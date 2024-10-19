@@ -104,7 +104,7 @@ class _AdCardState extends State<AdCard> {
                                   color: Colors.black.withOpacity(0.8),
                                   alignment: AlignmentDirectional.center,
                                   child: Label(
-                                    text: 'See More',
+                                    text: LocaleKeys.seeAll.localize,
                                     style: Styles.headerText(
                                         color: Colors.white,
                                         decoration: TextDecoration.underline),
@@ -332,7 +332,7 @@ class _AdCardState extends State<AdCard> {
               ),
             const Sizer(width: 5)],
             Label(
-              text: status=='premium'?"Premium":status=='premium'?"Regular":'Not Subscribed',
+              text: status=='premium'?LocaleKeys.premiumSubscription.localize:status=='Regular'?LocaleKeys.regularRequest.localize:LocaleKeys.notSubscribed.localize,
               style: Styles.mediumText(color: Colors.white,fontSize: 35,fontWeight: FontWeight.bold),
               maxLines: 1,
             ),

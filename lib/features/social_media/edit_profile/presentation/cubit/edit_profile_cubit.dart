@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/domain/entities/edit_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/domain/usecases/edit_profile_usecase.dart';
+import 'package:go_router/go_router.dart';
 
 part 'edit_profile_state.dart';
 
@@ -58,6 +59,7 @@ class EditProfileCubit extends Cubit<EditProfileState> {
         (data) {
       UserCubit.to.getUser();
       emit(state.copyWith(status: EditProfileStates.success));
+      // context.pop(true);
     });
   }
 

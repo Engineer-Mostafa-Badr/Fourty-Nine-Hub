@@ -1,7 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/payment/presentation/pages/payment_view.dart';
 import 'package:fourtyninehub/features/subscripe/domain/entities/subscription_amount_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -31,12 +36,12 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
     return Column(
       children: [
         Text(
-          "Insufficient Amount",
+          LocaleKeys.insufficientAmount.localize,
           style: Styles.headerText(color: Colors.red, fontSize: 40),
         ),
         const Sizer(),
         Text(
-          "select amount to charge",
+          LocaleKeys.selectAmountToCharge.localize,
           style: Styles.mediumText(),
         ),
         const Sizer(),
@@ -62,9 +67,12 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
                       });
                     },
                   ),
-                  ElevatedAppButton(
-                      label: '${widget.amounts[index].amount}',
-                      onPressed: () {}),
+                  Expanded(child: BadgedLabel(
+                      label: widget.amounts[index].amount.toString(),
+                    overFlow:TextOverflow.ellipsis,
+                    max: 1,
+                    padding: EdgeInsets.all(20.w),
+                  ))
                 ],
               );
             },
@@ -72,7 +80,7 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
         ),
         const Sizer(),
         ElevatedAppButton(
-          label: 'Charge Now',
+          label:LocaleKeys.chargeNow.localize,
           onPressed: () {
             if (groupValue != null) {
               context.push(Routes.PAYMENT,

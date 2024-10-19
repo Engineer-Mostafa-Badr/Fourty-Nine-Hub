@@ -145,7 +145,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                         if (myPost.isShared == true)
                           _buildContentWidget(
                               content: myPost.mainPost?.content ?? '',
-                              backgroundColor: null,
+                              share: true,
+                              backgroundColor: myPost.mainPost?.backgroundColor,
                               images: myPost.mainPost?.images ?? []),
                       ],
                       if (myPost.type != 'advertisement' &&
@@ -246,14 +247,118 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                             isImage: true,
                             image: Assets.facebookShare,
                             onTap: () async {
-                              var result = await controller.onShare(
-                                  postId: myPost.isShared == true
-                                      ? myPost.mainPost!.id
-                                      : myPost.id);
-                              if (result == true) {
-                                showSuccessMessage(context,
-                                    LocaleKeys.postSharedSuccessfully.localize);
-                              }
+
+                              showModalBottomSheet(
+                                backgroundColor: Colors.white,
+                                context: context,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(15.0),
+                                    topRight: Radius.circular(15.0),
+                                  ),
+                                ),
+                                isDismissible: true,
+                                isScrollControlled: true,
+                                builder: (BuildContext context) {
+                                  return AnimatedPadding(
+                                    padding: MediaQuery.of(context).viewInsets,
+                                    duration: const Duration(milliseconds: 50),
+                                    child: Container(
+                                      height: 400.h,
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 10.h,
+                                        horizontal: 10,
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Label(
+                                            text: LocaleKeys.share.localize,
+                                            style: Styles.headerText(),
+                                          ),
+                                          Sizer(
+                                            height: 30.h,
+                                          ),
+                                          Container(
+                                            constraints: BoxConstraints(maxHeight: 220.h,minHeight: 180.h),
+                                            child: Form(
+                                              key: controller.shareFormKey,
+                                              child: TextFormField(
+                                                validator: (value) {
+                                                  if ((value == null || value.isEmpty)) {
+                                                    return LocaleKeys.required.localize;
+                                                  } else {
+                                                    return null;
+                                                  }
+                                                },
+                                                // focusNode: focusNode,
+                                                maxLines: null,
+                                                maxLength: 100,
+                                                onChanged: (c) => controller.changeContent(v: c),
+                                                // controller: controller,
+                                                decoration: InputDecoration(
+                                                    hintText: LocaleKeys.saySomthing.localize,
+                                                    fillColor: Colors.white,
+                                                    hintStyle: Styles.mediumText(
+                                                        color: AppColors.DARK_GRAY_COLOR)),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: InkWell(
+                                                    onTap: () async {
+                                                      if (controller.shareFormKey.currentState!
+                                                          .validate()) {
+                                                        var result = await controller.onShare(
+                                                            postId: myPost.isShared == true
+                                                                ? myPost.mainPost!.id
+                                                                : myPost.id);
+                                                        if (result == true) {
+                                                          showSuccessMessage(context,
+                                                              LocaleKeys.postSharedSuccessfully.localize);
+                                                          context.pop();
+                                                        }
+
+                                                      }
+                                                    },
+                                                    child: Container(
+                                                      width: 100,
+                                                      height: 80.h,
+                                                      padding: const EdgeInsets.all(5),
+                                                      decoration: BoxDecoration(
+                                                          color: AppColors.PRIMARY_COLOR,
+                                                          borderRadius: BorderRadius.circular(15)),
+                                                      alignment: Alignment.center,
+                                                      child: Label(
+                                                        text: LocaleKeys.share.localize,
+                                                        style:
+                                                        Styles.headerText(color: Colors.white),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Label(
+                                                      text: LocaleKeys.cancel.localize,
+                                                      style: Styles.headerText(),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },);
                             }),
                       ),
                     ],
@@ -380,7 +485,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       children: [
         Image.asset(
           image,
-          height: 35.w,
+          height: 45.w,
         ),
         Label(
           text: value.toString(),
@@ -651,24 +756,28 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   Widget _buildContentWidget(
       {String? backgroundColor,
       required String content,
-      List<String>? images}) {
+      List<String>? images,bool? share=false}) {
     return (backgroundColor != null && backgroundColor != '#FFFFFFFF') &&
             images!.isEmpty &&
             content.isNotEmpty
         ? Container(
             width: double.infinity,
-            height: 260.h,
+            height: 500.h,
             alignment: Alignment.center,
             margin: EdgeInsets.symmetric(vertical: 10.h),
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
-            color: images.isEmpty
-                ? Color(int.parse(backgroundColor.substring(1), radix: 16))
-                : Colors.white,
+
+            decoration: BoxDecoration(
+              color: images.isEmpty
+                  ? Color(int.parse(backgroundColor.substring(1), radix: 16))
+                  : Colors.white,
+              borderRadius: BorderRadius.circular((share==true?10:0).r),
+            ),
             child: ReadMoreLabel(
               text: content,
               style: Styles.headerText(
-                  color: Colors.black,
-                  fontSize: 30,
+                  color: backgroundColor != '#FFFFFFFF' ? Colors.white:Colors.black,
+                  fontSize: 35,
                   fontWeight: FontWeight.bold),
             ),
           )

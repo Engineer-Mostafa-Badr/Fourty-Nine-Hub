@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/share_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
@@ -539,8 +540,8 @@ class EndPoints {
     return '/twitter/post/share/$postId?subCategory=${Constants.twitterSubCategory}';
   }
 
-  static String shareFacebookPost(String postId) {
-    return '/facebook/post/share/$postId?subCategory=${Constants.facebookSubCategory}';
+  static String shareFacebookPost(SharePostParams params) {
+    return '/facebook/post/share/${params.postId}?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String commentOnPost(String postId) {
