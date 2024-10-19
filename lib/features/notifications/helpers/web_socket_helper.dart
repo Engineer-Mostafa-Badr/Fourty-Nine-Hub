@@ -32,7 +32,7 @@ class WebSocketHelper {
   Future<void> notificationListener(
       Function(Map<String, dynamic> data) notificationCallback) async {
     try {
-      pr(TokenManager.getAccessToken().toString());
+      pr(CacheManager.getAccessToken().toString());
       pr('notificationListener is called ');
       socket.disconnect();
       socket.io.close();
@@ -40,7 +40,7 @@ class WebSocketHelper {
       pr('token saved in the instance of the socket is ');
       pr(socket.io.options?['extraHeaders']?['authorization']);
       pr('saved token is ');
-      pr(await TokenManager.getAccessToken());
+      pr(await CacheManager.getAccessToken());
 
       // socket.io.options?['extraHeaders']?['authorization'] =
       //     await TokenManager.getAccessToken();

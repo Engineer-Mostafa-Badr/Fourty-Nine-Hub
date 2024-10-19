@@ -1,4 +1,3 @@
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/get_scheuled_rooms_use_case.dart';
 import 'package:get_it/get_it.dart';
 
@@ -31,7 +30,7 @@ class StreamServiceLocator {
     serviceLocator
         .registerFactory(() => GetScheduledRoomsUseCase(serviceLocator()));
     //lazy singleton to use it in several places
-    serviceLocator.registerLazySingleton(() => StreamCubit(
+    serviceLocator.registerFactory(() => StreamCubit(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

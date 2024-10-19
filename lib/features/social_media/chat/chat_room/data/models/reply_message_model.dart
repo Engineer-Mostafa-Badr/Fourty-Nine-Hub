@@ -22,10 +22,10 @@ class ReplyMessageModel extends ReplyMessageEntity {
       id: json['_id'] ?? 'no id',
       media: json['media'] != null
           ? (json['media'] as List)
-          .whereType<
-          Map<String, dynamic>>() // Only keep items that are maps
-          .map((e) => MessageMediaModel.fromJson(e))
-          .toList()
+              .whereType<
+                  Map<String, dynamic>>() // Only keep items that are maps
+              .map((e) => MessageMediaModel.fromJson(e))
+              .toList()
           : [],
     );
   }

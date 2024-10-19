@@ -33,11 +33,11 @@ class StoryRepository {
   }
 
   Future<void> _initializeToken() async {
-    _token = await TokenManager.getAccessToken();
+    _token = await CacheManager.getAccessToken();
   }
 
   Future<void> _ensureTokenInitialized() async {
-    _token ??= await TokenManager.getAccessToken();
+    _token ??= await CacheManager.getAccessToken();
   }
 
   //-----------------------------------------------------------------------------------------------

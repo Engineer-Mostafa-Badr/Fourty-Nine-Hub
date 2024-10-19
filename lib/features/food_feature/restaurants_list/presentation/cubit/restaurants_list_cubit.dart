@@ -253,7 +253,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   }
 
   Future<void> _ensureTokenInitialized() async {
-    token ??= await TokenManager.getAccessToken();
+    token ??= await CacheManager.getAccessToken();
   }
 
   Future<void> getExpiredOrders({int page = 1}) async {

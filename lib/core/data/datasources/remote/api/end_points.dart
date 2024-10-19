@@ -22,6 +22,9 @@ import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_
 import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_main_category.dart';
 
 class EndPoints {
+  //logout
+  static const logout = '/auth/logout';
+
   static const pageSize = 20;
   static const developmentWebSocketBaseUrl = 'https://49dev.com';
   static const developmentBaseUrl = 'https://49dev.com/api/v1';
@@ -125,25 +128,32 @@ class EndPoints {
       '/talent/$id';
 
   //My Ads
-  static const myAdsAuction='/ads/allMyAds/auction';
-  static const myAdsInstallment='/ads/allMyAds/installment';
-  static const myAdsOther='/ads/allMyAds/other';
-  static const myAdsTripJoin='/ride/come-with-you/my?subCategory=62ea00e269ea29c91dfc390c';
-  static const clickGlobal='/global/click';
+  static const myAdsAuction = '/ads/allMyAds/auction';
+  static const myAdsInstallment = '/ads/allMyAds/installment';
+  static const myAdsOther = '/ads/allMyAds/other';
+  static const myAdsTripJoin =
+      '/ride/come-with-you/my?subCategory=62ea00e269ea29c91dfc390c';
+  static const clickGlobal = '/global/click';
+
   static String deleteMyTripJoin({required String id}) =>
       '/ride/come-with-you/Delete/$id';
-  static String getMyAdsWithId({required String id}) =>
-      '/ads/getAd/$id';
+
+  static String getMyAdsWithId({required String id}) => '/ads/getAd/$id';
+
   static String deleteMyInstallment({required String id}) =>
       '/ads/deleteAd/$id';
+
   static String getAllCount(Params params) =>
       '/ride/come-with-you/callAndChat/${params.id}?status=${params.status}';
+
   static String getAllAdsCount(CountAdsParams params) =>
       '/ads/users-ads-field/${params.id}?field=${params.status}';
+
   static String updateMyAds(UpdateMyAdsParams params) =>
       '/ads/update-ads/${params.id}';
-  static String editMyAds(EditParams params) =>
-      '/ads/update-ads/${params.id}';
+
+  static String editMyAds(EditParams params) => '/ads/update-ads/${params.id}';
+
   static String search(SearchParams params) =>
       '/searchApp?page=${params.params.page}&limit=${params.params.limit}}';
 
@@ -191,11 +201,12 @@ class EndPoints {
   static String expectedPrice = "$developmentBaseUrl/ride/trips/expected/price";
   static String acceptOfferRide =
       "$developmentBaseUrl/ride/offers/accept/offer";
-  static String declineOfferRide =
-      "$developmentBaseUrl/ride/offers/decline/offer";
+  static String declineOfferRide = "$developmentBaseUrl/ride/offers/decline/offer";
+  static String expiredTripRider = "$developmentBaseUrl/ride/trips/user?limit=10&page=1&subCategory=667382a7f87288ce577e723b";
   static String pictureOptional =
       "$developmentBaseUrl/ride/info/picture-optional";
   static String newTripRide = "$developmentBaseUrl/ride/trips/newTrip";
+
   //shipping
   static String bannerData = "$developmentBaseUrl/loading/driver/subcategory";
   static const drivingLicenseS3 = '/ride/info/driving-license';
@@ -277,7 +288,6 @@ class EndPoints {
   static const requestInstapay = '/payout/request-instapay';
   static const yellowCardPrice = '/payout/yellow-card/price';
   static const payoutMethod = '/payout/methods';
-
   static String doctorAcceptAppointment(String appointmentId) =>
       '/health/book-appointment/approve/$appointmentId';
 
@@ -285,6 +295,9 @@ class EndPoints {
       '/health/book-appointment/reject/$appointmentId';
   static const getAllDoctorReservations =
       '/health/dashboard/number-of-reservations';
+
+
+
   static const isDoctorApproval = '/health/check-doctor-approval';
   static const getDoctorProfile = '/health/doctor-profile';
   static const updateDoctorProfilePhoto = '/health/doctor/picture';
@@ -293,6 +306,7 @@ class EndPoints {
   static const updateDoctorID = '/health/doctor-upload-license-id';
 
   static String deleteDoctor(String doctorId) => '/health/doctor/$doctorId';
+
   // ride
   //shipping
   static String registerDriver = "$developmentBaseUrl/loading/driver/register";
@@ -300,6 +314,7 @@ class EndPoints {
       "$developmentBaseUrl/favorite-sub-category";
   static String createLoadingTrip =
       "$developmentBaseUrl/loading/trip/createLoadingTrip";
+
   // static const idLicenseS3 = '/ride/info/id';
   static const getAllTripBySubCategory =
       '$developmentBaseUrl/loading/trip/driver/subcategory';
@@ -311,12 +326,14 @@ class EndPoints {
   static const deleteDriver = '$developmentBaseUrl/loading/driver/deleteDriver';
   static const driverStatistics =
       '$developmentBaseUrl/loading/driver/driverStatistics';
+
   //trip
   static const sendOffer = '$developmentBaseUrl/loading/trip/sendOffer';
   static const reportUrl = '$developmentBaseUrl/report';
   static const favoriteCategory = '$developmentBaseUrl/favorite-category';
   static const sendOfferPremium =
       '$developmentBaseUrl/loading/trip/sendOffer-premium';
+
   // static const acceptLoadingTripOffer =
   //     '$developmentBaseUrl/loading/trip/acceptLoadingTripOffer';
   static const mediasignedUrl =
@@ -331,6 +348,7 @@ class EndPoints {
       '$developmentBaseUrl/loading/trip/deleteLoadingTrip';
   static const loadingTripRequests =
       '$developmentBaseUrl/loading/trip/loadingTripRequests';
+
   // reels
   static const getExploreReels = '/reels/explore';
 
@@ -665,12 +683,15 @@ class EndPoints {
   }
 
   static const createAd = '/ads/create-ads';
-  static filterAd (FilterModel filter)=> '/ads/filter-ads/${filter.subCategoryId}?government=${filter.governorateId}&city=${filter.cityId}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
+
+  static filterAd(FilterModel filter) =>
+      '/ads/filter-ads/${filter.subCategoryId}?government=${filter.governorateId}&city=${filter.cityId}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
   static const myAds = '/ads/allMyAds?limit=100';
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const makePremiumRequest = '/ads-requests/makeAdRequest-Premium';
   static const favouriteAds = '/ads-favourites/allFavouriteAds';
   static const favouriteSubCategories = '/favorite-sub-category';
+
   static String deleteFavouriteAds(String id) {
     return '/ads-favourites/reomveAdFromFavourites/$id';
   }
@@ -808,7 +829,6 @@ class EndPoints {
     return '/chat/pin-chat/$chatId';
   }
 
-
   static String changeChatToArchiveOrNormal(String chatId) {
     return '/chat/archive-chat/$chatId';
   }
@@ -864,7 +884,9 @@ class EndPoints {
   }
 
   static String getAllMyTripJoin = '/ride/come-with-you/my';
+
   static String deleteTrip(String id) => '/ride/come-with-you/Delete/$id';
+
   static String getRequest(String id) =>
       '/ride/come-with-you/trip/requests//$id';
   static String carpoolRoutePrice = '/carpool/price';
@@ -873,10 +895,15 @@ class EndPoints {
   static String chance = '/chance-ads/my-ads';
   static String addChance = '/chance-ads';
   static String subCatChance = '/categories/main/has-auction?page=1&limit=100';
-  static String rateChance(String id ) => '/chance-ads/contribution-percentage/$id';
+
+  static String rateChance(String id) =>
+      '/chance-ads/contribution-percentage/$id';
+
   static String mainCatChance(MainCategoryChanceParams params) {
     return '/categories/main/has-auction?page=${params.paginationParams.page}&limit=${params.paginationParams.limit}';
   }
+
   static String joinTripCarPool = '/carpool/joinCompleteBus';
   static String createCarPool = '/carpool/create';
+
 }

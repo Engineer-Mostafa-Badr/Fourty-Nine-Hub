@@ -32,39 +32,37 @@ class _ChatRoomViewState extends State<ChatRoomView> {
             create: (context) => serviceLocator<ChatRoomCubit>()
               ..init(chat: widget.chatsCubit.selectedChat)),
       ],
-      child: Builder(
-        builder: (context) {
-          return Scaffold(
-            backgroundColor: AppColors.BACKGROUND_COLOR,
-            appBar: ChatRoomAppBar(
-              chatRoomCubit: context.read<ChatRoomCubit>(),
-            ),
-            body: Stack(
-              children: [
-                // Background image
-                Positioned.fill(
-                  child: Image.asset(
-                    Assets.chatRoomBackground,
-                    scale: 7,
-                    // fit: BoxFit.cover,
-                    repeat: ImageRepeat.repeat,
-                    opacity: const AlwaysStoppedAnimation(0.7),
-                  ),
+      child: Builder(builder: (context) {
+        return Scaffold(
+          backgroundColor: AppColors.BACKGROUND_COLOR,
+          appBar: ChatRoomAppBar(
+            chatRoomCubit: context.read<ChatRoomCubit>(),
+          ),
+          body: Stack(
+            children: [
+              // Background image
+              Positioned.fill(
+                child: Image.asset(
+                  Assets.chatRoomBackground,
+                  scale: 7,
+                  // fit: BoxFit.cover,
+                  repeat: ImageRepeat.repeat,
+                  opacity: const AlwaysStoppedAnimation(0.7),
                 ),
-                // Main content
-                const SafeArea(
-                  child: Column(
-                    children: [
-                      Expanded(child: MessagesListView()),
-                      SendMessageWidget(),
-                    ],
-                  ),
+              ),
+              // Main content
+              const SafeArea(
+                child: Column(
+                  children: [
+                    Expanded(child: MessagesListView()),
+                    SendMessageWidget(),
+                  ],
                 ),
-              ],
-            ),
-          );
-        }
-      ),
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 

@@ -8,11 +8,11 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../../../../trip_join/helpers/print_helper.dart';
 import '../../../domain/use_cases/apple_sign_in_usecase.dart';
 import '../../../domain/use_cases/login_use_case.dart';
 import '../../../domain/use_cases/save_tokens_use_case.dart';
 import '../../../domain/use_cases/attach_token_use_case.dart';
-
 
 class LoginCubit extends Cubit<LoginState> {
   final LoginUseCase _loginUseCase;
@@ -25,15 +25,13 @@ class LoginCubit extends Cubit<LoginState> {
   final passwordFocusNode = FocusNode();
 
   LoginCubit(
-      this._loginUseCase,
-      this._saveTokens,
-      this._attachToken,
-      this._appleSignInUseCase,
-  {
+    this._loginUseCase,
+    this._saveTokens,
+    this._attachToken,
+    this._appleSignInUseCase, {
     required this.googleSignIn,
     required this.firebaseAuth,
-  }
-      ) : super(LoginInitial());
+  }) : super(LoginInitial());
 
   String? token;
 
@@ -50,18 +48,21 @@ class LoginCubit extends Cubit<LoginState> {
       );
 
       result.fold(
-            (failure) => emit(LoginError(failure)),
-            (userToken) {
+        (failure) => emit(LoginError(failure)),
+        (userToken) {
           _attachToken(userToken); // Attach to dio
           _saveTokens(userToken); // Ensure tokens are saved before proceeding
+          // pr('state token is  ${userToken}');
+
           emit(LoginSuccess(userTokensEntity: userToken));
         },
       );
     }
   }
-   User? user = FirebaseAuth.instance.currentUser;
 
-   Future<User?> loginWithGoogle() async {
+  User? user = FirebaseAuth.instance.currentUser;
+
+  Future<User?> loginWithGoogle() async {
     final googleAccount = await GoogleSignIn().signIn();
 
     final googleAuth = await googleAccount?.authentication;
@@ -135,22 +136,23 @@ class LoginCubit extends Cubit<LoginState> {
 
   Future<void> signInWithApple() async {
     if (state is LoginLoading) return;
-    emit(SocialAuthState(status: AuthStatus.authenticating));
+    emit(const SocialAuthState(status: AuthStatus.authenticating));
 
     final result = await _appleSignInUseCase(const NoParams());
 
     result.fold(
-          (failure) => emit(SocialAuthState(status: AuthStatus.authenticateError)),
-          (userToken) async {
+      (failure) =>
+          emit(const SocialAuthState(status: AuthStatus.authenticateError)),
+      (userToken) async {
         _attachToken(userToken); // Attach to dio
-        await _saveTokens(userToken); // Ensure tokens are saved before proceeding
+        await _saveTokens(
+            userToken); // Ensure tokens are saved before proceeding
         emit(LoginSuccess(userTokensEntity: userToken));
       },
     );
   }
 
-
-   Future<UserCredential> signInWithFacebook() async {
+  Future<UserCredential> signInWithFacebook() async {
     // Trigger the sign-in flow
     final LoginResult loginResult = await FacebookAuth.instance.login();
 
@@ -159,7 +161,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     // Create a credential from the access token
     final OAuthCredential facebookAuthCredential =
-    FacebookAuthProvider.credential(loginResult.accessToken!.token);
+        FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
     // Once signed in, return the UserCredential
     UserCredential userCredential = await FirebaseAuth.instance
@@ -170,7 +172,6 @@ class LoginCubit extends Cubit<LoginState> {
     return userCredential;
   }
 
-
   @override
   Future<void> close() {
     emailTextController.dispose();
@@ -178,8 +179,6 @@ class LoginCubit extends Cubit<LoginState> {
     return super.close();
   }
 }
-
-
 
 // import 'package:firebase_messaging/firebase_messaging.dart';
 // import 'package:flutter/cupertino.dart';

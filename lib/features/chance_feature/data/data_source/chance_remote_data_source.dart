@@ -44,13 +44,13 @@ class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
   }
 
   Future<void> _ensureTokenInitialized() async {
-    token ??= await TokenManager.getAccessToken();
+    token ??= await CacheManager.getAccessToken();
   }
 
   String? token;
 
   Future<void> _initializeToken() async {
-    token = await TokenManager.getAccessToken();
+    token = await CacheManager.getAccessToken();
   }
 
   @override

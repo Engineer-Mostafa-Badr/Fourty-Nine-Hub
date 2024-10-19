@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
@@ -87,7 +86,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
         return GestureDetector(
           onTap: () {
             if (!widget.buttons && !widget.yourRequest) {
-              context.push(Routes.DRIVERREQUESTSDETIALS, extra: widget.model);
+              // context.push(Routes.DRIVERREQUESTSDETIALS, extra: widget.model);
             }
           },
           child: Container(
@@ -111,8 +110,8 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                       children: [
                         Text(
                           widget.title ?? 'New Ride'.tr(),
-                          style: const TextStyle(
-                            color: AppColors.PRIMARY_COLOR,
+                          style:  TextStyle(
+                            color: Theme.of(context).brightness == Brightness.dark? Colors.white:AppColors.PRIMARY_COLOR,
                             fontWeight: FontWeight.bold,
                             fontSize: 22,
                           ),
@@ -260,7 +259,8 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                             id: widget.model.id ?? "",
                                             price: widget.model.price ?? 0,
                                             message:
-                                                "The request has been successfully approved.".tr());
+                                                "The request has been successfully approved."
+                                                    .tr());
                                       },
                                       backColor: AppColors.PRIMARY_COLOR,
                                       color: Colors.white,

@@ -155,7 +155,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                   ],
                 ),
               ),
-              Sizer(),
+              const Sizer(),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0.w),
                 child: Row(

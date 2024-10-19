@@ -20,9 +20,20 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
-class DahsboardDriverScreen extends StatelessWidget {
+class DahsboardDriverScreen extends StatefulWidget {
   const DahsboardDriverScreen({super.key});
 
+  @override
+  State<DahsboardDriverScreen> createState() => _DahsboardDriverScreenState();
+}
+
+class _DahsboardDriverScreenState extends State<DahsboardDriverScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<GetAllTripCubit>().getAllTrips();
+  }
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -53,7 +64,7 @@ class DahsboardDriverScreen extends StatelessWidget {
                     ),
                     Text(
                       "Pickup Dashboard".tr(),
-                      style: TextStyle(fontSize: 20),
+                      style: const TextStyle(fontSize: 20),
                     )
                   ],
                 ),
@@ -71,7 +82,7 @@ class DahsboardDriverScreen extends StatelessWidget {
                         children: [
                           Text(
                             "Trips".tr(),
-                            style: TextStyle(fontSize: 20),
+                            style: const TextStyle(fontSize: 20),
                           ),
                           // Container(
                           //   width: 20,
@@ -93,7 +104,7 @@ class DahsboardDriverScreen extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     child: Text(
                       "Information".tr(),
-                      style: TextStyle(fontSize: 20),
+                      style: const TextStyle(fontSize: 20),
                     ),
                   ),
                   // Text("Edit", style: TextStyle(fontSize: 20),),
@@ -173,8 +184,9 @@ class NewTripWidget extends StatelessWidget {
                                               walletType: WalletTypes.balance);
                                     },
                                     child: Text(
-                                      "Subscribe to send offer / contact the client".tr(),
-                                      style: TextStyle(
+                                      "Subscribe to send offer / contact the client"
+                                          .tr(),
+                                      style: const TextStyle(
                                           fontSize: 16, color: Colors.red),
                                     ),
                                   ))

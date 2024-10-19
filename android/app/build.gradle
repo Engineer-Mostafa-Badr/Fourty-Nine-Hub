@@ -26,6 +26,8 @@ if (flutterVersionName == null) {
 }
 
 android {
+//    useAndroidX = true
+
     namespace "com.app.fourtynine"
     compileSdk 34
     ndkVersion flutter.ndkVersion
@@ -52,6 +54,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -69,6 +72,5 @@ flutter {
 }
 
 dependencies {
-
     implementation 'io.socket:socket.io-client:2.1.0'
 }

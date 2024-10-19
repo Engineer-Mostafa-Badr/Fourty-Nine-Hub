@@ -33,7 +33,7 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
   String? _token;
 
   Future<void> _ensureTokenInitialized() async {
-    _token ??= await TokenManager.getAccessToken();
+    _token ??= await CacheManager.getAccessToken();
   }
 
   // Future<void> getRestaurantOrders() async {

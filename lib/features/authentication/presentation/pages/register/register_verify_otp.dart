@@ -46,9 +46,9 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
         } else if (state is ResendOtpSuccess) {
           showSuccessMessage(context, 'resend otp success');
         } else if (state is VerifyOtpSuccess) {
-          await TokenManager.saveAccessToken(
+          await CacheManager.saveAccessToken(
               state.userTokensEntity.accessToken);
-          await TokenManager.saveRefreshToken(
+          await CacheManager.saveRefreshToken(
               state.userTokensEntity.refreshToken);
           context
               .read<NotificationSocketIoCubit>()
@@ -64,8 +64,8 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
               // Ensure the widget is still mounted before proceeding
               if (!mounted) return;
 
-              String? accessToken = await TokenManager.getAccessToken();
-              String? refreshToken = await TokenManager.getRefreshToken();
+              String? accessToken = await CacheManager.getAccessToken();
+              String? refreshToken = await CacheManager.getRefreshToken();
 
               print(
                   '/////////////////////////////////////////////////////////////////////////');

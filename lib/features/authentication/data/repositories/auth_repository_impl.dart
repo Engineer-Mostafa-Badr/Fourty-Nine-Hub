@@ -164,7 +164,7 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> signOut() {
+  Future<bool> signOut() {
     return _localDataSource.deleteTokens();
   }
 }

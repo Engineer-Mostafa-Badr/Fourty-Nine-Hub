@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -26,7 +25,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
             text: LocaleKeys.theCommercialRegister.tr(),
             style: Styles.headerText(),
           ),
-          Sizer(),
+          const Sizer(),
           FittedBox(
             child: Row(
               children: [
@@ -60,7 +59,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                     },
                   ),
                 ),
-                Sizer(),
+                const Sizer(),
                 InkWell(
                   onTap: () async {
                     await createRestaurantCubit.uploadLicenseSecondPageImage();
@@ -91,7 +90,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                     },
                   ),
                 ),
-                Sizer(),
+                const Sizer(),
                 InkWell(
                   onTap: () async {
                     await createRestaurantCubit.uploadLicenseThiredPageImage();

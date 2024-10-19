@@ -141,16 +141,22 @@ class _TripJoinGoogleMapState extends State<TripJoinGoogleMap> {
     }
     await polylinePoints
         .getRouteBetweenCoordinates(
+          googleApiKey: 
       UIConst.googleGeocodingApiKey,
-      PointLatLng(
+      request: PolylineRequest(
+        origin: PointLatLng(
         markers[0].position.latitude,
         markers[0].position.longitude,
-      ), //Starting LATLANG
-      PointLatLng(
+      ),
+      destination: PointLatLng(
         markers[1].position.latitude,
         markers[1].position.longitude,
-      ), //End LATLANG
-      travelMode: TravelMode.driving,
+      ),
+      mode: TravelMode.driving
+      )
+       //Starting LATLANG
+       //End LATLANG
+      // travelMode: TravelMode.driving,
     )
         .then((value) {
       for (var point in value.points) {

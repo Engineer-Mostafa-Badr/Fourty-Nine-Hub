@@ -76,7 +76,8 @@ class _ReadMoreLabelState extends State<ReadMoreLabel> {
 
   // Function to handle clickable links in the text
   Widget _buildRichText(String text) {
-    final List<TextSpan> spans = _getTextSpans(text, widget.style??Styles.headerText(color: Colors.black,fontSize: 30));
+    final List<TextSpan> spans = _getTextSpans(text,
+        widget.style ?? Styles.headerText(color: Colors.black, fontSize: 30));
     return RichText(
       textAlign: widget.textAlign ?? TextAlign.left,
       text: TextSpan(children: spans),

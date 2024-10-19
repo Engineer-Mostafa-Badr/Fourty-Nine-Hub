@@ -1,13 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/favorite_shipping_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -107,8 +102,8 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
                         style: Styles.mediumText(fontWeight: FontWeight.bold),
                       ),
                       // if (!widget.isSmallCard)
-                        // Label(
-                        //     text: '${widget.item.numberOfContent ?? 0} Driver')
+                      // Label(
+                      //     text: '${widget.item.numberOfContent ?? 0} Driver')
                     ],
                   ),
                 ),

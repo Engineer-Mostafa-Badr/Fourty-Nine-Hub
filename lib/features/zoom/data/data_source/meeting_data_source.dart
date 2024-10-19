@@ -31,8 +31,9 @@ class MeetingDataSourceImpl extends MeetingDataSource {
 
   @override
   Future<Either<Failure, bool>> addRoom(MeetingParams params) async {
-    final result =
-        await apiConsumer.post(EndPoints.createMeeting, data: params.toJson());
+    final result = await apiConsumer.post(EndPoints.createMeeting,
+        data:
+            params.startedAt == null ? params.createIdJson() : params.toJson());
     // if(params.title!=null){
     //   getScheduledMeetings();
     // }

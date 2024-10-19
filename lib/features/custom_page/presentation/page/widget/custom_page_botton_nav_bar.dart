@@ -34,7 +34,7 @@ class CustomPageBottonNavBar extends StatelessWidget
         builder: (context, state) {
           // Check if navigateBar data is available
           if (state.navigateBar == null) {
-            return SizedBox(); // or a loading indicator
+            return const SizedBox(); // or a loading indicator
           }
 
           final navigateBar = state.navigateBar!;
