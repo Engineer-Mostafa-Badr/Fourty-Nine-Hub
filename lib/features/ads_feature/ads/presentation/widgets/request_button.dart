@@ -26,7 +26,7 @@ class RequestButton extends StatelessWidget {
         final controller = context.read<AdvertisementCubit>();
 
         return AvaialbleTripsButton(
-          title: LocaleKeys.requests.localize,
+          title: LocaleKeys.normalRequest.localize,
           color:subscriptionStatus=='premium'?AppColors.DARK_GRAY_COLOR: AppColors.PRIMARY_COLOR,
           onTap:subscriptionStatus=='premium'?null: () {
             showModalBottomSheet(

@@ -53,13 +53,14 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
             }
           },
           toggle: false,
-          direction: ReactionsBoxAlignment.rtl,
+          // direction: ReactionsBoxAlignment.ltr,
           animateBox: false,
           placeholder: Reaction<String>(
             value: null,
             icon: _buildReactionPlaceholder(),
           ),
           itemsSpacing: 0,
+
           itemSize: const Size(40, 40),
           reactions: context.isArabic
               ? _buildReactionsEnList()

@@ -932,9 +932,7 @@
   "unsubscribed": "Unsubscribed",
   "seeAll": "See All",
   "idExpiryDate": "ID Expiry Date",
-  "expiredRequests": "Expired Requests",
   "licenseFrontAndBack": "Upload Your License (Front and Back)",
-  "other": "Others",
   "filter": "Filter",
   "beAStar": "Be A Star",
   "pleaseEnterTheAmount": "Please enter the amount",
@@ -994,5 +992,12 @@
   "transactionSuccessful": "Transaction Successful",
   "yourTransactionWasSuccessful": "Your transaction was successful",
   "transferAmount": "Transfer Amount",
-  "shareTransactionDetails": "Share Transaction Details"
+  "shareTransactionDetails": "Share Transaction Details",
+  "insufficientAmount": "Insufficient Amount",
+  "selectAmountToCharge": "Select amount to charge",
+  "chargeNow": "Charge Now",
+  "premiumSubscription": "Premium Subscription",
+  "regularSubscription": "Regular Subscription",
+  "notSubscribed": "Not Subscribed"
+
 }

@@ -1,241 +1,47 @@
-// import 'package:flutter_bloc/flutter_bloc.dart';
-//
-// import 'package:fourtyninehub/core/states/basic_state.dart';
-// import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_entity.dart';
-// import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-//
-// import '../../../domain/use_case/get_explore_reels_use_case.dart';
-//
-// class ExploreReelsCubit extends Cubit<BasicState> {
-//   final GetExploreReelsUseCase _getExploreReelsUseCase;
-//   late final PagingController<int, ReelEntity> exploreReelsPagingController =
-//       PagingController(firstPageKey: 1)
-//         ..addPageRequestListener(_getExploreReels);
-//
-//   ExploreReelsCubit(this._getExploreReelsUseCase) : super(const BasicState());
-//
-//   Future<void> _getExploreReels(int page) async {
-//     final result = await _getExploreReelsUseCase(page);
-//     result.fold(
-//       (failure) {
-//         exploreReelsPagingController.error = failure;
-//       },
-//       (reels) {
-//         if (reels.length < EndPoints.pageSize) {
-//           exploreReelsPagingController.appendLastPage(reels);
-//         } else {
-//           exploreReelsPagingController.appendPage(reels, page + 1);
-//         }
-//       },
-//     );
-//   }
-//
-//   @override
-//   Future<void> close() {
-//     exploreReelsPagingController.dispose();
-//     return super.close();
-//   }
-// }
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/audio_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/like_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/save_reel_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/share_reel_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/add_reel_comment_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/add_reel_reply_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_advertisement_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_reel_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/get_comments_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/get_explore_reels_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/get_followers_reels_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/like_reel_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_with_same_audia_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/save_reel_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/share_reel_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/toggle_comment_like_use_case.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../../core/utils/shared_pref.dart';
 import '../../../data/models/new_reels_model.dart';
-import '../../../data/repositories/reels_repository_impl.dart';
 
-class ReelsState {
-  final List<Reel> globalReels;
-
-  final List<Reel> reelsForFollower;
-
-  final List<Reel>? reelsForAudio;
-  final int? playingIndex;
-
-  final bool globalReelsIsLoading;
-  final bool globalReelsHasReachedMax;
-  final int globalReelsCurrentPage;
-
-  final bool reelsForFollowerIsLoading;
-  final bool reelsForFollowerHasReachedMax;
-  final int reelsForFollowerCurrentPage;
-
-  final bool isLikingComment;
-  final String likeReelCommentErrorMessage;
-  final String likeReelCommentResponseMessage;
-
-  // Fields related to liking a reel
-  final bool isLikingReel;
-  final String? likeReelErrorMessage;
-  final ReelLikeResponse? likeReelResponse;
-
-  final ReelSaveResponse? reelSaveResponse;
-  final ReelShareResponse reelShareResponse;
-
-  // New fields related to adding a comment
-  final bool isCommenting;
-  final String? commentErrorMessage;
-  final AddCommentResponse? commentResponse;
-
-  // Fields related to fetching comments
-  final bool isFetchingComments;
-  final String? fetchCommentsErrorMessage;
-  final GetCommentsResponse? fetchedComments;
-
-  // New fields related to replaying a comment
-  final bool isReplyingComment;
-  final String? replyCommentErrorMessage;
-  final AddCommentResponse? replyCommentResponse;
-
-  // Fields related to uploading a reel
-  final bool isUploadingReel;
-  final String? uploadReelErrorMessage;
-  final bool? uploadReelSuccess;
-
-  // Fields for Reel View operation (ReelViewState)
-  final bool? isCreatingReelView;
-  final String? reelViewErrorMessage;
-  final bool? reelViewSuccess;
-
-  ReelsState({
-    this.isCreatingReelView,
-    this.reelViewErrorMessage,
-    this.reelViewSuccess,
-    required this.reelsForFollower,
-    this.reelsForFollowerIsLoading = false,
-    this.reelsForFollowerHasReachedMax = false,
-    this.reelsForFollowerCurrentPage = 0,
-    this.reelsForAudio,
-    this.isLikingComment = false,
-    this.likeReelCommentErrorMessage = '',
-    this.likeReelCommentResponseMessage = '',
-    required this.reelSaveResponse,
-    required this.reelShareResponse,
-    required this.globalReels,
-    required this.globalReelsIsLoading,
-    this.playingIndex,
-    required this.globalReelsHasReachedMax,
-    required this.globalReelsCurrentPage,
-    this.isLikingReel = false,
-    this.likeReelErrorMessage,
-    this.likeReelResponse,
-    this.isCommenting = false,
-    this.commentErrorMessage,
-    this.commentResponse,
-    this.isFetchingComments = false,
-    this.fetchCommentsErrorMessage,
-    this.fetchedComments,
-    this.isReplyingComment = false,
-    this.replyCommentErrorMessage,
-    this.replyCommentResponse,
-    this.isUploadingReel = false,
-    this.uploadReelErrorMessage,
-    this.uploadReelSuccess,
-  });
-
-  ReelsState copyWith({
-    bool? isCreatingReelView,
-    String? reelViewErrorMessage,
-    bool? reelViewSuccess,
-    List<Reel>? reelsForFollower,
-    bool? reelsForFollowerIsLoading,
-    bool? reelsForFollowerHasReachedMax,
-    int? reelsForFollowerCurrentPage,
-    int? playingIndex,
-    bool? isLikingComment,
-    String? likeReelCommentErrorMessage,
-    String? likeReelCommentResponseMessage,
-    ReelSaveResponse? reelSaveResponse,
-    ReelShareResponse? reelShareResponse,
-    List<Reel>? reels,
-    List<Reel>? reelsForAudio,
-    bool? isLoading,
-    bool? hasReachedMax,
-    int? currentPage,
-    bool? isLikingReel,
-    String? likeReelErrorMessage,
-    ReelLikeResponse? likeReelResponse,
-    bool? isCommenting,
-    String? commentErrorMessage,
-    AddCommentResponse? commentResponse,
-    bool? isFetchingComments,
-    String? fetchCommentsErrorMessage,
-    GetCommentsResponse? fetchedComments,
-    bool? isReplyingComment,
-    String? replyCommentErrorMessage,
-    AddCommentResponse? replyCommentResponse,
-    bool? isUploadingReel,
-    String? uploadReelErrorMessage,
-    bool? uploadReelSuccess,
-  }) {
-    return ReelsState(
-        isCreatingReelView: isCreatingReelView ?? this.isCreatingReelView,
-        reelViewErrorMessage: reelViewErrorMessage ?? this.reelViewErrorMessage,
-        reelViewSuccess: reelViewSuccess ?? this.reelViewSuccess,
-        isLikingComment: isLikingComment ?? this.isLikingComment,
-        likeReelCommentErrorMessage:
-            likeReelCommentErrorMessage ?? this.likeReelCommentErrorMessage,
-        likeReelCommentResponseMessage: likeReelCommentResponseMessage ??
-            this.likeReelCommentResponseMessage,
-        globalReels: reels ?? globalReels,
-        reelsForAudio: reelsForAudio ?? this.reelsForAudio,
-        globalReelsIsLoading: isLoading ?? globalReelsIsLoading,
-        globalReelsHasReachedMax: hasReachedMax ?? globalReelsHasReachedMax,
-        globalReelsCurrentPage: currentPage ?? globalReelsCurrentPage,
-        isLikingReel: isLikingReel ?? this.isLikingReel,
-        likeReelErrorMessage: likeReelErrorMessage ?? this.likeReelErrorMessage,
-        likeReelResponse: likeReelResponse ?? this.likeReelResponse,
-        isCommenting: isCommenting ?? this.isCommenting,
-        commentErrorMessage: commentErrorMessage ?? this.commentErrorMessage,
-        commentResponse: commentResponse ?? this.commentResponse,
-        isFetchingComments: isFetchingComments ?? this.isFetchingComments,
-        fetchCommentsErrorMessage:
-            fetchCommentsErrorMessage ?? this.fetchCommentsErrorMessage,
-        fetchedComments: fetchedComments ?? this.fetchedComments,
-        isReplyingComment: isReplyingComment ?? this.isReplyingComment,
-        replyCommentErrorMessage:
-            replyCommentErrorMessage ?? this.replyCommentErrorMessage,
-        replyCommentResponse: replyCommentResponse ?? this.replyCommentResponse,
-        isUploadingReel: isUploadingReel ?? this.isUploadingReel,
-        uploadReelErrorMessage:
-            uploadReelErrorMessage ?? this.uploadReelErrorMessage,
-        uploadReelSuccess: uploadReelSuccess ?? this.uploadReelSuccess,
-        reelSaveResponse: reelSaveResponse ?? this.reelSaveResponse,
-        reelShareResponse: reelShareResponse ?? this.reelShareResponse,
-        playingIndex: playingIndex ?? this.playingIndex,
-        reelsForFollower: reelsForFollower ?? this.reelsForFollower,
-        reelsForFollowerCurrentPage:
-            reelsForFollowerCurrentPage ?? this.reelsForFollowerCurrentPage,
-        reelsForFollowerHasReachedMax:
-            reelsForFollowerHasReachedMax ?? this.reelsForFollowerHasReachedMax,
-        reelsForFollowerIsLoading:
-            reelsForFollowerIsLoading ?? this.reelsForFollowerIsLoading);
-  }
-}
+part 'explore_reels_state.dart';
 
 class ReelsCubit extends Cubit<ReelsState> {
-  final ReelsRepository repository;
-  final ApiConsumer apiConsumer;
-
-  ReelsCubit(this.apiConsumer, {required this.repository})
-      : super(ReelsState(
-            reelsForFollower: [],
-            reelSaveResponse: ReelSaveResponse(),
-            reelShareResponse: ReelShareResponse(),
-            globalReels: [],
-            globalReelsIsLoading: false,
-            globalReelsHasReachedMax: false,
-            globalReelsCurrentPage: 0));
+  final CreateReelUseCase _createReelUseCase;
+  final CreateAdvertisementUseCase _advertisementUseCase;
+  final GetExploreReelsUseCase _getExploreReelsUseCase;
+  final GetFollowersReelsUseCase _getFollowersReelsUseCase;
+  final SaveReelUseCase _saveReelUseCase;
+  final ShareReelUseCase _shareReelUseCase;
+  final LikeReelUseCase _likeReelUseCase;
+  final AddReelCommentUseCase _addCommentUseCase;
+  final AddReelReplyUseCase _addReplyUseCase;
+  final GetCommentsUseCase _getCommentsUseCase;
+  final ToggleCommentLikeUseCase _toggleCommentLikeUseCase;
+  final ReelsWithSameAudioUseCase _reelsWithSameAudioUseCase;
+  ReelsCubit( this._createReelUseCase, this._advertisementUseCase, this._getExploreReelsUseCase, this._getFollowersReelsUseCase, this._saveReelUseCase, this._shareReelUseCase, this._likeReelUseCase, this._addCommentUseCase, this._addReplyUseCase, this._getCommentsUseCase, this._toggleCommentLikeUseCase, this._reelsWithSameAudioUseCase)
+      : super(ReelsState());
 
 //---------------------------------------------------------------------------------------
 
@@ -243,21 +49,24 @@ class ReelsCubit extends Cubit<ReelsState> {
 
   pauseChildVideo({bool pause = false}) {
     pauseChild = pause;
-    print(pauseChild.toString() + "asfsldhfnsd");
+    print("${pauseChild}asfsldhfnsd");
 
     emit(state);
   }
 
   Future<void> createReelView(String reelId, int duration) async {
     emit(state.copyWith(isCreatingReelView: true));
-
-    final String url = 'https://49dev.com/api/v1/reels/views/$reelId';
-
-    final result = await apiConsumer.post(
-      url,
-      data: {
-        "duration": duration,
-      },
+    //
+    // final String url = 'https://49dev.com/api/v1/reels/views/$reelId';
+    //
+    // final result = await apiConsumer.post(
+    //   url,
+    //   data: {
+    //     "duration": duration,
+    //   },
+    // );
+    final result = await _createReelUseCase(
+      CreateReelParams(reelId: reelId, duration: duration),
     );
 
     result.fold(
@@ -332,68 +141,97 @@ class ReelsCubit extends Cubit<ReelsState> {
 //---------------------------------------------------------------------------------------
   Future<void> createAdvertisement(
       List<String> mediaIds, String type, double totalPrice) async {
-    final token = await CacheManager.getAccessToken();
 
-    final url = Uri.parse('https://49dev.com/api/v1/advertisementCompany');
-    final headers = {
-      'Authorization': 'Bearer $token',
-      'Content-Type': 'application/json',
-    };
-    final body = jsonEncode({
-      "advertisements": [
-        {
-          "media": mediaIds,
-          "advertisement_type": type,
-          "totalPrice": totalPrice,
-        }
-      ]
-    });
+    final result = await _advertisementUseCase(
+      CreateAdvertisementParams(type: type,mediaIds: mediaIds,totalPrice: totalPrice),
+    );
 
-    try {
-      final response = await http.post(
-        url,
-        headers: headers,
-        body: body,
-      );
-
-      if (response.statusCode == 200) {
-        // Handle success
-        print(
-            'Advertisement created successfully!  ${response.body} ****************************************************');
-      } else {
-        // Handle failure
-        print('Failed to create advertisement: ${response.body}');
-        print('Response: ${response.body}');
-      }
-    } catch (e) {
-      // Handle error
-      print('Error occurred: $e');
-    }
+    result.fold(
+          (failure) =>
+          emit(state.copyWith(reelViewErrorMessage: failure.toString())),
+          (data) {
+            print(
+                'Advertisement created successfully!  ${data} ****************************************************');
+          },
+    );
+    // final token = await CacheManager.getAccessToken();
+    //
+    // final url = Uri.parse('https://49dev.com/api/v1/advertisementCompany');
+    // final headers = {
+    //   'Authorization': 'Bearer $token',
+    //   'Content-Type': 'application/json',
+    // };
+    // final body = jsonEncode({
+    //   "advertisements": [
+    //     {
+    //       "media": mediaIds,
+    //       "advertisement_type": type,
+    //       "totalPrice": totalPrice,
+    //     }
+    //   ]
+    // });
+    //
+    // try {
+    //   final response = await http.post(
+    //     url,
+    //     headers: headers,
+    //     body: body,
+    //   );
+    //
+    //   if (response.statusCode == 200) {
+    //     // Handle success
+    //     print(
+    //         'Advertisement created successfully!  ${response.body} ****************************************************');
+    //   } else {
+    //     // Handle failure
+    //     print('Failed to create advertisement: ${response.body}');
+    //     print('Response: ${response.body}');
+    //   }
+    // } catch (e) {
+    //   // Handle error
+    //   print('Error occurred: $e');
+    // }
   }
 
 //---------------------------------------------------------------------------------------
   Future<void> fetchReels() async {
-    if (state.globalReelsIsLoading || state.globalReelsHasReachedMax) return;
+    if ((state.globalReelsIsLoading??false) || (state.globalReelsHasReachedMax??false)) return;
 
     emit(state.copyWith(isLoading: true));
+    final result = await _getExploreReelsUseCase(1);
 
-    try {
-      // Fetch 3 reels at a time
-      final ReelsResponse response = await repository.fetchReels(
-        page: state.globalReelsCurrentPage + 1,
-      );
-
-      print(response.data.reels.length.toString() + "asfadjcbalc");
-      emit(state.copyWith(
-        reels: [...state.globalReels, ...response.data.reels],
-        isLoading: false,
-        hasReachedMax: response.data.pagination.currentPage >=
-            response.data.pagination.pageCount,
-        currentPage: response.data.pagination.currentPage,
-      ));
-    } catch (e) {
-      emit(state.copyWith(isLoading: false));
-    }
+    result.fold(
+          (failure) =>
+          emit(state.copyWith(reelViewErrorMessage: failure.toString())),
+          (data) {
+            print("${data.data.reels.length}asfadjcbalc");
+            emit(state.copyWith(
+              reels: [...state.globalReels??[], ...data.data.reels],
+              isLoading: false,
+              hasReachedMax: data.data.pagination.currentPage >=
+                  data.data.pagination.pageCount,
+              currentPage: data.data.pagination.currentPage,
+            ));
+      },
+    );
+    //
+    // try {
+    //   // Fetch 3 reels at a time
+    //   final ReelsResponse response = await repository.fetchReels(
+    //     page: (state.globalReelsCurrentPage??0) + 1,
+    //   );
+    //
+    //   print("${response.data.reels.length}asfadjcbalc");
+    //   emit(state.copyWith(
+    //     reels: [...state.globalReels, ...response.data.reels],
+    //     isLoading: false,
+    //     hasReachedMax: response.data.pagination.currentPage >=
+    //         response.data.pagination.pageCount,
+    //     currentPage: response.data.pagination.currentPage,
+    //   ));
+    // } catch (e) {
+    //   emit(state.copyWith(isLoading: false));
+    // }
   }
 
 //--------------------------------------------------------------------------------------------//---------------------------------------------------------------------------------------
@@ -405,220 +243,356 @@ class ReelsCubit extends Cubit<ReelsState> {
 
     emit(state.copyWith(reelsForFollowerIsLoading: true));
 
-    try {
-      // Fetch 3 reels at a time
-      final ReelsResponse response = await repository.fetchReelsForFollowers(
-        page: state.reelsForFollowerCurrentPage + 1,
-      );
+    final result = await _getFollowersReelsUseCase(1);
 
-      log('from fetchReelsForFollowers --> ${response.data.reels.length}');
-      emit(state.copyWith(
-        reelsForFollower: [...state.reelsForFollower, ...response.data.reels],
-        reelsForFollowerIsLoading: false,
-        reelsForFollowerHasReachedMax: response.data.pagination.currentPage >=
-            response.data.pagination.pageCount,
-        reelsForFollowerCurrentPage: response.data.pagination.currentPage,
-      ));
-    } catch (e) {
-      emit(state.copyWith(reelsForFollowerIsLoading: false));
-    }
+    result.fold(
+          (failure) =>
+          emit(state.copyWith(reelViewErrorMessage: failure.toString())),
+          (data) {
+        print("${data.data.reels.length}asfadjcbalc");
+        emit(state.copyWith(
+          reelsForFollower: [...state.reelsForFollower??[], ...data.data.reels],
+          reelsForFollowerIsLoading: false,
+          reelsForFollowerHasReachedMax: data.data.pagination.currentPage >=
+              data.data.pagination.pageCount,
+          reelsForFollowerCurrentPage: data.data.pagination.currentPage,
+        ));
+      },
+    );
+
+    // try {
+    //   // Fetch 3 reels at a time
+    //   final ReelsResponse response = await repository.fetchReelsForFollowers(
+    //     page: state.reelsForFollowerCurrentPage + 1,
+    //   );
+    //
+    //   log('from fetchReelsForFollowers --> ${response.data.reels.length}');
+    //   emit(state.copyWith(
+    //     reelsForFollower: [...state.reelsForFollower, ...response.data.reels],
+    //     reelsForFollowerIsLoading: false,
+    //     reelsForFollowerHasReachedMax: response.data.pagination.currentPage >=
+    //         response.data.pagination.pageCount,
+    //     reelsForFollowerCurrentPage: response.data.pagination.currentPage,
+    //   ));
+    // } catch (e) {
+    //   emit(state.copyWith(reelsForFollowerIsLoading: false));
+    // }
   }
 
 //--------------------------------------------------------------------------------------------
   // New method to save a reel
   Future<String?> saveReel(String reelId) async {
-    try {
-      // Optionally, you can emit a loading state here if you want to show a loader or disable UI interaction
-      final ReelSaveResponse response = await repository.saveReel(reelId);
-
-      // Optionally, you can update the state to reflect that the reel was saved, or show a success message
-
-      log("Reel saved successfully ${response.message}------------------------------------------------------");
-
-      emit(state.copyWith(reelSaveResponse: response
-          // Add any state update logic here if necessary
-          ));
-      return response.message;
-      log("Reel saved successfully");
-    } catch (e) {
-      log("Error saving reel: $e");
-      // Optionally, emit a state with an error message if needed
-    }
-    return null;
+    final result = await _saveReelUseCase(reelId);
+    String message = '';
+    result.fold(
+          (failure) =>
+          emit(state.copyWith(reelViewErrorMessage: failure.toString())),
+          (data) {
+            emit(state.copyWith(reelSaveResponse: data
+              // Add any state update logic here if necessary
+            ));
+            message = data.message??'';
+      },
+    );
+    return message;
+    // try {
+    //   // Optionally, you can emit a loading state here if you want to show a loader or disable UI interaction
+    //   final ReelSaveResponse response = await repository.saveReel(reelId);
+    //
+    //   // Optionally, you can update the state to reflect that the reel was saved, or show a success message
+    //
+    //   log("Reel saved successfully ${response.message}------------------------------------------------------");
+    //
+    //   emit(state.copyWith(reelSaveResponse: response
+    //       // Add any state update logic here if necessary
+    //       ));
+    //   return response.message;
+    //   log("Reel saved successfully");
+    // } catch (e) {
+    //   log("Error saving reel: $e");
+    //   // Optionally, emit a state with an error message if needed
+    // }
+    // return null;
   }
 
 //--------------------------------------------------------------------------------------------
   // New method to share a reel
   Future<void> shareReel(String reelId) async {
-    try {
-      // Optionally, you can emit a loading state here if you want to show a loader or disable UI interaction
-      final ReelShareResponse response = await repository.shareReel(reelId);
-
-      // Optionally, you can update the state to reflect that the reel was shared, or show a success message
-      emit(state.copyWith(reelShareResponse: response
-          // Add any state update logic here if necessary
-          ));
-      log("Reel shared successfully");
-    } catch (e) {
-      log("Error sharing reel: $e");
-      // Optionally, emit a state with an error message if needed
-    }
+    final result = await _shareReelUseCase(reelId);
+    result.fold(
+          (failure) =>
+          emit(state.copyWith(reelViewErrorMessage: failure.toString())),
+          (data) {
+            emit(state.copyWith(reelShareResponse: data
+              // Add any state update logic here if necessary
+            ));
+      },
+    );
+    // try {
+    //   // Optionally, you can emit a loading state here if you want to show a loader or disable UI interaction
+    //   final ReelShareResponse response = await repository.shareReel(reelId);
+    //
+    //   // Optionally, you can update the state to reflect that the reel was shared, or show a success message
+    //   emit(state.copyWith(reelShareResponse: response
+    //       // Add any state update logic here if necessary
+    //       ));
+    //   log("Reel shared successfully");
+    // } catch (e) {
+    //   log("Error sharing reel: $e");
+    //   // Optionally, emit a state with an error message if needed
+    // }
   }
 
 //--------------------------------------------------------------------------------------------
   Future<String> likeReel(String reelId) async {
-    try {
-      emit(state.copyWith(
-          isLikingReel: false, likeReelErrorMessage: 'loadingLike'));
-
-      final response = await repository.likeReel(reelId);
-
-      print(response.message+"dsfdvsdvsdv");
-      // Assuming you might want to update the specific reel in the list with the like status
-      List<Reel> updatedReels = state.globalReels.map((reel) {
-        if (reel.id == reelId) {
-          // Update the reel here if needed
-        }
-        return reel;
-      }).toList();
-
-      emit(state.copyWith(
-          likeReelResponse: response,
-          isLikingReel:
-              response.message == "Reel liked successfully" ? true : false));
-      return  response.message;
-    } catch (e) {
-      emit(state.copyWith(
-          isLikingReel: false,
-          likeReelErrorMessage:
-              'errorLike')); // Handle the error, possibly update the UI state or show an error message
-    }
-    return '';
+    emit(state.copyWith(
+        isLikingReel: false, likeReelErrorMessage: 'loadingLike'));
+    final result = await _likeReelUseCase(reelId);
+    String message  = '';
+    result.fold(
+            (failure) =>
+            emit(state.copyWith(
+                isLikingReel: false,
+                likeReelErrorMessage:
+                'errorLike')),
+            (data) {
+          message=data.message;
+          emit(state.copyWith(
+              likeReelResponse: data,
+              isLikingReel:
+              data.message == "Reel liked successfully" ? true : false));}
+    );
+    return message;
+    // try {
+    //   emit(state.copyWith(
+    //       isLikingReel: false, likeReelErrorMessage: 'loadingLike'));
+    //
+    //   final response = await repository.likeReel(reelId);
+    //
+    //   print("${response.message}dsfdvsdvsdv");
+    //   // Assuming you might want to update the specific reel in the list with the like status
+    //   List<Reel> updatedReels = state.globalReels.map((reel) {
+    //     if (reel.id == reelId) {
+    //       // Update the reel here if needed
+    //     }
+    //     return reel;
+    //   }).toList();
+    //
+    //   emit(state.copyWith(
+    //       likeReelResponse: response,
+    //       isLikingReel:
+    //           response.message == "Reel liked successfully" ? true : false));
+    //   return  response.message;
+    // } catch (e) {
+    //   emit(state.copyWith(
+    //       isLikingReel: false,
+    //       likeReelErrorMessage:
+    //           'errorLike')); // Handle the error, possibly update the UI state or show an error message
+    // }
+    // return '';
   }
 
   //======================================================================================
   Future<void> addComment(String reelId, String comment,
       {String? receiverComment, String? parentCommentId}) async {
-    try {
-      // Indicate that a comment is being added
-      emit(state.copyWith(isCommenting: false));
-
-      // Make the API call to add a comment
-      final response = await repository.addComment(
-        reelId: reelId,
-        comment: comment,
-      );
-
-      // Update the state based on the response
-      log("${response.message}=====================================--------------------------------");
-      emit(state.copyWith(
-        isCommenting: true,
-        commentResponse: response,
-        commentErrorMessage: response.status ? null : "Failed to add comment",
-      ));
-    } catch (e) {
-      // Handle errors and update the state accordingly
-      emit(state.copyWith(
-        isCommenting: false,
-        commentErrorMessage: "An error occurred while adding the comment",
-      ));
-    }
+    emit(state.copyWith(isCommenting: false));
+    final result = await _addCommentUseCase(AddReelCommentParams(comment: comment,reelId: reelId));
+    result.fold(
+            (failure) =>
+                emit(state.copyWith(
+                  isCommenting: false,
+                  commentErrorMessage: "An error occurred while adding the comment",
+                )),
+            (data) {
+              emit(state.copyWith(
+                isCommenting: true,
+                commentResponse: data,
+                commentErrorMessage: data.status ? null : "Failed to add comment",
+              ));
+            }
+    );
+    // try {
+    //   // Indicate that a comment is being added
+    //   emit(state.copyWith(isCommenting: false));
+    //
+    //   // Make the API call to add a comment
+    //   final response = await repository.addComment(
+    //     reelId: reelId,
+    //     comment: comment,
+    //   );
+    //
+    //   // Update the state based on the response
+    //   log("${response.message}=====================================--------------------------------");
+    //   emit(state.copyWith(
+    //     isCommenting: true,
+    //     commentResponse: response,
+    //     commentErrorMessage: response.status ? null : "Failed to add comment",
+    //   ));
+    // } catch (e) {
+    //   // Handle errors and update the state accordingly
+    //   emit(state.copyWith(
+    //     isCommenting: false,
+    //     commentErrorMessage: "An error occurred while adding the comment",
+    //   ));
+    // }
   }
 
   Future<void> addReplayComment(String reelId, String comment,
       {String? receiverComment, String? parentCommentId}) async {
-    try {
-      // Indicate that a comment is being added
-      emit(state.copyWith(isCommenting: false));
-
-      // Make the API call to add a comment
-      final response = await repository.addReplayComment(
-        reelId: reelId,
-        comment: comment,
-        receiverComment: receiverComment,
-        parentCommentId: parentCommentId,
-      );
-
-      // Update the state based on the response
-      log("${response.message}=====================================--------------------------------");
-      emit(state.copyWith(
-        isCommenting: true,
-        commentResponse: response,
-        commentErrorMessage: response.status ? null : "Failed to add comment",
-      ));
-    } catch (e) {
-      // Handle errors and update the state accordingly
-      emit(state.copyWith(
-        isCommenting: false,
-        commentErrorMessage: "An error occurred while adding the comment",
-      ));
-    }
+    emit(state.copyWith(isCommenting: false));
+    final result = await _addReplyUseCase(AddReelReplyParams(comment: comment,reelId: reelId,parentCommentId: parentCommentId,receiverComment: receiverComment));
+    result.fold(
+            (failure) =>
+                emit(state.copyWith(
+                  isCommenting: false,
+                  commentErrorMessage: "An error occurred while adding the comment",
+                )),
+            (data) {
+              emit(state.copyWith(
+                isCommenting: true,
+                commentResponse: data,
+                commentErrorMessage: data.status ? null : "Failed to add comment",
+              ));
+        }
+    );
+    // try {
+    //   // Indicate that a comment is being added
+    //   emit(state.copyWith(isCommenting: false));
+    //
+    //   // Make the API call to add a comment
+    //   final response = await repository.addReplayComment(
+    //     reelId: reelId,
+    //     comment: comment,
+    //     receiverComment: receiverComment,
+    //     parentCommentId: parentCommentId,
+    //   );
+    //
+    //   // Update the state based on the response
+    //   log("${response.message}=====================================--------------------------------");
+    //   emit(state.copyWith(
+    //     isCommenting: true,
+    //     commentResponse: response,
+    //     commentErrorMessage: response.status ? null : "Failed to add comment",
+    //   ));
+    // } catch (e) {
+    //   // Handle errors and update the state accordingly
+    //   emit(state.copyWith(
+    //     isCommenting: false,
+    //     commentErrorMessage: "An error occurred while adding the comment",
+    //   ));
+    // }
   }
 
   Future<void> getComments(String reelId) async {
-    try {
-      emit(state.copyWith(isFetchingComments: false));
-      final commentsResponse = await repository.fetchComments(reelId);
-      log("${commentsResponse.data.first.comment}aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-      emit(state.copyWith(
-          isFetchingComments: true, fetchedComments: commentsResponse));
-    } catch (e) {
-      emit(state.copyWith(
-          isFetchingComments: false,
-          fetchCommentsErrorMessage: 'fetchCommentsError'));
-    }
+    final result = await _getCommentsUseCase(reelId);
+    result.fold(
+            (failure) =>
+                emit(state.copyWith(
+                    isFetchingComments: false,
+                    fetchCommentsErrorMessage: 'fetchCommentsError')),
+            (data) {
+              emit(state.copyWith(
+                  isFetchingComments: true, fetchedComments: data));
+        }
+    );
+    // try {
+    //   emit(state.copyWith(isFetchingComments: false));
+    //   final commentsResponse = await repository.fetchComments(reelId);
+    //   log("${commentsResponse.data.first.comment}aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    //   emit(state.copyWith(
+    //       isFetchingComments: true, fetchedComments: commentsResponse));
+    // } catch (e) {
+    //   emit(state.copyWith(
+    //       isFetchingComments: false,
+    //       fetchCommentsErrorMessage: 'fetchCommentsError'));
+    // }
   }
 
   Future<void> toggleCommentLike(String commentId) async {
-    try {
-      emit(state.copyWith(isLikingComment: true));
-
-      final message = await repository.toggleLike(commentId);
-
-      if (message != null) {
-        emit(state.copyWith(
-          likeReelCommentResponseMessage: message,
-        )); // Save the message ("like" or "unlike")
-      }
-    } catch (e) {
-      emit(state.copyWith(
-          isLikingComment: false,
-          likeReelErrorMessage:
-              'An error occurred while liking/unliking the comment'));
-    }
+    final result = await _toggleCommentLikeUseCase(commentId);
+    result.fold(
+            (failure) =>
+                emit(state.copyWith(
+                    isLikingComment: false,
+                    likeReelErrorMessage:
+                    'An error occurred while liking/unliking the comment')),
+            (data) {
+              emit(state.copyWith(
+                likeReelCommentResponseMessage: data,
+              )); // Save the message ("like" or "unlike")
+            }
+    );
+    // try {
+    //   emit(state.copyWith(isLikingComment: true));
+    //
+    //   final message = await repository.toggleLike(commentId);
+    //
+    //   if (message != null) {
+    //     emit(state.copyWith(
+    //       likeReelCommentResponseMessage: message,
+    //     )); // Save the message ("like" or "unlike")
+    //   }
+    // } catch (e) {
+    //   emit(state.copyWith(
+    //       isLikingComment: false,
+    //       likeReelErrorMessage:
+    //           'An error occurred while liking/unliking the comment'));
+    // }
+    // _reelsWithSameAudioUseCase
   }
 
   Future<void> fetchReelsWithSameAudio(String audioId,
       {bool isInitialLoad = false}) async {
-    if (state.globalReelsIsLoading || state.globalReelsHasReachedMax) return;
+    if ((state.globalReelsIsLoading??false) || (state.globalReelsHasReachedMax??false)) return;
 
     emit(state.copyWith(isLoading: true));
+    final int pageToFetch =
+    isInitialLoad ? 1 : (state.globalReelsCurrentPage??0) + 1;
+    final result = await _reelsWithSameAudioUseCase(ReelsWithSameAudioParams(audioId: audioId));
+    result.fold(
+            (failure) =>
+                emit(state.copyWith(isLoading: false)),
+            (data) {
+              final bool hasReachedMax =
+                  pageToFetch >= data.data!.pagination!.pageCount!;
+              final List<Reel> newReels = data.data?.reels ?? [];
+              log("${newReels.first.user.firstName}----------------------------------------------------------------------------------------------");
 
-    try {
-      // If it's an initial load, start from the first page
-      final int pageToFetch =
-          isInitialLoad ? 1 : state.globalReelsCurrentPage + 1;
+              emit(state.copyWith(
+                reelsForAudio:
+                isInitialLoad ? newReels : [...?state.reelsForAudio, ...newReels],
+                isLoading: false,
+                hasReachedMax: hasReachedMax,
+                currentPage: pageToFetch,
+              ));
+        }
+    );
 
-      final ReelsForAudioResponse response =
-          await repository.fetchReelsWithSameAudio(audioId, page: pageToFetch);
-
-      final bool hasReachedMax =
-          pageToFetch >= response.data!.pagination!.pageCount!;
-
-      final List<Reel> newReels = response.data?.reels ?? [];
-      log("${newReels.first.user.firstName}----------------------------------------------------------------------------------------------");
-
-      emit(state.copyWith(
-        reelsForAudio:
-            isInitialLoad ? newReels : [...?state.reelsForAudio, ...newReels],
-        isLoading: false,
-        hasReachedMax: hasReachedMax,
-        currentPage: pageToFetch,
-      ));
-    } catch (e) {
-      emit(state.copyWith(isLoading: false));
-      log("Error fetching reels with the same audio: $e");
-    }
+    // try {
+    //   // If it's an initial load, start from the first page
+    //   final int pageToFetch =
+    //       isInitialLoad ? 1 : state.globalReelsCurrentPage + 1;
+    //
+    //   final ReelsForAudioResponse response =
+    //       await repository.fetchReelsWithSameAudio(audioId, page: pageToFetch);
+    //
+    //   final bool hasReachedMax =
+    //       pageToFetch >= response.data!.pagination!.pageCount!;
+    //
+    //   final List<Reel> newReels = response.data?.reels ?? [];
+    //   log("${newReels.first.user.firstName}----------------------------------------------------------------------------------------------");
+    //
+    //   emit(state.copyWith(
+    //     reelsForAudio:
+    //         isInitialLoad ? newReels : [...?state.reelsForAudio, ...newReels],
+    //     isLoading: false,
+    //     hasReachedMax: hasReachedMax,
+    //     currentPage: pageToFetch,
+    //   ));
+    // } catch (e) {
+    //   emit(state.copyWith(isLoading: false));
+    //   log("Error fetching reels with the same audio: $e");
+    // }
   }
 
   void updatePlayingIndex(int? index) {

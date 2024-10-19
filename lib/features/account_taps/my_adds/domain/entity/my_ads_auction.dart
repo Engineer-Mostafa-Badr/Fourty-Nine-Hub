@@ -15,7 +15,7 @@ class MyAuctionAdsEntity {
   final bool adminIgnore;
   final bool isFavourite;
   final MyAuctionSubCategoryEntity subCategory;
-  final MyAuctionMainCategory mainCategory;
+  final MyAuctionMainCategory? mainCategory;
   final bool isApproved;
   final bool isActive;
   final bool isPremium;
@@ -39,7 +39,7 @@ class MyAuctionAdsEntity {
       required this.adminIgnore,
       required this.isFavourite,
       required this.subCategory,
-      required this.mainCategory,
+        this.mainCategory,
       required this.isApproved,
       required this.isActive,
       required this.isPremium,

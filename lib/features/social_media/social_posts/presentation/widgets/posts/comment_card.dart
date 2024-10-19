@@ -78,20 +78,20 @@ class _CommentCardState extends State<CommentCard> {
                     style: Styles.mediumText(color: widget.textColor)),
               ],
             )),
-            if (widget.comment.user.id != user?.id)
-              GestureDetector(
-                  onTap: () {
-                    bottomSheet(
-                        context: context,
-                        widget: ReportView(
-                          id: widget.comment.id,
-                          categoryId: '66a3583454e6e337915514db',
-                        ));
-                  },
-                  child: Icon(
-                    Icons.more_vert,
-                    color: widget.textColor,
-                  )),
+            // if (widget.comment.user.id != user?.id)
+            //   GestureDetector(
+            //       onTap: () {
+            //         bottomSheet(
+            //             context: context,
+            //             widget: ReportView(
+            //               id: widget.comment.id,
+            //               categoryId: '66a3583454e6e337915514db',
+            //             ));
+            //       },
+            //       child: Icon(
+            //         Icons.more_vert,
+            //         color: widget.textColor,
+            //       )),
             const Sizer(),
             GestureDetector(
               onTap: () {
