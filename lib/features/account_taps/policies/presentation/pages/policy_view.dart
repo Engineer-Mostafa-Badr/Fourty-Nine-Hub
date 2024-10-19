@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:advance_pdf_viewer2/advance_pdf_viewer.dart';
+// import 'package:advance_pdf_viewer2/advance_pdf_viewer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -14,7 +14,7 @@ class PolicyView extends StatefulWidget {
 
 class _PolicyViewState extends State<PolicyView> {
   bool _isLoading = true;
-  late PDFDocument document;
+  // late PDFDocument document;
 
   @override
   void initState() {
@@ -33,9 +33,9 @@ class _PolicyViewState extends State<PolicyView> {
     // Avoid loading the document multiple times
     if (!_isLoading) return;
 
-    document = context.locale.languageCode == 'en'
-        ? await PDFDocument.fromAsset('assets/pdf/who_we_are_en.pdf')
-        : await PDFDocument.fromAsset('assets/pdf/who_we_are_ar.pdf');
+    // document = context.locale.languageCode == 'en'
+    //     ? await PDFDocument.fromAsset('assets/pdf/who_we_are_en.pdf')
+    //     : await PDFDocument.fromAsset('assets/pdf/who_we_are_ar.pdf');
 
     setState(() {
       _isLoading = false;
@@ -47,9 +47,9 @@ class _PolicyViewState extends State<PolicyView> {
       _isLoading = true;
     });
 
-    document = context.locale.languageCode == 'en'
-        ? await PDFDocument.fromAsset('assets/pdf/who_we_are_en.pdf')
-        : await PDFDocument.fromAsset('assets/pdf/who_we_are_ar.pdf');
+    // document = context.locale.languageCode == 'en'
+    //     ? await PDFDocument.fromAsset('assets/pdf/who_we_are_en.pdf')
+    //     : await PDFDocument.fromAsset('assets/pdf/who_we_are_ar.pdf');
 
     setState(() {
       _isLoading = false;
@@ -65,16 +65,16 @@ class _PolicyViewState extends State<PolicyView> {
       ),
       body: Center(
         child: _isLoading
-            ? const CircularProgressIndicator()
-            : PDFViewer(
-                document: document,
-                zoomSteps: 2,
-                showNavigation: false, // Hide bottom navigation
-                showPicker: false, // Hide page picker
-                lazyLoad:
-                    false, // Set this to true if you want to load pages lazily
-                scrollDirection: Axis.vertical, // Vertical scrolling
-              ),
+            ? const CircularProgressIndicator():Container()
+            // : PDFViewer(
+            //     document: document,
+            //     zoomSteps: 2,
+            //     showNavigation: false, // Hide bottom navigation
+            //     showPicker: false, // Hide page picker
+            //     lazyLoad:
+            //         false, // Set this to true if you want to load pages lazily
+            //     scrollDirection: Axis.vertical, // Vertical scrolling
+            //   ),
       ),
     );
   }

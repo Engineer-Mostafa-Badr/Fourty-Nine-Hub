@@ -951,5 +951,12 @@
   "transactionSuccessful": "تمت المعاملة بنجاح",
   "yourTransactionWasSuccessful": "كانت معاملتك ناجحة",
   "transferAmount": "مبلغ التحويل",
-  "shareTransactionDetails": "مشاركة تفاصيل المعاملة"
+  "shareTransactionDetails": "مشاركة تفاصيل المعاملة",
+  "premiumPackageMoreVisibilityCashback": "تمنحك الباقة المميزة الفرصة لتكون أكثر وضوحًا وتحصل على المزيد من الاسترداد النقدي.",
+  "inFront": "من الامام",
+  "behind": "من الخلف",
+  "drivingLicense": "رخصة القيادة",
+  "theApplicationDoesNotDeductAnyPercentage": "لا يقوم التطبيق بخصم أي نسبة من مقدم الخدمة.",
+  "youWillGetPoundsAnnually": "سوف تحصل على 3,650 جنيهًا إسترلينيًا سنويًا إذا قمت بالاشتراك.",
+  "license": "رخصة"
 }

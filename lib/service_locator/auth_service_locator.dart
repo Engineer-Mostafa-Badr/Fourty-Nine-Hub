@@ -92,8 +92,8 @@ class AuthServiceLocator {
         .registerFactory(() => GetWelcomeGiftUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => GoogleSignInUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => AppleSignInUseCase(serviceLocator()));
-    serviceLocator
-        .registerFactory(() => FacebookSignInUseCase(serviceLocator()));
+    // serviceLocator
+    //     .registerFactory(() => FacebookSignInUseCase(serviceLocator()));
     serviceLocator
         .registerFactory(() => SendForgetPasswordOTPUseCase(serviceLocator()));
     serviceLocator.registerFactory(
@@ -149,7 +149,7 @@ class AuthServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
-        serviceLocator(),
+        // serviceLocator(),
       )..getWelcomeGift(),
     );
     serviceLocator.registerFactory<VerifyOtpCubit>(

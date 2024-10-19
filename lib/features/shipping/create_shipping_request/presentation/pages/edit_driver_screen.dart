@@ -11,6 +11,7 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.d
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/pickers/date/id_expiry_date_picker.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_driver_cubit.dart';
@@ -65,7 +66,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
             if (state is SuccessUpdateDriverState) {
               context.pushReplacementNamed(Routes.SHIPPING);
               // ! SUPER
-              showSuccessMessage(context, "Success update Driver".tr());
+              showSuccessMessage(context, LocaleKeys.successUpdateDriver.tr());
             }
           },
           child: BlocConsumer<GetDriverCubit, ShippingState>(
@@ -121,7 +122,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Welcome to Ship Register".tr(),
+                          LocaleKeys.welcomeToShipRegister.tr(),
                           style: Styles.headerText(
                             fontSize: 40,
                             color: AppColors.PRIMARY_COLOR_DARK,
@@ -213,7 +214,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                                       .size
                                                       .width *
                                                   0.95,
-                                              hintText: "Sub Category".tr(),
+                                              hintText: LocaleKeys.subCategory.tr(),
                                               dropdownMenuEntries: state
                                                   .model.subCategories!
                                                   .map((e) => SubCategoryEntity(
@@ -305,7 +306,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                         DefaultTextFormField(
                           currentFocusNode: phoneFocusNode,
                           nextFocusNode: model,
-                          hint: Labels.phone,
+                          hint: LocaleKeys.phone.tr(),
                           hintColor: AppColors.PRIMARY_COLOR,
                           currentController: phoneController,
                           // validator: (p0) {
@@ -340,7 +341,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "Car Picture".tr(),
+                                            LocaleKeys.carPicture.tr(),
                                             style: const TextStyle(
                                                 fontSize: 17,
                                                 color: AppColors.PRIMARY_COLOR,
@@ -361,7 +362,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                                     .driverInformation
                                                     ?.driverInfoId
                                                     ?.carPicturesKey,
-                                                hint: Labels.inFront,
+                                                hint: LocaleKeys.inFront.tr(),
                                                 // validator: (value) {
                                                 //   return shippingcubit.validation(
                                                 //       message:
@@ -406,7 +407,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Label(
-                                            text: "ID".tr(),
+                                            text: LocaleKeys.id.tr(),
                                             style: const TextStyle(
                                                 fontSize: 17,
                                                 color: AppColors.PRIMARY_COLOR,
@@ -432,7 +433,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                                         .driverInformation
                                                         ?.driverInfoId
                                                         ?.idFrontKey,
-                                                    hint: Labels.inFront,
+                                                    hint: LocaleKeys.inFront.tr(),
                                                     // validator: (value) {
                                                     //   return shippingcubit.validation(
                                                     //       message:
@@ -457,7 +458,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                                         .driverInformation
                                                         ?.driverInfoId
                                                         ?.idBehindKey,
-                                                    hint: Labels.behind,
+                                                    hint: LocaleKeys.behind.tr(),
                                                     // validator: (value) {
                                                     //   return shippingcubit.validation(
                                                     //       message:
@@ -517,8 +518,8 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Label(
-                                  text: Labels.drivingLicense,
+                                Label(
+                                  text: LocaleKeys.drivingLicense.tr(),
                                   style: TextStyle(
                                       fontSize: 17,
                                       color: AppColors.PRIMARY_COLOR,
@@ -552,7 +553,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                                   ?.driverInfoId
                                                   ?.drivingLicenseFrontKey,
                                               // iconColor: Colors.grey,
-                                              hint: Labels.inFront,
+                                              hint: LocaleKeys.inFront.tr(),
                                               // validator: (value) {
                                               //   return shippingcubit.validation(
                                               //       message:
@@ -576,7 +577,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                                   .driverInformation
                                                   ?.driverInfoId
                                                   ?.drivingLicenseBehindKey,
-                                              hint: Labels.behind,
+                                              hint: LocaleKeys.behind.tr(),
                                               // validator: (value) {
                                               //   return shippingcubit.validation(
                                               //       message:
@@ -616,8 +617,8 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Label(
-                                  text: Labels.license,
+                                Label(
+                                  text: LocaleKeys.license.tr(),
                                   style: TextStyle(
                                       fontSize: 17,
                                       color: AppColors.PRIMARY_COLOR,
@@ -650,7 +651,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                                   .driverInformation
                                                   ?.driverInfoId
                                                   ?.carLicenseFrontKey,
-                                              hint: Labels.inFront,
+                                              hint: LocaleKeys.inFront.tr(),
                                               // validator: (value) {
                                               //   return shippingcubit.validation(
                                               //       message:
@@ -674,7 +675,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                                   .driverInformation
                                                   ?.driverInfoId
                                                   ?.carLicenseBehindKey,
-                                              hint: Labels.behind,
+                                              hint: LocaleKeys.behind.tr(),
                                               // validator: (value) {
                                               //   return shippingcubit.validation(
                                               //       message:
@@ -726,7 +727,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                 // },
                                 currentController: idNumberController,
                                 currentFocusNode: idNumberFocusNode,
-                                hint: "ID Number".tr(),
+                                hint: LocaleKeys.idNumber.tr(),
                               ),
                             ),
                             const SizedBox(
@@ -741,7 +742,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                 // },
                                 currentController: plateNumberController,
                                 currentFocusNode: plateNumberFocusNode,
-                                hint: "Plate information".tr(),
+                                hint: LocaleKeys.plateInformation.tr(),
                               ),
                             ),
                           ],
@@ -771,7 +772,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                           height: 10,
                         ),
                         CreateDoctorIDExpiryDatePicker(
-                          title: "Driving License Expiry Date".tr(),
+                          title: LocaleKeys.drivingLicenseExpiryDate.tr(),
                           textStyle: const TextStyle(
                               fontSize: 17,
                               color: AppColors.PRIMARY_COLOR,
@@ -795,7 +796,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                         ),
                         CreateDoctorIDExpiryDatePicker(
                           borderWidth: 1,
-                          title: "License Expiry Date".tr(),
+                          title: LocaleKeys.licenseExpiryDate.tr(),
                           textStyle: const TextStyle(
                               fontSize: 17,
                               color: AppColors.PRIMARY_COLOR,
@@ -850,7 +851,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                       // onChanged: (value) {
                                       //   shippingcubit.model.model = value;
                                       // },
-                                      hint: Labels.model),
+                                      hint: LocaleKeys.model.tr()),
                                 ),
                                 if (field.hasError)
                                   Column(
@@ -876,14 +877,14 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        const AppInfoText(
-                          text: Labels.theApplicationDoesNot,
+                        AppInfoText(
+                          text: LocaleKeys.theApplicationDoesNotDeductAnyPercentage.tr(),
                         ),
                         const SizedBox(
                           height: 10,
                         ),
-                        const AppInfoText(
-                          text: Labels.youWillGetPounds,
+                        AppInfoText(
+                          text: LocaleKeys.youWillGetPoundsAnnually.tr(),
                         ),
                         const SizedBox(
                           height: 10,
@@ -897,7 +898,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                               fontSize: 16,
                               color: Colors.white,
                             ),
-                            label: "Update".tr(),
+                            label: LocaleKeys.update.tr(),
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
                                 shippingcubit.model.firstName =

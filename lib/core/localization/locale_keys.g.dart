@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const nnew = 'nnew';
   static const today = 'today';
   static const tommorow = 'tommorow';
@@ -310,7 +310,7 @@ abstract class LocaleKeys {
   static const chatLockMessage = 'chatLockMessage';
   static const createGroupWith = 'createGroupWith';
   static const createGroup = 'createGroup';
-  static const attachments = 'attachments ';
+  static const attachments  = 'attachments ';
   static const docs = 'docs';
   static const links = 'links';
   static const media = 'media';
@@ -923,7 +923,7 @@ abstract class LocaleKeys {
   static const ChanceDetails = 'ChanceDetails';
   static const ProductDescription = 'ProductDescription';
   static const Typethevalueyouwanttoparticipation = 'Typethevalueyouwanttoparticipation';
-  static const CreateChance = 'CreateChance ';
+  static const CreateChance  = 'CreateChance ';
   static const enterPrice = 'enterPrice';
   static const enterTitle = 'enterTitle';
   static const enterDescription = 'enterDescription';
@@ -942,5 +942,12 @@ abstract class LocaleKeys {
   static const yourTransactionWasSuccessful = 'yourTransactionWasSuccessful';
   static const transferAmount = 'transferAmount';
   static const shareTransactionDetails = 'shareTransactionDetails';
+  static const premiumPackageMoreVisibilityCashback = 'premiumPackageMoreVisibilityCashback';
+  static const inFront = 'inFront';
+  static const behind = 'behind';
+  static const drivingLicense = 'drivingLicense';
+  static const theApplicationDoesNotDeductAnyPercentage = 'theApplicationDoesNotDeductAnyPercentage';
+  static const youWillGetPoundsAnnually = 'youWillGetPoundsAnnually';
+  static const license = 'license';
 
 }

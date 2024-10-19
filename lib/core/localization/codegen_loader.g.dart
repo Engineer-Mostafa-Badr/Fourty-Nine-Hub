@@ -967,7 +967,14 @@ class CodegenLoader extends AssetLoader{
   "transactionSuccessful": "تمت المعاملة بنجاح",
   "yourTransactionWasSuccessful": "كانت معاملتك ناجحة",
   "transferAmount": "مبلغ التحويل",
-  "shareTransactionDetails": "مشاركة تفاصيل المعاملة"
+  "shareTransactionDetails": "مشاركة تفاصيل المعاملة",
+  "premiumPackageMoreVisibilityCashback": "تمنحك الباقة المميزة الفرصة لتكون أكثر وضوحًا وتحصل على المزيد من الاسترداد النقدي.",
+  "inFront": "من الامام",
+  "behind": "من الخلف",
+  "drivingLicense": "رخصة القيادة",
+  "theApplicationDoesNotDeductAnyPercentage": "لا يقوم التطبيق بخصم أي نسبة من مقدم الخدمة.",
+  "youWillGetPoundsAnnually": "سوف تحصل على 3,650 جنيهًا إسترلينيًا سنويًا إذا قمت بالاشتراك.",
+  "license": "رخصة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1946,7 +1953,13 @@ static const Map<String,dynamic> en = {
   "transactionSuccessful": "Transaction Successful",
   "yourTransactionWasSuccessful": "Your transaction was successful",
   "transferAmount": "Transfer Amount",
-  "shareTransactionDetails": "Share Transaction Details"
+  "shareTransactionDetails": "Share Transaction Details",
+  "inFront": "In Front",
+  "behind": "Behind",
+  "drivingLicense": "Driving License",
+  "theApplicationDoesNotDeductAnyPercentage": "The application does not deduct any percentage from the service provider.",
+  "youWillGetPoundsAnnually": "You will get 3,650 pounds annually if you subscribe.",
+  "license": "رخصة"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

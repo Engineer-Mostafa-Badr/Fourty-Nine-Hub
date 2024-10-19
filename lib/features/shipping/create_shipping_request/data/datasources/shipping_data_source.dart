@@ -15,8 +15,8 @@ class ShippingDataSource {
   ShippingDataSource({required this.api, required this.cacheService});
   Future<Either<Failure, Map<String, dynamic>>> getBannerData() async {
     log(cacheService.getDriverId().toString(), name: "DriverId");
-    String? token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6ImI2NDkzOGE5LTllYTgtNDhhNy1hNmNkLTc5MWQ4ZTI5NGQ3YSIsImlhdCI6MTcyODk1MDY0OCwiZXhwIjo1NTcyODk1MDY0OCwic3ViIjoiNjZjMzQ5ZDdhNjg0YWI0NzNmMWMxZWQ3In0.CyblIO_MVPhx8dOPMr64P2j3VwFpxn_ncqKkjMSAs60";
+    String? token = await cacheService.getUserToken() ?? "";
+    log(token, name: "lllllllllllllllllllllllllddddddddddddddddd");
     // extractUserId(token ?? "");
     return api.get("${EndPoints.bannerData}?userId=${extractUserId(token)}");
   }
