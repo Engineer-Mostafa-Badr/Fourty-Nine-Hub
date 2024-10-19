@@ -5,6 +5,11 @@ import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_c
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/add_reel_comment_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/add_reel_reply_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_advertisement_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_reel_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_with_same_audia_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
@@ -26,7 +31,7 @@ class EndPoints {
   //logout
   static const logout = '/auth/logout';
 
-  static const pageSize = 20;
+  static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49dev.com';
   static const developmentBaseUrl = 'https://49dev.com/api/v1';
   static const productionBaseUrl = 'https://49dev.com/api/v1';
@@ -345,6 +350,15 @@ class EndPoints {
 
   // reels
   static const getExploreReels = '/reels/explore';
+  static const fetchReelsForFollowers = '/reels/followers?subCategory=66684135dbb427ee42aa0141';
+  static saveReel(String id)=> '/reels/saved/$id';
+  static shareReel(String id)=> '/reels/share/$id';
+  static likeReel(String id)=> '/reels/likes/$id';
+  static getComments(String id)=> '/reels/comments/$id';
+  static getReelsWithSameAudio(ReelsWithSameAudioParams params)=> '/reels/audio/${params.audioId}';
+  static toggleCommentLike(String id)=> '/reels/comments/like/$id';
+  static addReelComment(AddReelCommentParams params)=> '/reels/comments/${params.reelId}';
+  static addReelReply(AddReelReplyParams params)=> '/reels/comments/${params.reelId}';
 
   // ride request
   // static const expectedPrice = '/ride/trips/expected/price';
@@ -475,6 +489,16 @@ class EndPoints {
   static String getSavedReels(TwitterFeedParams params) {
     return '/reels/saved?limit=${params.limit}&page=${params.page}&subCategory=${Constants.reelsSubCategory}';
   }
+
+  static String createReel(CreateReelParams params) {
+    return '/reels/views/${params.reelId}';
+  }
+
+  static String createAdvertisement(CreateAdvertisementParams params) {
+    return '/advertisementCompany';
+  }
+
+
 
   static String getAdvertisement(TwitterFeedParams params) {
     return '/advertisementCompany?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';

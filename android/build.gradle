@@ -9,6 +9,10 @@ buildscript {
         classpath 'com.android.tools.build:gradle:8.5.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10"
         classpath "com.google.gms:google-services:4.4.2"
+        configurations.all {
+            exclude group: 'com.mapbox.common', module: 'common'
+            exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-core'
+        }
 
     }
 }

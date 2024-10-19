@@ -1,20 +1,85 @@
-// // import 'package:dartz/dartz.dart';
-// //
-// // import '../../../../../core/error/failure.dart';
-// // import '../../domain/entities/reel_entity.dart';
-// // import '../../domain/repositories/reels_repository.dart';
-// // import '../data_sources/reels_remote_data_source.dart';
-// //
-// // class ReelsRepositoryImpl extends ReelsRepository {
-// //   final ReelsRemoteDataSource _reelsRemoteDataSource;
-// //
-// //   ReelsRepositoryImpl(this._reelsRemoteDataSource);
-// //
-// //   @override
-// //   Future<Either<Failure, List<ReelEntity>>> getExploreReels(int page) {
-// //     return _reelsRemoteDataSource.getExploreReels(page);
-// //   }
-// // }
+import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/models/audio_reels_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/models/like_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/models/save_reel_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/models/share_reel_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/repositories/reels_repository.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/add_reel_comment_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/add_reel_reply_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_advertisement_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_reel_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_with_same_audia_use_case.dart';
+
+import '../../../../../core/error/failure.dart';
+import '../data_sources/reels_remote_data_source.dart';
+
+class ReelsRepositoryImpl extends ReelsRepository {
+  final ReelsRemoteDataSource _reelsRemoteDataSource;
+
+  ReelsRepositoryImpl(this._reelsRemoteDataSource);
+
+  @override
+  Future<Either<Failure, ReelsResponse>> getExploreReels(int page) {
+    return _reelsRemoteDataSource.getExploreReels(page);
+  }
+
+  @override
+  Future<Either<Failure, bool>> createReel(CreateReelParams params) {
+    return _reelsRemoteDataSource.createReel(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> createAdvertisement(CreateAdvertisementParams params) {
+    return _reelsRemoteDataSource.createAdvertisement(params);
+  }
+
+  @override
+  Future<Either<Failure, ReelsResponse>> getFollowersReels(int page) {
+    return _reelsRemoteDataSource.getFollowersReels(page);
+  }
+
+  @override
+  Future<Either<Failure, ReelSaveResponse>> saveReel(String reelId) {
+    return _reelsRemoteDataSource.saveReel(reelId);
+  }
+  @override
+  Future<Either<Failure, ReelShareResponse>> shareReel(String reelId) {
+    return _reelsRemoteDataSource.shareReel(reelId);
+  }
+
+  @override
+  Future<Either<Failure, ReelLikeResponse>> likeReel(String reelId) {
+    return _reelsRemoteDataSource.likeReel(reelId);
+  }
+
+  @override
+  Future<Either<Failure, AddCommentResponse>> addComment(AddReelCommentParams params) {
+    return _reelsRemoteDataSource.addComment(params);
+  }
+
+  @override
+  Future<Either<Failure, AddCommentResponse>> addReply(AddReelReplyParams params) {
+    return _reelsRemoteDataSource.addReply(params);
+  }
+
+  @override
+  Future<Either<Failure, GetCommentsResponse>> getComments(String reelId) {
+    return _reelsRemoteDataSource.getComments(reelId);
+  }
+
+  @override
+  Future<Either<Failure, String>> toggleCommentLike(String commentId) {
+    return _reelsRemoteDataSource.toggleCommentLike(commentId);
+  }
+
+  @override
+  Future<Either<Failure, ReelsForAudioResponse>> getReelsWithSameAudio(ReelsWithSameAudioParams params) {
+    return _reelsRemoteDataSource.getReelsWithSameAudio(params);
+  }
+}
 // import 'dart:convert';
 // import 'dart:developer';
 // import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -133,308 +198,308 @@
 //     }
 //   }
 // }
-
-import 'dart:convert';
-import 'dart:developer';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/audio_reels_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/like_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/save_reel_model.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
-import '../../../../../core/enums/wallet_types_enums.dart';
-import '../../../../../core/utils/shared_pref.dart';
-import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
-import '../models/new_reels_model.dart';
-import '../models/share_reel_model.dart';
-
-class ReelsRepository {
-  String? token;
-
-  ReelsRepository(this.apiConsumer) {
-    _initializeToken();
-  }
-
-  Future<void> _initializeToken() async {
-    token = await CacheManager.getAccessToken();
-  }
-
-  Future<void> _ensureTokenInitialized() async {
-    token ??= await CacheManager.getAccessToken();
-  }
-
-  // Future<http.Response?> _makeGetRequest({
-  //   required String url,
-  //   required String fromMethod,
-  // }) async {
-  //   await _ensureTokenInitialized();
-  //   try {
-  //     final response = await http.get(
-  //       Uri.parse(url),
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Content-Type': 'application/json',
-  //       },
-  //     );
-  //     var responseData = json.decode(response.body);
-  //     log("from ReelsRepository");
-  //     if (responseData['endPointSubscription'] != null &&
-  //         responseData['endPointSubscription'] == true &&
-  //         responseData['userSubscription'] == false) {
-  //       List<WalletTypes> wallets = (responseData['paymentMethod'] as List)
-  //           .map((e) => (e as String).toWalletType)
-  //           .toList();
-  //       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-  //           subCategoryId: responseData['subCategoryId'],
-  //           wallets: wallets,
-  //           title: 'Reels Subscription');
-  //     }
-  //     if (response.statusCode >= 200 && response.statusCode < 300) {
-  //       return response;
-  //     } else {
-  //       log("Failed to load data from -----$fromMethod -------------: ${response.statusCode} ${response.body}");
-  //     }
-  //   } catch (e) {
-  //     log("Error fetching data: $e");
-  //   }
-  //   return null;
-  // }
-  final ApiConsumer apiConsumer;
-
-  _makeGetRequest({
-    required String url,
-    required String fromMethod,
-  }) async {
-    // await _ensureTokenInitialized();
-    Map<String, dynamic>? res;
-    try {
-      final response = await apiConsumer.get(
-        url,
-      );
-
-      response.fold((l) => (l) {}, (r) async {
-        log("from ReelsRepository${r.toString()}");
-        if (r['endPointSubscription'] != null &&
-            r['endPointSubscription'] == true &&
-            r['userSubscription'] == false) {
-          List<WalletTypes> wallets = (r['paymentMethod'] as List)
-              .map((e) => (e as String).toWalletType)
-              .toList();
-          await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-              subCategoryId: r['subCategoryId'],
-              wallets: wallets,
-              title: 'Reels Subscription');
-        }
-        log("${r.toString()} knsaln");
-        res = r;
-      });
-      // var responseData = json.decode(response.body);
-
-      // if (response.statusCode >= 200 && response.statusCode < 300) {
-      //   return response;
-      // } else {
-      //   log("Failed to load data from -----$fromMethod -------------: ${response.statusCode} ${response.body}");
-      // }
-      return res;
-    } catch (e) {
-      log("Error fetching data: $e");
-    }
-    return res;
-  }
-
-  Future<http.Response?> _makePostRequest({
-    required String url,
-    required String body,
-  }) async {
-    await _ensureTokenInitialized();
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-        body: body,
-      );
-
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        return response;
-      } else {
-        log("Failed to post data: ${response.statusCode} ${response.body}");
-      }
-    } catch (e) {
-      log("Error posting data: $e");
-    }
-    return null;
-  }
-
-  // New method to share a reel
-  Future<ReelShareResponse> shareReel(String reelId) async {
-    final String url = 'https://49dev.com/api/v1/reels/share/$reelId';
-
-    final response = await _makePostRequest(url: url, body: '{}');
-    if (response != null) {
-      log("Reel shared successfully: ${response.body}");
-      return ReelShareResponse.fromJson(json.decode(response.body));
-    } else {
-      throw Exception('Failed to share the reel');
-    }
-  }
-
-  // New method to save a reel
-  Future<ReelSaveResponse> saveReel(String reelId) async {
-    final String url = 'https://49dev.com/api/v1/reels/saved/$reelId';
-
-    final response = await _makePostRequest(url: url, body: '{}');
-    if (response != null) {
-      log("Reel saved successfully: ${response.body}");
-      return ReelSaveResponse.fromJson(json.decode(response.body));
-    } else {
-      throw Exception('Failed to save the reel');
-    }
-  }
-
-  Future<ReelsResponse> fetchReels({int page = 1, int limit = 3}) async {
-    final url =
-        'https://49dev.com/api/v1/reels/explore?page=$page&limit=$limit&subCategory=66684135dbb427ee42aa0141&userId=${serviceLocator<UserCubit>().state.data?.id ?? ''}';
-    var response = await _makeGetRequest(url: url, fromMethod: 'fetchReels');
-    print("${response['data']['reels'].isEmpty}assss");
-    if (response['data']['reels'].isEmpty) {
-      response = await _makeGetRequest(
-          url:
-              'https://49dev.com/api/v1/reels/explore?page=$page&limit=$limit&subCategory=66684135dbb427ee42aa0141',
-          fromMethod: 'fetchReels');
-    }
-    log("from ReelsRepository${ReelsResponse.fromJson(response).message}");
-    return ReelsResponse.fromJson(response);
-  }
-
-  Future<ReelsResponse> fetchReelsForFollowers(
-      {int page = 1, int limit = 3}) async {
-    final url =
-        'https://49dev.com/api/v1/reels/followers?page=$page&limit=$limit&subCategory=66684135dbb427ee42aa0141';
-    final response = await _makeGetRequest(url: url, fromMethod: 'fetchReels');
-    if (response != null) {
-      log("from ReelsRepository");
-      return ReelsResponse.fromJson(json.decode(response.body));
-    } else {
-      log("from ReelsRepository Failed to load reels--------------");
-      throw Exception('Failed to load reels');
-    }
-  }
-
-  Future<ReelLikeResponse> likeReel(String reelId) async {
-    final String url = 'https://49dev.com/api/v1/reels/likes/$reelId';
-
-    final response = await _makePostRequest(url: url, body: '{}');
-    if (response != null) {
-      log("from likeReel repo${response.body}");
-      return ReelLikeResponse.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to like the reel');
-    }
-  }
-
-  Future<AddCommentResponse> addComment({
-    required String reelId,
-    required String comment,
-  }) async {
-    final String url = 'https://49dev.com/api/v1/reels/comments/$reelId';
-
-    final response = await _makePostRequest(
-      url: url,
-      body: jsonEncode({'comment': comment}),
-    );
-
-    if (response != null) {
-      return AddCommentResponse.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to add comment');
-    }
-  }
-
-  Future<AddCommentResponse> addReplayComment({
-    required String reelId,
-    required String comment,
-    String? receiverComment,
-    String? parentCommentId,
-  }) async {
-    final String url = 'https://49dev.com/api/v1/reels/comments/$reelId';
-
-    final Map<String, dynamic> requestBody = {
-      'comment': comment,
-    };
-
-    if (receiverComment != null) {
-      requestBody['receiverComment'] = receiverComment;
-    }
-
-    if (parentCommentId != null) {
-      requestBody['parentCommentId'] = parentCommentId;
-    }
-
-    final response = await _makePostRequest(
-      url: url,
-      body: jsonEncode(requestBody),
-    );
-
-    if (response != null) {
-      return AddCommentResponse.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to add comment');
-    }
-  }
-
-  Future<GetCommentsResponse> fetchComments(String reelId) async {
-    final url = 'https://49dev.com/api/v1/reels/comments/$reelId';
-
-    final response =
-        await _makeGetRequest(url: url, fromMethod: 'fetchComments');
-    log("${response} from fetchComments repo *******************************************************************");
-
-    return GetCommentsResponse.fromJson(response);
-
-    if (response != null) {
-      log("${response.body} from fetchComments repo *******************************************************************");
-      return GetCommentsResponse.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to load comments');
-    }
-  }
-
-  Future<String?> toggleLike(String commentId) async {
-    final String url =
-        'https://49dev.com/api/v1/reels/comments/like/$commentId';
-
-    final response = await _makePostRequest(url: url, body: '{}');
-    if (response != null) {
-      final parsedResponse = jsonDecode(response.body);
-
-      log("from toggleLike repo: ${parsedResponse['message']}");
-
-      return parsedResponse['message']; // "like" or "unlike"
-    } else {
-      throw Exception('Failed to like/unlike the comment');
-    }
-  }
-
-  Future<ReelsForAudioResponse> fetchReelsWithSameAudio(String audioId,
-      {int page = 1, int limit = 10}) async {
-    final url = 'https://49dev.com/api/v1/reels/audio/$audioId';
-    // 'https://49dev.com/api/v1/reels/audio/$audioId?page=$page&limit=$limit';
-
-    final response =
-        await _makeGetRequest(url: url, fromMethod: 'fetchReelsWithSameAudio');
-    if (response != null) {
-      log("Fetched reels with the same audio successfully.");
-      return ReelsForAudioResponse.fromJson(json.decode(response.body));
-    } else {
-      log("Failed to fetch reels with the same audio.");
-      throw Exception('Failed to fetch reels with the same audio');
-    }
-  }
-}
+//
+// import 'dart:convert';
+// import 'dart:developer';
+// import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+// import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+// import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
+// import 'package:fourtyninehub/features/social_media/reels/data/models/audio_reels_model.dart';
+// import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
+// import 'package:fourtyninehub/features/social_media/reels/data/models/like_model.dart';
+// import 'package:fourtyninehub/features/social_media/reels/data/models/save_reel_model.dart';
+// import 'package:fourtyninehub/service_locator/service_locator.dart';
+// import 'package:http/http.dart' as http;
+// import 'package:path/path.dart';
+// import '../../../../../core/enums/wallet_types_enums.dart';
+// import '../../../../../core/utils/shared_pref.dart';
+// import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
+// import '../models/new_reels_model.dart';
+// import '../models/share_reel_model.dart';
+//
+// class ReelsRepository {
+//   String? token;
+//
+//   ReelsRepository(this.apiConsumer) {
+//     _initializeToken();
+//   }
+//
+//   Future<void> _initializeToken() async {
+//     token = await CacheManager.getAccessToken();
+//   }
+//
+//   Future<void> _ensureTokenInitialized() async {
+//     token ??= await CacheManager.getAccessToken();
+//   }
+//
+//   // Future<http.Response?> _makeGetRequest({
+//   //   required String url,
+//   //   required String fromMethod,
+//   // }) async {
+//   //   await _ensureTokenInitialized();
+//   //   try {
+//   //     final response = await http.get(
+//   //       Uri.parse(url),
+//   //       headers: {
+//   //         'Authorization': 'Bearer $token',
+//   //         'Content-Type': 'application/json',
+//   //       },
+//   //     );
+//   //     var responseData = json.decode(response.body);
+//   //     log("from ReelsRepository");
+//   //     if (responseData['endPointSubscription'] != null &&
+//   //         responseData['endPointSubscription'] == true &&
+//   //         responseData['userSubscription'] == false) {
+//   //       List<WalletTypes> wallets = (responseData['paymentMethod'] as List)
+//   //           .map((e) => (e as String).toWalletType)
+//   //           .toList();
+//   //       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
+//   //           subCategoryId: responseData['subCategoryId'],
+//   //           wallets: wallets,
+//   //           title: 'Reels Subscription');
+//   //     }
+//   //     if (response.statusCode >= 200 && response.statusCode < 300) {
+//   //       return response;
+//   //     } else {
+//   //       log("Failed to load data from -----$fromMethod -------------: ${response.statusCode} ${response.body}");
+//   //     }
+//   //   } catch (e) {
+//   //     log("Error fetching data: $e");
+//   //   }
+//   //   return null;
+//   // }
+//   final ApiConsumer apiConsumer;
+//
+//   _makeGetRequest({
+//     required String url,
+//     required String fromMethod,
+//   }) async {
+//     // await _ensureTokenInitialized();
+//     Map<String, dynamic>? res;
+//     try {
+//       final response = await apiConsumer.get(
+//         url,
+//       );
+//
+//       response.fold((l) => (l) {}, (r) async {
+//         log("from ReelsRepository${r.toString()}");
+//         if (r['endPointSubscription'] != null &&
+//             r['endPointSubscription'] == true &&
+//             r['userSubscription'] == false) {
+//           List<WalletTypes> wallets = (r['paymentMethod'] as List)
+//               .map((e) => (e as String).toWalletType)
+//               .toList();
+//           await serviceLocator<SubscriptionController>().showSubscriptionPlans(
+//               subCategoryId: r['subCategoryId'],
+//               wallets: wallets,
+//               title: 'Reels Subscription');
+//         }
+//         log("${r.toString()} knsaln");
+//         res = r;
+//       });
+//       // var responseData = json.decode(response.body);
+//
+//       // if (response.statusCode >= 200 && response.statusCode < 300) {
+//       //   return response;
+//       // } else {
+//       //   log("Failed to load data from -----$fromMethod -------------: ${response.statusCode} ${response.body}");
+//       // }
+//       return res;
+//     } catch (e) {
+//       log("Error fetching data: $e");
+//     }
+//     return res;
+//   }
+//
+//   Future<http.Response?> _makePostRequest({
+//     required String url,
+//     required String body,
+//   }) async {
+//     await _ensureTokenInitialized();
+//     try {
+//       final response = await http.post(
+//         Uri.parse(url),
+//         headers: {
+//           'Authorization': 'Bearer $token',
+//           'Content-Type': 'application/json',
+//         },
+//         body: body,
+//       );
+//
+//       if (response.statusCode >= 200 && response.statusCode < 300) {
+//         return response;
+//       } else {
+//         log("Failed to post data: ${response.statusCode} ${response.body}");
+//       }
+//     } catch (e) {
+//       log("Error posting data: $e");
+//     }
+//     return null;
+//   }
+//
+//   // New method to share a reel
+//   Future<ReelShareResponse> shareReel(String reelId) async {
+//     final String url = 'https://49dev.com/api/v1/reels/share/$reelId';
+//
+//     final response = await _makePostRequest(url: url, body: '{}');
+//     if (response != null) {
+//       log("Reel shared successfully: ${response.body}");
+//       return ReelShareResponse.fromJson(json.decode(response.body));
+//     } else {
+//       throw Exception('Failed to share the reel');
+//     }
+//   }
+//
+//   // New method to save a reel
+//   Future<ReelSaveResponse> saveReel(String reelId) async {
+//     final String url = 'https://49dev.com/api/v1/reels/saved/$reelId';
+//
+//     final response = await _makePostRequest(url: url, body: '{}');
+//     if (response != null) {
+//       log("Reel saved successfully: ${response.body}");
+//       return ReelSaveResponse.fromJson(json.decode(response.body));
+//     } else {
+//       throw Exception('Failed to save the reel');
+//     }
+//   }
+//
+//   Future<ReelsResponse> fetchReels({int page = 1, int limit = 3}) async {
+//     final url =
+//         'https://49dev.com/api/v1/reels/explore?page=$page&limit=$limit&subCategory=66684135dbb427ee42aa0141&userId=${serviceLocator<UserCubit>().state.data?.id ?? ''}';
+//     var response = await _makeGetRequest(url: url, fromMethod: 'fetchReels');
+//     print("${response['data']['reels'].isEmpty}assss");
+//     if (response['data']['reels'].isEmpty) {
+//       response = await _makeGetRequest(
+//           url:
+//               'https://49dev.com/api/v1/reels/explore?page=$page&limit=$limit&subCategory=66684135dbb427ee42aa0141',
+//           fromMethod: 'fetchReels');
+//     }
+//     log("from ReelsRepository${ReelsResponse.fromJson(response).message}");
+//     return ReelsResponse.fromJson(response);
+//   }
+//
+//   Future<ReelsResponse> fetchReelsForFollowers(
+//       {int page = 1, int limit = 3}) async {
+//     final url =
+//         'https://49dev.com/api/v1/reels/followers?page=$page&limit=$limit&subCategory=66684135dbb427ee42aa0141';
+//     final response = await _makeGetRequest(url: url, fromMethod: 'fetchReels');
+//     if (response != null) {
+//       log("from ReelsRepository");
+//       return ReelsResponse.fromJson(json.decode(response.body));
+//     } else {
+//       log("from ReelsRepository Failed to load reels--------------");
+//       throw Exception('Failed to load reels');
+//     }
+//   }
+//
+//   Future<ReelLikeResponse> likeReel(String reelId) async {
+//     final String url = 'https://49dev.com/api/v1/reels/likes/$reelId';
+//
+//     final response = await _makePostRequest(url: url, body: '{}');
+//     if (response != null) {
+//       log("from likeReel repo${response.body}");
+//       return ReelLikeResponse.fromJson(jsonDecode(response.body));
+//     } else {
+//       throw Exception('Failed to like the reel');
+//     }
+//   }
+//
+//   Future<AddCommentResponse> addComment({
+//     required String reelId,
+//     required String comment,
+//   }) async {
+//     final String url = 'https://49dev.com/api/v1/reels/comments/$reelId';
+//
+//     final response = await _makePostRequest(
+//       url: url,
+//       body: jsonEncode({'comment': comment}),
+//     );
+//
+//     if (response != null) {
+//       return AddCommentResponse.fromJson(jsonDecode(response.body));
+//     } else {
+//       throw Exception('Failed to add comment');
+//     }
+//   }
+//
+//   Future<AddCommentResponse> addReplayComment({
+//     required String reelId,
+//     required String comment,
+//     String? receiverComment,
+//     String? parentCommentId,
+//   }) async {
+//     final String url = 'https://49dev.com/api/v1/reels/comments/$reelId';
+//
+//     final Map<String, dynamic> requestBody = {
+//       'comment': comment,
+//     };
+//
+//     if (receiverComment != null) {
+//       requestBody['receiverComment'] = receiverComment;
+//     }
+//
+//     if (parentCommentId != null) {
+//       requestBody['parentCommentId'] = parentCommentId;
+//     }
+//
+//     final response = await _makePostRequest(
+//       url: url,
+//       body: jsonEncode(requestBody),
+//     );
+//
+//     if (response != null) {
+//       return AddCommentResponse.fromJson(jsonDecode(response.body));
+//     } else {
+//       throw Exception('Failed to add comment');
+//     }
+//   }
+//
+//   Future<GetCommentsResponse> fetchComments(String reelId) async {
+//     final url = 'https://49dev.com/api/v1/reels/comments/$reelId';
+//
+//     final response =
+//         await _makeGetRequest(url: url, fromMethod: 'fetchComments');
+//     log("${response} from fetchComments repo *******************************************************************");
+//
+//     return GetCommentsResponse.fromJson(response);
+//
+//     if (response != null) {
+//       log("${response.body} from fetchComments repo *******************************************************************");
+//       return GetCommentsResponse.fromJson(jsonDecode(response.body));
+//     } else {
+//       throw Exception('Failed to load comments');
+//     }
+//   }
+//
+//   Future<String?> toggleLike(String commentId) async {
+//     final String url =
+//         'https://49dev.com/api/v1/reels/comments/like/$commentId';
+//
+//     final response = await _makePostRequest(url: url, body: '{}');
+//     if (response != null) {
+//       final parsedResponse = jsonDecode(response.body);
+//
+//       log("from toggleLike repo: ${parsedResponse['message']}");
+//
+//       return parsedResponse['message']; // "like" or "unlike"
+//     } else {
+//       throw Exception('Failed to like/unlike the comment');
+//     }
+//   }
+//
+//   Future<ReelsForAudioResponse> fetchReelsWithSameAudio(String audioId,
+//       {int page = 1, int limit = 10}) async {
+//     final url = 'https://49dev.com/api/v1/reels/audio/$audioId';
+//     // 'https://49dev.com/api/v1/reels/audio/$audioId?page=$page&limit=$limit';
+//
+//     final response =
+//         await _makeGetRequest(url: url, fromMethod: 'fetchReelsWithSameAudio');
+//     if (response != null) {
+//       log("Fetched reels with the same audio successfully.");
+//       return ReelsForAudioResponse.fromJson(json.decode(response.body));
+//     } else {
+//       log("Failed to fetch reels with the same audio.");
+//       throw Exception('Failed to fetch reels with the same audio');
+//     }
+//   }
+// }
