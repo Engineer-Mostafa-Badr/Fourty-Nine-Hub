@@ -47,7 +47,7 @@ class _CreateRestaurantProfilePhotoPickerState
                   if (state is CreateRestaurantUploadProfileImage) ...[
                     ...state.files.map(
                       (e) => ImagePickerPlaceholder(
-                        tilte: e.path.split('/').last,
+                        title: e.path.split('/').last,
                         image: Image.file(
                           File(e.path),
                           fit: BoxFit.cover,

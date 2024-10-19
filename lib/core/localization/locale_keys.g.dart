@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const nnew = 'nnew';
   static const today = 'today';
   static const tommorow = 'tommorow';
@@ -310,7 +310,7 @@ abstract class LocaleKeys {
   static const chatLockMessage = 'chatLockMessage';
   static const createGroupWith = 'createGroupWith';
   static const createGroup = 'createGroup';
-  static const attachments = 'attachments ';
+  static const attachments  = 'attachments ';
   static const docs = 'docs';
   static const links = 'links';
   static const media = 'media';
@@ -581,15 +581,7 @@ abstract class LocaleKeys {
   static const reel_voices_other_voice = 'reel_voices.other_voice';
   static const reel_voices_mix_voices = 'reel_voices.mix_voices';
   static const reel_voices = 'reel_voices';
-  static const free = 'free';
-  static const booked = 'booked';
-  static const inProgress = 'inProgress';
-  static const comfort = 'comfort';
-  static const egp = 'egp';
-  static const minutesAgo = 'minutesAgo';
-  static const womenOnly = 'womenOnly';
   static const paymentOption = 'paymentOption';
-  static const bookSeat = 'bookSeat';
   static const welcomeToCarPool = 'welcomeToCarPool';
   static const youDontHaveCarMessage = 'youDontHaveCarMessage';
   static const createRoute = 'createRoute';
@@ -923,7 +915,7 @@ abstract class LocaleKeys {
   static const ChanceDetails = 'ChanceDetails';
   static const ProductDescription = 'ProductDescription';
   static const Typethevalueyouwanttoparticipation = 'Typethevalueyouwanttoparticipation';
-  static const CreateChance = 'CreateChance ';
+  static const CreateChance  = 'CreateChance ';
   static const enterPrice = 'enterPrice';
   static const enterTitle = 'enterTitle';
   static const enterDescription = 'enterDescription';
@@ -935,12 +927,32 @@ abstract class LocaleKeys {
   static const editMyAds = 'editMyAds';
   static const requestTripJoin = 'requestTripJoin';
   static const requestAd = 'requestAd';
+  static const breakfast = 'breakfast';
+  static const items_count = 'items_count';
+  static const noName = 'noName';
+  static const unknownRestaurant = 'unknownRestaurant';
+  static const noOrders = 'noOrders';
+  static const noDate = 'noDate';
+  static const noSubscription = 'noSubscription';
+  static const unknownFood = 'unknownFood';
+  static const restaurantMenu = 'restaurantMenu';
+  static const view_cart = 'view_cart';
+  static const your_cart_empty = 'your_cart_empty';
+  static const your_cart = 'your_cart';
+  static const restaurant_total = 'restaurant_total';
+  static const premium_request = 'premium_request';
+  static const your_phone_number = 'your_phone_number';
+  static const please_enter_phone_number = 'please_enter_phone_number';
+  static const submit_order = 'submit_order';
   static const removeFavouriteSuccessfully = 'removeFavouriteSuccessfully';
   static const selectValidUser = 'selectValidUser';
   static const notEnoughMoneyWallet = 'notEnoughMoneyWallet';
   static const transactionSuccessful = 'transactionSuccessful';
   static const yourTransactionWasSuccessful = 'yourTransactionWasSuccessful';
   static const transferAmount = 'transferAmount';
+  static const comfort = 'comfort';
+  static const womenOnly = 'womenOnly';
+  static const minutesAgo = 'minutesAgo';
   static const shareTransactionDetails = 'shareTransactionDetails';
 
 }

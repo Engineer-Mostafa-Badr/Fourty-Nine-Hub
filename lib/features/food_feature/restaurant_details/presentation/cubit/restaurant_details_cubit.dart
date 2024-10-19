@@ -51,17 +51,17 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
             status: RestaurantDetailsStates.initState, meals: data)));
   }
 
-  addToCart(
+  addToCart(context,
       {required String restaurantId,
       required String foodId,
       required String quantity}) async {
     final response = await _addToCartUseCase(
         restaurantId: restaurantId, foodId: foodId, quantity: quantity);
-    response.fold(
-        (l) => emit(
-            state.copyWith(failure: l, status: RestaurantDetailsStates.error)),
-        (data) {
-      if (data) {}
+    response.fold((l) {
+      showErrorMessage(context, getFailureMessage(l, context));
+      emit(state.copyWith(failure: l, status: RestaurantDetailsStates.error));
+    }, (data) {
+      showSuccessMessage(context, data ? 'Success' : '');
     });
   }
 

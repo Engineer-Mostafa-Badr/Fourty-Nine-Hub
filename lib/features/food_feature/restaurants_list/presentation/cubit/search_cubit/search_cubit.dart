@@ -91,7 +91,7 @@ class SearchRestaurantsCubit extends Cubit<SearchRestaurantState> {
       user = UserCubit.to.state.data;
     } else {}
 
-    await _getMealCategoriesWithCountRestaurants();
+    await _getMealCategoriesWithCountRestaurants();refreshState();
   }
 
   Future<void> _getCities(String governorateId) async {
@@ -177,7 +177,7 @@ class SearchRestaurantsCubit extends Cubit<SearchRestaurantState> {
         return category.name!.toLowerCase().contains(value.toLowerCase());
       }).toList();
       emit(state.copyWith(
-        searchResultRestaurants: filteredRestaurants,
+        searchResultRestaurants: state.allRestaurant,
         status: SearchRestaurantStates.loadingSearchResult,
       ));
     } else {
