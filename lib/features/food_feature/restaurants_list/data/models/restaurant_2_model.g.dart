@@ -38,7 +38,7 @@ Restaurant2Model _$Restaurant2ModelFromJson(Map<String, dynamic> json) =>
       totalRating: (json['totalRating'] as num?)?.toDouble(),
       description: json['description'] as String?,
       isFavorite: json['isFavorite'] as bool?,
-      enableOrDisableChat: json['enableOrDisableChat'] as String?,
+      enableOrDisableChat: json['enableOrDisableChat'].toString(),
     );
 
 Map<String, dynamic> _$Restaurant2ModelToJson(Restaurant2Model instance) =>

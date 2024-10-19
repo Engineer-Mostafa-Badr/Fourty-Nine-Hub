@@ -95,7 +95,7 @@
   "noResultFound": "لايوجد نتائج",
   "restaurantDashboard": "لوحة المطعم",
   "allRestaurants": "كل المطاعم",
-  "restaurantsForSelectedMeal": "المطاعم للوجبة المحدده",
+  "restaurantsForSelectedMeal": "المطاعم لهذه الوجبه",
   "itemName": "اسم الوجبة",
   "price": "السعر",
   "salary": "المرتب",
@@ -590,15 +590,8 @@
     "other_voice": "صوت آخر",
     "mix_voices": "دمج الأصوات"
   },
-  "free": "متاح",
-  "booked": "محجوز",
-  "inProgress": "قيد التقدم",
-  "comfort": "مريح",
-  "egp": "جنيه",
-  "minutesAgo": "دقائق متبقية",
-  "womenOnly": "نساء فقط",
+
   "paymentOption": "نظام الدفع",
-  "bookSeat": "حجز مقعد",
   "welcomeToCarPool": "مرحباً بك في مشاركة السيارات",
   "youDontHaveCarMessage": "أنت لا تملك سيارة، ستقوم بإنشاء رحلة وتنتظر لمدة ساعة لإعطاء المستخدمين فرصة لحجز مقعد في نفس السيارة.",
   "createRoute": "إنشاء مسار",
@@ -917,13 +910,29 @@
   "editMyAds": "تعديل الاعلان",
   "requestTripJoin": "طلب الانضمام إلى الرحلة",
   "requestAd": "طلب إعلان",
+  "breakfast": "الإفطار",
+  "items_count": "العناصر",
+  "noName": "لا يوجد اسم",
+  "unknownRestaurant": "مطعم غير معروف",
+  "noOrders": "لا توجد طلبات",
+  "noDate": "لا يوجد تاريخ",
+  "noSubscription": "لا توجد اشتراك",
+  "unknownFood": "طعام غير معروف",
+  "restaurantMenu": "قائمة المطعم",
+  "view_cart": "عرض السلة",
+  "your_cart_empty": "سلتك فارغة",
+  "your_cart": "سلتك",
+  "restaurant_total": "إجمالي المطعم:",
+  "premium_request": "طلب مميز",
+  "your_phone_number": "رقم هاتفك",
+  "please_enter_phone_number": "يرجى إدخال رقم هاتفك",
+  "submit_order": "إرسال الطلب",
   "removeFavouriteSuccessfully": "إزالة الإعلان المفضل بنجاح",
   "selectValidUser": "لم يتم العثور على المستخدم أو أنه غير صالح، يرجى تحديد مستخدم صالح",
   "notEnoughMoneyWallet": "لا يوجد ما يكفي من المال في المحفظة",
   "transactionSuccessful": "تمت المعاملة بنجاح",
   "yourTransactionWasSuccessful": "كانت معاملتك ناجحة",
   "transferAmount": "مبلغ التحويل",
-  "shareTransactionDetails": "مشاركة تفاصيل المعاملة",
   "insufficientAmount": "الرصيد غير كافٍ",
   "selectAmountToCharge": "اختر مبلغًا للشحن",
   "chargeNow": "اشحن الان",
@@ -932,10 +941,14 @@
   "notSubscribed": "غير مشترك",
   "seeAll": "عرض الكل",
   "premiumRequest": "طلب مميز",
-  "normalRequest": "طلب عادي"
+  "normalRequest": "طلب عادي",
 
 
 
 
 
+  "comfort": "مريح",
+  "womenOnly": "نسوان",
+  "minutesAgo": "من دقيقه",
+  "shareTransactionDetails": "مشاركة تفاصيل المعاملة"
 }

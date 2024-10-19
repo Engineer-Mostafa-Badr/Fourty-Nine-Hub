@@ -859,14 +859,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
-  flutter_mapbox_navigation:
-    dependency: "direct main"
-    description:
-      name: flutter_mapbox_navigation
-      sha256: "623c0331d4b29ec884044baaf23735cc2ef777acc8292abfa11d5e0c7d8491ba"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.2"
   flutter_osm_interface:
     dependency: transitive
     description:
@@ -1517,38 +1509,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
-  mapbox_gl:
-    dependency: "direct main"
-    description:
-      name: mapbox_gl
-      sha256: dd86894d200ff74867d3a21e71a0ee00387f1b7e4d775d6bad9c850ecfef082c
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.14.0"
-  mapbox_gl_dart:
-    dependency: transitive
-    description:
-      name: mapbox_gl_dart
-      sha256: de6d03718e5eb05c9eb1ddaae7f0383b28acb5afa16405e1deed7ff04dd34f3d
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.1"
-  mapbox_gl_platform_interface:
-    dependency: transitive
-    description:
-      name: mapbox_gl_platform_interface
-      sha256: e92ac7e803db5773c56eeb0ceadcf8953cd12dbc44bed2e79e08948c9251666d
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.14.0"
-  mapbox_gl_web:
-    dependency: transitive
-    description:
-      name: mapbox_gl_web
-      sha256: b5ce81cfbbeda67c491abfda285c3639584afb58f19271218e78dba129ce8f36
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.14.0"
   marquee_text:
     dependency: "direct main"
     description:
@@ -2530,14 +2490,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  very_good_analysis:
-    dependency: transitive
-    description:
-      name: very_good_analysis
-      sha256: "9ae7f3a3bd5764fb021b335ca28a34f040cd0ab6eec00a1b213b445dae58a4b8"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.1.0"
   video_player:
     dependency: "direct main"
     description:

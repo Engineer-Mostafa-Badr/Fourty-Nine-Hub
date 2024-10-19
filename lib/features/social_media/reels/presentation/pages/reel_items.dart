@@ -714,17 +714,17 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           children: [
             _UserAvatar(reel: reel),
-            Positioned(
-              bottom: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: Colors.white, width: 2),
-                ),
-                child: const Icon(Icons.add, color: Colors.white, size: 15),
-              ),
-            ),
+            // Positioned(
+            //   bottom: 0,
+            //   child: Container(
+            //     decoration: BoxDecoration(
+            //       color: Colors.red,
+            //       borderRadius: BorderRadius.circular(15),
+            //       border: Border.all(color: Colors.white, width: 2),
+            //     ),
+            //     child: const Icon(Icons.add, color: Colors.white, size: 15),
+            //   ),
+            // ),
           ],
         ).animate().scale(duration: 200.ms),
         const SizedBox(height: 12),
