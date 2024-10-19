@@ -10,7 +10,7 @@ environment:
 
 dependencies:
 
-  advance_pdf_viewer2: ^2.0.5+1
+  # advance_pdf_viewer2: ^2.0.5+1
   audio_video_progress_bar: ^1.0.0
   cached_network_image: ^3.3.1
   camera: ^0.11.0+2
@@ -38,7 +38,7 @@ dependencies:
   flutter_card_swiper: ^7.0.1
   flutter_contacts: ^1.1.9+2
   flutter_credit_card: ^4.0.1
-  flutter_facebook_auth: 3.5.0
+  # flutter_facebook_auth: 3.5.0
   flutter_fortune_wheel: ^1.3.1
   flutter_local_notifications: ^17.1.2
   flutter_polyline_points: ^2.1.0
@@ -62,7 +62,7 @@ dependencies:
 
   # latlong2: ^0.8.1
   # icons_launcher: ^2.1.7
-  mapbox_gl: ^0.14.0
+  # mapbox_gl: ^0.14.0
   # image: ^3.0.0
   image_gallery_saver: 2.0.3
   image_picker: ^1.1.2
@@ -111,16 +111,18 @@ dependencies:
   web_socket_channel: ^2.4.5
   zego_express_engine: ^3.16.2
   native_device_orientation: ^2.0.3
-  win32:
+  # win32:
   flutter_osm_plugin: ^0.70.4
-  flutter_mapbox_navigation: ^0.2.2
+  # flutter_mapbox_navigation: ^0.2.2
   icons_launcher:
   readmore: ^3.0.0
   flutter_animate: ^4.5.0
   carousel_slider: ^5.0.0
   screenshot:
   jwt_decoder:
-  location: ^4.4.0
+  location: ^7.0.0
+  win32: ^5.6.1
+  # location: ^4.4.0
 dependency_overrides:
   http: ^0.13.3
 dev_dependencies:

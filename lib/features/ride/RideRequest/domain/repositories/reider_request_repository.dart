@@ -10,7 +10,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/offer_data_m
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rider_register_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_response_model/trip_response_model.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+// import 'package:mapbox_gl/mapbox_gl.dart';
 
 class ReiderRequestRepository {
   final RiderDataSource dataSource;
@@ -219,9 +219,9 @@ class ReiderRequestRepository {
   Future<Either<Failure, Map<String, dynamic>>> expiredTrip() {
     return dataSource.getExpairedTrip();
   }
-  Future<List<LatLng>> getRoute({required LatLng start, required LatLng end}) {
-    return dataSource.getRoute(start: start, end: end);
-  }
+  // Future<List<LatLng>> getRoute({required LatLng start, required LatLng end}) {
+  //   return dataSource.getRoute(start: start, end: end);
+  // }
 }
 
 // Future<Either<Failure, Map<String, dynamic>>>

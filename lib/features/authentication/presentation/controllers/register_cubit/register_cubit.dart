@@ -20,7 +20,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   final GetWelcomeGiftUseCase _getWelcomeGiftUseCase;
   final RegisterUseCase _registerUseCase;
   final GoogleSignInUseCase _googleSignInUseCase;
-  final FacebookSignInUseCase _facebookSignInUseCase;
+  // final FacebookSignInUseCase _facebookSignInUseCase;
   final SaveTokensUseCase _saveTokens;
   final AttachTokenUseCase _attachToken;
   final formKey = GlobalKey<FormState>();
@@ -45,7 +45,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     this._saveTokens,
     this._attachToken,
     this._googleSignInUseCase,
-    this._facebookSignInUseCase,
+    // this._facebookSignInUseCase,
   ) : super(RegisterInitial());
 
   Future<void> register() async {
@@ -93,17 +93,17 @@ class RegisterCubit extends Cubit<RegisterState> {
   Future<void> signInWithFacebook() async {
     if (state is RegisterLoading) return;
     emit(RegisterLoading());
-    final result = await _facebookSignInUseCase(const NoParams());
-    emit(
-      result.fold(
-        (failure) => RegisterError(failure),
-        (userToken) {
-          _attachToken(userToken); // attach to dio
-          _saveTokens(userToken); // save to local storage
-          return RegisterSuccess(userTokensEntity: userToken);
-        },
-      ),
-    );
+    // final result = await _facebookSignInUseCase(const NoParams());
+    // emit(
+    //   result.fold(
+    //     (failure) => RegisterError(failure),
+    //     (userToken) {
+    //       _attachToken(userToken); // attach to dio
+    //       _saveTokens(userToken); // save to local storage
+    //       return RegisterSuccess(userTokensEntity: userToken);
+    //     },
+    //   ),
+    // );
   }
 
   void getWelcomeGift() async {

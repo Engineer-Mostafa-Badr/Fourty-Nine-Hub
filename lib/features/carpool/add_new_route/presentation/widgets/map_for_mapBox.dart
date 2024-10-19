@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mapbox_navigation/flutter_mapbox_navigation.dart';
+// import 'package:flutter_mapbox_navigation/flutter_mapbox_navigation.dart';
 
 class MapboxNavigationWidget extends StatefulWidget {
-  final WayPoint origin;
-  final WayPoint destination;
+  // final WayPoint origin;
+  // final WayPoint destination;
 
   const MapboxNavigationWidget({
-    required this.origin,
-    required this.destination,
+    // required this.origin,
+    // required this.destination,
     Key? key,
   }) : super(key: key);
 
@@ -16,36 +16,36 @@ class MapboxNavigationWidget extends StatefulWidget {
 }
 
 class _MapboxNavigationWidgetState extends State<MapboxNavigationWidget> {
-  late MapBoxNavigation _directions;
-  late MapBoxOptions _options;
-  bool _isNavigating = false;
+  // late MapBoxNavigation _directions;
+  // late MapBoxOptions _options;
+  // bool _isNavigating = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _directions = MapBoxNavigation();
-    _options = MapBoxOptions(
-      mode: MapBoxNavigationMode.drivingWithTraffic,
-      simulateRoute: false,
-      language: "en",
-      units: VoiceUnits.metric,
-    );
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _directions = MapBoxNavigation();
+  //   _options = MapBoxOptions(
+  //     mode: MapBoxNavigationMode.drivingWithTraffic,
+  //     simulateRoute: false,
+  //     language: "en",
+  //     units: VoiceUnits.metric,
+  //   );
+  // }
 
-  Future<void> _startNavigation() async {
-    var wayPoints = <WayPoint>[];
-    wayPoints.add(widget.origin);
-    wayPoints.add(widget.destination);
+  // Future<void> _startNavigation() async {
+  //   var wayPoints = <WayPoint>[];
+  //   wayPoints.add(widget.origin);
+  //   wayPoints.add(widget.destination);
 
-    await _directions.startNavigation(
-      wayPoints: wayPoints,
-      options: _options,
-    );
+  //   await _directions.startNavigation(
+  //     wayPoints: wayPoints,
+  //     options: _options,
+  //   );
 
-    setState(() {
-      _isNavigating = true;
-    });
-  }
+  //   setState(() {
+  //     _isNavigating = true;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -62,15 +62,15 @@ class _MapboxNavigationWidgetState extends State<MapboxNavigationWidget> {
         //     },
         //   ),
         // ),
-        ElevatedButton(
-          onPressed: _startNavigation,
-          child: Text("Start Navigation"),
-        ),
-        if (_isNavigating)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("Navigation in progress..."),
-          ),
+        // ElevatedButton(
+        //   onPressed: _startNavigation,
+        //   child: Text("Start Navigation"),
+        // ),
+        // if (_isNavigating)
+        //   Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: Text("Navigation in progress..."),
+        //   ),
       ],
     );
   }
