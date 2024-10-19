@@ -950,6 +950,9 @@
   "transactionSuccessful": "Transaction Successful",
   "yourTransactionWasSuccessful": "Your transaction was successful",
   "transferAmount": "Transfer Amount",
-  "shareTransactionDetails": "Share Transaction Details"
+  "shareTransactionDetails": "Share Transaction Details",
+  "snapCopyOfBillPayment": "Snap copy of bill payment",
+  "paymentSuccessful": "Payment successful",
+  "sendReviewApproval": "Send for review and approval"
 
 }

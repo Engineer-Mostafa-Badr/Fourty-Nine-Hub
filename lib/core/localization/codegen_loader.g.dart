@@ -952,7 +952,10 @@ class CodegenLoader extends AssetLoader{
   "transactionSuccessful": "تمت المعاملة بنجاح",
   "yourTransactionWasSuccessful": "كانت معاملتك ناجحة",
   "transferAmount": "مبلغ التحويل",
-  "shareTransactionDetails": "مشاركة تفاصيل المعاملة"
+  "shareTransactionDetails": "مشاركة تفاصيل المعاملة",
+  "snapCopyOfBillPayment": "التقط نسخة من دفع الفاتورة",
+  "paymentSuccessful": "تم الدفع بنجاح",
+  "sendReviewApproval": "إرسال للمراجعة والموافقة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1895,7 +1898,10 @@ static const Map<String,dynamic> en = {
   "transactionSuccessful": "Transaction Successful",
   "yourTransactionWasSuccessful": "Your transaction was successful",
   "transferAmount": "Transfer Amount",
-  "shareTransactionDetails": "Share Transaction Details"
+  "shareTransactionDetails": "Share Transaction Details",
+  "snapCopyOfBillPayment": "Snap copy of bill payment",
+  "paymentSuccessful": "Payment successful",
+  "sendReviewApproval": "Send for review and approval"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

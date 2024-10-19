@@ -939,7 +939,10 @@
   "transactionSuccessful": "تمت المعاملة بنجاح",
   "yourTransactionWasSuccessful": "كانت معاملتك ناجحة",
   "transferAmount": "مبلغ التحويل",
-  "shareTransactionDetails": "مشاركة تفاصيل المعاملة"
+  "shareTransactionDetails": "مشاركة تفاصيل المعاملة",
+  "snapCopyOfBillPayment": "التقط نسخة من دفع الفاتورة",
+  "paymentSuccessful": "تم الدفع بنجاح",
+  "sendReviewApproval": "إرسال للمراجعة والموافقة"
 
 
 }

@@ -1,5 +1,5 @@
 class BalanceDataEntity {
-  final num? balance;
+  final num balance;
   final int? tenYears;
   final int? fiveYears;
   final String? createdAt;

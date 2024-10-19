@@ -927,5 +927,8 @@ abstract class  LocaleKeys {
   static const yourTransactionWasSuccessful = 'yourTransactionWasSuccessful';
   static const transferAmount = 'transferAmount';
   static const shareTransactionDetails = 'shareTransactionDetails';
+  static const snapCopyOfBillPayment = 'snapCopyOfBillPayment';
+  static const paymentSuccessful = 'paymentSuccessful';
+  static const sendReviewApproval = 'sendReviewApproval';
 
 }

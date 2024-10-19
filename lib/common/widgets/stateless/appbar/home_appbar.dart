@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/widgets/unread_notifications_builder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -145,6 +146,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
           ),
+          const Sizer(),
           if (showLanguage) TextButton(onPressed: () {}, child: Label(text: 'Register', style: Styles.mediumText())),
           if (language)
             InkWell(
