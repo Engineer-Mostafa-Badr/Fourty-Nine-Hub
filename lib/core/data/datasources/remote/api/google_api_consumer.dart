@@ -97,4 +97,9 @@ class GoogleApiConsumer extends ApiConsumer {
     // TODO: implement patch
     throw UnimplementedError();
   }
+
+  @override
+  void removeTokenFromHeader() {
+    // TODO: implement removeTokenFromHeader
+  }
 }
