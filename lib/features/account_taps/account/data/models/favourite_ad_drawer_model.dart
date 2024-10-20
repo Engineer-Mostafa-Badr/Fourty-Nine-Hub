@@ -4,12 +4,12 @@ class FavouriteAdDrawerModel extends FavouriteAdDrawerEntity {
   FavouriteAdDrawerModel(
       {required super.id,
       required super.userId,
-      required super.adId,
       required super.mainCategoryId,
       required super.nameEn,
       required super.nameAr,
       required super.title,
       required super.desc,
+      required super.subscriptionStatus,
       required super.images,
       required super.price,
       required super.phone,
@@ -21,18 +21,18 @@ class FavouriteAdDrawerModel extends FavouriteAdDrawerEntity {
   factory FavouriteAdDrawerModel.fromJson(Map<String, dynamic> json) {
     return FavouriteAdDrawerModel(
       id: json['_id'] ?? '',
-      userId: json['userId']['_id'] ?? '',
-      adId: json['adId']['_id'] ?? '',
-      mainCategoryId: json['adId']['mainCategoryId']['_id'] ?? '',
-      nameEn: json['adId']['mainCategoryId']['nameEn'] ?? '',
-      nameAr: json['adId']['mainCategoryId']['nameAr'] ?? '',
-      title: json['adId']['title'] ?? '',
-      desc: json['adId']['desc'] ?? '',
-      images: (json['adId']['images'] as List)
+      userId: json['userId'] ?? '',
+      mainCategoryId: json['mainCategoryId']['_id'] ?? '',
+      nameEn: json['mainCategoryId']['nameEn'] ?? '',
+      nameAr: json['mainCategoryId']['nameAr'] ?? '',
+      title: json['title'] ?? '',
+      desc: json['desc'] ?? '',
+      subscriptionStatus: json['subscriptionStatus'] ?? '',
+      images: (json['images'] as List)
           .map((e) => FavouriteAdDrawerImageModel.fromJson(e))
           .toList(),
-      price: json['adId']['price'] ?? 0,
-      phone: json['adId']['phone'] ?? '',
+      price: json['price'] ?? 0,
+      phone: json['phone'] ?? '',
       subCategoryId: json['subCategoryId']['_id'] ?? '',
       subCategoryNameAr: json['subCategoryId']['nameAr'] ?? '',
       subCategoryNameEn: json['subCategoryId']['nameEn'] ?? '',

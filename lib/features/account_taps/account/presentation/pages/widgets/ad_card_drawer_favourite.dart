@@ -61,7 +61,7 @@ class _AdCardState extends State<AdCardDrawerFavourite> {
         final controller = context.read<AdvertisementCubit>();
         return InkWell(
           onTap: () {
-            context.push(Routes.ADdetails, extra: widget.item.adId);
+            context.push(Routes.ADdetails, extra: widget.item.id);
           },
           child: Container(
             width: kToolbarHeight * 2.5,
@@ -249,9 +249,9 @@ class _AdCardState extends State<AdCardDrawerFavourite> {
                           Expanded(
                             flex: 3,
                             child: PremiumRequestButton(
-                              adId: widget.item.adId,
+                              adId: widget.item.id,
                               subCategoryId: widget.item.subCategoryId,
-                              subscriptionStatus: 'not subscribed',
+                              subscriptionStatus: widget.item.subscriptionStatus,
                             //  subscriptionStatus: widget.item.subscriptionStatus??'',
                             ),
                           ),
@@ -259,8 +259,8 @@ class _AdCardState extends State<AdCardDrawerFavourite> {
                           Expanded(
                             flex: 3,
                             child: RequestButton(
-                              adId: widget.item.adId,
-                              subscriptionStatus: 'not subscribed',
+                              adId: widget.item.id,
+                              subscriptionStatus: widget.item.subscriptionStatus,
                               //subscriptionStatus: widget.item.subscriptionStatus??'',
                             ),
                           )
