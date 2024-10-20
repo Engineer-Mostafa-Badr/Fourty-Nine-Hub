@@ -99,7 +99,7 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(LocaleKeys.bookSeat.localize, style: Styles.headerText()),
+              Text('LocaleKeys.bookSeat.localize', style: Styles.headerText()),
               const Sizer(),
               Text(LocaleKeys.pricePerSeat.localize,
                   style: Styles.mediumText()),

@@ -27,6 +27,8 @@ import 'package:fourtyninehub/features/carpool/add_new_route/presentation/views/
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/views/carpool_view.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/edit_food_view.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/map_box_location_test.dart';
 import 'package:fourtyninehub/features/carpool/create_carpool/presentation/cubits/cubit/create_car_pool_cubit.dart';
@@ -303,11 +305,20 @@ class AppPages {
           GoRoute(
             path: Paths.EditFoodView,
             name: Routes.EditFoodView,
-            builder: (context, state) =>
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
                 BlocProvider.value(
                   value: serviceLocator<RestaurantDetailsCubit>(),
-                  child: EditFoodView(payload: state.extra),
                 ),
+                BlocProvider.value(
+                  value: RestaurantMenuCubit(serviceLocator()),
+                ),
+                BlocProvider<CreateRestaurantCubit>.value(
+                  value: serviceLocator()..loadData(),
+                )
+              ],
+              child: EditFoodView(payload: state.extra),
+            ),
           ),
           // FLIP CARDS
           GoRoute(
@@ -411,7 +422,7 @@ class AppPages {
                             BlocProvider.value(
                                 value: serviceLocator<CreateAdCubit>(),
                                 child: CreateAdView(
-                            
+
                                   categorization:
                                   state.extra as CategorizationEntity,
                                 )),
@@ -1173,9 +1184,7 @@ class AppPages {
                   MultiBlocProvider(
                     providers: [
                       BlocProvider<RestaurantsCubit>(
-                        create: (context) =>
-                        serviceLocator()
-                          ..loadData(),
+                        create: (context) => serviceLocator(),
                       ),
                     ],
                     child: const RestaurantsListsView(),
@@ -1203,9 +1212,9 @@ class AppPages {
                 GoRoute(
                     path: Paths.RESTAURANTDETAILS,
                     name: Routes.RESTAURANTDETAILS,
-                    builder: (context, state) =>
-                        BlocProvider.value(
-                          value: serviceLocator<RestaurantDetailsCubit>(),
+                    builder: (context, state) => BlocProvider(
+                          create: (context) =>
+                              serviceLocator<RestaurantDetailsCubit>(),
                           child: RestaurantDetailsView(
                             id: state.extra as String,
                           ),

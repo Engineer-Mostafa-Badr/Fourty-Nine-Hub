@@ -43,7 +43,7 @@ class CreateDoctorLicensePhotoPicker extends StatelessWidget {
                     );
                   }
                   return ImagePickerPlaceholder(
-                    tilte: LocaleKeys.front.tr(),
+                    title: LocaleKeys.front.tr(),
                   );
                 },
               ),
@@ -66,7 +66,7 @@ class CreateDoctorLicensePhotoPicker extends StatelessWidget {
                     );
                   }
                   return ImagePickerPlaceholder(
-                    tilte: LocaleKeys.back.tr(),
+                    title: LocaleKeys.back.tr(),
                   );
                 },
               ),

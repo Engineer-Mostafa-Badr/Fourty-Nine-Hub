@@ -103,20 +103,12 @@ class RestaurantStatisticsView extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(
-              // fontSize: 14.sp,
-              color: Colors.black,
-              fontWeight: FontWeight.w700,
-            ),
+            style: Styles.mediumText(fontSize: 30),
           ),
           Spacer(),
           Text(
             value,
-            style: const TextStyle(
-              // fontSize: 16.sp,
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
+            style: Styles.mediumText(fontSize: 30),
           ),
           SizedBox(
             width: 0.04.sw,

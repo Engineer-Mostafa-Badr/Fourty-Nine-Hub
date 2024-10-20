@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
@@ -24,13 +25,12 @@ class SearchRestaurantView extends StatelessWidget {
     return BlocBuilder<SearchRestaurantsCubit, SearchRestaurantState>(
         builder: (context, state) {
       return Scaffold(
-        appBar: AppBar(
+        appBar: BackAppBar(
+          label: "${LocaleKeys.search.tr()} ${LocaleKeys.restaurants.tr()}",
           leading: IconButton(
             onPressed: () => searchCubit.back(),
             icon: const Icon(Icons.arrow_back),
           ),
-          title:
-              Text("${LocaleKeys.search.tr()} ${LocaleKeys.restaurants.tr()}"),
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -38,23 +38,83 @@ class SearchRestaurantView extends StatelessWidget {
             children: [
               /// top
               TextFormField(
+                // onFieldSubmitted: (value) {
+                //   if (value.isNotEmpty) {
+                //     if (state.status ==
+                //         SearchRestaurantStates.loadingSubCategories) {
+                //       context
+                //           .read<SearchRestaurantsCubit>()
+                //           .searchSubCategories(value);
+                //     }
+                //     if (state.status ==
+                //         SearchRestaurantStates.loadingGovernorates) {
+                //       context
+                //           .read<SearchRestaurantsCubit>()
+                //           .searchGovernorates(value);
+                //     }
+                //     if (state.status == SearchRestaurantStates.loadingCities) {
+                //       context
+                //           .read<SearchRestaurantsCubit>()
+                //           .searchCities(value);
+                //     }
+                //     if (state.status == SearchRestaurantStates.loadingResult) {
+                //       context
+                //           .read<SearchRestaurantsCubit>()
+                //           .searchResult(value);
+                //     }
+                //   }
+                // },
+                // onSaved: (value) {
+                //   if (value!.isNotEmpty) {
+                //     if (state.status ==
+                //         SearchRestaurantStates.loadingSubCategories) {
+                //       context
+                //           .read<SearchRestaurantsCubit>()
+                //           .searchSubCategories(value);
+                //     }
+                //     if (state.status ==
+                //         SearchRestaurantStates.loadingGovernorates) {
+                //       context
+                //           .read<SearchRestaurantsCubit>()
+                //           .searchGovernorates(value);
+                //     }
+                //     if (state.status == SearchRestaurantStates.loadingCities) {
+                //       context
+                //           .read<SearchRestaurantsCubit>()
+                //           .searchCities(value);
+                //     }
+                //     if (state.status == SearchRestaurantStates.loadingResult) {
+                //       context
+                //           .read<SearchRestaurantsCubit>()
+                //           .searchResult(value);
+                //     }
+                //   }
+                // },
                 onChanged: (value) {
                   if (state.status ==
-                      SearchRestaurantStates.loadingSubCategories) {
+                          SearchRestaurantStates.loadingSubCategories ||
+                      state.status ==
+                          SearchRestaurantStates.loadingSearchSubCategory) {
                     context
                         .read<SearchRestaurantsCubit>()
                         .searchSubCategories(value);
                   }
                   if (state.status ==
-                      SearchRestaurantStates.loadingGovernorates) {
+                          SearchRestaurantStates.loadingGovernorates ||
+                      state.status ==
+                          SearchRestaurantStates.loadingSearchGevnorates) {
                     context
                         .read<SearchRestaurantsCubit>()
                         .searchGovernorates(value);
                   }
-                  if (state.status == SearchRestaurantStates.loadingCities) {
+                  if (state.status == SearchRestaurantStates.loadingCities ||
+                      state.status ==
+                          SearchRestaurantStates.loadingSearchCities) {
                     context.read<SearchRestaurantsCubit>().searchCities(value);
                   }
-                  if (state.status == SearchRestaurantStates.loadingResult) {
+                  if (state.status == SearchRestaurantStates.loadingResult ||
+                      state.status ==
+                          SearchRestaurantStates.loadingSearchResult) {
                     context.read<SearchRestaurantsCubit>().searchResult(value);
                   }
                 },
@@ -257,7 +317,16 @@ class SearchRestaurantView extends StatelessWidget {
                         SearchRestaurantStates.loadingResult) {
                       return RefreshIndicator(
                         onRefresh: () async => searchCubit.refreshState(),
-                        child: ListView.builder(
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 1,
+                            mainAxisSpacing: 8,
+                            crossAxisSpacing: 8,
+                            childAspectRatio: 1.001,
+                          ),
                           itemCount: state.allRestaurant?.length,
                           itemBuilder: (context, index) {
                             Restaurant? restaurant =
@@ -270,7 +339,16 @@ class SearchRestaurantView extends StatelessWidget {
                         SearchRestaurantStates.loadingSearchResult) {
                       return RefreshIndicator(
                         onRefresh: () async => searchCubit.refreshState(),
-                        child: ListView.builder(
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 1,
+                            mainAxisSpacing: 8,
+                            crossAxisSpacing: 8,
+                            childAspectRatio: 1.001,
+                          ),
                           itemCount: state.searchRestaurant?.length,
                           itemBuilder: (context, index) {
                             Restaurant? restaurant =

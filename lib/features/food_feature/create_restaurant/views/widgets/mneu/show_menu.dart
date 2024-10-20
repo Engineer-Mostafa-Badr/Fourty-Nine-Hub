@@ -23,11 +23,10 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 // ignore: must_be_immutable
 class ShowMneu extends StatelessWidget {
-  final String from;
-
   var subcategoryId;
+  var restaurantId;
 
-  ShowMneu({super.key, required this.from, this.subcategoryId});
+  ShowMneu({super.key, this.subcategoryId, this.restaurantId});
 
   TextEditingController foodNameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
@@ -49,7 +48,6 @@ class ShowMneu extends StatelessWidget {
                 style: Styles.headerText(color: Colors.red),
               ),
               if (createRestaurantCubit.menu.isNotEmpty) ...[
-                if (from != 'update')
                   Center(
                     child: Wrap(
                       alignment: WrapAlignment.center,
@@ -162,7 +160,7 @@ class ShowMneu extends StatelessWidget {
                                     height: 195.h,
                                     child: ImagePickerPlaceholder(
                                       // width: double.infinity,
-                                      tilte: LocaleKeys.photoForMeal.tr(),
+                                      title: LocaleKeys.photoForMeal.tr(),
                                     ),
                                   );
                                 },
@@ -292,26 +290,6 @@ class ShowMneu extends StatelessWidget {
                             context
                                 .read<RestaurantMenuCubit>()
                                 .addMenuItem(context, menuItem);
-
-                            if (from == 'update') {
-                              // context
-                              //     .read<RestaurantMenuCubit>()
-                              //     .addMenuItem(context, menuItem);
-
-                              await context
-                                  .read<RestaurantMenuCubit>()
-                                  .updateMenuItem(
-                                    menuItem,
-                                  );
-                              if (from == 'update') {
-                                Navigator.pop(context);
-                              }
-                            }
-                            // else {
-                            //   context
-                            //       .read<RestaurantMenuCubit>()
-                            //       .addMenuItem(context, menuItem);
-                            // }
 
                             // Clear the input fields
                             foodNameController.clear();

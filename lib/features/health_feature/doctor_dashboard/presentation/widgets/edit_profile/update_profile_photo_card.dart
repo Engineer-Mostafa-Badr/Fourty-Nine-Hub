@@ -35,7 +35,7 @@ class UpdateProfilePhotoCard extends StatelessWidget {
                     },
                   );
                 } else {
-                  return const ImagePickerPlaceholder(tilte: 'Profile');
+                  return const ImagePickerPlaceholder(title: 'Profile');
                 }
               }),
         ],
