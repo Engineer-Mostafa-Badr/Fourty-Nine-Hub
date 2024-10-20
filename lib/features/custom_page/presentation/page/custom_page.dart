@@ -58,31 +58,7 @@ class _CustomPageState extends State<CustomPage> {
                     ],
                   ),
                 ),
-                // SwitchListTile(
-                //   title: Text(
-                //     LocaleKeys.activatePage.localize,
-                //     style: Styles.mediumText(
-                //       fontSize: 65.sp,
-                //       fontWeight: FontWeight.w400,
-                //     ),
-                //   ),
-                //   value: state.activate?.customPage ??false, // Set the value dynamically
-                //   activeColor: AppColors.SECONDARY_COLOR,
-                //   activeTrackColor: AppColors.SECONDARY_COLOR,
-                //   inactiveTrackColor: AppColors.SECONDARY_COLOR,
-                //   onChanged: (value) {
-                //     controller.updateActivate(value);
-                //     setState(() {
-                //
-                //     });
-                //   },
-                // ),
                 ListTile(
-                  // leading: Image.asset(
-                  //   image,
-                  //   width: 50.h,
-                  //   height: 50.h,
-                  // ),
                   title: Label(
                       text: LocaleKeys.editPage.localize,
                       style: Styles.mediumText(
@@ -98,11 +74,6 @@ class _CustomPageState extends State<CustomPage> {
                   trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
                 ),
                 ListTile(
-                  // leading: Image.asset(
-                  //   image,
-                  //   width: 50.h,
-                  //   height: 50.h,
-                  // ),
                   title: Label(
                       text: LocaleKeys.pagePreview.localize,
                       style: Styles.mediumText(
