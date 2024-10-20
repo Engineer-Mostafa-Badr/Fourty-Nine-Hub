@@ -381,156 +381,159 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                     child: BlocBuilder<ChatsCubit, ChatsState>(
                       builder: (context, state) {
                         return context.read<UserCubit>().isLoggedIn
-                            ? Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 16.w),
-                                    child: Text(
-                                      context
-                                              .read<ChatsCubit>()
-                                              .selectedChats
-                                              .isNotEmpty
-                                          ? "${context.read<ChatsCubit>().selectedChats.length} ${LocaleKeys.selected.tr()}"
-                                          : "",
-                                      style: Styles.mediumText(
-                                          color: AppColors.PRIMARY_COLOR),
+                            ? SizedBox(
+                          height: 20,
+                              child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16.w),
+                                      child: Text(
+                                        context
+                                                .read<ChatsCubit>()
+                                                .selectedChats
+                                                .isNotEmpty
+                                            ? "${context.read<ChatsCubit>().selectedChats.length} ${LocaleKeys.selected.tr()}"
+                                            : "",
+                                        style: Styles.mediumText(
+                                            color: AppColors.PRIMARY_COLOR),
+                                      ),
                                     ),
-                                  ),
-                                  const Spacer(),
-                                  context
-                                          .read<ChatsCubit>()
-                                          .selectedChats
-                                          .isEmpty
-                                      ? const SizedBox.shrink()
-                                      : Row(
-                                          children: [
-                                            IconButton(
-                                              onPressed: () async {
-                                                await context
-                                                    .read<ChatsCubit>()
-                                                    .pinAndUnpinChat();
-                                              },
-                                              icon: const Icon(Icons.push_pin),
+                                    const Spacer(),
+                                    context
+                                            .read<ChatsCubit>()
+                                            .selectedChats
+                                            .isEmpty
+                                        ? const SizedBox.shrink()
+                                        : Row(
+                                            children: [
+                                              IconButton(
+                                                onPressed: () async {
+                                                  await context
+                                                      .read<ChatsCubit>()
+                                                      .pinAndUnpinChat();
+                                                },
+                                                icon: const Icon(Icons.push_pin),
+                                                color: AppColors.PRIMARY_COLOR,
+                                              ),
+                                              IconButton(
+                                                onPressed: () async {
+                                                  await context
+                                                      .read<ChatsCubit>()
+                                                      .deleteChat();
+                                                },
+                                                icon: const Icon(
+                                                  Icons.delete_forever,
+                                                  color: AppColors.PRIMARY_COLOR,
+                                                ),
+                                              ),
+                                              IconButton(
+                                                onPressed: () async {
+                                                  await context
+                                                      .read<ChatsCubit>()
+                                                      .changeMuteChat();
+                                                },
+                                                icon: const Icon(
+                                                  Icons.notifications_off,
+                                                  color: AppColors.PRIMARY_COLOR,
+                                                ),
+                                              ),
+                                              IconButton(
+                                                onPressed: () async {
+                                                  await context
+                                                      .read<ChatsCubit>()
+                                                      .changeArchiveChat();
+                                                },
+                                                icon: const Icon(
+                                                  Icons.archive,
+                                                  color: AppColors.PRIMARY_COLOR,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                    context
+                                            .read<ChatsCubit>()
+                                            .selectedChats
+                                            .isEmpty
+                                        ? PopupMenuButton(
+                                            icon: const Icon(
+                                              Icons.more_vert,
                                               color: AppColors.PRIMARY_COLOR,
                                             ),
-                                            IconButton(
-                                              onPressed: () async {
-                                                await context
-                                                    .read<ChatsCubit>()
-                                                    .deleteChat();
-                                              },
-                                              icon: const Icon(
-                                                Icons.delete_forever,
-                                                color: AppColors.PRIMARY_COLOR,
-                                              ),
+                                            color: AppColors.BACKGROUND_COLOR,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(16.0)),
                                             ),
-                                            IconButton(
-                                              onPressed: () async {
-                                                await context
-                                                    .read<ChatsCubit>()
-                                                    .changeMuteChat();
-                                              },
-                                              icon: const Icon(
-                                                Icons.notifications_off,
-                                                color: AppColors.PRIMARY_COLOR,
-                                              ),
+                                            offset: const Offset(0, 50),
+                                            onSelected: (int value) async {
+                                              if (value == 4) {
+                                                context
+                                                    .push(Routes.CHATPROFILEVIEW);
+                                              }
+                                            },
+                                            itemBuilder: (context) {
+                                              return _mainMenuBuilder();
+                                            },
+                                          )
+                                        : PopupMenuButton(
+                                            icon: const Icon(
+                                              Icons.more_vert,
+                                              color: AppColors.PRIMARY_COLOR,
                                             ),
-                                            IconButton(
-                                              onPressed: () async {
-                                                await context
-                                                    .read<ChatsCubit>()
-                                                    .changeArchiveChat();
-                                              },
-                                              icon: const Icon(
-                                                Icons.archive,
-                                                color: AppColors.PRIMARY_COLOR,
-                                              ),
+                                            color: AppColors.BACKGROUND_COLOR,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(16.0)),
                                             ),
-                                          ],
-                                        ),
-                                  context
-                                          .read<ChatsCubit>()
-                                          .selectedChats
-                                          .isEmpty
-                                      ? PopupMenuButton(
-                                          icon: const Icon(
-                                            Icons.more_vert,
-                                            color: AppColors.PRIMARY_COLOR,
-                                          ),
-                                          color: AppColors.BACKGROUND_COLOR,
-                                          shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(16.0)),
-                                          ),
-                                          offset: const Offset(0, 50),
-                                          onSelected: (int value) async {
-                                            if (value == 4) {
-                                              context
-                                                  .push(Routes.CHATPROFILEVIEW);
-                                            }
-                                          },
-                                          itemBuilder: (context) {
-                                            return _mainMenuBuilder();
-                                          },
-                                        )
-                                      : PopupMenuButton(
-                                          icon: const Icon(
-                                            Icons.more_vert,
-                                            color: AppColors.PRIMARY_COLOR,
-                                          ),
-                                          color: AppColors.BACKGROUND_COLOR,
-                                          shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(16.0)),
-                                          ),
-                                          offset: const Offset(0, 50),
-                                          onSelected: (int value) async {},
-                                          itemBuilder: (context) {
-                                            return [
-                                              PopupMenuItem<int>(
-                                                value: 0,
-                                                child: Text(
-                                                  LocaleKeys.addShortcut.tr(),
-                                                  style: Styles.mediumText(
-                                                      color: AppColors
-                                                          .PRIMARY_COLOR),
+                                            offset: const Offset(0, 50),
+                                            onSelected: (int value) async {},
+                                            itemBuilder: (context) {
+                                              return [
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: Text(
+                                                    LocaleKeys.addShortcut.tr(),
+                                                    style: Styles.mediumText(
+                                                        color: AppColors
+                                                            .PRIMARY_COLOR),
+                                                  ),
                                                 ),
-                                              ),
-                                              PopupMenuItem<int>(
-                                                value: 0,
-                                                child: Text(
-                                                  LocaleKeys.markAsUnread.tr(),
-                                                  style: Styles.mediumText(
-                                                      color: AppColors
-                                                          .PRIMARY_COLOR),
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: Text(
+                                                    LocaleKeys.markAsUnread.tr(),
+                                                    style: Styles.mediumText(
+                                                        color: AppColors
+                                                            .PRIMARY_COLOR),
+                                                  ),
                                                 ),
-                                              ),
-                                              PopupMenuItem<int>(
-                                                value: 0,
-                                                child: Text(
-                                                  LocaleKeys.selectAll.tr(),
-                                                  style: Styles.mediumText(
-                                                      color: AppColors
-                                                          .PRIMARY_COLOR),
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: Text(
+                                                    LocaleKeys.selectAll.tr(),
+                                                    style: Styles.mediumText(
+                                                        color: AppColors
+                                                            .PRIMARY_COLOR),
+                                                  ),
                                                 ),
-                                              ),
-                                              PopupMenuItem<int>(
-                                                value: 0,
-                                                child: Text(
-                                                  LocaleKeys.lockChat.tr(),
-                                                  style: Styles.mediumText(
-                                                      color: AppColors
-                                                          .PRIMARY_COLOR),
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: Text(
+                                                    LocaleKeys.lockChat.tr(),
+                                                    style: Styles.mediumText(
+                                                        color: AppColors
+                                                            .PRIMARY_COLOR),
+                                                  ),
                                                 ),
-                                              ),
-                                            ];
-                                          },
-                                        ),
-                                ],
-                              )
+                                              ];
+                                            },
+                                          ),
+                                  ],
+                                ),
+                            )
                             : const SizedBox.shrink();
                       },
                     ),
@@ -538,7 +541,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                 ),
                 SliverAppBar(
                   expandedHeight: MediaQuery.of(context).size.height *
-                      0.15, // Responsive height
+                      0.08, // Responsive height
                   automaticallyImplyLeading: false,
                   floating: true,
                   flexibleSpace: BlocProvider(

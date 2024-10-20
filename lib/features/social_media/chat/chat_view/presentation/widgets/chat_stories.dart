@@ -536,8 +536,8 @@ class ChatStories extends StatelessWidget {
                       baseColor: Colors.grey.withOpacity(0.1),
                       highlightColor: Colors.grey.withOpacity(0.5),
                       child: CircleAvatar(
-                        radius: MediaQuery.of(context).size.width *
-                            0.09, // Responsive radius
+                        radius: MediaQuery.of(context).size.height *
+                            0.03, // Responsive radius
                       ),
                     ),
                   );

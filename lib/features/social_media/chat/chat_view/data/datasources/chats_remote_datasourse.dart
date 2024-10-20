@@ -72,6 +72,8 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
       GetChatsParams params) async {
     final response =
         await _apiConsumer.post(EndPoints.getChats, data: params.toJson());
+
+    log("locked chats : $response");
     return response.fold(
       (failure) => Left(failure),
       (data) => Right((data['data']['chats'] as List)

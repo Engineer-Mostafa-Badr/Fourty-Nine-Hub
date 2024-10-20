@@ -169,6 +169,7 @@ class ChatsCubit extends Cubit<ChatsState> {
         params: GetChatsParams(isServices: true));
   }
 
+
   Future<void> getGreetChats() async {
     await _getChats(
         flag: (chat) => chat.categoryId == ChatCategoriesIds.greet,
@@ -183,7 +184,7 @@ class ChatsCubit extends Cubit<ChatsState> {
 
   Future<void> getLockedChats() async {
     await _getChats(
-        flag: (chat) => chat.locked, params: GetChatsParams(isLocked: true));
+        flag: (chat) => chat.locked, params: GetChatsParams(isLocked: true)); // send pass in params
   }
 
   Future<void> _getUnreadChats() async {
