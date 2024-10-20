@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/custom_page/domain/entity/activate_entity.dart';
 import 'package:fourtyninehub/features/custom_page/domain/entity/social_page_entity.dart';
 
 import '../entity/favourite_categ_entity.dart';
@@ -19,4 +20,6 @@ abstract class CustomPageRepository {
   Future<Either<Failure, bool>> updateNavigateBar(NavigateBarParams params);
   Future<Either<Failure, FavouriteCatEntity>> fetchFavouriteCat();
   Future<Either<Failure, bool>> updateFavouriteCat(FavouriteCatParams params);
+  Future<Either<Failure, ActivateEntity>> fetchActivate();
+  Future<Either<Failure, bool>> updateActivate({required bool customPage});
 }

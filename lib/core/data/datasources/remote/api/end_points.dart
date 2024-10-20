@@ -119,6 +119,7 @@ class EndPoints {
   static const subTab = '/navigators/subTap';
   static const navigateBar = '/navigators/navigatorsBar';
   static const favouriteCat = '/navigators/navigateCategories';
+  static const activate = '/navigators/customPage';
 
   // Star
   static const allStar = '/talent/';

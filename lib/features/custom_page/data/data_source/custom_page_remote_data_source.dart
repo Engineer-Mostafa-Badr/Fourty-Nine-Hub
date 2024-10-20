@@ -1,9 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/features/custom_page/data/model/activate_model.dart';
 import 'package:fourtyninehub/features/custom_page/data/model/navigate_bar_model.dart';
 import 'package:fourtyninehub/features/custom_page/data/model/social_page_model.dart';
 import 'package:fourtyninehub/features/custom_page/data/model/sub_tab_model.dart';
+import 'package:fourtyninehub/features/custom_page/domain/entity/activate_entity.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../domain/entity/favourite_categ_entity.dart';
@@ -25,6 +27,8 @@ abstract class CustomPageRemoteDataSource {
   Future<Either<Failure, bool>> updateNavigateBar(NavigateBarParams params);
   Future<Either<Failure, FavouriteCatEntity>> fetchFavouriteCat();
   Future<Either<Failure, bool>> updateFavouriteCat(FavouriteCatParams params);
+  Future<Either<Failure, ActivateEntity>> fetchActivate();
+  Future<Either<Failure, bool>> updateActivate({required bool customPage});
 }
 
 class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
@@ -118,4 +122,25 @@ class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
       (response) => Right(response['status']),
     );
   }
+
+  @override
+  Future<Either<Failure, ActivateEntity>> fetchActivate() async {
+    var response = await _apiConsumer.get(EndPoints.activate);
+
+    return response.fold(
+          (failure) => Left(failure),
+          (response) => Right(ActivateModel.fromJson(response['data'])),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateActivate({required bool customPage}) async {
+    var response =
+    await _apiConsumer.put(EndPoints.activate, data: {"customPage":customPage});
+
+    return response.fold(
+          (failure) => Left(failure),
+          (response) => Right(response['status']),
+    );
+}
 }
