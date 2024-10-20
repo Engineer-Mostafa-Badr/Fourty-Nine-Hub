@@ -979,6 +979,14 @@
   "shareTransactionDetails": "Share Transaction Details",
   "snapCopyOfBillPayment": "Snap copy of bill payment",
   "paymentSuccessful": "Payment successful",
-  "sendReviewApproval": "Send for review and approval"
+  "sendReviewApproval": "Send for review and approval",
+  "youWin": "You Win!",
+  "shipping": "Shipping",
+  "food": "Food",
+  "thereNoItems": "There is no items",
+  "areDeleteThisAd": "Are you sure you want to delete this Ad!",
+  "offers": "Offers",
+  "contactPhone": "Contact Phone",
+  "booking": "Booking"
 
 }

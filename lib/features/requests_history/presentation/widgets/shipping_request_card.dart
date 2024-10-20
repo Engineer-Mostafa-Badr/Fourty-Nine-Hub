@@ -3,6 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/shipping_request_model/shipping_request_model.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_static_maps_controller/google_static_maps_controller.dart';
@@ -60,7 +62,7 @@ class ShippingRequestCard extends StatelessWidget {
             if (trip.offers.isNotEmpty)
               Row(
                 children: [
-                  TextAppButton(label: 'Offers', onPressed: () {}),
+                  TextAppButton(label: LocaleKeys.offers.localize, onPressed: () {}),
                   const Sizer(),
                   Expanded(
                     child: SizedBox(

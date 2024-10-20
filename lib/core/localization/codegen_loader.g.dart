@@ -970,7 +970,15 @@ class CodegenLoader extends AssetLoader{
   "shareTransactionDetails": "مشاركة تفاصيل المعاملة",
   "snapCopyOfBillPayment": "التقط نسخة من دفع الفاتورة",
   "paymentSuccessful": "تم الدفع بنجاح",
-  "sendReviewApproval": "إرسال للمراجعة والموافقة"
+  "sendReviewApproval": "إرسال للمراجعة والموافقة",
+  "youWin": "لقد فزت!",
+  "shipping": "شحن",
+  "food": "اكله",
+  "thereNoItems": "لا يوجد أي عناصر",
+  "areDeleteThisAd": "هل أنت متأكد من أنك تريد حذف هذا الإعلان!",
+  "offers": "العروض",
+  "contactPhone": "رقم الهاتف للاتصال",
+  "booking": "الحجز"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1952,7 +1960,15 @@ static const Map<String,dynamic> en = {
   "shareTransactionDetails": "Share Transaction Details",
   "snapCopyOfBillPayment": "Snap copy of bill payment",
   "paymentSuccessful": "Payment successful",
-  "sendReviewApproval": "Send for review and approval"
+  "sendReviewApproval": "Send for review and approval",
+  "youWin": "You Win!",
+  "shipping": "Shipping",
+  "food": "Food",
+  "thereNoItems": "There is no items",
+  "areDeleteThisAd": "Are you sure you want to delete this Ad!",
+  "offers": "Offers",
+  "contactPhone": "Contact Phone",
+  "booking": "Booking"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

@@ -153,12 +153,12 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               onTap: () => context.push(Routes.CHAT),
               child: SvgPicture.asset(
                 Assets.message,
-                height: 30.h,
+                height: 35.h,
               ),
             ),
 
           SizedBox(
-            width: 40.w,
+            width: 30.w,
           ),
           GestureDetector(
             onTap: () {
@@ -167,11 +167,11 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             child: const UnreadNotificationsBuilder(),
           ),
           SizedBox(
-            width: 5.w,
+            width: 10.w,
           ),
         ],
       ),
-      leadingWidth: 70.w,
+      leadingWidth: 80.w,
       elevation: 0,
       titleSpacing: 0,
       //systemOverlayStyle: SystemUiOverlayStyle.light,

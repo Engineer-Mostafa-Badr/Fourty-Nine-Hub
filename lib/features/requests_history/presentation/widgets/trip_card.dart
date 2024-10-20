@@ -7,6 +7,8 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart'
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_come_with_me_usecase.dart';
 import 'package:fourtyninehub/features/requests_history/domain/entities/trip_entity.dart';
 import 'package:go_router/go_router.dart';
@@ -69,12 +71,12 @@ class TripCard extends StatelessWidget {
                 const Spacer(),
                 if (showDelete)
                   TextAppButton(
-                      label: 'Delete',
+                      label: LocaleKeys.deleteAd.localize,
                       onPressed: () {
                         showAreYouSure(
-                            title: 'Alert!',
+                            title: LocaleKeys.alert.localize,
                             subTitle:
-                                'Are you sure you want to delete this Ad!',
+                            LocaleKeys.areDeleteThisAd.localize,
                             action: () {
                               if (onDelete != null) {
                                 onDelete!(trip.id);
@@ -107,7 +109,7 @@ class TripCard extends StatelessWidget {
             if (trip.offers.isNotEmpty)
               Row(
                 children: [
-                  TextAppButton(label: 'Offers', onPressed: () {}),
+                  TextAppButton(label: LocaleKeys.offers.localize, onPressed: () {}),
                   const Sizer(),
                   Expanded(
                     child: SizedBox(
@@ -157,7 +159,7 @@ class TripCard extends StatelessWidget {
             const Sizer(),
             if (onRequest != null)
               AppButton(
-                  label: 'Request',
+                  label: LocaleKeys.request.localize,
                   onPressed: () {
                     bottomSheet(
                         context: context,
@@ -185,11 +187,11 @@ class TripCard extends StatelessWidget {
           shrinkWrap: true,
           children: [
             Label(
-                text: 'Contact Phone',
+                text: LocaleKeys.contactPhone.localize,
                 style: Styles.mediumText(fontWeight: FontWeight.bold)),
             const Sizer(),
             FormTextField(
-                hint: 'Phone',
+                hint: LocaleKeys.phone.localize,
                 type: TextInputType.number,
                 style: TextStyle(
                     fontSize: 20.sp,
@@ -198,7 +200,7 @@ class TripCard extends StatelessWidget {
                 action: (v) => phone = v),
             const Sizer(),
             AppButton(
-                label: 'Done',
+                label: LocaleKeys.done.localize,
                 onPressed: () {
                   if (formState.currentState!.validate()) {
                     context.pop();
@@ -224,7 +226,7 @@ class TripCard extends StatelessWidget {
             children: [
               Expanded(
                   child: AppButton(
-                      label: 'Reject',
+                      label: LocaleKeys.reject.localize,
                       onPressed: () {
                         if (onReject != null) {
                           onReject!(request.id);
@@ -233,7 +235,7 @@ class TripCard extends StatelessWidget {
               const Sizer(),
               Expanded(
                   child: AppButton(
-                      label: 'Accept',
+                      label: LocaleKeys.Accept.localize,
                       backColor: Colors.green,
                       onPressed: () {
                         if (onAccept != null) {
@@ -242,8 +244,8 @@ class TripCard extends StatelessWidget {
                       })),
             ],
           ),
-        if (request.isAccepted) const BadgedLabel(label: 'Accepted'),
-        if (request.isRejected) const BadgedLabel(label: 'Reject')
+        if (request.isAccepted)  BadgedLabel(label: LocaleKeys.Accept.localize),
+        if (request.isRejected)  BadgedLabel(label: LocaleKeys.reject.localize)
       ],
     );
   }

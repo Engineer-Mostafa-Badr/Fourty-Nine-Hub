@@ -954,7 +954,15 @@
   "shareTransactionDetails": "مشاركة تفاصيل المعاملة",
   "snapCopyOfBillPayment": "التقط نسخة من دفع الفاتورة",
   "paymentSuccessful": "تم الدفع بنجاح",
-  "sendReviewApproval": "إرسال للمراجعة والموافقة"
+  "sendReviewApproval": "إرسال للمراجعة والموافقة",
+  "youWin": "لقد فزت!",
+  "shipping": "شحن",
+  "food": "اكله",
+  "thereNoItems": "لا يوجد أي عناصر",
+  "areDeleteThisAd": "هل أنت متأكد من أنك تريد حذف هذا الإعلان!",
+  "offers": "العروض",
+  "contactPhone": "رقم الهاتف للاتصال",
+  "booking": "الحجز"
 
 
 }

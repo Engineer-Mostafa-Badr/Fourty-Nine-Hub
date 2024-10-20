@@ -34,7 +34,7 @@ class LuckyWheelView extends StatelessWidget {
       ),
       body: BlocConsumer<WheelCubit, BasicState<WheelEntity>>(
         listener: (BuildContext context, BasicState<WheelEntity> state) {
-          if (state.failure == null) {
+          if (state.status == StateStatus.error) {
             showSuccessMessage(
               context,
               color: AppColors.SECONDARY_COLOR,

@@ -4,9 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/lucky_wheel/domain/entities/wheel_entity.dart';
 import 'package:fourtyninehub/features/lucky_wheel/domain/entities/wheel_item_entity.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../common/widgets/stateless/buttons/elevated_button.dart';
 import '../../../../../core/enums/wheel.dart';
@@ -61,18 +65,21 @@ class SpinWheelCubit extends Cubit<BasicState<WheelItemEntity>> {
         return Center(
           child: AlertDialog(
             scrollable: false,
-            title: const Center(child: Text("You Win!")),
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            title:  Center(child: Text(LocaleKeys.youWin.localize)),
             content: SingleChildScrollView(
               child: Column(
                 children: [
                   Text(
                     prize.type == WheelItemTypes.point
-                        ? '${prize.value} Points'
+                        ? '${prize.value} ${LocaleKeys.points.localize}'
                         : '${prize.value}',
                     style: TextStyle(fontSize: 30.sp),
                   ),
                   ElevatedAppButton(
-                    label: 'back',
+                    label: LocaleKeys.back.localize,
+                    textStyle: Styles.mediumText(color: AppColors.AUTH_CONTAINER_COLOR),
+                    backColor: AppColors.SECONDARY_COLOR,
                     onPressed: () {
                       Navigator.pop(context);
                     },
