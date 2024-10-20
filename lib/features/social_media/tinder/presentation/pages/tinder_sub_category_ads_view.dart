@@ -62,7 +62,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
           return tinderCubit.state.mainCategoryResponse?.data != null
               ? Column(
                   children: [
-                    Sizer(),
+                    const Sizer(),
                     Container(
                       padding: EdgeInsets.symmetric(
                           vertical: padding, horizontal: padding),
@@ -95,7 +95,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                                             : AppColors.GREY_DARK_COLOR,
                                   ),
                                 ),
-                                Sizer(),
+                                const Sizer(),
                                 Text(
                                   '${tinderCubit.state.mainCategoryResponse!.data.mainCategory.numberOfAdsCount} ${Labels.ads}',
                                   textScaler: TextScaler.noScaling,
@@ -124,7 +124,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                         ],
                       ),
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Text(
                       widget.params.subCategory.name,
                       textScaler: TextScaler.noScaling,
@@ -133,7 +133,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                           color: AppColors.SECONDARY_COLOR,
                           fontWeight: FontWeight.bold),
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Builder(builder: (context) {
                       String provider =
                           getServiceName(widget.params.subCategory.name);

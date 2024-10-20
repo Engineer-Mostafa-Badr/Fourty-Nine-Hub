@@ -394,7 +394,7 @@ class ReelsRepository {
 
     final response =
         await _makeGetRequest(url: url, fromMethod: 'fetchComments');
-    log("${response} from fetchComments repo *******************************************************************");
+    log("$response from fetchComments repo *******************************************************************");
 
     return GetCommentsResponse.fromJson(response);
 

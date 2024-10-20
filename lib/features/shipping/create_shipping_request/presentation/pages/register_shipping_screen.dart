@@ -529,7 +529,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                           children: [
                             Label(
                               text: LocaleKeys.drivingLicense.tr(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 17,
                                   color: AppColors.PRIMARY_COLOR,
                                   fontWeight: FontWeight.w600),
@@ -619,7 +619,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                           children: [
                              Label(
                               text: LocaleKeys.license.tr(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 17,
                                   color: AppColors.PRIMARY_COLOR,
                                   fontWeight: FontWeight.w600),

@@ -16,7 +16,7 @@ ThemeData get lightTheme => ThemeData(
       color: AppColors.AUTH_CONTAINER_COLOR,
     ),
     switchTheme: const SwitchThemeData(
-      trackColor: MaterialStatePropertyAll<Color>(AppColors.SECONDARY_COLOR),
+      trackColor: WidgetStatePropertyAll<Color>(AppColors.SECONDARY_COLOR),
     ),
     textTheme: const TextTheme(
       displayMedium: TextStyle(color: AppColors.QUANTITY_COLOR),

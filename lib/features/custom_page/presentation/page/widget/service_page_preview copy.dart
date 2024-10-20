@@ -134,7 +134,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                           //  Sizer(),
                           //pick me and come with U
                           _buildStarWidget(),
-                          Sizer(),
+                          const Sizer(),
                           _pickMeAndComeWithUWidget(subTab),
                           if (subTab.subTab?.carpool == true ||
                               subTab.subTab?.tripJoin == true)

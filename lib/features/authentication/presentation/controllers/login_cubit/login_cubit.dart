@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../../../../trip_join/helpers/print_helper.dart';
 import '../../../domain/use_cases/apple_sign_in_usecase.dart';
 import '../../../domain/use_cases/login_use_case.dart';
 import '../../../domain/use_cases/save_tokens_use_case.dart';

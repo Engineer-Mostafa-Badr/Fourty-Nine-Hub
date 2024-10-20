@@ -7,10 +7,11 @@ class CreateAdModel extends CreateAdEntity {
   factory CreateAdModel.fromJson(Map<String, dynamic> json) {
     return CreateAdModel(
       value: SelectionModel.fromJson(json['value']),
-      propId: json['propertyId'] != null ? json['propertyId'] : '',
+      propId: json['propertyId'] ?? '',
     );
   }
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'value': value.toJson(),

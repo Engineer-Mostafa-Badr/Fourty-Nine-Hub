@@ -64,7 +64,7 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
 
     res.fold((l) {}, (r) {
       myRestaurant = Restaurant2Model.fromJson(r);
-      print((myRestaurant!.toJson().toString()) + "askln");
+      print("${myRestaurant!.toJson()}askln");
     });
   }
 
@@ -104,26 +104,26 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                             height: 0.25.sh,
                             child: PropertyCard(
                                 myRestaurant: true,
-                                item: Restaurant2Model.fromJson({
+                                item: Restaurant2Model.fromJson(const {
                                   "_id": "66ce0c0d20daf452d7a0d4eb",
                                   "name": "Not Meme xd xd 9",
-                                  "subcategoryId": {
+                                  "subcategoryId": const {
                                     "_id": "62c8babb8e28a58a3edf581d",
                                     "nameAr": "فول/طعميه",
                                     "nameEn": "Beans/falafel"
                                   },
-                                  "mainCategoryId": {
+                                  "mainCategoryId": const {
                                     "_id": "62c8b57e9332225799fe3308",
                                     "nameAr": "اكله",
                                     "nameEn": "Food",
                                     "id": "62c8b57e9332225799fe3308"
                                   },
-                                  "userId": {
+                                  "userId": const {
                                     "_id": "66cdef252184623620bb5337",
                                     "twitter_documentation": false,
                                     "id": "66cdef252184623620bb5337"
                                   },
-                                  "restaurantMedia": [
+                                  "restaurantMedia": const [
                                     {
                                       "_id": "670a908d5240649c258be296",
                                       "mediaKey":
@@ -140,11 +140,11 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                                           "https://d3j5umpuujp1ej.cloudfront.net/cars/infiniti/66cd7c4d5630606afd974fe1/7c3a555d-6ea7-413a-b1eb-6d193cec313d.png"
                                     }
                                   ],
-                                  "government": {
+                                  "government": const {
                                     "governorate_name_ar": "القاهرة",
                                     "governorate_name_en": "Cairo"
                                   },
-                                  "city": {
+                                  "city": const {
                                     "city_name_ar": "15 مايو",
                                     "city_name_en": "15 May"
                                   },
@@ -155,14 +155,14 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                                   "subscriptionType": "No subscription",
                                   "isFavorite": false,
                                   "enableOrDisableChat": "disable",
-                                  "MENU": [
+                                  "MENU": const [
                                     {
                                       "_id": "66ce0c0d20daf452d7a0d4ee",
                                       "restaurantId":
                                           "66ce0c0d20daf452d7a0d4eb",
                                       "foodName": "item 1",
                                       "price": 745,
-                                      "picture": {
+                                      "picture": const {
                                         "_id": "66ce06ba64f63bf95e3ff1d9",
                                         "mediaKey":
                                             "https://d3j5umpuujp1ej.cloudfront.net/food/beans/falafel/66cdef252184623620bb5337/3bbedc1c-ec3a-401d-8ab9-49cf55995331.png"
@@ -200,7 +200,7 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                                       inactiveTrackColor: Colors.grey,
                                       onChanged: (v) async {
                                         print(
-                                            v.toString() + "sflakkwrgbkengkl");
+                                            "${v}sflakkwrgbkengkl");
                                         await context
                                             .read<RestaurantsCubit>()
                                             .changeConnectivityStatus(v)
@@ -208,11 +208,11 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                                       })
                                 ],
                               )),
-                          Divider(),
+                          const Divider(),
 
-                          Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: const RestaurantStatisticsView(),
+                          const Padding(
+                            padding: EdgeInsets.all(4.0),
+                            child: RestaurantStatisticsView(),
                           ),
                           // Divider(),
                           const Sizer(),
@@ -247,7 +247,7 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                                         Styles.headerText(color: Colors.white),
                                   ),
                                 ),
-                                Sizer(),
+                                const Sizer(),
                                 Expanded(
                                   child: AppButton(
                                     label: 'Delete Registration',
@@ -281,7 +281,7 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                     SliverToBoxAdapter(
                       child: ListView.separated(
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             print(
                                 '${state.orders!.data.orders.length}455555555555555555555555');
@@ -361,6 +361,6 @@ void _deleteItem(BuildContext context) {
 
   // Show a snackbar after deletion
   ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text("Item deleted successfully")),
+    const SnackBar(content: Text("Item deleted successfully")),
   );
 }

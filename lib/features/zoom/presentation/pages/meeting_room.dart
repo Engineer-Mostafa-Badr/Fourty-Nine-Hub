@@ -5,7 +5,6 @@ import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_state.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 
-import '../../../../service_locator/service_locator.dart';
 import '../../../social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
 class MeetingRoom extends StatefulWidget {

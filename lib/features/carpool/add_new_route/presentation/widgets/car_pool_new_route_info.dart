@@ -144,7 +144,7 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
                 setState(() {});
               },
               activeColor: AppColors.PRIMARY_COLOR,
-              trackOutlineColor: const MaterialStatePropertyAll(Colors.grey),
+              trackOutlineColor: const WidgetStatePropertyAll(Colors.grey),
               activeTrackColor: Colors.grey,
               inactiveTrackColor: Colors.white,
               inactiveThumbColor: Colors.grey,
@@ -166,7 +166,7 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
                 setState(() {});
               },
               activeColor: AppColors.PRIMARY_COLOR,
-              trackOutlineColor: const MaterialStatePropertyAll(Colors.grey),
+              trackOutlineColor: const WidgetStatePropertyAll(Colors.grey),
               activeTrackColor: Colors.grey,
               inactiveTrackColor: Colors.white,
               inactiveThumbColor: Colors.grey,
@@ -192,7 +192,7 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
                   },
                   activeColor: AppColors.PRIMARY_COLOR,
                   trackOutlineColor:
-                      const MaterialStatePropertyAll(Colors.grey),
+                      const WidgetStatePropertyAll(Colors.grey),
                   activeTrackColor: Colors.grey,
                   inactiveTrackColor: Colors.white,
                   inactiveThumbColor: Colors.grey,

@@ -31,7 +31,7 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
         // return Left(failure);
       },
       (data) {
-        print(data.toString() + "v");
+        print("${data}v");
       },
     );
   }

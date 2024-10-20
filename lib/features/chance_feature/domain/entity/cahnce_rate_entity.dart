@@ -5,7 +5,7 @@ class ChanceRateEntity extends Equatable {
   final int totalContributions;
   final double contributionPercentage;
 
-  ChanceRateEntity({
+  const ChanceRateEntity({
     required this.userContribution,
     required this.totalContributions,
     required this.contributionPercentage,

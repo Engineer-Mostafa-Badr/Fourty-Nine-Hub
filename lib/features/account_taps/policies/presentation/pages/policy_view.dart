@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 // import 'package:advance_pdf_viewer2/advance_pdf_viewer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';

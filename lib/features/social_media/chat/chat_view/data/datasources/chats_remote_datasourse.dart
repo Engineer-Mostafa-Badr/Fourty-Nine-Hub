@@ -230,12 +230,14 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
         (failure) => Left(failure), (data) => Right(data['status']));
   }
 
+  @override
   Future<Either<Failure, bool>> pinChat({required String chatId}) async {
     final response = await _apiConsumer.put(EndPoints.pinAndUnPinChat(chatId));
     return response.fold(
         (failure) => Left(failure), (data) => Right(data['status']));
   }
 
+  @override
   Future<Either<Failure, bool>> unPinChat({required String chatId}) async {
     final response = await _apiConsumer.put(EndPoints.pinAndUnPinChat(chatId));
     return response.fold(

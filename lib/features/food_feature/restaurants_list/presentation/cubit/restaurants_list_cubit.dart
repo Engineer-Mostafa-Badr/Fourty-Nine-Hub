@@ -21,7 +21,6 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_banner_by_id_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_subcategory.dart';
-import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:http/http.dart' as http;
 

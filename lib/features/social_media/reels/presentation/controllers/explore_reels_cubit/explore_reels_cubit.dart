@@ -243,7 +243,7 @@ class ReelsCubit extends Cubit<ReelsState> {
 
   pauseChildVideo({bool pause = false}) {
     pauseChild = pause;
-    print(pauseChild.toString() + "asfsldhfnsd");
+    print("${pauseChild}asfsldhfnsd");
 
     emit(state);
   }
@@ -383,7 +383,7 @@ class ReelsCubit extends Cubit<ReelsState> {
         page: state.globalReelsCurrentPage + 1,
       );
 
-      print(response.data.reels.length.toString() + "asfadjcbalc");
+      print("${response.data.reels.length}asfadjcbalc");
       emit(state.copyWith(
         reels: [...state.globalReels, ...response.data.reels],
         isLoading: false,
@@ -473,7 +473,7 @@ class ReelsCubit extends Cubit<ReelsState> {
 
       final response = await repository.likeReel(reelId);
 
-      print(response.message+"dsfdvsdvsdv");
+      print("${response.message}dsfdvsdvsdv");
       // Assuming you might want to update the specific reel in the list with the like status
       List<Reel> updatedReels = state.globalReels.map((reel) {
         if (reel.id == reelId) {

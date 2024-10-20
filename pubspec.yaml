@@ -120,7 +120,7 @@ dependencies:
   carousel_slider: ^5.0.0
   screenshot:
   jwt_decoder:
-  location: ^4.4.0
+  # location: ^4.4.0
 dependency_overrides:
   http: ^0.13.3
 dev_dependencies:

@@ -9,7 +9,6 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../domain/entities/user_tokens_entity.dart';
 import '../../../domain/use_cases/attach_token_use_case.dart';
-import '../../../domain/use_cases/facebook_sign_in_use_case.dart';
 import '../../../domain/use_cases/get_welcome_gift_use_case.dart';
 import '../../../domain/use_cases/google_sign_in_use_case.dart';
 import '../../../domain/use_cases/save_tokens_use_case.dart';

@@ -321,7 +321,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                       ),
                       const Sizer(),
                       state.status == CreateAdStates.loadCities
-                          ? Center(child: const CircularProgressIndicator())
+                          ? const Center(child: CircularProgressIndicator())
                           : state.status == CreateAdStates.loadCitiesSuccess
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -544,8 +544,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                                 ),
                               ),
                             const Sizer(),
-                            if (widget.categorization.images != null &&
-                                widget.categorization.images.isNotEmpty)
+                            if (widget.categorization.images.isNotEmpty)
                               SizedBox(
                                 height: 80.h,
                                 child: Row(

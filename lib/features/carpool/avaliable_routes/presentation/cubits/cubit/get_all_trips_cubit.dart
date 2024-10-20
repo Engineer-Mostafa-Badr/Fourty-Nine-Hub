@@ -68,7 +68,7 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
       throw Exception('Expected a list of trips but got ${data.runtimeType}');
     }
 
-    return (data as List).map((tripData) {
+    return (data).map((tripData) {
       List<CarpoolLocation> locations = [];
       if (tripData['CARPOOL_LOCATIONS'] is List) {
         locations = (tripData['CARPOOL_LOCATIONS'] as List).map((loc) {

@@ -155,11 +155,11 @@ class ItemCard extends StatefulWidget {
   bool? fromUpdate;
 
   ItemCard({
-    Key? key,
+    super.key,
     required this.meal,
     required this.restaurantId,
     this.fromUpdate,
-  }) : super(key: key);
+  });
 
   @override
   State<ItemCard> createState() => _ItemCardState();

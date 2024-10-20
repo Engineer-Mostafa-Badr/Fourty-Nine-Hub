@@ -17,7 +17,6 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card_selected.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:image_picker/image_picker.dart';
@@ -323,6 +322,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                     Expanded(
                       child: DefaultTextFormField(
                         margin: EdgeInsets.zero,
+                        keyboardType: TextInputType.number,
                         validator: (value) {
                           return shippingcubit.validation(
                               message: LocaleKeys.youHaveToFillYourOfferPrice.tr(),
@@ -340,6 +340,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                     ),
                     Expanded(
                       child: DefaultTextFormField(
+                        style: Styles.smallText(),
                         margin: EdgeInsets.zero,
                         validator: (value) {
                           return shippingcubit.validation(

@@ -260,7 +260,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class TinderView extends StatelessWidget {
-  const TinderView({Key? key}) : super(key: key);
+  const TinderView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -278,7 +278,7 @@ class TinderView extends StatelessWidget {
 }
 
 class TinderScreen extends StatefulWidget {
-  const TinderScreen({Key? key}) : super(key: key);
+  const TinderScreen({super.key});
 
   @override
   State<TinderScreen> createState() => _TinderScreenState();
@@ -359,7 +359,7 @@ class _TinderScreenState extends State<TinderScreen> {
                 ? const TinderCardStack()
                 : SizedBox(
                     height: 0.55.sh,
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         'Empty List',
                       ),
@@ -378,7 +378,7 @@ class _TinderScreenState extends State<TinderScreen> {
                 ? _buildSubCategoryList(context, state)
                 : SizedBox(
                     height: 0.3.sh,
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         'Empty List',
                       ),

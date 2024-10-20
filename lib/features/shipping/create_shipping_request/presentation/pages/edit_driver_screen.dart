@@ -520,7 +520,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                               children: [
                                 Label(
                                   text: LocaleKeys.drivingLicense.tr(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 17,
                                       color: AppColors.PRIMARY_COLOR,
                                       fontWeight: FontWeight.w600),
@@ -619,7 +619,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                               children: [
                                 Label(
                                   text: LocaleKeys.license.tr(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 17,
                                       color: AppColors.PRIMARY_COLOR,
                                       fontWeight: FontWeight.w600),

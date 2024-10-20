@@ -15,10 +15,8 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -107,27 +105,32 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          widget.title ?? LocaleKeys.newRide.tr(),
-                          style:  TextStyle(
-                            color: Theme.of(context).brightness == Brightness.dark? Colors.white:AppColors.PRIMARY_COLOR,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
+                    Flexible(
+                      child: Row(
+                        children: [
+                          Text(
+                            widget.title ?? LocaleKeys.newRide.tr(),
+                            style:  TextStyle(
+                              color: Theme.of(context).brightness == Brightness.dark? Colors.white:AppColors.PRIMARY_COLOR,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                            ),
                           ),
-                        ),
-                        Text(
-                          widget.noBracts
-                              ? " ${widget.model.status}"
-                              : " (${widget.model.status})",
-                          style: const TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
+                          Flexible(
+                            child: Text(
+                              widget.noBracts
+                                  ? " ${widget.model.status}"
+                                  : " (${widget.model.status})",
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22,
+                                overflow: TextOverflow.ellipsis
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     Column(
                       children: [
