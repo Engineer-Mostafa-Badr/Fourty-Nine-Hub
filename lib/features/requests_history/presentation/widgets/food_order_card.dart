@@ -79,10 +79,10 @@ class FoodOrderCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Label(text: 'Address: ${item.address.address}'),
+          Label(text: '${LocaleKeys.address.localize}: ${item.address.address}'),
           Label(
-              text: 'Name: ${item.address.firstName} ${item.address.lastName}'),
-          Label(text: 'Phone: ${item.address.phone}'),
+              text: '${LocaleKeys.name.localize}: ${item.address.firstName} ${item.address.lastName}'),
+          Label(text: '${LocaleKeys.phone.localize}: ${item.address.phone}'),
         ],
       ),
     );

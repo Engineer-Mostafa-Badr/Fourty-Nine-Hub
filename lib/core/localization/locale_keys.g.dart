@@ -923,6 +923,17 @@ abstract class  LocaleKeys {
   static const transactionSuccessful = 'transactionSuccessful';
   static const yourTransactionWasSuccessful = 'yourTransactionWasSuccessful';
   static const transferAmount = 'transferAmount';
+  static const snapCopyOfBillPayment = 'snapCopyOfBillPayment';
+  static const paymentSuccessful = 'paymentSuccessful';
+  static const sendReviewApproval = 'sendReviewApproval';
+  static const youWin = 'youWin';
+  static const shipping = 'shipping';
+  static const food = 'food';
+  static const thereNoItems = 'thereNoItems';
+  static const areDeleteThisAd = 'areDeleteThisAd';
+  static const offers = 'offers';
+  static const contactPhone = 'contactPhone';
+  static const booking = 'booking';
   static const insufficientAmount = 'insufficientAmount';
   static const selectAmountToCharge = 'selectAmountToCharge';
   static const chargeNow = 'chargeNow';

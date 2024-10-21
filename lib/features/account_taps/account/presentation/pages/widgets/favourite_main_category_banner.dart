@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_category_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -13,8 +12,6 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../core/localization/locales.dart';
 
 class FavouriteMainCategoryBanner extends StatefulWidget {
@@ -87,17 +84,17 @@ class _FavouriteMainCategoryBannerState
                           ),
                         )
                       : const SizedBox.shrink(),
-                  Sizer(
-                    height: 15.h,
-                  ),
-                  Label(
-                    text:
-                        '${widget.category.numberOfAds.toShortScale} ${LocaleKeys.ad.localize}',
-                    style: Styles.mediumText(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  )
+                  // Sizer(
+                  //   height: 15.h,
+                  // ),
+                  // Label(
+                  //   text:
+                  //       '${widget.category.numberOfAds.toShortScale} ${LocaleKeys.ad.localize}',
+                  //   style: Styles.mediumText(
+                  //     fontWeight: FontWeight.bold,
+                  //     color: Colors.white,
+                  //   ),
+                  // )
                 ],
               ),
             ),

@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/features/custom_page/domain/use_case/fetch_activate_use_case.dart';
 import 'package:fourtyninehub/features/custom_page/domain/use_case/fetch_social_page_use_case.dart';
+import 'package:fourtyninehub/features/custom_page/domain/use_case/update_activate_use_case.dart';
 import 'package:fourtyninehub/features/custom_page/domain/use_case/update_social_page_use_case.dart';
 import '../../domain/use_case/fetch_favourite_cat_use_case.dart';
 import '../../domain/use_case/fetch_navigate_bar_use_case.dart';
@@ -19,6 +21,8 @@ class CustomPageCubit extends Cubit<CustomPageState> {
   final UpdateNavigateBarUseCase _updateNavigateBarUseCase;
   final FetchFavouriteCatUseCase _favouriteCatUseCase;
   final UpdateFavouriteCatUseCase _updateFavouriteCatUseCase;
+  final FetchActivateUseCase _fetchActivateUseCase;
+  final UpdateActivateUseCase _updateActivateUseCase;
 
   CustomPageCubit(
       this._fetchSocialPageUseCase,
@@ -28,7 +32,7 @@ class CustomPageCubit extends Cubit<CustomPageState> {
       this._fetchNavigateBarUseCase,
       this._updateNavigateBarUseCase,
       this._favouriteCatUseCase,
-      this._updateFavouriteCatUseCase)
+      this._updateFavouriteCatUseCase, this._fetchActivateUseCase, this._updateActivateUseCase)
       : super(const CustomPageState());
 
   // void loadData() async {
@@ -114,6 +118,27 @@ class CustomPageCubit extends Cubit<CustomPageState> {
       emit(state.copyWith(failure: l, status: CustomPageStates.error));
     }, (data) {
       emit(state.copyWith(status: CustomPageStates.success));
+    });
+  }
+
+  // Activate ///////////////////////////////////////////////
+
+  Future<void> fetchActivate() async {
+    final response = await _fetchActivateUseCase.call(const NoParams());
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: CustomPageStates.error));
+    }, (data) {
+      emit(state.copyWith(activate: data, status: CustomPageStates.success));
+    });
+  }
+
+  Future<void> updateActivate(bool params) async {
+    final response = await _updateActivateUseCase.call(params);
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: CustomPageStates.error));
+    }, (data) {
+      emit(state.copyWith(status: CustomPageStates.success));
+      fetchActivate();
     });
   }
 }

@@ -42,7 +42,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await CacheServiceImpl.init();
-  await DI.execute();
+  await DI.execute(); 
 
   // ZegoGiftManager().cache.cache(giftItemList);
 

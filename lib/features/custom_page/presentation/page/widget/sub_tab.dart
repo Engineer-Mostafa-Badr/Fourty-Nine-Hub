@@ -29,7 +29,7 @@ class _SubTabState extends State<SubTab> {
       "Carpool": preferences.carpool,
       "Auction": preferences.auction,
       "Installment": preferences.installment,
-      "Chance": preferences.chance,
+      "Booking": preferences.booking,
     };
   }
 
@@ -105,7 +105,7 @@ class _SubTabState extends State<SubTab> {
                         carpool: _selectedItems["Carpool"] ?? false,
                         auction: _selectedItems["Auction"] ?? false,
                         installment: _selectedItems["Installment"] ?? false,
-                        chance: _selectedItems["Chance"] ?? false,
+                    booking: _selectedItems["Booking"] ?? false,
                       ));
                 } else {
                   // Show a message if the selection is not valid

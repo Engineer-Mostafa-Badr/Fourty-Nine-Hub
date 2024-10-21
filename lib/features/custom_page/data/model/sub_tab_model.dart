@@ -6,7 +6,7 @@ class SubTabModel extends SubTabEntity {
       required super.userId,
       required super.auction,
       required super.carpool,
-      required super.chance,
+      required super.booking,
       required super.installment,
       required super.tripJoin});
 
@@ -16,7 +16,7 @@ class SubTabModel extends SubTabEntity {
       userId: json['userId'] ?? '',
       auction: json['Auction'] ?? false,
       carpool: json['Carpool'] ?? false,
-      chance: json['Chance'] ?? false,
+      booking: json['Booking'] ?? false,
       installment: json['Installment'] ?? false,
       tripJoin: json['TripJoin'] ?? false,
     );

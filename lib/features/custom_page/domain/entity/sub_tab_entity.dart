@@ -3,7 +3,7 @@ class SubTabEntity {
   final String userId;
   final bool auction;
   final bool carpool;
-  final bool chance;
+  final bool booking;
   final bool installment;
   final bool tripJoin;
 
@@ -12,7 +12,7 @@ class SubTabEntity {
       required this.userId,
       required this.auction,
       required this.carpool,
-      required this.chance,
+      required this.booking,
       required this.installment,
       required this.tripJoin});
 }
