@@ -3,6 +3,7 @@ import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/data_sources/stories_data_source.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/followers_model.dart';
+import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/muted_stories_model.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/viewers_model.dart';
 import 'package:fourtyninehub/features/social_media/stories/domain/repositories/stories_repository.dart';
@@ -25,6 +26,11 @@ Future<Either<Failure, bool>> deleteStory(String id) {
 }
 
 @override
+Future<Either<Failure, bool>> createStory(String id) {
+  return _storiesRemoteDataSource.deleteStory(id);
+}
+
+@override
 Future<Either<Failure, bool>> muteUserStories(String id) {
   return _storiesRemoteDataSource.muteUserStories(id);
 }
@@ -32,6 +38,11 @@ Future<Either<Failure, bool>> muteUserStories(String id) {
   @override
   Future<Either<Failure, MutedStoriesResponse>> getMutedStories(PaginationParams params) {
     return _storiesRemoteDataSource.getMutedStories(params);
+  }
+
+  @override
+  Future<Either<Failure, StoriesResponse>> fetchStories(PaginationParams params) {
+    return _storiesRemoteDataSource.fetchStories(params);
   }
 
   @override

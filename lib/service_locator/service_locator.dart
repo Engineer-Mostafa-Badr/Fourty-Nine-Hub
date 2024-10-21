@@ -19,7 +19,6 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_t
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/repositories/StoriesRpo.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/repo/tinder_repo.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
@@ -37,6 +36,7 @@ import 'package:fourtyninehub/service_locator/search_service_locator.dart';
 import 'package:fourtyninehub/service_locator/secrets_service_locator.dart';
 import 'package:fourtyninehub/service_locator/setting_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
+import 'package:fourtyninehub/service_locator/stories_service_locator.dart';
 import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
 import 'package:fourtyninehub/service_locator/transfer_money_service_locator.dart';
 import 'package:fourtyninehub/service_locator/trip_join_service_locator.dart';
@@ -145,10 +145,7 @@ class DI {
       () => StoryRepository(),
     );
 
-    // Register the StoryCubit
-    serviceLocator.registerFactory<StoryCubit>(
-      () => StoryCubit(serviceLocator<StoryRepository>(),serviceLocator(),serviceLocator(),serviceLocator(),serviceLocator(),serviceLocator(),serviceLocator(),serviceLocator(),serviceLocator()),
-    );
+
     // serviceLocator
     //     .registerFactory<SliderCubit>(() => SliderCubit(serviceLocator()));
     //
@@ -259,5 +256,6 @@ class DI {
     SearchServiceLocator.execute(serviceLocator: serviceLocator);
     JoinTripCarpoolServiceLocator.execute(serviceLocator: serviceLocator);
     ReelsServiceLocator.execute(serviceLocator: serviceLocator);
+    StoriesServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

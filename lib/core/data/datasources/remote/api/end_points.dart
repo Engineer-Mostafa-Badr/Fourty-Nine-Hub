@@ -360,8 +360,10 @@ class EndPoints {
   static toggleCommentLike(String id)=> '/reels/comments/like/$id';
   static makeViews(String id)=> '/stories/view/$id';
   static deleteStory(String id)=> '/stories/$id';
+  static const createStory= '/stories/text';
   static getStoryViewers(String id)=> '/Stories/view/$id';
-  static getMutedStories(PaginationParams params)=> '/mutedStories?limit=${params.limit}&page=${params.page}';
+  static getMutedStories(PaginationParams params)=> '/stories/mutedStories?limit=${params.limit}&page=${params.page}';
+  static fetchStories(PaginationParams params)=> '/stories/explore?limit=${params.limit}&page=${params.page}';
   static const muteUserStories = '/stories/muteUserStory';
   static const updatePrivacy = '/stories/privacy';
   static const getFollowers = '/follow/followers?subCategory=62ef7cf658c90d4a7ed48120';
