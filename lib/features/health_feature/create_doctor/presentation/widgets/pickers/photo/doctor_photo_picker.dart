@@ -51,7 +51,7 @@ class _CreateDoctorProfilePhotoPickerState
                         builder: (context, state) {
                       return const ImagePickerPlaceholder(
                         borderColor: Colors.grey,
-                        tilte: 'Photo',
+                        title: 'Photo',
                       );
                     }),
                   )
@@ -65,7 +65,7 @@ class _CreateDoctorProfilePhotoPickerState
                     builder: (context, state) {
                   return ImagePickerPlaceholder(
                     borderColor: Colors.grey,
-                    tilte: LocaleKeys.photo.tr(),
+                    title: LocaleKeys.photo.tr(),
                   );
                 }),
               );

@@ -1,4 +1,5 @@
 import 'package:card_swiper/card_swiper.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,9 +9,12 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/utils/duration_helper.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_ad_drawer_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
@@ -40,6 +44,11 @@ class AdCardDrawerFavourite extends StatefulWidget {
 }
 
 class _AdCardState extends State<AdCardDrawerFavourite> {
+  String get formatedDate => DateFormat('yyyy-MM-dd').format(widget.item.createdAt);
+  Duration get restTimeDuration => DateTime.now().difference(widget.item.createdAt);
+
+  String get formattedRestTime =>
+      DurationHelper().sinceTime(duration: restTimeDuration);
   @override
   Widget build(BuildContext context) {
     // List<CreateAdEntity> details = widget.item.details
@@ -52,7 +61,7 @@ class _AdCardState extends State<AdCardDrawerFavourite> {
         final controller = context.read<AdvertisementCubit>();
         return InkWell(
           onTap: () {
-            context.push(Routes.ADdetails, extra: widget.item.adId);
+            context.push(Routes.ADdetails, extra: widget.item.id);
           },
           child: Container(
             width: kToolbarHeight * 2.5,
@@ -226,7 +235,7 @@ class _AdCardState extends State<AdCardDrawerFavourite> {
                               //               ));
                               //         }).toList())),
                               Label(
-                                text: '${widget.item.createdAt}',
+                                text: formattedRestTime,
                                 style: Styles.mediumText(color: Colors.grey),
                                 maxLines: 1,
                               ),
@@ -239,182 +248,205 @@ class _AdCardState extends State<AdCardDrawerFavourite> {
                         children: [
                           Expanded(
                             flex: 3,
-                            child: AvaialbleTripsButton(
-                              title: 'Premium Request',
-                              color: AppColors.SECONDARY_COLOR,
-                              onTap: () {
-                                SubscriptionMethod().subscribe(
-                                    subscribeId: widget.item.subCategoryId,
-                                    title: LocaleKeys.premiumRequest.localize);
-                              },
+                            child: PremiumRequestButton(
+                              adId: widget.item.id,
+                              subCategoryId: widget.item.subCategoryId,
+                              subscriptionStatus: widget.item.subscriptionStatus,
+                            //  subscriptionStatus: widget.item.subscriptionStatus??'',
                             ),
                           ),
                           const Sizer(width: 5),
                           Expanded(
                             flex: 3,
-                            child: AvaialbleTripsButton(
-                              title: 'Request',
-                              color: AppColors.PRIMARY_COLOR,
-                              onTap: () {
-                                showModalBottomSheet(
-                                  backgroundColor: Colors.white,
-                                  context: context,
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(32.0),
-                                      topRight: Radius.circular(32.0),
-                                    ),
-                                  ),
-                                  isDismissible: true,
-                                  isScrollControlled: true,
-                                  builder: (BuildContext context) {
-                                    return AnimatedPadding(
-                                      padding:
-                                          MediaQuery.of(context).viewInsets,
-                                      duration:
-                                          const Duration(milliseconds: 50),
-                                      child: Container(
-                                        height: 400.h,
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 10.h,
-                                          horizontal: 10,
-                                        ),
-                                        child: Column(
-                                          children: [
-                                            Label(
-                                              text: LocaleKeys
-                                                  .enterPhoneNumber.localize,
-                                              style: Styles.headerText(),
-                                            ),
-                                            Sizer(
-                                              height: 30.h,
-                                            ),
-                                            Container(
-                                              constraints: BoxConstraints(
-                                                  maxHeight: 180.h),
-                                              child: Form(
-                                                key: controller.formKey,
-                                                child: TextFormField(
-                                                  validator: (value) {
-                                                    if ((value == null ||
-                                                        value.isEmpty)) {
-                                                      return LocaleKeys
-                                                          .required.localize;
-                                                    } else {
-                                                      return null;
-                                                    }
-                                                  },
-                                                  // focusNode: focusNode,
-                                                  maxLines: null,
-                                                  maxLength: 150,
-                                                  onChanged: (c) => controller
-                                                      .changePhone(v: c),
-                                                  // controller: controller,
-                                                  decoration: InputDecoration(
-                                                      hintText: LocaleKeys
-                                                          .phoneNumber.localize,
-                                                      fillColor: Colors.white,
-                                                      hintStyle: Styles.mediumText(
-                                                          color: AppColors
-                                                              .DARK_GRAY_COLOR)),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: InkWell(
-                                                      onTap: () async {
-                                                        if (controller.formKey
-                                                            .currentState!
-                                                            .validate()) {
-                                                          await controller
-                                                              .makeAdRequest(
-                                                                  id: widget
-                                                                      .item.id)
-                                                              .then((value) {
-                                                            if (value == true) {
-                                                              context.pop();
-                                                              showSuccessMessage(
-                                                                  context,
-                                                                  'Request Sent Successfully');
-                                                              controller
-                                                                  .resetRequest();
-                                                            } else {
-                                                              context.pop();
-                                                              if (state
-                                                                      .failure !=
-                                                                  null) {
-                                                                showErrorMessage(
-                                                                    context,
-                                                                    getFailureMessage(
-                                                                        state
-                                                                            .failure!,
-                                                                        context));
-                                                              } else {
-                                                                showErrorMessage(
-                                                                    context,
-                                                                    'Please Try Again!');
-                                                              }
-                                                            }
-                                                          });
-                                                        }
-                                                      },
-                                                      child: Container(
-                                                        width: 100,
-                                                        height: 80.h,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(5),
-                                                        decoration: BoxDecoration(
-                                                            color: AppColors
-                                                                .PRIMARY_COLOR,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        15)),
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: Label(
-                                                          text: LocaleKeys
-                                                              .send.localize,
-                                                          style:
-                                                              Styles.headerText(
-                                                                  color: Colors
-                                                                      .white),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    child: TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop(); // Close the dialog
-                                                      },
-                                                      child: Label(
-                                                        text: LocaleKeys
-                                                            .cancel.localize,
-                                                        style:
-                                                            Styles.headerText(),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
+                            child: RequestButton(
+                              adId: widget.item.id,
+                              subscriptionStatus: widget.item.subscriptionStatus,
+                              //subscriptionStatus: widget.item.subscriptionStatus??'',
                             ),
                           )
                         ],
                       ),
+                      // Row(
+                      //   crossAxisAlignment: CrossAxisAlignment.center,
+                      //   children: [
+                      //     Expanded(
+                      //       flex: 3,
+                      //       child: AvaialbleTripsButton(
+                      //         title: 'Premium Request',
+                      //         color: AppColors.SECONDARY_COLOR,
+                      //         onTap: () {
+                      //           SubscriptionMethod().subscribe(
+                      //               subscribeId: widget.item.subCategoryId,
+                      //               title: LocaleKeys.premiumRequest.localize);
+                      //         },
+                      //       ),
+                      //     ),
+                      //     const Sizer(width: 5),
+                      //     Expanded(
+                      //       flex: 3,
+                      //       child: AvaialbleTripsButton(
+                      //         title: 'Request',
+                      //         color: AppColors.PRIMARY_COLOR,
+                      //         onTap: () {
+                      //           showModalBottomSheet(
+                      //             backgroundColor: Colors.white,
+                      //             context: context,
+                      //             shape: const RoundedRectangleBorder(
+                      //               borderRadius: BorderRadius.only(
+                      //                 topLeft: Radius.circular(32.0),
+                      //                 topRight: Radius.circular(32.0),
+                      //               ),
+                      //             ),
+                      //             isDismissible: true,
+                      //             isScrollControlled: true,
+                      //             builder: (BuildContext context) {
+                      //               return AnimatedPadding(
+                      //                 padding:
+                      //                     MediaQuery.of(context).viewInsets,
+                      //                 duration:
+                      //                     const Duration(milliseconds: 50),
+                      //                 child: Container(
+                      //                   height: 400.h,
+                      //                   padding: EdgeInsets.symmetric(
+                      //                     vertical: 10.h,
+                      //                     horizontal: 10,
+                      //                   ),
+                      //                   child: Column(
+                      //                     children: [
+                      //                       Label(
+                      //                         text: LocaleKeys
+                      //                             .enterPhoneNumber.localize,
+                      //                         style: Styles.headerText(),
+                      //                       ),
+                      //                       Sizer(
+                      //                         height: 30.h,
+                      //                       ),
+                      //                       Container(
+                      //                         constraints: BoxConstraints(
+                      //                             maxHeight: 180.h),
+                      //                         child: Form(
+                      //                           key: controller.formKey,
+                      //                           child: TextFormField(
+                      //                             validator: (value) {
+                      //                               if ((value == null ||
+                      //                                   value.isEmpty)) {
+                      //                                 return LocaleKeys
+                      //                                     .required.localize;
+                      //                               } else {
+                      //                                 return null;
+                      //                               }
+                      //                             },
+                      //                             // focusNode: focusNode,
+                      //                             maxLines: null,
+                      //                             maxLength: 150,
+                      //                             onChanged: (c) => controller
+                      //                                 .changePhone(v: c),
+                      //                             // controller: controller,
+                      //                             decoration: InputDecoration(
+                      //                                 hintText: LocaleKeys
+                      //                                     .phoneNumber.localize,
+                      //                                 fillColor: Colors.white,
+                      //                                 hintStyle: Styles.mediumText(
+                      //                                     color: AppColors
+                      //                                         .DARK_GRAY_COLOR)),
+                      //                           ),
+                      //                         ),
+                      //                       ),
+                      //                       Expanded(
+                      //                         child: Row(
+                      //                           children: [
+                      //                             Expanded(
+                      //                               child: InkWell(
+                      //                                 onTap: () async {
+                      //                                   if (controller.formKey
+                      //                                       .currentState!
+                      //                                       .validate()) {
+                      //                                     await controller
+                      //                                         .makeAdRequest(
+                      //                                             id: widget
+                      //                                                 .item.id)
+                      //                                         .then((value) {
+                      //                                       if (value == true) {
+                      //                                         context.pop();
+                      //                                         showSuccessMessage(
+                      //                                             context,
+                      //                                             'Request Sent Successfully');
+                      //                                         controller
+                      //                                             .resetRequest();
+                      //                                       } else {
+                      //                                         context.pop();
+                      //                                         if (state
+                      //                                                 .failure !=
+                      //                                             null) {
+                      //                                           showErrorMessage(
+                      //                                               context,
+                      //                                               getFailureMessage(
+                      //                                                   state
+                      //                                                       .failure!,
+                      //                                                   context));
+                      //                                         } else {
+                      //                                           showErrorMessage(
+                      //                                               context,
+                      //                                               'Please Try Again!');
+                      //                                         }
+                      //                                       }
+                      //                                     });
+                      //                                   }
+                      //                                 },
+                      //                                 child: Container(
+                      //                                   width: 100,
+                      //                                   height: 80.h,
+                      //                                   padding:
+                      //                                       const EdgeInsets
+                      //                                           .all(5),
+                      //                                   decoration: BoxDecoration(
+                      //                                       color: AppColors
+                      //                                           .PRIMARY_COLOR,
+                      //                                       borderRadius:
+                      //                                           BorderRadius
+                      //                                               .circular(
+                      //                                                   15)),
+                      //                                   alignment:
+                      //                                       Alignment.center,
+                      //                                   child: Label(
+                      //                                     text: LocaleKeys
+                      //                                         .send.localize,
+                      //                                     style:
+                      //                                         Styles.headerText(
+                      //                                             color: Colors
+                      //                                                 .white),
+                      //                                   ),
+                      //                                 ),
+                      //                               ),
+                      //                             ),
+                      //                             Expanded(
+                      //                               child: TextButton(
+                      //                                 onPressed: () {
+                      //                                   Navigator.of(context)
+                      //                                       .pop(); // Close the dialog
+                      //                                 },
+                      //                                 child: Label(
+                      //                                   text: LocaleKeys
+                      //                                       .cancel.localize,
+                      //                                   style:
+                      //                                       Styles.headerText(),
+                      //                                 ),
+                      //                               ),
+                      //                             ),
+                      //                           ],
+                      //                         ),
+                      //                       ),
+                      //                     ],
+                      //                   ),
+                      //                 ),
+                      //               );
+                      //             },
+                      //           );
+                      //         },
+                      //       ),
+                      //     )
+                      //   ],
+                      // ),
                       const Sizer(),
                       CallMessageButtons(
                         otherUserId: widget.item.userId,

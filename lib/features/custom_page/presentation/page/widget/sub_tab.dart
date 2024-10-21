@@ -29,7 +29,7 @@ class _SubTabState extends State<SubTab> {
       "Carpool": preferences.carpool,
       "Auction": preferences.auction,
       "Installment": preferences.installment,
-      "Chance": preferences.chance,
+      "Booking": preferences.booking,
     };
   }
 
@@ -77,7 +77,8 @@ class _SubTabState extends State<SubTab> {
             } else if (state.status == CustomPageStates.loading) {
               return const Center(child: CircularProgressIndicator());
             } else {
-              return Center(child: Text(LocaleKeys.failedToLoadCategories.localize));
+              return Center(
+                  child: Text(LocaleKeys.failedToLoadCategories.localize));
             }
           },
         ),
@@ -87,7 +88,8 @@ class _SubTabState extends State<SubTab> {
         child: BlocConsumer<CustomPageCubit, CustomPageState>(
           listener: (BuildContext context, state) {
             if (state.status == CustomPageStates.success) {
-              showSuccessMessage(context, LocaleKeys.updateSuccessfully.localize);
+              showSuccessMessage(
+                  context, LocaleKeys.updateSuccessfully.localize);
             }
           },
           builder: (BuildContext context, state) {
@@ -103,7 +105,7 @@ class _SubTabState extends State<SubTab> {
                         carpool: _selectedItems["Carpool"] ?? false,
                         auction: _selectedItems["Auction"] ?? false,
                         installment: _selectedItems["Installment"] ?? false,
-                        chance: _selectedItems["Chance"] ?? false,
+                    booking: _selectedItems["Booking"] ?? false,
                       ));
                 } else {
                   // Show a message if the selection is not valid
@@ -114,7 +116,8 @@ class _SubTabState extends State<SubTab> {
                   );
                 }
               },
-              child: Icon(Icons.check, color: Theme.of(context).scaffoldBackgroundColor),
+              child: Icon(Icons.check,
+                  color: Theme.of(context).scaffoldBackgroundColor),
             );
           },
         ),

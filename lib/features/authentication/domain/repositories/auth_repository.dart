@@ -33,7 +33,7 @@ abstract class AuthRepository {
   Future<Either<Failure, bool>> saveUserTokens(UserTokensEntity? userTokens);
   // Future<Either<Failure, bool>> saveUserId (UserTokensEntity? userTokens);
   Future<Either<Failure, double>> getWelcomeGift();
-  Future<Either<Failure, bool>> signOut();
+  Future<bool> signOut();
 
   bool attachToken(UserTokensEntity? token);
 }

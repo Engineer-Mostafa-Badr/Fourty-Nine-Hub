@@ -1,3 +1,4 @@
+
 class Cart {
   final bool status;
   final String id;
@@ -6,6 +7,7 @@ class Cart {
   final double subTotal;
   final String createdAt;
   final String updatedAt;
+  final String currency; // Added currency field
 
   Cart({
     required this.status,
@@ -15,6 +17,7 @@ class Cart {
     required this.subTotal,
     required this.createdAt,
     required this.updatedAt,
+    required this.currency, // Initialize currency
   });
 
   factory Cart.fromJson(Map<String, dynamic> json) {
@@ -24,23 +27,25 @@ class Cart {
       id: data['_id'],
       userId: data['userId'],
       allItems: List<CartItem>.from(
-          data['allItems'].map((item) => CartItem.fromJson(item))),
-      subTotal: data['subTotal'].toDouble(),
+        data['allItems'].map((item) => CartItem.fromJson(item)),
+      ),
+      subTotal: (data['subTotal'] as num).toDouble(),
       createdAt: data['createdAt'],
       updatedAt: data['updatedAt'],
+      currency: data['currency'], // Parse currency
     );
   }
 }
 
 class CartItem {
   final String id;
-  final CartRestaurant restaurant;
+  final CartRestaurant? restaurant; // Nullable
   final List<RestaurantItem> restaurantItems;
   final double total;
 
   CartItem({
     required this.id,
-    required this.restaurant,
+    this.restaurant, // Nullable
     required this.restaurantItems,
     required this.total,
   });
@@ -48,10 +53,15 @@ class CartItem {
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(
       id: json['_id'],
-      restaurant: CartRestaurant.fromJson(json['restaurantId']),
-      restaurantItems: List<RestaurantItem>.from(
-          json['restaurantItems'].map((item) => RestaurantItem.fromJson(item))),
-      total: json['total'].toDouble(),
+      restaurant: json['restaurantId'] != null
+          ? CartRestaurant.fromJson(json['restaurantId'])
+          : null, // Handle null
+      restaurantItems: json['restaurantItems'] != null
+          ? List<RestaurantItem>.from(
+        json['restaurantItems'].map((item) => RestaurantItem.fromJson(item)),
+      )
+          : [],
+      total: (json['total'] as num).toDouble(),
     );
   }
 }
@@ -71,22 +81,25 @@ class CartRestaurant {
     return CartRestaurant(
       id: json['_id'],
       name: json['name'],
-      restaurantMedia: List<Media>.from(
-          json['restaurantMedia'].map((item) => Media.fromJson(item))),
+      restaurantMedia: json['restaurantMedia'] != null
+          ? List<Media>.from(
+        json['restaurantMedia'].map((item) => Media.fromJson(item)),
+      )
+          : [],
     );
   }
 }
 
 class RestaurantItem {
   final String id;
-  final Food food;
+  final Food? food; // Nullable
   final int quantity;
   final double price;
   final double totalPriceOfItem;
 
   RestaurantItem({
     required this.id,
-    required this.food,
+    this.food, // Nullable
     required this.quantity,
     required this.price,
     required this.totalPriceOfItem,
@@ -95,10 +108,12 @@ class RestaurantItem {
   factory RestaurantItem.fromJson(Map<String, dynamic> json) {
     return RestaurantItem(
       id: json['_id'],
-      food: Food.fromJson(json['foodId']),
+      food: json['foodId'] != null
+          ? Food.fromJson(json['foodId'])
+          : null, // Handle null
       quantity: json['quantity'],
-      price: json['price'].toDouble(),
-      totalPriceOfItem: json['totalPriceOfItem'].toDouble(),
+      price: (json['price'] as num).toDouble(),
+      totalPriceOfItem: (json['totalPriceOfItem'] as num).toDouble(),
     );
   }
 }
@@ -120,7 +135,7 @@ class Food {
     return Food(
       id: json['_id'],
       foodName: json['foodName'],
-      price: json['price'].toDouble(),
+      price: (json['price'] as num).toDouble(),
       picture: Media.fromJson(json['picture']),
     );
   }

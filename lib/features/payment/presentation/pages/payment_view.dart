@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/payment/presentation/pages/widgets/payment_fawry_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,7 +50,7 @@ class _PaymentViewState extends State<PaymentView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Payment Options'),
+        title:  Text(LocaleKeys.paymentOptions.localize),
       ),
       body: BlocBuilder<PaymentCubit, PaymentState>(
         builder: (context, state) {
@@ -74,7 +76,7 @@ class _PaymentViewState extends State<PaymentView> {
                           height: 30.h,
                         ),
                         color: Colors.blue,
-                        details: 'Enter your credit card details',
+                        details: LocaleKeys.enterYourCreditCardDetails.localize,
                         context: context,
                       ),
                     ),
@@ -88,7 +90,7 @@ class _PaymentViewState extends State<PaymentView> {
                           height: 30.h,
                         ),
                         color: Colors.orange,
-                        details: 'Enter your Paymob link',
+                        details: LocaleKeys.enterPaymobLink.localize,
                         context: context,
                       ),
                     ),
@@ -102,7 +104,7 @@ class _PaymentViewState extends State<PaymentView> {
                           height: 50.h,
                         ),
                         color: Colors.deepPurple,
-                        details: 'Enter your bank account details',
+                        details: LocaleKeys.enterBankAccountDetails.localize,
                         context: context,
                       ),
                     ),
@@ -202,8 +204,8 @@ class _PaymentViewState extends State<PaymentView> {
       case 'InstaPay':
         return _bankTransferPayment();
       default:
-        return const Center(
-          child: Text('Please select a payment method.'),
+        return  Center(
+          child: Text(LocaleKeys.pleaseSelectPaymentMethod.localize),
         );
     }
   }
@@ -238,9 +240,9 @@ class _PaymentViewState extends State<PaymentView> {
       child: Column(
         children: [
           DropdownButtonFormField<String>(
-            decoration: const InputDecoration(
+            decoration:  InputDecoration(
               fillColor: Colors.white,
-              labelText: 'Select Phone Number',
+              labelText: LocaleKeys.phoneNumber.localize,
             ),
             dropdownColor: Colors.blue.withOpacity(0.5),
             items: phoneNumbers.map((phone) {
@@ -272,7 +274,7 @@ class _PaymentViewState extends State<PaymentView> {
             children: [
               SizedBox(height: 20.h),
               Label(
-                text: "Snap copy of bill payment",
+                text: LocaleKeys.snapCopyOfBillPayment.localize,
                 style: Styles.headerText(),
               ),
               const SizedBox(),
@@ -313,7 +315,7 @@ class _PaymentViewState extends State<PaymentView> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(state.instaPayResponseData?.message ??
-                                'Payment successful'),
+                                LocaleKeys.paymentSuccessful.localize),
                             backgroundColor: Colors.green,
                           ),
                         );
@@ -321,7 +323,7 @@ class _PaymentViewState extends State<PaymentView> {
                       }
                     },
                     child: Text(
-                      "Send for review and approval",
+                      LocaleKeys.sendReviewApproval.localize,
                       style: TextStyle(
                           color: AppColors.LIGHT_COLOR, fontSize: 20.sp),
                     ),

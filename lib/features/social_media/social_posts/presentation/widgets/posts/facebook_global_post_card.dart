@@ -419,6 +419,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
     required BuildContext context,
     required PostEntity post,
   }) {
+    print("post.user${post.user}");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

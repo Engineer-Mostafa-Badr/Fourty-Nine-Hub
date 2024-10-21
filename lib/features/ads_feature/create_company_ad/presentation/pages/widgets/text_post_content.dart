@@ -1,8 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/build_item_text_post.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../../common/models/public/pagination_params.dart';
@@ -33,32 +36,36 @@ class _TextPostContentState extends State<TextPostContent> {
         },
         builder: (BuildContext context, state) {
           return PaginationView<CompanyAdEntity>(
-            loadingWidget: const SizedBox.shrink(),
+           // loadingWidget: const SizedBox.shrink(),
             build: (scrollController, data) {
               return data.isNotEmpty
-                  ? ListView.separated(
-                      controller: scrollController,
-                      itemBuilder: (context, index) => BuildItemTextPost(
-                        advertises: data[index],
-                        onDeleteItem: (id) async {
-                          var result = await context
-                              .read<CreateCompanyAdCubit>()
-                              .deleteCompanyAd(
-                                id: id,
-                              );
-                          if (result == true) {
-                            data.removeWhere((e) => e.sId == id);
-                            setState(() {});
-                          }
-                        },
+                  ? Padding(
+                    padding:  EdgeInsets.all(8.w),
+                    child: ListView.separated(
+                        controller: scrollController,
+                        itemBuilder: (context, index) => BuildItemTextPost(
+                          advertises: data[index],
+                          onDeleteItem: (id) async {
+                            var result = await context
+                                .read<CreateCompanyAdCubit>()
+                                .deleteCompanyAd(
+                                  id: id,
+                                );
+                            if (result == true) {
+                              data.removeWhere((e) => e.sId == id);
+                              setState(() {});
+                            }
+                          },
+                        ),
+                        separatorBuilder: (context, index) => Divider(
+                          color: AppColors.GREY_LIGHT_COLOR,
+                          height: 30.h,
+                          endIndent:20.w ,
+                          indent:20.w,
+                        ),
+                        itemCount: data.length,
                       ),
-                      separatorBuilder: (context, index) => Divider(
-                        color: AppColors.GREY_LIGHT_COLOR,
-                        height: 30.h,
-                        endIndent: 30,
-                      ),
-                      itemCount: data.length,
-                    )
+                  )
                   : Center(child: Label(text: LocaleKeys.noTextPosts.localize));
             },
             fetchData: (PaginationParams paginationParams) {

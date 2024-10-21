@@ -40,8 +40,7 @@ class MessageEntity {
       this.groupId,
       required this.time,
       required this.isDeleted,
-      required this.sharedContacts
-      });
+      required this.sharedContacts});
 
   void markAsSeen() {
     seen = true;

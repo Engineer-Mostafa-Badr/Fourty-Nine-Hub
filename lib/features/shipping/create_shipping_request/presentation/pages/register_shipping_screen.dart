@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
@@ -123,7 +122,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                     log(value.toString());
                                     return shippingcubit.validation(
                                       message:
-                                          "Choose your favorite Sub Category!".tr(),
+                                          "Choose your favorite Sub Category!"
+                                              .tr(),
                                       condition:
                                           shippingcubit.model.subCategoryId ==
                                               null,
@@ -371,9 +371,9 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                       Text(
+                                      Text(
                                         "Car Picture".tr(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 17,
                                             color: AppColors.PRIMARY_COLOR,
                                             fontWeight: FontWeight.w600),
@@ -392,7 +392,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                             validator: (value) {
                                               return shippingcubit.validation(
                                                   message:
-                                                      "This field is required.".tr(),
+                                                      "This field is required."
+                                                          .tr(),
                                                   condition: shippingcubit.model
                                                           .carImageInFront ==
                                                       null);
@@ -433,7 +434,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                     children: [
                                       Label(
                                         text: "ID".tr(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 17,
                                             color: AppColors.PRIMARY_COLOR,
                                             fontWeight: FontWeight.w600),
@@ -457,7 +458,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                                 validator: (value) {
                                                   return shippingcubit.validation(
                                                       message:
-                                                          "This field is required.".tr(),
+                                                          "This field is required."
+                                                              .tr(),
                                                       condition: shippingcubit
                                                               .model
                                                               .idImageInFront ==
@@ -478,7 +480,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                                 validator: (value) {
                                                   return shippingcubit.validation(
                                                       message:
-                                                          "This field is required.".tr(),
+                                                          "This field is required."
+                                                              .tr(),
                                                       condition: shippingcubit
                                                               .model
                                                               .idImageInFront ==
@@ -565,7 +568,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                           validator: (value) {
                                             return shippingcubit.validation(
                                                 message:
-                                                    "This field is required.".tr(),
+                                                    "This field is required."
+                                                        .tr(),
                                                 condition: shippingcubit
                                                         .model.idImageInFront ==
                                                     null);
@@ -585,7 +589,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                           validator: (value) {
                                             return shippingcubit.validation(
                                                 message:
-                                                    "This field is required.".tr(),
+                                                    "This field is required."
+                                                        .tr(),
                                                 condition: shippingcubit
                                                         .model.idImageInFront ==
                                                     null);
@@ -655,7 +660,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                           validator: (value) {
                                             return shippingcubit.validation(
                                                 message:
-                                                    "This field is required.".tr(),
+                                                    "This field is required."
+                                                        .tr(),
                                                 condition: shippingcubit
                                                         .model.idImageInFront ==
                                                     null);
@@ -675,7 +681,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                           validator: (value) {
                                             return shippingcubit.validation(
                                                 message:
-                                                    "This field is required.".tr(),
+                                                    "This field is required."
+                                                        .tr(),
                                                 condition: shippingcubit
                                                         .model.idImageInFront ==
                                                     null);
@@ -918,7 +925,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       },
                       validator: (value) {
                         return shippingcubit.validation(
-                            message: "fill your driving license expiry date!".tr(),
+                            message:
+                                "fill your driving license expiry date!".tr(),
                             condition:
                                 shippingcubit.model.drivingExpiryDate == null);
                       },

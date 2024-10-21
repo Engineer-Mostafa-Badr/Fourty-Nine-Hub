@@ -206,8 +206,8 @@ class BuildItemAuctionCard extends StatelessWidget {
                   children: [
                     Label(
                         text: context.locale == Locales.english
-                            ? item.mainCategory.nameEn
-                            : item.mainCategory.nameAr,
+                            ? item.mainCategory?.nameEn??''
+                            : item.mainCategory?.nameAr??'',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         color: Theme.of(context).scaffoldBackgroundColor),

@@ -355,7 +355,7 @@ class StoryCubit extends Cubit<StoryState> {
 
   Future<void> uploadStoryVideoOrImage(File file, String fileType, int fileSize,
       {description}) async {
-    final token = await TokenManager.getAccessToken();
+    final token = await CacheManager.getAccessToken();
 
     // Step 1: Generate Signed URL
     final response = await http.post(
@@ -404,7 +404,7 @@ class StoryCubit extends Cubit<StoryState> {
   }
 
   Future<void> confirmUpload(String storyMediaId, {description = ''}) async {
-    final token = await TokenManager.getAccessToken();
+    final token = await CacheManager.getAccessToken();
 
     final response = await http.put(
       Uri.parse(
@@ -428,7 +428,7 @@ class StoryCubit extends Cubit<StoryState> {
 
   Future<void> createTextStory(String text) async {
     try {
-      final token = await TokenManager.getAccessToken();
+      final token = await CacheManager.getAccessToken();
 
       final response = await http.post(
         Uri.parse('https://49dev.com/api/v1/stories/text'),

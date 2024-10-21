@@ -76,10 +76,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
               decoration: InputDecoration(
                 // labelText: 'Room Subject',
                 hintText: LocaleKeys.enterRoomSubject.localize,
-                prefixIcon: const Icon(
-                  Icons.headset_mic_rounded,
-                  color: AppColors.PRIMARY_COLOR,
-                ),
+                hintStyle: Styles.mediumText(),
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 ),
@@ -113,6 +110,8 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                 children: <Widget>[
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
                         backgroundColor: context.isDarkMode
                             ? AppColors.SECONDARY_COLOR
                             : AppColors.PRIMARY_COLOR),
@@ -135,14 +134,19 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                       color: Colors.white,
                     ),
                   ),
-                  TextButton(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        backgroundColor: !context.isDarkMode
+                            ? AppColors.SECONDARY_COLOR
+                            : AppColors.PRIMARY_COLOR),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
                     child: Label(
                       text: LocaleKeys.cancel.localize,
-                      style: Styles.headerText(
-                          fontSize: 25, color: AppColors.SECONDARY_COLOR),
+                      // style: Styles.headerText(),
                     ),
                   ),
                 ],

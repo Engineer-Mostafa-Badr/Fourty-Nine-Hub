@@ -26,7 +26,6 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
-import '../../../../secrets/controller/secrets_cubit.dart';
 
 class MeetingView extends StatelessWidget {
   const MeetingView({super.key});
@@ -169,7 +168,7 @@ class MeetingView extends StatelessWidget {
             if (state.scheduledMeeting == null) {
               // print('data is null');
               return Container();
-            } else if (state.isGotScheduledMeeting || state.isSuccess) {
+            } else if (state.isSuccess) {
               return ListView.builder(
                   itemCount: state.scheduledMeeting!.length,
                   shrinkWrap: true,

@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 
 enum WalletTypes { mainWallet, giftWallet, balance }
@@ -17,11 +19,11 @@ extension WalletTypesX on WalletTypes {
   String get translatedName {
     switch (this) {
       case WalletTypes.mainWallet:
-        return Labels.mainWallet;
+        return LocaleKeys.wallet.tr();
       case WalletTypes.giftWallet:
-        return Labels.giftWallet;
+        return LocaleKeys.gift.tr();
       case WalletTypes.balance:
-        return Labels.balance;
+        return LocaleKeys.balance.tr();
     }
   }
 }

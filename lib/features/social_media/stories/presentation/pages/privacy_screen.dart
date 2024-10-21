@@ -10,7 +10,7 @@ import '../../data/models/followers_model.dart';
 import '../cubit/stories_cubit.dart';
 
 class StatusPrivacyScreen extends StatefulWidget {
-  const StatusPrivacyScreen({Key? key}) : super(key: key);
+  const StatusPrivacyScreen({super.key});
 
   @override
   _StatusPrivacyScreenState createState() => _StatusPrivacyScreenState();
@@ -19,7 +19,7 @@ class StatusPrivacyScreen extends StatefulWidget {
 class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
   String _selectedPrivacyOption =
       LocaleKeys.my_contacts.tr(); // Localized string
-  Set<String> _selectedContacts = {};
+  final Set<String> _selectedContacts = {};
 
   final List<String> _privacyOptions = [
     LocaleKeys.my_contacts.tr(), // Localized string
@@ -101,9 +101,7 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
               ),
         ),
         const SizedBox(height: 16.0),
-        ..._privacyOptions
-            .map((option) => _buildPrivacyOption(option))
-            .toList(),
+        ..._privacyOptions.map((option) => _buildPrivacyOption(option)),
       ],
     );
   }
@@ -117,7 +115,9 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
       subtitle: (exclusionCount > 0 &&
               _selectedPrivacyOption != LocaleKeys.my_contacts.tr())
           ? Text(
-              '${exclusionCount == 1 ? LocaleKeys.one_contact.tr() : '$exclusionCount ${LocaleKeys.contacts.tr()}'}',
+              exclusionCount == 1
+                  ? LocaleKeys.one_contact.tr()
+                  : '$exclusionCount ${LocaleKeys.contacts.tr()}',
             )
           : null,
       value: title,

@@ -1,12 +1,10 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,7 +16,6 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/controlle
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/profile_buttom_sheet.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_items.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,7 +25,6 @@ import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../res/style/styles.dart';
 import '../../../../zoom/presentation/controller/stream_cubit.dart';
 import '../../../../zoom/presentation/widgets/join_meeting_screen.dart';
 
@@ -144,7 +140,7 @@ class ReelsScreenState extends State<ReelsScreen>
       _currentPage = index;
     });
     final reelsCubit = context.read<ReelsCubit>();
-    if (index == reelsCubit.state.globalReels.length - 1 && mounted) {
+    if (index == (reelsCubit.state.globalReels?.length??0) - 1 && mounted) {
       reelsCubit.fetchReels();
     }
   }
@@ -162,11 +158,11 @@ class ReelsScreenState extends State<ReelsScreen>
                 physics: const BouncingScrollPhysics(),
                 controller: _pageController,
                 scrollDirection: Axis.vertical,
-                itemCount: state.globalReels.length +
-                    (state.globalReelsHasReachedMax ? 0 : 1),
+                itemCount: (state.globalReels?.length??0) +
+                    ((state.globalReelsHasReachedMax??false) ? 0 : 1),
                 onPageChanged: _handlePageChange,
                 itemBuilder: (context, index) {
-                  if (index >= state.globalReels.length) {
+                  if (index >= (state.globalReels?.length??0)) {
                     return const Center(
                       child: CupertinoActivityIndicator(
                         radius: 25,
@@ -175,7 +171,7 @@ class ReelsScreenState extends State<ReelsScreen>
                     );
                   }
                   return UnifiedReelItem(
-                    reel: state.globalReels[index],
+                    reel: state.globalReels![index],
                     isVisible: _currentPage == index,
                     itemType: ReelItemType.main,
                   );

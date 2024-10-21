@@ -65,45 +65,46 @@ class _NavigateBarState extends State<NavigateBar> {
         create: (BuildContext context) => serviceLocator()..fetchNavigateBar(),
         child: BlocBuilder<CustomPageCubit, CustomPageState>(
           builder: (BuildContext context, state) {
-            if (state.status == CustomPageStates.success){
-            if (_selectedItems.isEmpty) {
-              _selectedItems = _initFavouriteCategories(state.navigateBar!);
-            }
-            return ListView.builder(
-              itemCount: _selectedItems.length,
-              itemBuilder: (context, index) {
-                final categoryName = _selectedItems.keys.elementAt(index);
-                final isSelected = _selectedItems[categoryName]!;
-                return ListTile(
-                  leading: Checkbox(
-                    value: isSelected,
-                    checkColor: Theme.of(context).scaffoldBackgroundColor,
-                    activeColor: Theme.of(context).primaryColor,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        _selectedItems[categoryName] = value ?? false;
-                      });
-                    },
-                  ),
-                  title: Text(
-                    categoryName,
-                    style: Styles.mediumText(
-                        fontSize: 65.sp,
-                        fontWeight: FontWeight.w400,
-                        color: Theme.of(context).primaryColor),
-                  ),
-                  selected: isSelected,
-                  trailing: SvgPicture.asset(
-                    _icons[index],
-                    height: 40.h,
-                  ),
-                );
-              },
-            );
-            }else if (state.status == CustomPageStates.loading) {
+            if (state.status == CustomPageStates.success) {
+              if (_selectedItems.isEmpty) {
+                _selectedItems = _initFavouriteCategories(state.navigateBar!);
+              }
+              return ListView.builder(
+                itemCount: _selectedItems.length,
+                itemBuilder: (context, index) {
+                  final categoryName = _selectedItems.keys.elementAt(index);
+                  final isSelected = _selectedItems[categoryName]!;
+                  return ListTile(
+                    leading: Checkbox(
+                      value: isSelected,
+                      checkColor: Theme.of(context).scaffoldBackgroundColor,
+                      activeColor: Theme.of(context).primaryColor,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _selectedItems[categoryName] = value ?? false;
+                        });
+                      },
+                    ),
+                    title: Text(
+                      categoryName,
+                      style: Styles.mediumText(
+                          fontSize: 65.sp,
+                          fontWeight: FontWeight.w400,
+                          color: Theme.of(context).primaryColor),
+                    ),
+                    selected: isSelected,
+                    trailing: SvgPicture.asset(
+                      _icons[index],
+                      height: 40.h,
+                    ),
+                  );
+                },
+              );
+            } else if (state.status == CustomPageStates.loading) {
               return const Center(child: CircularProgressIndicator());
             } else {
-              return Center(child: Text(LocaleKeys.failedToLoadCategories.localize));
+              return Center(
+                  child: Text(LocaleKeys.failedToLoadCategories.localize));
             }
           },
         ),
@@ -125,23 +126,24 @@ class _NavigateBarState extends State<NavigateBar> {
                     .where((entry) => entry.value == true)
                     .map((entry) => entry.key)
                     .toList();
-                if (selectedCategories.length >= 3 && selectedCategories.length <= 5) {
+                if (selectedCategories.length >= 3 &&
+                    selectedCategories.length <= 5) {
                   // Proceed with the selected items
                   context
                       .read<CustomPageCubit>()
                       .updateNavigateBar(NavigateBarParams(
-                    ride: _selectedItems["Ride"] ?? false,
-                    loading: _selectedItems["Loading"] ?? false,
-                    health: _selectedItems["Health"] ?? false,
-                    meal: _selectedItems["Meal"] ?? false,
-                    find: _selectedItems["Find"] ?? false,
-                    chat: _selectedItems["Chat"] ?? false,
-                    reel: _selectedItems["Reel"] ?? false,
-                    tweet: _selectedItems["Tweet"] ?? false,
-                    spotlight: _selectedItems["Spotlight"] ?? false,
-                    meet: _selectedItems["Meet"] ?? false,
-                    live: _selectedItems["Live"] ?? false,
-                    snap: _selectedItems["Snap"] ?? false,
+                        ride: _selectedItems["Ride"] ?? false,
+                        loading: _selectedItems["Loading"] ?? false,
+                        health: _selectedItems["Health"] ?? false,
+                        meal: _selectedItems["Meal"] ?? false,
+                        find: _selectedItems["Find"] ?? false,
+                        chat: _selectedItems["Chat"] ?? false,
+                        reel: _selectedItems["Reel"] ?? false,
+                        tweet: _selectedItems["Tweet"] ?? false,
+                        spotlight: _selectedItems["Spotlight"] ?? false,
+                        meet: _selectedItems["Meet"] ?? false,
+                        live: _selectedItems["Live"] ?? false,
+                        snap: _selectedItems["Snap"] ?? false,
                       ));
                 } else {
                   // Show a message if the selection is not valid

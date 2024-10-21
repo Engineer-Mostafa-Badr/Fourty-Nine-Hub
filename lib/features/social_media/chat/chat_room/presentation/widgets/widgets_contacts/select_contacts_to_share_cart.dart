@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -27,14 +26,16 @@ class _SelectContactToShareCartState extends State<SelectContactToShareCart> {
       onTap: () => {
         setState(() {
           isSelected = !isSelected;
-          if(isSelected){
-            context.read<ChatRoomCubit>().addToSelectedContacts(contact: widget.contact);
-          }
-          else{
-            context.read<ChatRoomCubit>().removeFromSelectedContacts(contact: widget.contact);
+          if (isSelected) {
+            context
+                .read<ChatRoomCubit>()
+                .addToSelectedContacts(contact: widget.contact);
+          } else {
+            context
+                .read<ChatRoomCubit>()
+                .removeFromSelectedContacts(contact: widget.contact);
           }
         })
-
       },
       splashColor:
           AppColors.PRIMARY_COLOR.withOpacity(0.3), // Ripple effect color
@@ -93,16 +94,14 @@ class _SelectContactToShareCartState extends State<SelectContactToShareCart> {
                     ),
                   )
                 : Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                border: Border.all(
-                  color: AppColors.PRIMARY_COLOR,
-
-                )
-              ),
-            ),
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        border: Border.all(
+                          color: AppColors.PRIMARY_COLOR,
+                        )),
+                  ),
             const SizedBox(
               width: 16,
             ),

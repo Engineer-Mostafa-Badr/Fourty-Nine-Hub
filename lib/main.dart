@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
@@ -43,7 +42,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await CacheServiceImpl.init();
-  await DI.execute();
+  await DI.execute(); 
 
   // ZegoGiftManager().cache.cache(giftItemList);
 
@@ -60,7 +59,7 @@ void main() async {
       //   enabled: !kReleaseMode,
       //   builder: (context) => const MyApp(),
       // ),
-      child: Phoenix(child: const MyApp()),
+      child: const MyApp(),
     ),
   );
 }
@@ -74,7 +73,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Future<void> _startWebSocketService() async {
-    final token = await TokenManager.getAccessToken();
+    final token = await CacheManager.getAccessToken();
     BackgroundService.startWebSocketService(token);
   }
 
@@ -178,27 +177,32 @@ class _MyAppState extends State<MyApp> {
           context.read<SecretsCubit>().state.secrets?.zegoAppId;
           return BlocBuilder<ThemeCubit, ThemeStates>(
             builder: (BuildContext context, state) {
-              return MaterialApp.router(
-                builder: (context, child) {
-                  return MediaQuery(
-                    data: MediaQuery.of(context)
-                        .copyWith(textScaler: TextScaler.noScaling),
-                    child: child!,
+              return FutureBuilder<bool>(
+                future: CacheManager.getMode(),
+                builder: (context, snapshot) {
+                  return MaterialApp.router(
+                    builder: (context, child) {
+                      return MediaQuery(
+                        data: MediaQuery.of(context)
+                            .copyWith(textScaler: TextScaler.noScaling),
+                        child: child!,
+                      );
+                    },
+                    themeMode: snapshot.data!
+                        ? ThemeMode.dark
+                        : ThemeMode.light,
+                    theme: lightTheme,
+                    darkTheme: darkTheme,
+                    title: '49',
+                    debugShowCheckedModeBanner: false,
+                    routerConfig: AppPages.router,
+                    localizationsDelegates: context.localizationDelegates,
+                    supportedLocales: context.supportedLocales,
+                    locale: context.locale,
+                    // for device preview package
+                    // builder: DevicePreview.appBuilder,
                   );
-                },
-                themeMode: context.read<ThemeCubit>().isDarkTheme
-                    ? ThemeMode.dark
-                    : ThemeMode.light,
-                theme: lightTheme(),
-                darkTheme: darkTheme(),
-                title: '49',
-                debugShowCheckedModeBanner: false,
-                routerConfig: AppPages.router,
-                localizationsDelegates: context.localizationDelegates,
-                supportedLocales: context.supportedLocales,
-                locale: context.locale,
-                // for device preview package
-                // builder: DevicePreview.appBuilder,
+                }
               );
             },
           );

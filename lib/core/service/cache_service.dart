@@ -15,6 +15,8 @@ abstract class CacheService {
 
   Future<bool> saveUserToken(String userToken);
   Future<String?> getUserToken();
+  Future<String?> getUserId();
+  Future<bool> setUserId(String userId);
 
   Future<bool> saveUserRefreshToken(String userRefreshToken);
   Future<String?> getUserRefreshToken();
@@ -68,6 +70,7 @@ class CacheServiceImpl implements CacheService {
   static const _FAV_PRODUCTS_LIST = "FAV_PRODUCTS_LIST";
   static const _SubCateogryDriver = "SubCateogryDriver";
   static const _DriverId = "DriverId";
+  static const _USER_ID = "USER_ID";
   static late SharedPreferences preferences;
   @override
   Future<bool> saveUserData(String userData) async {
@@ -128,7 +131,7 @@ class CacheServiceImpl implements CacheService {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_TOKEN);
   }
-
+  
   @override
   Future<bool> saveUserTokenExpirationDate(String userTokenExpireDate) async {
     final prefs = await SharedPreferences.getInstance();
@@ -253,6 +256,29 @@ class CacheServiceImpl implements CacheService {
   Future<void> setDriverId({required String id}) async {
     await preferences.setString(_DriverId, id);
   }
+  
+  @override
+  Future<String?> getUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_USER_ID);
+  }
+  
+  @override
+  Future<bool> setUserId(String userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    return await prefs.setString(_USER_ID, userId);
+  }
+  //   @override
+  // Future<bool> saveUserToken(String userToken) async {
+    // final prefs = await SharedPreferences.getInstance();
+    // return await prefs.setString(_TOKEN, userToken);
+  // }
+
+  // @override
+  // Future<String?> getUserToken() async {
+    // final prefs = await SharedPreferences.getInstance();
+    // return prefs.getString(_TOKEN);
+  // }
 }
 
 class CacheServiceImplV2 implements CacheService {
@@ -483,6 +509,18 @@ class CacheServiceImplV2 implements CacheService {
   @override
   Future<void> setDriverId({required String id}) {
     // TODO: implement setDriverId
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<String?> getUserId() {
+    // TODO: implement getUserId
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<bool> setUserId(String userId) {
+    // TODO: implement setUserId
     throw UnimplementedError();
   }
 }

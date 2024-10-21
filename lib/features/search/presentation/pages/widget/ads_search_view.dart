@@ -9,7 +9,6 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 
 class AdsSearchView extends StatelessWidget {
   const AdsSearchView({super.key});
@@ -18,7 +17,7 @@ class AdsSearchView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.separated(
       itemBuilder: (context, index) => buildItem(),
-      separatorBuilder: (context, index) => Sizer(),
+      separatorBuilder: (context, index) => const Sizer(),
       itemCount: 10,
     );
   }
@@ -83,7 +82,7 @@ class AdsSearchView extends StatelessWidget {
                   //     maxLines: 1,
                   //   ),
                   // ),
-                  Sizer(),
+                  const Sizer(),
                   IconAppButton(
                       size: 18, icon: Icons.favorite_border, onPressed: () {}),
                 ],

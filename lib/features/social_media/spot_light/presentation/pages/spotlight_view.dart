@@ -2092,7 +2092,6 @@ class DiscoverSectionState extends State<DiscoverSection> {
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -2262,7 +2261,7 @@ class SpotlightView extends StatefulWidget {
 class _SpotlightViewState extends State<SpotlightView> {
   late ScrollController _scrollController;
   bool _isFetchingMore = false;
-  int _itemCount = 20; // Example item count, adjust as needed
+  int itemCount = 20; // Example item count, adjust as needed
 
   @override
   void initState() {
@@ -2294,7 +2293,7 @@ class _SpotlightViewState extends State<SpotlightView> {
     await context.read<ReelsCubit>().fetchReels();
     setState(() {
       _isFetchingMore = false;
-      _itemCount += 10; // Simulate more items being added
+     // _itemCount += 10; // Simulate more items being added
     });
   }
 
@@ -2497,7 +2496,7 @@ class _FollowingSectionState extends State<FollowingSection> {
           width: double.infinity,
           child: BlocConsumer<ReelsCubit, ReelsState>(
             builder: (context, state) {
-              if (state.reelsForFollower.isEmpty) {
+              if (state.reelsForFollower?.isEmpty??false) {
                 return const Center(child: CupertinoActivityIndicator());
               }
               return Stack(
@@ -2514,21 +2513,17 @@ class _FollowingSectionState extends State<FollowingSection> {
                       controller: _scrollController,
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      itemCount: state.reelsForFollower.length,
+                      itemCount: (state.reelsForFollower?.length??0),
                       itemBuilder: (context, index) {
-                        final reel = state.reelsForFollower[index];
-                        if (reel != null) {
-                          return SizedBox(
-                            width: MediaQuery.of(context).size.width / 2.5,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 4.0, vertical: 12.h),
-                              child: _buildReelCard(context, reel),
-                            ),
-                          );
-                        } else {
-                          return const SizedBox.shrink();
-                        }
+                        final reel = state.reelsForFollower![index];
+                        return SizedBox(
+                          width: MediaQuery.of(context).size.width / 2.5,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 4.0, vertical: 12.h),
+                            child: _buildReelCard(context, reel),
+                          ),
+                        );
                       },
                     ),
                   ),
@@ -2643,7 +2638,7 @@ class _FollowingSectionState extends State<FollowingSection> {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    reel.viewCount.toString() ?? '0',
+                    reel.viewCount.toString(),
                     textScaler: TextScaler.noScaling,
                     style: const TextStyle(color: Colors.white),
                   ),
@@ -2684,7 +2679,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
         Flexible(
           child: BlocBuilder<ReelsCubit, ReelsState>(
             builder: (context, state) {
-              if (state.globalReels.isEmpty && !state.globalReelsIsLoading) {
+              if ((state.globalReels?.isEmpty??false) && !(state.globalReelsIsLoading??false)) {
                 return const Center(child: CupertinoActivityIndicator());
               }
 
@@ -2699,9 +2694,9 @@ class DiscoverSectionState extends State<DiscoverSection> {
                   childAspectRatio: 0.7,
                 ),
                 itemCount:
-                    state.globalReels.length + (widget.isFetchingMore ? 1 : 0),
+                    (state.globalReels?.length??0) + (widget.isFetchingMore ? 1 : 0),
                 itemBuilder: (context, index) {
-                  if (index == state.globalReels.length &&
+                  if (index == (state.globalReels?.length??0) &&
                       widget.isFetchingMore) {
                     return const Padding(
                       padding: EdgeInsets.all(8.0),
@@ -2710,12 +2705,8 @@ class DiscoverSectionState extends State<DiscoverSection> {
                       ),
                     );
                   }
-                  final reel = state.globalReels[index];
-                  if (reel != null) {
-                    return _buildReelCard(context, reel);
-                  } else {
-                    return const SizedBox.shrink();
-                  }
+                  final reel = state.globalReels![index];
+                  return _buildReelCard(context, reel);
                 },
               );
             },

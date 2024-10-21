@@ -26,37 +26,40 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<BottomItemModel> pages =
-    <BottomItemModel>[
+    List<BottomItemModel> pages = <BottomItemModel>[
       BottomItemModel(
         icon: FontAwesomeIcons.list,
-        label: 'reels', // Translated text
+        label: 'reels',
+        // Translated text
         index: 1,
         image: Assets.reels,
         route: Routes.REELS,
       ),
       BottomItemModel(
         icon: FontAwesomeIcons.bowlFood,
-        label: 'meal', // Translated text
+        label: 'meal',
+        // Translated text
         index: 0,
         image: Assets.food,
         route: Routes.FOOD,
       ),
       BottomItemModel(
         icon: FontAwesomeIcons.kitMedical,
-        label: 'health', // Translated text
+        label: 'health',
+        // Translated text
         index: 1,
         image: Assets.health,
         route: Routes.VISITA,
       ),
-                BottomItemModel(
-                  icon: FontAwesomeIcons.car,
-                  label: 'ride', // Using generated key for translation
-                  index: 4,
-                  image: Assets.ride,
-                  route: Routes.RIDE,
-                ),
-              ];
+      BottomItemModel(
+        icon: FontAwesomeIcons.car,
+        label: 'ride',
+        // Using generated key for translation
+        index: 4,
+        image: Assets.ride,
+        route: Routes.RIDE,
+      ),
+    ];
 
     return CustomBottomNavigationBar(
       currentIndex: index,

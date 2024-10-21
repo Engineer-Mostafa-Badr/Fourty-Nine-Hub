@@ -57,14 +57,14 @@ class WalletCardWidget extends StatelessWidget {
                       text: balance,
                       style: Styles.headerText(
                           color: Theme.of(context).scaffoldBackgroundColor,
-                          fontSize: 50.sp),
+                          fontSize: 60.sp),
                     ),
-                    Sizer(width: 20.w,),
+                    Sizer(width: 10.w,),
                     Label(
                       text: currency,
                       style: Styles.headerText(
                           color: AppColors.SECONDARY_COLOR,
-                          fontSize: 50.sp),
+                          fontSize: 40.sp),
                     ),
                   ],
                 ),

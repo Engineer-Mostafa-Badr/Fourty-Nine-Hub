@@ -14,8 +14,8 @@ class CompetitionRepoImpl implements CompetitionRepo {
   @override
   Future<Either<Failure, CompetitionModel>> fetchCompetition() async {
     try {
-      String? accessToken = await TokenManager.getAccessToken();
-      String? refreshToken = await TokenManager.getRefreshToken();
+      String? accessToken = await CacheManager.getAccessToken();
+      String? refreshToken = await CacheManager.getRefreshToken();
       var data = await apiService.get(
           url: 'api/v1/subscriber/competitionsSubscriber', token: accessToken);
 
@@ -43,8 +43,8 @@ class CompetitionRepoImpl implements CompetitionRepo {
   @override
   Future<Either<Failure, WinnersModel>> fetchWinners() async {
     try {
-      String? accessToken = await TokenManager.getAccessToken();
-      String? refreshToken = await TokenManager.getRefreshToken();
+      String? accessToken = await CacheManager.getAccessToken();
+      String? refreshToken = await CacheManager.getRefreshToken();
       var data = await apiService.get(
           url: 'api/v1/subscriber/winners', token: accessToken);
 

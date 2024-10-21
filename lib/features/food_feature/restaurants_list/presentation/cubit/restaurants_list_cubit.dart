@@ -76,10 +76,10 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   Future<void> loadData() async {
     await _getUser();
     if (serviceLocator<UserCubit>().isLoggedIn) {
-      await isRestaurant();
       await _getMainCategoryDetails();
+      await isRestaurant();
       await _getMealCategoriesWithCountRestaurants();
-      await _getNumOfRestaurants();
+      // await _getNumOfRestaurants();
       await getAllRestaurant();
 
       // Future.wait([
@@ -156,7 +156,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     const url = 'https://49dev.com/api/v1/restaurants/modify-active';
 
     await apiConsumer.patch(url, data: {
-      'isActive': isActive ,
+      'isActive': isActive,
     });
 
     await isRestaurant();
@@ -253,7 +253,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   }
 
   Future<void> _ensureTokenInitialized() async {
-    token ??= await TokenManager.getAccessToken();
+    token ??= await CacheManager.getAccessToken();
   }
 
   Future<void> getExpiredOrders({int page = 1}) async {
@@ -281,7 +281,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
         // final List<dynamic> ordersData = data['data'] ?? [];
         final orders = ExpiredRequestsResponse.fromJson(data);
 
-        log(orders.data!.first.createdAt.toString());
+        log(orders.data!.first.createdAt.toString() + ",jblnkln");
         emit(state.copyWith(
           status: RestaurantsListStates.success,
           expiredRequestsResponse: orders,

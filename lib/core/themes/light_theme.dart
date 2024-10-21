@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import '../../res/style/app_colors.dart';
 import '../../res/style/styles.dart';
 
-ThemeData lightTheme() {
-  return ThemeData(
+ThemeData get lightTheme => ThemeData(
     primaryColor: AppColors.PRIMARY_COLOR,
     scaffoldBackgroundColor: AppColors.AUTH_CONTAINER_COLOR,
     //scaffoldBackgroundColor: Colors.grey[200],
@@ -77,4 +76,3 @@ ThemeData lightTheme() {
     dividerTheme: const DividerThemeData(),
     tabBarTheme: const TabBarTheme(),
   );
-}

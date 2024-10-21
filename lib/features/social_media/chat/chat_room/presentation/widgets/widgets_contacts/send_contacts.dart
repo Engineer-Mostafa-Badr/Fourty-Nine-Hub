@@ -1,9 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:developer';
-import 'dart:io';
-
-import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,9 +9,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
-import 'package:open_file/open_file.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:swipe_to/swipe_to.dart';
 
 import '../../../../../../../common/widgets/stateless/labels/label.dart';
@@ -200,7 +193,7 @@ class _SentContactsCardState extends State<SentContactsCard> {
                                                 widget.messageEntity));
                                   },
                                   child: Text(
-                                   LocaleKeys.viewAll.tr(),
+                                    LocaleKeys.viewAll.tr(),
                                     // overflow: TextOverflow.ellipsis,
                                     style: Styles.mediumText(
                                         color: AppColors.PRIMARY_COLOR),

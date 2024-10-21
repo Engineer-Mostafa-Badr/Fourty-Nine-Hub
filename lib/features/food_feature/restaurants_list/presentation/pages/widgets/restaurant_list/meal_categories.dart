@@ -18,7 +18,7 @@ class MealCategories extends StatefulWidget {
 }
 
 class _MealCategoriesState extends State<MealCategories> {
-   final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class _MealCategoriesState extends State<MealCategories> {
                 height: 0.31.sh,
                 width: double.infinity,
                 child: ListView.separated(
-                  controller:  _scrollController,
+                  controller: _scrollController,
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   separatorBuilder: (context, index) => const Sizer(),
                   scrollDirection: Axis.horizontal,
@@ -79,10 +79,8 @@ class _MealCategoriesState extends State<MealCategories> {
                           await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => BlocProvider.value(
-                                value: serviceLocator<RestaurantsCubit>(),
-                                child: RestaurantForSelectedMeal(mealId: id),
-                              ),
+                              builder: (context) =>
+                                  RestaurantForSelectedMeal(mealId: id),
                             ),
                           );
                           // Refresh the restaurant list after returning

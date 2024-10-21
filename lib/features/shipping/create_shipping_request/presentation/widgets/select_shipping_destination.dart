@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -72,7 +71,8 @@ class SelectShippingDestination extends StatelessWidget {
                     const Sizer(),
                     Expanded(
                         child: Text(
-                      state.fromAddress?.address ?? 'Select Pickup location'.tr(),
+                      state.fromAddress?.address ??
+                          'Select Pickup location'.tr(),
                       maxLines: 1,
                     )),
                   ],

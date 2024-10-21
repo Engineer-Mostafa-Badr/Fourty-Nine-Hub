@@ -41,7 +41,7 @@ class _ImagesProfileForRestaurantState
                     (e) => SquareImage(
                       fit: BoxFit.cover,
                       width: widget.widthForImages ?? 100,
-                      radius: 5,
+                      radius: 0,
                       url: e.mediaKey,
                     ),
                   )

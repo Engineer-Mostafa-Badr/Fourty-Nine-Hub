@@ -3,6 +3,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_inf
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/offer_data_model/offer_data_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/picture_optional_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/success_request_trip_model/success_request_trip_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_response_model/trip_response_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
 
 class RiderState {}
@@ -59,4 +60,16 @@ class SuccessDclineOfferRideState extends RiderState {}
 class SuccessGetOfferDataState extends RiderState {
   OfferDataModel? data;
   SuccessGetOfferDataState({this.data});
+}
+
+class SuccessGetAllTripsRiderState extends RiderState {
+  final List<TripResponseModel> list;
+
+  SuccessGetAllTripsRiderState({required this.list});
+}
+
+class SuccessGetExpairedTripRider extends RiderState {
+  final List<TripResponseModel> list;
+
+  SuccessGetExpairedTripRider({required this.list});
 }

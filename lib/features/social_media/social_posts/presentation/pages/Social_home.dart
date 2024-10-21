@@ -73,10 +73,9 @@ class _SocialHomeViewState extends State<SocialHomeView>
               ? null
               : HomeAppbar(
                   isWithBackArrow: true,
-                  toolbarHeight: context.screenHeight/6.5,
+                  toolbarHeight: context.screenHeight / 6.5,
                   bottom: TabBar(
                     padding: EdgeInsets.zero,
-
                     indicatorColor: context.isDarkMode
                         ? Colors.white
                         : AppColors.PRIMARY_COLOR,
@@ -143,11 +142,12 @@ class _SocialHomeViewState extends State<SocialHomeView>
                         scrollController: ScrollController(),
                         appBars: [
                           SliverAppBar(
+
                             backgroundColor:
                                 Theme.of(context).scaffoldBackgroundColor,
                             automaticallyImplyLeading: false,
                             floating: true,
-                            // pinned: true,
+                            pinned: true,
                             flexibleSpace: const CreatePostBanner(),
                           ),
                           SliverAppBar(

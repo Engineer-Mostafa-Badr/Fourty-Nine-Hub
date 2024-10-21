@@ -74,7 +74,7 @@ class CreatePostBanner extends StatelessWidget {
                   height: 3.h,
                 ),
                 Label(
-                  text: 'zoom',
+                  text: LocaleKeys.meet.localize,
                   style: Styles.smallText(),
                 ),
               ],

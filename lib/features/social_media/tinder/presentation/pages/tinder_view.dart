@@ -243,6 +243,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -257,7 +258,9 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_sub_category_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 
 class TinderView extends StatelessWidget {
   const TinderView({Key? key}) : super(key: key);
@@ -313,14 +316,15 @@ class _TinderScreenState extends State<TinderScreen> {
   Widget build(BuildContext context) {
     log('TinderScreen built');
     return Scaffold(
-      appBar: AppBar(
-        elevation: 4,
-        title: Label(
-          text: LocaleKeys.tinder_find.tr(),
-          style: Styles.headerText(
-            fontSize: MediaQuery.of(context).size.width * 0.1,
-          ),
-        ),
+      // appBar: AppBar(
+      //   elevation: 4,
+      //   title: Text(
+      //     LocaleKeys.tinder_find.tr(),
+      //     style: Styles.headerText(),
+      //   ),
+      // ),
+      appBar: BackAppBar(
+        label: LocaleKeys.tinder_find.tr(),
       ),
       body: BlocConsumer<TinderViewCubit, TinderViewState>(
         listener: (context, state) {
@@ -396,11 +400,9 @@ class _TinderScreenState extends State<TinderScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Align(
         alignment: context.isArabic ? Alignment.topRight : Alignment.topLeft,
-        child: Label(
-          text: LocaleKeys.tinder_find.tr(),
-          style: Styles.headerText(
-            fontSize: MediaQuery.of(context).size.width * 0.1,
-          ),
+        child: Text(
+          LocaleKeys.tinder_find.tr(),
+          style: Styles.headerText(),
         ),
       ),
     );
@@ -471,9 +473,14 @@ class _TinderScreenState extends State<TinderScreen> {
 
   Widget _buildPleaseLoginWidget(BuildContext context) {
     return Center(
-      child: Text(
-        LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.tr(),
-        style: TextStyle(fontSize: 18.sp),
+      child: GestureDetector(
+        onTap: () {
+          context.push(Routes.LOGIN);
+        },
+        child: Text(
+          LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.tr(),
+          style: Styles.headerText(),
+        ),
       ),
     );
   }

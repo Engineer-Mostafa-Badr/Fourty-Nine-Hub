@@ -60,22 +60,22 @@ class OfferObject {
 // {
 //   "data": {
 //     "offerObject": {
-//       "priceOffer": 50, 
-//       "firstName": "walal", 
+//       "priceOffer": 50,
+//       "firstName": "walal",
 //       "carId": {
 //         "_id": "669874705319c6256d7c7670",
-//         "Brand": "Volkswagen", 
+//         "Brand": "Volkswagen",
 //         "Model": "Beetle"
-//       }, 
-//       "allCountTrip": 0, 
-//       "averageRating": 0, 
-//       "arrivalTimeToClient": 3600, 
-//       "distance": 5000, 
-//       "model": "Beetle", 
-//       "brand": "Volkswagen", 
-//       "comfort": false, 
+//       },
+//       "allCountTrip": 0,
+//       "averageRating": 0,
+//       "arrivalTimeToClient": 3600,
+//       "distance": 5000,
+//       "model": "Beetle",
+//       "brand": "Volkswagen",
+//       "comfort": false,
 //       "profilePicture": "https://49hub-reels.s3.eu-central-1.amazonaws.com/ride/twitter/66a4118c8a30f11ecd8f9edd/eeed6270-6a1c-4d76-a3ed-4bb015e1160c.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZI2LDRJFLQMKAMUH%2F20240927%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20240927T150813Z&X-Amz-Expires=3600&X-Amz-Signature=9948ecf66e5098ec3c166f0e0778c8fcbdb60cf6e811febf02733c432323bd59&X-Amz-SignedHeaders=host&x-id=GetObject"
-//     }, 
+//     },
 //     "userId": "66c349d7a684ab473f1c1ed7"
 //   }
 // }

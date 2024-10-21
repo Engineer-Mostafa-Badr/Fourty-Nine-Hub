@@ -13,7 +13,7 @@ import '../../../../../res/style/styles.dart';
 import '../cubit/managers/favourite_categories_cubit.dart';
 
 class FavouriteCategoryView extends StatefulWidget {
-  FavouriteCategoryView({super.key});
+  const FavouriteCategoryView({super.key});
 
   @override
   State<FavouriteCategoryView> createState() => _FavouriteCategoryViewState();

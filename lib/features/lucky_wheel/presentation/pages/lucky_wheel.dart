@@ -34,7 +34,7 @@ class LuckyWheelView extends StatelessWidget {
       ),
       body: BlocConsumer<WheelCubit, BasicState<WheelEntity>>(
         listener: (BuildContext context, BasicState<WheelEntity> state) {
-          if (state.failure == null) {
+          if (state.status == StateStatus.error) {
             showSuccessMessage(
               context,
               color: AppColors.SECONDARY_COLOR,
@@ -70,7 +70,7 @@ class LuckyWheelView extends StatelessWidget {
                                       color: Theme.of(context)
                                           .scaffoldBackgroundColor),
                                 ),
-                                Spacer(),
+                                const Spacer(),
                                 Text(
                                   '${state.data?.amount.round() ?? 0}',
                                   style: Styles.mediumText(
@@ -81,7 +81,7 @@ class LuckyWheelView extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Sizer(),
+                        const Sizer(),
                         Expanded(
                           child: Container(
                             padding: EdgeInsetsDirectional.symmetric(
@@ -97,7 +97,7 @@ class LuckyWheelView extends StatelessWidget {
                                       color: Theme.of(context)
                                           .scaffoldBackgroundColor),
                                 ),
-                                Spacer(),
+                                const Spacer(),
                                 Text(
                                   '${state.data?.points.round() ?? 0}',
                                   style: Styles.mediumText(
@@ -116,7 +116,7 @@ class LuckyWheelView extends StatelessWidget {
                         ? FortuneWheel(
                             selected: spinWheelCubit.controller.stream,
                             animateFirst: false,
-                            duration: Duration(seconds: 3),
+                            duration: const Duration(seconds: 3),
                             hapticImpact: HapticImpact.heavy,
                             onAnimationEnd: () {
                               spinWheelCubit.showPrize(context);

@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
@@ -78,7 +77,8 @@ class FromAndToWidget extends StatelessWidget {
               const Sizer(),
               Expanded(
                   child: Label(
-                text: state.toAddress?.address ?? 'Select drop off location'.tr(),
+                text:
+                    state.toAddress?.address ?? 'Select drop off location'.tr(),
                 style: Styles.mediumText(),
                 maxLines: 1,
               )),
@@ -115,7 +115,8 @@ class FromAndToWidget extends StatelessWidget {
                     const Sizer(),
                     Expanded(
                         child: Text(
-                      state.fromAddress?.address ?? 'Select Pickup location'.tr(),
+                      state.fromAddress?.address ??
+                          'Select Pickup location'.tr(),
                       maxLines: 1,
                     )),
                   ],
