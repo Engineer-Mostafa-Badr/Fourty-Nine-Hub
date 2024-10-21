@@ -19,11 +19,7 @@ class TwitterUserModel extends TwitterUserEntity {
       lastName: json['lastName'][0].toUpperCase() +
               json['lastName'].substring(1).toLowerCase() ??
           '',
-      image: json['image'] ??
-          (json['profilePictureSignedUrl'] ??
-              (json['USER_PROFILE'] != null
-                  ? json['USER_PROFILE']['image']
-                  : '')),
+      image: json['image']?? '',
       email: json['email'] ?? '',
       isDocumented: json['twitter_documentation'] ?? false,
       createdAt: json['createdAt'] is String

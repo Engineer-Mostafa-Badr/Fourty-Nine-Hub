@@ -4,6 +4,6 @@ import 'package:fourtyninehub/features/authentication/domain/entities/user_entit
 import 'package:fourtyninehub/features/social_media/edit_profile/domain/entities/edit_profile_entity.dart';
 
 abstract class EditProfileRepo {
-  Future<Either<Failure, UserEntity>> editProfile(
+  Future<Either<Failure, bool>> editProfile(
       {required EditProfileEntity params});
 }

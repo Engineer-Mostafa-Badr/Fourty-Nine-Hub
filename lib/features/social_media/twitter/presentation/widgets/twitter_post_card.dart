@@ -15,7 +15,6 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -378,24 +377,26 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               style: Styles.mediumText(color: Colors.grey)),
         ),
         Label(text: ' . $date', style: Styles.mediumText(color: Colors.grey)),
-        if (post.user.id != user?.id && context.read<UserCubit>().isLoggedIn)
-          IconButton(
-            onPressed: () {
-              bottomSheet(
-                  context: context,
-                  widget: ReportView(
-                    id: widget.post.id,
-                    categoryId: '66a3583454e6e337915514db',
-                  ));
-            },
-            icon: const Icon(
-              Icons.report,
-              color: AppColors.SECONDARY_COLOR,
-            ),
-          ),
+        // if (post.user.id != user?.id && context.read<UserCubit>().isLoggedIn)
+        //   IconButton(
+        //     onPressed: () {
+        //       bottomSheet(
+        //           context: context,
+        //           widget: ReportView(
+        //             id: widget.post.id,
+        //             categoryId: '66a3583454e6e337915514db',
+        //           ));
+        //     },
+        //     icon: const Icon(
+        //       Icons.report,
+        //       color: AppColors.SECONDARY_COLOR,
+        //     ),
+        //   ),
+        Sizer(),
         if (context.read<UserCubit>().isLoggedIn)
           IconAppButton(
             icon: Icons.clear,
+            size: 40.w,
             onPressed: () {
               bottomSheet(
                 context: context,
@@ -524,24 +525,25 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
           ),
         ),
         if (post.isShared == false &&
-            (post.user.id != user?.id) &&
+            (post.user.id == user?.id) &&
             context.read<UserCubit>().isLoggedIn) ...[
-          IconButton(
-            onPressed: () {
-              bottomSheet(
-                context: context,
-                widget: ReportView(
-                  id: widget.post.id,
-                  categoryId: '66a3583454e6e337915514db',
-                ),
-              );
-            },
-            icon: Icon(
-              Icons.report,
-              color: AppColors.SECONDARY_COLOR,
-              size: 35.w,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: () {
+          //     bottomSheet(
+          //       context: context,
+          //       widget: ReportView(
+          //         id: widget.post.id,
+          //         categoryId: '66a3583454e6e337915514db',
+          //       ),
+          //     );
+          //   },
+          //   icon: Icon(
+          //     Icons.report,
+          //     color: AppColors.SECONDARY_COLOR,
+          //     size: 35.w,
+          //   ),
+          // ),
+          const Sizer(),
           if (context.read<UserCubit>().isLoggedIn)
             IconAppButton(
               icon: Icons.clear,

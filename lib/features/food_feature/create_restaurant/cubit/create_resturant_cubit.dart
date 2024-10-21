@@ -102,7 +102,6 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
 
   updateRestaurant1(context) async {
     CreateRestaurantParams params = createRestaurantParams;
-    // _validationUpdateState();
 
     // List<Map<String, dynamic>> mneu = [];
     // params.mneu?.forEach((element) {
@@ -124,6 +123,17 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
       if (params.city != null) "city": params.city,
       // "menu": mneu,
     };
+
+    if ((params.name == null || params.name!.isEmpty) &&
+        (params.number == null || params.number!.isEmpty) &&
+        (params.subcategoryId == null || params.subcategoryId!.isEmpty) &&
+        (params.restaurantMedia == null || params.restaurantMedia!.isEmpty) &&
+        (params.government == null || params.government!.isEmpty) &&
+        (params.city == null || params.city!.isEmpty)) {
+      _validationUpdateState();
+
+      return;
+    }
 
     final response = await apiConsumer.put(
         'https://49dev.com/api/v1/restaurants/update-restaurant-info',

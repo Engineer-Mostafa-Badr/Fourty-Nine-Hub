@@ -26,7 +26,7 @@ class PremiumRequestButton extends StatelessWidget {
     return BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
       final controller = context.read<AdvertisementCubit>();
       return AvaialbleTripsButton(
-        title: 'Premium Request',
+        title: LocaleKeys.premiumRequest.localize,
         color: subscriptionStatus=='premium'?AppColors.DARK_GRAY_COLOR:AppColors.SECONDARY_COLOR,
         onTap:() {
           if(subscriptionStatus!='premium') {

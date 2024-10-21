@@ -142,11 +142,12 @@ class _SocialHomeViewState extends State<SocialHomeView>
                         scrollController: ScrollController(),
                         appBars: [
                           SliverAppBar(
+
                             backgroundColor:
                                 Theme.of(context).scaffoldBackgroundColor,
                             automaticallyImplyLeading: false,
                             floating: true,
-                            // pinned: true,
+                            pinned: true,
                             flexibleSpace: const CreatePostBanner(),
                           ),
                           SliverAppBar(
