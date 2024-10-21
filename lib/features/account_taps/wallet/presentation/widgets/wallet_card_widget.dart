@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -7,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class WalletCardWidget extends StatelessWidget {
