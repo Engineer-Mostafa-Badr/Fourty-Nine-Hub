@@ -36,6 +36,7 @@ import 'package:fourtyninehub/service_locator/search_service_locator.dart';
 import 'package:fourtyninehub/service_locator/secrets_service_locator.dart';
 import 'package:fourtyninehub/service_locator/setting_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
+import 'package:fourtyninehub/service_locator/star_service_locator.dart';
 import 'package:fourtyninehub/service_locator/stories_service_locator.dart';
 import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
 import 'package:fourtyninehub/service_locator/transfer_money_service_locator.dart';
@@ -137,14 +138,10 @@ class DI {
     );
     // serviceLocator.registerLazySingleton<CompanyAdvertiseRepoImpl>(() => CompanyAdvertiseRepoImpl(ApiService(Dio())),);
 
-
-
-
     // Register the StoryRepository
     serviceLocator.registerLazySingleton<StoryRepository>(
       () => StoryRepository(),
     );
-
 
     // serviceLocator
     //     .registerFactory<SliderCubit>(() => SliderCubit(serviceLocator()));
