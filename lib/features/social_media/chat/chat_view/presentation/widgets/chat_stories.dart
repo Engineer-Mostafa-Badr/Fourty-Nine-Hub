@@ -471,7 +471,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/pages/create_story_screen.dart';
@@ -479,7 +481,10 @@ import 'package:fourtyninehub/features/social_media/stories/presentation/pages/m
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/widgets/story_view.dart';
@@ -568,12 +573,15 @@ class ChatStories extends StatelessWidget {
     return FittedBox(
       child: GestureDetector(
         onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const CameraScreen(),
-            ),
-          );
+          context.read<UserCubit>().isLoggedIn
+              ? await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CameraScreen(),
+                  ),
+                )
+              : context.push(Routes.LOGIN);
+
           BlocProvider.of<StoryCubit>(context)
             ..fetchStories()
             ..getMutedStories();
@@ -641,15 +649,18 @@ class ChatStories extends StatelessWidget {
     return FittedBox(
       child: GestureDetector(
         onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BlocProvider.value(
-                value: serviceLocator<StoryCubit>(),
-                child: MutedStories(),
-              ),
-            ),
-          );
+          context.read<UserCubit>().isLoggedIn
+              ? await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider.value(
+                      value: serviceLocator<StoryCubit>(),
+                      child: MutedStories(),
+                    ),
+                  ),
+                )
+              : context.push(Routes.LOGIN);
+
           context.read<StoryCubit>()
             ..fetchStories()
             ..getMutedStories();
@@ -671,7 +682,7 @@ class ChatStories extends StatelessWidget {
             ),
             FittedBox(
               child: Text(
-                'Muted',
+                LocaleKeys.muted.localize,
                 style: Styles.headerText(
                     color: Colors.black.withOpacity(0.68),
                     fontWeight: FontWeight.bold),
@@ -689,18 +700,21 @@ class ChatStories extends StatelessWidget {
     return FittedBox(
       child: GestureDetector(
         onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BlocProvider.value(
-                value: serviceLocator<StoryCubit>(),
-                child: StoryViewScreen(
-                  stories: state.users,
-                  initialUserIndex: index,
-                ),
-              ),
-            ),
-          );
+          context.read<UserCubit>().isLoggedIn
+              ? await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider.value(
+                      value: serviceLocator<StoryCubit>(),
+                      child: StoryViewScreen(
+                        stories: state.users,
+                        initialUserIndex: 0,
+                      ),
+                    ),
+                  ),
+                )
+              : context.push(Routes.LOGIN);
+
           BlocProvider.of<StoryCubit>(context)
             ..fetchStories()
             ..getMutedStories();
@@ -777,244 +791,3 @@ class ChatStories extends StatelessWidget {
     );
   }
 }
-
-/*
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/pages/create_story_screen.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:story_view/controller/story_controller.dart';
-import 'package:story_view/widgets/story_view.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart'; // For localization keys
-
-import '../../../../stories/presentation/pages/more_stories.dart';
-import '../../../../tinder/data/shared/shared.dart';
-
-class ChatStories extends StatelessWidget {
-  const ChatStories({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        // color: Theme.of(context).scaffoldBackgroundColor,
-        color: Colors.grey,
-      ),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              width: 4,
-            ),
-            _createMyStory(context),
-            const SizedBox(
-              width: 4,
-            ),
-            BlocBuilder<StoryCubit, StoryState>(
-              builder: (context, state) {
-                if (state.users.isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                    child: Shimmer.fromColors(
-                      baseColor: Colors.grey.withOpacity(0.1),
-                      highlightColor: Colors.grey.withOpacity(0.5),
-                      child: CircleAvatar(
-                        radius: MediaQuery.of(context).size.width *
-                            0.09, // Responsive radius
-                      ),
-                    ),
-                  );
-                }
-                return ListView.separated(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                      child: _buildStoryItem(context, state, index),
-                    );
-                  },
-                  separatorBuilder: (context, index) => const Sizer(
-                    width: 8,
-                  ),
-                  itemCount: state.users.length,
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _createMyStory(BuildContext context) {
-    return FittedBox(
-      child: GestureDetector(
-        onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const CameraScreen(),
-            ),
-          );
-          await BlocProvider.of<StoryCubit>(context).fetchStories();
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              radius:
-              MediaQuery.of(context).size.width * 0.08, // Responsive radius
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: CircleAvatar(
-                      backgroundColor: AppColors.PRIMARY_COLOR,
-                      backgroundImage: NetworkImage(
-                        serviceLocator<UserCubit>().state.data != null
-                            ? serviceLocator<UserCubit>()
-                            .state
-                            .data!
-                            .profilePicture!
-                            : UIConst.profilePlaceHolder,
-                      ),
-                      onBackgroundImageError: (_, __) => Image.asset(
-                        UIConst.profilePlaceHolder,
-                      ),
-                    ),
-                  ),
-                  const Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: CircleAvatar(
-                      backgroundColor: AppColors.PRIMARY_COLOR,
-                      radius: 10,
-                      child: Icon(
-                        Icons.add,
-                        size: 15,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 2,
-            ),
-            FittedBox(
-              child: Text(
-                LocaleKeys.add_story.tr() + "\n", // Localized text
-                textScaler: TextScaler.noScaling,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStoryItem(BuildContext context, StoryState state, int index) {
-    final userController = StoryController();
-
-    return FittedBox(
-      child: GestureDetector(
-        onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => StoryViewScreen(
-                stories: state.users,
-                initialUserIndex: index,
-              ),
-            ),
-          );
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              radius:
-              MediaQuery.of(context).size.width * 0.09, // Responsive radius
-              backgroundColor: AppColors.SECONDARY_COLOR,
-              child: CircleAvatar(
-                radius: MediaQuery.of(context).size.width *
-                    0.08, // Responsive radius
-                backgroundColor: AppColors.SECONDARY_COLOR,
-                child: ClipOval(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: double.infinity,
-                    child: IgnorePointer(
-                      ignoring: true,
-                      child: Image.network(
-                          state.users[index].user!.profilePictureUrl!),
-
-                      // StoryView(
-                      //   indicatorColor: Colors.transparent,
-                      //   indicatorForegroundColor: Colors.transparent,
-                      //   storyItems: [
-                      //     state.users[index].userStories!.first.type != 'video'
-                      //         ? createStoryItem(
-                      //             context,
-                      //             state.users[index].userStories!.first,
-                      //             userController,
-                      //             textStyle: const TextStyle(fontSize: 6))
-                      //         : StoryItem.pageImage(
-                      //             loadingWidget: const CupertinoActivityIndicator(
-                      //               color: Colors.white,
-                      //             ),
-                      //             url:
-                      //                 state.users[index].user!.profilePictureUrl!,
-                      //             errorWidget: Image.network(
-                      //               UIConst.profilePlaceHolder,
-                      //               fit: BoxFit.fitHeight,
-                      //             ),
-                      //             imageFit: BoxFit.cover,
-                      //             controller: userController,
-                      //           ),
-                      //   ],
-                      //   controller: userController,
-                      // ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 2),
-            FittedBox(
-              child: Text(
-                capitalizeAndSplit2Only(
-                  "${state.users[index].user!.firstName}\n",
-                ),
-                textScaler: TextScaler.noScaling,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-*/

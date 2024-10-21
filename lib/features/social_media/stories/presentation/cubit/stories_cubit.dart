@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
@@ -142,28 +143,6 @@ class StoryCubit extends Cubit<StoryState> {
     );
   }
 
-  // getMutedStories({userId, context, limit, page, bool? loadMore}) async {
-  //   final response = await apiConsumer.get(
-  //       'https://49dev.com/api/v1/stories/mutedStories?limit=$limit&page=$page');
-  //   print('from getMutedStories ');
-  //
-  //   response.fold(
-  //     (failure) {
-  //       // emit(state);
-  //       print('assssssssssssssssssgetMutedStoriesssssssssssssfffffffdsa');
-  //     },
-  //     (data) {
-  //       // emit(state);
-  //       // print(
-  //       //     'assssssssssssssssssgetMutedStoriesssssssssssssfffffffdsa');
-  //
-  //       log('${data.toString()}assssssssssssssssssgetMutedStoriesssssssssssssfffffffdsa');
-  //
-  //       emit(state.copyWith(
-  //           mutedStoriesResponse: MutedStoriesResponse.fromJson(data)));
-  //     },
-  //   );
-  // }
   Future<void> getMutedStories({
     userId,
     context,
@@ -276,21 +255,7 @@ class StoryCubit extends Cubit<StoryState> {
     try {
       emit(state.copyWith(isLoading: true));
       await storyRepository.deleteStory(storyId);
-      // Remove the deleted story from the list
-      // // final updatedStories = state.stories.where((story) => story.id != storyId).toList();
-      // final updatedStories = state.stories.map((userStory) {
-      //   // Filter the nested stories within each userStory
-      //   final filteredStories = userStory.stories!
-      //       .where((element) => element.id != storyId)
-      //       .toList();
-      //
-      //   // Return the updated userStory with the filtered stories
-      // }).where((userStory) {
-      //   // Ensure we only keep userStories that still have stories after filtering
-      //   return userStory!.stories!.isNotEmpty;
-      // }).toList();
-      //
-      // emit(state.copyWith(stories: updatedStories));
+
       await fetchStories();
     } catch (e) {
       emit(StoryError('Failed to delete story: $e'));
@@ -346,38 +311,6 @@ class StoryCubit extends Cubit<StoryState> {
       ));
     }
   }
-
-  // void fetchStories({bool loadMore = false}) async {
-  //   if (loadMore && state.isFetchingMore) return;
-  //
-  //   if (!loadMore && state.isLoading) return;
-  //
-  //   emit(state.copyWith(
-  //     isLoading: !loadMore,
-  //     isFetchingMore: loadMore,
-  //   ));
-  //
-  //   try {
-  //     final listOfUserStories =
-  //         await storyRepository.fetchStories(10, state.currentPage);
-  //
-  //     emit(state.copyWith(
-  //       stories: loadMore
-  //           ? [...state.stories, ...listOfUserStories]
-  //           : listOfUserStories,
-  //       isLoading: false,
-  //       isFetchingMore: false,
-  //       hasReachedMax: listOfUserStories.isEmpty,
-  //       currentPage: state.currentPage + 1,
-  //     ));
-  //   } catch (e) {
-  //     emit(state.copyWith(
-  //       isLoading: false,
-  //       isFetchingMore: false,
-  //     ));
-  //     emit(StoryError(e.toString()));
-  //   }
-  // }
 
   void updateCurrentStoryCreatedAt(DateTime createdAt) {
     emit(state.copyWith(currentStoryCreatedAt: createdAt));
@@ -530,7 +463,9 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
     ),
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
+    backgroundColor: ThemeCubit.get(context).isDarkTheme
+        ? Colors.black.withOpacity(0.9)
+        : Colors.white.withOpacity(0.9),
     builder: (BuildContext context) {
       return DraggableScrollableSheet(
         expand: false,
@@ -542,8 +477,10 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
             children: [
               // Beautiful Header Section with shadow effect
               Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                decoration: BoxDecoration(
+                  color: ThemeCubit.get(context).isDarkTheme
+                      ? Colors.black.withOpacity(0.9)
+                      : Colors.white.withOpacity(0.9),
                   borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
                   boxShadow: [
                     BoxShadow(
@@ -559,10 +496,12 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
                   children: [
                     Text(
                       'Viewed by ${viewers.data.length}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black87,
+                        color: ThemeCubit.get(context).isDarkTheme
+                            ? Colors.white.withOpacity(0.9)
+                            : Colors.black.withOpacity(0.9),
                       ),
                     ),
                     GestureDetector(
@@ -585,11 +524,9 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.white, Colors.grey[100]!],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
+                    color: ThemeCubit.get(context).isDarkTheme
+                        ? Colors.black.withOpacity(0.9)
+                        : Colors.white.withOpacity(0.9),
                   ),
                   child: ListView.builder(
                     controller: scrollController,
@@ -610,7 +547,7 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
                             onTap: () => context.push(Routes.OTHERSACCOUNT,
                                 extra: viewer.user.id),
                             child: CircleAvatar(
-                              radius: 30,
+                              radius: 16,
                               backgroundImage: NetworkImage(viewer
                                   .user.profile!.profilePicture!.mediaKey!),
                               backgroundColor: Colors.grey[300],
@@ -619,10 +556,12 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
                           title: Text(
                             capitalizeAndSplit2Only(
                                 "${viewer.user.firstName} ${viewer.user.lastName}"),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
-                              color: Colors.black87,
+                              color: ThemeCubit.get(context).isDarkTheme
+                                  ? Colors.white.withOpacity(0.9)
+                                  : Colors.black.withOpacity(0.9),
                             ),
                           ),
                           subtitle: Text(
@@ -637,7 +576,9 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
                             getTimeAgo(context, viewer.updatedAt.toString()),
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.grey[600],
+                              color: ThemeCubit.get(context).isDarkTheme
+                                  ? Colors.grey[200]
+                                  : Colors.grey[600],
                             ),
                           ),
                           onTap: () {

@@ -315,6 +315,5 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
         womenOnly: false,
       ),
     );
-    BlocProvider.of<GetAllTripsCubit>(context).fetchAllCarpoolTrips();
   }
 }

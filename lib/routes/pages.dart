@@ -374,11 +374,11 @@ class AppPages {
                       GoRoute(
                           path: Paths.ADdetails,
                           name: Routes.ADdetails,
-                          builder: (context, state) => BlocProvider<AdDetailsCubit>(
-                            create: (_) => serviceLocator(),
-                            child:
-                            AdDetailsView(payload: state.extra ),
-                          )),
+                          builder: (context, state) =>
+                              BlocProvider<AdDetailsCubit>(
+                                create: (_) => serviceLocator(),
+                                child: AdDetailsView(payload: state.extra),
+                              )),
                       GoRoute(
                         path: Paths.CREATEAD,
                         name: Routes.CREATEAD,
@@ -405,7 +405,8 @@ class AppPages {
                         builder: (context, state) => BlocProvider.value(
                             value: serviceLocator<CreateAdCubit>(),
                             child: GovernorateFilterAdsView(
-                              categorization: state.extra as CategorizationEntity,
+                              categorization:
+                                  state.extra as CategorizationEntity,
                             )),
                       ),
                       // CreateCompanyAdView
@@ -1515,6 +1516,9 @@ class AppPages {
                   ),
                 ),
                 BlocProvider(
+                  create: (_) => MapBoxCubit(),
+                ),
+                BlocProvider(
                   create: (_) => PublishTripJoinCubit(
                     publishTripJoinUseCase:
                         serviceLocator<PublishTripJoinUseCase>(),
@@ -1607,6 +1611,9 @@ class AppPages {
                 BlocProvider<GetPriceCarpoolCubit>(
                   create: (context) => GetPriceCarpoolCubit(
                       getPriceCarpoolUsecase: serviceLocator()),
+                ),
+                BlocProvider<GetAllTripsCubit>(
+                  create: (context) => GetAllTripsCubit(serviceLocator()),
                 ),
                 BlocProvider<CreateCarPoolCubit>(
                   create: (context) => CreateCarPoolCubit(

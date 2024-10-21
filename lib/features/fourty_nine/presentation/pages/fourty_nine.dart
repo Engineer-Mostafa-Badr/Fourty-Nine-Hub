@@ -308,7 +308,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               Expanded(
                 child: _buildRideSubCategoryItem(
                   service: state.data?[0].service ?? RideServicesEnum.pickMe,
-                  title: 'Carpool',
+                  title: LocaleKeys.carpool.localize,
                   image: state.data?[0].image ?? '',
                   // image: Assets.carpool,
                   // isFavorite: state.data![0].is,
@@ -412,6 +412,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       ),
     );
   }
+
   Widget _buildStarWidget() {
     return SizedBox(
       height: kToolbarHeight * .9.h,

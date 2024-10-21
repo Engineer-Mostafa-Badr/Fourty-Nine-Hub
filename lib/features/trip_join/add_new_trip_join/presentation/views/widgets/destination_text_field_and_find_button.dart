@@ -23,14 +23,14 @@ class _DestinationTextFieldAndFindButonState
     extends State<DestinationTextFieldAndFindButon> {
   late TextEditingController destinationController;
   late final DestinationLocationCubit destinationLocationCubit;
-  late final MapBoxDestCubit mapBoxDestCubit;
+  // late final MapBoxDestCubit mapBoxDestCubit;
 
   final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    mapBoxDestCubit = context.read<MapBoxDestCubit>();
+    // mapBoxDestCubit = context.read<MapBoxDestCubit>();
 
     destinationLocationCubit = context.read<DestinationLocationCubit>();
     destinationController = TextEditingController();
@@ -53,7 +53,8 @@ class _DestinationTextFieldAndFindButonState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: BlocBuilder<MapBoxDestCubit, MapBoxDestCubitState>(
+              child: BlocBuilder<DestinationLocationCubit,
+                  DestinationLocationState>(
                 builder: (context, state) {
                   return TextFormField(
                     decoration: InputDecoration(
@@ -76,8 +77,8 @@ class _DestinationTextFieldAndFindButonState
               title: LocaleKeys.searchFind.localize,
               onTap: () {
                 if (formKey.currentState!.validate()) {
-                  mapBoxDestCubit.searchLocationMapBoxDest(
-                      query: destinationController.text);
+                  destinationLocationCubit.getDestinationLocation(
+                      address: destinationController.text);
                 }
               },
               height: double.infinity,
@@ -88,15 +89,15 @@ class _DestinationTextFieldAndFindButonState
     );
   }
 
-  Widget? _getIcon(MapBoxDestCubitState state) {
-    if (state is MapBoxDestCubitSuccess) {
+  Widget? _getIcon(DestinationLocationState state) {
+    if (state is DestinationLocationSuccess) {
       return const Icon(
         Icons.check,
         color: AppColors.CHECK_MARK_COLOR,
         size: 30,
       );
     }
-    if (state is MapBoxDestCubitLoading) {
+    if (state is DestinationLocationLoading) {
       return SizedBox(
         width: 30,
         height: 30,
@@ -108,14 +109,14 @@ class _DestinationTextFieldAndFindButonState
         ),
       );
     }
-    if (state is MapBoxDestCubitFailure) {
+    if (state is DestinationLocationFailed) {
       return const Icon(
         Icons.error,
         color: Colors.red,
         size: 30,
       );
     }
-    if (state is MapBoxDestCubitInitial) {
+    if (state is DestinationLocationInitial) {
       return const Icon(
         Icons.error,
         color: Colors.grey,
@@ -129,9 +130,9 @@ class _DestinationTextFieldAndFindButonState
     if (value == null || value.isEmpty) {
       return LocaleKeys.youCantLeaveFieldEmpty.localize;
     }
-    if (value.length < 10) {
-      return LocaleKeys.addressMustBeAtLeast10Chars.localize;
-    }
+    // if (value.length < 10) {
+    //   return LocaleKeys.addressMustBeAtLeast10Chars.localize;
+    // }
     return null;
   }
 }
