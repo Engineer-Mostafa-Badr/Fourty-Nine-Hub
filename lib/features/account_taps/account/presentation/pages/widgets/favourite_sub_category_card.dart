@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_subcategory_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -19,6 +20,7 @@ import '../../../../../../core/localization/locales.dart';
 class FavouriteSubCategoryCard extends StatefulWidget {
   const FavouriteSubCategoryCard(
       {super.key, required this.item, required this.onFav});
+
   final FavouriteSubcategoryEntity item;
   final Function() onFav;
 
@@ -31,7 +33,11 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      // onTap: () => context.push(Routes.ADS, extra: AdsViewParams(mainCategory: mainCategory, subCategory: item)),
+      // onTap: () => context.push(Routes.ADS,
+      //     extra: AdsViewParams(
+      //         mainCategory: widget.mainCategory,
+      //         subCategory: widget.item,
+      //     ),),
       child: Container(
         margin: EdgeInsets.all(10.w),
         decoration: BoxDecoration(
@@ -83,11 +89,11 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
                               : widget.item.nameAr,
                           style: Styles.mediumText(fontWeight: FontWeight.bold),
                         ),
-                        Label(
-                          text:
-                              '${widget.item.numOfAds} ${LocaleKeys.ad.localize}',
-                          style: Styles.smallText(fontSize: 40.sp),
-                        )
+                        // Label(
+                        //   text:
+                        //       '${widget.item.numOfAds} ${LocaleKeys.ad.localize}',
+                        //   style: Styles.smallText(fontSize: 40.sp),
+                        // )
                       ],
                     ),
                   ),

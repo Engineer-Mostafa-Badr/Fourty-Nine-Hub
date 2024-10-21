@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/custom_container.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/show_post_company_advertise.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../core/widget/custom_text_no_login.dart';
@@ -149,18 +150,18 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                               price: state.price?.reelPrice ?? 0,
                               context: context,
                               function: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (context) => ReelsRecordingScreen(
-                                //       voiceUrl: '',
-                                //       totalPrice:
-                                //       '${state.price?.reelPrice ?? 0}',
-                                //       advertisementType: 'reel',
-                                //       comeFromCompany: 'company',
-                                //     ),
-                                //   ),
-                                // );
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ReelsRecordingScreen(
+                                      voiceUrl: '',
+                                      totalPrice:
+                                      '${state.price?.reelPrice ?? 0}',
+                                      advertisementType: 'reel',
+                                      comeFromCompany: 'company',
+                                    ),
+                                  ),
+                                );
                               },
                               onTotalPriceUpdated: (price) {
                                 updateTotalPrice('reel', price);

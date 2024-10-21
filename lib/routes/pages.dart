@@ -30,13 +30,10 @@ import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/vie
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/edit_food_view.dart';
-import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/map_box_location_test.dart';
 import 'package:fourtyninehub/features/carpool/create_carpool/presentation/cubits/cubit/create_car_pool_cubit.dart';
-import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/create_resturant_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
@@ -137,6 +134,7 @@ import 'package:fourtyninehub/features/social_media/spot_light/presentation/page
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/pages/be_star_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_brand_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_model_usecase.dart';
@@ -163,6 +161,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/useca
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/request_trip_join_cubit/request_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/avaiable_trips_view.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -422,7 +421,7 @@ class AppPages {
                             BlocProvider.value(
                                 value: serviceLocator<CreateAdCubit>(),
                                 child: CreateAdView(
-
+                            
                                   categorization:
                                   state.extra as CategorizationEntity,
                                 )),
@@ -1184,7 +1183,9 @@ class AppPages {
                   MultiBlocProvider(
                     providers: [
                       BlocProvider<RestaurantsCubit>(
-                        create: (context) => serviceLocator(),
+                        create: (context) =>
+                        serviceLocator()
+                          ..loadData(),
                       ),
                     ],
                     child: const RestaurantsListsView(),
@@ -1212,9 +1213,9 @@ class AppPages {
                 GoRoute(
                     path: Paths.RESTAURANTDETAILS,
                     name: Routes.RESTAURANTDETAILS,
-                    builder: (context, state) => BlocProvider(
-                          create: (context) =>
-                              serviceLocator<RestaurantDetailsCubit>(),
+                    builder: (context, state) =>
+                        BlocProvider.value(
+                          value: serviceLocator<RestaurantDetailsCubit>(),
                           child: RestaurantDetailsView(
                             id: state.extra as String,
                           ),
@@ -1624,6 +1625,14 @@ class AppPages {
                     ],
                     child: TripRatingScreen(model: state.extra as GetRequestsForLoadingModel),
                   )),
+          // Be a Star
+          GoRoute(
+            path: Paths.BE_STAR,
+            name: Routes.BE_STAR,
+            builder: (context, state) {
+              return const BeStarView();
+            },
+          ),
           // ___________________ trip join ______________
           GoRoute(
             path: Paths.TRIP_JOIN,

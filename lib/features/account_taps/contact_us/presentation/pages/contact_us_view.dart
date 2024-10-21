@@ -54,6 +54,7 @@ class ContactUsView extends StatelessWidget {
                   ),
                   const Sizer(),
                   FormTextField(
+                    type: TextInputType.phone,
                     textStyle: Styles.mediumText(
                         color: Theme.of(context).scaffoldBackgroundColor),
                     validator: (v) => null,

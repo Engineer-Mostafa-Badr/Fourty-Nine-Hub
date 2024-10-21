@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_states.dart';
@@ -41,10 +42,15 @@ class BalanceWalletView extends StatelessWidget {
               if (state.status == BalanceStates.initial) {
                 showSuccessMessage(context, LocaleKeys.requestWithdrawal.localize);
               }
-              // if (state.status == BalanceStates.successFive) {
-              //   showSuccessMessage(
-              //       context, 'Transfer five_years balance done to gift wallet');
-              // }
+              if (state.status == BalanceStates.errorRequest) {
+                showErrorMessage(
+                  context,
+                  getFailureMessage(
+                    state.failure!,
+                    context,
+                  ),
+                );
+              }
               // if (state.status == BalanceStates.successTen) {
               //   showSuccessMessage(
               //       context, 'Transfer ten_years balance done to gift wallet');
@@ -81,7 +87,7 @@ class BalanceWalletView extends StatelessWidget {
                           ],
                         ),
                       ),
-                      state.balance?.openBalance == true
+                      state.balance?.openBalance == true && state.balance!.balance >=1002
                           ? AppButton(
                               backColor: AppColors.SECONDARY_COLOR,
                               color: AppColors.AUTH_CONTAINER_COLOR,
@@ -98,7 +104,7 @@ class BalanceWalletView extends StatelessWidget {
                               onPressed: () {},
                               margin: 10,
                             ),
-                      if (state.balance?.openBalance == true && state.withdraw?.data == false)
+                      if (state.balance?.openBalance == true && state.withdraw?.data == false )
                         Label(text: LocaleKeys.checkRequest.localize),
                       if (state.withdraw?.data == true)
                         AppButton(
