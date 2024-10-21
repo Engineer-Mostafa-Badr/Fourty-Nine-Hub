@@ -3,12 +3,21 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/muted_stories_model.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/viewers_model.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/repositories/StoriesRpo.dart';
+import 'package:fourtyninehub/features/social_media/stories/domain/use_case/delete_story_use_case.dart';
+import 'package:fourtyninehub/features/social_media/stories/domain/use_case/get_followers_use_case.dart';
+import 'package:fourtyninehub/features/social_media/stories/domain/use_case/get_muted_stories_use_case.dart';
+import 'package:fourtyninehub/features/social_media/stories/domain/use_case/get_story_viewrs_use_case.dart';
+import 'package:fourtyninehub/features/social_media/stories/domain/use_case/make_view_use_case.dart';
+import 'package:fourtyninehub/features/social_media/stories/domain/use_case/mute_stories_use_case.dart';
+import 'package:fourtyninehub/features/social_media/stories/domain/use_case/update_privacy_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -20,93 +29,29 @@ import 'package:path/path.dart' as path;
 import '../../../../../core/utils/shared_pref.dart';
 import '../../data/models/followers_model.dart';
 
-class StoryState {
-  List<UserStories> users;
-  final bool isLoading;
-  final bool hasReachedMax;
-  final int currentPage;
-  final bool isFetchingMore;
-  final DateTime? currentStoryCreatedAt; // New field
-
-  final List<Follower> followers;
-
-  final ViewersResponse? viewersResponse;
-  final MutedStoriesResponse? mutedStoriesResponse;
-
-  final bool isLoadingFollower;
-  final String? errorMessage;
-
-  StoryState({
-    this.mutedStoriesResponse,
-    this.viewersResponse,
-    required this.followers,
-    this.isLoadingFollower = false,
-    this.errorMessage,
-    required this.users,
-    this.isLoading = false,
-    this.hasReachedMax = false,
-    this.currentPage = 1,
-    this.isFetchingMore = false,
-    this.currentStoryCreatedAt, // Initialize the field
-  });
-
-  StoryState copyWith({
-    MutedStoriesResponse? mutedStoriesResponse,
-    ViewersResponse? viewersResponse,
-    List<Follower>? followers,
-    bool? isLoadingFollower,
-    String? errorMessage,
-    List<UserStories>? stories,
-    bool? isLoading,
-    bool? hasReachedMax,
-    int? currentPage,
-    bool? isFetchingMore,
-    DateTime? currentStoryCreatedAt, // Include this in copyWith
-  }) {
-    return StoryState(
-      mutedStoriesResponse: mutedStoriesResponse ?? this.mutedStoriesResponse,
-      viewersResponse: viewersResponse ?? this.viewersResponse,
-      currentStoryCreatedAt:
-          currentStoryCreatedAt ?? this.currentStoryCreatedAt,
-      // New copyWith field
-      followers: followers ?? this.followers,
-      isLoadingFollower: isLoadingFollower ?? this.isLoadingFollower,
-      errorMessage: errorMessage,
-      users: stories ?? users,
-      isLoading: isLoading ?? this.isLoading,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
-      currentPage: currentPage ?? this.currentPage,
-      isFetchingMore: isFetchingMore ?? this.isFetchingMore,
-    );
-  }
-}
-
-class StoryInitial extends StoryState {
-  StoryInitial() : super(users: [], followers: []);
-}
-
-class StoryError extends StoryState {
-  final String error;
-
-  StoryError(this.error) : super(users: [], followers: []);
-}
+part  'stories_state.dart';
 
 class StoryCubit extends Cubit<StoryState> {
   final StoryRepository storyRepository;
   final ApiConsumer apiConsumer;
+  final MakeViewUseCase _makeViewUseCase;
+  final MuteStoriesUseCase _muteStoriesUseCase;
+  final GetMutedStoriesUseCase _getMutedStoriesUseCase;
+  final GetStoryViewersUseCase _getStoryViewersUseCase;
+  final GetFollowersUseCase _getFollowersUseCase;
+  final UpdateStoryPrivacyUseCase _updateStoryPrivacyUseCase;
+  final DeleteStoryUseCase _deleteStoryUseCase;
 
-  DateTime? _currentStoryCreatedAt; // Store the current story's createdAt
-
-  StoryCubit(this.storyRepository, this.apiConsumer) : super(StoryInitial());
+  StoryCubit(this.storyRepository,this.apiConsumer,this._deleteStoryUseCase, this._makeViewUseCase, this._muteStoriesUseCase, this._getMutedStoriesUseCase, this._getStoryViewersUseCase, this._getFollowersUseCase, this._updateStoryPrivacyUseCase) : super(StoryState());
 
   makeView({storyId, context}) async {
     getViewersInStory(context: context, storyId: storyId);
 
     // Map<String, dynamic> data = {};
 
-    final response = await apiConsumer
-        .post('https://49dev.com/api/v1/stories/view/$storyId');
-
+    final response = await _makeViewUseCase(
+      storyId,
+    );
     response.fold(
       (failure) {
         emit(state);
@@ -122,10 +67,10 @@ class StoryCubit extends Cubit<StoryState> {
   }
 
   muteUserStories({userId, context}) async {
-    Map<String, dynamic> data = {"muteUser": "$userId"};
 
-    final response = await apiConsumer
-        .post('https://49dev.com/api/v1/stories/muteUserStory', data: data);
+    final response = await _muteStoriesUseCase(
+      userId,
+    );
 
     response.fold(
       (failure) {
@@ -164,26 +109,19 @@ class StoryCubit extends Cubit<StoryState> {
   //     },
   //   );
   // }
-  Future<void> getMutedStories({
-    userId,
-    context,
-    limit = 1,
-    page = 1,
-    loadMore = false,
-  }) async {
+  Future<void> getMutedStories({userId, context, limit = 1, page = 1, loadMore = false,}) async {
     try {
-      // Make the API call
-      final response = await apiConsumer.get(
-          'https://49dev.com/api/v1/stories/mutedStories?limit=$limit&page=$page');
+      final response = await _getMutedStoriesUseCase(
+        PaginationParams(page: page,limit: limit),
+      );
 
       response.fold(
         (failure) {
-          // Handle failure (API error, network issue, etc.)
           print('Error fetching muted stories');
         },
         (data) {
           // Parse the response
-          final newData = MutedStoriesResponse.fromJson(data);
+          final newData = data;
 
           // If loadMore is true, append new stories to the existing list
           if (loadMore) {
@@ -219,8 +157,9 @@ class StoryCubit extends Cubit<StoryState> {
   }
 
   getViewersInStory({storyId, context}) async {
-    final response =
-        await apiConsumer.get('https://49dev.com/api/v1/stories/view/$storyId');
+    final response = await _getStoryViewersUseCase(
+      storyId,
+    );
     emit(state.copyWith(viewersResponse: null)); // Set loading state
 
     return response.fold(
@@ -235,46 +174,64 @@ class StoryCubit extends Cubit<StoryState> {
 
         emit(state.copyWith(
             viewersResponse:
-                ViewersResponse.fromMap(data))); // Set loading state
+                data)); // Set loading state
       },
     );
   }
 
   /// Fetch all followers based on subCategory ID
   Future<void> fetchFollowers() async {
-    try {
-      emit(state.copyWith(isLoading: true)); // Set loading state
+    emit(state.copyWith(isLoading: true)); // Set loading state
+    final response = await _getFollowersUseCase(const NoParams());
+    response.fold(
+          (failure) {
+            emit(state.copyWith(
+                isLoading: false, errorMessage: 'Failed to load followers'));
+      },
+          (data) {
+            emit(state.copyWith(followers: data.data.followers, isLoading: false));
 
-      final followers =
-          await storyRepository.getAllFollowers('62ef7cf658c90d4a7ed48120');
-
-      emit(state.copyWith(followers: followers, isLoading: false));
-    } catch (e) {
-      emit(state.copyWith(
-          isLoading: false, errorMessage: 'Failed to load followers'));
-    }
+      },
+    );
   }
 
   // New method to update story privacy
   Future<void> updateStoryPrivacy(String privacyType,
       {List<String>? users}) async {
-    try {
-      emit(state.copyWith(isLoading: true)); // Show loading state
+    emit(state.copyWith(isLoading: true)); // Show loading state
+    final response = await _updateStoryPrivacyUseCase(
+      UpdateStoryPrivacyParams(privacyType: privacyType, users: users)
+    );
 
-      await storyRepository.updatePrivacy(privacyType, users: users);
+    response.fold(
+          (failure) {
+            emit(StoryError('Failed to update privacy: $failure'));
+      },
+          (data) async {
+            await fetchStories();
+            emit(state.copyWith(isLoading: false)); // Reset loading state
+      },
+    );
 
-      // Optional: fetch stories again if you want to refresh the state after updating privacy
-      await fetchStories();
-
-      emit(state.copyWith(isLoading: false)); // Reset loading state
-    } catch (e) {
-      emit(StoryError('Failed to update privacy: $e'));
-    }
   }
 
   Future<void> deleteStory(String storyId) async {
     try {
       emit(state.copyWith(isLoading: true));
+      final response = await _deleteStoryUseCase(
+          storyId
+      );
+
+      response.fold(
+            (failure) {
+          emit(StoryError('Failed to delete story: $failure'));
+          emit(state.copyWith(isLoading: false)); // Reset loading state
+        },
+            (data) async {
+              await fetchStories();
+          emit(state.copyWith(isLoading: false)); // Reset loading state
+        },
+      );
       await storyRepository.deleteStory(storyId);
       // Remove the deleted story from the list
       // // final updatedStories = state.stories.where((story) => story.id != storyId).toList();
@@ -291,9 +248,7 @@ class StoryCubit extends Cubit<StoryState> {
       // }).toList();
       //
       // emit(state.copyWith(stories: updatedStories));
-      await fetchStories();
     } catch (e) {
-      emit(StoryError('Failed to delete story: $e'));
     } finally {
       emit(state.copyWith(isLoading: false));
     }
