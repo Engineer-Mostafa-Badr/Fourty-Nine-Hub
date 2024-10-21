@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -52,19 +53,26 @@ class WalletCardWidget extends StatelessWidget {
                         color: Theme.of(context).scaffoldBackgroundColor),
                   ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Label(
-                      text: balance,
+                      text: _formatBalance(balance),
                       style: Styles.headerText(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          fontSize: 60.sp),
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        fontSize: 100.sp,
+                      ),
                     ),
-                    Sizer(width: 10.w,),
-                    Label(
-                      text: currency,
-                      style: Styles.headerText(
-                          color: AppColors.SECONDARY_COLOR,
-                          fontSize: 40.sp),
+                    Sizer(width: 10.w),
+                    Transform.translate(
+                      offset: Offset(0, 8.h),
+                      child: Label(
+                        text: currency,
+                        style: Styles.headerText(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          fontSize: 40.sp,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -97,5 +105,18 @@ class WalletCardWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _formatBalance(String? balance) {
+    if (balance == null || balance.isEmpty) {
+      return "0"; // Fallback value if balance is null or empty
+    }
+
+    try {
+      return double.parse(balance).floor().toString();
+    } catch (e) {
+      // If parsing fails, return a fallback value or handle the error as needed
+      return "0";
+    }
   }
 }

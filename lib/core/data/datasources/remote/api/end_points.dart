@@ -666,7 +666,7 @@ class EndPoints {
   }
 
   static String deleteFollow(String userId) {
-    return '/follow/delete-follower/$userId?subCategory=${Constants.instagramSubCategory}';
+    return '/follow/unfollow/$userId?subCategory=${Constants.instagramSubCategory}';
   }
 
   static String greetMessage(String userId) {

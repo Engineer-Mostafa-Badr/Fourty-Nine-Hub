@@ -789,7 +789,10 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (content.isNotEmpty) ...[
-                  ReadMoreLabel(text: content),
+                  ReadMoreLabel(text: content,
+                    textAlign: isArabic(content) ? TextAlign.right : TextAlign.left,
+
+                  ),
                   SizedBox(
                     height: 10.h,
                   )
@@ -974,5 +977,10 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         ],
       ),
     );
+  }
+
+  bool isArabic(String text) {
+    final arabicRegex = RegExp(r'[\u0600-\u06FF]');
+    return arabicRegex.hasMatch(text);
   }
 }

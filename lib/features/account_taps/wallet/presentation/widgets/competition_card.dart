@@ -47,35 +47,40 @@ class CompetitionCard extends StatelessWidget {
                       text: context.locale == Locales.english
                           ? competitionsWalletEntity.nameEn ?? ''
                           : competitionsWalletEntity.nameAr ?? '',
-                      style: Styles.mediumText(fontWeight: FontWeight.bold),
+                      style: Styles.mediumText(fontSize: 55.sp,fontWeight: FontWeight.bold),
+                    ),
+
+                  ],
+                )),
+                Column(
+                  children: [
+                    SizedBox(
+                      height: kToolbarHeight,
+                      width: kToolbarHeight,
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: CircularProgressIndicator(
+                              value: countOfRequest / maxRequests,
+                              strokeWidth: 10,
+                              color: AppColors.SECONDARY_COLOR,
+                            ),
+                          ),
+                          Positioned.fill(
+                            child: Center(
+                              child: Label(
+                                text:
+                                    '${((countOfRequest / maxRequests) * 100).toStringAsFixed(1)}%',
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                     Label(
                       text: '${competitionsWalletEntity.countOfRequest}',
                     ),
                   ],
-                )),
-                SizedBox(
-                  height: kToolbarHeight,
-                  width: kToolbarHeight,
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: CircularProgressIndicator(
-                          value: countOfRequest / maxRequests,
-                          strokeWidth: 10,
-                          color: AppColors.SECONDARY_COLOR,
-                        ),
-                      ),
-                      Positioned.fill(
-                        child: Center(
-                          child: Label(
-                            text:
-                                '${((countOfRequest / maxRequests) * 100).toStringAsFixed(1)}%',
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
                 )
               ],
             ),

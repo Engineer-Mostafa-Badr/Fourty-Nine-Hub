@@ -365,11 +365,11 @@ class _CreatePostViewState extends State<CreatePostView> {
                       : AppColors.QUANTITY_COLOR,
                   fontSize: (state.isBiggerThen120 == true &&
                           state.isBiggerThan80 == false)
-                      ? 16
+                      ? 25.sp
                       : (state.isBiggerThen120 == false &&
                               state.isBiggerThan80 == true)
-                          ? 18
-                          : 22,
+                          ? 25.sp
+                          : 30.sp,
                   fontWeight: (state.backColor == '#FFFFFFFF' ||
                           state.isBiggerThen150 == true)
                       ? FontWeight.w400
@@ -379,7 +379,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                   context.read<CreatePostCubit>().postContentTextController,
               decoration: InputDecoration(
                 hintText: '${LocaleKeys.typeHere.localize} ... ',
-                hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
+                hintStyle: Styles.mediumText(color: AppColors.QUANTITY_COLOR),
                 floatingLabelAlignment: FloatingLabelAlignment.center,
                 fillColor: ((state.isBiggerThen150 == true &&
                         state.isBiggerThan80 == false &&

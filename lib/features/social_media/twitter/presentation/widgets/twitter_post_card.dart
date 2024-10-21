@@ -88,7 +88,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
           BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
       child: Container(
         padding: EdgeInsets.all(isShared == true ? 10 : 0),
-        decoration: const BoxDecoration(color: Colors.white),
+        decoration:  BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
