@@ -708,7 +708,7 @@ class ChatStories extends StatelessWidget {
                       value: serviceLocator<StoryCubit>(),
                       child: StoryViewScreen(
                         stories: state.users,
-                        initialUserIndex: 0,
+                        initialUserIndex: index,
                       ),
                     ),
                   ),

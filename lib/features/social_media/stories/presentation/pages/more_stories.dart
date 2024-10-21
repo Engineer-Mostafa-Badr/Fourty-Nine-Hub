@@ -327,21 +327,6 @@ class UserStoryViewState extends State<UserStoryView> {
         _buildStoryView(),
         _buildUserInfoBar(),
         _buildNavigationOverlay(),
-        // Positioned(
-        //     bottom: 100,
-        //     top: 100,
-        //     right: 50,
-        //     left: 50,
-        //     child: BlocConsumer<StoryCubit, StoryState>(
-        //       listener: (context, state) {
-        //         // TODO: implement listener
-        //       },
-        //       builder: (context, state) {
-        //         return Text(state.viewersResponse != null
-        //             ? state.viewersResponse!.data.length.toString()
-        //             : 'asasad');
-        //       },
-        //     )),
         if (widget.userStory.user!.id !=
             serviceLocator<UserCubit>().state.data!.id)
           const Positioned(
@@ -702,12 +687,6 @@ class _UserInfoBarState extends State<UserInfoBar> {
     );
   }
 }
-
-// String capitalizeAndSplit2Only(String text) {
-//   return text.split(' ').map((str) {
-//     return str[0].toUpperCase() + str.substring(1).toLowerCase();
-//   }).join(' ');
-// }
 
 String removeSubstringBeforeFirstTildeOnly(String input) {
   int tildeIndex = input.indexOf('~');
