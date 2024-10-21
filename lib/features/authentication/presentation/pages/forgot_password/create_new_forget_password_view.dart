@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -31,8 +32,9 @@ class CreateNewForgetPasswordView extends StatelessWidget {
         if (state is CreateNewForgotPasswordSuccess) {
           showSuccessMessage(
               context, LocaleKeys.passwordChangedSuccessfully.localize);
-          context.pushReplacement(
+          context.pushAndRemoveUntil(
             Routes.LOGIN,
+            (route) => false,
           );
         } else if (state is CreateNewForgotPasswordFailure) {
           showErrorMessage(context, getFailureMessage(state.failure, context));

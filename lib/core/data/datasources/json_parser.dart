@@ -67,7 +67,7 @@ class JsonParser implements ApiConsumer {
           message: 'File size is too large',
         );
       } else if (e.response?.statusCode == 401) {
-        return const UnauthorizedFailure();
+        return const UnauthorizedFailure('');
       } else if (e.response?.data is Map &&
           e.response?.data['message'] is String) {
         return ServerFailure(
@@ -104,5 +104,10 @@ class JsonParser implements ApiConsumer {
       Map<String, dynamic>? headers}) {
     // TODO: implement patch
     throw UnimplementedError();
+  }
+
+  @override
+  void removeTokenFromHeader() {
+    // TODO: implement removeTokenFromHeader
   }
 }

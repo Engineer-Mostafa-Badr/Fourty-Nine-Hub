@@ -164,8 +164,8 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<bool> signOut() {
-    return _localDataSource.deleteTokens();
+  Future<Either<Failure, void>> signOut() {
+    return _remoteDataSource.logout();
   }
 }
 //enum: ['google', 'facebook', 'local', 'apple']

@@ -235,6 +235,7 @@ abstract class  LocaleKeys {
   static const giftApp = 'giftApp';
   static const clearAll = 'clearAll';
   static const clearNotification = 'clearNotification';
+  static const showNotification = 'showNotification';
   static const clearNoti = 'clearNoti';
   static const ok = 'ok';
   static const cancel = 'cancel';

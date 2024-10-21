@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/snap/utils/filters.dart';
 import 'package:go_router/go_router.dart';
@@ -1226,8 +1227,13 @@ class _AdvancedSnapchatCameraScreenState
               IconButton(
                 color: Colors.red,
                 onPressed: () {
+                  if(context.isUserLoggedIn){
+
                   context.push(Routes.OTHERSACCOUNT,
                       extra: serviceLocator<UserCubit>().state.data!.id);
+                  }else{
+                    context.go(Routes.LOGIN);
+                  }
                 },
                 icon: const Icon(
                   Icons.person,
