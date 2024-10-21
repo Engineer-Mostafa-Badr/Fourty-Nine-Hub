@@ -261,6 +261,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 
 class TinderView extends StatelessWidget {
   const TinderView({Key? key}) : super(key: key);
@@ -331,15 +332,6 @@ class _TinderScreenState extends State<TinderScreen> {
           // Handle any state changes if necessary
         },
         builder: (context, state) {
-          if (state.userData.isEmpty &&
-              state.subCategoryData.isEmpty &&
-              state.mainCategoryResponse == null) {
-            // Display a loading indicator while fetching data
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
           if (!context.read<UserCubit>().isLoggedIn) {
             // Prompt user to log in if not authenticated
             return _buildPleaseLoginWidget(context);
@@ -363,9 +355,16 @@ class _TinderScreenState extends State<TinderScreen> {
                 ? const TinderCardStack()
                 : SizedBox(
                     height: 0.55.sh,
-                    child: Center(
-                      child: Text(
-                        'Empty List',
+                    child: Shimmer.fromColors(
+                      baseColor: Colors.grey[100]!,
+                      highlightColor: Colors.white24,
+                      child: Container(
+                        // height: MediaQuery.sizeOf(context).height * 0.08,
+                        decoration: BoxDecoration(
+                          color: AppColors.AUTH_CONTAINER_COLOR,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.grey),
+                        ),
                       ),
                     ),
                   ),
@@ -382,9 +381,16 @@ class _TinderScreenState extends State<TinderScreen> {
                 ? _buildSubCategoryList(context, state)
                 : SizedBox(
                     height: 0.3.sh,
-                    child: Center(
-                      child: Text(
-                        'Empty List',
+                    child: Shimmer.fromColors(
+                      baseColor: Colors.grey[100]!,
+                      highlightColor: Colors.white24,
+                      child: Container(
+                        // height: MediaQuery.sizeOf(context).height * 0.08,
+                        decoration: BoxDecoration(
+                          color: AppColors.AUTH_CONTAINER_COLOR,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.grey),
+                        ),
                       ),
                     ),
                   ),

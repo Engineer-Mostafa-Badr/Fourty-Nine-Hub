@@ -2293,7 +2293,7 @@ class _SpotlightViewState extends State<SpotlightView> {
     await context.read<ReelsCubit>().fetchReels();
     setState(() {
       _isFetchingMore = false;
-      _itemCount += 10; // Simulate more items being added
+      // _itemCount += 10; // Simulate more items being added
     });
   }
 

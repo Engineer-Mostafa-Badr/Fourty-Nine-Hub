@@ -296,9 +296,9 @@ class _LoginWidgetState extends State<LoginWidget> {
       children: [
         FormTextField(
           constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
-          fillColor: const Color(0xFFEEEEEE),
+          // fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.r),
-          style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
+          // style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
           controller: loginCubit.emailTextController,
           hint: LocaleKeys.emailOrPhone.localize,
           prefix: Icon(

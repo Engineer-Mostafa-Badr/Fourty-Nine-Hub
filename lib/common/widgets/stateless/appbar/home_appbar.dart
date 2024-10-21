@@ -157,15 +157,18 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                 onPressed: () {},
                 child: Label(text: LocaleKeys.register.localize, style: Styles.mediumText())),
           // if (language)
-            InkWell(
-              onTap: () {
-                context.read<UserCubit>().isLoggedIn
-                    ? context.push(Routes.CHAT)
-                    : context.push(Routes.LOGIN);
-              },
-              child: SvgPicture.asset(
-                Assets.message,
-                height: 30.h,
+            Padding(
+              padding:  EdgeInsets.symmetric(horizontal:15.w),
+              child: InkWell(
+                onTap: () {
+                  context.read<UserCubit>().isLoggedIn
+                      ? context.push(Routes.CHAT)
+                      : context.push(Routes.LOGIN);
+                },
+                child: SvgPicture.asset(
+                  Assets.message,
+                  height: 30.h,
+                ),
               ),
             ),
 
