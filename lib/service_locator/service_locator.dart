@@ -257,5 +257,6 @@ class DI {
     JoinTripCarpoolServiceLocator.execute(serviceLocator: serviceLocator);
     ReelsServiceLocator.execute(serviceLocator: serviceLocator);
     StoriesServiceLocator.execute(serviceLocator: serviceLocator);
+    StarServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

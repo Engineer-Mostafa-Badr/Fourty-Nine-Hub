@@ -150,7 +150,7 @@ class AuthServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
-      )..getWelcomeGift(),
+      ),
     );
     serviceLocator.registerFactory<VerifyOtpCubit>(
       () => VerifyOtpCubit(

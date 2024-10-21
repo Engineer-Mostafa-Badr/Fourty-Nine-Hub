@@ -38,7 +38,7 @@ class _FavouriteViewState extends State<FavouriteView> {
                       item: state.favourite![index],
                       onFav: (String) {},
                       onRemoveFav: () {
-                        context.read<FavouriteDrawerCubit>().deleteFavouriteAds(id: state.favourite![index].adId);
+                        context.read<FavouriteDrawerCubit>().deleteFavouriteAds(id: state.favourite![index].id);
                       },
                     ),
                 // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

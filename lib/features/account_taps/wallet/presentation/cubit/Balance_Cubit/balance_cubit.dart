@@ -86,7 +86,7 @@ class BalanceCubit extends Cubit<BalanceState> {
   requestWithdrawBalance() async {
     final response = await _withdrawBalanceUseCase(const NoParams());
     response.fold((l) {
-      emit(state.copyWith(failure: l, status: BalanceStates.error));
+      emit(state.copyWith(failure: l, status: BalanceStates.errorRequest));
     }, (data) {
       emit(state.copyWith(status: BalanceStates.initial));
     });

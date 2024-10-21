@@ -126,6 +126,14 @@ class EndPoints {
   static const subTab = '/navigators/subTap';
   static const navigateBar = '/navigators/navigatorsBar';
   static const favouriteCat = '/navigators/navigateCategories';
+  static const activate = '/navigators/customPage';
+
+  // Star
+  static const allStar = '/talent/';
+  static const myStar = '/talent/my-talent';
+  static const uploadStar = '/talent/upload';
+  static String deleteMyStar({required String id}) =>
+      '/talent/$id';
 
   //My Ads
   static const myAdsAuction = '/ads/allMyAds/auction';

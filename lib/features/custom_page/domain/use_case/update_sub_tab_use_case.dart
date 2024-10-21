@@ -18,19 +18,19 @@ class UpdateSubTabUseCase extends UseCase<bool, SubTabParams> {
 class SubTabParams {
   final bool auction;
   final bool carpool;
-  final bool chance;
+  final bool booking;
   final bool installment;
   final bool tripJoin;
 
   SubTabParams(
       {required this.auction,
       required this.carpool,
-      required this.chance,
+      required this.booking,
       required this.installment,
       required this.tripJoin});
 
   Map<String, dynamic> toJson() => {
-        "Chance": chance,
+        "Booking": booking,
         "Installment": installment,
         "Carpool": carpool,
         "Auction": auction,

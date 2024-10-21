@@ -30,10 +30,6 @@ class SubscriptionWidget extends StatelessWidget {
         (subscription.isActive == true||subscription.isActive==false) && subscription.isPremium == true
             ? DateTime.parse(subscription.expirePremium ?? '')
                 : DateTime.parse(subscription.expireSubscription ?? '');
-    // final DateTime createdAt = subscription.isActive == true ||
-    //         subscription.isActive == false && subscription.isPremium == false
-    //     ? DateTime.parse(subscription.expireSubscription ?? '')
-    //     : DateTime.parse(subscription.expirePremium ?? '');
     final DateTime egyptTime = createdAt.toUtc().add(const Duration(hours: 3));
     final String formattedDateTime = DateFormat('dd/MM/yyyy').format(egyptTime);
     return Column(

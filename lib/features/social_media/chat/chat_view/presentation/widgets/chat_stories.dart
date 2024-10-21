@@ -493,6 +493,9 @@ class ChatStories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if(context.read<UserCubit>().isLoggedIn){
+      return Container();
+    }
     return Container(
       height: 0.1.sh, // Responsive height
       decoration: BoxDecoration(

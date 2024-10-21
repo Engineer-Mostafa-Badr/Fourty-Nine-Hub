@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
@@ -900,45 +901,118 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               // LIVE Icon with Glow Effect
               const Sizer(),
               _buildLiveIcon(onTap: () {
-                showModalBottomSheet(
+                if(context.isUserLoggedIn) {
+                  showModalBottomSheet(
                     context: context,
+                    backgroundColor: Colors.transparent, // Make background transparent for rounded effect
+                    isScrollControlled: true, // Allows the sheet to take more space
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                    ),
                     builder: (context) {
-                      return Wrap(
-                        children: [
-                          ListTile(
-                              onTap: () async {
-                                var result = await context
-                                    .read<StreamCubit>()
-                                    .createLive(title: 'create live',roomId: generateRandom9DigitNumber.toString(), context: context);
-                                if(result==true){
-                                  context.push(Routes.LIVEView,
-                                      extra: ZegoArgs(
-                                          context
-                                              .read<StreamCubit>()
-                                              .state
-                                              .liveCreateResponseEntity!
-                                              .id,
+                      return DraggableScrollableSheet(
+                        expand: false,
+                        initialChildSize: 0.4, // Adjust as needed
+                        maxChildSize: 0.7,
+                        minChildSize: 0.2,
+                        builder: (_, controller) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white, // Set background color
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 10,
+                                  spreadRadius: 5,
+                                ),
+                              ],
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                            child: ListView(
+                              controller: controller,
+                              shrinkWrap: true,
+                              children: [
+                                // Header Section
+                                Center(
+                                  child: Container(
+                                    width: 50,
+                                    height: 5,
+                                    margin: const EdgeInsets.only(bottom: 16),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                                const Text(
+                                  'Live Stream Options',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 16),
+                                // Option 1: Create Live
+                                ListTile(
+                                  leading: const Icon(Icons.videocam, color: Colors.blue),
+                                  title: const Text('Create Live'),
+                                  onTap: () async {
+                                    var result = await context
+                                        .read<StreamCubit>()
+                                        .createLive(
+                                      title: 'create live',
+                                      roomId: generateRandom9DigitNumber.toString(),
+                                      context: context,
+                                    );
+                                    if (result == true) {
+                                      context.push(
+                                        Routes.LIVEView,
+                                        extra: ZegoArgs(
+                                          context.read<StreamCubit>().state.liveCreateResponseEntity!.id,
                                           true,
-                                          context
-                                              .read<UserCubit>()
-                                              .state
-                                              .data!
-                                              .fullName));
-                                }else{
-                                  print("objectFailed");
-                                }
-                              },
-                              title: const Label(text: 'Create Live')),
-                          ListTile(
-                            onTap: () {
-                              context.pop();
-                              context.push(Routes.LIVE);
-                            },
-                            title: Label(text:'Watch'),
-                          )
-                        ],
+                                          context.read<UserCubit>().state.data!.fullName,
+                                        ),
+                                      );
+                                    } else {
+                                      print("Failed to create live stream");
+                                    }
+                                  },
+                                ),
+                                const Divider(),
+                                // Option 2: Watch Live
+                                ListTile(
+                                  leading: const Icon(Icons.tv, color: Colors.green),
+                                  title: const Text('Watch'),
+                                  onTap: () {
+                                    context.pop();
+                                    context.push(Routes.LIVE);
+                                  },
+                                ),
+                                const SizedBox(height: 10),
+                                // Cancel Button
+                                ElevatedButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.redAccent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: const Text('Cancel', style: TextStyle(color: Colors.white)),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                       );
-                    });
+                    },
+                  );
+                }
+                else {
+                  context.go(Routes.LOGIN);
+                }
               }),
               const Spacer(), // Explore Tab
               _buildTab("Spotlight", 0, onTap: () {

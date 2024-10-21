@@ -76,6 +76,9 @@ class _CreatePostViewState extends State<CreatePostCompany> {
 
                   context.push(Routes.CREATECOMPANYAD);
                 }
+                // if(state.status == StateStatus.error){
+                //   showErrorMessage(context,LocaleKeys.imageNotSelected.localize);
+                // }
               },
               builder: (BuildContext context, Object? state) {
                 return Scaffold(
@@ -90,19 +93,14 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                             print(controller.selectedImages);
                             print('**************************************');
                             if (formKey.currentState!.validate()) {
-                              context
+                                context
                                   .read<CreateCompanyAdCubit>()
                                   .addPostCompanyAdvertise(
                                     mediaIds: widget.picture
-                                        ? controller.selectedImages!.isNotEmpty
-                                            ? controller.selectedImages
-                                            : showSuccessMessage(
+                                        ? controller.selectedImages ?? showErrorMessage(
                                                 context,
                                                 LocaleKeys
                                                     .imageNotSelected.localize,
-                                                color:
-                                                    AppColors.SECONDARY_COLOR,
-                                                icon: Icons.error,
                                               )
                                         : null,
                                     type: widget.type,
@@ -111,22 +109,6 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                         : null,
                                     totalPrice: widget.totalPrice,
                                   );
-                              // CompanyAdvertiseCubit.get(context)
-                              //     .addPostCompanyAdvertise(
-                              //   context: context,
-                              //   mediaIds: widget.picture ? controller
-                              //       .selectedImages!.isNotEmpty ?
-                              //   controller.selectedImages : showSuccessMessage(
-                              //     context, 'Image not selected',
-                              //     color: AppColors.SECONDARY_COLOR,
-                              //     icon: Icons.error,)
-                              //       :null,
-                              // type: widget.type,
-                              // post: widget.text
-                              // ? postContentTextController.text
-                              //     : null,
-                              //   totalPrice: widget.totalPrice,
-                              // );
                             }
                           }),
                     ],
@@ -146,6 +128,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                 GestureDetector(
                                   onTap: () {
                                     showModalBottomSheet(
+                                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                                       context: context,
                                       builder: (BuildContext context) {
                                         return Wrap(
@@ -154,14 +137,12 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                               leading: const Icon(
                                                   Icons.photo_library),
                                               title: Text(
-                                                  LocaleKeys.gallery.localize),
+                                                  LocaleKeys.gallery.localize,
+                                              ),
                                               onTap: () async {
                                                 Navigator.pop(context);
                                                 controller.uploadPhoto(
                                                     isGallery: true);
-                                                // await CompanyAdvertiseCubit.get(context)
-                                                //     .uploadPhoto();
-                                                // Reload user data if needed
                                               },
                                             ),
                                             ListTile(
@@ -219,8 +200,8 @@ class _CreatePostViewState extends State<CreatePostCompany> {
   Widget _buildCreatePost() {
     return Container(
         padding: const EdgeInsets.all(10),
-        // color: Colors.white,
         child: TextFormField(
+          cursorColor: AppColors.PRIMARY_COLOR,
           maxLines: 4,
           maxLength: 150,
           validator: (value) {

@@ -105,4 +105,9 @@ class JsonParser implements ApiConsumer {
     // TODO: implement patch
     throw UnimplementedError();
   }
+
+  @override
+  void removeTokenFromHeader() {
+    // TODO: implement removeTokenFromHeader
+  }
 }

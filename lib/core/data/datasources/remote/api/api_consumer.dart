@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 
 // import 'dart:convert';
 // import 'package:flutter/services.dart' show rootBundle;
@@ -52,8 +53,9 @@ abstract class ApiConsumer {
   });
 
   void attachToken(UserTokensEntity? token);
-
   bool get isTokenAttached;
+
+  void removeTokenFromHeader();
 }
 
 class BaseApiConsumer extends ApiConsumer {
@@ -340,5 +342,11 @@ class BaseApiConsumer extends ApiConsumer {
 
   @override
   bool get isTokenAttached => _token != null;
+
+  @override
+  void removeTokenFromHeader() {
+    _dio.options.headers['Authorization'] = null;
+    CliLogger.info('Barear Token is  ${_dio.options.headers['Authorization']}');
+  }
 }
 //dependency inversion
