@@ -235,8 +235,8 @@ class Stories extends StatelessWidget {
         child: Container(
           height: kToolbarHeight * 2,
           width: kToolbarHeight * 1.5,
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration:  BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
           ),
           child: Stack(
             children: [
@@ -267,10 +267,11 @@ class Stories extends StatelessWidget {
                       Label(
                         text: LocaleKeys.create_story.tr(),
                         // Localized text
+                        color: Theme.of(context).primaryColor,
                         maxLines: 1,
 
                         style: Styles.mediumText(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+                            color:Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
                       )
                     ],
                   ))
@@ -338,7 +339,6 @@ class Stories extends StatelessWidget {
                 child: Text(
                   'Muted',
                   style: Styles.headerText(
-                      color: Colors.black.withOpacity(0.68),
                       fontWeight: FontWeight.bold),
                 ),
               )

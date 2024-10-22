@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
@@ -65,8 +69,8 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
     final user = context.read<UserCubit>().state.data;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
+        toolbarHeight: 200.h,
         iconTheme: const IconThemeData(color: Colors.grey),
         title: Label(text: 'Post', style: Styles.mediumText()),
         leading: IconButton(
@@ -129,11 +133,10 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                             builderDelegate:
                                 PagedChildBuilderDelegate<CommentEntity>(
                               noItemsFoundIndicatorBuilder: (context) {
-                                return const Center(
+                                return  Center(
                                   child: Text(
-                                    "No Comments",
-                                    style: TextStyle(
-                                      color: Colors.black,
+                                    LocaleKeys.noComments.localize,
+                                    style: const TextStyle(
                                       fontSize: 18,
                                     ),
                                   ),
@@ -196,11 +199,10 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                   ),
                   Container(
                     height: kToolbarHeight,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                    ),
+                    decoration: const BoxDecoration(),
                     child: Row(children: [
                       ProfileImage(
+                        size: 40.sp,
                         accountId: 0,
                         userId: state.postDetails?.user.id,
                         imageURL: user?.profilePicture,
@@ -216,7 +218,6 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                         },
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
-                          fillColor: Colors.white,
                           contentPadding: const EdgeInsets.all(5),
                           hintText: 'Type your comment ....',
                           hintStyle: Styles.mediumText(),

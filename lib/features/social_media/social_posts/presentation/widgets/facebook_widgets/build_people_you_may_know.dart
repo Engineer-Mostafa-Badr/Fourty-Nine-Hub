@@ -59,13 +59,19 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Label(
-                        text: LocaleKeys.peopleYouMayKnow.localize,
-                        style: Styles.headerText(),
+                      Row(
+                        children: [
+                          Icon(Icons.group_rounded,size: 40.sp,),
+                          const Sizer(),
+                          Label(
+                            text: LocaleKeys.peopleYouMayKnow.localize,
+                            style: Styles.mediumText(fontSize: 60.sp),
+                          ),
+                        ],
                       ),
                       Container(
                         alignment: AlignmentDirectional.topStart,
-                        height: 350.h,
+                        height: 380.h,
                         child: PagedListView<int, SuggestUserEntity>(
                           scrollDirection: Axis.horizontal,
                           padding: EdgeInsets.symmetric(
@@ -107,7 +113,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                 .id);
                                       },
                                       child: Container(
-                                        width: 400.w,
+                                        width: 350.w,
                                         padding:
                                             const EdgeInsets.only(bottom: 10),
                                         margin:
@@ -149,7 +155,13 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                     text:
                                                         "${item.firstName} ${item.lastName}",
                                                     maxLines: 1,
-                                                    style: Styles.mediumText(),
+                                                    style: Styles.mediumText(color: Theme.of(context).primaryColor),
+                                                  ),
+                                                  Label(
+                                                    text:
+                                                    "${item.mutualFriendsCount} ${LocaleKeys.mutualFriend.localize}",
+                                                    maxLines: 1,
+                                                    style: Styles.smallText(color: AppColors.GREY_NORMAL_COLOR),
                                                   ),
                                                   Sizer(
                                                     height: 10.h,
@@ -375,16 +387,14 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                     borderRadius:
                                                                         BorderRadius
                                                                             .circular(4),
-                                                                    color: Colors
-                                                                        .grey,
+                                                                    color: AppColors.SECONDARY_COLOR,
                                                                   ),
                                                                   child: Label(
                                                                     text: LocaleKeys
                                                                         .remove
                                                                         .localize,
                                                                     style: Styles.mediumText(
-                                                                        color: Colors
-                                                                            .black,
+                                                                        color: AppColors.AUTH_CONTAINER_COLOR,
                                                                         fontSize:
                                                                             22,
                                                                         fontWeight:

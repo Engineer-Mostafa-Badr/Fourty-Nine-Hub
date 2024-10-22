@@ -971,7 +971,8 @@ class CodegenLoader extends AssetLoader{
   "comfort": "مريح",
   "womenOnly": "نسوان",
   "minutesAgo": "من دقيقه",
-  "shareTransactionDetails": "مشاركة تفاصيل المعاملة"
+  "shareTransactionDetails": "مشاركة تفاصيل المعاملة",
+  "mutualFriend": "صديق مشترك"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1380,7 +1381,7 @@ static const Map<String,dynamic> en = {
   "checkRequest": "Please wait to check request",
   "reportSentSuccess": "Report sent successfully",
   "whatDoYouThink": "What do you think about?",
-  "peopleYouMayKnow": "People You May Know",
+  "peopleYouMayKnow": "People you may know",
   "noFriendsSuggested": "No Friends Suggested",
   "days": "d",
   "comments": "Comments",
@@ -1982,7 +1983,9 @@ static const Map<String,dynamic> en = {
   "chargeNow": "Charge Now",
   "premiumSubscription": "Premium Subscription",
   "regularSubscription": "Regular Subscription",
-  "notSubscribed": "Not Subscribed"
+  "notSubscribed": "Not Subscribed",
+  "mutualFriend": "mutual friend",
+  "youWillHidePost": "You Will Hide Post"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

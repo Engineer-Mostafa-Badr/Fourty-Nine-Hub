@@ -946,5 +946,6 @@ abstract class  LocaleKeys {
   static const womenOnly = 'womenOnly';
   static const minutesAgo = 'minutesAgo';
   static const shareTransactionDetails = 'shareTransactionDetails';
+  static const mutualFriend = 'mutualFriend';
 
 }
