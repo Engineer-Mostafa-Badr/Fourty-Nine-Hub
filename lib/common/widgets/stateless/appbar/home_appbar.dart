@@ -83,7 +83,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               size: 20,
             ),
           SizedBox(
-            width: 5.w,
+            width: 20.w,
           ),
           if (language)
             if (showLanguage)
@@ -111,7 +111,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     });
                   })),
           SizedBox(
-            width: 5.w,
+            width: 20.w,
           ),
           Expanded(
             child: Container(
@@ -171,7 +171,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
-      leadingWidth: 80.w,
+      leadingWidth: 90.w,
       elevation: 0,
       titleSpacing: 0,
       //systemOverlayStyle: SystemUiOverlayStyle.light,
