@@ -784,6 +784,22 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
             ),
             const Divider(),
             _buildCategoryChats(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.lock, size: 18,),
+                Label(
+                    text: "Your personal messages are ",
+                    style: Styles.mediumText(
+                        fontWeight: FontWeight.bold, fontSize: 24)),
+                Label(
+                  text: "end-to-end encrypted",
+                  style: Styles.mediumText(
+                      fontWeight: FontWeight.bold, fontSize: 24, color: AppColors.PRIMARY_COLOR_DARK),
+                ),
+
+              ],
+            ),
           ],
         );
       case ChatCategories.service:
@@ -843,6 +859,22 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
             ),
             const Divider(),
             _buildCategoryChats(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.lock, size: 18,),
+                Label(
+                    text: "Your personal messages are ",
+                    style: Styles.mediumText(
+                        fontWeight: FontWeight.bold, fontSize: 24)),
+                Label(
+                    text: "end-to-end encrypted",
+                    style: Styles.mediumText(
+                        fontWeight: FontWeight.bold, fontSize: 24, color: AppColors.PRIMARY_COLOR_DARK),
+                ),
+
+              ],
+            ),
           ],
         );
       case ChatCategories.groups:
@@ -877,61 +909,61 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   child: Label(
                       text: LocaleKeys.noChatsUntilNow.tr(),
                       style: Styles.mediumText(
-                          fontWeight: FontWeight.bold, fontSize: 18)),
+                          fontWeight: FontWeight.bold, fontSize: 26)),
                 )
-              : ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) => (state
-                          .chats![index].archived)
-                      ? const SizedBox()
-                      : Slidable(
-                          key: ValueKey(index),
-                          closeOnScroll: false,
-                          endActionPane: ActionPane(
-                            motion: const ScrollMotion(),
-                            dismissible: DismissiblePane(onDismissed: () {}),
-                            children: [
-                              SlidableAction(
-                                onPressed: (value) {
-                                  // bottomSheet(
-                                  //     backColor:
-                                  //         Theme.of(context).scaffoldBackgroundColor,
-                                  //     context: context,
-                                  //     isScrollControlled: true,
-                                  //     widget: MoreIconBottomSheet(
-                                  //       ChatCategoryEntity: state.chats![index],
-                                  //       chatsCubit: chatCubit,
-                                  //     ));
-                                },
-                                backgroundColor:
-                                    const Color.fromARGB(255, 191, 191, 191),
-                                foregroundColor: Colors.white,
-                                icon: Icons.more_horiz,
-                                label: LocaleKeys.more.tr(),
-                                padding: EdgeInsets.zero,
-                              ),
-                              SlidableAction(
-                                onPressed: (value) async {},
-                                backgroundColor: AppColors.PRIMARY_COLOR,
-                                foregroundColor: Colors.white,
-                                icon: Icons.delete_outlined,
-                                label: state.chats![index].archived
-                                    ? LocaleKeys.unarchive.tr()
-                                    : LocaleKeys.archive.tr(),
-                                padding: EdgeInsets.zero,
-                              ),
-                            ],
-                          ),
-                          child: ChatCard(
-                            isSecret: isSecret,
-                            chat: state.chats?[index],
-                            chatsCubit: chatCubit,
-                          ),
-                        ),
-                  separatorBuilder: (context, index) => const SizedBox(),
-                  itemCount: state.chats?.length ?? 0,
-                );
+              : Scrollbar(
+        // isAlwaysShown: true,  // Ensures the scrollbar is always visible
+        interactive: true,
+        thumbVisibility: true,
+        thickness: 3,
+
+        child: ListView.separated(
+          shrinkWrap: true,
+          physics: const AlwaysScrollableScrollPhysics(), // Enable scrolling
+          itemBuilder: (context, index) => (state.chats![index].archived)
+              ? const SizedBox()
+              : Slidable(
+            key: ValueKey(index),
+            closeOnScroll: false,
+            endActionPane: ActionPane(
+              motion: const ScrollMotion(),
+              dismissible: DismissiblePane(onDismissed: () {}),
+              children: [
+                SlidableAction(
+                  onPressed: (value) {
+                    // bottomSheet logic
+                  },
+                  backgroundColor: const Color.fromARGB(255, 191, 191, 191),
+                  foregroundColor: Colors.white,
+                  icon: Icons.more_horiz,
+                  label: LocaleKeys.more.tr(),
+                  padding: EdgeInsets.zero,
+                ),
+                SlidableAction(
+                  onPressed: (value) async {
+                    // Archive or unarchive logic
+                  },
+                  backgroundColor: AppColors.PRIMARY_COLOR,
+                  foregroundColor: Colors.white,
+                  icon: Icons.delete_outlined,
+                  label: state.chats![index].archived
+                      ? LocaleKeys.unarchive.tr()
+                      : LocaleKeys.archive.tr(),
+                  padding: EdgeInsets.zero,
+                ),
+              ],
+            ),
+            child: ChatCard(
+              isSecret: isSecret,
+              chat: state.chats?[index],
+              chatsCubit: chatCubit,
+            ),
+          ),
+          separatorBuilder: (context, index) => const SizedBox(),
+          itemCount: state.chats?.length ?? 0,
+        ),
+      );
+
     });
   }
 
