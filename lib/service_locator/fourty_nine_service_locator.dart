@@ -18,6 +18,10 @@ import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/ge
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_relevant_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/make_ad_premium_request_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/make_ad_request_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/data/datasources/ad_requests_remote_data_source.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/data/repositories/ad_requests_repo_impl.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/repositories/ad_requests_repo.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/datasources/ads_remote_data_source.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/repositories/ads_repo.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/favourite_ad_usecase.dart';
@@ -87,6 +91,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<AdRequestsRemoteDataSource>(
+      () => AdRequestsRemoteDataSourceImpl(
+        serviceLocator(),
+      ),
+    );
     serviceLocator.registerLazySingleton<AdDetailsRemoteDataSource>(
       () => AdDetailsRemoteDataSourceImpl(
         serviceLocator(),
@@ -121,11 +130,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
-    // serviceLocator.registerLazySingleton<CreateCompanyAdRepo>(
-    //   () => CreateCompanyAdRepoImpl(
-    //     serviceLocator(),
-    //   ),
-    // );
+    serviceLocator.registerLazySingleton<AdRequestsRepo>(
+      () => AdRequestsRepoImpl(
+        serviceLocator(),
+      ),
+    );
     serviceLocator.registerLazySingleton<ContactUsRepo>(
       () => ContactUsRepoImpl(
         serviceLocator(),
@@ -469,6 +478,12 @@ class FourtyNineServiceLocator {
     // ContactUsCubit
     serviceLocator.registerFactory<ContactUsCubit>(
       () => ContactUsCubit(
+        serviceLocator(),
+      ),
+    );
+    // AdRequestsCubit
+    serviceLocator.registerFactory<AdRequestsCubit>(
+      () => AdRequestsCubit(
         serviceLocator(),
       ),
     );

@@ -7,7 +7,6 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
@@ -570,7 +569,9 @@ class DiscoverSectionState extends State<DiscoverSection> {
                     color: Colors.white,
                     size: 16,
                   ),
-                  const SizedBox(width: 4),
+                  const SizedBox(
+                      width: 4
+                  ),
                   Text(
                     reel.viewCount.toString(),
                     textScaler: TextScaler.noScaling,

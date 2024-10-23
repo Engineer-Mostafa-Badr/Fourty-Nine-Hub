@@ -693,8 +693,10 @@ class EndPoints {
   }
 
   static String getNumOfResturants = '/restaurants/num-of-restaurants';
+  static String foodExpiredOrders(PaginationParams params) => '/food/expired-orders?page=${params.page}&limit=${params.limit}';
   static String isResturant = '/restaurants/check-user-have-restaurant';
   static String createRestaurant = '/restaurants/create-restaurant';
+  static String changeConnectivity = '/restaurants/modify-active';
 
   static String getMealsWithCountRestaurant({PostCommentsParams? params}) =>
       '/restaurants/subcategories-count-restaurant${params?.page != null || params?.userId != null ? "?page=${params?.page}&userId=${params?.userId}" : ""}';
@@ -737,7 +739,7 @@ class EndPoints {
   }
 
   static String subCategoryAds(GetAdsParams params) {
-    return '/ads/subCategoryAds/${params.subCategoryId}?filter=${params.filter}&page=${params.page}&limit=${params.limit}';
+    return '/ads/subCategoryAds/${params.subCategoryId}?filter=${params.filter}&page=${params.page}&limit=${params.limit}${params.userId!=null?"&userId=${params.userId}":""}';
   }
 
   static String createAuction(String id) {

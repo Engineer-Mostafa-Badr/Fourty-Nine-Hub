@@ -48,28 +48,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   void initState() {
     super.initState();
     context.read<RestaurantsCubit>().loadData();
-    fetchData();
   }
 
-  Future<void> fetchData() async {
-    final url = Uri.parse(
-        'https://49dev.com/api/v1/restaurants/mainCategory/62c8b57e9332225799fe3308');
-
-    try {
-      final response = await http.get(url);
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        setState(() {
-          restaurantCategory = NoAuthRestaurantCategory.fromJson(data);
-        });
-      } else {
-        log('Error: ${response.statusCode}');
-      }
-    } catch (e) {
-      log('Failed to fetch data: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

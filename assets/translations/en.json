@@ -1011,6 +1011,6 @@
   "chargeNow": "Charge Now",
   "premiumSubscription": "Premium Subscription",
   "regularSubscription": "Regular Subscription",
-  "notSubscribed": "Not Subscribed"
-
+  "notSubscribed": "Not Subscribed",
+  "adRequests": "Ad Requests"
 }

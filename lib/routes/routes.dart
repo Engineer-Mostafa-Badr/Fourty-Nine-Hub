@@ -13,6 +13,7 @@ abstract class Routes {
   static const FILTERADS = '/Subcategories/ADS/FilterAds';
   static const GOVERNORATEFILTERADS = '/Subcategories/ADS/GovernorateFilterAds';
   static const ADdetails = '/Subcategories/ADS/AD-Details';
+  static const ADRequests = '/Subcategories/ADS/AD-Details/AD-Requests';
   static const CREATEAD = '/Subcategories/ADS/CreateAd';
   static const CREATECOMPANYAD = '/Subcategories/ADS/CreateCompanyAd';
 
@@ -175,6 +176,7 @@ abstract class Paths {
   static const GOVERNORATEFILTERADS = 'GovernorateFilterAds';
   static const ADS = 'ADS';
   static const ADdetails = 'AD-Details';
+  static const ADRequests = 'AD-Requests';
   static const ARCHIVEDCHATS = 'ArchivedChatsView';
   static const CREATEAD = 'CreateAd';
   static const CREATECOMPANYAD = 'CreateCompanyAd';
