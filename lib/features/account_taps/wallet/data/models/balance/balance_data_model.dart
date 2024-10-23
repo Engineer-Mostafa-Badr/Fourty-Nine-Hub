@@ -16,7 +16,7 @@ class BalanceDataModel extends BalanceDataEntity {
 
   factory BalanceDataModel.fromJson(Map<String, dynamic> json) {
     return BalanceDataModel(
-      balance: json['balance'] ?? 0,
+      balance: json['balance'],
       tenYears: json['ten_years'] ?? 0,
       fiveYears: json['five_years'] ?? 0,
       createdAt: json['createdAt'] ?? '',

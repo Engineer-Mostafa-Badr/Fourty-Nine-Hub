@@ -1,16 +1,17 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/change_connectivity_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_all_restaurant_use_case.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_expired_orders_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_meal_categories_with_count_restaurants_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_nearby_restaurants_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_num_of_resturant_use_case.dart';
@@ -20,9 +21,9 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/banner.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_banner_by_id_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
+import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_subcategory.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:http/http.dart' as http;
 
 import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../core/enums/main_services_enum.dart';
@@ -43,7 +44,10 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   final GetNumOfResturantUseCase _getNumOfResturantUseCase;
   final GetSubCategoryRestaurantsUseCases _getSubCategoryRestaurantsUseCases;
   final ToggleFavoriteSubcategoryUseCase _toggleFavoriteSubcategoryUseCase;
+  final ToggleFavoriteCategoryUseCase _toggleFavoriteCategoryUseCase;
   final IsResturantUsecase _isResturantUseCase;
+  final ChangeConnectivityUseCase _changeConnectivityUseCase;
+  final GetExpiredOrdersUseCase _getExpiredOrdersUseCase;
   final GetMealCategoriesWithCountRestaurantsUseCase
       _getMealCategoriesWithCountRestaurantsUseCase;
   final ApiConsumer apiConsumer;
@@ -56,9 +60,10 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     this._getNumOfResturantUseCase,
     this._getSubCategoryRestaurantsUseCases,
     this._toggleFavoriteSubcategoryUseCase,
+    this._toggleFavoriteCategoryUseCase,
     this._isResturantUseCase,
     this._getMealCategoriesWithCountRestaurantsUseCase,
-    this.apiConsumer,
+    this.apiConsumer, this._changeConnectivityUseCase, this._getExpiredOrdersUseCase,
   ) : super(const RestaurantsListState());
 
   final service = MainServicesEnum.food;
@@ -75,19 +80,19 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   Future<void> loadData() async {
     await _getUser();
     if (serviceLocator<UserCubit>().isLoggedIn) {
-      await isRestaurant();
-      await _getMainCategoryDetails();
-      await _getMealCategoriesWithCountRestaurants();
-      await _getNumOfRestaurants();
-      await getAllRestaurant();
+      // await _getMainCategoryDetails();
+      // await isRestaurant();
+      // await _getMealCategoriesWithCountRestaurants();
+      // // await _getNumOfRestaurants();
+      // await getAllRestaurant();
 
-      // Future.wait([
-      //   _getMainCategoryDetails(),
-      //   isRestaurant(),
-      //   _getMealCategoriesWithCountRestaurants(),
-      //   getAllRestaurant(),
-      //   _getNumOfRestaurants(),
-      // ]);
+      Future.wait([
+        _getMainCategoryDetails(),
+        isRestaurant(),
+        _getMealCategoriesWithCountRestaurants(),
+        getAllRestaurant(),
+        // _getNumOfRestaurants(),
+      ]);
     }
   }
 
@@ -110,29 +115,38 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   }
 
   Future<void> toggleFavoriteCategory(String categoryId) async {
-    await _ensureTokenInitialized();
-
-    final String url = 'https://49dev.com/api/v1/favorite-category/$categoryId';
-    final headers = {
-      'Authorization': 'Bearer $token',
-      'Content-Type': 'application/json'
-    };
-
-    try {
-      final response = await http.post(Uri.parse(url), headers: headers);
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        print("Category API Success: $data");
-        await _getMainCategoryDetails();
-      } else {
-        print("Failed to toggle favorite: ${response.statusCode}");
-        emit(state.copyWith(status: RestaurantsListStates.error));
-      }
-    } catch (e) {
-      print("API Error: $e");
-      emit(state.copyWith(status: RestaurantsListStates.error));
-    }
+    final response = await _toggleFavoriteCategoryUseCase(categoryId);
+    response.fold(
+        (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
+        (data) async {
+          await _getMainCategoryDetails();
+        });
   }
+
+  // Future<void> toggleFavoriteCategory(String categoryId) async {
+  //   await _ensureTokenInitialized();
+  //
+  //   final String url = 'https://49dev.com/api/v1/favorite-category/$categoryId';
+  //   final headers = {
+  //     'Authorization': 'Bearer $token',
+  //     'Content-Type': 'application/json'
+  //   };
+  //
+  //   try {
+  //     final response = await http.post(Uri.parse(url), headers: headers);
+  //     if (response.statusCode == 200) {
+  //       final data = json.decode(response.body);
+  //       print("Category API Success: $data");
+  //       await _getMainCategoryDetails();
+  //     } else {
+  //       print("Failed to toggle favorite: ${response.statusCode}");
+  //       emit(state.copyWith(status: RestaurantsListStates.error));
+  //     }
+  //   } catch (e) {
+  //     print("API Error: $e");
+  //     emit(state.copyWith(status: RestaurantsListStates.error));
+  //   }
+  // }
 
   Future<void> isRestaurant() async {
     if (user != null) {
@@ -152,14 +166,21 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   }
 
   Future<void> changeConnectivityStatus(isActive) async {
-    const url = 'https://49dev.com/api/v1/restaurants/modify-active';
+    final response = await _changeConnectivityUseCase(params:const NoParams());
+    response.fold(
+            (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
+            (data) async {
+              await isRestaurant();
+            });
 
-    await apiConsumer.patch(url, data: {
-      'isActive': isActive ,
-    });
-
-    await isRestaurant();
-    emit(state);
+    // const url = 'https://49dev.com/api/v1/restaurants/modify-active';
+    //
+    // await apiConsumer.patch(url, data: {
+    //   'isActive': isActive,
+    // });
+    //
+    // await isRestaurant();
+    // emit(state);
   }
 
   Future<void> getBannerById() async {
@@ -257,36 +278,17 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
 
   Future<void> getExpiredOrders({int page = 1}) async {
     emit(state.copyWith(status: RestaurantsListStates.loading));
-
-    const String url = 'https://49dev.com/api/v1/food/expired-orders';
-
-    final Map<String, dynamic> queryParameters = {
-      'page': '$page',
-    };
-
-    final response = await apiConsumer.get(
-      url,
-      queryParameters: queryParameters,
-    );
-
+    final response = await _getExpiredOrdersUseCase(params:PaginationParams(page: page, limit: 50));
     response.fold(
-      (failure) {
-        emit(state.copyWith(
-          status: RestaurantsListStates.error,
-          failure: failure,
-        ));
-      },
-      (data) {
-        // final List<dynamic> ordersData = data['data'] ?? [];
-        final orders = ExpiredRequestsResponse.fromJson(data);
-
-        log(orders.data!.first.createdAt.toString());
-        emit(state.copyWith(
-          status: RestaurantsListStates.success,
-          expiredRequestsResponse: orders,
-        ));
-      },
-    );
+            (failure) =>
+                emit(state.copyWith(
+                  status: RestaurantsListStates.error,
+                  failure: failure,
+                )),
+            (data) =>  emit(state.copyWith(
+              status: RestaurantsListStates.success,
+              expiredRequestsResponse: data,
+            )),);
   }
 }
 

@@ -40,9 +40,9 @@ class AvailableRoutesPointInfo extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
                 status == "Free"
-                    ? LocaleKeys.free.localize
+                    ? 'LocaleKeys.free.localize'
                     : status == "Booked"
-                        ? LocaleKeys.booked.localize
+                        ? 'LocaleKeys.booked.localize'
                         : "",
                 style: Styles.headerText(
                     fontSize: 24,
@@ -114,7 +114,7 @@ class AvailableRoutesPointInfo extends StatelessWidget {
     if (dotNumber == 4) {
       return Center(
         child: Text(
-          inProgress ? LocaleKeys.inProgress.localize : 'Finished',
+          inProgress ? 'LocaleKeys.inProgress.localize' : 'Finished',
           style: Styles.headerText(fontSize: 24),
           textAlign: TextAlign.center,
         ),

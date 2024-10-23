@@ -43,22 +43,23 @@ class HistoryRequestsView extends StatelessWidget {
                         children: [
                           TabBar(
                             isScrollable: true,
+                            tabAlignment: TabAlignment.start,
                             dividerColor: context.isDarkMode ? Colors.grey : null,
                             tabs: [
                               Tab(
-                                text: 'Ride',
+                                text: LocaleKeys.ride.localize,
                                 icon: SvgPicture.asset(height: 20.h, Assets.ride),
                               ),
                               Tab(
-                                text: 'Shipping',
+                                text: LocaleKeys.shipping.localize,
                                 icon: SvgPicture.asset(height: 20.h, Assets.shipping),
                               ),
                               Tab(
-                                text: 'Health',
+                                text: LocaleKeys.health.localize,
                                 icon: SvgPicture.asset(height: 20.h, Assets.health),
                               ),
                               Tab(
-                                text: 'Food',
+                                text: LocaleKeys.food.localize,
                                 icon: SvgPicture.asset(height: 20.h, Assets.food),
                               ),
                               Tab(
@@ -66,7 +67,7 @@ class HistoryRequestsView extends StatelessWidget {
                                 icon: Image.asset(height: 20.h, Assets.tripjoin),
                               ),
                               Tab(
-                                text: 'Requests',
+                                text: LocaleKeys.requests.localize,
                                 icon: Image.asset(height: 20.h, Assets.hand),
                               ),
                             ],
@@ -90,9 +91,9 @@ class HistoryRequestsView extends StatelessWidget {
   }
 
   Widget _buildEmptyList() {
-    return const Center(
+    return Center(
       child: Label(
-        text: "There is no items",
+        text: LocaleKeys.thereNoItems.localize,
       ),
     );
   }

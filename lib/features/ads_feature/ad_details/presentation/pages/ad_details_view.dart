@@ -21,6 +21,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/requ
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import 'package:go_router/go_router.dart';
@@ -145,7 +146,9 @@ class _AdDetailsViewState extends State<AdDetailsView> {
       child: AvaialbleTripsButton(
         title: 'Show add requests',
         color: AppColors.SECONDARY_COLOR,
-        onTap: () async {},
+        onTap: () async {
+          context.push(Routes.ADRequests,extra: widget.id);
+        },
       ),
     );
   }

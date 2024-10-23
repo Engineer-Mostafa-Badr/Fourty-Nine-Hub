@@ -168,7 +168,7 @@ class _FilterAdDynamicInputWidgetState
           children: [
             Expanded(
               child: TextFormField(
-                maxLines: null,
+                maxLines: 1,
                 onChanged: (v) => widget.onTextChanged(v, true,widget.property.type),
                 keyboardType: TextInputType.number,
                 style: Styles.headerText(fontSize: 26),
@@ -192,7 +192,7 @@ class _FilterAdDynamicInputWidgetState
             const Sizer(),
             Expanded(
                 child: TextFormField(
-              maxLines: null,
+              maxLines: 1,
               onChanged: (v) => widget.onTextChanged(v, false,widget.property.type),
               keyboardType: TextInputType.number,
               style: Styles.headerText(fontSize: 26),

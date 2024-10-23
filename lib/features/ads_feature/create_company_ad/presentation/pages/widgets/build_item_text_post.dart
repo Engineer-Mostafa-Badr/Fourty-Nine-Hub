@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../../core/enums/base_status_enum.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
@@ -28,7 +29,7 @@ class BuildItemTextPost extends StatelessWidget {
     final DateTime createdAt = DateTime.parse(advertises.createdAt!);
     final DateTime egyptTime = createdAt.toUtc().add(const Duration(hours: 3));
     final String formattedDayTime =
-        DateFormat('EEEE, h:mm a').format(egyptTime);
+        DateFormat('EEEE, h:mm a',context.locale == Locales.english? 'en':'ar').format(egyptTime);
 
     return BlocProvider<CreateCompanyAdCubit>(
       create: (BuildContext context) => serviceLocator(),
@@ -85,7 +86,7 @@ class BuildItemTextPost extends StatelessWidget {
     );
   }
 
-  Widget buildItem(context) {
+  Widget buildItem(BuildContext context) {
     return Container(
       constraints: BoxConstraints(minHeight: 120.h),
       width: double.infinity,
@@ -96,11 +97,18 @@ class BuildItemTextPost extends StatelessWidget {
       ),
       child: Text(
         advertises.post!,
+        textAlign: _isArabic(advertises.post!) ? TextAlign.right : TextAlign.left,
         style: Styles.mediumText(
-          // fontSize: 34.sp,
           color: Theme.of(context).scaffoldBackgroundColor,
         ),
       ),
     );
   }
+
+// Helper function to check if the text is Arabic
+  bool _isArabic(String text) {
+    final RegExp arabicRegex = RegExp(r'^[\u0600-\u06FF\s]+$');
+    return arabicRegex.hasMatch(text);
+  }
+
 }

@@ -12,10 +12,10 @@ class ExpiredRequestsResponse {
   factory ExpiredRequestsResponse.fromJson(Map<String, dynamic> json) {
     return ExpiredRequestsResponse(
       status: json['status'] ?? false,
-      data: json['data'] != null
-          ? List<OrderData>.from(
-          json['data'].map((x) => OrderData.fromJson(x as Map<String, dynamic>)))
-          : null,
+      data: (json['data'] as List?)
+              ?.map((x) => OrderData.fromJson(x as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
   }
 
@@ -50,31 +50,25 @@ class OrderData {
   });
 
   factory OrderData.fromJson(Map<String, dynamic> json) {
-    try {
-      return OrderData(
-        id: json['_id'] ?? json['id'],
-        user: json['userId'] != null
-            ? User.fromJson(json['userId'] as Map<String, dynamic>)
-            : null,
-        restaurant: json['restaurantId'] != null
-            ? Restaurant.fromJson(json['restaurantId'] as Map<String, dynamic>)
-            : null,
-        orders: json['orders'] != null
-            ? List<OrderItem>.from(
-            json['orders'].map((x) => OrderItem.fromJson(x as Map<String, dynamic>)))
-            : null,
-        total: json['total'] is int ? json['total'] as int : null,
-        createdAt: json['createdAt'] != null
-            ? DateTime.tryParse(json['createdAt'] as String)
-            : null,
-        subscriptionType: json['subscriptionType'] as String?,
-        currency: json['currency'] as String?,
-      );
-    } catch (e) {
-      // Log the error if necessary
-      print('Error parsing OrderData: $e');
-      return OrderData(); // Return an empty OrderData object
-    }
+    return OrderData(
+      id: json['_id'] ?? json['id'] ?? '',
+      user: json['userId'] != null
+          ? User.fromJson(json['userId'] as Map<String, dynamic>)
+          : User(),
+      restaurant: json['restaurantId'] != null
+          ? Restaurant.fromJson(json['restaurantId'] as Map<String, dynamic>)
+          : Restaurant(),
+      orders: (json['orders'] as List?)
+              ?.map((x) => OrderItem.fromJson(x as Map<String, dynamic>))
+              .toList() ??
+          [],
+      total: json['total'] is int ? json['total'] as int : 0,
+      createdAt: json['createdAt'] != null
+          ? DateTime.tryParse(json['createdAt'] as String)
+          : DateTime.tryParse(''),
+      subscriptionType: json['subscriptionType'] ?? '',
+      currency: json['currency'] ?? '',
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -108,21 +102,15 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
-    try {
-      return User(
-        id: json['_id'] ?? json['id'],
-        firstName: json['firstName'] as String?,
-        lastName: json['lastName'] as String?,
-        gender: json['gender'] as String?,
-        userProfile: json['USER_PROFILE'] != null
-            ? UserProfile.fromJson(json['USER_PROFILE'] as Map<String, dynamic>)
-            : null,
-      );
-    } catch (e) {
-      // Log the error if necessary
-      print('Error parsing User: $e');
-      return User(); // Return an empty User object
-    }
+    return User(
+      id: json['_id'] ?? json['id'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      gender: json['gender'] ?? '',
+      userProfile: json['USER_PROFILE'] != null
+          ? UserProfile.fromJson(json['USER_PROFILE'] as Map<String, dynamic>)
+          : UserProfile(),
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -140,22 +128,15 @@ class User {
 class UserProfile {
   final ProfilePictureKey? profilePictureKey;
 
-  UserProfile({
-    this.profilePictureKey,
-  });
+  UserProfile({this.profilePictureKey});
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
-    try {
-      return UserProfile(
-        profilePictureKey: json['profilePictureKey'] != null
-            ? ProfilePictureKey.fromJson(json['profilePictureKey'] as Map<String, dynamic>)
-            : null,
-      );
-    } catch (e) {
-      // Log the error if necessary
-      print('Error parsing UserProfile: $e');
-      return UserProfile(); // Return an empty UserProfile object
-    }
+    return UserProfile(
+      profilePictureKey: json['profilePictureKey'] != null
+          ? ProfilePictureKey.fromJson(
+              json['profilePictureKey'] as Map<String, dynamic>)
+          : ProfilePictureKey(),
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -170,22 +151,13 @@ class ProfilePictureKey {
   final String? id;
   final String? mediaKey;
 
-  ProfilePictureKey({
-    this.id,
-    this.mediaKey,
-  });
+  ProfilePictureKey({this.id, this.mediaKey});
 
   factory ProfilePictureKey.fromJson(Map<String, dynamic> json) {
-    try {
-      return ProfilePictureKey(
-        id: json['_id'] ?? json['id'],
-        mediaKey: json['mediaKey'] as String?,
-      );
-    } catch (e) {
-      // Log the error if necessary
-      print('Error parsing ProfilePictureKey: $e');
-      return ProfilePictureKey(); // Return an empty ProfilePictureKey object
-    }
+    return ProfilePictureKey(
+      id: json['_id'] ?? json['id'] ?? '',
+      mediaKey: json['mediaKey'] ?? '',
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -202,26 +174,16 @@ class Restaurant {
   final String? name;
   final Subcategory? subcategory;
 
-  Restaurant({
-    this.id,
-    this.name,
-    this.subcategory,
-  });
+  Restaurant({this.id, this.name, this.subcategory});
 
   factory Restaurant.fromJson(Map<String, dynamic> json) {
-    try {
-      return Restaurant(
-        id: json['_id'] ?? json['id'],
-        name: json['name'] as String?,
-        subcategory: json['subcategoryId'] != null
-            ? Subcategory.fromJson(json['subcategoryId'] as Map<String, dynamic>)
-            : null,
-      );
-    } catch (e) {
-      // Log the error if necessary
-      print('Error parsing Restaurant: $e');
-      return Restaurant(); // Return an empty Restaurant object
-    }
+    return Restaurant(
+      id: json['_id'] ?? json['id'] ?? '',
+      name: json['name'] ?? 'Unknown Restaurant',
+      subcategory: json['subcategoryId'] != null
+          ? Subcategory.fromJson(json['subcategoryId'] as Map<String, dynamic>)
+          : Subcategory(),
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -239,24 +201,14 @@ class Subcategory {
   final String? nameAr;
   final String? nameEn;
 
-  Subcategory({
-    this.id,
-    this.nameAr,
-    this.nameEn,
-  });
+  Subcategory({this.id, this.nameAr, this.nameEn});
 
   factory Subcategory.fromJson(Map<String, dynamic> json) {
-    try {
-      return Subcategory(
-        id: json['_id'] ?? json['id'],
-        nameAr: json['nameAr'] as String?,
-        nameEn: json['nameEn'] as String?,
-      );
-    } catch (e) {
-      // Log the error if necessary
-      print('Error parsing Subcategory: $e');
-      return Subcategory(); // Return an empty Subcategory object
-    }
+    return Subcategory(
+      id: json['_id'] ?? json['id'] ?? '',
+      nameAr: json['nameAr'] ?? '',
+      nameEn: json['nameEn'] ?? '',
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -271,7 +223,7 @@ class Subcategory {
 // OrderItem class
 class OrderItem {
   final String? id;
-  final Food? food; // Changed from String? foodId to Food? food
+  final Food? food;
   final int? quantity;
   final int? price;
   final int? totalPriceOfItem;
@@ -285,22 +237,15 @@ class OrderItem {
   });
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
-    try {
-      return OrderItem(
-        id: json['_id'] ?? json['id'],
-        food: json['foodId'] != null
-            ? Food.fromJson(json['foodId'] as Map<String, dynamic>)
-            : null,
-        quantity: json['quantity'] is int ? json['quantity'] as int : null,
-        price: json['price'] is int ? json['price'] as int : null,
-        totalPriceOfItem:
-        json['totalPriceOfItem'] is int ? json['totalPriceOfItem'] as int : null,
-      );
-    } catch (e) {
-      // Log the error if necessary
-      print('Error parsing OrderItem: $e');
-      return OrderItem(); // Return an empty OrderItem object
-    }
+    return OrderItem(
+      id: json['_id'] ?? json['id'] ?? "",
+      food: json['foodId'] != null
+          ? Food.fromJson(json['foodId'] as Map<String, dynamic>)
+          : Food(),
+      quantity: json['quantity'] ?? 0,
+      price: json['price'] ?? 0,
+      totalPriceOfItem: json['totalPriceOfItem'] ?? 0,
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -319,22 +264,13 @@ class Food {
   final String? id;
   final String? foodName;
 
-  Food({
-    this.id,
-    this.foodName,
-  });
+  Food({this.id, this.foodName});
 
   factory Food.fromJson(Map<String, dynamic> json) {
-    try {
-      return Food(
-        id: json['_id'] ?? json['id'],
-        foodName: json['foodName'] as String?,
-      );
-    } catch (e) {
-      // Log the error if necessary
-      print('Error parsing Food: $e');
-      return Food(); // Return an empty Food object
-    }
+    return Food(
+      id: json['_id'] ?? json['id'] ?? '',
+      foodName: json['foodName'] ?? '',
+    );
   }
 
   Map<String, dynamic> toJson() {

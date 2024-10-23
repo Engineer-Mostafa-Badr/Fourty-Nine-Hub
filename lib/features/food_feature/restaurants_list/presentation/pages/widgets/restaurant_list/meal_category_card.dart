@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../../../core/localization/locale_keys.g.dart';
@@ -34,10 +35,9 @@ class MealCategoryCard extends StatelessWidget {
         // // shape: RoundedRectangleBorder(
         // //   borderRadius: BorderRadius.circular(15.0),
         // // ),
-        child: Container(
+        color: cardDarkColor(context),
+        child: SizedBox(
           width: 0.38.sw,
-          color: Colors.white70,
-
           child: InkWell(
             onTap: () => onTap(subCategory?.id ?? ""),
             child: Column(

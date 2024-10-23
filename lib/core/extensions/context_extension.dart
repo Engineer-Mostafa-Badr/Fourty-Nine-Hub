@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 
 extension ContextExtensions on BuildContext {
   // Get the current theme mode
@@ -27,4 +30,6 @@ extension ContextExtensions on BuildContext {
       isArabic ? TextDirection.rtl : TextDirection.ltr;
 
   FocusScopeNode get foucsScopeNode => FocusScope.of(this);
+
+  bool get isUserLoggedIn => read<UserCubit>().isLoggedIn;
 }

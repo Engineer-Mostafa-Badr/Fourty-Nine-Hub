@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -75,54 +76,57 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
                 Sizer(
                   height: 60.h,
                 ),
-                PinCodeTextField(
-                  appContext: context,
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  pastedTextStyle: TextStyle(
-                    color: Colors.green.shade600,
-                    fontWeight: FontWeight.bold,
+                Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: PinCodeTextField(
+                    appContext: context,
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    pastedTextStyle: TextStyle(
+                      color: Colors.green.shade600,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    length: 6,
+                    obscureText: false,
+                    blinkWhenObscuring: true,
+                    animationType: AnimationType.fade,
+                    pinTheme: PinTheme(
+                      shape: PinCodeFieldShape.box,
+                      borderRadius: BorderRadius.circular(4),
+                      // fieldHeight: 50.h,
+                      // fieldWidth: 50.w,
+                      activeFillColor: context.theme.scaffoldBackgroundColor,
+                      selectedFillColor: context.theme.scaffoldBackgroundColor,
+                      inactiveFillColor: context.theme.scaffoldBackgroundColor,
+                      inactiveColor: Theme.of(context).primaryColor,
+                      activeColor: Theme.of(context).primaryColor,
+                      selectedColor: Theme.of(context).primaryColor,
+                      disabledColor: Colors.grey[100],
+                      errorBorderColor: Colors.red,
+                      activeBorderWidth: 1,
+                      selectedBorderWidth: 1,
+                      inactiveBorderWidth: 1,
+                      disabledBorderWidth: 1,
+                      errorBorderWidth: 1,
+                      borderWidth: 1,
+                    ),
+                    cursorColor: AppColors.PRIMARY_COLOR,
+                    animationDuration: const Duration(milliseconds: 300),
+                    enableActiveFill: true,
+                    onChanged: (v) => cubit.otp = v,
+                    keyboardType: TextInputType.number,
+                    boxShadows: const [
+                      BoxShadow(
+                        offset: Offset(0, 1),
+                        color: Colors.black12,
+                        blurRadius: 10,
+                      )
+                    ],
+                    onCompleted: (v) => cubit.verifyOtp(email),
+                    beforeTextPaste: (text) {
+                      return true;
+                    },
                   ),
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  length: 6,
-                  obscureText: false,
-                  blinkWhenObscuring: true,
-                  animationType: AnimationType.fade,
-                  pinTheme: PinTheme(
-                    shape: PinCodeFieldShape.box,
-                    borderRadius: BorderRadius.circular(4),
-                    fieldHeight: 50.h,
-                    fieldWidth: 50.w,
-                    activeFillColor: Colors.white,
-                    selectedFillColor: Colors.white,
-                    inactiveFillColor: Colors.white,
-                    inactiveColor: Theme.of(context).primaryColor,
-                    activeColor: Theme.of(context).primaryColor,
-                    selectedColor: Theme.of(context).primaryColor,
-                    disabledColor: Colors.grey[100],
-                    errorBorderColor: Colors.red,
-                    activeBorderWidth: 1,
-                    selectedBorderWidth: 1,
-                    inactiveBorderWidth: 1,
-                    disabledBorderWidth: 1,
-                    errorBorderWidth: 1,
-                    borderWidth: 1,
-                  ),
-                  cursorColor: Colors.black,
-                  animationDuration: const Duration(milliseconds: 300),
-                  enableActiveFill: true,
-                  onChanged: (v) => cubit.otp = v,
-                  keyboardType: TextInputType.number,
-                  boxShadows: const [
-                    BoxShadow(
-                      offset: Offset(0, 1),
-                      color: Colors.black12,
-                      blurRadius: 10,
-                    )
-                  ],
-                  onCompleted: (v) => cubit.verifyOtp(email),
-                  beforeTextPaste: (text) {
-                    return true;
-                  },
                 ),
                 const Sizer(),
               ],

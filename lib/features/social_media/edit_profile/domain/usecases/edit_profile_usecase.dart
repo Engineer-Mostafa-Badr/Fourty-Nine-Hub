@@ -5,11 +5,11 @@ import 'package:fourtyninehub/features/social_media/edit_profile/domain/reposito
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
-class EditProfileUseCase extends UseCase<UserEntity, EditProfileEntity> {
+class EditProfileUseCase extends UseCase<bool, EditProfileEntity> {
   final EditProfileRepo _repo;
   EditProfileUseCase(this._repo);
   @override
-  Future<Either<Failure, UserEntity>> call(EditProfileEntity params) async {
+  Future<Either<Failure, bool>> call(EditProfileEntity params) async {
     return await _repo.editProfile(params: params);
   }
 }

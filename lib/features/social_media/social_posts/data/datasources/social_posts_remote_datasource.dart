@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/send_greet_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/share_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 
@@ -74,7 +75,7 @@ abstract class SocialPostsRemoteDataSource {
   Future<Either<Failure, bool>> removeSuggestUser({required String userId});
   Future<Either<Failure, List<SuggestUserEntity>>> suggestedFriends(
       {required SuggestedFriendsParams params});
-  Future<Either<Failure, bool>> sharePost({required params});
+  Future<Either<Failure, bool>> sharePost({required SharePostParams params});
 }
 
 class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
@@ -280,9 +281,9 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> sharePost({required params}) async {
+  Future<Either<Failure, bool>> sharePost({required SharePostParams params}) async {
     final response =
-        await _apiConsumer.post(EndPoints.shareFacebookPost(params));
+        await _apiConsumer.post(EndPoints.shareFacebookPost(params),data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 

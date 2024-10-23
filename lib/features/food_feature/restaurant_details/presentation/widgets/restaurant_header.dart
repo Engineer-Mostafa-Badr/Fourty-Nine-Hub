@@ -211,15 +211,15 @@ class RestaurantHeader extends StatelessWidget {
           ),
 
           // Back Button
-          Positioned(
-            top: MediaQuery.of(context).padding.top + 10,
-            left: 10,
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () => context.pop(),
-              tooltip: 'Back',
-            ),
-          ),
+          // Positioned(
+          //   top: MediaQuery.of(context).padding.top + 10,
+          //   left: 10,
+          //   child: IconButton(
+          //     icon: const Icon(Icons.arrow_back, color: Colors.white),
+          //     onPressed: () => context.pop(),
+          //     tooltip: 'Back',
+          //   ),
+          // ),
         ],
       ),
     );

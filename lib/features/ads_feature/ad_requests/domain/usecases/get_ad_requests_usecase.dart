@@ -5,9 +5,9 @@ import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_mo
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
-class GetAdDetailsUseCase extends UseCase<AddDetailsModel, String> {
+class GetAdRequestsUseCase extends UseCase<AddDetailsModel, String> {
   final AdDetailsRepo _repo;
-  GetAdDetailsUseCase(this._repo);
+  GetAdRequestsUseCase(this._repo);
 
   @override
   Future<Either<Failure, AddDetailsModel>> call(String params) {

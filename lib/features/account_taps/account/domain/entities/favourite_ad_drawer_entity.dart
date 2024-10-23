@@ -1,12 +1,12 @@
 class FavouriteAdDrawerEntity {
   final String id;
   final String userId;
-  final String adId;
   final String mainCategoryId;
   final String nameEn;
   final String nameAr;
   final String title;
   final String desc;
+  final String subscriptionStatus;
   final List<FavouriteAdDrawerImages> images;
   final num price;
   final String phone;
@@ -18,12 +18,12 @@ class FavouriteAdDrawerEntity {
   FavouriteAdDrawerEntity(
       {required this.id,
       required this.userId,
-      required this.adId,
       required this.mainCategoryId,
       required this.nameEn,
       required this.nameAr,
       required this.title,
       required this.desc,
+      required this.subscriptionStatus,
       required this.images,
       required this.price,
       required this.phone,

@@ -8,7 +8,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_items.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -16,7 +15,6 @@ import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../routes/routes.dart';
 import '../../../tinder/data/shared/shared.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
@@ -175,7 +173,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
               await showModalBottomSheet(
               context: context,
               isScrollControlled: true,
-              backgroundColor: Colors.transparent,
+              backgroundColor: Colors.white,
               builder: (context) {
                 return SizedBox(
                   height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,

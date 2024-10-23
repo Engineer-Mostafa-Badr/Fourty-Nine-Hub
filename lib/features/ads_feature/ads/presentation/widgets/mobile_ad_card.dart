@@ -49,6 +49,7 @@ class _MobileAdCardState extends State<MobileAdCard> {
         ),
         child: Column(
           children: [
+            _buildTag(status: widget.item.subscriptionStatus??''),
             SizedBox(
               height: kToolbarHeight * 2.8,
               child: Row(
@@ -227,7 +228,7 @@ class _MobileAdCardState extends State<MobileAdCard> {
                     children: [
                       Expanded(
                         flex: 3,
-                        child: PremiumRequestButton(adId:widget.item.id??'',subscriptionStatus: widget.item.subscriptionStatus??'',subCategoryId: widget.item.subCategoryId??'',),
+                        child: PremiumRequestButton(adId:widget.item.id,subscriptionStatus: widget.item.subscriptionStatus??'',subCategoryId: widget.item.subCategoryId??'',),
                       ),
                       const Sizer(width: 5),
                       Expanded(
@@ -253,14 +254,30 @@ class _MobileAdCardState extends State<MobileAdCard> {
     );
   }
 
-  Widget _buildTag() {
+  Widget _buildTag({required String status}) {
     // super premium
-    return const Icon(
-      Icons.workspace_premium_outlined,
-      size: 20,
-      color: AppColors.SECONDARY_COLOR,
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(10.w),
+      color: status=='premium'?Colors.amber:status=='Regular'?Colors.grey:Colors.grey,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if(status=='premium'||status=='Regular')...[
+            Icon(Icons.workspace_premium_outlined,
+              size: 55.w,
+              color: status=='premium'?AppColors.SECONDARY_COLOR:status=='Regular'?AppColors.PRIMARY_COLOR:null,
+            ),
+            const Sizer(width: 5)],
+          Label(
+            text: status=='premium'?LocaleKeys.premiumSubscription.localize:status=='Regular'?LocaleKeys.regularRequest.localize:LocaleKeys.notSubscribed.localize,
+            style: Styles.mediumText(color: Colors.white,fontSize: 35,fontWeight: FontWeight.bold),
+            maxLines: 1,
+          ),
+        ],
+      ),
     );
     // premium
-    // regular
+    // Regular
   }
 }

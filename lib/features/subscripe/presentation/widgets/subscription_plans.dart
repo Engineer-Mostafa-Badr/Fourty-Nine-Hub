@@ -70,21 +70,44 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                 ),
               ),
               SizedBox(height: 20.h),
-              DropdownMenu<WalletTypes>(
-                  hintText: "Select Wallet",
-                  expandedInsets: const EdgeInsets.only(),
-                  dropdownMenuEntries: widget.paymentMenthods!
-                      .map((e) => DropdownMenuEntry<WalletTypes>(
-                          value: e, label: e.translatedName))
-                      .toList(),
-                  initialSelection: selectedWallet,
-                  // inputDecorationTheme: ,
-                  onSelected: (value) {
-                    selectedWallet = value;
-                    print(selectedWallet);
-                    setState(() {});
-                    // context.read<WalletCubit>().onSelectWallet(value!);
-                  }),
+              DropdownButtonHideUnderline(
+                child: DropdownMenu<WalletTypes>(
+                  inputDecorationTheme: InputDecorationTheme(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                    hintText: "Select Wallet",
+                    expandedInsets: const EdgeInsets.only(),
+                    dropdownMenuEntries: widget.paymentMenthods!
+                        .map((e) => DropdownMenuEntry<WalletTypes>(
+                            value: e, label: e.translatedName))
+                        .toList(),
+                    textStyle: Styles.mediumText(fontWeight: FontWeight.w600),
+                    initialSelection: selectedWallet,
+                    // inputDecorationTheme: ,
+                    onSelected: (value) {
+                      selectedWallet = value;
+                      print(selectedWallet);
+                      setState(() {});
+                      // context.read<WalletCubit>().onSelectWallet(value!);
+                    }),
+              ),
 
               SizedBox(height: 20.h),
               // SizedBox(height: 20.h),

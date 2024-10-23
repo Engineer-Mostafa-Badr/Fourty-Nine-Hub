@@ -235,7 +235,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                       const Sizer(),
                       Label(text: LocaleKeys.phone.localize),
                       TextFormField(
-                        maxLines: null,
+                        maxLines: 1,
+                        keyboardType: TextInputType.number,
                         onChanged: (v) => controller.phone = v,
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
@@ -332,7 +333,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                               ? LocaleKeys.price.localize
                               : LocaleKeys.salary.localize),
                       TextFormField(
-                        maxLines: null,
+                        maxLines: 1,
+                        keyboardType: TextInputType.number,
                         onChanged: (v) => controller.price = v,
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(

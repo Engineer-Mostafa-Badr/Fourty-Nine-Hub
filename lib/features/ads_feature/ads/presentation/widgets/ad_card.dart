@@ -102,7 +102,7 @@ class _AdCardState extends State<AdCard> {
                                   color: Colors.black.withOpacity(0.8),
                                   alignment: AlignmentDirectional.center,
                                   child: Label(
-                                    text: 'See More',
+                                    text: LocaleKeys.seeAll.localize,
                                     style: Styles.headerText(
                                         color: Colors.white,
                                         decoration: TextDecoration.underline),
@@ -319,18 +319,18 @@ class _AdCardState extends State<AdCard> {
       return Container(
         width: double.infinity,
         padding: EdgeInsets.all(10.w),
-        color: status=='premium'?Colors.amber:status=='Regular'?Colors.grey:Colors.grey,
+        color: status=='premium'?Colors.amber:status=='regular'?Colors.grey:Colors.grey,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if(status=='premium'||status=='Regular')...[
+            if(status=='premium'||status=='regular')...[
               Icon(Icons.workspace_premium_outlined,
                 size: 55.w,
-                color: status=='premium'?AppColors.SECONDARY_COLOR:status=='Regular'?AppColors.PRIMARY_COLOR:null,
+                color: status=='premium'?AppColors.SECONDARY_COLOR:status=='regular'?AppColors.PRIMARY_COLOR:null,
               ),
             const Sizer(width: 5)],
             Label(
-              text: status=='premium'?"Premium":status=='premium'?"Regular":'Not Subscribed',
+              text: status=='premium'?LocaleKeys.premiumSubscription.localize:status=='regular'?LocaleKeys.regularSubscription.localize:LocaleKeys.notSubscribed.localize,
               style: Styles.mediumText(color: Colors.white,fontSize: 35,fontWeight: FontWeight.bold),
               maxLines: 1,
             ),
@@ -338,6 +338,6 @@ class _AdCardState extends State<AdCard> {
         ),
       );
     // premium
-    // Regular
+    // regular
   }
 }

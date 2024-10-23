@@ -243,6 +243,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -257,10 +258,13 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_sub_category_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 
 class TinderView extends StatelessWidget {
-  const TinderView({super.key});
+  const TinderView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -278,7 +282,7 @@ class TinderView extends StatelessWidget {
 }
 
 class TinderScreen extends StatefulWidget {
-  const TinderScreen({super.key});
+  const TinderScreen({Key? key}) : super(key: key);
 
   @override
   State<TinderScreen> createState() => _TinderScreenState();
@@ -313,29 +317,21 @@ class _TinderScreenState extends State<TinderScreen> {
   Widget build(BuildContext context) {
     log('TinderScreen built');
     return Scaffold(
-      appBar: AppBar(
-        elevation: 4,
-        title: Label(
-          text: LocaleKeys.tinder_find.tr(),
-          style: Styles.headerText(
-            fontSize: MediaQuery.of(context).size.width * 0.1,
-          ),
-        ),
+      // appBar: AppBar(
+      //   elevation: 4,
+      //   title: Text(
+      //     LocaleKeys.tinder_find.tr(),
+      //     style: Styles.headerText(),
+      //   ),
+      // ),
+      appBar: BackAppBar(
+        label: LocaleKeys.tinder_find.tr(),
       ),
       body: BlocConsumer<TinderViewCubit, TinderViewState>(
         listener: (context, state) {
           // Handle any state changes if necessary
         },
         builder: (context, state) {
-          if (state.userData.isEmpty &&
-              state.subCategoryData.isEmpty &&
-              state.mainCategoryResponse == null) {
-            // Display a loading indicator while fetching data
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
           if (!context.read<UserCubit>().isLoggedIn) {
             // Prompt user to log in if not authenticated
             return _buildPleaseLoginWidget(context);
@@ -359,9 +355,16 @@ class _TinderScreenState extends State<TinderScreen> {
                 ? const TinderCardStack()
                 : SizedBox(
                     height: 0.55.sh,
-                    child: const Center(
-                      child: Text(
-                        'Empty List',
+                    child: Shimmer.fromColors(
+                      baseColor: Colors.grey[100]!,
+                      highlightColor: Colors.white24,
+                      child: Container(
+                        // height: MediaQuery.sizeOf(context).height * 0.08,
+                        decoration: BoxDecoration(
+                          color: AppColors.AUTH_CONTAINER_COLOR,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.grey),
+                        ),
                       ),
                     ),
                   ),
@@ -378,9 +381,16 @@ class _TinderScreenState extends State<TinderScreen> {
                 ? _buildSubCategoryList(context, state)
                 : SizedBox(
                     height: 0.3.sh,
-                    child: const Center(
-                      child: Text(
-                        'Empty List',
+                    child: Shimmer.fromColors(
+                      baseColor: Colors.grey[100]!,
+                      highlightColor: Colors.white24,
+                      child: Container(
+                        // height: MediaQuery.sizeOf(context).height * 0.08,
+                        decoration: BoxDecoration(
+                          color: AppColors.AUTH_CONTAINER_COLOR,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.grey),
+                        ),
                       ),
                     ),
                   ),
@@ -396,11 +406,9 @@ class _TinderScreenState extends State<TinderScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Align(
         alignment: context.isArabic ? Alignment.topRight : Alignment.topLeft,
-        child: Label(
-          text: LocaleKeys.tinder_find.tr(),
-          style: Styles.headerText(
-            fontSize: MediaQuery.of(context).size.width * 0.1,
-          ),
+        child: Text(
+          LocaleKeys.tinder_find.tr(),
+          style: Styles.headerText(),
         ),
       ),
     );
@@ -471,9 +479,14 @@ class _TinderScreenState extends State<TinderScreen> {
 
   Widget _buildPleaseLoginWidget(BuildContext context) {
     return Center(
-      child: Text(
-        LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.tr(),
-        style: TextStyle(fontSize: 18.sp),
+      child: GestureDetector(
+        onTap: () {
+          context.push(Routes.LOGIN);
+        },
+        child: Text(
+          LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.tr(),
+          style: Styles.headerText(),
+        ),
       ),
     );
   }

@@ -73,7 +73,7 @@ class _ImageValidationState extends State<ImageValidation> {
                 width: widget.width,
                 height: widget.height,
                 borderColor: field.hasError ? Colors.red : null,
-                tilte: widget.hint,
+                title: widget.hint,
                 image: image != null
                     ? Container(
                         width: widget.width ?? 100,

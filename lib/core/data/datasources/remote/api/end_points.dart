@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
@@ -5,10 +6,16 @@ import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_c
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/add_reel_comment_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/add_reel_reply_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_advertisement_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_reel_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_with_same_audia_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/share_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
@@ -25,7 +32,7 @@ class EndPoints {
   //logout
   static const logout = '/auth/logout';
 
-  static const pageSize = 20;
+  static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49dev.com';
   static const developmentBaseUrl = 'https://49dev.com/api/v1';
   static const productionBaseUrl = 'https://49dev.com/api/v1';
@@ -119,6 +126,14 @@ class EndPoints {
   static const subTab = '/navigators/subTap';
   static const navigateBar = '/navigators/navigatorsBar';
   static const favouriteCat = '/navigators/navigateCategories';
+  static const activate = '/navigators/customPage';
+
+  // Star
+  static const allStar = '/talent/';
+  static const myStar = '/talent/my-talent';
+  static const uploadStar = '/talent/upload';
+  static String deleteMyStar({required String id}) =>
+      '/talent/$id';
 
   //My Ads
   static const myAdsAuction = '/ads/allMyAds/auction';
@@ -344,6 +359,24 @@ class EndPoints {
 
   // reels
   static const getExploreReels = '/reels/explore';
+  static const fetchReelsForFollowers = '/reels/followers?subCategory=66684135dbb427ee42aa0141';
+  static saveReel(String id)=> '/reels/saved/$id';
+  static shareReel(String id)=> '/reels/share/$id';
+  static likeReel(String id)=> '/reels/likes/$id';
+  static getComments(String id)=> '/reels/comments/$id';
+  static getReelsWithSameAudio(ReelsWithSameAudioParams params)=> '/reels/audio/${params.audioId}';
+  static toggleCommentLike(String id)=> '/reels/comments/like/$id';
+  static makeViews(String id)=> '/stories/view/$id';
+  static deleteStory(String id)=> '/stories/$id';
+  static const createStory= '/stories/text';
+  static getStoryViewers(String id)=> '/Stories/view/$id';
+  static getMutedStories(PaginationParams params)=> '/stories/mutedStories?limit=${params.limit}&page=${params.page}';
+  static fetchStories(PaginationParams params)=> '/stories/explore?limit=${params.limit}&page=${params.page}';
+  static const muteUserStories = '/stories/muteUserStory';
+  static const updatePrivacy = '/stories/privacy';
+  static const getFollowers = '/follow/followers?subCategory=62ef7cf658c90d4a7ed48120';
+  static addReelComment(AddReelCommentParams params)=> '/reels/comments/${params.reelId}';
+  static addReelReply(AddReelReplyParams params)=> '/reels/comments/${params.reelId}';
 
   // ride request
   // static const expectedPrice = '/ride/trips/expected/price';
@@ -475,6 +508,16 @@ class EndPoints {
     return '/reels/saved?limit=${params.limit}&page=${params.page}&subCategory=${Constants.reelsSubCategory}';
   }
 
+  static String createReel(CreateReelParams params) {
+    return '/reels/views/${params.reelId}';
+  }
+
+  static String createAdvertisement(CreateAdvertisementParams params) {
+    return '/advertisementCompany';
+  }
+
+
+
   static String getAdvertisement(TwitterFeedParams params) {
     return '/advertisementCompany?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
   }
@@ -539,8 +582,8 @@ class EndPoints {
     return '/twitter/post/share/$postId?subCategory=${Constants.twitterSubCategory}';
   }
 
-  static String shareFacebookPost(String postId) {
-    return '/facebook/post/share/$postId?subCategory=${Constants.facebookSubCategory}';
+  static String shareFacebookPost(SharePostParams params) {
+    return '/facebook/post/share/${params.postId}?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String commentOnPost(String postId) {
@@ -650,8 +693,10 @@ class EndPoints {
   }
 
   static String getNumOfResturants = '/restaurants/num-of-restaurants';
+  static String foodExpiredOrders(PaginationParams params) => '/food/expired-orders?page=${params.page}&limit=${params.limit}';
   static String isResturant = '/restaurants/check-user-have-restaurant';
   static String createRestaurant = '/restaurants/create-restaurant';
+  static String changeConnectivity = '/restaurants/modify-active';
 
   static String getMealsWithCountRestaurant({PostCommentsParams? params}) =>
       '/restaurants/subcategories-count-restaurant${params?.page != null || params?.userId != null ? "?page=${params?.page}&userId=${params?.userId}" : ""}';
@@ -694,7 +739,7 @@ class EndPoints {
   }
 
   static String subCategoryAds(GetAdsParams params) {
-    return '/ads/subCategoryAds/${params.subCategoryId}?filter=${params.filter}&page=${params.page}&limit=${params.limit}';
+    return '/ads/subCategoryAds/${params.subCategoryId}?filter=${params.filter}&page=${params.page}&limit=${params.limit}${params.userId!=null?"&userId=${params.userId}":""}';
   }
 
   static String createAuction(String id) {

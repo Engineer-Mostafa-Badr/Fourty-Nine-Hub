@@ -41,7 +41,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await CacheServiceImpl.init();
-  await DI.execute();
+  await DI.execute(); 
 
   // ZegoGiftManager().cache.cache(giftItemList);
 
@@ -187,7 +187,7 @@ class _MyAppState extends State<MyApp> {
                         child: child!,
                       );
                     },
-                    themeMode: snapshot.data!
+                    themeMode: (snapshot.data??false)
                         ? ThemeMode.dark
                         : ThemeMode.light,
                     theme: lightTheme,

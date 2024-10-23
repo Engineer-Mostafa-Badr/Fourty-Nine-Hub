@@ -1,16 +1,15 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
@@ -18,7 +17,6 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/controlle
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/profile_buttom_sheet.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_items.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,7 +26,6 @@ import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../res/style/styles.dart';
 import '../../../../zoom/presentation/controller/stream_cubit.dart';
 import '../../../../zoom/presentation/widgets/join_meeting_screen.dart';
 
@@ -144,7 +141,7 @@ class ReelsScreenState extends State<ReelsScreen>
       _currentPage = index;
     });
     final reelsCubit = context.read<ReelsCubit>();
-    if (index == reelsCubit.state.globalReels.length - 1 && mounted) {
+    if (index == (reelsCubit.state.globalReels?.length??0) - 1 && mounted) {
       reelsCubit.fetchReels();
     }
   }
@@ -162,11 +159,11 @@ class ReelsScreenState extends State<ReelsScreen>
                 physics: const BouncingScrollPhysics(),
                 controller: _pageController,
                 scrollDirection: Axis.vertical,
-                itemCount: state.globalReels.length +
-                    (state.globalReelsHasReachedMax ? 0 : 1),
+                itemCount: (state.globalReels?.length??0) +
+                    ((state.globalReelsHasReachedMax??false) ? 0 : 1),
                 onPageChanged: _handlePageChange,
                 itemBuilder: (context, index) {
-                  if (index >= state.globalReels.length) {
+                  if (index >= (state.globalReels?.length??0)) {
                     return const Center(
                       child: CupertinoActivityIndicator(
                         radius: 25,
@@ -175,7 +172,7 @@ class ReelsScreenState extends State<ReelsScreen>
                     );
                   }
                   return UnifiedReelItem(
-                    reel: state.globalReels[index],
+                    reel: state.globalReels![index],
                     isVisible: _currentPage == index,
                     itemType: ReelItemType.main,
                   );
@@ -221,7 +218,7 @@ class RoundedButtonWithImage extends StatelessWidget {
         child: ElevatedButton.icon(
           onPressed: onPressed,
           style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll<Color>(
+            backgroundColor: MaterialStatePropertyAll<Color>(
               Colors.blueGrey.withOpacity(0.2),
             ),
           ),
@@ -613,14 +610,14 @@ class DoubleTapHeart extends StatefulWidget {
   final Duration animationDuration;
 
   const DoubleTapHeart({
-    super.key,
+    Key? key,
     required this.child,
     this.onDoubleTap,
     this.heartIcon = Icons.favorite,
     this.iconSize = 80.0,
     this.iconColor = Colors.redAccent,
     this.animationDuration = const Duration(milliseconds: 700),
-  });
+  }) : super(key: key);
 
   @override
   _DoubleTapHeartState createState() => _DoubleTapHeartState();
@@ -629,7 +626,7 @@ class DoubleTapHeart extends StatefulWidget {
 class _DoubleTapHeartState extends State<DoubleTapHeart>
     with SingleTickerProviderStateMixin {
   Offset _tapPosition = Offset.zero;
-  final List<_AnimatedHeartOverlay> _heartOverlays = [];
+  List<_AnimatedHeartOverlay> _heartOverlays = [];
 
   @override
   Widget build(BuildContext context) {
@@ -686,14 +683,14 @@ class _AnimatedHeartOverlay extends StatefulWidget {
   final Function(_AnimatedHeartOverlay) onAnimationComplete;
 
   const _AnimatedHeartOverlay({
-    super.key,
+    Key? key,
     required this.position,
     required this.icon,
     required this.size,
     required this.color,
     required this.duration,
     required this.onAnimationComplete,
-  });
+  }) : super(key: key);
 
   @override
   __AnimatedHeartOverlayState createState() => __AnimatedHeartOverlayState();
@@ -756,7 +753,7 @@ class __AnimatedHeartOverlayState extends State<_AnimatedHeartOverlay>
 class VideoWidget extends StatefulWidget {
   final String url;
 
-  const VideoWidget({super.key, required this.url});
+  const VideoWidget({required this.url});
 
   @override
   _VideoWidgetState createState() => _VideoWidgetState();
@@ -856,8 +853,6 @@ class _VideoWidgetState extends State<VideoWidget> {
 }
 
 class AdvancedTikTokTabBar extends StatefulWidget {
-  const AdvancedTikTokTabBar({super.key});
-
   @override
   _AdvancedTikTokTabBarState createState() => _AdvancedTikTokTabBarState();
 }
@@ -906,45 +901,118 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               // LIVE Icon with Glow Effect
               const Sizer(),
               _buildLiveIcon(onTap: () {
-                showModalBottomSheet(
+                if(context.isUserLoggedIn) {
+                  showModalBottomSheet(
                     context: context,
+                    backgroundColor: Colors.transparent, // Make background transparent for rounded effect
+                    isScrollControlled: true, // Allows the sheet to take more space
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                    ),
                     builder: (context) {
-                      return Wrap(
-                        children: [
-                          ListTile(
-                              onTap: () async {
-                                var result = await context
-                                    .read<StreamCubit>()
-                                    .createLive(title: 'create live',roomId: generateRandom9DigitNumber.toString(), context: context);
-                                if(result==true){
-                                  context.push(Routes.LIVEView,
-                                      extra: ZegoArgs(
-                                          context
-                                              .read<StreamCubit>()
-                                              .state
-                                              .liveCreateResponseEntity!
-                                              .id,
+                      return DraggableScrollableSheet(
+                        expand: false,
+                        initialChildSize: 0.4, // Adjust as needed
+                        maxChildSize: 0.7,
+                        minChildSize: 0.2,
+                        builder: (_, controller) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white, // Set background color
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 10,
+                                  spreadRadius: 5,
+                                ),
+                              ],
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                            child: ListView(
+                              controller: controller,
+                              shrinkWrap: true,
+                              children: [
+                                // Header Section
+                                Center(
+                                  child: Container(
+                                    width: 50,
+                                    height: 5,
+                                    margin: const EdgeInsets.only(bottom: 16),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                                const Text(
+                                  'Live Stream Options',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 16),
+                                // Option 1: Create Live
+                                ListTile(
+                                  leading: const Icon(Icons.videocam, color: Colors.blue),
+                                  title: const Text('Create Live'),
+                                  onTap: () async {
+                                    var result = await context
+                                        .read<StreamCubit>()
+                                        .createLive(
+                                      title: 'create live',
+                                      roomId: generateRandom9DigitNumber.toString(),
+                                      context: context,
+                                    );
+                                    if (result == true) {
+                                      context.push(
+                                        Routes.LIVEView,
+                                        extra: ZegoArgs(
+                                          context.read<StreamCubit>().state.liveCreateResponseEntity!.id,
                                           true,
-                                          context
-                                              .read<UserCubit>()
-                                              .state
-                                              .data!
-                                              .fullName));
-                                }else{
-                                  print("objectFailed");
-                                }
-                              },
-                              title: const Label(text: 'Create Live')),
-                          ListTile(
-                            onTap: () {
-                              context.pop();
-                              context.push(Routes.LIVE);
-                            },
-                            title: const Label(text:'Watch'),
-                          )
-                        ],
+                                          context.read<UserCubit>().state.data!.fullName,
+                                        ),
+                                      );
+                                    } else {
+                                      print("Failed to create live stream");
+                                    }
+                                  },
+                                ),
+                                const Divider(),
+                                // Option 2: Watch Live
+                                ListTile(
+                                  leading: const Icon(Icons.tv, color: Colors.green),
+                                  title: const Text('Watch'),
+                                  onTap: () {
+                                    context.pop();
+                                    context.push(Routes.LIVE);
+                                  },
+                                ),
+                                const SizedBox(height: 10),
+                                // Cancel Button
+                                ElevatedButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.redAccent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: const Text('Cancel', style: TextStyle(color: Colors.white)),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                       );
-                    });
+                    },
+                  );
+                }
+                else {
+                  context.go(Routes.LOGIN);
+                }
               }),
               const Spacer(), // Explore Tab
               _buildTab("Spotlight", 0, onTap: () {
@@ -1110,9 +1178,9 @@ class CustomChewieControls extends StatefulWidget {
   final ChewieController chewieController;
 
   const CustomChewieControls({
-    super.key,
+    Key? key,
     required this.chewieController,
-  });
+  }) : super(key: key);
 
   @override
   State<CustomChewieControls> createState() => _CustomChewieControlsState();
@@ -1145,7 +1213,8 @@ class _CustomChewieControlsState extends State<CustomChewieControls> {
 class AdvancedChewieWithProgressBar extends StatefulWidget {
   final String videoUrl;
 
-  const AdvancedChewieWithProgressBar({super.key, required this.videoUrl});
+  const AdvancedChewieWithProgressBar({Key? key, required this.videoUrl})
+      : super(key: key);
 
   @override
   _AdvancedChewieWithProgressBarState createState() =>
@@ -1214,7 +1283,8 @@ class _AdvancedChewieWithProgressBarState
 class CustomProgressBar extends StatefulWidget {
   final VideoPlayerController videoPlayerController;
 
-  const CustomProgressBar({super.key, required this.videoPlayerController});
+  const CustomProgressBar({Key? key, required this.videoPlayerController})
+      : super(key: key);
 
   @override
   _CustomProgressBarState createState() => _CustomProgressBarState();

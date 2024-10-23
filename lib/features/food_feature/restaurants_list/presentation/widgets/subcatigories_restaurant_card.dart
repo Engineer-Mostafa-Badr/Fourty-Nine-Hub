@@ -707,7 +707,10 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
@@ -724,7 +727,7 @@ import '../../../../subscripe/presentation/controllers/subscription_controller.d
 import '../../../restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 
 class SubCategoriesRestaurantCard extends StatelessWidget {
-  final Restaurant2Model? item;
+  final Restaurant? item;
   final bool isVertical;
   final String mealId;
 
@@ -747,7 +750,7 @@ class SubCategoriesRestaurantCard extends StatelessWidget {
 }
 
 class VerticalRestaurantCard extends StatelessWidget {
-  final Restaurant2Model? item;
+  final Restaurant? item;
   final String mealId;
 
   const VerticalRestaurantCard({super.key, this.item, required this.mealId});
@@ -767,7 +770,7 @@ class VerticalRestaurantCard extends StatelessWidget {
 }
 
 class HorizontalRestaurantCard extends StatelessWidget {
-  final Restaurant2Model? item;
+  final Restaurant? item;
 
   const HorizontalRestaurantCard({super.key, this.item});
 
@@ -823,7 +826,7 @@ class HorizontalRestaurantCard extends StatelessWidget {
 }
 
 class PropertyCard extends StatelessWidget {
-  final Restaurant2Model item;
+  final Restaurant item;
   final String mealId;
   final bool myRestaurant;
 
@@ -840,21 +843,14 @@ class PropertyCard extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Card(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15.0),
-              topRight: Radius.circular(15.0),
-            ),
-          ),
+          clipBehavior: Clip.hardEdge,
+          color: cardDarkColor(context),
           elevation: myRestaurant ? 0 : 5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (hasSubscription)
-                Expanded(
-                  flex: 1,
-                  child: EliteBanner(subscriptionType: item.subscriptionType!),
-                ),
+                EliteBanner(subscriptionType: item.subscriptionType!),
               Flexible(
                 flex: 4,
                 child: Stack(
@@ -892,6 +888,11 @@ class PropertyCard extends StatelessWidget {
               if (!myRestaurant) const SizedBox(height: 4),
               if (!myRestaurant) CallMessageReportButtons(item: item),
               if (!myRestaurant) const SizedBox(height: 2),
+              // CallMessageButtons(
+              //     otherUserId: item.userIdModel!.id??''!,
+              //     subcategoryId: item.subcategoryId!.id,
+              //     phone: item.number!,
+              //     id: item.id!),
             ],
           ),
         );
@@ -931,7 +932,7 @@ class EliteBanner extends StatelessWidget {
 }
 
 class FavoriteButton extends StatelessWidget {
-  final Restaurant2Model item;
+  final Restaurant item;
   final String mealId;
 
   const FavoriteButton({super.key, required this.item, required this.mealId});
@@ -960,7 +961,7 @@ class FavoriteButton extends StatelessWidget {
 }
 
 class DetailsSection extends StatelessWidget {
-  final Restaurant2Model item;
+  final Restaurant item;
 
   final bool myRestaurant;
 
@@ -979,10 +980,10 @@ class DetailsSection extends StatelessWidget {
         children: [
           Expanded(child: Text(item.name ?? '', style: Styles.headerText())),
           Expanded(
-            child: Text("${item.subcategoryId?.name ?? ''}, ${item.description ?? ''}",
+            child: Text(
+                "${item.subcategoryId?.name ?? ''}, ${item.description ?? ''}",
                 style: Styles.mediumText(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black.withOpacity(0.8))),
+                    fontWeight: FontWeight.w600, fontSize: 30)),
           ),
           if (myRestaurant)
             Expanded(
@@ -991,8 +992,7 @@ class DetailsSection extends StatelessWidget {
                 children: [
                   Text(
                       '${item.government?.governorateNameEn ?? ''}, ${item.city?.cityNameEn ?? ''}',
-                      style: Styles.mediumText(
-                          color: Colors.black.withOpacity(0.7))),
+                      style: Styles.mediumText()),
                   const Spacer(),
                   const Icon(
                     Icons.star_rounded,
@@ -1014,7 +1014,7 @@ class DetailsSection extends StatelessWidget {
             Expanded(
               child: Text(
                   '${item.government?.governorateNameEn ?? ''}, ${item.city?.cityNameEn ?? ''}',
-                  style: Styles.mediumText(color: Colors.black.withOpacity(0.7))),
+                  style: Styles.mediumText()),
             ),
           if (!myRestaurant)
             Expanded(
@@ -1039,14 +1039,9 @@ class DetailsSection extends StatelessWidget {
                     ],
                   ),
                   if (!myRestaurant)
-                    Text(
-                      item.isActive! ? 'Available' : 'Not Available',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      ),
-                    ),
+                    Text(item.isActive! ? 'Available' : 'Not Available',
+                        style: Styles.headerText(
+                            color: AppColors.SECONDARY_COLOR)),
                 ],
               ),
             ),
@@ -1057,7 +1052,7 @@ class DetailsSection extends StatelessWidget {
 }
 
 class PremiumAndRequestButtons extends StatelessWidget {
-  final Restaurant2Model item;
+  final Restaurant item;
 
   const PremiumAndRequestButtons({super.key, required this.item});
 
@@ -1114,7 +1109,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
 }
 
 class CallMessageReportButtons extends StatelessWidget {
-  final Restaurant2Model item;
+  final Restaurant item;
 
   const CallMessageReportButtons({super.key, required this.item});
 

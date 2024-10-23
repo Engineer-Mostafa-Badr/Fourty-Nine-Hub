@@ -90,7 +90,7 @@ class _MutedStoriesState extends State<MutedStories> {
                             builder: (context) => BlocProvider.value(
                               value: serviceLocator<StoryCubit>(),
                               child: StoryViewScreen(
-                                stories: state.users,
+                                stories: state.users??[],
                                 mutedStories:
                                     state.mutedStoriesResponse!.data.stories,
                                 initialUserIndex: index,

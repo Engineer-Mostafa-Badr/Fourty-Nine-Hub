@@ -50,7 +50,7 @@ class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
         height: widget.height,
         width: widget.width,
         image: _image,
-        tilte: widget.tilte,
+        title: widget.tilte,
       ),
     );
   }

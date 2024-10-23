@@ -44,7 +44,7 @@ class _EditMyAdsState extends State<EditMyAds> {
   void initState() {
     context
         .read<CreateAdCubit>()
-        .loadData(subCategoryId: widget.categorization.mainCategory.id);
+        .loadData(subCategoryId: widget.categorization.mainCategory?.id??'');
     super.initState();
   }
   //   @override
@@ -123,7 +123,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                               ),
                               Label(
                                   text:
-                                      widget.categorization.mainCategory.nameEn),
+                                      widget.categorization.mainCategory?.nameEn??''),
                             ],
                           )),
                         ],

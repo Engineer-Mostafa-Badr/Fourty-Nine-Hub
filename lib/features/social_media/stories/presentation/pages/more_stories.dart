@@ -364,7 +364,6 @@ class UserStoryViewState extends State<UserStoryView> {
                   child: InkWell(
                     onTap: () async {
                       _storyController.pause();
-
                       await showViewerList(context, state.viewersResponse!);
                       _storyController.play();
                     },

@@ -113,7 +113,7 @@ class FacebookTweetCard extends StatelessWidget {
     return Row(
       children: [
         InkWell(
-          onTap: () => context.push(Routes.OTHERSACCOUNT),
+          onTap: () => context.push(Routes.OTHERSACCOUNT,extra: user.id),
           child: CircleAvatar(
             backgroundColor: Colors.white,
             backgroundImage: NetworkImage((user.image != null)
