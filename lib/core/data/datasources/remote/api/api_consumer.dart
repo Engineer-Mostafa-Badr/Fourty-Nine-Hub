@@ -278,13 +278,16 @@ class BaseApiConsumer extends ApiConsumer {
   }
 
   Failure _getFailure(dynamic e) {
+    final error = e.response?.data['error'] as Map;
+
     if (e is DioException) {
       if (e.response?.statusCode == 413) {
         return const ServerFailure(
           message: 'File size is too large',
         );
       } else if (e.response?.statusCode == 401) {
-        return const UnauthorizedFailure();
+        final error = e.response?.data['error'] as Map;
+        return  UnauthorizedFailure(error['message'] as String,);
       } else if (e.response?.data is Map &&
           e.response?.data['message'] is String) {
         return ServerFailure(
@@ -314,7 +317,7 @@ class BaseApiConsumer extends ApiConsumer {
         );
       }
     }
-    return UnknownFailure(e.toString());
+    return UnknownFailure(error['message'].toString());
   }
 
   Future<void> refreshToken() async {
