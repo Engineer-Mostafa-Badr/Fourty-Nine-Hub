@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/expired_requests_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
@@ -14,6 +16,8 @@ import '../models/restaurant_model.dart';
 
 abstract class RestaurantsRemoteDataSource {
   Future<Either<Failure, bool>> createRestaurant(CreateRestaurantParams params);
+  Future<Either<Failure, bool>> changeConnectivity();
+  Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(PaginationParams params);
   Future<Either<Failure, List<FoodCategoryModel>>> getFoodCategories();
   Future<Either<Failure, List<FoodCategoryModel>>>
       getMealCategoriesWithCountRestaurants(
@@ -187,5 +191,29 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
         return Right(data['status']);
       },
     );
+  }
+
+  @override
+  Future<Either<Failure, bool>> changeConnectivity() async {
+    final response =
+        await _apiConsumer.patch(EndPoints.changeConnectivity);
+
+    return response.fold(
+          (Failure failure) {
+        return Left(failure);
+      },
+          (data) {
+        return Right(data['status']);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(PaginationParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.foodExpiredOrders(params));
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right(ExpiredRequestsResponse.fromJson(data)));
   }
 }

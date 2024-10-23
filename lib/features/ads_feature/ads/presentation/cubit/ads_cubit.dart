@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_c
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_pick_me_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/filter_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../core/error/failure.dart';
@@ -124,11 +125,13 @@ class AdvertisementCubit extends Cubit<AdsState> {
       {required String subCategoryId,
       required String filter,
       required int page}) async {
+    final userId = UserCubit.to.state.data?.id;
+
     if(page==1){
       adsPagingController.itemList=[];
     }
     final response = await _getAdsUseCase(GetAdsParams(
-        subCategoryId: subCategoryId, filter: filter, page: page, limit: 10));
+        subCategoryId: subCategoryId, filter: filter, page: page, limit: 10,userId: userId));
     response
         .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
             (data) async {

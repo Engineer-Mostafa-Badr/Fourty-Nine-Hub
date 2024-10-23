@@ -943,6 +943,7 @@ abstract class  LocaleKeys {
   static const seeAll = 'seeAll';
   static const premiumRequest = 'premiumRequest';
   static const normalRequest = 'normalRequest';
+  static const adRequests = 'adRequests';
   static const comfort = 'comfort';
   static const womenOnly = 'womenOnly';
   static const minutesAgo = 'minutesAgo';

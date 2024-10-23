@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -321,18 +319,18 @@ class _AdCardState extends State<AdCard> {
       return Container(
         width: double.infinity,
         padding: EdgeInsets.all(10.w),
-        color: status=='premium'?Colors.amber:status=='Regular'?Colors.grey:Colors.grey,
+        color: status=='premium'?Colors.amber:status=='regular'?Colors.grey:Colors.grey,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if(status=='premium'||status=='Regular')...[
+            if(status=='premium'||status=='regular')...[
               Icon(Icons.workspace_premium_outlined,
                 size: 55.w,
-                color: status=='premium'?AppColors.SECONDARY_COLOR:status=='Regular'?AppColors.PRIMARY_COLOR:null,
+                color: status=='premium'?AppColors.SECONDARY_COLOR:status=='regular'?AppColors.PRIMARY_COLOR:null,
               ),
             const Sizer(width: 5)],
             Label(
-              text: status=='premium'?LocaleKeys.premiumSubscription.localize:status=='Regular'?LocaleKeys.regularRequest.localize:LocaleKeys.notSubscribed.localize,
+              text: status=='premium'?LocaleKeys.premiumSubscription.localize:status=='regular'?LocaleKeys.regularSubscription.localize:LocaleKeys.notSubscribed.localize,
               style: Styles.mediumText(color: Colors.white,fontSize: 35,fontWeight: FontWeight.bold),
               maxLines: 1,
             ),
@@ -340,6 +338,6 @@ class _AdCardState extends State<AdCard> {
         ),
       );
     // premium
-    // Regular
+    // regular
   }
 }
