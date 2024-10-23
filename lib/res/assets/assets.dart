@@ -34,6 +34,7 @@ abstract class Assets {
   static String ride = 'assets/images/ride_icon.svg';
   static String food = 'assets/images/burger_icon.svg';
   static String health = 'assets/images/doctor_icon.svg';
+  static String healthRed = 'assets/images/health.png';
   static String shipping = 'assets/images/goods_icon.svg';
   static String zoom = 'assets/images/zoom.svg';
   static String zoomMeeting = 'assets/images/zoom_meeting.svg';

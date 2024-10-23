@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/enti
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/repositories/company_advertise_repository.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/usecases/delete_company_ad_use_case.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/usecases/get_company_add_use_case.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/usecases/pay_company_ad_use_case.dart';
 
 class CompanyAdvertiseRepositoryImpl implements CompanyAdvertiseRepository {
   final CompanyAdvertiseDataSource _advertiseDataSource;
@@ -33,5 +34,10 @@ class CompanyAdvertiseRepositoryImpl implements CompanyAdvertiseRepository {
   Future<Either<Failure, List<CompanyAdEntity>>> getPostCompanyAd(
       FetchPostCompanyAdvertiseParams params) {
     return _advertiseDataSource.getPostCompanyAd(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> payCompanyAd(PayCompanyAdParams params) {
+    return _advertiseDataSource.payCompanyAd(params);
   }
 }

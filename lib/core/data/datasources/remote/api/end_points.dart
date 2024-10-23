@@ -111,6 +111,7 @@ class EndPoints {
   static String deleteCompanyAd(String id) {
     return '/advertisementCompany/$id';
   }
+  static const payCompanyAd='/advertisementCompany/payment';
 
   static String getPostsCompanyAd(FetchPostCompanyAdvertiseParams params) {
     return '/advertisementCompany/my-advertisement?page=${params.paginationParams.page}&filter=${params.filter}&limit=${params.paginationParams.limit}&subCategory=66adecd7aa2ff24015872e9f';

@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../routes/routes.dart';
@@ -43,9 +42,12 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         route: Routes.FOOD,
       ),
       BottomItemModel(
-        icon: FontAwesomeIcons.plus, // Change to a health-related icon
+        icon: FontAwesomeIcons.plus,
+        // Change to a health-related icon
         label: 'health',
-        index: 2, // Ensure this index matches the health item
+        image: Assets.healthRed,
+        index: 2,
+        // Ensure this index matches the health item
         route: Routes.VISITA,
       ),
       BottomItemModel(
@@ -117,14 +119,16 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     super.initState();
 
     scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
         if (!isScrollingDown) {
           setState(() {
             isScrollingDown = true;
             bottomNavBarHeight = 0.0; // Hide the bottom bar
           });
         }
-      } else if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
+      } else if (scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
         if (isScrollingDown) {
           setState(() {
             isScrollingDown = false;
@@ -169,19 +173,19 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                       padding: index == index1
                           ? EdgeInsets.only(right: 30.w)
                           : index == index2
-                          ? EdgeInsets.only(left: 60.w)
-                          : EdgeInsets.zero,
+                              ? EdgeInsets.only(left: 60.w)
+                              : EdgeInsets.zero,
                       // Conditionally render the Icon or SvgPicture
                       child: index == 2 // Index for "health"
-                          ? Icon(
-                        widget.items[index].icon,
-                        size: widget.items[index].height * 2.h,
-                        color: AppColors.SECONDARY_COLOR,
-                      )
+                          ? Image.asset(
+                              widget.items[index].image!,
+                              //width: 90.w,
+                              height: widget.items[index].height * 2.h,
+                            )
                           : SvgPicture.asset(
-                        widget.items[index].image!,
-                        height: widget.items[index].height * 1.8.h,
-                      ),
+                              widget.items[index].image!,
+                              height: widget.items[index].height * 1.8.h,
+                            ),
                     ),
                   );
                 }),
