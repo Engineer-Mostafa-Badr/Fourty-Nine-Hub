@@ -9,11 +9,11 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:go_router/go_router.dart';
 
 class CallMessageButtons extends StatefulWidget {
-  const CallMessageButtons({super.key, required this.otherUserId, required this.subcategoryId, required this.phone, required this.id, this.hasReport=false});
+  const CallMessageButtons({super.key, required this.otherUserId, required this.subcategoryId, required this.phone, required this.id, this.hasReport=false, this.clientId});
   final String otherUserId;
+  final String? clientId;
   final String subcategoryId;
   final String phone;
   final String id;
@@ -28,6 +28,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: ButtonAvailability().isShowButton(
+          clientId: widget.clientId,
             otherUserId: widget.otherUserId, subcategoryId: widget.subcategoryId ),
         builder: (context, snap) {
           print(snap.data);
@@ -43,7 +44,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                   onTap: snap.data == true ? () {
                     LaunchURLHelper().call( phone: widget.phone);
                   } : () async{
-                    SubscriptionMethod().subscribe(subscribeId: widget.subcategoryId??'', title: LocaleKeys.ads.localize);
+                    SubscriptionMethod().subscribe(subscribeId: widget.subcategoryId, title: LocaleKeys.ads.localize);
                   },
                 ),
               ),
@@ -55,7 +56,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                   color: snap.data == true ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
                   icon: Icons.email,
                   onTap: snap.data == true ? () {} : () {
-                    SubscriptionMethod().subscribe(subscribeId: widget.subcategoryId??'', title: LocaleKeys.ads.localize);
+                    SubscriptionMethod().subscribe(subscribeId: widget.subcategoryId, title: LocaleKeys.ads.localize);
                   },
                 ),
               ),

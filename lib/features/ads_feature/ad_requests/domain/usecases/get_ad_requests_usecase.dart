@@ -1,16 +1,16 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/ads_feature/ad_details/domain/repositories/ad_details_repo.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_model.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/entities/ad_request_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/repositories/ad_requests_repo.dart';
 
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
-class GetAdRequestsUseCase extends UseCase<AddDetailsModel, String> {
-  final AdDetailsRepo _repo;
+class GetAdRequestsUseCase extends UseCase<List<AdRequestEntity>, String> {
+  final AdRequestsRepo _repo;
   GetAdRequestsUseCase(this._repo);
 
   @override
-  Future<Either<Failure, AddDetailsModel>> call(String params) {
-    return _repo.getAdDetails(id: params);
+  Future<Either<Failure, List<AdRequestEntity>>> call(String params) {
+    return _repo.getAdRequests(id: params);
   }
 }

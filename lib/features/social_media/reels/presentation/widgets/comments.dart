@@ -2374,13 +2374,10 @@
 //   );
 // }
 
-import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
@@ -2391,7 +2388,6 @@ import 'package:shimmer/shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../tinder/data/shared/shared.dart';
-import '../../../tinder/presentation/pages/user_profile.dart';
 import 'dart:ui';
 
 bool isDarkTheme(BuildContext context) {
@@ -2818,7 +2814,7 @@ class _CommentWidgetState extends State<CommentWidget> {
   Widget _buildRepliesList(
       bool isDark, TextStyle userNameStyle, TextStyle commentTextStyle) {
     return Padding(
-      padding: EdgeInsets.only(left: 40.0, bottom: 8, top: 8),
+      padding: const EdgeInsets.only(left: 40.0, bottom: 8, top: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: widget.commentData.replies
@@ -2843,7 +2839,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                     NetworkImage(reply.user.profilePictureSignedUrl),
                 radius: 16,
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -2976,7 +2972,7 @@ class ShimmerCommentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -2988,7 +2984,7 @@ class ShimmerCommentWidget extends StatelessWidget {
               radius: 20,
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -3020,7 +3016,7 @@ class ShimmerCommentWidget extends StatelessWidget {
                       highlightColor: Colors.white12,
                       child: const Icon(Icons.favorite, color: Colors.white12),
                     ),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 5),
                     Shimmer.fromColors(
                       baseColor: Colors.white12,
                       highlightColor: Colors.white12,

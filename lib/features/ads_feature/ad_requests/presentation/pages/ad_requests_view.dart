@@ -10,10 +10,11 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_details_prop_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/strings/labels.dart';
@@ -42,7 +43,7 @@ class AdRequestsView extends StatefulWidget {
 class _AdRequestsViewState extends State<AdRequestsView> {
   @override
   void initState() {
-    // context.read<AdDetailsCubit>().loadData(adId: widget.id);
+    context.read<AdRequestsCubit>().getRelevantAds(widget.id);
     super.initState();
   }
 
@@ -67,30 +68,72 @@ class _AdRequestsViewState extends State<AdRequestsView> {
                 showSuccessMessage(context, Labels.success);
               }
             }, builder: (context, state) {
-          // if (state.ad == null) {
-          //   return const Center(
-          //     child: CircularProgressIndicator.adaptive(),
-          //   );
-          // }
-          List<AdDetailsPropEntity>? details = state.ad?.details
-              .where((e) => e.nameAr != 'الراتب' && e.nameAr != 'السعر')
-              .toList();
+              print("state.requests?[0].subCategoryId${state.requests?[0].subCategoryId}");
+          if (state.isLoading) {
+            return Shimmer.fromColors(
+              baseColor: Colors.grey[100]!,
+              highlightColor: Colors.white24,
+              child: Column(
+                children: List.generate(
+                    6,
+                        (index) => Padding(
+                      padding: EdgeInsets.only(bottom: 15.h),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height *
+                            .15.h,
+                        width: double.infinity,
+                        margin:
+                        EdgeInsets.symmetric(horizontal: 10.w),
+                        padding:
+                        EdgeInsets.symmetric(horizontal: 10.w),
+                        decoration: BoxDecoration(
+                          color: AppColors.AUTH_CONTAINER_COLOR,
+                          borderRadius: BorderRadius.circular(20.r),
+                          border: Border.all(color: Colors.grey),
+                        ),
+                      ),
+                    )),
+              ),
+            );
+          }
+          // List<AdDetailsPropEntity>? details = state.ad?.details
+          //     .where((e) => e.nameAr != 'الراتب' && e.nameAr != 'السعر')
+          //     .toList();
           // print("state.ad?.user${context.read<AdDetailsCubit>().state.ad?.user?.id}");
 
-          return Column(
-            children: [
-              // Expanded(
-              //   child: ListView(
-              //     children: [
-              //       _buildTag(status: state.ad?.subscriptionStatus??''),
-              //       const Sizer(),
-              //       _buildRelevantAdsWidget(),
-              //     ],
-              //   ),
-              // ),
-              // CallMessageButtons(otherUserId: state.ad?.userId??'', subcategoryId: state.ad?.subCategoryId??'', phone: state.ad?.phone??'', id: state.ad?.id??'',hasReport: true,),
-            ],
-          );
+          return ListView.separated(itemBuilder: (context,i)=>Container(
+            margin: EdgeInsetsDirectional.all(10.w),
+            padding: EdgeInsetsDirectional.symmetric(horizontal: 10.w,vertical: 10.h),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5.r),
+              border: Border.all(color: AppColors.DARK_GRAY_COLOR, width: 1),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 100.w,height: 100.h,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(image: AssetImage(state.requests?[i].gender=='male'?Assets.maleImagePlaceholder:Assets.femaleImagePlacehlder), fit: BoxFit.contain),
+                        shape: BoxShape.circle
+                      ),
+                    ),
+                    Sizer(),
+                    Column(
+                      children: [
+                        Text(state.requests?[i].userName??'',style: Styles.headerText(),),
+                        Text(state.requests?[i].sinceTime??'',style: Styles.mediumText(),),
+                      ],
+                    ),
+
+                  ],
+                ),
+                CallMessageButtons(otherUserId: state.requests?[i].adUserId??'',clientId: state.requests?[i].requestId, subcategoryId: state.requests?[i].subCategoryId??'', phone: state.requests?[i].phone??'', id: state.requests?[i].requestUserId??'',hasReport: true,),
+
+              ],
+            ),
+          ), separatorBuilder: (context,i)=>Sizer(), itemCount: state.requests?.length??0);
         }));
   }
 
@@ -124,40 +167,40 @@ class _AdRequestsViewState extends State<AdRequestsView> {
         });
   }
 
-  Widget _buildActionsWidget() {
-    return BlocBuilder<AdDetailsCubit, AdDetailsState>(
-        builder: (context, state) {
-          return Container(
-            margin: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                // const Sizer(),
-                // Row(
-                //   crossAxisAlignment: CrossAxisAlignment.center,
-                //   children: [
-                //     Expanded(
-                //       flex: 3,
-                //       child: BlocProvider(
-                //           create: (_)=>serviceLocator<AdvertisementCubit>(),
-                //           child: PremiumRequestButton(adId: state.ad?.id??'',subCategoryId: state.ad?.subCategoryId??'',subscriptionStatus: state.ad?.subscriptionStatus??'',)),
-                //     ),
-                //     const Sizer(width: 5),
-                //     Expanded(
-                //       flex: 3,
-                //       child: BlocProvider(
-                //           create: (_)=>serviceLocator<AdvertisementCubit>(),
-                //           child: RequestButton(adId: state.ad?.id??'',subscriptionStatus: state.ad?.subscriptionStatus??''))
-                //
-                //     )
-                //   ],
-                // ),
-                // const Sizer(),
-                CallMessageButtons(otherUserId: state.ad?.userId??'', subcategoryId: state.ad?.subCategoryId??'', phone: state.ad?.phone??'', id: state.ad?.id??'',hasReport: true,),
-              ],
-            ),
-          );
-        });
-  }
+  // Widget _buildActionsWidget() {
+  //   return BlocBuilder<AdDetailsCubit, AdDetailsState>(
+  //       builder: (context, state) {
+  //         return Container(
+  //           margin: const EdgeInsets.all(10),
+  //           child: Column(
+  //             children: [
+  //               // const Sizer(),
+  //               // Row(
+  //               //   crossAxisAlignment: CrossAxisAlignment.center,
+  //               //   children: [
+  //               //     Expanded(
+  //               //       flex: 3,
+  //               //       child: BlocProvider(
+  //               //           create: (_)=>serviceLocator<AdvertisementCubit>(),
+  //               //           child: PremiumRequestButton(adId: state.ad?.id??'',subCategoryId: state.ad?.subCategoryId??'',subscriptionStatus: state.ad?.subscriptionStatus??'',)),
+  //               //     ),
+  //               //     const Sizer(width: 5),
+  //               //     Expanded(
+  //               //       flex: 3,
+  //               //       child: BlocProvider(
+  //               //           create: (_)=>serviceLocator<AdvertisementCubit>(),
+  //               //           child: RequestButton(adId: state.ad?.id??'',subscriptionStatus: state.ad?.subscriptionStatus??''))
+  //               //
+  //               //     )
+  //               //   ],
+  //               // ),
+  //               // const Sizer(),
+  //               CallMessageButtons(otherUserId: state.ad?.userId??'', subcategoryId: state.ad?.subCategoryId??'', phone: state.ad?.phone??'', id: state.ad?.id??'',hasReport: true,),
+  //             ],
+  //           ),
+  //         );
+  //       });
+  // }
 
   Widget _buildTag({required String status}) {
     // super premium

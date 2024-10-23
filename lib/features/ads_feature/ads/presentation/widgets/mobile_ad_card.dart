@@ -1,8 +1,6 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/functions/global/button_availability.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -12,7 +10,6 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/prem
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -20,7 +17,6 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 
 class MobileAdCard extends StatefulWidget {
   final AdEntity item;
@@ -263,18 +259,18 @@ class _MobileAdCardState extends State<MobileAdCard> {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(10.w),
-      color: status=='premium'?Colors.amber:status=='Regular'?Colors.grey:Colors.grey,
+      color: status=='premium'?Colors.amber:status=='regular'?Colors.grey:Colors.grey,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if(status=='premium'||status=='Regular')...[
+          if(status=='premium'||status=='regular')...[
             Icon(Icons.workspace_premium_outlined,
               size: 55.w,
-              color: status=='premium'?AppColors.SECONDARY_COLOR:status=='Regular'?AppColors.PRIMARY_COLOR:null,
+              color: status=='premium'?AppColors.SECONDARY_COLOR:status=='regular'?AppColors.PRIMARY_COLOR:null,
             ),
             const Sizer(width: 5)],
           Label(
-            text: status=='premium'?LocaleKeys.premiumSubscription.localize:status=='Regular'?LocaleKeys.regularRequest.localize:LocaleKeys.notSubscribed.localize,
+            text: status=='premium'?LocaleKeys.premiumSubscription.localize:status=='regular'?LocaleKeys.regularRequest.localize:LocaleKeys.notSubscribed.localize,
             style: Styles.mediumText(color: Colors.white,fontSize: 35,fontWeight: FontWeight.bold),
             maxLines: 1,
           ),
@@ -282,6 +278,6 @@ class _MobileAdCardState extends State<MobileAdCard> {
       ),
     );
     // premium
-    // Regular
+    // regular
   }
 }

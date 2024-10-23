@@ -6,6 +6,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 class ButtonAvailability {
   Future<bool> isShowButton({
     required String otherUserId,
+    String? clientId,
     required String subcategoryId,
   }) async {
     bool result =false;
@@ -13,7 +14,7 @@ class ButtonAvailability {
       final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
       final response = await serviceLocator<ApiConsumer>()
           .post(EndPoints.buttonAvailable, data: {
-        "clientId": userId,
+        "clientId": clientId??userId,
         "ownerId": otherUserId,
         "subcategoryId": subcategoryId
       });

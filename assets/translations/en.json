@@ -1012,5 +1012,6 @@
   "premiumSubscription": "Premium Subscription",
   "regularSubscription": "Regular Subscription",
   "notSubscribed": "Not Subscribed",
-  "adRequests": "Ad Requests"
+  "adRequests": "Ad Requests",
+  "showAdRequests": "Show Ad Requests"
 }

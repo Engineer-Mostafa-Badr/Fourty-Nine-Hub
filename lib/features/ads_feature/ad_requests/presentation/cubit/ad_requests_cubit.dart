@@ -1,30 +1,29 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_model.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/entities/ad_request_entity.dart';
 import '../../../../../core/error/failure.dart';
-import '../../../ads/domain/usecases/get_ads_usecase.dart';
 import '../../domain/usecases/get_ad_requests_usecase.dart';
 part 'ad_requests_state.dart';
 
 class AdRequestsCubit extends Cubit<AdRequestsState> {
-  final GetAdsUseCase _getAdsUseCase;
+  final GetAdRequestsUseCase _getAdRequestsUseCase;
 
   String? phone;
-  AdRequestsCubit( this._getAdsUseCase,
+  AdRequestsCubit( this._getAdRequestsUseCase,
       )
       : super(const AdRequestsState());
 
 
 
-  //
-  // Future<void> getRelevantAds() async {
-  //   final response = await _getAdsUseCase(GetAdsParams(subCategoryId: state.ad?.subCategoryId ?? '',filter: 'provider'));
-  //   response.fold(
-  //       (failure) => emit(
-  //           state.copyWith(failure: failure, status: AdRequestsStates.error)),
-  //       (data) => emit(state.copyWith(
-  //           relevantAds: data, status: AdRequestsStates.initState)));
-  // }
+
+  Future<void> getRelevantAds(String id) async {
+    emit(state.copyWith(status: AdRequestsStates.loading));
+    final response = await _getAdRequestsUseCase(id);
+    response.fold(
+        (failure) => emit(
+            state.copyWith(failure: failure, status: AdRequestsStates.error)),
+        (data) => emit(state.copyWith(
+            requests: data, status: AdRequestsStates.initState)));
+  }
 
   void changePhone({
     required String v,

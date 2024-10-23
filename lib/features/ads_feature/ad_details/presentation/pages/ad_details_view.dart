@@ -144,7 +144,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
       height: 80.h,
       padding: EdgeInsets.all(10.w),
       child: AvaialbleTripsButton(
-        title: 'Show add requests',
+        title: LocaleKeys.showAdRequests.localize,
         color: AppColors.SECONDARY_COLOR,
         onTap: () async {
           context.push(Routes.ADRequests,extra: widget.id);
@@ -192,18 +192,18 @@ class _AdDetailsViewState extends State<AdDetailsView> {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(10.w),
-      color: status=='premium'?Colors.amber:status=='Regular'?Colors.grey:Colors.grey,
+      color: status=='premium'?Colors.amber:status=='regular'?Colors.grey:Colors.grey,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if(status=='premium'||status=='Regular')...[
+          if(status=='premium'||status=='regular')...[
             Icon(Icons.workspace_premium_outlined,
               size: 55.w,
-              color: status=='premium'?AppColors.SECONDARY_COLOR:status=='Regular'?AppColors.PRIMARY_COLOR:null,
+              color: status=='premium'?AppColors.SECONDARY_COLOR:status=='regular'?AppColors.PRIMARY_COLOR:null,
             ),
             const Sizer(width: 5)],
           Label(
-            text: status=='premium'?"Premium":status=='premium'?"Regular":'Not Subscribed',
+            text: status=='premium'?LocaleKeys.premiumSubscription.localize:status=='regular'?LocaleKeys.regularRequest.localize:LocaleKeys.notSubscribed.localize,
             style: Styles.mediumText(color: Colors.white,fontSize: 35,fontWeight: FontWeight.bold),
             maxLines: 1,
           ),

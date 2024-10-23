@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/constants/constants.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_ad_details_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
@@ -773,8 +774,12 @@ class EndPoints {
     return '/auction/end-auction/$id';
   }
 
-  static String adDetails(String id) {
-    return '/ads/getAd/$id';
+  static String adDetails(GetAdDetailsParams params) {
+    return '/ads/getAd/${params.adId}${params.userId.isNotEmpty?"?userId=${params.userId}":""}';
+  }
+
+  static String adRequests(String id) {
+    return '/ads-requests/getAdRequest/$id';
   }
 
   // /installment

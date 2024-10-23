@@ -21,6 +21,7 @@ import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/ma
 import 'package:fourtyninehub/features/ads_feature/ad_requests/data/datasources/ad_requests_remote_data_source.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/data/repositories/ad_requests_repo_impl.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/repositories/ad_requests_repo.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/usecases/get_ad_requests_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/datasources/ads_remote_data_source.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/repositories/ads_repo.dart';
@@ -159,6 +160,12 @@ class FourtyNineServiceLocator {
     // use cases
     serviceLocator.registerLazySingleton<GetParentMainCategoriesUseCase>(
       () => GetParentMainCategoriesUseCase(
+        serviceLocator(),
+      ),
+    );
+
+    serviceLocator.registerLazySingleton<GetAdRequestsUseCase>(
+      () => GetAdRequestsUseCase(
         serviceLocator(),
       ),
     );

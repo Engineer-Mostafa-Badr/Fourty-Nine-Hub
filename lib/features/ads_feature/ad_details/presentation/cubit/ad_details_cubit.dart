@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_model.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../ads/domain/usecases/get_ads_usecase.dart';
 import '../../domain/usecases/get_ad_details_usecase.dart';
@@ -22,7 +23,8 @@ class AdDetailsCubit extends Cubit<AdDetailsState> {
   }
 
   Future<void> getAdDetails({required String adId}) async {
-    final response = await _getAdDetailsUseCase(adId);
+    final userId = UserCubit.to.state.data?.id;
+    final response = await _getAdDetailsUseCase(GetAdDetailsParams(adId: adId,userId: userId??''));
 
     response.fold(
         (failure) => emit(

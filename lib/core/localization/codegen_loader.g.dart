@@ -970,6 +970,7 @@ class CodegenLoader extends AssetLoader{
   "premiumRequest": "طلب مميز",
   "normalRequest": "طلب عادي",
   "adRequests": "طلبات الاعلان",
+  "showAdRequests": "عرض طلبات الاعلان",
   "comfort": "مريح",
   "womenOnly": "نسوان",
   "minutesAgo": "من دقيقه",
@@ -1986,7 +1987,8 @@ static const Map<String,dynamic> en = {
   "premiumSubscription": "Premium Subscription",
   "regularSubscription": "Regular Subscription",
   "notSubscribed": "Not Subscribed",
-  "adRequests": "Ad Requests"
+  "adRequests": "Ad Requests",
+  "showAdRequests": "Show Ad Requests"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
