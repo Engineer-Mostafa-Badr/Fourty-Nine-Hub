@@ -787,7 +787,7 @@ class EndPoints {
   }
 
   static String adRequests(String id) {
-    return '/ads-requests/getAdRequest/$id';
+    return '/ads-requests/getAdRequest/$id/search';
   }
 
   // /installment

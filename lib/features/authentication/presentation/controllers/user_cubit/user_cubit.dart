@@ -111,7 +111,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     emit(state.copyWith(status: StateStatus.loading));
     final result = await _signOutUseCase(const NoParams());
     result.fold((l) => emit(state.copyWith(status: StateStatus.error)),
-        (r) => emit(state.copyWith(status: StateStatus.success,token: null,data: null)));
+        (r) => emit(state.copyWith(status: StateStatus.success,token: null,data: const UserEntity(id: '', firstName: '', lastName: '', email: '', profilePicture: '', profileCover: '', friendsCount: null, followersCount: null, followingCount: null, wallet: null))));
     // if(result == true){
     //   emit(state.copyWith(status: StateStatus.success,data: null,token: null));
       pr('state token is  ${state.token}');
