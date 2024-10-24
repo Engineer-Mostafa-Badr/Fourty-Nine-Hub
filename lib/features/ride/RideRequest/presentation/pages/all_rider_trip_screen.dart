@@ -1,18 +1,6 @@
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_all_trip_rider_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_expired_trip_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_route_rider_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/google_map_tracking.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 // import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 

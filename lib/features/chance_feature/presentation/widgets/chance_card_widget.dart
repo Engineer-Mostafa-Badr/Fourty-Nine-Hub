@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/chance_feature/domain/entity/main_categry_entity.dart';
 import 'package:fourtyninehub/features/chance_feature/domain/entity/sup_category_entity.dart';
-import 'package:fourtyninehub/features/chance_feature/presentation/controller/cubit/chance_cubit.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/pages/chance_details_view.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/image_card_widget.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/subscribe_widget_in_card.dart';

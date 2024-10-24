@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -12,6 +13,8 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
@@ -55,6 +58,9 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(
+              height: 32,
+            ),
             Row(
               children: [
                 ProfileImage(
@@ -74,10 +80,15 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                         text: widget.reply.user.firstName,
                         style: Styles.mediumText(
                             fontWeight: FontWeight.bold,
-                            color: widget.textColor)),
+                            color: context.isDarkMode
+                                ? AppColors.SECONDARY_COLOR
+                                : Colors.black)),
                     Label(
                         text: widget.reply.sinceTime,
-                        style: Styles.mediumText(color: widget.textColor)),
+                        style: Styles.smallText(
+                            color: context.isDarkMode
+                                ? AppColors.LIGHT_COLOR
+                                : Colors.black)),
                   ],
                 )),
                 GestureDetector(
@@ -92,17 +103,30 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                   },
                   child: Icon(
                     Icons.more_horiz_outlined,
-                    color: widget.textColor,
+                    color: context.isDarkMode
+                        ? AppColors.LIGHT_COLOR
+                        : Colors.black,
                     size: 20,
                   ),
                 ),
               ],
             ),
             const Sizer(),
-            Label(
-              textAlign: TextAlign.start,
-              text: widget.reply.content,
-              style: Styles.mediumText(color: widget.textColor),
+            Row(
+              children: [
+                const SizedBox(
+                  width: 32,
+                ),
+                Label(
+                  textAlign: TextAlign.start,
+                  text: widget.reply.content,
+                  style: Styles.mediumText(
+                    color: context.isDarkMode
+                        ? AppColors.LIGHT_COLOR
+                        : Colors.black,
+                  ),
+                ),
+              ],
             ),
             if (widget.reply.edit == true)
               Row(
@@ -116,7 +140,9 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                     },
                     style: Styles.headerText(fontSize: 26),
                     decoration: InputDecoration(
-                      fillColor: Colors.white,
+                      fillColor: context.isDarkMode
+                          ? Colors.transparent
+                          : Colors.white,
                       contentPadding: const EdgeInsets.all(5),
                       hintText: '${LocaleKeys.typeYourReply.localize} ....',
                       hintStyle: Styles.mediumText(),
@@ -141,10 +167,15 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                         })
                 ],
               ),
-            const Sizer(),
+            const Sizer(
+              height: 16,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                const SizedBox(
+                  width: 32,
+                ),
                 InkWell(
                   onTap: () async {
                     if (widget.reply.isLove == true) {
@@ -191,6 +222,9 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                         widget.reply.isLove == false ? Colors.grey : Colors.red,
                   ),
                 ),
+                const SizedBox(
+                  width: 4,
+                ),
                 Label(text: '${widget.reply.loveCount}'),
               ],
             ),
@@ -226,6 +260,8 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
           if (isMyComment)
             listTile(
                 icon: Icons.delete,
+                iconColor:
+                    context.isDarkMode ? AppColors.LIGHT_COLOR : Colors.black,
                 title: LocaleKeys.deleteReply.localize,
                 subTitle: LocaleKeys.youWillDeleteReply.localize,
                 onTap: () {
@@ -234,6 +270,8 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
           if (isMyComment)
             listTile(
                 icon: Icons.edit,
+                iconColor:
+                    context.isDarkMode ? AppColors.LIGHT_COLOR : Colors.black,
                 title: LocaleKeys.editReply.localize,
                 subTitle: LocaleKeys.youWillEditReply.localize,
                 onTap: () {

@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/usecases/pay_company_ad_use_case.dart';
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/error/failure.dart';
 import '../../domain/entities/company_ad_entity.dart';
@@ -19,12 +20,13 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
   final GetCompanyAddUseCases _companyAddUseCases;
   final DeleteCompanyAddUseCases _deleteCompanyAddUseCases;
   final GetPostsCompanyAdUseCase _getPostsCompanyAdUseCase;
+  final PayCompanyAdUseCase _payCompanyAdUseCase;
 
   CreateCompanyAdCubit(
     this._getPriceUseCases,
     this._companyAddUseCases,
     this._deleteCompanyAddUseCases,
-    this._getPostsCompanyAdUseCase,
+    this._getPostsCompanyAdUseCase, this._payCompanyAdUseCase,
   ) : super(const CreateCompanyAdState());
 
   void loadData() async {
@@ -99,5 +101,17 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
       },
     );
     return result;
+  }
+
+  Future<void> payCompanyAd(PayCompanyAdParams params) async {
+    emit(state.copyWith(status: StateStatus.loading)); // Start loading state
+    final response = await _payCompanyAdUseCase(params);
+  return response.fold(
+      (failure) =>
+          emit(state.copyWith(failure: failure, status: StateStatus.error)),
+      (success) {
+        emit(state.copyWith(status: StateStatus.success));
+      },
+    );
   }
 }

@@ -2403,11 +2403,11 @@ class NoScaleText extends StatelessWidget {
 
   const NoScaleText(
     this.data, {
-    Key? key,
+    super.key,
     this.style,
     this.textAlign,
     this.maxLines,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -2443,7 +2443,7 @@ bool isKeyboardVisible(BuildContext context) {
 class CommentsBottomSheet extends StatefulWidget {
   final Reel reel;
 
-  const CommentsBottomSheet({Key? key, required this.reel}) : super(key: key);
+  const CommentsBottomSheet({super.key, required this.reel});
 
   @override
   _CommentsBottomSheetState createState() => _CommentsBottomSheetState();
@@ -2564,10 +2564,10 @@ class CommentInputField extends StatefulWidget {
   final ScrollController scrollController;
 
   const CommentInputField({
-    Key? key,
+    super.key,
     required this.reel,
     required this.scrollController,
-  }) : super(key: key);
+  });
 
   @override
   CommentInputFieldState createState() => CommentInputFieldState();
@@ -2597,7 +2597,7 @@ class CommentInputFieldState extends State<CommentInputField> {
                 alignment: Alignment.centerRight,
                 children: [
                   MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                    data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
                     child: TextField(
                       controller: _commentController,
                       style: TextStyle(
@@ -2678,7 +2678,7 @@ class CommentInputFieldState extends State<CommentInputField> {
 class CommentWidget extends StatefulWidget {
   final CommentData commentData;
 
-  const CommentWidget({Key? key, required this.commentData}) : super(key: key);
+  const CommentWidget({super.key, required this.commentData});
 
   @override
   _CommentWidgetState createState() => _CommentWidgetState();
@@ -2898,7 +2898,7 @@ class _CommentWidgetState extends State<CommentWidget> {
         children: [
           Expanded(
             child: MediaQuery(
-              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
               child: TextField(
                 controller: _replyController,
                 focusNode: _replyFocusNode,
@@ -2969,6 +2969,8 @@ class _CommentWidgetState extends State<CommentWidget> {
 
 // Shimmer effect for loading state of comments
 class ShimmerCommentWidget extends StatelessWidget {
+  const ShimmerCommentWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(

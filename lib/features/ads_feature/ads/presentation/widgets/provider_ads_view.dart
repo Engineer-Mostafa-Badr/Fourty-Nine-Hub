@@ -22,10 +22,14 @@ class ProviderAdsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return controller.state.status == AdsStates.loading ? const Center(
-        child: CircularProgressIndicator()
+    return controller.state.status == AdsStates.loading ?  Center(
+        child: Padding(
+          padding: EdgeInsets.only(top: 30.h),
+          child: const CircularProgressIndicator(),
+        )
     ) : Column(
         children: [
+          const Sizer(),
           Align(
               alignment: AlignmentDirectional.topStart,
               child: Container(
@@ -33,7 +37,7 @@ class ProviderAdsView extends StatelessWidget {
                   child: Row(
                     children: [
                       BadgedLabel(label: LocaleKeys.filter.localize,
-                          width: 145.h,
+                          width: 170.h,
                           icon: Icons.filter_alt_rounded,
                           iconLeading: Icons.arrow_drop_down,
                           onTap: () async {
@@ -54,7 +58,7 @@ class ProviderAdsView extends StatelessWidget {
                       ),
                       const Sizer(width: 5,),
                       BadgedLabel(label: LocaleKeys.city.localize,
-                          width: 145.h,
+                          width: 170.h,
                           icon: Icons.filter_alt_rounded,
                           iconLeading: Icons.arrow_drop_down,
                           onTap: () async {

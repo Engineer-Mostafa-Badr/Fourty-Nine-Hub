@@ -176,7 +176,7 @@ class RestaurantOrderCard extends StatelessWidget {
 
                         Row(
                           children: [
-                            Spacer(),
+                            const Spacer(),
                             Text(
                               getTimeAgo(context, order.createdAt.toString()),
                               style: TextStyle(color: Colors.grey[600]),

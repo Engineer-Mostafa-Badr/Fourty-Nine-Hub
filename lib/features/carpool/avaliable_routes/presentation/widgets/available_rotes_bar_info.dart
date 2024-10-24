@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/available_routes_card_entity.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/get_all_trips_entity.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/available_routes_point_widget.dart';
 
@@ -20,6 +19,8 @@ class AvilableRoutesBarInfo extends StatelessWidget {
         children: [
           Expanded(
             child: AvailableRoutesPointInfo(
+                entity: entity,
+                createdAt: entity.createdAt,
                 seatId: "first",
                 tripId: entity.id,
                 userLocation: const [40.0333486, -3.925665899999999],
@@ -31,6 +32,8 @@ class AvilableRoutesBarInfo extends StatelessWidget {
           ),
           Expanded(
             child: AvailableRoutesPointInfo(
+                entity: entity,
+                createdAt: entity.createdAt,
                 isComfort: entity.comfort,
                 price: entity.priceForEveryUser,
                 seatId: "second",
@@ -42,6 +45,8 @@ class AvilableRoutesBarInfo extends StatelessWidget {
           ),
           Expanded(
             child: AvailableRoutesPointInfo(
+                entity: entity,
+                createdAt: entity.createdAt,
                 isComfort: entity.comfort,
                 price: entity.priceForEveryUser,
                 dotNumber: 3,
@@ -53,6 +58,8 @@ class AvilableRoutesBarInfo extends StatelessWidget {
           ),
           Expanded(
             child: AvailableRoutesPointInfo(
+              entity: entity,
+              createdAt: entity.createdAt,
               seatId: "",
               tripId: "",
               userLocation: const [40.0333486, -3.925665899999999],

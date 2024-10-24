@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -13,6 +15,7 @@ import 'package:fourtyninehub/features/authentication/domain/entities/user_entit
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import 'package:fourtyninehub/features/quraan/presentation/pages/quran_page.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -33,9 +36,32 @@ import '../stateless/buttons/iconAppButton.dart';
 import '../stateless/labels/label.dart';
 import 'sizer.dart';
 
-class DrawerWidget extends StatelessWidget {
+class DrawerWidget extends StatefulWidget {
   const DrawerWidget({super.key});
 
+  @override
+  State<DrawerWidget> createState() => _DrawerWidgetState();
+}
+
+class _DrawerWidgetState extends State<DrawerWidget> {
+  var widgejsonData;
+
+  loadJsonAsset() async {
+    final String jsonString =
+    await rootBundle.loadString('assets/json/surahs.json');
+    var data = jsonDecode(jsonString);
+    setState(() {
+      widgejsonData = data;
+    });
+  }
+
+  @override
+  void initState() {
+    loadJsonAsset();
+
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -67,7 +93,15 @@ class DrawerWidget extends StatelessWidget {
                     drawerListTile(
                         image: Assets.quran,
                         label: LocaleKeys.quraan.localize,
-                        onTap: () => context.push(Routes.QURAAN)),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (builder) => QuranPage(
+                                    suraJsonData: widgejsonData,
+                                  )));
+                        //  return context.push(Routes.QURAAN);
+                        }),
                     drawerListTile(
                         image: Assets.azkar,
                         label: LocaleKeys.azkar.localize,
@@ -337,65 +371,6 @@ class DrawerWidget extends StatelessWidget {
   }
 
   // Widget walletCircularProgress({
-  //   required BuildContext context,
-  // }) {
-  //   return InkWell(
-  //     onTap: () {
-  //       context.push(Routes.WALLET);
-  //     },
-  //     child: Container(
-  //       padding: const EdgeInsets.all(10),
-  //       margin: const EdgeInsets.all(5),
-  //       decoration: BoxDecoration(
-  //           borderRadius: BorderRadius.circular(5),
-  //           color: AppColors.LIGHT_GRAY_COLOR),
-  //       child: Row(
-  //         children: [
-  //           Expanded(
-  //               child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Label(
-  //                   text: LocaleKeys.wallet.localize,
-  //                   style: Styles.mediumText(fontWeight: FontWeight.bold)),
-  //               Label(
-  //                   text: 'Earn Money with 49Hub',
-  //                   style: Styles.mediumText(fontWeight: FontWeight.w400)),
-  //             ],
-  //           )),
-  //           SizedBox(
-  //             height: kTextTabBarHeight,
-  //             width: kTextTabBarHeight,
-  //             child: Stack(
-  //               children: [
-  //                 const Positioned.fill(
-  //                   child: CircularProgressIndicator(
-  //                     value: .3,
-  //                     strokeWidth: 5,
-  //                     color: AppColors.PRIMARY_COLOR,
-  //                     backgroundColor: Colors.white,
-  //                   ),
-  //                 ),
-  //                 Positioned.fill(
-  //                     child: Center(
-  //                         child: RichText(
-  //                             text: TextSpan(children: [
-  //                   TextSpan(text: '300\n', style: Styles.mediumText()),
-  //                   TextSpan(
-  //                       text: '/1002',
-  //                       style: Styles.mediumText(
-  //                         fontSize: 8.sp,
-  //                       ))
-  //                 ]))))
-  //               ],
-  //             ),
-  //           )
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget drawerListTile(
       {IconData? icon,
       required String label,

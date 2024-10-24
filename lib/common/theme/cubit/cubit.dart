@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 
-import '../../../core/utils/theme_service.dart';
 
 class ThemeCubit extends Cubit<ThemeStates> {
   ThemeCubit() : super(LightThemeModeStates());

@@ -2,7 +2,6 @@
 import 'dart:core';
 
 // Flutter imports:
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,10 +35,8 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../../../res/style/styles.dart';
 import '../../../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'dynamic_progress_indicator.dart';
 
 /// @nodoc
 class ZegoLiveStreamingLivePageSurface extends StatefulWidget {

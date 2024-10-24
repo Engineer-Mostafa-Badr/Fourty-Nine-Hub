@@ -330,7 +330,7 @@ class _FollowingSectionState extends State<FollowingSection> {
                       color: isDarkTheme(context) ? Colors.white : Colors.grey,
                       onPressed: () => context.pop(),
                     ),
-                    actions: [
+                    actions: const [
                       // const Spacer(),
                       // Padding(
                       //   padding: const EdgeInsets.all(8.0),
@@ -502,7 +502,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
                     color: isDarkTheme(context) ? Colors.white : Colors.grey,
                     onPressed: () => context.pop(),
                   ),
-                  actions: [
+                  actions: const [
                     // const Spacer(),
                     // Padding(
                     //   padding: const EdgeInsets.all(8.0),

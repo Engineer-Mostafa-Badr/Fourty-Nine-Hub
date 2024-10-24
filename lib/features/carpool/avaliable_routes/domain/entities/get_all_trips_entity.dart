@@ -61,8 +61,8 @@ class CarpoolLocation {
 }
 
 class LocationCoordinates {
-  final double latitude;
-  final double longitude;
+  final double? latitude;
+  final double? longitude;
 
   LocationCoordinates({
     required this.latitude,

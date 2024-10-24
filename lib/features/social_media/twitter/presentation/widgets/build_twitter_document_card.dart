@@ -61,7 +61,7 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
           margin: const EdgeInsets.all(10),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: AppColors.PRIMARY_COLOR_LIGHT,
+              color: AppColors.PRIMARY_COLOR,
               borderRadius: BorderRadius.circular(15)),
           child: Center(
             child: Row(
@@ -74,7 +74,7 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
                 ),
                 Label(
                   text: LocaleKeys.documentation.localize,
-                  style: Styles.headerText(fontSize: 20, color: Colors.white),
+                  style: Styles.headerText( color: Colors.white),
                 ),
                 const SizedBox(
                   width: 10,

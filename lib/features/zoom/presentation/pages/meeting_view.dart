@@ -17,7 +17,6 @@ import 'package:fourtyninehub/features/zoom/presentation/controller/stream_state
 import 'package:fourtyninehub/features/zoom/presentation/pages/meeting_room.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/schedule_meeting_screen.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';

@@ -18,7 +18,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/listen_to_new_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/pin_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unpin_chat_use_case.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'chats_state.dart';
 

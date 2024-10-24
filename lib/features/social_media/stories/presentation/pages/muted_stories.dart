@@ -10,6 +10,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class MutedStories extends StatefulWidget {
+  const MutedStories({super.key});
+
   @override
   State<MutedStories> createState() => _MutedStoriesState();
 }

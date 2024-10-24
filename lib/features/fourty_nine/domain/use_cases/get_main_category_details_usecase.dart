@@ -5,7 +5,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/features/fourty_nine/domain/repositories/fourty_nine_repository.dart';
 
 class GetMainCategoryDetailsUseCase
-    extends UseCase<MainCategoryEntity, String> {
+    extends UseCase<MainCategoryEntity?, String> {
   final FourtyNineRepository _repo;
   GetMainCategoryDetailsUseCase(this._repo);
   @override

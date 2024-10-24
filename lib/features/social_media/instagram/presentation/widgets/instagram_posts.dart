@@ -13,6 +13,7 @@ import 'package:fourtyninehub/common/widgets/stateless/images/social_image_viewe
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -108,10 +109,13 @@ class _InstagramPostsState extends State<InstagramPosts> {
           slivers: [
             SliverToBoxAdapter(
               child: BlocProvider<StoryCubit>(
-                create: (_) => serviceLocator()..fetchStories()..getMutedStories(),
+                create: (_) => serviceLocator()
+                  ..fetchStories()
+                  ..getMutedStories(),
                 child: const ChatStories(),
               ),
             ),
+            //hey ahmed dont forget this part
             SliverToBoxAdapter(
               child: BlocProvider<InstagramCubit>(
                 create: (_) => serviceLocator()..loadInstaSuggestedPeople(),
@@ -126,7 +130,9 @@ class _InstagramPostsState extends State<InstagramPosts> {
                     child: Text(
                       LocaleKeys.noPosts.localize,
                       style: TextStyle(
-                        color: Colors.black,
+                        color: context.isDarkMode
+                            ? AppColors.LIGHT_COLOR
+                            : AppColors.DARK_BLUE_COLOR,
                         fontSize: 18.sp,
                       ),
                     ),
@@ -655,8 +661,11 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                         Routes.INSTAGRAMPROFILE,
                                         extra: controller.feedPagingController
                                             .itemList?[index].user.id),
-                                  style:
-                                      Styles.mediumText(color: Colors.black)),
+                                  style: Styles.mediumText(
+                                    color: context.isDarkMode
+                                        ? AppColors.SECONDARY_COLOR_DARK
+                                        : AppColors.DARK_BLUE_COLOR,
+                                  )),
                               TextSpan(
                                   text: controller.feedPagingController
                                               .itemList![index].firstComment ==
@@ -667,14 +676,22 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                           .itemList?[index]
                                           .firstComment
                                           ?.content,
-                                  style: Styles.mediumText(color: Colors.grey)),
+                                  style: Styles.mediumText(
+                                    color: context.isDarkMode
+                                        ? AppColors.LIGHT_GRAY_COLOR
+                                        : AppColors.DARK_GRAY_COLOR,
+                                  )),
                             ])),
                           RichText(
                               text: TextSpan(children: [
                             TextSpan(
                                 text: controller.feedPagingController
                                     .itemList?[index].sinceTime,
-                                style: Styles.mediumText(color: Colors.grey)),
+                                style: Styles.mediumText(
+                                  color: context.isDarkMode
+                                      ? AppColors.LIGHT_GRAY_COLOR
+                                      : AppColors.DARK_GRAY_COLOR,
+                                )),
                           ]))
                         ],
                       ),

@@ -38,7 +38,9 @@ class RequestButton extends StatelessWidget {
             ? null
             : () {
                 showModalBottomSheet(
-                  backgroundColor: Colors.white,
+                  backgroundColor: context.isDarkMode
+                      ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
+                      : AppColors.LIGHT_COLOR,
                   context: context,
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
@@ -72,6 +74,9 @@ class RequestButton extends StatelessWidget {
                               child: Form(
                                 key: controller.formKey,
                                 child: TextFormField(
+                                  style: const TextStyle(
+                                    color: AppColors.DARK_BLUE_COLOR,
+                                  ),
                                   validator: (value) {
                                     if ((value == null || value.isEmpty)) {
                                       return LocaleKeys.required.localize;

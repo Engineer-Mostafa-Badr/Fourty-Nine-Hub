@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -33,7 +34,7 @@ class CommentCard extends StatefulWidget {
 
   const CommentCard(
       {super.key,
-      this.textColor = Colors.black,
+      this.textColor =Colors.black,
       required this.comment,
       required this.onAddReply,
       required this.onDeleteComment,
@@ -57,6 +58,7 @@ class _CommentCardState extends State<CommentCard> {
         Row(
           children: [
             UserProfileImage(
+              size: 40.sp,
               accountId: 0,
               withBorder: false,
               imageURL: widget.comment.user.image.isNotEmpty
@@ -72,10 +74,10 @@ class _CommentCardState extends State<CommentCard> {
                 Label(
                     text: widget.comment.user.firstName,
                     style: Styles.mediumText(
-                        fontWeight: FontWeight.bold, color: widget.textColor)),
+                        fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor,)),
                 Label(
                     text: widget.comment.sinceTime,
-                    style: Styles.mediumText(color: widget.textColor)),
+                    style: Styles.mediumText(color: Theme.of(context).primaryColor,)),
               ],
             )),
             // if (widget.comment.user.id != user?.id)
@@ -105,8 +107,8 @@ class _CommentCardState extends State<CommentCard> {
               },
               child: Icon(
                 Icons.more_horiz_outlined,
-                color: widget.textColor,
-                size: 20,
+                color:  Theme.of(context).primaryColor,
+                size: 50.sp,
               ),
             ),
           ],
@@ -114,7 +116,7 @@ class _CommentCardState extends State<CommentCard> {
         const Sizer(),
         Text(
           widget.comment.content,
-          style: Styles.mediumText(color: widget.textColor),
+          style: Styles.mediumText(color: Theme.of(context).primaryColor,),
         ),
         if (widget.comment.edit == true)
           SizedBox(
@@ -220,6 +222,7 @@ class _CommentCardState extends State<CommentCard> {
           if (isMyComment)
             listTile(
                 icon: Icons.delete,
+                iconColor: Theme.of(context).primaryColor,
                 title: LocaleKeys.deleteComment.localize,
                 subTitle: LocaleKeys.youWillDeleteComment.localize,
                 onTap: () {
@@ -228,6 +231,7 @@ class _CommentCardState extends State<CommentCard> {
           if (isMyComment)
             listTile(
                 icon: Icons.visibility_off,
+                iconColor: Theme.of(context).primaryColor,
                 title: LocaleKeys.editComment.localize,
                 subTitle: LocaleKeys.youWillEditComment.localize,
                 onTap: () {
@@ -254,7 +258,7 @@ class _CommentCardState extends State<CommentCard> {
       },
       leading: Icon(
         icon,
-        color: iconColor ?? Colors.black,
+        color: iconColor ??  Theme.of(context).primaryColor,
       ),
       subtitle: Label(
         text: subTitle,

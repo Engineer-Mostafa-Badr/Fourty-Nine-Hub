@@ -68,7 +68,7 @@ class _SearchViewState extends State<SearchView>
                   action: (v) async{
                     if (v.isNotEmpty) {
                       final prefs = await SharedPreferences.getInstance();
-                      String? filter =  await prefs.getString('filter');
+                      String? filter =  prefs.getString('filter');
                       print('context.read<SearchCubit>().state.filter??''${filter??''}');
                       context.read<SearchCubit>().loadData(
                         SearchParams(
@@ -116,7 +116,7 @@ class _SearchViewState extends State<SearchView>
             }else if(i==6){
               await prefs.setString('filter', 'trip');
             }
-            String? filter =  await prefs.getString('filter');
+            String? filter =  prefs.getString('filter');
 
             print('context.read<SearchCubit>().state.filter??''${filter??''}');
               context.read<SearchCubit>().loadData(SearchParams(

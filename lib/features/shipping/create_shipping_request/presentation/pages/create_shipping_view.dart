@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/common/dashboard_banner.dart';
@@ -27,7 +28,6 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/trip_card.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -37,13 +37,16 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 class CreateShippingView extends StatefulWidget {
   const CreateShippingView({super.key, this.selectedId});
+
   final String? selectedId;
+
   @override
   State<CreateShippingView> createState() => _CreateShippingViewState();
 }
 
 class _CreateShippingViewState extends State<CreateShippingView> {
   GlobalKey<FormState> formKey = GlobalKey();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -52,6 +55,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
   }
 
   bool isButtonSheet = false;
+
   // GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   @override
@@ -73,7 +77,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
       },
       builder: (context, status) {
         if (status is LoadingShippingState) {
-          return const Align(
+          return const Expanded(
             child: Center(
               child: CircularProgressIndicator(
                 color: AppColors.PRIMARY_COLOR,
@@ -88,7 +92,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
             child: SingleChildScrollView(
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height,
+                    // minHeight: MediaQuery.of(context).size.height,
                     minWidth: MediaQuery.of(context).size.width),
                 child: IntrinsicHeight(
                   child: Column(
@@ -154,10 +158,10 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                       DashboardBanner(
                                         onTap: () => context
                                             .push(Routes.DASHBOARDDRIVERSCREEN),
-                                        title: "Driver dashboard".tr(),
-                                        subTitle:
-                                            "New Bookings are waiting you, go to driver dashboard and explore more!"
-                                                .tr(),
+                                        title: LocaleKeys.driverDashboard.tr(),
+                                        subTitle: LocaleKeys
+                                            .newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore
+                                            .tr(),
                                         route: Routes.DOCTORDASHBOARD,
                                       ),
                                     ],
@@ -194,7 +198,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                         horizontal: 10,
                                       ),
                                       child: Text(
-                                        "You can enjoy serving your clients using your car by clicking the register button above."
+                                        LocaleKeys
+                                            .youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove
                                             .tr(),
                                         style: const TextStyle(
                                           color: Colors.red,
@@ -241,50 +246,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       const SizedBox(
                         height: 10,
                       ),
-                      // Spacer(),
-                      // NotFoundOffeRers(),
-                      // CreateTripForm(
-                      //   formKey: formKey,
-                      // ),
-
-                      // BlocBuilder<GetMyTripCubit, ShippingState>(
-                      //   builder: (context, state) {
-                      //     if (state is SuccessGetMyTripState) {
-
-                      //     }
-                      //     else{
-
-                      //     }
-                      //   },
-                      // )
-                      // CreateTripForm(formKey: formKey),
-                      // BlocBuilder<GetAllRequestByMyTripCubit, ShippingState>(
-                      //   builder: (context, state) {
-                      //     if (state is SuccessGetLoadingTripRequests) {
-                      //       if (state.request.isNotEmpty) {
-                      //         return Column(
-                      //           children: [
-                      //             ...List.generate(
-                      //               state.request.length,
-                      //               (index) => RequestOfferCard(
-                      //                 model: state.request[index],
-                      //               ),
-                      //             )
-                      //           ],
-                      //         );
-                      //       } else {
-                      //         return NotFoundOffers();
-                      //       }
-                      //     } else {
-                      //       return CreateTripForm(formKey: formKey);
-                      //     }
-                      //   },
-                      // ),
-                      // status is SuccessGetBannerState?
-                      // if(status.)
-                      // :CreateTripForm()
-                      // const SizedBox(height: 20),
-                    ],
+                     ],
                   ),
                 ),
               ),
@@ -322,8 +284,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                 if (state is SuccessCancelState) {
                   context.pop();
 
-                  showSuccessMessage(
-                      context, "The trip has been successfully closed.".tr());
+                  showSuccessMessage(context,
+                      LocaleKeys.theTripHasBeenSuccessfullyClosed.tr());
                 }
                 if (state is FailureShippingState) {
                   showErrorMessage(
@@ -332,7 +294,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
               },
               child: TripCardWidget(
                 yourRequest: true,
-                title: "Your request".tr(),
+                title: LocaleKeys.yourRequest.tr(),
                 buttons: false,
                 model: AllTripModel(
                     id: state.model.id,
@@ -362,11 +324,13 @@ class CustomTextField extends StatelessWidget {
       this.minLines,
       this.maxLines,
       this.maxLength});
+
   final String hint;
   final Icon? prefixIcon;
   final int? minLines;
   final int? maxLines;
   final int? maxLength;
+
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -409,7 +373,7 @@ class NotFoundOffers extends StatelessWidget {
       children: [
         Center(
           child: Text(
-            "Your request has been sent. You'll receive offers shortly.".tr(),
+            LocaleKeys.yourRequestHasBeenSentYouWillReceiveOffersShortly.tr(),
             style: const TextStyle(
               fontSize: 25,
             ),
@@ -424,8 +388,10 @@ class NotFoundOffers extends StatelessWidget {
 class RequestOfferCard extends StatelessWidget {
   const RequestOfferCard(
       {super.key, required this.model, this.isHistory = false});
+
   final GetRequestsForLoadingModel model;
   final bool isHistory;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<AcceptDeclineTripCubit, ShippingState>(
@@ -433,17 +399,17 @@ class RequestOfferCard extends StatelessWidget {
         log(state.toString(), name: "loadingState");
         if (state is SuccessAcceptState) {
           showSuccessMessage(
-              context, "The request has been successfully approved.".tr());
+              context, LocaleKeys.theRequestHasBeenSuccessfullyApproved.tr());
           context.read<GetAllRequestByMyTripCubit>().getAllRequest();
           context.pop();
         }
         if (state is SuccessDeclineState) {
           showSuccessMessage(
-              context, "The request was successfully rejected.".tr());
+              context, LocaleKeys.theRequestWasSuccessfullyRejected.tr());
           context.read<GetAllRequestByMyTripCubit>().getAllRequest();
         }
         if (state is SuccessCompleteTripState) {
-          showSuccessMessage(context, "Trip is completed".tr());
+          showSuccessMessage(context, LocaleKeys.tripIsCompleted.tr());
           context.read<GetAllRequestByMyTripCubit>().getAllRequest();
           context.read<ShippingCubit>().getBannerData();
         }
@@ -481,7 +447,7 @@ class RequestOfferCard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6),
                       child: Text(
-                        isHistory ? "" : "New Offer".tr(),
+                        isHistory ? "" : LocaleKeys.newOffer.tr(),
                         style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
@@ -525,7 +491,7 @@ class RequestOfferCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "car model".tr(),
+                          LocaleKeys.carModel.tr(),
                           style: const TextStyle(fontSize: 15),
                         ),
                         const SizedBox(
@@ -539,7 +505,7 @@ class RequestOfferCard extends StatelessWidget {
                           height: 5,
                         ),
                         Text(
-                          "${model.driverId?.trips ?? 0} ${"Orders".tr()}",
+                          "${model.driverId?.trips ?? 0} ${LocaleKeys.orders.tr()}",
                           style: const TextStyle(fontSize: 15),
                         )
                       ],
@@ -566,7 +532,8 @@ class RequestOfferCard extends StatelessWidget {
                             ],
                           ),
                         ),
-                        if (model.isPremium ?? false) Text("Premium".tr())
+                        if (model.isPremium ?? false)
+                          Text(LocaleKeys.premium.tr())
                       ],
                     )
                   ],
@@ -589,7 +556,7 @@ class RequestOfferCard extends StatelessWidget {
                           },
                           style: Styles.mediumText(
                               fontSize: 28, color: Colors.white),
-                          label: "Complete Trip".tr(),
+                          label: LocaleKeys.completeTrip.tr(),
                           // backgroundColor: Colors.red,
                         )
                       : Row(
@@ -608,7 +575,7 @@ class RequestOfferCard extends StatelessWidget {
                                 },
                                 style: Styles.mediumText(
                                     fontSize: 28, color: Colors.white),
-                                label: "Decline".tr(),
+                                label: LocaleKeys.decline.tr(),
                                 // backgroundColor: Colors.red,
                               ),
                             ),
@@ -627,7 +594,7 @@ class RequestOfferCard extends StatelessWidget {
                                       .read<AcceptDeclineTripCubit>()
                                       .accept(loadingRequestId: model.id ?? "");
                                 },
-                                label: "Accept".tr(),
+                                label: LocaleKeys.Accept.tr(),
                               ),
                             )
                           ],
@@ -667,7 +634,7 @@ class RequestOfferCard extends StatelessWidget {
                             ),
                             Expanded(
                               child: AppButton(
-                                label: "Message".tr(),
+                                label: LocaleKeys.message.tr(),
                                 icon: Icons.message,
                                 backColor: state.data
                                     ? AppColors.PRIMARY_COLOR
@@ -682,7 +649,7 @@ class RequestOfferCard extends StatelessWidget {
                             ),
                             Expanded(
                               child: AppButton(
-                                label: "Report".tr(),
+                                label: LocaleKeys.report.tr(),
                                 icon: Icons.report,
                                 backColor: Colors.red,
                                 style: Styles.mediumText(
@@ -712,7 +679,7 @@ class RequestOfferCard extends StatelessWidget {
                           children: [
                             Expanded(
                               child: AppButton(
-                                label: "Call".tr(),
+                                label: LocaleKeys.call.tr(),
                                 color: Colors.white,
                                 icon: Icons.call,
                                 backColor: AppColors.DARK_GRAY_COLOR,
@@ -735,7 +702,7 @@ class RequestOfferCard extends StatelessWidget {
                             ),
                             Expanded(
                               child: AppButton(
-                                label: "Message".tr(),
+                                label: LocaleKeys.message.tr(),
                                 icon: Icons.message,
                                 backColor: AppColors.DARK_GRAY_COLOR,
                                 style: Styles.mediumText(
@@ -753,7 +720,7 @@ class RequestOfferCard extends StatelessWidget {
                             ),
                             Expanded(
                               child: AppButton(
-                                label: "Report".tr(),
+                                label: LocaleKeys.report.tr(),
                                 icon: Icons.report,
                                 backColor: Colors.red,
                                 style: Styles.mediumText(
@@ -788,7 +755,7 @@ class RequestOfferCard extends StatelessWidget {
                             subCategoryId: "62c8bab18e28a58a3edf580d");
                   },
                   child: Text(
-                    "Subscribe to contact to the driver".tr(),
+                    LocaleKeys.subscribeToContactToTheDriver.tr(),
                     style: const TextStyle(fontSize: 16, color: Colors.red),
                   ),
                 )),

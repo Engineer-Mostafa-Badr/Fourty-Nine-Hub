@@ -15,7 +15,7 @@ abstract class AuthRepository {
 
   Future<Either<Failure, UserTokensEntity>> login(LoginParams params);
   Future<Either<Failure, UserTokensEntity>> signInWithGoogle();
-  Future<Either<Failure, UserTokensEntity>> signInWithFacebook();
+  // Future<Either<Failure, UserTokensEntity>> signInWithFacebook();
   Future<Either<Failure, UserTokensEntity>> signInWithApple();
   Future<Either<Failure, void>> register(RegisterParams registerParams);
   Future<Either<Failure, UserTokensEntity>> verifyOTP(

@@ -11,7 +11,7 @@ import '../../../cubit/restaurants_list_cubit.dart';
 import '../../restaurant_for_meal.dart';
 
 class MealCategories extends StatefulWidget {
-  MealCategories({Key? key}) : super(key: key);
+  const MealCategories({super.key});
 
   @override
   State<MealCategories> createState() => _MealCategoriesState();
@@ -50,7 +50,7 @@ class _MealCategoriesState extends State<MealCategories> {
                       const Spacer(),
                       Text(
                         context.isArabic ? 'عرض المزيد' : 'More',
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: AppColors.PRIMARY_COLOR_DARK,
                             fontWeight: FontWeight.bold),
                       ),
@@ -64,7 +64,7 @@ class _MealCategoriesState extends State<MealCategories> {
                   ),
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 0.31.sh,
                 width: double.infinity,
                 child: ListView.separated(

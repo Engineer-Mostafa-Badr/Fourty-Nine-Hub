@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_ad_details_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
+import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
@@ -113,6 +114,7 @@ class EndPoints {
   static String deleteCompanyAd(String id) {
     return '/advertisementCompany/$id';
   }
+  static const payCompanyAd='/advertisementCompany/payment';
 
   static String getPostsCompanyAd(FetchPostCompanyAdvertiseParams params) {
     return '/advertisementCompany/my-advertisement?page=${params.paginationParams.page}&filter=${params.filter}&limit=${params.paginationParams.limit}&subCategory=66adecd7aa2ff24015872e9f';
@@ -190,6 +192,12 @@ class EndPoints {
   static const deleteAccount = '/users/settings/delete-account';
   static const disableAccount = '/users/settings/disable-account';
   static const enableAccount = '/users/settings/enable-account';
+
+  // Quran
+  static String quranSurah(QuranParams params) =>
+      '/quran/surahs?page=${params.params.page}&limit=${params.params.limit}';
+  static String quran(int id) =>
+      '/quran/surah/$id';
 
   static String notificationsSeen(String id) => '/notifications/$id';
 
@@ -677,7 +685,7 @@ class EndPoints {
   }
 
   static String deleteFollow(String userId) {
-    return '/follow/delete-follower/$userId?subCategory=${Constants.instagramSubCategory}';
+    return '/follow/unfollow/$userId?subCategory=${Constants.instagramSubCategory}';
   }
 
   static String greetMessage(String userId) {

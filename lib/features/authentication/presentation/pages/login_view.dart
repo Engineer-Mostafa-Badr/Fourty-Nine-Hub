@@ -19,6 +19,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/l
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -111,6 +112,7 @@ class _LoginViewState extends State<LoginView> {
               ..getUser().then((value) async {
                 serviceLocator<GetWalletCubit>().getWallet();
                 serviceLocator<WalletCubit>().getWallet();
+                serviceLocator<MainCategoriesCubit>().getWallet();
                 String? accessToken = await CacheManager.getAccessToken();
                 String? refreshToken = await CacheManager.getRefreshToken();
                 debugPrint(
@@ -388,7 +390,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 textColor: Colors.black,
                 icon: FontAwesomeIcons.facebook,
                 onPressed: () async {
-                  await loginCubit.signInWithFacebook();
+                  // await loginCubit.signInWithFacebook();
                 },
               ),
             ),

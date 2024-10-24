@@ -35,6 +35,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
         // print(' ============= noMoreDataInDatabase = $noMoreDataInDatabase ');
         // print(' ============= paginationParams = ${paginationParams.page} ');
         tripJoinCards.addAll(models);
+        print(response);
         emit(
           ViewAllTripJoinSuccess(tripJoinCards),
         );
