@@ -651,7 +651,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                 ? AppColors.PRIMARY_COLOR
                                 : null,
                             label: user.isFollowed == true
-                                ? LocaleKeys.unfollow.localize
+                                ? LocaleKeys.Unfollow.localize
                                 : LocaleKeys.follow.localize,
                             style: Styles.mediumText(color: Colors.white),
                             onPressed: () {
