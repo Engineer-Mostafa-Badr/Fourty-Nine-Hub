@@ -1,14 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_model.dart';
-import 'package:fourtyninehub/res/assets/jsons.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/data/models/ad_request_model.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/entities/ad_request_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/usecases/get_ad_requests_usecase.dart';
 import '../../../../../core/error/failure.dart';
-import '../../../ads/data/models/Ad_model.dart';
 
 abstract class AdRequestsRemoteDataSource {
-  Future<Either<Failure, AddDetailsModel>> getAdDetails({required String id});
-  Future<Either<Failure, List<AdModel>>> getRelevantAds({required int id});
+  Future<Either<Failure, List<AdRequestEntity>>> getAdRequests({required GetAdRequestsParams params});
 }
 
 class AdRequestsRemoteDataSourceImpl extends AdRequestsRemoteDataSource {
@@ -16,26 +15,14 @@ class AdRequestsRemoteDataSourceImpl extends AdRequestsRemoteDataSource {
   AdRequestsRemoteDataSourceImpl(this._apiConsumer);
 
   @override
-  Future<Either<Failure, AddDetailsModel>> getAdDetails(
-      {required String id}) async {
-    final response = await _apiConsumer.get(EndPoints.adDetails(id));
+  Future<Either<Failure, List<AdRequestEntity>>> getAdRequests(
+      {required GetAdRequestsParams params}) async {
+    final response = await _apiConsumer.get(EndPoints.adRequests(params.id),queryParameters: params.toJson());
 
     return response.fold((failure) => Left(failure), (data) {
-      final item = AddDetailsModel.fromJson(data['data']);
-      return Right(item);
+      return Right((data['data'] as List)
+          .map((e) => AdRequestModel.fromJson(e))
+          .toList());
     });
   }
-
-  @override
-  Future<Either<Failure, List<AdModel>>> getRelevantAds(
-      {required int id}) async {
-    final response = await _apiConsumer.get(Jsons.userAdsList);
-    return response.fold(
-        (failure) => Left(failure),
-        (data) => Right((data['data']['ads'] as List)
-            .map((e) => AdModel.fromJson(e))
-            .toList()));
-  }
-
-
 }

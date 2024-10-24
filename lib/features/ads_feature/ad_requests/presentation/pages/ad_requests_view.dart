@@ -1,19 +1,24 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/search_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/entities/ad_request_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_details_prop_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/strings/labels.dart';
@@ -42,7 +47,7 @@ class AdRequestsView extends StatefulWidget {
 class _AdRequestsViewState extends State<AdRequestsView> {
   @override
   void initState() {
-    // context.read<AdDetailsCubit>().loadData(adId: widget.id);
+    context.read<AdRequestsCubit>().loadGlobalData(widget.id);
     super.initState();
   }
 
@@ -53,44 +58,103 @@ class _AdRequestsViewState extends State<AdRequestsView> {
 
     return Scaffold(
       appBar: BackAppBar(label: LocaleKeys.adRequests.localize,),
-        body: BlocConsumer<AdRequestsCubit, AdRequestsState>(
-            listener: (contex, state) {
-              if (state.isError) {
-                showErrorMessage(
-                  context,
-                  getFailureMessage(
-                    state.failure!,
-                    context,
-                  ),
-                );
-              } else if (state.isSuccess) {
-                showSuccessMessage(context, Labels.success);
-              }
-            }, builder: (context, state) {
-          // if (state.ad == null) {
-          //   return const Center(
-          //     child: CircularProgressIndicator.adaptive(),
-          //   );
-          // }
-          List<AdDetailsPropEntity>? details = state.ad?.details
-              .where((e) => e.nameAr != 'الراتب' && e.nameAr != 'السعر')
-              .toList();
-          // print("state.ad?.user${context.read<AdDetailsCubit>().state.ad?.user?.id}");
+        body: BlocBuilder<AdRequestsCubit, AdRequestsState>(
+             builder: (context, state) {
+              final controller = context.read<AdRequestsCubit>();
+          if (state.isLoading) {
+            return Shimmer.fromColors(
+              baseColor: Colors.grey[100]!,
+              highlightColor: Colors.white24,
+              child: Column(
+                children: List.generate(
+                    6,
+                        (index) => Padding(
+                      padding: EdgeInsets.only(bottom: 15.h),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height *
+                            .15.h,
+                        width: double.infinity,
+                        margin:
+                        EdgeInsets.symmetric(horizontal: 10.w),
+                        padding:
+                        EdgeInsets.symmetric(horizontal: 10.w),
+                        decoration: BoxDecoration(
+                          color: AppColors.AUTH_CONTAINER_COLOR,
+                          borderRadius: BorderRadius.circular(20.r),
+                          border: Border.all(color: Colors.grey),
+                        ),
+                      ),
+                    )),
+              ),
+            );
+          }
+              return Column(
+                children: [
+                  SearchTextFormField(currentFocusNode: FocusNode(), currentController: TextEditingController(),),
+                  Expanded(
+                    child: PagedListView<int, AdRequestEntity>(
+                      pagingController: controller.requestsPagingController,
+                      builderDelegate: PagedChildBuilderDelegate<AdRequestEntity>(
+                        noItemsFoundIndicatorBuilder: (context) {
+                          return Center(
+                            child: Text(
+                              LocaleKeys.noData.localize,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18.sp,
+                              ),
+                            ),
+                          );
+                        },
+                        itemBuilder: (context, item, index) {
+                          return Container(
+                            margin: EdgeInsetsDirectional.all(10.w),
+                            padding: EdgeInsetsDirectional.symmetric(horizontal: 15.w,vertical: 10.h),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5.r),
+                              border: Border.all(color: AppColors.DARK_GRAY_COLOR, width: 1),
+                            ),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 100.w,height: 100.h,
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(image: AssetImage(item.gender=='male'?Assets.maleImagePlaceholder:Assets.femaleImagePlacehlder), fit: BoxFit.contain),
+                                          shape: BoxShape.circle
+                                      ),
+                                    ),
+                                    Sizer(),
+                                    Expanded(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(item.userName??'',style: Styles.headerText(),),
+                                          Text(item.sinceTime??'',style: Styles.mediumText(),),
+                                        ],
+                                      ),
+                                    ),
 
-          return Column(
-            children: [
-              // Expanded(
-              //   child: ListView(
-              //     children: [
-              //       _buildTag(status: state.ad?.subscriptionStatus??''),
-              //       const Sizer(),
-              //       _buildRelevantAdsWidget(),
-              //     ],
-              //   ),
-              // ),
-              // CallMessageButtons(otherUserId: state.ad?.userId??'', subcategoryId: state.ad?.subCategoryId??'', phone: state.ad?.phone??'', id: state.ad?.id??'',hasReport: true,),
-            ],
-          );
+                                  ],
+                                ),
+                                CallMessageButtons(otherUserId: item.adUserId??'',clientId: item.requestId, subcategoryId: item.subCategoryId??'', phone: item.phone??'', id: item.requestUserId??'',hasReport: true,),
+
+                              ],
+                            ),
+                          );
+                        },
+                        noMoreItemsIndicatorBuilder: (context) => Container(),
+                        firstPageProgressIndicatorBuilder: (context) =>
+                        const CupertinoActivityIndicator(),
+                        newPageProgressIndicatorBuilder: (context) =>
+                        const CupertinoActivityIndicator(),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+          ;
         }));
   }
 
@@ -124,40 +188,40 @@ class _AdRequestsViewState extends State<AdRequestsView> {
         });
   }
 
-  Widget _buildActionsWidget() {
-    return BlocBuilder<AdDetailsCubit, AdDetailsState>(
-        builder: (context, state) {
-          return Container(
-            margin: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                // const Sizer(),
-                // Row(
-                //   crossAxisAlignment: CrossAxisAlignment.center,
-                //   children: [
-                //     Expanded(
-                //       flex: 3,
-                //       child: BlocProvider(
-                //           create: (_)=>serviceLocator<AdvertisementCubit>(),
-                //           child: PremiumRequestButton(adId: state.ad?.id??'',subCategoryId: state.ad?.subCategoryId??'',subscriptionStatus: state.ad?.subscriptionStatus??'',)),
-                //     ),
-                //     const Sizer(width: 5),
-                //     Expanded(
-                //       flex: 3,
-                //       child: BlocProvider(
-                //           create: (_)=>serviceLocator<AdvertisementCubit>(),
-                //           child: RequestButton(adId: state.ad?.id??'',subscriptionStatus: state.ad?.subscriptionStatus??''))
-                //
-                //     )
-                //   ],
-                // ),
-                // const Sizer(),
-                CallMessageButtons(otherUserId: state.ad?.userId??'', subcategoryId: state.ad?.subCategoryId??'', phone: state.ad?.phone??'', id: state.ad?.id??'',hasReport: true,),
-              ],
-            ),
-          );
-        });
-  }
+  // Widget _buildActionsWidget() {
+  //   return BlocBuilder<AdDetailsCubit, AdDetailsState>(
+  //       builder: (context, state) {
+  //         return Container(
+  //           margin: const EdgeInsets.all(10),
+  //           child: Column(
+  //             children: [
+  //               // const Sizer(),
+  //               // Row(
+  //               //   crossAxisAlignment: CrossAxisAlignment.center,
+  //               //   children: [
+  //               //     Expanded(
+  //               //       flex: 3,
+  //               //       child: BlocProvider(
+  //               //           create: (_)=>serviceLocator<AdvertisementCubit>(),
+  //               //           child: PremiumRequestButton(adId: state.ad?.id??'',subCategoryId: state.ad?.subCategoryId??'',subscriptionStatus: state.ad?.subscriptionStatus??'',)),
+  //               //     ),
+  //               //     const Sizer(width: 5),
+  //               //     Expanded(
+  //               //       flex: 3,
+  //               //       child: BlocProvider(
+  //               //           create: (_)=>serviceLocator<AdvertisementCubit>(),
+  //               //           child: RequestButton(adId: state.ad?.id??'',subscriptionStatus: state.ad?.subscriptionStatus??''))
+  //               //
+  //               //     )
+  //               //   ],
+  //               // ),
+  //               // const Sizer(),
+  //               CallMessageButtons(otherUserId: state.ad?.userId??'', subcategoryId: state.ad?.subCategoryId??'', phone: state.ad?.phone??'', id: state.ad?.id??'',hasReport: true,),
+  //             ],
+  //           ),
+  //         );
+  //       });
+  // }
 
   Widget _buildTag({required String status}) {
     // super premium

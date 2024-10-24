@@ -31,6 +31,9 @@ class _MealCategoriesState extends State<MealCategories> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
                   onTap: () {
                     // Scroll to a specific pixel position
                     _scrollController.animateTo(

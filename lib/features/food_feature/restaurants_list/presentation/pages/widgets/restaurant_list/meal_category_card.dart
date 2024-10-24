@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -62,7 +63,7 @@ class MealCategoryCard extends StatelessWidget {
                       ),
                     ),
                     // Favorite Icon (Heart)
-                    Positioned(
+                   if(context.read<UserCubit>().isLoggedIn) Positioned(
                       top: 5,
                       right: 5,
                       child: IconAppButton(

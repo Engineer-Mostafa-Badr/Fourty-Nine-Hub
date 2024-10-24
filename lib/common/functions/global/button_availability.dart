@@ -1,3 +1,4 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -6,14 +7,15 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 class ButtonAvailability {
   Future<bool> isShowButton({
     required String otherUserId,
+    String? clientId,
     required String subcategoryId,
   }) async {
     bool result =false;
     try {
-      final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
+      final userId = serviceLocator<UserCubit>().isLoggedIn?serviceLocator<UserCubit>().state.data?.id : '';
       final response = await serviceLocator<ApiConsumer>()
           .post(EndPoints.buttonAvailable, data: {
-        "clientId": userId,
+        "clientId": clientId??userId,
         "ownerId": otherUserId,
         "subcategoryId": subcategoryId
       });

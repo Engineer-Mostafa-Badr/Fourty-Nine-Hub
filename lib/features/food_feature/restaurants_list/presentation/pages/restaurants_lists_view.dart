@@ -1,5 +1,4 @@
-import 'dart:developer';
-import 'dart:convert'; // For JSON decoding
+// For JSON decoding
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,8 +7,6 @@ import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
@@ -27,7 +24,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http; // For HTTP requests
+// For HTTP requests
 import 'package:shimmer/shimmer.dart';
 
 class RestaurantsListsView extends StatefulWidget {
@@ -70,10 +67,11 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
           padding: const EdgeInsets.all(8.0),
           child: Builder(
             builder: (context) {
-              if (!context.watch<UserCubit>().isLoggedIn) {
-                return _buildNotLoggedInView(context);
-              }
+              // if (context.watch<UserCubit>().isLoggedIn==false) {
+              //   return _buildNotLoggedInView(context);
+              // }
               if (state.isLoading) {
+                print("objectHiiii");
                 return const Center(
                     child: CircularProgressIndicator.adaptive());
               }
@@ -86,10 +84,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   }
 
   Widget _buildNotLoggedInView(BuildContext context) {
-    if (restaurantCategory == null) {
-      return const Center(child: CircularProgressIndicator.adaptive());
-    }
-
+    // if (restaurantCategory == null) {
+    //   return const Center(child: CircularProgressIndicator.adaptive());
+    // }
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -256,7 +253,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
       children: [
         Expanded(
           child: InkWell(
-            onTap: () => Navigator.push(
+            onTap: () => context.read<UserCubit>().isLoggedIn
+                ?Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => BlocProvider(
@@ -269,7 +267,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                   child: const SearchRestaurantView(),
                 ),
               ),
-            ),
+            ):context.push(Routes.LOGIN),
             child: Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -292,7 +290,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
         Expanded(
           child: InkWell(
             onTap: () {
-              Navigator.push(
+              context.read<UserCubit>().isLoggedIn
+                  ? Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => BlocProvider.value(
@@ -301,7 +300,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                     child: const RestaurantExpiredRequestsScreen(),
                   ),
                 ),
-              );
+              ):context.push(Routes.LOGIN);
             },
             child: Container(
               alignment: Alignment.centerLeft,

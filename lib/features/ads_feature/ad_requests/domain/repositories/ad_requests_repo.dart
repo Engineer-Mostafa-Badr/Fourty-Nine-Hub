@@ -1,10 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_model.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/entities/ad_request_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/usecases/get_ad_requests_usecase.dart';
 
 import '../../../../../core/error/failure.dart';
-import '../../../ads/data/models/Ad_model.dart';
 
 abstract class AdRequestsRepo {
-  Future<Either<Failure, AddDetailsModel>> getAdDetails({required String id});
-  Future<Either<Failure, List<AdModel>>> getRelevantAds({required int id});
+  Future<Either<Failure, List<AdRequestEntity>>> getAdRequests({required GetAdRequestsParams params});
 }
