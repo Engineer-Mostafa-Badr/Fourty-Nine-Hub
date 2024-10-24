@@ -15,7 +15,7 @@ abstract class AuthRepository {
 
   Future<Either<Failure, UserTokensEntity>> login(LoginParams params);
   Future<Either<Failure, UserTokensEntity>> signInWithGoogle();
-  Future<Either<Failure, UserTokensEntity>> signInWithFacebook();
+  // Future<Either<Failure, UserTokensEntity>> signInWithFacebook();
   Future<Either<Failure, UserTokensEntity>> signInWithApple();
   Future<Either<Failure, void>> register(RegisterParams registerParams);
   Future<Either<Failure, UserTokensEntity>> verifyOTP(
@@ -33,7 +33,7 @@ abstract class AuthRepository {
   Future<Either<Failure, bool>> saveUserTokens(UserTokensEntity? userTokens);
   // Future<Either<Failure, bool>> saveUserId (UserTokensEntity? userTokens);
   Future<Either<Failure, double>> getWelcomeGift();
-  Future<Either<Failure, bool>> signOut();
+  Future<Either<Failure, void>> signOut();
 
   bool attachToken(UserTokensEntity? token);
 }

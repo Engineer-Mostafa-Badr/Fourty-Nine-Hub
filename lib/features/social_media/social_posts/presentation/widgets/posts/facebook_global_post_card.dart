@@ -419,6 +419,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
     required BuildContext context,
     required PostEntity post,
   }) {
+    print("post.user${post.user}");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -610,8 +611,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
             child: ReadMoreLabel(
               text: content,
               style: Styles.headerText(
-                  color: Colors.black,
-                  fontSize: 24,
+              color: Theme.of(context).primaryColor,                  fontSize: 24,
                   fontWeight: FontWeight.bold),
             ),
           )
@@ -622,7 +622,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ReadMoreLabel(text: content),
+                ReadMoreLabel(text: content, style: Styles.headerText(color: Theme.of(context).primaryColor),),
                 SizedBox(
                   height: 10.h,
                 ),

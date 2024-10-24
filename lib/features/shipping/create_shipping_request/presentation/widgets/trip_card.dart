@@ -3,11 +3,11 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/accept_decline_trip_cubit.dart';
@@ -15,10 +15,8 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -80,14 +78,14 @@ class _TripCardWidgetState extends State<TripCardWidget> {
           showErrorMessage(context, getFailureMessage(state.failure, context));
         }
         if (state is SuccessReportState) {
-          showSuccessMessage(context, 'you have reported this trip.'.tr());
+          showSuccessMessage(context, LocaleKeys.youHaveReportedThisTrip.tr());
         }
       },
       builder: (context, state) {
         return GestureDetector(
           onTap: () {
             if (!widget.buttons && !widget.yourRequest) {
-              context.push(Routes.DRIVERREQUESTSDETIALS, extra: widget.model);
+              // context.push(Routes.DRIVERREQUESTSDETIALS, extra: widget.model);
             }
           },
           child: Container(
@@ -107,27 +105,32 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          widget.title ?? 'New Ride'.tr(),
-                          style: const TextStyle(
-                            color: AppColors.PRIMARY_COLOR,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
+                    Flexible(
+                      child: Row(
+                        children: [
+                          Text(
+                            widget.title ?? LocaleKeys.newRide.tr(),
+                            style:  TextStyle(
+                              color: Theme.of(context).brightness == Brightness.dark? Colors.white:AppColors.PRIMARY_COLOR,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                            ),
                           ),
-                        ),
-                        Text(
-                          widget.noBracts
-                              ? " ${widget.model.status}"
-                              : " (${widget.model.status})",
-                          style: const TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
+                          Flexible(
+                            child: Text(
+                              widget.noBracts
+                                  ? " ${widget.model.status}"
+                                  : " (${widget.model.status})",
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22,
+                                overflow: TextOverflow.ellipsis
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     Column(
                       children: [
@@ -139,7 +142,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                             fontSize: widget.priceFontSize,
                           ),
                         ),
-                        if (!widget.noBracts) Text("Premium".tr())
+                        if (!widget.noBracts) Text( LocaleKeys.premium.tr())
                       ],
                     ),
                   ],
@@ -239,7 +242,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                               .read<AcceptDeclineTripCubit>()
                               .cancel(tripId: widget.model.id ?? "");
                         },
-                        label: "Cancel Request".tr(),
+                        label: LocaleKeys.cancelRequest.tr(),
                       )
                     : widget.buttons
                         ? Container()
@@ -254,13 +257,12 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                     child: AppButton(
                                       style: Styles.mediumText(
                                           fontSize: 28, color: Colors.white),
-                                      label: "Send Offer".tr(),
+                                      label: LocaleKeys.sendOffer.tr(),
                                       onPressed: () {
                                         tripCubit.newOffer(
                                             id: widget.model.id ?? "",
                                             price: widget.model.price ?? 0,
-                                            message:
-                                                "The request has been successfully approved.".tr());
+                                            message: LocaleKeys.theRequestHasBeenSuccessfullyApproved.tr());
                                       },
                                       backColor: AppColors.PRIMARY_COLOR,
                                       color: Colors.white,
@@ -304,7 +306,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                       children: [
                                         Expanded(
                                           child: AppButton(
-                                            label: Labels.call,
+                                            label: LocaleKeys.call.tr(),
                                             color: Colors.white,
                                             icon: Icons.call,
                                             backColor: state.data &&
@@ -321,7 +323,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                         const Sizer(),
                                         Expanded(
                                           child: AppButton(
-                                            label: Labels.message,
+                                            label: LocaleKeys.message.tr(),
                                             icon: Icons.message,
                                             backColor: state.data &&
                                                     (widget.model.acceptedReq ??
@@ -337,7 +339,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                         const Sizer(),
                                         Expanded(
                                           child: AppButton(
-                                            label: Labels.report,
+                                            label: LocaleKeys.report.tr(),
                                             icon: Icons.report,
                                             backColor: Colors.red,
                                             style: Styles.mediumText(
@@ -371,7 +373,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                       children: [
                                         Expanded(
                                           child: AppButton(
-                                            label: Labels.call,
+                                            label: LocaleKeys.call.tr(),
                                             color: Colors.white,
                                             icon: Icons.call,
                                             backColor:
@@ -388,7 +390,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                         const Sizer(),
                                         Expanded(
                                           child: AppButton(
-                                            label: Labels.message,
+                                            label: LocaleKeys.message.tr(),
                                             icon: Icons.message,
                                             backColor:
                                                 AppColors.DARK_GRAY_COLOR,
@@ -401,7 +403,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                         const Sizer(),
                                         Expanded(
                                           child: AppButton(
-                                            label: Labels.report,
+                                            label: LocaleKeys.report.tr(),
                                             icon: Icons.report,
                                             backColor: Colors.red,
                                             style: Styles.mediumText(

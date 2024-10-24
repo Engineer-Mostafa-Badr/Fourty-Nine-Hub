@@ -1,37 +1,103 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/search/domain/entity/main_category_search_entity.dart';
+import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/localization/locales.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
-class SubCategorySearchView extends StatelessWidget {
+class SubCategorySearchView extends StatefulWidget {
   const SubCategorySearchView({super.key});
 
+  @override
+  State<SubCategorySearchView> createState() => _SubCategorySearchViewState();
+}
+
+class _SubCategorySearchViewState extends State<SubCategorySearchView> {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 20.h),
-      child: GridView.builder(
-        itemCount: 10,
-        //      controller: controller.scrollController,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, childAspectRatio: 1),
-        itemBuilder: (context, index) {
-          return buildItem(context);
-          // final subCategory = state.subCategories![index];
-          // return SubCategoryCard(
-          //   mainCategory: controller.selectedCategory,
-          //   item: subCategory,
-          //   onFav: () {
-          //     print("object");
-          //     return controller.toggleSubCategoryToFavorites(
-          //         state.subCategories![index].id);
+      child: BlocBuilder<SearchCubit,SearchState>(
+        builder: (BuildContext context, state) {
+          final controller = context.read<SearchCubit>();
+          if (controller.searchController.text.isNotEmpty) {
+            return PagedGridView<int, MainSubCategorySearchEntity>(
+              pagingController: controller.searchPagingController,
+              builderDelegate: PagedChildBuilderDelegate<MainSubCategorySearchEntity>(
+                noItemsFoundIndicatorBuilder: (context) {
+                  return Center(
+                    child: Text(
+                      LocaleKeys.noData.localize,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                      ),
+                    ),
+                  );
+                },
+                itemBuilder: (context, item, index) {
+                  return InkWell(
+                    onTap: () {
+                     // context.push(Routes.SUBCATEGORIES, extra: state.search![index]);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child:  buildItem(item,
+                          () async{
+                            var result = await controller
+                                .toggleSubCategoryToFavorites(item.id);
+                            return result;
+                          },
+                          item.isFavorite == true
+                              ? Icons.favorite
+                              : Icons.favorite_border
+                      ),
+                    ),
+                  );
+                },
+                noMoreItemsIndicatorBuilder: (context) => Container(),
+                firstPageProgressIndicatorBuilder: (context) =>
+                const CupertinoActivityIndicator(),
+                newPageProgressIndicatorBuilder: (context) =>
+                const CupertinoActivityIndicator(),
+              ), gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, childAspectRatio: 1),
+            );
+          }
+
+          // If no search results or initial state
+          return const Center(
+            child: Text('No results found.'),
+          );
+          // return GridView.builder(
+          //   itemCount: 10,
+          //   //      controller: controller.scrollController,
+          //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          //       crossAxisCount: 2, childAspectRatio: 1),
+          //   itemBuilder: (context, index) {
+          //     return buildItem(context);
+          //     // final subCategory = state.subCategories![index];
+          //     // return SubCategoryCard(
+          //     //   mainCategory: controller.selectedCategory,
+          //     //   item: subCategory,
+          //     //   onFav: () {
+          //     //     print("object");
+          //     //     return controller.toggleSubCategoryToFavorites(
+          //     //         state.subCategories![index].id);
+          //     //   },
+          //     // );
           //   },
           // );
         },
@@ -39,7 +105,7 @@ class SubCategorySearchView extends StatelessWidget {
     );
   }
 
-  Widget buildItem(context) => InkWell(
+  Widget buildItem(MainSubCategorySearchEntity model,Function() fav,IconData icon) => InkWell(
         onTap: () {},
         child: Container(
           margin: EdgeInsets.all(10.w),
@@ -59,20 +125,25 @@ class SubCategorySearchView extends StatelessWidget {
               Expanded(
                 child: Stack(
                   children: [
-                    const Positioned.fill(
+                     Positioned.fill(
                       child: SquareImage(
                         fit: BoxFit.cover,
                         radius: 5,
-                        url:
-                            'https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg',
+                        url: model.banner,
                       ),
                     ),
                     Positioned(
                         top: 10.h,
                         right: 10.w,
                         child: IconAppButton(
-                          icon: Icons.favorite_outline,
+                          icon: icon,
                           onPressed: () async {
+                            final result = await fav();
+                            print("resutlt=$result");
+                            if (result == true) {
+                              model.isFavorite = !model.isFavorite!;
+                              setState(() {});
+                            }
                             // var result = await widget.onFav();
                             // if (result == true) {
                             //   widget.item.isFavorite = !widget.item.isFavorite!;
@@ -84,7 +155,7 @@ class SubCategorySearchView extends StatelessWidget {
                   ],
                 ),
               ),
-              Sizer(),
+              const Sizer(),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0.w),
                 child: Row(
@@ -94,14 +165,10 @@ class SubCategorySearchView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Label(
-                            text: 'Craft',
+                            text:context.locale == Locales.english? model.nameEn :model.nameAr,
                             style:
                                 Styles.mediumText(fontWeight: FontWeight.bold),
                           ),
-                          Label(
-                            text: '0 ${LocaleKeys.ads.localize}',
-                            style: Styles.smallText(fontSize: 25),
-                          )
                         ],
                       ),
                     ),

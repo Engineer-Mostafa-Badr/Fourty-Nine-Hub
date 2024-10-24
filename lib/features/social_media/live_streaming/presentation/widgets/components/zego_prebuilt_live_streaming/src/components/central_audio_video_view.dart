@@ -28,13 +28,12 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 
 import '../../../../../../../../zoom/presentation/controller/stream_cubit.dart';
 import '../../../../../../../../zoom/presentation/controller/stream_state.dart';
-import '../../../zego_uikit/src/services/defines/defines.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 /// @nodoc
 class ZegoLiveStreamingCentralAudioVideoView extends StatefulWidget {
   const ZegoLiveStreamingCentralAudioVideoView({
-    Key? key,
+    super.key,
     required this.config,
     required this.hostManager,
     required this.liveStatusManager,
@@ -42,7 +41,7 @@ class ZegoLiveStreamingCentralAudioVideoView extends StatefulWidget {
     this.plugins,
     required this.constraints,
     required this.isLiveStream,
-  }) : super(key: key);
+  });
 
   final ZegoUIKitPrebuiltLiveStreamingConfig config;
 

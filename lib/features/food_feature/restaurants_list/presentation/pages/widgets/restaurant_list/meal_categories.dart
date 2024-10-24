@@ -11,14 +11,14 @@ import '../../../cubit/restaurants_list_cubit.dart';
 import '../../restaurant_for_meal.dart';
 
 class MealCategories extends StatefulWidget {
-  MealCategories({Key? key}) : super(key: key);
+  const MealCategories({super.key});
 
   @override
   State<MealCategories> createState() => _MealCategoriesState();
 }
 
 class _MealCategoriesState extends State<MealCategories> {
-   final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +31,9 @@ class _MealCategoriesState extends State<MealCategories> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
                   onTap: () {
                     // Scroll to a specific pixel position
                     _scrollController.animateTo(
@@ -47,7 +50,7 @@ class _MealCategoriesState extends State<MealCategories> {
                       const Spacer(),
                       Text(
                         context.isArabic ? 'عرض المزيد' : 'More',
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: AppColors.PRIMARY_COLOR_DARK,
                             fontWeight: FontWeight.bold),
                       ),
@@ -61,11 +64,11 @@ class _MealCategoriesState extends State<MealCategories> {
                   ),
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 0.31.sh,
                 width: double.infinity,
                 child: ListView.separated(
-                  controller:  _scrollController,
+                  controller: _scrollController,
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   separatorBuilder: (context, index) => const Sizer(),
                   scrollDirection: Axis.horizontal,
@@ -79,10 +82,8 @@ class _MealCategoriesState extends State<MealCategories> {
                           await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => BlocProvider.value(
-                                value: serviceLocator<RestaurantsCubit>(),
-                                child: RestaurantForSelectedMeal(mealId: id),
-                              ),
+                              builder: (context) =>
+                                  RestaurantForSelectedMeal(mealId: id),
                             ),
                           );
                           // Refresh the restaurant list after returning

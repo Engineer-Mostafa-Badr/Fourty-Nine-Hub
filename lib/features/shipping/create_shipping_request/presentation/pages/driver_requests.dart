@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/trip_card.dart';
@@ -61,9 +62,10 @@ class DriverRequests extends StatelessWidget {
                                         walletType: WalletTypes.balance);
                               },
                               child: Text(
-                                "Subscribe to send offer / contact the client".tr(),
-                                style:
-                                    TextStyle(fontSize: 16, color: Colors.red),
+                                LocaleKeys.subscribeToSendOfferContactTheClient
+                                    .tr(),
+                                style: const TextStyle(
+                                    fontSize: 16, color: Colors.red),
                               ),
                             ))
                       ],

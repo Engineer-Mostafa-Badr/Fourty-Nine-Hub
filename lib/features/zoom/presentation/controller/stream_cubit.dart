@@ -97,7 +97,9 @@ final class StreamCubit extends Cubit<StreamState> {
   }
 
   bool isHost = false;
-
+  void reInititiateState(){
+    emit(state.copyWith(status: StreamsStates.initial));
+  }
   Future<bool> joinNewMeeting(String roomId) async {
     emit(state.copyWith(status: StreamsStates.loading));
     final response = await joinRoomUseCase(MeetingParams(id: roomId));
@@ -152,7 +154,7 @@ final class StreamCubit extends Cubit<StreamState> {
     }, (r) {
       CliLogger.info('first title is  ${r.first.title}');
       emit(state.copyWith(
-        status: StreamsStates.gotscheduledMeeting,
+        status: StreamsStates.success,
         scheduledMeetings: r,
       ));
       // emit(state.copyWith(

@@ -11,6 +11,7 @@
 migrate_working_dir/
 # *.g.dart
 pubspec.lock
+pubspec.yaml
 
 # IntelliJ related
 *.iml

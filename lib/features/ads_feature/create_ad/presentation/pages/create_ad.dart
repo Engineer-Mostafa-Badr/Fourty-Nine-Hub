@@ -10,6 +10,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
@@ -66,7 +67,11 @@ class _CreateAdViewState extends State<CreateAdView> {
         appBar: BackAppBar(label: LocaleKeys.createAd.localize),
         body: BlocBuilder<CreateAdCubit, CreateAdState>(
           builder: (context, state) {
-            if (state.status == CreateAdStates.success||state.status == CreateAdStates.loadCitiesSuccess||state.status == CreateAdStates.loadCities||state.status == CreateAdStates.imageUploading||state.status == CreateAdStates.initState) {
+            if (state.status == CreateAdStates.success ||
+                state.status == CreateAdStates.loadCitiesSuccess ||
+                state.status == CreateAdStates.loadCities ||
+                state.status == CreateAdStates.imageUploading ||
+                state.status == CreateAdStates.initState) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Form(
@@ -107,9 +112,10 @@ class _CreateAdViewState extends State<CreateAdView> {
                               child: InkWell(
                             onTap: () {
                               setState(() {
-                                if(widget.categorization.mainCategory.nameEn=='Dating') {
-                                  state.isMale=true;
-                                }else if (widget.categorization.subCategory
+                                if (widget.categorization.mainCategory.nameEn ==
+                                    'Dating') {
+                                  state.isMale = true;
+                                } else if (widget.categorization.subCategory
                                         .hasAuction ==
                                     true) {
                                   state.isSale = true;
@@ -122,7 +128,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                   color: (state.isUser == true &&
-                                          state.isSale == true&&state.isMale==true)
+                                          state.isSale == true &&
+                                          state.isMale == true)
                                       ? AppColors.PRIMARY_COLOR
                                       : Colors.white,
                                   borderRadius: BorderRadius.circular(15),
@@ -130,13 +137,18 @@ class _CreateAdViewState extends State<CreateAdView> {
                                       color: AppColors.PRIMARY_COLOR)),
                               alignment: AlignmentDirectional.center,
                               child: Text(
-                                widget.categorization.mainCategory.nameEn=='Dating'?LocaleKeys.maleUser.localize:widget.categorization.subCategory.hasAuction ==
-                                        true
-                                    ? LocaleKeys.sale.localize
-                                    : LocaleKeys.user.localize,
+                                widget.categorization.mainCategory.nameEn ==
+                                        'Dating'
+                                    ? LocaleKeys.maleUser.localize
+                                    : widget.categorization.subCategory
+                                                .hasAuction ==
+                                            true
+                                        ? LocaleKeys.sale.localize
+                                        : LocaleKeys.user.localize,
                                 style: Styles.mediumText(
                                     color: (state.isUser == false ||
-                                            state.isSale == false||state.isMale==false)
+                                            state.isSale == false ||
+                                            state.isMale == false)
                                         ? AppColors.PRIMARY_COLOR
                                         : Colors.white),
                               ),
@@ -147,9 +159,11 @@ class _CreateAdViewState extends State<CreateAdView> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  if(widget.categorization.mainCategory.nameEn=='Dating') {
-                                    state.isMale=false;
-                                  }else if (widget.categorization.subCategory
+                                  if (widget
+                                          .categorization.mainCategory.nameEn ==
+                                      'Dating') {
+                                    state.isMale = false;
+                                  } else if (widget.categorization.subCategory
                                           .hasAuction ==
                                       true) {
                                     state.isSale = false;
@@ -164,7 +178,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                     color: (state.isUser == false ||
-                                            state.isSale == false||state.isMale==false)
+                                            state.isSale == false ||
+                                            state.isMale == false)
                                         ? AppColors.PRIMARY_COLOR
                                         : Colors.white,
                                     borderRadius: BorderRadius.circular(15),
@@ -172,14 +187,18 @@ class _CreateAdViewState extends State<CreateAdView> {
                                         color: AppColors.PRIMARY_COLOR)),
                                 alignment: AlignmentDirectional.center,
                                 child: Text(
-                                  widget.categorization.mainCategory.nameEn=='Dating'?LocaleKeys.femaleUser.localize: widget.categorization.subCategory
-                                              .hasAuction ==
-                                          true
-                                      ? LocaleKeys.rent.localize
-                                      : LocaleKeys.provider.localize,
+                                  widget.categorization.mainCategory.nameEn ==
+                                          'Dating'
+                                      ? LocaleKeys.femaleUser.localize
+                                      : widget.categorization.subCategory
+                                                  .hasAuction ==
+                                              true
+                                          ? LocaleKeys.rent.localize
+                                          : LocaleKeys.provider.localize,
                                   style: Styles.mediumText(
                                       color: (state.isUser == true &&
-                                              state.isSale == true&&state.isMale==true)
+                                              state.isSale == true &&
+                                              state.isMale == true)
                                           ? AppColors.PRIMARY_COLOR
                                           : Colors.white),
                                 ),
@@ -195,7 +214,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                         onChanged: (v) => controller.title = v,
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
-                            fillColor: Colors.white,
+                            fillColor: context.isDarkMode
+                                ? AppColors.GREY_DARK_COLOR
+                                : AppColors.LIGHT_COLOR,
                             contentPadding: const EdgeInsets.all(5),
                             hintText: LocaleKeys.title.localize,
                             hintStyle: Styles.mediumText(),
@@ -217,7 +238,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                         onChanged: (v) => controller.description = v,
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
-                            fillColor: Colors.white,
+                            fillColor: context.isDarkMode
+                                ? AppColors.GREY_DARK_COLOR
+                                : AppColors.LIGHT_COLOR,
                             contentPadding: const EdgeInsets.all(5),
                             hintText: LocaleKeys.desc.localize,
                             hintStyle: Styles.mediumText(),
@@ -235,11 +258,14 @@ class _CreateAdViewState extends State<CreateAdView> {
                       const Sizer(),
                       Label(text: LocaleKeys.phone.localize),
                       TextFormField(
-                        maxLines: null,
+                        maxLines: 1,
+                        keyboardType: TextInputType.number,
                         onChanged: (v) => controller.phone = v,
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
-                            fillColor: Colors.white,
+                            fillColor: context.isDarkMode
+                                ? AppColors.GREY_DARK_COLOR
+                                : AppColors.LIGHT_COLOR,
                             contentPadding: const EdgeInsets.all(5),
                             hintText: LocaleKeys.phone.localize,
                             hintStyle: Styles.mediumText(),
@@ -255,88 +281,150 @@ class _CreateAdViewState extends State<CreateAdView> {
                         },
                       ),
                       const Sizer(),
-
                       Label(text: LocaleKeys.governorate.localize),
                       SizedBox(
                         width: double.infinity,
                         child: DropdownButtonFormField<GovernorateEntity>(
                           decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: context.isDarkMode
+                                      ? AppColors.LIGHT_COLOR
+                                      : Colors.grey),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: context.isDarkMode
+                                      ? AppColors.LIGHT_COLOR
+                                      : Colors.grey),
+                            ),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(
-                                color: Colors.grey, // Border color
-                                width: 1.0,         // Border width
-                              ),
+                              borderSide: BorderSide(
+                                  color: context.isDarkMode
+                                      ? AppColors.LIGHT_COLOR
+                                      : Colors.grey),
+                            ),
+                            fillColor: context.isDarkMode
+                                ? Colors.transparent
+                                : AppColors.LIGHT_COLOR,
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 12),
+                          ),
+                          hint: Text(
+                            LocaleKeys.selectGovernorate.tr(),
+                            style: TextStyle(
+                              color: context.isDarkMode
+                                  ? AppColors.LIGHT_COLOR
+                                  : AppColors.GREY_DARK_COLOR,
                             ),
                           ),
-                          hint: Text(LocaleKeys.selectGovernorate.tr()),
                           value: null,
                           onChanged: (GovernorateEntity? newValue) {
-                            controller.selectGovernorate(newValue?.id??'');
+                            controller.selectGovernorate(newValue?.id ?? '');
                             print("state.governorate${state.governorate}");
                             print("state.city${state.city}");
-                            controller.getCities(newValue?.id??'');
+                            controller.getCities(newValue?.id ?? '');
                           },
-                          dropdownColor: Colors.white,
-                          items: state.governorates?.map<DropdownMenuItem<GovernorateEntity>>((GovernorateEntity government) {
+                          dropdownColor: context.isDarkMode
+                              ? AppColors.GREY_DARK_COLOR
+                              : AppColors.LIGHT_COLOR,
+                          items: state.governorates
+                              ?.map<DropdownMenuItem<GovernorateEntity>>(
+                                  (GovernorateEntity government) {
                             return DropdownMenuItem<GovernorateEntity>(
                               value: government,
-                              child: Text(government.nameEn), // Change to city.nameAr for Arabic
+                              child: Text(government
+                                  .nameEn), // Change to city.nameAr for Arabic
                             );
                           }).toList(),
                         ),
                       ),
-
                       const Sizer(),
-                      state.status==CreateAdStates.loadCities?Center(child: const CircularProgressIndicator()):state.status==CreateAdStates.loadCitiesSuccess?Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children:[
-                          Label(text: LocaleKeys.city.localize),
-                          SizedBox(
-                            width: double.infinity,
-                            child: DropdownButtonFormField<CityEntity>(
-                              decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(
-                                    color: Colors.grey, // Border color
-                                    width: 1.0,         // Border width
-                                  ),
-                                ),
-                              ),
-                              hint: Text(LocaleKeys.selectCity.tr()),
-                              value: null,
-                              onChanged: (CityEntity? newValue) {
-                                print(newValue?.id);
-                                controller.selectCity(newValue?.id??'');
-                                print("state.governorate${state.governorate}");
-                                print("state.city${state.city}");
-                              },
-                              dropdownColor: Colors.white,
-                              items: state.cities?.map<DropdownMenuItem<CityEntity>>((CityEntity city) {
-                                return DropdownMenuItem<CityEntity>(
-                                  value: city,
-                                  child: Text(city.nameEn), // Change to city.nameAr for Arabic
-                                );
-                              }).toList(),
-                            ),
-                          ),
-
-                        ],
-                      ):const SizedBox.shrink(),
+                      state.status == CreateAdStates.loadCities
+                          ? Center(child: const CircularProgressIndicator())
+                          : state.status == CreateAdStates.loadCitiesSuccess
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Label(text: LocaleKeys.city.localize),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child:
+                                          DropdownButtonFormField<CityEntity>(
+                                        decoration: InputDecoration(
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: context.isDarkMode
+                                                    ? AppColors.LIGHT_COLOR
+                                                    : Colors.grey),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: context.isDarkMode
+                                                    ? AppColors.LIGHT_COLOR
+                                                    : Colors.grey),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: context.isDarkMode
+                                                    ? AppColors.LIGHT_COLOR
+                                                    : Colors.grey),
+                                          ),
+                                          fillColor: context.isDarkMode
+                                              ? Colors.transparent
+                                              : AppColors.LIGHT_COLOR,
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 10, horizontal: 12),
+                                        ),
+                                        hint: Text(
+                                          LocaleKeys.selectCity.tr(),
+                                          style: TextStyle(
+                                            color: context.isDarkMode
+                                                ? AppColors.LIGHT_COLOR
+                                                : AppColors.GREY_DARK_COLOR,
+                                          ),
+                                        ),
+                                        value: null,
+                                        onChanged: (CityEntity? newValue) {
+                                          print(newValue?.id);
+                                          controller
+                                              .selectCity(newValue?.id ?? '');
+                                          print(
+                                              "state.governorate${state.governorate}");
+                                          print("state.city${state.city}");
+                                        },
+                                        dropdownColor: context.isDarkMode
+                                            ? AppColors.GREY_DARK_COLOR
+                                            : AppColors.LIGHT_COLOR,
+                                        items: state.cities
+                                            ?.map<DropdownMenuItem<CityEntity>>(
+                                                (CityEntity city) {
+                                          return DropdownMenuItem<CityEntity>(
+                                            value: city,
+                                            child: Text(city
+                                                .nameEn), // Change to city.nameAr for Arabic
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : const SizedBox.shrink(),
                       const Sizer(),
                       Label(
                           text: state.isPrice == true
                               ? LocaleKeys.price.localize
                               : LocaleKeys.salary.localize),
                       TextFormField(
-                        maxLines: null,
+                        maxLines: 1,
+                        keyboardType: TextInputType.number,
                         onChanged: (v) => controller.price = v,
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
-                            fillColor: Colors.white,
+                            fillColor: context.isDarkMode
+                                ? AppColors.GREY_DARK_COLOR
+                                : AppColors.LIGHT_COLOR,
                             contentPadding: const EdgeInsets.all(5),
                             hintText: state.isPrice == true
                                 ? LocaleKeys.price.localize
@@ -364,6 +452,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                                 controller.onChanged(v: v, index: index),
                             onTextChanged: (String v) =>
                                 controller.onTextChanged(v: v, index: index),
+                            selectedProp: '',
                           );
                         },
                         separatorBuilder: (context, index) => const Sizer(),
@@ -422,7 +511,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                       BadgedLabel(
                         label: LocaleKeys.addImages.localize,
                         isBordered: true,
-                        style: Styles.smallText(color: Colors.black),
+                        style: Styles.mediumText(color: AppColors.LIGHT_COLOR),
                         color: AppColors.SECONDARY_COLOR,
                         isCentered: true,
                         close: false,
@@ -430,7 +519,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                     Label(
                       text: LocaleKeys.addImagesDesc.localize,
                       style: Styles.mediumText(
-                        color: Colors.grey,
+                        color: context.isDarkMode
+                            ? AppColors.LIGHT_COLOR
+                            : AppColors.GREY_DARK_COLOR,
                       ),
                       textAlign: TextAlign.center,
                     )

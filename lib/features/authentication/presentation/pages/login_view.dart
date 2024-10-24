@@ -19,6 +19,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/l
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -99,9 +100,9 @@ class _LoginViewState extends State<LoginView> {
               ),
             );
           } else if (state is LoginSuccess) {
-            await TokenManager.saveAccessToken(
+            await CacheManager.saveAccessToken(
                 state.userTokensEntity.accessToken);
-            await TokenManager.saveRefreshToken(
+            await CacheManager.saveRefreshToken(
                 state.userTokensEntity.refreshToken);
             await BackgroundService.reStartWebSocketService(
                 state.userTokensEntity.accessToken);
@@ -111,8 +112,9 @@ class _LoginViewState extends State<LoginView> {
               ..getUser().then((value) async {
                 serviceLocator<GetWalletCubit>().getWallet();
                 serviceLocator<WalletCubit>().getWallet();
-                String? accessToken = await TokenManager.getAccessToken();
-                String? refreshToken = await TokenManager.getRefreshToken();
+                serviceLocator<MainCategoriesCubit>().getWallet();
+                String? accessToken = await CacheManager.getAccessToken();
+                String? refreshToken = await CacheManager.getRefreshToken();
                 debugPrint(
                     '/////////////////////////////////////////////////////////////////////////');
                 debugPrint('Refresh Token: $refreshToken');
@@ -296,9 +298,9 @@ class _LoginWidgetState extends State<LoginWidget> {
       children: [
         FormTextField(
           constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
-          fillColor: const Color(0xFFEEEEEE),
+          // fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.r),
-          style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
+          // style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
           controller: loginCubit.emailTextController,
           hint: LocaleKeys.emailOrPhone.localize,
           prefix: Icon(
@@ -388,7 +390,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 textColor: Colors.black,
                 icon: FontAwesomeIcons.facebook,
                 onPressed: () async {
-                  await loginCubit.signInWithFacebook();
+                  // await loginCubit.signInWithFacebook();
                 },
               ),
             ),

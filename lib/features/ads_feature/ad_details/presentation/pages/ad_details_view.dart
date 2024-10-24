@@ -1,8 +1,6 @@
 import 'package:card_swiper/card_swiper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/global/button_availability.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
@@ -12,12 +10,19 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_model.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_details_prop_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import 'package:go_router/go_router.dart';
 
@@ -28,9 +33,19 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class AdDetailsView extends StatefulWidget {
-  final String id;
+  var id;
 
-  const AdDetailsView({super.key, required this.id});
+  AdDetailsView({super.key, payload}) {
+    print("objectitemId$payload");
+    if (payload is String) {
+      id = payload;
+    } else {
+      print("payloadpayloadpayload $payload");
+      // print(id);
+      // print('itemId${payload['itemId']}');
+      id = payload['itemId'];
+    }
+  }
 
   @override
   State<AdDetailsView> createState() => _AdDetailsViewState();
@@ -45,161 +60,174 @@ class _AdDetailsViewState extends State<AdDetailsView> {
 
   @override
   Widget build(BuildContext context) {
+    final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
+    print("userId#{$userId");
+
     return Scaffold(
-      // appBar: const BackAppBar(),
         body: BlocConsumer<AdDetailsCubit, AdDetailsState>(
             listener: (contex, state) {
-              if (state.isError) {
-                showErrorMessage(
-                  context,
-                  getFailureMessage(
-                    state.failure!,
-                    context,
-                  ),
-                );
-              } else if (state.isSuccess) {
-                showSuccessMessage(context, Labels.success);
-              }
-            }, builder: (context, state) {
-          if (state.ad == null) {
-            return const Center(
-              child: CircularProgressIndicator.adaptive(),
-            );
-          }
-          List<AdDetailsPropEntity>? details = state.ad?.details
-              .where((e) => e.nameAr != 'الراتب' && e.nameAr != 'السعر')
-              .toList();
+      if (state.isError) {
+        showErrorMessage(
+          context,
+          getFailureMessage(
+            state.failure!,
+            context,
+          ),
+        );
+      } else if (state.isSuccess) {
+        showSuccessMessage(context, Labels.success);
+      }
+    }, builder: (context, state) {
+      if (state.ad == null) {
+        return const Center(
+          child: CircularProgressIndicator.adaptive(),
+        );
+      }
+      List<AdDetailsPropEntity>? details = state.ad?.details
+          .where((e) => e.nameAr != 'الراتب' && e.nameAr != 'السعر')
+          .toList();
+      print(
+          "state.ad?.user${context.read<AdDetailsCubit>().state.ad?.user?.id}");
 
-          return Column(
-            children: [
-              Expanded(
-                child: ListView(
-                  children: [
-                    _buildAdInfoWidget(ad: state.ad!),
-                    const Sizer(),
-                    const Sizer(),
-                    if (details!.isNotEmpty) _buildDetailsWidget(ad: state.ad!),
-                    const Sizer(),
-                    _buildRelevantAdsWidget(),
-                  ],
-                ),
-              ),
-              _buildActionsWidget(),
-            ],
-          );
-        }));
+      return Column(
+        children: [
+          Expanded(
+            child: ListView(
+              children: [
+                _buildTag(status: state.ad?.subscriptionStatus ?? ''),
+                _buildAdInfoWidget(ad: state.ad!),
+                const Sizer(),
+                const Sizer(),
+                if (details!.isNotEmpty) _buildDetailsWidget(ad: state.ad!),
+                const Sizer(),
+                _buildRelevantAdsWidget(),
+              ],
+            ),
+          ),
+          userId == state.ad?.userId
+              ? _buildRequestsButton()
+              : _buildActionsWidget(),
+        ],
+      );
+    }));
   }
 
   Widget _buildRelevantAdsWidget() {
     return BlocBuilder<AdDetailsCubit, AdDetailsState>(
         builder: (context, state) {
-          if (state.relevantAds?.isEmpty ?? true) {
-            return const SizedBox();
-          }
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Label(
-                text: 'Relevant Ads',
-                style: Styles.mediumText(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: kToolbarHeight * 3.5,
-                child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => AdCard(
+      if (state.relevantAds?.isEmpty ?? true) {
+        return const SizedBox();
+      }
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Label(
+            text: 'Relevant Ads',
+            style: Styles.mediumText(fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: kToolbarHeight * 3.5,
+            child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) => AdCard(
                       item: state.relevantAds![index],
                       onFav: (String) {},
                       onRemoveFav: (String) {},
                     ),
-                    separatorBuilder: (context, index) => const Sizer(),
-                    itemCount: state.relevantAds?.length ?? 0),
-              ),
-            ],
-          );
-        });
+                separatorBuilder: (context, index) => const Sizer(),
+                itemCount: state.relevantAds?.length ?? 0),
+          ),
+        ],
+      );
+    });
+  }
+
+  Widget _buildRequestsButton() {
+    return Container(
+      height: 80.h,
+      padding: EdgeInsets.all(10.w),
+      child: AvaialbleTripsButton(
+        title: LocaleKeys.showAdRequests.localize,
+        color: AppColors.SECONDARY_COLOR,
+        onTap: () async {
+          context.push(Routes.ADRequests,extra: widget.id);
+        },
+      ),
+    );
   }
 
   Widget _buildActionsWidget() {
     return BlocBuilder<AdDetailsCubit, AdDetailsState>(
         builder: (context, state) {
-          final controller = context.read<AdDetailsCubit>();
-          return Container(
-            margin: const EdgeInsets.all(10),
-            child: Column(
+      return Container(
+        margin: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            const Sizer(),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Sizer(),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: AvaialbleTripsButton(
-                        title: 'Premium Request',
-                        color: AppColors.SECONDARY_COLOR,
-                        onTap: () {},
-                      ),
-                    ),
-                    const Sizer(width: 5),
-                    Expanded(
-                      flex: 3,
-                      child: AvaialbleTripsButton(
-                        title: 'Request',
-                        color: AppColors.PRIMARY_COLOR,
-                        onTap: () {},
-                      ),
-                    )
-                  ],
+                Expanded(
+                  flex: 3,
+                  child: BlocProvider(
+                      create: (_) => serviceLocator<AdvertisementCubit>(),
+                      child: PremiumRequestButton(
+                        adId: state.ad?.id ?? '',
+                        subCategoryId: state.ad?.subCategoryId ?? '',
+                        subscriptionStatus: state.ad?.subscriptionStatus ?? '',
+                      )),
                 ),
-                const Sizer(),
-                FutureBuilder(
-                    future: ButtonAvailability().isShowButton(
-                        otherUserId: state.ad?.user?.id ?? '',
-                        subcategoryId: state.ad?.subCategoryId ?? ''),
-                    builder: (context, snap) {
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: AvaialbleTripsButton(
-                              title: 'Call',
-                              color: snap.data == true
-                                  ? AppColors.SECONDARY_COLOR
-                                  : AppColors.DARK_GRAY_COLOR,
-                              icon: Icons.call,
-                              onTap: snap.data == true ? () {} : () {},
-                            ),
-                          ),
-                          const Sizer(width: 5),
-                          Expanded(
-                            flex: 3,
-                            child: AvaialbleTripsButton(
-                              title: 'Message',
-                              color: snap.data == true
-                                  ? AppColors.SECONDARY_COLOR
-                                  : AppColors.DARK_GRAY_COLOR,
-                              icon: Icons.email,
-                              onTap: snap.data == true ? () {} : () {},
-                            ),
-                          ),
-                          const Sizer(width: 5),
-                          Expanded(
-                            flex: 3,
-                            child: AvaialbleTripsButton(
-                              title: 'Report',
-                              color: AppColors.SECONDARY_COLOR,
-                              icon: Icons.report,
-                              onTap: () {},
-                            ),
-                          ),
-                        ],
-                      );
-                    }),
+                const Sizer(width: 5),
+                Expanded(
+                    flex: 3,
+                    child: BlocProvider(
+                        create: (_) => serviceLocator<AdvertisementCubit>(),
+                        child: RequestButton(
+                            adId: state.ad?.id ?? '',
+                            subscriptionStatus:
+                                state.ad?.subscriptionStatus ?? '')))
               ],
             ),
-          );
-        });
+            const Sizer(),
+            CallMessageButtons(
+              otherUserId: state.ad?.userId ?? '',
+              subcategoryId: state.ad?.subCategoryId ?? '',
+              phone: state.ad?.phone ?? '',
+              id: state.ad?.id ?? '',
+              hasReport: true,
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget _buildTag({required String status}) {
+    // super premium
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(10.w),
+      color: status=='premium'?Colors.amber:status=='regular'?Colors.grey:Colors.grey,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if(status=='premium'||status=='regular')...[
+            Icon(Icons.workspace_premium_outlined,
+              size: 55.w,
+              color: status=='premium'?AppColors.SECONDARY_COLOR:status=='regular'?AppColors.PRIMARY_COLOR:null,
+            ),
+            const Sizer(width: 5)
+          ],
+          Label(
+            text: status=='premium'?LocaleKeys.premiumSubscription.localize:status=='regular'?LocaleKeys.regularRequest.localize:LocaleKeys.notSubscribed.localize,
+            style: Styles.mediumText(color: Colors.white,fontSize: 35,fontWeight: FontWeight.bold),
+            maxLines: 1,
+          ),
+        ],
+      ),
+    );
+    // premium
+    // Regular
   }
 
   Widget _buildAdInfoWidget({required AddDetailsModel ad}) {
@@ -226,13 +254,13 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                 ),
                 pagination: SwiperPagination(
                     builder: SwiperCustomPagination(builder: (context, config) {
-                      return const DotSwiperPaginationBuilder(
+                  return const DotSwiperPaginationBuilder(
                           color: AppColors.GREY_DARK_COLOR,
                           activeColor: AppColors.SECONDARY_COLOR,
                           size: 10.0,
                           activeSize: 10.0)
-                          .build(context, config);
-                    })),
+                      .build(context, config);
+                })),
               ),
               PositionedDirectional(
                 top: 10.h,
@@ -243,6 +271,13 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                     Icons.arrow_back,
                     color: Colors.white,
                     size: 60.w,
+                    shadows: const [
+                      Shadow(
+                        color: Colors.black,
+                        blurRadius: 5,
+                        offset: Offset(1, 1), // changes position of shadow
+                      ),
+                    ],
                   ),
                 ),
               )
@@ -260,7 +295,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                 children: [
                   Label(
                     text:
-                    '${NumbersHelper.formatThousands(number: ad.price ?? 0)} ${LocaleKeys.currency.localize}',
+                        '${NumbersHelper.formatThousands(number: ad.price ?? 0)} ${LocaleKeys.currency.localize}',
                     style: Styles.mediumText(
                         fontWeight: FontWeight.bold,
                         color: AppColors.SECONDARY_COLOR),
@@ -301,7 +336,9 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         color: AppColors.SECONDARY_COLOR),
                   ),
                   Label(
-                    text: context.isArabic?ad.governorateAr??'':ad.governorateEn??'',
+                    text: context.isArabic
+                        ? ad.governorateAr ?? ''
+                        : ad.governorateEn ?? '',
                     style: Styles.mediumText(fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -321,7 +358,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         color: AppColors.SECONDARY_COLOR),
                   ),
                   Label(
-                    text: context.isArabic?ad.cityAr??'':ad.cityEn??'',
+                    text: context.isArabic ? ad.cityAr ?? '' : ad.cityEn ?? '',
                     style: Styles.mediumText(fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -377,15 +414,17 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                     Expanded(
                         child: Label(
                             text:
-                            "${getLang() == 'ar' ? detail.nameAr : detail.nameEn} : ",
+                                "${getLang() == 'ar' ? detail.nameAr : detail.nameEn} : ",
                             style: Styles.mediumText(
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.SECONDARY_COLOR))),
                     Expanded(
                         child: Label(
-                            text: getLang() == 'ar'
-                                ? detail.valueAr
-                                : detail.valueEn)),
+                      text: getLang() == 'ar' ? detail.valueAr : detail.valueEn,
+                      style: const TextStyle(
+                        color: AppColors.DARK_BLUE_COLOR,
+                      ),
+                    )),
                   ],
                 ),
               );

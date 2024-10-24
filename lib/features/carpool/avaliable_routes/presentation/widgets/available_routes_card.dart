@@ -5,19 +5,17 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/available_routes_card_entity.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/get_all_trips_entity.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_cubit.dart';
-import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_state.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_state.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/address_info_list.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/available_rotes_bar_info.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-import '../cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class AvaiableRoutesCard extends StatefulWidget {
@@ -66,7 +64,9 @@ class _AvaiableRoutesCardState extends State<AvaiableRoutesCard> {
                   widget.entity.comfort
                       ? Text(LocaleKeys.comfort.localize,
                           style: Styles.mediumText(
-                              color: AppColors.PRIMARY_COLOR,
+                              color: isDarkTheme(context)
+                                  ? AppColors.PRIMARY_COLOR_DARK
+                                  : AppColors.PRIMARY_COLOR_LIGHT,
                               fontWeight: FontWeight.w600))
                       : const SizedBox(),
                   const Spacer(),
@@ -109,7 +109,9 @@ class _AvaiableRoutesCardState extends State<AvaiableRoutesCard> {
                       ),
                       Text(LocaleKeys.seat.localize,
                           style: Styles.mediumText(
-                            color: AppColors.PRIMARY_COLOR,
+                            color: isDarkTheme(context)
+                                ? AppColors.LIGHT_COLOR
+                                : AppColors.PRIMARY_COLOR_LIGHT,
                           )),
                     ],
                   ),
@@ -122,9 +124,26 @@ class _AvaiableRoutesCardState extends State<AvaiableRoutesCard> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                      "  ${DateTime.now().difference(DateTime.parse(widget.entity.createdAt.toString())).inMinutes} ${LocaleKeys.minutesAgo.localize}",
-                      style: Styles.headerText(fontSize: 24)),
+                  DateTime.now()
+                              .difference(DateTime.parse(
+                                  widget.entity.createdAt.toString()))
+                              .inMinutes <
+                          60
+                      ? Text(
+                          "  ${DateTime.now().difference(DateTime.parse(widget.entity.createdAt.toString())).inMinutes} ${LocaleKeys.minutesAgo.localize}",
+                          style: Styles.headerText(fontSize: 24))
+                      : DateTime.now()
+                                  .difference(DateTime.parse(
+                                      widget.entity.createdAt.toString()))
+                                  .inMinutes <
+                              1440
+                          //1440=60*24
+                          ? Text(
+                              "  ${DateTime.now().difference(DateTime.parse(widget.entity.createdAt.toString())).inHours} ${LocaleKeys.hoursAgo.localize}",
+                              style: Styles.headerText(fontSize: 24))
+                          : Text(
+                              "  ${DateTime.now().difference(DateTime.parse(widget.entity.createdAt.toString())).inDays} ${LocaleKeys.daysAgo.localize}",
+                              style: Styles.headerText(fontSize: 24)),
                   const Spacer(),
                   Text(
                       widget.entity.womenOnly == true

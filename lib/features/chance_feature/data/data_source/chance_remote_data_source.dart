@@ -13,9 +13,7 @@ import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_chan
 import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_main_category.dart';
 import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_sub_category.dart';
 
-import '../../../../common/models/public/pagination_params.dart';
 import '../../../../core/error/failure.dart';
-import '../../../../core/utils/const.dart';
 import '../../../../core/utils/shared_pref.dart';
 import '../../domain/entity/chance_entity.dart';
 import '../../domain/use_case/add_chance_data.dart';
@@ -44,13 +42,13 @@ class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
   }
 
   Future<void> _ensureTokenInitialized() async {
-    token ??= await TokenManager.getAccessToken();
+    token ??= await CacheManager.getAccessToken();
   }
 
   String? token;
 
   Future<void> _initializeToken() async {
-    token = await TokenManager.getAccessToken();
+    token = await CacheManager.getAccessToken();
   }
 
   @override

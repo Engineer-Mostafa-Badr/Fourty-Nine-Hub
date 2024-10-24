@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_ad_drawer_entity.dart';
 
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_ad_entity.dart';
 
@@ -29,5 +30,15 @@ class AccountRepoImpl implements AccountRepo {
   Future<Either<Failure, List<FavouriteSubcategoryEntity>>>
       getFavouriteSubcategories() {
     return _remoteDataSource.getFavouriteSubcategories();
+  }
+
+  @override
+  Future<Either<Failure, List<FavouriteAdDrawerEntity>>> getDrawerFavouriteAds() {
+    return _remoteDataSource.getDrawerFavouriteAds();
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteFavouriteAds({required String id}) {
+    return _remoteDataSource.deleteFavouriteAds(id: id);
   }
 }

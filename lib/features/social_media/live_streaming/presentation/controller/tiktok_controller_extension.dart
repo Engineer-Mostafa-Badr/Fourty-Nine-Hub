@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
 
+import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/create_live_use_case.dart';
@@ -94,8 +95,9 @@ extension TiktokControllerExtension on StreamCubit {
       selectedGifts: updatedGifts,
     ));
   }
-
-  Future<void> createLive({required String title}) async {
+ 
+  Future<bool> createLive({required String title,required String roomId,required BuildContext context}) async {
+    bool success = false;
     emit(state.copyWith(status: StreamsStates.loading));
     //extract data from state
     final List<GoalParams> goalParamsList = state.selectedGifts.map((gift) {
@@ -104,6 +106,7 @@ extension TiktokControllerExtension on StreamCubit {
 
     final result = await createLiveUseCase(CreateLiveParams(
       title: title,
+      roomID:roomId,
       topicId: '66ec0328a2c474341310cbc3',
       description: state.goalDescription!,
       goals: goalParamsList,
@@ -111,11 +114,14 @@ extension TiktokControllerExtension on StreamCubit {
     result.fold(
         (l) => emit(state.copyWith(status: StreamsStates.failure, failure: l)),
         (r) {
+          success=true;
+          print("objectakldnlka");
       CliLogger.info(r.id);
       liveId = r.id;
       emit(state.copyWith(
           status: StreamsStates.success, liveCreateResponseEntity: r));
     });
+    return success;
   }
 
   void loadLives() async {

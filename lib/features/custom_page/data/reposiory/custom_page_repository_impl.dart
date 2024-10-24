@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/custom_page/data/data_source/custom_page_remote_data_source.dart';
+import 'package:fourtyninehub/features/custom_page/domain/entity/activate_entity.dart';
 import 'package:fourtyninehub/features/custom_page/domain/entity/favourite_categ_entity.dart';
 import 'package:fourtyninehub/features/custom_page/domain/entity/navigate_bar_entity.dart';
 import 'package:fourtyninehub/features/custom_page/domain/entity/social_page_entity.dart';
@@ -54,5 +55,15 @@ class CustomPageRepositoryImpl extends CustomPageRepository {
   @override
   Future<Either<Failure, bool>> updateFavouriteCat(FavouriteCatParams params) {
     return _customPageRemoteDataSource.updateFavouriteCat(params);
+  }
+
+  @override
+  Future<Either<Failure, ActivateEntity>> fetchActivate() {
+    return _customPageRemoteDataSource.fetchActivate();
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateActivate({required bool customPage}) {
+    return _customPageRemoteDataSource.updateActivate(customPage: customPage);
   }
 }

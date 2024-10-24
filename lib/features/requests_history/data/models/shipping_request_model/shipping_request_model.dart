@@ -4,28 +4,27 @@ import 'package:fourtyninehub/features/requests_history/data/models/offer_model.
 import 'package:fourtyninehub/features/requests_history/domain/entities/shipping_request_entity.dart';
 import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
 
-
 class ShippingRequestModel extends ShippingRequestEntity {
   ShippingRequestModel(
       {required super.id,
-        required super.fromCoordinates,
-        required super.toCoordinates,
-        required super.fromAddress,
-        required super.toAddress,
-        required super.price,
-        required super.time,
-        required super.distance,
-        required super.started,
-        required super.ended,
-        required super.canceled,
-        required super.calls,
-        required super.offers,
-        required super.driver,
-        required super.category,
-        required super.moreFromAddressDetails,
-        required super.moreToAddressDetails,
-        required super.receiverPhone,
-        required super.senderPhone});
+      required super.fromCoordinates,
+      required super.toCoordinates,
+      required super.fromAddress,
+      required super.toAddress,
+      required super.price,
+      required super.time,
+      required super.distance,
+      required super.started,
+      required super.ended,
+      required super.canceled,
+      required super.calls,
+      required super.offers,
+      required super.driver,
+      required super.category,
+      required super.moreFromAddressDetails,
+      required super.moreToAddressDetails,
+      required super.receiverPhone,
+      required super.senderPhone});
   factory ShippingRequestModel.fromJson(Map<String, dynamic> json) {
     return ShippingRequestModel(
       id: json['id'],
@@ -43,9 +42,9 @@ class ShippingRequestModel extends ShippingRequestEntity {
           ? (json['calls'] as List).map((e) => CallModel.fromJson(e)).toList()
           : [],
       offers:
-      (json['offers'] as List).map((e) => OfferModel.fromJson(e)).toList(),
+          (json['offers'] as List).map((e) => OfferModel.fromJson(e)).toList(),
       driver:
-      json['driver'] != null ? DriverModel.fromJson(json['driver']) : null,
+          json['driver'] != null ? DriverModel.fromJson(json['driver']) : null,
       category: SubCategoryModel.fromJson(json['category']),
       moreFromAddressDetails: json['more_from_address_details'],
       moreToAddressDetails: json['more_to_address_details'],

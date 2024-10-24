@@ -4,7 +4,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/balan
 import '../../../../../../core/error/failure.dart';
 import '../../../domain/entities/balance/request_withdraw_entity.dart';
 
-enum BalanceStates { loading, initial, error, successFive, successTen }
+enum BalanceStates { loading, initial, error,errorRequest, successFive, successTen }
 
 class BalanceState {
   final BalanceStates status;

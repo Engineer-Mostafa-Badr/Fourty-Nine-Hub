@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -18,7 +18,7 @@ class ShippingDetailsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BackAppBar(label: 'Shipping Details'.tr()),
+      appBar: BackAppBar(label: LocaleKeys.shippingDetails.tr()),
       body: ListView(
         children: [
           _buildPickUpFromWidget(context: context),
@@ -39,7 +39,7 @@ class ShippingDetailsWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Label(
-            text: 'Where to deliver'.tr(),
+            text: LocaleKeys.whereToDeliver.tr(),
             style: Styles.headerText(),
           ),
           Row(
@@ -48,20 +48,20 @@ class ShippingDetailsWidget extends StatelessWidget {
                   flex: 3,
                   child: FormTextField(
                     controller: controller.toAddressTextController,
-                    hint: 'To Address'.tr(),
+                    hint: LocaleKeys.toAddress.tr(),
                     prefix: const Icon(Icons.location_on),
                   )),
               const Sizer(),
               Expanded(
                   child: FormTextField(
-                hint: 'Entrance'.tr(),
+                hint: LocaleKeys.entrance.tr(),
                 controller: controller.toEntranceTextController,
               )),
             ],
           ),
           const Sizer(),
           FormTextField(
-            hint: 'Phone Number'.tr(),
+            hint: LocaleKeys.phoneNumber.tr(),
             prefix: const Icon(Icons.phone),
             controller: controller.toPhoneTextController,
           ),
@@ -78,17 +78,17 @@ class ShippingDetailsWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Label(
-            text: 'What to deliver'.tr(),
+            text: LocaleKeys.whatToDeliver.tr(),
             style: Styles.headerText(),
           ),
           FormTextField(
-            hint: 'Notes'.tr(),
+            hint: LocaleKeys.notes.tr(),
             maxLines: 3,
             controller: controller.toPhoneTextController,
           ),
           const Sizer(),
           FormTextField(
-            hint: 'Offer Price'.tr(),
+            hint: LocaleKeys.offerPrice.tr(),
             prefix: const Icon(Icons.monetization_on_outlined),
             controller: controller.offerTextController,
           ),
@@ -105,7 +105,7 @@ class ShippingDetailsWidget extends StatelessWidget {
                       color: Colors.red),
                   child: Center(
                       child: Label(
-                    text: 'Premium Request'.tr(),
+                    text: LocaleKeys.premiumRequest.tr(),
                     style: Styles.mediumText(color: Colors.white),
                   )),
                 ),
@@ -121,7 +121,7 @@ class ShippingDetailsWidget extends StatelessWidget {
                       color: AppColors.PRIMARY_COLOR),
                   child: Center(
                       child: Label(
-                          text: 'Normal Request'.tr(),
+                          text: LocaleKeys.normalRequest.tr(),
                           style: Styles.mediumText(color: Colors.white))),
                 ),
               )),
@@ -140,7 +140,7 @@ class ShippingDetailsWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Label(
-            text: 'Where to pick up'.tr(),
+            text: LocaleKeys.whereToPickUp.tr(),
             style: Styles.headerText(),
           ),
           Row(
@@ -149,20 +149,20 @@ class ShippingDetailsWidget extends StatelessWidget {
                   flex: 3,
                   child: FormTextField(
                     controller: controller.fromAddressTextController,
-                    hint: 'From Address'.tr(),
+                    hint: LocaleKeys.fromAddress.tr(),
                     prefix: const Icon(Icons.location_on),
                   )),
               const Sizer(),
               Expanded(
                   child: FormTextField(
-                hint: 'Entrance'.tr(),
+                hint: LocaleKeys.entrance.tr(),
                 controller: controller.fromEntranceTextController,
               )),
             ],
           ),
           const Sizer(),
           FormTextField(
-            hint: 'Phone Number'.tr(),
+            hint: LocaleKeys.phoneNumber.tr(),
             prefix: const Icon(Icons.phone),
             controller: controller.fromPhoneTextController,
           ),

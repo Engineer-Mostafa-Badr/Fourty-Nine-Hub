@@ -2374,13 +2374,10 @@
 //   );
 // }
 
-import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
@@ -2391,7 +2388,6 @@ import 'package:shimmer/shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../tinder/data/shared/shared.dart';
-import '../../../tinder/presentation/pages/user_profile.dart';
 import 'dart:ui';
 
 bool isDarkTheme(BuildContext context) {
@@ -2407,11 +2403,11 @@ class NoScaleText extends StatelessWidget {
 
   const NoScaleText(
     this.data, {
-    Key? key,
+    super.key,
     this.style,
     this.textAlign,
     this.maxLines,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -2447,7 +2443,7 @@ bool isKeyboardVisible(BuildContext context) {
 class CommentsBottomSheet extends StatefulWidget {
   final Reel reel;
 
-  const CommentsBottomSheet({Key? key, required this.reel}) : super(key: key);
+  const CommentsBottomSheet({super.key, required this.reel});
 
   @override
   _CommentsBottomSheetState createState() => _CommentsBottomSheetState();
@@ -2568,10 +2564,10 @@ class CommentInputField extends StatefulWidget {
   final ScrollController scrollController;
 
   const CommentInputField({
-    Key? key,
+    super.key,
     required this.reel,
     required this.scrollController,
-  }) : super(key: key);
+  });
 
   @override
   CommentInputFieldState createState() => CommentInputFieldState();
@@ -2601,7 +2597,7 @@ class CommentInputFieldState extends State<CommentInputField> {
                 alignment: Alignment.centerRight,
                 children: [
                   MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                    data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
                     child: TextField(
                       controller: _commentController,
                       style: TextStyle(
@@ -2682,7 +2678,7 @@ class CommentInputFieldState extends State<CommentInputField> {
 class CommentWidget extends StatefulWidget {
   final CommentData commentData;
 
-  const CommentWidget({Key? key, required this.commentData}) : super(key: key);
+  const CommentWidget({super.key, required this.commentData});
 
   @override
   _CommentWidgetState createState() => _CommentWidgetState();
@@ -2818,7 +2814,7 @@ class _CommentWidgetState extends State<CommentWidget> {
   Widget _buildRepliesList(
       bool isDark, TextStyle userNameStyle, TextStyle commentTextStyle) {
     return Padding(
-      padding: EdgeInsets.only(left: 40.0, bottom: 8, top: 8),
+      padding: const EdgeInsets.only(left: 40.0, bottom: 8, top: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: widget.commentData.replies
@@ -2843,7 +2839,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                     NetworkImage(reply.user.profilePictureSignedUrl),
                 radius: 16,
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -2902,7 +2898,7 @@ class _CommentWidgetState extends State<CommentWidget> {
         children: [
           Expanded(
             child: MediaQuery(
-              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
               child: TextField(
                 controller: _replyController,
                 focusNode: _replyFocusNode,
@@ -2973,10 +2969,12 @@ class _CommentWidgetState extends State<CommentWidget> {
 
 // Shimmer effect for loading state of comments
 class ShimmerCommentWidget extends StatelessWidget {
+  const ShimmerCommentWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -2988,7 +2986,7 @@ class ShimmerCommentWidget extends StatelessWidget {
               radius: 20,
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -3020,7 +3018,7 @@ class ShimmerCommentWidget extends StatelessWidget {
                       highlightColor: Colors.white12,
                       child: const Icon(Icons.favorite, color: Colors.white12),
                     ),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 5),
                     Shimmer.fromColors(
                       baseColor: Colors.white12,
                       highlightColor: Colors.white12,

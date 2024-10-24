@@ -65,8 +65,8 @@ class _ShippingBannerState extends State<ShippingBanner> {
         }
       },
       // canRegister: true,
-      canRegister:
-          !(widget.model.mainCategory?.isDriver ?? false) && !(widget.model.mainCategory?.isDriverApproved ?? false),
+      canRegister: true,
+          // !(widget.model.mainCategory?.isDriver ?? false) && !(widget.model.mainCategory?.isDriverApproved ?? false),
       category: MainCategoryEntity(
         nameEn: widget.model.mainCategory?.nameEn,
         id: widget.model.mainCategory?.mainCategoryId ?? '',

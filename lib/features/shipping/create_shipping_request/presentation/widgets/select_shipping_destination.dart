@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,7 +36,7 @@ class SelectShippingDestination extends StatelessWidget {
                 children: [
                   Expanded(
                       child: Label(
-                    text: 'Enter Your route'.tr(),
+                    text: LocaleKeys.enterYourRoute.tr(),
                     style: Styles.mediumText(fontWeight: FontWeight.bold),
                   )),
                   InkWell(
@@ -72,7 +72,7 @@ class SelectShippingDestination extends StatelessWidget {
                     const Sizer(),
                     Expanded(
                         child: Text(
-                      state.fromAddress?.address ?? 'Select Pickup location'.tr(),
+                      state.fromAddress?.address ?? LocaleKeys.selectPickupLocation.tr(),
                       maxLines: 1,
                     )),
                   ],
@@ -89,14 +89,14 @@ class SelectShippingDestination extends StatelessWidget {
                   children: [
                     AppButton(
                         margin: 5,
-                        label: 'Search'.tr(),
+                        label: LocaleKeys.search.tr(),
                         width: kToolbarHeight,
                         height: 30.h,
                         onPressed: () => rideCubit.loadNearByPlaces(
                             key: rideCubit.toAddressTextController.text)),
                   ],
                 ),
-                hint: 'To'.tr(),
+                hint: LocaleKeys.to.tr(),
               ),
               const Sizer(),
               if (state.nearByPlaces.isNotEmpty)

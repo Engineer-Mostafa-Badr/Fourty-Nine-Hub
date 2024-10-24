@@ -38,7 +38,7 @@ class GoogleApiConsumer extends ApiConsumer {
   Failure _getFailure(dynamic e) {
     if (e is DioException) {
       if (e.response?.statusCode == 401) {
-        return const UnauthorizedFailure();
+        return const UnauthorizedFailure('');
       } else if (e.response?.statusCode == 400) {
         if (e.response?.data is Map &&
             e.response?.data['error_message'] is String) {
@@ -96,5 +96,10 @@ class GoogleApiConsumer extends ApiConsumer {
       Map<String, dynamic>? headers}) {
     // TODO: implement patch
     throw UnimplementedError();
+  }
+
+  @override
+  void removeTokenFromHeader() {
+    // TODO: implement removeTokenFromHeader
   }
 }

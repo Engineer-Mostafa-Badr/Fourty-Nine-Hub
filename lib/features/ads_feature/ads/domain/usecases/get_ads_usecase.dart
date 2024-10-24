@@ -20,16 +20,18 @@ class GetAdsParams {
   final String filter;
   final int page;
   final int limit;
+  final String? userId;
 
   GetAdsParams(
       {required this.subCategoryId,
       required this.filter,
-      required this.page,
+      required this.page, this.userId,
       required this.limit});
   Map<String, dynamic> toJson() => {
         'subCategoryId': subCategoryId,
         'filter': filter,
         'page': page,
         'limit': limit,
+        if(userId!=null)'userId': limit,
       };
 }

@@ -14,7 +14,7 @@ class EditProfileRepoImpl implements EditProfileRepo {
   EditProfileRepoImpl(this._remoteDataSource);
 
   @override
-  Future<Either<Failure, UserEntity>> editProfile(
+  Future<Either<Failure, bool>> editProfile(
       {required EditProfileEntity params}) {
     return _remoteDataSource.editProfile(params: params);
   }

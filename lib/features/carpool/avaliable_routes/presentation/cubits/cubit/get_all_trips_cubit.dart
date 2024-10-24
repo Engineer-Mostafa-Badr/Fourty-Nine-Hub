@@ -15,8 +15,10 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
 
   void _initializeSocketListeners() {
     // Connect the socket
-    _socket.connect();
-    print("Socket connection initiated...");
+    if (!_socket.connected) {
+      _socket.connect();
+      print("Socket connection initiated...");
+    }
 
     // Listen for real-time trip updates from the server
     _socket.on('carpool:getAllTrip', (data) {
@@ -33,16 +35,17 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
     // Handle potential socket errors
     _socket.on('connect_error', (error) {
       print("Socket connection error: $error");
-      emit(GetAllTripsFailure('Socket connection error: $error'));
+      emit(GetAllTripsFailure('Erorr happend . Please Try again: $error'));
     });
 
-    _socket.on('disconnect', (_) {
-      print("Socket disconnected");
-      emit(GetAllTripsFailure('Socket disconnected'));
+    _socket.on('disconnect', (data) {
+      print('Socket disconnected: $data');
     });
   }
 
   void fetchAllCarpoolTrips() {
+    _socket.connect();
+
     emit(GetAllTripsLoading());
 
     // Request the server to send the current list of carpool trips
@@ -68,7 +71,7 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
       throw Exception('Expected a list of trips but got ${data.runtimeType}');
     }
 
-    return (data as List).map((tripData) {
+    return (data).map((tripData) {
       List<CarpoolLocation> locations = [];
       if (tripData['CARPOOL_LOCATIONS'] is List) {
         locations = (tripData['CARPOOL_LOCATIONS'] as List).map((loc) {
@@ -78,8 +81,12 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
             type: loc['type'],
             locationTitle: loc['locationTitle'],
             coordinates: LocationCoordinates(
-              latitude: loc['location']['coordinates'][1],
-              longitude: loc['location']['coordinates'][0],
+              latitude: loc['location']?['coordinates']?[0] != null
+                  ? loc['location']['coordinates'][0] as double
+                  : null,
+              longitude: loc['location']?['coordinates']?[1] != null
+                  ? loc['location']['coordinates'][1] as double
+                  : null,
             ),
             comfort: loc['comfort'] ?? false,
             booked: loc['booked'] ?? false,

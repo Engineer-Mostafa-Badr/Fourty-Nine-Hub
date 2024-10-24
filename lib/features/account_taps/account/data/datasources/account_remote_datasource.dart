@@ -3,6 +3,8 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/account_taps/account/data/models/favourite_ad_drawer_model.dart';
+import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_ad_drawer_entity.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_ad_entity.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_subcategory_entity.dart';
 import '../../domain/entities/favourite_category_entity.dart';
@@ -18,6 +20,8 @@ abstract class AccountRemoteDataSource {
   getFavouriteSubcategories();
 
   Future<Either<Failure, List<FavouriteAdEntity>>> getFavouriteAds();
+  Future<Either<Failure, List<FavouriteAdDrawerEntity>>> getDrawerFavouriteAds();
+  Future<Either<Failure, bool>> deleteFavouriteAds({required String id});
 }
 
 class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
@@ -54,5 +58,23 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
             (data) => Right((data['data'] as List)
             .map((e) => FavouriteSubcategoryModel.fromJson(e))
             .toList()));
+  }
+
+  @override
+  Future<Either<Failure, List<FavouriteAdDrawerEntity>>> getDrawerFavouriteAds() async {
+    final response = await _apiConsumer.get(EndPoints.favouriteAds);
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right((data['data'] as List)
+            .map((e) => FavouriteAdDrawerModel.fromJson(e))
+            .toList()));
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteFavouriteAds({required String id}) async {
+    final response = await _apiConsumer.delete(EndPoints.deleteFavouriteAds(id));
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right(data['status']));
   }
 }

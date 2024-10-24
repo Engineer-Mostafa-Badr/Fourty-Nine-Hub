@@ -1,17 +1,14 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../res/strings/labels.dart';
-import '../../../../requests_history/domain/entities/food_order_entity.dart';
 import '../../data/models/restaurant_orders_model.dart';
 import '../../domain/usecases/get_restaurant_orders_usecase.dart';
 
@@ -33,7 +30,7 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
   String? _token;
 
   Future<void> _ensureTokenInitialized() async {
-    _token ??= await TokenManager.getAccessToken();
+    _token ??= await CacheManager.getAccessToken();
   }
 
   // Future<void> getRestaurantOrders() async {

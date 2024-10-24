@@ -28,7 +28,6 @@ class _ImagesPageViewState extends State<ImagesPageView> {
   int _selectedIndex = 0;
   late PageController _pageController;
   @override
-
   void initState() {
     _selectedIndex = widget.params.index;
     _pageController = PageController(initialPage: _selectedIndex);

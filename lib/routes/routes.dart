@@ -11,7 +11,9 @@ abstract class Routes {
   static const SUBCATEGORIES = '/Subcategories';
   static const ADS = '/Subcategories/ADS';
   static const FILTERADS = '/Subcategories/ADS/FilterAds';
+  static const GOVERNORATEFILTERADS = '/Subcategories/ADS/GovernorateFilterAds';
   static const ADdetails = '/Subcategories/ADS/AD-Details';
+  static const ADRequests = '/Subcategories/ADS/AD-Details/AD-Requests';
   static const CREATEAD = '/Subcategories/ADS/CreateAd';
   static const CREATECOMPANYAD = '/Subcategories/ADS/CreateCompanyAd';
 
@@ -140,12 +142,14 @@ abstract class Routes {
   static const PAYMENT = '/Payment';
   static const SUBSCRIPTIONPLANS = '/SubscriptionPlans';
   static const DASHBOARDDRIVERSCREEN = '/DASHBOARDDRIVERSCREEN';
+  static const ALLTRIPRIDER = '/Ride/ALLTRIPRIDER';
   static const DRIVERREQUESTSDETIALS = '/DRIVERREQUESTSDETIALS';
   static const MyRating = '/MyRating';
   static const TripRating = '/TripRating';
   static const EDITDRIVERSCREEN = '/EditDriver';
 
   static const TRIP_JOIN = '/TripJoin';
+  static const BE_STAR = '/BeAStar';
   static const AVAILABLE_TRIPS = '/AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = '/TripJoinRequestNotification';
   static const TRIP_JOIN_REQUEST_HISTORY = '/TripJoinRequestHistory';
@@ -169,8 +173,10 @@ abstract class Paths {
   static const MAINCATEGORIESTREE = 'MainCategoriesTree';
   static const SUBCATEGORIES = 'Subcategories';
   static const FILTERADS = 'FilterAds';
+  static const GOVERNORATEFILTERADS = 'GovernorateFilterAds';
   static const ADS = 'ADS';
   static const ADdetails = 'AD-Details';
+  static const ADRequests = 'AD-Requests';
   static const ARCHIVEDCHATS = 'ArchivedChatsView';
   static const CREATEAD = 'CreateAd';
   static const CREATECOMPANYAD = 'CreateCompanyAd';
@@ -284,6 +290,7 @@ abstract class Paths {
   static const SUBSCRIPTIONPLANS = 'SubscriptionPlans';
 
   static const TRIP_JOIN = 'TripJoin';
+  static const BE_STAR = 'BeAStar';
   static const AVAILABLE_TRIPS = 'AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = 'TripJoinRequestNotification';
   static const TRIP_JOIN_REQUEST_HISTORY = 'TripJoinRequestHistory';
@@ -299,6 +306,7 @@ abstract class Paths {
 
   static const BROADCAST = 'Broadcast';
   static const DASHBOARDDRIVERSCREEN = 'DASHBOARDDRIVERSCREEN';
+  static const ALLTRIPRIDER = 'ALLTRIPRIDER';
   static const DRIVERREQUESTSDETIALS = 'DRIVERREQUESTSDETIALS';
   static const MyRating = 'MyRating';
   static const TripRating = 'TripRating';

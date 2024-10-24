@@ -3,6 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/shipping_request_model/shipping_request_model.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_static_maps_controller/google_static_maps_controller.dart';
@@ -30,7 +32,7 @@ class ShippingRequestCard extends StatelessWidget {
               children: [
                 const Icon(FontAwesomeIcons.car,
                     color: AppColors.PRIMARY_COLOR),
-                Sizer(),
+                const Sizer(),
                 Label(
                   text: trip.category.name,
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
@@ -43,7 +45,7 @@ class ShippingRequestCard extends StatelessWidget {
                   Icons.location_searching,
                   color: AppColors.PRIMARY_COLOR,
                 ),
-                Sizer(),
+                const Sizer(),
                 Expanded(child: Label(text: trip.fromAddress)),
               ],
             ),
@@ -53,15 +55,15 @@ class ShippingRequestCard extends StatelessWidget {
                   Icons.location_on,
                   color: AppColors.SECONDARY_COLOR,
                 ),
-                Sizer(),
+                const Sizer(),
                 Expanded(child: Label(text: trip.toAddress)),
               ],
             ),
             if (trip.offers.isNotEmpty)
               Row(
                 children: [
-                  TextAppButton(label: 'Offers', onPressed: () {}),
-                  Sizer(),
+                  TextAppButton(label: LocaleKeys.offers.localize, onPressed: () {}),
+                  const Sizer(),
                   Expanded(
                     child: SizedBox(
                       height: kToolbarHeight * .5,
@@ -73,17 +75,17 @@ class ShippingRequestCard extends StatelessWidget {
                               backgroundColor: Colors.white,
                               radius: 10,
                               backgroundImage:
-                              NetworkImage(offer.profileImage ?? ''),
+                                  NetworkImage(offer.profileImage ?? ''),
                             );
                           },
                           separatorBuilder: (context, index) =>
-                          const SizedBox(),
+                              const SizedBox(),
                           itemCount: trip.offers.length),
                     ),
                   ),
                 ],
               ),
-            Sizer(),
+            const Sizer(),
             StaticMapWidget(
               height: kToolbarHeight * 1.5,
               radius: 10,

@@ -14,8 +14,6 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../routes/routes.dart';
-import '../../../../secrets/controller/secrets_cubit.dart';
-import '../../../../service_locator/service_locator.dart';
 import '../controller/stream_state.dart';
 
 class JoinMeetingScreen extends StatefulWidget {

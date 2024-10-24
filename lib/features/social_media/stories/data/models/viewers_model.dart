@@ -11,11 +11,11 @@ class ViewersResponse {
   });
 
   // Parse JSON data
-  factory ViewersResponse.fromJson(String str) =>
-      ViewersResponse.fromMap(json.decode(str));
-
+  // factory ViewersResponse.fromJson(String str) =>
+  //     ViewersResponse.fromMap(json.decode(str));
+  //
   // Convert from map to object
-  factory ViewersResponse.fromMap(Map<String, dynamic> json) => ViewersResponse(
+  factory ViewersResponse.fromJson(Map<String, dynamic> json) => ViewersResponse(
         status: json["status"] ?? false, // Default to false if missing
         data: json["data"] != null
             ? List<UserData>.from(json["data"].map((x) => UserData.fromMap(x)))

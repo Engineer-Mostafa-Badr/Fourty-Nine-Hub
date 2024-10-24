@@ -9,9 +9,14 @@ class BadgedLabel extends StatelessWidget {
   final Color color, textColor, borderColor;
   final String label;
   final double radius;
+  final EdgeInsetsGeometry? padding;
+  final TextOverflow? overFlow;
+  final int? max;
   final TextStyle? style;
   final double? height, width, margin;
   final Function? onTap;
+  final IconData? icon;
+  final IconData? iconLeading;
   final bool isBordered;
   final bool isCentered;
   final bool close;
@@ -25,6 +30,7 @@ class BadgedLabel extends StatelessWidget {
       this.height,
       this.width,
       this.style,
+      this.padding,
       this.borderColor = AppColors.PRIMARY_COLOR,
       this.onTap,
       this.onRemove,
@@ -33,7 +39,7 @@ class BadgedLabel extends StatelessWidget {
       this.isBordered = false,
       this.isCentered = false,
       this.close = true,
-      this.textColor = Colors.white});
+      this.textColor = Colors.white, this.icon, this.iconLeading, this.overFlow, this.max});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +53,7 @@ class BadgedLabel extends StatelessWidget {
             height: height,
             width: width,
             margin: EdgeInsets.all(margin ?? 0),
-            padding: EdgeInsets.symmetric(horizontal: 20.w.w, vertical: 6.h.h),
+            padding: padding??EdgeInsets.symmetric(horizontal: 20.w.w, vertical: 6.h.h),
             //padding: EdgeInsetsDirectional.only(end: 8,top: 5),
             decoration: BoxDecoration(
                 color: isBordered ? color : color,
@@ -74,10 +80,30 @@ class BadgedLabel extends StatelessWidget {
   }
 
   Widget _buildLabelWidget() {
-    return Label(
-      text: label,
-      style:style?? Styles.mediumText(color: textColor),
-      textAlign: TextAlign.center,
+    return Row(
+      mainAxisAlignment: (icon != null&&iconLeading!=null)?MainAxisAlignment.spaceBetween:(icon != null||iconLeading!=null)?MainAxisAlignment.start:MainAxisAlignment.center,
+      children: [
+        if (icon != null)
+          Icon(
+            icon,
+            color: textColor,
+            size: 35.sp,
+          ),
+        Label(
+          text: label,
+          style:style?? Styles.mediumText(color: textColor),
+          textAlign: TextAlign.center,
+          overflow: overFlow,
+          maxLines: max,
+        ),
+
+        if (iconLeading != null)
+          Icon(
+            iconLeading,
+            color: textColor,
+            size: 35.sp,
+          ),
+      ],
     );
   }
 }

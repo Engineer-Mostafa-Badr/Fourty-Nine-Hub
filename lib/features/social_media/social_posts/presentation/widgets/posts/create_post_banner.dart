@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
@@ -62,7 +63,13 @@ class CreatePostBanner extends StatelessWidget {
             width: 10,
           ),
           InkWell(
-            onTap: () => context.push(Routes.ZOOM),
+            onTap: () {
+              if (context.isUserLoggedIn) {
+                context.push(Routes.ZOOM);
+              } else {
+                context.push(Routes.LOGIN);
+              }
+            },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -74,7 +81,7 @@ class CreatePostBanner extends StatelessWidget {
                   height: 3.h,
                 ),
                 Label(
-                  text: 'zoom',
+                  text: LocaleKeys.meet.localize,
                   style: Styles.smallText(),
                 ),
               ],

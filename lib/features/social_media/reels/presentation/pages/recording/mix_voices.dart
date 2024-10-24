@@ -337,7 +337,6 @@ import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -351,8 +350,6 @@ import '../../../../../../service_locator/service_locator.dart';
 import '../../controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import '../../shared/filter_utiles.dart';
 import 'recording_shared.dart';
-
-import 'package:easy_localization/easy_localization.dart';
 
 class MixVoiceVideoRecordingScreen extends StatefulWidget {
   final String voiceUrl;

@@ -15,7 +15,6 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -89,7 +88,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
           BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
       child: Container(
         padding: EdgeInsets.all(isShared == true ? 10 : 0),
-        decoration: const BoxDecoration(color: Colors.white),
+        decoration:  BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -264,7 +263,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
         if (label != null || label != '') ...[
           ReadMoreLabel(
             text: label ?? '',
-            style: Styles.headerText(fontSize: 30,color: Colors.black),
+            style: Styles.headerText(fontSize: 30),
           ),
           const Sizer(),
         ],
@@ -316,7 +315,6 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             // borderRadius: BorderRadius.circular(15),
-                            color: Colors.black.withOpacity(0.5),
                           ),
                           child: Center(
                             child: Label(
@@ -378,24 +376,26 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               style: Styles.mediumText(color: Colors.grey)),
         ),
         Label(text: ' . $date', style: Styles.mediumText(color: Colors.grey)),
-        if (post.user.id != user?.id && context.read<UserCubit>().isLoggedIn)
-          IconButton(
-            onPressed: () {
-              bottomSheet(
-                  context: context,
-                  widget: ReportView(
-                    id: widget.post.id,
-                    categoryId: '66a3583454e6e337915514db',
-                  ));
-            },
-            icon: const Icon(
-              Icons.report,
-              color: AppColors.SECONDARY_COLOR,
-            ),
-          ),
+        // if (post.user.id != user?.id && context.read<UserCubit>().isLoggedIn)
+        //   IconButton(
+        //     onPressed: () {
+        //       bottomSheet(
+        //           context: context,
+        //           widget: ReportView(
+        //             id: widget.post.id,
+        //             categoryId: '66a3583454e6e337915514db',
+        //           ));
+        //     },
+        //     icon: const Icon(
+        //       Icons.report,
+        //       color: AppColors.SECONDARY_COLOR,
+        //     ),
+        //   ),
+        Sizer(),
         if (context.read<UserCubit>().isLoggedIn)
           IconAppButton(
             icon: Icons.clear,
+            size: 40.w,
             onPressed: () {
               bottomSheet(
                 context: context,
@@ -457,7 +457,6 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
       },
       leading: Icon(
         icon,
-        color: Colors.black,
       ),
       subtitle: Label(
         text: subTitle,
@@ -511,7 +510,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               Label(
                   text: date,
                   maxLines: 1,
-                  style: Styles.mediumText(color: Colors.black)),
+                  style: Styles.mediumText()),
               if (post.user.isDocumented == true && post.isShared == false ||
                   (post.mainPost?.user.isDocumented == true &&
                       post.isShared == true))
@@ -524,24 +523,25 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
           ),
         ),
         if (post.isShared == false &&
-            (post.user.id != user?.id) &&
+            (post.user.id == user?.id) &&
             context.read<UserCubit>().isLoggedIn) ...[
-          IconButton(
-            onPressed: () {
-              bottomSheet(
-                context: context,
-                widget: ReportView(
-                  id: widget.post.id,
-                  categoryId: '66a3583454e6e337915514db',
-                ),
-              );
-            },
-            icon: Icon(
-              Icons.report,
-              color: AppColors.SECONDARY_COLOR,
-              size: 35.w,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: () {
+          //     bottomSheet(
+          //       context: context,
+          //       widget: ReportView(
+          //         id: widget.post.id,
+          //         categoryId: '66a3583454e6e337915514db',
+          //       ),
+          //     );
+          //   },
+          //   icon: Icon(
+          //     Icons.report,
+          //     color: AppColors.SECONDARY_COLOR,
+          //     size: 35.w,
+          //   ),
+          // ),
+          const Sizer(),
           if (context.read<UserCubit>().isLoggedIn)
             IconAppButton(
               icon: Icons.clear,

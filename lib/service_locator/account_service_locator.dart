@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/account_taps/account/data/datasources/account_remote_datasource.dart';
+import 'package:fourtyninehub/features/account_taps/account/domain/usecases/delete_favourite_ads_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/usecases/get_favourite_ads_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/usecases/get_favourite_categories_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/usecases/get_favourite_subcategories_usecase.dart';
@@ -24,6 +25,8 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wa
 import 'package:get_it/get_it.dart';
 import '../features/account_taps/account/data/repositories/account_repo_impl.dart';
 import '../features/account_taps/account/domain/repositories/account_repo.dart';
+import '../features/account_taps/account/domain/usecases/get_drawer_favourite_ads_usecase.dart';
+import '../features/account_taps/account/presentation/cubit/cubit/favourite_drawer_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_ads_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import '../features/account_taps/lists/presentation/cubit/lists_cubit.dart';
@@ -87,6 +90,10 @@ class AccountServiceLocator {
         () => DeleteSubscriptionUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<AddSubscriptionUseCase>(
         () => AddSubscriptionUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetDrawerFavouriteAdsUsecase>(
+        () => GetDrawerFavouriteAdsUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<DeleteFavouriteAdsUsecase>(
+        () => DeleteFavouriteAdsUsecase(serviceLocator()));
 
     serviceLocator.registerFactory<FavouriteAdsCubit>(
         () => FavouriteAdsCubit(serviceLocator())..loadData());
@@ -105,6 +112,10 @@ class AccountServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
+    serviceLocator.registerFactory<FavouriteDrawerCubit>(() => FavouriteDrawerCubit(
           serviceLocator(),
           serviceLocator(),
         ));

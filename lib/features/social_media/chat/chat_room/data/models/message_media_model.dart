@@ -3,7 +3,11 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entiti
 
 class MessageMediaModel extends MessageMediaEntity {
   MessageMediaModel(
-      {required super.id, required super.url, required super.type, super.fileName, super.fileSize});
+      {required super.id,
+      required super.url,
+      required super.type,
+      super.fileName,
+      super.fileSize});
 
   factory MessageMediaModel.fromJson(Map<String, dynamic> json) {
     return MessageMediaModel(

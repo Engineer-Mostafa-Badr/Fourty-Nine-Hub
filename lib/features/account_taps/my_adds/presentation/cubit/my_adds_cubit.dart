@@ -2,9 +2,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/accept_come_with_me_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/accept_pick_me_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/fetch_my_ads_by_id_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/get_my_trip_join_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/reject_come_with_me_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/reject_pick_me_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/edit_my_ads_entity.dart';
 
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../core/error/failure.dart';
@@ -55,6 +57,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
   final GetAllCountsAdsUseCase _allCountsAdsUseCase;
   final EditMyAdsUseCase _editMyAdsUseCase;
   final ClickUseCase _clickUseCase;
+  final FetchMyAdsByIdUseCase _adsByIdUseCase;
 
   MyAddsCubit(
       this._getMyAdsUseCase,
@@ -75,7 +78,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
       this._getMyOtherAdsUseCase,
       this._allCountsUseCase,
       this._allCountsAdsUseCase,
-      this._editMyAdsUseCase, this._clickUseCase)
+      this._editMyAdsUseCase, this._clickUseCase, this._adsByIdUseCase)
       : super(const MyAddsState());
 
   void loadData() async {
@@ -332,5 +335,17 @@ class MyAddsCubit extends Cubit<MyAddsState> {
             emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
             (r) =>
             emit(state.copyWith(click: r,status: MyAddsStates.success)));
+  }
+
+
+  Future<void> fetchMyAdsById({
+    required String id,
+  }) async {
+    final response = await _adsByIdUseCase(id);
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
+            (r) =>
+            emit(state.copyWith(adsById: r,status: MyAddsStates.success)));
   }
 }

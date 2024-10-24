@@ -10,6 +10,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
@@ -44,9 +45,29 @@ class _EditMyAdsState extends State<EditMyAds> {
   void initState() {
     context
         .read<CreateAdCubit>()
-        .loadData(subCategoryId: widget.categorization.mainCategory.id);
+        .loadData(subCategoryId: widget.categorization.mainCategory?.id ?? '');
     super.initState();
   }
+  //   @override
+//   void initState() {
+//     super.initState();
+//     // Initialize the controllers with the existing data from widget.item
+//     _titleController = TextEditingController(text: widget.item.title);
+//     _descController = TextEditingController(text: widget.item.desc);
+//     _phoneController = TextEditingController(text: widget.item.phone);
+//     _priceController =
+//         TextEditingController(text: widget.item.price.toString());
+//   }
+//
+//   @override
+//   void dispose() {
+//     // Dispose of the controllers to avoid memory leaks
+//     _titleController.dispose();
+//     _descController.dispose();
+//     _phoneController.dispose();
+//     _priceController.dispose();
+//     super.dispose();
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +93,10 @@ class _EditMyAdsState extends State<EditMyAds> {
                 state.status == CreateAdStates.loadCities ||
                 state.status == CreateAdStates.imageUploading ||
                 state.status == CreateAdStates.initState) {
+              controller.titleController.text = widget.categorization.title;
+              controller.descController.text = widget.categorization.desc;
+              controller.phoneController.text = widget.categorization.phone;
+
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Form(
@@ -97,8 +122,9 @@ class _EditMyAdsState extends State<EditMyAds> {
                                     fontWeight: FontWeight.bold),
                               ),
                               Label(
-                                  text:
-                                      widget.categorization.mainCategory.nameEn),
+                                  text: widget.categorization.mainCategory
+                                          ?.nameEn ??
+                                      ''),
                             ],
                           )),
                         ],
@@ -193,10 +219,13 @@ class _EditMyAdsState extends State<EditMyAds> {
                       Label(text: LocaleKeys.adTitle.localize),
                       TextFormField(
                         maxLines: null,
+                        controller: controller.titleController,
                         onChanged: (v) => controller.title = v,
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
-                            fillColor: Colors.white,
+                            fillColor: context.isDarkMode
+                                ? AppColors.GREY_DARK_COLOR
+                                : AppColors.LIGHT_COLOR,
                             contentPadding: const EdgeInsets.all(5),
                             hintText: LocaleKeys.title.localize,
                             hintStyle: Styles.mediumText(),
@@ -214,11 +243,14 @@ class _EditMyAdsState extends State<EditMyAds> {
                       const Sizer(),
                       Label(text: LocaleKeys.desc.localize),
                       TextFormField(
+                        controller: controller.descController,
                         maxLines: null,
                         onChanged: (v) => controller.description = v,
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
-                            fillColor: Colors.white,
+                            fillColor: context.isDarkMode
+                                ? AppColors.GREY_DARK_COLOR
+                                : AppColors.LIGHT_COLOR,
                             contentPadding: const EdgeInsets.all(5),
                             hintText: LocaleKeys.desc.localize,
                             hintStyle: Styles.mediumText(),
@@ -236,11 +268,14 @@ class _EditMyAdsState extends State<EditMyAds> {
                       const Sizer(),
                       Label(text: LocaleKeys.phone.localize),
                       TextFormField(
+                        controller: controller.phoneController,
                         maxLines: null,
                         onChanged: (v) => controller.phone = v,
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
-                            fillColor: Colors.white,
+                            fillColor: context.isDarkMode
+                                ? AppColors.GREY_DARK_COLOR
+                                : AppColors.LIGHT_COLOR,
                             contentPadding: const EdgeInsets.all(5),
                             hintText: LocaleKeys.phone.localize,
                             hintStyle: Styles.mediumText(),
@@ -263,15 +298,33 @@ class _EditMyAdsState extends State<EditMyAds> {
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 12),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: context.isDarkMode
+                                      ? AppColors.LIGHT_COLOR
+                                      : Colors.grey),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: context.isDarkMode
+                                      ? AppColors.LIGHT_COLOR
+                                      : Colors.grey),
+                            ),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(
-                                color: Colors.grey, // Border color
-                                width: 1.0, // Border width
-                              ),
+                              borderSide: BorderSide(
+                                  color: context.isDarkMode
+                                      ? AppColors.LIGHT_COLOR
+                                      : Colors.grey),
                             ),
                           ),
-                          hint: Text(LocaleKeys.selectGovernorate.tr()),
+                          hint: Text(
+                            LocaleKeys.selectGovernorate.tr(),
+                            style: TextStyle(
+                              color: context.isDarkMode
+                                  ? AppColors.LIGHT_COLOR
+                                  : AppColors.GREY_DARK_COLOR,
+                            ),
+                          ),
                           value: null,
                           onChanged: (GovernorateEntity? newValue) {
                             controller.selectGovernorate(newValue?.id ?? '');
@@ -279,7 +332,9 @@ class _EditMyAdsState extends State<EditMyAds> {
                             print("state.city${state.city}");
                             controller.getCities(newValue?.id ?? '');
                           },
-                          dropdownColor: Colors.white,
+                          dropdownColor: context.isDarkMode
+                              ? AppColors.GREY_DARK_COLOR
+                              : AppColors.LIGHT_COLOR,
                           items: state.governorates
                               ?.map<DropdownMenuItem<GovernorateEntity>>(
                                   (GovernorateEntity government) {
@@ -293,7 +348,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                       ),
                       const Sizer(),
                       state.status == CreateAdStates.loadCities
-                          ? Center(child: const CircularProgressIndicator())
+                          ? const Center(child: CircularProgressIndicator())
                           : state.status == CreateAdStates.loadCitiesSuccess
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,17 +362,33 @@ class _EditMyAdsState extends State<EditMyAds> {
                                           contentPadding:
                                               const EdgeInsets.symmetric(
                                                   vertical: 10, horizontal: 12),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: context.isDarkMode
+                                                    ? AppColors.LIGHT_COLOR
+                                                    : Colors.grey),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: context.isDarkMode
+                                                    ? AppColors.LIGHT_COLOR
+                                                    : Colors.grey),
+                                          ),
                                           border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            borderSide: const BorderSide(
-                                              color:
-                                                  Colors.grey, // Border color
-                                              width: 1.0, // Border width
-                                            ),
+                                            borderSide: BorderSide(
+                                                color: context.isDarkMode
+                                                    ? AppColors.LIGHT_COLOR
+                                                    : Colors.grey),
                                           ),
                                         ),
-                                        hint: Text(LocaleKeys.selectCity.tr()),
+                                        hint: Text(
+                                          LocaleKeys.selectCity.tr(),
+                                          style: TextStyle(
+                                            color: context.isDarkMode
+                                                ? AppColors.LIGHT_COLOR
+                                                : AppColors.GREY_DARK_COLOR,
+                                          ),
+                                        ),
                                         value: null,
                                         onChanged: (CityEntity? newValue) {
                                           print(newValue?.id);
@@ -327,7 +398,9 @@ class _EditMyAdsState extends State<EditMyAds> {
                                               "state.governorate${state.governorate}");
                                           print("state.city${state.city}");
                                         },
-                                        dropdownColor: Colors.white,
+                                        dropdownColor: context.isDarkMode
+                                            ? AppColors.GREY_DARK_COLOR
+                                            : AppColors.LIGHT_COLOR,
                                         items: state.cities
                                             ?.map<DropdownMenuItem<CityEntity>>(
                                                 (CityEntity city) {
@@ -352,7 +425,9 @@ class _EditMyAdsState extends State<EditMyAds> {
                         onChanged: (v) => controller.price = v,
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
-                            fillColor: Colors.white,
+                            fillColor: context.isDarkMode
+                                ? AppColors.GREY_DARK_COLOR
+                                : AppColors.LIGHT_COLOR,
                             contentPadding: const EdgeInsets.all(5),
                             hintText: state.isPrice == true
                                 ? LocaleKeys.price.localize
@@ -380,6 +455,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                                 controller.onChanged(v: v, index: index),
                             onTextChanged: (String v) =>
                                 controller.onTextChanged(v: v, index: index),
+                            selectedProp: '',
                           );
                         },
                         separatorBuilder: (context, index) => const Sizer(),
@@ -388,13 +464,12 @@ class _EditMyAdsState extends State<EditMyAds> {
                       ),
                       const Sizer(),
                       DefaultButton(
-                          label: LocaleKeys.publish.localize,
+                          label: LocaleKeys.edit.localize,
                           onPressed: () {
                             // controller.createAd(
                             //     categorize: widget.categorization,
                             //     context: context);
-                          }
-                          ),
+                          }),
                     ],
                   ),
                 ),
@@ -413,7 +488,8 @@ class _EditMyAdsState extends State<EditMyAds> {
   Widget _buildImagePicker() {
     return BlocProvider<CreateAdCubit>(
       create: (BuildContext context) => serviceLocator(),
-      child: BlocBuilder<CreateAdCubit, CreateAdState>(builder: (context, state) {
+      child:
+          BlocBuilder<CreateAdCubit, CreateAdState>(builder: (context, state) {
         final controller = context.read<CreateAdCubit>();
         return Column(
           children: [
@@ -450,73 +526,79 @@ class _EditMyAdsState extends State<EditMyAds> {
                                 height: kToolbarHeight * 1,
                                 child: Row(
                                   children: List.generate(
-                                      state.images?.length ??0,
-                                          (index)=>SizedBox(
+                                      state.images?.length ?? 0,
+                                      (index) => SizedBox(
                                             height: 100.h,
                                             width: 100.w,
-                                    child: Stack(
-                                      alignment:
-                                      AlignmentDirectional.topStart,
-                                      children: [
-                                        // Positioned.fill(
-                                        //   child: Image.network(widget.item.images[index].photo),
-                                        // //     child: Image.file(
-                                        // //   fit: BoxFit.cover,
-                                        // //   File(image.file.path),
-                                        // // ),
-                                        // ),
-                                        // if (state.images != null &&
-                                        //     state.images!.isNotEmpty)
-                                        Container(
-                                          height: 200,
-                                          width: 200,
-                                          margin:
-                                          const EdgeInsetsDirectional
-                                              .only(
-                                              end: 10, bottom: 10),
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                            BorderRadius.circular(15),
-                                            image: DecorationImage(
-                                              fit: BoxFit.fill,
-                                              image: FileImage(
-                                                File(state.images![index]
-                                                    .file.path),
-                                              ),
+                                            child: Stack(
+                                              alignment:
+                                                  AlignmentDirectional.topStart,
+                                              children: [
+                                                // Positioned.fill(
+                                                //   child: Image.network(widget.item.images[index].photo),
+                                                // //     child: Image.file(
+                                                // //   fit: BoxFit.cover,
+                                                // //   File(image.file.path),
+                                                // // ),
+                                                // ),
+                                                // if (state.images != null &&
+                                                //     state.images!.isNotEmpty)
+                                                Container(
+                                                  height: 200,
+                                                  width: 200,
+                                                  margin:
+                                                      const EdgeInsetsDirectional
+                                                          .only(
+                                                          end: 10, bottom: 10),
+                                                  padding:
+                                                      const EdgeInsets.all(10),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                    image: DecorationImage(
+                                                      fit: BoxFit.fill,
+                                                      image: FileImage(
+                                                        File(state
+                                                            .images![index]
+                                                            .file
+                                                            .path),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                PositionedDirectional(
+                                                  start: 5.w,
+                                                  top: 0,
+                                                  child: IconAppButton(
+                                                    width: 35.w,
+                                                    height: 35.h,
+                                                    icon: Icons.close_sharp,
+                                                    color: Colors.red,
+                                                    backColor: Colors.white,
+                                                    size: 25.w,
+                                                    isCircle: true,
+                                                    onPressed: () =>
+                                                        showAreYouSure(
+                                                            context: context,
+                                                            title: 'Alert',
+                                                            subTitle:
+                                                                'Are you sure you want to remove this image?',
+                                                            action: () {
+                                                              controller.removeImage(
+                                                                  image: state
+                                                                          .images![
+                                                                      index]);
+                                                            }),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                        ),
-                                        PositionedDirectional(
-                                          start: 5.w,
-                                          top: 0,
-                                          child: IconAppButton(
-                                            width: 35.w,
-                                            height: 35.h,
-                                            icon: Icons.close_sharp,
-                                            color: Colors.red,
-                                            backColor: Colors.white,
-                                            size: 25.w,
-                                            isCircle: true,
-                                            onPressed: () => showAreYouSure(
-                                                context: context,
-                                                title: 'Alert',
-                                                subTitle:
-                                                'Are you sure you want to remove this image?',
-                                                action: () {
-                                                  controller.removeImage(
-                                                    image: state.images![index]);
-                                                }),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )),
+                                          )),
                                 ),
                               ),
                             const Sizer(),
-                            if (widget.categorization.images != null &&
-                                widget.categorization.images.isNotEmpty)
+                            if (widget.categorization.images.isNotEmpty)
                               SizedBox(
                                 height: 80.h,
                                 child: Row(
@@ -545,8 +627,8 @@ class _EditMyAdsState extends State<EditMyAds> {
                                                       BorderRadius.circular(
                                                           20.r),
                                                   fit: BoxFit.fill,
-                                                  image: widget
-                                                      .categorization.images[index].photo,
+                                                  image: widget.categorization
+                                                      .images[index].photo,
                                                 ),
                                                 // Container(
                                                 //   height: 100.h,
@@ -582,7 +664,8 @@ class _EditMyAdsState extends State<EditMyAds> {
                                                                 'Are you sure you want to remove this image?',
                                                             action: () {
                                                               controller.removeImage(
-                                                                image:   state.images![
+                                                                  image: state
+                                                                          .images![
                                                                       index]);
                                                             }),
                                                   ),

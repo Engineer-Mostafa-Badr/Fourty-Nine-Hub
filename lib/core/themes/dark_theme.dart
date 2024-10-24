@@ -4,8 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../res/style/app_colors.dart';
 import '../../res/style/styles.dart';
 
-ThemeData darkTheme() {
-  return ThemeData(
+ThemeData get darkTheme => ThemeData(
     brightness: Brightness.dark,
     primaryColor: AppColors.AUTH_CONTAINER_COLOR,
     scaffoldBackgroundColor: AppColors.QUANTITY_COLOR,
@@ -78,4 +77,3 @@ ThemeData darkTheme() {
     dividerTheme: const DividerThemeData(),
     tabBarTheme: const TabBarTheme(),
   );
-}

@@ -7,14 +7,18 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/driver_register_request_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/request_model.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class ShippingDataSource {
   ApiConsumer api;
   final CacheService cacheService;
   ShippingDataSource({required this.api, required this.cacheService});
-  Future<Either<Failure, Map<String, dynamic>>> getBannerData() {
+  Future<Either<Failure, Map<String, dynamic>>> getBannerData() async {
     log(cacheService.getDriverId().toString(), name: "DriverId");
-    return api.get("${EndPoints.bannerData}?userId=66e088a30fe8b0df89506491");
+    String? token = await cacheService.getUserToken() ?? "";
+    log(token, name: "lllllllllllllllllllllllllddddddddddddddddd");
+    // extractUserId(token ?? "");
+    return api.get("${EndPoints.bannerData}?userId=${extractUserId(token)}");
   }
 
 // 66b76065ab3b6f5a3d2273ed
@@ -164,5 +168,18 @@ class ShippingDataSource {
 
   Future<Either<Failure, Map<String, dynamic>>> deleteDriver() async {
     return api.delete(EndPoints.deleteDriver);
+  }
+
+  String extractUserId(String token) {
+    log(token, name: "Token");
+    // فك تشفير الـ token
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+    log(decodedToken.toString(), name: "decodedToken");
+    // استخراج الـ UserId من الـ payload
+    // String userId = decodedToken[
+    //     'userId']; // تأكد من أن الـ key هو 'userId' أو الاسم الصحيح في الـ token
+
+    // print("UserId هو: $userId");
+    return decodedToken['sub'];
   }
 }

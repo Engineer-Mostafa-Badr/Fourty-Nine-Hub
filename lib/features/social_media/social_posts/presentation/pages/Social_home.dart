@@ -73,10 +73,9 @@ class _SocialHomeViewState extends State<SocialHomeView>
               ? null
               : HomeAppbar(
                   isWithBackArrow: true,
-                  toolbarHeight: context.screenHeight/6.5,
+                  toolbarHeight: context.screenHeight / 6.5,
                   bottom: TabBar(
                     padding: EdgeInsets.zero,
-
                     indicatorColor: context.isDarkMode
                         ? Colors.white
                         : AppColors.PRIMARY_COLOR,
@@ -143,11 +142,12 @@ class _SocialHomeViewState extends State<SocialHomeView>
                         scrollController: ScrollController(),
                         appBars: [
                           SliverAppBar(
+
                             backgroundColor:
                                 Theme.of(context).scaffoldBackgroundColor,
                             automaticallyImplyLeading: false,
                             floating: true,
-                            // pinned: true,
+                            pinned: true,
                             flexibleSpace: const CreatePostBanner(),
                           ),
                           SliverAppBar(
@@ -199,14 +199,14 @@ class _SocialHomeViewState extends State<SocialHomeView>
               },
               child: Container(
                   decoration: i == 0
-                      ? const BoxDecoration(
+                      ?  BoxDecoration(
                           border: Border(
                               bottom: BorderSide(
-                                  color: AppColors.PRIMARY_COLOR, width: 2)))
+                                  color: Theme.of(context).primaryColor, width: 2)))
                       : null,
                   child: Icon(
                     i == 0 ? Icons.home : Icons.person,
-                    color: i == 0 ? AppColors.PRIMARY_COLOR : Colors.grey,
+                    color: i == 0 ? Theme.of(context).primaryColor : Colors.grey,
                     size: 40.w,
                   )),
             ),

@@ -24,8 +24,8 @@ class CompetitionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final int countOfRequest =
-        (competitionsWalletEntity.countOfRequest ?? 0).toInt();
-    final int maxRequests = (competitionsWalletEntity.maxRequests ?? 0).toInt();
+        (competitionsWalletEntity.countOfRequest).toInt();
+    final int maxRequests = (competitionsWalletEntity.maxRequests).toInt();
     return GestureDetector(
       onTap: () => onTap(context),
       child: Container(
@@ -45,37 +45,42 @@ class CompetitionCard extends StatelessWidget {
                   children: [
                     Label(
                       text: context.locale == Locales.english
-                          ? competitionsWalletEntity.nameEn ?? ''
-                          : competitionsWalletEntity.nameAr ?? '',
-                      style: Styles.mediumText(fontWeight: FontWeight.bold),
+                          ? competitionsWalletEntity.nameEn
+                          : competitionsWalletEntity.nameAr,
+                      style: Styles.mediumText(fontSize: 55.sp,fontWeight: FontWeight.bold),
+                    ),
+
+                  ],
+                )),
+                Column(
+                  children: [
+                    SizedBox(
+                      height: kToolbarHeight,
+                      width: kToolbarHeight,
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: CircularProgressIndicator(
+                              value: countOfRequest / maxRequests,
+                              strokeWidth: 10,
+                              color: AppColors.SECONDARY_COLOR,
+                            ),
+                          ),
+                          Positioned.fill(
+                            child: Center(
+                              child: Label(
+                                text:
+                                    '${((countOfRequest / maxRequests) * 100).toStringAsFixed(1)}%',
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                     Label(
                       text: '${competitionsWalletEntity.countOfRequest}',
                     ),
                   ],
-                )),
-                SizedBox(
-                  height: kToolbarHeight,
-                  width: kToolbarHeight,
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: CircularProgressIndicator(
-                          value: countOfRequest / maxRequests,
-                          strokeWidth: 10,
-                          color: AppColors.SECONDARY_COLOR,
-                        ),
-                      ),
-                      Positioned.fill(
-                        child: Center(
-                          child: Label(
-                            text:
-                                '${((countOfRequest / maxRequests) * 100).toStringAsFixed(1)}%',
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
                 )
               ],
             ),
@@ -99,11 +104,11 @@ class CompetitionCard extends StatelessWidget {
                 )),
               ],
             ),
-            Sizer(),
+            const Sizer(),
             AppButton(
               label: LocaleKeys.requestWithdraw.localize,
               color: AppColors.AUTH_CONTAINER_COLOR,
-              backColor: competitionsWalletEntity.countOfRequest! >= 5000 &&
+              backColor: competitionsWalletEntity.countOfRequest >= 5000 &&
                       competitionsWalletEntity.isWinner == true
                   ? Colors.red
                   : Colors.red.withOpacity(.5),

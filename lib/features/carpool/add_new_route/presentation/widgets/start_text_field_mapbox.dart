@@ -94,10 +94,10 @@ class _StartTextFieldAndFindButonState
       );
     }
     if (state is MapBoxCubitLoading) {
-      return SizedBox(
+      return const SizedBox(
         width: 30,
         height: 30,
-        child: const Center(
+        child: Center(
           child: CircularProgressIndicator(
             color: AppColors.PRIMARY_COLOR,
             strokeWidth: 3,
@@ -126,9 +126,9 @@ class _StartTextFieldAndFindButonState
     if (value == null || value.isEmpty) {
       return LocaleKeys.youCantLeaveFieldEmpty.localize;
     }
-    if (value.length < 10) {
-      return LocaleKeys.addressMustBeAtLeast10Chars.localize;
-    }
+    // if (value.length < 10) {
+    //   return LocaleKeys.addressMustBeAtLeast10Chars.localize;
+    // }
     return null;
   }
 }

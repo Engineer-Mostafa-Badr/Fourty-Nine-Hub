@@ -3,9 +3,11 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 
 // import 'dart:convert';
 // import 'package:flutter/services.dart' show rootBundle;
@@ -52,8 +54,9 @@ abstract class ApiConsumer {
   });
 
   void attachToken(UserTokensEntity? token);
-
   bool get isTokenAttached;
+
+  void removeTokenFromHeader();
 }
 
 class BaseApiConsumer extends ApiConsumer {
@@ -71,6 +74,8 @@ class BaseApiConsumer extends ApiConsumer {
   void attachToken(UserTokensEntity? token) {
     log(token?.accessToken.toString() ?? "Token", name: "Token");
     _token = token;
+    log(_token?.accessToken.toString()??"Okkkk", name: "lskdjflskdjflskdjflskjdf");
+        CacheServiceImpl().saveUserToken(_token?.accessToken??"Token");
     log("${token?.accessToken}", name: "Token");
     if (token != null) {
       log(token.accessToken.toString(), name: "Token");
@@ -276,13 +281,16 @@ class BaseApiConsumer extends ApiConsumer {
   }
 
   Failure _getFailure(dynamic e) {
+    final error = e.response?.data['error'] as Map;
+
     if (e is DioException) {
       if (e.response?.statusCode == 413) {
         return const ServerFailure(
           message: 'File size is too large',
         );
       } else if (e.response?.statusCode == 401) {
-        return const UnauthorizedFailure();
+        final error = e.response?.data['error'] as Map;
+        return  UnauthorizedFailure(error['message'] as String,);
       } else if (e.response?.data is Map &&
           e.response?.data['message'] is String) {
         return ServerFailure(
@@ -312,7 +320,7 @@ class BaseApiConsumer extends ApiConsumer {
         );
       }
     }
-    return UnknownFailure(e.toString());
+    return UnknownFailure(error['message'].toString());
   }
 
   Future<void> refreshToken() async {
@@ -332,13 +340,21 @@ class BaseApiConsumer extends ApiConsumer {
       (response) {
         final accessToken = response['data']['accessToken'] as String;
         final newToken = _token!.copyWith(accessToken: accessToken);
+
         attachToken(newToken);
         _authLocalDataSource.saveUserTokens(newToken.toModel());
+        
       },
     );
   }
 
   @override
   bool get isTokenAttached => _token != null;
+
+  @override
+  void removeTokenFromHeader() {
+    _dio.options.headers['Authorization'] = null;
+    CliLogger.info('Barear Token is  ${_dio.options.headers['Authorization']}');
+  }
 }
 //dependency inversion

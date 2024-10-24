@@ -56,13 +56,12 @@ class CreateRouteBottomSheet extends StatefulWidget {
   final String tripId;
   final List<double> userLocation;
   CreateRouteBottomSheet(
-      {Key? key,
+      {super.key,
       required this.isComfort,
       required this.price,
       required this.seatId,
       required this.tripId,
-      required this.userLocation})
-      : super(key: key);
+      required this.userLocation});
 
   @override
   _CreateRouteBottomSheetState createState() => _CreateRouteBottomSheetState();
@@ -99,7 +98,7 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(LocaleKeys.bookSeat.localize, style: Styles.headerText()),
+              Text('LocaleKeys.bookSeat.localize', style: Styles.headerText()),
               const Sizer(),
               Text(LocaleKeys.pricePerSeat.localize,
                   style: Styles.mediumText()),
@@ -162,7 +161,7 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
                             },
                             activeColor: AppColors.PRIMARY_COLOR,
                             trackOutlineColor:
-                                MaterialStatePropertyAll(Colors.grey),
+                            const MaterialStatePropertyAll(Colors.grey),
                             activeTrackColor: Colors.grey,
                             inactiveTrackColor: Colors.white,
                             inactiveThumbColor: Colors.grey,

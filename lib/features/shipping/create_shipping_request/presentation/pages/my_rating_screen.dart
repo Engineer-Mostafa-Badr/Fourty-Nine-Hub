@@ -1,11 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/all_trip_model/all_trip_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/trip_card.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -40,7 +39,7 @@ class MyRatingScreen extends StatelessWidget {
                       margin: EdgeInsets.zero,
                       title: "",
                       noBoardr: true,
-                      model: AllTripModel(price: 20, status: "Completed".tr()),
+                      model: AllTripModel(price: 20, status: LocaleKeys.completed.tr()),
                     ),
                     Container(
                       decoration: const BoxDecoration(
@@ -63,7 +62,7 @@ class MyRatingScreen extends StatelessWidget {
                             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Trip".tr(),
+                                LocaleKeys.trip.tr(),
                                 style: Styles.headerText(),
                               ),
                               const Spacer(),
@@ -93,7 +92,7 @@ class MyRatingScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Driver".tr(),
+                                LocaleKeys.driver.tr(),
                                 style: Styles.headerText(),
                               ),
                               const Spacer(),
@@ -123,7 +122,7 @@ class MyRatingScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Service".tr(),
+                                LocaleKeys.service.tr(),
                                 style: Styles.headerText(),
                               ),
                               const Spacer(),
@@ -150,7 +149,7 @@ class MyRatingScreen extends StatelessWidget {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "Comment".tr(),
+                              LocaleKeys.comment.tr(),
                               style: Styles.mediumText(),
                             ),
                           ),
@@ -161,7 +160,7 @@ class MyRatingScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: AppButton(
-                                  label: Labels.call,
+                                  label: LocaleKeys.call.tr(),
                                   color: Colors.white,
                                   icon: Icons.call,
                                   backColor: AppColors.DARK_GRAY_COLOR,
@@ -177,7 +176,7 @@ class MyRatingScreen extends StatelessWidget {
                               ),
                               Expanded(
                                 child: AppButton(
-                                  label: Labels.message,
+                                  label: LocaleKeys.message.tr(),
                                   icon: Icons.message,
                                   backColor: AppColors.DARK_GRAY_COLOR,
                                   style: Styles.mediumText(

@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
@@ -14,7 +13,6 @@ import 'package:go_router/go_router.dart';
 import 'package:readmore/readmore.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
@@ -34,7 +32,7 @@ class ReelInfo extends StatefulWidget {
   final ReelItemType itemType;
   final AnimationController rotationController;
 
-  const ReelInfo({
+  const ReelInfo({super.key, 
     required this.reel,
     required this.itemType,
     required this.rotationController,
@@ -99,7 +97,7 @@ class _UserSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
         _UserInfo(reel: reel),
@@ -660,11 +658,11 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
   final AnimationController rotationController;
 
   const AdvancedTikTokReactionsColumn({
-    Key? key,
+    super.key,
     required this.reel,
     required this.itemType,
     required this.rotationController,
-  }) : super(key: key);
+  });
 
   static double iconSize = 0.1.sw;
   static const TextStyle countTextStyle = TextStyle(
@@ -714,17 +712,17 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           children: [
             _UserAvatar(reel: reel),
-            Positioned(
-              bottom: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: Colors.white, width: 2),
-                ),
-                child: const Icon(Icons.add, color: Colors.white, size: 15),
-              ),
-            ),
+            // Positioned(
+            //   bottom: 0,
+            //   child: Container(
+            //     decoration: BoxDecoration(
+            //       color: Colors.red,
+            //       borderRadius: BorderRadius.circular(15),
+            //       border: Border.all(color: Colors.white, width: 2),
+            //     ),
+            //     child: const Icon(Icons.add, color: Colors.white, size: 15),
+            //   ),
+            // ),
           ],
         ).animate().scale(duration: 200.ms),
         const SizedBox(height: 12),
@@ -941,7 +939,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       builder: (context) {
         return SizedBox(
           height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
@@ -1122,7 +1120,7 @@ class _ActionButtons extends StatelessWidget {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       builder: (context) {
         return SizedBox(
           height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,

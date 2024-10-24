@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/driverStatistics_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
@@ -20,9 +21,20 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
-class DahsboardDriverScreen extends StatelessWidget {
+class DahsboardDriverScreen extends StatefulWidget {
   const DahsboardDriverScreen({super.key});
 
+  @override
+  State<DahsboardDriverScreen> createState() => _DahsboardDriverScreenState();
+}
+
+class _DahsboardDriverScreenState extends State<DahsboardDriverScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<GetAllTripCubit>().getAllTrips();
+  }
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -51,9 +63,8 @@ class DahsboardDriverScreen extends StatelessWidget {
                     const SizedBox(
                       width: 5,
                     ),
-                    Text(
-                      "Pickup Dashboard".tr(),
-                      style: TextStyle(fontSize: 20),
+                    Text( LocaleKeys.pickupDashboard.tr(),
+                      style: const TextStyle(fontSize: 20),
                     )
                   ],
                 ),
@@ -70,8 +81,8 @@ class DahsboardDriverScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
-                            "Trips".tr(),
-                            style: TextStyle(fontSize: 20),
+                            LocaleKeys.trips.tr(),
+                            style: const TextStyle(fontSize: 20),
                           ),
                           // Container(
                           //   width: 20,
@@ -92,8 +103,8 @@ class DahsboardDriverScreen extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     child: Text(
-                      "Information".tr(),
-                      style: TextStyle(fontSize: 20),
+                      LocaleKeys.information.tr(),
+                      style: const TextStyle(fontSize: 20),
                     ),
                   ),
                   // Text("Edit", style: TextStyle(fontSize: 20),),
@@ -173,8 +184,8 @@ class NewTripWidget extends StatelessWidget {
                                               walletType: WalletTypes.balance);
                                     },
                                     child: Text(
-                                      "Subscribe to send offer / contact the client".tr(),
-                                      style: TextStyle(
+                                      LocaleKeys.subscribeToSendOfferContactTheClient.tr(),
+                                      style: const TextStyle(
                                           fontSize: 16, color: Colors.red),
                                     ),
                                   ))
@@ -318,7 +329,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                       AppButton(
                         padding: 20,
                         mainAxisAlignment: MainAxisAlignment.start,
-                        label: "Registertion Form".tr(),
+                        label: LocaleKeys.registrationForm.tr(),
                         onPressed: () {
                           context.push(Routes.EDITDRIVERSCREEN);
                         },
@@ -333,7 +344,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Label(
-                                text: "Deadline Subscription".tr(),
+                                text: LocaleKeys.deadlineSubscription.tr(),
                                 style: Styles.mediumText(
                                     color: AppColors.PRIMARY_COLOR)),
                             Label(
@@ -345,7 +356,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         padding: 20,
                         width: double.infinity,
                         mainAxisAlignment: MainAxisAlignment.start,
-                        label: "Deadline Subscription".tr(),
+                        label: LocaleKeys.deadlineSubscription.tr(),
                         onPressed: () {
                           // serviceLocator<SubscriptionController>()
                           //     .showSubscriptionPlans(subCategoryId: "62c8bab18e28a58a3edf580d");
@@ -368,11 +379,11 @@ class _EditTabShippingState extends State<EditTabShipping> {
                                       color: Colors.red,
                                     ),
                                     Text(
-                                      "Subcateogry name".tr(),
+                                      LocaleKeys.subcategoryName.tr(),
                                       style: Styles.headerText(),
                                     ),
                                     Text(
-                                      "Premium".tr(),
+                                      LocaleKeys.premium.tr(),
                                       style: Styles.headerText(),
                                     ),
                                     Text(
@@ -385,7 +396,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                                     AppButton(
                                         color: Colors.white,
                                         backColor: AppColors.PRIMARY_COLOR,
-                                        label: "Add Subscription".tr(),
+                                        label: LocaleKeys.addSubscription.tr(),
                                         onPressed: () {
                                           serviceLocator<
                                                   SubscriptionController>()
@@ -409,7 +420,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Label(
-                                text: "Deadline Id".tr(),
+                                text: LocaleKeys.deadlineId.tr(),
                                 style: Styles.mediumText(
                                     color: AppColors.PRIMARY_COLOR)),
                             Label(
@@ -421,7 +432,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         padding: 20,
                         width: double.infinity,
                         mainAxisAlignment: MainAxisAlignment.start,
-                        label: "Deadline Subscription".tr(),
+                        label: LocaleKeys.deadlineSubscription.tr(),
                         onPressed: () {
                           log('message');
                           serviceLocator<SubscriptionController>()
@@ -437,7 +448,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Label(
-                                text: "Deadline License".tr(),
+                                text: LocaleKeys.deadlineLicense.tr(),
                                 style: Styles.mediumText(
                                     color: AppColors.PRIMARY_COLOR)),
                             Label(
@@ -449,7 +460,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         padding: 20,
                         width: double.infinity,
                         mainAxisAlignment: MainAxisAlignment.start,
-                        label: "Deadline Id".tr(),
+                        label: LocaleKeys.deadlineId.tr(),
                         onPressed: () {},
                         backColor: Colors.white,
                       ),
@@ -461,7 +472,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Label(
-                                text: "Deadline Driver License".tr(),
+                                text: LocaleKeys.deadlineDriverLicense.tr(),
                                 style: Styles.mediumText(
                                     color: AppColors.PRIMARY_COLOR)),
                             Label(
@@ -473,7 +484,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         padding: 20,
                         width: double.infinity,
                         mainAxisAlignment: MainAxisAlignment.start,
-                        label: "Deadline Driver License".tr(),
+                        label: LocaleKeys.deadlineDriverLicense.tr(),
                         onPressed: () {},
                         backColor: Colors.white,
                       ),
@@ -485,7 +496,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Label(
-                                text: "Your Trips".tr(),
+                                text: LocaleKeys.yourTrips.tr(),
                                 style: Styles.mediumText(
                                     color: AppColors.PRIMARY_COLOR)),
                             Label(
@@ -509,7 +520,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Label(
-                                text: "Profit".tr(),
+                                text: LocaleKeys.profit.tr(),
                                 style: Styles.mediumText(
                                     color: AppColors.PRIMARY_COLOR)),
                             Label(
@@ -533,7 +544,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Label(
-                                text: "Clients Rating".tr(),
+                                text: LocaleKeys.clientsRating.tr(),
                                 style: Styles.mediumText(
                                     color: AppColors.PRIMARY_COLOR)),
                             Label(
@@ -555,7 +566,7 @@ class _EditTabShippingState extends State<EditTabShipping> {
                         height: 10,
                       ),
                       AppButton(
-                        label: "Delete Registration".tr(),
+                        label: LocaleKeys.deleteRegistration.tr(),
                         onPressed: () {
                           context.read<ShippingCubit>().deleteDriver();
                         },

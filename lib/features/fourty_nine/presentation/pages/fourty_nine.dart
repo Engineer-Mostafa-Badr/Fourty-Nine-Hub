@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -123,6 +122,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             ? null
             : const FloatingButton(
                 changeView: 1,
+          icon: Icons.person,
               ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         drawer: const DrawerWidget(),
@@ -144,13 +144,15 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             //admob
             //   const GoogleAddsBanner(),
             _buildStarWidget(),
-            Sizer(),
+            const Sizer(),
             //pick me and come with U
             _pickMeAndComeWithUWidget(),
-            const Sizer(),
-            _buildChanceWidget(),
+            // const Sizer(),
+            // _buildChanceWidget(),
             const Sizer(),
             _auctionAndInstallmentWidget(),
+            const Sizer(),
+            _buildBookingWidget(),
             const Sizer(),
             //cats layout
             _buildMainCategoriesViews(),
@@ -308,7 +310,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               Expanded(
                 child: _buildRideSubCategoryItem(
                   service: state.data?[0].service ?? RideServicesEnum.pickMe,
-                  title: 'Carpool',
+                  title: LocaleKeys.carpool.localize,
                   image: state.data?[0].image ?? '',
                   // image: Assets.carpool,
                   // isFavorite: state.data![0].is,
@@ -359,7 +361,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     );
   }
 
-  Widget _buildChanceWidget() {
+  Widget _buildBookingWidget() {
     return SizedBox(
       height: kToolbarHeight * .9.h,
       width: double.infinity,
@@ -368,7 +370,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           Positioned.fill(
             child: AppButton(
                 color: AppColors.AUTH_CONTAINER_COLOR,
-                label: LocaleKeys.chance.localize,
+                label: LocaleKeys.booking.localize,
                 style: Styles.mediumText(
                   color: AppColors.AUTH_CONTAINER_COLOR,
                   fontWeight: FontWeight.bold,
@@ -376,12 +378,12 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 icon: Icons.auto_awesome,
                 iconSize: 50.h,
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ChanceView(),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const ChanceView(),
+                  //   ),
+                  // );
                 }),
           ),
           Positioned(
@@ -412,6 +414,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       ),
     );
   }
+
   Widget _buildStarWidget() {
     return SizedBox(
       height: kToolbarHeight * .9.h,
@@ -428,7 +431,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 ),
                 icon: Icons.star,
                 iconSize: 50.h,
-                onPressed: () {}),
+                onPressed: () {
+                  context.push(Routes.BE_STAR);
+                }),
           ),
           Positioned(
               bottom: 5,
@@ -518,7 +523,6 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     required String image,
     String? route,
     bool? isFavorite,
-    int? numberOfAds,
   }) {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: service.value()),

@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_states.dart';
@@ -20,8 +21,6 @@ import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../payment/presentation/cubit/payment_cubit.dart';
-import '../../../../payment/presentation/pages/payment_view.dart';
 import '../../domain/entities/balance/balance_history_entity.dart';
 import '../widgets/wallet_history_card.dart';
 
@@ -41,10 +40,15 @@ class BalanceWalletView extends StatelessWidget {
               if (state.status == BalanceStates.initial) {
                 showSuccessMessage(context, LocaleKeys.requestWithdrawal.localize);
               }
-              // if (state.status == BalanceStates.successFive) {
-              //   showSuccessMessage(
-              //       context, 'Transfer five_years balance done to gift wallet');
-              // }
+              if (state.status == BalanceStates.errorRequest) {
+                showErrorMessage(
+                  context,
+                  getFailureMessage(
+                    state.failure!,
+                    context,
+                  ),
+                );
+              }
               // if (state.status == BalanceStates.successTen) {
               //   showSuccessMessage(
               //       context, 'Transfer ten_years balance done to gift wallet');
@@ -81,7 +85,8 @@ class BalanceWalletView extends StatelessWidget {
                           ],
                         ),
                       ),
-                      state.balance?.openBalance == true
+                    //  state.balance?.openBalance == true && state.balance!.balance >=1002
+                       state.balance!.balance >=1002
                           ? AppButton(
                               backColor: AppColors.SECONDARY_COLOR,
                               color: AppColors.AUTH_CONTAINER_COLOR,
@@ -98,37 +103,8 @@ class BalanceWalletView extends StatelessWidget {
                               onPressed: () {},
                               margin: 10,
                             ),
-                      if (state.balance?.openBalance == true && state.withdraw?.data == false)
-                        Label(text: LocaleKeys.checkRequest.localize),
-                      if (state.withdraw?.data == true)
-                        AppButton(
-                          backColor: AppColors.SECONDARY_COLOR,
-                          color: AppColors.AUTH_CONTAINER_COLOR,
-                          label: LocaleKeys.withdraw.localize,
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => BlocProvider<PaymentCubit>(
-                                    create: (BuildContext context) => serviceLocator(),
-                                    child: PaymentView(
-                                      amountId: '',
-                                      amount: state.balance?.balance ?? 0,
-                                    ),
-                                  ),
-                                ));
-                          },
-                          margin: 10,
-                        )
-                      else
-                        AppButton(
-                          backColor: Colors.red.withOpacity(.5),
-                          label: LocaleKeys.withdraw.localize,
-                          onPressed: () {},
-                          margin: 10,
-                        ),
-                      // if(state.withdraw?.data ==true)
-                      //   const Label(text: 'Please wait to check request'),
+                      // if (state.balance?.openBalance == true && state.withdraw?.data == false )
+                      //   Label(text: LocaleKeys.checkRequest.localize,color:AppColors.SECONDARY_COLOR,),
 
                       _buildWalletActionItem(
                           label: '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',

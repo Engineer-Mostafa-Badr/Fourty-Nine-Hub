@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/account_taps/transfer_money/domain/entities/transfer_money_entity.dart';
 
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/use_case/transfer_money_use_case.dart';
 
@@ -14,7 +15,7 @@ class TransferMoneyRepositoryImpl extends TransferMoneyRepository {
   TransferMoneyRepositoryImpl(this._transferMoneyRemoteDataSource);
 
   @override
-  Future<Either<Failure, bool>> transferMoney(TransferMoneyParams params) {
+  Future<Either<Failure, TransferMoneyEntity>> transferMoney(TransferMoneyParams params) {
     return _transferMoneyRemoteDataSource.transferMoney(params);
   }
 

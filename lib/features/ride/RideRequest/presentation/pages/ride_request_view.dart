@@ -5,13 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/offer_data_model/offer_data_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/success_request_trip_model/success_request_trip_model.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
@@ -20,6 +17,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/reque
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/common/dashboard_banner.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/rider_banner.dart';
 import 'package:fourtyninehub/features/ride/rider_shipping/presentation/pages/create_trip_rider.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/sub_category.dart';
@@ -48,6 +46,7 @@ class _RideRequestViewState extends State<RideRequestView> {
 
   @override
   Widget build(BuildContext context) {
+    // context.read<GetAllTripRiderCubit>().getAllTrip();
     var getTripInfoCubit = context.read<GetTripInfoCubit>();
     log(GoRouter.of(context).routerDelegate.currentConfiguration.toString(),
         name: "llllllllllllllllllllll");
@@ -95,29 +94,42 @@ class _RideRequestViewState extends State<RideRequestView> {
                             favoriteName: "Driver",
                           )),
                       // SizedBox(height: 10,),
-                      GestureDetector(
-                        // onTap: () => context
-                        //     .push(Routes.SHIPPING_REGISTER),
-                        onTap: () {
-                          if (context.read<UserCubit>().isLoggedIn) {
-                            context.push(Routes.SHIPPING_REGISTER);
-                          } else {
-                            // context.push(Routes.SHIPPING_REGISTER);
-                            context.push(Routes.LOGIN);
-                          }
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                          ),
-                          child: Text(
-                            "You can enjoy serving your clients using your car by clicking the register button above.",
-                            style: TextStyle(
-                              color: Colors.red,
-                            ),
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: DashboardBanner(
+                          onTap: () => context
+                              .push(Routes.ALLTRIPRIDER),
+                          title: Labels.driverDashboard,
+                          subTitle: Labels
+                              .driverDashboardBannerDiscription,
+                          route: Routes.DOCTORDASHBOARD,
                         ),
                       ),
+                      //-------------------------------------------------------------
+                      // GestureDetector(
+                      //   // onTap: () => context
+                      //   //     .push(Routes.SHIPPING_REGISTER),
+                      //   onTap: () {
+                      //     if (context.read<UserCubit>().isLoggedIn) {
+                      //       context.push(Routes.SHIPPING_REGISTER);
+                      //     } else {
+                      //       // context.push(Routes.SHIPPING_REGISTER);
+                      //       context.push(Routes.LOGIN);
+                      //     }
+                      //   },
+                      //   child: const Padding(
+                      //     padding: EdgeInsets.symmetric(
+                      //       horizontal: 10,
+                      //     ),
+                      //     child: Text(
+                      //       "You can enjoy serving your clients using your car by clicking the register button above.",
+                      //       style: TextStyle(
+                      //         color: Colors.red,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                     // -------------------------------------------
                       // SizedBox(
                       //   height: 10,
                       // ),
@@ -500,12 +512,12 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                 //   overlayEntry.remove();
                                                 // });
 
-                                                context
-                                                    .read<
-                                                        RequestRiderTripCubit>()
-                                                    .request(
-                                                        model:
-                                                            TripRequestModel());
+                                                // context
+                                                //     .read<
+                                                //         RequestRiderTripCubit>()
+                                                //     .request(
+                                                //         model:
+                                                //             TripRequestModel());
 
                                                 // context
                                                 //     .read<LocationSocketCubit>()
@@ -516,9 +528,9 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                 //             ?.id ??
                                                 //         "");
 
-                                                // context
-                                                //     .read<GetTripInfoCubit>()
-                                                //     .getTripInfoRequest();
+                                                context
+                                                    .read<GetTripInfoCubit>()
+                                                    .getTripInfoRequest();
                                                 // context
                                                 //     .read<RequestRiderTripCubit>()
                                                 //     .request(
@@ -1380,3 +1392,12 @@ class AcceptOrDeclineTrip extends StatelessWidget {
     }
   }
 }
+
+
+// [lklkkkkkkkkkkkkkkkkkkkkkkjjjjjjjjjjjjj] {
+//   status: true, 
+//   data: {
+//     price: 235.75, 
+//     lowestFare: null, 
+//     from: شارع القنال 92، حي المعادي 11728، 
+//     مصر, to: شارع العيسي ، حي مصر الجديدة 11، مصر, calculate_b: 0, polyline: {coordinates: , type: LineString}}}

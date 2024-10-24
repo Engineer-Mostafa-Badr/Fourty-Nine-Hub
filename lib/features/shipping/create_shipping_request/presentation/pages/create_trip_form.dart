@@ -1,14 +1,13 @@
-import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/sub_category.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/request_model.dart';
@@ -18,7 +17,6 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card_selected.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:image_picker/image_picker.dart';
@@ -86,7 +84,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
           FormField(
             validator: (value) {
               return shippingcubit.validation(
-                  message: "You have to select one sub category!".tr(),
+                  message: LocaleKeys.youHaveToSelectOneSubCategory.tr(),
                   condition:
                       shippingcubit.requestModel.subcategoryEntity == null);
             },
@@ -105,10 +103,11 @@ class _CreateTripFormState extends State<CreateTripForm> {
                       children: [
                         _buildMainCategoriesWidget(
                           category: MainCategoryEntity(
-                            nameEn: state.model.mainCategory?.nameEn,
+                            
+                              nameEn: state.model.mainCategory?.nameEn,
                               id: state.model.mainCategory?.mainCategoryId ??
                                   "",
-                              name: "Choose your favorite sub category!".tr(),
+                              name: LocaleKeys.chooseYourFavoriteSubCategory.tr(),
                               image: state.model.mainCategory?.cover ?? "",
                               isFavorite: true,
                               total:
@@ -119,6 +118,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                   sortList(state.model.subCategories)!
                                       .map(
                                         (e) => SubCategoryEntity(
+                                          
                                             id: e.subCategoryId!,
                                             numberOfContent: e.driverCount,
                                             image: e.picture!,
@@ -163,34 +163,33 @@ class _CreateTripFormState extends State<CreateTripForm> {
                   children: [
                     Expanded(
                       child: DefaultTextFormField(
+                        margin: EdgeInsets.zero,
                         validator: (value) {
                           return shippingcubit.validation(
-                              message: "You have to fill your receipt point!".tr(),
+                              message: LocaleKeys.youHaveToFillYourReceiptPoint.tr(),
                               condition: receiptPoint.text.isEmpty);
                         },
                         currentController: receiptPoint,
                         currentFocusNode: receiptPointFocusNode,
-                        hint: Labels.receiptPoint,
+                        hint: LocaleKeys.pickupLocation.tr(),
                       ),
                     ),
-                    // const SizedBox(
-                    //   width: 5,
-                    // ),
+                    const SizedBox(
+                      width: 5,
+                    ),
                     Expanded(
-
                       child: DefaultTextFormField(
-                        constraints: BoxConstraints(
-                          maxWidth: double.infinity
-                        ),
+                        margin: EdgeInsets.zero,
+                        constraints:
+                            const BoxConstraints(maxWidth: double.infinity),
                         validator: (value) {
                           return shippingcubit.validation(
-                              message: "You have to fill your devlivery point!".tr(),
+                              message: LocaleKeys.youHaveToFillYourDeliveryPoint.tr(),
                               condition: deliveryPoint.text.isEmpty);
                         },
                         currentController: deliveryPoint,
                         currentFocusNode: deliveryPointFocusNode,
-                        hint: Labels.deliveryPoint,
-
+                        hint: LocaleKeys.destination.tr(),
                       ),
                     )
                   ],
@@ -204,9 +203,10 @@ class _CreateTripFormState extends State<CreateTripForm> {
                   children: [
                     Flexible(
                       child: DefaultTextFormField(
+                        margin: EdgeInsets.zero,
                         validator: (value) {
                           return shippingcubit.validation(
-                              message: "You have to fill your time!".tr(),
+                              message: LocaleKeys.youHaveToFillYourTime.tr(),
                               condition: time == null);
                         },
                         onTap: () async {
@@ -223,7 +223,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                         // hint: "نقطة الاستلام",
                         hint: time != null
                             ? "${time!.hour}:${time!.minute}"
-                            : Labels.time,
+                            :LocaleKeys.pickupTime.tr()
                       ),
                     ),
                     const SizedBox(
@@ -231,9 +231,10 @@ class _CreateTripFormState extends State<CreateTripForm> {
                     ),
                     Flexible(
                       child: DefaultTextFormField(
+                        margin: EdgeInsets.zero,
                         validator: (value) {
                           return shippingcubit.validation(
-                              message: "You have to fill your date!".tr(),
+                              message: LocaleKeys.youHaveToFillYourDate.tr(),
                               condition: date == null);
                         },
                         onTap: () async {
@@ -251,7 +252,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                         // hint: "نقطة الاستلام",
                         hint: date != null
                             ? "${date!.year}/${date!.month}/${date!.day}"
-                            : "Pickup Date".tr(),
+                            : LocaleKeys.pickupDate.tr(),
                       ),
                     )
                   ],
@@ -263,7 +264,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                 TextFormField(
                   validator: (value) {
                     return shippingcubit.validation(
-                        message: "You have to fill your description!".tr(),
+                        message: LocaleKeys.youHaveToFillYourDescription.tr(),
                         condition: decoration.text.isEmpty);
                   },
                   controller: decoration,
@@ -293,7 +294,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    hintText: Labels.description,
+                    hintText: LocaleKeys.cargoDescription.tr(),
                     hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
                     counterText: "", // لإخفاء عداد الأحرف الافتراضي خارج الحقل
                   ),
@@ -318,35 +319,39 @@ class _CreateTripFormState extends State<CreateTripForm> {
                 ),
                 Row(
                   children: [
-                    Flexible(
+                    Expanded(
                       child: DefaultTextFormField(
+                        margin: EdgeInsets.zero,
+                        keyboardType: TextInputType.number,
                         validator: (value) {
                           return shippingcubit.validation(
-                              message: "You have to fill your offer price!".tr(),
+                              message: LocaleKeys.youHaveToFillYourOfferPrice.tr(),
                               condition: offerPrice.text.isEmpty);
                         },
                         currentController: offerPrice,
                         currentFocusNode: offerPriceFocusNode,
-
+                      
                         // hint: "نقطة الاستلام",
-                        hint: Labels.offerPrice,
+                        hint: LocaleKeys.offerPrice.tr(),
                       ),
                     ),
                     const SizedBox(
                       width: 5,
                     ),
-                    Flexible(
+                    Expanded(
                       child: DefaultTextFormField(
+                        style: Styles.smallText(),
+                        margin: EdgeInsets.zero,
                         validator: (value) {
                           return shippingcubit.validation(
-                            message: "You have to fill your phone!".tr(),
+                            message: LocaleKeys.youHaveToFillYourPhone.tr(),
                             condition: phone.text.isEmpty,
                           );
                         },
                         currentController: phone,
                         currentFocusNode: phoneFocusNode,
                         // hint: "نقطة الاستلام",
-                        hint: Labels.phone,
+                        hint: LocaleKeys.phone.tr(),
                         keyboardType: TextInputType.phone,
                       ),
                     )
@@ -358,17 +363,17 @@ class _CreateTripFormState extends State<CreateTripForm> {
                 const SizedBox(
                   height: 4,
                 ),
-                const AppInfoText(
-                  text: Labels.theApplicationDoesNot,
+               AppInfoText(
+                  text: LocaleKeys.theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider.tr(),
                 ),
                 const SizedBox(height: 4),
-                const AppInfoText(
-                  text: Labels.thePremiumPackageGivesYou,
+                 AppInfoText(
+                  text: LocaleKeys.premiumPackageMoreVisibilityCashback.tr(),
                 ),
                 const SizedBox(height: 4),
 
-                const AppInfoText(
-                  text: Labels.freeCancellation,
+                 AppInfoText(
+                  text: LocaleKeys.freeCancellation.tr(),
                 ),
                 const SizedBox(height: 4),
                 // const Gap(50),
@@ -377,7 +382,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                     Flexible(
                       child: AppButton(
                         height: 40,
-                        label: Labels.premiumRequest,
+                        label: LocaleKeys.premiumRequest.tr(),
                         style: Styles.headerText(color: Colors.white),
                         onPressed: () {},
                       ),
@@ -388,7 +393,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                       child: AppButton(
                         height: 40,
                         backColor: const Color(0xFF0B1135),
-                        label: Labels.request,
+                        label: LocaleKeys.request.tr(),
                         style: Styles.headerText(color: Colors.white),
                         onPressed: () async {
                           if (widget.formKey.currentState!.validate()) {
@@ -450,7 +455,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
         ),
         if (category.subcategories?.isNotEmpty ?? false)
           SizedBox(
-            height: kToolbarHeight * 3,
+            height: 80,
             child: ListView.separated(
               controller: scrollController,
               scrollDirection: Axis.horizontal,
@@ -462,7 +467,6 @@ class _CreateTripFormState extends State<CreateTripForm> {
                       scrollController.jumpTo(0);
                       if (select != null) {
                         if (select!.id == category.subcategories![index].id) {
-
                           select = null;
                         } else {
                           select = category.subcategories![index];
@@ -477,6 +481,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                     });
                   },
                   child: SubcategoryCardSelected(
+                    isSmallCard: true,
                     selected: select == null
                         ? false
                         : select!.id == category.subcategories![index].id,

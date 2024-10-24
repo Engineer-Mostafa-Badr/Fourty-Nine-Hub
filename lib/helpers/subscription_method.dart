@@ -3,7 +3,7 @@ import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscr
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class SubscriptionMethod {
-  void subscribe({required String subscribeId, required String title}) {
+  subscribe({required String subscribeId, required String title,}) {
     serviceLocator<SubscriptionController>()
         .showSubscriptionPlans(
       wallets: [

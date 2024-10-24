@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
@@ -14,6 +14,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
+import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../domain/entities/sub_category_entity.dart';
 
 class SubCategoryCard extends StatefulWidget {
@@ -62,7 +63,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                       url: widget.item.image,
                     ),
                   ),
-                  PositionedDirectional(
+                if(context.read<UserCubit>().isLoggedIn)  PositionedDirectional(
                       top: 10.h,
                       start: 10.w,
                       child: IconAppButton(

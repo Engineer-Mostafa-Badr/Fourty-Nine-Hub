@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
@@ -14,6 +13,7 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.d
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/pickers/date/id_expiry_date_picker.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
@@ -66,7 +66,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
           listener: (context, state) {
             if (state is SuccessRegisterState) {
               showSuccessMessage(context, state.message);
-              context.pushReplacementNamed(Routes.SHIPPING);
+              context.pushReplacementNamed(Routes.HOME);
             }
             if (state is FailureShippingState) {
               showErrorMessage(
@@ -94,7 +94,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     // ),
                     // const Gap(30),
                     Text(
-                      "Welcome to Ship Register".tr(),
+                      LocaleKeys.welcomeToShipRegister.tr(),
                       style: Styles.headerText(
                         fontSize: 40,
                         color: AppColors.PRIMARY_COLOR_DARK,
@@ -122,8 +122,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                   validator: (value) {
                                     log(value.toString());
                                     return shippingcubit.validation(
-                                      message:
-                                          "Choose your favorite Sub Category!".tr(),
+                                      message: LocaleKeys.chooseYourFavoriteSubCategory.tr(),
                                       condition:
                                           shippingcubit.model.subCategoryId ==
                                               null,
@@ -181,7 +180,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                                   .size
                                                   .width *
                                               0.95,
-                                          hintText: "Sub Category".tr(),
+                                          hintText: LocaleKeys.subCategory.tr(),
                                           dropdownMenuEntries: state
                                               .model.subCategories!
                                               .map((e) => SubCategoryEntity(
@@ -243,7 +242,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                           child: FirstNameTextFormField(
                             validator: (String? value) {
                               if (value == null || value.isEmpty) {
-                                return "First name is required!".tr();
+                                return LocaleKeys.firstNameIsRequired.tr();
                               }
                               return null;
                             },
@@ -259,7 +258,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                           child: LastNameTextFormField(
                             validator: (String? value) {
                               if (value == null || value.isEmpty) {
-                                return "Last name is required!".tr();
+                                return LocaleKeys.lastNameIsRequired.tr();
                               }
                               return null;
                             },
@@ -278,12 +277,12 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     DefaultTextFormField(
                       currentFocusNode: phoneFocusNode,
                       nextFocusNode: model,
-                      hint: Labels.phone,
+                      hint: LocaleKeys.phone.tr(),
                       hintColor: AppColors.PRIMARY_COLOR,
                       currentController: phoneController,
                       validator: (p0) {
                         if (p0 == null || p0.isEmpty) {
-                          return "Phone is required!".tr();
+                          return LocaleKeys.phoneIsRequired.tr();
                         }
                         return null;
                       },
@@ -354,7 +353,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                         if (shippingcubit.model.carImageInFront == null &&
                             shippingcubit.model.idImageBehind == null &&
                             shippingcubit.model.idImageInFront == null) {
-                          return "This field is required!".tr();
+                          return LocaleKeys.thisFieldIsRequired.tr();
                         }
                         return null;
                       },
@@ -371,9 +370,9 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                       Text(
-                                        "Car Picture".tr(),
-                                        style: TextStyle(
+                                      Text(
+                                        LocaleKeys.carPicture.tr(),
+                                        style: const TextStyle(
                                             fontSize: 17,
                                             color: AppColors.PRIMARY_COLOR,
                                             fontWeight: FontWeight.w600),
@@ -388,11 +387,10 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                           ImageValidation(
                                             width: 95,
                                             noTextError: true,
-                                            hint: Labels.inFront,
+                                            hint: LocaleKeys.inFront.tr(),
                                             validator: (value) {
                                               return shippingcubit.validation(
-                                                  message:
-                                                      "This field is required.".tr(),
+                                                  message: LocaleKeys.thisFieldIsRequired.tr(),
                                                   condition: shippingcubit.model
                                                           .carImageInFront ==
                                                       null);
@@ -432,8 +430,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Label(
-                                        text: "ID".tr(),
-                                        style: TextStyle(
+                                        text: LocaleKeys.id.tr(),
+                                        style: const TextStyle(
                                             fontSize: 17,
                                             color: AppColors.PRIMARY_COLOR,
                                             fontWeight: FontWeight.w600),
@@ -453,11 +451,10 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                                 width: 95,
                                                 noTextError: true,
                                                 // iconColor: Colors.grey,
-                                                hint: Labels.inFront,
+                                                hint: LocaleKeys.inFront.tr(),
                                                 validator: (value) {
                                                   return shippingcubit.validation(
-                                                      message:
-                                                          "This field is required.".tr(),
+                                                      message: LocaleKeys.thisFieldIsRequired.tr(),
                                                       condition: shippingcubit
                                                               .model
                                                               .idImageInFront ==
@@ -474,11 +471,10 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                                 noTextError: true,
                                                 width: 95,
                                                 // iconColor: Colors.grey,
-                                                hint: Labels.behind,
+                                                hint: LocaleKeys.behind.tr(),
                                                 validator: (value) {
                                                   return shippingcubit.validation(
-                                                      message:
-                                                          "This field is required.".tr(),
+                                                      message: LocaleKeys.thisFieldIsRequired.tr(),
                                                       condition: shippingcubit
                                                               .model
                                                               .idImageInFront ==
@@ -531,9 +527,9 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Label(
-                              text: Labels.drivingLicense,
-                              style: TextStyle(
+                            Label(
+                              text: LocaleKeys.drivingLicense.tr(),
+                              style: const TextStyle(
                                   fontSize: 17,
                                   color: AppColors.PRIMARY_COLOR,
                                   fontWeight: FontWeight.w600),
@@ -545,7 +541,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                         null ||
                                     shippingcubit.model.drivingImageInFront ==
                                         null) {
-                                  return "This field is required!".tr();
+                                  return LocaleKeys.thisFieldIsRequired.tr();
                                 }
                                 return null;
                               },
@@ -561,11 +557,11 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                           noTextError: true,
                                           width: 95,
                                           // iconColor: Colors.grey,
-                                          hint: Labels.inFront,
+                                          hint: LocaleKeys.inFront.tr(),
                                           validator: (value) {
                                             return shippingcubit.validation(
-                                                message:
-                                                    "This field is required.".tr(),
+                                                message: LocaleKeys.thisFieldIsRequired
+                                                        .tr(),
                                                 condition: shippingcubit
                                                         .model.idImageInFront ==
                                                     null);
@@ -581,11 +577,11 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                           noTextError: true,
                                           width: 95,
                                           // iconColor: Colors.grey,
-                                          hint: Labels.behind,
+                                          hint: LocaleKeys.behind.tr(),
                                           validator: (value) {
                                             return shippingcubit.validation(
-                                                message:
-                                                    "This field is required.".tr(),
+                                                message: LocaleKeys.thisFieldIsRequired
+                                                        .tr(),
                                                 condition: shippingcubit
                                                         .model.idImageInFront ==
                                                     null);
@@ -621,9 +617,9 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Label(
-                              text: Labels.license,
-                              style: TextStyle(
+                             Label(
+                              text: LocaleKeys.license.tr(),
+                              style: const TextStyle(
                                   fontSize: 17,
                                   color: AppColors.PRIMARY_COLOR,
                                   fontWeight: FontWeight.w600),
@@ -635,7 +631,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                         null ||
                                     shippingcubit.model.licenseImageInFront ==
                                         null) {
-                                  return "This field is required.".tr();
+                                  return LocaleKeys.thisFieldIsRequired.tr();
                                 }
                                 return null;
                               },
@@ -651,11 +647,11 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                           noTextError: true,
                                           width: 95,
                                           // // iconColor: Colors.grey,
-                                          hint: Labels.inFront,
+                                          hint: LocaleKeys.inFront.tr(),
                                           validator: (value) {
                                             return shippingcubit.validation(
-                                                message:
-                                                    "This field is required.".tr(),
+                                                message: LocaleKeys.thisFieldIsRequired
+                                                        .tr(),
                                                 condition: shippingcubit
                                                         .model.idImageInFront ==
                                                     null);
@@ -671,11 +667,11 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                           width: 95,
                                           noTextError: true,
                                           // iconColor: Colors.grey,
-                                          hint: Labels.behind,
+                                          hint: LocaleKeys.behind.tr(),
                                           validator: (value) {
                                             return shippingcubit.validation(
-                                                message:
-                                                    "This field is required.".tr(),
+                                                message: LocaleKeys.thisFieldIsRequired
+                                                        .tr(),
                                                 condition: shippingcubit
                                                         .model.idImageInFront ==
                                                     null);
@@ -722,7 +718,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //       Flexible(
                     //         // flex: 2,
                     //         child: Text(
-                    //           Labels.identificationCard,
+                    //           LocaleKeys.identificationCard,
                     //           style: Styles.headerText(fontSize: 20),
                     //         ),
                     //       ),
@@ -733,12 +729,12 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //         mainAxisAlignment: MainAxisAlignment.spaceAround,
                     //         children: [
                     //           // ImagePickerPlaceholder(
-                    //           //   tilte: Labels.behind,
+                    //           //   tilte: LocaleKeys.behind,
                     //           //   // iconColor: Colors.grey,
                     //           // ),
                     //           ImageValidation(
                     //             // iconColor: Colors.grey,
-                    //             hint: Labels.behind,
+                    //             hint: LocaleKeys.behind,
                     //             validator: (value) {
                     //               return shippingcubit.validation(
                     //                   message: "This field is required.",
@@ -756,7 +752,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //           ),
                     // ImageValidation(
                     //   // iconColor: Colors.grey,
-                    //   hint: Labels.inFront,
+                    //   hint: LocaleKeys.inFront,
                     //   validator: (value) {
                     //     return shippingcubit.validation(
                     //         message: "This field is required.",
@@ -782,13 +778,13 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                           child: DefaultTextFormField(
                             validator: (p0) {
                               if (p0 == null || p0.isEmpty) {
-                                return "This field is required!".tr();
+                                return LocaleKeys.thisFieldIsRequired.tr();
                               }
                               return null;
                             },
                             currentController: idNumberController,
                             currentFocusNode: idNumberFocusNode,
-                            hint: "ID Number",
+                            hint: LocaleKeys.idNumber.tr()
                           ),
                         ),
                         const SizedBox(
@@ -798,13 +794,13 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                           child: DefaultTextFormField(
                             validator: (p0) {
                               if (p0 == null || p0.isEmpty) {
-                                return "This field is required!".tr();
+                                return LocaleKeys.thisFieldIsRequired.tr();
                               }
                               return null;
                             },
                             currentController: plateNumberController,
                             currentFocusNode: plateNumberFocusNode,
-                            hint: "Plate information".tr(),
+                            hint: LocaleKeys.plateInformation.tr(),
                           ),
                         ),
                       ],
@@ -825,7 +821,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       },
                       validator: (value) {
                         return shippingcubit.validation(
-                            message: "fill your id expiry date!".tr(),
+                            message: LocaleKeys.fillYourIdExpiryDate.tr(),
                             condition:
                                 shippingcubit.model.idExpiryDate == null);
                       },
@@ -844,7 +840,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //     children: [
                     //       Flexible(
                     //         child: Text(
-                    //           Labels.drivingLicense,
+                    //           LocaleKeys.drivingLicense,
                     //           style: Styles.headerText(fontSize: 20),
                     //         ),
                     //       ),
@@ -853,15 +849,15 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //         mainAxisAlignment: MainAxisAlignment.spaceAround,
                     //         children: [
                     //           // ImagePickerPlaceholder(
-                    //           //   tilte: Labels.behind,
+                    //           //   tilte: LocaleKeys.behind,
                     //           //   // iconColor: Colors.grey,
                     //           // ),
                     //           // Gap(15),
                     //           // ImagePickerPlaceholder(
-                    //           //     tilte: Labels.inFront, iconColor: Colors.grey),
+                    //           //     tilte: LocaleKeys.inFront, iconColor: Colors.grey),
                     //           ImageValidation(
                     //             // iconColor: Colors.grey,
-                    //             hint: Labels.behind,
+                    //             hint: LocaleKeys.behind,
                     //             validator: (value) {
                     //               return shippingcubit.validation(
                     //                   message: "This field is required.",
@@ -880,7 +876,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //           ),
                     //           ImageValidation(
                     //             // iconColor: Colors.grey,
-                    //             hint: Labels.inFront,
+                    //             hint: LocaleKeys.inFront,
                     //             validator: (value) {
                     //               return shippingcubit.validation(
                     //                   message: "This field is required.",
@@ -904,7 +900,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //   height: 20,
                     // ),
                     CreateDoctorIDExpiryDatePicker(
-                      title: "Driving License Expiry Date".tr(),
+                      title: LocaleKeys.drivingLicenseExpiryDate.tr(),
                       // title: "" ExpiryDate",
                       textStyle: const TextStyle(
                           fontSize: 17,
@@ -918,7 +914,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       },
                       validator: (value) {
                         return shippingcubit.validation(
-                            message: "fill your driving license expiry date!".tr(),
+                            message: LocaleKeys.fillYourDrivingLicenseExpiryDate.tr(),
                             condition:
                                 shippingcubit.model.drivingExpiryDate == null);
                       },
@@ -938,7 +934,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //     children: [
                     //       Flexible(
                     //         child: Text(
-                    //           Labels.license,
+                    //           LocaleKeys.license,
                     //           style: Styles.headerText(fontSize: 20),
                     //         ),
                     //       ),
@@ -948,7 +944,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //         children: [
                     //           ImageValidation(
                     //             // iconColor: Colors.grey,
-                    //             hint: Labels.behind,
+                    //             hint: LocaleKeys.behind,
                     //             validator: (value) {
                     //               return shippingcubit.validation(
                     //                   message: "This field is required.",
@@ -967,7 +963,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //           ),
                     //           ImageValidation(
                     //             // iconColor: Colors.grey,
-                    //             hint: Labels.inFront,
+                    //             hint: LocaleKeys.inFront,
                     //             validator: (value) {
                     //               return shippingcubit.validation(
                     //                   message: "This field is required.",
@@ -992,7 +988,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     // ),
                     CreateDoctorIDExpiryDatePicker(
                       borderWidth: 1,
-                      title: "License Expiry Date".tr(),
+                      title: LocaleKeys.licenseExpiryDate.tr(),
                       textStyle: const TextStyle(
                           fontSize: 17,
                           color: AppColors.PRIMARY_COLOR,
@@ -1002,7 +998,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       },
                       validator: (value) {
                         return shippingcubit.validation(
-                            message: "fill your license expiry date!".tr(),
+                            message: LocaleKeys.fillYourLicenseExpiryDate.tr(),
                             condition:
                                 shippingcubit.model.licenseExpiryDate == null);
                       },
@@ -1029,11 +1025,11 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //     },
                     //     currentFocusNode: FocusNode(),
                     //     currentController: TextEditingController(),
-                    //     hint: Labels.model),
+                    //     hint: LocaleKeys.model),
                     FormField(
                       validator: (value) {
-                        if (shippingcubit.model.model == null) {
-                          return "fill your car model!".tr();
+                        if (modelController.text.isEmpty) {
+                          return  LocaleKeys.fillYourCarModel.tr();
                         }
                         return null;
                       },
@@ -1059,6 +1055,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                   currentController: modelController,
                                   // hintFontSize: 16,
                                   noBoarder: true,
+                                  borderColor: Colors.transparent,
+
                                   contentPadding:
                                       const EdgeInsets.symmetric(horizontal: 5),
                                   // constraints: const BoxConstraints(
@@ -1075,7 +1073,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                   // },
                                   // currentFocusNode: FocusNode(),
                                   // currentController: TextEditingController(),
-                                  hint: Labels.model),
+                                  hint: LocaleKeys.model.tr()),
                             ),
                             if (field.hasError)
                               Column(
@@ -1111,7 +1109,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     // const SizedBox(
                     //   height: 30,
                     // ),
-                    // DefaultTextFormField(currentFocusNode: FocusNode(), currentController: TextEditingController(), hint: Labels.phone),
+                    // DefaultTextFormField(currentFocusNode: FocusNode(), currentController: TextEditingController(), hint: LocaleKeys.phone),
 
                     // const Gap(50),
                     const SizedBox(
@@ -1160,21 +1158,21 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //     ),
                     // const Flexible(
                     //     flex: 3,
-                    //     child: Text(Labels.theApplicationDoesNot,
+                    //     child: Text(LocaleKeys.theApplicationDoesNot,
                     //         textAlign: TextAlign.start,
                     //         style: TextStyle(
                     //             fontSize: 18, fontWeight: FontWeight.w500))),
                     //   ],
                     // ),
-                    const AppInfoText(
-                      text: Labels.theApplicationDoesNot,
+                     AppInfoText(
+                      text: LocaleKeys.theApplicationDoesNotDeductAnyPercentage.tr(),
                     ),
                     // const Gap(30),
                     const SizedBox(
                       height: 10,
                     ),
-                    const AppInfoText(
-                      text: Labels.youWillGetPounds,
+                     AppInfoText(
+                      text: LocaleKeys.youWillGetPoundsAnnually.tr(),
                     ),
                     // Row(
                     //   mainAxisAlignment: MainAxisAlignment.start,
@@ -1193,7 +1191,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     //     const Flexible(
                     //         flex: 3,
                     //         child: Text(
-                    //           Labels.youWillGetPounds,
+                    //           LocaleKeys.youWillGetPounds,
                     //           textAlign: TextAlign.start,
                     //           style: TextStyle(
                     //               fontSize: 20, fontWeight: FontWeight.bold),
@@ -1213,9 +1211,11 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                           fontSize: 16,
                           color: Colors.white,
                         ),
-                        label: Labels.submit,
+                        label: LocaleKeys.submit.tr(),
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
+                            shippingcubit.model.model =
+                                modelController.text;
                             shippingcubit.model.firstName =
                                 firstNameController.text;
                             shippingcubit.model.lastName =
@@ -1236,7 +1236,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       //       borderRadius: BorderRadius.circular(20)),
                       //   child: Center(
                       //     child: Text(
-                      //       Labels.submit,
+                      //       LocaleKeys.submit,
                       //       style: Styles.headerText(
                       //           color: Colors.white, fontSize: 18),
                       //     ),

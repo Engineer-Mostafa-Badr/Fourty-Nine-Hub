@@ -243,6 +243,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -257,7 +258,10 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_sub_category_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 
 class TinderView extends StatelessWidget {
   const TinderView({Key? key}) : super(key: key);
@@ -288,10 +292,10 @@ class _TinderScreenState extends State<TinderScreen> {
   late final ScrollController _scrollController;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
     _scrollController = ScrollController();
     _initializeTinderData();
+    super.didChangeDependencies();
   }
 
   @override
@@ -306,40 +310,32 @@ class _TinderScreenState extends State<TinderScreen> {
       ..fetchUserData(gender: 'female')
       ..fetchSubCategoryData()
       ..fetchFavorites()
-      ..fetchMainCategoryById('62c8b5b09332225799fe335e');
+      ..fetchMainCategoryById(context,'62c8b5b09332225799fe335e');
   }
 
   @override
   Widget build(BuildContext context) {
     log('TinderScreen built');
     return Scaffold(
-      appBar: AppBar(
-        elevation: 4,
-        title: Label(
-          text: LocaleKeys.tinder_find.tr(),
-          style: Styles.headerText(
-            fontSize: MediaQuery.of(context).size.width * 0.1,
-          ),
-        ),
+      // appBar: AppBar(
+      //   elevation: 4,
+      //   title: Text(
+      //     LocaleKeys.tinder_find.tr(),
+      //     style: Styles.headerText(),
+      //   ),
+      // ),
+      appBar: BackAppBar(
+        label: LocaleKeys.tinder_find.tr(),
       ),
       body: BlocConsumer<TinderViewCubit, TinderViewState>(
         listener: (context, state) {
           // Handle any state changes if necessary
         },
         builder: (context, state) {
-          if (state.userData.isEmpty &&
-              state.subCategoryData.isEmpty &&
-              state.mainCategoryResponse == null) {
-            // Display a loading indicator while fetching data
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          if (!context.read<UserCubit>().isLoggedIn) {
-            // Prompt user to log in if not authenticated
-            return _buildPleaseLoginWidget(context);
-          }
+          // if (!context.read<UserCubit>().isLoggedIn) {
+          //   // Prompt user to log in if not authenticated
+          //   return _buildPleaseLoginWidget(context);
+          // }
 
           return _buildLoggedInContent(context, state);
         },
@@ -355,17 +351,24 @@ class _TinderScreenState extends State<TinderScreen> {
         child: Column(
           children: [
             // _buildHeader(),
-            state.userData.isNotEmpty
+            state.userData!.isNotEmpty
                 ? const TinderCardStack()
                 : SizedBox(
                     height: 0.55.sh,
-                    child: Center(
-                      child: Text(
-                        'Empty List',
+                    child: Shimmer.fromColors(
+                      baseColor: Colors.grey[100]!,
+                      highlightColor: Colors.white24,
+                      child: Container(
+                        // height: MediaQuery.sizeOf(context).height * 0.08,
+                        decoration: BoxDecoration(
+                          color: AppColors.AUTH_CONTAINER_COLOR,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.grey),
+                        ),
                       ),
                     ),
                   ),
-            if (state.userData.isNotEmpty)
+            if (state.userData!.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 2),
                 child: Divider(
@@ -374,13 +377,20 @@ class _TinderScreenState extends State<TinderScreen> {
                   thickness: 1.h,
                 ),
               ),
-            state.subCategoryData.isNotEmpty
+            state.subCategoryData!.isNotEmpty
                 ? _buildSubCategoryList(context, state)
                 : SizedBox(
                     height: 0.3.sh,
-                    child: Center(
-                      child: Text(
-                        'Empty List',
+                    child: Shimmer.fromColors(
+                      baseColor: Colors.grey[100]!,
+                      highlightColor: Colors.white24,
+                      child: Container(
+                        // height: MediaQuery.sizeOf(context).height * 0.08,
+                        decoration: BoxDecoration(
+                          color: AppColors.AUTH_CONTAINER_COLOR,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.grey),
+                        ),
                       ),
                     ),
                   ),
@@ -396,11 +406,9 @@ class _TinderScreenState extends State<TinderScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Align(
         alignment: context.isArabic ? Alignment.topRight : Alignment.topLeft,
-        child: Label(
-          text: LocaleKeys.tinder_find.tr(),
-          style: Styles.headerText(
-            fontSize: MediaQuery.of(context).size.width * 0.1,
-          ),
+        child: Text(
+          LocaleKeys.tinder_find.tr(),
+          style: Styles.headerText(),
         ),
       ),
     );
@@ -443,27 +451,36 @@ class _TinderScreenState extends State<TinderScreen> {
             ),
           ),
         ),
-        SizedBox(
-          height: 0.3.sh,
-          child: ListView.separated(
-            controller: _scrollController,
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            scrollDirection: Axis.horizontal,
-            reverse: context.isArabic,
-            itemCount: state.subCategoryData.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 0),
-            itemBuilder: (context, index) {
-              final subCategory = state.subCategoryData[index];
-              return Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: TinderSubCategoryCard(
-                  subCategoryCardData: subCategory,
-                  index: index,
-                  mainCategory: state.mainCategoryResponse!.data.mainCategory,
-                ),
-              );
-            },
-          ),
+        BlocBuilder<TinderViewCubit, TinderViewState>(
+          builder: (context, state) {
+            return SizedBox(
+              height: 0.3.sh,
+              child: ListView.separated(
+                controller: _scrollController,
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                scrollDirection: Axis.horizontal,
+                reverse: context.isArabic,
+                itemCount: state.subCategoryData!.length,
+                separatorBuilder: (context, index) => const SizedBox(width: 0),
+                itemBuilder: (context, index) {
+                  final subCategory = state.subCategoryData![index];
+
+                  return state.isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: TinderSubCategoryCard(
+                            subCategoryCardData: subCategory,
+                            index: index,
+                            mainCategory: state.mainCategoryResponse!,
+                          ),
+                        );
+                },
+              ),
+            );
+          },
         ),
       ],
     );
@@ -471,9 +488,14 @@ class _TinderScreenState extends State<TinderScreen> {
 
   Widget _buildPleaseLoginWidget(BuildContext context) {
     return Center(
-      child: Text(
-        LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.tr(),
-        style: TextStyle(fontSize: 18.sp),
+      child: GestureDetector(
+        onTap: () {
+          context.push(Routes.LOGIN);
+        },
+        child: Text(
+          LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.tr(),
+          style: Styles.headerText(),
+        ),
       ),
     );
   }

@@ -1,670 +1,31 @@
-// import 'dart:developer';
-//
-// import 'package:easy_localization/easy_localization.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
-// import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-// import 'package:fourtyninehub/core/extensions/context_extension.dart';
-// import 'package:fourtyninehub/core/extensions/string_extension.dart';
-// import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-// import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-// import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/expired_request_view.dart';
-// import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/banner.dart';
-// import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/meal_categories.dart';
-// import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/resturant_dashboard_banner.dart';
-// import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
-// import 'package:fourtyninehub/res/style/app_colors.dart';
-// import 'package:fourtyninehub/routes/routes.dart';
-// import 'package:fourtyninehub/service_locator/service_locator.dart';
-// import 'package:go_router/go_router.dart';
-// import 'package:shimmer/shimmer.dart';
-// import '../../../../../common/widgets/dynamic/sizer.dart';
-// import '../../../../../common/widgets/stateless/labels/label.dart';
-// import '../../../../../res/strings/labels.dart';
-// import '../../../../../res/style/styles.dart';
-// import '../../../create_restaurant/cubit/create_resturant_cubit.dart';
-// import '../../../create_restaurant/views/create_resturant_view.dart';
-// import '../cubit/meal_cubit/restaurants_meal_list_cubit.dart';
-// import '../cubit/restaurants_list_cubit.dart';
-// import '../widgets/restaurant_card.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-//
-// import 'dart:convert'; // For JSON decoding
-// import 'package:http/http.dart' as http; // For HTTP requests
-//
-// class RestaurantsListsView extends StatefulWidget {
-//   const RestaurantsListsView({super.key});
-//
-//   @override
-//   State<RestaurantsListsView> createState() => _RestaurantsListsViewState();
-// }
-//
-// class _RestaurantsListsViewState extends State<RestaurantsListsView> {
-//   NoAuthRestaurantCategory? restaurantCategory;
-//
-// // Define a function to fetch the data
-//   Future<void> fetchData() async {
-//     final url = Uri.parse(
-//         'https://49dev.com/api/v1/restaurants/mainCategory/62c8b57e9332225799fe3308');
-//
-//     // Perform the GET request
-//     final response = await http.get(url);
-//
-//     // Check if the request was successful
-//     if (response.statusCode == 200) {
-//       // Parse the JSON data
-//       final data = jsonDecode(response.body);
-//       final restaurantCategory =
-//           NoAuthRestaurantCategory.fromJson(data); // Since it's an array
-//
-//       setState(() {
-//         this.restaurantCategory = restaurantCategory;
-//       });
-//       print(data); // Use the data as needed
-//     } else {
-//       print('Error: ${response.statusCode}');
-//     }
-//   }
-//
-//   @override
-//   void initState() {
-//     // TODO: implement initState
-//     fetchData();
-//
-//     super.initState();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: BlocProvider(
-//         create: (context) => serviceLocator<RestaurantsCubit>(),
-//         child: SharedScaffold(
-//           mainCategoryId: 1,
-//           body: RefreshIndicator(
-//             onRefresh: () async {
-//               if (serviceLocator<UserCubit>().isLoggedIn) {
-//                 // serviceLocator<RestaurantsCubit>().loadData();
-//                 BlocProvider.of<RestaurantsCubit>(context).loadData();
-//               }
-//             },
-//             child: Padding(
-//               padding: const EdgeInsets.all(8.0),
-//               child: BlocConsumer<RestaurantsCubit, RestaurantsListState>(
-//                 listener: (BuildContext context, RestaurantsListState state) {},
-//                 builder: (context, state) {
-//                   // if (state.isLoading) {
-//                   //   return const Center(
-//                   //     child: CircularProgressIndicator.adaptive(),
-//                   //   );
-//                   // }
-//                   if (!serviceLocator<UserCubit>().isLoggedIn) {
-//                     print('from isNotLoggedIn');
-//
-//                     return restaurantCategory != null
-//                         ? SizedBox(
-//                             width: double.infinity,
-//                             child: Column(
-//                               children: [
-//                                 Stack(
-//                                   alignment: Alignment.center,
-//                                   children: [
-//                                     Image.network(
-//                                       restaurantCategory!.data.banner,
-//                                       width: double.infinity,
-//                                       height: 100.h,
-//                                       fit: BoxFit.fitWidth,
-//                                       errorBuilder:
-//                                           (context, error, stackTrace) =>
-//                                               Shimmer.fromColors(
-//                                         baseColor: Colors.grey[100]!,
-//                                         highlightColor: Colors.white,
-//                                         child: Padding(
-//                                           padding: const EdgeInsets.symmetric(
-//                                               vertical: 8.0),
-//                                           child: Container(
-//                                             height: MediaQuery.of(context)
-//                                                     .size
-//                                                     .width *
-//                                                 0.2,
-//                                             width: double.infinity,
-//                                             decoration: BoxDecoration(
-//                                                 color: Colors.white,
-//                                                 borderRadius:
-//                                                     BorderRadius.circular(10)),
-//                                           ),
-//                                         ),
-//                                       ),
-//                                     ),
-//                                     PositionedDirectional(
-//                                       start: 8,
-//                                       child: Label(
-//                                         text:
-//                                             '${restaurantCategory!.data.numberOfAds.toShortScale} ${LocaleKeys.ads.localize}',
-//                                         style: Styles.mediumText(
-//                                           shadows: const [
-//                                             Shadow(
-//                                               offset: Offset(1.0, 1.0),
-//                                               blurRadius: 4.0,
-//                                               color: Colors.black,
-//                                             ),
-//                                           ],
-//                                           fontWeight: FontWeight.bold,
-//                                           color: Colors.white,
-//                                         ),
-//                                       ),
-//                                     ),
-//                                     Center(
-//                                       child: Label(
-//                                         text:
-//                                             context.isArabic ? 'اكله' : 'Meal',
-//                                         // text: restaurantCategory!.data.nameEn,
-//                                         style: TextStyle(
-//                                             color: Colors.white,
-//                                             fontWeight: FontWeight.bold,
-//                                             fontSize: 45.sp),
-//                                       ),
-//                                     ),
-//                                     PositionedDirectional(
-//                                         end: 0,
-//                                         child: Padding(
-//                                           padding: const EdgeInsets.all(8.0),
-//                                           child: InkWell(
-//                                             onTap: () {
-//                                               log('88888888888888888888888888');
-//                                               context.push(Routes.REGISTER);
-//                                             },
-//                                             child: Text(
-//                                                 LocaleKeys.register.localize,
-//                                                 style: Styles.mediumText(
-//                                                     color: Colors.white,
-//                                                     shadows: const [
-//                                                       Shadow(
-//                                                         offset:
-//                                                             Offset(1.0, 1.0),
-//                                                         blurRadius: 4.0,
-//                                                         color: Colors.black,
-//                                                       ),
-//                                                     ],
-//                                                     fontWeight:
-//                                                         FontWeight.bold)),
-//                                           ),
-//                                         )),
-//                                   ],
-//                                 ),
-//                                 GestureDetector(
-//                                   onTap: () {
-//                                     if (context.read<UserCubit>().isLoggedIn) {
-//                                       Navigator.push(
-//                                           context,
-//                                           MaterialPageRoute(
-//                                             builder: (context) => BlocProvider<
-//                                                 CreateRestaurantCubit>(
-//                                               create: (context) =>
-//                                                   serviceLocator(),
-//                                               child:
-//                                                   const CreateRestaurantForm(),
-//                                             ),
-//                                           ));
-//                                       // context.push(Routes.CREATERESTURANT);
-//                                     } else {
-//                                       context.push(Routes.REGISTER);
-//                                     }
-//                                   },
-//                                   child: Padding(
-//                                     padding: const EdgeInsets.symmetric(
-//                                         horizontal: 5.0),
-//                                     child: Text(
-//                                       LocaleKeys
-//                                           .youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove
-//                                           .tr(),
-//                                       style: Styles.mediumText(
-//                                         color: Colors.red,
-//                                       ),
-//                                     ),
-//                                   ),
-//                                 ),
-//                                 Expanded(
-//                                   child: Padding(
-//                                     padding: const EdgeInsets.symmetric(
-//                                         vertical: 8.0),
-//                                     child: Shimmer.fromColors(
-//                                       baseColor: Colors.grey[100]!,
-//                                       highlightColor: Colors.white,
-//                                       child: Column(
-//                                         mainAxisSize: MainAxisSize.min,
-//                                         children: List.generate(
-//                                           3,
-//                                           (index) => Padding(
-//                                             padding: const EdgeInsets.symmetric(
-//                                                 vertical: 8.0),
-//                                             child: Container(
-//                                               height: MediaQuery.of(context)
-//                                                       .size
-//                                                       .width *
-//                                                   0.2,
-//                                               width: double.infinity,
-//                                               decoration: BoxDecoration(
-//                                                   color: Colors.white,
-//                                                   borderRadius:
-//                                                       BorderRadius.circular(
-//                                                           10)),
-//                                             ),
-//                                           ),
-//                                         ),
-//                                       ),
-//                                     ),
-//                                   ),
-//                                 )
-//                               ],
-//                             ),
-//                           )
-//                         : const SizedBox.shrink();
-//                   }
-//                   return context.watch<RestaurantsCubit>().user == null
-//                       ? const Center(
-//                           child: CircularProgressIndicator.adaptive(),
-//                           //   child: Label(
-//                           //   text: LocaleKeys.needToLogin.tr(),
-//                           // ),
-//                         )
-//                       : Stack(
-//                           children: [
-//                             CustomScrollView(
-//                               slivers: [
-//                                 SliverToBoxAdapter(
-//                                   child: Column(
-//                                     children: [
-//                                       const SizedBox(
-//                                           width: double.infinity,
-//                                           child: MealBanner()),
-//                                       // const PropertyCard(),
-//                                       Visibility(
-//                                         visible:
-//                                             state.isResturant?.isRestaurant ==
-//                                                 false,
-//                                         child: GestureDetector(
-//                                           onTap: () {
-//                                             if (context
-//                                                 .read<UserCubit>()
-//                                                 .isLoggedIn) {
-//                                               Navigator.push(
-//                                                   context,
-//                                                   MaterialPageRoute(
-//                                                     builder: (context) =>
-//                                                         BlocProvider<
-//                                                             CreateRestaurantCubit>(
-//                                                       create: (context) =>
-//                                                           serviceLocator(),
-//                                                       child:
-//                                                           const CreateRestaurantForm(),
-//                                                     ),
-//                                                   ));
-//                                               // context
-//                                               //     .push(Routes.CREATERESTURANT);
-//                                             } else {
-//                                               context.push(Routes.REGISTER);
-//                                             }
-//                                           },
-//                                           child: Padding(
-//                                             padding: const EdgeInsets.symmetric(
-//                                                 horizontal: 5.0),
-//                                             child: Text(
-//                                               LocaleKeys
-//                                                   .youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove
-//                                                   .tr(),
-//                                               style: Styles.mediumText(
-//                                                 color: Colors.red,
-//                                               ),
-//                                             ),
-//                                           ),
-//                                         ),
-//                                       ),
-//                                       const Sizer(),
-//                                       Visibility(
-//                                           visible: (state.isResturant
-//                                                       ?.isRestaurant ??
-//                                                   false) &&
-//                                               (state.isResturant?.approved ??
-//                                                   false),
-//                                           child:
-//                                               const ResturantDashboardButton()),
-//                                       const Sizer(),
-//                                       Row(
-//                                         children: [
-//                                           Expanded(
-//                                             child: InkWell(
-//                                               onTap: () {
-//                                                 if (context
-//                                                     .read<UserCubit>()
-//                                                     .isLoggedIn) {
-//                                                   context
-//                                                       .push(Routes.SEARCHMEALS);
-//                                                 } else {
-//                                                   context.push(Routes.REGISTER);
-//                                                 }
-//                                               },
-//                                               child: Container(
-//                                                   alignment:
-//                                                       Alignment.centerLeft,
-//                                                   padding: EdgeInsets.symmetric(
-//                                                       horizontal: 10.w),
-//                                                   height: 50.h,
-//                                                   decoration: BoxDecoration(
-//                                                     borderRadius:
-//                                                         BorderRadius.circular(
-//                                                             10),
-//                                                     border: Border.all(
-//                                                         width: .5,
-//                                                         color: Colors.grey),
-//                                                   ),
-//                                                   child: Row(
-//                                                     mainAxisAlignment:
-//                                                         MainAxisAlignment
-//                                                             .spaceBetween,
-//                                                     children: [
-//                                                       Text(LocaleKeys.search
-//                                                           .tr()),
-//                                                       const Icon(Icons.search,
-//                                                           color: Colors.grey),
-//                                                     ],
-//                                                   )),
-//                                             ),
-//                                           ),
-//                                           Sizer(),
-//                                           Expanded(
-//                                             child: InkWell(
-//                                               onTap: () {
-//                                                 if (context
-//                                                     .read<UserCubit>()
-//                                                     .isLoggedIn) {
-//                                                   Navigator.push(
-//                                                       context,
-//                                                       MaterialPageRoute(
-//                                                         builder: (context) =>
-//                                                             TripRequestsScreen(),
-//                                                       ));
-//                                                 } else {
-//                                                   context.push(Routes.REGISTER);
-//                                                 }
-//                                               },
-//                                               child: Container(
-//                                                   alignment:
-//                                                       Alignment.centerLeft,
-//                                                   padding: EdgeInsets.symmetric(
-//                                                       horizontal: 10.w),
-//                                                   height: 50.h,
-//                                                   decoration: BoxDecoration(
-//                                                     borderRadius:
-//                                                         BorderRadius.circular(
-//                                                             10),
-//                                                     border: Border.all(
-//                                                         width: .5,
-//                                                         color: Colors.grey),
-//                                                   ),
-//                                                   child: Center(
-//                                                     child: Text(LocaleKeys
-//                                                         .expiredRequests
-//                                                         .tr()),
-//                                                   )),
-//                                             ),
-//                                           ),
-//                                         ],
-//                                       ),
-//                                       const Sizer(),
-//                                       if (state.mealCategories?.isNotEmpty ??
-//                                           false)
-//                                         const MealCategories(),
-//                                       if (state.loadingSubCategories) ...[
-//                                         Shimmer.fromColors(
-//                                             baseColor: Colors.grey[100]!,
-//                                             highlightColor: Colors.white,
-//                                             child: Row(
-//                                               children: List.generate(
-//                                                 2,
-//                                                 (index) => Container(
-//                                                   margin: const EdgeInsets
-//                                                       .symmetric(
-//                                                       horizontal: 10),
-//                                                   height: MediaQuery.of(context)
-//                                                           .size
-//                                                           .width *
-//                                                       0.2,
-//                                                   width: MediaQuery.of(context)
-//                                                           .size
-//                                                           .width *
-//                                                       0.2,
-//                                                   decoration: BoxDecoration(
-//                                                       color: Colors.white,
-//                                                       borderRadius:
-//                                                           BorderRadius.circular(
-//                                                               10)),
-//                                                 ),
-//                                               ),
-//                                             ))
-//                                       ],
-//                                       // if ((state.subCategories?.isNotEmpty ??
-//                                       //         false) &&
-//                                       //     state.isSuccess) ...[
-//                                       //   Label(
-//                                       //     text: LocaleKeys.restaurantsForSelectedMeal
-//                                       //         .tr(),
-//                                       //     style: Styles.headerText(),
-//                                       //   ),
-//                                       //   const Sizer(),
-//                                       //   _buildSubCatigoriesRestaurants(),
-//                                       // ],
-//                                       // const Sizer(),
-//                                       const Sizer(),
-//                                       if ((state.allRestaurant?.isNotEmpty ??
-//                                           false)) ...[
-//                                         Label(
-//                                             text:
-//                                                 LocaleKeys.allRestaurants.tr(),
-//                                             style: Styles.headerText()),
-//                                         const Sizer(),
-//                                       ],
-//                                     ],
-//                                   ),
-//                                 ),
-//                                 SliverToBoxAdapter(
-//                                   child: _buildAllRestaurants(),
-//                                 ),
-//                               ],
-//                             ),
-//
-//                             /// numOfRestaurants
-//                             // if (state.numOfRestaurants != null)
-//                             //   Positioned(
-//                             //     bottom: 10,
-//                             //     right: 10,
-//                             //     child: FloatingActionButton(
-//                             //       tooltip: LocaleKeys.restaurants.tr(),
-//                             //       backgroundColor: AppColors.PRIMARY_COLOR,
-//                             //       onPressed: () {},
-//                             //       child: Text(
-//                             //         "${state.numOfRestaurants}",
-//                             //         style: Styles.mediumText(
-//                             //             color: Colors.white,
-//                             //             fontWeight: FontWeight.bold),
-//                             //       ),
-//                             //     ),
-//                             //   )
-//                           ],
-//                         );
-//                 },
-//               ),
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   Widget _buildSubCatigoriesRestaurants() {
-//     return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
-//         builder: (context, state) {
-//       return SizedBox(
-//           height: MediaQuery.of(context).size.width,
-//           child: ListView.separated(
-//               shrinkWrap: true,
-//               scrollDirection: Axis.horizontal,
-//               itemBuilder: (context, index) => SubCategoriesRestaurantCard(
-//                   mealId: '', item: state.subCategories?[index]),
-//               separatorBuilder: (context, index) => const Sizer(),
-//               itemCount: state.subCategories?.length ?? 0));
-//     });
-//   }
-//
-//   Widget _buildAllRestaurants() {
-//     return BlocConsumer<RestaurantsCubit, RestaurantsListState>(
-//       builder: (context, state) {
-//         return GridView.builder(
-//             shrinkWrap: true,
-//             physics: const NeverScrollableScrollPhysics(),
-//             // GridView won't scroll independently
-//             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-//               crossAxisCount: 1,
-//               mainAxisSpacing: 8,
-//               crossAxisSpacing: 8,
-//               childAspectRatio: 0.7,
-//             ),
-//             itemBuilder: (context, index) => Padding(
-//                   padding: const EdgeInsets.all(8.0),
-//                   child: SubCategoriesRestaurantCard(
-//                     item: state.allRestaurant![index],
-//                     mealId: '',
-//                   ),
-//                 ),
-//             itemCount: state.allRestaurant?.length ?? 0);
-//       },
-//       listener: (BuildContext context, RestaurantsListState state) {},
-//     );
-//   }
-// }
-//
-// class NoAuthRestaurantCategory {
-//   final bool status;
-//   final CategoryData data;
-//
-//   NoAuthRestaurantCategory({
-//     required this.status,
-//     required this.data,
-//   });
-//
-//   // Factory constructor to create an instance from JSON
-//   factory NoAuthRestaurantCategory.fromJson(Map<String, dynamic> json) {
-//     return NoAuthRestaurantCategory(
-//       status: json['status'],
-//       data: CategoryData.fromJson(json['data']),
-//     );
-//   }
-//
-//   // Method to convert back to JSON if needed
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'status': status,
-//       'data': data.toJson(),
-//     };
-//   }
-// }
-//
-// class CategoryData {
-//   final String id;
-//   final String banner;
-//   final String cover;
-//   final int index;
-//   final String createdAt;
-//   final String updatedAt;
-//   final String nameAr;
-//   final String nameEn;
-//   final String nameCode;
-//   final bool isHidden;
-//   final bool enableInstallmentAndAuction;
-//   final int numberOfAds;
-//
-//   CategoryData({
-//     required this.id,
-//     required this.banner,
-//     required this.cover,
-//     required this.index,
-//     required this.createdAt,
-//     required this.updatedAt,
-//     required this.nameAr,
-//     required this.nameEn,
-//     required this.nameCode,
-//     required this.isHidden,
-//     required this.enableInstallmentAndAuction,
-//     required this.numberOfAds,
-//   });
-//
-//   // Factory constructor to create an instance from JSON
-//   factory CategoryData.fromJson(Map<String, dynamic> json) {
-//     return CategoryData(
-//       id: json['_id'],
-//       banner: json['banner'],
-//       cover: json['cover'],
-//       index: json['index'],
-//       createdAt: json['createdAt'],
-//       updatedAt: json['updatedAt'],
-//       nameAr: json['nameAr'],
-//       nameEn: json['nameEn'],
-//       nameCode: json['nameCode'],
-//       isHidden: json['isHidden'],
-//       enableInstallmentAndAuction: json['EnableInstallmentAndAuction'],
-//       numberOfAds: json['numberOfAds'],
-//     );
-//   }
-//
-//   // Method to convert back to JSON if needed
-//   Map<String, dynamic> toJson() {
-//     return {
-//       '_id': id,
-//       'banner': banner,
-//       'cover': cover,
-//       'index': index,
-//       'createdAt': createdAt,
-//       'updatedAt': updatedAt,
-//       'nameAr': nameAr,
-//       'nameEn': nameEn,
-//       'nameCode': nameCode,
-//       'isHidden': isHidden,
-//       'EnableInstallmentAndAuction': enableInstallmentAndAuction,
-//       'numberOfAds': numberOfAds,
-//     };
-//   }
-// }
-
-import 'dart:developer';
-
+// For JSON decoding
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/views/create_resturant_view.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/search_cubit/search_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/expired_request_view.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/searsh_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/banner.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/meal_categories.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/resturant_dashboard_banner.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+// For HTTP requests
 import 'package:shimmer/shimmer.dart';
-import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../res/style/styles.dart';
-import '../cubit/restaurants_list_cubit.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'dart:convert'; // For JSON decoding
-import 'package:http/http.dart' as http; // For HTTP requests
 
 class RestaurantsListsView extends StatefulWidget {
   const RestaurantsListsView({super.key});
@@ -673,63 +34,49 @@ class RestaurantsListsView extends StatefulWidget {
   State<RestaurantsListsView> createState() => _RestaurantsListsViewState();
 }
 
-class _RestaurantsListsViewState extends State<RestaurantsListsView> {
+class _RestaurantsListsViewState extends State<RestaurantsListsView>
+    with AutomaticKeepAliveClientMixin {
   NoAuthRestaurantCategory? restaurantCategory;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
-    fetchData();
+    context.read<RestaurantsCubit>().loadData();
   }
 
-  Future<void> fetchData() async {
-    final url = Uri.parse(
-        'https://49dev.com/api/v1/restaurants/mainCategory/62c8b57e9332225799fe3308');
-
-    try {
-      final response = await http.get(url);
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        setState(() {
-          restaurantCategory = NoAuthRestaurantCategory.fromJson(data);
-        });
-      } else {
-        log('Error: ${response.statusCode}');
-      }
-    } catch (e) {
-      log('Failed to fetch data: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final state = context.watch<RestaurantsCubit>().state;
-    return Scaffold(
-      body: SharedScaffold(
-        mainCategoryId: 1,
-        body: RefreshIndicator(
-          onRefresh: () async {
-            if (context.read<UserCubit>().isLoggedIn) {
-              setState(() {
-                context.read<RestaurantsCubit>().loadData();
-              });
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Builder(
-              builder: (context) {
-                if (!context.watch<UserCubit>().isLoggedIn) {
-                  return _buildNotLoggedInView(context);
-                }
-                if (state.isLoading) {
-                  return const Center(
-                      child: CircularProgressIndicator.adaptive());
-                }
-                return _buildLoggedInView(state);
-              },
-            ),
+    return SharedScaffold(
+      mainCategoryId: 1,
+      backgroundColor: scaffoldDarkColor(context),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          if (context.read<UserCubit>().isLoggedIn) {
+            setState(() {
+              context.read<RestaurantsCubit>().loadData();
+            });
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Builder(
+            builder: (context) {
+              // if (context.watch<UserCubit>().isLoggedIn==false) {
+              //   return _buildNotLoggedInView(context);
+              // }
+              if (state.isLoading) {
+                print("objectHiiii");
+                return const Center(
+                    child: CircularProgressIndicator.adaptive());
+              }
+              return _buildLoggedInView(state);
+            },
           ),
         ),
       ),
@@ -737,10 +84,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
   }
 
   Widget _buildNotLoggedInView(BuildContext context) {
-    if (restaurantCategory == null) {
-      return const Center(child: CircularProgressIndicator.adaptive());
-    }
-
+    // if (restaurantCategory == null) {
+    //   return const Center(child: CircularProgressIndicator.adaptive());
+    // }
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -760,7 +106,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
                 start: 8,
                 child: Label(
                   text:
-                      '${restaurantCategory!.data.numberOfAds} ${LocaleKeys.ads.tr()}',
+                      '${restaurantCategory!.data.numberOfAds.toShortScale} ${LocaleKeys.ads.tr()}',
                   style: Styles.mediumText(
                     shadows: const [
                       Shadow(
@@ -776,7 +122,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
               ),
               Center(
                 child: Label(
-                  text: context.isArabic ? 'اكله' : 'Meal',
+                  text: LocaleKeys.meal.tr(),
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -833,24 +179,22 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
   }
 
   Widget _buildLoggedInView(RestaurantsListState state) {
-    print(
-        "${state.isResturant!.isRestaurant! && state.isResturant!.approved!}asfafasdfasdfafdadsf");
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
           child: Column(
             children: [
               const MealBanner(),
-              if (!(state.isResturant!.isRestaurant!))
+              if (!(state.isResturant?.isRestaurant ?? false))
                 _buildRegisterRestaurantPrompt(state),
               const Sizer(),
-              if (state.isResturant!.isRestaurant! &&
-                  state.isResturant!.approved!)
+              if ((state.isResturant?.isRestaurant ?? false) &&
+                  (state.isResturant?.approved ?? false))
                 const ResturantDashboardButton(),
               const Sizer(),
               _buildSearchAndExpiredRequests(),
               const Sizer(),
-              if (state.mealCategories?.isNotEmpty ?? false) MealCategories(),
+              if ((state.mealCategories?.isNotEmpty ?? false)) MealCategories(),
               if (state.loadingSubCategories)
                 _buildLoadingSubCategoriesPlaceholder(),
               const Sizer(),
@@ -874,17 +218,23 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
   Widget _buildRegisterRestaurantPrompt(RestaurantsListState state) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+        if (context.read<UserCubit>().isLoggedIn) {
+          Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => BlocProvider<CreateRestaurantCubit>(
-                create: (context) => serviceLocator()..loadData(),
+                create: (context) =>
+                    serviceLocator<CreateRestaurantCubit>()..loadData(),
                 child: CreateRestaurantForm(
                   from: 'create',
-                  restaurantId: state.isResturant!.restaurantId!,
+                  restaurantId: state.isResturant?.restaurantId ?? '',
                 ),
               ),
-            ));
+            ),
+          );
+        } else {
+          context.push(Routes.REGISTER);
+        }
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5.0),
@@ -903,14 +253,28 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
       children: [
         Expanded(
           child: InkWell(
-            onTap: () => context.push(Routes.SEARCHMEALS),
+            onTap: () => context.read<UserCubit>().isLoggedIn
+                ?Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BlocProvider(
+                  create: (context) => SearchRestaurantsCubit(
+                    serviceLocator(),
+                    serviceLocator(),
+                    serviceLocator(),
+                    serviceLocator(),
+                  )..loadData(),
+                  child: const SearchRestaurantView(),
+                ),
+              ),
+            ):context.push(Routes.LOGIN),
             child: Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               height: 50.h,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(width: .5, color: Colors.grey),
+                borderRadius: BorderRadius.circular(10.r),
+                border: Border.all(width: 1, color: Colors.grey),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -926,23 +290,25 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
         Expanded(
           child: InkWell(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider.value(
-                      value: serviceLocator<RestaurantsCubit>()
-                        ..getExpiredOrders(),
-                      child: const RestaurantExpiredRequestsScreen(),
-                    ),
-                  ));
+              context.read<UserCubit>().isLoggedIn
+                  ? Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BlocProvider.value(
+                    value: serviceLocator<RestaurantsCubit>()
+                      ..getExpiredOrders(),
+                    child: const RestaurantExpiredRequestsScreen(),
+                  ),
+                ),
+              ):context.push(Routes.LOGIN);
             },
             child: Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               height: 50.h,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(width: .5, color: Colors.grey),
+                borderRadius: BorderRadius.circular(10.r),
+                border: Border.all(width: 1, color: Colors.grey),
               ),
               child: Center(
                 child: Text(LocaleKeys.expiredRequests.tr()),
@@ -967,7 +333,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
             width: MediaQuery.of(context).size.width * 0.2,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(10.r),
             ),
           ),
         ),
@@ -975,26 +341,25 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
     );
   }
 
-  Widget _buildAllRestaurants(state) {
-    return Builder(
-      builder: (context) {
-        final restaurants = state.allRestaurant ?? [];
-        return GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1,
-            mainAxisSpacing: 8,
-            crossAxisSpacing: 8,
-            childAspectRatio: 1.001,
-          ),
-          itemCount: restaurants.length,
-          itemBuilder: (context, index) => Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SubCategoriesRestaurantCard(
-              item: restaurants[index],
-              mealId: '',
-            ),
+  Widget _buildAllRestaurants(RestaurantsListState state) {
+    final restaurants = state.allRestaurant ?? [];
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 1,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+        childAspectRatio: 1.001,
+      ),
+      itemCount: restaurants.length,
+      itemBuilder: (context, index) {
+        final restaurant = restaurants[index];
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SubCategoriesRestaurantCard(
+            item: restaurant,
+            mealId: '',
           ),
         );
       },
@@ -1016,7 +381,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView> {
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10.r),
               ),
             ),
           ),
@@ -1037,8 +402,8 @@ class NoAuthRestaurantCategory {
 
   factory NoAuthRestaurantCategory.fromJson(Map<String, dynamic> json) {
     return NoAuthRestaurantCategory(
-      status: json['status'],
-      data: CategoryData.fromJson(json['data']),
+      status: json['status'] as bool? ?? false,
+      data: CategoryData.fromJson(json['data'] as Map<String, dynamic>? ?? {}),
     );
   }
 }
@@ -1074,18 +439,36 @@ class CategoryData {
 
   factory CategoryData.fromJson(Map<String, dynamic> json) {
     return CategoryData(
-      id: json['_id'],
-      banner: json['banner'],
-      cover: json['cover'],
-      index: json['index'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
-      nameAr: json['nameAr'],
-      nameEn: json['nameEn'],
-      nameCode: json['nameCode'],
-      isHidden: json['isHidden'],
-      enableInstallmentAndAuction: json['EnableInstallmentAndAuction'],
-      numberOfAds: json['numberOfAds'],
+      id: json['_id'] as String? ?? '',
+      banner: json['banner'] as String? ?? '',
+      cover: json['cover'] as String? ?? '',
+      index: json['index'] as int? ?? 0,
+      createdAt: json['createdAt'] as String? ?? '',
+      updatedAt: json['updatedAt'] as String? ?? '',
+      nameAr: json['nameAr'] as String? ?? '',
+      nameEn: json['nameEn'] as String? ?? '',
+      nameCode: json['nameCode'] as String? ?? '',
+      isHidden: json['isHidden'] as bool? ?? false,
+      enableInstallmentAndAuction:
+          json['EnableInstallmentAndAuction'] as bool? ?? false,
+      numberOfAds: json['numberOfAds'] as int? ?? 0,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'banner': banner,
+      'cover': cover,
+      'index': index,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+      'nameAr': nameAr,
+      'nameEn': nameEn,
+      'nameCode': nameCode,
+      'isHidden': isHidden,
+      'EnableInstallmentAndAuction': enableInstallmentAndAuction,
+      'numberOfAds': numberOfAds,
+    };
   }
 }

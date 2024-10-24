@@ -54,12 +54,14 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
           children: [
             widget.comment.user.image == ''
                 ? UserProfileImage(
+              size: 40.sp,
                     accountId: 0,
                     withBorder: false,
                     fromProfile: widget.fromProfile,
                     userId: widget.comment.user.id,
                   )
                 : UserProfileImage(
+              size: 40.sp,
                     accountId: 0,
                     imageURL: widget.comment.user.image,
                     fromProfile: widget.fromProfile,
@@ -86,8 +88,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
               },
               child: Icon(
                 Icons.more_horiz_outlined,
-                color: widget.textColor,
-                size: 20,
+                size: 50.sp,
               ),
             ),
           ],
@@ -159,7 +160,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                 color: widget.comment.isReact == false ? Colors.grey : Colors.red,
               ),
             ),
-            Label(text: widget.comment.loveCount.toString(), style: Styles.mediumText(color: widget.textColor)),
+            Label(text: widget.comment.loveCount.toString(), style: Styles.mediumText()),
             const Sizer(),
             TextAppButton(
                 style: Styles.mediumText(), label: LocaleKeys.reply.localize, onPressed: widget.onCommentReply)

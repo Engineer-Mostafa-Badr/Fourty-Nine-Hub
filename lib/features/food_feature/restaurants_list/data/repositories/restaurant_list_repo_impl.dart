@@ -1,10 +1,11 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/expired_requests_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/food_category_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 
@@ -76,5 +77,15 @@ class RestaurantListRepoImpl implements RestaurantListRepo {
   Future<Either<Failure, bool>> createRestaurant(
       CreateRestaurantParams params) async {
     return _remoteDataSource.createRestaurant(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> changeConnectivity() {
+    return _remoteDataSource.changeConnectivity();
+  }
+
+  @override
+  Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(PaginationParams params) {
+    return _remoteDataSource.getExpiredOrders(params);
   }
 }

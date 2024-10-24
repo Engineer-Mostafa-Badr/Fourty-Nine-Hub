@@ -614,7 +614,6 @@
 //   }
 // }
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
@@ -623,7 +622,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -639,7 +637,6 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -668,7 +665,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
           log("Error: $state");
         },
         builder: (context, state) {
-          if (state.userData.isEmpty) {
+          if (state.userData!.isEmpty) {
             return const Center(
               child: CupertinoActivityIndicator(radius: 25),
             );
@@ -681,33 +678,33 @@ class _TinderCardStackState extends State<TinderCardStack> {
 
   Widget _buildCardSwiper(BuildContext context, TinderViewState state) {
     return CardSwiper(
-      cardsCount: state.userData.length,
+      cardsCount: state.userData!.length,
       numberOfCardsDisplayed:
-          state.userData.length < 3 ? state.userData.length : 2,
+          state.userData!.length < 3 ? state.userData!.length : 2,
       scale: 0.9,
       isLoop: true,
       padding: const EdgeInsets.only(right: 4.0, left: 4.0, bottom: 16),
       onSwipe: (previousIndex, currentIndex, direction) {
         // Disable swapping if there's only one card
-        if (state.userData.length == 1) {
+        if (state.userData!.length == 1) {
           return false; // Prevent swipe
         }
         setState(() {
           // Update the UI based on new card index
-          _buildCardWidget(context, state.userData[currentIndex!]);
+          _buildCardWidget(context, state.userData![currentIndex!]);
         });
         if (currentIndex != null) {
-          _fetchUserDataOnSwipe(context, state.userData[currentIndex].id);
+          _fetchUserDataOnSwipe(context, state.userData![currentIndex].id);
 
-          if (currentIndex >= state.userData.length - 3) {
-            context.read<TinderViewCubit>().loadMoreUserData(state.gender);
+          if (currentIndex >= state.userData!.length - 3) {
+            context.read<TinderViewCubit>().loadMoreUserData(state.gender!);
           }
         }
         return true;
       },
       cardBuilder: (context, index, horizontalOffsetPercentage,
           verticalOffsetPercentage) {
-        return _buildCardWidget(context, state.userData[index]);
+        return _buildCardWidget(context, state.userData![index]);
       },
       duration: const Duration(milliseconds: 100),
     );
@@ -886,7 +883,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
       return context.isArabic ? 'غير متصل' : 'offline';
     }
     if (lastSeenModel.data?.status == 'online') {
-      if (lastSeenModel!.data?.lastSeen != null ||
+      if (lastSeenModel.data?.lastSeen != null ||
           lastSeenModel.data?.lastSeen != '') return '';
 
       return context.isArabic ? 'متصل' : 'online';
@@ -921,8 +918,8 @@ class _TinderCardStackState extends State<TinderCardStack> {
         // TODO: implement listener
       },
       builder: (context, state) {
-        if (state.lastSeenModelState == DataState.failure ||
-            state.lastSeenModelState == DataState.initial) return const Sizer();
+        if (state.lastSeenModelState == TinderStates.failure ||
+            state.lastSeenModelState == TinderStates.initial) return const Sizer();
         return Row(
           children: [
             getStatus(context).toString().isNotEmpty
@@ -966,8 +963,8 @@ class _TinderCardStackState extends State<TinderCardStack> {
         // TODO: implement listener
       },
       builder: (context, state) {
-        if (state.lastSeenModelState == DataState.failure ||
-            state.lastSeenModelState == DataState.initial) {
+        if (state.lastSeenModelState == TinderStates.failure ||
+            state.lastSeenModelState == TinderStates.initial) {
           return const Text('');
         } else {
           return Text(
@@ -1437,37 +1434,37 @@ void showChatBottomSheet(BuildContext context, UserData cardUser) {
 }
 
 Widget swipeCardDemo2(BuildContext context, UserData cardUser) {
-  int _currentStoryIndex = 0;
+  int currentStoryIndex = 0;
 
-  void _nextStory() {
+  void nextStory() {
     final pictures = cardUser.pictures;
-    _currentStoryIndex = (_currentStoryIndex < pictures.length - 1)
-        ? _currentStoryIndex + 1
+    currentStoryIndex = (currentStoryIndex < pictures.length - 1)
+        ? currentStoryIndex + 1
         : pictures.length - 1;
   }
 
-  void _previousStory() {
-    _currentStoryIndex = (_currentStoryIndex > 0) ? _currentStoryIndex - 1 : 0;
+  void previousStory() {
+    currentStoryIndex = (currentStoryIndex > 0) ? currentStoryIndex - 1 : 0;
   }
 
-  void _handleTap(Offset localPosition) {
+  void handleTap(Offset localPosition) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final bool tappedLeftSide = localPosition.dx < screenWidth / 2;
 
     if (tappedLeftSide) {
-      context.isArabic ? _nextStory() : _previousStory();
+      context.isArabic ? nextStory() : previousStory();
     } else {
-      context.isArabic ? _previousStory() : _nextStory();
+      context.isArabic ? previousStory() : nextStory();
     }
   }
 
-  Widget _buildCard(BuildContext context) {
+  Widget buildCard(BuildContext context) {
     final pictures = cardUser.pictures;
     final profilePicture = cardUser.profilePicture;
 
-    var imageUrl;
+    String? imageUrl;
     if (pictures.isNotEmpty) {
-      imageUrl = pictures.reversed.toList()[_currentStoryIndex].mediaKey;
+      imageUrl = pictures.reversed.toList()[currentStoryIndex].mediaKey;
     }
 
     return Stack(
@@ -1499,7 +1496,7 @@ Widget swipeCardDemo2(BuildContext context, UserData cardUser) {
                   margin: const EdgeInsets.symmetric(horizontal: 2.0),
                   height: 4,
                   decoration: BoxDecoration(
-                    color: (dotIndex == _currentStoryIndex)
+                    color: (dotIndex == currentStoryIndex)
                         ? Colors.red
                         : Colors.white54,
                     borderRadius: BorderRadius.circular(2),
@@ -1516,8 +1513,8 @@ Widget swipeCardDemo2(BuildContext context, UserData cardUser) {
   return StatefulBuilder(
     builder: (context, setState) {
       return GestureDetector(
-        onTapUp: (details) => _handleTap(details.localPosition),
-        child: _buildCard(context),
+        onTapUp: (details) => handleTap(details.localPosition),
+        child: buildCard(context),
       );
     },
   );
@@ -1614,7 +1611,7 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
     final pictures = widget.cardUser.pictures;
     final profilePicture = widget.cardUser.profilePicture;
 
-    var imageUrl;
+    String? imageUrl;
     if (pictures.isNotEmpty) {
       imageUrl = pictures.reversed.toList()[_currentStoryIndex].mediaKey;
     }

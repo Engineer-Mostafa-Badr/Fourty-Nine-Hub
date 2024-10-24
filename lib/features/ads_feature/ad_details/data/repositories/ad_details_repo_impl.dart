@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_ad_details_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/make_ad_request_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_model.dart';
 
@@ -14,8 +15,8 @@ class AdDetailsRepoImpl implements AdDetailsRepo {
   AdDetailsRepoImpl(this._remoteDataSource);
   @override
   Future<Either<Failure, AddDetailsModel>> getAdDetails(
-      {required String id}) async {
-    return await _remoteDataSource.getAdDetails(id: id);
+      {required GetAdDetailsParams params}) async {
+    return await _remoteDataSource.getAdDetails(params: params);
   }
 
   @override
@@ -28,5 +29,10 @@ class AdDetailsRepoImpl implements AdDetailsRepo {
   Future<Either<Failure, bool>> makeAdRequest(
       {required AdRequestParams params}) {
     return _remoteDataSource.makeAdRequest(params: params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> makeAdPremiumRequest({required AdRequestParams params}) {
+    return _remoteDataSource.makeAdPremiumRequest(params: params);
   }
 }

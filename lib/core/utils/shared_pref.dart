@@ -1,8 +1,10 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class TokenManager {
+class CacheManager {
   static const _accessTokenKey = 'accessToken';
   static const _refreshTokenKey = 'refreshToken';
+  static const themeDarkKey = 'darkTheme';
+  // static const themeLightKey = 'lightTheme';
 
   // Save access token
   static Future<void> saveAccessToken(String token) async {
@@ -29,9 +31,33 @@ class TokenManager {
   }
 
   // Delete all tokens
-  static Future<void> deleteAllTokens() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_accessTokenKey);
-    await prefs.remove(_refreshTokenKey);
+  static Future<bool> deleteAllTokens() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_accessTokenKey);
+      await prefs.remove(_refreshTokenKey);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static Future<bool> isDarkMode(bool value) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      return await prefs.setBool(themeDarkKey, value);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static Future<bool> getMode() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getBool(themeDarkKey) ?? false;
+    } catch (e) {
+      return false;
+    }
   }
 }

@@ -34,6 +34,7 @@ abstract class Assets {
   static String ride = 'assets/images/ride_icon.svg';
   static String food = 'assets/images/burger_icon.svg';
   static String health = 'assets/images/doctor_icon.svg';
+  static String healthRed = 'assets/images/health.png';
   static String shipping = 'assets/images/goods_icon.svg';
   static String zoom = 'assets/images/zoom.svg';
   static String zoomMeeting = 'assets/images/zoom_meeting.svg';
@@ -114,9 +115,14 @@ abstract class Assets {
   static String spotLightDemo = 'assets/images/spot_light_demo.jpg';
   static String spotlightIcon = 'assets/icons/spotlight.svg';
   static String cameraIcon = 'assets/icons/camera_icon.svg';
+  static String star = 'assets/images/star.png';
 
   //! audio
   static String notificationAudioApp = 'audio/notification.mp3';
   static String notificationAudioServieAndSocial =
       'audio/notification_social.mp3';
+
+  //Quran
+  static String maka = 'assets/images/maka.png';
+  static String madina = 'assets/images/madina.png';
 }

@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 
 import '../../../../../core/abstract/use_case.dart';
-import '../../../tinder/data/models/gift_model.dart';
 import '../entity/live_create_response_entity.dart';
 import '../repository/live_repository.dart';
 
@@ -23,17 +22,19 @@ class CreateLiveUseCase
 
 class CreateLiveParams {
   final String title;
+  final String roomID;
   final String? topicId;
   final String? description;
   final List<GoalParams>? goals;
 
   CreateLiveParams(
-      {required this.title, this.topicId, this.description, this.goals});
+      {required this.title,required this.roomID, this.topicId, this.description, this.goals});
 
   Map<String, dynamic> toJson() {
     return {
       "title": title,
       "topic": topicId,
+      "roomId":roomID,
       "description": description,
       "goals": goals
     };

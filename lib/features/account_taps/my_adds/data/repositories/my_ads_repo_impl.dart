@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/edit
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/get_all_counts_ads_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/get_all_counts_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/update_my_ads_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/edit_my_ads_entity.dart';
 
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/ride/trip_details/domain/entities/trip_and_request_entity.dart';
@@ -101,7 +102,7 @@ class MyAdsRepoImpl implements MyAdsRepo {
 
   @override
   Future<Either<Failure, bool>> deleteMyInstallment({required String id}) {
-   return _remoteDatasource.deleteMyInstallment(id: id);
+    return _remoteDatasource.deleteMyInstallment(id: id);
   }
 
   @override
@@ -110,7 +111,8 @@ class MyAdsRepoImpl implements MyAdsRepo {
   }
 
   @override
-  Future<Either<Failure, List<GetAllCountsTripJoinEntity>>> getAllCountsTripJoin(Params params) {
+  Future<Either<Failure, List<GetAllCountsTripJoinEntity>>>
+      getAllCountsTripJoin(Params params) {
     return _remoteDatasource.getAllCountsTripJoin(params);
   }
 
@@ -132,5 +134,10 @@ class MyAdsRepoImpl implements MyAdsRepo {
   @override
   Future<Either<Failure, ClickEntity>> click(ClickParams params) {
     return _remoteDatasource.click(params);
+  }
+
+  @override
+  Future<Either<Failure, EditMyAdsEntity>> fetchMyAdsById({required String id}) {
+   return _remoteDatasource.fetchMyAdsById(id: id);
   }
 }

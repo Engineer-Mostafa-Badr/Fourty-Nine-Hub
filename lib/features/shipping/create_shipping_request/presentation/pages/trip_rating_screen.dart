@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -67,17 +67,17 @@ class TripRatingScreen extends StatelessWidget {
                               width: 5,
                             ),
                             Text(
-                                "${"Rider".tr()}(${model.driverId?.review?.ratingDriver?.toStringAsFixed(0) ?? 0})"),
+                                "${LocaleKeys.rider.tr()}(${model.driverId?.review?.ratingDriver?.toStringAsFixed(0) ?? 0})"),
                             const SizedBox(
                               width: 5,
                             ),
                             Text(
-                                "${"Trip".tr()}(${model.driverId?.review?.ratingTrip?.toStringAsFixed(0) ?? 0})"),
+                                "${LocaleKeys.trip.tr()}(${model.driverId?.review?.ratingTrip?.toStringAsFixed(0) ?? 0})"),
                             const SizedBox(
                               width: 5,
                             ),
                             Text(
-                                "${"Service".tr()}(${model.driverId?.review?.ratingService?.toStringAsFixed(0) ?? 0})"),
+                                "${LocaleKeys.service.tr()}(${model.driverId?.review?.ratingService?.toStringAsFixed(0) ?? 0})"),
                           ],
                         ),
                         const SizedBox(

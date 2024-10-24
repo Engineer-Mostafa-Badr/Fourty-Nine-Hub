@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import '../../../../core/utils/validator.dart';
 import 'abstract/main_text_form_field.dart';
@@ -17,7 +19,7 @@ class LastNameTextFormField extends MainTextFormField {
       super.fillColor})
       : super(
           validator: validator ?? Validator().validateUserName,
-          hintText: 'Last Name',
+          hintText: LocaleKeys.lastName.tr(),
           // border
           keyboardType: TextInputType.name,
           borderColor: Colors.black,

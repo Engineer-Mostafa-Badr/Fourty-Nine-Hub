@@ -48,59 +48,56 @@ class _ReportViewState extends State<ReportView> {
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: Card(
-        color: Colors.white,
-        child: BlocProvider<TwitterCubit>(
-          create: (_) => serviceLocator<TwitterCubit>(),
-          child: BlocBuilder<TwitterCubit, TwitterState>(
-            builder: (context, state) {
-              final controller = context.read<TwitterCubit>();
-              final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+      child: BlocProvider<TwitterCubit>(
+        create: (_) => serviceLocator<TwitterCubit>(),
+        child: BlocBuilder<TwitterCubit, TwitterState>(
+          builder: (context, state) {
+            final controller = context.read<TwitterCubit>();
+            final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
-              return Padding(
-                padding: EdgeInsets.only(bottom: bottomInset),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(height: 12.h),
-                      _buildHandleIndicator(),
-                      SizedBox(height: 12.h),
-                      _buildHeader(context, screenWidth),
-                      SizedBox(height: 16),
-                      if (reports.isEmpty)
-                        Center(
-                          child: Text(
-                            LocaleKeys.noReportCategoriesAvailable.localize,
-                            textScaleFactor: 1.0,
-                            style: TextStyle(fontSize: 40.sp),
-                          ),
-                        )
-                      else
-                        ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: reports.length,
-                          separatorBuilder: (context, i) =>
-                              SizedBox(height: 10.h),
-                          itemBuilder: (context, i) {
-                            return Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: _buildReportOption(
-                                  context, reports[i], screenWidth),
-                            );
-                          },
+            return Padding(
+              padding: EdgeInsets.only(bottom: bottomInset),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 12.h),
+                    _buildHandleIndicator(),
+                    SizedBox(height: 12.h),
+                    _buildHeader(context, screenWidth),
+                    const SizedBox(height: 16),
+                    if (reports.isEmpty)
+                      Center(
+                        child: Text(
+                          LocaleKeys.noReportCategoriesAvailable.localize,
+                          textScaleFactor: 1.0,
+                          style: TextStyle(fontSize: 40.sp),
                         ),
-                      SizedBox(height: 20.h),
-                      _buildTextFieldWithSendButton(
-                          context, screenWidth, controller, state),
-                      SizedBox(height: 20.h),
-                    ],
-                  ),
+                      )
+                    else
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: reports.length,
+                        separatorBuilder: (context, i) =>
+                            SizedBox(height: 10.h),
+                        itemBuilder: (context, i) {
+                          return Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: _buildReportOption(
+                                context, reports[i], screenWidth),
+                          );
+                        },
+                      ),
+                    SizedBox(height: 20.h),
+                    _buildTextFieldWithSendButton(
+                        context, screenWidth, controller, state),
+                    SizedBox(height: 20.h),
+                  ],
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -165,7 +162,7 @@ class _ReportViewState extends State<ReportView> {
           children: [
             Expanded(
               child: Text(
-                capitalizeAndSplit(report.category),
+                capitalizeAndSplit(report.displayTitleAr),
                 textScaleFactor: 1.0,
                 style: TextStyle(
                   fontSize: 30.sp,
@@ -201,46 +198,61 @@ class _ReportViewState extends State<ReportView> {
       children: [
         Expanded(
           child: MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
             // Disable scaling
 
-            child: TextField(
-              maxLines: null,
-              style: TextStyle(
-                fontSize: 35.sp,
-                fontWeight: FontWeight.bold,
-                color: isDarkTheme(context)
-                    ? Colors.white70
-                    : AppColors.PRIMARY_COLOR_LIGHT,
+            child: Container(
+              constraints: BoxConstraints(
+                maxHeight: 150.h
               ),
-              onChanged: (value) {
-                setState(() {});
-              },
-              controller: reportTextController,
-              decoration: InputDecoration(
-                fillColor: isDarkTheme(context)
-                    ? Colors.transparent
-                    : AppColors.LIGHT_COLOR,
-                contentPadding: EdgeInsets.symmetric(
-                  vertical: MediaQuery.of(context).size.height * 0.02,
-                  horizontal: 16.0,
-                ),
-                hintText: '${LocaleKeys.typeReportReason.localize}...',
-                hintStyle: TextStyle(
+              child: TextField(
+                maxLines: null,
+                style: TextStyle(
                   fontSize: 35.sp,
+                  fontWeight: FontWeight.bold,
                   color: isDarkTheme(context)
                       ? Colors.white70
-                      : AppColors.DARK_GRAY_COLOR,
+                      : AppColors.PRIMARY_COLOR_LIGHT,
                 ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
+                onChanged: (value) {
+                  setState(() {});
+                },
+                controller: reportTextController,
+                decoration: InputDecoration(
+                  fillColor: isDarkTheme(context)
+                      ? Colors.transparent
+                      : AppColors.LIGHT_COLOR,
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: MediaQuery.of(context).size.height * 0.02,
+                    horizontal: 16.0,
+                  ),
+                  hintText: '${LocaleKeys.typeReportReason.localize}...',
+                  hintStyle: TextStyle(
+                    fontSize: 35.sp,
+                    color: isDarkTheme(context)
+                        ? Colors.white70
+                        : AppColors.DARK_GRAY_COLOR,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                    borderSide:
+                        const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
+                  ),
+                  enabledBorder:  OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                    borderSide:
+                    const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
+                  ),
+                  errorBorder:  OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0),
                   borderSide:
-                      const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  borderSide:
-                      const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
+                  const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                    borderSide:
+                        const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
+                  ),
                 ),
               ),
             ),
@@ -252,7 +264,7 @@ class _ReportViewState extends State<ReportView> {
           duration: const Duration(milliseconds: 300),
           child: IconButton(
             color: AppColors.PRIMARY_COLOR_DARK,
-            icon: Icon(
+            icon: const Icon(
               Icons.send,
             ),
             onPressed: reportTextController.text.isNotEmpty
@@ -286,7 +298,7 @@ class _ReportViewState extends State<ReportView> {
                       }
                     }
                   }
-                : () => null,
+                : () {},
           ),
         ),
       ],

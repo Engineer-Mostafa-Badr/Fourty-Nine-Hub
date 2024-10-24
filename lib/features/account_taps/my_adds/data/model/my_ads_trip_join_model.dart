@@ -10,7 +10,7 @@ class MyAdsTripJoinModel extends MyAdsTripJoinEntity {
 
   factory MyAdsTripJoinModel.fromJson(Map<String, dynamic> json) {
     return MyAdsTripJoinModel(
-      subscribedPremium: json['subscribedPremium'] ??false,
+      subscribedPremium: json['subscribedPremium'] ?? false,
       subscriptionEndDate: json['subscriptionEndDate'],
       docs: (json['docs'] as List)
           .map((e) => DocsTripJoinModel.fromJson(e))

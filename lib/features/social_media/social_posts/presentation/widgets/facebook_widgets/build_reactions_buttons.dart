@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_reaction_button/flutter_reaction_button.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -53,13 +54,14 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
             }
           },
           toggle: false,
-          direction: ReactionsBoxAlignment.rtl,
+          // direction: ReactionsBoxAlignment.ltr,
           animateBox: false,
           placeholder: Reaction<String>(
             value: null,
             icon: _buildReactionPlaceholder(),
           ),
           itemsSpacing: 0,
+
           itemSize: const Size(40, 40),
           reactions: context.isArabic
               ? _buildReactionsEnList()
@@ -408,10 +410,10 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const FaIcon(
+         FaIcon(
           Icons.thumb_up_alt_outlined,
           color: Colors.grey,
-          size: 18,
+          size: 32.sp,
         ),
         if (widget.from == 'posts') ...[
           Label(

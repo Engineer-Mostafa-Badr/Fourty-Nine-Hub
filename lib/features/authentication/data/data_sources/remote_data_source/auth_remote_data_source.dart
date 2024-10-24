@@ -17,6 +17,8 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_fo
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_otp_use_case.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../../../../core/utils/shared_pref.dart';
+
 abstract class AuthRemoteDataSource {
   const AuthRemoteDataSource();
 
@@ -50,6 +52,8 @@ abstract class AuthRemoteDataSource {
   Future<Either<Failure, double>> getWelcomeGift();
 
   void attachToken(UserTokensModel? token);
+
+  Future<Either<Failure, void>> logout();
 }
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
@@ -181,7 +185,8 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
       // Handle the result
       return signInResult.fold(
-        (failure) => Left(failure), // If the sign-in failed, return the failure
+        (failure) => Left(failure),
+        // If the sign-in failed, return the failure
         (userCredential) async {
           // If sign-in succeeded, obtain the tokens (idToken and accessToken)
           final idToken = await userCredential.user?.getIdToken();
@@ -270,5 +275,15 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       (failure) => Left(failure),
       (response) => const Right(null),
     );
+  }
+
+  @override
+  Future<Either<Failure, void>> logout() async {
+    var result = await _apiConsumer.post(EndPoints.logout);
+    return result.fold((l) => Left(l), (r) async {
+      await CacheManager.deleteAllTokens();
+      _apiConsumer.removeTokenFromHeader();
+      return Right(r);
+    });
   }
 }

@@ -124,6 +124,10 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._createAnonymousChatUseCase,
   ) : super(const SocialPostsState());
 
+
+  final shareFormKey = GlobalKey<FormState>();
+
+
   void loadData() async {
     await getFeed(1);
     feedPagingController.addPageRequestListener((pageKey) {
@@ -135,6 +139,15 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       print("initStatePageKey : $pageKey");
       getSuggestedFriends(pageKey);
     });
+  }
+
+  String? content;
+
+  void changeContent({
+    required String v,
+  }) {
+    content = v;
+    print(content);
   }
 
   void loadGlobalData() async {
@@ -908,7 +921,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 
   // share post
   Future<bool> onShare({required String postId}) async {
-    var response = await _sharePostUseCase(postId);
+    var response = await _sharePostUseCase(SharePostParams(postId: postId,content: content??''));
     var value = false;
     response.fold(
         (failure) =>

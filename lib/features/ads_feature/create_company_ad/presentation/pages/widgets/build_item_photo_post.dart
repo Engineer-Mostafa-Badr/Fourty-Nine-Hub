@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -33,7 +34,7 @@ class BuildItemPhotoPost extends StatelessWidget {
     final DateTime createdAt = DateTime.parse(advertises.createdAt!);
     final DateTime egyptTime = createdAt.toUtc().add(const Duration(hours: 3));
     final String formattedDayTime =
-        DateFormat('EEEE, h:mm a').format(egyptTime);
+        DateFormat('EEEE, h:mm a',context.locale == Locales.english? 'en':'ar').format(egyptTime);
     return BlocConsumer<CreateCompanyAdCubit, CreateCompanyAdState>(
       listener: (BuildContext context, CreateCompanyAdState state) {
         if (state.status == StateStatus.success) {

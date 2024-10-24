@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -76,10 +77,18 @@ class _ReadMoreLabelState extends State<ReadMoreLabel> {
 
   // Function to handle clickable links in the text
   Widget _buildRichText(String text) {
-    final List<TextSpan> spans = _getTextSpans(text, widget.style??Styles.headerText(color: Colors.black,fontSize: 30));
-    return RichText(
-      textAlign: widget.textAlign ?? TextAlign.left,
-      text: TextSpan(children: spans),
+    final List<TextSpan> spans = _getTextSpans(
+      text,
+      widget.style ?? Styles.headerText(fontSize: 60.sp),
+    );
+    return Align(
+      alignment: widget.textAlign == TextAlign.right
+          ? Alignment.centerRight
+          : Alignment.centerLeft,
+      child: RichText(
+        textAlign: widget.textAlign ?? TextAlign.left,
+        text: TextSpan(children: spans),
+      ),
     );
   }
 

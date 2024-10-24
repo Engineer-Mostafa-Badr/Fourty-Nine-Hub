@@ -2,8 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
@@ -322,21 +327,6 @@ class UserStoryViewState extends State<UserStoryView> {
         _buildStoryView(),
         _buildUserInfoBar(),
         _buildNavigationOverlay(),
-        // Positioned(
-        //     bottom: 100,
-        //     top: 100,
-        //     right: 50,
-        //     left: 50,
-        //     child: BlocConsumer<StoryCubit, StoryState>(
-        //       listener: (context, state) {
-        //         // TODO: implement listener
-        //       },
-        //       builder: (context, state) {
-        //         return Text(state.viewersResponse != null
-        //             ? state.viewersResponse!.data.length.toString()
-        //             : 'asasad');
-        //       },
-        //     )),
         if (widget.userStory.user!.id !=
             serviceLocator<UserCubit>().state.data!.id)
           const Positioned(
@@ -364,7 +354,6 @@ class UserStoryViewState extends State<UserStoryView> {
                   child: InkWell(
                     onTap: () async {
                       _storyController.pause();
-
                       await showViewerList(context, state.viewersResponse!);
                       _storyController.play();
                     },
@@ -492,12 +481,24 @@ class UserStoryViewState extends State<UserStoryView> {
           children: [
             Expanded(
               child: GestureDetector(
+                onLongPressEnd: (details) {
+                  _storyController.play();
+                },
+                onLongPress: () {
+                  _storyController.pause();
+                },
                 onTap: _storyController.previous,
                 child: Container(color: Colors.transparent),
               ),
             ),
             Expanded(
               child: GestureDetector(
+                onLongPressEnd: (details) {
+                  _storyController.play();
+                },
+                onLongPress: () {
+                  _storyController.pause();
+                },
                 onTap: _storyController.next,
                 child: Container(color: Colors.transparent),
               ),
@@ -648,29 +649,33 @@ class _UserInfoBarState extends State<UserInfoBar> {
               ),
             ),
           if (widget.userStory.user?.id != widget.currentUserId)
-            const PopupMenuItem<String>(
+            PopupMenuItem<String>(
               value: 'report',
               child: Row(
                 children: [
                   Icon(Icons.report, color: AppColors.PRIMARY_COLOR_DARK),
                   SizedBox(width: 10),
                   Text(
-                    'Report',
+                    LocaleKeys.report.localize,
                     textScaler: TextScaler.noScaling,
                   ),
                 ],
               ),
             ),
           if (widget.userStory.user?.id != widget.currentUserId)
-            const PopupMenuItem<String>(
+            PopupMenuItem<String>(
               value: 'Mute',
               child: Row(
                 children: [
-                  Icon(Icons.notifications_off_outlined,
-                      color: AppColors.PRIMARY_COLOR),
-                  SizedBox(width: 10),
+                  Icon(
+                    Icons.notifications_off_outlined,
+                    color: ThemeCubit.get(context).isDarkTheme
+                        ? Colors.white.withOpacity(0.9)
+                        : Colors.black.withOpacity(0.9),
+                  ),
+                  const SizedBox(width: 10),
                   Text(
-                    'Mute',
+                    LocaleKeys.mute.localize,
                     textScaler: TextScaler.noScaling,
                   ),
                 ],
@@ -681,12 +686,6 @@ class _UserInfoBarState extends State<UserInfoBar> {
     );
   }
 }
-
-// String capitalizeAndSplit2Only(String text) {
-//   return text.split(' ').map((str) {
-//     return str[0].toUpperCase() + str.substring(1).toLowerCase();
-//   }).join(' ');
-// }
 
 String removeSubstringBeforeFirstTildeOnly(String input) {
   int tildeIndex = input.indexOf('~');

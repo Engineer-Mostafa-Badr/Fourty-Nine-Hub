@@ -15,6 +15,7 @@ import 'package:fourtyninehub/routes/pages.dart';
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../service_locator/service_locator.dart';
+import '../../../../trip_join/helpers/print_helper.dart';
 import '../../../domain/entities/user_tokens_entity.dart';
 import '../../../domain/use_cases/get_user_use_case.dart';
 import '../../../domain/use_cases/sign_out_usecase.dart';
@@ -90,8 +91,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   // }
 
   void attachToken() async {
-    String? accessToken = await TokenManager.getAccessToken();
-    String? refreshToken = await TokenManager.getRefreshToken();
+    String? accessToken = await CacheManager.getAccessToken();
+    String? refreshToken = await CacheManager.getRefreshToken();
     if (accessToken != null && refreshToken != null) {
       _attachTokenUseCase(UserTokensEntity(
         accessToken: accessToken,
@@ -107,21 +108,16 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     _attachTokenUseCase(null);
     _saveTokensUseCase(null);
     isTokenAttached = false;
-    state.copyWith(
-        status: StateStatus.success,
-        data: const UserEntity(
-            id: '',
-            firstName: '',
-            lastName: '',
-            email: '',
-            profilePicture: '',
-            profileCover: '',
-            friendsCount: 0,
-            followersCount: 0,
-            followingCount: 0,
-            wallet: 0));
-    await _signOutUseCase(const NoParams());
-    emit(const BasicState());
+    emit(state.copyWith(status: StateStatus.loading));
+    final result = await _signOutUseCase(const NoParams());
+    result.fold((l) => emit(state.copyWith(status: StateStatus.error)),
+        (r) => emit(state.copyWith(status: StateStatus.success,token: null,data: null)));
+    // if(result == true){
+    //   emit(state.copyWith(status: StateStatus.success,data: null,token: null));
+      pr('state token is  ${state.token}');
+    // }else{
+    // emit(state.copyWith(status: StateStatus.error));
+    // }
   }
 
   setLogin(bool value) {

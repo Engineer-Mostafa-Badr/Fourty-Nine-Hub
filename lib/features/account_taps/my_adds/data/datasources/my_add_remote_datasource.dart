@@ -2,7 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/data/model/click_model.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/data/model/edit_my_ads_model.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/data/model/my_ads_trip_join_model.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/edit_my_ads_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/ride/trip_details/domain/entities/trip_and_request_entity.dart';
 
@@ -47,6 +49,7 @@ abstract class MyAdsRemoteDatasource {
   Future<Either<Failure, bool>> updateMyAds(UpdateMyAdsParams params);
   Future<Either<Failure, bool>> editMyAds(EditParams params);
   Future<Either<Failure, ClickEntity>> click(ClickParams params);
+  Future<Either<Failure, EditMyAdsEntity>> fetchMyAdsById({required String id});
 }
 
 class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
@@ -207,5 +210,13 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
     return response.fold(
             (failure) => Left(failure),
             (data) => Right(ClickModel.fromJson(data)));
+  }
+
+  @override
+  Future<Either<Failure, EditMyAdsEntity>> fetchMyAdsById({required String id}) async {
+    final response = await _apiConsumer.get(EndPoints.getMyAdsWithId(id: id));
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right(EditMyAdsModel.fromJson(data)));
   }
 }
