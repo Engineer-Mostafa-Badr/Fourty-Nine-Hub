@@ -74,7 +74,9 @@ class QuraanView extends StatelessWidget {
       Row(
         children: [
           Container(
-              padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 30.w),
+            width: 100.w,
+             height: 100.h,
+             // padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 30.w),
               decoration: BoxDecoration(
                 color: Theme
                     .of(context)
