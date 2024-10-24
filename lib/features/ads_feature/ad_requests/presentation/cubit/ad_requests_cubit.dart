@@ -3,7 +3,6 @@ import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_mo
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../ads/domain/usecases/get_ads_usecase.dart';
-import '../../domain/usecases/get_ad_requests_usecase.dart';
 part 'ad_requests_state.dart';
 
 class AdRequestsCubit extends Cubit<AdRequestsState> {

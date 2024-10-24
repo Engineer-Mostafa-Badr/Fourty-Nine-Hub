@@ -948,5 +948,12 @@ abstract class  LocaleKeys {
   static const womenOnly = 'womenOnly';
   static const minutesAgo = 'minutesAgo';
   static const shareTransactionDetails = 'shareTransactionDetails';
+  static const premiumPackageMoreVisibilityCashback = 'premiumPackageMoreVisibilityCashback';
+  static const inFront = 'inFront';
+  static const behind = 'behind';
+  static const drivingLicense = 'drivingLicense';
+  static const theApplicationDoesNotDeductAnyPercentage = 'theApplicationDoesNotDeductAnyPercentage';
+  static const youWillGetPoundsAnnually = 'youWillGetPoundsAnnually';
+  static const license = 'license';
 
 }

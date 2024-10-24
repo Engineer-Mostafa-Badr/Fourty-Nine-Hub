@@ -290,7 +290,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                       ),
 
                       const Sizer(),
-                      state.status==CreateAdStates.loadCities?Center(child: const CircularProgressIndicator()):state.status==CreateAdStates.loadCitiesSuccess?Column(
+                      state.status==CreateAdStates.loadCities?const Center(child: CircularProgressIndicator()):state.status==CreateAdStates.loadCitiesSuccess?Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children:[
                           Label(text: LocaleKeys.city.localize),

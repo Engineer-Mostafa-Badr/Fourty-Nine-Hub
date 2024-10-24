@@ -21,8 +21,7 @@ void showCreateRouteModalSheet(BuildContext context, {bool isComfort = false}) {
 class CreateRouteBottomSheet extends StatefulWidget {
   final bool isComfort;
 
-  const CreateRouteBottomSheet({Key? key, required this.isComfort})
-      : super(key: key);
+  const CreateRouteBottomSheet({super.key, required this.isComfort});
 
   @override
   _CreateRouteBottomSheetState createState() => _CreateRouteBottomSheetState();
@@ -85,7 +84,7 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
                     });
                   },
                   activeColor: AppColors.PRIMARY_COLOR,
-                  trackOutlineColor: MaterialStatePropertyAll(Colors.grey),
+                  trackOutlineColor: WidgetStatePropertyAll(Colors.grey),
                   activeTrackColor: Colors.grey,
                   inactiveTrackColor: Colors.white,
                   inactiveThumbColor: Colors.grey,

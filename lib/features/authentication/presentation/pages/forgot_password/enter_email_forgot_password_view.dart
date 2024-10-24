@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -52,8 +53,9 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
                 const Sizer(),
                 Form(
                   key: cubit.emailFormKey,
-                  child: FormTextField(
-                    controller: cubit.emailController,
+                  child: DefaultTextFormField(
+                    currentController: cubit.emailController,
+                    // controller: cubit.emailController,
                     label: LocaleKeys.email.localize,
                     hint: LocaleKeys.typeHere.localize,
                     prefix: Icon(

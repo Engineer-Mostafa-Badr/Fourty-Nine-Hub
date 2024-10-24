@@ -883,7 +883,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
       return context.isArabic ? 'غير متصل' : 'offline';
     }
     if (lastSeenModel.data?.status == 'online') {
-      if (lastSeenModel!.data?.lastSeen != null ||
+      if (lastSeenModel.data?.lastSeen != null ||
           lastSeenModel.data?.lastSeen != '') return '';
 
       return context.isArabic ? 'متصل' : 'online';

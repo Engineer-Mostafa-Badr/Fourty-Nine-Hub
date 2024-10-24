@@ -36,7 +36,7 @@ class CardDetails extends StatelessWidget {
             const SizedBox(height: 20,),
              Text(
               LocaleKeys.SubscriberCompletionRate.localize,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
               ),
             ),
@@ -62,12 +62,12 @@ class CardDetails extends StatelessWidget {
               children: [
                 Text(
                   LocaleKeys.ProductDescription.localize,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   'This product is the Honor 90 Lite Dual SIM phone that comes with FHD screen, high resolution rear camera and powerful processor.',
                   style: Styles.mediumText(

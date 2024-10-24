@@ -9,7 +9,7 @@ class RestaurantOrders extends StatelessWidget {
       appBar: AppBar(),
       body: Container(
         color: Colors.green,
-        child: Text('RestaurantOrders'),
+        child: const Text('RestaurantOrders'),
       ),
     );
   }

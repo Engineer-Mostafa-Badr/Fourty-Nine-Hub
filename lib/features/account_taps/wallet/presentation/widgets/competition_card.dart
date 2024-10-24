@@ -103,7 +103,7 @@ class CompetitionCard extends StatelessWidget {
             AppButton(
               label: LocaleKeys.requestWithdraw.localize,
               color: AppColors.AUTH_CONTAINER_COLOR,
-              backColor: competitionsWalletEntity.countOfRequest! >= 5000 &&
+              backColor: competitionsWalletEntity.countOfRequest >= 5000 &&
                       competitionsWalletEntity.isWinner == true
                   ? Colors.red
                   : Colors.red.withOpacity(.5),

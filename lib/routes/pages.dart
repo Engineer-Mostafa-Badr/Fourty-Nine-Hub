@@ -1419,7 +1419,7 @@ class AppPages {
                             create: (context) => GetRouteRiderCubit(
                                 repository: serviceLocator()),
                           ),
-                        ], child: AllRiderTripScreen())
+                        ], child: const AllRiderTripScreen())
                     // BlocProvider(
                     //   create: (_) => GetAllTripRiderCubit(repository: serviceLocator())..getAllTrip(),
                     //   child: const AllRiderTripScreen(),

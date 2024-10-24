@@ -558,7 +558,7 @@ class _EditFoodViewState extends State<EditFoodView> {
       if (maxScroll > 0) {
         _scrollController.animateTo(
           maxScroll,
-          duration: Duration(seconds: 1),
+          duration: const Duration(seconds: 1),
           curve: Curves.easeInOut,
         );
       }
@@ -580,7 +580,7 @@ class _EditFoodViewState extends State<EditFoodView> {
       (failure) {
         // Display error message
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to delete item')),
+          const SnackBar(content: Text('Failed to delete item')),
         );
       },
       (r) async {

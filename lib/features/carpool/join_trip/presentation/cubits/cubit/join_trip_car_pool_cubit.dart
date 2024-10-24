@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/data/models/join_trip_carpool_model.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/domain/entities/join_trip_entity.dart';

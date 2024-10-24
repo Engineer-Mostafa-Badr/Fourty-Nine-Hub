@@ -462,7 +462,7 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
                   ],
                 ),
               ),
-              Divider(thickness: 1, color: Colors.transparent),
+              const Divider(thickness: 1, color: Colors.transparent),
 
               // Responsive List of Viewers
               Expanded(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -32,9 +32,8 @@ class CreateNewForgetPasswordView extends StatelessWidget {
         if (state is CreateNewForgotPasswordSuccess) {
           showSuccessMessage(
               context, LocaleKeys.passwordChangedSuccessfully.localize);
-          context.pushAndRemoveUntil(
+          context.pushReplacement(
             Routes.LOGIN,
-            (route) => false,
           );
         } else if (state is CreateNewForgotPasswordFailure) {
           showErrorMessage(context, getFailureMessage(state.failure, context));
@@ -62,21 +61,25 @@ class CreateNewForgetPasswordView extends StatelessWidget {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 children: [
-                  FormTextField(
-                    controller: cubit.newPasswordController,
+                  DefaultTextFormField(
+                    currentController: cubit.newPasswordController,
                     label: LocaleKeys.newPassword.localize,
                     hint: '***********',
-                    obsecure: true,
-                    prefix: const Icon(Icons.password),
+                    obscureText: true,
+                    maxLines: 1,
+                    // minLines: 1,
+                    // prefix: const Icon(Icons.password),
                   ),
                   SizedBox(height: 20.h),
-                  FormTextField(
-                    controller: cubit.confirmPasswordController,
+                  DefaultTextFormField(
+                    currentController: cubit.confirmPasswordController,
                     label: LocaleKeys.confirmNewPassword.localize,
                     hint: '***********',
-                    obsecure: true,
-                    prefix: const Icon(Icons.password),
-                    action: (v) {},
+                    obscureText: true,
+                    maxLines: 1,
+                    // minLines: 1,
+                    // prefix: const Icon(Icons.password),
+                    // action: (v) {},
                   ),
                 ],
               ),

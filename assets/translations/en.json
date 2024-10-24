@@ -994,6 +994,13 @@
   "transactionSuccessful": "Transaction Successful",
   "yourTransactionWasSuccessful": "Your transaction was successful",
   "transferAmount": "Transfer Amount",
+  "shareTransactionDetails": "Share Transaction Details",
+  "inFront": "In Front",
+  "behind": "Behind",
+  "drivingLicense": "Driving License",
+  "theApplicationDoesNotDeductAnyPercentage": "The application does not deduct any percentage from the service provider.",
+  "youWillGetPoundsAnnually": "You will get 3,650 pounds annually if you subscribe.",
+  "license": "رخصة"
   "snapCopyOfBillPayment": "Snap copy of bill payment",
   "paymentSuccessful": "Payment successful",
   "sendReviewApproval": "Send for review and approval",
