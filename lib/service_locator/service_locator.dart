@@ -31,6 +31,7 @@ import 'package:fourtyninehub/service_locator/join_trip_carpool_service_locator.
 import 'package:fourtyninehub/service_locator/notification_service_locator.dart';
 import 'package:fourtyninehub/service_locator/payment_service_locator.dart';
 import 'package:fourtyninehub/service_locator/privacy_service_locator.dart';
+import 'package:fourtyninehub/service_locator/quran_service_locator.dart';
 import 'package:fourtyninehub/service_locator/reels_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
 import 'package:fourtyninehub/service_locator/search_service_locator.dart';
@@ -271,5 +272,6 @@ class DI {
     JoinTripCarpoolServiceLocator.execute(serviceLocator: serviceLocator);
     ReelsServiceLocator.execute(serviceLocator: serviceLocator);
     StarServiceLocator.execute(serviceLocator: serviceLocator);
+    QuranServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

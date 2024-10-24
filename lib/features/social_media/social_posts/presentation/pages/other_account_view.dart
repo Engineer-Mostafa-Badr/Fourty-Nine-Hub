@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -77,8 +78,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         SliverToBoxAdapter(
                             child: Container(
                                 width: double.infinity,
-                                padding: const EdgeInsetsDirectional.only(
-                                    top: 35, end: 10, start: 10),
+                                padding:  EdgeInsetsDirectional.only(
+                                    top: 80.h, end: 20.w, start: 20.w),
                                 child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -87,7 +88,6 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           onPressed: () => context.pop(),
                                           icon: const Icon(
                                             Icons.arrow_back,
-                                            color: Colors.black,
                                           )),
                                       if (context
                                               .read<UserCubit>()
@@ -96,7 +96,6 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                         PopupMenuButton(
                                             icon: const Icon(
                                               Icons.more_vert,
-                                              color: Colors.black,
                                             ),
                                             itemBuilder: (context) {
                                               return [
@@ -190,7 +189,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                             },
                                             icon: const Icon(
                                               Icons.search,
-                                              color: Colors.black,
+
                                             )),
                                     ]))),
                         SliverToBoxAdapter(
@@ -548,13 +547,14 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 selectCoverImage();
                               },
                               child: Container(
-                                  padding: const EdgeInsets.all(5),
+                                  padding:  EdgeInsets.all(10.w),
+                                  margin:  EdgeInsets.all(20.w),
                                   decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: AppColors.PRIMARY_COLOR),
+                                      color: AppColors.GREY_LIGHT_COLOR),
                                   child: const Icon(
                                     Icons.camera_alt_outlined,
-                                    color: Colors.white,
+                                    color: Colors.black,
                                   )),
                             )
                         ],
@@ -672,7 +672,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   ],
                 )),
                 PositionedDirectional(
-                    bottom: 0,
+                    bottom: 20.h,
                     start: 10,
                     child: Stack(
                       alignment: AlignmentDirectional.bottomEnd,
@@ -694,7 +694,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           ));
                                 },
                                 child: CircleAvatar(
-                                  radius: 60,
+                                  radius: 120,
                                   child: CircleAvatar(
                                     radius: 60,
                                     backgroundColor: Colors.white,
@@ -717,12 +717,16 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                             },
                                           ));
                                 },
-                                child: ImageFromInternet(
-                                  image: user.profilePicture ??
-                                      UIConst.profilePlaceHolder,
-                                  height: 140.h,
-                                  width: 160.w,
-                                  isCircle: true,
+                                child: CircleAvatar(
+                                  radius: 110.w,
+                                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                  child: ImageFromInternet(
+                                    image: user.profilePicture ??
+                                        UIConst.profilePlaceHolder,
+                                    height: 180.h,
+                                    width: 250.w,
+                                    isCircle: true,
+                                  ),
                                 ),
                               ),
                         if (loginUser?.id == user.id)
@@ -733,13 +737,13 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 selectImageGallary();
                               },
                               child: Container(
-                                  padding: const EdgeInsets.all(5),
+                                  padding:  EdgeInsets.all(15.w),
                                   decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: AppColors.PRIMARY_COLOR),
+                                      color: AppColors.GREY_LIGHT_COLOR),
                                   child: Icon(
                                     Icons.camera_alt_outlined,
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     size: 35.w,
                                   )),
                             ),
@@ -765,7 +769,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                     text: "${user.firstName} ${user.lastName}",
                                     style: Styles.headerText(
                                         fontWeight: FontWeight.w600,
-                                        color: Colors.black)),
+
+                                    )),
                                 const Sizer(
                                   width: 5,
                                 ),
@@ -784,12 +789,12 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                     text: "${user.firstName} ${user.lastName}",
                                     style: Styles.headerText(
                                         fontWeight: FontWeight.w600,
-                                        color: Colors.black)),
+                                        ),),
                                 if (user.job.isNotEmpty)
                                   TextSpan(
                                       text: '\t(${user.job})',
                                       style: Styles.headerText(
-                                          color: Colors.black, fontSize: 26)),
+                                           fontSize: 26)),
                               ])),
                     ),
                     if (loginUser?.id != widget.userId)
@@ -873,7 +878,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                 Sizer(height: 5.h),
                 Label(
                     text: user.bio,
-                    style: Styles.mediumText(color: Colors.black)),
+                    style: Styles.mediumText(),
+                ),
                 Sizer(height: 5.h),
                 if (user.city.isNotEmpty ||
                     user.job.isNotEmpty ||
@@ -903,7 +909,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               child: Label(
                                 text: user.city,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30),
+                                     fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -934,7 +940,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               child: Label(
                                 text: user.country,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30),
+                                     fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -965,7 +971,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               child: Label(
                                 text: user.job,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30),
+                                     fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -994,7 +1000,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               child: Label(
                                 text: user.phone,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30),
+                                     fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -1018,7 +1024,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               child: Label(
                                 text: user.maritalStatus,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 30),
+                                     fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -1044,7 +1050,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
       TextSpan(
           text: value,
           style: Styles.mediumText(
-              color: Colors.black, fontWeight: FontWeight.w500)),
+               fontWeight: FontWeight.w500)),
       TextSpan(
           text: label,
           style: Styles.mediumText(

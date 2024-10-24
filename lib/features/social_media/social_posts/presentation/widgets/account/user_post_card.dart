@@ -73,6 +73,7 @@ class UserPostCard extends StatefulWidget {
 
 class _UserPostCardState extends State<UserPostCard> {
   final pageController = PageController();
+
   // bool showReacts = false;
   bool hide = false;
 
@@ -182,9 +183,10 @@ class _UserPostCardState extends State<UserPostCard> {
                           context: context, post: myPost.mainPost!),
                     if (myPost.isShared == true)
                       _buildContentWidget(
-                          content: myPost.mainPost?.content ?? '',
-                          backgroundColor: null,
-                          images: myPost.mainPost?.images ?? []),
+                        content: myPost.mainPost?.content ?? '',
+                        backgroundColor: null,
+                        images: myPost.mainPost?.images ?? [],
+                      ),
                   ],
                   if (myPost.type != 'advertisement' &&
                       myPost.isShared == true &&
@@ -437,6 +439,9 @@ class _UserPostCardState extends State<UserPostCard> {
                       children: [
                         TextAppButton(
                             label: post.user.firstName,
+                            style: Styles.mediumText(
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.w700),
                             onPressed: () {
                               if (user?.id != post.user.id) {
                                 context.push(Routes.OTHERSACCOUNT,
@@ -545,6 +550,7 @@ class _UserPostCardState extends State<UserPostCard> {
                 children: [
                   TextAppButton(
                       label: post.user.firstName,
+                      style: Styles.mediumText(fontWeight: FontWeight.w700),
                       onPressed: () {
                         if (user?.id != post.user.id) {
                           context.push(Routes.OTHERSACCOUNT,
@@ -592,8 +598,9 @@ class _UserPostCardState extends State<UserPostCard> {
                 : Colors.white,
             child: ReadMoreLabel(
               text: content,
+              textAlign: _isArabic(content) ? TextAlign.right : TextAlign.left,
               style: Styles.headerText(
-                  color: Colors.black,
+                //  color: Colors.black,
                   fontSize: 30,
                   fontWeight: FontWeight.bold),
             ),
@@ -605,7 +612,12 @@ class _UserPostCardState extends State<UserPostCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (content.isNotEmpty) ReadMoreLabel(text: content),
+                if (content.isNotEmpty)
+                  ReadMoreLabel(
+                    text: content,
+                    textAlign:
+                        _isArabic(content) ? TextAlign.right : TextAlign.left,
+                  ),
                 SizedBox(
                   height: 10.h,
                 ),
@@ -773,5 +785,10 @@ class _UserPostCardState extends State<UserPostCard> {
         ],
       ),
     );
+  }
+
+  bool _isArabic(String text) {
+    final RegExp arabicRegex = RegExp(r'^[\u0600-\u06FF\s]+$');
+    return arabicRegex.hasMatch(text);
   }
 }

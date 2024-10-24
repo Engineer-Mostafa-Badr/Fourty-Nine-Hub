@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class WalletCardWidget extends StatelessWidget {
@@ -52,19 +51,26 @@ class WalletCardWidget extends StatelessWidget {
                         color: Theme.of(context).scaffoldBackgroundColor),
                   ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Label(
-                      text: balance,
+                      text: _formatBalance(balance),
                       style: Styles.headerText(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          fontSize: 60.sp),
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        fontSize: 100.sp,
+                      ),
                     ),
-                    Sizer(width: 10.w,),
-                    Label(
-                      text: currency,
-                      style: Styles.headerText(
-                          color: AppColors.SECONDARY_COLOR,
-                          fontSize: 40.sp),
+                    Sizer(width: 10.w),
+                    Transform.translate(
+                      offset: Offset(0, 8.h),
+                      child: Label(
+                        text: currency,
+                        style: Styles.headerText(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          fontSize: 40.sp,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -97,5 +103,18 @@ class WalletCardWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _formatBalance(String? balance) {
+    if (balance == null || balance.isEmpty) {
+      return "0"; // Fallback value if balance is null or empty
+    }
+
+    try {
+      return double.parse(balance).floor().toString();
+    } catch (e) {
+      // If parsing fails, return a fallback value or handle the error as needed
+      return "0";
+    }
   }
 }

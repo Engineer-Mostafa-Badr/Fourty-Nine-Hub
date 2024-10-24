@@ -406,7 +406,7 @@
   "checkRequest": "Please wait to check request",
   "reportSentSuccess": "Report sent successfully",
   "whatDoYouThink": "What do you think about?",
-  "peopleYouMayKnow": "People You May Know",
+  "peopleYouMayKnow": "People you may know",
   "noFriendsSuggested": "No Friends Suggested",
   "days": "d",
   "comments": "Comments",
@@ -1023,6 +1023,9 @@
   "chargeNow": "Charge Now",
   "premiumSubscription": "Premium Subscription",
   "regularSubscription": "Regular Subscription",
+  "mutualFriend": "mutual friend",
+  "youWillHidePost": "You Will Hide Post",
+
   "notSubscribed": "Not Subscribed",
   "adRequests": "Ad Requests"
 }

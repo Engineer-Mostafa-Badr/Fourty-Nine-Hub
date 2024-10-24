@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/entities/company_ad_option_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/entities/price_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/usecases/pay_company_ad_use_case.dart';
 
 import '../../data/models/fetch_post_company_advertise_params.dart';
 import '../entities/company_ad_entity.dart';
@@ -15,4 +16,5 @@ abstract class CompanyAdvertiseRepository {
   Future<Either<Failure, bool>> deleteCompanyAd(DeleteCompanyAdParams params);
   Future<Either<Failure, List<CompanyAdEntity>>> getPostCompanyAd(
       FetchPostCompanyAdvertiseParams params);
+  Future<Either<Failure, bool>> payCompanyAd(PayCompanyAdParams params);
 }
