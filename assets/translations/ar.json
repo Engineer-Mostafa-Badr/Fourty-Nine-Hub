@@ -1016,5 +1016,6 @@
   "youHaveReportedThisTrip": "لقد تم تقديم تقرير لهذه الرحلة",
   "newRide": "رحلة جديدة",
   "cancelRequest": "إلغاء الطلب",
-  "sendOffer": "إرسال العرض"
+  "sendOffer": "إرسال العرض",
+  "shareTransactionDetails": "مشاركة تفاصيل المعاملة"
 }

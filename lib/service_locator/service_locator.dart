@@ -146,20 +146,7 @@ class DI {
       () => StoryRepository(),
     );
 
-    // Register the StoryCubit
-    serviceLocator.registerFactory<StoryCubit>(
-      () => StoryCubit(
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-      ),
-    );
+
     // serviceLocator
     //     .registerFactory<SliderCubit>(() => SliderCubit(serviceLocator()));
     //

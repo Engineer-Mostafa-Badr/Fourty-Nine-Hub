@@ -806,7 +806,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               text: content,
               textAlign: isArabic(content) ? TextAlign.right : TextAlign.left,
               style:
-                  Styles.headerText(fontSize: 35, fontWeight: FontWeight.bold),
+                  Styles.headerText(fontSize: 35, fontWeight: FontWeight.bold,color: Theme.of(context).primaryColor),
             ),
           )
         : Container(
@@ -821,6 +821,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     text: content,
                     textAlign:
                         isArabic(content) ? TextAlign.right : TextAlign.left,
+        style:Styles.headerText(color:  Theme.of(context).primaryColor),
                   ),
                   SizedBox(
                     height: 10.h,

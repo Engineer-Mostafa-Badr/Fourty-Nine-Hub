@@ -466,6 +466,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                                           controller.feedPagingController
                                                               .itemList![index].id),
                                                     child: InstagramPostComments(
+                                                      isShown:true,
                                                       postId: controller
                                                           .feedPagingController
                                                           .itemList![index]
