@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -82,8 +83,10 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                           child: Label(
                                             text: LocaleKeys
                                                 .noFriendsSuggested.localize,
-                                            style: const TextStyle(
-                                              color: Colors.black,
+                                            style: TextStyle(
+                                              color: context.isDarkMode
+                                                  ? AppColors.LIGHT_COLOR
+                                                  : Colors.black,
                                               fontSize: 18,
                                             ),
                                           ),

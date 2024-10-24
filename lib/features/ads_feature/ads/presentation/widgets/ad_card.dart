@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
@@ -59,12 +60,16 @@ class _AdCardState extends State<AdCard> {
         margin: EdgeInsetsDirectional.all(10.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.r),
-          border: Border.all(color: AppColors.DARK_GRAY_COLOR, width: 1),
+          border: Border.all(
+              color: context.isDarkMode
+                  ? AppColors.LIGHT_COLOR
+                  : AppColors.GREY_DARK_COLOR,
+              width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildTag(status: widget.item.subscriptionStatus??''),
+            _buildTag(status: widget.item.subscriptionStatus ?? ''),
             Expanded(
               child: Stack(
                 alignment: AlignmentDirectional.topStart,
@@ -191,8 +196,11 @@ class _AdCardState extends State<AdCard> {
                               Label(
                                 text: widget.item.title,
                                 style: Styles.mediumText(
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.grey),
+                                  fontWeight: FontWeight.w500,
+                                  color: context.isDarkMode
+                                      ? AppColors.LIGHT_COLOR
+                                      : AppColors.GREY_DARK_COLOR,
+                                ),
                                 maxLines: 1,
                               ),
                             ],
@@ -207,8 +215,11 @@ class _AdCardState extends State<AdCard> {
                                 child: Label(
                                   text: widget.item.description,
                                   style: Styles.mediumText(
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.grey),
+                                    fontWeight: FontWeight.w500,
+                                    color: context.isDarkMode
+                                        ? AppColors.LIGHT_COLOR
+                                        : AppColors.GREY_DARK_COLOR,
+                                  ),
                                   maxLines: 1,
                                 ),
                               ),
@@ -236,12 +247,20 @@ class _AdCardState extends State<AdCard> {
                           }).toList())),
                           Label(
                             text: widget.item.formattedRestTime,
-                            style: Styles.mediumText(color: Colors.grey),
+                            style: Styles.mediumText(
+                              color: context.isDarkMode
+                                  ? AppColors.LIGHT_COLOR
+                                  : AppColors.GREY_DARK_COLOR,
+                            ),
                             maxLines: 1,
                           ),
                         ]),
                   ),
-                  const Divider(),
+                  Divider(
+                    color: context.isDarkMode
+                        ? AppColors.LIGHT_COLOR
+                        : AppColors.GREY_DARK_COLOR,
+                  ),
                   const Sizer(),
                   widget.item.userId != userId
                       ? Column(
@@ -253,16 +272,20 @@ class _AdCardState extends State<AdCard> {
                                 Expanded(
                                   flex: 3,
                                   child: PremiumRequestButton(
-                                    adId: widget.item.id??'',
-                                    subCategoryId: widget.item.subCategoryId??'',
-                                    subscriptionStatus: widget.item.subscriptionStatus??'',
+                                    adId: widget.item.id ?? '',
+                                    subCategoryId:
+                                        widget.item.subCategoryId ?? '',
+                                    subscriptionStatus:
+                                        widget.item.subscriptionStatus ?? '',
                                   ),
                                 ),
                                 const Sizer(width: 5),
                                 Expanded(
                                   flex: 3,
                                   child: RequestButton(
-                                    adId: widget.item.id,subscriptionStatus: widget.item.subscriptionStatus??'',
+                                    adId: widget.item.id,
+                                    subscriptionStatus:
+                                        widget.item.subscriptionStatus ?? '',
                                   ),
                                 )
                               ],
@@ -318,27 +341,42 @@ class _AdCardState extends State<AdCard> {
 
   Widget _buildTag({required String status}) {
     // super premium
-      return Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(10.w),
-        color: status=='premium'?Colors.amber:status=='Regular'?Colors.grey:Colors.grey,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if(status=='premium'||status=='Regular')...[
-              Icon(Icons.workspace_premium_outlined,
-                size: 55.w,
-                color: status=='premium'?AppColors.SECONDARY_COLOR:status=='Regular'?AppColors.PRIMARY_COLOR:null,
-              ),
-            const Sizer(width: 5)],
-            Label(
-              text: status=='premium'?LocaleKeys.premiumSubscription.localize:status=='Regular'?LocaleKeys.regularRequest.localize:LocaleKeys.notSubscribed.localize,
-              style: Styles.mediumText(color: Colors.white,fontSize: 35,fontWeight: FontWeight.bold),
-              maxLines: 1,
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(10.w),
+      color: status == 'premium'
+          ? Colors.amber
+          : status == 'Regular'
+              ? Colors.grey
+              : Colors.grey,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (status == 'premium' || status == 'Regular') ...[
+            Icon(
+              Icons.workspace_premium_outlined,
+              size: 55.w,
+              color: status == 'premium'
+                  ? AppColors.SECONDARY_COLOR
+                  : status == 'Regular'
+                      ? AppColors.PRIMARY_COLOR
+                      : null,
             ),
+            const Sizer(width: 5)
           ],
-        ),
-      );
+          Label(
+            text: status == 'premium'
+                ? LocaleKeys.premiumSubscription.localize
+                : status == 'Regular'
+                    ? LocaleKeys.regularRequest.localize
+                    : LocaleKeys.notSubscribed.localize,
+            style: Styles.mediumText(
+                color: Colors.white, fontSize: 35, fontWeight: FontWeight.bold),
+            maxLines: 1,
+          ),
+        ],
+      ),
+    );
     // premium
     // Regular
   }

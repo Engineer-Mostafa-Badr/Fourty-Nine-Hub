@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -10,6 +11,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -51,6 +53,9 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(
+          height: 32,
+        ),
         Row(
           children: [
             ProfileImage(
@@ -69,10 +74,17 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                 Label(
                     text: widget.comment.user.firstName,
                     style: Styles.mediumText(
-                        fontWeight: FontWeight.bold, color: widget.textColor)),
+                      fontWeight: FontWeight.bold,
+                      color: context.isDarkMode
+                          ? AppColors.SECONDARY_COLOR
+                          : Colors.black,
+                    )),
                 Label(
                     text: widget.comment.sinceTime,
-                    style: Styles.mediumText(color: widget.textColor)),
+                    style: Styles.smallText(
+                        color: context.isDarkMode
+                            ? AppColors.LIGHT_COLOR
+                            : Colors.black)),
               ],
             )),
             GestureDetector(
@@ -87,17 +99,28 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
               },
               child: Icon(
                 Icons.more_horiz_outlined,
-                color: widget.textColor,
+                color:
+                    context.isDarkMode ? AppColors.LIGHT_COLOR : Colors.black,
                 size: 20,
               ),
             ),
           ],
         ),
         const Sizer(),
-        Label(
-          textAlign: TextAlign.start,
-          text: widget.comment.content,
-          style: Styles.mediumText(color: widget.textColor),
+        Row(
+          children: [
+            const SizedBox(
+              width: 32,
+            ),
+            Label(
+              textAlign: TextAlign.start,
+              text: widget.comment.content,
+              style: Styles.mediumText(
+                  color: context.isDarkMode
+                      ? AppColors.LIGHT_COLOR
+                      : Colors.black),
+            ),
+          ],
         ),
         if (widget.comment.edit == true)
           SizedBox(
@@ -113,7 +136,8 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                   },
                   style: Styles.headerText(fontSize: 26),
                   decoration: InputDecoration(
-                    fillColor: Colors.white,
+                    fillColor:
+                        context.isDarkMode ? Colors.transparent : Colors.white,
                     contentPadding: const EdgeInsets.all(5),
                     hintText: '${LocaleKeys.typeYourComment.localize} ....',
                     hintStyle: Styles.mediumText(),
@@ -140,11 +164,14 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
             ),
           ),
         Sizer(
-          height: 4.h,
+          height: 32.h,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            const SizedBox(
+              width: 32,
+            ),
             InkWell(
               onTap: () {
                 if (widget.comment.isLove == true) {
@@ -168,8 +195,13 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
                     widget.comment.isLove == false ? Colors.grey : Colors.red,
               ),
             ),
+            const Sizer(
+              width: 4,
+            ),
             Label(text: '${widget.comment.loveCount}'),
-            const Sizer(),
+            const Sizer(
+              width: 32,
+            ),
             TextAppButton(
                 style: Styles.mediumText(),
                 label: LocaleKeys.reply.localize,
@@ -221,6 +253,8 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
           if (isMyComment)
             listTile(
                 icon: Icons.delete,
+                iconColor:
+                    context.isDarkMode ? AppColors.LIGHT_COLOR : Colors.black,
                 title: LocaleKeys.deleteComment.localize,
                 subTitle: LocaleKeys.youWillDeleteComment.localize,
                 onTap: () {
@@ -229,6 +263,8 @@ class _InstagramCommentCardState extends State<InstagramCommentCard> {
           if (isMyComment)
             listTile(
                 icon: Icons.edit,
+                iconColor:
+                    context.isDarkMode ? AppColors.LIGHT_COLOR : Colors.black,
                 title: LocaleKeys.editComment.localize,
                 subTitle: LocaleKeys.youWillEditComment.localize,
                 onTap: () {

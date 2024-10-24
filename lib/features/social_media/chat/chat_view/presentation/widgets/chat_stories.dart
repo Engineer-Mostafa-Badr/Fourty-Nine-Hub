@@ -473,6 +473,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
@@ -498,9 +499,9 @@ class ChatStories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(context.read<UserCubit>().isLoggedIn){
-      return Container();
-    }
+    // if(context.read<UserCubit>().isLoggedIn){
+    //   return Container();
+    // }
     return Container(
       height: 0.1.sh, // Responsive height
       decoration: BoxDecoration(
@@ -537,7 +538,7 @@ class ChatStories extends StatelessWidget {
             ),
             BlocBuilder<StoryCubit, StoryState>(
               builder: (context, state) {
-                if (state.users?.isEmpty??false) {
+                if (state.users?.isEmpty ?? false) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 2.0),
                     child: Shimmer.fromColors(
@@ -562,7 +563,7 @@ class ChatStories extends StatelessWidget {
                   separatorBuilder: (context, index) => const Sizer(
                     width: 8,
                   ),
-                  itemCount: state.users?.length??0,
+                  itemCount: state.users?.length ?? 0,
                 );
               },
             ),
@@ -676,8 +677,12 @@ class ChatStories extends StatelessWidget {
                   MediaQuery.of(context).size.width * 0.08, // Responsive radius
               backgroundColor: Colors.black12,
 
-              child: const Icon(Icons.notifications_off_outlined,
-                  color: Colors.black54),
+              child: Icon(
+                Icons.notifications_off_outlined,
+                color: context.isDarkMode
+                    ? AppColors.LIGHT_COLOR
+                    : Colors.black.withOpacity(0.68),
+              ),
               // child: Icon(icon)
             ),
             const SizedBox(
@@ -687,7 +692,9 @@ class ChatStories extends StatelessWidget {
               child: Text(
                 LocaleKeys.muted.localize,
                 style: Styles.headerText(
-                    color: Colors.black.withOpacity(0.68),
+                    color: context.isDarkMode
+                        ? AppColors.LIGHT_COLOR
+                        : Colors.black.withOpacity(0.68),
                     fontWeight: FontWeight.bold),
               ),
             ),
@@ -704,18 +711,19 @@ class ChatStories extends StatelessWidget {
       child: GestureDetector(
         onTap: () async {
           context.read<UserCubit>().isLoggedIn
-              ?  await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BlocProvider.value(
-                value: serviceLocator<StoryCubit>(),
-                child: StoryViewScreen(
-                  stories: state.users??[],
-                  initialUserIndex: index,
-                ),
-              ),
-            ),
-          ) : context.push(Routes.LOGIN);
+              ? await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider.value(
+                      value: serviceLocator<StoryCubit>(),
+                      child: StoryViewScreen(
+                        stories: state.users ?? [],
+                        initialUserIndex: index,
+                      ),
+                    ),
+                  ),
+                )
+              : context.push(Routes.LOGIN);
 
           BlocProvider.of<StoryCubit>(context)
             ..fetchStories()
@@ -741,7 +749,7 @@ class ChatStories extends StatelessWidget {
                       ignoring: true,
                       child: Image.network(
                           fit: BoxFit.cover,
-                          state.users?[index].user?.profilePictureUrl??''),
+                          state.users?[index].user?.profilePictureUrl ?? ''),
 
                       // StoryView(
                       //   indicatorColor: Colors.transparent,
@@ -778,7 +786,7 @@ class ChatStories extends StatelessWidget {
             FittedBox(
               child: Text(
                 capitalizeAndSplit2Only(
-                  state.users?[index].user?.firstName??'',
+                  state.users?[index].user?.firstName ?? '',
                 ),
                 textScaler: TextScaler.noScaling,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40.sp),
