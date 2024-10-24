@@ -101,7 +101,7 @@ class _DestinationTextFieldAndFindButonState
       return SizedBox(
         width: 30,
         height: 30,
-        child: const Center(
+        child: Center(
           child: CircularProgressIndicator(
             color: AppColors.PRIMARY_COLOR,
             strokeWidth: 3,

@@ -30,17 +30,22 @@ abstract class MainTextFormField extends StatefulWidget {
   final bool readOnly;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
+  final String? label;
+  final Widget? prefix;
   final ValueChanged<String>? onChanged;
   final Color? fillColor;
   final Color? cursorColor;
   final TextStyle? style;
   final VoidCallback? onTap;
   final VoidCallback? onEditComplete;
-  final String? label;
+  final Widget? labelWidget;
   const MainTextFormField({
     super.key,
     this.currentFocusNode,
     this.minLines,
+    this.label,
+    this.labelWidget,
+    this.prefix,
     this.readOnly = false,
     this.noBoarder = false,
     this.nextFocusNode,
@@ -70,7 +75,6 @@ abstract class MainTextFormField extends StatefulWidget {
     this.prefixIcon,
     this.onTap,
     this.onEditComplete,
-    this.label,
   });
 
   @override
@@ -123,6 +127,8 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
           labelText: widget.label,
           hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
           suffixIcon: widget.suffixIcon,
+          prefix: widget.prefix,
+          label: widget.labelWidget,
           prefixIcon: widget.prefixIcon,
           constraints: widget.constraints,
           prefixIconColor: AppColors.QUANTITY_COLOR,

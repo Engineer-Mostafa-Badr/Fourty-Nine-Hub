@@ -8,7 +8,7 @@ import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widget
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/welcome_text_car_pool.dart';
 
 class MapAndAddressFinderCarPool extends StatelessWidget {
-  MapAndAddressFinderCarPool({
+  const MapAndAddressFinderCarPool({
     super.key,
   });
 

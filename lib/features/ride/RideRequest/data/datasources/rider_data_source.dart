@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
@@ -9,7 +7,6 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_inf
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rider_register_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_model.dart';
 // import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:http/http.dart' as http;
 
 class RiderDataSource {
   final ApiConsumer api;

@@ -24,9 +24,7 @@ import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
-import 'package:shimmer/shimmer.dart';
 
-import '../../../../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../../../core/localization/locale_keys.g.dart';
@@ -38,7 +36,6 @@ import '../../../../../../../../authentication/presentation/controllers/user_cub
 import '../../../../../../../../zoom/presentation/controller/stream_cubit.dart';
 import '../../../../../../../../zoom/presentation/controller/stream_state.dart';
 import '../../../../../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import '../../../../../../../tinder/data/shared/shared.dart';
 import '../../../../../../../tinder/presentation/cubit/gift_cubit.dart';
 import '../../../../../../domain/entity/topic_entity.dart';
 import '../config.dart';

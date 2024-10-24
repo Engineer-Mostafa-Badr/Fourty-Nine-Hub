@@ -324,7 +324,7 @@ class Stories extends StatelessWidget {
           ),
           child: Stack(
             children: [
-              Positioned(
+              const Positioned(
                 top: 2,
                 left: 2,
                 child: Icon(Icons.notifications_off_outlined,

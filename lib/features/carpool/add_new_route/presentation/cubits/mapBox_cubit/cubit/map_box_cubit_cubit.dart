@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:dio/dio.dart';
-import 'package:fourtyninehub/features/carpool/add_new_route/data/models/map_box_search_model.dart';
 
 part 'map_box_cubit_state.dart';
 

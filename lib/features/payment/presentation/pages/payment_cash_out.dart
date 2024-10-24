@@ -25,9 +25,9 @@ class PaymobLink {
 }
 
 class PaymentCashOut extends StatefulWidget {
-  PaymentCashOut({
-    Key? key,
-  }) : super(key: key);
+  const PaymentCashOut({
+    super.key,
+  });
 
   @override
   _PaymentCashOutState createState() => _PaymentCashOutState();
@@ -185,7 +185,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
               color: color.withOpacity(0.3),
               spreadRadius: 2,
               blurRadius: 8,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -195,7 +195,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             icon,
-           Sizer(),
+           const Sizer(),
             Text(
               title,
               style: Styles.mediumText(color: color),
@@ -233,6 +233,6 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
     } else {
       print("Null $url");
     }
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 }

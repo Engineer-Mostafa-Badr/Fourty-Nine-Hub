@@ -200,7 +200,7 @@ class AvailableRoutesPointInfo extends StatelessWidget {
             // Display the image inside the circle
             Container(
               clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle, // Circle shape for the image
               ),
               child: status.toLowerCase() == 'free'

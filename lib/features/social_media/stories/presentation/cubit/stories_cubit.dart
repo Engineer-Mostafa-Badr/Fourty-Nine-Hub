@@ -43,17 +43,11 @@ class StoryCubit extends Cubit<StoryState> {
   final DeleteStoryUseCase _deleteStoryUseCase;
   final FetchStoriesUseCase _fetchStoriesUseCase;
 
-  StoryCubit(
-      this._createStoryUseCase,
-      this._deleteStoryUseCase,
-      this._fetchStoriesUseCase,
-      this._makeViewUseCase,
-      this._muteStoriesUseCase,
-      this._getMutedStoriesUseCase,
-      this._getStoryViewersUseCase,
-      this._getFollowersUseCase,
-      this._updateStoryPrivacyUseCase)
-      : super(StoryState());
+  StoryCubit(this._createStoryUseCase, this._deleteStoryUseCase,
+      this._fetchStoriesUseCase, this._makeViewUseCase,
+      this._muteStoriesUseCase, this._getMutedStoriesUseCase,
+      this._getStoryViewersUseCase, this._getFollowersUseCase,
+      this._updateStoryPrivacyUseCase) : super(StoryState());
 
   makeView({storyId, context}) async {
     getViewersInStory(context: context, storyId: storyId);
@@ -62,12 +56,13 @@ class StoryCubit extends Cubit<StoryState> {
       storyId,
     );
     response.fold(
-      (failure) {
+          (failure) {
         emit(state);
         print(
-            '${getFailureMessage(failure, context)}assssssssssssssssssssssssssssssfffffffdsa');
+            '${getFailureMessage(
+                failure, context)}assssssssssssssssssssssssssssssfffffffdsa');
       },
-      (data) {
+          (data) {
         emit(state);
 
         print('${data.toString()}assssssssssssssssssssssssssssssfffffffdsa');
@@ -81,12 +76,13 @@ class StoryCubit extends Cubit<StoryState> {
     );
 
     response.fold(
-      (failure) {
+          (failure) {
         emit(state);
         print(
-            '${getFailureMessage(failure, context)}assssssssssssssssssssssssssssssfffffffdsa');
+            '${getFailureMessage(
+                failure, context)}assssssssssssssssssssssssssssssfffffffdsa');
       },
-      (data) {
+          (data) {
         emit(state);
 
         print('${data.toString()}assssssssssssssssssssssssssssssfffffffdsa');
@@ -118,23 +114,18 @@ class StoryCubit extends Cubit<StoryState> {
   //   );
   // }
 
-  Future<void> getMutedStories({
-    userId,
-    context,
-    limit = 1,
-    page = 1,
-    loadMore = false,
-  }) async {
+  Future<void> getMutedStories(
+      {userId, context, limit = 1, page = 1, loadMore = false,}) async {
     try {
       final response = await _getMutedStoriesUseCase(
         PaginationParams(page: page, limit: limit),
       );
 
       response.fold(
-        (failure) {
+            (failure) {
           print('Error fetching muted stories');
         },
-        (data) {
+            (data) {
           // Parse the response
           final newData = data;
 
@@ -178,16 +169,19 @@ class StoryCubit extends Cubit<StoryState> {
     emit(state.copyWith(viewersResponse: null)); // Set loading state
 
     return response.fold(
-      (failure) {
+          (failure) {
         print(
-            '${getFailureMessage(failure, context)}assssssssssssssssssssssssssssssfffffffdsa');
+            '${getFailureMessage(
+                failure, context)}assssssssssssssssssssssssssssssfffffffdsa');
         emit(state.copyWith(viewersResponse: null)); // Set loading state
       },
-      (data) {
+          (data) {
         // print(
         //     '${ViewersResponse.fromMap(data).data.first.createdAt.toString()}assssssssssssssssssssssssssssssfffffffdsa');
 
-        emit(state.copyWith(viewersResponse: data)); // Set loading state
+        emit(state.copyWith(
+            viewersResponse:
+            data)); // Set loading state
       },
     );
   }
@@ -197,11 +191,11 @@ class StoryCubit extends Cubit<StoryState> {
     emit(state.copyWith(isLoading: true)); // Set loading state
     final response = await _getFollowersUseCase(const NoParams());
     response.fold(
-      (failure) {
+          (failure) {
         emit(state.copyWith(
             isLoading: false, errorMessage: 'Failed to load followers'));
       },
-      (data) {
+          (data) {
         emit(state.copyWith(followers: data.data.followers, isLoading: false));
       },
     );
@@ -212,13 +206,14 @@ class StoryCubit extends Cubit<StoryState> {
       {List<String>? users}) async {
     emit(state.copyWith(isLoading: true)); // Show loading state
     final response = await _updateStoryPrivacyUseCase(
-        UpdateStoryPrivacyParams(privacyType: privacyType, users: users));
+        UpdateStoryPrivacyParams(privacyType: privacyType, users: users)
+    );
 
     response.fold(
-      (failure) {
+          (failure) {
         emit(StoryError('Failed to update privacy: $failure'));
       },
-      (data) async {
+          (data) async {
         await fetchStories();
         emit(state.copyWith(isLoading: false)); // Reset loading state
       },
@@ -227,14 +222,16 @@ class StoryCubit extends Cubit<StoryState> {
 
   Future<void> deleteStory(String storyId) async {
     emit(state.copyWith(isLoading: true));
-    final response = await _deleteStoryUseCase(storyId);
+    final response = await _deleteStoryUseCase(
+        storyId
+    );
 
     response.fold(
-      (failure) {
+          (failure) {
         emit(StoryError('Failed to delete story: $failure'));
         emit(state.copyWith(isLoading: false)); // Reset loading state
       },
-      (data) async {
+          (data) async {
         await fetchStories();
         emit(state.copyWith(isLoading: false)); // Reset loading state
       },
@@ -252,19 +249,20 @@ class StoryCubit extends Cubit<StoryState> {
     ));
     // _fetchStoriesUseCase
     final response = await _fetchStoriesUseCase(
-        PaginationParams(page: state.currentPage, limit: 10));
+        PaginationParams(page: state.currentPage, limit: 10)
+    );
 
     response.fold(
-      (failure) {
+          (failure) {
         emit(StoryError('Failed to fetch stories: $failure'));
       },
-      (data) async {
+          (data) async {
         final listOfUserStories = data.data?.userStories ?? [];
-        final newStories = loadMore
-            ? [...state.users, ...listOfUserStories]
-            : listOfUserStories;
+        final newStories =
+        loadMore ? [...state.users, ...listOfUserStories] : listOfUserStories;
 
-        emit(state.copyWith());
+        emit(state.copyWith(
+        ));
         final uniqueStoriesMap = {
           for (var story in newStories) story.user!.id: story
         };
@@ -290,8 +288,8 @@ class StoryCubit extends Cubit<StoryState> {
 
     // Pick an image or video
     final XFile? pickedFile = await picker.pickMedia(
-        // allowedExtensions: ['jpg', 'png', 'mp4'], // Optional: filter allowed extensions
-        );
+      // allowedExtensions: ['jpg', 'png', 'mp4'], // Optional: filter allowed extensions
+    );
 
     if (pickedFile != null) {
       // Convert the picked file to a File object
@@ -396,7 +394,9 @@ class StoryCubit extends Cubit<StoryState> {
   }
 
   Future<void> createTextStory(String text) async {
-    final response = await _createStoryUseCase(text);
+    final response = await _createStoryUseCase(
+        text
+    );
     response.fold(
       (failure) {
         emit(StoryError('Failed to create story: $failure'));
@@ -471,7 +471,7 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
                   ],
                 ),
               ),
-              Divider(thickness: 1, color: Colors.transparent),
+              const Divider(thickness: 1, color: Colors.transparent),
 
               // Responsive List of Viewers
               Expanded(
@@ -495,11 +495,12 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                             side:
-                                BorderSide(color: Colors.grey[300]!, width: 1),
+                            BorderSide(color: Colors.grey[300]!, width: 1),
                           ),
                           leading: GestureDetector(
-                            onTap: () => context.push(Routes.OTHERSACCOUNT,
-                                extra: viewer.user.id),
+                            onTap: () =>
+                                context.push(Routes.OTHERSACCOUNT,
+                                    extra: viewer.user.id),
                             child: CircleAvatar(
                               radius: 16,
                               backgroundImage: NetworkImage(viewer

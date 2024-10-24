@@ -8,8 +8,10 @@ import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/data/datasources/restaurant_dashboard_remote_datasource.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/data/repositories/restaurant_dashboard_repo_impl.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_orders_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/change_connectivity_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_all_restaurant_use_case.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_expired_orders_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_meal_categories_with_count_restaurants_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_num_of_resturant_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/is_resturant_usecase.dart';
@@ -63,6 +65,14 @@ class FoodServiceLocator {
         () => CreateRestaurantUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<ChangeConnectivityUseCase>(
+        () => ChangeConnectivityUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<GetExpiredOrdersUseCase>(
+        () => GetExpiredOrdersUseCase(
+              serviceLocator(),
+            ));
     serviceLocator.registerLazySingleton<RestaurantMenuCubit>(
         () => RestaurantMenuCubit(serviceLocator()));
     serviceLocator.registerLazySingleton<RestaurantSharedData>(
@@ -78,6 +88,9 @@ class FoodServiceLocator {
       ),
     );
     serviceLocator.registerFactory<RestaurantsCubit>(() => RestaurantsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

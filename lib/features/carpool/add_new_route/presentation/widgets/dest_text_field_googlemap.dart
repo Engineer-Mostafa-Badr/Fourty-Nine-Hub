@@ -98,10 +98,10 @@ class _DestinationTextFieldAndFindButonState
       );
     }
     if (state is DestinationLocationLoading) {
-      return SizedBox(
+      return const SizedBox(
         width: 30,
         height: 30,
-        child: const Center(
+        child: Center(
           child: CircularProgressIndicator(
             color: AppColors.PRIMARY_COLOR,
             strokeWidth: 3,

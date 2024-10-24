@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../food_feature/restaurants_list/data/models/is_restaurant_model.dart';
 
 class DashboardBanner extends StatelessWidget {
   final String title;

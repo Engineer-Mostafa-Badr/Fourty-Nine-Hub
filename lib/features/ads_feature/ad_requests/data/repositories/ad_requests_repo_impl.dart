@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/make_ad_request_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_model.dart';
 
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';

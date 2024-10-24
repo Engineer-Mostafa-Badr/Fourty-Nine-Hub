@@ -21,8 +21,7 @@ void showCreateRouteModalSheet(BuildContext context, {bool isComfort = false}) {
 class CreateRouteBottomSheet extends StatefulWidget {
   final bool isComfort;
 
-  const CreateRouteBottomSheet({Key? key, required this.isComfort})
-      : super(key: key);
+  const CreateRouteBottomSheet({super.key, required this.isComfort});
 
   @override
   _CreateRouteBottomSheetState createState() => _CreateRouteBottomSheetState();

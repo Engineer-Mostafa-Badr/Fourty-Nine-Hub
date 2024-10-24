@@ -105,7 +105,7 @@ class RestaurantStatisticsView extends StatelessWidget {
             label,
             style: Styles.mediumText(fontSize: 30),
           ),
-          Spacer(),
+          const Spacer(),
           Text(
             value,
             style: Styles.mediumText(fontSize: 30),

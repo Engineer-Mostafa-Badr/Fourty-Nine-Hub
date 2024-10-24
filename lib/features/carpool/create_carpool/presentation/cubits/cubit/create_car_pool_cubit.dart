@@ -24,7 +24,7 @@ class CreateCarPoolCubit extends Cubit<CreateCarPoolState> {
         (Failure failure) =>
             emit(CreateCarPoolFailure(errorMessage: Labels.errorHappened)),
         (data) {
-      print("dataaaaaa ${data}");
+      print("dataaaaaa $data");
       emit(CreateCarPoolSuccess(createCarPoolModel: data));
     });
   }
