@@ -418,6 +418,7 @@
 
 import 'dart:developer';
 import 'dart:io';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -506,25 +507,35 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   }
 
   Widget _micButton(BuildContext context) {
+    final AudioPlayer audioPlayer = AudioPlayer();
     return SocialMediaRecorder(
       startRecording: () {
         _isRecording = true;
         setState(() {});
       },
+
       stopRecording: (time) {
         _isRecording = false;
         setState(() {});
       },
       encode: AudioEncoderType.AAC, // Ensure it's recorded in AAC
+
       sendRequestFunction: (File soundFile, String time) async {
         _isRecording = false;
         setState(() {});
-
+        log("sound file path is : ${soundFile.path}");
         // Rename the file to .mp3
         String newPath = soundFile.path.replaceAll('.m4a', '.mp3');
+        log("new path is : $newPath");
         File mp3File = await soundFile.rename(newPath);
 
         log(mp3File.path); // Log the new file path
+
+        // Play the audio file locally
+        await audioPlayer.play(
+          DeviceFileSource(mp3File.path),
+          volume: 0,
+        );
 
         // Add the renamed MP3 file to the media list
         // ignore: use_build_context_synchronously

@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -31,7 +32,9 @@ class ViewContactEncriptionCart extends StatelessWidget {
                 LocaleKeys.encryption.tr(),
                 style: Styles.mediumText(
                   fontWeight: FontWeight.w600,
-                  color: AppColors.PRIMARY_COLOR,
+                  color: context.isDarkMode
+                      ? AppColors.BACKGROUND_COLOR
+                      : AppColors.PRIMARY_COLOR,
                 ),
               ),
               ConstrainedBox(

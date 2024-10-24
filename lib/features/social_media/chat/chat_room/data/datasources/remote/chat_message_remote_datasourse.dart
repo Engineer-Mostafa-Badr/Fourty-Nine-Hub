@@ -69,12 +69,11 @@ class MessagesRemoteDataSourceImplementation
   @override
   void listenToNewMessages(Function(MessageEntity message) params) {
     try {
-      
       _socket.connect();
       _socket.on(SocketIOListeners.newMessageFromMe, (data) {
         final decodedData = jsonDecode(data);
-        log("listenToNewMessagesssssssssssss");
-        log("listenToNewMessagesssssssssssss $decodedData");
+        log("listenToNewMessagesssssssssssss From me");
+        log("listenToNewMessagesssssssssssss  From me$decodedData");
         if (decodedData is List) {
           data = decodedData[0];
         } else {
@@ -86,6 +85,8 @@ class MessagesRemoteDataSourceImplementation
       });
       _socket.on(SocketIOListeners.newMessageFromOther, (data) {
         final decodedData = jsonDecode(data);
+        log("listenToNewMessagesssssssssssss From Other");
+        log("listenToNewMessagesssssssssssss  From Other$decodedData");
         if (decodedData is List) {
           data = decodedData[0];
         } else {
@@ -123,6 +124,8 @@ class MessagesRemoteDataSourceImplementation
             "groupId": null,
             "replyMessageId": params.replyMessageId,
             "oneTimeView": params.oneTimeView,
+            "sharedContacts":
+              params.sharedContacts.map((contact) => contact.toJson()).toList(),
           }));
       return const Right(true);
     } catch (e) {
@@ -159,8 +162,8 @@ class MessagesRemoteDataSourceImplementation
   //         "groupId": null,
   //         "replyMessageId": params.replyMessageId,
   //         "oneTimeView": params.oneTimeView,
-  //         "sharedContacts":
-  //             params.sharedContacts.map((contact) => contact.toJson()).toList(),
+          // "sharedContacts":
+          //     params.sharedContacts.map((contact) => contact.toJson()).toList(),
   //       }),
   //     );
   //     return const Right(true);
