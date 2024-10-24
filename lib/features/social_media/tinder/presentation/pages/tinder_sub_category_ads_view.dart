@@ -33,8 +33,8 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
   void initState() {
     super.initState();
 
-    context.read<TinderViewCubit>().fetchMainCategoryById(
-          '62c8b5b09332225799fe335e',
+    context.read<TinderViewCubit>().fetchMainCategoryById(context,
+          '6718f27eacb309f8b1f94d0c',
         );
 
     _tabController = TabController(length: 2, vsync: this);
@@ -59,7 +59,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
           final textSize = isSmallScreen ? 14.0 : 18.0;
           final iconSize = isSmallScreen ? 24.0 : 30.0;
 
-          return tinderCubit.state.mainCategoryResponse?.data != null
+          return tinderCubit.state.mainCategoryResponse != null
               ? Column(
                   children: [
                     const Sizer(),
@@ -72,8 +72,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: NetworkImage(
-                            tinderCubit.state.mainCategoryResponse?.data
-                                    .mainCategory.banner ??
+                            tinderCubit.state.mainCategoryResponse?.banner ??
                                 '',
                           ),
                         ),
@@ -97,7 +96,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                                 ),
                                 const Sizer(),
                                 Text(
-                                  '${tinderCubit.state.mainCategoryResponse!.data.mainCategory.numberOfAdsCount} ${Labels.ads}',
+                                  '${tinderCubit.state.mainCategoryResponse!.numberOfAdsCount} ${Labels.ads}',
                                   textScaler: TextScaler.noScaling,
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 30.sp),
@@ -110,7 +109,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                             child: FittedBox(
                               child: Text(
                                 tinderCubit.state.mainCategoryResponse!
-                                        .data.mainCategory.name,
+                                        .name,
                                 textScaler: TextScaler.noScaling,
                                 style: TextStyle(
                                     // color: AppColors.PRIMARY_COLOR,

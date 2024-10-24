@@ -1,7 +1,8 @@
 
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
-
+import 'package:dartz/dartz.dart';
+import '../../../../core/error/failure.dart';
 class SignOutUseCase extends UseCase<void, NoParams> {
   final AuthRepository _repository;
 

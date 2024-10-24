@@ -665,7 +665,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
           log("Error: $state");
         },
         builder: (context, state) {
-          if (state.userData.isEmpty) {
+          if (state.userData!.isEmpty) {
             return const Center(
               child: CupertinoActivityIndicator(radius: 25),
             );
@@ -678,33 +678,33 @@ class _TinderCardStackState extends State<TinderCardStack> {
 
   Widget _buildCardSwiper(BuildContext context, TinderViewState state) {
     return CardSwiper(
-      cardsCount: state.userData.length,
+      cardsCount: state.userData!.length,
       numberOfCardsDisplayed:
-          state.userData.length < 3 ? state.userData.length : 2,
+          state.userData!.length < 3 ? state.userData!.length : 2,
       scale: 0.9,
       isLoop: true,
       padding: const EdgeInsets.only(right: 4.0, left: 4.0, bottom: 16),
       onSwipe: (previousIndex, currentIndex, direction) {
         // Disable swapping if there's only one card
-        if (state.userData.length == 1) {
+        if (state.userData!.length == 1) {
           return false; // Prevent swipe
         }
         setState(() {
           // Update the UI based on new card index
-          _buildCardWidget(context, state.userData[currentIndex!]);
+          _buildCardWidget(context, state.userData![currentIndex!]);
         });
         if (currentIndex != null) {
-          _fetchUserDataOnSwipe(context, state.userData[currentIndex].id);
+          _fetchUserDataOnSwipe(context, state.userData![currentIndex].id);
 
-          if (currentIndex >= state.userData.length - 3) {
-            context.read<TinderViewCubit>().loadMoreUserData(state.gender);
+          if (currentIndex >= state.userData!.length - 3) {
+            context.read<TinderViewCubit>().loadMoreUserData(state.gender!);
           }
         }
         return true;
       },
       cardBuilder: (context, index, horizontalOffsetPercentage,
           verticalOffsetPercentage) {
-        return _buildCardWidget(context, state.userData[index]);
+        return _buildCardWidget(context, state.userData![index]);
       },
       duration: const Duration(milliseconds: 100),
     );
@@ -918,8 +918,8 @@ class _TinderCardStackState extends State<TinderCardStack> {
         // TODO: implement listener
       },
       builder: (context, state) {
-        if (state.lastSeenModelState == DataState.failure ||
-            state.lastSeenModelState == DataState.initial) return const Sizer();
+        if (state.lastSeenModelState == TinderStates.failure ||
+            state.lastSeenModelState == TinderStates.initial) return const Sizer();
         return Row(
           children: [
             getStatus(context).toString().isNotEmpty
@@ -963,8 +963,8 @@ class _TinderCardStackState extends State<TinderCardStack> {
         // TODO: implement listener
       },
       builder: (context, state) {
-        if (state.lastSeenModelState == DataState.failure ||
-            state.lastSeenModelState == DataState.initial) {
+        if (state.lastSeenModelState == TinderStates.failure ||
+            state.lastSeenModelState == TinderStates.initial) {
           return const Text('');
         } else {
           return Text(
