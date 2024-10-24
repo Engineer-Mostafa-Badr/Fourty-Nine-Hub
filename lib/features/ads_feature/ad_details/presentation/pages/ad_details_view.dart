@@ -94,7 +94,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
           Expanded(
             child: ListView(
               children: [
-                _buildTag(status: state.ad?.subscriptionStatus ?? ''),
+                if(context.read<UserCubit>().isLoggedIn)_buildTag(status: state.ad?.subscriptionStatus ?? ''),
                 _buildAdInfoWidget(ad: state.ad!),
                 const Sizer(),
                 const Sizer(),

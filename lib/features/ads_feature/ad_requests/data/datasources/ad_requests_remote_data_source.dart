@@ -17,7 +17,7 @@ class AdRequestsRemoteDataSourceImpl extends AdRequestsRemoteDataSource {
   @override
   Future<Either<Failure, List<AdRequestEntity>>> getAdRequests(
       {required GetAdRequestsParams params}) async {
-    final response = await _apiConsumer.get(EndPoints.adRequests(params.id),queryParameters: params.toJson());
+    final response = await _apiConsumer.post(EndPoints.adRequests(params.id),queryParameters: params.toJson());
 
     return response.fold((failure) => Left(failure), (data) {
       return Right((data['data'] as List)

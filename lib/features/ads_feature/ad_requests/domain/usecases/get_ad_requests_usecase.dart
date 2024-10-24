@@ -19,10 +19,12 @@ class GetAdRequestsParams{
   final String id;
   final int page;
   final int limit;
+  final String username;
 
-  GetAdRequestsParams({required this.id, required this.page, required this.limit});
+  GetAdRequestsParams({required this.id, required this.page, required this.limit,required this.username});
 
   Map<String, dynamic> toJson() => {
+    "username": username,
     "page": page,
     "limit": limit
   };

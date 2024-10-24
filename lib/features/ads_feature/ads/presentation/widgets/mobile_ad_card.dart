@@ -1,5 +1,6 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -9,6 +10,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -49,7 +51,7 @@ class _MobileAdCardState extends State<MobileAdCard> {
         ),
         child: Column(
           children: [
-            _buildTag(status: widget.item.subscriptionStatus??''),
+            if(context.read<UserCubit>().isLoggedIn)_buildTag(status: widget.item.subscriptionStatus??''),
             SizedBox(
               height: kToolbarHeight * 2.8,
               child: Row(
