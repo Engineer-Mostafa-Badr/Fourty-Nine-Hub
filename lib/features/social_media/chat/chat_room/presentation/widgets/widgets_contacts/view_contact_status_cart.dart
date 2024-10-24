@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -24,7 +25,7 @@ class ViewContactStatusCart extends StatelessWidget {
                   'A bird in the hand is better than two on the tree.',
                   style: Styles.mediumText(
                     fontWeight: FontWeight.w600,
-                    color: AppColors.PRIMARY_COLOR,
+                    color:context.isDarkMode ? AppColors.BACKGROUND_COLOR: AppColors.PRIMARY_COLOR,
                   ),
                 ),
               ),

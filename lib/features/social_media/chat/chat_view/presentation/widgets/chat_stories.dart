@@ -473,6 +473,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
@@ -543,8 +544,8 @@ class ChatStories extends StatelessWidget {
                       baseColor: Colors.grey.withOpacity(0.1),
                       highlightColor: Colors.grey.withOpacity(0.5),
                       child: CircleAvatar(
-                        radius: MediaQuery.of(context).size.width *
-                            0.09, // Responsive radius
+                        radius: MediaQuery.of(context).size.height *
+                            0.03, // Responsive radius
                       ),
                     ),
                   );
@@ -612,16 +613,20 @@ class ChatStories extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Positioned(
+                  Positioned(
                     bottom: 0,
                     right: 0,
                     child: CircleAvatar(
-                      backgroundColor: AppColors.PRIMARY_COLOR,
+                      backgroundColor: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR,
                       radius: 10,
                       child: Icon(
                         Icons.add,
                         size: 15,
-                        color: Colors.white,
+                        color: context.isDarkMode
+                            ? AppColors.PRIMARY_COLOR
+                            : Colors.white,
                       ),
                     ),
                   ),

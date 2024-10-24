@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -29,9 +30,13 @@ class _ChatCardState extends State<ChatCard> {
     return BlocBuilder<ChatsCubit, ChatsState>(
       builder: (context, state) {
         return InkWell(
-          splashColor: AppColors.PRIMARY_COLOR.withOpacity(0.05),
+          splashColor: context.isDarkMode
+              ? Colors.white
+              : AppColors.PRIMARY_COLOR.withOpacity(0.05),
           // Ripple effect color
-          highlightColor: AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2),
+          highlightColor: context.isDarkMode
+              ? AppColors.QUANTITY_COLOR
+              : AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2),
           // Highlight color on tap
           onTap: () {
             if (context.read<ChatsCubit>().selectedChats.isEmpty) {
@@ -70,7 +75,9 @@ class _ChatCardState extends State<ChatCard> {
             decoration: BoxDecoration(
               color: widget.chat!.isSelected
                   ? AppColors.PRIMARY_COLOR.withOpacity(0.001)
-                  : AppColors.BACKGROUND_COLOR,
+                  : context.isDarkMode
+                      ? AppColors.QUANTITY_COLOR
+                      : AppColors.BACKGROUND_COLOR,
               borderRadius: BorderRadius.circular(8),
               boxShadow: widget.chat!.isSelected
                   ? [

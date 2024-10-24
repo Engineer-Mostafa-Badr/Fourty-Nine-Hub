@@ -281,6 +281,7 @@ import 'package:fourtyninehub/common/widgets/stateless/appbar/nested_appbar.dart
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/chat_categories.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
@@ -381,155 +382,190 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                     child: BlocBuilder<ChatsCubit, ChatsState>(
                       builder: (context, state) {
                         return context.read<UserCubit>().isLoggedIn
-                            ? Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 16.w),
-                                    child: Text(
-                                      context
-                                              .read<ChatsCubit>()
-                                              .selectedChats
-                                              .isNotEmpty
-                                          ? "${context.read<ChatsCubit>().selectedChats.length} ${LocaleKeys.selected.tr()}"
-                                          : "",
-                                      style: Styles.mediumText(
-                                          color: AppColors.PRIMARY_COLOR),
+                            ? SizedBox(
+                                // height: 20,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 16.w),
+                                      child: Text(
+                                        context
+                                                .read<ChatsCubit>()
+                                                .selectedChats
+                                                .isNotEmpty
+                                            ? "${context.read<ChatsCubit>().selectedChats.length} ${LocaleKeys.selected.tr()}"
+                                            : "",
+                                        style: Styles.mediumText(
+                                            color: context.isDarkMode
+                                                ? Colors.white
+                                                : AppColors.PRIMARY_COLOR),
+                                      ),
                                     ),
-                                  ),
-                                  const Spacer(),
-                                  context
-                                          .read<ChatsCubit>()
-                                          .selectedChats
-                                          .isEmpty
-                                      ? const SizedBox.shrink()
-                                      : Row(
-                                          children: [
-                                            IconButton(
-                                              onPressed: () async {
-                                                await context
-                                                    .read<ChatsCubit>()
-                                                    .pinAndUnpinChat();
-                                              },
-                                              icon: const Icon(Icons.push_pin),
-                                              color: AppColors.PRIMARY_COLOR,
-                                            ),
-                                            IconButton(
-                                              onPressed: () async {
-                                                await context
-                                                    .read<ChatsCubit>()
-                                                    .deleteChat();
-                                              },
-                                              icon: const Icon(
-                                                Icons.delete_forever,
-                                                color: AppColors.PRIMARY_COLOR,
+                                    const Spacer(),
+                                    context
+                                            .read<ChatsCubit>()
+                                            .selectedChats
+                                            .isEmpty
+                                        ? const SizedBox.shrink()
+                                        : Row(
+                                            children: [
+                                              IconButton(
+                                                onPressed: () async {
+                                                  await context
+                                                      .read<ChatsCubit>()
+                                                      .pinAndUnpinChat();
+                                                },
+                                                icon:
+                                                    const Icon(Icons.push_pin),
+                                                color: context.isDarkMode
+                                                    ? Colors.white
+                                                    : AppColors.PRIMARY_COLOR,
                                               ),
-                                            ),
-                                            IconButton(
-                                              onPressed: () async {
-                                                await context
-                                                    .read<ChatsCubit>()
-                                                    .changeMuteChat();
-                                              },
-                                              icon: const Icon(
-                                                Icons.notifications_off,
-                                                color: AppColors.PRIMARY_COLOR,
-                                              ),
-                                            ),
-                                            IconButton(
-                                              onPressed: () async {
-                                                await context
-                                                    .read<ChatsCubit>()
-                                                    .changeArchiveChat();
-                                              },
-                                              icon: const Icon(
-                                                Icons.archive,
-                                                color: AppColors.PRIMARY_COLOR,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                  context
-                                          .read<ChatsCubit>()
-                                          .selectedChats
-                                          .isEmpty
-                                      ? PopupMenuButton(
-                                          icon: const Icon(
-                                            Icons.more_vert,
-                                            color: AppColors.PRIMARY_COLOR,
-                                          ),
-                                          color: AppColors.BACKGROUND_COLOR,
-                                          shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(16.0)),
-                                          ),
-                                          offset: const Offset(0, 50),
-                                          onSelected: (int value) async {
-                                            if (value == 4) {
-                                              context
-                                                  .push(Routes.CHATPROFILEVIEW);
-                                            }
-                                          },
-                                          itemBuilder: (context) {
-                                            return _mainMenuBuilder();
-                                          },
-                                        )
-                                      : PopupMenuButton(
-                                          icon: const Icon(
-                                            Icons.more_vert,
-                                            color: AppColors.PRIMARY_COLOR,
-                                          ),
-                                          color: AppColors.BACKGROUND_COLOR,
-                                          shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(16.0)),
-                                          ),
-                                          offset: const Offset(0, 50),
-                                          onSelected: (int value) async {},
-                                          itemBuilder: (context) {
-                                            return [
-                                              PopupMenuItem<int>(
-                                                value: 0,
-                                                child: Text(
-                                                  LocaleKeys.addShortcut.tr(),
-                                                  style: Styles.mediumText(
-                                                      color: AppColors
-                                                          .PRIMARY_COLOR),
+                                              IconButton(
+                                                onPressed: () async {
+                                                  await context
+                                                      .read<ChatsCubit>()
+                                                      .deleteChat();
+                                                },
+                                                icon: Icon(
+                                                  Icons.delete_forever,
+                                                  color: context.isDarkMode
+                                                      ? Colors.white
+                                                      : AppColors.PRIMARY_COLOR,
                                                 ),
                                               ),
-                                              PopupMenuItem<int>(
-                                                value: 0,
-                                                child: Text(
-                                                  LocaleKeys.markAsUnread.tr(),
-                                                  style: Styles.mediumText(
-                                                      color: AppColors
-                                                          .PRIMARY_COLOR),
+                                              IconButton(
+                                                onPressed: () async {
+                                                  await context
+                                                      .read<ChatsCubit>()
+                                                      .changeMuteChat();
+                                                },
+                                                icon: Icon(
+                                                  Icons.notifications_off,
+                                                  color: context.isDarkMode
+                                                      ? Colors.white
+                                                      : AppColors.PRIMARY_COLOR,
                                                 ),
                                               ),
-                                              PopupMenuItem<int>(
-                                                value: 0,
-                                                child: Text(
-                                                  LocaleKeys.selectAll.tr(),
-                                                  style: Styles.mediumText(
-                                                      color: AppColors
-                                                          .PRIMARY_COLOR),
+                                              IconButton(
+                                                onPressed: () async {
+                                                  await context
+                                                      .read<ChatsCubit>()
+                                                      .changeArchiveChat();
+                                                },
+                                                icon: Icon(
+                                                  Icons.archive,
+                                                  color: context.isDarkMode
+                                                      ? Colors.white
+                                                      : AppColors.PRIMARY_COLOR,
                                                 ),
                                               ),
-                                              PopupMenuItem<int>(
-                                                value: 0,
-                                                child: Text(
-                                                  LocaleKeys.lockChat.tr(),
-                                                  style: Styles.mediumText(
-                                                      color: AppColors
-                                                          .PRIMARY_COLOR),
+                                            ],
+                                          ),
+                                    context
+                                            .read<ChatsCubit>()
+                                            .selectedChats
+                                            .isEmpty
+                                        ? PopupMenuButton(
+                                            icon: Icon(
+                                              Icons.more_vert,
+                                              color: context.isDarkMode
+                                                  ? Colors.white
+                                                  : AppColors.PRIMARY_COLOR,
+                                            ),
+                                            color: context.isDarkMode
+                                                ? AppColors.PRIMARY_COLOR
+                                                : AppColors.BACKGROUND_COLOR,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(16.0)),
+                                            ),
+                                            offset: const Offset(0, 50),
+                                            onSelected: (int value) async {
+                                              if (value == 4) {
+                                                context.push(
+                                                    Routes.CHATPROFILEVIEW);
+                                              }
+                                            },
+                                            itemBuilder: (context) {
+                                              return _mainMenuBuilder();
+                                            },
+                                          )
+                                        : PopupMenuButton(
+                                            icon: Icon(
+                                              Icons.more_vert,
+                                              color: context.isDarkMode
+                                                  ? Colors.white
+                                                  : AppColors.PRIMARY_COLOR,
+                                            ),
+                                            color: context.isDarkMode
+                                                ? AppColors.PRIMARY_COLOR
+                                                : AppColors.BACKGROUND_COLOR,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(16.0)),
+                                            ),
+                                            offset: const Offset(0, 50),
+                                            onSelected: (int value) async {},
+                                            itemBuilder: (context) {
+                                              return [
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: Text(
+                                                    LocaleKeys.addShortcut.tr(),
+                                                    style: Styles.mediumText(
+                                                        color: context
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : AppColors
+                                                                .PRIMARY_COLOR),
+                                                  ),
                                                 ),
-                                              ),
-                                            ];
-                                          },
-                                        ),
-                                ],
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: Text(
+                                                    LocaleKeys.markAsUnread
+                                                        .tr(),
+                                                    style: Styles.mediumText(
+                                                        color: context
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : AppColors
+                                                                .PRIMARY_COLOR),
+                                                  ),
+                                                ),
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: Text(
+                                                    LocaleKeys.selectAll.tr(),
+                                                    style: Styles.mediumText(
+                                                        color: context
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : AppColors
+                                                                .PRIMARY_COLOR),
+                                                  ),
+                                                ),
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: Text(
+                                                    LocaleKeys.lockChat.tr(),
+                                                    style: Styles.mediumText(
+                                                        color: context
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : AppColors
+                                                                .PRIMARY_COLOR),
+                                                  ),
+                                                ),
+                                              ];
+                                            },
+                                          ),
+                                  ],
+                                ),
                               )
                             : const SizedBox.shrink();
                       },
@@ -538,12 +574,13 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                 ),
                 if(context.read<UserCubit>().isLoggedIn)SliverAppBar(
                   expandedHeight: MediaQuery.of(context).size.height *
-                      0.15, // Responsive height
+                      0.08, // Responsive height
                   automaticallyImplyLeading: false,
                   floating: true,
                   flexibleSpace: BlocProvider(
-                    create: (context) =>
-                        serviceLocator<StoryCubit>()..fetchStories()..getMutedStories(),
+                    create: (context) => serviceLocator<StoryCubit>()
+                      ..fetchStories()
+                      ..getMutedStories(),
                     child: const ChatStories(),
                   ),
                 ),
@@ -574,35 +611,45 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
         value: 0,
         child: Text(
           LocaleKeys.newGroup.tr(),
-          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+          style: Styles.mediumText(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 1,
         child: Text(
           LocaleKeys.newBroadcast.tr(),
-          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+          style: Styles.mediumText(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 2,
         child: Text(
           LocaleKeys.linkedDevice.tr(),
-          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+          style: Styles.mediumText(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 3,
         child: Text(
           LocaleKeys.starredMessages.tr(),
-          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+          style: Styles.mediumText(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 4,
         child: Text(
           LocaleKeys.profile.tr(),
-          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+          style: Styles.mediumText(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
     ];
@@ -611,7 +658,8 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
   Widget _buildCategoriesLabels() {
     return TabBar(
         controller: tabController,
-        labelColor: AppColors.PRIMARY_COLOR,
+        labelColor: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+        unselectedLabelColor: AppColors.LIGHT_GRAY_COLOR2,
         indicatorColor: Colors.red,
         tabAlignment: TabAlignment.start,
         isScrollable: true,
@@ -752,6 +800,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
             ),
             const Divider(),
             _buildCategoryChats(),
+            const MessagesAreEndToEndEncrypted(),
           ],
         );
       case ChatCategories.service:
@@ -811,6 +860,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
             ),
             const Divider(),
             _buildCategoryChats(),
+            const MessagesAreEndToEndEncrypted(),
           ],
         );
       case ChatCategories.groups:
@@ -845,60 +895,70 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   child: Label(
                       text: LocaleKeys.noChatsUntilNow.tr(),
                       style: Styles.mediumText(
-                          fontWeight: FontWeight.bold, fontSize: 18)),
+                          fontWeight: FontWeight.bold, fontSize: 26)),
                 )
-              : ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) => (state
-                          .chats![index].archived)
-                      ? const SizedBox()
-                      : Slidable(
-                          key: ValueKey(index),
-                          closeOnScroll: false,
-                          endActionPane: ActionPane(
-                            motion: const ScrollMotion(),
-                            dismissible: DismissiblePane(onDismissed: () {}),
-                            children: [
-                              SlidableAction(
-                                onPressed: (value) {
-                                  // bottomSheet(
-                                  //     backColor:
-                                  //         Theme.of(context).scaffoldBackgroundColor,
-                                  //     context: context,
-                                  //     isScrollControlled: true,
-                                  //     widget: MoreIconBottomSheet(
-                                  //       ChatCategoryEntity: state.chats![index],
-                                  //       chatsCubit: chatCubit,
-                                  //     ));
-                                },
-                                backgroundColor:
-                                    const Color.fromARGB(255, 191, 191, 191),
-                                foregroundColor: Colors.white,
-                                icon: Icons.more_horiz,
-                                label: LocaleKeys.more.tr(),
-                                padding: EdgeInsets.zero,
-                              ),
-                              SlidableAction(
-                                onPressed: (value) async {},
-                                backgroundColor: AppColors.PRIMARY_COLOR,
-                                foregroundColor: Colors.white,
-                                icon: Icons.delete_outlined,
-                                label: state.chats![index].archived
-                                    ? LocaleKeys.unarchive.tr()
-                                    : LocaleKeys.archive.tr(),
-                                padding: EdgeInsets.zero,
-                              ),
-                            ],
+              : Scrollbar(
+                  // isAlwaysShown: true,  // Ensures the scrollbar is always visible
+                  interactive: true,
+                  thumbVisibility: true,
+                  thickness: 3,
+
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    physics:
+                        const AlwaysScrollableScrollPhysics(), // Enable scrolling
+                    itemBuilder: (context, index) => (state
+                            .chats![index].archived)
+                        ? const SizedBox()
+                        : Slidable(
+                            key: ValueKey(index),
+                            closeOnScroll: false,
+                            endActionPane: ActionPane(
+                              motion: const ScrollMotion(),
+                              dismissible: DismissiblePane(onDismissed: () {}),
+                              children: [
+                                SlidableAction(
+                                  onPressed: (value) {
+                                    // bottomSheet logic
+                                  },
+                                  backgroundColor: context.isDarkMode
+                                      ? AppColors.DARK_BLUE_COLOR
+                                      : const Color.fromARGB(
+                                          255, 191, 191, 191),
+                                  foregroundColor: context.isDarkMode
+                                      ? AppColors.DARK_BLUE_COLOR
+                                      : Colors.white,
+                                  icon: Icons.more_horiz,
+                                  label: LocaleKeys.more.tr(),
+                                  padding: EdgeInsets.zero,
+                                ),
+                                SlidableAction(
+                                  onPressed: (value) async {
+                                    // Archive or unarchive logic
+                                  },
+                                  backgroundColor: context.isDarkMode
+                                      ? Colors.white
+                                      : AppColors.PRIMARY_COLOR,
+                                  foregroundColor: context.isDarkMode
+                                      ? AppColors.DARK_BLUE_COLOR
+                                      : Colors.white,
+                                  icon: Icons.delete_outlined,
+                                  label: state.chats![index].archived
+                                      ? LocaleKeys.unarchive.tr()
+                                      : LocaleKeys.archive.tr(),
+                                  padding: EdgeInsets.zero,
+                                ),
+                              ],
+                            ),
+                            child: ChatCard(
+                              isSecret: isSecret,
+                              chat: state.chats?[index],
+                              chatsCubit: chatCubit,
+                            ),
                           ),
-                          child: ChatCard(
-                            isSecret: isSecret,
-                            chat: state.chats?[index],
-                            chatsCubit: chatCubit,
-                          ),
-                        ),
-                  separatorBuilder: (context, index) => const SizedBox(),
-                  itemCount: state.chats?.length ?? 0,
+                    separatorBuilder: (context, index) => const SizedBox(),
+                    itemCount: state.chats?.length ?? 0,
+                  ),
                 );
     });
   }
@@ -911,7 +971,8 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
         children: [
           // Tab Bar for Social and Services
           TabBar(
-            labelColor: AppColors.PRIMARY_COLOR,
+            labelColor:
+                context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
             unselectedLabelColor: AppColors.LIGHT_GRAY_COLOR2,
             indicator: const BoxDecoration(
                 // color: AppColors.PRIMARY_COLOR_DARK,
@@ -1049,6 +1110,46 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
   }
 }
 
+class MessagesAreEndToEndEncrypted extends StatelessWidget {
+  const MessagesAreEndToEndEncrypted({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(
+          height: 16,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.lock,
+              size: 18,
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Label(
+                text: "Your personal messages are ",
+                style: Styles.mediumText(
+                    fontWeight: FontWeight.bold, fontSize: 28)),
+          ],
+        ),
+        Label(
+          text: "     end-to-end encrypted",
+          style: Styles.mediumText(
+              fontWeight: FontWeight.bold,
+              fontSize: 28,
+              color: AppColors.PRIMARY_COLOR_DARK),
+        ),
+      ],
+    );
+  }
+}
+
 class ChatOptions extends StatelessWidget {
   const ChatOptions({
     super.key,
@@ -1070,7 +1171,8 @@ class ChatOptions extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: AppColors.PRIMARY_COLOR,
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
             ),
             const SizedBox(width: 8),
             Label(
