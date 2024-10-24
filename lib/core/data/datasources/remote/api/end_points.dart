@@ -740,7 +740,7 @@ class EndPoints {
   }
 
   static String subCategoryAds(GetAdsParams params) {
-    return '/ads/subCategoryAds/${params.subCategoryId}?filter=${params.filter}&page=${params.page}&limit=${params.limit}${params.userId!=null?"&userId=${params.userId}":""}';
+    return '/ads/subCategoryAds/${params.subCategoryId}?filter=${params.filter}&page=${params.page}&limit=${params.limit}${(params.userId!=null&&params.userId!="")?"&userId=${params.userId}":""}';
   }
 
   static String createAuction(String id) {

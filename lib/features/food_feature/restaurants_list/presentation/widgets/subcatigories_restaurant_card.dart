@@ -709,6 +709,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
@@ -861,7 +862,7 @@ class PropertyCard extends StatelessWidget {
                       autoPlay: true,
                       restaurantMedia: item.restaurantMedia,
                     ),
-                    if (!myRestaurant)
+                    if (!myRestaurant&&context.read<UserCubit>().isLoggedIn)
                       Positioned(
                         top: 0,
                         left: 0,

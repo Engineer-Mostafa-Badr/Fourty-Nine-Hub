@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/entities/ad_request_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/usecases/get_ad_requests_usecase.dart';
 
 
 import '../../domain/repositories/ad_requests_repo.dart';
@@ -12,7 +13,7 @@ class AdRequestsRepoImpl implements AdRequestsRepo {
   AdRequestsRepoImpl(this._remoteDataSource);
   @override
   Future<Either<Failure, List<AdRequestEntity>>> getAdRequests(
-      {required String id}) async {
-    return await _remoteDataSource.getAdRequests(id: id);
+      {required GetAdRequestsParams params}) async {
+    return await _remoteDataSource.getAdRequests(params: params);
   }
 }

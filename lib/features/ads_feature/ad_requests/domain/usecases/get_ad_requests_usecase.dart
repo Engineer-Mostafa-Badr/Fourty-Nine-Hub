@@ -5,12 +5,25 @@ import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/repositori
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
-class GetAdRequestsUseCase extends UseCase<List<AdRequestEntity>, String> {
+class GetAdRequestsUseCase extends UseCase<List<AdRequestEntity>, GetAdRequestsParams> {
   final AdRequestsRepo _repo;
   GetAdRequestsUseCase(this._repo);
 
   @override
-  Future<Either<Failure, List<AdRequestEntity>>> call(String params) {
-    return _repo.getAdRequests(id: params);
+  Future<Either<Failure, List<AdRequestEntity>>> call(GetAdRequestsParams params) {
+    return _repo.getAdRequests(params: params);
   }
+}
+
+class GetAdRequestsParams{
+  final String id;
+  final int page;
+  final int limit;
+
+  GetAdRequestsParams({required this.id, required this.page, required this.limit});
+
+  Map<String, dynamic> toJson() => {
+    "page": page,
+    "limit": limit
+  };
 }

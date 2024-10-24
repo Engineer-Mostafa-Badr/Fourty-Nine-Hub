@@ -112,81 +112,81 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                         const CupertinoActivityIndicator()),
               ),
             ),
-            Container(
-                height: kToolbarHeight,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Row(
-                  children: [
-                    const ProfileImage(
-                      accountId: 0,
-                      userId: '',
-                    ),
-                    const Sizer(),
-                    Expanded(
-                        child: TextFormField(
-                      maxLines: null,
-                      controller: commentTextController,
-                      onChanged: (v) {
-                        setState(() {});
-                      },
-                      style: Styles.headerText(fontSize: 26),
-                      decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        contentPadding: const EdgeInsets.all(5),
-                        hintText: '${LocaleKeys.typeYourComment.localize} ....',
-                        hintStyle: Styles.mediumText(),
-                      ),
-                    )),
-                    const Sizer(),
-                    if (commentTextController.text.isNotEmpty)
-                      IconAppButton(
-                          icon: Icons.send,
-                          size: 20,
-                          isCircle: true,
-                          onPressed: () async {
-                            CommentEntity data = await widget.onAddComment(
-                              PostCommentParams(
-                                  postId: widget.postId,
-                                  content: commentTextController.text),
-                            );
-                            controller.commentsPagingController.itemList
-                                ?.insert(
-                              0,
-                              CommentModel(
-                                id: data.id,
-                                content: commentTextController.text,
-                                post: widget.postId,
-                                createdAt: DateTime.now(),
-                                loveCount: data.loveCount,
-                                angryCount: data.angryCount,
-                                likesCount: data.likesCount,
-                                repliesCount: data.repliesCount,
-                                sadCount: data.sadCount,
-                                wowCount: data.wowCount,
-                                isAngry: false,
-                                isLikes: false,
-                                isLove: false,
-                                isSad: false,
-                                isWow: false,
-                                user: TwitterUserEntity(
-                                  id: user!.id,
-                                  firstName: user.firstName,
-                                  lastName: user.lastName,
-                                  createdAt: DateTime.now(),
-                                  image: user.profilePicture ?? '',
-                                  email: user.email ?? '',
-                                  isDocumented: false,
-                                ),
-                              ),
-                            );
-                            commentTextController.clear();
-                            FocusScope.of(context).unfocus();
-                            setState(() {});
-                          })
-                  ],
-                )),
+            // Container(
+            //     height: kToolbarHeight,
+            //     decoration: const BoxDecoration(
+            //       color: Colors.white,
+            //     ),
+            //     child: Row(
+            //       children: [
+            //         const ProfileImage(
+            //           accountId: 0,
+            //           userId: '',
+            //         ),
+            //         const Sizer(),
+            //         Expanded(
+            //             child: TextFormField(
+            //           maxLines: null,
+            //           controller: commentTextController,
+            //           onChanged: (v) {
+            //             setState(() {});
+            //           },
+            //           style: Styles.headerText(fontSize: 26),
+            //           decoration: InputDecoration(
+            //             fillColor: Colors.white,
+            //             contentPadding: const EdgeInsets.all(5),
+            //             hintText: '${LocaleKeys.typeYourComment.localize} ....',
+            //             hintStyle: Styles.mediumText(),
+            //           ),
+            //         )),
+            //         const Sizer(),
+            //         if (commentTextController.text.isNotEmpty)
+            //           IconAppButton(
+            //               icon: Icons.send,
+            //               size: 20,
+            //               isCircle: true,
+            //               onPressed: () async {
+            //                 CommentEntity data = await widget.onAddComment(
+            //                   PostCommentParams(
+            //                       postId: widget.postId,
+            //                       content: commentTextController.text),
+            //                 );
+            //                 controller.commentsPagingController.itemList
+            //                     ?.insert(
+            //                   0,
+            //                   CommentModel(
+            //                     id: data.id,
+            //                     content: commentTextController.text,
+            //                     post: widget.postId,
+            //                     createdAt: DateTime.now(),
+            //                     loveCount: data.loveCount,
+            //                     angryCount: data.angryCount,
+            //                     likesCount: data.likesCount,
+            //                     repliesCount: data.repliesCount,
+            //                     sadCount: data.sadCount,
+            //                     wowCount: data.wowCount,
+            //                     isAngry: false,
+            //                     isLikes: false,
+            //                     isLove: false,
+            //                     isSad: false,
+            //                     isWow: false,
+            //                     user: TwitterUserEntity(
+            //                       id: user!.id,
+            //                       firstName: user.firstName,
+            //                       lastName: user.lastName,
+            //                       createdAt: DateTime.now(),
+            //                       image: user.profilePicture ?? '',
+            //                       email: user.email ?? '',
+            //                       isDocumented: false,
+            //                     ),
+            //                   ),
+            //                 );
+            //                 commentTextController.clear();
+            //                 FocusScope.of(context).unfocus();
+            //                 setState(() {});
+            //               })
+            //       ],
+            //     )),
           ],
         ),
       );
