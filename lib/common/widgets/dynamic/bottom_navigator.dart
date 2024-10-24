@@ -57,7 +57,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         // Using generated key for translation
         index: 4,
         image: Assets.ride,
-        route: Routes.RIDE,
+        route:context.isUserLoggedIn? Routes.RIDE:Routes.LOGIN,
       ),
     ];
 
