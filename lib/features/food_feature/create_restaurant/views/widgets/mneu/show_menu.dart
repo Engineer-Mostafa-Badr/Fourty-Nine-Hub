@@ -72,7 +72,7 @@ class ShowMneu extends StatelessWidget {
                                     fit: BoxFit.cover,
                                   ),
                                 ),
-                                Sizer(),
+                                const Sizer(),
                                 Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -89,7 +89,7 @@ class ShowMneu extends StatelessWidget {
                                       style:
                                           Styles.headerText(color: Colors.red),
                                     ),
-                                    Sizer(),
+                                    const Sizer(),
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.red,
@@ -119,7 +119,7 @@ class ShowMneu extends StatelessWidget {
                     ),
                   ),
               ],
-              Sizer(),
+              const Sizer(),
               Container(
                 // height: MediaQuery.of(context).size.width * 0.5,
                 // width: MediaQuery.of(context).size.width,
@@ -155,7 +155,7 @@ class ShowMneu extends StatelessWidget {
                                       ),
                                     );
                                   }
-                                  return Container(
+                                  return SizedBox(
                                     // color: Colors.red,
                                     height: 195.h,
                                     child: ImagePickerPlaceholder(
@@ -167,7 +167,7 @@ class ShowMneu extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Sizer(),
+                          const Sizer(),
                           Expanded(
                             flex: 3,
                             child: Column(
@@ -214,7 +214,7 @@ class ShowMneu extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                Sizer(),
+                                const Sizer(),
                                 TextFormField(
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -269,7 +269,7 @@ class ShowMneu extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Sizer(),
+                      const Sizer(),
                       ElevatedAppButton(
                         onPressed: () async {
                           // print("1222222dsvvs23");

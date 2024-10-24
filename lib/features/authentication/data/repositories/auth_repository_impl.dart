@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/remote_data_source/auth_remote_data_source.dart';
@@ -70,32 +70,32 @@ class AuthRepositoryImpl extends AuthRepository {
     return _remoteDataSource.getWelcomeGift();
   }
 
-  @override
-  Future<Either<Failure, UserTokensEntity>> signInWithFacebook() async {
-    try {
-      final LoginResult loginResult = await FacebookAuth.instance.login();
+  // @override
+  // Future<Either<Failure, UserTokensEntity>> signInWithFacebook() async {
+  //   try {
+      // final LoginResult loginResult = await FacebookAuth.instance.login();
 
-      final OAuthCredential facebookAuthCredential =
-          FacebookAuthProvider.credential(loginResult.accessToken!.token);
+      // final OAuthCredential facebookAuthCredential =
+      //     FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
-      final result = await FirebaseAuth.instance
-          .signInWithCredential(facebookAuthCredential);
-      final tokenResult = await _remoteDataSource.socialLogin(
-        await _loginWithCredentials(
-          GoogleAuthProvider.credential(
-            accessToken: result.credential?.accessToken,
-            idToken: await result.user?.getIdToken(),
-          ),
-        ),
-      );
-      return tokenResult.fold(
-        (failure) => Left(failure),
-        (token) => Right(token),
-      );
-    } catch (e) {
-      return Left(SocialLoginFailure(e));
-    }
-  }
+      // final result = await FirebaseAuth.instance
+      //     .signInWithCredential(facebookAuthCredential);
+      // final tokenResult = await _remoteDataSource.socialLogin(
+      //   await _loginWithCredentials(
+          // GoogleAuthProvider.credential(
+          //   accessToken: result.credential?.accessToken,
+          //   idToken: await result.user?.getIdToken(),
+          // ),
+        // ),
+      // );
+      // return tokenResult.fold(
+      //   (failure) => Left(failure),
+      //   (token) => Right(token),
+      // );
+  //   } catch (e) {
+  //     return Left(SocialLoginFailure(e));
+  //   }
+  // }
 
   @override
   Future<Either<Failure, UserTokensEntity>> signInWithGoogle() async {
@@ -164,8 +164,8 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<bool> signOut() {
-    return _localDataSource.deleteTokens();
+  Future<Either<Failure, void>> signOut() {
+    return _remoteDataSource.logout();
   }
 }
 //enum: ['google', 'facebook', 'local', 'apple']

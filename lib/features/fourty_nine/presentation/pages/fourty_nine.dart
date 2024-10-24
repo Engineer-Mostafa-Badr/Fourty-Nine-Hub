@@ -144,7 +144,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             //admob
             //   const GoogleAddsBanner(),
             _buildStarWidget(),
-            Sizer(),
+            const Sizer(),
             //pick me and come with U
             _pickMeAndComeWithUWidget(),
             // const Sizer(),
@@ -522,7 +522,6 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     required String image,
     String? route,
     bool? isFavorite,
-    int? numberOfAds,
   }) {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: service.value()),

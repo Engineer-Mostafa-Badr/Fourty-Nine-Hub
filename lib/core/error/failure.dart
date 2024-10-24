@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 abstract class Failure {
+
   const Failure();
 }
 
@@ -18,7 +19,8 @@ class ServerFailure extends Failure {
 }
 
 class UnauthorizedFailure extends Failure {
-  const UnauthorizedFailure();
+  final String message;
+  const UnauthorizedFailure(this.message);
 }
 
 class CacheFailure extends Failure {
@@ -60,7 +62,7 @@ String getFailureMessage(Failure failure, BuildContext context) {
   } else if (failure is InvalidOtpFailure) {
     return failure.message;
   } else if (failure is UnauthorizedFailure) {
-    return 'Unauthorized';
+    return failure.message;
   } else if (failure is SocialLoginFailure) {
     if (failure.exception is FirebaseException &&
         (failure.exception as FirebaseException).message != null) {
@@ -72,7 +74,7 @@ String getFailureMessage(Failure failure, BuildContext context) {
   } else if (failure is ValidationFailure) {
     return failure.message;
   } else if (failure is UnknownFailure) {
-    return 'Unknown Failure';
+    return failure.error;
   } else {
     return 'Unknown Failure';
   }

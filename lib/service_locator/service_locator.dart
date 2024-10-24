@@ -139,9 +139,6 @@ class DI {
     );
     // serviceLocator.registerLazySingleton<CompanyAdvertiseRepoImpl>(() => CompanyAdvertiseRepoImpl(ApiService(Dio())),);
 
-
-
-
     // Register the StoryRepository
     serviceLocator.registerLazySingleton<StoryRepository>(
       () => StoryRepository(),
@@ -149,7 +146,17 @@ class DI {
 
     // Register the StoryCubit
     serviceLocator.registerFactory<StoryCubit>(
-      () => StoryCubit(serviceLocator<StoryRepository>(),serviceLocator()),
+      () => StoryCubit(
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+      ),
     );
     // serviceLocator
     //     .registerFactory<SliderCubit>(() => SliderCubit(serviceLocator()));
@@ -178,8 +185,9 @@ class DI {
         .registerLazySingleton<TinderRepository>(() => TinderRepository());
 
     // Register the TinderViewCubit and inject the TinderRepository dependency
-    serviceLocator.registerFactory<TinderViewCubit>(() =>
-        TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()));
+    serviceLocator.registerFactory<TinderViewCubit>(() => TinderViewCubit(
+        tinderRepository: serviceLocator<TinderRepository>(),
+        getMainCategoryDetailsUseCase: serviceLocator()));
 
     // Register other dependencies...
     // serviceLocator

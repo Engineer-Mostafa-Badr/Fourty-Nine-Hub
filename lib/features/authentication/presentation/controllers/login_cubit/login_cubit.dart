@@ -1,14 +1,12 @@
-import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../../../../trip_join/helpers/print_helper.dart';
 import '../../../domain/use_cases/apple_sign_in_usecase.dart';
 import '../../../domain/use_cases/login_use_case.dart';
 import '../../../domain/use_cases/save_tokens_use_case.dart';
@@ -152,25 +150,25 @@ class LoginCubit extends Cubit<LoginState> {
     );
   }
 
-  Future<UserCredential> signInWithFacebook() async {
+  // Future<UserCredential> signInWithFacebook() async {
     // Trigger the sign-in flow
-    final LoginResult loginResult = await FacebookAuth.instance.login();
+    // final LoginResult loginResult = await FacebookAuth.instance.login();
 
     // log(loginResult.accessToken!.tokenString.toString());
     // log(loginResult.message.toString());
 
     // Create a credential from the access token
-    final OAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(loginResult.accessToken!.token);
+    // final OAuthCredential facebookAuthCredential =
+    //     FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
     // Once signed in, return the UserCredential
-    UserCredential userCredential = await FirebaseAuth.instance
-        .signInWithCredential(facebookAuthCredential);
-    log(userCredential.additionalUserInfo!.username.toString());
-    log(userCredential.user!.email.toString());
-    log(userCredential.user!.photoURL.toString());
-    return userCredential;
-  }
+    // UserCredential userCredential = await FirebaseAuth.instance
+    //     .signInWithCredential();
+    // log(userCredential.additionalUserInfo!.username.toString());
+    // log(userCredential.user!.email.toString());
+    // log(userCredential.user!.photoURL.toString());
+    // return UserCredential();
+  // }
 
   @override
   Future<void> close() {

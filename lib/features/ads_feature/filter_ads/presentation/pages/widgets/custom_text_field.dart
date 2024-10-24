@@ -74,7 +74,7 @@ class MyTextField extends StatelessWidget {
     return TextFormField(
       style: Styles.mediumText(color: AppColors.QUANTITY_COLOR),
       textAlignVertical: textAlignVertical,
-      maxLines: maxLines ?? null,
+      maxLines: maxLines,
       maxLength: maxLength,
       onFieldSubmitted: (v) {
         if (onConfirm != null) {

@@ -6,7 +6,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:location/location.dart';
+// import 'package:location/location.dart';
 
 // import 'location';
 class GoogleMapTracking extends StatefulWidget {
@@ -167,15 +167,15 @@ class _GoogleMapTrackingState extends State<GoogleMapTracking> {
     [31.33121, 30.06132],
     [31.331694, 30.061371]
   ];
-  LocationData? currentLocation;
+  // LocationData? currentLocation;
   Future<void> getCurrentLocation() async {
-    Location location = Location();
-    location.getLocation().then(
-      (value) {
-        log(value.toString(), name: "location");
-        currentLocation = value;
-      },
-    );
+    // Location location = Location();
+    // location.getLocation().then(
+    //   (value) {
+    //     log(value.toString(), name: "location");
+    //     currentLocation = value;
+    //   },
+    // );
     GoogleMapController googleMapController = await _controller.future;
     // location.onLocationChanged.listen(
     //   (event) {
@@ -215,15 +215,17 @@ class _GoogleMapTrackingState extends State<GoogleMapTracking> {
 
   @override
   Widget build(BuildContext context) {
-    log(currentLocation.toString());
+    // log(currentLocation.toString());
     return Scaffold(
-      body: currentLocation == null
-          ? const Center(
-              child: CircularProgressIndicator(
-                color: AppColors.PRIMARY_COLOR,
-              ),
-            )
-          : GoogleMap(
+      body: 
+      // currentLocation == null
+          // ? const Center(
+          //     child: CircularProgressIndicator(
+          //       color: AppColors.PRIMARY_COLOR,
+          //     ),
+          //   )
+          // :
+           GoogleMap(
               initialCameraPosition:
                   CameraPosition(target: widget.startLocation, zoom: 13),
               polylines: {

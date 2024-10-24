@@ -269,7 +269,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                   child: ElevatedButton(
                     style: const ButtonStyle(
                         backgroundColor:
-                            MaterialStatePropertyAll(AppColors.PRIMARY_COLOR)),
+                        MaterialStatePropertyAll(AppColors.PRIMARY_COLOR)),
                     onPressed: () {
                       _player.dispose();
                       Navigator.push(

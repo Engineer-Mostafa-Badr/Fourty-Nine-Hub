@@ -536,7 +536,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                SliverAppBar(
+                if(context.read<UserCubit>().isLoggedIn)SliverAppBar(
                   expandedHeight: MediaQuery.of(context).size.height *
                       0.15, // Responsive height
                   automaticallyImplyLeading: false,
@@ -557,37 +557,8 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               ],
               body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
                 builder: (context, state) {
-                  return context.read<UserCubit>().isLoggedIn
-                      ? _buildCategoriesViews()
-                      : Center(
-                          child: GestureDetector(
-                            onTap: () => context.push(Routes.LOGIN),
-                            child: Container(
-                              padding: const EdgeInsets.all(12),
-                              width: 300,
-                              height: 300,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Theme.of(context).primaryColor,
-                                  width: 4,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  LocaleKeys.pleaseLoginRegisterToEnjoyTheApp
-                                      .tr(),
-                                  style: Styles.headerText(
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
+                  return _buildCategoriesViews()
+                      ;
                 },
               ),
             ),

@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
@@ -21,7 +20,6 @@ import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favo
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_subcategory.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:http/http.dart' as http;
 
 import '../../../../create_doctor/domain/entities/governorate_entity.dart';
 import '../../../../create_doctor/domain/usecases/get_governorates.dart';
@@ -175,40 +173,43 @@ class HealthCubit extends Cubit<HealthState> {
         (data) => getSubCategories(reload: true));
   }
 
-  // Future<bool> toggleFavoriteMedicalService(String subcategoryId) async {
-  //   final response = await _toggleFavoriteSubcategoryUseCase(subcategoryId);
-  //   bool result = false;
-  //   response.fold(
-  //       (failure) =>
-  //           emit(state.copyWith(failure: failure, status: HealthStates.error)),
-  //       (data) {
-  //         MainCategoryEntity mainCategoryEntity;
-  //           mainCategoryEntity = state.mainCategory!;
-  //           mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
-  //         emit(state.copyWith(mainCategory: mainCategoryEntity));
-  //         result = state.mainCategory!.isFavorite!;
-  //         print("Salama ${data}");
-  //         return getServices();
-  //       });
-  //   return result;
-  // }
-  // Future<bool> toggleFavoriteMedicalService(String subcategoryId) async {
-  //   final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
-  //   bool result = false;
-  //   response.fold(
-  //       (failure) =>
-  //           emit(state.copyWith(failure: failure, status: HealthStates.error)),
-  //       (data) {
-  //         MainCategoryEntity mainCategoryEntity;
-  //           mainCategoryEntity = state.mainCategory!;
-  //           mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
-  //         emit(state.copyWith(mainCategory: mainCategoryEntity));
-  //         result = state.mainCategory!.isFavorite!;
-  //         print("Salama ${data}");
-  //         return getServices();
-  //       });
-  //   return result;
-  // }
+  Future<bool> toggleFavoriteMedicalService(String subcategoryId) async {
+    await _ensureTokenInitialized();
+    final response = await _toggleFavoriteSubcategoryUseCase(subcategoryId);
+    bool result = false;
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) {
+          MainCategoryEntity mainCategoryEntity;
+            mainCategoryEntity = state.mainCategory!;
+            mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
+          emit(state.copyWith(mainCategory: mainCategoryEntity));
+          result = state.mainCategory!.isFavorite!;
+          print("Salama ${data}");
+          return getServices();
+        });
+    return result;
+  }
+  Future<bool> toggleFavoriteCategory(String subcategoryId) async {
+    final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
+    bool result = false;
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) {
+          // MainCategoryEntity mainCategoryEntity;
+          //   mainCategoryEntity = state.mainCategory!;
+          //   mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
+          // emit(state.copyWith(mainCategory: mainCategoryEntity));
+          // result = state.mainCategory!.isFavorite!;
+          // print("Salama ${data}");
+          _getMainCategoryDetails();
+
+          return getServices();
+        });
+    return result;
+  }
 
   String? token;
 
@@ -216,106 +217,6 @@ class HealthCubit extends Cubit<HealthState> {
     token ??= await CacheManager.getAccessToken();
   }
 
-  Future<void> toggleFavoriteMedicalService(String subcategoryId) async {
-    await _ensureTokenInitialized();
-
-    final String url =
-        'https://49dev.com/api/v1/favorite-sub-category/$subcategoryId'; // API endpoint
-
-    // API request headers
-    final Map<String, String> headers = {
-      'Authorization': 'Bearer $token',
-      'Content-Type': 'application/json',
-    };
-
-    // Execute the HTTP POST request to toggle the favorite status
-    try {
-      final response = await http.post(Uri.parse(url), headers: headers);
-
-      if (response.statusCode == 200) {
-        // Parse response if needed
-        final data = json.decode(response.body);
-
-        // Emit the updated state with the new mainCategory
-        emit(state.copyWith(mainCategory: state.mainCategory));
-
-        print("API Response Success: $data");
-
-        // Optionally fetch services again
-        getServices();
-      } else {
-        print("Failed to toggle favorite: ${response.statusCode}");
-        emit(state.copyWith(status: HealthStates.error)); // Emit error state
-      }
-    } catch (e) {
-      print("Error during API request: $e");
-      emit(state.copyWith(status: HealthStates.error)); // Emit error state
-    }
-  }
-
-  Future<void> toggleFavoriteCategory(String categoryId) async {
-    await _ensureTokenInitialized();
-
-    final String url = 'https://49dev.com/api/v1/favorite-category/$categoryId';
-    final headers = {
-      'Authorization': 'Bearer $token',
-      'Content-Type': 'application/json'
-    };
-
-    try {
-      final response = await http.post(Uri.parse(url), headers: headers);
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        print("Category API Success: $data");
-        await _getMainCategoryDetails();
-      } else {
-        print("Failed to toggle favorite: ${response.statusCode}");
-        emit(state.copyWith(status: HealthStates.error));
-      }
-    } catch (e) {
-      print("API Error: $e");
-      emit(state.copyWith(status: HealthStates.error));
-    }
-  }
-
-  // Future<void> toggleFavoriteCategory(String categoryId) async {
-  //   await _ensureTokenInitialized();
-
-  //   final String url =
-  //       'https://49dev.com/api/v1/favorite-category/$categoryId'; // API endpoint for the category
-
-  //   // API request headers
-  //   final Map<String, String> headers = {
-  //     'Authorization': 'Bearer $token',
-  //     'Content-Type': 'application/json',
-  //   };
-
-  //   // Execute the HTTP POST request to toggle the favorite category status
-  //   try {
-  //     final response = await http.post(Uri.parse(url), headers: headers);
-
-  //     if (response.statusCode == 200) {
-  //       // Parse response if needed
-  //       final data = json.decode(response.body);
-
-  //       // Update the result based on the new isFavorite value
-
-  //       // Emit the updated state with the new mainCategory
-
-  //       print("Category API Response Success: $data");
-
-  //       // Optionally fetch services again
-  //       await _getMainCategoryDetails();
-  //       emit(state.copyWith(mainCategory: state.mainCategory));
-  //     } else {
-  //       print("Failed to toggle category favorite: ${response.statusCode}");
-  //       emit(state.copyWith(status: HealthStates.error)); // Emit error state
-  //     }
-  //   } catch (e) {
-  //     print("Error during category API request: $e");
-  //     emit(state.copyWith(status: HealthStates.error)); // Emit error state
-  //   }
-  // }
 
   Future<bool> deleteMedicalService(String subcategoryId) async {
     final response = await _deleteFavoriteCategoryUseCase(subcategoryId);

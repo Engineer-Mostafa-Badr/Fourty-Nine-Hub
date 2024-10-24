@@ -10,6 +10,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class MutedStories extends StatefulWidget {
+  const MutedStories({super.key});
+
   @override
   State<MutedStories> createState() => _MutedStoriesState();
 }
@@ -88,7 +90,7 @@ class _MutedStoriesState extends State<MutedStories> {
                             builder: (context) => BlocProvider.value(
                               value: serviceLocator<StoryCubit>(),
                               child: StoryViewScreen(
-                                stories: state.users,
+                                stories: state.users??[],
                                 mutedStories:
                                     state.mutedStoriesResponse!.data.stories,
                                 initialUserIndex: index,

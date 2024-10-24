@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_items.dart';
 
 import '../../data/models/new_reels_model.dart';
 

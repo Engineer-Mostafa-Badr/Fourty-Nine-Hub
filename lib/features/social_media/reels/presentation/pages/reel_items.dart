@@ -32,7 +32,7 @@ class ReelInfo extends StatefulWidget {
   final ReelItemType itemType;
   final AnimationController rotationController;
 
-  const ReelInfo({
+  const ReelInfo({super.key, 
     required this.reel,
     required this.itemType,
     required this.rotationController,
@@ -97,7 +97,7 @@ class _UserSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
         _UserInfo(reel: reel),
@@ -658,11 +658,11 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
   final AnimationController rotationController;
 
   const AdvancedTikTokReactionsColumn({
-    Key? key,
+    super.key,
     required this.reel,
     required this.itemType,
     required this.rotationController,
-  }) : super(key: key);
+  });
 
   static double iconSize = 0.1.sw;
   static const TextStyle countTextStyle = TextStyle(

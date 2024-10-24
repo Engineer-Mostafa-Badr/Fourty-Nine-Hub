@@ -1,15 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 
-import '../../../../../core/utils/duration_helper.dart';
-import '../../../../ads_feature/ads/domain/entities/ad_statistics_entity.dart';
-import '../../../../ads_feature/create_ad/domain/entities/create_ad_entity.dart';
-import '../../../../authentication/domain/entities/user_entity.dart';
-import '../../../../requests_history/domain/entities/address_entity.dart';
 import '../entity/click_entity.dart';
-import '../entity/my_auction_image_entity.dart';
 import '../repositories/my_ads_repo.dart';
 
 class ClickUseCase extends UseCase<ClickEntity, ClickParams> {

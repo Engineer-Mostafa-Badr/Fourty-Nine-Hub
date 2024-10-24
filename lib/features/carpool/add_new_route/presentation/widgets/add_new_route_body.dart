@@ -17,7 +17,7 @@ class AddNewRouteBody extends StatelessWidget {
         if (state is CreateCarPoolSuccess) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
+              const SnackBar(
                 content: Text('Carpool created successfully!'),
                 duration: Duration(seconds: 2),
               ),
@@ -28,7 +28,7 @@ class AddNewRouteBody extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.errorMessage),
-                duration: Duration(seconds: 2),
+                duration: const Duration(seconds: 2),
               ),
             );
           });
@@ -41,7 +41,7 @@ class AddNewRouteBody extends StatelessWidget {
               children: [
                 MapAndAddressFinderCarPool(),
                 // const Sizer(height: 50),
-                Visibility(
+                const Visibility(
                   visible: true,
                   child: CarPoolNewRouteInfo(),
                 ),

@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
@@ -373,6 +374,15 @@ class EndPoints {
   static getComments(String id)=> '/reels/comments/$id';
   static getReelsWithSameAudio(ReelsWithSameAudioParams params)=> '/reels/audio/${params.audioId}';
   static toggleCommentLike(String id)=> '/reels/comments/like/$id';
+  static makeViews(String id)=> '/stories/view/$id';
+  static deleteStory(String id)=> '/stories/$id';
+  static const createStory= '/stories/text';
+  static getStoryViewers(String id)=> '/Stories/view/$id';
+  static getMutedStories(PaginationParams params)=> '/stories/mutedStories?limit=${params.limit}&page=${params.page}';
+  static fetchStories(PaginationParams params)=> '/stories/explore?limit=${params.limit}&page=${params.page}';
+  static const muteUserStories = '/stories/muteUserStory';
+  static const updatePrivacy = '/stories/privacy';
+  static const getFollowers = '/follow/followers?subCategory=62ef7cf658c90d4a7ed48120';
   static addReelComment(AddReelCommentParams params)=> '/reels/comments/${params.reelId}';
   static addReelReply(AddReelReplyParams params)=> '/reels/comments/${params.reelId}';
 
@@ -691,8 +701,10 @@ class EndPoints {
   }
 
   static String getNumOfResturants = '/restaurants/num-of-restaurants';
+  static String foodExpiredOrders(PaginationParams params) => '/food/expired-orders?page=${params.page}&limit=${params.limit}';
   static String isResturant = '/restaurants/check-user-have-restaurant';
   static String createRestaurant = '/restaurants/create-restaurant';
+  static String changeConnectivity = '/restaurants/modify-active';
 
   static String getMealsWithCountRestaurant({PostCommentsParams? params}) =>
       '/restaurants/subcategories-count-restaurant${params?.page != null || params?.userId != null ? "?page=${params?.page}&userId=${params?.userId}" : ""}';
@@ -735,7 +747,7 @@ class EndPoints {
   }
 
   static String subCategoryAds(GetAdsParams params) {
-    return '/ads/subCategoryAds/${params.subCategoryId}?filter=${params.filter}&page=${params.page}&limit=${params.limit}';
+    return '/ads/subCategoryAds/${params.subCategoryId}?filter=${params.filter}&page=${params.page}&limit=${params.limit}${params.userId!=null?"&userId=${params.userId}":""}';
   }
 
   static String createAuction(String id) {
