@@ -1,6 +1,7 @@
 import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
+import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
@@ -189,6 +190,12 @@ class EndPoints {
   static const deleteAccount = '/users/settings/delete-account';
   static const disableAccount = '/users/settings/disable-account';
   static const enableAccount = '/users/settings/enable-account';
+
+  // Quran
+  static String quranSurah(QuranParams params) =>
+      '/quran/surahs?page=${params.params.page}&limit=${params.params.limit}';
+  static String quran(int id) =>
+      '/quran/surah/$id';
 
   static String notificationsSeen(String id) => '/notifications/$id';
 

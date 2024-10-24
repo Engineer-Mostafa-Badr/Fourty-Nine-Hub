@@ -121,4 +121,8 @@ abstract class Assets {
   static String notificationAudioApp = 'audio/notification.mp3';
   static String notificationAudioServieAndSocial =
       'audio/notification_social.mp3';
+
+  //Quran
+  static String maka = 'assets/images/maka.png';
+  static String madina = 'assets/images/madina.png';
 }
