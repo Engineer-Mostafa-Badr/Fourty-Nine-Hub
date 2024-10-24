@@ -21,8 +21,6 @@ import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../payment/presentation/cubit/payment_cubit.dart';
-import '../../../../payment/presentation/pages/payment_view.dart';
 import '../../domain/entities/balance/balance_history_entity.dart';
 import '../widgets/wallet_history_card.dart';
 
@@ -87,7 +85,8 @@ class BalanceWalletView extends StatelessWidget {
                           ],
                         ),
                       ),
-                      state.balance?.openBalance == true && state.balance!.balance >=1002
+                    //  state.balance?.openBalance == true && state.balance!.balance >=1002
+                       state.balance!.balance >=1002
                           ? AppButton(
                               backColor: AppColors.SECONDARY_COLOR,
                               color: AppColors.AUTH_CONTAINER_COLOR,
@@ -104,37 +103,8 @@ class BalanceWalletView extends StatelessWidget {
                               onPressed: () {},
                               margin: 10,
                             ),
-                      if (state.balance?.openBalance == true && state.withdraw?.data == false )
-                        Label(text: LocaleKeys.checkRequest.localize),
-                      if (state.withdraw?.data == true)
-                        AppButton(
-                          backColor: AppColors.SECONDARY_COLOR,
-                          color: AppColors.AUTH_CONTAINER_COLOR,
-                          label: LocaleKeys.withdraw.localize,
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => BlocProvider<PaymentCubit>(
-                                    create: (BuildContext context) => serviceLocator(),
-                                    child: PaymentView(
-                                      amountId: '',
-                                      amount: state.balance?.balance ?? 0,
-                                    ),
-                                  ),
-                                ));
-                          },
-                          margin: 10,
-                        )
-                      else
-                        AppButton(
-                          backColor: Colors.red.withOpacity(.5),
-                          label: LocaleKeys.withdraw.localize,
-                          onPressed: () {},
-                          margin: 10,
-                        ),
-                      // if(state.withdraw?.data ==true)
-                      //   const Label(text: 'Please wait to check request'),
+                      // if (state.balance?.openBalance == true && state.withdraw?.data == false )
+                      //   Label(text: LocaleKeys.checkRequest.localize,color:AppColors.SECONDARY_COLOR,),
 
                       _buildWalletActionItem(
                           label: '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',
