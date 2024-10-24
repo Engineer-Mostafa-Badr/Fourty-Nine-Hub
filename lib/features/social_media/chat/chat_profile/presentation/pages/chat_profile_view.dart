@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -79,7 +80,10 @@ class ChatProfileView extends StatelessWidget {
                   ),
                 ],
               ),
-              trailing: const Icon(Icons.edit, color: AppColors.PRIMARY_COLOR),
+              trailing: Icon(Icons.edit,
+                  color: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR),
               subtitle: Text(
                 LocaleKeys.nameMessage.tr(),
                 style: Styles.mediumText(
@@ -103,7 +107,10 @@ class ChatProfileView extends StatelessWidget {
                 style: Styles.mediumText(
                     color: AppColors.LIGHT_GRAY_COLOR2, fontSize: 24),
               ),
-              trailing: const Icon(Icons.edit, color: AppColors.PRIMARY_COLOR),
+              trailing: Icon(Icons.edit,
+                  color: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR),
             ),
             const Divider(),
             // Phone Number Section

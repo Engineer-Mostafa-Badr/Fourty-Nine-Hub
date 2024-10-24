@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
@@ -32,39 +33,39 @@ class _ChatRoomViewState extends State<ChatRoomView> {
             create: (context) => serviceLocator<ChatRoomCubit>()
               ..init(chat: widget.chatsCubit.selectedChat)),
       ],
-      child: Builder(
-        builder: (context) {
-          return Scaffold(
-            backgroundColor: AppColors.BACKGROUND_COLOR,
-            appBar: ChatRoomAppBar(
-              chatRoomCubit: context.read<ChatRoomCubit>(),
-            ),
-            body: Stack(
-              children: [
-                // Background image
-                Positioned.fill(
-                  child: Image.asset(
-                    Assets.chatRoomBackground,
-                    scale: 7,
-                    // fit: BoxFit.cover,
-                    repeat: ImageRepeat.repeat,
-                    opacity: const AlwaysStoppedAnimation(0.7),
-                  ),
+      child: Builder(builder: (context) {
+        return Scaffold(
+          // backgroundColor: AppColors.BACKGROUND_COLOR,
+          appBar: ChatRoomAppBar(
+            chatRoomCubit: context.read<ChatRoomCubit>(),
+          ),
+          body: Stack(
+            children: [
+              // Background image
+              Positioned.fill(
+                child: Image.asset(
+                  Assets.chatRoomBackground,
+                  scale: 7,
+                  // fit: BoxFit.cover,
+                  repeat: ImageRepeat.repeat,
+                  opacity: context.isDarkMode
+                      ? const AlwaysStoppedAnimation(0.1)
+                      : const AlwaysStoppedAnimation(0.7),
                 ),
-                // Main content
-                const SafeArea(
-                  child: Column(
-                    children: [
-                      Expanded(child: MessagesListView()),
-                      SendMessageWidget(),
-                    ],
-                  ),
+              ),
+              // Main content
+              const SafeArea(
+                child: Column(
+                  children: [
+                    Expanded(child: MessagesListView()),
+                    SendMessageWidget(),
+                  ],
                 ),
-              ],
-            ),
-          );
-        }
-      ),
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 

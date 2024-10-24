@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
@@ -92,7 +93,9 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
             Icons.more_vert,
             color: Colors.white,
           ),
-          color: AppColors.BACKGROUND_COLOR,
+          color: context.isDarkMode
+              ? AppColors.PRIMARY_COLOR
+              : AppColors.BACKGROUND_COLOR,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16.0)),
           ),
@@ -113,55 +116,67 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
             }
           },
           itemBuilder: (context) {
-            return _mainMenuBuilder();
+            return _mainMenuBuilder(context);
           },
         )
       ],
     );
   }
 
-  List<PopupMenuEntry<int>> _mainMenuBuilder() {
+  List<PopupMenuEntry<int>> _mainMenuBuilder(BuildContext context) {
     return [
       PopupMenuItem<int>(
         value: 0,
         child: Text(
           LocaleKeys.viewContact.tr(),
-          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+          style: Styles.mediumText(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 1,
         child: Text(
           LocaleKeys.mediaLinksAndDocs.tr(),
-          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+          style: Styles.mediumText(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 2,
         child: Text(
           LocaleKeys.search.tr(),
-          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+          style: Styles.mediumText(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 3,
         child: Text(
           LocaleKeys.muteNotifications.tr(),
-          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+          style: Styles.mediumText(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 4,
         child: Text(
           LocaleKeys.wallpaper.tr(),
-          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+          style: Styles.mediumText(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 5,
         child: Text(
           LocaleKeys.disappearingMessages.tr(),
-          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+          style: Styles.mediumText(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
@@ -171,13 +186,17 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
           children: [
             Text(
               LocaleKeys.more.tr(),
-              style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+              style: Styles.mediumText(
+                  color: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR),
             ),
             const Spacer(),
-            const Icon(
+            Icon(
               Icons.arrow_forward_ios,
               size: 22,
-              color: AppColors.PRIMARY_COLOR,
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
             )
           ],
         ),
@@ -195,56 +214,79 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
           value: 1,
           child: Text(
             LocaleKeys.edit.tr(),
-            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+            style: Styles.mediumText(
+                color: context.isDarkMode
+                    ? Colors.white
+                    : AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 2,
           child: Text(
             LocaleKeys.share.tr(),
-            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+            style: Styles.mediumText(
+                color: context.isDarkMode
+                    ? Colors.white
+                    : AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 3,
           child: Text(
             LocaleKeys.report.tr(),
-            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+            style: Styles.mediumText(
+                color: context.isDarkMode
+                    ? Colors.white
+                    : AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 4,
           child: Text(
             LocaleKeys.block.tr(),
-            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+            style: Styles.mediumText(
+                color: context.isDarkMode
+                    ? Colors.white
+                    : AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 5,
           child: Text(
             LocaleKeys.clearChat.tr(),
-            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+            style: Styles.mediumText(
+                color: context.isDarkMode
+                    ? Colors.white
+                    : AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 6,
           child: Text(
             LocaleKeys.exportChat.tr(),
-            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+            style: Styles.mediumText(
+                color: context.isDarkMode
+                    ? Colors.white
+                    : AppColors.PRIMARY_COLOR),
           ),
         ),
         PopupMenuItem<int>(
           value: 7,
           child: Text(
             "${LocaleKeys.addShortcut.tr()}      ",
-            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+            style: Styles.mediumText(
+                color: context.isDarkMode
+                    ? Colors.white
+                    : AppColors.PRIMARY_COLOR),
           ),
         ),
       ],
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(16.0)),
       ),
-      color: AppColors.BACKGROUND_COLOR,
+      color: context.isDarkMode
+          ? AppColors.PRIMARY_COLOR
+          : AppColors.BACKGROUND_COLOR,
     );
   }
 

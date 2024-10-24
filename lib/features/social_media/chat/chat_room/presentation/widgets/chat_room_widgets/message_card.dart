@@ -13,6 +13,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
@@ -472,10 +473,11 @@ class MessageCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 15,
-              backgroundColor: Colors.white,
-              backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+              backgroundColor:
+                  context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+              backgroundImage: const NetworkImage(UIConst.profilePlaceHolder),
             ),
             const Sizer(width: 5),
             IntrinsicWidth(
@@ -494,7 +496,9 @@ class MessageCard extends StatelessWidget {
                       padding: const EdgeInsets.all(12),
                       margin: const EdgeInsets.all(0),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: context.isDarkMode
+                            ? AppColors.QUANTITY_COLOR
+                            : Colors.white,
                         borderRadius: BorderRadius.only(
                           topLeft: messageEntity.hasReply
                               ? const Radius.circular(0)
@@ -509,11 +513,13 @@ class MessageCard extends StatelessWidget {
                               ? const Radius.circular(12)
                               : const Radius.circular(0),
                         ),
-                        boxShadow: const [
+                        boxShadow: [
                           BoxShadow(
-                            color: Colors.black12,
+                            color: context.isDarkMode
+                                ? AppColors.BACKGROUND_COLOR.withOpacity(0.05)
+                                : Colors.black12,
                             blurRadius: 8,
-                            offset: Offset(0, 4),
+                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),
@@ -526,7 +532,9 @@ class MessageCard extends StatelessWidget {
                               // trimLines: 5,
                               text: messageEntity.text,
                               style: Styles.mediumText(
-                                color: AppColors.PRIMARY_COLOR,
+                                color: context.isDarkMode
+                                    ? AppColors.BACKGROUND_COLOR
+                                    : AppColors.PRIMARY_COLOR,
                               ),
                               textAlign: TextAlign.left,
                             ),
@@ -535,7 +543,9 @@ class MessageCard extends StatelessWidget {
                           Label(
                             text: messageEntity.time,
                             style: Styles.smallText(
-                                color: AppColors.PRIMARY_COLOR),
+                                color: context.isDarkMode
+                                    ? AppColors.BACKGROUND_COLOR
+                                    : AppColors.PRIMARY_COLOR),
                           ),
                         ],
                       ),
@@ -752,9 +762,9 @@ class ReplyRecivedMessageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
         ),
@@ -769,7 +779,9 @@ class ReplyRecivedMessageCard extends StatelessWidget {
           right: 8,
         ),
         decoration: BoxDecoration(
-          color: AppColors.DARK_GRAY_COLOR.withOpacity(0.4),
+          color: context.isDarkMode
+              ? Colors.white
+              : AppColors.DARK_GRAY_COLOR.withOpacity(0.4),
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(12),
             topRight: Radius.circular(12),
@@ -831,7 +843,9 @@ class ReplyRecivedMessageCard extends StatelessWidget {
                           : messageEntity.reply!.text,
                       overflow: TextOverflow.ellipsis,
                       style: Styles.mediumText(
-                        color: AppColors.DARK_GRAY_COLOR,
+                        color: context.isDarkMode
+                            ? AppColors.BACKGROUND_COLOR
+                            : AppColors.DARK_GRAY_COLOR,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -851,10 +865,12 @@ class ReplyRecivedMessageCard extends StatelessWidget {
                           height: double.infinity,
                         ),
                       )
-                    : const Icon(
+                    : Icon(
                         Icons.insert_drive_file,
                         size: 30,
-                        color: AppColors.GREY_DARK_COLOR,
+                        color: context.isDarkMode
+                            ? AppColors.BACKGROUND_COLOR
+                            : AppColors.GREY_DARK_COLOR,
                       )
                 : const SizedBox(),
           ],
