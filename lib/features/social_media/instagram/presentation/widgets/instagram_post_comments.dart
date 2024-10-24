@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -12,6 +14,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -53,7 +56,9 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
       final user = context.read<UserCubit>().state.data;
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: context.isDarkMode
+              ? AppColors.DARK_BLUE_COLOR.withOpacity(0.07)
+              : AppColors.LIGHT_COLOR,
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.grey),
           title: Label(
@@ -82,8 +87,10 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                           child: Center(
                             child: Text(
                               LocaleKeys.noComments.localize,
-                              style: const TextStyle(
-                                color: Colors.black,
+                              style: TextStyle(
+                                color: context.isDarkMode
+                                    ? AppColors.LIGHT_GRAY_COLOR
+                                    : Colors.black,
                                 fontSize: 18,
                               ),
                             ),
@@ -114,8 +121,10 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
             ),
             Container(
                 height: kToolbarHeight,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                decoration: BoxDecoration(
+                  color: context.isDarkMode
+                      ? Colors.transparent
+                      : AppColors.LIGHT_COLOR,
                 ),
                 child: Row(
                   children: [
@@ -133,7 +142,9 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                       },
                       style: Styles.headerText(fontSize: 26),
                       decoration: InputDecoration(
-                        fillColor: Colors.white,
+                        fillColor: context.isDarkMode
+                            ? AppColors.DARK_BLUE_COLOR.withOpacity(0.07)
+                            : AppColors.LIGHT_COLOR,
                         contentPadding: const EdgeInsets.all(5),
                         hintText: '${LocaleKeys.typeYourComment.localize} ....',
                         hintStyle: Styles.mediumText(),

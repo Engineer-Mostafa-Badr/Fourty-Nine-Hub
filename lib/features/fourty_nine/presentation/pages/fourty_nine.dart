@@ -414,6 +414,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       ),
     );
   }
+
   Widget _buildStarWidget() {
     return SizedBox(
       height: kToolbarHeight * .9.h,

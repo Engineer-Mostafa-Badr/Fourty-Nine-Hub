@@ -432,7 +432,7 @@ class AppPages {
                             BlocProvider.value(
                                 value: serviceLocator<CreateAdCubit>(),
                                 child: CreateAdView(
-                            
+
                                   categorization:
                                   state.extra as CategorizationEntity,
                                 )),
@@ -1692,11 +1692,13 @@ class AppPages {
                           FetchCarYearTypeCubit(
                     fetchCarYearTypeUseCase:
                         serviceLocator<FetchCarYearTypeUseCase>(),
-                          ),
-                    ),
-                    BlocProvider(
-                      create: (_) =>
-                          PublishTripJoinCubit(
+                  ),
+                ),
+                BlocProvider(
+                  create: (_) => MapBoxCubit(),
+                ),
+                BlocProvider(
+                  create: (_) => PublishTripJoinCubit(
                     publishTripJoinUseCase:
                         serviceLocator<PublishTripJoinUseCase>(),
                           ),
@@ -1793,6 +1795,9 @@ class AppPages {
                 BlocProvider<GetPriceCarpoolCubit>(
                   create: (context) => GetPriceCarpoolCubit(
                       getPriceCarpoolUsecase: serviceLocator()),
+                ),
+                BlocProvider<GetAllTripsCubit>(
+                  create: (context) => GetAllTripsCubit(serviceLocator()),
                 ),
                 BlocProvider<CreateCarPoolCubit>(
                   create: (context) => CreateCarPoolCubit(

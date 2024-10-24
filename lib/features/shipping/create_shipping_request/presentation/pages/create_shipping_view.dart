@@ -37,13 +37,16 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 class CreateShippingView extends StatefulWidget {
   const CreateShippingView({super.key, this.selectedId});
+
   final String? selectedId;
+
   @override
   State<CreateShippingView> createState() => _CreateShippingViewState();
 }
 
 class _CreateShippingViewState extends State<CreateShippingView> {
   GlobalKey<FormState> formKey = GlobalKey();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -52,6 +55,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
   }
 
   bool isButtonSheet = false;
+
   // GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   @override
@@ -73,7 +77,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
       },
       builder: (context, status) {
         if (status is LoadingShippingState) {
-          return const Align(
+          return const Expanded(
             child: Center(
               child: CircularProgressIndicator(
                 color: AppColors.PRIMARY_COLOR,
@@ -88,7 +92,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
             child: SingleChildScrollView(
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height,
+                    // minHeight: MediaQuery.of(context).size.height,
                     minWidth: MediaQuery.of(context).size.width),
                 child: IntrinsicHeight(
                   child: Column(
@@ -155,8 +159,9 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                         onTap: () => context
                                             .push(Routes.DASHBOARDDRIVERSCREEN),
                                         title: LocaleKeys.driverDashboard.tr(),
-                                        subTitle: LocaleKeys.newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore
-                                                .tr(),
+                                        subTitle: LocaleKeys
+                                            .newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore
+                                            .tr(),
                                         route: Routes.DOCTORDASHBOARD,
                                       ),
                                     ],
@@ -193,7 +198,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                         horizontal: 10,
                                       ),
                                       child: Text(
-                                        LocaleKeys.youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove
+                                        LocaleKeys
+                                            .youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove
                                             .tr(),
                                         style: const TextStyle(
                                           color: Colors.red,
@@ -240,50 +246,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       const SizedBox(
                         height: 10,
                       ),
-                      // Spacer(),
-                      // NotFoundOffeRers(),
-                      // CreateTripForm(
-                      //   formKey: formKey,
-                      // ),
-
-                      // BlocBuilder<GetMyTripCubit, ShippingState>(
-                      //   builder: (context, state) {
-                      //     if (state is SuccessGetMyTripState) {
-
-                      //     }
-                      //     else{
-
-                      //     }
-                      //   },
-                      // )
-                      // CreateTripForm(formKey: formKey),
-                      // BlocBuilder<GetAllRequestByMyTripCubit, ShippingState>(
-                      //   builder: (context, state) {
-                      //     if (state is SuccessGetLoadingTripRequests) {
-                      //       if (state.request.isNotEmpty) {
-                      //         return Column(
-                      //           children: [
-                      //             ...List.generate(
-                      //               state.request.length,
-                      //               (index) => RequestOfferCard(
-                      //                 model: state.request[index],
-                      //               ),
-                      //             )
-                      //           ],
-                      //         );
-                      //       } else {
-                      //         return NotFoundOffers();
-                      //       }
-                      //     } else {
-                      //       return CreateTripForm(formKey: formKey);
-                      //     }
-                      //   },
-                      // ),
-                      // status is SuccessGetBannerState?
-                      // if(status.)
-                      // :CreateTripForm()
-                      // const SizedBox(height: 20),
-                    ],
+                     ],
                   ),
                 ),
               ),
@@ -321,8 +284,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                 if (state is SuccessCancelState) {
                   context.pop();
 
-                  showSuccessMessage(
-                      context, LocaleKeys.theTripHasBeenSuccessfullyClosed.tr());
+                  showSuccessMessage(context,
+                      LocaleKeys.theTripHasBeenSuccessfullyClosed.tr());
                 }
                 if (state is FailureShippingState) {
                   showErrorMessage(
@@ -361,11 +324,13 @@ class CustomTextField extends StatelessWidget {
       this.minLines,
       this.maxLines,
       this.maxLength});
+
   final String hint;
   final Icon? prefixIcon;
   final int? minLines;
   final int? maxLines;
   final int? maxLength;
+
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -423,8 +388,10 @@ class NotFoundOffers extends StatelessWidget {
 class RequestOfferCard extends StatelessWidget {
   const RequestOfferCard(
       {super.key, required this.model, this.isHistory = false});
+
   final GetRequestsForLoadingModel model;
   final bool isHistory;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<AcceptDeclineTripCubit, ShippingState>(
@@ -565,7 +532,8 @@ class RequestOfferCard extends StatelessWidget {
                             ],
                           ),
                         ),
-                        if (model.isPremium ?? false) Text(LocaleKeys.premium.tr())
+                        if (model.isPremium ?? false)
+                          Text(LocaleKeys.premium.tr())
                       ],
                     )
                   ],
@@ -786,7 +754,8 @@ class RequestOfferCard extends StatelessWidget {
                         .showSubscriptionPlans(
                             subCategoryId: "62c8bab18e28a58a3edf580d");
                   },
-                  child: Text( LocaleKeys.subscribeToContactToTheDriver.tr(),
+                  child: Text(
+                    LocaleKeys.subscribeToContactToTheDriver.tr(),
                     style: const TextStyle(fontSize: 16, color: Colors.red),
                   ),
                 )),
