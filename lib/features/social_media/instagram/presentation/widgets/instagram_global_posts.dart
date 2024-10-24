@@ -11,6 +11,7 @@ import 'package:fourtyninehub/common/widgets/stateless/images/social_image_viewe
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -81,7 +82,9 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                         child: Text(
                           LocaleKeys.noPosts.localize,
                           style: TextStyle(
-                            color: Colors.black,
+                            color: context.isDarkMode
+                                ? AppColors.LIGHT_COLOR
+                                : Colors.black,
                             fontSize: 18.sp,
                           ),
                         ),
@@ -453,7 +456,10 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                         ..onTap =
                                             () => context.push(Routes.LOGIN),
                                       style: Styles.mediumText(
-                                          color: Colors.black)),
+                                        color: context.isDarkMode
+                                            ? AppColors.SECONDARY_COLOR
+                                            : Colors.black,
+                                      )),
                                   TextSpan(
                                       text: controller
                                                   .globalFeedPagingController
@@ -467,15 +473,21 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                               .firstComment
                                               ?.content,
                                       style: Styles.mediumText(
-                                          color: Colors.grey)),
+                                        color: context.isDarkMode
+                                            ? AppColors.LIGHT_GRAY_COLOR
+                                            : AppColors.DARK_GRAY_COLOR,
+                                      )),
                                 ])),
                               RichText(
                                   text: TextSpan(children: [
                                 TextSpan(
                                     text: controller.globalFeedPagingController
                                         .itemList?[index].sinceTime,
-                                    style:
-                                        Styles.mediumText(color: Colors.grey)),
+                                    style: Styles.mediumText(
+                                      color: context.isDarkMode
+                                          ? AppColors.LIGHT_GRAY_COLOR
+                                          : AppColors.DARK_GRAY_COLOR,
+                                    )),
                               ]))
                             ],
                           ),

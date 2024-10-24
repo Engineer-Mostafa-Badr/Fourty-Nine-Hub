@@ -11,6 +11,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -82,14 +83,19 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                           onPressed: () => context.pop(),
                                           icon: Icon(
                                             Icons.arrow_back,
-                                            color: Colors.black,
+                                            color: context.isDarkMode
+                                                ? AppColors.LIGHT_COLOR
+                                                : AppColors.DARK_BLUE_COLOR,
                                             size: 45.w,
                                           )),
                                       Label(
                                           text:
                                               '${state.profileData?.email.split('@')[0]}',
                                           style: Styles.mediumText(
-                                              color: Colors.grey)),
+                                            color: context.isDarkMode
+                                                ? AppColors.LIGHT_COLOR
+                                                : AppColors.DARK_GRAY_COLOR,
+                                          )),
                                       if (state.profileData?.isDocument ==
                                           true) ...[
                                         Sizer(
@@ -107,7 +113,9 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                     PopupMenuButton(
                                         icon: Icon(
                                           Icons.more_vert,
-                                          color: Colors.black,
+                                          color: context.isDarkMode
+                                              ? AppColors.LIGHT_COLOR
+                                              : AppColors.DARK_BLUE_COLOR,
                                           size: 45.w,
                                         ),
                                         itemBuilder: (context) {
@@ -216,6 +224,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                     tabAlignment: TabAlignment.center,
                                     // labelPadding: EdgeInsetsDirectional.only(end: 100),
                                     indicatorSize: TabBarIndicatorSize.tab,
+                                    indicatorColor: AppColors.SECONDARY_COLOR,
                                     labelPadding:
                                         EdgeInsetsDirectional.symmetric(
                                             horizontal: 90.w),
@@ -227,12 +236,18 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                         icon: Image.asset(
                                           Assets.userMedia,
                                           width: 55.w,
+                                          color: context.isDarkMode
+                                              ? AppColors.LIGHT_COLOR
+                                              : AppColors.DARK_BLUE_COLOR,
                                         ),
                                       ),
                                       Tab(
                                         icon: Image.asset(
                                           Assets.userReels,
                                           width: 55.w,
+                                          color: context.isDarkMode
+                                              ? AppColors.LIGHT_COLOR
+                                              : AppColors.DARK_BLUE_COLOR,
                                         ),
                                       ),
                                       if (context
@@ -245,6 +260,9 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                           icon: Image.asset(
                                             Assets.savedReels,
                                             width: 55.w,
+                                            color: context.isDarkMode
+                                                ? AppColors.LIGHT_COLOR
+                                                : AppColors.DARK_BLUE_COLOR,
                                           ),
                                         ),
                                     ]),
@@ -449,27 +467,41 @@ class _InstagramProfileState extends State<InstagramProfile> {
                       TextSpan(
                           text: "${user.firstName} ${user.lastName}",
                           style: Styles.headerText(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black)),
+                            fontWeight: FontWeight.w600,
+                            color: context.isDarkMode
+                                ? AppColors.PRIMARY_COLOR_DARK
+                                : AppColors.DARK_BLUE_COLOR,
+                          )),
                       if (user.job.isNotEmpty)
                         TextSpan(
                             text: '\t(${user.job})',
                             style: Styles.headerText(
-                                color: Colors.black, fontSize: 26)),
+                                color: context.isDarkMode
+                                    ? AppColors.LIGHT_COLOR
+                                    : AppColors.DARK_BLUE_COLOR,
+                                fontSize: 26)),
                     ])),
                 Sizer(
                   height: 4.h,
                 ),
                 Label(
                     text: '@ ${user.email.split('@')[0]}',
-                    style: Styles.mediumText(color: Colors.grey)),
+                    style: Styles.mediumText(
+                      color: context.isDarkMode
+                          ? AppColors.LIGHT_GRAY_COLOR
+                          : AppColors.DARK_BLUE_COLOR,
+                    )),
                 Sizer(
                   height: 4.h,
                 ),
                 if (user.bio.isNotEmpty)
                   Label(
                       text: user.bio,
-                      style: Styles.mediumText(color: Colors.black)),
+                      style: Styles.mediumText(
+                        color: context.isDarkMode
+                            ? AppColors.LIGHT_GRAY_COLOR
+                            : AppColors.DARK_BLUE_COLOR,
+                      )),
                 Sizer(
                   height: 5.h,
                 ),
@@ -488,7 +520,10 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                 text:
                                     '${user.country}${user.city.isNotEmpty ? ',' : ''} ${user.city}',
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 26),
+                                    color: context.isDarkMode
+                                        ? AppColors.LIGHT_GRAY_COLOR
+                                        : AppColors.DARK_BLUE_COLOR,
+                                    fontSize: 26),
                                 maxLines: 1,
                               ),
                             ),
@@ -505,7 +540,10 @@ class _InstagramProfileState extends State<InstagramProfile> {
                               child: Label(
                                 text: user.phone,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 26),
+                                    color: context.isDarkMode
+                                        ? AppColors.LIGHT_GRAY_COLOR
+                                        : AppColors.DARK_BLUE_COLOR,
+                                    fontSize: 26),
                                 maxLines: 1,
                               ),
                             ),
@@ -522,7 +560,10 @@ class _InstagramProfileState extends State<InstagramProfile> {
                               child: Label(
                                 text: user.job,
                                 style: Styles.headerText(
-                                    color: Colors.black, fontSize: 26),
+                                    color: context.isDarkMode
+                                        ? AppColors.LIGHT_GRAY_COLOR
+                                        : AppColors.DARK_BLUE_COLOR,
+                                    fontSize: 26),
                                 maxLines: 1,
                               ),
                             ),
@@ -574,12 +615,20 @@ class _InstagramProfileState extends State<InstagramProfile> {
                           TextSpan(
                               text:
                                   '${user.followers!.isNotEmpty ? '${user.followers![0].firstName} ${user.followers![0].lastName}' : ''} ${user.followers!.length > 1 ? '${user.followers![1].firstName} ${user.followers![1].lastName}' : ''}',
-                              style: Styles.mediumText(color: Colors.black)),
+                              style: Styles.mediumText(
+                                color: context.isDarkMode
+                                    ? AppColors.LIGHT_GRAY_COLOR
+                                    : AppColors.DARK_BLUE_COLOR,
+                              )),
                           if (user.followers!.length > 2)
                             TextSpan(
                                 text:
                                     '\tand ${user.followers!.length - 2} others',
-                                style: Styles.mediumText(color: Colors.grey)),
+                                style: Styles.mediumText(
+                                  color: context.isDarkMode
+                                      ? AppColors.GREY_LIGHT_COLOR
+                                      : AppColors.DARK_GRAY_COLOR,
+                                )),
                         ])),
                       ),
                     ],
@@ -601,8 +650,9 @@ class _InstagramProfileState extends State<InstagramProfile> {
                             backColor: user.isFollowed == true
                                 ? AppColors.PRIMARY_COLOR
                                 : null,
-                            label:
-                                user.isFollowed == true ? 'unFollow' : 'Follow',
+                            label: user.isFollowed == true
+                                ? LocaleKeys.Unfollow.localize
+                                : LocaleKeys.follow.localize,
                             style: Styles.mediumText(color: Colors.white),
                             onPressed: () {
                               onFollow();
@@ -781,7 +831,11 @@ class _InstagramProfileState extends State<InstagramProfile> {
         ),
         Text(
           label,
-          style: Styles.mediumText(color: Colors.grey),
+          style: Styles.mediumText(
+            color: context.isDarkMode
+                ? AppColors.LIGHT_GRAY_COLOR2
+                : AppColors.DARK_BLUE_COLOR,
+          ),
         ),
       ],
     );
