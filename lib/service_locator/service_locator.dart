@@ -273,5 +273,6 @@ class DI {
     ReelsServiceLocator.execute(serviceLocator: serviceLocator);
     StarServiceLocator.execute(serviceLocator: serviceLocator);
     QuranServiceLocator.execute(serviceLocator: serviceLocator);
+    StoriesServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }
