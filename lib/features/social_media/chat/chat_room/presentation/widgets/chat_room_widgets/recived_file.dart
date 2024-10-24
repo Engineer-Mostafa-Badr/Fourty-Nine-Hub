@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -69,10 +70,11 @@ class _ReceivedFileCardState extends State<ReceivedFileCard> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 15,
-              backgroundColor: Colors.white,
-              backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+              backgroundColor:
+                  context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+              backgroundImage: const NetworkImage(UIConst.profilePlaceHolder),
             ),
             const SizedBox(
               width: 8,
@@ -85,7 +87,9 @@ class _ReceivedFileCardState extends State<ReceivedFileCard> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: context.isDarkMode
+                          ? AppColors.QUANTITY_COLOR
+                          : Colors.white,
                       borderRadius: BorderRadius.only(
                         topLeft: const Radius.circular(12),
                         topRight: const Radius.circular(12),
@@ -96,11 +100,13 @@ class _ReceivedFileCardState extends State<ReceivedFileCard> {
                             ? const Radius.circular(12)
                             : const Radius.circular(0),
                       ),
-                      boxShadow: const [
+                      boxShadow: [
                         BoxShadow(
-                          color: Colors.black12,
+                          color: context.isDarkMode
+                              ? AppColors.BACKGROUND_COLOR.withOpacity(0.05)
+                              : Colors.black12,
                           blurRadius: 8,
-                          offset: Offset(0, 4),
+                          offset: const Offset(0, 4),
                         ),
                       ],
                     ),
@@ -190,7 +196,9 @@ class _ReceivedFileCardState extends State<ReceivedFileCard> {
                               Label(
                                 text: widget.messageEntity.time,
                                 style: Styles.smallText(
-                                    color: AppColors.PRIMARY_COLOR),
+                                    color: context.isDarkMode
+                                        ? AppColors.BACKGROUND_COLOR
+                                        : AppColors.PRIMARY_COLOR),
                               ),
                               const SizedBox(width: 4),
                               widget.messageEntity.byMe

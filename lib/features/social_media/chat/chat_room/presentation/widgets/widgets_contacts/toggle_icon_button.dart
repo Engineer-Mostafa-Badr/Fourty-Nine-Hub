@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class ToggleIconButton extends StatefulWidget {
@@ -23,8 +24,12 @@ class ToggleIconButtonState extends State<ToggleIconButton> {
       icon: Icon(
         _isEnabled ? Icons.toggle_on : Icons.toggle_off,
         color: _isEnabled
-            ? AppColors.PRIMARY_COLOR
-            : AppColors.PRIMARY_COLOR.withOpacity(0.5),
+            ? context.isDarkMode
+                ? AppColors.BACKGROUND_COLOR
+                : AppColors.PRIMARY_COLOR
+            : context.isDarkMode
+                ? AppColors.BACKGROUND_COLOR.withOpacity(0.2)
+                : AppColors.PRIMARY_COLOR.withOpacity(0.5),
         size: 44,
       ),
       onPressed: _toggleIcon,

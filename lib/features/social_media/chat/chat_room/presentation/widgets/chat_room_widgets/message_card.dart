@@ -184,10 +184,11 @@ class MessageCard extends StatelessWidget {
           const SizedBox(
             width: 8,
           ),
-          const CircleAvatar(
+          CircleAvatar(
             radius: 15,
-            backgroundColor: Colors.white,
-            backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+            backgroundColor:
+                context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+            backgroundImage: const NetworkImage(UIConst.profilePlaceHolder),
           ),
           const Sizer(width: 5),
           Padding(
@@ -199,7 +200,9 @@ class MessageCard extends StatelessWidget {
             ),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.isDarkMode
+                    ? AppColors.QUANTITY_COLOR
+                    : Colors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: messageEntity.hasReply
                       ? const Radius.circular(0)
@@ -214,11 +217,13 @@ class MessageCard extends StatelessWidget {
                       ? const Radius.circular(12)
                       : const Radius.circular(0),
                 ),
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
-                    color: Colors.black12,
+                    color: context.isDarkMode
+                        ? AppColors.BACKGROUND_COLOR.withOpacity(0.05)
+                        : Colors.black12,
                     blurRadius: 8,
-                    offset: Offset(0, 4),
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
@@ -259,7 +264,15 @@ class MessageCard extends StatelessWidget {
           ReadMoreLabel(
             // trimLines: 5,
             text: messageEntity.text,
-            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+            style: Styles.mediumText(
+              color: messageEntity.byMe
+                  ? context.isDarkMode
+                      ? AppColors.PRIMARY_COLOR
+                      : AppColors.PRIMARY_COLOR
+                  : context.isDarkMode
+                      ? AppColors.BACKGROUND_COLOR
+                      : AppColors.LIGHT_GRAY_COLOR2,
+            ),
             textAlign: TextAlign.left,
           ),
           const SizedBox(width: 8),
@@ -268,14 +281,24 @@ class MessageCard extends StatelessWidget {
             children: [
               Label(
                 text: messageEntity.time,
-                style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
+                style: Styles.smallText(
+                  color: messageEntity.byMe
+                      ? context.isDarkMode
+                          ? AppColors.PRIMARY_COLOR
+                          : AppColors.PRIMARY_COLOR
+                      : context.isDarkMode
+                          ? AppColors.BACKGROUND_COLOR
+                          : AppColors.LIGHT_GRAY_COLOR2,
+                ),
               ),
               const SizedBox(width: 4),
-              Icon(
-                _getMessageIcon(messageEntity),
-                color: _getMessageIconColor(messageEntity),
-                size: 12,
-              ),
+              messageEntity.byMe
+                  ? Icon(
+                      _getMessageIcon(messageEntity),
+                      color: _getMessageIconColor(messageEntity),
+                      size: 12,
+                    )
+                  : const SizedBox(),
             ],
           ),
           // Row(
@@ -609,10 +632,13 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
             children: [
               widget.isSend
                   ? const SizedBox()
-                  : const CircleAvatar(
+                  : CircleAvatar(
                       radius: 15,
-                      backgroundColor: Colors.white,
-                      backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+                      backgroundColor: context.isDarkMode
+                          ? AppColors.QUANTITY_COLOR
+                          : Colors.white,
+                      backgroundImage:
+                          const NetworkImage(UIConst.profilePlaceHolder),
                     ),
               widget.isSend ? const SizedBox() : const Sizer(width: 5),
               Container(
@@ -620,18 +646,22 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
                 decoration: BoxDecoration(
                   color: widget.isSend
                       ? AppColors.MESSAGE_COLOR
-                      : AppColors.BACKGROUND_COLOR,
+                      : context.isDarkMode
+                          ? AppColors.QUANTITY_COLOR
+                          : AppColors.BACKGROUND_COLOR,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(12),
                     topRight: Radius.circular(12),
                     bottomLeft: Radius.circular(12),
                     bottomRight: Radius.circular(12),
                   ),
-                  boxShadow: const [
+                  boxShadow: [
                     BoxShadow(
-                      color: Colors.black12,
+                      color: context.isDarkMode
+                          ? AppColors.BACKGROUND_COLOR.withOpacity(0.05)
+                          : Colors.black12,
                       blurRadius: 8,
-                      offset: Offset(0, 4),
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
@@ -653,16 +683,28 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
                       child: Stack(
                         children: [
                           VoiceMessageView(
-                            activeSliderColor: AppColors.PRIMARY_COLOR,
+                            activeSliderColor: widget.isSend
+                                ? context.isDarkMode
+                                    ? AppColors.PRIMARY_COLOR
+                                    : AppColors.PRIMARY_COLOR
+                                : context.isDarkMode
+                                    ? AppColors.BACKGROUND_COLOR
+                                        .withOpacity(0.5)
+                                    : AppColors.LIGHT_GRAY_COLOR2,
                             circlesColor: AppColors.PRIMARY_COLOR,
                             notActiveSliderColor: widget.isSend
                                 ? AppColors.MESSAGE_COLOR
-                                : AppColors.BACKGROUND_COLOR,
+                                : context.isDarkMode
+                                    ? AppColors.QUANTITY_COLOR
+                                    : AppColors.BACKGROUND_COLOR,
                             backgroundColor: widget.isSend
                                 ? AppColors.MESSAGE_COLOR
-                                : AppColors.BACKGROUND_COLOR,
+                                : context.isDarkMode
+                                    ? AppColors.QUANTITY_COLOR
+                                    : AppColors.BACKGROUND_COLOR,
                             innerPadding: 12,
                             cornerRadius: 12,
+
                             // notActiveSliderColor:
                             //     AppColors.PRIMARY_COLOR.withOpacity(0.1),
                             // size: ,
@@ -671,6 +713,7 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
                               // audioSrc:
                               //     "https://server8.mp3quran.net/afs/056.mp3",
                               maxDuration: const Duration(minutes: 1000),
+
                               // cacheKey: messageEntity.media[0].url,
                               isFile: false,
                               onComplete: () {},
@@ -703,7 +746,15 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
                           Label(
                             text: widget.messageEntity.time,
                             style: Styles.smallText(
-                                color: AppColors.PRIMARY_COLOR),
+                              color: widget.isSend
+                                  ? context.isDarkMode
+                                      ? AppColors.PRIMARY_COLOR
+                                      : AppColors.PRIMARY_COLOR
+                                  : context.isDarkMode
+                                      ? AppColors.BACKGROUND_COLOR
+                                          .withOpacity(0.5)
+                                      : AppColors.LIGHT_GRAY_COLOR2,
+                            ),
                           ),
                           widget.isSend
                               ? const SizedBox(width: 4)

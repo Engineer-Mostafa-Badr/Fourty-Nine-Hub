@@ -36,7 +36,7 @@ class ChatProfileView extends StatelessWidget {
           children: [
             const SizedBox(height: 20),
             // Profile Picture Section
-            const Stack(
+            Stack(
               children: [
                 CircleAvatar(
                   radius: 60,
@@ -48,9 +48,11 @@ class ChatProfileView extends StatelessWidget {
                   bottom: 0,
                   right: 0,
                   child: CircleAvatar(
-                    backgroundColor: AppColors.PRIMARY_COLOR,
+                    backgroundColor: context.isDarkMode
+                        ? AppColors.BACKGROUND_COLOR
+                        : AppColors.PRIMARY_COLOR,
                     radius: 16,
-                    child: Icon(
+                    child: const Icon(
                       Icons.camera_alt,
                       color: Colors.white,
                       size: 18,

@@ -235,7 +235,7 @@ class _BroadcastViewState extends State<BroadcastView> {
       PopupMenuItem<int>(
         value: 1,
         child: Text(
-          LocaleKeys.unfollow.tr(),
+          LocaleKeys.Unfollow.tr(),
           style: Styles.mediumText(
               color:
                   context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
