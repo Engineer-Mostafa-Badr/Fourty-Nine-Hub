@@ -13,8 +13,7 @@ import '../../../../../core/localization/locale_keys.g.dart';
 class RestaurantForSelectedMeal extends StatefulWidget {
   final String mealId;
 
-  const RestaurantForSelectedMeal({Key? key, required this.mealId})
-      : super(key: key);
+  const RestaurantForSelectedMeal({super.key, required this.mealId});
 
   @override
   State<RestaurantForSelectedMeal> createState() =>

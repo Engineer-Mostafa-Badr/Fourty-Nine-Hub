@@ -420,6 +420,7 @@ class EndPoints {
   }
 
   static const sendRideRequest = '/ride/trips/new';
+  static const checkDriverType = '/ride/riders/checkDriver/type';
   static const getMyPickMeTrips = '/ride/pick-me/trip/requests';
   static const getAllComeWithMeAds = '/ride/come-with-you/get-all';
   static const getAllPickMeAds = '/ride/pick-me/get-all';

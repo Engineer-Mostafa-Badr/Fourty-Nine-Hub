@@ -151,7 +151,7 @@ class ReelsCubit extends Cubit<ReelsState> {
           emit(state.copyWith(reelViewErrorMessage: failure.toString())),
           (data) {
             print(
-                'Advertisement created successfully!  ${data} ****************************************************');
+                'Advertisement created successfully!  $data ****************************************************');
           },
     );
     // final token = await CacheManager.getAccessToken();

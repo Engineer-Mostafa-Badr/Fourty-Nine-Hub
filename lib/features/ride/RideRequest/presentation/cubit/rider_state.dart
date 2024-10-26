@@ -73,3 +73,17 @@ class SuccessGetExpairedTripRider extends RiderState {
 
   SuccessGetExpairedTripRider({required this.list});
 }
+
+class SuccesCheckDriverTypeState extends RiderState {
+  final bool shipping;
+  final bool rider;
+
+  SuccesCheckDriverTypeState({required this.shipping, required this.rider});
+}
+
+class SuccessSelectCateogryState extends RiderState{
+  final String id;
+  final int type;
+
+  SuccessSelectCateogryState({required this.id, required this.type});
+}

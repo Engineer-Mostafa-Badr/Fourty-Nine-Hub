@@ -173,9 +173,9 @@ class TripRequestCard extends StatelessWidget {
           "${LocaleKeys.total.tr()}: ",
           style: Styles.headerText(),
         ),
-        Spacer(),
+        const Spacer(),
         Text(
-          "${orderData.total?.toString() ?? '0'}",
+          orderData.total?.toString() ?? '0',
           style: Styles.headerText(),
         ),
         Text(

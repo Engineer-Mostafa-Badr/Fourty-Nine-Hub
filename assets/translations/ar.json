@@ -89,7 +89,7 @@
   "thirdPage": "الصفحه الثالثه",
   "selectGovernorate": "اختر المحافظه",
   "selectCity": "اختر المدينه",
-  "newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore": "الحجوزات الجديدة في الانتظار، سوف تذهب للمطعم وتصفح المزيد.",
+  "newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore": "الحجوزات الجديدة في الانتظار، سوف تذهب للركاب وتصفح المزيد.",
   "premium": "العروض الخاصه",
   "comma": "،",
   "noResultFound": "لايوجد نتائج",
@@ -936,6 +936,8 @@
 
   "comfort": "مريح",
   "minutesAgo": "من دقيقه",
+  "shareTransactionDetails": "مشاركة تفاصيل المعاملة",
+  "Phonenumbercannotbewrittenindescription": "لا يمكن كتابه رقم هاتف في الوصف"
   "mutualFriend": "صديق مشترك",
   "womenOnly": "للنساء فقط",
   "chance": "فرصة",

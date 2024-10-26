@@ -1,7 +1,7 @@
 import 'package:fourtyninehub/features/chance_feature/domain/entity/cahnce_rate_entity.dart';
 
 class ChanceRateModel extends ChanceRateEntity {
-  ChanceRateModel({
+  const ChanceRateModel({
     required super.userContribution,
     required super.totalContributions,
     required super.contributionPercentage,

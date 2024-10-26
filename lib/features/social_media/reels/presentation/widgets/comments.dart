@@ -2597,7 +2597,7 @@ class CommentInputFieldState extends State<CommentInputField> {
                 alignment: Alignment.centerRight,
                 children: [
                   MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
+                    data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
                     child: TextField(
                       controller: _commentController,
                       style: TextStyle(
@@ -2898,7 +2898,7 @@ class _CommentWidgetState extends State<CommentWidget> {
         children: [
           Expanded(
             child: MediaQuery(
-              data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
+              data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
               child: TextField(
                 controller: _replyController,
                 focusNode: _replyFocusNode,

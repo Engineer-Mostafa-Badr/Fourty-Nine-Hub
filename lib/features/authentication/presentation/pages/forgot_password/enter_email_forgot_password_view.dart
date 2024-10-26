@@ -12,7 +12,6 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/f
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../../routes/routes.dart';
 

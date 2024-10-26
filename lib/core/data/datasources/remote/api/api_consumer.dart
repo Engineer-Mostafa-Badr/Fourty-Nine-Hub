@@ -166,7 +166,7 @@ class BaseApiConsumer extends ApiConsumer {
           // }
           // )
           );
-      log(result.toString());
+      log(result.toString(), name: url);
       // log(_dio.options.headers['Authorization'], name: "Authorization$url");
       print('Welcome ${result.data['status']}');
       if (result.data['status']) {
