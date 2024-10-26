@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/remote_data_source/wallet_datasource.dart';
 import 'package:fourtyninehub/features/authentication/data/repositories/wallet_repository.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_new_forget_password_use_case.dart';
-import 'package:fourtyninehub/features/authentication/domain/use_cases/facebook_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_welcome_gift_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_otp_use_case.dart';
@@ -92,8 +91,8 @@ class AuthServiceLocator {
         .registerFactory(() => GetWelcomeGiftUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => GoogleSignInUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => AppleSignInUseCase(serviceLocator()));
-    serviceLocator
-        .registerFactory(() => FacebookSignInUseCase(serviceLocator()));
+    // serviceLocator
+    //     .registerFactory(() => FacebookSignInUseCase(serviceLocator()));
     serviceLocator
         .registerFactory(() => SendForgetPasswordOTPUseCase(serviceLocator()));
     serviceLocator.registerFactory(
@@ -148,7 +147,7 @@ class AuthServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
-        serviceLocator(),
+        // serviceLocator(),
         serviceLocator(),
       ),
     );

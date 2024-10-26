@@ -949,6 +949,14 @@ class CodegenLoader extends AssetLoader{
   "transactionSuccessful": "تمت المعاملة بنجاح",
   "yourTransactionWasSuccessful": "كانت معاملتك ناجحة",
   "transferAmount": "مبلغ التحويل",
+  "shareTransactionDetails": "مشاركة تفاصيل المعاملة",
+  "premiumPackageMoreVisibilityCashback": "تمنحك الباقة المميزة الفرصة لتكون أكثر وضوحًا وتحصل على المزيد من الاسترداد النقدي.",
+  "inFront": "من الامام",
+  "behind": "من الخلف",
+  "drivingLicense": "رخصة القيادة",
+  "theApplicationDoesNotDeductAnyPercentage": "لا يقوم التطبيق بخصم أي نسبة من مقدم الخدمة.",
+  "youWillGetPoundsAnnually": "سوف تحصل على 3,650 جنيهًا إسترلينيًا سنويًا إذا قمت بالاشتراك.",
+  "license": "رخصة",
   "snapCopyOfBillPayment": "التقط نسخة من دفع الفاتورة",
   "paymentSuccessful": "تم الدفع بنجاح",
   "sendReviewApproval": "إرسال للمراجعة والموافقة",
@@ -973,7 +981,7 @@ class CodegenLoader extends AssetLoader{
   "comfort": "مريح",
   "womenOnly": "نسوان",
   "minutesAgo": "من دقيقه",
-  "shareTransactionDetails": "مشاركة تفاصيل المعاملة"
+  "Phonenumbercannotbewrittenindescription": "لا يمكن كتابه رقم هاتف في الوصف"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1968,6 +1976,13 @@ static const Map<String,dynamic> en = {
   "transactionSuccessful": "Transaction Successful",
   "yourTransactionWasSuccessful": "Your transaction was successful",
   "transferAmount": "Transfer Amount",
+  "shareTransactionDetails": "Share Transaction Details",
+  "inFront": "In Front",
+  "behind": "Behind",
+  "drivingLicense": "Driving License",
+  "theApplicationDoesNotDeductAnyPercentage": "The application does not deduct any percentage from the service provider.",
+  "youWillGetPoundsAnnually": "You will get 3,650 pounds annually if you subscribe.",
+  "license": "رخصة",
   "snapCopyOfBillPayment": "Snap copy of bill payment",
   "paymentSuccessful": "Payment successful",
   "sendReviewApproval": "Send for review and approval",
@@ -1979,14 +1994,14 @@ static const Map<String,dynamic> en = {
   "offers": "Offers",
   "contactPhone": "Contact Phone",
   "booking": "Booking",
-  "shareTransactionDetails": "Share Transaction Details",
   "insufficientAmount": "Insufficient Amount",
   "selectAmountToCharge": "Select amount to charge",
   "chargeNow": "Charge Now",
   "premiumSubscription": "Premium Subscription",
   "regularSubscription": "Regular Subscription",
   "notSubscribed": "Not Subscribed",
-  "adRequests": "Ad Requests"
+  "adRequests": "Ad Requests",
+  "Phonenumbercannotbewrittenindescription": "Phone number cannot be written in description"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 
 enum WalletTypes { mainWallet, giftWallet, balance }
 

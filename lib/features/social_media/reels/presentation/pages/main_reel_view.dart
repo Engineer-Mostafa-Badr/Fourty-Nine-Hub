@@ -218,7 +218,7 @@ class RoundedButtonWithImage extends StatelessWidget {
         child: ElevatedButton.icon(
           onPressed: onPressed,
           style: ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll<Color>(
+            backgroundColor: WidgetStatePropertyAll<Color>(
               Colors.blueGrey.withOpacity(0.2),
             ),
           ),
@@ -610,14 +610,14 @@ class DoubleTapHeart extends StatefulWidget {
   final Duration animationDuration;
 
   const DoubleTapHeart({
-    Key? key,
+    super.key,
     required this.child,
     this.onDoubleTap,
     this.heartIcon = Icons.favorite,
     this.iconSize = 80.0,
     this.iconColor = Colors.redAccent,
     this.animationDuration = const Duration(milliseconds: 700),
-  }) : super(key: key);
+  });
 
   @override
   _DoubleTapHeartState createState() => _DoubleTapHeartState();
@@ -626,7 +626,7 @@ class DoubleTapHeart extends StatefulWidget {
 class _DoubleTapHeartState extends State<DoubleTapHeart>
     with SingleTickerProviderStateMixin {
   Offset _tapPosition = Offset.zero;
-  List<_AnimatedHeartOverlay> _heartOverlays = [];
+  final List<_AnimatedHeartOverlay> _heartOverlays = [];
 
   @override
   Widget build(BuildContext context) {
@@ -683,14 +683,14 @@ class _AnimatedHeartOverlay extends StatefulWidget {
   final Function(_AnimatedHeartOverlay) onAnimationComplete;
 
   const _AnimatedHeartOverlay({
-    Key? key,
+    super.key,
     required this.position,
     required this.icon,
     required this.size,
     required this.color,
     required this.duration,
     required this.onAnimationComplete,
-  }) : super(key: key);
+  });
 
   @override
   __AnimatedHeartOverlayState createState() => __AnimatedHeartOverlayState();
@@ -753,7 +753,7 @@ class __AnimatedHeartOverlayState extends State<_AnimatedHeartOverlay>
 class VideoWidget extends StatefulWidget {
   final String url;
 
-  const VideoWidget({required this.url});
+  const VideoWidget({super.key, required this.url});
 
   @override
   _VideoWidgetState createState() => _VideoWidgetState();
@@ -853,6 +853,8 @@ class _VideoWidgetState extends State<VideoWidget> {
 }
 
 class AdvancedTikTokTabBar extends StatefulWidget {
+  const AdvancedTikTokTabBar({super.key});
+
   @override
   _AdvancedTikTokTabBarState createState() => _AdvancedTikTokTabBarState();
 }
@@ -906,7 +908,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                     context: context,
                     backgroundColor: Colors.transparent, // Make background transparent for rounded effect
                     isScrollControlled: true, // Allows the sheet to take more space
-                    shape: RoundedRectangleBorder(
+                    shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                     ),
                     builder: (context) {
@@ -919,7 +921,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                           return Container(
                             decoration: BoxDecoration(
                               color: Colors.white, // Set background color
-                              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.1),
@@ -1178,9 +1180,9 @@ class CustomChewieControls extends StatefulWidget {
   final ChewieController chewieController;
 
   const CustomChewieControls({
-    Key? key,
+    super.key,
     required this.chewieController,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomChewieControls> createState() => _CustomChewieControlsState();
@@ -1213,8 +1215,7 @@ class _CustomChewieControlsState extends State<CustomChewieControls> {
 class AdvancedChewieWithProgressBar extends StatefulWidget {
   final String videoUrl;
 
-  const AdvancedChewieWithProgressBar({Key? key, required this.videoUrl})
-      : super(key: key);
+  const AdvancedChewieWithProgressBar({super.key, required this.videoUrl});
 
   @override
   _AdvancedChewieWithProgressBarState createState() =>
@@ -1283,8 +1284,7 @@ class _AdvancedChewieWithProgressBarState
 class CustomProgressBar extends StatefulWidget {
   final VideoPlayerController videoPlayerController;
 
-  const CustomProgressBar({Key? key, required this.videoPlayerController})
-      : super(key: key);
+  const CustomProgressBar({super.key, required this.videoPlayerController});
 
   @override
   _CustomProgressBarState createState() => _CustomProgressBarState();

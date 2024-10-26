@@ -12,7 +12,6 @@ import '../../../features/account_taps/wallet/presentation/pages/balance_wallet_
 import '../../../features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/styles.dart';
-import '../../../service_locator/service_locator.dart';
 import '../stateless/labels/label.dart';
 import 'sizer.dart';
 

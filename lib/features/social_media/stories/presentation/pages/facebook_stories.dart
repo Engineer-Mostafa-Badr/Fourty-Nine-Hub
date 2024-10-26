@@ -59,7 +59,7 @@ class Stories extends StatelessWidget {
             height: kToolbarHeight * 2.5,
             child: BlocBuilder<StoryCubit, StoryState>(
               builder: (context, state) {
-                return (state.users?.isNotEmpty??false)
+                return (state.users.isNotEmpty??false)
                     ? ListView.separated(
                         physics: const NeverScrollableScrollPhysics(),
                         scrollDirection: Axis.horizontal,
@@ -69,7 +69,7 @@ class Stories extends StatelessWidget {
                         separatorBuilder: (context, index) => const Sizer(
                               width: 8,
                             ),
-                        itemCount: state.users?.length??0)
+                        itemCount: state.users.length??0)
                     : Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 2.0),
                         child: Shimmer.fromColors(
@@ -119,9 +119,9 @@ class Stories extends StatelessWidget {
           decoration: const BoxDecoration(
             color: Colors.white,
           ),
-          child: (state.users?.isNotEmpty??false) &&
-                  state.users?[index].stories != null &&
-                  (state.users?[index].stories?.isNotEmpty??false)
+          child: (state.users.isNotEmpty??false) &&
+                  state.users[index].stories != null &&
+                  (state.users[index].stories?.isNotEmpty??false)
               ? Stack(
                   children: [
                     Positioned.fill(
@@ -129,10 +129,10 @@ class Stories extends StatelessWidget {
                           indicatorColor: Colors.transparent,
                           indicatorForegroundColor: Colors.transparent,
                           storyItems: [
-                            state.users?[index].stories?.first.type != 'video'
+                            state.users[index].stories?.first.type != 'video'
                                 ? createStoryItem(
                                     context,
-                                    state.users![index].stories!.first,
+                                    state.users[index].stories!.first,
                                     userController)
                                 : StoryItem.pageImage(
                                     loadingWidget:
@@ -140,7 +140,7 @@ class Stories extends StatelessWidget {
                                       color: Colors.white,
                                     ),
                                     url: state
-                                        .users?[index].user?.profilePictureUrl??'',
+                                        .users[index].user?.profilePictureUrl??'',
                                     errorWidget: Image.network(
                                       UIConst.profilePlaceHolder,
                                       fit: BoxFit.fitHeight,
@@ -168,11 +168,11 @@ class Stories extends StatelessWidget {
                             child: CircleAvatar(
                               radius: 14,
                               backgroundColor: Colors.white,
-                              backgroundImage: NetworkImage(state.users?[index]
+                              backgroundImage: NetworkImage(state.users[index]
                                               .user!.profilePictureUrl !=
                                           null &&
-                                      (state.users?[index].user?.profilePictureUrl?.isNotEmpty??false)
-                                  ? state.users![index].user!.profilePictureUrl!
+                                      (state.users[index].user?.profilePictureUrl?.isNotEmpty??false)
+                                  ? state.users[index].user!.profilePictureUrl!
                                   : UIConst.profilePlaceHolder),
                               onBackgroundImageError: (exception, stackTrace) =>
                                   const NetworkImage(
@@ -185,7 +185,7 @@ class Stories extends StatelessWidget {
                             child: FittedBox(
                               child: Label(
                                   text: capitalizeAndSplit2Only(
-                                      "${state.users?[index].user!.firstName}\n${state.users?[index].user!.lastName}"),
+                                      "${state.users[index].user!.firstName}\n${state.users[index].user!.lastName}"),
                                   textAlign: TextAlign.start,
                                   style: Styles.mediumText(
                                     color: Colors.white,
@@ -307,7 +307,7 @@ class Stories extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => BlocProvider.value(
                 value: serviceLocator<StoryCubit>(),
-                child: MutedStories(),
+                child: const MutedStories(),
               ),
             ),
           );

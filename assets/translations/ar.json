@@ -89,7 +89,7 @@
   "thirdPage": "الصفحه الثالثه",
   "selectGovernorate": "اختر المحافظه",
   "selectCity": "اختر المدينه",
-  "newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore": "الحجوزات الجديدة في الانتظار، سوف تذهب للمطعم وتصفح المزيد.",
+  "newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore": "الحجوزات الجديدة في الانتظار، سوف تذهب للركاب وتصفح المزيد.",
   "premium": "العروض الخاصه",
   "comma": "،",
   "noResultFound": "لايوجد نتائج",
@@ -941,7 +941,7 @@
   "drivingLicense": "رخصة القيادة",
   "theApplicationDoesNotDeductAnyPercentage": "لا يقوم التطبيق بخصم أي نسبة من مقدم الخدمة.",
   "youWillGetPoundsAnnually": "سوف تحصل على 3,650 جنيهًا إسترلينيًا سنويًا إذا قمت بالاشتراك.",
-  "license": "رخصة"
+  "license": "رخصة",
   "snapCopyOfBillPayment": "التقط نسخة من دفع الفاتورة",
   "paymentSuccessful": "تم الدفع بنجاح",
   "sendReviewApproval": "إرسال للمراجعة والموافقة",
@@ -971,5 +971,6 @@
   "comfort": "مريح",
   "womenOnly": "نسوان",
   "minutesAgo": "من دقيقه",
-  "shareTransactionDetails": "مشاركة تفاصيل المعاملة"
+  "shareTransactionDetails": "مشاركة تفاصيل المعاملة",
+  "Phonenumbercannotbewrittenindescription": "لا يمكن كتابه رقم هاتف في الوصف"
 }

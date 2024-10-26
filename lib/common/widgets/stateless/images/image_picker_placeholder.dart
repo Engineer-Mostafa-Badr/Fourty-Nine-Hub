@@ -73,7 +73,7 @@ class ImagePickerPlaceholder extends StatelessWidget {
     if (title == null || title!.isEmpty) {
       // **Handling Null or Empty Title**
       // Return an empty widget if title is null or empty.
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
     return Center(
       child: Text(

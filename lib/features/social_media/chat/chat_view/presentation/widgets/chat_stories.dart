@@ -530,7 +530,7 @@ class ChatStories extends StatelessWidget {
             ),
             BlocBuilder<StoryCubit, StoryState>(
               builder: (context, state) {
-                if (state.users?.isEmpty??false) {
+                if (state.users.isEmpty??false) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 2.0),
                     child: Shimmer.fromColors(
@@ -555,7 +555,7 @@ class ChatStories extends StatelessWidget {
                   separatorBuilder: (context, index) => const Sizer(
                     width: 8,
                   ),
-                  itemCount: state.users?.length??0,
+                  itemCount: state.users.length??0,
                 );
               },
             ),
@@ -647,7 +647,7 @@ class ChatStories extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => BlocProvider.value(
                 value: serviceLocator<StoryCubit>(),
-                child: MutedStories(),
+                child: const MutedStories(),
               ),
             ),
           );
@@ -726,7 +726,7 @@ class ChatStories extends StatelessWidget {
                       ignoring: true,
                       child: Image.network(
                           fit: BoxFit.cover,
-                          state.users?[index].user?.profilePictureUrl??''),
+                          state.users[index].user?.profilePictureUrl??''),
 
                       // StoryView(
                       //   indicatorColor: Colors.transparent,
@@ -763,7 +763,7 @@ class ChatStories extends StatelessWidget {
             FittedBox(
               child: Text(
                 capitalizeAndSplit2Only(
-                  state.users?[index].user?.firstName??'',
+                  state.users[index].user?.firstName??'',
                 ),
                 textScaler: TextScaler.noScaling,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40.sp),

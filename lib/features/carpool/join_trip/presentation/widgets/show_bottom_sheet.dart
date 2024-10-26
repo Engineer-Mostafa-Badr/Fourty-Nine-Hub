@@ -161,7 +161,7 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
                             },
                             activeColor: AppColors.PRIMARY_COLOR,
                             trackOutlineColor:
-                                WidgetStatePropertyAll(Colors.grey),
+                                const WidgetStatePropertyAll(Colors.grey),
                             activeTrackColor: Colors.grey,
                             inactiveTrackColor: Colors.white,
                             inactiveThumbColor: Colors.grey,

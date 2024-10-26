@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -49,6 +50,11 @@ class _CreateShippingViewState extends State<CreateShippingView> {
     // TODO: implement initState
     super.initState();
     context.read<GetMyTripCubit>().getMyTrip();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        
+      },
+    );
   }
 
   bool isButtonSheet = false;
@@ -155,8 +161,9 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                         onTap: () => context
                                             .push(Routes.DASHBOARDDRIVERSCREEN),
                                         title: LocaleKeys.driverDashboard.tr(),
-                                        subTitle: LocaleKeys.newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore
-                                                .tr(),
+                                        subTitle: LocaleKeys
+                                            .newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore
+                                            .tr(),
                                         route: Routes.DOCTORDASHBOARD,
                                       ),
                                     ],
@@ -193,7 +200,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                         horizontal: 10,
                                       ),
                                       child: Text(
-                                        LocaleKeys.youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove
+                                        LocaleKeys
+                                            .youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove
                                             .tr(),
                                         style: const TextStyle(
                                           color: Colors.red,
@@ -321,8 +329,8 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                 if (state is SuccessCancelState) {
                   context.pop();
 
-                  showSuccessMessage(
-                      context, LocaleKeys.theTripHasBeenSuccessfullyClosed.tr());
+                  showSuccessMessage(context,
+                      LocaleKeys.theTripHasBeenSuccessfullyClosed.tr());
                 }
                 if (state is FailureShippingState) {
                   showErrorMessage(
@@ -565,7 +573,8 @@ class RequestOfferCard extends StatelessWidget {
                             ],
                           ),
                         ),
-                        if (model.isPremium ?? false) Text(LocaleKeys.premium.tr())
+                        if (model.isPremium ?? false)
+                          Text(LocaleKeys.premium.tr())
                       ],
                     )
                   ],
@@ -786,7 +795,8 @@ class RequestOfferCard extends StatelessWidget {
                         .showSubscriptionPlans(
                             subCategoryId: "62c8bab18e28a58a3edf580d");
                   },
-                  child: Text( LocaleKeys.subscribeToContactToTheDriver.tr(),
+                  child: Text(
+                    LocaleKeys.subscribeToContactToTheDriver.tr(),
                     style: const TextStyle(fontSize: 16, color: Colors.red),
                   ),
                 )),

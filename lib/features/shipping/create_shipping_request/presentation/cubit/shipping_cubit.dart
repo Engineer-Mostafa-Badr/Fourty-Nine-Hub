@@ -151,6 +151,11 @@ class ShippingCubit extends Cubit<ShippingState> {
     requestModel.subcategoryEntity = subCategory;
   }
 
+  removeSubCategoryRequest() {
+    requestModel.subcategoryEntity = null;
+    log(requestModel.subcategoryEntity.toString(), name: "lskdjflskdjflskdjf");
+  }
+
   pickIDExpiryDate(DateTime date) {
     model.idExpiryDate = date;
   }

@@ -77,7 +77,7 @@ class _AdRequestsViewState extends State<AdRequestsView> {
               .toList();
           // print("state.ad?.user${context.read<AdDetailsCubit>().state.ad?.user?.id}");
 
-          return Column(
+          return const Column(
             children: [
               // Expanded(
               //   child: ListView(

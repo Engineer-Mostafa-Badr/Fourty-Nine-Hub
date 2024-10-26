@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/numberwidget.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/presentation/widgets/show_bottom_sheet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';

@@ -392,7 +392,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
         //       color: AppColors.SECONDARY_COLOR,
         //     ),
         //   ),
-        Sizer(),
+        const Sizer(),
         if (context.read<UserCubit>().isLoggedIn)
           IconAppButton(
             icon: Icons.clear,

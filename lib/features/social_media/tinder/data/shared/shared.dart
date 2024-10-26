@@ -20,7 +20,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../routes/routes.dart';
-import '../../../../zoom/presentation/controller/stream_cubit.dart';
 
 class BottomSheetContent extends StatefulWidget {
   final String? receiverId;
