@@ -51,7 +51,6 @@ class _AdCardState extends State<AdCard> {
         .where((e) => e.value.nameAr != 'السعر' && e.value.nameAr != 'المرتب')
         .toList();
     return BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
-      final controller = context.read<AdvertisementCubit>();
       return Container(
         width: kToolbarHeight * 2.5,
         height: 600.h,
@@ -270,7 +269,7 @@ class _AdCardState extends State<AdCard> {
                                 Expanded(
                                   flex: 3,
                                   child: PremiumRequestButton(
-                                    adId: widget.item.id ?? '',
+                                    adId: widget.item.id,
                                     subCategoryId:
                                         widget.item.subCategoryId ?? '',
                                     subscriptionStatus:
