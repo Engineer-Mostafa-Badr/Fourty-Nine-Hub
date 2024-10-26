@@ -18,16 +18,21 @@ import '../../../../../res/style/styles.dart';
 
 class AdRequestsView extends StatefulWidget {
   var id;
+  String search = '';
 
   AdRequestsView({super.key, payload}){
     print("objectitemId$payload");
-    if(payload is String){
-      id=payload;
+    if(payload is AdRequestParams){
+      id=payload.id;
+      search = '';
+
     }else {
       print("payloadpayloadpayload $payload");
       // print(id);
       // print('itemId${payload['itemId']}');
       id=payload['itemId'];
+      search = payload['username'];
+
     }
   }
 
@@ -45,7 +50,7 @@ class _AdRequestsViewState extends State<AdRequestsView> {
     super.initState();
     _cubit = context.read<AdRequestsCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
-    _cubit.loadInitialData(widget.id, '');
+    _cubit.loadInitialData(widget.id, widget.search);
 
     _cubit.searchController.addListener(() {
       if (isFirstSearchListenerCall) {
@@ -137,8 +142,8 @@ class _AdRequestsViewState extends State<AdRequestsView> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(adRequest.userName ?? '', style: Styles.headerText()),
-                                    Text(adRequest.sinceTime ?? '', style: Styles.mediumText()),
+                                    Text(adRequest.userName, style: Styles.headerText()),
+                                    Text(adRequest.sinceTime, style: Styles.mediumText()),
                                   ],
                                 ),
                               ),
@@ -146,11 +151,11 @@ class _AdRequestsViewState extends State<AdRequestsView> {
                           ),
                           Sizer(height: 50.h),
                           CallMessageButtons(
-                            otherUserId: adRequest.adUserId ?? '',
+                            otherUserId: adRequest.adUserId,
                             clientId: adRequest.requestId,
-                            subcategoryId: adRequest.subCategoryId ?? '',
-                            phone: adRequest.phone ?? '',
-                            id: adRequest.requestUserId ?? '',
+                            subcategoryId: adRequest.subCategoryId,
+                            phone: adRequest.phone,
+                            id: adRequest.requestUserId,
                             hasReport: true,
                           ),
                         ],
@@ -195,4 +200,12 @@ class _AdRequestsViewState extends State<AdRequestsView> {
             ],
           );
         });
+  }
+
+
+  class AdRequestParams{
+    final String id;
+    final String userName;
+
+  AdRequestParams({required this.id, required this.userName});
   }

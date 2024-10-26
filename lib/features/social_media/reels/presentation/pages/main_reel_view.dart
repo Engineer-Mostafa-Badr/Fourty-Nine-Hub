@@ -218,8 +218,8 @@ class RoundedButtonWithImage extends StatelessWidget {
         child: ElevatedButton.icon(
           onPressed: onPressed,
           style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll<Color>(
-              Colors.blueGrey.withOpacity(0.2),
+            backgroundColor: MaterialStateProperty.resolveWith(
+              (states) => Colors.blueGrey.withOpacity(0.2),
             ),
           ),
           icon: const Icon(
