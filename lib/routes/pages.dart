@@ -8,6 +8,8 @@ import 'package:fourtyninehub/features/account_taps/privacy/presentation/pages/p
 import 'package:fourtyninehub/features/account_taps/share_app/presentation/pages/share_the_app.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_history_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/balance_wallet_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
@@ -692,6 +694,25 @@ class AppPages {
                   builder: (context, state) => const TransferMoneyView(),
                 ),
               ]),
+          GoRoute(
+              path: Paths.BALANCE,
+              name: Routes.BALANCE,
+              builder: (context, state) =>
+                  BlocProvider<WalletCubit>(
+                    create: (_) => serviceLocator(),
+                    child: const BalanceWalletView(),
+                  ),
+              ),
+          GoRoute(
+            path: Paths.GIFT,
+            name: Routes.GIFT,
+            builder: (context, state) =>
+                BlocProvider<WalletCubit>(
+                  create: (_) => serviceLocator(),
+                  child: const GiftWalletView(),
+                ),
+          ),
+
           GoRoute(
               path: Paths.ACCOUNT,
               name: Routes.ACCOUNT,

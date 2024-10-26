@@ -94,6 +94,7 @@
   "comma": "،",
   "noResultFound": "لايوجد نتائج",
   "restaurantDashboard": "لوحة المطعم",
+  "doctorDashboard": "لوحة الدكتور",
   "allRestaurants": "كل المطاعم",
   "restaurantsForSelectedMeal": "المطاعم لهذه الوجبه",
   "itemName": "اسم الوجبة",
@@ -1018,5 +1019,6 @@
   "newRide": "رحلة جديدة",
   "cancelRequest": "إلغاء الطلب",
   "sendOffer": "إرسال العرض",
-  "shareTransactionDetails": "مشاركة تفاصيل المعاملة"
+  "shareTransactionDetails": "مشاركة تفاصيل المعاملة",
+  "serveClientsByClickRegister": "خدمة العملاء عن طريق النقر على زر التسجيل."
 }

@@ -58,10 +58,7 @@ class WalletWidget extends StatelessWidget {
               ),
               const Sizer(),
               buildItem(() {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const BalanceWalletView()));
+                context.push(Routes.BALANCE);
               }, LocaleKeys.balance.tr(), '${state.wallet?.balance ?? ''} ',
                   state.wallet?.currency ?? ''),
               Container(
@@ -76,11 +73,7 @@ class WalletWidget extends StatelessWidget {
               ),
               const Sizer(),
               buildItem(() {
-                //context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const GiftWalletView()));
+                context.push(Routes.GIFT);
               }, LocaleKeys.gift.tr(), '${state.wallet?.giftWallet ?? ''} ',
                   state.wallet?.currency ?? ''),
               Container(

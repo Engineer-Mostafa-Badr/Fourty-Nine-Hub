@@ -1003,5 +1003,6 @@ abstract class  LocaleKeys {
   static const cancelRequest = 'cancelRequest';
   static const sendOffer = 'sendOffer';
   static const shareTransactionDetails = 'shareTransactionDetails';
+  static const serveClientsByClickRegister = 'serveClientsByClickRegister';
 
 }
