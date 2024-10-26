@@ -85,7 +85,7 @@
   "thirdPage": "Third Page",
   "selectGovernorate": "Select Governorate",
   "selectCity": "Select City",
-  "newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore": "New bookings are waiting. Go to restaurant dashboard and explore more.",
+  "newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore": "New bookings are waiting. Go to Riders dashboard and explore more.",
   "premium": "Premium",
   "restaurantDashboard": "Restaurant Dashboard",
   "allRestaurants": "All Restaurants",
@@ -93,7 +93,7 @@
   "itemName": "Item Name",
   "comma": ",",
   "noResultFound": "No Result Found",
-  "youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove": "You can enjoy serving your clints using your restaurant by clicking on the rigester button above.",
+  "youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove": "You can enjoy serving your clints using your Rdiers by clicking on the rigester button above.",
   "selectSubcategoryFirst": "Select Subcategory First",
   "UploadingImage": "Uploading Image...",
   "cantLoadCities": "Can't Load Cities",
@@ -1029,4 +1029,7 @@
   "notSubscribed": "Not Subscribed",
   "adRequests": "Ad Requests",
   "showAdRequests": "Show Ad Requests"
+  "adRequests": "Ad Requests",
+  "Phonenumbercannotbewrittenindescription": "Phone number cannot be written in description"
+
 }

@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
@@ -61,11 +63,46 @@ class _RiderBannerState extends State<RiderBanner> {
         // return true;
       },
       onRegister: () {
-        if (context.read<UserCubit>().isLoggedIn) {
+        
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DefaultButton(
+                    onPressed: () {
+                      if (context.read<UserCubit>().isLoggedIn) {
           context.push(Routes.RIDERREGISTER);
         } else {
           context.push(Routes.REGISTER);
         }
+                    },
+                    width: double.infinity,
+                    height: 50,
+                    label: "Ride",
+                    padding: EdgeInsets.zero,
+                  ),
+                  Sizer(),
+                  DefaultButton(
+                    onPressed: () {
+                      if (context.read<UserCubit>().isLoggedIn) {
+          context.push(Routes.SHIPPING_REGISTER);
+        } else {
+          context.push(Routes.REGISTER);
+        }
+                    },
+                    width: double.infinity,
+                    height: 50,
+                    label: "Ship",
+                    padding: EdgeInsets.zero,
+                  ),
+                ],
+              ),
+            );
+          },
+        );
       },
       canRegister: true,
       // canRegister: true,

@@ -20,7 +20,6 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/update_driver_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/image_validation.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';

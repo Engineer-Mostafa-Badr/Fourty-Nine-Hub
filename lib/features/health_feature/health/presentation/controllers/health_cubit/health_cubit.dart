@@ -186,7 +186,7 @@ class HealthCubit extends Cubit<HealthState> {
             mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
           emit(state.copyWith(mainCategory: mainCategoryEntity));
           result = state.mainCategory!.isFavorite!;
-          print("Salama ${data}");
+          print("Salama $data");
           return getServices();
         });
     return result;

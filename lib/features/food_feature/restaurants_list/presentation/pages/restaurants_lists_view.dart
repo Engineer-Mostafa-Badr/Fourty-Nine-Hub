@@ -194,7 +194,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               const Sizer(),
               _buildSearchAndExpiredRequests(),
               const Sizer(),
-              if ((state.mealCategories?.isNotEmpty ?? false)) MealCategories(),
+              if ((state.mealCategories?.isNotEmpty ?? false)) const MealCategories(),
               if (state.loadingSubCategories)
                 _buildLoadingSubCategoriesPlaceholder(),
               const Sizer(),

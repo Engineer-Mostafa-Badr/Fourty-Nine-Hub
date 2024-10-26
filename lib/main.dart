@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +43,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await CacheServiceImpl.init();
-  await DI.execute(); 
+  await DI.execute();
 
   // ZegoGiftManager().cache.cache(giftItemList);
 
@@ -84,6 +86,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    // log(CacheServiceImpl().isLogin().toString()??"null", name: "userId");
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -96,7 +99,7 @@ class _MyAppState extends State<MyApp> {
           create: (BuildContext context) => serviceLocator<WalletCubit>(),
         ),
         BlocProvider(
-          create: (BuildContext context) =>serviceLocator<SearchCubit>(),
+          create: (BuildContext context) => serviceLocator<SearchCubit>(),
         ),
         BlocProvider(
           create: (BuildContext context) =>
@@ -125,7 +128,10 @@ class _MyAppState extends State<MyApp> {
           create: (context) => ThemeCubit(),
         ),
         BlocProvider(
-          create: (context) => serviceLocator<StreamCubit>()..loadLives()..getScheduledMeetings()..getTopics(),
+          create: (context) => serviceLocator<StreamCubit>()
+            ..loadLives()
+            ..getScheduledMeetings()
+            ..getTopics(),
         ),
         BlocProvider<FirebaseNotficationsCubit>(
           create: (context) => FirebaseNotficationsCubit(serviceLocator()),
@@ -177,32 +183,31 @@ class _MyAppState extends State<MyApp> {
           return BlocBuilder<ThemeCubit, ThemeStates>(
             builder: (BuildContext context, state) {
               return FutureBuilder<bool>(
-                future: CacheManager.getMode(),
-                builder: (context, snapshot) {
-                  return MaterialApp.router(
-                    builder: (context, child) {
-                      return MediaQuery(
-                        data: MediaQuery.of(context)
-                            .copyWith(textScaler: TextScaler.noScaling),
-                        child: child!,
-                      );
-                    },
-                    themeMode: (snapshot.data??false)
-                        ? ThemeMode.dark
-                        : ThemeMode.light,
-                    theme: lightTheme,
-                    darkTheme: darkTheme,
-                    title: '49',
-                    debugShowCheckedModeBanner: false,
-                    routerConfig: AppPages.router,
-                    localizationsDelegates: context.localizationDelegates,
-                    supportedLocales: context.supportedLocales,
-                    locale: context.locale,
-                    // for device preview package
-                    // builder: DevicePreview.appBuilder,
-                  );
-                }
-              );
+                  future: CacheManager.getMode(),
+                  builder: (context, snapshot) {
+                    return MaterialApp.router(
+                      builder: (context, child) {
+                        return MediaQuery(
+                          data: MediaQuery.of(context)
+                              .copyWith(textScaler: TextScaler.noScaling),
+                          child: child!,
+                        );
+                      },
+                      themeMode: (snapshot.data ?? false)
+                          ? ThemeMode.dark
+                          : ThemeMode.light,
+                      theme: lightTheme,
+                      darkTheme: darkTheme,
+                      title: '49',
+                      debugShowCheckedModeBanner: false,
+                      routerConfig: AppPages.router,
+                      localizationsDelegates: context.localizationDelegates,
+                      supportedLocales: context.supportedLocales,
+                      locale: context.locale,
+                      // for device preview package
+                      // builder: DevicePreview.appBuilder,
+                    );
+                  });
             },
           );
         },

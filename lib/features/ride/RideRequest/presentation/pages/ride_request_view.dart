@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/common/widgets/stateful/maps/map_picker.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/offer_data_model/offer_data_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/success_request_trip_model/success_request_trip_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/address_search_params_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
@@ -16,6 +18,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/raise
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/common/dashboard_banner.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/rider_banner.dart';
@@ -591,54 +594,54 @@ class _RideRequestViewState extends State<RideRequestView> {
                 }
               },
             ),
-            // const Expanded(
-            //     child: Stack(
-            //   children: [
-            //     // Positioned.fill(
-            //     //   child: BlocProvider(
-            //     //     create: (BuildContext context) =>
-            //     //         serviceLocator<RiderequestCubit>(),
-            //     //     child: BlocBuilder<RiderequestCubit, RiderequestState>(
-            //     //       builder: (context, state) {
-            //     //         final rideCubit = context.read<RiderequestCubit>();
-            //     //         if (state.fromAddress != null &&
-            //     //             state.toAddress != null) {
-            //     //           return MapPicker(
-            //     //             lat: state.fromAddress?.lat,
-            //     //             lng: state.fromAddress?.lng,
-            //     //             destLat: state.toAddress?.lat,
-            //     //             destLng: state.toAddress?.lng,
-            //     //           );
-            //     //         }
-            //     //         return MapPicker(
-            //     //           lat: state.fromAddress?.lat,
-            //     //           lng: state.fromAddress?.lng,
-            //     //           onAddressPicked: (AddressSearchParamsEntity v) =>
-            //     //               rideCubit.selectPickUpLocation(item: v),
-            //     //         );
-            //     //         // return Container(
-            //     //         //   decoration: const BoxDecoration(
-            //     //         //     color: Colors.red,
-            //     //         //     image: DecorationImage(image: AssetImage("assets/images/map_image.png"), fit: BoxFit.cover)
-            //     //         //   ),
-            //     //         // );
-            //     //       },
-            //     //     ),
-            //     //   ),
-            //     // ),
-            //     // const Positioned(
-            //     // bottom: 10,
-            //     // right: 10,
-            //     // left: 10,
-            //     // child: DashboardBanner(
-            //     //   title: 'Driver Dashboard\n',
-            //     //   subTitle:
-            //     //       'New trips are waiting you, go to driver dashboard and explore more!',
-            //     //   route: Routes.RIDERDASHBOARD,
-            //     // )),
-            //   ],
-            // )
-            // ),
+            Expanded(
+                child: Stack(
+              children: [
+                Positioned.fill(
+                  child: BlocProvider(
+                    create: (BuildContext context) =>
+                        serviceLocator<RiderequestCubit>(),
+                    child: BlocBuilder<RiderequestCubit, RiderequestState>(
+                      builder: (context, state) {
+                        final rideCubit = context.read<RiderequestCubit>();
+                        if (state.fromAddress != null &&
+                            state.toAddress != null) {
+                          return MapPicker(
+                            lat: state.fromAddress?.lat,
+                            lng: state.fromAddress?.lng,
+                            destLat: state.toAddress?.lat,
+                            destLng: state.toAddress?.lng,
+                          );
+                        }
+                        return MapPicker(
+                          lat: state.fromAddress?.lat,
+                          lng: state.fromAddress?.lng,
+                          onAddressPicked: (AddressSearchParamsEntity v) =>
+                              rideCubit.selectPickUpLocation(item: v),
+                        );
+                        // return Container(
+                        //   decoration: const BoxDecoration(
+                        //     color: Colors.red,
+                        //     image: DecorationImage(image: AssetImage("assets/images/map_image.png"), fit: BoxFit.cover)
+                        //   ),
+                        // );
+                      },
+                    ),
+                  ),
+                ),
+                const Positioned(
+                bottom: 10,
+                right: 10,
+                left: 10,
+                child: DashboardBanner(
+                  title: 'Driver Dashboard\n',
+                  subTitle:
+                      'New trips are waiting you, go to driver dashboard and explore more!',
+                  route: Routes.RIDERDASHBOARD,
+                )),
+              ],
+            )
+            ),
             // BlocProvider.value(
             //   value: serviceLocator<RiderequestCubit>(),
             //   child: const RideOptionsBottomSheet(),

@@ -203,7 +203,7 @@ class _EditFoodViewState extends State<EditFoodView>
                             ),
                           );
                         }
-                        return Container(
+                        return SizedBox(
                           height: 195.h,
                           child: ImagePickerPlaceholder(
                             title: LocaleKeys.photoForMeal.tr(),
