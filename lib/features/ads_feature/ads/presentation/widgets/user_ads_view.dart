@@ -22,6 +22,7 @@ class UserAdsView extends StatelessWidget {
     return BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
       final controller = context.read<AdvertisementCubit>();
       return Column(children: [
+        const Sizer(),
         Align(
             alignment: AlignmentDirectional.topStart,
             child: Container(
@@ -30,7 +31,7 @@ class UserAdsView extends StatelessWidget {
                   children: [
                     BadgedLabel(
                         label: LocaleKeys.filter.localize,
-                        width: 145.h,
+                        width: 170.h,
                         icon: Icons.filter_alt_rounded,
                         iconLeading: Icons.arrow_drop_down,
 
@@ -47,7 +48,7 @@ class UserAdsView extends StatelessWidget {
                     const Sizer(width: 5,),
                     BadgedLabel(
                         label: LocaleKeys.city.localize,
-                        width: 145.h,
+                        width: 170.h,
                         icon: Icons.filter_alt_rounded,
                         iconLeading: Icons.arrow_drop_down,
 

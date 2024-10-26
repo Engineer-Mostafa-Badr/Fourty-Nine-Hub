@@ -57,7 +57,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
       final user = context.read<UserCubit>().state.data;
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          toolbarHeight: 200.h,
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.grey),
           title: Label(
@@ -87,7 +87,6 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                             child: Text(
                               LocaleKeys.noComments.localize,
                               style: const TextStyle(
-                                color: Colors.black,
                                 fontSize: 18,
                               ),
                             ),
@@ -118,9 +117,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
             ),
             Container(
                 height: kToolbarHeight,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
+                decoration: const BoxDecoration(),
                 child: Row(
                   children: [
                     ProfileImage(
@@ -139,11 +136,12 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                         },
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
-                          fillColor: Colors.white,
+                        //  fillColor: Colors.white,
                           contentPadding: const EdgeInsets.all(5),
                           hintText:
                               '${LocaleKeys.typeYourComment.localize} ....',
-                          hintStyle: Styles.mediumText(),
+                          hintStyle: Styles.mediumText(
+                          ),
                         ),
                       ),
                     ),

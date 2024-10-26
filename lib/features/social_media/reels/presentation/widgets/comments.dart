@@ -2374,13 +2374,10 @@
 //   );
 // }
 
-import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
@@ -2391,7 +2388,6 @@ import 'package:shimmer/shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../tinder/data/shared/shared.dart';
-import '../../../tinder/presentation/pages/user_profile.dart';
 import 'dart:ui';
 
 bool isDarkTheme(BuildContext context) {

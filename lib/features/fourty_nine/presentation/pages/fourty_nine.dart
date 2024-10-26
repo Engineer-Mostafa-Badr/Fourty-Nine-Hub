@@ -122,6 +122,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             ? null
             : const FloatingButton(
                 changeView: 1,
+          icon: Icons.person,
               ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         drawer: const DrawerWidget(),
@@ -150,6 +151,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             // _buildChanceWidget(),
             const Sizer(),
             _auctionAndInstallmentWidget(),
+            const Sizer(),
+            _buildBookingWidget(),
             const Sizer(),
             //cats layout
             _buildMainCategoriesViews(),
@@ -358,7 +361,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     );
   }
 
-  Widget _buildChanceWidget() {
+  Widget _buildBookingWidget() {
     return SizedBox(
       height: kToolbarHeight * .9.h,
       width: double.infinity,
@@ -367,7 +370,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           Positioned.fill(
             child: AppButton(
                 color: AppColors.AUTH_CONTAINER_COLOR,
-                label: LocaleKeys.chance.localize,
+                label: LocaleKeys.booking.localize,
                 style: Styles.mediumText(
                   color: AppColors.AUTH_CONTAINER_COLOR,
                   fontWeight: FontWeight.bold,
@@ -375,12 +378,12 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 icon: Icons.auto_awesome,
                 iconSize: 50.h,
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ChanceView(),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const ChanceView(),
+                  //   ),
+                  // );
                 }),
           ),
           Positioned(
@@ -411,6 +414,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       ),
     );
   }
+
   Widget _buildStarWidget() {
     return SizedBox(
       height: kToolbarHeight * .9.h,

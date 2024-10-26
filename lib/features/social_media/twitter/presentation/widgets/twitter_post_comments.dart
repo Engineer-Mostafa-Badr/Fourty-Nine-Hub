@@ -69,7 +69,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
       return Scaffold(
         // backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          toolbarHeight: 200.h,
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.grey),
           title: Label(
@@ -100,7 +100,6 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                             child: Text(
                               LocaleKeys.noComments.localize,
                               style: const TextStyle(
-                                color: Colors.black,
                                 fontSize: 18,
                               ),
                             ),
@@ -164,7 +163,6 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                       },
                       style: Styles.headerText(fontSize: 26),
                       decoration: InputDecoration(
-                        fillColor: Colors.white,
                         contentPadding: const EdgeInsets.all(5),
                         hintText: '${LocaleKeys.typeYourComment.localize} ....',
                         hintStyle: Styles.mediumText(),

@@ -39,7 +39,7 @@ class FacebookTweetCard extends StatelessWidget {
           Label(
             text: "@${LocaleKeys.tweet.localize}",
             style: Styles.headerText(
-              fontSize: 22,
+              fontSize: 36,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -164,7 +164,7 @@ class FacebookTweetCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ReadMoreLabel(text: post.content ?? ''),
+          ReadMoreLabel(text: post.content ?? '',style: Styles.headerText(color:  Theme.of(context).primaryColor),),
           SizedBox(
             height: 10.h,
           ),
@@ -253,7 +253,7 @@ class FacebookTweetCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ReadMoreLabel(text: post.content ?? ''),
+          ReadMoreLabel(text: post.content ?? '',style: Styles.headerText(color:  Theme.of(context).primaryColor),),
           SizedBox(
             height: 10.h,
           ),

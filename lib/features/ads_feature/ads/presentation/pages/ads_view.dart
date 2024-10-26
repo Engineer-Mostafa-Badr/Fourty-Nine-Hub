@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
@@ -161,7 +162,10 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                               : LocaleKeys.user.localize),
                     ],
                   ),
-                      state.status == AdsStates.loading?const Center(child: CircularProgressIndicator(),):
+                      state.status == AdsStates.loading? Center(child: Padding(
+                        padding: EdgeInsets.only(top: 20.h),
+                        child: const CircularProgressIndicator(),
+                      ),):
                            Expanded(
                           child: TabBarView(
                             physics: const NeverScrollableScrollPhysics(),

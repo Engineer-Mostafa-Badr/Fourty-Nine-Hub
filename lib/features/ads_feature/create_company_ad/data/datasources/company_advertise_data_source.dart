@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/models/company_ad_model.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/models/price_model.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/usecases/pay_company_ad_use_case.dart';
 
 import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../core/data/datasources/remote/api/end_points.dart';
@@ -22,6 +23,8 @@ abstract class CompanyAdvertiseDataSource {
 
   Future<Either<Failure, List<CompanyAdEntity>>> getPostCompanyAd(
       FetchPostCompanyAdvertiseParams params);
+
+  Future<Either<Failure, bool>> payCompanyAd(PayCompanyAdParams params);
 }
 
 class CompanyAdvertiseDataSourceImpl implements CompanyAdvertiseDataSource {
@@ -90,6 +93,19 @@ class CompanyAdvertiseDataSourceImpl implements CompanyAdvertiseDataSource {
       (response) => Right((response['data']['advertises'] as List)
           .map((e) => CompanyAdModel.fromJson(e))
           .toList()),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> payCompanyAd(params) async {
+    final response =
+    await _apiConsumer.post(EndPoints.payCompanyAd,
+    data: params.toJson()
+    );
+
+    return response.fold(
+          (failure) => Left(failure),
+          (response) => Right(response['status']),
     );
   }
 }

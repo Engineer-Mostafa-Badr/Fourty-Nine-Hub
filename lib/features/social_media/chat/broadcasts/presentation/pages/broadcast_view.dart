@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -104,7 +105,9 @@ class _BroadcastViewState extends State<BroadcastView> {
                     Icons.more_vert,
                     color: Colors.white,
                   ),
-                  color: AppColors.BACKGROUND_COLOR,
+                  color: context.isDarkMode
+                      ? AppColors.PRIMARY_COLOR
+                      : AppColors.BACKGROUND_COLOR,
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   ),
@@ -154,7 +157,9 @@ class _BroadcastViewState extends State<BroadcastView> {
               scale: 7,
               // fit: BoxFit.cover,
               repeat: ImageRepeat.repeat,
-              opacity: const AlwaysStoppedAnimation(0.7),
+              opacity: context.isDarkMode
+                  ? const AlwaysStoppedAnimation(0.1)
+                  : const AlwaysStoppedAnimation(0.7),
             ),
           ),
           // Chat content
@@ -222,28 +227,36 @@ class _BroadcastViewState extends State<BroadcastView> {
         value: 0,
         child: Text(
           LocaleKeys.channelInfo.tr(),
-          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+          style: Styles.mediumText(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 1,
         child: Text(
-          LocaleKeys.unfollow.tr(),
-          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+          LocaleKeys.Unfollow.tr(),
+          style: Styles.mediumText(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 2,
         child: Text(
           LocaleKeys.share.tr(),
-          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+          style: Styles.mediumText(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
         value: 3,
         child: Text(
           LocaleKeys.report.tr(),
-          style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+          style: Styles.mediumText(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
     ];
@@ -264,13 +277,17 @@ class _BroadcastViewState extends State<BroadcastView> {
               padding: const EdgeInsets.all(12),
               margin: const EdgeInsets.all(0),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.isDarkMode
+                    ? AppColors.QUANTITY_COLOR
+                    : Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
-                    color: Colors.black12,
+                    color: context.isDarkMode
+                        ? Colors.white.withOpacity(0.05)
+                        : Colors.black12,
                     blurRadius: 8,
-                    offset: Offset(0, 4),
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
@@ -286,7 +303,9 @@ class _BroadcastViewState extends State<BroadcastView> {
                         // trimLines: 6,
                         text: message,
                         style: Styles.mediumText(
-                          color: AppColors.PRIMARY_COLOR,
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR,
                         ),
                         textAlign: TextAlign.left,
                       ),
@@ -294,7 +313,10 @@ class _BroadcastViewState extends State<BroadcastView> {
                     const SizedBox(width: 8),
                     Label(
                       text: time,
-                      style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
+                      style: Styles.smallText(
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR),
                     ),
                   ],
                 ),
@@ -326,11 +348,15 @@ class BroadcastImage extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: AppColors.BACKGROUND_COLOR,
+                color: context.isDarkMode
+                    ? AppColors.QUANTITY_COLOR
+                    : AppColors.BACKGROUND_COLOR,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: context.isDarkMode
+                        ? Colors.white.withOpacity(0.05)
+                        : Colors.black.withOpacity(0.1),
                     spreadRadius: 0.1,
                     blurRadius: 5,
                     offset: const Offset(0, 0), // changes position of shadow

@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -33,11 +34,13 @@ class RequestButton extends StatelessWidget {
         color: subscriptionStatus == 'premium'
             ? AppColors.DARK_GRAY_COLOR
             : AppColors.PRIMARY_COLOR,
-        onTap: subscriptionStatus == 'premium'
+        onTap:!context.read<UserCubit>().isLoggedIn?()=>context.push(Routes.LOGIN): subscriptionStatus == 'premium'
             ? null
             : () {
                 showModalBottomSheet(
-                  backgroundColor: Colors.white,
+                  backgroundColor: context.isDarkMode
+                      ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
+                      : AppColors.LIGHT_COLOR,
                   context: context,
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
@@ -71,6 +74,9 @@ class RequestButton extends StatelessWidget {
                               child: Form(
                                 key: controller.formKey,
                                 child: TextFormField(
+                                  style: const TextStyle(
+                                    color: AppColors.DARK_BLUE_COLOR,
+                                  ),
                                   validator: (value) {
                                     if ((value == null || value.isEmpty)) {
                                       return LocaleKeys.required.localize;

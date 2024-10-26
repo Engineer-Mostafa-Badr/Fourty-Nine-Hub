@@ -161,14 +161,11 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                 const Sizer(),
                                 const Icon(
                                   Icons.lock,
-                                  color: Colors.black,
                                 ),
                                 const Sizer(),
                                 Label(
                                   text: "This content is not available now.",
-                                  style: Styles.headerText(
-                                    color: Colors.black,
-                                  ),
+                                  style: Styles.headerText(),
                                 ),
                               ],
                             ),
@@ -236,9 +233,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                       if (widget.from == 'posts')
                         Expanded(
                           child: _buildReactionPlaceHolder(
-                              icon: FontAwesomeIcons.message,
+                              icon: FontAwesomeIcons.comment,
                               label: LocaleKeys.comment.localize,
-                              image: Assets.comment,
+                              // image: Assets.comment,
                               onTap: () => widget.showPostComments(myPost.id)),
                         ),
                       Expanded(
@@ -247,7 +244,6 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                             isImage: true,
                             image: Assets.facebookShare,
                             onTap: () async {
-
                               showModalBottomSheet(
                                 backgroundColor: Colors.white,
                                 context: context,
@@ -279,13 +275,17 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                             height: 30.h,
                                           ),
                                           Container(
-                                            constraints: BoxConstraints(maxHeight: 220.h,minHeight: 180.h),
+                                            constraints: BoxConstraints(
+                                                maxHeight: 220.h,
+                                                minHeight: 180.h),
                                             child: Form(
                                               key: controller.shareFormKey,
                                               child: TextFormField(
                                                 validator: (value) {
-                                                  if ((value == null || value.isEmpty)) {
-                                                    return LocaleKeys.required.localize;
+                                                  if ((value == null ||
+                                                      value.isEmpty)) {
+                                                    return LocaleKeys
+                                                        .required.localize;
                                                   } else {
                                                     return null;
                                                   }
@@ -293,13 +293,16 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                                 // focusNode: focusNode,
                                                 maxLines: null,
                                                 maxLength: 100,
-                                                onChanged: (c) => controller.changeContent(v: c),
+                                                onChanged: (c) => controller
+                                                    .changeContent(v: c),
                                                 // controller: controller,
                                                 decoration: InputDecoration(
-                                                    hintText: LocaleKeys.saySomthing.localize,
+                                                    hintText: LocaleKeys
+                                                        .saySomthing.localize,
                                                     fillColor: Colors.white,
                                                     hintStyle: Styles.mediumText(
-                                                        color: AppColors.DARK_GRAY_COLOR)),
+                                                        color: AppColors
+                                                            .DARK_GRAY_COLOR)),
                                               ),
                                             ),
                                           ),
@@ -309,32 +312,52 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                                 Expanded(
                                                   child: InkWell(
                                                     onTap: () async {
-                                                      if (controller.shareFormKey.currentState!
+                                                      if (controller
+                                                          .shareFormKey
+                                                          .currentState!
                                                           .validate()) {
-                                                        var result = await controller.onShare(
-                                                            postId: myPost.isShared == true
-                                                                ? myPost.mainPost!.id
-                                                                : myPost.id);
+                                                        var result = await controller
+                                                            .onShare(
+                                                                postId: myPost
+                                                                            .isShared ==
+                                                                        true
+                                                                    ? myPost
+                                                                        .mainPost!
+                                                                        .id
+                                                                    : myPost
+                                                                        .id);
                                                         if (result == true) {
-                                                          showSuccessMessage(context,
-                                                              LocaleKeys.postSharedSuccessfully.localize);
+                                                          showSuccessMessage(
+                                                              context,
+                                                              LocaleKeys
+                                                                  .postSharedSuccessfully
+                                                                  .localize);
                                                           context.pop();
                                                         }
-
                                                       }
                                                     },
                                                     child: Container(
                                                       width: 100,
                                                       height: 80.h,
-                                                      padding: const EdgeInsets.all(5),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              5),
                                                       decoration: BoxDecoration(
-                                                          color: AppColors.PRIMARY_COLOR,
-                                                          borderRadius: BorderRadius.circular(15)),
-                                                      alignment: Alignment.center,
+                                                          color: AppColors
+                                                              .PRIMARY_COLOR,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      15)),
+                                                      alignment:
+                                                          Alignment.center,
                                                       child: Label(
-                                                        text: LocaleKeys.share.localize,
+                                                        text: LocaleKeys
+                                                            .share.localize,
                                                         style:
-                                                        Styles.headerText(color: Colors.white),
+                                                            Styles.headerText(
+                                                                color: Colors
+                                                                    .white),
                                                       ),
                                                     ),
                                                   ),
@@ -346,8 +369,10 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                                           .pop();
                                                     },
                                                     child: Label(
-                                                      text: LocaleKeys.cancel.localize,
-                                                      style: Styles.headerText(),
+                                                      text: LocaleKeys
+                                                          .cancel.localize,
+                                                      style:
+                                                          Styles.headerText(),
                                                     ),
                                                   ),
                                                 ),
@@ -358,7 +383,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                       ),
                                     ),
                                   );
-                                },);
+                                },
+                              );
                             }),
                       ),
                     ],
@@ -503,8 +529,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         children: [
           if (!widget.isMyPost)
             listTile(
+                iconColor: Theme.of(context).primaryColor,
                 icon: Icons.report,
-                iconColor: Colors.red,
                 title: LocaleKeys.reportPost.localize,
                 subTitle: LocaleKeys.youWillReportPost.localize,
                 onTap: () async {
@@ -520,6 +546,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           if (widget.isMyPost)
             listTile(
                 icon: Icons.delete,
+                iconColor: Theme.of(context).primaryColor,
                 title: LocaleKeys.deletePost.localize,
                 subTitle: LocaleKeys.youWillDeletePost.localize,
                 onTap: () {
@@ -530,6 +557,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 }),
           listTile(
               icon: Icons.visibility_off,
+              iconColor: Theme.of(context).primaryColor,
               title: LocaleKeys.hidePost.localize,
               subTitle: LocaleKeys.youWillHidePost.localize,
               onTap: () {
@@ -587,8 +615,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 child: ImageFromInternet(
                   image: post.user.image ?? '',
                   isCircle: true,
-                  width: 40,
-                  height: 40.h,
+                  width: 60.w,
+                  height: 60.h,
                 ),
               ),
               const Sizer(),
@@ -640,6 +668,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 icon: Icons.more_horiz_outlined,
                 onPressed: () {
                   bottomSheet(
+                    backColor: Theme.of(context).scaffoldBackgroundColor,
                     context: context,
                     widget: _buildPostOptions(
                       fromDetails: widget.from == 'details',
@@ -756,7 +785,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   Widget _buildContentWidget(
       {String? backgroundColor,
       required String content,
-      List<String>? images,bool? share=false}) {
+      List<String>? images,
+      bool? share = false}) {
     return (backgroundColor != null && backgroundColor != '#FFFFFFFF') &&
             images!.isEmpty &&
             content.isNotEmpty
@@ -766,19 +796,17 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             alignment: Alignment.center,
             margin: EdgeInsets.symmetric(vertical: 10.h),
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
-
             decoration: BoxDecoration(
               color: images.isEmpty
                   ? Color(int.parse(backgroundColor.substring(1), radix: 16))
                   : Colors.white,
-              borderRadius: BorderRadius.circular((share==true?10:0).r),
+              borderRadius: BorderRadius.circular((share == true ? 10 : 0).r),
             ),
             child: ReadMoreLabel(
               text: content,
-              style: Styles.headerText(
-                  color: backgroundColor != '#FFFFFFFF' ? Colors.white:Colors.black,
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold),
+              textAlign: isArabic(content) ? TextAlign.right : TextAlign.left,
+              style:
+                  Styles.headerText(fontSize: 35, fontWeight: FontWeight.bold,color: Theme.of(context).primaryColor),
             ),
           )
         : Container(
@@ -789,7 +817,12 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (content.isNotEmpty) ...[
-                  ReadMoreLabel(text: content),
+                  ReadMoreLabel(
+                    text: content,
+                    textAlign:
+                        isArabic(content) ? TextAlign.right : TextAlign.left,
+        style:Styles.headerText(color:  Theme.of(context).primaryColor),
+                  ),
                   SizedBox(
                     height: 10.h,
                   )
@@ -884,14 +917,15 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           if (image != null)
             Image.asset(
               image,
-              width: 24,
+              width: 24.w,
               height: 24.h,
+              color: Colors.grey,
             ),
           if (isImage == false)
             FaIcon(
               icon,
-              color: AppColors.GREY_DARK_COLOR,
-              size: 20.w,
+              color: Colors.grey,
+              size: 32.sp,
             ),
           Label(text: label, style: Styles.mediumText(color: Colors.grey))
         ],
@@ -907,12 +941,13 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 image,
                 width: 40.w,
                 height: 40.h,
+                color: Colors.grey,
               ),
             if (image == null)
               FaIcon(
                 icon,
-                color: AppColors.GREY_DARK_COLOR,
-                size: 20,
+                color: Colors.grey,
+                size: 32.sp,
               ),
             // Sizer(),
             Label(text: label, style: Styles.mediumText(color: Colors.grey))
@@ -942,7 +977,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               children: [
                 Label(
                   text: '${LocaleKeys.withKey.localize}: ',
-                  style: Styles.mediumText(),
+                  style: Styles.smallText(color: AppColors.GREY_NORMAL_COLOR),
                 ),
                 GestureDetector(
                   onTap: () {
@@ -952,8 +987,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   child: Label(
                     text:
                         "${post.users![0].firstName} ${post.users![0].lastName} ",
-                    style:
-                        Styles.mediumText(decoration: TextDecoration.underline),
+                    style: Styles.smallText(
+                        decoration: TextDecoration.underline,
+                        color: AppColors.GREY_NORMAL_COLOR),
                   ),
                 ),
                 if (post.users!.length > 1)
@@ -967,12 +1003,18 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                       },
                       child: Label(
                         text: '+${post.users!.length - 1}',
-                        style: Styles.headerText(),
+                        style: Styles.mediumText(
+                            color: AppColors.GREY_NORMAL_COLOR),
                       ))
               ],
             ),
         ],
       ),
     );
+  }
+
+  bool isArabic(String text) {
+    final arabicRegex = RegExp(r'[\u0600-\u06FF]');
+    return arabicRegex.hasMatch(text);
   }
 }

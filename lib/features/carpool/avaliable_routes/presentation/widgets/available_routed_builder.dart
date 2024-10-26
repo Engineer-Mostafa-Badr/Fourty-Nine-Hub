@@ -23,12 +23,6 @@ class AvailableRoutesBuilder extends StatefulWidget {
 }
 
 class _AvailableRoutesBuilderState extends State<AvailableRoutesBuilder> {
-  @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<GetAllTripsCubit>(context).fetchAllCarpoolTrips();
-  }
-
   final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
 
   @override
@@ -38,7 +32,6 @@ class _AvailableRoutesBuilderState extends State<AvailableRoutesBuilder> {
         if (state is GetAllTripsLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is GetAllTripsSuccess) {
-          print("hello bro");
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 20.h),
             child: ListView.builder(
@@ -81,7 +74,7 @@ class _AvailableRoutesBuilderState extends State<AvailableRoutesBuilder> {
         } else if (state is GetAllTripsFailure) {
           return Center(child: Text("Error: ${state.errorMessage}"));
         } else {
-          return const Center(child: Text("No trips available"));
+          return const SizedBox();
         }
       },
     );
@@ -149,7 +142,7 @@ class _AvailableRoutesBottomSheetState
                       setState(() {});
                     },
                     activeColor: AppColors.PRIMARY_COLOR,
-                    trackColor: const WidgetStatePropertyAll(
+                    trackColor: const MaterialStatePropertyAll(
                         AppColors.SECONDARY_COLOR),
                     inactiveThumbColor: Colors.grey,
                   ),
@@ -174,7 +167,7 @@ class _AvailableRoutesBottomSheetState
                       setState(() {});
                     },
                     activeColor: AppColors.PRIMARY_COLOR,
-                    trackColor: const WidgetStatePropertyAll(
+                    trackColor: const MaterialStatePropertyAll(
                         AppColors.SECONDARY_COLOR),
                     inactiveThumbColor: Colors.grey,
                   ),
@@ -201,7 +194,7 @@ class _AvailableRoutesBottomSheetState
                           setState(() {});
                         },
                         activeColor: AppColors.PRIMARY_COLOR,
-                        trackColor: const WidgetStatePropertyAll(
+                        trackColor: const MaterialStatePropertyAll(
                             AppColors.SECONDARY_COLOR),
                         inactiveThumbColor: Colors.grey,
                       ),

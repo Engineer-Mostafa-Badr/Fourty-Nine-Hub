@@ -26,11 +26,18 @@ class SubscriptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime createdAt =
-        (subscription.isActive == true||subscription.isActive==false) && subscription.isPremium == true
-            ? DateTime.parse(subscription.expirePremium ?? '')
-                : DateTime.parse(subscription.expireSubscription ?? '');
-    final DateTime egyptTime = createdAt.toUtc().add(const Duration(hours: 3));
+    DateTime? createdAt;
+
+    // Check if the subscription is active and if a date is available
+    if ((subscription.isActive == true || subscription.isActive == false) &&
+        subscription.isPremium == true) {
+      createdAt = _parseDate(subscription.expirePremium);
+    } else {
+      createdAt = _parseDate(subscription.expireSubscription);
+    }
+
+    // Default to current time if date parsing fails
+    final DateTime egyptTime = createdAt?.toUtc().add(const Duration(hours: 3)) ?? DateTime.now().toUtc().add(const Duration(hours: 3));
     final String formattedDateTime = DateFormat('dd/MM/yyyy').format(egyptTime);
     return Column(
       children: [
@@ -62,16 +69,7 @@ class SubscriptionWidget extends StatelessWidget {
                               ? '(${LocaleKeys.regular.localize})'
                               : '(${LocaleKeys.premium.localize})',
                   color: AppColors.GREY_NORMAL_COLOR,
-                )
-                // Label(
-                //   text: subscription.isActive == false &&
-                //           subscription.isPremium == false
-                //       ? '(${LocaleKeys.notSubscription.localize})'
-                //       : subscription.isActive == true
-                //           ? '(${LocaleKeys.regular.localize})'
-                //           : '(${LocaleKeys.premium.localize})',
-                //   color: AppColors.GREY_NORMAL_COLOR,
-                // )
+                ),
               ],
             )),
             Label(
@@ -86,14 +84,6 @@ class SubscriptionWidget extends StatelessWidget {
                         : AppColors.WHATS_APP_COLOR,
               ),
             )
-            // Label(
-            //   text: formattedDateTime,
-            //   style: Styles.mediumText(
-            //       color: subscription.isActive == false &&
-            //               subscription.isPremium == false
-            //           ? AppColors.SECONDARY_COLOR
-            //           : AppColors.WHATS_APP_COLOR),
-            // )
           ],
         ),
         Sizer(
@@ -176,4 +166,16 @@ class SubscriptionWidget extends StatelessWidget {
           ),
         ),
       );
+
+  DateTime? _parseDate(String? dateString) {
+    if (dateString == null || dateString.isEmpty) {
+      return null;
+    }
+    try {
+      return DateTime.parse(dateString);
+    } catch (e) {
+      print('Invalid date format: $dateString');
+      return null;
+    }
+  }
 }

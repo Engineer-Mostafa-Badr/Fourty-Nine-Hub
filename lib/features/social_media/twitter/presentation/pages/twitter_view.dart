@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -134,121 +135,124 @@ class _TwitterViewState extends State<TwitterView> {
                   },
                   itemBuilder: (context, item, index) {
                     final user = context.read<UserCubit>().state.data;
-                    return TwitterPostCard(
-                      post: controller.postsPagingController.itemList![index],
-                      onReact: () async {
-                        var result = await controller.onReact(
-                            params: TwitterPostReactParams(
+                    return Padding(
+                      padding:  EdgeInsets.only(bottom: 30.h),
+                      child: TwitterPostCard(
+                        post: controller.postsPagingController.itemList![index],
+                        onReact: () async {
+                          var result = await controller.onReact(
+                              params: TwitterPostReactParams(
+                                  postId: controller
+                                      .postsPagingController.itemList![index].id,
+                                  react: 'love'));
+                          if (result == true) {
+                            if (controller.postsPagingController.itemList?[index]
+                                    .isReact ==
+                                true) {
+                              controller.postsPagingController.itemList?[index]
+                                  .isReact = false;
+                              controller.postsPagingController.itemList?[index]
+                                  .loveCount = (controller.postsPagingController
+                                      .itemList![index].loveCount! -
+                                  1);
+                            } else {
+                              controller.postsPagingController.itemList?[index]
+                                  .isReact = true;
+                              controller.postsPagingController.itemList?[index]
+                                  .loveCount = (controller.postsPagingController
+                                      .itemList![index].loveCount! +
+                                  1);
+                            }
+                          }
+                        },
+                        shareSuccess: state.shareSuccess,
+                        onShare: () {
+                          controller.onShare(
+                            postId: controller.postsPagingController
+                                        .itemList![index].isShared ==
+                                    true
+                                ? controller.postsPagingController
+                                    .itemList![index].mainPost!.id
+                                : controller
+                                    .postsPagingController.itemList![index].id,
+                          );
+                          if (state.shareSuccess == true) {
+                            showSuccessMessage(context,
+                                LocaleKeys.postSharedSuccessfully.localize);
+                          }
+                          setState(() {});
+                        },
+                        showPostComments: (String v) {
+                          print(
+                              "mainId ${controller.postsPagingController.itemList![index].id}");
+                          bottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            widget: BlocProvider.value(
+                              value: serviceLocator<TwitterCubit>()
+                                ..loadComments(
+                                    context,
+                                    controller.postsPagingController
+                                        .itemList![index].id),
+                              child: TwitterPostComments(
+                                comments: const [],
                                 postId: controller
                                     .postsPagingController.itemList![index].id,
-                                react: 'love'));
-                        if (result == true) {
-                          if (controller.postsPagingController.itemList?[index]
-                                  .isReact ==
-                              true) {
-                            controller.postsPagingController.itemList?[index]
-                                .isReact = false;
-                            controller.postsPagingController.itemList?[index]
-                                .loveCount = (controller.postsPagingController
-                                    .itemList![index].loveCount! -
-                                1);
-                          } else {
-                            controller.postsPagingController.itemList?[index]
-                                .isReact = true;
-                            controller.postsPagingController.itemList?[index]
-                                .loveCount = (controller.postsPagingController
-                                    .itemList![index].loveCount! +
-                                1);
-                          }
-                        }
-                      },
-                      shareSuccess: state.shareSuccess,
-                      onShare: () {
-                        controller.onShare(
-                          postId: controller.postsPagingController
-                                      .itemList![index].isShared ==
-                                  true
-                              ? controller.postsPagingController
-                                  .itemList![index].mainPost!.id
-                              : controller
-                                  .postsPagingController.itemList![index].id,
-                        );
-                        if (state.shareSuccess == true) {
-                          showSuccessMessage(context,
-                              LocaleKeys.postSharedSuccessfully.localize);
-                        }
-                        setState(() {});
-                      },
-                      showPostComments: (String v) {
-                        print(
-                            "mainId ${controller.postsPagingController.itemList![index].id}");
-                        bottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          widget: BlocProvider.value(
-                            value: serviceLocator<TwitterCubit>()
-                              ..loadComments(
-                                  context,
-                                  controller.postsPagingController
-                                      .itemList![index].id),
-                            child: TwitterPostComments(
-                              comments: const [],
-                              postId: controller
-                                  .postsPagingController.itemList![index].id,
-                              user: user,
-                              onAddComment: (TwitterPostCommentParams params) =>
-                                  controller.onPostComment(params: params),
-                              onAddReply:
-                                  (TwitterCommentReplyParams params) async {
-                                return await controller.onCommentReply(
-                                    params: params);
-                              },
-                              onCommentReact:
-                                  (TwitterCommentReactParams params) {
-                                controller.onCommentReact(params: params);
-                              },
-                              onGetReplies: (String id,
-                                  TwitterPostCommentEntity comment) async {},
-                              newCommentId: '',
-                              state: state,
-                              onReport: (TwitterReportParams params) {
-                                controller.onReport(params);
-                              },
-                              onEditComment:
-                                  (TwitterPostCommentParams params) async {
-                                return await controller.editComment(
-                                    params: params);
-                              },
-                              onDeleteComment: (id) async =>
-                                  await controller.deleteComment(
-                                      context: context,
-                                      commentId: id,
-                                      postId: controller.postsPagingController
-                                          .itemList![index].id,
-                                      from: 'posts'),
+                                user: user,
+                                onAddComment: (TwitterPostCommentParams params) =>
+                                    controller.onPostComment(params: params),
+                                onAddReply:
+                                    (TwitterCommentReplyParams params) async {
+                                  return await controller.onCommentReply(
+                                      params: params);
+                                },
+                                onCommentReact:
+                                    (TwitterCommentReactParams params) {
+                                  controller.onCommentReact(params: params);
+                                },
+                                onGetReplies: (String id,
+                                    TwitterPostCommentEntity comment) async {},
+                                newCommentId: '',
+                                state: state,
+                                onReport: (TwitterReportParams params) {
+                                  controller.onReport(params);
+                                },
+                                onEditComment:
+                                    (TwitterPostCommentParams params) async {
+                                  return await controller.editComment(
+                                      params: params);
+                                },
+                                onDeleteComment: (id) async =>
+                                    await controller.deleteComment(
+                                        context: context,
+                                        commentId: id,
+                                        postId: controller.postsPagingController
+                                            .itemList![index].id,
+                                        from: 'posts'),
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      getPost: () {},
-                      onReport: (TwitterReportParams params) {
-                        controller.onReport(params);
-                      },
-                      deletePost: (String id) {
-                        controller.deletePost(context: context, postId: id);
-                      },
-                      hidePost: (String id) {
-                        controller.hidePost(context: context, postId: id);
-                      },
-                      onDeleteComment: (String id) async {
-                        return await controller.deleteComment(
-                            context: context,
-                            commentId: id,
-                            postId: 'postId',
-                            from: 'details');
-                      },
-                      onEditComment: (params) async =>
-                          await controller.editComment(params: params),
+                          );
+                        },
+                        getPost: () {},
+                        onReport: (TwitterReportParams params) {
+                          controller.onReport(params);
+                        },
+                        deletePost: (String id) {
+                          controller.deletePost(context: context, postId: id);
+                        },
+                        hidePost: (String id) {
+                          controller.hidePost(context: context, postId: id);
+                        },
+                        onDeleteComment: (String id) async {
+                          return await controller.deleteComment(
+                              context: context,
+                              commentId: id,
+                              postId: 'postId',
+                              from: 'details');
+                        },
+                        onEditComment: (params) async =>
+                            await controller.editComment(params: params),
+                      ),
                     );
                   },
                   noMoreItemsIndicatorBuilder: (context) => Container(),

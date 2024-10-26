@@ -88,7 +88,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
           BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
       child: Container(
         padding: EdgeInsets.all(isShared == true ? 10 : 0),
-        decoration: const BoxDecoration(color: Colors.white),
+        decoration:  BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -263,7 +263,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
         if (label != null || label != '') ...[
           ReadMoreLabel(
             text: label ?? '',
-            style: Styles.headerText(fontSize: 30,color: Colors.black),
+            style: Styles.headerText(fontSize: 30),
           ),
           const Sizer(),
         ],
@@ -315,7 +315,6 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             // borderRadius: BorderRadius.circular(15),
-                            color: Colors.black.withOpacity(0.5),
                           ),
                           child: Center(
                             child: Label(
@@ -458,7 +457,6 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
       },
       leading: Icon(
         icon,
-        color: Colors.black,
       ),
       subtitle: Label(
         text: subTitle,
@@ -512,7 +510,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               Label(
                   text: date,
                   maxLines: 1,
-                  style: Styles.mediumText(color: Colors.black)),
+                  style: Styles.mediumText()),
               if (post.user.isDocumented == true && post.isShared == false ||
                   (post.mainPost?.user.isDocumented == true &&
                       post.isShared == true))

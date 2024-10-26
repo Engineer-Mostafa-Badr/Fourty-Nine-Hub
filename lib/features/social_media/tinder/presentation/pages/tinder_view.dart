@@ -292,10 +292,10 @@ class _TinderScreenState extends State<TinderScreen> {
   late final ScrollController _scrollController;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
     _scrollController = ScrollController();
     _initializeTinderData();
+    super.didChangeDependencies();
   }
 
   @override
@@ -310,7 +310,7 @@ class _TinderScreenState extends State<TinderScreen> {
       ..fetchUserData(gender: 'female')
       ..fetchSubCategoryData()
       ..fetchFavorites()
-      ..fetchMainCategoryById('62c8b5b09332225799fe335e');
+      ..fetchMainCategoryById(context,'62c8b5b09332225799fe335e');
   }
 
   @override
@@ -332,10 +332,10 @@ class _TinderScreenState extends State<TinderScreen> {
           // Handle any state changes if necessary
         },
         builder: (context, state) {
-          if (!context.read<UserCubit>().isLoggedIn) {
-            // Prompt user to log in if not authenticated
-            return _buildPleaseLoginWidget(context);
-          }
+          // if (!context.read<UserCubit>().isLoggedIn) {
+          //   // Prompt user to log in if not authenticated
+          //   return _buildPleaseLoginWidget(context);
+          // }
 
           return _buildLoggedInContent(context, state);
         },
@@ -351,7 +351,7 @@ class _TinderScreenState extends State<TinderScreen> {
         child: Column(
           children: [
             // _buildHeader(),
-            state.userData.isNotEmpty
+            state.userData!.isNotEmpty
                 ? const TinderCardStack()
                 : SizedBox(
                     height: 0.55.sh,
@@ -368,7 +368,7 @@ class _TinderScreenState extends State<TinderScreen> {
                       ),
                     ),
                   ),
-            if (state.userData.isNotEmpty)
+            if (state.userData!.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 2),
                 child: Divider(
@@ -377,7 +377,7 @@ class _TinderScreenState extends State<TinderScreen> {
                   thickness: 1.h,
                 ),
               ),
-            state.subCategoryData.isNotEmpty
+            state.subCategoryData!.isNotEmpty
                 ? _buildSubCategoryList(context, state)
                 : SizedBox(
                     height: 0.3.sh,
@@ -451,27 +451,36 @@ class _TinderScreenState extends State<TinderScreen> {
             ),
           ),
         ),
-        SizedBox(
-          height: 0.3.sh,
-          child: ListView.separated(
-            controller: _scrollController,
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            scrollDirection: Axis.horizontal,
-            reverse: context.isArabic,
-            itemCount: state.subCategoryData.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 0),
-            itemBuilder: (context, index) {
-              final subCategory = state.subCategoryData[index];
-              return Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: TinderSubCategoryCard(
-                  subCategoryCardData: subCategory,
-                  index: index,
-                  mainCategory: state.mainCategoryResponse!.data.mainCategory,
-                ),
-              );
-            },
-          ),
+        BlocBuilder<TinderViewCubit, TinderViewState>(
+          builder: (context, state) {
+            return SizedBox(
+              height: 0.3.sh,
+              child: ListView.separated(
+                controller: _scrollController,
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                scrollDirection: Axis.horizontal,
+                reverse: context.isArabic,
+                itemCount: state.subCategoryData!.length,
+                separatorBuilder: (context, index) => const SizedBox(width: 0),
+                itemBuilder: (context, index) {
+                  final subCategory = state.subCategoryData![index];
+
+                  return state.isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: TinderSubCategoryCard(
+                            subCategoryCardData: subCategory,
+                            index: index,
+                            mainCategory: state.mainCategoryResponse!,
+                          ),
+                        );
+                },
+              ),
+            );
+          },
         ),
       ],
     );

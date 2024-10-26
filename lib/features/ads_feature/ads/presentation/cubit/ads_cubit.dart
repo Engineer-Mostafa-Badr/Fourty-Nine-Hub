@@ -125,7 +125,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
       {required String subCategoryId,
       required String filter,
       required int page}) async {
-    final userId = UserCubit.to.state.data?.id;
+    final userId = UserCubit.to.isLoggedIn?UserCubit.to.state.data?.id:'';
 
     if(page==1){
       adsPagingController.itemList=[];

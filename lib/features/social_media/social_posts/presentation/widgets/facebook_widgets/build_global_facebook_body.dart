@@ -63,7 +63,6 @@ class FacebookGlobalBody extends StatelessWidget {
                                 child: Text(
                                   LocaleKeys.noPosts.localize,
                                   style: TextStyle(
-                                    color: Colors.black,
                                     fontSize: 18.sp,
                                   ),
                                 ),

@@ -56,13 +56,14 @@ class GiftWalletView extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Label(
-                            text: LocaleKeys.luckyWheel.localize,
-                            style:
-                                Styles.mediumText(fontWeight: FontWeight.bold),
-                          ),
                           Row(
                             children: [
+                              Label(
+                                text: LocaleKeys.luckyWheel.localize,
+                                style:
+                                Styles.mediumText(fontSize: 55.sp,fontWeight: FontWeight.bold),
+                              ),
+                              const Spacer(),
                               Label(
                                 text: '${state.gift?.amount ?? 0} ',
                               ),

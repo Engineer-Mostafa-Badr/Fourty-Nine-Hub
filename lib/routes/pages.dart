@@ -74,6 +74,7 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
+import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_driver_type_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_all_trip_rider_cubit.dart';
@@ -433,7 +434,7 @@ class AppPages {
                             BlocProvider.value(
                                 value: serviceLocator<CreateAdCubit>(),
                                 child: CreateAdView(
-                            
+
                                   categorization:
                                   state.extra as CategorizationEntity,
                                 )),
@@ -656,7 +657,8 @@ class AppPages {
           GoRoute(
             path: Paths.QURAAN,
             name: Routes.QURAAN,
-            builder: (context, state) => const QuraanView(),
+            builder: (context, state) => BlocProvider<QuranCubit>(
+                create: (_) => serviceLocator(),child: const QuraanView()),
           ),
           GoRoute(
             path: Paths.AZKAAR,
@@ -1708,11 +1710,13 @@ class AppPages {
                           FetchCarYearTypeCubit(
                     fetchCarYearTypeUseCase:
                         serviceLocator<FetchCarYearTypeUseCase>(),
-                          ),
-                    ),
-                    BlocProvider(
-                      create: (_) =>
-                          PublishTripJoinCubit(
+                  ),
+                ),
+                BlocProvider(
+                  create: (_) => MapBoxCubit(),
+                ),
+                BlocProvider(
+                  create: (_) => PublishTripJoinCubit(
                     publishTripJoinUseCase:
                         serviceLocator<PublishTripJoinUseCase>(),
                           ),
@@ -1809,6 +1813,9 @@ class AppPages {
                 BlocProvider<GetPriceCarpoolCubit>(
                   create: (context) => GetPriceCarpoolCubit(
                       getPriceCarpoolUsecase: serviceLocator()),
+                ),
+                BlocProvider<GetAllTripsCubit>(
+                  create: (context) => GetAllTripsCubit(serviceLocator()),
                 ),
                 BlocProvider<CreateCarPoolCubit>(
                   create: (context) => CreateCarPoolCubit(

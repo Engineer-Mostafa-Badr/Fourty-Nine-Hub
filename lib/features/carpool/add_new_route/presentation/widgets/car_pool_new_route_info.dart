@@ -143,7 +143,7 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
                 setState(() {});
               },
               activeColor: AppColors.PRIMARY_COLOR,
-              trackOutlineColor: const WidgetStatePropertyAll(Colors.grey),
+              trackOutlineColor: const MaterialStatePropertyAll(Colors.grey),
               activeTrackColor: Colors.grey,
               inactiveTrackColor: Colors.white,
               inactiveThumbColor: Colors.grey,
@@ -165,7 +165,7 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
                 setState(() {});
               },
               activeColor: AppColors.PRIMARY_COLOR,
-              trackOutlineColor: const WidgetStatePropertyAll(Colors.grey),
+              trackOutlineColor: const MaterialStatePropertyAll(Colors.grey),
               activeTrackColor: Colors.grey,
               inactiveTrackColor: Colors.white,
               inactiveThumbColor: Colors.grey,
@@ -191,7 +191,7 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
                   },
                   activeColor: AppColors.PRIMARY_COLOR,
                   trackOutlineColor:
-                      const WidgetStatePropertyAll(Colors.grey),
+                      const MaterialStatePropertyAll(Colors.grey),
                   activeTrackColor: Colors.grey,
                   inactiveTrackColor: Colors.white,
                   inactiveThumbColor: Colors.grey,
@@ -314,6 +314,5 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
         womenOnly: false,
       ),
     );
-    BlocProvider.of<GetAllTripsCubit>(context).fetchAllCarpoolTrips();
   }
 }

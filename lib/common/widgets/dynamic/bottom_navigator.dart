@@ -4,9 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../res/assets/assets.dart';
 import '../../../routes/routes.dart';
 import 'bottom_painter.dart';
 
@@ -30,7 +30,6 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
       BottomItemModel(
         icon: FontAwesomeIcons.list,
         label: 'reels',
-        // Translated text
         index: 1,
         image: Assets.reels,
         route: Routes.REELS,
@@ -38,26 +37,25 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
       BottomItemModel(
         icon: FontAwesomeIcons.bowlFood,
         label: 'meal',
-        // Translated text
         index: 0,
         image: Assets.food,
         route: Routes.FOOD,
       ),
       BottomItemModel(
-        icon: FontAwesomeIcons.kitMedical,
+        icon: FontAwesomeIcons.plus,
+        // Change to a health-related icon
         label: 'health',
-        // Translated text
-        index: 1,
-        image: Assets.health,
+        image: Assets.healthRed,
+        index: 2,
+        // Ensure this index matches the health item
         route: Routes.VISITA,
       ),
       BottomItemModel(
         icon: FontAwesomeIcons.car,
         label: 'ride',
-        // Using generated key for translation
-        index: 4,
+        index: 3,
         image: Assets.ride,
-        route: Routes.RIDE,
+        route:context.isUserLoggedIn? Routes.RIDE:Routes.LOGIN,
       ),
     ];
 
@@ -97,7 +95,6 @@ class CustomBottomNavigationBar extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
   _CustomBottomNavigationBarState createState() =>
       _CustomBottomNavigationBarState(
         scrollController: scrollController,
@@ -167,6 +164,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                 children: List.generate(widget.items.length, (index) {
                   int index1 = context.isArabic ? 2 : 1;
                   int index2 = context.isArabic ? 1 : 2;
+
                   return GestureDetector(
                     onTap: () {
                       widget.onTap(index);
@@ -177,10 +175,17 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                           : index == index2
                               ? EdgeInsets.only(left: 60.w)
                               : EdgeInsets.zero,
-                      child: SvgPicture.asset(
-                        widget.items[index].image,
-                        height: widget.items[index].height * 1.8.h,
-                      ),
+                      // Conditionally render the Icon or SvgPicture
+                      child: index == 2 // Index for "health"
+                          ? Image.asset(
+                              widget.items[index].image!,
+                              //width: 90.w,
+                              height: widget.items[index].height * 2.h,
+                            )
+                          : SvgPicture.asset(
+                              widget.items[index].image!,
+                              height: widget.items[index].height * 1.8.h,
+                            ),
                     ),
                   );
                 }),
@@ -197,7 +202,7 @@ class BottomItemModel {
   final IconData icon;
   final String label;
   final int index;
-  final String image;
+  final String? image;
   final String route;
   final double height;
 
@@ -205,7 +210,7 @@ class BottomItemModel {
     required this.icon,
     required this.label,
     required this.index,
-    required this.image,
+    this.image,
     required this.route,
     this.height = 20,
   });

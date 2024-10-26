@@ -55,7 +55,7 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
               return Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "You don't own a car/Someone will share the trip with you and pay half price",
+                  LocaleKeys.youDontOwnCar.localize,
                   // "Users own cars/share the trip with them" ,
                   style: Styles.headerText(
                     color: AppColors.getSecondryColor(context),
