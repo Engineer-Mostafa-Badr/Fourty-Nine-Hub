@@ -205,7 +205,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                       ),
                                       child: Text(
                                         LocaleKeys
-                                            .youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove
+                                            .serveClientsByClickRegister
                                             .tr(),
                                         style: const TextStyle(
                                           color: Colors.red,

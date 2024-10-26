@@ -115,7 +115,7 @@ class _ShippingRiderTabScreenState extends State<ShippingRiderTabScreen> {
                                     ),
                                     child: Text(
                                       LocaleKeys
-                                          .youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove
+                                          .serveClientsByClickRegister
                                           .tr(),
                                       style: const TextStyle(
                                         color: Colors.red,

@@ -240,7 +240,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
         padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: Text(
           LocaleKeys
-              .youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove
+              .serveClientsByClickRegister
               .tr(),
           style: Styles.mediumText(color: Colors.red),
         ),

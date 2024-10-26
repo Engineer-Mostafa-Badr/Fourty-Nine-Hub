@@ -1028,7 +1028,8 @@ class CodegenLoader extends AssetLoader{
   "newRide": "رحلة جديدة",
   "cancelRequest": "إلغاء الطلب",
   "sendOffer": "إرسال العرض",
-  "shareTransactionDetails": "مشاركة تفاصيل المعاملة"
+  "shareTransactionDetails": "مشاركة تفاصيل المعاملة",
+  "serveClientsByClickRegister": "خدمة العملاء عن طريق النقر على زر التسجيل."
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2056,7 +2057,10 @@ static const Map<String,dynamic> en = {
   "regularSubscription": "Regular Subscription",
   "mutualFriend": "mutual friend",
   "youWillHidePost": "You Will Hide Post",
+  "serveClientsByClickRegister": "Serve Clients By Click Register",
+  "expiredRequests": "Expired Requests",
   "notSubscribed": "Not Subscribed",
+  "adRequests": "Ad Requests",
   "showAdRequests": "Show Ad Requests",
   "Phonenumbercannotbewrittenindescription": "Phone number cannot be written in description"
 };

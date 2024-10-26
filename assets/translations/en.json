@@ -1025,6 +1025,9 @@
   "regularSubscription": "Regular Subscription",
   "mutualFriend": "mutual friend",
   "youWillHidePost": "You Will Hide Post",
+  "serveClientsByClickRegister": "Serve Clients By Click Register",
+  "expiredRequests": "Expired Requests",
+  "doctorDashboard": "Doctor Dashboard",
 
   "notSubscribed": "Not Subscribed",
   "adRequests": "Ad Requests",

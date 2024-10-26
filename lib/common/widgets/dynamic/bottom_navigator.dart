@@ -45,7 +45,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         icon: FontAwesomeIcons.plus,
         // Change to a health-related icon
         label: 'health',
-        image: Assets.healthRed,
+        image: Assets.healthcare,
         index: 2,
         // Ensure this index matches the health item
         route: Routes.VISITA,
