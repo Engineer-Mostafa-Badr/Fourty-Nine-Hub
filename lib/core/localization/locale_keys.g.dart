@@ -96,6 +96,7 @@ abstract class  LocaleKeys {
   static const comma = 'comma';
   static const noResultFound = 'noResultFound';
   static const restaurantDashboard = 'restaurantDashboard';
+  static const doctorDashboard = 'doctorDashboard';
   static const allRestaurants = 'allRestaurants';
   static const restaurantsForSelectedMeal = 'restaurantsForSelectedMeal';
   static const itemName = 'itemName';
@@ -921,7 +922,6 @@ abstract class  LocaleKeys {
   static const comfort = 'comfort';
   static const minutesAgo = 'minutesAgo';
   static const Phonenumbercannotbewrittenindescription = 'Phonenumbercannotbewrittenindescription';
-  static const mutualFriend = 'mutualFriend';
   static const womenOnly = 'womenOnly';
   static const chance = 'chance';
   static const subTab = 'subTab';
@@ -1004,5 +1004,11 @@ abstract class  LocaleKeys {
   static const sendOffer = 'sendOffer';
   static const shareTransactionDetails = 'shareTransactionDetails';
   static const serveClientsByClickRegister = 'serveClientsByClickRegister';
+  static const yourPersonalMessages = 'yourPersonalMessages';
+  static const endToEndEncryption = 'endToEndEncryption';
+  static const liveStreamOptions = 'liveStreamOptions';
+  static const createLive = 'createLive';
+  static const watch = 'watch';
+  static const mutualFriend = 'mutualFriend';
 
 }

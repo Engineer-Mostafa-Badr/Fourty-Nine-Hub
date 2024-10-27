@@ -110,6 +110,7 @@ class CodegenLoader extends AssetLoader{
   "comma": "،",
   "noResultFound": "لايوجد نتائج",
   "restaurantDashboard": "لوحة المطعم",
+  "doctorDashboard": "لوحة الدكتور",
   "allRestaurants": "كل المطاعم",
   "restaurantsForSelectedMeal": "المطاعم لهذه الوجبه",
   "itemName": "اسم الوجبة",
@@ -947,7 +948,6 @@ class CodegenLoader extends AssetLoader{
   "comfort": "مريح",
   "minutesAgo": "من دقيقه",
   "Phonenumbercannotbewrittenindescription": "لا يمكن كتابه رقم هاتف في الوصف",
-  "mutualFriend": "صديق مشترك",
   "womenOnly": "للنساء فقط",
   "chance": "فرصة",
   "subTab": "علامة تبويب فرعية",
@@ -1029,7 +1029,13 @@ class CodegenLoader extends AssetLoader{
   "cancelRequest": "إلغاء الطلب",
   "sendOffer": "إرسال العرض",
   "shareTransactionDetails": "مشاركة تفاصيل المعاملة",
-  "serveClientsByClickRegister": "خدمة العملاء عن طريق النقر على زر التسجيل."
+  "serveClientsByClickRegister": "خدمة العملاء عن طريق النقر على زر التسجيل.",
+  "yourPersonalMessages": "رسالاتك الشخصيه",
+  "endToEndEncryption": "مشفره من البدايه للنهايه",
+  "liveStreamOptions": "خيارات البث الحي",
+  "createLive": "انشاء بث",
+  "watch": "مشاهدة",
+  "mutualFriend": "صديق مشترك"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2037,7 +2043,7 @@ static const Map<String,dynamic> en = {
   "drivingLicense": "Driving License",
   "theApplicationDoesNotDeductAnyPercentage": "The application does not deduct any percentage from the service provider.",
   "youWillGetPoundsAnnually": "You will get 3,650 pounds annually if you subscribe.",
-  "license": "رخصة",
+  "license": "License",
   "snapCopyOfBillPayment": "Snap copy of bill payment",
   "paymentSuccessful": "Payment successful",
   "sendReviewApproval": "Send for review and approval",
@@ -2059,10 +2065,15 @@ static const Map<String,dynamic> en = {
   "youWillHidePost": "You Will Hide Post",
   "serveClientsByClickRegister": "Serve Clients By Click Register",
   "expiredRequests": "Expired Requests",
+  "doctorDashboard": "Doctor Dashboard",
   "notSubscribed": "Not Subscribed",
   "adRequests": "Ad Requests",
-  "showAdRequests": "Show Ad Requests",
-  "Phonenumbercannotbewrittenindescription": "Phone number cannot be written in description"
+  "yourPersonalMessages": "Your personal messages are",
+  "endToEndEncryption": "end-to-end encrypted",
+  "liveStreamOptions": "Live Stream Options",
+  "createLive": "Create Live",
+  "watch": "Watch"
 };
+
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
