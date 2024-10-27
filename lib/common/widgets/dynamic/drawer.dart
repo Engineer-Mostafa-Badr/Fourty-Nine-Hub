@@ -94,13 +94,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         image: Assets.quran,
                         label: LocaleKeys.quraan.localize,
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (builder) => QuranPage(
-                                    suraJsonData: widgejsonData,
-                                  )));
-                        //  return context.push(Routes.QURAAN);
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (builder) => QuranPage()));
+                          return context.push(Routes.QURAAN);
                         }),
                     drawerListTile(
                         image: Assets.azkar,

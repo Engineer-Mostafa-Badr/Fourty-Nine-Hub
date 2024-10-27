@@ -1,267 +1,71 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/features/quraan/domain/entity/surah.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.dart';
+import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_state.dart';
 import 'package:fourtyninehub/features/quraan/presentation/pages/quran_details.dart';
-// import 'package:quran/dart';
-import 'package:quran/quran.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class QuranPage extends StatefulWidget {
-  var suraJsonData;
-
-  QuranPage({super.key, required this.suraJsonData});
-
   @override
   State<QuranPage> createState() => _QuranPageState();
 }
 
 class _QuranPageState extends State<QuranPage> {
-  TextEditingController textEditingController = TextEditingController();
-
-  bool isLoading = true;
-
-  var searchQuery = "";
-  var filteredData;
-  List<Surah> surahList = [];
-  var ayatFiltered;
-
-  List pageNumbers = [];
-
-  addFilteredData() async {
-    await Future.delayed(const Duration(milliseconds: 600));
-    setState(() {
-      filteredData = widget.suraJsonData;
-      isLoading = false;
-    });
-  }
-
   @override
   void initState() {
-    addFilteredData();
     super.initState();
+    // Fetch surah data when the page loads
+    //  context.read<QuranCubit>().fetchSurah(id: id);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffF1EEE5),
+      backgroundColor: const Color(0xffF1EEE5),
       appBar: AppBar(
         title: const Text("Quran Page"),
       ),
-      body: isLoading
-          ? const Center(
-        child: CircularProgressIndicator(),
-      )
-          : ListView(
-        shrinkWrap: true,
-        physics: const ClampingScrollPhysics(),
-        children: [
-          TextField(
-            textDirection: TextDirection.rtl,
-            controller: textEditingController,
-            onChanged: (value) {
-              setState(() {
-                searchQuery = value;
-              });
-
-              if (value == "") {
-                filteredData = widget.suraJsonData;
-
-                pageNumbers = [];
-
-                setState(() {});
-              }
-
-              // if (searchQuery.isNotEmpty &&
-              //     isInt(searchQuery) &&
-              //     toInt(searchQuery) < 605 &&
-              //     toInt(searchQuery) > 0) {
-              //   pageNumbers.add(toInt(searchQuery));
-              // }
-
-              if (searchQuery.length > 3 ||
-                  searchQuery.toString().contains(" ")) {
-                setState(() {
-                  ayatFiltered = [];
-
-                //  ayatFiltered = searchWords(searchQuery);
-                  filteredData = widget.suraJsonData.where((sura) {
-                    final suraName = sura['englishName'].toLowerCase();
-                    // final suraNameTranslated =
-                    //     sura['name']
-                    //         .toString()
-                    //         .toLowerCase();
-                    final suraNameTranslated =
-                    getSurahNameArabic(sura["number"]);
-
-                    return suraName.contains(searchQuery.toLowerCase()) ||
-                        suraNameTranslated
-                            .contains(searchQuery.toLowerCase());
-                  }).toList();
-                });
-              }
-            },
-            style: const TextStyle(color: Color.fromARGB(190, 0, 0, 0)),
-            decoration: const InputDecoration(
-              hintText: 'searchQuran',
-              hintStyle: TextStyle(),
-              border: InputBorder.none,
-            ),
-          ),
-          if (pageNumbers.isNotEmpty)
-            Container(
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text("page"),
-              ),
-            ),
-          ListView.separated(
-              reverse: true,
-              itemBuilder: (ctx, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Container(
-                    height: 20,
-                    width: 120,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.r),
-                      color: Colors.orange.withOpacity(.5),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(pageNumbers[index].toString()),
-                          Text(getSurahName(
-                              getPageData(pageNumbers[index])[0]
-                              ["surah"]))
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              separatorBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Divider(
-                  color: Colors.grey.withOpacity(.5),
-                ),
-              ),
-              itemCount: pageNumbers.length),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            separatorBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Divider(
-                color: Colors.grey.withOpacity(.5),
-              ),
-            ),
-            itemCount: filteredData.length,
-            itemBuilder: (context, index) {
-              int suraNumber = index + 1;
-              String suraName = filteredData[index]["englishName"];
-              String suraNameEnglishTranslated =
-              filteredData[index]["englishNameTranslation"];
-              int suraNumberInQuran = filteredData[index]["number"];
-              String suraNameTranslated =
-              filteredData[index]["name"].toString();
-              int ayahCount = getVerseCount(suraNumber);
-
-              return Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: Container(
-                  child: ListTile(
-                    leading: SizedBox(
-                      width: 45,
-                      height: 45,
-                      child: Center(
-                        child: Text(
-                          suraNumber.toString(),
-                          style: const TextStyle(
-                              color: Colors.orange, fontSize: 14),
-                        ),
-                      ),
-                    ) //  Material(
-
-                    ,
-                    minVerticalPadding: 0,
-                    title: SizedBox(
-                      width: 90,
-                      child: Row(
-                        children: [
-                          Text(
-                            suraName,
-                            style: const TextStyle(
-                              // fontWeight: FontWeight.bold,
-                              color: Colors.blue,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700, // Text color
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    subtitle: Text(
-                      "$suraNameEnglishTranslated ($ayahCount)",
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey.withOpacity(.8)),
-                    ),trailing: RichText(text:  TextSpan(text:                suraNumber.toString(),
-
-                    // textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        fontFamily: "arsura",
-                        fontSize: 22,color: Colors.black
-
-                    ),
-                  )),
-                    onTap: () async {
+      body: BlocProvider<QuranCubit>(
+        create: (BuildContext context) => serviceLocator()..fetchQuranSurah(),
+        child: BlocBuilder<QuranCubit, QuranState>(
+          builder: (context, state) {
+            if (state.status == QuranStates.loading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state.status == QuranStates.success) {
+              return ListView.builder(
+                itemCount: state.quranSurah?.length,
+                itemBuilder: (context, index) {
+                  var surah = state.quranSurah![index];
+                  return InkWell(
+                    onTap: () {
                       Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => QuranViewPage(
+                              surahId: state.quranSurah![index].surahNo, pageNumber: 1,),
+                        ),
+                      );
+                    },
+                    child: ListTile(
+                      title: Text(surah.surahNameAr),
+                      subtitle: Text('Surah number: ${surah.surahNo}'),
+                      onTap: () {
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (builder) => QuranViewPage(
-                                  shouldHighlightText: false,
-                                  highlightVerse: "",
-                                  jsonData: widget.suraJsonData,
-                                  pageNumber: getPageNumber(
-                                      suraNumberInQuran, 1))));
-                    },
-                  ),
-                ),
+                            builder: (context) => QuranViewPage(
+                                surahId: state.quranSurah![index].surahNo, pageNumber: 1,),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
               );
-            },
-          ),
-          if (ayatFiltered != null)
-            ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: ayatFiltered["occurences"] > 10
-                  ? 10
-                  : ayatFiltered["occurences"],
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Container(
-                    height: 20,
-                    width: 120,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.r),
-                      color: Colors.white70,
-                    ),
-                    child: Text(
-                      "سورة ${getSurahNameArabic(ayatFiltered["result"][index]["surah"])} - ${getVerse(ayatFiltered["result"][index]["surah"], ayatFiltered["result"][index]["verse"], verseEndSymbol: true)}",
-                      textDirection: TextDirection.rtl,
-                      style: const TextStyle(
-                          color: Colors.black, fontSize: 17),
-                    ),
-                  ),
-                );
-              },
-            ),
-        ],
+            }
+            return const SizedBox();
+          },
+        ),
       ),
     );
   }

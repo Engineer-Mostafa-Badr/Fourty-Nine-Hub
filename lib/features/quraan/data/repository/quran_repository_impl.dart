@@ -11,8 +11,8 @@ import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_
 
   QuranRepositoryImpl(this._remoteDataSource);
   @override
-  Future<Either<Failure, List<QuranSurahEntity>>> fetchQuranSurah(QuranParams params) {
-    return _remoteDataSource.fetchQuranSurah(params);
+  Future<Either<Failure, List<QuranSurahEntity>>> fetchQuranSurah() {
+    return _remoteDataSource.fetchQuranSurah();
   }
 
   @override

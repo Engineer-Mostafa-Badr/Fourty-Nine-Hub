@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/constants/constants.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_use_case.dart';
@@ -94,8 +95,8 @@ class EndPoints {
     return '/user-transactions/mainWallet';
   }
 
-  static String geMainCategoryWallet() {
-    return '/categories/main';
+  static String geMainCategoryWallet(MainCategoryParams params) {
+    return '/categories/main/for-subscriptions?page=1&limit=60';
   }
 
   static String geSubCategoryWallet(String id) {
@@ -193,8 +194,8 @@ class EndPoints {
   static const enableAccount = '/users/settings/enable-account';
 
   // Quran
-  static String quranSurah(QuranParams params) =>
-      '/quran/surahs?page=${params.params.page}&limit=${params.params.limit}';
+  static String quranSurah() =>
+      '/quran/surahs?page=1&limit=500';
   static String quran(int id) =>
       '/quran/surah/$id';
 
