@@ -90,7 +90,7 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => serviceLocator<UserCubit>(),
+          create: (context) => serviceLocator<UserCubit>()..getUser(),
         ),
         BlocProvider(
           create: (context) => serviceLocator<SecretsCubit>()..getAllSecrets(),

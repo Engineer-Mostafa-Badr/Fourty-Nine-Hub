@@ -122,8 +122,8 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                                       activeTrackColor: Colors.grey,
                                       activeColor: AppColors.SECONDARY_COLOR,
                                       trackOutlineColor:
-                                          MaterialStateProperty.resolveWith (
-                                              (sattes)=>Colors.white),
+                                          const MaterialStatePropertyAll(
+                                              Colors.white),
                                       onChanged: (v) async {
                                         await context
                                             .read<RestaurantsCubit>()
