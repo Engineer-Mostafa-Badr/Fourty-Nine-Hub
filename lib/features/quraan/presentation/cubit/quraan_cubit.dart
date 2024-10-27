@@ -1,11 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/features/quraan/domain/entity/quran_surah_entity.dart';
 import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_use_case.dart';
 import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_surah_use_case.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_state.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class QuranCubit extends Cubit<QuranState> {
   final FetchQuranSurahUseCase _quranSurahUseCase;

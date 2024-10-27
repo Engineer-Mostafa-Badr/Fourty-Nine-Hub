@@ -13,7 +13,6 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class QuraanView extends StatelessWidget {
   const QuraanView({super.key});
