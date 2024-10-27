@@ -96,6 +96,7 @@ abstract class  LocaleKeys {
   static const comma = 'comma';
   static const noResultFound = 'noResultFound';
   static const restaurantDashboard = 'restaurantDashboard';
+  static const doctorDashboard = 'doctorDashboard';
   static const allRestaurants = 'allRestaurants';
   static const restaurantsForSelectedMeal = 'restaurantsForSelectedMeal';
   static const itemName = 'itemName';
@@ -585,14 +586,11 @@ abstract class  LocaleKeys {
   static const free = 'free';
   static const booked = 'booked';
   static const inProgress = 'inProgress';
-  static const comfort = 'comfort';
   static const muted = 'muted';
   static const egp = 'egp';
-  static const minutesAgo = 'minutesAgo';
   static const pleaseUploadVideo = 'pleaseUploadVideo';
   static const pleaseUploadImage = 'pleaseUploadImage';
   static const expired = 'expired';
-  static const womenOnly = 'womenOnly';
   static const youDontOwnCar = 'youDontOwnCar';
   static const paymentOption = 'paymentOption';
   static const bookSeat = 'bookSeat';
@@ -892,7 +890,6 @@ abstract class  LocaleKeys {
   static const transactionSuccessful = 'transactionSuccessful';
   static const yourTransactionWasSuccessful = 'yourTransactionWasSuccessful';
   static const transferAmount = 'transferAmount';
-  static const shareTransactionDetails = 'shareTransactionDetails';
   static const premiumPackageMoreVisibilityCashback = 'premiumPackageMoreVisibilityCashback';
   static const inFront = 'inFront';
   static const behind = 'behind';
@@ -921,7 +918,12 @@ abstract class  LocaleKeys {
   static const premiumRequest = 'premiumRequest';
   static const normalRequest = 'normalRequest';
   static const adRequests = 'adRequests';
+  static const showAdRequests = 'showAdRequests';
+  static const comfort = 'comfort';
+  static const minutesAgo = 'minutesAgo';
+  static const Phonenumbercannotbewrittenindescription = 'Phonenumbercannotbewrittenindescription';
   static const mutualFriend = 'mutualFriend';
+  static const womenOnly = 'womenOnly';
   static const chance = 'chance';
   static const subTab = 'subTab';
   static const exactly2items = 'exactly2items';
@@ -1001,5 +1003,7 @@ abstract class  LocaleKeys {
   static const newRide = 'newRide';
   static const cancelRequest = 'cancelRequest';
   static const sendOffer = 'sendOffer';
+  static const shareTransactionDetails = 'shareTransactionDetails';
+  static const serveClientsByClickRegister = 'serveClientsByClickRegister';
 
 }
