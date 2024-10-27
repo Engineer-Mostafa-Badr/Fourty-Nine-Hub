@@ -219,11 +219,11 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                             child: GestureDetector(
                               onTap: totalPrice > 0
                                   ? () {
-                                      context
-                                          .read<CreateCompanyAdCubit>()
-                                          .payCompanyAd(
-                                            PayCompanyAdParams(amount: totalPrice),
-                                          );
+                                      // context
+                                      //     .read<CreateCompanyAdCubit>()
+                                      //     .payCompanyAd(
+                                      //       PayCompanyAdParams(amount: totalPrice),
+                                      //     );
                                       // Navigator.push(
                                       //   context,
                                       //   MaterialPageRoute(
