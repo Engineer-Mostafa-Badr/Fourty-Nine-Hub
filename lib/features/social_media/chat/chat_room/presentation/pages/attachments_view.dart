@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/service/get_file_size_format.dart';
@@ -82,27 +83,21 @@ class AttachementsViewState extends State<AttachementsView> {
                   children: [
                     state.messages == null
                         ? const Center(
-                            child: CircularProgressIndicator(
-                              color: AppColors.PRIMARY_COLOR,
-                            ),
+                            child: CircularProgressIndicator(),
                           )
                         : MediaAttachementsTab(
                             messages: state.messages ?? [],
                           ),
                     state.messages == null
                         ? const Center(
-                            child: CircularProgressIndicator(
-                              color: AppColors.PRIMARY_COLOR,
-                            ),
+                            child: CircularProgressIndicator(),
                           )
                         : DocumentsAttachementsTab(
                             messages: state.messages ?? [],
                           ),
                     state.messages == null
                         ? const Center(
-                            child: CircularProgressIndicator(
-                              color: AppColors.PRIMARY_COLOR,
-                            ),
+                            child: CircularProgressIndicator(),
                           )
                         : LinksAttachementsTab(
                             messages: state.messages ?? [],
@@ -270,8 +265,19 @@ class LinkCard extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: Colors.grey[200],
+          color:
+              context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.grey[200],
           borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: context.isDarkMode
+                  ? AppColors.BACKGROUND_COLOR.withOpacity(0.05)
+                  : Colors.black12,
+              blurRadius: 8,
+              spreadRadius: 2,
+              offset: const Offset(0, 0),
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -506,9 +512,9 @@ class _AttachmentsFileCardState extends State<AttachmentsFileCard> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
       child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
+        decoration: BoxDecoration(
+          color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(12),
             topRight: Radius.circular(12),
             bottomLeft: Radius.circular(12),
@@ -516,9 +522,11 @@ class _AttachmentsFileCardState extends State<AttachmentsFileCard> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black12,
+              color: context.isDarkMode
+                  ? AppColors.BACKGROUND_COLOR.withOpacity(0.05)
+                  : Colors.black12,
               blurRadius: 8,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -586,7 +594,10 @@ class _AttachmentsFileCardState extends State<AttachmentsFileCard> {
                 children: [
                   Label(
                     text: widget.messageEntity.time,
-                    style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
+                    style: Styles.smallText(
+                        color: context.isDarkMode
+                            ? AppColors.BACKGROUND_COLOR
+                            : AppColors.PRIMARY_COLOR),
                   ),
                   const SizedBox(width: 4),
                 ],

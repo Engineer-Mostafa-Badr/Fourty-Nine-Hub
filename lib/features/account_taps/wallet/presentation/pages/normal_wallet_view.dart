@@ -129,7 +129,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                                     BlocProvider<PaymentCubit>(
                                   create: (BuildContext context) =>
                                       serviceLocator(),
-                                  child: PaymentCashOut(),
+                                  child: const PaymentCashOut(),
                                 ),
                               ),
                             );

@@ -14,7 +14,7 @@ class ItemCard extends StatefulWidget {
   final RestaurantMenu meal;
   final bool? fromUpdate;
 
-  ItemCard({
+  const ItemCard({
     super.key,
     required this.meal,
     required this.restaurantId,

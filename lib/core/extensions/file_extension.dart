@@ -53,11 +53,11 @@ const List<String> docsExtensions = [
   'doc',
   'docx',
   'pdf',
-  'txt',
-  'xls',
-  'xlsx',
-  'ppt',
-  'pptx'
+  // 'txt',
+  // 'xls',
+  // 'xlsx',
+  // 'ppt',
+  // 'pptx'
 ];
 const List<String> imagesExtensions = [
   'jpg',

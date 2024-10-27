@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -47,7 +48,9 @@ class _SelectContactToShareCartState extends State<SelectContactToShareCart> {
         padding: const EdgeInsets.symmetric(vertical: 8),
         color: isSelected
             ? AppColors.PRIMARY_COLOR.withOpacity(0.1)
-            : AppColors.BACKGROUND_COLOR, // Change background when selected
+            : context.isDarkMode
+                ? AppColors.QUANTITY_COLOR
+                : AppColors.BACKGROUND_COLOR, // Change background when selected
         child: Row(
           children: [
             const SizedBox(

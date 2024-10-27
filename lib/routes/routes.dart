@@ -23,6 +23,8 @@ abstract class Routes {
   static const COMPETITIONS = '/Competitions';
   static const WINNERS = '/Winners';
   static const WALLET = '/Wallet';
+  static const BALANCE = '/Balance';
+  static const GIFT = '/Gift';
   static const WALLETHISTORY = '/Wallet/WalletHistory';
   static const TRANSFERMONEY = '/Wallet/TransferMoney';
   static const SOCIAL = '/Social';
@@ -184,6 +186,8 @@ abstract class Paths {
   static const COMPETITIONS = 'Competitions';
   static const WINNERS = 'Winners';
   static const WALLET = 'Wallet';
+  static const BALANCE = 'Balance';
+  static const GIFT = 'Gift';
   static const WALLETHISTORY = 'WalletHistory';
   static const TRANSFERMONEY = 'TransferMoney';
   static const INSTAGRAM = 'Instagram';

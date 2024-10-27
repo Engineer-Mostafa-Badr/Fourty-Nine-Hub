@@ -36,7 +36,7 @@ class CreateRestaurantForm extends StatefulWidget {
   final String? restaurantId;
   final String? subcategoryId;
 
-  CreateRestaurantForm(
+  const CreateRestaurantForm(
       {super.key, this.from, this.restaurantId, this.subcategoryId});
 
   @override
@@ -48,7 +48,7 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.from.toString() + 'sdkvjbskdvblkn');
+    print('${widget.from}sdkvjbskdvblkn');
     return BlocListener<CreateRestaurantCubit, CreateRestaurantState>(
       listener: (context, state) {
         switch (state) {

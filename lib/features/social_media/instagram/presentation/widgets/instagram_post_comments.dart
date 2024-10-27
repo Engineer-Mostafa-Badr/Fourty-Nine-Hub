@@ -25,6 +25,7 @@ import '../../../../../../res/style/styles.dart';
 
 class InstagramPostComments extends StatefulWidget {
   final String postId;
+  final bool? isShown;
   final Function(PostCommentParams) onAddComment;
   final Function(PostCommentParams) onEditComment;
   final Function(String) onDeleteComment;
@@ -34,6 +35,7 @@ class InstagramPostComments extends StatefulWidget {
   const InstagramPostComments({
     super.key,
     required this.postId,
+    this.isShown=false,
     required this.onAddComment,
     required this.onEditComment,
     required this.onDeleteComment,
@@ -119,12 +121,10 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                         const CupertinoActivityIndicator()),
               ),
             ),
-            Container(
+            if(widget.isShown==false)Container(
                 height: kToolbarHeight,
-                decoration: BoxDecoration(
-                  color: context.isDarkMode
-                      ? Colors.transparent
-                      : AppColors.LIGHT_COLOR,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
                 ),
                 child: Row(
                   children: [
@@ -142,9 +142,7 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                       },
                       style: Styles.headerText(fontSize: 26),
                       decoration: InputDecoration(
-                        fillColor: context.isDarkMode
-                            ? AppColors.DARK_BLUE_COLOR.withOpacity(0.07)
-                            : AppColors.LIGHT_COLOR,
+                        fillColor: Colors.white,
                         contentPadding: const EdgeInsets.all(5),
                         hintText: '${LocaleKeys.typeYourComment.localize} ....',
                         hintStyle: Styles.mediumText(),

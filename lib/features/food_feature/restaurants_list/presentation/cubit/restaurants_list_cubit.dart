@@ -79,13 +79,13 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
 
   Future<void> loadData() async {
     await _getUser();
-    if (serviceLocator<UserCubit>().isLoggedIn) {
+    // if (serviceLocator<UserCubit>().isLoggedIn) {
       // await _getMainCategoryDetails();
       // await isRestaurant();
       // await _getMealCategoriesWithCountRestaurants();
       // // await _getNumOfRestaurants();
       // await getAllRestaurant();
-
+    emit(state.copyWith(status: RestaurantsListStates.loading));
       Future.wait([
         _getMainCategoryDetails(),
         isRestaurant(),
@@ -93,7 +93,8 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
         getAllRestaurant(),
         // _getNumOfRestaurants(),
       ]);
-    }
+    emit(state.copyWith(status: RestaurantsListStates.success));
+    // }
   }
 
   Future<void> _getUser() async {
@@ -262,14 +263,14 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   }
 
   Future<void> _getMainCategoryDetails() async {
-    if (user != null) {
+    // if (user != null) {
       final response = await _getMainCategoryDetailsUseCase(service.id);
       response.fold(
           (failure) =>
               emit(state.copyWith(status: RestaurantsListStates.error)),
           (data) => emit(state.copyWith(
-              mainCategory: data, status: RestaurantsListStates.success)));
-    }
+              mainCategory: data, )));
+    // }
   }
 
   Future<void> _ensureTokenInitialized() async {

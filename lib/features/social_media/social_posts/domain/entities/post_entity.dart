@@ -58,10 +58,11 @@ class PostEntity {
   bool? isApproved;
 
   DateTime? createdAt;
+  String? createAt;
   Duration get publishedDuration => DateTime.now().difference(createdAt!);
 
   String get sinceTime =>
-      DurationHelper().sinceTime(duration: publishedDuration);
+      DurationHelper().getTimeDifference( createdAt!);
 
   PostEntity({
     required this.id,
@@ -92,6 +93,7 @@ class PostEntity {
     this.hahaCount = 0,
     this.totalCount = 0,
     this.createdAt,
+    this.createAt,
     this.feeling,
     this.activity,
     this.backgroundColor,

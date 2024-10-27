@@ -1,15 +1,19 @@
 // Nasr
 
+import 'dart:async';
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
@@ -24,6 +28,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swipe_to/swipe_to.dart';
+import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 
@@ -179,10 +184,11 @@ class MessageCard extends StatelessWidget {
           const SizedBox(
             width: 8,
           ),
-          const CircleAvatar(
+          CircleAvatar(
             radius: 15,
-            backgroundColor: Colors.white,
-            backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+            backgroundColor:
+                context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+            backgroundImage: const NetworkImage(UIConst.profilePlaceHolder),
           ),
           const Sizer(width: 5),
           Padding(
@@ -194,7 +200,9 @@ class MessageCard extends StatelessWidget {
             ),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.isDarkMode
+                    ? AppColors.QUANTITY_COLOR
+                    : Colors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: messageEntity.hasReply
                       ? const Radius.circular(0)
@@ -209,11 +217,13 @@ class MessageCard extends StatelessWidget {
                       ? const Radius.circular(12)
                       : const Radius.circular(0),
                 ),
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
-                    color: Colors.black12,
+                    color: context.isDarkMode
+                        ? AppColors.BACKGROUND_COLOR.withOpacity(0.05)
+                        : Colors.black12,
                     blurRadius: 8,
-                    offset: Offset(0, 4),
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
@@ -254,7 +264,15 @@ class MessageCard extends StatelessWidget {
           ReadMoreLabel(
             // trimLines: 5,
             text: messageEntity.text,
-            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+            style: Styles.mediumText(
+              color: messageEntity.byMe
+                  ? context.isDarkMode
+                      ? AppColors.PRIMARY_COLOR
+                      : AppColors.PRIMARY_COLOR
+                  : context.isDarkMode
+                      ? AppColors.BACKGROUND_COLOR
+                      : AppColors.LIGHT_GRAY_COLOR2,
+            ),
             textAlign: TextAlign.left,
           ),
           const SizedBox(width: 8),
@@ -263,14 +281,24 @@ class MessageCard extends StatelessWidget {
             children: [
               Label(
                 text: messageEntity.time,
-                style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
+                style: Styles.smallText(
+                  color: messageEntity.byMe
+                      ? context.isDarkMode
+                          ? AppColors.PRIMARY_COLOR
+                          : AppColors.PRIMARY_COLOR
+                      : context.isDarkMode
+                          ? AppColors.BACKGROUND_COLOR
+                          : AppColors.LIGHT_GRAY_COLOR2,
+                ),
               ),
               const SizedBox(width: 4),
-              Icon(
-                _getMessageIcon(messageEntity),
-                color: _getMessageIconColor(messageEntity),
-                size: 12,
-              ),
+              messageEntity.byMe
+                  ? Icon(
+                      _getMessageIcon(messageEntity),
+                      color: _getMessageIconColor(messageEntity),
+                      size: 12,
+                    )
+                  : const SizedBox(),
             ],
           ),
           // Row(
@@ -468,10 +496,11 @@ class MessageCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 15,
-              backgroundColor: Colors.white,
-              backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+              backgroundColor:
+                  context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+              backgroundImage: const NetworkImage(UIConst.profilePlaceHolder),
             ),
             const Sizer(width: 5),
             IntrinsicWidth(
@@ -490,7 +519,9 @@ class MessageCard extends StatelessWidget {
                       padding: const EdgeInsets.all(12),
                       margin: const EdgeInsets.all(0),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: context.isDarkMode
+                            ? AppColors.QUANTITY_COLOR
+                            : Colors.white,
                         borderRadius: BorderRadius.only(
                           topLeft: messageEntity.hasReply
                               ? const Radius.circular(0)
@@ -505,11 +536,13 @@ class MessageCard extends StatelessWidget {
                               ? const Radius.circular(12)
                               : const Radius.circular(0),
                         ),
-                        boxShadow: const [
+                        boxShadow: [
                           BoxShadow(
-                            color: Colors.black12,
+                            color: context.isDarkMode
+                                ? AppColors.BACKGROUND_COLOR.withOpacity(0.05)
+                                : Colors.black12,
                             blurRadius: 8,
-                            offset: Offset(0, 4),
+                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),
@@ -522,7 +555,9 @@ class MessageCard extends StatelessWidget {
                               // trimLines: 5,
                               text: messageEntity.text,
                               style: Styles.mediumText(
-                                color: AppColors.PRIMARY_COLOR,
+                                color: context.isDarkMode
+                                    ? AppColors.BACKGROUND_COLOR
+                                    : AppColors.PRIMARY_COLOR,
                               ),
                               textAlign: TextAlign.left,
                             ),
@@ -531,7 +566,9 @@ class MessageCard extends StatelessWidget {
                           Label(
                             text: messageEntity.time,
                             style: Styles.smallText(
-                                color: AppColors.PRIMARY_COLOR),
+                                color: context.isDarkMode
+                                    ? AppColors.BACKGROUND_COLOR
+                                    : AppColors.PRIMARY_COLOR),
                           ),
                         ],
                       ),
@@ -547,7 +584,7 @@ class MessageCard extends StatelessWidget {
   }
 }
 
-class VoiceMessageCard extends StatelessWidget {
+class VoiceMessageCard extends StatefulWidget {
   const VoiceMessageCard({
     super.key,
     required this.messageEntity,
@@ -558,139 +595,186 @@ class VoiceMessageCard extends StatelessWidget {
   final bool isSend;
 
   @override
+  State<VoiceMessageCard> createState() => _VoiceMessageCardState();
+}
+
+class _VoiceMessageCardState extends State<VoiceMessageCard> {
+  @override
   Widget build(BuildContext context) {
     final chatRoomCubit = context.read<ChatRoomCubit>();
     final isArabic = LocaleKeys.more.tr() == "More";
-    return SwipeTo(
-      onRightSwipe: !isArabic
-          ? null
-          : (details) {
-              chatRoomCubit.selectMessageForReplaying(messageEntity);
-            },
-      onLeftSwipe: isArabic
-          ? null
-          : (details) {
-              chatRoomCubit.selectMessageForReplaying(messageEntity);
-            },
-      child: Padding(
-        padding: const EdgeInsets.only(
-          right: 8,
-          bottom: 6,
-          top: 6,
-          left: 8,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment:
-              isSend ? MainAxisAlignment.end : MainAxisAlignment.start,
-          children: [
-            isSend
-                ? const SizedBox()
-                : const CircleAvatar(
-                    radius: 15,
-                    backgroundColor: Colors.white,
-                    backgroundImage: NetworkImage(UIConst.profilePlaceHolder),
+    return GestureDetector(
+      onTap: () {
+        log("voice message card tap : ${widget.messageEntity.media[0].url}");
+      },
+      child: SwipeTo(
+        onRightSwipe: !isArabic
+            ? null
+            : (details) {
+                chatRoomCubit.selectMessageForReplaying(widget.messageEntity);
+              },
+        onLeftSwipe: isArabic
+            ? null
+            : (details) {
+                chatRoomCubit.selectMessageForReplaying(widget.messageEntity);
+              },
+        child: Padding(
+          padding: const EdgeInsets.only(
+            right: 8,
+            bottom: 6,
+            top: 6,
+            left: 8,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment:
+                widget.isSend ? MainAxisAlignment.end : MainAxisAlignment.start,
+            children: [
+              widget.isSend
+                  ? const SizedBox()
+                  : CircleAvatar(
+                      radius: 15,
+                      backgroundColor: context.isDarkMode
+                          ? AppColors.QUANTITY_COLOR
+                          : Colors.white,
+                      backgroundImage:
+                          const NetworkImage(UIConst.profilePlaceHolder),
+                    ),
+              widget.isSend ? const SizedBox() : const Sizer(width: 5),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.65,
+                decoration: BoxDecoration(
+                  color: widget.isSend
+                      ? AppColors.MESSAGE_COLOR
+                      : context.isDarkMode
+                          ? AppColors.QUANTITY_COLOR
+                          : AppColors.BACKGROUND_COLOR,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
+                    bottomLeft: Radius.circular(12),
+                    bottomRight: Radius.circular(12),
                   ),
-            isSend ? const SizedBox() : const Sizer(width: 5),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.65,
-              decoration: BoxDecoration(
-                color: isSend
-                    ? AppColors.MESSAGE_COLOR
-                    : AppColors.BACKGROUND_COLOR,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
-                  bottomLeft: Radius.circular(12),
-                  bottomRight: Radius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: context.isDarkMode
+                          ? AppColors.BACKGROUND_COLOR.withOpacity(0.05)
+                          : Colors.black12,
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 8,
-                    offset: Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  messageEntity.hasReply
-                      ? isSend
-                          ? ReplySendMessageCard(
-                              width: MediaQuery.of(context).size.width * 0.65,
-                              messageEntity: messageEntity)
-                          : ReplyRecivedMessageCard(
-                              messageEntity: messageEntity,
-                              width: MediaQuery.of(context).size.width * 0.65,
-                            )
-                      : const SizedBox(),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.65,
-                    child: Stack(
-                      children: [
-                        VoiceMessageView(
-                          activeSliderColor: AppColors.PRIMARY_COLOR,
-                          circlesColor: AppColors.PRIMARY_COLOR,
-                          notActiveSliderColor: isSend
-                              ? AppColors.MESSAGE_COLOR
-                              : AppColors.BACKGROUND_COLOR,
-                          backgroundColor: isSend
-                              ? AppColors.MESSAGE_COLOR
-                              : AppColors.BACKGROUND_COLOR,
-                          innerPadding: 12,
-                          cornerRadius: 12,
-                          // notActiveSliderColor:
-                          //     AppColors.PRIMARY_COLOR.withOpacity(0.1),
-                          // size: ,
-                          controller: VoiceController(
-                            audioSrc: messageEntity.media[0].url,
-                            maxDuration: const Duration(minutes: 1000),
-                            // cacheKey: messageEntity.media[0].url,
-                            isFile: false,
-                            onComplete: () {},
-                            onPause: () {},
-                            onPlaying: () {},
-                            onError: (p0) {},
-                          ),
-                        ),
-                        const Divider(
-                          color: AppColors.LIGHT_GRAY_COLOR2,
-                          height: 70,
-                          indent: 70,
-                          endIndent: 90,
-                          // thickness: 2,
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 8.0, right: 8.0, bottom: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Label(
-                          text: messageEntity.time,
-                          style:
-                              Styles.smallText(color: AppColors.PRIMARY_COLOR),
-                        ),
-                        isSend ? const SizedBox(width: 4) : const SizedBox(),
-                        isSend
-                            ? Icon(
-                                _getMessageIcon(messageEntity),
-                                color: _getMessageIconColor(messageEntity),
-                                size: 12,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    widget.messageEntity.hasReply
+                        ? widget.isSend
+                            ? ReplySendMessageCard(
+                                width: MediaQuery.of(context).size.width * 0.65,
+                                messageEntity: widget.messageEntity)
+                            : ReplyRecivedMessageCard(
+                                messageEntity: widget.messageEntity,
+                                width: MediaQuery.of(context).size.width * 0.65,
                               )
-                            : const SizedBox(),
-                      ],
+                        : const SizedBox(),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.65,
+                      child: Stack(
+                        children: [
+                          VoiceMessageView(
+                            activeSliderColor: widget.isSend
+                                ? context.isDarkMode
+                                    ? AppColors.PRIMARY_COLOR
+                                    : AppColors.PRIMARY_COLOR
+                                : context.isDarkMode
+                                    ? AppColors.BACKGROUND_COLOR
+                                        .withOpacity(0.5)
+                                    : AppColors.LIGHT_GRAY_COLOR2,
+                            circlesColor: AppColors.PRIMARY_COLOR,
+                            notActiveSliderColor: widget.isSend
+                                ? AppColors.MESSAGE_COLOR
+                                : context.isDarkMode
+                                    ? AppColors.QUANTITY_COLOR
+                                    : AppColors.BACKGROUND_COLOR,
+                            backgroundColor: widget.isSend
+                                ? AppColors.MESSAGE_COLOR
+                                : context.isDarkMode
+                                    ? AppColors.QUANTITY_COLOR
+                                    : AppColors.BACKGROUND_COLOR,
+                            innerPadding: 12,
+                            cornerRadius: 12,
+
+                            // notActiveSliderColor:
+                            //     AppColors.PRIMARY_COLOR.withOpacity(0.1),
+                            // size: ,
+                            controller: VoiceController(
+                              audioSrc: widget.messageEntity.media[0].url,
+                              // audioSrc:
+                              //     "https://server8.mp3quran.net/afs/056.mp3",
+                              maxDuration: const Duration(minutes: 1000),
+
+                              // cacheKey: messageEntity.media[0].url,
+                              isFile: false,
+                              onComplete: () {},
+                              onPause: () {},
+                              onPlaying: () {},
+                              onError: (p0) {
+                                // setState(() {
+                                log("voice error : $p0");
+                                // });
+                              },
+                            ),
+                          ),
+                          const Divider(
+                            color: AppColors.LIGHT_GRAY_COLOR2,
+                            height: 70,
+                            indent: 70,
+                            endIndent: 90,
+                            // thickness: 2,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 8),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 8.0, right: 8.0, bottom: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Label(
+                            text: widget.messageEntity.time,
+                            style: Styles.smallText(
+                              color: widget.isSend
+                                  ? context.isDarkMode
+                                      ? AppColors.PRIMARY_COLOR
+                                      : AppColors.PRIMARY_COLOR
+                                  : context.isDarkMode
+                                      ? AppColors.BACKGROUND_COLOR
+                                          .withOpacity(0.5)
+                                      : AppColors.LIGHT_GRAY_COLOR2,
+                            ),
+                          ),
+                          widget.isSend
+                              ? const SizedBox(width: 4)
+                              : const SizedBox(),
+                          widget.isSend
+                              ? Icon(
+                                  _getMessageIcon(widget.messageEntity),
+                                  color: _getMessageIconColor(
+                                      widget.messageEntity),
+                                  size: 12,
+                                )
+                              : const SizedBox(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -729,9 +813,9 @@ class ReplyRecivedMessageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
         ),
@@ -746,7 +830,9 @@ class ReplyRecivedMessageCard extends StatelessWidget {
           right: 8,
         ),
         decoration: BoxDecoration(
-          color: AppColors.DARK_GRAY_COLOR.withOpacity(0.4),
+          color: context.isDarkMode
+              ? Colors.white
+              : AppColors.DARK_GRAY_COLOR.withOpacity(0.4),
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(12),
             topRight: Radius.circular(12),
@@ -808,7 +894,9 @@ class ReplyRecivedMessageCard extends StatelessWidget {
                           : messageEntity.reply!.text,
                       overflow: TextOverflow.ellipsis,
                       style: Styles.mediumText(
-                        color: AppColors.DARK_GRAY_COLOR,
+                        color: context.isDarkMode
+                            ? AppColors.BACKGROUND_COLOR
+                            : AppColors.DARK_GRAY_COLOR,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -828,10 +916,12 @@ class ReplyRecivedMessageCard extends StatelessWidget {
                           height: double.infinity,
                         ),
                       )
-                    : const Icon(
+                    : Icon(
                         Icons.insert_drive_file,
                         size: 30,
-                        color: AppColors.GREY_DARK_COLOR,
+                        color: context.isDarkMode
+                            ? AppColors.BACKGROUND_COLOR
+                            : AppColors.GREY_DARK_COLOR,
                       )
                 : const SizedBox(),
           ],

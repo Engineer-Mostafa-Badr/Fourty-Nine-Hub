@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/constants/constants.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_ad_details_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
@@ -419,6 +420,7 @@ class EndPoints {
   }
 
   static const sendRideRequest = '/ride/trips/new';
+  static const checkDriverType = '/ride/riders/checkDriver/type';
   static const getMyPickMeTrips = '/ride/pick-me/trip/requests';
   static const getAllComeWithMeAds = '/ride/come-with-you/get-all';
   static const getAllPickMeAds = '/ride/pick-me/get-all';
@@ -747,7 +749,7 @@ class EndPoints {
   }
 
   static String subCategoryAds(GetAdsParams params) {
-    return '/ads/subCategoryAds/${params.subCategoryId}?filter=${params.filter}&page=${params.page}&limit=${params.limit}${params.userId!=null?"&userId=${params.userId}":""}';
+    return '/ads/subCategoryAds/${params.subCategoryId}?filter=${params.filter}&page=${params.page}&limit=${params.limit}${(params.userId!=null&&params.userId!="")?"&userId=${params.userId}":""}';
   }
 
   static String createAuction(String id) {
@@ -781,8 +783,12 @@ class EndPoints {
     return '/auction/end-auction/$id';
   }
 
-  static String adDetails(String id) {
-    return '/ads/getAd/$id';
+  static String adDetails(GetAdDetailsParams params) {
+    return '/ads/getAd/${params.adId}${params.userId.isNotEmpty?"?userId=${params.userId}":""}';
+  }
+
+  static String adRequests(String id) {
+    return '/ads-requests/getAdRequest/$id/search';
   }
 
   // /installment

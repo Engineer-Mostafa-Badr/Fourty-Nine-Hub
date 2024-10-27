@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,28 +11,28 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_details_prop_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import '../../../../../core/error/failure.dart';
-import '../../../../../core/messages/messages.dart';
-import '../../../../../res/strings/labels.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class AdRequestsView extends StatefulWidget {
   var id;
+  String search = '';
 
   AdRequestsView({super.key, payload}){
     print("objectitemId$payload");
-    if(payload is String){
-      id=payload;
+    if(payload is AdRequestParams){
+      id=payload.id;
+      search = '';
+
     }else {
       print("payloadpayloadpayload $payload");
       // print(id);
       // print('itemId${payload['itemId']}');
       id=payload['itemId'];
+      search = payload['username'];
+
     }
   }
 
@@ -40,59 +41,136 @@ class AdRequestsView extends StatefulWidget {
 }
 
 class _AdRequestsViewState extends State<AdRequestsView> {
+  late ScrollController _scrollController;
+  late AdRequestsCubit _cubit;
+  bool isFirstSearchListenerCall = true;
+
   @override
   void initState() {
-    // context.read<AdDetailsCubit>().loadData(adId: widget.id);
     super.initState();
+    _cubit = context.read<AdRequestsCubit>();
+    _scrollController = ScrollController()..addListener(_onScroll);
+    _cubit.loadInitialData(widget.id, widget.search);
+
+    _cubit.searchController.addListener(() {
+      if (isFirstSearchListenerCall) {
+        isFirstSearchListenerCall = false;
+        return;
+      }
+      _cubit.loadInitialData(widget.id, _cubit.searchController.text);
+    });
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      _cubit.fetchAdRequests(widget.id, _cubit.searchController.text);
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    _cubit.searchController.dispose(); // Don't forget to dispose the controller
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
-    print("userId#{$userId");
-
     return Scaffold(
-      appBar: BackAppBar(label: LocaleKeys.adRequests.localize,),
-        body: BlocConsumer<AdRequestsCubit, AdRequestsState>(
-            listener: (contex, state) {
-              if (state.isError) {
-                showErrorMessage(
-                  context,
-                  getFailureMessage(
-                    state.failure!,
-                    context,
-                  ),
-                );
-              } else if (state.isSuccess) {
-                showSuccessMessage(context, Labels.success);
-              }
-            }, builder: (context, state) {
-          // if (state.ad == null) {
-          //   return const Center(
-          //     child: CircularProgressIndicator.adaptive(),
-          //   );
-          // }
-          List<AdDetailsPropEntity>? details = state.ad?.details
-              .where((e) => e.nameAr != 'الراتب' && e.nameAr != 'السعر')
-              .toList();
-          // print("state.ad?.user${context.read<AdDetailsCubit>().state.ad?.user?.id}");
+      appBar: BackAppBar(label: LocaleKeys.adRequests.localize),
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15.0.w),
+            child: TextFormField(
+              controller: _cubit.searchController,
+              decoration: InputDecoration(
+                contentPadding:  EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                hintStyle: Styles.mediumText(),
+                hintText: LocaleKeys.searchWithName.localize,
+              ),
+            ),
+          ),
+          Sizer(),
+          Expanded(
+            child: BlocBuilder<AdRequestsCubit, AdRequestsState>(
+              builder: (context, state) {
+                if (state.isLoading && _cubit.adRequests.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-          return Column(
-            children: [
-              // Expanded(
-              //   child: ListView(
-              //     children: [
-              //       _buildTag(status: state.ad?.subscriptionStatus??''),
-              //       const Sizer(),
-              //       _buildRelevantAdsWidget(),
-              //     ],
-              //   ),
-              // ),
-              // CallMessageButtons(otherUserId: state.ad?.userId??'', subcategoryId: state.ad?.subCategoryId??'', phone: state.ad?.phone??'', id: state.ad?.id??'',hasReport: true,),
-            ],
-          );
-        }));
+                return ListView.builder(
+                  controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: _cubit.adRequests.length + (_cubit.isLoadingMore ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (index == _cubit.adRequests.length) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    final adRequest = _cubit.adRequests[index];
+                    return Container(
+                      margin: EdgeInsetsDirectional.all(10.w),
+                      padding: EdgeInsetsDirectional.symmetric(horizontal: 15.w, vertical: 10.h),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.r),
+                        border: Border.all(
+                          color: AppColors.DARK_GRAY_COLOR.withOpacity(0.5),
+                          width: 1,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 100.w,
+                                height: 100.h,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(adRequest.gender == 'male'
+                                        ? Assets.maleImagePlaceholder
+                                        : Assets.femaleImagePlacehlder),
+                                    fit: BoxFit.contain,
+                                  ),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(adRequest.userName, style: Styles.headerText()),
+                                    Text(adRequest.sinceTime, style: Styles.mediumText()),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Sizer(height: 50.h),
+                          CallMessageButtons(
+                            otherUserId: adRequest.adUserId,
+                            clientId: adRequest.requestId,
+                            subcategoryId: adRequest.subCategoryId,
+                            phone: adRequest.phone,
+                            id: adRequest.requestUserId,
+                            hasReport: true,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
+}
 
   Widget _buildRelevantAdsWidget() {
     return BlocBuilder<AdDetailsCubit, AdDetailsState>(
@@ -124,68 +202,10 @@ class _AdRequestsViewState extends State<AdRequestsView> {
         });
   }
 
-  Widget _buildActionsWidget() {
-    return BlocBuilder<AdDetailsCubit, AdDetailsState>(
-        builder: (context, state) {
-          return Container(
-            margin: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                // const Sizer(),
-                // Row(
-                //   crossAxisAlignment: CrossAxisAlignment.center,
-                //   children: [
-                //     Expanded(
-                //       flex: 3,
-                //       child: BlocProvider(
-                //           create: (_)=>serviceLocator<AdvertisementCubit>(),
-                //           child: PremiumRequestButton(adId: state.ad?.id??'',subCategoryId: state.ad?.subCategoryId??'',subscriptionStatus: state.ad?.subscriptionStatus??'',)),
-                //     ),
-                //     const Sizer(width: 5),
-                //     Expanded(
-                //       flex: 3,
-                //       child: BlocProvider(
-                //           create: (_)=>serviceLocator<AdvertisementCubit>(),
-                //           child: RequestButton(adId: state.ad?.id??'',subscriptionStatus: state.ad?.subscriptionStatus??''))
-                //
-                //     )
-                //   ],
-                // ),
-                // const Sizer(),
-                CallMessageButtons(otherUserId: state.ad?.userId??'', subcategoryId: state.ad?.subCategoryId??'', phone: state.ad?.phone??'', id: state.ad?.id??'',hasReport: true,),
-              ],
-            ),
-          );
-        });
+
+  class AdRequestParams{
+    final String id;
+    final String userName;
+
+  AdRequestParams({required this.id, required this.userName});
   }
-
-  Widget _buildTag({required String status}) {
-    // super premium
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(10.w),
-      color: status=='premium'?Colors.amber:status=='Regular'?Colors.grey:Colors.grey,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          if(status=='premium'||status=='Regular')...[
-            Icon(Icons.workspace_premium_outlined,
-              size: 55.w,
-              color: status=='premium'?AppColors.SECONDARY_COLOR:status=='Regular'?AppColors.PRIMARY_COLOR:null,
-            ),
-            const Sizer(width: 5)],
-          Label(
-            text: status=='premium'?"Premium":status=='premium'?"Regular":'Not Subscribed',
-            style: Styles.mediumText(color: Colors.white,fontSize: 35,fontWeight: FontWeight.bold),
-            maxLines: 1,
-          ),
-        ],
-      ),
-    );
-    // premium
-    // Regular
-  }
-
-
-
-}

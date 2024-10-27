@@ -146,20 +146,7 @@ class DI {
       () => StoryRepository(),
     );
 
-    // Register the StoryCubit
-    serviceLocator.registerFactory<StoryCubit>(
-      () => StoryCubit(
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-      ),
-    );
+
     // serviceLocator
     //     .registerFactory<SliderCubit>(() => SliderCubit(serviceLocator()));
     //
@@ -273,5 +260,6 @@ class DI {
     ReelsServiceLocator.execute(serviceLocator: serviceLocator);
     StarServiceLocator.execute(serviceLocator: serviceLocator);
     QuranServiceLocator.execute(serviceLocator: serviceLocator);
+    StoriesServiceLocator.execute(serviceLocator: serviceLocator);
   }
 }

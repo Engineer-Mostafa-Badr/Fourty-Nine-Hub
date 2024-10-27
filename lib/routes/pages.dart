@@ -8,6 +8,8 @@ import 'package:fourtyninehub/features/account_taps/privacy/presentation/pages/p
 import 'package:fourtyninehub/features/account_taps/share_app/presentation/pages/share_the_app.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_history_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/balance_wallet_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
@@ -76,6 +78,7 @@ import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentati
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_driver_type_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_all_trip_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_expired_trip_cubit.dart';
@@ -88,6 +91,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/raise
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/select_cateogry_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/all_rider_trip_screen.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/rider_register_view.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/shipping_rider_tab_screen.dart';
@@ -690,6 +694,25 @@ class AppPages {
                   builder: (context, state) => const TransferMoneyView(),
                 ),
               ]),
+          GoRoute(
+              path: Paths.BALANCE,
+              name: Routes.BALANCE,
+              builder: (context, state) =>
+                  BlocProvider<WalletCubit>(
+                    create: (_) => serviceLocator(),
+                    child: const BalanceWalletView(),
+                  ),
+              ),
+          GoRoute(
+            path: Paths.GIFT,
+            name: Routes.GIFT,
+            builder: (context, state) =>
+                BlocProvider<WalletCubit>(
+                  create: (_) => serviceLocator(),
+                  child: const GiftWalletView(),
+                ),
+          ),
+
           GoRoute(
               path: Paths.ACCOUNT,
               name: Routes.ACCOUNT,
@@ -1394,10 +1417,26 @@ class AppPages {
                     BlocProvider<TwitterCubit>(
                       create: (context) => serviceLocator<TwitterCubit>(),
                     ),
-                    // BlocProvider(
-                    //   create: (context) =>
-                    //       GetAllTripRiderCubit(repository: serviceLocator()),
-                    // ),
+                    BlocProvider(
+                      create: (context) =>
+                          CheckDriverTypeCubit(repository: serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) =>
+                          DestinationLocationCubit(fetchLocationCordinatesUseCase: serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) =>
+                          MapBoxCubit(),
+                    ),
+                    BlocProvider(
+                      create: (context) =>
+                          MapBoxDestCubit(),
+                    ),
+                    BlocProvider(
+                      create: (context) =>
+                          SelectCateogryCubit(),
+                    ),
                   ],
                   child: const ShippingRiderTabScreen(),
                 );

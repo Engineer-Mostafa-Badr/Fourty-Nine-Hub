@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -25,7 +26,9 @@ class FollowBroadcastCard extends StatelessWidget {
         padding: const EdgeInsets.only(right: 12, left: 12, top: 16),
         margin: const EdgeInsets.only(left: 16),
         decoration: BoxDecoration(
-          color: AppColors.BACKGROUND_COLOR,
+          color: context.isDarkMode
+              ? AppColors.QUANTITY_COLOR
+              : AppColors.BACKGROUND_COLOR,
           boxShadow: const [
             BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2),
           ],
@@ -50,7 +53,9 @@ class FollowBroadcastCard extends StatelessWidget {
                   title,
                   overflow: TextOverflow.ellipsis,
                   style: Styles.mediumText(
-                      color: AppColors.PRIMARY_COLOR,
+                      color: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR,
                       fontSize: 24,
                       fontWeight: FontWeight.w600),
                 ),

@@ -1,9 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/account_taps/privacy/domain/useCase/update_privacy_use_case.dart';
-import 'package:fourtyninehub/features/account_taps/privacy/domain/useCase/update_privacy_use_case.dart';
-import 'package:fourtyninehub/features/social_media/stories/data/models/followers_model.dart';
 
 import '../repositories/stories_repository.dart';
 

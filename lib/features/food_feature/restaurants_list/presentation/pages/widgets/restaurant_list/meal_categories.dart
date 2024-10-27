@@ -4,7 +4,6 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/meal_category_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../../../res/style/app_colors.dart';
 import '../../../cubit/restaurants_list_cubit.dart';
@@ -31,6 +30,9 @@ class _MealCategoriesState extends State<MealCategories> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
                   onTap: () {
                     // Scroll to a specific pixel position
                     _scrollController.animateTo(

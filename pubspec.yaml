@@ -119,7 +119,7 @@ dependencies:
   carousel_slider: ^5.0.0
   screenshot:
   jwt_decoder:
-  flutter_pdfview:
+  flutter_pdfview: ^1.3.4
   quran: ^1.3.1
   # location: ^4.4.0
   location: ^4.4.0
