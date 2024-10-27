@@ -16,7 +16,7 @@ class AzkarDetailsModel extends AzkarDetailsEntity {
       category: json['category'] ??'',
       zekr: json['zekr'] ??'',
       description: json['description'] ??'',
-      count: json['count']  ??0,
+      count: json['count'],
       reference: json['reference']  ??'',
       search: json['search']  ??'',
     );

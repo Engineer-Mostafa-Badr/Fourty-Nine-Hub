@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_cubit.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_state.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class AzkarDetails extends StatefulWidget {
   const AzkarDetails({super.key, required this.category});
@@ -16,17 +17,19 @@ class AzkarDetails extends StatefulWidget {
 class _AzkarDetailsState extends State<AzkarDetails> {
   late ScrollController _scrollController;
   late AzkarCubit _cubit;
+
   @override
   void initState() {
     super.initState();
     _cubit = context.read<AzkarCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
-    _cubit.loadInitialData();
+    _cubit.loadAzkarData(widget.category);
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      _cubit.fetchAzkar();
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      _cubit.fetchDetailsAzkar(widget.category);
     }
   }
 
@@ -36,7 +39,6 @@ class _AzkarDetailsState extends State<AzkarDetails> {
     _scrollController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,9 @@ class _AzkarDetailsState extends State<AzkarDetails> {
               style: const TextStyle(fontSize: 20),
             ),
             IconButton(
-              icon: const Icon(Icons.arrow_forward,),
+              icon: const Icon(
+                Icons.arrow_forward,
+              ),
               onPressed: () {
                 Navigator.of(context).pop(); // Pop the current screen
               },
@@ -59,44 +63,89 @@ class _AzkarDetailsState extends State<AzkarDetails> {
           ],
         ),
       ),
-      body: BlocBuilder<AzkarCubit,AzkarState>(
+      body: BlocBuilder<AzkarCubit, AzkarState>(
         builder: (BuildContext context, state) {
-          if (state.status ==AzkarStates.loading) {
+          if (state.status == AzkarStates.loading) {
             return const Center(child: CircularProgressIndicator());
           }
-          return  Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: 10.w
-            ),
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.w),
             child: ListView.separated(
               controller: _scrollController,
               physics: const AlwaysScrollableScrollPhysics(),
-              itemBuilder: (context,index) {
-                if (index == _cubit.azkar.length) {
+              itemBuilder: (context, index) {
+                if (index == _cubit.azkarDetails.length) {
                   return const Center(child: CircularProgressIndicator());
                 }
                 return Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: 10.h,
-                  horizontal: 10.w,
-                ),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.only(bottomRight: Radius.circular(20.r),)
-                ),
-                child:  Text(
-                    state.azkarDetail![index].zekr,
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontFamily: 'Amiri',
-                      fontSize: 50.sp,
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                    )
-                ),
-              );
+                  padding: EdgeInsets.symmetric(
+                    vertical: 15.h,
+                    horizontal: 15.w,
+                  ),
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(
+                       20.r,
+                      )),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text.rich(
+                        textDirection: TextDirection.rtl,
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: state.azkarDetail![index].zekr, // Zekr text
+                              style: TextStyle(
+                                fontFamily: 'Amiri',
+                                fontSize: 40.sp,
+                                color: Theme.of(context).scaffoldBackgroundColor,
+                              ),
+                            ),
+                            TextSpan(
+                              text: state.azkarDetail?[index].count != null
+                                  ? '(${state.azkarDetail![index].count})' // Show count with parentheses if not null
+                                  : '',// Count text in red
+                              style: TextStyle(
+                                fontFamily: 'Amiri',
+                                fontSize: 40.sp,
+                                color: Colors.red, // Red color for the count
+                              ),
+                            ),
+                          ],
+                        ),
+                        textAlign: TextAlign.right,
+                      ),
+                      if(state.azkarDetail![index].description!.isNotEmpty)
+                      Text(state.azkarDetail![index].description!,
+                          textAlign: TextAlign.right,
+                          textDirection: TextDirection.rtl,
+                          style: TextStyle(
+                            fontFamily: 'Amiri',
+                            fontSize: 30.sp,
+                            color: AppColors.SECONDARY_COLOR,
+                          )),
+                      if(state.azkarDetail![index].reference!.isNotEmpty)
+                      Align(
+                        alignment: AlignmentDirectional.topStart,
+                        child: Text(state.azkarDetail![index].reference!,
+                            textAlign: TextAlign.left,
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(
+                              fontFamily: 'Amiri',
+                              fontSize: 30.sp,
+                              color: AppColors.SECONDARY_COLOR,
+                            )),
+                      ),
+                    ],
+                  ),
+                );
               },
-              separatorBuilder: (context,index)=> const Divider(),
-              itemCount: state.azkarDetail?.length ??0,),
+              separatorBuilder: (context, index) => const Divider(
+                color: AppColors.GREY_NORMAL_COLOR,
+              ),
+              itemCount: state.azkarDetail?.length ?? 0,
+            ),
           );
         },
       ),

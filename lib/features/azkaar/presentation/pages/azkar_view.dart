@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_cubit.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_state.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -44,9 +40,29 @@ class _AzkarViewState extends State<AzkarView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.azkar.localize,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              'الاذكار',
+              style:  TextStyle(fontSize: 40.sp),
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.arrow_forward,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Pop the current screen
+              },
+            ),
+          ],
+        ),
       ),
+      // appBar: BackAppBar(
+      //   label: LocaleKeys.azkar.localize,
+      // ),
       body: BlocBuilder<AzkarCubit,AzkarState>(
         builder: (BuildContext context, state) {
           if (state.status ==AzkarStates.loading) {
