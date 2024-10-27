@@ -4,6 +4,8 @@ import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/ge
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
+import 'package:fourtyninehub/features/azkaar/domain/use_case/fetch_azkar_use_case.dart';
+import 'package:fourtyninehub/features/azkaar/domain/use_case/fetch_details_azkar_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
@@ -198,6 +200,10 @@ class EndPoints {
       '/quran/surahs?page=1&limit=500';
   static String quran(int id) =>
       '/quran/surah/$id';
+  static String azkar(AzkarParams params) =>
+      '/azkar/categories?page=${params.page}&limit=${params.limit}';
+  static String azkarDetails(AzkarDetailsParams params) =>
+      '/azkar/azkar-in-category?page=${params.page}&limit=${params.limit}';
 
   static String notificationsSeen(String id) => '/notifications/$id';
 

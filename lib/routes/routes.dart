@@ -105,6 +105,7 @@ abstract class Routes {
   static const YOUTUBE = '/Youtube';
   static const QURAAN = '/Quraan';
   static const AZKAAR = '/Azkaar';
+  static const AZKAARDETAILS = '/Azkaar/AZKAARDETAILS';
   static const PLAYVIDEO = '/Youtube/PlayVideo';
 
   static const MAZADDETAILS = '/Mazadat/MazadDetails';
@@ -290,6 +291,7 @@ abstract class Paths {
   static const SETTINGS = 'Settings';
   static const QURAAN = 'Quraan';
   static const AZKAAR = 'Azkaar';
+  static const AZKAARDETAILS = 'AZKAARDETAILS';
   static const PAYMENT = 'Payment';
   static const SUBSCRIPTIONPLANS = 'SubscriptionPlans';
 

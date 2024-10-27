@@ -10,12 +10,6 @@ import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_state.da
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'quran_cubit.dart';
-// import 'quran_state.dart';
-// import 'surah_entity.dart';
-
 class QuranViewPage extends StatefulWidget {
   final int surahId;
   final int pageNumber;
