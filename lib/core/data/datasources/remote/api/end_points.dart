@@ -709,10 +709,10 @@ class EndPoints {
   static String changeConnectivity = '/restaurants/modify-active';
 
   static String getMealsWithCountRestaurant({PostCommentsParams? params}) =>
-      '/restaurants/subcategories-count-restaurant${params?.page != null || params?.userId != null ? "?page=${params?.page}&userId=${params?.userId}" : ""}';
+      '/restaurants/subcategories-count-restaurant?page=${params?.page}&limit=${params?.limit}${params?.userId != null ? "&userId=${params?.userId}" : ""}';
 
   static String getAllRestaurantWithMenu({PostCommentsParams? params}) =>
-      '/restaurants/all-restaurants${params?.page != null || params?.userId != null ? "?page=${params?.page}&userId=${params?.userId}" : ""}';
+      '/restaurants/all-restaurants?page=${params?.page}&limit=${params?.limit}${params?.userId != null ? "&userId=${params?.userId}" : ""}';
 
   static String searchRestaurants({PostCommentsParams? params}) =>
       '/restaurants/search-restaurants${params?.page != null ? "?page=${params?.page ?? "1"}&limit=${params?.limit ?? "20"}" : ""}';

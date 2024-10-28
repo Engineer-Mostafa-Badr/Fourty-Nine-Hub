@@ -17,13 +17,13 @@ class FoodCategoryEntity extends Equatable {
   @JsonKey(name: "numberOfRestaurant")
   final int? numberOfRestaurant;
   @JsonKey(name: "isFavorite")
-  final bool? isFavorite;
+  bool? isFavorite;
 
-  const FoodCategoryEntity({
+  FoodCategoryEntity({
     this.id,
     this.name,
     this.image,
-    this.isFavorite,
+    this.isFavorite=false,
     this.parent,
     this.picture,
     this.nameAr,

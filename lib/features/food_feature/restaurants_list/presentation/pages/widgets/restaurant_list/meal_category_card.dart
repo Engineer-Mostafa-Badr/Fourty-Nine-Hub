@@ -8,39 +8,33 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../res/style/app_colors.dart';
 import '../../../cubit/restaurants_list_cubit.dart';
 
-class MealCategoryCard extends StatelessWidget {
+class MealCategoryCard extends StatefulWidget {
   final FoodCategoryEntity? subCategory;
   final Function(String) onTap;
 
   const MealCategoryCard({super.key, this.subCategory, required this.onTap});
 
   @override
+  State<MealCategoryCard> createState() => _MealCategoryCardState();
+}
+
+class _MealCategoryCardState extends State<MealCategoryCard> {
+  @override
   Widget build(BuildContext context) {
     return FittedBox(
       child: Card(
         clipBehavior: Clip.hardEdge,
-        // decoration: BoxDecoration(
-        //     color: isDarkTheme(context) ? Colors.transparent : Colors.white,
-        //     boxShadow: [
-        //       BoxShadow(
-        //           color: isDarkTheme(context) ? Colors.black54 : Colors.grey,
-        //           blurRadius: 2.0,
-        //           offset: Offset(1, 1))
-        //     ]),
-        // // elevation: 2,
-        // // shape: RoundedRectangleBorder(
-        // //   borderRadius: BorderRadius.circular(15.0),
-        // // ),
         color: cardDarkColor(context),
         child: SizedBox(
-          width: 0.38.sw,
+          width: 0.55.sw,
           child: InkWell(
-            onTap: () => onTap(subCategory?.id ?? ""),
+            onTap: () => widget.onTap(widget.subCategory?.id ?? ""),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,55 +42,45 @@ class MealCategoryCard extends StatelessWidget {
                 Stack(
                   children: [
                     // Heart image
-                    Container(
-                      height: 300.h,
-                      width: 300.h,
-                      decoration: BoxDecoration(
-                        // color: Colors.green,
-                        image: DecorationImage(
-                          image: NetworkImage(
-                            subCategory!
-                                .picture!, // Replace with your image URL
-                          ),
-                          fit: BoxFit.fitHeight,
-                        ),
-                      ),
-                    ),
-                    // Favorite Icon (Heart)
+                    ImageFromInternet(image: widget.subCategory?.picture??'',defaultLogo: true,height: 300.h,width: 0.55.sw,),
                    if(context.read<UserCubit>().isLoggedIn) Positioned(
                       top: 5,
                       right: 5,
                       child: IconAppButton(
                           size: 25,
-                          icon: subCategory?.isFavorite ?? false
+                          icon: widget.subCategory?.isFavorite ?? false
                               ? Icons.favorite
                               : Icons.favorite_border,
                           color: AppColors.PRIMARY_COLOR_DARK,
                           onPressed: () {
-                            context
+                            var result = context
                                 .read<RestaurantsCubit>()
                                 .toggleFavoriteSubcategory(
-                                    subCategory?.id ?? "");
+                                    widget.subCategory?.id ?? "");
+                            if(result == true){
+                              widget.subCategory?.isFavorite=!(widget.subCategory?.isFavorite??false);
+                              setState(() {});
+                            }
                           }),
                     ),
                   ],
                 ),
                 const SizedBox(height: 10),
                 Padding(
-                  padding: const EdgeInsets.all(2.0),
+                  padding:EdgeInsets.symmetric(vertical: 8.h,horizontal: 10.w),
                   child: Label(
                     text: (getLang() == "ar"
-                            ? subCategory?.nameAr
-                            : subCategory?.nameEn) ??
+                            ? widget.subCategory?.nameAr
+                            : widget.subCategory?.nameEn) ??
                         "",
                     style: Styles.headerText(),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(2.0),
+                  padding:EdgeInsets.only(bottom: 10.h,left: 10.w,right: 10.w),
                   child: Label(
                     text:
-                        '${subCategory?.numberOfRestaurant ?? "0"} ${LocaleKeys.restaurants.tr()}',
+                        '${widget.subCategory?.numberOfRestaurant ?? "0"} ${LocaleKeys.restaurants.tr()}',
                     style: Styles.mediumText(),
                   ),
                 ),

@@ -22,20 +22,18 @@ class MealBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
       builder: (context, state) {
-        if (state.isLoading) {
+        if (state.mainCategory==null) {
           return Shimmer.fromColors(
             baseColor: Colors.grey[100]!,
             highlightColor: Colors.white,
             child: Container(
-              height: 150.h,
+              height: MediaQuery.sizeOf(context).height * 0.13.h,
               width: double.infinity,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(10)),
             ),
           );
         }
-        if (state.isSuccess &&
-            (state.mainCategory != null || state.banner != null)) {
           return MainCategoryBanner(
             category: state.mainCategory != null
                 ? MainCategoryEntity(
@@ -83,9 +81,7 @@ class MealBanner extends StatelessWidget {
             },
             isFavorite: false,
           );
-        } else {
-          return const SizedBox.shrink();
-        }
+
       },
     );
   }

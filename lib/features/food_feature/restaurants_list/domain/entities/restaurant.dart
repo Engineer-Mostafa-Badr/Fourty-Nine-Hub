@@ -273,7 +273,7 @@ class Restaurant extends Equatable {
   final FoodCategoryModel? mainCategoryId;
 
   @JsonKey(name: "isFavorite")
-  final bool? isFavorite;
+  bool? isFavorite;
 
   @JsonKey(name: "enableOrDisableChat")
   final String?
@@ -282,7 +282,7 @@ class Restaurant extends Equatable {
   @JsonKey(name: "description")
   final String? description;
 
-  const Restaurant({
+  Restaurant({
     this.userIdModel,
     this.id,
     this.name,
@@ -297,7 +297,7 @@ class Restaurant extends Equatable {
     this.menu,
     this.subcategoryId,
     this.mainCategoryId,
-    this.isFavorite,
+    this.isFavorite=false,
     this.enableOrDisableChat,
     this.description,
   });

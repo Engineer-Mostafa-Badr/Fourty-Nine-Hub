@@ -170,7 +170,6 @@ import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:go_router/go_router.dart';
 
-import '../core/enums/wallet_types_enums.dart';
 import '../features/account_taps/account/presentation/cubit/cubit/favourite_drawer_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
@@ -675,7 +674,7 @@ class AppPages {
                   BlocProvider<WalletCubit>(
                     create: (_) => serviceLocator(),
                     child: WalletView(
-                      type: state.extra as WalletTypes,
+                      // type: state.extra as WalletTypes,
                     ),
                   ),
               routes: [

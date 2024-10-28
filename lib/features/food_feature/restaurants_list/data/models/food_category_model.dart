@@ -5,7 +5,7 @@ part 'food_category_model.g.dart';
 
 @JsonSerializable()
 class FoodCategoryModel extends FoodCategoryEntity {
-  const FoodCategoryModel({
+  FoodCategoryModel({
     super.id,
     super.name,
     super.image,

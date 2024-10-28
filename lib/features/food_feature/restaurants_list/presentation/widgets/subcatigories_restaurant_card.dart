@@ -707,10 +707,8 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
@@ -720,6 +718,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -902,6 +901,27 @@ class PropertyCard extends StatelessWidget {
   }
 }
 
+class PropertyCardShimmer extends StatelessWidget {
+  const PropertyCardShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.92,
+        height: MediaQuery.of(context).size.width * 1.1,
+        child: Card(
+          clipBehavior: Clip.hardEdge,
+          color: Colors.grey[300],
+          elevation: 5,
+        ),
+      ),
+    );
+  }
+}
+
 class EliteBanner extends StatelessWidget {
   final String subscriptionType;
 
@@ -954,7 +974,7 @@ class FavoriteButton extends StatelessWidget {
           await BlocProvider.of<RestaurantsCubit>(context)
               .getSubCategoryRestaurants(id: mealId);
         } else {
-          await BlocProvider.of<RestaurantsCubit>(context).getAllRestaurant();
+          // await BlocProvider.of<RestaurantsCubit>(context).getAllRestaurant();
         }
       },
     );

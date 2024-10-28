@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../res/assets/assets.dart';
@@ -28,6 +29,8 @@ class FloatingButton extends StatelessWidget {
         onPressed: onTap != null
             ? () => onTap!()
             : () {
+          HandleCashback.setCount('socialCount');
+
                 if (changeView == 1) {
                   context.push(Routes.SOCIAL);
                 } else {
