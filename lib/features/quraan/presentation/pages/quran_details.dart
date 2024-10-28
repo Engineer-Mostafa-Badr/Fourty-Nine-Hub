@@ -151,51 +151,54 @@ class _QuranViewPageState extends State<QuranViewPage> {
               ),
             Directionality(
               textDirection: TextDirection.rtl,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: ayahs.map((ayah) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        children: [
-                          Stack(
-                            alignment: AlignmentDirectional.center,
-                            children: [
-                              Image.asset(
-                                'assets/images/ayah.png',
-                                height: 50.h,
-                                width: 50.w,
-                              ),
-                              Text(
-                                '${ayah.ayahNoSurah}',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 25.sp,
-                                  height: 2.0,
-                                  color: AppColors.PRIMARY_COLOR,
-                                  fontFamily: 'Amiri',
-                                ),
-                              ),
-                            ],
-                          ),
-                          Text(
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: ayahs.map((ayah) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: Text(
                             ayah.ayahAr,
                             textAlign: TextAlign.center,
+                            maxLines: 100,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 50.sp,
                               height: 2.0,
                               fontFamily: 'Amiri',
                             ),
                           ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                ),
+                        ),
+                        Stack(
+                          alignment: AlignmentDirectional.center,
+                          children: [
+                            Image.asset(
+                              'assets/images/ayah.png',
+                              height: 50.h,
+                              width: 50.w,
+                            ),
+                            Text(
+                              '${ayah.ayahNoSurah}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 25.sp,
+                                height: 2.0,
+                                color: AppColors.PRIMARY_COLOR,
+                                fontFamily: 'Amiri',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
               ),
-            ),
+            )
 
           ],
         ),
