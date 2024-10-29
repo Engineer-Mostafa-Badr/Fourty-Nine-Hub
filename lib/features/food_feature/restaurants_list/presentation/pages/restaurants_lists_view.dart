@@ -105,7 +105,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                const MealCategories(),
                const Sizer(),
                Label(
-                 text: context.isArabic?"${state.selectedCategory?.id!=''?"مطاعم ":''}${state.selectedCategory?.nameAr}"??'':"${state.selectedCategory?.nameEn}${state.selectedCategory?.id!=''?" Restaurants":''}"??'',
+                 text: context.isArabic?"${state.selectedCategory?.id!=''?"مطاعم ":''}${state.selectedCategory?.nameAr}":"${state.selectedCategory?.nameEn}${state.selectedCategory?.id!=''?" Restaurants":''}",
                  style: Styles.headerText(),
                ),
                const Sizer(),
@@ -115,10 +115,11 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                  shrinkWrap: true,
                  physics: const NeverScrollableScrollPhysics(),
                  itemBuilder: (context,i)=>const PropertyCardShimmer(),
-               ):context.read<RestaurantsCubit>().restaurants.isNotEmpty?ListView.builder(
+               ):context.read<RestaurantsCubit>().restaurants.isNotEmpty?ListView.separated(
                  shrinkWrap: true,
                  physics: const NeverScrollableScrollPhysics(),
                  itemCount: context.read<RestaurantsCubit>().restaurants.length,
+                 separatorBuilder: (context, index) => const Sizer(),
                  itemBuilder: (context,i)=>SubCategoriesRestaurantCard(
                    item: context.read<RestaurantsCubit>().restaurants[i],
                    mealId: '', favouriteRestaurant: (String id) async {
