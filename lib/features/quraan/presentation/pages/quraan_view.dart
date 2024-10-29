@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/features/quraan/domain/entity/quran_surah_entity.dart';
@@ -13,7 +12,6 @@ import 'package:fourtyninehub/features/quraan/presentation/pages/quran_details.d
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class QuraanView extends StatefulWidget {
   const QuraanView({super.key});
@@ -48,7 +46,26 @@ class _QuraanViewState extends State<QuraanView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(label: 'Quran'), // AppBar remains the same
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              'القران الكريم',
+              style:  TextStyle(fontSize: 40.sp),
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.arrow_forward,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Pop the current screen
+              },
+            ),
+          ],
+        ),
+      ),
       body: Directionality(
         textDirection: TextDirection.rtl, // Set the whole screen to RTL
         child: BlocBuilder<QuranCubit, QuranState>(
@@ -56,27 +73,8 @@ class _QuraanViewState extends State<QuraanView> {
             if(state.status ==QuranStates.loading){
               return const CustomLoading();
             }
-            var controller=context.read<QuranCubit>();
             return Padding(
                 padding: EdgeInsets.all(12.w),
-                // child: InkWell(
-                //   onTap: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) => QuranViewPage(
-                //           surahId: state.quranSurah![index].surahNo, pageNumber: 1,),
-                //       ),
-                //     );
-                //   },
-                //   child: Padding(
-                //     padding: const EdgeInsets.only(bottom: 8.0),
-                //     child: buildItem(
-                //       context,
-                //       state.quranSurah![index],
-                //     ),
-                //   ),
-                // )
               child: ListView.separated(
                 controller: _scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),

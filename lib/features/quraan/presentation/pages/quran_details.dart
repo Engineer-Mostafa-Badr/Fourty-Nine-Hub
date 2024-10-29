@@ -1,7 +1,4 @@
 library quran;
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,7 +7,6 @@ import 'package:fourtyninehub/features/quraan/domain/entity/surah_entity.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_state.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class QuranViewPage extends StatefulWidget {
@@ -46,9 +42,9 @@ class _QuranViewPageState extends State<QuranViewPage> {
             if (state.status == QuranStates.loading) {
               return Center(child: CircularProgressIndicator());
             } else if (state.status == QuranStates.success) {
-              return PageView.builder(
+              return ListView.builder(
                 controller: _pageController,
-                itemCount: state.surah?.length,
+                itemCount: 1,
                 itemBuilder: (context, index) {
                   return buildPageContent(index, state.surah!);
                 },
@@ -77,77 +73,32 @@ class _QuranViewPageState extends State<QuranViewPage> {
                 alignment: AlignmentDirectional.center,
                 children: [
                   SizedBox(
-                    height: 70.h,
-                    // color: const Color(0xffFFFCE7),
+                    height: 100.h,
                     child: Image.asset(
                       "assets/images/888-02.png",
-                      // fit: BoxFit.fill,
-                      height: 70.h,
+                      height: 100.h,
                       width: double.infinity,
-                    ),
-                  ),
-                  Positioned(
-                    left: 120.w,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      // Minimize the space taken by the Column
-                      textBaseline: TextBaseline.alphabetic,
-                      // Align texts to baseline
-                      children: [
-                        Text(
-                          'آيَاتُهَا',
-                          style: Styles.smallText(fontSize: 30.sp),
-                          textHeightBehavior: const TextHeightBehavior(
-                            applyHeightToFirstAscent: false,
-                            applyHeightToLastDescent: false,
-                          ),
-                        ),
-                        Text(
-                          '${ayahs.length}',
-                          style: Styles.smallText(fontSize: 30.sp),
-                          textHeightBehavior: const TextHeightBehavior(
-                            applyHeightToFirstAscent: false,
-                            applyHeightToLastDescent: false,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    right: 120.w,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      // Minimize the space taken by the Column
-                      textBaseline: TextBaseline.alphabetic,
-                      // Align texts to baseline
-                      children: [
-                        Text(
-                          'تَرْتِيبُهَا',
-                          style: Styles.smallText(fontSize: 30.sp),
-                          textHeightBehavior: const TextHeightBehavior(
-                            applyHeightToFirstAscent: false,
-                            applyHeightToLastDescent: false,
-                          ),
-                        ),
-                        Text(
-                          '${ayahs[index].surahNo}',
-                          style: Styles.smallText(fontSize: 30.sp),
-                          textHeightBehavior: const TextHeightBehavior(
-                            applyHeightToFirstAscent: false,
-                            applyHeightToLastDescent: false,
-                          ),
-                        ),
-                      ],
+                      fit: BoxFit.fill,
                     ),
                   ),
                   Label(
                     text: 'سُورَةٌ${ayahs[index].surahNameAr}',
                     style: TextStyle(
                       fontFamily: 'Amiri',
-                      fontSize: 30.sp,
+                      fontSize: 45.sp,
                     ),
                   )
                 ],
+              ),
+            if (ayahs[index].surahNameAr != 'الفاتحة' &&ayahs[index].surahNameAr != 'التوبة')
+              SizedBox(
+                height: 90.h,
+                child: Image.asset(
+                  "assets/images/Basmala.png",
+                  height: 90.h,
+                  color: Theme.of(context).primaryColor,
+                  width: double.infinity,
+                ),
               ),
             Directionality(
               textDirection: TextDirection.rtl,
@@ -157,52 +108,51 @@ class _QuranViewPageState extends State<QuranViewPage> {
                 children: ayahs.map((ayah) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            ayah.ayahAr,
-                            textAlign: TextAlign.center,
-                            maxLines: 100,
-                            overflow: TextOverflow.ellipsis,
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: ayah.ayahAr,
                             style: TextStyle(
-                              fontSize: 50.sp,
+                              fontSize: 40.sp,
                               height: 2.0,
                               fontFamily: 'Amiri',
+                              color:Theme.of(context).primaryColor
                             ),
                           ),
-                        ),
-                        Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/ayah.png',
-                              height: 50.h,
-                              width: 50.w,
+                          WidgetSpan(
+                            alignment: PlaceholderAlignment.middle,
+                            child: Stack(
+                              alignment: AlignmentDirectional.center,
+                              children: [
+                                Image.asset(
+                                  'assets/images/ayah.png',
+                                  height: 50.h,
+                                  width: 50.w,
+                                ),
+                                Text(
+                                  '${ayah.ayahNoSurah}',
+                                  style: TextStyle(
+                                    fontSize: 25.sp,
+                                    color: AppColors.PRIMARY_COLOR,
+                                    fontFamily: 'Amiri',
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-                              '${ayah.ayahNoSurah}',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 25.sp,
-                                height: 2.0,
-                                color: AppColors.PRIMARY_COLOR,
-                                fontFamily: 'Amiri',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }).toList(),
               ),
             )
-
           ],
         ),
       ),
     );
   }
+
 }
