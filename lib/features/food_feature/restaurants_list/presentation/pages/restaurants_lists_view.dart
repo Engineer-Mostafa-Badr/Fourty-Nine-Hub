@@ -140,7 +140,6 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
              ],
            ),
          )
-
       ],
     );
   }
