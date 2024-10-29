@@ -101,7 +101,7 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                               child: PropertyCard(
                                   myRestaurant: true,
                                   item: myRestaurant!,
-                                  mealId: 'mealId'),
+                                  mealId: 'mealId', favouriteRestaurant: (String id) {  },),
                             ),
                           Padding(
                               padding:

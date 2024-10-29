@@ -6,12 +6,20 @@ import '../../../../../core/abstract/use_case.dart';
 import '../repositories/resturant_list_repo.dart';
 
 class GetSubCategoryRestaurantsUseCases
-    extends UseCase<List<Restaurant2Model>, String> {
+    extends UseCase<List<Restaurant2Model>, GetSubCategoryRestaurants> {
   final RestaurantListRepo _repo;
   GetSubCategoryRestaurantsUseCases(this._repo);
 
   @override
-  Future<Either<Failure, List<Restaurant2Model>>> call(String params) {
-    return _repo.getSubCategoryRestaurants(id: params);
+  Future<Either<Failure, List<Restaurant2Model>>> call(GetSubCategoryRestaurants params) {
+    return _repo.getSubCategoryRestaurants(params: params);
   }
+}
+
+class GetSubCategoryRestaurants{
+  final String id;
+  final int page;
+  final int limit;
+
+  GetSubCategoryRestaurants({required this.id, required this.page, required this.limit});
 }

@@ -19,6 +19,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usec
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/search_restaurants_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/toggle_restaurant_favourite_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/search_cubit/search_cubit.dart';
 import 'package:get_it/get_it.dart';
 
@@ -73,6 +74,11 @@ class FoodServiceLocator {
         () => GetExpiredOrdersUseCase(
               serviceLocator(),
             ));
+
+    serviceLocator.registerLazySingleton<ToggleRestaurantFavouriteUseCase>(
+        () => ToggleRestaurantFavouriteUseCase(
+              serviceLocator(),
+            ));
     serviceLocator.registerLazySingleton<RestaurantMenuCubit>(
         () => RestaurantMenuCubit(serviceLocator()));
     serviceLocator.registerLazySingleton<RestaurantSharedData>(
@@ -88,7 +94,6 @@ class FoodServiceLocator {
       ),
     );
     serviceLocator.registerFactory<RestaurantsCubit>(() => RestaurantsCubit(
-          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

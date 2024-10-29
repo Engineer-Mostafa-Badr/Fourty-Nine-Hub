@@ -38,6 +38,8 @@ class RestaurantsListState {
   final bool? isLoadingMore;
   final bool? isLoadingRestaurantsMore;
   final int? numOfRestaurants;
+  final String? selectedSubCategoryId;
+  final FoodCategoryEntity? selectedCategory;
   final MainCategoryEntity? mainCategory;
   final IsRestaurantModel? isResturant;
   final List<Restaurant2Model>?
@@ -55,7 +57,9 @@ class RestaurantsListState {
     this.numOfRestaurants,
     this.mainCategory,
     this.allRestaurant,
-    this.isLoadingMore,
+    this.isLoadingMore=false,
+    this.selectedCategory,
+    this.selectedSubCategoryId='',
     this.isLoadingRestaurantsMore,
     this.isResturant,
     this.nearByRestaurants,
@@ -72,6 +76,8 @@ class RestaurantsListState {
     bool? isLoadingRestaurantsMore,
     List<RestaurantEntity>? nearByRestaurants,
     List<Restaurant2Model>? subCategories,
+    String? selectedSubCategoryId,
+    FoodCategoryEntity? selectedCategory,
     List<Restaurant2Model>?
     allRestaurant, // Using Restaurant2Model for consistency
     int? numOfRestaurants,
@@ -99,6 +105,8 @@ class RestaurantsListState {
       banner: banner ?? this.banner,
       trendingRestaurants: trendingRestaurants ?? this.trendingRestaurants,
       categories: categories ?? this.categories,
+      selectedSubCategoryId: selectedSubCategoryId ?? this.selectedSubCategoryId,
+      selectedCategory: selectedCategory ?? this.selectedCategory,
     );
   }
 }

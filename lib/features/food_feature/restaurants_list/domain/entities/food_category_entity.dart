@@ -18,12 +18,16 @@ class FoodCategoryEntity extends Equatable {
   final int? numberOfRestaurant;
   @JsonKey(name: "isFavorite")
   bool? isFavorite;
+  bool? isSelected;
+  bool? fromAsset;
 
   FoodCategoryEntity({
     this.id,
     this.name,
     this.image,
     this.isFavorite=false,
+    this.isSelected=false,
+    this.fromAsset=false,
     this.parent,
     this.picture,
     this.nameAr,

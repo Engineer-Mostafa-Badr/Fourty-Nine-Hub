@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import '../../../../../res/assets/jsons.dart';
 import '../models/food_category_model.dart';
@@ -38,8 +39,9 @@ abstract class RestaurantsRemoteDataSource {
     required double lng,
   });
   Future<Either<Failure, int>> numOfRestaurants();
+  Future<Either<Failure, bool>> toggleRestaurantFavourite({required String params});
   Future<Either<Failure, List<Restaurant2Model>>> getSubCategoryRestaurants(
-      {required String id});
+      {required GetSubCategoryRestaurants params});
   Future<Either<Failure, IsRestaurantModel>> isRestaurant();
 }
 
@@ -80,9 +82,9 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
 
   @override
   Future<Either<Failure, List<Restaurant2Model>>> getSubCategoryRestaurants(
-      {required String id}) async {
+      {required GetSubCategoryRestaurants params}) async {
     final response =
-        await _apiConsumer.get(EndPoints.subCategoryRestaurants(id));
+        await _apiConsumer.get(EndPoints.subCategoryRestaurants(params));
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data']['restaurant'] as List)
@@ -215,5 +217,14 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
     return response.fold(
             (failure) => Left(failure),
             (data) => Right(ExpiredRequestsResponse.fromJson(data)));
+  }
+
+  @override
+  Future<Either<Failure, bool>> toggleRestaurantFavourite({required String params}) async {
+    final response =
+        await _apiConsumer.post(EndPoints.toggleRestaurantFavourite(params));
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right(data['status']));
   }
 }

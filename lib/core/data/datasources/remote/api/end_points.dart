@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_ad_details_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
 import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
@@ -698,12 +699,13 @@ class EndPoints {
   }
 
   // food
-  static String subCategoryRestaurants(String id) {
-    return '/restaurants/subcategory/$id';
+  static String subCategoryRestaurants(GetSubCategoryRestaurants params) {
+    return '/restaurants/subcategory?${params.id!=''?'subCategoryId=${params.id}&':''}page=${params.page}&limit=${params.limit}';
   }
 
   static String getNumOfResturants = '/restaurants/num-of-restaurants';
   static String foodExpiredOrders(PaginationParams params) => '/food/expired-orders?page=${params.page}&limit=${params.limit}';
+  static String toggleRestaurantFavourite(String id) => '/food/favorite-restaurant/$id';
   static String isResturant = '/restaurants/check-user-have-restaurant';
   static String createRestaurant = '/restaurants/create-restaurant';
   static String changeConnectivity = '/restaurants/modify-active';

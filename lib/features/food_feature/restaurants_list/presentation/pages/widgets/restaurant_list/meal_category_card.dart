@@ -17,8 +17,9 @@ import '../../../cubit/restaurants_list_cubit.dart';
 class MealCategoryCard extends StatefulWidget {
   final FoodCategoryEntity? subCategory;
   final Function(String) onTap;
+  final Function() favouriteSubCategory;
 
-  const MealCategoryCard({super.key, this.subCategory, required this.onTap});
+  const MealCategoryCard({super.key, this.subCategory, required this.onTap, required this.favouriteSubCategory});
 
   @override
   State<MealCategoryCard> createState() => _MealCategoryCardState();
@@ -30,7 +31,8 @@ class _MealCategoryCardState extends State<MealCategoryCard> {
     return FittedBox(
       child: Card(
         clipBehavior: Clip.hardEdge,
-        color: cardDarkColor(context),
+        elevation: widget.subCategory?.isSelected==true?0:null,
+        color: widget.subCategory?.isSelected==true?AppColors.SECONDARY_COLOR:cardDarkColor(context),
         child: SizedBox(
           width: 0.55.sw,
           child: InkWell(
@@ -42,7 +44,7 @@ class _MealCategoryCardState extends State<MealCategoryCard> {
                 Stack(
                   children: [
                     // Heart image
-                    ImageFromInternet(image: widget.subCategory?.picture??'',defaultLogo: true,height: 300.h,width: 0.55.sw,),
+                    widget.subCategory?.fromAsset==true? Image.asset(widget.subCategory?.image??'',fit: BoxFit.fill,height: 300.h,width: 0.55.sw,):ImageFromInternet(image: widget.subCategory?.picture??'',defaultLogo: true,height: 300.h,width: 0.55.sw,),
                    if(context.read<UserCubit>().isLoggedIn) Positioned(
                       top: 5,
                       right: 5,
@@ -52,15 +54,8 @@ class _MealCategoryCardState extends State<MealCategoryCard> {
                               ? Icons.favorite
                               : Icons.favorite_border,
                           color: AppColors.PRIMARY_COLOR_DARK,
-                          onPressed: () {
-                            var result = context
-                                .read<RestaurantsCubit>()
-                                .toggleFavoriteSubcategory(
-                                    widget.subCategory?.id ?? "");
-                            if(result == true){
-                              widget.subCategory?.isFavorite=!(widget.subCategory?.isFavorite??false);
-                              setState(() {});
-                            }
+                          onPressed: () async{
+                            await widget.favouriteSubCategory();
                           }),
                     ),
                   ],

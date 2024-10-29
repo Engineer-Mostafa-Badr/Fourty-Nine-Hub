@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
@@ -76,7 +77,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
             });
           }
         },
-        child: state.isLoading ? const Center(child: CircularProgressIndicator.adaptive()) : state.isSuccess?_buildLoggedInView(state):const SizedBox.shrink(),
+        child: state.isLoading ? const Center(child: CircularProgressIndicator.adaptive()) :_buildLoggedInView(state),
       ),
     );
   }
@@ -91,30 +92,54 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
           if (!(state.isResturant?.isRestaurant ?? false))
             _buildRegisterRestaurantPrompt(state),
           const Sizer(),
-          if ((state.isResturant?.isRestaurant ?? false) &&
-              (state.isResturant?.approved ?? false))
-            const ResturantDashboardButton(),
-          const Sizer(),
-          _buildSearchAndExpiredRequests(),
-          const Sizer(),
-        const MealCategories(),
-          if (state.loadingSubCategories)
-            _buildLoadingSubCategoriesPlaceholder(),
-          const Sizer(),
-          Label(
-            text: LocaleKeys.allRestaurants.tr(),
-            style: Styles.headerText(),
-          ),
-          const Sizer(),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: context.read<RestaurantsCubit>().restaurants.length,
-          itemBuilder: (context,i)=>SubCategoriesRestaurantCard(
-            item: context.read<RestaurantsCubit>().restaurants[i],
-            mealId: '',
-          ),
-        )
+         Padding(
+           padding: EdgeInsets.all(10.w),
+           child: Column(
+             children: [
+               if ((state.isResturant?.isRestaurant ?? false) &&
+                   (state.isResturant?.approved ?? false))
+                 const ResturantDashboardButton(),
+               const Sizer(),
+               _buildSearchAndExpiredRequests(),
+               const Sizer(),
+               const MealCategories(),
+               const Sizer(),
+               Label(
+                 text: context.isArabic?"${state.selectedCategory?.id!=''?"مطاعم ":''}${state.selectedCategory?.nameAr}"??'':"${state.selectedCategory?.nameEn}${state.selectedCategory?.id!=''?" Restaurants":''}"??'',
+                 style: Styles.headerText(),
+               ),
+               const Sizer(),
+               (state.isLoadingRestaurantsMore==true&&context.read<RestaurantsCubit>().currentRestaurantsPage==1)?ListView.builder(
+                 itemCount: 1,
+                 padding: EdgeInsets.zero,
+                 shrinkWrap: true,
+                 physics: const NeverScrollableScrollPhysics(),
+                 itemBuilder: (context,i)=>const PropertyCardShimmer(),
+               ):context.read<RestaurantsCubit>().restaurants.isNotEmpty?ListView.builder(
+                 shrinkWrap: true,
+                 physics: const NeverScrollableScrollPhysics(),
+                 itemCount: context.read<RestaurantsCubit>().restaurants.length,
+                 itemBuilder: (context,i)=>SubCategoriesRestaurantCard(
+                   item: context.read<RestaurantsCubit>().restaurants[i],
+                   mealId: '', favouriteRestaurant: (String id) async {
+                   var result = await context.read<RestaurantsCubit>().toggleFavoriteRestaurant(id);
+                   if(result==true){
+                     context.read<RestaurantsCubit>().restaurants[i].isFavorite= !context.read<RestaurantsCubit>().restaurants[i].isFavorite!;
+                   }
+                 },
+                 ),
+               ):Center(
+                 child: Padding(
+                   padding: EdgeInsets.only(top: 40.h),
+                   child: Text(
+                     context.isArabic ? "لا توجد مطاعم متوفرة." : "No Restaurants Found.",
+                     style: Styles.mediumText(),
+                   ),
+                 ),
+               )
+             ],
+           ),
+         )
 
       ],
     );

@@ -13,6 +13,8 @@ class FoodCategoryModel extends FoodCategoryEntity {
     super.picture,
     super.nameAr,
     super.nameEn,
+    super.fromAsset,
+    super.isSelected,
     super.isFavorite,
     super.numberOfRestaurant,
   });
