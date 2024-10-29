@@ -898,7 +898,7 @@ class AppPages {
                         MultiBlocProvider(
                           providers: [
                             BlocProvider<ReelsCubit>(
-                              create: (_) => serviceLocator(),
+                              create: (_) => serviceLocator<ReelsCubit>(),
                             ),
                           ],
                           child: const ReelView(),

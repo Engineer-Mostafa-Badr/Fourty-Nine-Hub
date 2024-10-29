@@ -21,6 +21,7 @@ import '../../../tinder/data/shared/shared.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
 import '../../data/models/new_reels_model.dart';
 import '../controllers/explore_reels_cubit/explore_reels_cubit.dart';
+import '../widgets/components/unified_widget_view.dart';
 import 'audio_screen.dart';
 
 /// A unified reel item widget that can function as MainReelItem, ReelItemForInstagram, or SpotlightReelItem.
