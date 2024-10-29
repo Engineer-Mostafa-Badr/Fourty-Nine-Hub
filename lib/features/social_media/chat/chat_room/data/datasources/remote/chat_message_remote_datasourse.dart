@@ -10,6 +10,8 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_recording_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_typing_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
@@ -20,6 +22,14 @@ abstract class MessagesRemoteDataSource {
   void listenToNewMessages(Function(MessageEntity message) params);
 
   Future<Either<Failure, bool>> sendMessage(SendMessageParams params);
+
+  Future<Either<Failure, bool>> startTyping({required String chatId});
+   Future<Either<Failure, bool>> stopTyping({required String chatId});
+   void listenToTypingStatus(Function(ListenToTypingParams listenToTypingParams) params);
+   
+  Future<Either<Failure, bool>> startRecording({required String chatId});
+   Future<Either<Failure, bool>> stopRecording({required String chatId});
+   void listenToRecordingStatus(Function(ListenToRecordingParams listenToTypingParams) params);
 
   Future<Either<Failure, bool>> deleteMessage({
     required String chatId,
@@ -124,8 +134,9 @@ class MessagesRemoteDataSourceImplementation
             "groupId": null,
             "replyMessageId": params.replyMessageId,
             "oneTimeView": params.oneTimeView,
-            "sharedContacts":
-              params.sharedContacts.map((contact) => contact.toJson()).toList(),
+            "sharedContacts": params.sharedContacts
+                .map((contact) => contact.toJson())
+                .toList(),
           }));
       return const Right(true);
     } catch (e) {
@@ -162,8 +173,8 @@ class MessagesRemoteDataSourceImplementation
   //         "groupId": null,
   //         "replyMessageId": params.replyMessageId,
   //         "oneTimeView": params.oneTimeView,
-          // "sharedContacts":
-          //     params.sharedContacts.map((contact) => contact.toJson()).toList(),
+  // "sharedContacts":
+  //     params.sharedContacts.map((contact) => contact.toJson()).toList(),
   //       }),
   //     );
   //     return const Right(true);
@@ -273,6 +284,127 @@ class MessagesRemoteDataSourceImplementation
       CliLogger.info("can't mark message as delivered error $e");
       return const Left(
           ServerFailure(message: "can't mark message as delivered"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> startTyping({required String chatId}) async {
+    try {
+      _socket.connect();
+      CliLogger.info('you start typing : $chatId');
+
+      _socket.emit(
+          SocketIOEvents.startTypingMessage,
+          jsonEncode({
+            "chatId": chatId,
+          }));
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error(' can\'t start typing $e');
+      return const Left(ServerFailure(message: "can't start typing"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> stopTyping({required String chatId}) async{
+    try {
+      _socket.connect();
+      CliLogger.info('you stop typing : $chatId');
+
+      _socket.emit(
+          SocketIOEvents.stopTypingMessage,
+          jsonEncode({
+            "chatId": chatId,
+          }));
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error(' can\'t stop typing $e');
+      return const Left(ServerFailure(message: "can't stop typing"));
+    }
+  }
+  
+  @override
+
+  void listenToTypingStatus(Function(ListenToTypingParams listenToTypingParams) params) {
+    try {
+      _socket.connect();
+      _socket.on(SocketIOListeners.typingMessage, (data) {
+        log(data.toString());
+        final decodedData = jsonDecode(data);
+        log("listenToTypingStatus :  $data");
+        CliLogger.info("typingChats :  $data");
+        log("listenToTypingStatus decodedData:  $decodedData");
+        if (decodedData is List) {
+          data = decodedData[0];
+        } else {
+          data = decodedData;
+        }
+        ListenToTypingParams listenToTypingParams = ListenToTypingParams.fromJson(data);
+        params(listenToTypingParams);
+      });
+      
+    } catch (e) {
+      CliLogger.info("can't listen to typing status error $e");
+    }
+  }
+  
+  @override
+  void listenToRecordingStatus(Function(ListenToRecordingParams listenToRecordingParams) params) {
+    try {
+      _socket.connect();
+      _socket.on(SocketIOListeners.recordingMessage, (data) {
+        log(data.toString());
+        final decodedData = jsonDecode(data);
+        log("listenToRecordingStatus :  $data");
+        CliLogger.info("recordingChats :  $data");
+        log("listenToRecordingStatus decodedData:  $decodedData");
+        if (decodedData is List) {
+          data = decodedData[0];
+        } else {
+          data = decodedData;
+        }
+        ListenToRecordingParams listenToRecordingParams = ListenToRecordingParams.fromJson(data);
+        params(listenToRecordingParams);
+      });
+      
+    } catch (e) {
+      CliLogger.info("can't listen to recording status error $e");
+    }
+  }
+  
+  @override
+  Future<Either<Failure, bool>> startRecording({required String chatId}) async{
+    try {
+      _socket.connect();
+      CliLogger.info('you start recording : $chatId');
+
+      _socket.emit(
+          SocketIOEvents.startRecordingMessage,
+          jsonEncode({
+            "chatId": chatId,
+          }));
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error(' can\'t start recording $e');
+      return const Left(ServerFailure(message: "can't start recording"));
+    }
+  }
+  
+  @override
+  Future<Either<Failure, bool>> stopRecording({required String chatId})async {
+    try {
+      _socket.connect();
+      CliLogger.info('you stop recording : $chatId');
+
+      _socket.emit(
+          SocketIOEvents.stopRecordingMessage,
+          jsonEncode({
+            "chatId": chatId,
+          }));
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error(' can\'t stop recording $e');
+      return const Left(ServerFailure(message: "can't stop recording"));
     }
   }
 }

@@ -5,13 +5,19 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/reposi
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_delivered_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_recording_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_seen_messages.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_typing_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/start_recording_uecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/start_typing_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_delivered_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_seen_messages.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_recording_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_typing_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/datasources/chats_remote_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/repositories/chats_repository_implement.dart';
@@ -53,6 +59,34 @@ class SocialServiceLocator {
           serviceLocator(),
         ));
 
+    serviceLocator.registerLazySingleton<StartTypingMessageUseCase>(
+        () => StartTypingMessageUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<StopTypingMessageUseCase>(
+        () => StopTypingMessageUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToTypingUseCase>(
+        () => ListenToTypingUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<StartRecordingMessageUseCase>(
+        () => StartRecordingMessageUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<StopRecordingMessageUseCase>(
+        () => StopRecordingMessageUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToRecordingUseCase>(
+        () => ListenToRecordingUseCase(
+              serviceLocator(),
+            ));
+
     serviceLocator
         .registerLazySingleton<GroupsChatsUseCase>(() => GroupsChatsUseCase(
               serviceLocator(),
@@ -75,16 +109,15 @@ class SocialServiceLocator {
         () => ChangeChatMuteStateUseCase(
               serviceLocator(),
             ));
-    serviceLocator.registerLazySingleton<DeleteChatUseCase>(
-        () => DeleteChatUseCase(
+    serviceLocator
+        .registerLazySingleton<DeleteChatUseCase>(() => DeleteChatUseCase(
               serviceLocator(),
             ));
-            serviceLocator.registerLazySingleton<PinChatUseCase>(
-        () => PinChatUseCase(
-              serviceLocator(),
-            ));
-            serviceLocator.registerLazySingleton<UnPinChatUseCase>(
-        () => UnPinChatUseCase(
+    serviceLocator.registerLazySingleton<PinChatUseCase>(() => PinChatUseCase(
+          serviceLocator(),
+        ));
+    serviceLocator
+        .registerLazySingleton<UnPinChatUseCase>(() => UnPinChatUseCase(
               serviceLocator(),
             ));
     serviceLocator.registerLazySingleton<ChangeChatToArchiveOrNormalUseCase>(
@@ -106,7 +139,7 @@ class SocialServiceLocator {
               serviceLocator(),
             ));
 
-serviceLocator.registerLazySingleton<ListenToNewChatUseCase>(
+    serviceLocator.registerLazySingleton<ListenToNewChatUseCase>(
         () => ListenToNewChatUseCase(
               serviceLocator(),
             ));
@@ -162,6 +195,8 @@ serviceLocator.registerLazySingleton<ListenToNewChatUseCase>(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
         ));
 
     serviceLocator.registerFactory<ChatRoomCubit>(() => ChatRoomCubit(
@@ -172,6 +207,10 @@ serviceLocator.registerLazySingleton<ListenToNewChatUseCase>(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator()
         ));
   }
 }

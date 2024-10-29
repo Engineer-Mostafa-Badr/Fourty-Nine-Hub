@@ -509,18 +509,22 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   Widget _micButton(BuildContext context) {
     final AudioPlayer audioPlayer = AudioPlayer();
     return SocialMediaRecorder(
-      startRecording: () {
+      startRecording: () async {
+        await context.read<ChatRoomCubit>().startRecording();
         _isRecording = true;
         setState(() {});
       },
 
-      stopRecording: (time) {
+      stopRecording: (time) async {
+        await context.read<ChatRoomCubit>().stopRecording();
         _isRecording = false;
+
         setState(() {});
       },
       encode: AudioEncoderType.AAC, // Ensure it's recorded in AAC
 
       sendRequestFunction: (File soundFile, String time) async {
+        await context.read<ChatRoomCubit>().stopRecording();
         _isRecording = false;
         setState(() {});
         log("sound file path is : ${soundFile.path}");
@@ -580,6 +584,16 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   }
 
   Widget _textField() {
+    _messageTextController.addListener(() async {
+      // Check if the user is typing
+      if (_messageTextController.text.length == 1) {
+        await context.read<ChatRoomCubit>().startTyping();
+      } else if (_messageTextController.text.isEmpty) {
+        // User stopped typing or cleared the text
+        await context.read<ChatRoomCubit>().stopTyping();
+      }
+    });
+
     return BlocBuilder<ChatRoomCubit, ChatRoomState>(
       builder: (context, state) {
         Radius topRadius = state.replayedMessage == null ? radius : Radius.zero;
@@ -598,16 +612,16 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
               boxShadow: state.replayedMessage == null
                   ? [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.5), // Shadow color
-                        spreadRadius: 1, // Spread the shadow
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 1,
                         blurRadius: 5,
                         offset: const Offset(0, 3),
                       ),
                     ]
                   : [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.5), // Shadow color
-                        spreadRadius: 1, // Spread the shadow
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 1,
                         blurRadius: 1,
                         offset: const Offset(0, 3),
                       ),

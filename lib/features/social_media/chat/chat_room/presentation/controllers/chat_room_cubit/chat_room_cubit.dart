@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/extensions/map_extension.dart';
@@ -20,8 +22,12 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_seen_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/start_recording_uecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/start_typing_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_delivered_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_seen_messages.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_recording_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_typing_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -36,6 +42,10 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   final ListenToSeenMessagesUseCase _listenToSeenMessagesUseCase;
   final StopListenToSeenMessagesUseCase _stopListenToSeenMessagesUseCase;
   final ListenToDeliveredMessagesUseCase _listenToDeliveredMessagesUseCase;
+  final StartTypingMessageUseCase _startTypingMessageUseCase;
+  final StopTypingMessageUseCase _stopTypingMessageUseCase;
+  final StartRecordingMessageUseCase _startRecordingMessageUseCase;
+  final StopRecordingMessageUseCase _stopRecordingMessageUseCase;
   final StopListenToDeliveredMessagesUseCase
       _stopListenToDeliveredMessagesUseCase;
   final ScrollController scrollController = ScrollController();
@@ -59,6 +69,10 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     this._stopListenToSeenMessagesUseCase,
     this._listenToDeliveredMessagesUseCase,
     this._stopListenToDeliveredMessagesUseCase,
+    this._startTypingMessageUseCase,
+    this._stopTypingMessageUseCase,
+    this._startRecordingMessageUseCase,
+    this._stopRecordingMessageUseCase,
   ) : super(const ChatRoomState()) {
     _listenToDeliveredMessages();
     _listenToSeenMessages();
@@ -86,6 +100,79 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       _messages = _messages.reverse();
       emit(state.copyWith(messages: _messages.values.toList()));
       _scrollDown();
+    });
+  }
+
+  Future<void> startTyping() async {
+    final result = await _startTypingMessageUseCase(_chat.id);
+    result.fold(
+        (l) => emit(state.copyWith(failure: l, status: ChatRoomStates.error)),
+        (r) async {
+      log("start typing result $r");
+      emit(state.copyWith(status: ChatRoomStates.success));
+    });
+    // Socket _socket = serviceLocator<Socket>();
+    // try {
+    //   _socket.connect();
+    //   // CliLogger.info('you start typing : ${_chat.id}');
+
+    //   _socket.emit(
+    //       SocketIOEvents.typingMessage,
+    //       jsonEncode({
+    //         "chatId": _chat.id,
+    //       }));
+    //       CliLogger.info('you start typing : ${_chat.id}');
+    //   // return const Right(true);
+    // } catch (e) {
+    //   CliLogger.error(' can\'t start typing $e');
+    //   // return const Left(ServerFailure(message: "can't stop typing"));
+    // }
+  }
+
+  Future<void> stopTyping() async {
+    final result = await _stopTypingMessageUseCase(_chat.id);
+    result.fold(
+        (l) => emit(state.copyWith(failure: l, status: ChatRoomStates.error)),
+        (r) async {
+      log("stop typing result $r");
+      emit(state.copyWith(status: ChatRoomStates.success));
+    });
+
+    // Socket _socket = serviceLocator<Socket>();
+    // try {
+    //   _socket.connect();
+    //   // CliLogger.info('you stop typing : ${_chat.id}');
+
+    //   _socket.emit(
+    //       SocketIOEvents.typingMessage,
+    //       jsonEncode({
+    //         "chatId": _chat.id,
+    //       }));
+    //       CliLogger.info('you stop typing : ${_chat.id}');
+    //   // return const Right(true);
+    // } catch (e) {
+    //   CliLogger.error(' can\'t stop typing $e');
+    //   // return const Left(ServerFailure(message: "can't stop typing"));
+    // }
+  }
+
+  Future<void> startRecording() async {
+    final result = await _startRecordingMessageUseCase(_chat.id);
+    result.fold(
+        (l) => emit(state.copyWith(failure: l, status: ChatRoomStates.error)),
+        (r) async {
+      log("start recording result $r");
+      emit(state.copyWith(status: ChatRoomStates.success));
+    });
+  }
+
+  Future<void> stopRecording() async {
+    final result = await _stopRecordingMessageUseCase(_chat.id);
+    result.fold(
+        (l) => emit(state.copyWith(failure: l, status: ChatRoomStates.error)),
+        (r) async {
+      log("stop recording result $r");
+      emit(state.copyWith(status: ChatRoomStates.success));
     });
   }
 
@@ -125,11 +212,11 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       selectedContactsToShare.clear();
       sharedContacts.clear();
 // Play notification sound
-          log("before playing");
-          final player = AudioPlayer(); // Initialize the player
-          await player.play(AssetSource('49 Notification 01.mp3')); // Play the asset
-          log("playing");
-
+      log("sound before send message");
+      final player = AudioPlayer(); // Initialize the player
+      await player
+          .play(AssetSource('ChatSounds/Send Message.mp3')); // Play the asset
+      log("sound after send message");
     });
   }
 

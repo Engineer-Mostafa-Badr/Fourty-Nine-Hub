@@ -53,6 +53,8 @@ abstract class SocketIOListeners {
   static const String sendPoints = 'Stream:SendPoint';
   static const String requestBattle = 'Stream:SendBattleRequest';
   static const String creatingNewChat = 'newChat';
+  static const String typingMessage = 'messageTyping';
+  static const String recordingMessage = 'messageRecording';
 }
 
 abstract class SocketIOEvents {
@@ -61,6 +63,10 @@ abstract class SocketIOEvents {
   static const String sendMessage = 'Message:Send';
   static const String markMessageAsSeen = 'Message:Seen';
   static const String markMessageAsDelivered = 'Message:Delivered';
+  static const String startTypingMessage = 'Message:Typing';
+  static const String stopTypingMessage = 'Message:StopTyping';
+  static const String startRecordingMessage = 'Message:Recording';
+  static const String stopRecordingMessage = 'Message:StopRecording';
 }
 
 //

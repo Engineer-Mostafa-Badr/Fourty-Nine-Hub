@@ -12,7 +12,8 @@ class ChatEntity {
   int unreadCount;
   String userId;
   String avatar;
-  bool typing;
+  bool typing = false;
+  bool recording = false;
   bool online;
   MessageEntity? lastMessage;
   bool isSelected = false;
@@ -30,7 +31,8 @@ class ChatEntity {
     required this.unreadCount,
     required this.userId,
     required this.avatar,
-    required this.typing,
+    this.typing = false,
+    this.recording = false,
     required this.online,
     this.lastMessage,
     this.isSelected = false,

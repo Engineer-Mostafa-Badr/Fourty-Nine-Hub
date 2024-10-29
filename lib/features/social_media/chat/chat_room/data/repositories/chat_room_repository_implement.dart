@@ -6,6 +6,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasour
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_recording_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_typing_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
@@ -68,5 +70,35 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   Future<Either<Failure, bool>> markMessageAsDelivered(
       MarkMessagesAsDeliveredParams params) {
     return _chatRemoteDataSource.markMessageAsDelivered(params);
+  }
+  
+  @override
+  Future<Either<Failure, bool>> startTyping({required String chatId}) {
+    return _chatRemoteDataSource.startTyping(chatId: chatId);
+  }
+  
+  @override
+  Future<Either<Failure, bool>> stopTyping({required String chatId}) {
+    return _chatRemoteDataSource.stopTyping(chatId: chatId);
+  }
+
+  @override
+  void listenToTypingStatus(Function(ListenToTypingParams p1) params) {
+    _chatRemoteDataSource.listenToTypingStatus(params);
+  }
+  
+  @override
+  void listenToRecordingStatus(Function(ListenToRecordingParams p1) params) {
+    _chatRemoteDataSource.listenToRecordingStatus(params);
+  }
+  
+  @override
+  Future<Either<Failure, bool>> startRecording({required String chatId}) {
+    return _chatRemoteDataSource.startRecording(chatId: chatId);
+  }
+  
+  @override
+  Future<Either<Failure, bool>> stopRecording({required String chatId}) {
+    return _chatRemoteDataSource.stopRecording(chatId: chatId);
   }
 }

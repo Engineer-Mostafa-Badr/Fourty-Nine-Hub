@@ -380,6 +380,10 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   flexibleSpace: BlocProvider.value(
                     value: serviceLocator<StoryCubit>()..fetchStories(),
                     child: BlocBuilder<ChatsCubit, ChatsState>(
+                      // buildWhen: (previous, current) {
+                      //   return previous.status != ChatsStates.typing ||
+                      //       previous.status != ChatsStates.recording;
+                      // },
                       builder: (context, state) {
                         return context.read<UserCubit>().isLoggedIn
                             ? SizedBox(
@@ -572,18 +576,19 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                if(context.read<UserCubit>().isLoggedIn)SliverAppBar(
-                  expandedHeight: MediaQuery.of(context).size.height *
-                      0.08, // Responsive height
-                  automaticallyImplyLeading: false,
-                  floating: true,
-                  flexibleSpace: BlocProvider(
-                    create: (context) => serviceLocator<StoryCubit>()
-                      ..fetchStories()
-                      ..getMutedStories(),
-                    child: const ChatStories(),
+                if (context.read<UserCubit>().isLoggedIn)
+                  SliverAppBar(
+                    expandedHeight: MediaQuery.of(context).size.height *
+                        0.08, // Responsive height
+                    automaticallyImplyLeading: false,
+                    floating: true,
+                    flexibleSpace: BlocProvider(
+                      create: (context) => serviceLocator<StoryCubit>()
+                        ..fetchStories()
+                        ..getMutedStories(),
+                      child: const ChatStories(),
+                    ),
                   ),
-                ),
                 SliverAppBar(
                   automaticallyImplyLeading: false,
                   floating: true,
@@ -594,8 +599,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               ],
               body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
                 builder: (context, state) {
-                  return _buildCategoriesViews()
-                      ;
+                  return _buildCategoriesViews();
                 },
               ),
             ),
