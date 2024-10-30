@@ -78,7 +78,7 @@ class DI {
 
 
     // //preloading
-    // serviceLocator.registerLazySingleton(() => PreloadBloc());
+    serviceLocator.registerLazySingleton(() => PreloadBloc());
 
     await Firebase.initializeApp(
       name: "49-App",

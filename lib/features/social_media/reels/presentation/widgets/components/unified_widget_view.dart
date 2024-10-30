@@ -16,6 +16,7 @@ class UnifiedReelItem extends StatefulWidget {
   final Reel reel;
   final bool isVisible;
   final int index;
+
   final ReelItemType itemType;
 
   const UnifiedReelItem({

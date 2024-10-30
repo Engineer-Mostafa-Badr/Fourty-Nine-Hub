@@ -2,7 +2,7 @@
 // preload_event.dart
 abstract class PreloadEvent {}
 
-class GetVideosFromApi extends PreloadEvent {}
+class GetVideosFromApiEvent extends PreloadEvent {}
 
 class SetLoading extends PreloadEvent {}
 

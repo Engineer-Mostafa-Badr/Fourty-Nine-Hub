@@ -1,6 +1,8 @@
+import 'dart:developer';
 import 'dart:isolate';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import '../../features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
@@ -56,7 +58,14 @@ void getVideosTask(SendPort mySendPort) async {
 }
 
 Future<List<String>> getReelVideos({int id = 0}) async {
-  final videos = currentContext.read<ReelsCubit>().state.globalReels!;
+  await serviceLocator<ReelsCubit>()
+      .fetchReels()
+      .then((value) => log(
+          'reels are fetched ${currentContext.read<ReelsCubit>().state.globalReels ?? []}'))
+      .catchError((e) {
+    log('error occurred $e');
+  });
+  final videos = serviceLocator<ReelsCubit>().state.globalReels!;
   // No more videos
   if ((id >= videos.length)) {
     return [];

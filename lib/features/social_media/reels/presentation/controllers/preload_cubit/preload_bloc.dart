@@ -8,7 +8,6 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/controlle
 
 import '../../../../../../core/isolates/get_video_isolate.dart';
 import '../../shared/constants.dart';
-import '../explore_reels_cubit/explore_reels_cubit.dart';
 import 'preload_state.dart';
 import 'package:video_player/video_player.dart';
 
@@ -18,18 +17,32 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
       emit(state.copyWith(isLoading: true));
     });
 
-    on<GetVideosFromApi>((event, emit) async {
-      final List<String> _urls = await getReelVideos();
-      final updatedUrls = List<String>.from(state.urls)..addAll(_urls);
+    on<GetVideosFromApiEvent>((event, emit) async {
+      emit(state.copyWith(isLoading: true));
+      try {
+        log('event entered');
+        final List<String> _urls = await getReelVideos();
+        log(_urls.map((e) => e).toString());
 
-      await _initializeControllerAtIndex(0);
-      _playControllerAtIndex(0);
-      await _initializeControllerAtIndex(1);
+        final updatedUrls = List<String>.from(state.urls)..addAll(_urls);
+        log('urls  ${state.urls}');
 
-      emit(state.copyWith(
-        urls: updatedUrls,
-        reloadCounter: state.reloadCounter + 1,
-      ));
+        emit(state.copyWith(
+          urls: updatedUrls,
+          isLoading: false,
+          reloadCounter: state.reloadCounter + 1,
+        ));
+        await _initializeControllerAtIndex(0);
+        _playControllerAtIndex(0);
+        await _initializeControllerAtIndex(1);
+
+        log('event exited');
+      } catch (e) {
+        emit(state.copyWith(
+          isLoading: false,
+        ));
+        rethrow;
+      }
     });
 
     on<OnVideoIndexChanged>((event, emit) {
@@ -77,13 +90,20 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
   }
 
   Future<void> _initializeControllerAtIndex(int index) async {
-    if (state.urls.length > index && index >= 0) {
-      final controller =
-          VideoPlayerController.networkUrl(state.urls[index].toUri);
-      state.controllers[index] = controller;
-      await controller.initialize();
-      log('🚀🚀🚀 INITIALIZED $index');
-    }
+    final controller =
+        VideoPlayerController.networkUrl(state.urls[index].toUri);
+    state.controllers[index] = controller;
+
+    await controller.initialize();
+
+    log('🚀🚀🚀 INITIALIZED $index');
+
+    // Emit new state with the updated controller map
+    // final updatedControllers = Map<int, VideoPlayerController>.from(state.controllers)
+    //   ..[index] = controller;
+
+    // emit(state.copyWith(controllers: updatedControllers));
+    log('🚀🚀🚀 EMITTED $index');
   }
 
   void _playControllerAtIndex(int index) {
@@ -103,5 +123,11 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     final controller = state.controllers.remove(index);
     controller?.dispose();
     log('🚀🚀🚀 DISPOSED $index');
+
+    final updatedControllers =
+        Map<int, VideoPlayerController>.from(state.controllers)..remove(index);
+
+    emit(state.copyWith(controllers: updatedControllers));
+    log('🚀🚀🚀 EMITTED DISPOSED $index');
   }
 }
