@@ -15,7 +15,10 @@ class StarModel extends StarEntity {
       required super.totalRatings,
       required super.totalPoints,
       required super.averageRating,
-      required super.averageRatingPercentage});
+      required super.averageRatingPercentage,
+          super.createdAt,
+          super.createAt,
+      });
 
   factory StarModel.fromJson(Map<String, dynamic> json) {
       return StarModel(
@@ -32,6 +35,10 @@ class StarModel extends StarEntity {
           totalPoints: json['totalPoints'] ??0,
           averageRating: json['averageRating'] ??0,
           averageRatingPercentage: json['averageRatingPercentage'] ??0,
+          createAt: json['videoUrl']['createAt']??'',
+          createdAt: json['videoUrl']['createdAt'] != null
+              ? DateTime.parse(json['videoUrl']['createdAt'])
+              : null,
       );
   }
 }

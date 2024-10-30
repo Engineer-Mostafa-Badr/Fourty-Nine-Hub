@@ -1019,5 +1019,7 @@
   "liveStreamOptions": "خيارات البث الحي",
   "createLive": "انشاء بث",
   "watch": "مشاهدة",
-  "mutualFriend": "صديق مشترك"
+  "mutualFriend": "صديق مشترك",
+  "Face":"وجه",
+  "Insta":"صور"
 }

@@ -4,10 +4,11 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/star_feature/data/model/star_model.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
+import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
 
 abstract class StarRemoteDataSource {
-  Future<Either<Failure, List<StarEntity>>> fetchAllStar();
+  Future<Either<Failure, List<StarEntity>>> fetchAllStar(StarPaginationParams params);
 
   Future<Either<Failure, List<StarEntity>>> fetchMyStar();
 
@@ -21,8 +22,8 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
   StarRemoteDataSourceImpl(this._apiConsumer);
 
   @override
-  Future<Either<Failure, List<StarEntity>>> fetchAllStar() async {
-    final response = await _apiConsumer.get(EndPoints.allStar);
+  Future<Either<Failure, List<StarEntity>>> fetchAllStar(StarPaginationParams params) async {
+    final response = await _apiConsumer.get(EndPoints.allStar(params));
 
     return response.fold(
       (failure) => Left(failure),

@@ -126,4 +126,5 @@ abstract class Assets {
   //Quran
   static String maka = 'assets/images/maka.png';
   static String madina = 'assets/images/madina.png';
+  static String win = 'assets/images/win.jpg';
 }

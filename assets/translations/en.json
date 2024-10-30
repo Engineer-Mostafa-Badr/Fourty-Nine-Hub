@@ -1033,5 +1033,7 @@
   "endToEndEncryption": "end-to-end encrypted",
   "liveStreamOptions": "Live Stream Options",
   "createLive": "Create Live",
-  "watch": "Watch"
+  "watch": "Watch",
+  "Face":"Face",
+  "Insta":"Insta"
 }

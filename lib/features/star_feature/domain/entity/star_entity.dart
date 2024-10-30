@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/core/utils/duration_helper.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
 
 class StarEntity {
@@ -15,6 +16,13 @@ class StarEntity {
   final num averageRating;
   final num averageRatingPercentage;
 
+  DateTime? createdAt;
+  String? createAt;
+  Duration get publishedDuration => DateTime.now().difference(createdAt!);
+
+  String get sinceTime =>
+      DurationHelper().getTimeDifference( createdAt!);
+
   StarEntity(
       {required this.id,
       required this.user,
@@ -28,5 +36,8 @@ class StarEntity {
       required this.totalRatings,
       required this.totalPoints,
       required this.averageRating,
-      required this.averageRatingPercentage});
+      required this.averageRatingPercentage,
+        this.createdAt,
+        this.createAt,
+      });
 }

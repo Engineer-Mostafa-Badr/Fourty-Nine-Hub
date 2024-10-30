@@ -1010,5 +1010,7 @@ abstract class  LocaleKeys {
   static const createLive = 'createLive';
   static const watch = 'watch';
   static const mutualFriend = 'mutualFriend';
+  static const Face = 'Face';
+  static const Insta = 'Insta';
 
 }

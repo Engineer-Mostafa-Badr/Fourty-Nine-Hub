@@ -1035,7 +1035,9 @@ class CodegenLoader extends AssetLoader{
   "liveStreamOptions": "خيارات البث الحي",
   "createLive": "انشاء بث",
   "watch": "مشاهدة",
-  "mutualFriend": "صديق مشترك"
+  "mutualFriend": "صديق مشترك",
+  "Face": "وجه",
+  "Insta": "صور"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2072,8 +2074,9 @@ static const Map<String,dynamic> en = {
   "endToEndEncryption": "end-to-end encrypted",
   "liveStreamOptions": "Live Stream Options",
   "createLive": "Create Live",
-  "watch": "Watch"
+  "watch": "Watch",
+  "Face": "Face",
+  "Insta": "Insta"
 };
-
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

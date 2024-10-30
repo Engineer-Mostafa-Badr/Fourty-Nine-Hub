@@ -21,63 +21,105 @@ class StarCubit extends Cubit<StarState> {
 
   TextEditingController starController = TextEditingController();
 
-  void onRefresh() async {
-    starPagingController.refresh();
-   // StarPagingUserController.refresh();
+  List<StarEntity> star = [];
+  // List<AzkarDetailsEntity> azkarDetails = [];
+  bool isLoadingMore = false;
+  bool hasMoreData = true;
+  int currentPage = 1;
+  int pageSize = 10;
+
+
+  void loadInitialData() async {
+    emit(state.copyWith(status: StarStates.loading));
+    star.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await fetchAllStar();
   }
 
-  void loadData() async {
-    //   await getFeed(1);
-    getPaginatedStar(1);
-    getPaginatedMyStar(1);
-    //getPaginatedUserStar(1);
-    starPagingController.addPageRequestListener((pageKey) {
-      print("initStatePageKey : $pageKey");
-      getPaginatedStar(pageKey);
-    });
-    starPagingController.addPageRequestListener((pageKey) {
-      print("initStatePageKey : $pageKey");
-      getPaginatedMyStar(pageKey);
-    });
-    // StarPagingUserController.addPageRequestListener((pageKey) {
-    //   print("initStatePageKey : $pageKey");
-    //   getPaginatedUserStar(params, pageKey);
-    // });
+  Future<void> fetchAllStar() async {
+    if (!hasMoreData || isLoadingMore) return;
+
+    isLoadingMore = true;
+
+    final response = await _allStarUseCase(
+      StarPaginationParams(page: currentPage, limit: pageSize),
+    );
+
+    response.fold(
+          (failure) => emit(state.copyWith(failure: failure, status: StarStates.error)),
+          (data) {
+        star.addAll(data);
+
+        if (data.length < pageSize) {
+          hasMoreData = false;
+        } else {
+          currentPage++;
+        }
+
+        isLoadingMore = false;
+        emit(state.copyWith(star: star,status: StarStates.success));
+      },
+    );
   }
+
+  // void onRefresh() async {
+  //   starPagingController.refresh();
+  //  // StarPagingUserController.refresh();
+  // }
+  //
+  // void loadData() async {
+  //   //   await getFeed(1);
+  //   getPaginatedStar(1);
+  //   getPaginatedMyStar(1);
+  //   //getPaginatedUserStar(1);
+  //   starPagingController.addPageRequestListener((pageKey) {
+  //     print("initStatePageKey : $pageKey");
+  //     getPaginatedStar(pageKey);
+  //   });
+  //   starPagingController.addPageRequestListener((pageKey) {
+  //     print("initStatePageKey : $pageKey");
+  //     getPaginatedMyStar(pageKey);
+  //   });
+  //   // StarPagingUserController.addPageRequestListener((pageKey) {
+  //   //   print("initStatePageKey : $pageKey");
+  //   //   getPaginatedUserStar(params, pageKey);
+  //   // });
+  // }
 
 
   final PagingController<int, StarEntity> starPagingController =
       PagingController(firstPageKey: 1);
-  final int pageSize = 10;
-
-  Future<List<StarEntity>> getPaginatedStar(int page) async {
-    emit(state.copyWith(status: StarStates.loading));
-    List<StarEntity> main = [];
-    final response = await _allStarUseCase.call(const NoParams());
-
-    response.fold((l) {
-      print('Errrrrrrror :$l');
-      emit(state.copyWith(failure: l, status: StarStates.error));
-    }, (data) {
-      final isLastPage = data.length < pageSize;
-      if (page == 1) {
-        print("page == 1 $page");
-        starPagingController.itemList = [];
-      }
-      if (isLastPage) {
-        print("isLastPage = $isLastPage");
-        starPagingController.appendLastPage(data);
-      } else {
-        print("isNotLastPage = $isLastPage");
-        final nextPageKey = page + 1;
-        starPagingController.appendPage(data, nextPageKey);
-      }
-      print('Sussecc :$data');
-      main = data;
-      emit(state.copyWith(star: data, status: StarStates.success));
-    });
-    return main;
-  }
+  // final int pageSize = 10;
+  //
+  // Future<List<StarEntity>> getPaginatedStar(int page) async {
+  //   emit(state.copyWith(status: StarStates.loading));
+  //   List<StarEntity> main = [];
+  //   final response = await _allStarUseCase.call(const NoParams());
+  //
+  //   response.fold((l) {
+  //     print('Errrrrrrror :$l');
+  //     emit(state.copyWith(failure: l, status: StarStates.error));
+  //   }, (data) {
+  //     final isLastPage = data.length < pageSize;
+  //     if (page == 1) {
+  //       print("page == 1 $page");
+  //       starPagingController.itemList = [];
+  //     }
+  //     if (isLastPage) {
+  //       print("isLastPage = $isLastPage");
+  //       starPagingController.appendLastPage(data);
+  //     } else {
+  //       print("isNotLastPage = $isLastPage");
+  //       final nextPageKey = page + 1;
+  //       starPagingController.appendPage(data, nextPageKey);
+  //     }
+  //     print('Sussecc :$data');
+  //     main = data;
+  //     emit(state.copyWith(star: data, status: StarStates.success));
+  //   });
+  //   return main;
+  // }
 
 
   Future<List<StarEntity>> getPaginatedMyStar(int page) async {
