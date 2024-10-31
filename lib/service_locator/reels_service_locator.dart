@@ -29,7 +29,7 @@ class ReelsServiceLocator {
           () => ReelsRepositoryImpl(serviceLocator()),
     );
     // Register the ReelsCubit
-    serviceLocator.registerFactory<ReelsCubit>(
+    serviceLocator.registerLazySingleton<ReelsCubit>(
           () => ReelsCubit(serviceLocator(),
           serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()),
     );

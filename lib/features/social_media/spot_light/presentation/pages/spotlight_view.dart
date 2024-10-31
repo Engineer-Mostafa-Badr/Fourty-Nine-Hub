@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/unified_widget_view.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../routes/routes.dart';
@@ -287,7 +288,7 @@ class _FollowingSectionState extends State<FollowingSection> {
                           child: Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 4.0, vertical: 12.h),
-                            child: _buildReelCard(context, reel),
+                            child: _buildReelCard(context, reel,index),
                           ),
                         );
                       },
@@ -310,7 +311,7 @@ class _FollowingSectionState extends State<FollowingSection> {
     );
   }
 
-  Widget _buildReelCard(BuildContext context, Reel reel) {
+  Widget _buildReelCard(BuildContext context, Reel reel,int index) {
     return GestureDetector(
       onTap: () async {
         await Navigator.push(
@@ -362,6 +363,7 @@ class _FollowingSectionState extends State<FollowingSection> {
                   body: UnifiedReelItem(
                     reel: reel,
                     isVisible: true,
+                    index:index,
                     itemType: ReelItemType.spotlight,
                   ),
                   // MainReelItem(
@@ -472,7 +474,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
                     );
                   }
                   final reel = state.globalReels![index];
-                  return _buildReelCard(context, reel);
+                  return _buildReelCard(context, reel,index);
                 },
               );
             },
@@ -482,7 +484,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
     );
   }
 
-  Widget _buildReelCard(BuildContext context, Reel reel) {
+  Widget _buildReelCard(BuildContext context, Reel reel,int index) {
     return GestureDetector(
       onTap: () async {
         await Navigator.push(
@@ -533,6 +535,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
                 ),
                 body: UnifiedReelItem(
                   reel: reel,
+                  index:index,
                   isVisible: true,
                   itemType: ReelItemType.spotlight,
                 ),
