@@ -1035,5 +1035,8 @@
   "createLive": "Create Live",
   "watch": "Watch",
   "Face":"Face",
-  "Insta":"Insta"
+  "Insta":"Insta",
+  "day": "Day",
+  "month": "Month",
+  "numOfWins": "Number of Wins"
 }

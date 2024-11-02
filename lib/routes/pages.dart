@@ -143,6 +143,7 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/ti
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/be_star_view.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/star_winner_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_brand_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_model_usecase.dart';
@@ -1635,12 +1636,24 @@ class AppPages {
           GoRoute(
             path: Paths.BE_STAR,
             name: Routes.BE_STAR,
+            routes: [
+              GoRoute(
+                path: Paths.BE_STAR_DETAILS,
+                name: Routes.BE_STAR_DETAILS,
+                builder: (context, state) {
+                  return BlocProvider<StarCubit>(
+                      create: (_) =>serviceLocator(),
+                      child: const StarWinnerView());
+                },
+              ),
+            ],
             builder: (context, state) {
               return BlocProvider<StarCubit>(
                   create: (_) =>serviceLocator(),
                   child: const BeStarView());
             },
           ),
+
           // ___________________ trip join ______________
           GoRoute(
             path: Paths.TRIP_JOIN,

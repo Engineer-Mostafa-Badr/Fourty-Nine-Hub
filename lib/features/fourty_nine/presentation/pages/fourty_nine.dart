@@ -161,8 +161,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             // _buildChanceWidget(),
             const Sizer(),
             _auctionAndInstallmentWidget(),
-            const Sizer(),
-            _buildBookingWidget(),
+            // const Sizer(),
+            // _buildBookingWidget(),
             const Sizer(),
             //cats layout
             _buildMainCategoriesViews(),

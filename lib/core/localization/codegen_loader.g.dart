@@ -1037,7 +1037,10 @@ class CodegenLoader extends AssetLoader{
   "watch": "مشاهدة",
   "mutualFriend": "صديق مشترك",
   "Face": "وجه",
-  "Insta": "صور"
+  "Insta": "صور",
+  "day": "يوم",
+  "month": "شهر",
+  "numOfWins": "عدد مرات الفوز"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2076,7 +2079,10 @@ static const Map<String,dynamic> en = {
   "createLive": "Create Live",
   "watch": "Watch",
   "Face": "Face",
-  "Insta": "Insta"
+  "Insta": "Insta",
+  "day": "Day",
+  "month": "Month",
+  "numOfWins": "Number of Wins"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

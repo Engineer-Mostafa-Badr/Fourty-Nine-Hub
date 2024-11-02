@@ -1012,5 +1012,8 @@ abstract class  LocaleKeys {
   static const mutualFriend = 'mutualFriend';
   static const Face = 'Face';
   static const Insta = 'Insta';
+  static const day = 'day';
+  static const month = 'month';
+  static const numOfWins = 'numOfWins';
 
 }

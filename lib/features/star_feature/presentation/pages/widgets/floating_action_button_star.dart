@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/create_star.dart';
 
 class FloatingActionButtonStar extends StatelessWidget {
   const FloatingActionButtonStar({super.key});
@@ -7,12 +8,12 @@ class FloatingActionButtonStar extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => const CreateChanceView(),
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CreateStar(),
+          ),
+        );
       },
       backgroundColor: Colors.red,
       child: const Icon(
