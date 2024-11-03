@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_winner_entity.dart';
@@ -147,7 +148,7 @@ class StarCubit extends Cubit<StarState> {
       },
           (data) {
         emit(state.copyWith(
-          status: StarStates.success,
+          status: StarStates.uploadSuccess,
         ));
       },
     );
@@ -169,5 +170,31 @@ class StarCubit extends Cubit<StarState> {
         ));
       },
     );
+  }
+
+  List<String>? selectedVideo;
+
+  uploadVideo({bool isGallery = true}) async {
+    final UploadFile upload = UploadFile();
+    print("objectssssssssss");
+    await upload.uploadVideo(
+        isGallery: isGallery,
+        subCategoryId: '66a3583454e6e337915514db',
+        onUploaded: (UploadFileEntity data) {
+          print("file name ${data.file}");
+          print("mediaId: ${data.mediaId}");
+          selectedVideo?.add(data.mediaId);
+          final video = state.video ?? [];
+
+          video.add(data);
+          selectedVideo = video.map((e) => e.mediaId).toList();
+          print("selectedvideo${selectedVideo?.length}");
+          print(video.length);
+          emit(state.copyWith(
+              video: video,
+             // backColor: '#FFFFFFFF',
+              status: StarStates.success));
+        });
+    print("length${state.video?.length}");
   }
 }
