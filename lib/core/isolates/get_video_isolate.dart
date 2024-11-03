@@ -12,9 +12,7 @@ import '../../routes/pages.dart';
 
 Future createIsolate(int index) async {
   // Set loading to true
-  BlocProvider.of<PreloadBloc>(
-          AppPages.router.configuration.navigatorKey.currentContext!,
-          listen: false)
+  currentContext.read<PreloadBloc>()
       .add(SetLoading());
 
   ReceivePort mainReceivePort = ReceivePort();
@@ -31,10 +29,10 @@ Future createIsolate(int index) async {
   final _urls = isolateResponse;
 
   // Update new urls
-  BlocProvider.of<PreloadBloc>(
-          AppPages.router.configuration.navigatorKey.currentContext!,
-          listen: false)
+  currentContext
+      .read<PreloadBloc>()
       .add(UpdateUrls(_urls));
+
 }
 
 void getVideosTask(SendPort mySendPort) async {
@@ -71,7 +69,7 @@ Future<List<String>> getReelVideos({int id = 0}) async {
     return [];
   }
 
-  await Future.delayed(const Duration(seconds: kLatency));
+  await Future.delayed(const Duration(milliseconds: kLatency));
 
   if ((id + kNextLimit >= videos.length)) {
     return videos.map((e) => e.videoMedia).toList().sublist(id, videos.length);

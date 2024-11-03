@@ -41,8 +41,6 @@ class _UnifiedReelItemState extends State<UnifiedReelItem>
   late final VideoPlayerController _videoPlayerController;
   late Future<void> _initializeVideoPlayerFuture;
   bool _isVisible = false; // Track visibility state
-
-  // ChewieController? _chewieController;
   bool _isInitialized = false;
   bool _isPlaying = false;
   bool _showPlayPauseIcon = false;

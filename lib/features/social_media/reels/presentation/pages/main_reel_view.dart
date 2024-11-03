@@ -17,7 +17,6 @@ class ReelView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-
       body: ReelsScreen(),
     );
   }
@@ -31,7 +30,6 @@ class ReelsScreen extends StatefulWidget {
 }
 
 class ReelsScreenState extends State<ReelsScreen> {
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PreloadBloc, PreloadState>(
@@ -57,9 +55,10 @@ class ReelsScreenState extends State<ReelsScreen> {
                   }
                   return state.focusedIndex == index
                       ? ReelsWidget(
-                          isLoading: _isLoading,
-                          controller: controller,
-                        )
+                        index: index,
+                        isLoading: _isLoading,
+                        controller: controller,
+                      )
                       : const SizedBox();
                 },
               ),
@@ -74,5 +73,4 @@ class ReelsScreenState extends State<ReelsScreen> {
       },
     );
   }
-
 }

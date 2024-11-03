@@ -124,10 +124,10 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     controller?.dispose();
     log('🚀🚀🚀 DISPOSED $index');
 
-    final updatedControllers =
-        Map<int, VideoPlayerController>.from(state.controllers)..remove(index);
+    // final updatedControllers =
+    //     Map<int, VideoPlayerController>.from(state.controllers)..remove(index);
 
-    emit(state.copyWith(controllers: updatedControllers));
+    // emit(state.copyWith(controllers: updatedControllers));
     log('🚀🚀🚀 EMITTED DISPOSED $index');
   }
 }

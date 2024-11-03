@@ -89,7 +89,7 @@ class DoubleTapHeart extends StatefulWidget {
     required this.child,
     this.onDoubleTap,
     this.heartIcon = Icons.favorite,
-    this.iconSize = 80.0,
+    this.iconSize = 30.0,
     this.iconColor = Colors.redAccent,
     this.animationDuration = const Duration(milliseconds: 700),
   });
