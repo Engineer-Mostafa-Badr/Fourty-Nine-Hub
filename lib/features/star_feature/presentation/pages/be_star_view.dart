@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/floating_action_button_star.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/star_winner_view.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -52,8 +51,8 @@ class _BeStarViewState extends State<BeStarView> {
 
   void _initializeVideoControllers(List<StarEntity> stars) {
     _videoControllers = stars.map((star) {
-      return isVideoFile(star.videoUrlVideo)
-          ? VideoPlayerController.network(star.videoUrlVideo)
+      return isVideoFile(star.mediaUrl[0].mediaKey)
+          ? VideoPlayerController.network(star.mediaUrl[0].mediaKey)
           : null; // No controller for images
     }).toList();
 
@@ -217,7 +216,7 @@ class _BeStarViewState extends State<BeStarView> {
                                         padding: EdgeInsets.all(12.w),
                                         child: Align(
                                           alignment: AlignmentDirectional.topStart,
-                                          child: Label(text: 'Rating: ${sortedStars[index].totalRatings}'),
+                                          child: Label(text: 'Rating: ${sortedStars[index].averageRating}'),
                                         ),
                                       ),
                                     ],
@@ -234,7 +233,7 @@ class _BeStarViewState extends State<BeStarView> {
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                         fit: BoxFit.fill,
-                                        image: NetworkImage(sortedStars[index].videoUrlVideo),
+                                        image: NetworkImage(sortedStars[index].mediaUrl[0].mediaKey),
                                       ),
                                     ),
                                   ),
@@ -256,7 +255,7 @@ class _BeStarViewState extends State<BeStarView> {
                                     padding: EdgeInsets.all(12.w),
                                     child: Align(
                                       alignment: AlignmentDirectional.topStart,
-                                      child: Label(text: 'Rating: ${sortedStars[index].totalRatings}'),
+                                      child: Label(text: 'Rating: ${sortedStars[index].averageRating}'),
                                     ),
                                   ),
                                 ],

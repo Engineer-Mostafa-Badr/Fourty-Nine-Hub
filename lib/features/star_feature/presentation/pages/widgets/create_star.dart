@@ -64,6 +64,11 @@ class _CreateStarState extends State<CreateStar> {
                 listener: (BuildContext context, state) {
                   if(state.status ==StarStates.uploadSuccess){
                     showSuccessMessage(context, 'Publish Successfully');
+                    setState(() {
+                      titleController.clear();
+                      descController.clear();
+                      controller.selectedImages ==null;
+                    });
                   }
                   if(state.status ==StarStates.error){
                     showErrorMessage(context,  getFailureMessage(
@@ -352,12 +357,17 @@ class _CreateStarState extends State<CreateStar> {
                               onPressed: () {
                                 print(controller.selectedImages);
                                 if(formKey.currentState!.validate()) {
-                                  context.read<StarCubit>().uploadStar(
+                                  if(controller.selectedImages !=null) {
+                                    context.read<StarCubit>().uploadStar(
                                         params: StarParams(
                                       title: titleController.text,
-                                      videoUrl: '67261c30e3c625f2962e53fb',
+                                      mediaUrl: controller.selectedImages,
                                       description: descController.text,
+                                      type: 'image',
                                     ));
+                                  }else{
+                                    showErrorMessage(context, 'Please enter images or video');
+                                  }
                                 }
                               }),
                         ],
