@@ -310,7 +310,7 @@ class _GiftItemWidgetState extends State<GiftItemWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.monetization_on,
-                    color: isDarkTheme(context)
+                    color: context.isDarkMode
                         ? AppColors.ACCENT_COLOR
                         : AppColors.PRIMARY_COLOR),
                 Label(

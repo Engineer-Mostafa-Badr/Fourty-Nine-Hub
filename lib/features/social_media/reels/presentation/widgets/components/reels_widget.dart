@@ -1,13 +1,12 @@
-import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/animated_heart_wiidget.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/custom_progress_bar.dart';
 import 'package:video_player/video_player.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import '../../pages/profile_buttom_sheet.dart';
@@ -29,10 +28,7 @@ class ReelsWidget extends StatefulWidget {
 }
 
 class _ReelsWidgetState extends State<ReelsWidget>
-    with
-        WidgetsBindingObserver,
-        AutomaticKeepAliveClientMixin,
-        SingleTickerProviderStateMixin {
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   bool _isVisible = false; // Track visibility state
   bool _isPlaying = false;
   bool _showPlayPauseIcon = false;
@@ -42,6 +38,8 @@ class _ReelsWidgetState extends State<ReelsWidget>
     super.initState();
     WidgetsBinding.instance
         .addObserver(this); // Start observing lifecycle changes
+    widget.controller.setLooping(true);
+    _playVideo();
 
     _initializeRotationController();
   }
@@ -62,6 +60,13 @@ class _ReelsWidgetState extends State<ReelsWidget>
       //   _playVideo();
       // }
     }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _rotationController.dispose();
+    super.dispose();
   }
 
   void _pauseVideo() {
@@ -114,127 +119,71 @@ class _ReelsWidgetState extends State<ReelsWidget>
     }
   }
 
-  @override
-  bool get wantKeepAlive => true;
+  // @override
+  // bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    // super.build(context);
     final reel = context.read<ReelsCubit>().state.globalReels![widget.index];
     final reelCubit = context.read<ReelsCubit>();
-    return Column(
-      children: [
-        VisibilityDetector(
-          key: Key(reel.videoMedia),
-          onVisibilityChanged: (visibilityInfo) {
-            final visiblePercentage = visibilityInfo.visibleFraction * 100;
-
-            // Play video when more than 50% is visible
-            if (visiblePercentage > 50 && !_isVisible) {
-              setState(() {
-                _isVisible = true;
-              });
-              widget.controller.play();
-            } else if (visiblePercentage <= 50 && _isVisible) {
-              setState(() {
-                _isVisible = false;
-              });
-              widget.controller.pause();
-            }
-          },
-          child: GestureDetector(
-            onTap: _togglePlayPause,
-            onVerticalDragEnd: (details) => _handleVerticalDrag(details, reel),
-            child: DoubleTapHeart(
-              iconSize: 200,
-              animationDuration: const Duration(seconds: 1),
-              heartIcon: Icons.favorite,
-              iconColor: Colors.pink,
-              onDoubleTap: () async {
-                await reelCubit.likeReel(reel.id).then((val) async {
-                  if (val == "Reel liked successfully") {
+    return SizedBox(
+      height: context.screenHeight,
+      child: GestureDetector(
+        onTap: _togglePlayPause,
+        // onVerticalDragEnd: (details) => _handleVerticalDrag(details, reel),
+        child: DoubleTapHeart(
+          iconSize: 40,
+          animationDuration: const Duration(seconds: 1),
+          heartIcon: Icons.favorite,
+          iconColor: Colors.pink,
+          onDoubleTap: () async {
+            await reelCubit.likeReel(reel.id).then((val) async {
+              if (val == "Reel liked successfully") {
+                setState(() {
+                  reel.likeCount++;
+                });
+              } else if (val == "Reel unlike successfully") {
+                if (reel.likeCount > 0) {
+                  setState(() {
+                    reel.likeCount--;
+                  });
+                }
+              }
+              if (val == "Reel unlike successfully") {
+                await reelCubit.likeReel(reel.id).then((value) {
+                  if (value == "Reel liked successfully") {
                     setState(() {
                       reel.likeCount++;
                     });
-                  } else if (val == "Reel unlike successfully") {
+                  } else if (value == "Reel unlike successfully") {
                     if (reel.likeCount > 0) {
                       setState(() {
                         reel.likeCount--;
                       });
                     }
                   }
-                  if (val == "Reel unlike successfully") {
-                    await reelCubit.likeReel(reel.id).then((value) {
-                      if (value == "Reel liked successfully") {
-                        setState(() {
-                          reel.likeCount++;
-                        });
-                      } else if (value == "Reel unlike successfully") {
-                        if (reel.likeCount > 0) {
-                          setState(() {
-                            reel.likeCount--;
-                          });
-                        }
-                      }
-                    });
-                  }
                 });
-              },
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Chewie(
-                      key: PageStorageKey(reel.videoMedia),
-                      controller: ChewieController(
-                        videoPlayerController: widget.controller,
-                        autoInitialize: true,
-                        looping: true,
-                        showOptions: false,
-                        allowFullScreen: false,
-                        showControls: false,
-                        aspectRatio: 2 / 4,
-                        errorBuilder: (context, errorMessage) {
-                          return Center(
-                            child: Text(
-                              errorMessage,
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 2,
-                    left: 10,
-                    right: 10,
-                    child: CustomProgressBar(
-                      videoPlayerController: widget.controller,
-                    ),
-                  ),
-                ],
+              }
+            });
+          },
+          child: Stack(
+            children: [
+              VideoPlayer(widget.controller),
+              buildPlayPauseIcon(),
+
+              Positioned(
+                bottom: 20,
+                left: 10,
+                right: 10,
+                child: CustomProgressBar(
+                  videoPlayerController: widget.controller,
+                ),
               ),
-            ),
+            ],
           ),
         ),
-        //for loading
-        AnimatedCrossFade(
-          alignment: Alignment.bottomCenter,
-          sizeCurve: Curves.decelerate,
-          duration: const Duration(milliseconds: 400),
-          firstChild: const Padding(
-            padding: EdgeInsets.all(10.0),
-            child: CupertinoActivityIndicator(
-              color: Colors.white,
-              radius: 8,
-            ),
-          ),
-          secondChild: const SizedBox(),
-          crossFadeState: widget.isLoading
-              ? CrossFadeState.showFirst
-              : CrossFadeState.showSecond,
-        ),
-      ],
+      ),
     );
   }
 

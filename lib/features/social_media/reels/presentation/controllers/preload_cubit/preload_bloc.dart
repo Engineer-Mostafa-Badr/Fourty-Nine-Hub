@@ -86,6 +86,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     _stopControllerAtIndex(index + 1);
     _disposeControllerAtIndex(index + 2);
     _playControllerAtIndex(index);
+    if(index == 0) return;
     _initializeControllerAtIndex(index - 1);
   }
 

@@ -67,7 +67,7 @@ class TripRequestCard extends StatelessWidget {
             orderData.restaurant != null ||
             orderData.restaurant!.id!.isNotEmpty
         ? Card(
-            elevation: isDarkTheme(context) ? 0 : 2,
+            elevation: context.isDarkMode ? 0 : 2,
             color: cardDarkColor(context),
             child: Padding(
               padding: const EdgeInsets.all(12.0),

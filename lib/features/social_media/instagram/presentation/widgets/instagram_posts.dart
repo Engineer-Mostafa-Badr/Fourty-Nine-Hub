@@ -450,7 +450,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                         builder: (context, scrollController) {
                                           return Container(
                                             decoration: BoxDecoration(
-                                              color: isDarkTheme(context) ? Colors.grey[900] : Colors.white,
+                                              color: context.isDarkMode ? Colors.grey[900] : Colors.white,
                                               borderRadius: const BorderRadius.only(
                                                 topLeft: Radius.circular(20),
                                                 topRight: Radius.circular(20),
