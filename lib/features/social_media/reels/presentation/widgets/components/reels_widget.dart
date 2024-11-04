@@ -6,10 +6,12 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/animated_heart_wiidget.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/custom_progress_bar.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/unified_widget_view.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import '../../pages/profile_buttom_sheet.dart';
+import '../../pages/reel_items.dart';
 
 class ReelsWidget extends StatefulWidget {
   const ReelsWidget({
@@ -171,7 +173,15 @@ class _ReelsWidgetState extends State<ReelsWidget>
             children: [
               VideoPlayer(widget.controller),
               buildPlayPauseIcon(),
-
+              Positioned(
+                right: 0,
+                bottom: 20,
+                child: ReelInfo(
+                  reel: reel,
+                  itemType: ReelItemType.main,
+                  rotationController: _rotationController,
+                ),
+              ),
               Positioned(
                 bottom: 20,
                 left: 10,
