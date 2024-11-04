@@ -27,22 +27,22 @@ import 'audio_screen.dart';
 /// A unified reel item widget that can function as MainReelItem, ReelItemForInstagram, or SpotlightReelItem.
 
 /// Widget to display reel information such as user info, actions, and audio.
-class ReelInfo extends StatefulWidget {
+class ReelActions extends StatefulWidget {
   final Reel reel;
   final ReelItemType itemType;
   final AnimationController rotationController;
 
-  const ReelInfo({super.key, 
+  const ReelActions({super.key,
     required this.reel,
     required this.itemType,
     required this.rotationController,
   });
 
   @override
-  State<ReelInfo> createState() => _ReelInfoState();
+  State<ReelActions> createState() => _ReelActionsState();
 }
 
-class _ReelInfoState extends State<ReelInfo> {
+class _ReelActionsState extends State<ReelActions> {
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;

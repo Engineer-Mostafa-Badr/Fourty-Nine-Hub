@@ -39,7 +39,7 @@ class ReelsScreenState extends State<ReelsScreen> {
           children: [
             Positioned.fill(
               child: PageView.builder(
-                physics: const BouncingScrollPhysics(),
+                // physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 itemCount: state.urls.length,
                 onPageChanged: (index) =>

@@ -11,7 +11,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import '../../pages/profile_buttom_sheet.dart';
-import '../../pages/reel_items.dart';
+import '../../pages/reel_actions.dart';
 
 class ReelsWidget extends StatefulWidget {
   const ReelsWidget({
@@ -176,7 +176,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
               Positioned(
                 right: 0,
                 bottom: 20,
-                child: ReelInfo(
+                child: ReelActions(
                   reel: reel,
                   itemType: ReelItemType.main,
                   rotationController: _rotationController,

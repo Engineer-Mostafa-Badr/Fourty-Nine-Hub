@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../tinder/data/shared/shared.dart';
 import 'dart:ui';
@@ -170,8 +171,9 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
               },
             );
           }
+          // if(state.)
 
-          return const CupertinoActivityIndicator(radius: 15);
+          return Center(child: Label(text: LocaleKeys.noComments.localize));
         },
       ),
     );

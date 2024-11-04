@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/profile_buttom_sheet.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_items.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/pages/reel_actions.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/custom_progress_bar.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -320,7 +320,7 @@ class _UnifiedReelItemState extends State<UnifiedReelItem>
               behavior: HitTestBehavior.opaque,
             ),
           ),
-        ReelInfo(
+        ReelActions(
           reel: widget.reel,
           itemType: widget.itemType,
           rotationController: _rotationController,

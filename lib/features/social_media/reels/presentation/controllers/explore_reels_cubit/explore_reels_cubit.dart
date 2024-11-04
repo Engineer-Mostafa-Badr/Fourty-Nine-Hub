@@ -290,6 +290,7 @@ class ReelsCubit extends Cubit<ReelsState> {
   }
 
   Future<void> getComments(String reelId) async {
+    print('reelId: $reelId');
     final result = await _getCommentsUseCase(reelId);
     result.fold(
         (failure) => emit(state.copyWith(
