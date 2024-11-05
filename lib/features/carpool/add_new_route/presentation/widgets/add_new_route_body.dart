@@ -36,12 +36,12 @@ class AddNewRouteBody extends StatelessWidget {
 
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 20.h),
-          child: SingleChildScrollView(
+          child: const SingleChildScrollView(
             child: Column(
               children: [
                 MapAndAddressFinderCarPool(),
                 // const Sizer(height: 50),
-                const Visibility(
+                Visibility(
                   visible: true,
                   child: CarPoolNewRouteInfo(),
                 ),

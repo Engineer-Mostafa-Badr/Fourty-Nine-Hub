@@ -18,6 +18,8 @@ import 'package:fourtyninehub/features/competition/data/repository/competition_r
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/repositories/StoriesRpo.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/repo/tinder_repo.dart';
@@ -74,6 +76,26 @@ final serviceLocator = GetIt.instance;
 
 class DI {
   static Future<void> execute() async {
+
+
+    // //preloading
+    serviceLocator.registerLazySingleton(() => PreloadBloc());
+    serviceLocator.registerLazySingleton<ReelsCubit>(
+          () => ReelsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator()),
+    );
+
     await Firebase.initializeApp(
       name: "49-App",
       options: DefaultFirebaseOptions.currentPlatform,

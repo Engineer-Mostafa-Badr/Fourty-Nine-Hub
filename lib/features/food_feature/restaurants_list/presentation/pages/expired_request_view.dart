@@ -67,7 +67,7 @@ class TripRequestCard extends StatelessWidget {
             orderData.restaurant != null ||
             orderData.restaurant!.id!.isNotEmpty
         ? Card(
-            elevation: isDarkTheme(context) ? 0 : 2,
+            elevation: context.isDarkMode ? 0 : 2,
             color: cardDarkColor(context),
             child: Padding(
               padding: const EdgeInsets.all(12.0),
@@ -173,9 +173,9 @@ class TripRequestCard extends StatelessWidget {
           "${LocaleKeys.total.tr()}: ",
           style: Styles.headerText(),
         ),
-        Spacer(),
+        const Spacer(),
         Text(
-          "${orderData.total?.toString() ?? '0'}",
+          orderData.total?.toString() ?? '0',
           style: Styles.headerText(),
         ),
         Text(

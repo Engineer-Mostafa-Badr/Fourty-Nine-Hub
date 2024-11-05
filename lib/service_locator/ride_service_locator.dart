@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/get_ride
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/add_ride_request_usecase.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_car_types_use_case.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/usecases/request/get_expected_price_use_case.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_driver_type_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
@@ -90,6 +91,8 @@ class RideServiceLocator {
         )..loadData());
     serviceLocator.registerFactory(
         () => GetCateogryRiderCubit(repo: serviceLocator())..getCateogryData());
+    serviceLocator.registerFactory(
+        () => CheckDriverTypeCubit(repository: serviceLocator())..checkDriverType());
     serviceLocator.registerFactory(
         () => FetchCarBrandsCubit(fetchCarBrandUseCase: serviceLocator()));
     serviceLocator.registerFactory(

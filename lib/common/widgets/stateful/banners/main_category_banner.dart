@@ -59,7 +59,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
               ? Colors.transparent
               : AppColors.PRIMARY_COLOR,
           image: DecorationImage(
-            fit: BoxFit.cover,
+            fit: BoxFit.fitWidth,
             image: CachedNetworkImageProvider(
               widget.category.banner,
             ),

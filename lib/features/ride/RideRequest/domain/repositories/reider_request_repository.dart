@@ -219,6 +219,9 @@ class ReiderRequestRepository {
   Future<Either<Failure, Map<String, dynamic>>> expiredTrip() {
     return dataSource.getExpairedTrip();
   }
+  Future<Either<Failure, Map<String, dynamic>>> checkDriverType() {
+    return dataSource.checkDriverType();
+  }
   // Future<List<LatLng>> getRoute({required LatLng start, required LatLng end}) {
   //   return dataSource.getRoute(start: start, end: end);
   // }

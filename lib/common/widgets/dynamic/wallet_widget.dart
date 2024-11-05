@@ -12,7 +12,6 @@ import '../../../features/account_taps/wallet/presentation/pages/balance_wallet_
 import '../../../features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/styles.dart';
-import '../../../service_locator/service_locator.dart';
 import '../stateless/labels/label.dart';
 import 'sizer.dart';
 
@@ -59,10 +58,7 @@ class WalletWidget extends StatelessWidget {
               ),
               const Sizer(),
               buildItem(() {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const BalanceWalletView()));
+                context.push(Routes.BALANCE);
               }, LocaleKeys.balance.tr(), '${state.wallet?.balance ?? ''} ',
                   state.wallet?.currency ?? ''),
               Container(
@@ -77,11 +73,7 @@ class WalletWidget extends StatelessWidget {
               ),
               const Sizer(),
               buildItem(() {
-                //context.push(Routes.WALLET, extra: WalletTypes.giftWallet);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const GiftWalletView()));
+                context.push(Routes.GIFT);
               }, LocaleKeys.gift.tr(), '${state.wallet?.giftWallet ?? ''} ',
                   state.wallet?.currency ?? ''),
               Container(

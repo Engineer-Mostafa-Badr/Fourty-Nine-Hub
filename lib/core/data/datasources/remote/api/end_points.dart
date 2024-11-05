@@ -426,6 +426,7 @@ class EndPoints {
   }
 
   static const sendRideRequest = '/ride/trips/new';
+  static const checkDriverType = '/ride/riders/checkDriver/type';
   static const getMyPickMeTrips = '/ride/pick-me/trip/requests';
   static const getAllComeWithMeAds = '/ride/come-with-you/get-all';
   static const getAllPickMeAds = '/ride/pick-me/get-all';
@@ -792,7 +793,7 @@ class EndPoints {
   }
 
   static String adRequests(String id) {
-    return '/ads-requests/getAdRequest/$id';
+    return '/ads-requests/getAdRequest/$id/search';
   }
 
   // /installment

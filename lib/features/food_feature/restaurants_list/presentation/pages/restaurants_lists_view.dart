@@ -194,7 +194,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               const Sizer(),
               _buildSearchAndExpiredRequests(),
               const Sizer(),
-              if ((state.mealCategories?.isNotEmpty ?? false)) MealCategories(),
+              if ((state.mealCategories?.isNotEmpty ?? false)) const MealCategories(),
               if (state.loadingSubCategories)
                 _buildLoadingSubCategoriesPlaceholder(),
               const Sizer(),
@@ -240,7 +240,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
         padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: Text(
           LocaleKeys
-              .youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove
+              .serveClientsByClickRegister
               .tr(),
           style: Styles.mediumText(color: Colors.red),
         ),

@@ -43,7 +43,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                 flex: 3,
                 child: AvaialbleTripsButton(
                   title: LocaleKeys.call.localize,
-                  color: snap.data == true ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
+                  color: (snap.data == true &&context.read<UserCubit>().isLoggedIn)? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
                   icon: Icons.call,
                   onTap: !context.read<UserCubit>().isLoggedIn?()=>context.push(Routes.LOGIN):snap.data == true ? () {
                     LaunchURLHelper().call( phone: widget.phone);
@@ -57,7 +57,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                 flex: 3,
                 child: AvaialbleTripsButton(
                   title: LocaleKeys.message.localize,
-                  color: snap.data == true ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
+                  color: (snap.data == true&&context.read<UserCubit>().isLoggedIn) ? AppColors.SECONDARY_COLOR : AppColors.DARK_GRAY_COLOR,
                   icon: Icons.email,
                   onTap:!context.read<UserCubit>().isLoggedIn?()=>context.push(Routes.LOGIN): snap.data == true ? () {} : () {
                     SubscriptionMethod().subscribe(subscribeId: widget.subcategoryId, title: LocaleKeys.ads.localize);

@@ -12,21 +12,25 @@ extension AdRequestsStateX on AdRequestsState {
 class AdRequestsState {
   final AdRequestsStates? status;
   final Failure? failure;
+  final bool? isLast;
   final List<AdRequestEntity>? requests;
   const AdRequestsState({
     this.status,
     this.failure,
     this.requests,
+    this.isLast,
   });
   AdRequestsState copyWith({
     AdRequestsStates? status,
     Failure? failure,
+    bool? isLast,
     List<AdRequestEntity>? requests,
   }) {
     return AdRequestsState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
       requests: requests ?? this.requests,
+      isLast: isLast ?? this.isLast,
     );
   }
 }

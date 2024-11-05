@@ -70,7 +70,7 @@ class _DatePickerFieldState extends State<DatePickerField> {
                   : Text(
                       _selectedDate!.toLocal().toString().split(' ')[0],
                       style:
-                          Styles.mediumText(color: Colors.black, fontSize: 15),
+                          Styles.mediumText(color: Colors.black, fontSize: 30),
                     ),
             ),
             const Sizer(),

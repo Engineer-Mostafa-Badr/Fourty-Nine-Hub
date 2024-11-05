@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,7 +19,7 @@ class CustomCard extends StatelessWidget {
       // padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
         border: Border.all(
-          color: isDarkTheme(context)
+          color: context.isDarkMode
               ? AppColors.PRIMARY_COLOR_DARK
               : AppColors.PRIMARY_COLOR_LIGHT,
         ),
@@ -26,7 +27,7 @@ class CustomCard extends StatelessWidget {
         color: Theme.of(context).scaffoldBackgroundColor,
         boxShadow: [
           BoxShadow(
-            color: isDarkTheme(context)
+            color: context.isDarkMode
                 ? AppColors.PRIMARY_COLOR_DARK.withOpacity(0.5)
                 : AppColors.PRIMARY_COLOR_LIGHT.withOpacity(0.5),
             offset: const Offset(1, 2),

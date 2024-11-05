@@ -25,10 +25,10 @@ class MealCategoryCard extends StatelessWidget {
       child: Card(
         clipBehavior: Clip.hardEdge,
         // decoration: BoxDecoration(
-        //     color: isDarkTheme(context) ? Colors.transparent : Colors.white,
+        //     color: context.isDarkMode ? Colors.transparent : Colors.white,
         //     boxShadow: [
         //       BoxShadow(
-        //           color: isDarkTheme(context) ? Colors.black54 : Colors.grey,
+        //           color: context.isDarkMode ? Colors.black54 : Colors.grey,
         //           blurRadius: 2.0,
         //           offset: Offset(1, 1))
         //     ]),

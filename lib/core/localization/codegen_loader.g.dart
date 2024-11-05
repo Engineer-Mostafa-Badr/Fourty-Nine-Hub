@@ -105,11 +105,12 @@ class CodegenLoader extends AssetLoader{
   "thirdPage": "الصفحه الثالثه",
   "selectGovernorate": "اختر المحافظه",
   "selectCity": "اختر المدينه",
-  "newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore": "الحجوزات الجديدة في الانتظار، سوف تذهب للمطعم وتصفح المزيد.",
+  "newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore": "الحجوزات الجديدة في الانتظار، سوف تذهب للركاب وتصفح المزيد.",
   "premium": "العروض الخاصه",
   "comma": "،",
   "noResultFound": "لايوجد نتائج",
   "restaurantDashboard": "لوحة المطعم",
+  "doctorDashboard": "لوحة الدكتور",
   "allRestaurants": "كل المطاعم",
   "restaurantsForSelectedMeal": "المطاعم لهذه الوجبه",
   "itemName": "اسم الوجبة",
@@ -946,7 +947,7 @@ class CodegenLoader extends AssetLoader{
   "showAdRequests": "عرض طلبات الاعلان",
   "comfort": "مريح",
   "minutesAgo": "من دقيقه",
-  "mutualFriend": "صديق مشترك",
+  "Phonenumbercannotbewrittenindescription": "لا يمكن كتابه رقم هاتف في الوصف",
   "womenOnly": "للنساء فقط",
   "chance": "فرصة",
   "subTab": "علامة تبويب فرعية",
@@ -1027,7 +1028,14 @@ class CodegenLoader extends AssetLoader{
   "newRide": "رحلة جديدة",
   "cancelRequest": "إلغاء الطلب",
   "sendOffer": "إرسال العرض",
-  "shareTransactionDetails": "مشاركة تفاصيل المعاملة"
+  "shareTransactionDetails": "مشاركة تفاصيل المعاملة",
+  "serveClientsByClickRegister": "خدمة العملاء عن طريق النقر على زر التسجيل.",
+  "yourPersonalMessages": "رسالاتك الشخصيه",
+  "endToEndEncryption": "مشفره من البدايه للنهايه",
+  "liveStreamOptions": "خيارات البث الحي",
+  "createLive": "انشاء بث",
+  "watch": "مشاهدة",
+  "mutualFriend": "صديق مشترك"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1116,7 +1124,7 @@ static const Map<String,dynamic> en = {
   "thirdPage": "Third Page",
   "selectGovernorate": "Select Governorate",
   "selectCity": "Select City",
-  "newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore": "New bookings are waiting. Go to restaurant dashboard and explore more.",
+  "newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore": "New bookings are waiting. Go to Riders dashboard and explore more.",
   "premium": "Premium",
   "restaurantDashboard": "Restaurant Dashboard",
   "allRestaurants": "All Restaurants",
@@ -1124,7 +1132,7 @@ static const Map<String,dynamic> en = {
   "itemName": "Item Name",
   "comma": ",",
   "noResultFound": "No Result Found",
-  "youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove": "You can enjoy serving your clints using your restaurant by clicking on the rigester button above.",
+  "youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove": "You can enjoy serving your clints using your Rdiers by clicking on the rigester button above.",
   "selectSubcategoryFirst": "Select Subcategory First",
   "UploadingImage": "Uploading Image...",
   "cantLoadCities": "Can't Load Cities",
@@ -2035,7 +2043,7 @@ static const Map<String,dynamic> en = {
   "drivingLicense": "Driving License",
   "theApplicationDoesNotDeductAnyPercentage": "The application does not deduct any percentage from the service provider.",
   "youWillGetPoundsAnnually": "You will get 3,650 pounds annually if you subscribe.",
-  "license": "رخصة",
+  "license": "License",
   "snapCopyOfBillPayment": "Snap copy of bill payment",
   "paymentSuccessful": "Payment successful",
   "sendReviewApproval": "Send for review and approval",
@@ -2055,9 +2063,17 @@ static const Map<String,dynamic> en = {
   "regularSubscription": "Regular Subscription",
   "mutualFriend": "mutual friend",
   "youWillHidePost": "You Will Hide Post",
+  "serveClientsByClickRegister": "Serve Clients By Click Register",
+  "expiredRequests": "Expired Requests",
+  "doctorDashboard": "Doctor Dashboard",
   "notSubscribed": "Not Subscribed",
   "adRequests": "Ad Requests",
-  "showAdRequests": "Show Ad Requests"
+  "yourPersonalMessages": "Your personal messages are",
+  "endToEndEncryption": "end-to-end encrypted",
+  "liveStreamOptions": "Live Stream Options",
+  "createLive": "Create Live",
+  "watch": "Watch"
 };
+
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
