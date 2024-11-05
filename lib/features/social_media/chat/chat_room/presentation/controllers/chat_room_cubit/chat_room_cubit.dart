@@ -18,10 +18,14 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_shared_contacts_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_one_time_view_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_delivered_messages.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_one_time_message_seen.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_record_listend.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_seen_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/set_record_as_listened.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/start_recording_uecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/start_typing_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_delivered_messages.dart';
@@ -38,10 +42,14 @@ part 'chat_room_state.dart';
 class ChatRoomCubit extends Cubit<ChatRoomState> {
   final SendMessageUseCase _sendMessageUseCase;
   final GetMessagesUseCase _getMessagesUseCase;
+  final GetOneTimeViewMessageUseCase _getOneTimeMessageUseCase;
   final MarkMessageAsSeenUseCase _markMessageAsSeenUseCase;
   final ListenToSeenMessagesUseCase _listenToSeenMessagesUseCase;
+  final SetRecordAsListenedUseCase _setRecordAsListenedUseCase;
+  final ListenToRecordListened _listenToRecordListenedUseCase;
   final StopListenToSeenMessagesUseCase _stopListenToSeenMessagesUseCase;
   final ListenToDeliveredMessagesUseCase _listenToDeliveredMessagesUseCase;
+  final ListenToOneTimeMessageSeenUseCase _listenToOneTimeMessageSeenUseCase;
   final StartTypingMessageUseCase _startTypingMessageUseCase;
   final StopTypingMessageUseCase _stopTypingMessageUseCase;
   final StartRecordingMessageUseCase _startRecordingMessageUseCase;
@@ -60,6 +68,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   List<MessageEntity> linksMessages = [];
   MessageEntity? _replayMessage;
   late ChatEntity _chat;
+  MessageEntity? _oneTimeViewMessage;
+  bool isOneTimeView = false;
 
   ChatRoomCubit(
     this._sendMessageUseCase,
@@ -73,9 +83,20 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     this._stopTypingMessageUseCase,
     this._startRecordingMessageUseCase,
     this._stopRecordingMessageUseCase,
+    this._getOneTimeMessageUseCase,
+    this._setRecordAsListenedUseCase,
+    this._listenToRecordListenedUseCase,
+    this._listenToOneTimeMessageSeenUseCase,
   ) : super(const ChatRoomState()) {
     _listenToDeliveredMessages();
     _listenToSeenMessages();
+    _listenToSeenOneTimeViewMessages();
+    listenToRecordListenedUseCase();
+    serviceLocator<Socket>().connect();
+    serviceLocator<Socket>().on("error", (date) {
+      log("error from socket : $date");
+    });
+
     serviceLocator<Socket>().emit('Chat:getRooms');
   }
 
@@ -176,6 +197,22 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     });
   }
 
+  Future<void> setRecordAsListened({required MessageEntity message}) async {
+    final result = await _setRecordAsListenedUseCase(
+      SetRecordAsListenedParams(
+        chatId: _chat.id,
+        messageId: message.id,
+      ),
+    );
+    result.fold((l) {
+      log("set record as listened error $l");
+      // emit(state.copyWith(failure: l, status: ChatRoomStates.error));
+    }, (r) async {
+      log("set record as listened result $r");
+      // emit(state.copyWith(status: ChatRoomStates.success));
+    });
+  }
+
   void addMessage(MessageEntity message) {
     if (message.chatId == _chat.id) {
       log(message.text);
@@ -197,12 +234,13 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   Future<void> sendMessage() async {
     final result = await _sendMessageUseCase(SendMessageParams(
-        replyMessageId: _replayMessage?.id,
-        message: messageTextController.text,
-        chat: _chat,
-        media: media,
-        sharedContacts: selectedContactsToShare,
-        oneTimeView: false));
+      replyMessageId: _replayMessage?.id,
+      message: messageTextController.text,
+      chat: _chat,
+      media: media,
+      sharedContacts: selectedContactsToShare,
+      oneTimeView: isOneTimeView,
+    ));
     result.fold(
         (l) => emit(state.copyWith(failure: l, status: ChatRoomStates.error)),
         (r) async {
@@ -211,6 +249,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       media.clear();
       selectedContactsToShare.clear();
       sharedContacts.clear();
+      isOneTimeView = false;
 // Play notification sound
       log("sound before send message");
       final player = AudioPlayer(); // Initialize the player
@@ -243,6 +282,24 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
           _messages[message.id]?.markAsSeen();
           emit(state.copyWith(messages: _messages.values.toList()));
         }
+      }
+    });
+  }
+
+  void _listenToSeenOneTimeViewMessages() async {
+    _listenToOneTimeMessageSeenUseCase.call((message) {
+      if (message.chatId == _chat.id) {
+        _messages[message.id]?.markAsOneTimeView();
+        emit(state.copyWith(messages: _messages.values.toList()));
+      }
+    });
+  }
+
+  void listenToRecordListenedUseCase() async {
+    _listenToRecordListenedUseCase.call((setRecordAsListenedParams) {
+      if (setRecordAsListenedParams.chatId == _chat.id) {
+        _messages[setRecordAsListenedParams.messageId]?.markAsListened();
+        emit(state.copyWith(messages: _messages.values.toList()));
       }
     });
   }
@@ -364,6 +421,22 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         }
       }
     }
+  }
+
+  Future<void> getOneTimeViewMessage({required MessageEntity message}) async {
+    final result = await _getOneTimeMessageUseCase(
+        GetOneTimeViewMessageParams(chatId: _chat.id, messageId: message.id));
+    result.fold((l) {
+      log(l.toString());
+      emit(state.copyWith(failure: l, status: ChatRoomStates.error));
+    }, (r) {
+      // _oneTimeViewMessage = r;
+      // message.isOneTimeSeenMessage = true;
+      log("one time view message chat room cubit Right: $r");
+      emit(state.copyWith(
+          // oneTimeViewMessage: _oneTimeViewMessage,
+          status: ChatRoomStates.success));
+    });
   }
 
   // =========================================================================================================

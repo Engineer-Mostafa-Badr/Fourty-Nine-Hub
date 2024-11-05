@@ -55,6 +55,8 @@ abstract class SocketIOListeners {
   static const String creatingNewChat = 'newChat';
   static const String typingMessage = 'messageTyping';
   static const String recordingMessage = 'messageRecording';
+  static const String oneTimeMessageSeen = 'OneTimeMessageSeen';
+  static const String setRecordAsListened = 'messageListen';
 }
 
 abstract class SocketIOEvents {
@@ -67,6 +69,7 @@ abstract class SocketIOEvents {
   static const String stopTypingMessage = 'Message:StopTyping';
   static const String startRecordingMessage = 'Message:Recording';
   static const String stopRecordingMessage = 'Message:StopRecording';
+  static const String setRecordAsListened = 'Message:Listen';
 }
 
 //

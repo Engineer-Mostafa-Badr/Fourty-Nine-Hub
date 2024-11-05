@@ -22,6 +22,9 @@ class MessageEntity {
   bool delivered;
   bool hasReply;
   bool isDeleted;
+  bool isOneTimeViewMessage;
+  bool isOneTimeSeenMessage;
+  bool isListened;
 
   MessageEntity(
       {required this.id,
@@ -40,11 +43,28 @@ class MessageEntity {
       this.groupId,
       required this.time,
       required this.isDeleted,
-      required this.sharedContacts});
+      required this.sharedContacts,
+      required this.isOneTimeViewMessage,
+      required this.isOneTimeSeenMessage,
+      required this.isListened,
+      });
 
   void markAsSeen() {
     seen = true;
     delivered = true;
+    // isOneTimeSeenMessage = true;
+  }
+
+  void markAsListened() {
+    isListened = true;
+  }
+
+  void markAsOneTimeView() {
+    isOneTimeViewMessage = true;
+  }
+
+  void markRecordAsListened() {
+    isListened = true;
   }
 
   void markAsDelivered() {

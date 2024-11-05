@@ -20,12 +20,14 @@ class ChatRoomState {
   final Failure? failure;
   final List<MessageEntity>? messages;
   final MessageEntity? replayedMessage;
+  final MessageEntity? oneTimeViewMessage;
 
   const ChatRoomState({
     this.status = ChatRoomStates.initState,
     this.failure,
     this.messages,
     this.replayedMessage,
+    this.oneTimeViewMessage,
   });
 
   ChatRoomState copyWith({
@@ -33,12 +35,14 @@ class ChatRoomState {
     Failure? failure,
     List<MessageEntity>? messages,
     MessageEntity? replayedMessage,
+    MessageEntity? oneTimeViewMessage,
   }) {
     return ChatRoomState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
       messages: messages ?? this.messages,
       replayedMessage: replayedMessage,
+      oneTimeViewMessage: oneTimeViewMessage,
     );
   }
 }

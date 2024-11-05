@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
@@ -11,6 +14,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/attach_to
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../core/utils/shared_pref.dart';
@@ -64,6 +68,10 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
           );
         },
         (user) {
+          serviceLocator<Socket>().connect();
+
+          log("socket is connected " + "${serviceLocator<Socket>().connected}");
+
           return state.copyWith(status: StateStatus.success, data: user);
         },
       ),
@@ -110,11 +118,13 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     isTokenAttached = false;
     emit(state.copyWith(status: StateStatus.loading));
     final result = await _signOutUseCase(const NoParams());
-    result.fold((l) => emit(state.copyWith(status: StateStatus.error)),
-        (r) => emit(state.copyWith(status: StateStatus.success,token: null,data: null)));
+    result.fold(
+        (l) => emit(state.copyWith(status: StateStatus.error)),
+        (r) => emit(state.copyWith(
+            status: StateStatus.success, token: null, data: null)));
     // if(result == true){
     //   emit(state.copyWith(status: StateStatus.success,data: null,token: null));
-      pr('state token is  ${state.token}');
+    pr('state token is  ${state.token}');
     // }else{
     // emit(state.copyWith(status: StateStatus.error));
     // }

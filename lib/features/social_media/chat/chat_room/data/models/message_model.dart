@@ -6,24 +6,28 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entiti
 import 'package:fourtyninehub/res/style/const.dart';
 
 class MessageModel extends MessageEntity {
-  MessageModel(
-      {required super.id,
-      required super.text,
-      required super.media,
-      required super.sender,
-      required super.reply,
-      required super.createdAt,
-      required super.updateAt,
-      required super.byMe,
-      super.chatId,
-      super.groupId,
-      required super.isUpdated,
-      required super.seen,
-      required super.delivered,
-      required super.hasReply,
-      required super.isDeleted,
-      required super.time,
-      required super.sharedContacts});
+  MessageModel({
+    required super.id,
+    required super.text,
+    required super.media,
+    required super.sender,
+    required super.reply,
+    required super.createdAt,
+    required super.updateAt,
+    required super.byMe,
+    super.chatId,
+    super.groupId,
+    required super.isUpdated,
+    required super.seen,
+    required super.delivered,
+    required super.hasReply,
+    required super.isDeleted,
+    required super.time,
+    required super.sharedContacts,
+    required super.isOneTimeViewMessage,
+    required super.isOneTimeSeenMessage,
+    required super.isListened,
+  });
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
     return MessageModel(
@@ -66,6 +70,9 @@ class MessageModel extends MessageEntity {
               .map((e) => MessageSharedContactsModel.fromJson(e))
               .toList()
           : [],
+      isOneTimeViewMessage: json['oneTimeView'] ?? false,
+      isOneTimeSeenMessage: json['oneTimeSeen'] ?? false,
+      isListened: json['listen'] ?? false,
     );
   }
 }
