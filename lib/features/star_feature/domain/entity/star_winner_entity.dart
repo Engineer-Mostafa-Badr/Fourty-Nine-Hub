@@ -4,17 +4,8 @@ import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_enti
 class StarWinnerEntity {
   final String id;
   final UserStarEntity user;
-  final String videoUrlId;
-  final String videoUrlMediaKey;
-  final String videoUrlVideo;
-  final String title;
-  final String description;
-  final num years;
-  final num month;
-  final num totalViews;
-  final num totalPoints;
-  final num averageRating;
-  final num averageRatingPercentage;
+  final num numberOfWins;
+  final num profit;
 
   DateTime? createdAt;
   String? createAt;
@@ -26,17 +17,8 @@ class StarWinnerEntity {
   StarWinnerEntity(
       {required this.id,
       required this.user,
-      required this.videoUrlId,
-      required this.videoUrlMediaKey,
-      required this.videoUrlVideo,
-      required this.title,
-      required this.description,
-      required this.years,
-      required this.totalViews,
-      required this.month,
-      required this.totalPoints,
-      required this.averageRating,
-      required this.averageRatingPercentage,
+      required this.numberOfWins,
+      required this.profit,
         this.createdAt,
         this.createAt,
       });

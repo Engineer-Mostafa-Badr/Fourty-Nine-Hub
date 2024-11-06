@@ -85,6 +85,11 @@ class _StarWinnerViewState extends State<StarWinnerView> {
     final String formattedDateTime =
     DateFormat('dd/MM/yyyy')
         .format(star.createdAt!);
+
+    DateTime dateTime = DateTime.parse('${star.createdAt!}');
+
+    // Get the month
+    int month = dateTime.month;
     return Container(
         padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
         decoration: BoxDecoration(
@@ -123,14 +128,14 @@ class _StarWinnerViewState extends State<StarWinnerView> {
                   ),
                 ),
                 Label(
-                  text: '${LocaleKeys.month.localize}: ${star.month}',
+                  text: '${LocaleKeys.month.localize}: $month',
                   style: Styles.smallText(
                     fontSize: 50.sp,
                     color: AppColors.GREY_NORMAL_COLOR,
                   ),
                 ),
                 Label(
-                  text: '${LocaleKeys.numOfWins.localize}: 1',
+                  text: '${LocaleKeys.numOfWins.localize}: ${star.numberOfWins}',
                   style: Styles.smallText(
                     fontSize: 50.sp,
                     color: AppColors.GREY_NORMAL_COLOR,

@@ -43,7 +43,7 @@ class _EditMyAdsState extends State<EditMyAds> {
   void initState() {
     context
         .read<CreateAdCubit>()
-        .loadData(subCategoryId: widget.categorization.mainCategory?.id ?? '');
+        .loadData(subCategoryId: widget.categorization.subCategory.id ?? '');
     super.initState();
   }
   //   @override
@@ -464,6 +464,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                       DefaultButton(
                           label: LocaleKeys.edit.localize,
                           onPressed: () {
+                          //  controller.editMyAds(params: params)
                             // controller.createAd(
                             //     categorize: widget.categorization,
                             //     context: context);

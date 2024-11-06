@@ -197,4 +197,11 @@ class StarCubit extends Cubit<StarState> {
         });
     print("length${state.video?.length}");
   }
+
+  void clearSelectedVideos() {
+    selectedVideo = [];
+    emit(state.copyWith(video: [])); // Emit updated state to notify listeners
+  }
+
+
 }

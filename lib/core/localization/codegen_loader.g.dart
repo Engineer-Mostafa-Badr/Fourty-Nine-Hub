@@ -1040,7 +1040,12 @@ class CodegenLoader extends AssetLoader{
   "Insta": "صور",
   "day": "يوم",
   "month": "شهر",
-  "numOfWins": "عدد مرات الفوز"
+  "numOfWins": "عدد مرات الفوز",
+  "addStar": "إضافة موهبة",
+  "publishSuccessfully": "تم النشر بنجاح",
+  "removeImage": "هل أنت متأكد أنك تريد إزالة هذه الصورة؟",
+  "removeVideo": "هل أنت متأكد أنك تريد إزالة هذا الفيديو؟",
+  "enterImageOrVideo": "الرجاء إدخال الصور أو الفيديو"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2082,7 +2087,12 @@ static const Map<String,dynamic> en = {
   "Insta": "Insta",
   "day": "Day",
   "month": "Month",
-  "numOfWins": "Number of Wins"
+  "numOfWins": "Number of Wins",
+  "addStar": "Add Talent",
+  "publishSuccessfully": "Publish Successfully",
+  "removeImage": "Are you sure you want to remove this image?",
+  "removeVideo": "Are you sure you want to remove this video?",
+  "enterImageOrVideo": "Please enter images or video"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

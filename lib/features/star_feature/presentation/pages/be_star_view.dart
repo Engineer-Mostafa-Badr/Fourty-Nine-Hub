@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
+import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
@@ -44,7 +45,8 @@ class _BeStarViewState extends State<BeStarView> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       _cubit.fetchAllStar();
     }
   }
@@ -74,12 +76,11 @@ class _BeStarViewState extends State<BeStarView> {
     }
   }
 
-
   bool isVideoFile(String url) {
     final videoExtensions = ['.mp4', '.mov', '.avi', '.wmv'];
-    return videoExtensions.any((extension) => url.toLowerCase().endsWith(extension));
+    return videoExtensions
+        .any((extension) => url.toLowerCase().endsWith(extension));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +91,7 @@ class _BeStarViewState extends State<BeStarView> {
           TextButton(
             onPressed: () {
               context.push(Routes.BE_STAR_DETAILS);
-          //   Navigator.push(context, MaterialPageRoute(builder: (context)=>const StarWinnerView()));
+              //   Navigator.push(context, MaterialPageRoute(builder: (context)=>const StarWinnerView()));
             },
             child: Text(
               '${LocaleKeys.winners.localize} 🏆',
@@ -107,7 +108,7 @@ class _BeStarViewState extends State<BeStarView> {
             return const CustomLoading();
           }
 
-          final sortedStars = List<StarEntity>.from(state.star?? [])
+          final sortedStars = List<StarEntity>.from(state.star ?? [])
             ..sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
 
           // Initialize video controllers if not done yet
@@ -115,7 +116,7 @@ class _BeStarViewState extends State<BeStarView> {
             _initializeVideoControllers(sortedStars);
           }
           // Initialize video controllers if not done yet
-          if (_videoControllers.isEmpty && sortedStars!= null) {
+          if (_videoControllers.isEmpty && sortedStars != null) {
             _initializeVideoControllers(sortedStars);
           }
 
@@ -123,7 +124,8 @@ class _BeStarViewState extends State<BeStarView> {
             padding: const EdgeInsets.all(8.0),
             child: RefreshIndicator(
               onRefresh: () async => context.read<StarCubit>().fetchAllStar(),
-              child: SingleChildScrollView( // Keeps the entire content scrollable
+              child: SingleChildScrollView(
+                // Keeps the entire content scrollable
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
@@ -160,18 +162,23 @@ class _BeStarViewState extends State<BeStarView> {
                     // ListView with shrinkWrap and no scrolling
                     ListView.separated(
                       controller: _scrollController,
-                      physics: const NeverScrollableScrollPhysics(), // Disable scrolling
-                      shrinkWrap: true, // Allow the ListView to take only the necessary height
+                      physics: const NeverScrollableScrollPhysics(),
+                      // Disable scrolling
+                      shrinkWrap: true,
+                      // Allow the ListView to take only the necessary height
                       itemBuilder: (context, index) {
                         if (index >= sortedStars.length) {
-                          return const Center(child: CircularProgressIndicator());
+                          return const Center(
+                              child: CircularProgressIndicator());
                         }
                         if (index >= sortedStars.length) {
-                          return const Center(child: CircularProgressIndicator());
+                          return const Center(
+                              child: CircularProgressIndicator());
                         }
                         final videoController = _videoControllers[index];
                         final star = sortedStars[index];
-                       // final videoController = _videoControllers[index];
+                        // final videoController = _videoControllers[index];
+
 
                         return Column(
                           children: [
@@ -180,65 +187,138 @@ class _BeStarViewState extends State<BeStarView> {
                             if (videoController != null)
                               videoController.value.isInitialized
                                   ? GestureDetector(
-                                onTap: () {
-                                  if (_isVideoEnded[index]) {
-                                    videoController.seekTo(Duration.zero);
-                                    videoController.play();
-                                    setState(() {
-                                      _isVideoEnded[index] = false;
-                                    });
-                                  } else {
-                                    videoController.value.isPlaying
-                                        ? videoController.pause()
-                                        : videoController.play();
-                                  }
-                                },
-                                child: AspectRatio(
-                                  aspectRatio: videoController.value.aspectRatio,
-                                  child: Stack(
-                                    children: [
-                                      VideoPlayer(videoController),
-                                      Padding(
-                                        padding: EdgeInsets.all(12.w),
-                                        child: Align(
-                                          alignment: AlignmentDirectional.topEnd,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.end,
-                                            children: [
-                                              const Icon(Icons.remove_red_eye),
-                                              Sizer(width: 10.w),
-                                              Label(text: '${sortedStars[index].totalViews}'),
-                                            ],
-                                          ),
+                                      onTap: () {
+                                        if (_isVideoEnded[index]) {
+                                          videoController.seekTo(Duration.zero);
+                                          videoController.play();
+                                          setState(() {
+                                            _isVideoEnded[index] = false;
+                                          });
+                                        } else {
+                                          videoController.value.isPlaying
+                                              ? videoController.pause()
+                                              : videoController.play();
+                                        }
+                                      },
+                                      child: AspectRatio(
+                                        aspectRatio:
+                                           1,
+                                        child: Stack(
+                                          children: [
+                                            VideoPlayer(videoController),
+                                            Padding(
+                                              padding: EdgeInsets.all(12.w),
+                                              child: Align(
+                                                alignment:
+                                                    AlignmentDirectional.topEnd,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    const Icon(
+                                                        Icons.remove_red_eye),
+                                                    Sizer(width: 10.w),
+                                                    Label(
+                                                        text:
+                                                            '${sortedStars[index].totalViews}'),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.all(12.w),
+                                              child: Align(
+                                                alignment: AlignmentDirectional
+                                                    .topStart,
+                                                child: Label(
+                                                    text:
+                                                        'Rating: ${sortedStars[index].averageRating}'),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.all(12.w),
-                                        child: Align(
-                                          alignment: AlignmentDirectional.topStart,
-                                          child: Label(text: 'Rating: ${sortedStars[index].averageRating}'),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
+                                    )
                                   : const CircularProgressIndicator()
                             else
                               Stack(
                                 children: [
-                                  Container(
-                                    width: double.infinity,
-                                    height: 240.h,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: NetworkImage(sortedStars[index].mediaUrl[0].mediaKey),
+                                  Stack(
+                                    alignment: AlignmentDirectional.topEnd,
+                                    children: [
+                                      GridView.builder(
+                                        shrinkWrap: true,
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        padding: const EdgeInsets.all(10),
+                                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: state.star![index].mediaUrl.length == 1 ? 1 : 2,
+                                        ),
+                                        itemCount: state.star![index].mediaUrl.length < 4
+                                            ? state.star![index].mediaUrl.length
+                                            : 4,
+                                        itemBuilder: (context, mediaIndex) {
+                                          if (mediaIndex >= state.star![index].mediaUrl.length) {
+                                            // Skip rendering for out-of-bounds mediaIndex
+                                            return SizedBox.shrink();
+                                          }
+                                          return GestureDetector(
+                                            onTap: () {
+                                              if (mediaIndex != 3 || (mediaIndex == 3 && state.star![index].mediaUrl.length == 4)) {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) => ImageDetails(
+                                                    image: state.star![index].mediaUrl[mediaIndex].mediaKey,
+                                                    function: () {},
+                                                  ),
+                                                );
+                                              } else {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) => allImage(
+                                                        () {},
+                                                    state.star![index].mediaUrl.length,
+                                                    state.star![index].mediaUrl[mediaIndex].mediaKey,
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            child: Stack(
+                                              children: [
+                                                Container(
+                                                  margin: const EdgeInsetsDirectional.only(end: 10, bottom: 10),
+                                                  padding: const EdgeInsets.all(10),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(15),
+                                                    image: DecorationImage(
+                                                      fit: BoxFit.fill,
+                                                      image: NetworkImage(state.star![index].mediaUrl[mediaIndex].mediaKey),
+                                                    ),
+                                                  ),
+                                                ),
+                                                if (mediaIndex == 3 && state.star![index].mediaUrl.length > 4)
+                                                  Container(
+                                                    margin: const EdgeInsetsDirectional.only(end: 10, bottom: 10),
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(15),
+                                                      color: Colors.black.withOpacity(0.5),
+                                                    ),
+                                                    child: Center(
+                                                      child: Label(
+                                                        text: "+${state.star![index].mediaUrl.length - 4}",
+                                                        style: Styles.headerText(color: Colors.white),
+                                                      ),
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
+                                          );
+                                        },
                                       ),
-                                    ),
+                                    ],
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.all(12.w),
+                                    padding: EdgeInsets.all(20.w),
                                     child: Align(
                                       alignment: AlignmentDirectional.topEnd,
                                       child: Row(
@@ -246,36 +326,44 @@ class _BeStarViewState extends State<BeStarView> {
                                         children: [
                                           const Icon(Icons.remove_red_eye),
                                           Sizer(width: 10.w),
-                                          Label(text: '${sortedStars[index].totalViews}'),
+                                          Text(
+                                            '${sortedStars[index].totalViews}',
+                                            style: Styles.mediumText().copyWith(
+                                              shadows: [
+                                                Shadow(
+                                                  offset: Offset(2.0, 2.0), // Position of the shadow
+                                                  blurRadius: 3.0, // Blur radius of the shadow
+                                                  color: Colors.black.withOpacity(0.5), // Shadow color
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.all(12.w),
+                                    padding: EdgeInsets.all(20.w),
                                     child: Align(
                                       alignment: AlignmentDirectional.topStart,
-                                      child: Label(text: 'Rating: ${sortedStars[index].averageRating}'),
+                                      child: Text(
+                                        'Rating: ${sortedStars[index].averageRating}',
+                                        style: Styles.mediumText().copyWith(
+                                          shadows: [
+                                            Shadow(
+                                              offset: Offset(1.0, 1.0),
+                                              blurRadius: 3.0,
+                                              color: Colors.white.withOpacity(0.5),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
+
                                 ],
                               ),
                             Sizer(),
-                            // Row(
-                            //   mainAxisSize: MainAxisSize.min,
-                            //   children: List.generate(5, (index) {
-                            //     int starIndex = index + 1;
-                            //     return IconButton(
-                            //       icon: Icon(
-                            //         Icons.star,
-                            //         color: Colors.yellow,
-                            //       ),
-                            //       onPressed: () {
-                            //         // _addRating(context, starIndex); // Send rating to the cubit
-                            //       },
-                            //     );
-                            //   }),
-                            // ),
                             Align(
                               alignment: AlignmentDirectional.topStart,
                               child: Text(
@@ -294,10 +382,15 @@ class _BeStarViewState extends State<BeStarView> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(showMore ? Icons.arrow_drop_down_rounded : Icons.arrow_drop_up_rounded),
+                                  Icon(showMore
+                                      ? Icons.arrow_drop_down_rounded
+                                      : Icons.arrow_drop_up_rounded),
                                   Label(
-                                    text: showMore ? LocaleKeys.showLess.localize : LocaleKeys.showMore.localize,
-                                    style: Styles.smallText(color: Theme.of(context).primaryColor),
+                                    text: showMore
+                                        ? LocaleKeys.showLess.localize
+                                        : LocaleKeys.showMore.localize,
+                                    style: Styles.smallText(
+                                        color: Theme.of(context).primaryColor),
                                   ),
                                 ],
                               ),
@@ -317,7 +410,6 @@ class _BeStarViewState extends State<BeStarView> {
               ),
             ),
           );
-
         },
       ),
     );
@@ -386,5 +478,45 @@ class _BeStarViewState extends State<BeStarView> {
             ],
           )),
         ],
+      );
+
+  Widget allImage(Function function, int length, String image) => Container(
+        height: double.infinity,
+        width: double.infinity,
+        color: AppColors.DARK_BLUE_COLOR,
+        child: ListView.builder(
+          itemCount: length,
+          itemBuilder: (context, index) => Material(
+            // Add Material widget here
+            color: Colors.transparent,
+            // Ensure the background remains unchanged
+            child: InkWell(
+              onTap: () {
+                print("object");
+                showDialog(
+                  context: context,
+                  builder: (context) =>
+                      ImageDetails(image: image, function: function),
+                );
+              },
+              child: Stack(
+                children: [
+                  Container(
+                    height: 400.h,
+                    margin: const EdgeInsets.only(bottom: 10),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppColors.DARK_BLUE_COLOR,
+                      image: DecorationImage(
+                        image: NetworkImage(image),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       );
 }

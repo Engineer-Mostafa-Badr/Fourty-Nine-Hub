@@ -1015,5 +1015,10 @@ abstract class  LocaleKeys {
   static const day = 'day';
   static const month = 'month';
   static const numOfWins = 'numOfWins';
+  static const addStar = 'addStar';
+  static const publishSuccessfully = 'publishSuccessfully';
+  static const removeImage = 'removeImage';
+  static const removeVideo = 'removeVideo';
+  static const enterImageOrVideo = 'enterImageOrVideo';
 
 }

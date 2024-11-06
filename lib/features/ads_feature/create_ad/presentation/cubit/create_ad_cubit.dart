@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/edit_my_ads_use_case.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
@@ -36,6 +37,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   final GetCitiesUseCase _citiesUseCase;
   final CreateAdUseCase _createAdUseCase;
   final FilterAdUseCase _filterAdUseCase;
+  final EditMyAdsUseCase _editMyAdsUseCase;
 
   List<SelectionEntity> values = [];
 
@@ -47,7 +49,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   final formStatic = GlobalKey<FormState>();
 
   CreateAdCubit(this._getAdPropertiesUsecase, this._createAdUseCase,
-      this._governoratesUseCase, this._citiesUseCase, this._filterAdUseCase)
+      this._governoratesUseCase, this._citiesUseCase, this._filterAdUseCase, this._editMyAdsUseCase)
       : super(CreateAdState());
 
   void loadData({required String subCategoryId}) async {
@@ -322,5 +324,17 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       (data) => emit(state.copyWith(
           cities: data, status: CreateAdStates.loadCitiesSuccess)),
     );
+  }
+
+
+  Future<void> editMyAds({
+    required EditParams params,
+  }) async {
+    final response = await _editMyAdsUseCase(params);
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: CreateAdStates.error)),
+            (r) =>
+            emit(state.copyWith(status: CreateAdStates.success)));
   }
 }
