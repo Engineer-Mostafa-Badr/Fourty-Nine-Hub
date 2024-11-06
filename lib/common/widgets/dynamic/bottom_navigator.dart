@@ -71,7 +71,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         if (selectedItem.route != ModalRoute.of(context)?.settings.name) {
           selectedItem.action(context);
         }
-        HandleCashback.setCount(pages[index].cacheKey??'');
+        HandleCashback.setCount(pages[index].cacheKey??'',context);
       },
       items: pages,
       scrollController: scrollController,

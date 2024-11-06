@@ -29,7 +29,7 @@ class FloatingButton extends StatelessWidget {
         onPressed: onTap != null
             ? () => onTap!()
             : () {
-          HandleCashback.setCount('socialCount');
+          HandleCashback.setCount('socialCount',context);
 
                 if (changeView == 1) {
                   context.push(Routes.SOCIAL);

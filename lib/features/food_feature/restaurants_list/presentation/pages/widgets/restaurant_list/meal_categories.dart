@@ -67,7 +67,7 @@ class _MealCategoriesState extends State<MealCategories> {
                     children: [
                       const Spacer(),
                       Text(
-                        context.isArabic ? 'عرض المزيد' : 'More',
+                        context.isArabic ? 'تحريك' : 'Move',
                         style: const TextStyle(
                             color: AppColors.PRIMARY_COLOR_DARK,
                             fontWeight: FontWeight.bold),

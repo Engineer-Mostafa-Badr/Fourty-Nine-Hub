@@ -46,7 +46,7 @@ class DoctorSubcategoryFilterCubit extends Cubit<DoctorSubcategoryFilterState> {
       emit(DoctorSubcategoryFilterLoaded(
           subCategories: _shareCubit.subCategories
               .where((element) =>
-                  element.name.toLowerCase().contains(query.toLowerCase()))
+                  element.nameEn.toLowerCase().contains(query.toLowerCase()))
               .toList()));
     } else {
       emit(DoctorSubcategoryFilterLoaded(

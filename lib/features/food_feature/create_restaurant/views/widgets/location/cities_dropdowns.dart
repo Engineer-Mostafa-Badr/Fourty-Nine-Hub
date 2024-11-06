@@ -1,7 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,8 +26,10 @@ class CreateRestaurantCitiesDropdowns extends StatelessWidget {
             children: [
               BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                   builder: (context, st) {
-                return DropdownMenu<CityEntity>(
-                  inputDecorationTheme: InputDecorationTheme(
+                return DropdownButtonFormField<CityEntity>(
+                  dropdownColor: cardDarkColor(context),
+                  decoration: InputDecoration(
+                    fillColor: Colors.transparent,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
                       borderSide: BorderSide(
@@ -50,40 +55,33 @@ class CreateRestaurantCitiesDropdowns extends StatelessWidget {
                       ),
                     ),
                     isDense: true,
-                    // Makes the input field more compact
                     constraints: BoxConstraints.loose(Size.fromHeight(90.h)),
-                    // contentPadding: EdgeInsets.symmetric(
-                    //   vertical: 0, // Set to zero to reduce height
-                    //   horizontal:
-                    //       10.w, // Keep horizontal padding for better appearance
-                    // ),
                   ),
-                  // Keeping the menuHeight the same since we're focusing on the widget's height
-                  menuHeight: MediaQuery.of(context).size.height / 1.5,
-                  menuStyle: const MenuStyle(
-                    visualDensity: VisualDensity.comfortable,
-                  ),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  hintText: LocaleKeys.selectCity.tr(),
-                  dropdownMenuEntries: state.cities
-                      .map((e) => DropdownMenuEntry(value: e, label: e.nameEn))
-                      .toList(),
-                  onSelected: (value) {
+                  hint: Text(LocaleKeys.selectCity.tr()),
+                  items: state.cities.map((e) {
+                    return DropdownMenuItem<CityEntity>(
+                      value: e,
+                      child: Text(context.isArabic?e.nameAr:e.nameEn),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
                     if (value != null) {
                       createRestaurantCubit.selectCity(value);
                     }
                   },
-                );
+                  isExpanded: true,  // Ensures the dropdown takes up the available width
+                )
+                ;
               }),
               BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                   builder: (context, st) {
                 return Visibility(
                   visible: st is ValidationState && (st.isCity ?? true),
-                  child: const Padding(
-                    padding: EdgeInsets.only(right: 5, left: 5, top: 5.0),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 5, left: 5, top: 5.0),
                     child: Text(
-                      "You have to selecte your city!",
-                      style: TextStyle(color: Colors.red),
+                      LocaleKeys.youHaveToSelectYourCity.localize,
+                      style: const TextStyle(color: Colors.red),
                     ),
                   ),
                 );

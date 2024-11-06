@@ -17,7 +17,7 @@ import '../models/restaurant_model.dart';
 
 abstract class RestaurantsRemoteDataSource {
   Future<Either<Failure, bool>> createRestaurant(CreateRestaurantParams params);
-  Future<Either<Failure, bool>> changeConnectivity();
+  Future<Either<Failure, bool>> changeConnectivity(bool isActive);
   Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(PaginationParams params);
   Future<Either<Failure, List<FoodCategoryModel>>> getFoodCategories();
   Future<Either<Failure, List<FoodCategoryModel>>>
@@ -196,9 +196,13 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> changeConnectivity() async {
+  Future<Either<Failure, bool>> changeConnectivity(bool isActive) async {
     final response =
-        await _apiConsumer.patch(EndPoints.changeConnectivity);
+        await _apiConsumer.patch(EndPoints.changeConnectivity,
+            data: {
+            'isActive':isActive
+            }
+        );
 
     return response.fold(
           (Failure failure) {

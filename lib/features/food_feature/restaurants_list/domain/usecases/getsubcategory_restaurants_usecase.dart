@@ -18,8 +18,9 @@ class GetSubCategoryRestaurantsUseCases
 
 class GetSubCategoryRestaurants{
   final String id;
+  final String userId;
   final int page;
   final int limit;
 
-  GetSubCategoryRestaurants({required this.id, required this.page, required this.limit});
+  GetSubCategoryRestaurants({required this.id,required this.userId, required this.page, required this.limit});
 }

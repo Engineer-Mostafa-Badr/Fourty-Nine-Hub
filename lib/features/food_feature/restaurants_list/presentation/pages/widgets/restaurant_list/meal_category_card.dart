@@ -4,15 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import '../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../res/style/app_colors.dart';
-import '../../../cubit/restaurants_list_cubit.dart';
 
 class MealCategoryCard extends StatefulWidget {
   final FoodCategoryEntity? subCategory;
@@ -32,7 +29,7 @@ class _MealCategoryCardState extends State<MealCategoryCard> {
       child: Card(
         clipBehavior: Clip.hardEdge,
         elevation: widget.subCategory?.isSelected==true?0:null,
-        color: widget.subCategory?.isSelected==true?AppColors.SECONDARY_COLOR:cardDarkColor(context),
+        // color: widget.subCategory?.isSelected==true?AppColors.SECONDARY_COLOR:cardDarkColor(context),
         child: SizedBox(
           width: 0.55.sw,
           child: InkWell(
@@ -45,7 +42,7 @@ class _MealCategoryCardState extends State<MealCategoryCard> {
                   children: [
                     // Heart image
                     widget.subCategory?.fromAsset==true? Image.asset(widget.subCategory?.image??'',fit: BoxFit.fill,height: 300.h,width: 0.55.sw,):ImageFromInternet(image: widget.subCategory?.picture??'',defaultLogo: true,height: 300.h,width: 0.55.sw,),
-                   if(context.read<UserCubit>().isLoggedIn) Positioned(
+                   if(context.read<UserCubit>().isLoggedIn&&widget.subCategory?.id!='') Positioned(
                       top: 5,
                       right: 5,
                       child: IconAppButton(
@@ -60,23 +57,22 @@ class _MealCategoryCardState extends State<MealCategoryCard> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding:EdgeInsets.symmetric(vertical: 8.h,horizontal: 10.w),
+                Container(
+                  width: double.infinity,
+                  color: widget.subCategory?.isSelected==true?AppColors.SECONDARY_COLOR:cardDarkColor(context),
+                  padding:EdgeInsetsDirectional.only(
+                      top: 8.h,
+                      end: 10.w,
+                      start:16.w,
+                      bottom:16.h),
                   child: Label(
                     text: (getLang() == "ar"
                             ? widget.subCategory?.nameAr
                             : widget.subCategory?.nameEn) ??
                         "",
-                    style: Styles.headerText(),
-                  ),
-                ),
-                Padding(
-                  padding:EdgeInsets.only(bottom: 10.h,left: 10.w,right: 10.w),
-                  child: Label(
-                    text:
-                        '${widget.subCategory?.numberOfRestaurant ?? "0"} ${LocaleKeys.restaurants.tr()}',
-                    style: Styles.mediumText(),
+                    style: Styles.headerText(
+                      color: widget.subCategory?.isSelected==true?Colors.white:null,
+                    ),
                   ),
                 ),
               ],
@@ -87,33 +83,3 @@ class _MealCategoryCardState extends State<MealCategoryCard> {
     );
   }
 }
-/*
-Container(
-  width: 200,
-  padding: const EdgeInsets.all(10),
-  decoration: BoxDecoration(
-    color: Theme.of(context).scaffoldBackgroundColor,
-    borderRadius: BorderRadius.circular(10),
-  ),
-  child: Column(
-    children: [
-           Sizer(),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Sizer(
-                  width: double.infinity,
-                ),
-              ),
-            ],
-          ),
-
-        ],
-      ),
-    ],
-  ),
-),
-*/

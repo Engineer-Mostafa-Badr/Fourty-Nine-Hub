@@ -22,7 +22,7 @@ abstract class RestaurantListRepo {
   Future<Either<Failure, IsRestaurantModel>> isRestaurant();
 
   Future<Either<Failure, int>> numOfRestaurants();
-  Future<Either<Failure, bool>> changeConnectivity();
+  Future<Either<Failure, bool>> changeConnectivity(bool isActive);
   Future<Either<Failure, bool>> toggleRestaurantFavourite({required String params});
   Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(PaginationParams params);
   Future<Either<Failure, List<RestaurantModel>>> getTrendingRestaurants({

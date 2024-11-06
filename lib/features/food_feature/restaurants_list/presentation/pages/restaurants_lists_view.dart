@@ -24,7 +24,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shimmer/shimmer.dart';
 
 class RestaurantsListsView extends StatefulWidget {
   const RestaurantsListsView({super.key});
@@ -228,7 +227,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                 MaterialPageRoute(
                   builder: (context) => BlocProvider.value(
                     value: serviceLocator<RestaurantsCubit>()
-                      ..getExpiredOrders(),
+                      ..loadInitialExpiredOrders(),
                     child: const RestaurantExpiredRequestsScreen(),
                   ),
                 ),
@@ -251,28 +250,6 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
       ],
     );
   }
-
-  Widget _buildLoadingSubCategoriesPlaceholder() {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[100]!,
-      highlightColor: Colors.white,
-      child: Row(
-        children: List.generate(
-          2,
-          (index) => Container(
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            height: MediaQuery.of(context).size.width * 0.2,
-            width: MediaQuery.of(context).size.width * 0.2,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10.r),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
 
 }
 

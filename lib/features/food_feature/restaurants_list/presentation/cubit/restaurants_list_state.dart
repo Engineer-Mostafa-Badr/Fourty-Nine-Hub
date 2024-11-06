@@ -37,6 +37,7 @@ class RestaurantsListState {
   final Banner? banner;
   final bool? isLoadingMore;
   final bool? isLoadingRestaurantsMore;
+  final bool? isLoadingExpiredOrdersMore;
   final int? numOfRestaurants;
   final String? selectedSubCategoryId;
   final FoodCategoryEntity? selectedCategory;
@@ -58,6 +59,7 @@ class RestaurantsListState {
     this.mainCategory,
     this.allRestaurant,
     this.isLoadingMore=false,
+    this.isLoadingExpiredOrdersMore=false,
     this.selectedCategory,
     this.selectedSubCategoryId='',
     this.isLoadingRestaurantsMore,
@@ -73,6 +75,7 @@ class RestaurantsListState {
     ExpiredRequestsResponse? expiredRequestsResponse,
     Failure? failure,
     bool? isLoadingMore,
+    bool? isLoadingExpiredOrdersMore,
     bool? isLoadingRestaurantsMore,
     List<RestaurantEntity>? nearByRestaurants,
     List<Restaurant2Model>? subCategories,
@@ -95,6 +98,7 @@ class RestaurantsListState {
       mealCategories: mealCategories ?? this.mealCategories,
       numOfRestaurants: numOfRestaurants ?? this.numOfRestaurants,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      isLoadingExpiredOrdersMore: isLoadingExpiredOrdersMore ?? this.isLoadingExpiredOrdersMore,
       isLoadingRestaurantsMore: isLoadingRestaurantsMore ?? this.isLoadingRestaurantsMore,
       allRestaurant: allRestaurant ?? this.allRestaurant,
       failure: failure ?? this.failure,

@@ -5,12 +5,20 @@ import '../../../../../../core/abstract/use_case.dart';
 
 import '../repositories/restaurant_details_repo.dart';
 
-class GetMealsUseCase extends UseCase<List<RestaurantMenu>, String> {
+class GetMealsUseCase extends UseCase<List<RestaurantMenu>, GetMealsParams> {
   final RestaurantDetailsRepo _repo;
   GetMealsUseCase(this._repo);
 
   @override
-  Future<Either<Failure, List<RestaurantMenu>>> call(String params) {
-    return _repo.getMeals(restaurantId: params);
+  Future<Either<Failure, List<RestaurantMenu>>> call(GetMealsParams params) {
+    return _repo.getMeals(params: params);
   }
+}
+
+class GetMealsParams{
+  final String restaurantId;
+  final int page;
+  final int limit;
+
+  GetMealsParams({required this.restaurantId, required this.page, required this.limit});
 }

@@ -4,12 +4,17 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
+import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -36,7 +41,7 @@ class SubCategoriesRestaurantCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.push(Routes.RESTAURANTDETAILS, extra: item?.id),
+      onTap: () => context.push(Routes.RESTAURANTDETAILS, extra: item),
       child: isVertical
           ? VerticalRestaurantCard(item: item, mealId: mealId, favouriteRestaurant: (String id) =>favouriteRestaurant(id),)
           : HorizontalRestaurantCard(item: item),
@@ -79,7 +84,7 @@ class HorizontalRestaurantCard extends StatelessWidget {
           width: kToolbarHeight,
           child: SquareImage(
             radius: 5,
-            url: item!.restaurantMedia!.first.mediaKey,
+            url: item?.restaurantMedia?.first.mediaKey,
           ),
         ),
         const Sizer(),
@@ -147,7 +152,7 @@ class PropertyCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (hasSubscription)
-                EliteBanner(subscriptionType: item.subscriptionType!),
+                EliteBanner(subscriptionType: item.subscriptionType??''),
               Flexible(
                 flex: 4,
                 child: Stack(
@@ -161,17 +166,6 @@ class PropertyCard extends StatelessWidget {
                         top: 0,
                         left: 0,
                         child: FavoriteButton(item: item, mealId: mealId, favouriteRestaurant: (String id)=>favouriteRestaurant(id)),
-                      ),
-                    // if (item.isVerified ?? false)
-                    if (false)
-                      const Positioned(
-                        top: 10,
-                        right: 10,
-                        child: Icon(
-                          Icons.verified,
-                          color: AppColors.SECONDARY_COLOR,
-                          size: 24.0,
-                        ),
                       ),
                   ],
                 ),
@@ -228,22 +222,35 @@ class EliteBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
-        color: Color(0xFFD4AF37),
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: subscriptionType=='Premium subscription'?const Color(0xFFD4AF37):AppColors.DARK_GRAY_COLOR,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(15),
           topRight: Radius.circular(15),
         ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4),
-      child: Text(
-        subscriptionType.split(' ').first,
-        textAlign: TextAlign.start,
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
+      child: Row(
+        children: [
+          Icon(Icons.workspace_premium_outlined,
+            size: 55.w,
+            color: subscriptionType=='Premium subscription'?AppColors.SECONDARY_COLOR:subscriptionType=='Regular subscription'?AppColors.PRIMARY_COLOR:null,
+          ),
+          const Sizer(),
+          Text(
+            subscriptionType == 'Premium subscription'
+                ? LocaleKeys.premium.localize
+                : subscriptionType == 'Regular subscription'
+                ? LocaleKeys.regular.localize
+                : LocaleKeys.notSubscribed.localize,
+            textAlign: TextAlign.start,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -296,10 +303,19 @@ class DetailsSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Expanded(child: Text(item.name ?? '', style: Styles.headerText())),
+          Expanded(child: Row(
+            children: [
+              Expanded(child: Text(item.name ?? '', style: Styles.headerText())),
+              if(myRestaurant)ClickableWidget(
+                  onTap: (){
+                    context.push(Routes.RestaurantOrders);
+                  },
+                  child: Text('Show all orders', style: Styles.mediumText(color: AppColors.SECONDARY_COLOR,decoration: TextDecoration.underline,decorationThickness: 2.w))),
+            ],
+          )),
           Expanded(
             child: Text(
-                "${item.subcategoryId?.name ?? ''}, ${item.description ?? ''}",
+                "${context.isArabic?item.subcategoryId?.nameAr:item.subcategoryId?.nameEn ?? ''}, ${item.description ?? ''}",
                 style: Styles.mediumText(
                     fontWeight: FontWeight.w600, fontSize: 30)),
           ),
@@ -309,7 +325,7 @@ class DetailsSection extends StatelessWidget {
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                      '${item.government?.governorateNameEn ?? ''}, ${item.city?.cityNameEn ?? ''}',
+                      '${context.isArabic?item.government?.governorateNameAr??'':item.government?.governorateNameEn ?? ''}, ${context.isArabic?item.city?.cityNameAr:item.city?.cityNameEn ?? ''}',
                       style: Styles.mediumText()),
                   const Spacer(),
                   const Icon(
@@ -331,7 +347,7 @@ class DetailsSection extends StatelessWidget {
           else
             Expanded(
               child: Text(
-                  '${item.government?.governorateNameEn ?? ''}, ${item.city?.cityNameEn ?? ''}',
+                  '${context.isArabic?item.government?.governorateNameAr??'':item.government?.governorateNameEn ?? ''}, ${context.isArabic?item.city?.cityNameAr:item.city?.cityNameEn ?? ''}',
                   style: Styles.mediumText()),
             ),
           if (!myRestaurant)
@@ -357,7 +373,7 @@ class DetailsSection extends StatelessWidget {
                     ],
                   ),
                   if (!myRestaurant)
-                    Text(item.isActive! ? 'Available' : 'Not Available',
+                    Text((item.isActive??false) ? LocaleKeys.available.localize : LocaleKeys.notAvailable.localize,
                         style: Styles.headerText(
                             color: AppColors.SECONDARY_COLOR)),
                 ],
@@ -381,14 +397,14 @@ class PremiumAndRequestButtons extends StatelessWidget {
       child: Row(
         children: [
           _buildButton(
-            label: 'Premium Request',
+            label: LocaleKeys.premiumRequest.localize,
             color: AppColors.PRIMARY_COLOR_DARK,
             onPressed: () async {
               serviceLocator<SubscriptionController>().checkIfUserSubscribed(
                 showRegular: false,
-                title: "${item.subcategoryId!.name} Subscription",
+                title: "${context.isArabic?item.subcategoryId?.nameAr:item.subcategoryId?.nameEn} Subscription",
                 onSubscribed: () {
-                  context.push(Routes.RESTAURANTDETAILS, extra: item.id);
+                  context.push(Routes.RESTAURANTDETAILS, extra: item);
                 },
                 subCategoryId: item.subcategoryId!.id,
               );
@@ -396,10 +412,10 @@ class PremiumAndRequestButtons extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           _buildButton(
-            label: 'Request',
+            label: LocaleKeys.request.localize,
             color: AppColors.PRIMARY_COLOR,
             onPressed: () {
-              context.push(Routes.RESTAURANTDETAILS, extra: item.id);
+              context.push(Routes.RESTAURANTDETAILS, extra: item);
             },
           ),
         ],
@@ -439,29 +455,35 @@ class CallMessageReportButtons extends StatelessWidget {
       child: Row(
         children: [
           _buildButtonWithIcon(
-            label: 'Call',
+            label: LocaleKeys.call.localize,
             icon: Icons.call,
-            color: AppColors.GREY_DARK_COLOR,
+            color:isChatEnabled?AppColors.PRIMARY_COLOR: AppColors.GREY_DARK_COLOR,
             onPressed: isChatEnabled
                 ? () => launchUrlString("tel://${item.number}")
-                : () {},
+                : () {
+              SubscriptionMethod().subscribe(subscribeId: item.subcategoryId?.id??'', title: item.name??'');
+
+            },
           ),
           const SizedBox(width: 4),
           _buildButtonWithIcon(
-            label: 'Message',
+            label: LocaleKeys.message.localize,
             icon: Icons.message,
-            color: AppColors.GREY_DARK_COLOR,
+            color:isChatEnabled?AppColors.PRIMARY_COLOR: AppColors.GREY_DARK_COLOR,
             onPressed: isChatEnabled
                 ? () {
                     BlocProvider.of<RestaurantsCubit>(context)
                         .getExpiredOrders();
                     // Implement message functionality here
                   }
-                : () {},
+                : () {
+              SubscriptionMethod().subscribe(subscribeId: item.subcategoryId?.id??'', title: item.name??'');
+
+            },
           ),
           const SizedBox(width: 4),
           _buildButtonWithIcon(
-            label: 'Report',
+            label: LocaleKeys.report.localize,
             icon: Icons.report,
             color: AppColors.PRIMARY_COLOR_DARK,
             onPressed: () async {

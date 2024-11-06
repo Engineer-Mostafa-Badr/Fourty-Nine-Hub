@@ -81,8 +81,8 @@ class RestaurantListRepoImpl implements RestaurantListRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> changeConnectivity() {
-    return _remoteDataSource.changeConnectivity();
+  Future<Either<Failure, bool>> changeConnectivity(bool isActive) {
+    return _remoteDataSource.changeConnectivity(isActive);
   }
 
   @override

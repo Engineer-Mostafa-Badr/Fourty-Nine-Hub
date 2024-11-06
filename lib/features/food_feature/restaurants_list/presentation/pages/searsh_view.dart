@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
@@ -13,6 +14,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/presentatio
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -156,8 +158,10 @@ class SearchRestaurantView extends StatelessWidget {
                         SearchRestaurantStates.loadingSubCategories) {
                       return RefreshIndicator(
                         onRefresh: () async => searchCubit.refreshState(),
-                        child: ListView.builder(
-                          itemCount: state.mealCategories?.length,
+                        child: ListView.separated(
+                          itemCount: state.mealCategories?.length??0,
+                          padding: EdgeInsets.all(10.w),
+                          separatorBuilder: (context, index) => Sizer(height: 0.h,),
                           itemBuilder: (context, index) {
                             FoodCategoryEntity? category =
                                 state.mealCategories?[index];
@@ -168,10 +172,31 @@ class SearchRestaurantView extends StatelessWidget {
                                 children: [
                                   CachedNetworkImage(
                                     imageUrl: category?.picture ?? "",
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
+                                    imageBuilder: (context, imageProvider) =>Container(
+                                      width: 150.w,
+                                      height: 150.h,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.grey.shade300,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: AppColors.PRIMARY_COLOR
+                                                  .withOpacity(0.5),
+                                              spreadRadius: 2,
+                                              blurRadius: 3,
+                                              offset: const Offset(0, 3),
+                                            ),
+                                          ],
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover,
+                                        )
+                                      ),
+                                    ),
+                                    width: 150.w,
                                   ),
-                                  const Sizer(),
+                                  Sizer(width: 40.w,),
                                   Text(getLang() == "ar"
                                       ? (category?.nameAr ?? "")
                                       : (category?.nameEn ?? "")),
@@ -187,6 +212,7 @@ class SearchRestaurantView extends StatelessWidget {
                         onRefresh: () async => searchCubit.refreshState(),
                         child: ListView.builder(
                           itemCount: state.searchMealCategories?.length,
+                          padding: EdgeInsets.all(15.w),
                           itemBuilder: (context, index) {
                             FoodCategoryEntity? category =
                                 state.searchMealCategories?[index];
@@ -197,8 +223,29 @@ class SearchRestaurantView extends StatelessWidget {
                                 children: [
                                   CachedNetworkImage(
                                     imageUrl: category?.picture ?? "",
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
+                                    imageBuilder: (context, imageProvider) =>Container(
+                                      width: 150.w,
+                                      height: 150.h,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.grey.shade300,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: AppColors.PRIMARY_COLOR
+                                                  .withOpacity(0.5),
+                                              spreadRadius: 2,
+                                              blurRadius: 3,
+                                              offset: const Offset(0, 3),
+                                            ),
+                                          ],
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover,
+                                          )
+                                      ),
+                                    ),
+                                    width: 150.w,
                                   ),
                                   const Sizer(),
                                   Text(getLang() == "ar"
@@ -230,7 +277,7 @@ class SearchRestaurantView extends StatelessWidget {
                                 child: Text((getLang() == "ar"
                                         ? governorate?.nameAr
                                         : governorate?.nameEn) ??
-                                    ''),
+                                    '',style: Styles.headerText(),),
                               ),
                             );
                           },
@@ -250,9 +297,9 @@ class SearchRestaurantView extends StatelessWidget {
                                   searchCubit.selectGovernorate(governorate),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Text(getLang() == "ar"
+                                child: Text(context.isArabic
                                     ? (governorate?.nameAr ?? "")
-                                    : (governorate?.nameEn ?? "")),
+                                    : (governorate?.nameEn ?? ""),style: Styles.headerText(),),
                               ),
                             );
                           },
@@ -273,10 +320,10 @@ class SearchRestaurantView extends StatelessWidget {
                               onTap: () => searchCubit.selectCity(city),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Text((getLang() == "ar"
+                                child: Text((context.isArabic
                                         ? city?.nameAr
-                                        : city?.nameAr) ??
-                                    ''),
+                                        : city?.nameEn) ??
+                                    '',style: Styles.headerText(),),
                               ),
                             );
                           },
@@ -294,9 +341,9 @@ class SearchRestaurantView extends StatelessWidget {
                               onTap: () => searchCubit.selectCity(city),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Text(getLang() == "ar"
+                                child: Text(context.isArabic
                                     ? (city?.nameAr ?? "")
-                                    : (city?.nameEn ?? "")),
+                                    : (city?.nameEn ?? ""),style: Styles.headerText(),),
                               ),
                             );
                           },

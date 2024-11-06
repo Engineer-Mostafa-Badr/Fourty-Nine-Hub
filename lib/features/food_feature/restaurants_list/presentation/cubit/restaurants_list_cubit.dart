@@ -149,16 +149,6 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     }
   }
 
-  Future<void> changeConnectivityStatus(isActive) async {
-    final response = await _changeConnectivityUseCase(params:const NoParams());
-    response.fold(
-            (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
-            (data) async {
-              await isRestaurant();
-            });
-
-
-  }
 
   Future<void> getBannerById() async {
     final response = await _getBannerByIdUseCase.call(id: service.id);
@@ -243,6 +233,15 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     await fetchSubCategories();
   }
 
+  void loadInitialExpiredOrders() async {
+    emit(state.copyWith(status:RestaurantsListStates.loading));
+    expiredOrders.clear();
+    currentExpiredOrdersPage = 1;
+    hasMoreExpiredOrders = true;
+    await getExpiredOrders();
+    emit(state.copyWith(status:RestaurantsListStates.success));
+  }
+
   void loadInitialRestaurantsData(String? id) async {
     FoodCategoryEntity selectedCategory;
     if(subCategories.isNotEmpty){
@@ -270,12 +269,16 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
 
   bool isLoadingMore = false;
   bool hasMoreData = true;
+  bool hasMoreExpiredOrders = true;
   int currentPage = 1;
+  int currentExpiredOrdersPage = 1;
   bool isLoadingRestaurantMore = false;
+  bool isLoadingExpiredOrdersMore = false;
   bool hasMoreRestaurantsData = true;
   int currentRestaurantsPage = 1;
   List<FoodCategoryEntity> subCategories = [];
   List<Restaurant2Model> restaurants = [];
+  List<OrderData> expiredOrders=[];
 
   Future<void> fetchSubCategories() async {
     if (!hasMoreData || isLoadingMore) return;
@@ -320,14 +323,14 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
 
     isLoadingRestaurantMore = true;
     emit(state.copyWith(isLoadingRestaurantsMore: true));
-    final response = await _getSubCategoryRestaurantsUseCases(GetSubCategoryRestaurants(id: state.selectedSubCategoryId??'',page: currentRestaurantsPage,limit: 2));
+    final response = await _getSubCategoryRestaurantsUseCases(GetSubCategoryRestaurants(id: state.selectedSubCategoryId??'',page: currentRestaurantsPage,limit: pageSize, userId:serviceLocator<UserCubit>().state.data?.id??''));
 
     response.fold(
           (failure) => emit(state.copyWith(failure: failure, status: RestaurantsListStates.error)),
           (data) {
         restaurants.addAll(data);
 
-        if (data.length < 1) {
+        if (data.length < pageSize) {
           hasMoreRestaurantsData = false;
           emit(state.copyWith(isLoadingRestaurantsMore: false));
         } else {
@@ -359,19 +362,48 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   //   token ??= await CacheManager.getAccessToken();
   // }
 
-  Future<void> getExpiredOrders({int page = 1}) async {
-    emit(state.copyWith(status: RestaurantsListStates.loading));
-    final response = await _getExpiredOrdersUseCase(params:PaginationParams(page: page, limit: 50));
+  // Future<void> getExpiredOrders({int page = 1}) async {
+  //   emit(state.copyWith(status: RestaurantsListStates.loading));
+  //   final response = await _getExpiredOrdersUseCase(params:PaginationParams(page: page, limit: 5));
+  //   response.fold(
+  //           (failure) =>
+  //               emit(state.copyWith(
+  //                 status: RestaurantsListStates.error,
+  //                 failure: failure,
+  //               )),
+  //           (data) =>  emit(state.copyWith(
+  //             status: RestaurantsListStates.success,
+  //             expiredRequestsResponse: data,
+  //           )),);
+  // }
+  Future<void> getExpiredOrders() async {
+    if (!hasMoreExpiredOrders || isLoadingExpiredOrdersMore) return;
+
+
+    isLoadingExpiredOrdersMore = true;
+    emit(state.copyWith(isLoadingExpiredOrdersMore: true));
+
+    final response = await
+    _getExpiredOrdersUseCase(params:PaginationParams(page: currentExpiredOrdersPage, limit: 5));
     response.fold(
-            (failure) =>
-                emit(state.copyWith(
-                  status: RestaurantsListStates.error,
-                  failure: failure,
-                )),
-            (data) =>  emit(state.copyWith(
-              status: RestaurantsListStates.success,
-              expiredRequestsResponse: data,
-            )),);
+          (failure) {
+            isLoadingExpiredOrdersMore = false;
+            emit(state.copyWith(failure: failure,isLoadingExpiredOrdersMore: false, status: RestaurantsListStates.error));
+          },
+          (data) {
+        expiredOrders.addAll(data.data??[]);
+
+        if ((data.data?.length??0) < 5) {
+          hasMoreExpiredOrders = false;
+          emit(state.copyWith(isLoadingMore: false));
+        } else {
+          currentExpiredOrdersPage++;
+        }
+
+        isLoadingExpiredOrdersMore = false;
+        emit(state.copyWith(expiredRequestsResponse: data,isLoadingExpiredOrdersMore: false));
+      },
+    );
   }
 }
 

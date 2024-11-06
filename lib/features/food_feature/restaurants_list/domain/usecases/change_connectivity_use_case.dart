@@ -9,7 +9,7 @@ class ChangeConnectivityUseCase {
   ChangeConnectivityUseCase(this._repo);
 
   Future<Either<Failure, bool>> call(
-      {required NoParams params}) {
-    return _repo.changeConnectivity();
+      {required bool params}) {
+    return _repo.changeConnectivity(params);
   }
 }

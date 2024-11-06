@@ -195,7 +195,9 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                       image: e.picture!,
                                                       isFavorite:
                                                           e.isFavorite ?? false,
-                                                      name:
+                                                      nameAr:
+                                                          e.subCategoryNameAr!,
+                                                      nameEn:
                                                           e.subCategoryNameEn!),
                                                 )
                                                 .toList()),
@@ -790,7 +792,8 @@ class _RideRequestViewState extends State<RideRequestView> {
     // isSelect = true;
     return SubCategoryEntity(
         id: model?.subCategoryId ?? "",
-        name: model?.subCategoryNameEn ?? "",
+        nameEn: model?.subCategoryNameEn ?? "",
+        nameAr: model?.subCategoryNameAr ?? "",
         image: model?.picture ?? "",
         isFavorite: model?.isFavorite ?? false);
   }

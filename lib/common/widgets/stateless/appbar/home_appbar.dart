@@ -105,7 +105,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   label: LocaleKeys.lang.tr(),
                   style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
                   onPressed: () {
-                    HandleCashback.setCount('langCount');
+                    HandleCashback.setCount('langCount',context);
                     if (context.locale == Locales.english) {
                       changeLang(locale: Locales.arabic, context: context);
                     } else {
@@ -173,7 +173,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   if(isCurrentRoute(context, Routes.CHAT)==true){
                     return;
                   }
-                  HandleCashback.setCount('chatCount');
+                  HandleCashback.setCount('chatCount',context);
                   context.read<UserCubit>().isLoggedIn
                       ? context.push(Routes.CHAT)
                       : context.push(Routes.LOGIN);
@@ -193,7 +193,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               if(isCurrentRoute(context, Routes.NOTIFICATIONS)==true){
                 return;
               }
-              HandleCashback.setCount('notificationCount');
+              HandleCashback.setCount('notificationCount',context);
               context.push(context.read<UserCubit>().isLoggedIn
                   ? Routes.NOTIFICATIONS
                   : Routes.LOGIN);

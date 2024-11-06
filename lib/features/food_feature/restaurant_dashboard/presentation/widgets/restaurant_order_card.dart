@@ -1,7 +1,12 @@
 // ignore_for_file: avoid_unnecessary_containers
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/data/models/restaurant_orders_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
@@ -34,31 +39,16 @@ class RestaurantOrderCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             shadowColor: Colors.teal.withOpacity(0.3),
-            child: Stack(
-              children: [
-                Positioned(
-                  top: 4,
-                  right: 4,
-                  child: Row(
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // User Information with Profile Picture
+                  Row(
                     children: [
-                      Text('${order.total.ceil()} ',
-                          style: Styles.headerText(
-                              color: AppColors.WHATS_APP_COLOR)),
-                      Text(order.currency,
-                          style: Styles.mediumText(
-                              color: AppColors.PRIMARY_COLOR_DARK,
-                              fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // User Information with Profile Picture
-                        Row(
+                      Expanded(
+                        child: Row(
                           children: [
                             //gander image instead of this
                             CircleAvatar(
@@ -94,222 +84,105 @@ class RestaurantOrderCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 15),
+                      ),
+                      Row(
+                        children: [
+                          Text('${order.total.ceil()} ',
+                              style: Styles.headerText(
+                                  color: AppColors.WHATS_APP_COLOR)),
+                          Text(order.currency,
+                              style: Styles.mediumText(
+                                  color: AppColors.PRIMARY_COLOR_DARK,
+                                  fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
 
-                        // Order Details
-                        Row(
+                  // Order Details
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    // 'Food: ${food.id}',
-                                    'Orders:',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Column(
-                                    children: List.generate(
-                                      order.orders.length,
-                                      (index) => Row(
-                                        children: [
-                                          Text(
-                                            order.orders[index].foodId.foodName,
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.grey[700],
-                                            ),
-                                          ),
-                                          const Spacer(),
-                                          Text(
-                                            order.orders[index].quantity
-                                                .toString(),
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.grey[700],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-
-                                  const SizedBox(height: 4),
-                                  // Phone number
-                                  // const Row(
-                                  //   children: [
-                                  //     Icon(Icons.phone, color: Colors.teal),
-                                  //     SizedBox(width: 5),
-                                  //     Icon(Icons.message, color: Colors.teal),
-                                  //     SizedBox(width: 5),
-                                  //     // Text(order.phone),
-                                  //   ],
-                                  // ),
-                                ],
+                            Text(
+                              // 'Food: ${food.id}',
+                              LocaleKeys.orders.localize,
+                              // 'Orders:',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
                               ),
                             ),
-                          ],
-                        ),
-
-                        // Order Timing Information
-
-                        const SizedBox(height: 8),
-
-                        CallMessageReportButtons(item: item),
-                        const SizedBox(height: 8),
-
-                        Row(
-                          children: [
-                            const Spacer(),
-                            Text(
-                              getTimeAgo(context, order.createdAt.toString()),
-                              style: TextStyle(color: Colors.grey[600]),
+                            const SizedBox(height: 5),
+                            Column(
+                              children: List.generate(
+                                order.orders.length,
+                                (index) => Row(
+                                  children: [
+                                    Text(
+                                      order.orders[index].foodId.foodName,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.grey[700],
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      order.orders[index].quantity
+                                          .toString(),
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.grey[700],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
+
+                            const SizedBox(height: 4),
+                            // Phone number
+                            // const Row(
+                            //   children: [
+                            //     Icon(Icons.phone, color: Colors.teal),
+                            //     SizedBox(width: 5),
+                            //     Icon(Icons.message, color: Colors.teal),
+                            //     SizedBox(width: 5),
+                            //     // Text(order.phone),
+                            //   ],
+                            // ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+
+                  // Order Timing Information
+
+                  const SizedBox(height: 8),
+
+                  CallMessageReportButtons(item: item),
+                  const SizedBox(height: 8),
+
+                  Row(
+                    children: [
+                      const Spacer(),
+                      Text(
+                        getTimeAgo(context, order.createdAt.toString()),
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ));
       },
     );
-    // return Card(
-    //   color: AppColors.PRIMARY_COLOR,
-    //   // padding: const EdgeInsets.all(5),
-    //   // decoration: BoxDecoration(
-    //   //     border: Border.all(color: Colors.grey, width: .5),
-    //   //     borderRadius: BorderRadius.circular(10)),
-    //   child: Padding(
-    //     padding: const EdgeInsets.all(8.0),
-    //     child: Column(
-    //       crossAxisAlignment: CrossAxisAlignment.start,
-    //       children: [
-    //         // _buildRestaurantInfoWidget(),
-    //         Sizer(),
-    //         // _buildAddressWidget(),
-    //         Label(
-    //           text: 'Meals',
-    //           style: Styles.mediumText(
-    //               fontWeight: FontWeight.bold, color: Colors.white),
-    //         ),
-    //         // _buildMealsWidget(),
-    //         Image(
-    //           image: NetworkImage(
-    //             item.orders.first.foodId.picture.mediaKey,
-    //           ),
-    //           height: 0.5.sw,
-    //         ),
-    //         Sizer(),
-    //         Row(
-    //           children: [
-    //             Expanded(
-    //                 child: AppButton(
-    //                     icon: Icons.check,
-    //                     label: 'Approve',
-    //                     backColor: const Color.fromRGBO(76, 175, 80, 1),
-    //                     onPressed: () => showAreYouSure(
-    //                         title: 'Approve',
-    //                         subTitle: 'Do you want to approve this request?',
-    //                         action: () => (int v) {},
-    //                         context: context))),
-    //             Sizer(),
-    //             Expanded(
-    //                 child: AppButton(
-    //                     icon: Icons.clear,
-    //                     label: 'Cancel',
-    //                     onPressed: () => showAreYouSure(
-    //                         title: 'Cancel',
-    //                         subTitle: 'Do you want to cancel this request?',
-    //                         action: () => (int v) {},
-    //                         context: context))),
-    //           ],
-    //         )
-    //       ],
-    //     ),
-    //   ),
-    // );
   }
 
-// Widget _buildMealsWidget() {
-//   return ListView.builder(
-//       itemCount: item.orders.length,
-//       shrinkWrap: true,
-//       itemBuilder: (context, index) {
-//         final meal = item.orders[index];
-//         return RichText(
-//             text: TextSpan(children: [
-//           TextSpan(
-//               text: meal.foodIdmeal.foodName ?? "",
-//               style: Styles.mediumText(fontWeight: FontWeight.w600)),
-//           TextSpan(
-//               text: ' x ${meal.qty} \n',
-//               style: Styles.mediumText(fontWeight: FontWeight.w600)),
-//           ...meal.selectedVariations.map((e) {
-//             return WidgetSpan(
-//                 child: BadgedLabel(
-//                     margin: 5,
-//                     style: Styles.smallText(color: Colors.white),
-//                     label: '${e.variation.name} : ${e.selectedOption.name}'));
-//           }),
-//           ...meal.selectedAddOn.map((e) {
-//             return WidgetSpan(
-//                 child: BadgedLabel(
-//                     margin: 5,
-//                     style: Styles.smallText(color: Colors.white),
-//                     color: Colors.green,
-//                     label: '${e.name} : ${e.name}'));
-//           })
-//         ]));
-//       });
-// }
-//
-// Widget _buildAddressWidget() {
-//   return Container(
-//     child: Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         Label(text: 'Address: ${item.address.address}'),
-//         Label(
-//             text: 'Name: ${item.address.firstName} ${item.address.lastName}'),
-//         Label(text: 'Phone: ${item.address.phone}'),
-//       ],
-//     ),
-//   );
-// }
-//
-// Widget _buildRestaurantInfoWidget() {
-//   return Row(
-//     children: [
-//       SquareImage(
-//           height: kToolbarHeight,
-//           width: kToolbarHeight,
-//           radius: 10,
-//           source:
-//               NetworkImage(item.user?.image ?? UIConst.profilePlaceHolder)),
-//       Sizer(),
-//       Expanded(
-//           child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Label(
-//             text: item.user?.name ?? '',
-//             style: Styles.mediumText(fontWeight: FontWeight.bold),
-//           ),
-//           Label(
-//             text: item.user?.phone ?? '',
-//             style: Styles.mediumText(color: Colors.grey),
-//           ),
-//         ],
-//       ))
-//     ],
-//   );
-// }
 }
 
 class CallMessageReportButtons extends StatelessWidget {
@@ -326,9 +199,9 @@ class CallMessageReportButtons extends StatelessWidget {
         children: [
           //if enabled color = blue
           _buildButtonWithIcon(
-            label: 'Call',
+            label: LocaleKeys.call.localize,
             icon: Icons.call,
-            color: AppColors.GREY_DARK_COLOR,
+            color: item.openCallAndChat != 'disable'?AppColors.PRIMARY_COLOR:AppColors.GREY_DARK_COLOR,
             onPressed: item.openCallAndChat != 'disable'
                 ? () => launchUrlString("tel://${item.phone}")
                 : () {
@@ -337,9 +210,9 @@ class CallMessageReportButtons extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           _buildButtonWithIcon(
-            label: 'Message',
+            label: LocaleKeys.message.localize,
             icon: Icons.message,
-            color: AppColors.GREY_DARK_COLOR,
+            color: item.openCallAndChat != 'disable'?AppColors.PRIMARY_COLOR:AppColors.GREY_DARK_COLOR,
             onPressed: item.openCallAndChat != 'disable'
                 ? () {
                     // BlocProvider.of<RestaurantsCubit>(context)
@@ -352,14 +225,14 @@ class CallMessageReportButtons extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           _buildButtonWithIcon(
-            label: 'Report',
+            label: LocaleKeys.report.localize,
             icon: Icons.report,
             color: AppColors.PRIMARY_COLOR_DARK,
             onPressed: () async {
               await showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
-                backgroundColor: Colors.transparent,
+                backgroundColor: cardDarkColor(context),
                 builder: (context) {
                   return SizedBox(
                     height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,

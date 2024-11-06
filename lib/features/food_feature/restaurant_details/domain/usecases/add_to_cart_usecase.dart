@@ -10,7 +10,7 @@ class AddToCartUseCase {
   Future<Either<Failure, bool>> call({
     required String restaurantId,
     required String foodId,
-    required String quantity,
+    required int quantity,
   }) {
     return _repo.addToCart(
         restaurantId: restaurantId, foodId: foodId, quantity: quantity);

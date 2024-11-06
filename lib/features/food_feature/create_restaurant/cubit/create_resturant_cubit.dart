@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/update_restaurant_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
@@ -31,6 +32,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   final GetMealCategoriesWithCountRestaurantsUseCase
       _getSubSubcategoriesUseCase;
   final GetGovernoratesUseCase _getGovernoratesUseCase;
+  final UpdateRestaurantUseCase _updateRestaurantUseCase;
   final GetCitiesUseCase _getCitiesUseCase;
   final CreateRestaurantUseCase _createREstaurant;
   final ApiConsumer apiConsumer;
@@ -41,12 +43,14 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
       this._getGovernoratesUseCase,
       this._getCitiesUseCase,
       this._createREstaurant,
-      this.apiConsumer)
+      this.apiConsumer, this._updateRestaurantUseCase)
       : super(CreateRestaurantInitial());
 
   Future<void> loadData() async {
+    emit(CreateRestaurantLoading());
     await _getSubCategories();
     await _getGovernorates();
+    emit(CreateRestaurantFinish());
   }
 
   Future<String> submit(context) async {
@@ -134,25 +138,21 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
       return;
     }
 
-    final response = await apiConsumer.put(
-        'https://49dev.com/api/v1/restaurants/update-restaurant-info',
-        data: data);
-
-    return response.fold(
+    final result = await _updateRestaurantUseCase(
+        UpdateRestaurantParams(
+          city: params.city,
+          government: params.government,
+          subcategoryId: params.subcategoryId,
+          name: params.name,
+          number: params.number,
+          restaurantMedia: params.restaurantMedia,
+        ),
+    );
+    return result.fold(
       (Failure failure) {
-        print('from update-restaurant-info  failure');
         showErrorMessage(context, getFailureMessage(failure, context));
-        // ScaffoldMessenger.of(
-        //         AppPages.router.routerDelegate.navigatorKey.currentContext!)
-        //     .showSnackBar(SnackBar(
-        //   content: Text(LocaleKeys.completeAllFields.tr()),
-        //   backgroundColor: Colors.red,
-        // ));
       },
       (data1) {
-        print('from update-restaurant-info  success');
-
-        showSuccessMessage(context, data1['message']);
         Navigator.pop(context);
       },
     );

@@ -35,6 +35,7 @@ abstract class Styles {
         shadows: shadows,
         decorationThickness: decorationThickness,
         decoration: decoration,
+        decorationColor: color,
         fontWeight: fontWeight);
   }
 

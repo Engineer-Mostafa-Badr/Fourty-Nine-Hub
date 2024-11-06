@@ -131,7 +131,7 @@ class Order {
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
-      foodId: Food.fromJson(json['foodId']),
+      foodId:json['foodId']!=null? Food.fromJson(json['foodId']):Food(id: '', foodName: ''),
       quantity: json['quantity'],
       price: (json['price'] as num).toDouble(),
       totalPriceOfItem: (json['totalPriceOfItem'] as num).toDouble(),

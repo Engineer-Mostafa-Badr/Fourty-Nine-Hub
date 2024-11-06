@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/c
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart'; // Ensure correct path
 
@@ -49,9 +50,46 @@ class _FoodCartViewState extends State<FoodCartView> {
           context,
           restaurantId: restaurantId,
           foodId: mealId,
-          quantity: newQty.toString(),
+          quantity: 1,
         );
     await context.read<RestaurantDetailsCubit>().fetchCart();
+  }
+
+  Future<void> _decrement({
+    required String restaurantId,
+    required String mealId,
+    required int qtyChange,
+    required int currentQty,
+  }) async {
+    setState(() {});
+    final newQty = currentQty - qtyChange;
+    if (newQty < 0) return;
+
+    await context.read<RestaurantDetailsCubit>().decrement(
+          context,
+          restaurantId: restaurantId,
+          foodId: mealId,
+          quantity: newQty,
+        );
+    await context.read<RestaurantDetailsCubit>().fetchCart();
+  }
+
+  Future<void> _deleteFromCart({
+    required String restaurantId,
+    required String mealId,
+  }) async {
+    setState(() {});
+
+    await context.read<RestaurantDetailsCubit>().deleteFromCart(
+          context,
+          restaurantId: restaurantId,
+          foodId: mealId,
+        );
+    if(context.read<RestaurantDetailsCubit>().state.cart?.allItems.length==1){
+      context.pop();
+    }else{
+      await context.read<RestaurantDetailsCubit>().fetchCart();
+    }
   }
 
   Future<void> _removeItem({
@@ -115,22 +153,6 @@ class _FoodCartViewState extends State<FoodCartView> {
     return BackAppBar(
       label: LocaleKeys.your_cart.tr(),
     );
-    //   AppBar(
-    //   title: const Text(
-    //     'Your Cart',
-    //     style: TextStyle(fontSize: 20),
-    //   ),
-    //   elevation: 0,
-    //   backgroundColor: Colors.transparent,
-    //   foregroundColor: Colors.black,
-    //   actions: const [
-    //     Icon(
-    //       FontAwesomeIcons.cartShopping,
-    //       size: 24,
-    //     ),
-    //     SizedBox(width: 16),
-    //   ],
-    // );
   }
 
   Widget _buildCartContent(Cart cart) {
@@ -192,11 +214,11 @@ class _FoodCartViewState extends State<FoodCartView> {
     final food = item.food;
     if (food == null) return const SizedBox();
 
-    final foodName = food.foodName ?? LocaleKeys.unknownFood.tr();
-    final foodId = food.id ?? '';
-    final String foodImageUrl = food.picture.mediaKey ?? '';
-    final quantity = item.quantity ?? 0;
-    final totalPrice = item.totalPriceOfItem ?? 0.0;
+    final foodName = food.foodName;
+    final foodId = food.id;
+    final String foodImageUrl = food.picture.mediaKey;
+    final quantity = item.quantity;
+    final totalPrice = item.price;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -303,14 +325,18 @@ class _FoodCartViewState extends State<FoodCartView> {
           Row(
             children: [
               _buildQuantityButton(
-                icon: Icons.remove,
+                icon: quantity>1?Icons.remove:Icons.delete,
+                color: quantity>1?null:AppColors.SECONDARY_COLOR,
                 onTap: () {
                   setState(() {
-                    _updateQuantity(
+                    quantity>1?_decrement(
                       restaurantId: cartItem.restaurant?.id ?? '',
                       mealId: foodId,
-                      qtyChange: -1,
+                      qtyChange: 1,
                       currentQty: quantity,
+                    ):_deleteFromCart(
+                      mealId: foodId,
+                      restaurantId: cartItem.restaurant?.id ?? '',
                     );
                   });
                 },
@@ -344,8 +370,12 @@ class _FoodCartViewState extends State<FoodCartView> {
   Widget _buildQuantityButton({
     required IconData icon,
     required VoidCallback onTap,
+    Color? color
   }) {
-    return GestureDetector(
+    return InkWell(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      hoverColor: Colors.transparent,
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(4),
@@ -356,6 +386,7 @@ class _FoodCartViewState extends State<FoodCartView> {
         child: Icon(
           icon,
           size: 16,
+          color: color,
         ),
       ),
     );

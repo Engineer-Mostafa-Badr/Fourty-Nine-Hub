@@ -19,12 +19,12 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_t
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/repositories/StoriesRpo.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/repo/tinder_repo.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/carpool_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
+import 'package:fourtyninehub/service_locator/edit_food_service_locator.dart';
 import 'package:fourtyninehub/service_locator/face_book_service_locator.dart';
 import 'package:fourtyninehub/service_locator/instagram_service_locator.dart';
 import 'package:fourtyninehub/service_locator/join_trip_carpool_service_locator.dart';
@@ -256,6 +256,7 @@ class DI {
     CarpoolServiceLocator.execute(serviceLocator: serviceLocator);
     ChanceServiceLocator.execute(serviceLocator: serviceLocator);
     SearchServiceLocator.execute(serviceLocator: serviceLocator);
+    EditFoodServiceLocator.execute(serviceLocator: serviceLocator);
     JoinTripCarpoolServiceLocator.execute(serviceLocator: serviceLocator);
     ReelsServiceLocator.execute(serviceLocator: serviceLocator);
     StarServiceLocator.execute(serviceLocator: serviceLocator);

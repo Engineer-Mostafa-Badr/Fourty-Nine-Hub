@@ -116,7 +116,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           leading: IconButton(
             icon: Icon(Icons.menu), // The menu icon
             onPressed: () {
-              HandleCashback.setCount('drawerCount');
+              HandleCashback.setCount('drawerCount',context);
               _scaffoldKey.currentState?.openDrawer(); // Open the drawer
             },
           ),
@@ -205,7 +205,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          HandleCashback.setCount('mainCategoriesCount');
+                          HandleCashback.setCount('mainCategoriesCount',context);
                           context.push(Routes.SUBCATEGORIES,
                               extra: state.data![index]);
                         },
@@ -259,7 +259,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 width: 34.h,
               ),
               Routes.MAINCATEGORIESTREE,
-              () => HandleCashback.setCount('threeDotsCount'),
+              () => HandleCashback.setCount('threeDotsCount',context),
             ),
             _buildItemTabBar(
               SvgPicture.asset(
@@ -269,7 +269,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               ),
               Routes.MAINCATEGORIESCARDS,
                 (){
-                  HandleCashback.setCount('mainCategoriesSliderCount');
+                  HandleCashback.setCount('mainCategoriesSliderCount',context);
                 }
             ),
           ],
@@ -330,7 +330,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   service: state.data?[0].service ?? RideServicesEnum.pickMe,
                   title: LocaleKeys.carpool.localize,
                   image: state.data?[0].image ?? '',
-                  onTab: ()=> HandleCashback.setCount('carPoolCount'),
+                  onTab: ()=> HandleCashback.setCount('carPoolCount',context),
                   // image: Assets.carpool,
                   // isFavorite: state.data![0].is,
                   // numberOfAds: state.data![0].numberOfAds?.toInt(),
@@ -347,7 +347,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   // image: Assets.tripJoin,
 
                   route: Routes.AVAILABLE_TRIPS,
-                  onTab: () => HandleCashback.setCount('tripJoinCount'),
+                  onTab: () => HandleCashback.setCount('tripJoinCount',context),
                   // isFavorite: state.data![1].isFavorite,
                   // numberOfAds: state.data![1].numberOfAds?.toInt(),
                 ),
@@ -374,13 +374,13 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       children: [
         itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
             () {
-              HandleCashback.setCount('mazadat');
+              HandleCashback.setCount('mazadat',context);
           context.push(Routes.MAZADAT);
             }, Icons.group),
         const Sizer(),
         itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize,
             () {
-              HandleCashback.setCount('installments');
+              HandleCashback.setCount('installments',context);
           context.push(Routes.INSTALLMENT);
             }, Icons.list),
       ],
@@ -404,7 +404,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 icon: Icons.auto_awesome,
                 iconSize: 50.h,
                 onPressed: () async {
-                  HandleCashback.setCount('booking');
+                  HandleCashback.setCount('booking',context);
                   int? num = await CacheManager.getInt('booking');
                   print(num);
                 }),
@@ -455,7 +455,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 icon: Icons.star,
                 iconSize: 50.h,
                 onPressed: () {
-                  HandleCashback.setCount('beAStarCount');
+                  HandleCashback.setCount('beAStarCount',context);
                   context.push(Routes.BE_STAR);
                 }),
           ),

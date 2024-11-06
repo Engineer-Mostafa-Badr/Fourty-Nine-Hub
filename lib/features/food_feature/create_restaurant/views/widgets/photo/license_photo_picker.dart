@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -127,11 +128,11 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
           Visibility(
             visible:
                 state is ValidationState && (state.isCommercialPhoto ?? true),
-            child: const Padding(
-              padding: EdgeInsets.only(right: 5, left: 5, top: 5.0),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 5, left: 5, top: 5.0),
               child: Text(
-                "You have to uplaod the 3 pages of commercial registration!",
-                style: TextStyle(color: Colors.red),
+                LocaleKeys.youHaveToUploadThe3PagesOfCommercialRegistration.localize,
+                style: const TextStyle(color: Colors.red),
               ),
             ),
           )

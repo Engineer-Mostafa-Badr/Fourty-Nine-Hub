@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -137,7 +138,7 @@ class InstallmentView extends StatelessWidget {
                               : AppColors.LIGHT_GRAY_COLOR),
                       child: Center(
                         child: Label(
-                            text: subCategory.name,
+                            text: context.isArabic?subCategory.nameAr:subCategory.nameEn,
                             style: Styles.mediumText(
                                 color: state.selectedSubCategory == subCategory
                                     ? Colors.white

@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_ad_details_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/get_meals_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
 import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
@@ -72,6 +73,7 @@ class EndPoints {
   static const getMainCategoriesWithoutSubcategories = '/categories/main';
   static const getWalletHome = '/main-wallet/user-wallets-amount';
   static const getCurrency = '/main-wallet/app-currency';
+  static const anyCashBack = '/cashback/any';
 
   static String getMainCategoryDetails(String id) => '/categories/main/$id';
   static const getCurrencyCarPool = '/main-wallet/app-currency';
@@ -337,6 +339,7 @@ class EndPoints {
   static const getAllTripBySubCategory =
       '$developmentBaseUrl/loading/trip/driver/subcategory';
   static const carPlate = '/loading/driver/info/car-plate';
+  static getRestaurantOrders(PaginationParams params) => '/food/get-restaurant-orders?page=${params.page}&limit=${params.limit}';
   static const makeRatingDriver = '/loading/rating-driver/makeRating';
   static const getDriverData = '$developmentBaseUrl/loading/driver/info';
   static const updateDriver = '$developmentBaseUrl/loading/driver';
@@ -348,6 +351,10 @@ class EndPoints {
   //trip
   static const sendOffer = '$developmentBaseUrl/loading/trip/sendOffer';
   static const reportUrl = '$developmentBaseUrl/report';
+  static const getRestaurantInfo = '/restaurants/info-restaurant';
+  static const getRestaurantStatistics = '/restaurants/statistics';
+  static deleteRestaurant(String id) => '/restaurants/delete-restaurant/$id';
+  static const updateRestaurant= '/restaurants/update-restaurant-info';
   static const favoriteCategory = '$developmentBaseUrl/favorite-category';
   static const sendOfferPremium =
       '$developmentBaseUrl/loading/trip/sendOffer-premium';
@@ -700,7 +707,7 @@ class EndPoints {
 
   // food
   static String subCategoryRestaurants(GetSubCategoryRestaurants params) {
-    return '/restaurants/subcategory?${params.id!=''?'subCategoryId=${params.id}&':''}page=${params.page}&limit=${params.limit}';
+    return '/restaurants/subcategory?${params.id!=''?'subCategoryId=${params.id}&':''}page=${params.page}&limit=${params.limit}${params.userId != '' ? "&userId=${params.userId}" : ""}';
   }
 
   static String getNumOfResturants = '/restaurants/num-of-restaurants';
@@ -724,8 +731,8 @@ class EndPoints {
     return '/restaurants/$id';
   }
 
-  static String restaurantMeals(String id) {
-    return '/food/food-items/$id';
+  static String restaurantMeals(GetMealsParams params) {
+    return '/food/food-items/${params.restaurantId}?page=${params.page}&limit=${params.limit}';
   }
 
   static String getSubcategoryAdProps(String id) {
@@ -736,6 +743,11 @@ class EndPoints {
 
   static filterAd(FilterModel filter) =>
       '/ads/filter-ads/${filter.subCategoryId}?government=${filter.governorateId}&city=${filter.cityId}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
+  static deleteFood(String id) => '/food/delete-food-item/$id';
+  static const addFood = '/food/add-food';
+  static const deleteCart = '/food/deleteCart';
+  static const deleteFoodFromCart = '/food/deleteFromCart';
+  static const changeFoodQuantity = '/food/change-quantity';
   static const myAds = '/ads/allMyAds?limit=100';
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const makePremiumRequest = '/ads-requests/makeAdRequest-Premium';
