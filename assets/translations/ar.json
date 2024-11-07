@@ -1040,5 +1040,9 @@
   "youHaveToUploadAtLeastOnePhoto": "يجب عليك تحميل صورة واحدة على الأقل!",
   "youHaveToUploadThe3PagesOfCommercialRegistration": "يجب عليك تحميل الصفحات الثلاث لتسجيل التجاري!",
   "youHaveToSelectYourGovernorate": "يجب عليك اختيار محافظتك!",
-  "youHaveToSelectYourCity": "يجب عليك اختيار مدينتك!"
+  "youHaveToSelectYourCity": "يجب عليك اختيار مدينتك!",
+  "reviews": "مراجعة",
+  "addToCart": "إضافة الي السلة",
+  "showAllOrders": "عرض كل الطلبات",
+  "restaurantOrders": "طلبات المطعم"
 }

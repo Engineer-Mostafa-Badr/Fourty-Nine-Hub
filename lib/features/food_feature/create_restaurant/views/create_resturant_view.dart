@@ -104,7 +104,7 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                             ),
                           ),
                         ),
-                        ElevatedAppButton(
+                        if(widget.from == 'update')ElevatedAppButton(
                           label: LocaleKeys.editFood.localize,
                           onPressed: () {
                             context.push(Routes.EditFoodView,

@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/data/models/restaurant_orders_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
+import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -20,8 +21,9 @@ import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 
 class RestaurantOrderCard extends StatelessWidget {
   final RestaurantOrder item;
+  final String subCategoryId;
 
-  const RestaurantOrderCard({super.key, required this.item});
+  const RestaurantOrderCard({super.key, required this.item, required this.subCategoryId});
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +166,7 @@ class RestaurantOrderCard extends StatelessWidget {
 
                   const SizedBox(height: 8),
 
-                  CallMessageReportButtons(item: item),
+                  CallMessageReportButtons(item: item, subcategoryId: subCategoryId,),
                   const SizedBox(height: 8),
 
                   Row(
@@ -187,8 +189,9 @@ class RestaurantOrderCard extends StatelessWidget {
 
 class CallMessageReportButtons extends StatelessWidget {
   final RestaurantOrder item;
+  final String subcategoryId;
 
-  const CallMessageReportButtons({super.key, required this.item});
+  const CallMessageReportButtons({super.key, required this.item,required this.subcategoryId});
 
   @override
   Widget build(BuildContext context) {
@@ -205,7 +208,7 @@ class CallMessageReportButtons extends StatelessWidget {
             onPressed: item.openCallAndChat != 'disable'
                 ? () => launchUrlString("tel://${item.phone}")
                 : () {
-                    print('disabled call button');
+              SubscriptionMethod().subscribe(subscribeId: subcategoryId, title: LocaleKeys.restaurantDashboard.localize);
                   },
           ),
           const SizedBox(width: 4),
@@ -220,7 +223,7 @@ class CallMessageReportButtons extends StatelessWidget {
                     // Implement message functionality here
                   }
                 : () {
-                    print('disabled chat button');
+              SubscriptionMethod().subscribe(subscribeId: subcategoryId, title: LocaleKeys.restaurantDashboard.localize);
                   },
           ),
           const SizedBox(width: 4),

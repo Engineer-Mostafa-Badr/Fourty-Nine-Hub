@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
@@ -23,7 +24,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Label(
-            text: LocaleKeys.theCommercialRegister.tr(),
+            text: context.isArabic?'السجل التجاري':'The Commercial Register',
             style: Styles.headerText(),
           ),
           const Sizer(),
@@ -55,7 +56,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                                 (state.isCommercialFirstPage ?? true)
                             ? Colors.red
                             : Colors.grey,
-                        title: LocaleKeys.firstPage.tr(),
+                        title: context.isArabic?'الصفحة الأولي':'First Page',
                       );
                     },
                   ),
@@ -86,7 +87,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                                 (state.isCommercialSecondPage ?? true)
                             ? Colors.red
                             : Colors.grey,
-                        title: LocaleKeys.secondPage.tr(),
+                        title: context.isArabic?'الصفحة الثانية':'Second Page',
                       );
                     },
                   ),
@@ -117,7 +118,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                                 (state.isCommercialThirdPage ?? true)
                             ? Colors.red
                             : Colors.grey,
-                        title: LocaleKeys.thirdPage.tr(),
+                        title: context.isArabic?'الصفحة الثالثة':'Third Page',
                       );
                     },
                   ),

@@ -204,7 +204,7 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                               final order = state.orders!.data.orders[index];
                               return Column(
                                 children: [
-                                  RestaurantOrderCard(item: order),
+                                  RestaurantOrderCard(item: order, subCategoryId: state.info?.subcategoryId?.id??'',),
                                   if (state.orders!.data
                                       .restaurantSubscriptionType !=
                                       'Not subscribed')

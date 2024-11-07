@@ -168,8 +168,8 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
     log("removed: ${state.selectedMeals?.length}");
   }
 
-  Future<void> fetchCart() async {
-    emit(state.copyWith(status: RestaurantDetailsStates.loading, cart: null));
+  Future<void> fetchCart({bool? first = false}) async {
+    if(first==true)emit(state.copyWith(status: RestaurantDetailsStates.loading, cart: null));
 
     const url = 'https://49dev.com/api/v1/food/getCart';
 

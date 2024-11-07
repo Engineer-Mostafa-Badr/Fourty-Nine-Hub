@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_item.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/data/models/cart_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
@@ -33,7 +37,7 @@ class _FoodCartViewState extends State<FoodCartView> {
   @override
   void initState() {
     super.initState();
-    context.read<RestaurantDetailsCubit>().fetchCart();
+    context.read<RestaurantDetailsCubit>().fetchCart(first: true);
   }
 
   Future<void> _updateQuantity({
@@ -134,7 +138,11 @@ class _FoodCartViewState extends State<FoodCartView> {
       appBar: _buildAppBar(),
       body: BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
         builder: (context, state) {
-          if (state.cart != null && state.cart!.allItems.isNotEmpty) {
+          if(state.isLoading){
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }else if (state.cart!=null && state.cart!.allItems.isNotEmpty) {
             return _buildCartContent(state.cart!);
           } else {
             return Center(
@@ -164,12 +172,12 @@ class _FoodCartViewState extends State<FoodCartView> {
             itemCount: cart.allItems.length,
             itemBuilder: (context, index) {
               final cartItem = cart.allItems[index];
-              return _buildCartItem(cartItem, cart.currency);
+              return _buildCartItem(cartItem, context.isArabic?cart.currencyAr:cart.currencyEn);
             },
           ),
         ),
         const Divider(),
-        _buildCartSummary(cart, cart.currency),
+        _buildCartSummary(cart, context.isArabic?cart.currencyAr:cart.currencyEn),
       ],
     );
   }
@@ -254,23 +262,27 @@ class _FoodCartViewState extends State<FoodCartView> {
           //     ),
           //   ],
           // ),
-          child: Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Row(
-              children: [
-                _buildFoodImage(foodImageUrl.toString()),
-                const SizedBox(width: 12),
-                _buildItemDetails(
-                  cartItem,
-                  foodId,
-                  foodName,
-                  quantity,
-                  currency,
-                ),
-                _buildItemPrice(totalPrice, currency),
-              ],
-            ),
+          child: BuildCartItem(foodImageUrl: foodImageUrl,quantity: quantity,currency: currency,cartItem: cartItem,foodId: foodId,foodName: foodName,totalPrice: totalPrice,
+
           ),
+          // Padding(
+          //   padding: const EdgeInsets.all(4.0),
+          //   child: Row(
+          //     children: [
+          //       _buildFoodImage(foodImageUrl.toString()),
+          //       const SizedBox(width: 12),
+          //       _buildItemDetails(
+          //         cartItem,
+          //         foodId,
+          //         foodName,
+          //         quantity,
+          //         totalPrice,
+          //         currency,
+          //
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ),
       ),
     );
@@ -311,57 +323,73 @@ class _FoodCartViewState extends State<FoodCartView> {
     String foodId,
     String foodName,
     int quantity,
+  double totalPrice,
     String currency,
   ) {
+    int localQuantity = quantity;
     return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Text(
-            foodName,
-            style: Styles.headerText(),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  foodName,
+                  style: Styles.headerText(),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    _buildQuantityButton(
+                      icon: quantity>1?Icons.remove:Icons.delete,
+                      color: quantity>1?null:AppColors.SECONDARY_COLOR,
+                      onTap: () {
+                        setState(() {
+                        //   quantity>1?_decrement(
+                        //     restaurantId: cartItem.restaurant?.id ?? '',
+                        //     mealId: foodId,
+                        //     qtyChange: 1,
+                        //     currentQty: quantity,
+                        //   ):_deleteFromCart(
+                        //     mealId: foodId,
+                        //     restaurantId: cartItem.restaurant?.id ?? '',
+                        //   );
+                          if(localQuantity>0){
+                            localQuantity--;
+                          }
+                        });
+                      },
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      '$localQuantity',
+                      style: Styles.headerText(),
+                    ),
+                    const SizedBox(width: 12),
+                    _buildQuantityButton(
+                      icon: Icons.add,
+                      onTap: () {
+                        print("object");
+                        localQuantity+=1;
+
+                        setState(() {
+                          // _updateQuantity(
+                          //   restaurantId: cartItem.restaurant?.id ?? '',
+                          //   mealId: foodId,
+                          //   qtyChange: 1,
+                          //   currentQty: quantity,
+                          // );
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              _buildQuantityButton(
-                icon: quantity>1?Icons.remove:Icons.delete,
-                color: quantity>1?null:AppColors.SECONDARY_COLOR,
-                onTap: () {
-                  setState(() {
-                    quantity>1?_decrement(
-                      restaurantId: cartItem.restaurant?.id ?? '',
-                      mealId: foodId,
-                      qtyChange: 1,
-                      currentQty: quantity,
-                    ):_deleteFromCart(
-                      mealId: foodId,
-                      restaurantId: cartItem.restaurant?.id ?? '',
-                    );
-                  });
-                },
-              ),
-              const SizedBox(width: 12),
-              Text(
-                '$quantity',
-                style: Styles.headerText(),
-              ),
-              const SizedBox(width: 12),
-              _buildQuantityButton(
-                icon: Icons.add,
-                onTap: () {
-                  setState(() {
-                    _updateQuantity(
-                      restaurantId: cartItem.restaurant?.id ?? '',
-                      mealId: foodId,
-                      qtyChange: 1,
-                      currentQty: quantity,
-                    );
-                  });
-                },
-              ),
-            ],
-          ),
+          _buildItemPrice(totalPrice, currency,localQuantity!=quantity),
+
         ],
       ),
     );
@@ -392,7 +420,7 @@ class _FoodCartViewState extends State<FoodCartView> {
     );
   }
 
-  Widget _buildItemPrice(double totalPrice, String currency) {
+  Widget _buildItemPrice(double totalPrice, String currency,bool showConfirm) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -411,6 +439,12 @@ class _FoodCartViewState extends State<FoodCartView> {
           ],
         ),
         const SizedBox(height: 40),
+        if(showConfirm) ClickableWidget(
+          onTap: () {
+
+          },
+          child: Label(text: "text"),
+        )
       ],
     );
   }

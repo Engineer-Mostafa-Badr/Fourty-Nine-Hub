@@ -29,10 +29,12 @@ class RestaurantOrdersModel {
 class RestaurantData {
   final List<RestaurantOrder> orders;
   final String restaurantSubscriptionType;
+  final String subcategoryId;
 
   RestaurantData({
     required this.orders,
     required this.restaurantSubscriptionType,
+    required this.subcategoryId,
   });
 
   factory RestaurantData.fromJson(Map<String, dynamic> json) {
@@ -41,6 +43,7 @@ class RestaurantData {
         json['orders'].map((x) => RestaurantOrder.fromJson(x)),
       ),
       restaurantSubscriptionType: json['restaurantSubscriptionType'],
+      subcategoryId: json['subcategoryId'],
     );
   }
 

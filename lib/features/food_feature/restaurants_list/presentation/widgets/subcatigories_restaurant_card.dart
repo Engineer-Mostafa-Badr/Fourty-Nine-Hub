@@ -310,7 +310,7 @@ class DetailsSection extends StatelessWidget {
                   onTap: (){
                     context.push(Routes.RestaurantOrders);
                   },
-                  child: Text('Show all orders', style: Styles.mediumText(color: AppColors.SECONDARY_COLOR,decoration: TextDecoration.underline,decorationThickness: 2.w))),
+                  child: Text(LocaleKeys.showAllOrders.localize, style: Styles.mediumText(color: AppColors.SECONDARY_COLOR,decoration: TextDecoration.underline,decorationThickness: 2.w))),
             ],
           )),
           Expanded(

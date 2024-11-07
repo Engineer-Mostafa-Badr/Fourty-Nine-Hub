@@ -1025,5 +1025,9 @@ abstract class  LocaleKeys {
   static const youHaveToUploadThe3PagesOfCommercialRegistration = 'youHaveToUploadThe3PagesOfCommercialRegistration';
   static const youHaveToSelectYourGovernorate = 'youHaveToSelectYourGovernorate';
   static const youHaveToSelectYourCity = 'youHaveToSelectYourCity';
+  static const reviews = 'reviews';
+  static const addToCart = 'addToCart';
+  static const showAllOrders = 'showAllOrders';
+  static const restaurantOrders = 'restaurantOrders';
 
 }

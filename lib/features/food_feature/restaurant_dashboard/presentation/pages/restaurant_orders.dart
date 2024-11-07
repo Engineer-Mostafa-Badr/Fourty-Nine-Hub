@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/widgets/restaurant_order_card.dart';
+import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -44,13 +46,13 @@ class _RestaurantDashboardOrdersState extends State<RestaurantDashboardOrders> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Restaurant Orders',
+          LocaleKeys.restaurantOrders.localize,
           style: Styles.headerText(),),
       ),
       body: BlocBuilder<RestaurantDashboardCubit,RestaurantDashboardState>(
         builder: (context,state) {
           var controller = context.read<RestaurantDashboardCubit>();
-          return state.isLoading?const Center(child: CircularProgressIndicator(),):ListView(
+          return state.isLoading?const Center(child: CircularProgressIndicator(),):controller.orders.isNotEmpty?ListView(
             padding: EdgeInsets.all(16.w),
             controller: _scrollController,
             shrinkWrap: true,
@@ -68,8 +70,7 @@ class _RestaurantDashboardOrdersState extends State<RestaurantDashboardOrders> {
                     ),
                     ClickableWidget(
                       onTap: (){
-                        // SubscriptionMethod().subscribe(subscribeId: , title: LocaleKeys.restaurantDashboard.localize);
-
+                        SubscriptionMethod().subscribe(subscribeId: state.orders?.data.subcategoryId??'', title: LocaleKeys.restaurantDashboard.localize);
                       },
                       child: Text(
                         LocaleKeys.subscribe.localize,
@@ -88,11 +89,10 @@ class _RestaurantDashboardOrdersState extends State<RestaurantDashboardOrders> {
                       final order = controller.orders[index];
                       return Column(
                         children: [
-                          RestaurantOrderCard(item: order),
+                          RestaurantOrderCard(item: order, subCategoryId: state.orders?.data.subcategoryId??'',),
 
                         ],
                       );
-
                   },
                   separatorBuilder: (context, index) => const Sizer(
                     height: 20,
@@ -100,6 +100,8 @@ class _RestaurantDashboardOrdersState extends State<RestaurantDashboardOrders> {
                   itemCount: controller.orders.length ),
               if(controller.isLoadingMore==true)const Center(child: CircularProgressIndicator(),),
             ],
+          ):Center(
+            child: Label(text: LocaleKeys.thereNoItems.localize),
           );
         }
       ),

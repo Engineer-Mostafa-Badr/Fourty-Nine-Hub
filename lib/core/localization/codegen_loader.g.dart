@@ -1050,7 +1050,11 @@ class CodegenLoader extends AssetLoader{
   "youHaveToUploadAtLeastOnePhoto": "يجب عليك تحميل صورة واحدة على الأقل!",
   "youHaveToUploadThe3PagesOfCommercialRegistration": "يجب عليك تحميل الصفحات الثلاث لتسجيل التجاري!",
   "youHaveToSelectYourGovernorate": "يجب عليك اختيار محافظتك!",
-  "youHaveToSelectYourCity": "يجب عليك اختيار مدينتك!"
+  "youHaveToSelectYourCity": "يجب عليك اختيار مدينتك!",
+  "reviews": "مراجعة",
+  "addToCart": "إضافة الي السلة",
+  "showAllOrders": "عرض كل الطلبات",
+  "restaurantOrders": "طلبات المطعم"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2105,7 +2109,11 @@ static const Map<String,dynamic> en = {
   "youHaveToUploadAtLeastOnePhoto": "You have to upload at least one photo!",
   "youHaveToUploadThe3PagesOfCommercialRegistration": "You have to upload the 3 pages of commercial registration!",
   "youHaveToSelectYourGovernorate": "You have to select your governorate!",
-  "youHaveToSelectYourCity": "You have to select your city!"
+  "youHaveToSelectYourCity": "You have to select your city!",
+  "reviews": "Reviews",
+  "addToCart": "Add To Cart",
+  "showAllOrders": "Show All Orders",
+  "restaurantOrders": "Restaurant Orders"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

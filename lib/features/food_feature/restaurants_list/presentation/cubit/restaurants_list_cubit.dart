@@ -262,7 +262,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     hasMoreRestaurantsData = true;
     await fetchRestaurants();
     subCategories.map((e) => e.isSelected = false).toList();
-    subCategories.firstWhere((element) => element.id==state.selectedSubCategoryId).isSelected = true;
+    if(subCategories.isNotEmpty)subCategories.firstWhere((element) => element.id==state.selectedSubCategoryId).isSelected = true;
 
   }
 

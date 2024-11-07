@@ -68,6 +68,7 @@ class RestaurantDashboardState {
   final RestaurantDashboardStates status;
   final Failure? failure;
   final String? successMessage;
+  final String? subCategoryId;
   final Restaurant2Model? info;
   final RestaurantStatistics? statistics;
   final IsRestaurantModel? isRestaurant;
@@ -79,6 +80,7 @@ class RestaurantDashboardState {
         this.info,
         this.isRestaurant,
         this.statistics,
+        this.subCategoryId,
         this.connected = true,
         this.successMessage,
         this.orders});
@@ -90,6 +92,7 @@ class RestaurantDashboardState {
         Restaurant2Model? info,
         RestaurantStatistics? statistics,
         bool? connected,
+        String? subCategoryId,
         String? successMessage}) {
     return RestaurantDashboardState(
         status: status ?? this.status,
@@ -97,6 +100,7 @@ class RestaurantDashboardState {
         connected: connected ?? this.connected,
         statistics: statistics ?? this.statistics,
         info: info ?? this.info,
+        subCategoryId: subCategoryId ?? this.subCategoryId,
         isRestaurant: isRestaurant ?? this.isRestaurant,
         successMessage: successMessage ?? this.successMessage,
         orders: orders ?? this.orders);
