@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasour
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasources/remote/chat_message_remote_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/clear_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_one_time_view_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_recording_usecase.dart';
@@ -103,6 +104,11 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   Future<Either<Failure, bool>> stopRecording({required String chatId}) {
     return _chatRemoteDataSource.stopRecording(chatId: chatId);
   }
+
+  @override
+  Future<Either<Failure, bool>> clearChat(ClearChatParams params) {
+    return _chatRemoteDataSource.clearChat(params);
+  }
   
   @override
   Future<Either<Failure, MessageEntity>> getOneTimeViewMessage(GetOneTimeViewMessageParams params) {
@@ -122,5 +128,10 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   @override
   void listenToRecordListened(Function(SetRecordAsListenedParams setRecordAsListenedParams) params) {
     _chatRemoteDataSource.listenToRecordListened(params);
+  }
+  
+  @override
+  void listenToClearChatStatus(Function(String chatId) params) {
+    _chatRemoteDataSource.listenToClearChatStatus(params);
   }
 }

@@ -1010,5 +1010,9 @@ abstract class  LocaleKeys {
   static const createLive = 'createLive';
   static const watch = 'watch';
   static const mutualFriend = 'mutualFriend';
+  static const clearForEveryone = 'clearForEveryone';
+  static const clearForMe = 'clearForMe';
+  static const clearThisChat = 'clearThisChat';
+  static const opened = 'opened';
 
 }

@@ -1033,5 +1033,9 @@
   "endToEndEncryption": "end-to-end encrypted",
   "liveStreamOptions": "Live Stream Options",
   "createLive": "Create Live",
-  "watch": "Watch"
+  "watch": "Watch",
+  "clearForEveryone": "Clear for Everyone",
+  "clearForMe": "Clear for Me",
+  "clearThisChat": "Clear this Chat?",
+  "opened": "Opened"
 }

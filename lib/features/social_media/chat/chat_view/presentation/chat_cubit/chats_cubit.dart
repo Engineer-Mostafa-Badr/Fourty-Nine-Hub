@@ -276,6 +276,9 @@ class ChatsCubit extends Cubit<ChatsState> {
   @override
   Future<void> close() {
     _stopListenToMessagesUseCase(const NoParams());
+    serviceLocator<Socket>().off(SocketIOListeners.typingMessage);
+    serviceLocator<Socket>().off(SocketIOListeners.recordingMessage);
+    serviceLocator<Socket>().off(SocketIOListeners.creatingNewChat);
     return super.close();
   }
 

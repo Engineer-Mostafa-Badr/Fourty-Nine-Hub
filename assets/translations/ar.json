@@ -1019,5 +1019,9 @@
   "liveStreamOptions": "خيارات البث الحي",
   "createLive": "انشاء بث",
   "watch": "مشاهدة",
-  "mutualFriend": "صديق مشترك"
+  "mutualFriend": "صديق مشترك",
+  "clearForEveryone": "مسح لدي الجميع",
+  "clearForMe": "مسح لدي",
+  "clearThisChat": "مسح هذه الدردشة؟",
+  "opened": "تمت مشاهدته"
 }

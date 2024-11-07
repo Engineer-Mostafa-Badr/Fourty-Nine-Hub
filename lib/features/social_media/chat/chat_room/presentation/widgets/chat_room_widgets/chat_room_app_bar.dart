@@ -109,7 +109,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
               );
             }
             if (value == 6) {
-              _showMoreMenu(context);
+              _showMoreMenu(context, chatRoomCubit);
             }
           },
           itemBuilder: (context) {
@@ -201,7 +201,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
     ];
   }
 
-  void _showMoreMenu(BuildContext context) {
+  void _showMoreMenu(BuildContext context, ChatRoomCubit chatRoomCubit) {
     showMenu<int>(
       context: context,
       position: RelativeRect.fromLTRB(LocaleKeys.more.tr() != "More" ? 0 : 250,
@@ -249,6 +249,10 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         PopupMenuItem<int>(
           value: 5,
+          onTap: () {
+            // Show alert dialog when "Clear Chat" is selected
+            _showClearChatAlert(context, chatRoomCubit);
+          },
           child: Text(
             LocaleKeys.clearChat.tr(),
             style: Styles.mediumText(
@@ -284,6 +288,82 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
       color: context.isDarkMode
           ? AppColors.PRIMARY_COLOR
           : AppColors.BACKGROUND_COLOR,
+    );
+  }
+
+  void _showClearChatAlert(BuildContext context, ChatRoomCubit chatRoomCubit) {
+    int selectedOption = 0; // To track the selected radio button
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title:  Text(LocaleKeys.clearThisChat.tr()),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    title: Text(
+                      LocaleKeys.clearForMe.tr(),
+                      style: Styles.mediumText(color:context.isDarkMode ? Colors.white: AppColors.PRIMARY_COLOR),
+                    ),
+                    leading: Radio<int>(
+                      value: 0,
+                      activeColor: AppColors.PRIMARY_COLOR_DARK,
+                      groupValue: selectedOption,
+                      onChanged: (int? value) {
+                        setState(() {
+                          selectedOption = value!;
+                        });
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    title: Text(
+                      LocaleKeys.clearForEveryone.tr(),
+                      style: Styles.mediumText(color:context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+                    ),
+                    leading: Radio<int>(
+                      value: 1,
+                      activeColor: AppColors.PRIMARY_COLOR_DARK,
+                      groupValue: selectedOption,
+                      onChanged: (int? value) {
+                        setState(() {
+                          selectedOption = value!;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                LocaleKeys.cancel.tr(),
+                style: Styles.mediumText(color:context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                LocaleKeys.clearChat.tr(),
+                style: Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
+              ),
+              onPressed: ()async {
+                await chatRoomCubit.clearChat(clearForAll: selectedOption == 1);
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

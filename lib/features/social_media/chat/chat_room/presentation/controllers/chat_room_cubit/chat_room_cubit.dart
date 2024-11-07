@@ -17,8 +17,10 @@ import 'package:fourtyninehub/core/extensions/map_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_shared_contacts_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/clear_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_one_time_view_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_clear_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_delivered_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_one_time_message_seen.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_record_listend.dart';
@@ -56,6 +58,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   final StopRecordingMessageUseCase _stopRecordingMessageUseCase;
   final StopListenToDeliveredMessagesUseCase
       _stopListenToDeliveredMessagesUseCase;
+  final ClearChatUseCase _clearChatUseCase;
+  final ListenToClearChatUseCase _listenToClearChatUseCase;
   final ScrollController scrollController = ScrollController();
   final TextEditingController messageTextController = TextEditingController();
   final FilePicker _filePicker = FilePicker.platform;
@@ -87,11 +91,14 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     this._setRecordAsListenedUseCase,
     this._listenToRecordListenedUseCase,
     this._listenToOneTimeMessageSeenUseCase,
+    this._clearChatUseCase,
+    this._listenToClearChatUseCase,
   ) : super(const ChatRoomState()) {
     _listenToDeliveredMessages();
     _listenToSeenMessages();
     _listenToSeenOneTimeViewMessages();
     listenToRecordListenedUseCase();
+    _listenToClearChat();
     serviceLocator<Socket>().connect();
     serviceLocator<Socket>().on("error", (date) {
       log("error from socket : $date");
@@ -121,6 +128,33 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       _messages = _messages.reverse();
       emit(state.copyWith(messages: _messages.values.toList()));
       _scrollDown();
+    });
+  }
+
+  Future<void> clearChat({required bool clearForAll}) async {
+    final response = await _clearChatUseCase(
+        ClearChatParams(chatId: _chat.id, clearForAll: clearForAll));
+
+    response.fold(
+        (failure) => emit(
+            state.copyWith(failure: failure, status: ChatRoomStates.error)),
+        (data) {
+      log("clear chat result $data");
+      emit(state.copyWith(status: ChatRoomStates.success));
+      _scrollDown();
+    });
+  }
+
+
+  void _listenToClearChat() async {
+    _listenToClearChatUseCase.call((chatId) {
+      if (chatId == _chat.id) {
+        log("clear chat from cubit: ${_chat.id}");
+        log("messages length from cubit before clear: ${_messages.length}");
+        _messages.clear();
+        log("messages length from cubit after clear: ${_messages.length}");
+        emit(state.copyWith(messages: _messages.values.toList()));
+      }
     });
   }
 
@@ -289,6 +323,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   void _listenToSeenOneTimeViewMessages() async {
     _listenToOneTimeMessageSeenUseCase.call((message) {
       if (message.chatId == _chat.id) {
+        log("message id from listen to seen one time view message cubit : ${message.id}");
+        log("message isOneTimeView from listen to seen one time view message cubit : ${message.isOneTimeSeenMessage}");
         _messages[message.id]?.markAsOneTimeView();
         emit(state.copyWith(messages: _messages.values.toList()));
       }
@@ -448,6 +484,9 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   Future<void> close() {
     _stopListenToSeenMessagesUseCase(const NoParams());
     _stopListenToDeliveredMessagesUseCase(const NoParams());
+    serviceLocator<Socket>().off(SocketIOListeners.setRecordAsListened);
+    serviceLocator<Socket>().off(SocketIOListeners.oneTimeMessageSeen);
+    serviceLocator<Socket>().off(SocketIOListeners.clearChat);
     return super.close();
   }
 }

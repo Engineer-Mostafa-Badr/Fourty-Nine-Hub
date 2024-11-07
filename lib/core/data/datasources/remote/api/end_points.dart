@@ -919,6 +919,10 @@ class EndPoints {
     return '/chat/message/one-time-message';
   }
 
+  static String clearChat(String chatId) {
+    return '/chat/clear-chat/$chatId';
+  }
+
   static String getChatGroups = '/chat/group/get-groups/';
 
   static String seenHistoryEndpoint(String chatId) {

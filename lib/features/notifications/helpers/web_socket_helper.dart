@@ -32,7 +32,7 @@ class WebSocketHelper {
   Future<void> notificationListener(
       Function(Map<String, dynamic> data) notificationCallback) async {
     try {
-      pr(CacheManager.getAccessToken().toString());
+      pr(await CacheManager.getAccessToken());
       pr('notificationListener is called ');
       socket.disconnect();
       socket.io.close();

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/clear_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_one_time_view_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_recording_usecase.dart';
@@ -17,21 +18,25 @@ abstract class ChatRoomRepository {
 
   Future<Either<Failure, bool>> startTyping({required String chatId});
   Future<Either<Failure, bool>> stopTyping({required String chatId});
-  
+
+  Future<Either<Failure, bool>> clearChat(ClearChatParams params);
+
   void listenToTypingStatus(Function(ListenToTypingParams) params);
 
   Future<Either<Failure, bool>> startRecording({required String chatId});
   Future<Either<Failure, bool>> stopRecording({required String chatId});
   void listenToRecordingStatus(Function(ListenToRecordingParams) params);
 
-  Future<Either<Failure, MessageEntity>> getOneTimeViewMessage(GetOneTimeViewMessageParams params);
+  Future<Either<Failure, MessageEntity>> getOneTimeViewMessage(
+      GetOneTimeViewMessageParams params);
 
   Future<Either<Failure, List<MessageEntity>>> getMessages(
       GetMessagesParams params);
 
   void listenToNewMessages(Function(MessageEntity message) params);
 
-  void listenToRecordListened(Function(SetRecordAsListenedParams setRecordAsListenedParams) params);
+  void listenToRecordListened(
+      Function(SetRecordAsListenedParams setRecordAsListenedParams) params);
 
   void listenToSeenOneTimeViewMessage(Function(MessageEntity message) params);
 
@@ -40,7 +45,7 @@ abstract class ChatRoomRepository {
   Future<Either<Failure, bool>> markMessageAsSeen(
       MarkMessageAsSeenParams params);
 
-      Future<Either<Failure, bool>> setRecordAsListened(
+  Future<Either<Failure, bool>> setRecordAsListened(
       SetRecordAsListenedParams params);
 
   Future<Either<Failure, bool>> markMessageAsDelivered(
@@ -51,6 +56,8 @@ abstract class ChatRoomRepository {
   void stopListenToSeenStatus();
 
   void listenToDeliveredStatus(Function(String chatId) params);
+
+  void listenToClearChatStatus(Function(String chatId) params);
 
   void stopListenToDeliveredStatus();
 }

@@ -2,8 +2,10 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasour
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasources/remote/chat_message_remote_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/repositories/chat_room_repository_implement.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/clear_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_one_time_view_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_clear_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_delivered_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_one_time_message_seen.dart';
@@ -66,7 +68,14 @@ class SocialServiceLocator {
     serviceLocator.registerLazySingleton<GetChatsUseCase>(() => GetChatsUseCase(
           serviceLocator(),
         ));
-
+    serviceLocator
+        .registerLazySingleton<ClearChatUseCase>(() => ClearChatUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToClearChatUseCase>(
+        () => ListenToClearChatUseCase(
+              serviceLocator(),
+            ));
     serviceLocator.registerLazySingleton<ListenToOneTimeMessageSeenUseCase>(
         () => ListenToOneTimeMessageSeenUseCase(
               serviceLocator(),
@@ -228,6 +237,8 @@ class SocialServiceLocator {
         ));
 
     serviceLocator.registerFactory<ChatRoomCubit>(() => ChatRoomCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

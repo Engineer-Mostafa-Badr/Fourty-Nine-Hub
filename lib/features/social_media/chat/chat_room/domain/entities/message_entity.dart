@@ -60,7 +60,7 @@ class MessageEntity {
   }
 
   void markAsOneTimeView() {
-    isOneTimeViewMessage = true;
+    isOneTimeSeenMessage = true;
   }
 
   void markRecordAsListened() {
@@ -76,6 +76,6 @@ class MessageEntity {
 
   @override
   String toString() {
-    return "MessageEntity: { text: $text, sender: $sender, id: $id,chatId: $chatId, reply: $reply, time: $time, byMe: $byMe, isUpdated: $isUpdated, seen: $seen, delivered: $delivered, hasReply: $hasReply, media: $media, sharedContacts: $sharedContacts }";
+    return "MessageEntity: { text: $text, sender: $sender, id: $id,chatId: $chatId, reply: $reply, time: $time, byMe: $byMe, isUpdated: $isUpdated, seen: $seen, delivered: $delivered, hasReply: $hasReply, media: $media, sharedContacts: $sharedContacts, isOneTimeViewMessage: $isOneTimeViewMessage, isOneTimeSeenMessage: $isOneTimeSeenMessage, isListened: $isListened }";
   }
 }
