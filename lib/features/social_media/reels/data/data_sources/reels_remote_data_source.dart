@@ -17,17 +17,32 @@ import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_
 
 abstract class ReelsRemoteDataSource {
   Future<Either<Failure, ReelsResponse>> getExploreReels(int page);
+
   Future<Either<Failure, ReelsResponse>> getFollowersReels(int page);
+
   Future<Either<Failure, ReelSaveResponse>> saveReel(String reelId);
+
   Future<Either<Failure, ReelShareResponse>> shareReel(String reelId);
+
   Future<Either<Failure, ReelLikeResponse>> likeReel(String reelId);
-  Future<Either<Failure, AddCommentResponse>> addComment(AddReelCommentParams params);
-  Future<Either<Failure, AddCommentResponse>> addReply(AddReelReplyParams params);
+
+  Future<Either<Failure, AddCommentResponse>> addComment(
+      AddReelCommentParams params);
+
+  Future<Either<Failure, AddCommentResponse>> addReply(
+      AddReelReplyParams params);
+
   Future<Either<Failure, GetCommentsResponse>> getComments(String reelId);
+
   Future<Either<Failure, String>> toggleCommentLike(String commentId);
-  Future<Either<Failure, ReelsForAudioResponse>> getReelsWithSameAudio(ReelsWithSameAudioParams params);
+
+  Future<Either<Failure, ReelsForAudioResponse>> getReelsWithSameAudio(
+      ReelsWithSameAudioParams params);
+
   Future<Either<Failure, bool>> createReel(CreateReelParams params);
-  Future<Either<Failure, bool>> createAdvertisement(CreateAdvertisementParams params);
+
+  Future<Either<Failure, bool>> createAdvertisement(
+      CreateAdvertisementParams params);
 }
 
 class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
@@ -46,14 +61,12 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
     );
     return response.fold(
       (failure) => Left(failure),
-      (response) => Right(
-          ReelsResponse.fromJson(response)
-      ),
+      (response) => Right(ReelsResponse.fromJson(response)),
     );
   }
 
   @override
-  Future<Either<Failure, bool>> createReel(CreateReelParams params) async{
+  Future<Either<Failure, bool>> createReel(CreateReelParams params) async {
     final response = await _apiConsumer.post(EndPoints.createReel(params));
 
     return response.fold((l) {
@@ -68,8 +81,10 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> createAdvertisement(CreateAdvertisementParams params) async{
-    final response = await _apiConsumer.post(EndPoints.createAdvertisement(params));
+  Future<Either<Failure, bool>> createAdvertisement(
+      CreateAdvertisementParams params) async {
+    final response =
+        await _apiConsumer.post(EndPoints.createAdvertisement(params));
 
     return response.fold((l) {
       return Left(l);
@@ -79,8 +94,8 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
       //     .toList();
       // return Right(list);
       return Right(data['status']);
-    });  }
-
+    });
+  }
 
   @override
   Future<Either<Failure, ReelsResponse>> getFollowersReels(int page) async {
@@ -92,9 +107,9 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
       },
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            ReelsResponse.fromJson(response),
+      (failure) => Left(failure),
+      (response) => Right(
+        ReelsResponse.fromJson(response),
       ),
     );
   }
@@ -103,12 +118,11 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
   Future<Either<Failure, ReelSaveResponse>> saveReel(String reelId) async {
     final response = await _apiConsumer.post(
       EndPoints.saveReel(reelId),
-
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            ReelSaveResponse.fromJson(response),
+      (failure) => Left(failure),
+      (response) => Right(
+        ReelSaveResponse.fromJson(response),
       ),
     );
   }
@@ -117,12 +131,11 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
   Future<Either<Failure, ReelShareResponse>> shareReel(String reelId) async {
     final response = await _apiConsumer.post(
       EndPoints.shareReel(reelId),
-
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            ReelShareResponse.fromJson(response),
+      (failure) => Left(failure),
+      (response) => Right(
+        ReelShareResponse.fromJson(response),
       ),
     );
   }
@@ -131,81 +144,83 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
   Future<Either<Failure, ReelLikeResponse>> likeReel(String reelId) async {
     final response = await _apiConsumer.post(
       EndPoints.likeReel(reelId),
-
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            ReelLikeResponse.fromJson(response),
+      (failure) => Left(failure),
+      (response) => Right(
+        ReelLikeResponse.fromJson(response),
       ),
     );
   }
 
   @override
-  Future<Either<Failure, AddCommentResponse>> addComment(AddReelCommentParams params) async {
+  Future<Either<Failure, AddCommentResponse>> addComment(
+      AddReelCommentParams params) async {
     final response = await _apiConsumer.post(
       EndPoints.addReelComment(params),
-
+      data: params.toJson(),
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            AddCommentResponse.fromJson(response),
+      (failure) => Left(failure),
+      (response) => Right(
+        AddCommentResponse.fromJson(response),
       ),
     );
   }
 
   @override
-  Future<Either<Failure, AddCommentResponse>> addReply(AddReelReplyParams params) async {
+  Future<Either<Failure, AddCommentResponse>> addReply(
+      AddReelReplyParams params) async {
     final response = await _apiConsumer.post(
-    EndPoints.addReelReply(params),
-
+      EndPoints.addReelReply(params),
+      data: params.toJson(),
     );
     return response.fold(
-    (failure) => Left(failure),
-    (response) => Right(
-    AddCommentResponse.fromJson(response),
-    ),
+      (failure) => Left(failure),
+      (response) => Right(
+        AddCommentResponse.fromJson(response),
+      ),
     );
   }
 
   @override
-  Future<Either<Failure, GetCommentsResponse>> getComments(String reelId) async {
+  Future<Either<Failure, GetCommentsResponse>> getComments(
+      String reelId) async {
     final response = await _apiConsumer.get(
       EndPoints.getComments(reelId),
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            GetCommentsResponse.fromJson(response),
+      (failure) => Left(failure),
+      (response) => Right(
+        GetCommentsResponse.fromJson(response),
       ),
     );
   }
 
   @override
   Future<Either<Failure, String>> toggleCommentLike(String commentId) async {
-    final response = await _apiConsumer.get(
+    final response = await _apiConsumer.post(
       EndPoints.toggleCommentLike(commentId),
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            response['message'],
+      (failure) => Left(failure),
+      (response) => Right(
+        response['message'],
       ),
     );
   }
 
   @override
-  Future<Either<Failure, ReelsForAudioResponse>> getReelsWithSameAudio(ReelsWithSameAudioParams params) async {
+  Future<Either<Failure, ReelsForAudioResponse>> getReelsWithSameAudio(
+      ReelsWithSameAudioParams params) async {
     final response = await _apiConsumer.get(
       EndPoints.getReelsWithSameAudio(params),
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            ReelsForAudioResponse.fromJson(response),
+      (failure) => Left(failure),
+      (response) => Right(
+        ReelsForAudioResponse.fromJson(response),
       ),
     );
   }
-
 }

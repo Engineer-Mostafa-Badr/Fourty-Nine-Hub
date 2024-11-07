@@ -28,7 +28,7 @@ import '../../../../../../core/utils/shared_pref.dart';
 import '../../../../../trip_join/helpers/print_helper.dart';
 import '../../../data/models/new_reels_model.dart';
 
-part 'explore_reels_state.dart';
+part 'reel_state.dart';
 
 class ReelsCubit extends Cubit<ReelsState> {
   final CreateReelUseCase _createReelUseCase;
@@ -131,10 +131,8 @@ class ReelsCubit extends Cubit<ReelsState> {
           createAdvertisement([responseData['data']['mediaId']],
               advertisementType!, double.parse(totalPrice!));
         }
-      } else {
-      }
-    } else {
-    }
+      } else {}
+    } else {}
   }
 
   Future<void> createAdvertisement(
@@ -147,8 +145,7 @@ class ReelsCubit extends Cubit<ReelsState> {
     result.fold(
       (failure) =>
           emit(state.copyWith(reelViewErrorMessage: failure.toString())),
-      (data) {
-      },
+      (data) {},
     );
   }
 
@@ -200,7 +197,6 @@ class ReelsCubit extends Cubit<ReelsState> {
         ));
       },
     );
-
   }
 
   Future<String?> saveReel(String reelId) async {
@@ -217,7 +213,6 @@ class ReelsCubit extends Cubit<ReelsState> {
       },
     );
     return message;
-
   }
 
   Future<void> shareReel(String reelId) async {
@@ -270,7 +265,9 @@ class ReelsCubit extends Cubit<ReelsState> {
 
   Future<void> addReplayComment(String reelId, String comment,
       {String? receiverComment, String? parentCommentId}) async {
-    emit(state.copyWith(isCommenting: false));
+    //parent comment id is comment (global) Main comment
+    //receiver comment is reply or
+     emit(state.copyWith(isCommenting: false));
     final result = await _addReplyUseCase(AddReelReplyParams(
         comment: comment,
         reelId: reelId,
@@ -298,7 +295,6 @@ class ReelsCubit extends Cubit<ReelsState> {
             fetchCommentsErrorMessage: 'fetchCommentsError')), (data) {
       emit(state.copyWith(isFetchingComments: true, fetchedComments: data));
     });
-
   }
 
   Future<void> toggleCommentLike(String commentId) async {

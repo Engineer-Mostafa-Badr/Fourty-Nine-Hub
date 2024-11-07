@@ -1,4 +1,4 @@
-part of 'explore_reels_cubit.dart';
+part of 'reel_cubit.dart';
 
 class ReelsState {
   final List<Reel>? globalReels;

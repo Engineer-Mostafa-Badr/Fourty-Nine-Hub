@@ -20,13 +20,10 @@ import '../../../../ads_feature/create_company_ad/presentation/pages/widgets/ree
 import '../../../tinder/data/shared/shared.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
 import '../../data/models/new_reels_model.dart';
-import '../controllers/explore_reels_cubit/explore_reels_cubit.dart';
+import '../controllers/explore_reels_cubit/reel_cubit.dart';
 import '../widgets/components/unified_widget_view.dart';
 import 'audio_screen.dart';
 
-/// A unified reel item widget that can function as MainReelItem, ReelItemForInstagram, or SpotlightReelItem.
-
-/// Widget to display reel information such as user info, actions, and audio.
 class ReelActions extends StatefulWidget {
   final Reel reel;
   final ReelItemType itemType;
@@ -45,8 +42,14 @@ class ReelActions extends StatefulWidget {
 class _ReelActionsState extends State<ReelActions> {
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final double width = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     return SizedBox(
       height: height,
@@ -161,8 +164,9 @@ class _UserInfo extends StatefulWidget {
 }
 
 class _UserInfoState extends State<_UserInfo> {
-  String get _displayName => capitalizeAndSplit(
-      '${widget.reel.user.firstName} ${widget.reel.user.lastName}');
+  String get _displayName =>
+      capitalizeAndSplit(
+          '${widget.reel.user.firstName} ${widget.reel.user.lastName}');
 
   String get _displayReelName {
     final maxLength = (widget.reel.name.length * 0.75).round();
@@ -209,7 +213,8 @@ class _UserInfoState extends State<_UserInfo> {
           child: SizedBox(
             width: 0.7.sw,
             child: ReadMoreText(
-              "${widget.reel.name}\n${widget.reel.audio.audioName}\nعايز نحط ايه هنا  ",
+              "${widget.reel.name}\n${widget.reel.audio
+                  .audioName}\nعايز نحط ايه هنا  ",
               trimLines: 1,
               colorClickableText: AppColors.PRIMARY_COLOR_DARK,
               trimMode: TrimMode.Line,
@@ -234,7 +239,8 @@ class _UserInfoState extends State<_UserInfo> {
     );
   }
 
-  TextStyle get _nameTextStyle => TextStyle(
+  TextStyle get _nameTextStyle =>
+      TextStyle(
         fontSize: 50.sp,
         color: Colors.white,
         decoration: TextDecoration.none,
@@ -287,7 +293,8 @@ class _ReelDetails extends StatelessWidget {
     );
   }
 
-  TextStyle get _detailsTextStyle => TextStyle(
+  TextStyle get _detailsTextStyle =>
+      TextStyle(
         fontSize: 30.sp,
         color: Colors.white60,
         decoration: TextDecoration.none,
@@ -535,9 +542,9 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
         children: [
           isReversed
               ? Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: animatedIcon,
-                )
+            textDirection: TextDirection.rtl,
+            child: animatedIcon,
+          )
               : animatedIcon,
           Text(
             count,
@@ -566,8 +573,8 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
     }
   }
 
-  Future<void> _handleCommentAction(
-      BuildContext context, ReelsCubit cubit) async {
+  Future<void> _handleCommentAction(BuildContext context,
+      ReelsCubit cubit) async {
     try {
       await showCommentsBottomSheet(context, reel: reel);
     } catch (e) {
@@ -747,8 +754,8 @@ class _ActionButtons extends StatelessWidget {
     }
   }
 
-  Future<void> _handleCommentAction(
-      BuildContext context, ReelsCubit cubit) async {
+  Future<void> _handleCommentAction(BuildContext context,
+      ReelsCubit cubit) async {
     try {
       await cubit.getComments(reel.id);
     } catch (e) {
@@ -846,7 +853,8 @@ class _ActionButton extends StatelessWidget {
     );
   }
 
-  TextStyle get _countTextStyle => TextStyle(
+  TextStyle get _countTextStyle =>
+      TextStyle(
         height: 1.h,
         fontSize: 30.sp,
         color: Colors.white,
@@ -885,10 +893,10 @@ class RotatingCircularButton extends StatelessWidget {
                 : Colors.transparent,
             image: reel.audio.audioPicture.isNotEmpty
                 ? DecorationImage(
-                    image: NetworkImage(reel.audio.audioPicture),
-                    fit: BoxFit.cover,
-                    onError: (_, __) {},
-                  )
+              image: NetworkImage(reel.audio.audioPicture),
+              fit: BoxFit.cover,
+              onError: (_, __) {},
+            )
                 : null,
           ),
           child: InkWell(
@@ -899,14 +907,15 @@ class RotatingCircularButton extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => BlocProvider.value(
-                      value: serviceLocator<ReelsCubit>()
-                        ..fetchReelsWithSameAudio(reel.audio.id),
-                      child: InstagramAudioScreen(
-                        audio: reel.audio,
-                        reel: reel,
-                      ),
-                    ),
+                    builder: (context) =>
+                        BlocProvider.value(
+                          value: serviceLocator<ReelsCubit>()
+                            ..fetchReelsWithSameAudio(reel.audio.id),
+                          child: InstagramAudioScreen(
+                            audio: reel.audio,
+                            reel: reel,
+                          ),
+                        ),
                   ),
                 );
               }

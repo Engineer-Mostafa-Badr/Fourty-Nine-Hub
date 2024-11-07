@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_events.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_state.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/reels_widget.dart';

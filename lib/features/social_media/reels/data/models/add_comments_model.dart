@@ -1,3 +1,6 @@
+import 'package:fourtyninehub/features/social_media/reels/data/models/receiver_comment_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/entities/reciever_comment_entity.dart';
+
 class AddCommentResponse {
   final bool status;
   final String message;
@@ -32,7 +35,7 @@ class AddCommentData {
   final String comment;
   final User user;
   final String? parentId; // Nullable field
-  final String? receiverComment; // Nullable field
+  final ReceiverCommentEntity? receiverComment; // Nullable field
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -55,7 +58,9 @@ class AddCommentData {
       user: User.fromJson(json['user']),
       parentId: json['parentId'],
       // Accepts null
-      receiverComment: json['receiverComment'],
+      receiverComment: json['receiverComment'] == null
+          ? null
+          : ReceiverCommentModel.fromJson(json['receiverComment']),
       // Accepts null
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),

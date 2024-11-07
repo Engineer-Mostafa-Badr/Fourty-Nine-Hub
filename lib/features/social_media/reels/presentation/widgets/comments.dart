@@ -6,7 +6,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:shimmer/shimmer.dart';
@@ -15,6 +15,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../tinder/data/shared/shared.dart';
 import 'dart:ui';
+
 // Custom Text widget to avoid repeating textScaleFactor: 1.0
 class NoScaleText extends StatelessWidget {
   final String data;
@@ -34,7 +35,7 @@ class NoScaleText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       data,
-      textScaler: const TextScaler.linear(0.1),
+      textScaler: const TextScaler.linear(1),
       style: style,
       textAlign: textAlign,
       maxLines: maxLines,
@@ -47,7 +48,12 @@ Future<void> showCommentsBottomSheet(BuildContext context,
     {required Reel reel}) async {
   await showModalBottomSheet(
     context: context,
-    isScrollControlled: true,
+    isScrollControlled: false,
+    isDismissible: true,
+    constraints: BoxConstraints(
+      maxHeight: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+      minHeight: 0.6.sh,
+    ),
     backgroundColor: Colors.transparent,
     builder: (context) {
       return CommentsBottomSheet(
@@ -72,6 +78,7 @@ class CommentsBottomSheet extends StatefulWidget {
 
 class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   late ReelsCubit reelsCubit;
+  final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -92,39 +99,30 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: Stack(
-          children: [
-            Container(color: Colors.transparent),
-            // Transparent background to detect taps
-            DraggableScrollableSheet(
-              initialChildSize: isKeyboardVisible(context) ? 0.9 : 0.6,
-              // minChildSize: 0.4,
-              maxChildSize: 0.9,
-              builder: (context, scrollController) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: isDark ? Colors.grey[900] : Colors.white,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      _buildHandleIndicator(isDark),
-                      _buildCommentsHeader(isDark),
-                      _buildCommentsList(scrollController),
-                      Divider(color: Colors.grey[800]),
-                      CommentInputField(
-                        reel: widget.reel,
-                        scrollController: scrollController,
-                      ),
-                    ],
-                  ),
-                );
-              },
+        child: Container(
+          constraints: BoxConstraints(
+            maxHeight: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+            minHeight: 0.6.sh,
+          ),
+          decoration: BoxDecoration(
+            color: isDark ? Colors.grey[900] : Colors.white,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
             ),
-          ],
+          ),
+          child: Column(
+            children: <Widget>[
+              _buildHandleIndicator(isDark),
+              _buildCommentsHeader(isDark,widget.reel),
+              _buildCommentsList(),
+              Divider(color: Colors.grey[800]),
+              CommentInputField(
+                reel: widget.reel,
+                scrollController: scrollController,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -142,27 +140,27 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     );
   }
 
-  Widget _buildCommentsHeader(bool isDark) {
+  Widget _buildCommentsHeader(bool isDark,Reel reel) {
     return Center(
       child: NoScaleText(
-        LocaleKeys.comments_header.localize,
+        '${reel.commentCount} ${LocaleKeys.comments_header.localize}',
         style: TextStyle(
           color: isDark ? Colors.white : Colors.black87,
           fontWeight: FontWeight.bold,
-          fontSize: 40.sp,
+          fontSize: 30.sp,
         ),
       ),
     );
   }
 
-  Widget _buildCommentsList(ScrollController scrollController) {
+  Widget _buildCommentsList() {
     return Expanded(
       child: BlocBuilder<ReelsCubit, ReelsState>(
         builder: (context, state) {
           final comments = state.fetchedComments;
           if (comments != null && comments.data.isNotEmpty) {
             return ListView.builder(
-              controller: scrollController,
+              shrinkWrap: true,
               itemCount: comments.data.length,
               itemBuilder: (context, index) {
                 return CommentWidget(
@@ -172,8 +170,10 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
             );
           }
           // if(state.)
-
-          return Center(child: Label(text: LocaleKeys.noComments.localize));
+      
+          return Center(
+            child: Label(text: LocaleKeys.noComments.localize),
+          );
         },
       ),
     );
@@ -206,7 +206,6 @@ class CommentInputFieldState extends State<CommentInputField> {
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
       child: Row(
@@ -218,19 +217,24 @@ class CommentInputFieldState extends State<CommentInputField> {
                 alignment: Alignment.centerRight,
                 children: [
                   MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
+                    data: MediaQuery.of(context)
+                        .copyWith(textScaler: const TextScaler.linear(1.0)),
                     child: TextField(
                       controller: _commentController,
                       style: TextStyle(
-                        color: context.isDarkMode ? Colors.white : Colors.black87,
+                        color:
+                            context.isDarkMode ? Colors.white : Colors.black87,
                       ),
                       maxLines: null,
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: context.isDarkMode ? Colors.grey[800] : Colors.black12,
+                        fillColor: context.isDarkMode
+                            ? Colors.grey[800]
+                            : Colors.black12,
                         hintText: LocaleKeys.add_comment_hint.localize,
                         hintStyle: TextStyle(
-                          color: context.isDarkMode ? Colors.grey : Colors.black54,
+                          color:
+                              context.isDarkMode ? Colors.grey : Colors.black54,
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
@@ -241,39 +245,15 @@ class CommentInputFieldState extends State<CommentInputField> {
                       ),
                     ),
                   ),
-                  // Uncomment if you prefer the send button inside the text field
-                  /*
-                  Positioned.directional(
-                    end: 10,
-                    textDirection: context.isArabic
-                        ? TextDirection.rtl
-                        : TextDirection.ltr,
-                    child: IconButton(
-                      icon: const Icon(Icons.send, color: Colors.blue),
-                      onPressed: () async {
-                        final reelsCubit = context.read<ReelsCubit>();
-                        await reelsCubit.addComment(
-                            widget.reel.id, _commentController.text);
-                        await reelsCubit.getComments(widget.reel.id);
-
-                        widget.scrollController.animateTo(
-                          widget.scrollController.position.maxScrollExtent,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeOut,
-                        );
-
-                        _commentController.clear();
-                      },
-                    ),
-                  ),
-                  */
                 ],
               ),
             ),
           ),
           IconButton(
             icon: Icon(Icons.send,
-                color: context.isDarkMode ? AppColors.LIGHT_BLUE : AppColors.PRIMARY_COLOR),
+                color: context.isDarkMode
+                    ? AppColors.LIGHT_BLUE
+                    : AppColors.PRIMARY_COLOR),
             onPressed: () async {
               final reelsCubit = context.read<ReelsCubit>();
               await reelsCubit.addComment(
@@ -390,7 +370,10 @@ class _CommentWidgetState extends State<CommentWidget> {
                 ? AppColors.PRIMARY_COLOR_DARK
                 : AppColors.GREY_NORMAL_COLOR,
           ),
-          onPressed: () => _handleLikeComment(widget.commentData.id),
+          onPressed: () {
+            print('Like comment ${widget.commentData.id}');
+            _handleLikeComment(widget.commentData.id);
+          },
         ),
         NoScaleText(
           widget.commentData.likeCount.toString(),
@@ -519,7 +502,8 @@ class _CommentWidgetState extends State<CommentWidget> {
         children: [
           Expanded(
             child: MediaQuery(
-              data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
+              data: MediaQuery.of(context)
+                  .copyWith(textScaler: const TextScaler.linear(1.0)),
               child: TextField(
                 controller: _replyController,
                 focusNode: _replyFocusNode,
@@ -560,109 +544,26 @@ class _CommentWidgetState extends State<CommentWidget> {
     });
   }
 
-  void _handleSendReply() {
+  void _handleSendReply() async {
     final replyText = _replyController.text.trim();
     if (replyText.isNotEmpty) {
-      context
-          .read<ReelsCubit>()
-          .addReplayComment(
+      await context.read<ReelsCubit>().addReplayComment(
             widget.commentData.reelId,
             replyText,
             parentCommentId: widget.commentData.id,
             receiverComment: widget.commentData.user.id,
-          )
-          .then((_) {
-        _replyController.clear();
-        FocusScope.of(context).unfocus();
-        context.read<ReelsCubit>().getComments(widget.commentData.reelId);
-      }).catchError((error) {
-        _showErrorSnackBar(LocaleKeys.failed_send_reply.localize);
-      });
+          );
+
+      print('Reply sent successfully ${widget.commentData.id}');
+      _replyController.clear();
+      FocusScope.of(context).unfocus();
+      context.read<ReelsCubit>().getComments(widget.commentData.reelId);
     }
   }
 
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
-    );
-  }
-}
-
-// Shimmer effect for loading state of comments
-class ShimmerCommentWidget extends StatelessWidget {
-  const ShimmerCommentWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Shimmer.fromColors(
-            baseColor: Colors.white12,
-            highlightColor: Colors.white12,
-            child: const CircleAvatar(
-              backgroundColor: Colors.white12,
-              radius: 20,
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Shimmer.fromColors(
-                  baseColor: Colors.white12,
-                  highlightColor: Colors.white12,
-                  child: Container(
-                    width: 100,
-                    height: 16.h,
-                    color: Colors.white12,
-                  ),
-                ),
-                SizedBox(height: 5.h),
-                Shimmer.fromColors(
-                  baseColor: Colors.white12,
-                  highlightColor: Colors.white12,
-                  child: Container(
-                    width: double.infinity,
-                    height: 12.h,
-                    color: Colors.white12,
-                  ),
-                ),
-                SizedBox(height: 5.h),
-                Row(
-                  children: [
-                    Shimmer.fromColors(
-                      baseColor: Colors.white12,
-                      highlightColor: Colors.white12,
-                      child: const Icon(Icons.favorite, color: Colors.white12),
-                    ),
-                    const SizedBox(width: 5),
-                    Shimmer.fromColors(
-                      baseColor: Colors.white12,
-                      highlightColor: Colors.white12,
-                      child: Container(
-                        width: 20,
-                        height: 12.h,
-                        color: Colors.white12,
-                      ),
-                    ),
-                    const Spacer(),
-                    Shimmer.fromColors(
-                      baseColor: Colors.white12,
-                      highlightColor: Colors.white12,
-                      child: const Icon(FontAwesomeIcons.reply,
-                          color: Colors.white12),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

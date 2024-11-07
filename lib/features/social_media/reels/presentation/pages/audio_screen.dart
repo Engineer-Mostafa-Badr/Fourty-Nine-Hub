@@ -20,7 +20,7 @@ import '../../../../../routes/routes.dart';
 import '../../../tinder/data/shared/shared.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
 import '../../data/models/new_reels_model.dart';
-import '../controllers/explore_reels_cubit/explore_reels_cubit.dart';
+import '../controllers/explore_reels_cubit/reel_cubit.dart';
 import '../widgets/components/snackbars.dart';
 import 'audio_reel_view.dart';
 import 'package:easy_localization/easy_localization.dart';
