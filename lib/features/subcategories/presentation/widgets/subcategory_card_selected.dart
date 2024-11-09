@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -100,7 +99,7 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Label(
-                        text: context.isArabic?widget.item.nameAr:widget.item.nameEn,
+                        text: widget.item.name,
                         style: Styles.mediumText(fontWeight: FontWeight.bold),
                       ),
                       // if (!widget.isSmallCard)

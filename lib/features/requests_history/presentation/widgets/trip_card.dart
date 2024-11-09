@@ -7,7 +7,6 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart'
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_come_with_me_usecase.dart';
@@ -66,7 +65,7 @@ class TripCard extends StatelessWidget {
                     color: AppColors.PRIMARY_COLOR),
                 const Sizer(),
                 Label(
-                  text: context.isArabic?trip.category?.nameAr ?? '':trip.category?.nameEn??'',
+                  text: trip.category?.name ?? '',
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),

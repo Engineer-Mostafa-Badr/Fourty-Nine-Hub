@@ -59,8 +59,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
     isSelect = true;
     return SubCategoryEntity(
         id: model?.subCategoryId ?? "",
-        nameEn: model?.subCategoryNameEn ?? "",
-        nameAr: model?.subCategoryNameAr ?? "",
+        name: model?.subCategoryNameEn ?? "",
         image: model?.picture ?? "",
         isFavorite: model?.isFavorite ?? false);
   }
@@ -129,9 +128,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                             numberOfContent: e.driverCount,
                                             image: e.picture!,
                                             isFavorite: e.isFavorite ?? false,
-                                            nameEn: e.subCategoryNameEn??'',
-                                            nameAr: e.subCategoryNameAr??'',
-                                        ),
+                                            name: e.subCategoryNameEn!),
                                       )
                                       .toList()),
                         ),

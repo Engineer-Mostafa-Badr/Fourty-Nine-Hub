@@ -26,8 +26,7 @@ class DoctorSearchParams {
   CityEntity city = CityEntity(id: '', nameEn: '', nameAr: '');
   SubCategoryEntity subCategory = SubCategoryEntity(
     id: '',
-    nameEn: '',
-    nameAr: '',
+    name: '',
     image: '',
     isFavorite: false,
   );

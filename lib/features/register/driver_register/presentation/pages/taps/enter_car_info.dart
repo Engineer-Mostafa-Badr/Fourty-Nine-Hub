@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/register/driver_register/presentation/widgets/upload_image.dart';
 
 import '../../../../../../res/style/styles.dart';
@@ -90,7 +89,7 @@ class EnterCarInfo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Label(
-            text: 'I register in ${context.isArabic?state.subCategory?.nameAr??'':state.subCategory?.nameEn ?? ''}',
+            text: 'I register in ${state.subCategory?.name ?? ''}',
             style: Styles.headerText(),
           ),
           GridView.builder(
@@ -107,7 +106,7 @@ class EnterCarInfo extends StatelessWidget {
                         value: subCategory == state.subCategory,
                         onChanged: (v) => controller.changeSubCategorySelection(
                             item: subCategory)),
-                    Expanded(child: Label(text: context.isArabic?subCategory.nameAr:subCategory.nameEn)),
+                    Expanded(child: Label(text: subCategory.name)),
                   ],
                 );
               }),

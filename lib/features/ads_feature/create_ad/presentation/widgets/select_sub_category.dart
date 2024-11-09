@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../subcategories/domain/entities/sub_category_entity.dart';
@@ -25,11 +23,11 @@ class SelectSubCategory extends StatelessWidget {
       body: ListView.builder(
           itemCount: subCategories.length,
           itemBuilder: (context, index) =>
-              _buildCategoryTile(category: subCategories[index], context: context)),
+              _buildCategoryTile(category: subCategories[index])),
     );
   }
 
-  Widget _buildCategoryTile({required SubCategoryEntity category,required BuildContext context}) {
+  Widget _buildCategoryTile({required SubCategoryEntity category}) {
     return ListTile(
       onTap: () => onSelected(category),
       leading: SquareImage(
@@ -37,7 +35,7 @@ class SelectSubCategory extends StatelessWidget {
           width: kToolbarHeight * .5,
           height: kToolbarHeight * .5,
           source: NetworkImage(category.image)),
-      title: Label(text: context.isArabic?category.nameAr:category.nameEn),
+      title: Label(text: category.name),
     );
   }
 }

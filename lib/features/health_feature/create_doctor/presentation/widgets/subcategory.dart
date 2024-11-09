@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
@@ -52,7 +51,7 @@ class CreateDoctorSubcategoryDropdown extends StatelessWidget {
               hintText: LocaleKeys.speciality.tr(),
               dropdownMenuEntries: state.subCategories
                   .map((e) => DropdownMenuEntry<SubCategoryEntity>(
-                      value: e, label: context.isArabic?e.nameAr:e.nameEn))
+                      value: e, label: e.name))
                   .toList(),
               onSelected: (value) {
                 if (value != null) {

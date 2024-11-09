@@ -6,7 +6,6 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
@@ -87,7 +86,7 @@ class HealthMedicalServiceCard extends StatelessWidget {
                   Column(
                     children: [
                       Label(
-                        text: context.isArabic?subCategory.nameAr:subCategory.nameEn,
+                        text: subCategory.name,
                         style: Styles.mediumText(fontWeight: FontWeight.bold),
                       ),
                       Label(

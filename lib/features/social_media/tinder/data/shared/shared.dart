@@ -12,7 +12,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_cubit.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_state.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';

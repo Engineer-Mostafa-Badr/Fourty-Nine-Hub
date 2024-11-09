@@ -5,8 +5,7 @@ class HealthSubcategoryEntity extends SubCategoryEntity {
   final int numberOfContent;
   HealthSubcategoryEntity({
     required super.id,
-    required super.nameAr,
-    required super.nameEn,
+    required super.name,
     required super.image,
     required super.isFavorite,
     required this.numberOfContent,

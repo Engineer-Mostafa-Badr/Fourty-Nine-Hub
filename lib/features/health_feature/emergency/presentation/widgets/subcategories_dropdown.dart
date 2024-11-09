@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/presentation/cubit/emergency_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
@@ -26,7 +25,7 @@ class HealthEmergencySubCategoriesDropdown extends StatelessWidget {
               hintText: LocaleKeys.speciality.localize,
               dropdownMenuEntries: state.subCategories
                   .map((e) => DropdownMenuEntry<SubCategoryEntity>(
-                      value: e, label: context.isArabic?e.nameAr:e.nameEn))
+                      value: e, label: e.name))
                   .toList(),
               onSelected: (value) {
                 if (value != null) {

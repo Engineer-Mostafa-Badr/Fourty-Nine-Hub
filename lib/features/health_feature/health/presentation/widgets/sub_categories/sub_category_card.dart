@@ -7,7 +7,6 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
@@ -92,7 +91,7 @@ class HealthSubCategoryCard extends StatelessWidget {
                   ],
                 ),
                 Label(
-                  text: context.isArabic?subCategory.nameAr:subCategory.nameEn,
+                  text: subCategory.name,
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
                 ),
                 Label(

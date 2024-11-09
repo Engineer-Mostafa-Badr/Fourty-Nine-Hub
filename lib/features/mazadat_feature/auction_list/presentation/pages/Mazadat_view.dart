@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/presentation/cubit/auction_list_cubit.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -162,7 +161,7 @@ class MazadatView extends StatelessWidget {
                               : AppColors.LIGHT_GRAY_COLOR),
                       child: Center(
                         child: Label(
-                            text: context.isArabic?subCategory.nameAr:subCategory.nameEn,
+                            text: subCategory.name,
                             style: Styles.mediumText(
                                 color: state.selectedSubCategory == subCategory
                                     ? Colors.white

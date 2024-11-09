@@ -4,8 +4,7 @@ import '../../domain/entities/sub_category_entity.dart';
 class SubCategoryModel extends SubCategoryEntity {
   SubCategoryModel(
       {required super.id,
-      required super.nameAr,
-      required super.nameEn,
+      required super.name,
       required super.image,
       super.numberOfContent,
       super.hasAuction,
@@ -14,8 +13,7 @@ class SubCategoryModel extends SubCategoryEntity {
   factory SubCategoryModel.fromJson(Map<String, dynamic> json) {
     return SubCategoryModel(
       id: json['_id'],
-      nameAr: json['nameAr'] ,
-      nameEn: json['nameEn'] ,
+      name: getLang() == 'ar' ? json['nameAr'] : json['nameEn'],
       numberOfContent: json['numberOfAdsCount'] ?? 0,
       image: json['picture'] ?? '',
       isFavorite: json['isFavorite'] ?? false,
@@ -26,7 +24,7 @@ class SubCategoryModel extends SubCategoryEntity {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['name'] =getLang()=='ar'? nameAr: nameEn;
+    data['name'] = name;
     if (numberOfContent != null) {
       data['numberOfAdsCount'] = numberOfContent;
     }

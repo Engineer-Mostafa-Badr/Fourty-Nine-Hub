@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:google_static_maps_controller/google_static_maps_controller.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -49,7 +48,7 @@ class DriverTripCard extends StatelessWidget {
                       color: AppColors.PRIMARY_COLOR),
                   const Sizer(),
                   Label(
-                    text: context.isArabic?trip.category?.nameAr ?? '':trip.category?.nameEn ?? '',
+                    text: trip.category?.name ?? '',
                     style: Styles.mediumText(fontWeight: FontWeight.bold),
                   ),
                 ],

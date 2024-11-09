@@ -51,10 +51,10 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
         clipBehavior: Clip.hardEdge,
         // width: 0.35.sw,
         // decoration: BoxDecoration(
-        //     color: isDarkTheme(context)?Colors.transparent:Colors.white,
+        //     color: context.isDarkMode?Colors.transparent:Colors.white,
         //     boxShadow: [
         //       BoxShadow(
-        //           color: isDarkTheme(context) ? Colors.black54 : Colors.grey,
+        //           color: context.isDarkMode ? Colors.black54 : Colors.grey,
         //           blurRadius: 2.0,
         //           offset: Offset(1, 1))
         //     ]),
@@ -196,7 +196,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
   Widget _buildInfoSection(
     BuildContext context,
   ) {
-    final subCategoryName = context.isArabic?widget.subCategoryCardData.nameAr:widget.subCategoryCardData.nameEn;
+    final subCategoryName = widget.subCategoryCardData.name;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 2),
@@ -289,7 +289,7 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                    color: isDarkTheme(context) ? Colors.black : Colors.grey,
+                    color: context.isDarkMode ? Colors.black : Colors.grey,
                     blurRadius: 1.0,
                     offset: Offset(0, 1))
               ],

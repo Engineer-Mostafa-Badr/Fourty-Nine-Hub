@@ -50,8 +50,7 @@ class DoctorModel extends DoctorEntity {
           ? SubCategoryModel.fromJson(json['subCategoryId'])
           : SubCategoryEntity(
               id: '',
-              nameEn: '',
-              nameAr: '',
+              name: '',
               image: '',
               isFavorite: false,
             ),

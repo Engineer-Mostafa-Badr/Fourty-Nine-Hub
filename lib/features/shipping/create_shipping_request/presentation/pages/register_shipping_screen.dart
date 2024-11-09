@@ -13,7 +13,6 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.d
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/pickers/date/id_expiry_date_picker.dart';
@@ -187,14 +186,12 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                                     id: e.subCategoryId!,
                                                     image: e.picture ?? "",
                                                     isFavorite: false,
-                                                    nameEn: e.subCategoryNameEn ??
-                                                        "",
-                                            nameAr: e.subCategoryNameAr ??
+                                                    name: e.subCategoryNameEn ??
                                                         "",
                                                   ))
                                               .map((e) => DropdownMenuEntry<
                                                       SubCategoryEntity>(
-                                                  value: e, label: context.isArabic?e.nameAr:e.nameEn))
+                                                  value: e, label: e.name))
                                               .toList(),
                                           onSelected: (value) {
                                             setState(() {
