@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateful/maps/map_picker.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/domain/usecases/create_rider_offer_usecase.dart';
 import 'package:go_router/go_router.dart';
 
@@ -49,7 +50,7 @@ class DriverTripDetails extends StatelessWidget {
               const Icon(FontAwesomeIcons.car, color: AppColors.PRIMARY_COLOR),
               const Sizer(),
               Label(
-                text: trip.category?.name ?? "",
+                text: context.isArabic?trip.category?.nameAr ?? "":trip.category?.nameEn ?? "",
                 style: Styles.mediumText(fontWeight: FontWeight.bold),
               ),
             ],

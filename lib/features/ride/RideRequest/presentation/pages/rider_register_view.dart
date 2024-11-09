@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
@@ -191,15 +192,17 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
                                                   id: e.subCategoryId!,
                                                   image: e.picture ?? "",
                                                   isFavorite: false,
-                                                  name:
+                                                  nameEn:
                                                       e.subCategoryNameEn ?? "",
+                                                  nameAr:
+                                                      e.subCategoryNameAr ?? "",
                                                 ),
                                               )
                                               .map(
                                                 (e) => DropdownMenuEntry<
                                                     SubCategoryEntity>(
                                                   value: e,
-                                                  label: e.name,
+                                                  label: context.isArabic?e.nameAr:e.nameEn,
                                                 ),
                                               )
                                               .toList(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/doctor_profile.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/location.dart';
@@ -92,10 +93,7 @@ class _VisitaBookingState extends State<VisitaBooking> {
                             onPressed: () {
                               serviceLocator<SubscriptionController>()
                                   .checkIfUserSubscribed(
-                                title: serviceLocator<HealthSharedData>()
-                                    .doctorSearchParams
-                                    .subCategory
-                                    .name,
+                                title: context.isArabic?serviceLocator<HealthSharedData>().doctorSearchParams.subCategory.nameAr:serviceLocator<HealthSharedData>().doctorSearchParams.subCategory.nameEn,
                                 onSubscribed: () async {
                                   await controller.premiumBook();
                                 },

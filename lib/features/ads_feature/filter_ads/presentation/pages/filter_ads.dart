@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.da
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -72,7 +73,7 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Label(
-                            text: widget.categorization.subCategory.name,
+                            text: context.isArabic?widget.categorization.subCategory.nameAr:widget.categorization.subCategory.nameEn,
                             style: Styles.mediumText(fontWeight: FontWeight.bold),
                           ),
                           Label(text: widget.categorization.mainCategory.name),

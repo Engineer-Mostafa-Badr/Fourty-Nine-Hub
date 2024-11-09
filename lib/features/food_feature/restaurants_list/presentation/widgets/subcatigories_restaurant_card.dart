@@ -707,6 +707,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
@@ -982,7 +983,7 @@ class DetailsSection extends StatelessWidget {
           Expanded(child: Text(item.name ?? '', style: Styles.headerText())),
           Expanded(
             child: Text(
-                "${item.subcategoryId?.name ?? ''}, ${item.description ?? ''}",
+                "${context.isArabic?item.subcategoryId?.nameAr??'':item.subcategoryId?.nameEn ?? ''}, ${item.description ?? ''}",
                 style: Styles.mediumText(
                     fontWeight: FontWeight.w600, fontSize: 30)),
           ),
@@ -1069,7 +1070,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
             onPressed: () async {
               serviceLocator<SubscriptionController>().checkIfUserSubscribed(
                 showRegular: false,
-                title: "${item.subcategoryId!.name} Subscription",
+                title: "${context.isArabic?item.subcategoryId?.nameAr??'':item.subcategoryId?.nameEn??''} Subscription",
                 onSubscribed: () {
                   context.push(Routes.RESTAURANTDETAILS, extra: item.id);
                 },

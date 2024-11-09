@@ -386,6 +386,7 @@ class EndPoints {
   static fetchLastSeen(String id)=> '/users/last-seen/$id';
   static const sendGift= '/tinder/sendGifts';
   static const fetchGifts= '/dashboard-gifts?limit=10';
+  static getGifts(PaginationParams params)=> '/dashboard-gifts?limit=${params.limit}&page=${params.page}';
   static const tinderUploadPicture= '/tinder/uploadPictures?subCategory=66af974f8bf69f9469944746';
   static const createStory= '/stories/text';
   static getStoryViewers(String id)=> '/Stories/view/$id';
