@@ -44,7 +44,7 @@ class Reel {
   final int viewCount;
   final bool isLiked;
   bool isSaved;
-  final User user;
+  final UserReel user;
   final Audio audio;
   final List<String> repost;
   final String thumbnailSignedUrl;
@@ -85,7 +85,7 @@ class Reel {
       viewCount: json['viewCount'],
       isLiked: json['isLiked'],
       isSaved: json['isSaved'],
-      user: User.fromJson(json['user']),
+      user: UserReel.fromJson(json['user']),
       audio: Audio.fromJson(json['audio']),
       repost: repostList,
       thumbnailSignedUrl: json['thumbnailSignedUrl'],
@@ -94,7 +94,7 @@ class Reel {
   }
 }
 
-class User {
+class UserReel {
   final String id;
   final String firstName;
   final String lastName;
@@ -123,7 +123,7 @@ class User {
   final bool areFriends;
   final bool isSentRequest;
 
-  User({
+  UserReel({
     required this.id,
     required this.firstName,
     required this.lastName,
@@ -153,8 +153,8 @@ class User {
     required this.isSentRequest,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory UserReel.fromJson(Map<String, dynamic> json) {
+    return UserReel(
       id: json['_id'] ?? '',
       firstName: json['firstName'] ?? '',
       lastName: json['lastName'] ?? '',
@@ -162,7 +162,7 @@ class User {
       privacy: json['privacy'] ?? 'public',
       story: json['story'] ?? false,
       verified: json['verified'] ?? false,
-      profilePictureSignedUrl: json['profilePictureSignedUrl'],
+      profilePictureSignedUrl: json['profilePictureSignedUrl']??"",
       coverPictureSignedUrl: json['coverPictureSignedUrl'],
       bio: json['bio'],
       birthday: json['birthday'],

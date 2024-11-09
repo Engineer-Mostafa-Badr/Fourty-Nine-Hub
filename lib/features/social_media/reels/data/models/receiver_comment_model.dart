@@ -16,4 +16,13 @@ class ReceiverCommentModel extends ReceiverCommentEntity {
       // profilePictureSignedUrl: json['profilePictureSignedUrl'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'firstName': firstName,
+      'lastName': lastName,
+      // 'profilePictureSignedUrl': profilePictureSignedUrl,
+    };
+  }
 }

@@ -4,10 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,12 +51,12 @@ Future<void> showCommentsBottomSheet(BuildContext context,
     {required Reel reel}) async {
   await showModalBottomSheet(
     context: context,
-    isScrollControlled: false,
+    isScrollControlled: true,
     isDismissible: true,
-    constraints: BoxConstraints(
-      maxHeight: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
-      minHeight: 0.6.sh,
-    ),
+    // constraints: BoxConstraints(
+    //   maxHeight: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+    //   minHeight: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+    // ),
     backgroundColor: Colors.transparent,
     builder: (context) {
       return CommentsBottomSheet(
@@ -77,19 +80,25 @@ class CommentsBottomSheet extends StatefulWidget {
 }
 
 class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
-  late ReelsCubit reelsCubit;
   final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    reelsCubit = serviceLocator<ReelsCubit>();
-    reelsCubit
+
+    // Row(
+    //   children: [
+    //     Expanded(
+    //       child: Padding(
+    //  ();
+    context
+        .read<ReelsCubit>()
         .getComments(widget.reel.id); // Fetch comments once when initialized
   }
 
   @override
   Widget build(BuildContext context) {
+    var reelsCubit = context.read<ReelsCubit>();
     bool isDark = context.isDarkMode;
 
     return BlocProvider.value(
@@ -102,7 +111,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
         child: Container(
           constraints: BoxConstraints(
             maxHeight: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
-            minHeight: 0.6.sh,
+            minHeight: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
           ),
           decoration: BoxDecoration(
             color: isDark ? Colors.grey[900] : Colors.white,
@@ -114,9 +123,9 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
           child: Column(
             children: <Widget>[
               _buildHandleIndicator(isDark),
-              _buildCommentsHeader(isDark,widget.reel),
-              _buildCommentsList(),
-              Divider(color: Colors.grey[800]),
+              _buildCommentsHeader(isDark, widget.reel),
+              _buildCommentsList(scrollController),
+              // Divider(color: Colors.grey[800]),
               CommentInputField(
                 reel: widget.reel,
                 scrollController: scrollController,
@@ -140,7 +149,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     );
   }
 
-  Widget _buildCommentsHeader(bool isDark,Reel reel) {
+  Widget _buildCommentsHeader(bool isDark, Reel reel) {
     return Center(
       child: NoScaleText(
         '${reel.commentCount} ${LocaleKeys.comments_header.localize}',
@@ -153,24 +162,31 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     );
   }
 
-  Widget _buildCommentsList() {
+  Widget _buildCommentsList(ScrollController scrollController) {
     return Expanded(
       child: BlocBuilder<ReelsCubit, ReelsState>(
         builder: (context, state) {
+          if (state.isFetchingComments) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           final comments = state.fetchedComments;
           if (comments != null && comments.data.isNotEmpty) {
             return ListView.builder(
+              controller: scrollController,
               shrinkWrap: true,
+              // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               itemCount: comments.data.length,
               itemBuilder: (context, index) {
                 return CommentWidget(
-                  commentData: comments.data.reversed.toList()[index],
+                  commentData: comments.data.toList()[index],
                 );
               },
             );
           }
           // if(state.)
-      
+
           return Center(
             child: Label(text: LocaleKeys.noComments.localize),
           );
@@ -197,81 +213,112 @@ class CommentInputField extends StatefulWidget {
 
 class CommentInputFieldState extends State<CommentInputField> {
   final TextEditingController _commentController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void dispose() {
     _commentController.dispose();
+    _focusNode.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    _focusNode.requestFocus(); // Set the initial focus to the FocusNode.
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: MediaQuery.of(context).viewInsets,
-      child: Row(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Stack(
-                alignment: Alignment.centerRight,
-                children: [
-                  MediaQuery(
-                    data: MediaQuery.of(context)
-                        .copyWith(textScaler: const TextScaler.linear(1.0)),
-                    child: TextField(
-                      controller: _commentController,
-                      style: TextStyle(
-                        color:
-                            context.isDarkMode ? Colors.white : Colors.black87,
-                      ),
-                      maxLines: null,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: context.isDarkMode
-                            ? Colors.grey[800]
-                            : Colors.black12,
-                        hintText: LocaleKeys.add_comment_hint.localize,
-                        hintStyle: TextStyle(
-                          color:
-                              context.isDarkMode ? Colors.grey : Colors.black54,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10.h),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+        padding: MediaQuery.of(context).viewInsets,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0)
+              .add(EdgeInsetsDirectional.only(end: 20.w, bottom: 10.h)),
+          child: Row(children: [
+            ImageFromInternet(
+              width: 50,
+              height: 50,
+              isCircle: true,
+              image: widget.reel.user.profilePictureSignedUrl!.isEmpty
+                  ? UIConst.profilePlaceHolder
+                  : widget.reel.user.profilePictureSignedUrl!,
             ),
-          ),
-          IconButton(
-            icon: Icon(Icons.send,
-                color: context.isDarkMode
-                    ? AppColors.LIGHT_BLUE
-                    : AppColors.PRIMARY_COLOR),
-            onPressed: () async {
-              final reelsCubit = context.read<ReelsCubit>();
-              await reelsCubit.addComment(
-                  widget.reel.id, _commentController.text);
-              await reelsCubit.getComments(widget.reel.id);
+            SizedBox(width: 10.w),
+            Expanded(
+              child: TextField(
+                focusNode: _focusNode,
+                controller: _commentController,
+                style: TextStyle(
+                  color: context.isDarkMode ? Colors.white : Colors.black87,
+                ),
+                maxLines: null,
+                onChanged: (value) {
+                  setState(() {});
+                },
+                decoration: InputDecoration(
+                  filled: true,
+                  suffixIcon: _commentController.text.isNotEmpty
+                      ? Container(
+                          margin: EdgeInsetsDirectional.only(
+                              end: 10.w, top: 10, bottom: 10),
+                          padding: const EdgeInsets.all(3)
+                              .add(EdgeInsets.symmetric(horizontal: 10.w)),
+                          decoration: BoxDecoration(
+                            color: AppColors.SECONDARY_COLOR,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: InkWell(
+                            onTap: () async {
+                              final reelsCubit = context.read<ReelsCubit>();
+                              await reelsCubit.addComment(context,
+                                  widget.reel.id, _commentController.text);
+                              // await reelsCubit.getComments(widget.reel.id);
+                              widget.scrollController.animateTo(
+                                widget
+                                    .scrollController.position.minScrollExtent,
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeOut,
+                              );
+                              _commentController.clear();
+                              _focusNode.unfocus();
 
-              widget.scrollController.animateTo(
-                widget.scrollController.position.maxScrollExtent,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeOut,
-              );
-
-              _commentController.clear();
-            },
-          ),
-        ],
-      ),
-    );
+                              setState(() {});
+                            },
+                            child: Icon(
+                              Icons.arrow_upward,
+                              color: Colors.white,
+                              size: 30.h,
+                            ),
+                          ),
+                        )
+                      : null,
+                  fillColor:
+                      context.isDarkMode ? Colors.grey[800] : Colors.black12,
+                  hintText: LocaleKeys.add_comment_hint.localize,
+                  hintStyle: TextStyle(
+                    color: context.isDarkMode ? Colors.grey : Colors.black54,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.all(16),
+                ),
+                minLines: 1,
+                keyboardType: TextInputType.multiline,
+              ),
+            )
+          ]),
+        ));
   }
 }
 
@@ -333,9 +380,13 @@ class _CommentWidgetState extends State<CommentWidget> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CircleAvatar(
-          backgroundImage:
-              NetworkImage(widget.commentData.user.profilePictureSignedUrl),
+        ImageFromInternet(
+          width: 50,
+          height: 50,
+          isCircle: true,
+          image: widget.commentData.user.profilePictureSignedUrl.isEmpty
+              ? UIConst.profilePlaceHolder
+              : widget.commentData.user.profilePictureSignedUrl,
         ),
         const SizedBox(width: 10),
         Expanded(
@@ -345,14 +396,38 @@ class _CommentWidgetState extends State<CommentWidget> {
               NoScaleText(
                 capitalizeAndSplit(
                     '${widget.commentData.user.firstName} ${widget.commentData.user.lastName}'),
-                style: userNameStyle,
+                style: TextStyle(
+                  color: isDark ? Colors.white70 : Colors.grey,
+                  fontSize: 25.sp,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               SizedBox(height: 5.h),
               NoScaleText(
                 widget.commentData.comment,
-                style: commentTextStyle,
+                style: TextStyle(
+                  color: isDark ? Colors.white70 : Colors.black87,
+                  fontSize: 35.sp,
+                ),
               ),
-              _buildLikeAndReplyButtons(isDark),
+              SizedBox(height: 5.h),
+              Row(
+                children: [
+                  NoScaleText(
+                    formatDateTime(widget.commentData.createdAt),
+                    style: TextStyle(
+                      color: Colors.grey[500],
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  SizedBox(width: 30.w),
+                  _buildReplyButton(),
+                  const Spacer(),
+                  _buildLikeButton(isDark),
+                ],
+              ),
+
+              // _buildLikeAndReplyButtons(isDark),
             ],
           ),
         ),
@@ -360,7 +435,35 @@ class _CommentWidgetState extends State<CommentWidget> {
     );
   }
 
-  Widget _buildLikeAndReplyButtons(bool isDark) {
+  Widget _buildReplyButton() {
+    return InkWell(
+      onTap: () {
+        print('tapped');
+      },
+      child: NoScaleText(
+        LocaleKeys.reply.localize,
+        style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  String formatDateTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inSeconds < 60) {
+      return '${difference.inSeconds}s ago';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes}m ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours}h ago';
+    } else {
+      // Format as "MM-dd" for dates older than 24 hours
+      return '${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+    }
+  }
+
+  Widget _buildLikeButton(bool isDark) {
     return Row(
       children: [
         IconButton(
@@ -379,15 +482,10 @@ class _CommentWidgetState extends State<CommentWidget> {
           widget.commentData.likeCount.toString(),
           style: TextStyle(
             color: isDark ? Colors.white70 : Colors.black87,
-            fontSize: 35.sp,
+            fontSize: 25.sp,
           ),
         ),
-        const Spacer(),
-        IconButton(
-          icon: Icon(Icons.reply,
-              color: isDark ? Colors.white70 : Colors.black87),
-          onPressed: _showReplyInput,
-        ),
+        SizedBox(width: 10.w),
       ],
     );
   }

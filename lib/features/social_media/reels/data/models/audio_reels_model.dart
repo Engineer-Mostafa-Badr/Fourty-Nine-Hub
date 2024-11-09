@@ -43,7 +43,7 @@ class ReelsData {
   }
 }
 
-class User {
+class UserStory {
   final String? id;
   final String? firstName;
   final String? lastName;
@@ -53,7 +53,7 @@ class User {
   final bool? verified;
   final String? profilePictureSignedUrl;
 
-  User({
+  UserStory({
     this.id,
     this.firstName,
     this.lastName,
@@ -64,9 +64,9 @@ class User {
     this.profilePictureSignedUrl,
   });
 
-  factory User.fromJson(Map<String, dynamic>? json) {
-    if (json == null) return User();
-    return User(
+  factory UserStory.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return UserStory();
+    return UserStory(
       id: json['_id'] as String?,
       firstName: json['firstName'] as String?,
       lastName: json['lastName'] as String?,

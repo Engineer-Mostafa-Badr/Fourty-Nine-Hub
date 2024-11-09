@@ -1,3 +1,7 @@
+import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/models/receiver_comment_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/entities/reciever_comment_entity.dart';
+
 class GetCommentsResponse {
   final bool status;
   final String message;
@@ -35,12 +39,12 @@ class CommentData {
   final String reelId;
   final String comment;
   final String? parentId;
-  final ReceiverComment? receiverComment;
+  final ReceiverCommentEntity? receiverComment;
   final DateTime createdAt;
   final DateTime updatedAt;
   int likeCount;
   bool isLiked;
-  final User user;
+  final UserComment user;
   final List<CommentData> replies;
 
   CommentData({
@@ -64,7 +68,7 @@ class CommentData {
       comment: json['comment'] as String? ?? '',
       parentId: json['parentId'] as String?,
       receiverComment: json['receiverComment'] != null
-          ? ReceiverComment.fromJson(
+          ? ReceiverCommentModel.fromJson(
               json['receiverComment'] as Map<String, dynamic>)
           : null,
       createdAt: DateTime.tryParse(json['createdAt'] as String? ?? '') ??
@@ -73,7 +77,7 @@ class CommentData {
           DateTime.now(),
       likeCount: json['likeCount'] as int? ?? 0,
       isLiked: json['isLiked'] as bool? ?? false,
-      user: User.fromJson(json['user'] as Map<String, dynamic>? ?? {}),
+      user: UserComment.fromJson(json['user'] as Map<String, dynamic>? ?? {}),
       replies: (json['replies'] as List<dynamic>?)
               ?.map(
                   (item) => CommentData.fromJson(item as Map<String, dynamic>))
@@ -88,7 +92,7 @@ class CommentData {
       'reelId': reelId,
       'comment': comment,
       'parentId': parentId,
-      'receiverComment': receiverComment?.toJson(),
+      'receiverComment': null,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
       'likeCount': likeCount,
@@ -123,38 +127,6 @@ class ReceiverComment {
       'firstName': firstName,
       'lastName': lastName,
       'id': id,
-    };
-  }
-}
-
-class User {
-  final String id;
-  final String firstName;
-  final String lastName;
-  final String profilePictureSignedUrl;
-
-  User({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.profilePictureSignedUrl,
-  });
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['_id'] as String? ?? '',
-      firstName: json['firstName'] as String? ?? '',
-      lastName: json['lastName'] as String? ?? '',
-      profilePictureSignedUrl: json['profilePictureSignedUrl'] as String? ?? '',
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'firstName': firstName,
-      'lastName': lastName,
-      'profilePictureSignedUrl': profilePictureSignedUrl,
     };
   }
 }

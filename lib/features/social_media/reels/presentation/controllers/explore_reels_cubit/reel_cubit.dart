@@ -2,8 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/like_model.dart';
@@ -21,6 +25,7 @@ import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/save_reel_use_case.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/share_reel_use_case.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/toggle_comment_like_use_case.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import 'package:http/http.dart' as http;
 import 'package:video_player/video_player.dart';
 
@@ -228,9 +233,50 @@ class ReelsCubit extends Cubit<ReelsState> {
     );
   }
 
+  Future<void> addComment(BuildContext context, String reelId, String comment,
+      {String? receiverComment, String? parentCommentId}) async {
+    emit(state.copyWith(isCommenting: true));
+    final result = await _addCommentUseCase(
+        AddReelCommentParams(comment: comment, reelId: reelId));
+    result.fold(
+        (failure) {
+          showErrorMessage(context,getFailureMessage(failure, context));
+          emit(state.copyWith(
+              isCommenting: false,
+              commentErrorMessage: "An error occurred while adding the comment",
+            ));
+        }, (addCommentResponse) {
+      final newComment = CommentData(
+        id: addCommentResponse.data.id,
+        reelId: addCommentResponse.data.reelId,
+        comment: addCommentResponse.data.comment,
+        createdAt: addCommentResponse.data.createdAt,
+        updatedAt: addCommentResponse.data.updatedAt,
+        likeCount: 0,
+        isLiked: false,
+        user: UserComment(
+          firstName: context.read<UserCubit>().state.data!.firstName,
+          id: context.read<UserCubit>().state.data!.id,
+          lastName: context.read<UserCubit>().state.data!.lastName,
+          profilePictureSignedUrl:
+              context.read<UserCubit>().state.data!.profilePicture ??
+                  UIConst.profilePlaceHolder,
+        ),
+        parentId: addCommentResponse.data.parentId,
+        receiverComment: addCommentResponse.data.receiverComment,
+        replies: [], // Initialize with an empty replies list
+      );
+      state.fetchedComments!.data.insert(0, newComment);
+      emit(state.copyWith(
+        isCommenting: false,
+        commentResponse: addCommentResponse,
+      ));
+    });
+  }
+
   Future<String> likeReel(String reelId) async {
     emit(state.copyWith(
-        isLikingReel: false, likeReelErrorMessage: 'loadingLike'));
+        isLikingReel: true, likeReelErrorMessage: 'loadingLike'));
     final result = await _likeReelUseCase(reelId);
     String message = '';
     result.fold(
@@ -245,29 +291,11 @@ class ReelsCubit extends Cubit<ReelsState> {
     return message;
   }
 
-  Future<void> addComment(String reelId, String comment,
-      {String? receiverComment, String? parentCommentId}) async {
-    emit(state.copyWith(isCommenting: false));
-    final result = await _addCommentUseCase(
-        AddReelCommentParams(comment: comment, reelId: reelId));
-    result.fold(
-        (failure) => emit(state.copyWith(
-              isCommenting: false,
-              commentErrorMessage: "An error occurred while adding the comment",
-            )), (data) {
-      emit(state.copyWith(
-        isCommenting: true,
-        commentResponse: data,
-        commentErrorMessage: data.status ? null : "Failed to add comment",
-      ));
-    });
-  }
-
   Future<void> addReplayComment(String reelId, String comment,
       {String? receiverComment, String? parentCommentId}) async {
     //parent comment id is comment (global) Main comment
     //receiver comment is reply or
-     emit(state.copyWith(isCommenting: false));
+    emit(state.copyWith(isReplyingComment: true));
     final result = await _addReplyUseCase(AddReelReplyParams(
         comment: comment,
         reelId: reelId,
@@ -275,11 +303,11 @@ class ReelsCubit extends Cubit<ReelsState> {
         receiverComment: receiverComment));
     result.fold(
         (failure) => emit(state.copyWith(
-              isCommenting: false,
+              isReplyingComment: false,
               commentErrorMessage: "An error occurred while adding the comment",
             )), (data) {
       emit(state.copyWith(
-        isCommenting: true,
+        isReplyingComment: false,
         commentResponse: data,
         commentErrorMessage: data.status ? null : "Failed to add comment",
       ));
@@ -287,17 +315,27 @@ class ReelsCubit extends Cubit<ReelsState> {
   }
 
   Future<void> getComments(String reelId) async {
+    bool isFetching = true;
+    print('initial isFetching: $isFetching');
+    emit(state.copyWith(isFetchingComments: isFetching));
     print('reelId: $reelId');
     final result = await _getCommentsUseCase(reelId);
-    result.fold(
-        (failure) => emit(state.copyWith(
-            isFetchingComments: false,
-            fetchCommentsErrorMessage: 'fetchCommentsError')), (data) {
-      emit(state.copyWith(isFetchingComments: true, fetchedComments: data));
+    result.fold((failure) {
+      isFetching = false;
+      print('isFetching is false and failure');
+      emit(state.copyWith(
+          isFetchingComments: isFetching,
+          fetchCommentsErrorMessage: 'fetchCommentsError'));
+    }, (data) {
+      isFetching = false;
+      print('isFetching is false and success');
+      emit(state.copyWith(
+          isFetchingComments: isFetching, fetchedComments: data));
     });
   }
 
   Future<void> toggleCommentLike(String commentId) async {
+    emit(state.copyWith(isLikingComment: true));
     final result = await _toggleCommentLikeUseCase(commentId);
     result.fold(
         (failure) => emit(state.copyWith(
