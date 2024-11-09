@@ -84,14 +84,15 @@ class InstallmentAdCard extends StatelessWidget {
                     color: AppColors.SECONDARY_COLOR),
                 maxLines: 1,
               ),
-              RichText(
-                  text: TextSpan(
-                children: item.plans?.map((e) {
-                  return WidgetSpan(
-                      child:
-                          BadgedLabel(margin: 3, label: e.duration.toString()));
-                }).toList(),
-              ))
+              // RichText(
+              //     text: TextSpan(
+              //   children: item.plans?.map((e) {
+              //     return WidgetSpan(
+              //         child:
+              //             BadgedLabel(margin: 3, label: e.duration.toString()));
+              //   }).toList(),
+              // )
+              // )
             ],
           ),
         )
@@ -137,13 +138,13 @@ class InstallmentAdCard extends StatelessWidget {
           style: Styles.mediumText(),
           maxLines: 2,
         ),
-        RichText(
-            text: TextSpan(
-          children: item.plans?.map((e) {
-            return WidgetSpan(
-                child: BadgedLabel(margin: 3, label: e.duration.toString()));
-          }).toList(),
-        ))
+        // RichText(
+        //     text: TextSpan(
+        //   children: item.plans?.map((e) {
+        //     return WidgetSpan(
+        //         child: BadgedLabel(margin: 3, label: e.duration.toString()));
+        //   }).toList(),
+        // ))
       ],
     );
   }

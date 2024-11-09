@@ -33,11 +33,14 @@ import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cub
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/views/carpool_view.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/edit_food_view.dart';
 import 'package:fourtyninehub/features/carpool/create_carpool/presentation/cubits/cubit/create_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/edit_food/presentation/cubit/edit_food_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/edit_food/presentation/pages/edit_food_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_orders.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/create_resturant_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
@@ -172,7 +175,6 @@ import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:go_router/go_router.dart';
 
-import '../core/enums/wallet_types_enums.dart';
 import '../features/account_taps/account/presentation/cubit/cubit/favourite_drawer_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
@@ -286,21 +288,20 @@ class AppPages {
           GoRoute(
             path: Paths.RestaurantDashboard,
             name: Routes.RestaurantDashboard,
+            routes:[
+              GoRoute(
+                path: Paths.RestaurantOrders,
+                name: Routes.RestaurantOrders,
+                builder: (context, state) =>
+                    BlocProvider(
+                        create: (context) => serviceLocator<RestaurantDashboardCubit>(),
+                        child: const RestaurantDashboardOrders()),
+              ),
+            ],
             builder: (context, state) =>
-                MultiBlocProvider(
-                  providers: [
-                    BlocProvider(
-                      create: (context) =>
-                      RestaurantDashboardCubit(
-                          serviceLocator(), serviceLocator())
-                        ..loadData(),
-                    ),
-                    BlocProvider(
-                      create: (context) => serviceLocator<RestaurantsCubit>(),
-                    ),
-                  ],
-                  child: RestaurantDashboardView(payload: state.extra),
-                ),
+                BlocProvider(
+                    create: (context) => serviceLocator<RestaurantDashboardCubit>()..initialize(),
+                    child: RestaurantDashboardView(payload: state.extra)),
           ),
           GoRoute(
             path: Paths.RESTAURANTORDERS,
@@ -313,16 +314,16 @@ class AppPages {
             builder: (context, state) => MultiBlocProvider(
               providers: [
                 BlocProvider.value(
-                  value: serviceLocator<RestaurantDetailsCubit>(),
-                ),
-                BlocProvider.value(
                   value: RestaurantMenuCubit(serviceLocator()),
                 ),
                 BlocProvider<CreateRestaurantCubit>.value(
                   value: serviceLocator()..loadData(),
+                ),
+                BlocProvider(
+                  create: (context)=>serviceLocator<EditFoodCubit>(),
                 )
               ],
-              child: EditFoodView(payload: state.extra),
+              child: EditFoodView(payload: state.extra,),
             ),
           ),
           // FLIP CARDS
@@ -676,8 +677,8 @@ class AppPages {
               builder: (context, state) =>
                   BlocProvider<WalletCubit>(
                     create: (_) => serviceLocator(),
-                    child: WalletView(
-                      type: state.extra as WalletTypes,
+                    child: const WalletView(
+                      // type: state.extra as WalletTypes,
                     ),
                   ),
               routes: [
@@ -1064,7 +1065,7 @@ class AppPages {
               name: Routes.VISITA,
               builder: (context, state) {
                 return BlocProvider<HealthCubit>(
-                  create: (_) => serviceLocator<HealthCubit>(),
+                  create: (_) => serviceLocator<HealthCubit>()..loadData(),
                   child: const HealthView(),
                 );
               },
@@ -1244,10 +1245,10 @@ class AppPages {
                     path: Paths.RESTAURANTDETAILS,
                     name: Routes.RESTAURANTDETAILS,
                     builder: (context, state) =>
-                        BlocProvider.value(
-                          value: serviceLocator<RestaurantDetailsCubit>(),
+                        BlocProvider(
+                          create:(context)=> serviceLocator<RestaurantDetailsCubit>(),
                           child: RestaurantDetailsView(
-                            id: state.extra as String,
+                            restaurant: state.extra as Restaurant,
                           ),
                         ),
                     routes: [

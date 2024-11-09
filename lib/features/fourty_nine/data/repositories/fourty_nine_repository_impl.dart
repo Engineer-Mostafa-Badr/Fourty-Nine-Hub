@@ -67,4 +67,9 @@ class FourtyNineRepositoryImpl implements FourtyNineRepository {
   Future<Either<Failure, String>> getCurrency() {
     return _fourtyNineRemoteDataSource.getCurrency();
   }
+
+  @override
+  Future<Either<Failure, bool>> anyCashBack() {
+    return _fourtyNineRemoteDataSource.anyCashBack();
+  }
 }

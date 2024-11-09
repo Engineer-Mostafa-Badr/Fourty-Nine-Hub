@@ -1368,35 +1368,35 @@ class ChatBottomSheet extends StatelessWidget {
     final chatsCubit = serviceLocator<ChatsCubit>();
 
     if (label == "Anonymous") {
-      tinderCubit.startAnonymousChat(receiverId: cardUser.id ?? '').then((_) {
-        final chatId =
-            tinderCubit.state.anonymousChatResponse?.data.chat.id ?? '';
-        if (chatId.isNotEmpty) {
-          chatsCubit.init();
-          _navigateToChatRoom(context, chatId, chatRoomCubit, chatsCubit);
-        } else {
-          log("Chat ID is empty.");
-        }
-      }).catchError((error) {
-        log("Error starting anonymous chat: $error");
-      });
+      // tinderCubit.startAnonymousChat(receiverId: cardUser.id ?? '').then((_) {
+      //   final chatId =
+      //       tinderCubit.state.anonymousChatResponse?.data.chat.id ?? '';
+      //   if (chatId.isNotEmpty) {
+      //     chatsCubit.init();
+      //     _navigateToChatRoom(context, chatId, chatRoomCubit, chatsCubit);
+      //   } else {
+      //     log("Chat ID is empty.");
+      //   }
+      // }).catchError((error) {
+      //   log("Error starting anonymous chat: $error");
+      // });
     } else {
-      tinderCubit
-          .startNormalChat(
-        receiverId: cardUser.id ?? '',
-        subCategoryId: '62c8be6f8e28a58a3edf5f4f',
-      )
-          .then((_) {
-        final chatId = tinderCubit.state.normalChatResponse?.data.chat.id ?? '';
-        if (chatId.isNotEmpty) {
-          chatsCubit.init();
-          _navigateToChatRoom(context, chatId, chatRoomCubit, chatsCubit);
-        } else {
-          log("Chat ID is empty.");
-        }
-      }).catchError((error) {
-        log("Error starting normal chat: $error");
-      });
+      // tinderCubit
+      //     .startNormalChat(
+      //   receiverId: cardUser.id ?? '',
+      //   subCategoryId: '62c8be6f8e28a58a3edf5f4f',
+      // )
+      //     .then((_) {
+      //   final chatId = tinderCubit.state.normalChatResponse?.data.chat.id ?? '';
+      //   if (chatId.isNotEmpty) {
+      //     chatsCubit.init();
+      //     _navigateToChatRoom(context, chatId, chatRoomCubit, chatsCubit);
+      //   } else {
+      //     log("Chat ID is empty.");
+      //   }
+      // }).catchError((error) {
+      //   log("Error starting normal chat: $error");
+      // });
     }
   }
 

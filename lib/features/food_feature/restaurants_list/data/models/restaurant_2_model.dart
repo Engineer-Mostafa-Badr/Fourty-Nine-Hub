@@ -48,7 +48,7 @@ part 'restaurant_2_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Restaurant2Model extends Restaurant {
-    const Restaurant2Model({
+    Restaurant2Model({
         super.id,
         super.name,
         super.number,  // Corresponds to "phone" in the JSON

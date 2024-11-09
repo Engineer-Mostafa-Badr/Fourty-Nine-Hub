@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/requests_history/domain/entities/trip_entity.dart';
 import 'package:google_static_maps_controller/google_static_maps_controller.dart';
 
@@ -30,7 +31,7 @@ class StartedTripWidget extends StatelessWidget {
           children: [
             if (trip.driver != null) _buildDriverWidget(driver: trip.driver!),
             const Divider(),
-            _buildTripInfoWidget(trip: trip),
+            _buildTripInfoWidget(trip: trip,context: context),
           ],
         ),
       ),
@@ -71,7 +72,7 @@ class StartedTripWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildTripInfoWidget({required TripEntity trip}) {
+  Widget _buildTripInfoWidget({required TripEntity trip,required BuildContext context}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -80,7 +81,7 @@ class StartedTripWidget extends StatelessWidget {
             const Icon(FontAwesomeIcons.car, color: AppColors.PRIMARY_COLOR),
             const Sizer(),
             Label(
-              text: trip.category?.name ?? "",
+              text: context.isArabic?trip.category?.nameAr??'':trip.category?.nameEn ?? "",
               style: Styles.mediumText(fontWeight: FontWeight.bold),
             ),
           ],
