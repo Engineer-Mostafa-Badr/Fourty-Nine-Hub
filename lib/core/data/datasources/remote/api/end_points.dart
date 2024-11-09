@@ -376,13 +376,17 @@ class EndPoints {
   static getReelsWithSameAudio(ReelsWithSameAudioParams params)=> '/reels/audio/${params.audioId}';
   static toggleCommentLike(String id)=> '/reels/comments/like/$id';
   static makeViews(String id)=> '/stories/view/$id';
+  static getTinderUserProfile(String params)=> '/tinder/get-profile/$params?subCategory=66b2683f3a360fbdbf110767';
+  static const getUsers= '/tinder/';
+  static const fetchSubCategoryData= '/tinder/subCategories';
+  static const fetchFavourites= '/favorite-sub-category';
+  static const fetchFavouritesCategory= '/favorite-category';
   static deleteStory(String id)=> '/stories/$id';
   static addFavouriteCategories(String id)=> '/favorite-sub-category/$id';
   static fetchLastSeen(String id)=> '/users/last-seen/$id';
   static const sendGift= '/tinder/sendGifts';
   static const fetchGifts= '/dashboard-gifts?limit=10';
   static const tinderUploadPicture= '/tinder/uploadPictures?subCategory=66af974f8bf69f9469944746';
-
   static const createStory= '/stories/text';
   static getStoryViewers(String id)=> '/Stories/view/$id';
   static getMutedStories(PaginationParams params)=> '/stories/mutedStories?limit=${params.limit}&page=${params.page}';
