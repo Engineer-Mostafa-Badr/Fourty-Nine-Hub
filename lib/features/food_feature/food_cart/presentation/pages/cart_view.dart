@@ -249,40 +249,8 @@ class _FoodCartViewState extends State<FoodCartView> {
             ),
           ],
         ),
-        child: Card(
-          color: cardDarkColor(context),
-          // decoration: BoxDecoration(
-          //   borderRadius: BorderRadius.circular(12),
-          //   boxShadow: [
-          //     BoxShadow(
-          //       color: Colors.grey.withOpacity(0.2),
-          //       spreadRadius: 2,
-          //       blurRadius: 5,
-          //       offset: const Offset(0, 3),
-          //     ),
-          //   ],
-          // ),
-          child: BuildCartItem(foodImageUrl: foodImageUrl,quantity: quantity,currency: currency,cartItem: cartItem,foodId: foodId,foodName: foodName,totalPrice: totalPrice,
+        child: BuildCartItem(foodImageUrl: foodImageUrl,quantity: quantity,currency: currency,cartItem: cartItem,foodId: foodId,foodName: foodName,totalPrice: totalPrice,
 
-          ),
-          // Padding(
-          //   padding: const EdgeInsets.all(4.0),
-          //   child: Row(
-          //     children: [
-          //       _buildFoodImage(foodImageUrl.toString()),
-          //       const SizedBox(width: 12),
-          //       _buildItemDetails(
-          //         cartItem,
-          //         foodId,
-          //         foodName,
-          //         quantity,
-          //         totalPrice,
-          //         currency,
-          //
-          //       ),
-          //     ],
-          //   ),
-          // ),
         ),
       ),
     );

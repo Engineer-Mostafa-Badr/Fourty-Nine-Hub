@@ -44,6 +44,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   // final GetNumOfResturantUseCase _getNumOfResturantUseCase;
   final GetSubCategoryRestaurantsUseCases _getSubCategoryRestaurantsUseCases;
   final ToggleFavoriteSubcategoryUseCase _toggleFavoriteSubcategoryUseCase;
+  // final ToggleFavoriteCategoryUseCase _toggleFavoriteCategoryUseCase;
   final ToggleFavoriteCategoryUseCase _toggleFavoriteCategoryUseCase;
   final ToggleRestaurantFavouriteUseCase _toggleRestaurantFavouriteUseCase;
   final IsResturantUsecase _isResturantUseCase;

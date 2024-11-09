@@ -78,11 +78,12 @@ class MealBanner extends StatelessWidget {
               }
             },
             onFavorite: () {
+              print("object");
               context
                   .read<RestaurantsCubit>()
                   .toggleFavoriteCategory(state.mainCategory!.id);
             },
-            isFavorite: false,
+            isFavorite: !(state.mainCategory?.isFavorite??false),
           );
 
       },

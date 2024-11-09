@@ -21,6 +21,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/share_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_user_data_use_case.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
@@ -384,7 +385,18 @@ class EndPoints {
   static getReelsWithSameAudio(ReelsWithSameAudioParams params)=> '/reels/audio/${params.audioId}';
   static toggleCommentLike(String id)=> '/reels/comments/like/$id';
   static makeViews(String id)=> '/stories/view/$id';
+  static getGifts(PaginationParams params)=> '/dashboard-gifts?limit=${params.limit}&page=${params.page}';
+  static getTinderUserProfile(String params)=> '/tinder/get-profile/$params?subCategory=66b2683f3a360fbdbf110767';
+  static const getUsers= '/tinder/';
+  static const fetchSubCategoryData= '/tinder/subCategories';
+  static const fetchFavourites= '/favorite-sub-category';
+  static const fetchFavouritesCategory= '/favorite-category';
   static deleteStory(String id)=> '/stories/$id';
+  static addFavouriteCategories(String id)=> '/favorite-sub-category/$id';
+  static fetchLastSeen(String id)=> '/users/last-seen/$id';
+  static const sendGift= '/tinder/sendGifts';
+  static const fetchGifts= '/dashboard-gifts?limit=10';
+  static const tinderUploadPicture= '/tinder/uploadPictures?subCategory=66af974f8bf69f9469944746';
   static const createStory= '/stories/text';
   static getStoryViewers(String id)=> '/Stories/view/$id';
   static getMutedStories(PaginationParams params)=> '/stories/mutedStories?limit=${params.limit}&page=${params.page}';
@@ -806,7 +818,7 @@ class EndPoints {
   }
 
   // /installment
-  static String installment = '/installment';
+  static String installment = '/installment/all-generale';
 
   // static String installment = '/installment';
   static String createInstallment(String id) {
