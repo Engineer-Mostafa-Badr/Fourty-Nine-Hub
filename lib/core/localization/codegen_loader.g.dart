@@ -948,7 +948,6 @@ class CodegenLoader extends AssetLoader{
   "comfort": "مريح",
   "minutesAgo": "من دقيقه",
   "Phonenumbercannotbewrittenindescription": "لا يمكن كتابه رقم هاتف في الوصف",
-  "mutualFriend": "صديق مشترك",
   "womenOnly": "للنساء فقط",
   "chance": "فرصة",
   "subTab": "علامة تبويب فرعية",
@@ -1030,6 +1029,12 @@ class CodegenLoader extends AssetLoader{
   "cancelRequest": "إلغاء الطلب",
   "sendOffer": "إرسال العرض",
   "shareTransactionDetails": "مشاركة تفاصيل المعاملة",
+  "yourPersonalMessages": "رسالاتك الشخصيه",
+  "endToEndEncryption": "مشفره من البدايه للنهايه",
+  "liveStreamOptions": "خيارات البث الحي",
+  "createLive": "انشاء بث",
+  "watch": "مشاهدة",
+  "mutualFriend": "صديق مشترك",
   "serveClientsByClickRegister": "اخدم عملاءك بالنقر على زر التسجيل.",
   "totalOrder": "إجمالي الطلبات",
   "totalRevenue": "إجمالي الإيرادات",
@@ -2115,5 +2120,6 @@ static const Map<String,dynamic> en = {
   "showAllOrders": "Show All Orders",
   "restaurantOrders": "Restaurant Orders"
 };
+
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
