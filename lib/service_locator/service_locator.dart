@@ -186,19 +186,82 @@ class DI {
 
     //
     // // Register the TinderCubit
-    // serviceLocator.registerFactory<TinderViewCubit>(
-    //   () =>
-    //       TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()),
-    // );
+    // // Register the TinderCubit
+    serviceLocator.registerLazySingleton<TinderViewCubit>(() => TinderViewCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+    ));
 
-    // Register the TinderRepository as a singleton
+    serviceLocator.registerLazySingleton<TinderRemoteDataSource>(
+            () => TinderRemoteDataSourceImpl(
+          serviceLocator(),
+        ));
+    serviceLocator.registerLazySingleton<TinderRepository>(
+            () => TinderRepositoryImpl(serviceLocator()));
+
     serviceLocator
-        .registerLazySingleton<TinderRepository>(() => TinderRepository());
+        .registerLazySingleton<GetUserDataUseCase>(() => GetUserDataUseCase(
+      serviceLocator(),
+    ));
 
-    // Register the TinderViewCubit and inject the TinderRepository dependency
-    serviceLocator.registerFactory<TinderViewCubit>(() => TinderViewCubit(
-        tinderRepository: serviceLocator<TinderRepository>(),
-        getMainCategoryDetailsUseCase: serviceLocator()));
+    serviceLocator.registerLazySingleton<GetTinderFavouritesCategoryUseCase>(
+            () => GetTinderFavouritesCategoryUseCase(
+          serviceLocator(),
+        ));
+
+    serviceLocator.registerLazySingleton<GetTinderProfileUseCase>(
+            () => GetTinderProfileUseCase(
+          serviceLocator(),
+        ));
+
+    serviceLocator.registerLazySingleton<GetTinderFavouritesUseCase>(
+            () => GetTinderFavouritesUseCase(
+          serviceLocator(),
+        ));
+    serviceLocator
+        .registerLazySingleton<FetchLastSeenUseCase>(() => FetchLastSeenUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator.registerLazySingleton<SendGiftUseCase>(() => SendGiftUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator
+        .registerLazySingleton<FetchGiftsUseCase>(() => FetchGiftsUseCase(
+      serviceLocator(),
+    ));
+
+    serviceLocator.registerLazySingleton<CheckUserNearbyUseCase>(
+            () => CheckUserNearbyUseCase(
+          serviceLocator(),
+        ));
+
+    serviceLocator.registerLazySingleton<FetchSubCategoryDataUseCase>(
+            () => FetchSubCategoryDataUseCase(
+          serviceLocator(),
+        ));
+
+    serviceLocator.registerLazySingleton<UploadTinderPictureUseCase>(
+            () => UploadTinderPictureUseCase(
+          serviceLocator(),
+        ));
+
+    serviceLocator.registerLazySingleton<AddTinderFavouriteCategoryUseCase>(
+            () => AddTinderFavouriteCategoryUseCase(
+          serviceLocator(),
+        ));
+
 
     // Register other dependencies...
     // serviceLocator
