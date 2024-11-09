@@ -1,328 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/no_scale_text.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../tinder/data/shared/shared.dart';
 import 'dart:ui';
 
-// Custom Text widget to avoid repeating textScaleFactor: 1.0
-class NoScaleText extends StatelessWidget {
-  final String data;
-  final TextStyle? style;
-  final TextAlign? textAlign;
-  final int? maxLines;
 
-  const NoScaleText(
-    this.data, {
-    super.key,
-    this.style,
-    this.textAlign,
-    this.maxLines,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      data,
-      textScaler: const TextScaler.linear(1),
-      style: style,
-      textAlign: textAlign,
-      maxLines: maxLines,
-    );
-  }
-}
-
-// Main function to show comments bottom sheet
-Future<void> showCommentsBottomSheet(BuildContext context,
-    {required Reel reel}) async {
-  await showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    isDismissible: true,
-    // constraints: BoxConstraints(
-    //   maxHeight: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
-    //   minHeight: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
-    // ),
-    backgroundColor: Colors.transparent,
-    builder: (context) {
-      return CommentsBottomSheet(
-          reel: reel); // Use the new CommentsBottomSheet widget
-    },
-  );
-}
-
-bool isKeyboardVisible(BuildContext context) {
-  return MediaQuery.of(context).viewInsets.bottom != 0;
-}
-
-// CommentsBottomSheet widget
-class CommentsBottomSheet extends StatefulWidget {
-  final Reel reel;
-
-  const CommentsBottomSheet({super.key, required this.reel});
-
-  @override
-  _CommentsBottomSheetState createState() => _CommentsBottomSheetState();
-}
-
-class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
-  final ScrollController scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Row(
-    //   children: [
-    //     Expanded(
-    //       child: Padding(
-    //  ();
-    context
-        .read<ReelsCubit>()
-        .getComments(widget.reel.id); // Fetch comments once when initialized
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var reelsCubit = context.read<ReelsCubit>();
-    bool isDark = context.isDarkMode;
-
-    return BlocProvider.value(
-      value: reelsCubit,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Container(
-          constraints: BoxConstraints(
-            maxHeight: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
-            minHeight: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
-          ),
-          decoration: BoxDecoration(
-            color: isDark ? Colors.grey[900] : Colors.white,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-          ),
-          child: Column(
-            children: <Widget>[
-              _buildHandleIndicator(isDark),
-              _buildCommentsHeader(isDark, widget.reel),
-              _buildCommentsList(scrollController),
-              // Divider(color: Colors.grey[800]),
-              CommentInputField(
-                reel: widget.reel,
-                scrollController: scrollController,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHandleIndicator(bool isDark) {
-    return Container(
-      width: 50,
-      height: 5.h,
-      margin: EdgeInsets.symmetric(vertical: 10.h),
-      decoration: BoxDecoration(
-        color: isDark ? Colors.grey[700] : Colors.black87,
-        borderRadius: BorderRadius.circular(10),
-      ),
-    );
-  }
-
-  Widget _buildCommentsHeader(bool isDark, Reel reel) {
-    return Center(
-      child: NoScaleText(
-        '${reel.commentCount} ${LocaleKeys.comments_header.localize}',
-        style: TextStyle(
-          color: isDark ? Colors.white : Colors.black87,
-          fontWeight: FontWeight.bold,
-          fontSize: 30.sp,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCommentsList(ScrollController scrollController) {
-    return Expanded(
-      child: BlocBuilder<ReelsCubit, ReelsState>(
-        builder: (context, state) {
-          if (state.isFetchingComments) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          final comments = state.fetchedComments;
-          if (comments != null && comments.data.isNotEmpty) {
-            return ListView.builder(
-              controller: scrollController,
-              shrinkWrap: true,
-              // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              itemCount: comments.data.length,
-              itemBuilder: (context, index) {
-                return CommentWidget(
-                  commentData: comments.data.toList()[index],
-                );
-              },
-            );
-          }
-          // if(state.)
-
-          return Center(
-            child: Label(text: LocaleKeys.noComments.localize),
-          );
-        },
-      ),
-    );
-  }
-}
-
-// CommentInputField widget
-class CommentInputField extends StatefulWidget {
-  final Reel reel;
-  final ScrollController scrollController;
-
-  const CommentInputField({
-    super.key,
-    required this.reel,
-    required this.scrollController,
-  });
-
-  @override
-  CommentInputFieldState createState() => CommentInputFieldState();
-}
-
-class CommentInputFieldState extends State<CommentInputField> {
-  final TextEditingController _commentController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
-
-  @override
-  void dispose() {
-    _commentController.dispose();
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    _focusNode.requestFocus(); // Set the initial focus to the FocusNode.
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: MediaQuery.of(context).viewInsets,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0)
-              .add(EdgeInsetsDirectional.only(end: 20.w, bottom: 10.h)),
-          child: Row(children: [
-            ImageFromInternet(
-              width: 50,
-              height: 50,
-              isCircle: true,
-              image: widget.reel.user.profilePictureSignedUrl!.isEmpty
-                  ? UIConst.profilePlaceHolder
-                  : widget.reel.user.profilePictureSignedUrl!,
-            ),
-            SizedBox(width: 10.w),
-            Expanded(
-              child: TextField(
-                focusNode: _focusNode,
-                controller: _commentController,
-                style: TextStyle(
-                  color: context.isDarkMode ? Colors.white : Colors.black87,
-                ),
-                maxLines: null,
-                onChanged: (value) {
-                  setState(() {});
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  suffixIcon: _commentController.text.isNotEmpty
-                      ? Container(
-                          margin: EdgeInsetsDirectional.only(
-                              end: 10.w, top: 10, bottom: 10),
-                          padding: const EdgeInsets.all(3)
-                              .add(EdgeInsets.symmetric(horizontal: 10.w)),
-                          decoration: BoxDecoration(
-                            color: AppColors.SECONDARY_COLOR,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: InkWell(
-                            onTap: () async {
-                              final reelsCubit = context.read<ReelsCubit>();
-                              await reelsCubit.addComment(context,
-                                  widget.reel.id, _commentController.text);
-                              // await reelsCubit.getComments(widget.reel.id);
-                              widget.scrollController.animateTo(
-                                widget
-                                    .scrollController.position.minScrollExtent,
-                                duration: const Duration(milliseconds: 500),
-                                curve: Curves.easeOut,
-                              );
-                              _commentController.clear();
-                              _focusNode.unfocus();
-
-                              setState(() {});
-                            },
-                            child: Icon(
-                              Icons.arrow_upward,
-                              color: Colors.white,
-                              size: 30.h,
-                            ),
-                          ),
-                        )
-                      : null,
-                  fillColor:
-                      context.isDarkMode ? Colors.grey[800] : Colors.black12,
-                  hintText: LocaleKeys.add_comment_hint.localize,
-                  hintStyle: TextStyle(
-                    color: context.isDarkMode ? Colors.grey : Colors.black54,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide.none,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide.none,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide.none,
-                  ),
-                  contentPadding: const EdgeInsets.all(16),
-                ),
-                minLines: 1,
-                keyboardType: TextInputType.multiline,
-              ),
-            )
-          ]),
-        ));
-  }
-}
-
-// CommentWidget to display individual comments and replies
 class CommentWidget extends StatefulWidget {
   final CommentData commentData;
 
@@ -426,8 +118,6 @@ class _CommentWidgetState extends State<CommentWidget> {
                   _buildLikeButton(isDark),
                 ],
               ),
-
-              // _buildLikeAndReplyButtons(isDark),
             ],
           ),
         ),
@@ -664,4 +354,7 @@ class _CommentWidgetState extends State<CommentWidget> {
       SnackBar(content: Text(message)),
     );
   }
+}
+bool isKeyboardVisible(BuildContext context) {
+  return MediaQuery.of(context).viewInsets.bottom != 0;
 }
