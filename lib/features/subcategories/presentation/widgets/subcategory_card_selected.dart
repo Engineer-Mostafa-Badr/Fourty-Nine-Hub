@@ -89,6 +89,7 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
               ],
             ),
           ),
+
           if (!widget.isSmallCard) const Sizer(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
