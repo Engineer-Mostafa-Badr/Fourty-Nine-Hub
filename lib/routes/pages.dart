@@ -133,7 +133,9 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_events.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
@@ -260,7 +262,7 @@ import '../features/youtube/presentation/pages/play_video.dart';
 import '../features/youtube/presentation/pages/youtube.dart';
 import '../features/zoom/presentation/pages/meeting_room.dart';
 import '../features/zoom/presentation/pages/meeting_view.dart';
-import '../service_locator/service_locator.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'routes.dart';
 
 class AppPages {
@@ -896,14 +898,7 @@ class AppPages {
                     path: Paths.REELS,
                     name: Routes.REELS,
                     builder: (context, state) =>
-                        MultiBlocProvider(
-                          providers: [
-                            BlocProvider<ReelsCubit>(
-                              create: (_) => serviceLocator(),
-                            ),
-                          ],
-                          child: const ReelView(),
-                        ),
+                        const ReelView(),
                     routes: [
                       GoRoute(
                         path: Paths.MUSICREELS,

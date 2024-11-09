@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_bann
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
@@ -47,8 +48,17 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
+  checkLogin() {
+    try {
+      if(!context.isUserLoggedIn) context.read<UserCubit>().getUser();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   void initState() {
+    checkLogin();
     super.initState();
     _setupScrollController();
     context
@@ -131,7 +141,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             ? null
             : const FloatingButton(
                 changeView: 1,
-          icon: Icons.person,
+                icon: Icons.person,
               ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         drawer: const DrawerWidget(),

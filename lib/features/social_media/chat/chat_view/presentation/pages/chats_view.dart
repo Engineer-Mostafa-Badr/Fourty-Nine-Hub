@@ -282,6 +282,7 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.d
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/chat_categories.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
@@ -572,18 +573,19 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                if(context.read<UserCubit>().isLoggedIn)SliverAppBar(
-                  expandedHeight: MediaQuery.of(context).size.height *
-                      0.08, // Responsive height
-                  automaticallyImplyLeading: false,
-                  floating: true,
-                  flexibleSpace: BlocProvider(
-                    create: (context) => serviceLocator<StoryCubit>()
-                      ..fetchStories()
-                      ..getMutedStories(),
-                    child: const ChatStories(),
+                if (context.read<UserCubit>().isLoggedIn)
+                  SliverAppBar(
+                    expandedHeight: MediaQuery.of(context).size.height *
+                        0.08, // Responsive height
+                    automaticallyImplyLeading: false,
+                    floating: true,
+                    flexibleSpace: BlocProvider(
+                      create: (context) => serviceLocator<StoryCubit>()
+                        ..fetchStories()
+                        ..getMutedStories(),
+                      child: const ChatStories(),
+                    ),
                   ),
-                ),
                 SliverAppBar(
                   automaticallyImplyLeading: false,
                   floating: true,
@@ -594,8 +596,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               ],
               body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
                 builder: (context, state) {
-                  return _buildCategoriesViews()
-                      ;
+                  return _buildCategoriesViews();
                 },
               ),
             ),
@@ -905,8 +906,8 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
 
                   child: ListView.separated(
                     shrinkWrap: true,
-                    physics:
-                        const AlwaysScrollableScrollPhysics(), // Enable scrolling
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    // Enable scrolling
                     itemBuilder: (context, index) => (state
                             .chats![index].archived)
                         ? const SizedBox()
@@ -1133,13 +1134,13 @@ class MessagesAreEndToEndEncrypted extends StatelessWidget {
               width: 8,
             ),
             Label(
-                text: "Your personal messages are ",
+                text: "${LocaleKeys.yourPersonalMessages.localize} ",
                 style: Styles.mediumText(
                     fontWeight: FontWeight.bold, fontSize: 28)),
           ],
         ),
         Label(
-          text: "     end-to-end encrypted",
+          text: "     ${LocaleKeys.endToEndEncryption.localize}",
           style: Styles.mediumText(
               fontWeight: FontWeight.bold,
               fontSize: 28,
@@ -1157,6 +1158,7 @@ class ChatOptions extends StatelessWidget {
     required this.text,
     this.onTap,
   });
+
   final IconData icon;
   final String text;
   final Function()? onTap;

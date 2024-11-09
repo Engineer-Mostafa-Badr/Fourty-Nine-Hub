@@ -130,7 +130,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                  color: isDarkTheme(context) ? Colors.white : Colors.black87,
+                  color: context.isDarkMode ? Colors.white : Colors.black87,
                   fontSize: 25.sp),
             ),
           ),
@@ -140,7 +140,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
               '${gift.value ?? 0} 💰',
               textScaler: const TextScaler.linear(1.0),
               style: TextStyle(
-                  color: isDarkTheme(context) ? Colors.white : Colors.black87,
+                  color: context.isDarkMode ? Colors.white : Colors.black87,
                   fontSize: 20.sp),
             ),
           ),
@@ -387,7 +387,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                  color: isDarkTheme(context) ? Colors.white : Colors.black87,
+                  color: context.isDarkMode ? Colors.white : Colors.black87,
                   fontSize: 25.sp),
             ),
           ),
@@ -397,7 +397,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
               '${gift.value ?? 0} 💰',
               textScaler: const TextScaler.linear(1.0),
               style: TextStyle(
-                  color: isDarkTheme(context) ? Colors.white : Colors.black87,
+                  color: context.isDarkMode ? Colors.white : Colors.black87,
                   fontSize: 20.sp),
             ),
           ),
@@ -429,7 +429,7 @@ Future<void> showGiftBottomSheet(BuildContext context,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
             decoration: BoxDecoration(
-              color: isDarkTheme(context)
+              color: context.isDarkMode
                   ? Colors.black.withOpacity(0.8)
                   : Colors.white.withOpacity(0.9),
               borderRadius: const BorderRadius.only(
@@ -443,7 +443,7 @@ Future<void> showGiftBottomSheet(BuildContext context,
                   width: double.infinity,
                   height: kToolbarHeight * 0.80,
                   decoration: BoxDecoration(
-                    color: isDarkTheme(context)
+                    color: context.isDarkMode
                         ? Colors.black.withOpacity(0.4)
                         : Colors.grey.withOpacity(0.9),
                     borderRadius:
@@ -457,7 +457,7 @@ Future<void> showGiftBottomSheet(BuildContext context,
                           : LocaleKeys.gift_body_send_a_gift.tr(),
                       textScaler: const TextScaler.linear(1.0),
                       style: TextStyle(
-                          color: isDarkTheme(context)
+                          color: context.isDarkMode
                               ? AppColors.ACCENT_COLOR
                               : AppColors.PRIMARY_COLOR,
                           fontSize: 40.sp,
@@ -485,7 +485,7 @@ Future<void> showGiftBottomSheet(BuildContext context,
                                   width: 1, color: AppColors.ACCENT_COLOR)),
                               iconColor:
                                   const MaterialStatePropertyAll(Colors.white),
-                              backgroundColor: isDarkTheme(context)
+                              backgroundColor: context.isDarkMode
                                   ? const MaterialStatePropertyAll(Colors.black)
                                   : MaterialStatePropertyAll(
                                       Colors.grey.withOpacity(0.9)),
@@ -501,7 +501,7 @@ Future<void> showGiftBottomSheet(BuildContext context,
                               style: TextStyle(
                                   fontSize: 25.sp,
                                   fontWeight: FontWeight.bold,
-                                  color: isDarkTheme(context)
+                                  color: context.isDarkMode
                                       ? AppColors.YELLOW_COLOR
                                       : Colors.black),
                             ),
@@ -573,7 +573,7 @@ pleaseLoginWidget(context) {
           onPressed: () => context.push(Routes.LOGIN),
           style: ButtonStyle(
               foregroundColor: MaterialStatePropertyAll(
-                  isDarkTheme(context) ? Colors.white70 : Colors.black87)),
+                  context.isDarkMode ? Colors.white70 : Colors.black87)),
           child: FittedBox(
             child: Text(
               LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.tr(),
