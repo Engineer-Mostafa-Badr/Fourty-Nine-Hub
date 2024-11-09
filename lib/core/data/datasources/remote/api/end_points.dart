@@ -377,6 +377,12 @@ class EndPoints {
   static toggleCommentLike(String id)=> '/reels/comments/like/$id';
   static makeViews(String id)=> '/stories/view/$id';
   static deleteStory(String id)=> '/stories/$id';
+  static addFavouriteCategories(String id)=> '/favorite-sub-category/$id';
+  static fetchLastSeen(String id)=> '/users/last-seen/$id';
+  static const sendGift= '/tinder/sendGifts';
+  static const fetchGifts= '/dashboard-gifts?limit=10';
+  static const tinderUploadPicture= '/tinder/uploadPictures?subCategory=66af974f8bf69f9469944746';
+
   static const createStory= '/stories/text';
   static getStoryViewers(String id)=> '/Stories/view/$id';
   static getMutedStories(PaginationParams params)=> '/stories/mutedStories?limit=${params.limit}&page=${params.page}';
