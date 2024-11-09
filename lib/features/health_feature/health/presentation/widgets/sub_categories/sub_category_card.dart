@@ -37,9 +37,18 @@ class HealthSubCategoryCard extends StatelessWidget {
       child: Container(
         width: 200,
         padding: const EdgeInsets.all(10),
+        margin: const EdgeInsetsDirectional.only(end: 10,bottom: 10,top: 10),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 2,
+              offset: const Offset(0, 3),
+            ),
+          ]
         ),
         child: Column(
           children: [

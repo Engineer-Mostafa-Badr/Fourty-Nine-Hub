@@ -1070,7 +1070,7 @@ class AppPages {
               name: Routes.VISITA,
               builder: (context, state) {
                 return BlocProvider<HealthCubit>(
-                  create: (_) => serviceLocator<HealthCubit>(),
+                  create: (_) => serviceLocator<HealthCubit>()..loadData(),
                   child: const HealthView(),
                 );
               },
