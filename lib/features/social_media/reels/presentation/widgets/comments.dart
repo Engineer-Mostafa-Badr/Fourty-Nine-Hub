@@ -16,16 +16,17 @@ import 'dart:ui';
 
 class CommentWidget extends StatefulWidget {
   final CommentData commentData;
+  final int index;
   final FocusNode focusNode;
   String? replyingTo;
   final TextEditingController commentController;
-
   CommentWidget({
     super.key,
     required this.commentData,
     required this.focusNode,
+    required this.index,
     this.replyingTo,
-    required this.commentController,
+    required this.commentController
   });
 
   @override
@@ -36,11 +37,9 @@ class _CommentWidgetState extends State<CommentWidget> {
   bool _isRepliesVisible = false;
   int _displayedRepliesCount = 3;
 
-  @override
-  void dispose() {
-    // _replyController.dispose();
-    super.dispose();
-  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +49,7 @@ class _CommentWidgetState extends State<CommentWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCommentRow(
-              widget.commentData.comment, widget.commentData.createdAt),
+              widget.commentData.comment, widget.commentData.createdAt,false),
           SizedBox(height: 10.h),
           if (widget.commentData.replies.isNotEmpty) _buildToggleRepliesButton(),
           if (_isRepliesVisible) ...[
@@ -65,7 +64,7 @@ class _CommentWidgetState extends State<CommentWidget> {
     );
   }
 
-  Widget _buildCommentRow(String comment, DateTime createdAt) {
+  Widget _buildCommentRow(String comment, DateTime createdAt,bool reply) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -111,7 +110,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                   SizedBox(width: 30.w),
                   _buildReplyButton(),
                   const Spacer(),
-                  _buildLikeButton(),
+                  _buildLikeButton(reply),
                 ],
               ),
             ],
@@ -126,21 +125,15 @@ class _CommentWidgetState extends State<CommentWidget> {
       context.read<ReelsCubit>().updateParentCommentIdAndReceiverComment(
           parentCommentId: widget.commentData.id,
           receiverComment: widget.commentData.user.id);
-      print(context.read<ReelsCubit>().parentCommentId);
-      print(context.read<ReelsCubit>().receiverComment);
       widget.replyingTo = userName;
       if (userName != null) {
-        // Directly set the text and move the cursor if already focused
         widget.commentController.text = '@$userName ';
         widget.commentController.selection = TextSelection.fromPosition(
           TextPosition(offset: widget.commentController.text.length),
         );
-        // Ensure focus is on the text field
         widget.focusNode.requestFocus();
       } else {
-        // Clear the text if not in reply mode
         widget.commentController.clear();
-        // Optionally, you can unfocus here
         widget.focusNode.unfocus();
       }
     });
@@ -149,10 +142,8 @@ class _CommentWidgetState extends State<CommentWidget> {
   Widget _buildReplyButton() {
     return InkWell(
       onTap: () {
-        // widget.focusNode.requestFocus();
         _toggleReplyMode(
             '${widget.commentData.user.firstName} ${widget.commentData.user.lastName}');
-        print(widget.replyingTo);
       },
       child: NoScaleText(
         LocaleKeys.reply.localize,
@@ -172,12 +163,11 @@ class _CommentWidgetState extends State<CommentWidget> {
     } else if (difference.inHours < 24) {
       return '${difference.inHours}h ago';
     } else {
-      // Format as "MM-dd" for dates older than 24 hours
       return '${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
     }
   }
 
-  Widget _buildLikeButton() {
+  Widget _buildLikeButton(bool reply) {
     return Row(
       children: [
         IconButton(
@@ -188,8 +178,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                 : AppColors.GREY_NORMAL_COLOR,
           ),
           onPressed: () {
-            print('Like comment ${widget.commentData.id}');
-            _handleLikeComment(widget.commentData.id);
+            _handleLikeComment(widget.commentData.id, reply);
           },
         ),
         NoScaleText(
@@ -204,8 +193,8 @@ class _CommentWidgetState extends State<CommentWidget> {
     );
   }
 
-  void _handleLikeComment(String commentId) {
-    context.read<ReelsCubit>().toggleCommentLike(commentId).then((_) {
+  void _handleLikeComment(String commentId, bool isReply ) {
+    context.read<ReelsCubit>().toggleCommentLike(commentId,isReply).then((_) {
       FocusScope.of(context).unfocus();
     }).catchError((error) {
       _showErrorSnackBar('Failed to send like. Please try again.');
@@ -213,7 +202,6 @@ class _CommentWidgetState extends State<CommentWidget> {
   }
 
   Widget _buildToggleRepliesButton() {
-
     final remainingReplies =
         widget.commentData.replies.length - _displayedRepliesCount;
     final buttonText = _isRepliesVisible
@@ -226,13 +214,11 @@ class _CommentWidgetState extends State<CommentWidget> {
       onPressed: () {
         setState(() {
           if (_isRepliesVisible && remainingReplies > 0) {
-            // Show the next batch of replies
             _displayedRepliesCount += 3;
           } else {
-            // Toggle visibility
             _isRepliesVisible = !_isRepliesVisible;
             if (!_isRepliesVisible) {
-              _displayedRepliesCount = 3; // Reset if hiding replies
+              _displayedRepliesCount = 3;
             }
           }
         });
@@ -240,16 +226,14 @@ class _CommentWidgetState extends State<CommentWidget> {
       child: Text(buttonText,style: TextStyle(color: Colors.grey,fontSize:25.sp,fontWeight:FontWeight.w600),),
     );
   }
-
   Widget _buildRepliesList() {
-    // Display replies up to the _displayedRepliesCount
     final repliesToShow = widget.commentData.replies.take(_displayedRepliesCount).toList();
-
     return Padding(
       padding: const EdgeInsets.only(left: 40.0, bottom: 8, top: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: repliesToShow.map((reply) => _buildCommentRow(reply.comment,reply.createdAt)).toList(),
+      child: ListView(
+        shrinkWrap:true,
+        controller: context.read<ReelsCubit>().replyScrollController,
+        children: repliesToShow.map((reply) => _buildCommentRow(reply.comment,reply.createdAt,true)).toList(),
       ),
     );
   }

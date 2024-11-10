@@ -292,6 +292,8 @@ class ReelsCubit extends Cubit<ReelsState> {
     });
   }
 
+
+
   Future<void> addReplayComment(
       BuildContext context, String reelId, String comment,
       {String? receiverComment, String? parentCommentId}) async {
@@ -326,26 +328,52 @@ class ReelsCubit extends Cubit<ReelsState> {
         ),
         parentId: addCommentResponse.data.parentId,
         receiverComment: addCommentResponse.data.receiverComment,
-        replies: [], // Initialize with an empty replies list
+        replies: [],
       );
-
-      // Find the parent comment by matching parentCommentId
       final parentCommentIndex = state.fetchedComments!.data.indexWhere(
         (comment) => comment.id == parentCommentId,
       );
-
       if (parentCommentIndex != -1) {
-        // Add the new reply to the parent comment's replies list
         state.fetchedComments!.data[parentCommentIndex].replies
             .insert(0, newReply);
       }
-
+      if(state.fetchedComments!.data[parentCommentIndex].replies.length==1){
+        print('first reply');
+        _scrollToFirstReply();
+      }else{
+        print('latest reply');
+        _scrollToLatestReply();
+      }
       emit(state.copyWith(
         isReplyingComment: false,
         commentResponse: addCommentResponse,
         commentErrorMessage:
             addCommentResponse.status ? null : "Failed to add comment",
       ));
+    });
+  }
+
+  final ScrollController replyScrollController = ScrollController();
+  void _scrollToLatestReply() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (replyScrollController.hasClients) {
+        replyScrollController.animateTo(
+          replyScrollController.position.minScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+  void _scrollToFirstReply() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (replyScrollController.hasClients) {
+        replyScrollController.animateTo(
+          0.0, // Scroll to the top of replies
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
     });
   }
 
@@ -358,51 +386,81 @@ class ReelsCubit extends Cubit<ReelsState> {
     if (!hasMoreData || isLoadingMore) return;
 
     bool isFetching = true;
-    print('initial isFetching: $isFetching');
     emit(state.copyWith(isFetchingComments: isFetching));
-    print('reelId: $reelId');
     final result = await _getCommentsUseCase(CommentParams(
         reelId: reelId, pagingParams: PaginationParams(page: currentPage, limit: pageSize)));
     result.fold((failure) {
       isFetching = false;
-      print('isFetching is false and failure');
       emit(state.copyWith(
           isFetchingComments: isFetching,
           fetchCommentsErrorMessage: 'fetchCommentsError'));
     }, (data) {
       isFetching = false;
-      print('isFetching is false and success');
       emit(state.copyWith(
           isFetchingComments: isFetching, fetchedComments: data));
     });
   }
 
-  Future<void> toggleCommentLike(String commentId) async {
+  Future<void> toggleCommentLike(String commentId,bool isReply) async {
     emit(state.copyWith(isLikingComment: true));
     final result = await _toggleCommentLikeUseCase(commentId);
     result.fold(
-        (failure) => emit(state.copyWith(
+        (failure) {
+          print('failure message');
+          emit(state.copyWith(
             isLikingComment: false,
             likeReelErrorMessage:
-                'An error occurred while liking/unliking the comment')),
+                'An error occurred while liking/unliking the comment'));
+        },
         (data) {
-      // Find the target comment by its ID in the comment list
-      final updatedComments = state.fetchedComments!.data.map((comment) {
-        if (comment.id == commentId) {
-          // Determine if the action was a "like" or "unlike" and update accordingly
-          final isLiked = data == "like";
-          return comment.copyWith(
-            isLiked: isLiked,
-            likeCount: isLiked ? comment.likeCount + 1 : comment.likeCount - 1,
-          );
-        }
-        return comment;
-      }).toList();
+
+          print("Toggle Like Result: $data"); // Debugging output
+
+          final updatedComments = state.fetchedComments!.data.map((comment) {
+            if (isReply) {
+              // Debug: Check if we are updating a reply
+              print("Updating a reply with commentId: $commentId");
+
+              // If it's a reply, find the specific reply to update
+              final updatedReplies = comment.replies.map((reply) {
+                if (reply.id == commentId) {
+                  print("Found matching reply with id: ${reply.id}"); // Debugging output
+
+                  final isLiked = data == "like";
+                  return reply.copyWith(
+                    isLiked: isLiked,
+                    likeCount: isLiked ? reply.likeCount + 1 : reply.likeCount - 1,
+                  );
+                }
+                return reply;
+              }).toList();
+
+              // Return the comment with updated replies
+              return comment.copyWith(replies: updatedReplies);
+
+            } else {
+              // Debug: Check if we are updating a main comment
+              print("Updating a main comment with commentId: $commentId");
+
+              // If it's a main comment, update the main comment like data
+              if (comment.id == commentId) {
+                print("Found matching main comment with id: ${comment.id}"); // Debugging output
+
+                final isLiked = data == "like";
+                return comment.copyWith(
+                  isLiked: isLiked,
+                  likeCount: isLiked ? comment.likeCount + 1 : comment.likeCount - 1,
+                );
+              }
+            }
+
+            return comment; // Return the original comment if no changes were made
+          }).toList();
       emit(state.copyWith(
         isLikingComment: false,
         fetchedComments: state.fetchedComments!.copyWith(data: updatedComments),
         likeReelCommentResponseMessage: data,
-      )); // Save the message ("like" or "unlike")
+      ));
     });
   }
 
@@ -413,7 +471,7 @@ class ReelsCubit extends Cubit<ReelsState> {
 
     emit(state.copyWith(isLoading: true));
     final int pageToFetch =
-        isInitialLoad ? 1 : (state.globalReelsCurrentPage ?? 0) + 1;
+        isInitialLoad ? 1 : (state.globalReelsCurrentPage) + 1;
     final result = await _reelsWithSameAudioUseCase(
         ReelsWithSameAudioParams(audioId: audioId));
     result.fold((failure) => emit(state.copyWith(isLoading: false)), (data) {

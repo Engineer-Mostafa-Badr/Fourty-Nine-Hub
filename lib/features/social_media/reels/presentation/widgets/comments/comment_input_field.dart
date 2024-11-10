@@ -16,7 +16,6 @@ class CommentInputField extends StatefulWidget {
   final ScrollController scrollController;
   final FocusNode focusNode;
   final bool isReplying;
-
   const CommentInputField({
     super.key,
     required this.reel,
@@ -74,12 +73,9 @@ class CommentInputFieldState extends State<CommentInputField> {
                           child: InkWell(
                             onTap: () async {
                               final reelsCubit = context.read<ReelsCubit>();
-
-                              print(reelsCubit.parentCommentId);
-                              print(reelsCubit.receiverComment);
                               if (reelsCubit.receiverComment != null &&
                                   reelsCubit.parentCommentId != null) {
-                                reelsCubit.addReplayComment(
+                                await reelsCubit.addReplayComment(
                                   context,
                                   widget.reel.id,
                                   widget.commentController.text.trim(),
@@ -91,23 +87,24 @@ class CommentInputFieldState extends State<CommentInputField> {
                                     context,
                                     widget.reel.id,
                                     widget.commentController.text);
+                                if (widget.scrollController.hasClients &&
+                                    widget.scrollController.position
+                                            .maxScrollExtent >
+                                        0) {
+                                  widget.scrollController.animateTo(
+                                    widget.scrollController.position
+                                        .minScrollExtent,
+                                    duration: const Duration(milliseconds: 500),
+                                    curve: Curves.easeOut,
+                                  );
+                                }
                               }
-
-                              // await reelsCubit.getComments(widget.reel.id);
                               widget.commentController.clear();
                               widget.focusNode.unfocus();
                               reelsCubit
                                   .updateParentCommentIdAndReceiverComment(
-                                  receiverComment: null,
-                                  parentCommentId: null);
-                              if (widget.scrollController.hasClients &&
-                                  widget.scrollController.position.maxScrollExtent > 0) {
-                                widget.scrollController.animateTo(
-                                  widget.scrollController.position.minScrollExtent,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.easeOut,
-                                );
-                              }
+                                      receiverComment: null,
+                                      parentCommentId: null);
 
                               // setState(() {});
                             },
@@ -146,4 +143,6 @@ class CommentInputFieldState extends State<CommentInputField> {
           ]),
         ));
   }
+
+
 }

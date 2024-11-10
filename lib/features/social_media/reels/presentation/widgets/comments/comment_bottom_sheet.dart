@@ -27,6 +27,8 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   String? replyToUser;
   final bool isReplying = false;
 
+
+
   @override
   void initState() {
     super.initState();
@@ -69,12 +71,11 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
           ),
           child: Column(
             children: <Widget>[
-              _buildHandleIndicator(isDark),
-              _buildCommentsHeader(isDark, widget.reel),
+              _buildHandleIndicator(),
+              _buildCommentsHeader(widget.reel),
               _buildCommentsList(
                 scrollController,
               ),
-              // Divider(color: Colors.grey[800]),
               CommentInputField(
                 focusNode: focusNode,
                 reel: widget.reel,
@@ -89,24 +90,24 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     );
   }
 
-  Widget _buildHandleIndicator(bool isDark) {
+  Widget _buildHandleIndicator() {
     return Container(
       width: 50,
       height: 5.h,
       margin: EdgeInsets.symmetric(vertical: 10.h),
       decoration: BoxDecoration(
-        color: isDark ? Colors.grey[700] : Colors.black87,
+        color: context.isDarkMode ? Colors.grey[700] : Colors.black87,
         borderRadius: BorderRadius.circular(10),
       ),
     );
   }
 
-  Widget _buildCommentsHeader(bool isDark, Reel reel) {
+  Widget _buildCommentsHeader(Reel reel) {
     return Center(
       child: NoScaleText(
         '${reel.commentCount} ${LocaleKeys.comments_header.localize}',
         style: TextStyle(
-          color: isDark ? Colors.white : Colors.black87,
+          color: context.isDarkMode ? Colors.white : Colors.black87,
           fontWeight: FontWeight.bold,
           fontSize: 30.sp,
         ),
@@ -132,9 +133,9 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
               itemCount: comments.data.length,
               itemBuilder: (context, index) {
                 return CommentWidget(
-                  commentData: comments.data.toList()[index],
+                  commentData: comments.data[index],
+                  index: index,
                   commentController: _commentController,
-
                   //for reply
                   replyingTo: replyToUser,
                   focusNode: focusNode,
