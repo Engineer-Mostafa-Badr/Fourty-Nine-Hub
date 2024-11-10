@@ -209,35 +209,36 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
     final controller = context.read<InstallmentDetailsCubit>();
     return BlocBuilder<InstallmentDetailsCubit, InstallmentDetailsState>(
       builder: (BuildContext context, InstallmentDetailsState state) {
-        return RichText(
-            text: TextSpan(
-                children: state.installment?.plans?.map((e) {
-                      return WidgetSpan(
-                          child: InkWell(
-                        onTap: () => controller.changeInstallmentPlan(v: e),
-                        child: Container(
-                          margin: const EdgeInsets.all(3),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 2.h),
-                          decoration: BoxDecoration(
-                              color: e == state.selectedPlan
-                                  ? AppColors.SECONDARY_COLOR
-                                  : null,
-                              borderRadius: BorderRadius.circular(5),
-                              border: e == state.selectedPlan
-                                  ? null
-                                  : Border.all(color: Colors.grey)),
-                          child: Label(
-                              text: '${e.duration} ${Labels.months}',
-                              style: Styles.mediumText(
-                                  color: e == state.selectedPlan
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                      ));
-                    }).toList() ??
-                    []));
+        // return RichText(
+        //     text: TextSpan(
+        //         children: state.installment?.plans?.map((e) {
+        //               return WidgetSpan(
+        //                   child: InkWell(
+        //                 onTap: () => controller.changeInstallmentPlan(v: e),
+        //                 child: Container(
+        //                   margin: const EdgeInsets.all(3),
+        //                   padding: EdgeInsets.symmetric(
+        //                       horizontal: 10, vertical: 2.h),
+        //                   decoration: BoxDecoration(
+        //                       color: e == state.selectedPlan
+        //                           ? AppColors.SECONDARY_COLOR
+        //                           : null,
+        //                       borderRadius: BorderRadius.circular(5),
+        //                       border: e == state.selectedPlan
+        //                           ? null
+        //                           : Border.all(color: Colors.grey)),
+        //                   child: Label(
+        //                       text: '${e.duration} ${Labels.months}',
+        //                       style: Styles.mediumText(
+        //                           color: e == state.selectedPlan
+        //                               ? Colors.white
+        //                               : Colors.black,
+        //                           fontWeight: FontWeight.bold)),
+        //                 ),
+        //               ));
+        //             }).toList() ??
+        //             []));
+        return Container();
       },
     );
   }

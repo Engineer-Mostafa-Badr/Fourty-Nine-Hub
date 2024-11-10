@@ -7,7 +7,8 @@ class Cart {
   final double subTotal;
   final String createdAt;
   final String updatedAt;
-  final String currency; // Added currency field
+  final String currencyAr; // Added currency field
+  final String currencyEn; // Added currency field
 
   Cart({
     required this.status,
@@ -17,7 +18,8 @@ class Cart {
     required this.subTotal,
     required this.createdAt,
     required this.updatedAt,
-    required this.currency, // Initialize currency
+    required this.currencyAr, // Initialize currency
+    required this.currencyEn, // Initialize currency
   });
 
   factory Cart.fromJson(Map<String, dynamic> json) {
@@ -32,7 +34,8 @@ class Cart {
       subTotal: (data['subTotal'] as num).toDouble(),
       createdAt: data['createdAt'],
       updatedAt: data['updatedAt'],
-      currency: data['currency'], // Parse currency
+      currencyAr: data['currencyAr'], // Parse currency
+      currencyEn: data['currencyEn'], // Parse currency
     );
   }
 }

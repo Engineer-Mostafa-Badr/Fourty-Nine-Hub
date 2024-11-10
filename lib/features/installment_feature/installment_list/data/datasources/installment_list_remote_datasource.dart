@@ -21,7 +21,7 @@ class InstallmentListRemoteDataSourceImpl
     final response = await _apiConsumer.get(EndPoints.installment);
     return response.fold(
         (failure) => Left(failure),
-        (data) => Right((data['data']['docs'] as List)
+        (data) => Right((data['data'] as List)
             .map((e) => InstallmentModel.fromJson(e))
             .toList()));
   }

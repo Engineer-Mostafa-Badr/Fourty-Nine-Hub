@@ -1,10 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/widgets/build_food_list.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/widgets/item_card.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../res/style/styles.dart';
@@ -15,20 +21,36 @@ import '../../../restaurant_details/presentation/widgets/restaurant_header.dart'
 import '../cubit/restaurant_details_cubit.dart';
 
 class RestaurantDetailsView extends StatefulWidget {
-  final String id;
+  final Restaurant restaurant;
 
-  const RestaurantDetailsView({super.key, required this.id});
+  const RestaurantDetailsView({super.key, required this.restaurant});
 
   @override
   State<RestaurantDetailsView> createState() => _RestaurantDetailsViewState();
 }
 
 class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
+
+  late ScrollController _scrollController;
+  bool isFirstSearchListenerCall = true;
+  
   @override
   void initState() {
     super.initState();
-    // Initialize data fetching if needed
-    // context.read<RestaurantDetailsCubit>().loadData(id: widget.id);
+    _scrollController = ScrollController()..addListener(_onScroll);
+    context.read<RestaurantDetailsCubit>().loadData(id: widget.restaurant.id??'');
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      context.read<RestaurantDetailsCubit>().getMeals(id: widget.restaurant.id??'');
+    }
+  }
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -36,27 +58,51 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
     return Scaffold(
       appBar: BackAppBar(
         label: LocaleKeys.restaurantMenu.tr(),
+        backColor: context.theme.appBarTheme.backgroundColor,
       ),
-      backgroundColor: scaffoldDarkColor(context),
+      // backgroundColor: scaffoldDarkColor(context),
       extendBody: true,
       extendBodyBehindAppBar: true,
-      bottomNavigationBar: _viewCartButton(),
-      body: BlocProvider.value(
-        value: serviceLocator<RestaurantDetailsCubit>()..loadData(id: widget.id),
-        child: BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
-          builder: (context, state) {
-            return ListView(
-              children: [
-                if (state.restaurant != null)
-                  RestaurantHeader(restaurant: state.restaurant!),
-                const Sizer(),
-                BuildFoodList(
-                  restaurantId: widget.id,
+      body: BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
+        builder: (context, state) {
+          return state.isLoading?const Center(child: CircularProgressIndicator(),):Stack(
+            children: [
+              Column(
+                children: [
+                  Expanded(
+                    child: ListView(
+                      controller: _scrollController,
+                      children: [
+                          RestaurantHeader(restaurant: widget.restaurant),
+                        const Sizer(),
+                        BuildFoodList(
+                          restaurantId: widget.restaurant.id??'',
+                        ),
+                        if(context.read<RestaurantDetailsCubit>().isLoadingMore==true)const Center(child: CircularProgressIndicator(),),
+                      ],
+                    ),
+                  ),
+                  _viewCartButton(),
+                ],
+              ),
+              if(state.isAddToCart)Container(
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.7),
                 ),
-              ],
-            );
-          },
-        ),
+                child: Center(child: Container(
+                  height: 200.h,
+                  width: 250.w,
+                  padding: EdgeInsets.all(30.w),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.r)
+                  ),
+                    child: const CircularProgressIndicator(color: AppColors.PRIMARY_COLOR,)),),
+              )
+            ],
+          );
+        },
       ),
     );
   }
