@@ -6,9 +6,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import '../../features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
-import '../../features/social_media/reels/presentation/controllers/preload_cubit/preload_events.dart';
 import '../../features/social_media/reels/presentation/shared/constants.dart';
-import '../../routes/pages.dart';
 
 Future createIsolate(int index) async {
   // Set loading to true
