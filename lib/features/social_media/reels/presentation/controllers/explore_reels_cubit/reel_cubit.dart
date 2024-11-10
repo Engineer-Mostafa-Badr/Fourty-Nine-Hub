@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -32,6 +33,7 @@ import 'package:video_player/video_player.dart';
 import '../../../../../../core/utils/shared_pref.dart';
 import '../../../../../trip_join/helpers/print_helper.dart';
 import '../../../data/models/new_reels_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/data_sources/reels_remote_data_source.dart';
 
 part 'reel_state.dart';
 
@@ -233,8 +235,6 @@ class ReelsCubit extends Cubit<ReelsState> {
     );
   }
 
-
-
   Future<String> likeReel(String reelId) async {
     emit(state.copyWith(
         isLikingReel: true, likeReelErrorMessage: 'loadingLike'));
@@ -257,14 +257,13 @@ class ReelsCubit extends Cubit<ReelsState> {
     emit(state.copyWith(isCommenting: true));
     final result = await _addCommentUseCase(
         AddReelCommentParams(comment: comment, reelId: reelId));
-    result.fold(
-            (failure) {
-          showErrorMessage(context,getFailureMessage(failure, context));
-          emit(state.copyWith(
-            isCommenting: false,
-            commentErrorMessage: "An error occurred while adding the comment",
-          ));
-        }, (addCommentResponse) {
+    result.fold((failure) {
+      showErrorMessage(context, getFailureMessage(failure, context));
+      emit(state.copyWith(
+        isCommenting: false,
+        commentErrorMessage: "An error occurred while adding the comment",
+      ));
+    }, (addCommentResponse) {
       final newComment = CommentData(
         id: addCommentResponse.data.id,
         reelId: addCommentResponse.data.reelId,
@@ -278,8 +277,8 @@ class ReelsCubit extends Cubit<ReelsState> {
           id: context.read<UserCubit>().state.data!.id,
           lastName: context.read<UserCubit>().state.data!.lastName,
           profilePictureSignedUrl:
-          context.read<UserCubit>().state.data!.profilePicture ??
-              UIConst.profilePlaceHolder,
+              context.read<UserCubit>().state.data!.profilePicture ??
+                  UIConst.profilePlaceHolder,
         ),
         parentId: addCommentResponse.data.parentId,
         receiverComment: addCommentResponse.data.receiverComment,
@@ -293,7 +292,8 @@ class ReelsCubit extends Cubit<ReelsState> {
     });
   }
 
-  Future<void> addReplayComment(BuildContext context,String reelId, String comment,
+  Future<void> addReplayComment(
+      BuildContext context, String reelId, String comment,
       {String? receiverComment, String? parentCommentId}) async {
     //parent comment id is comment (global) Main comment
     //receiver comment is reply or
@@ -320,7 +320,9 @@ class ReelsCubit extends Cubit<ReelsState> {
           firstName: context.read<UserCubit>().state.data!.firstName,
           id: context.read<UserCubit>().state.data!.id,
           lastName: context.read<UserCubit>().state.data!.lastName,
-          profilePictureSignedUrl: context.read<UserCubit>().state.data!.profilePicture ?? UIConst.profilePlaceHolder,
+          profilePictureSignedUrl:
+              context.read<UserCubit>().state.data!.profilePicture ??
+                  UIConst.profilePlaceHolder,
         ),
         parentId: addCommentResponse.data.parentId,
         receiverComment: addCommentResponse.data.receiverComment,
@@ -329,28 +331,38 @@ class ReelsCubit extends Cubit<ReelsState> {
 
       // Find the parent comment by matching parentCommentId
       final parentCommentIndex = state.fetchedComments!.data.indexWhere(
-            (comment) => comment.id == parentCommentId,
+        (comment) => comment.id == parentCommentId,
       );
 
       if (parentCommentIndex != -1) {
         // Add the new reply to the parent comment's replies list
-        state.fetchedComments!.data[parentCommentIndex].replies.insert(0, newReply);
+        state.fetchedComments!.data[parentCommentIndex].replies
+            .insert(0, newReply);
       }
 
       emit(state.copyWith(
         isReplyingComment: false,
         commentResponse: addCommentResponse,
-        commentErrorMessage: addCommentResponse.status ? null : "Failed to add comment",
+        commentErrorMessage:
+            addCommentResponse.status ? null : "Failed to add comment",
       ));
     });
   }
 
+  bool isLoadingMore = false;
+  bool hasMoreData = true;
+  int currentPage = 1;
+  int pageSize = 10;
+
   Future<void> getComments(String reelId) async {
+    if (!hasMoreData || isLoadingMore) return;
+
     bool isFetching = true;
     print('initial isFetching: $isFetching');
     emit(state.copyWith(isFetchingComments: isFetching));
     print('reelId: $reelId');
-    final result = await _getCommentsUseCase(reelId);
+    final result = await _getCommentsUseCase(CommentParams(
+        reelId: reelId, pagingParams: PaginationParams(page: currentPage, limit: pageSize)));
     result.fold((failure) {
       isFetching = false;
       print('isFetching is false and failure');
@@ -374,18 +386,18 @@ class ReelsCubit extends Cubit<ReelsState> {
             likeReelErrorMessage:
                 'An error occurred while liking/unliking the comment')),
         (data) {
-          // Find the target comment by its ID in the comment list
-          final updatedComments = state.fetchedComments!.data.map((comment) {
-            if (comment.id == commentId) {
-              // Determine if the action was a "like" or "unlike" and update accordingly
-              final isLiked = data == "like";
-              return comment.copyWith(
-                isLiked: isLiked,
-                likeCount: isLiked ? comment.likeCount + 1 : comment.likeCount - 1,
-              );
-            }
-            return comment;
-          }).toList();
+      // Find the target comment by its ID in the comment list
+      final updatedComments = state.fetchedComments!.data.map((comment) {
+        if (comment.id == commentId) {
+          // Determine if the action was a "like" or "unlike" and update accordingly
+          final isLiked = data == "like";
+          return comment.copyWith(
+            isLiked: isLiked,
+            likeCount: isLiked ? comment.likeCount + 1 : comment.likeCount - 1,
+          );
+        }
+        return comment;
+      }).toList();
       emit(state.copyWith(
         isLikingComment: false,
         fetchedComments: state.fetchedComments!.copyWith(data: updatedComments),
@@ -426,12 +438,12 @@ class ReelsCubit extends Cubit<ReelsState> {
 
   String? parentCommentId;
   String? receiverComment;
+
   void updateParentCommentIdAndReceiverComment(
-      { String? parentCommentId, String? receiverComment}) {
+      {String? parentCommentId, String? receiverComment}) {
     emit(state.copyWith(isCreatingReply: false));
     this.parentCommentId = parentCommentId;
     this.receiverComment = receiverComment;
     emit(state.copyWith(isCreatingReply: true));
-
   }
 }

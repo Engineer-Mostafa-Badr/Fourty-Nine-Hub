@@ -1,4 +1,6 @@
 import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -32,7 +34,8 @@ abstract class ReelsRemoteDataSource {
   Future<Either<Failure, AddCommentResponse>> addReply(
       AddReelReplyParams params);
 
-  Future<Either<Failure, GetCommentsResponse>> getComments(String reelId);
+  Future<Either<Failure, GetCommentsResponse>> getComments(
+      CommentParams params);
 
   Future<Either<Failure, String>> toggleCommentLike(String commentId);
 
@@ -185,9 +188,10 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
 
   @override
   Future<Either<Failure, GetCommentsResponse>> getComments(
-      String reelId) async {
+      CommentParams params) async {
     final response = await _apiConsumer.get(
-      EndPoints.getComments(reelId),
+      EndPoints.getComments(params.reelId),
+      queryParameters: params.toJson(),
     );
     return response.fold(
       (failure) => Left(failure),
@@ -223,4 +227,17 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
       ),
     );
   }
+}
+
+class CommentParams extends Equatable {
+  final String reelId;
+  final PaginationParams pagingParams;
+
+  const CommentParams({required this.reelId, required this.pagingParams});
+
+  Map<String, dynamic> toJson() =>
+      {'page': pagingParams.page, 'limit': pagingParams.limit};
+
+  @override
+  List<Object?> get props => [reelId, pagingParams];
 }

@@ -14,7 +14,7 @@ import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_with_same_audia_use_case.dart';
 
 import '../../../../../core/error/failure.dart';
-import '../data_sources/reels_remote_data_source.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/data_sources/reels_remote_data_source.dart';
 
 class ReelsRepositoryImpl extends ReelsRepository {
   final ReelsRemoteDataSource _reelsRemoteDataSource;
@@ -66,8 +66,8 @@ class ReelsRepositoryImpl extends ReelsRepository {
   }
 
   @override
-  Future<Either<Failure, GetCommentsResponse>> getComments(String reelId) {
-    return _reelsRemoteDataSource.getComments(reelId);
+  Future<Either<Failure, GetCommentsResponse>> getComments(CommentParams params) {
+    return _reelsRemoteDataSource.getComments(params);
   }
 
   @override
