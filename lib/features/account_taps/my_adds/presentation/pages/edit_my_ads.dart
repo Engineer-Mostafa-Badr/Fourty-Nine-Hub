@@ -11,6 +11,12 @@ import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart'
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/localization/locales.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/my_ads_auction.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/edit_my_ads_use_case.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/presentation/widgets/ad_dynamic_input_edit.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
@@ -20,14 +26,10 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/labels/badged_label.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/error/failure.dart';
-import '../../../../../core/messages/messages.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
-import '../../../../ads_feature/create_ad/presentation/widgets/ad_dynamic_inputs.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import '../../domain/entity/my_ads_auction.dart';
 
 class EditMyAds extends StatefulWidget {
   final MyAuctionAdsEntity categorization;
@@ -39,61 +41,44 @@ class EditMyAds extends StatefulWidget {
 }
 
 class _EditMyAdsState extends State<EditMyAds> {
+  SelectionEntity? selectedExperienceLevel;
+  SelectionEntity? selectedEducationLevel;
+
   @override
   void initState() {
-    context
-        .read<CreateAdCubit>()
-        .loadData(subCategoryId: widget.categorization.subCategory.id ?? '');
     super.initState();
   }
-  //   @override
-//   void initState() {
-//     super.initState();
-//     // Initialize the controllers with the existing data from widget.item
-//     _titleController = TextEditingController(text: widget.item.title);
-//     _descController = TextEditingController(text: widget.item.desc);
-//     _phoneController = TextEditingController(text: widget.item.phone);
-//     _priceController =
-//         TextEditingController(text: widget.item.price.toString());
-//   }
-//
-//   @override
-//   void dispose() {
-//     // Dispose of the controllers to avoid memory leaks
-//     _titleController.dispose();
-//     _descController.dispose();
-//     _phoneController.dispose();
-//     _priceController.dispose();
-//     super.dispose();
-//   }
+
+  List<CreateAdEntity> details = [];
+  var selectedValue;
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CreateAdCubit, CreateAdState>(
-        listener: (context, state) {
-      if (state.isError) {
-        showErrorMessage(
-          context,
-          getFailureMessage(
-            state.failure!,
-            context,
-          ),
-        );
-      }
-    }, builder: (context, state) {
-      final controller = context.read<CreateAdCubit>();
-      return Scaffold(
-        appBar: BackAppBar(label: LocaleKeys.editMyAds.localize),
-        body: BlocBuilder<CreateAdCubit, CreateAdState>(
+    return Scaffold(
+      appBar: BackAppBar(label: LocaleKeys.editMyAds.localize),
+      body: BlocProvider<CreateAdCubit>(
+        create: (BuildContext context) => serviceLocator()
+          ..loadDataInEdit(
+              subCategoryId: widget.categorization.mainCategory?.id ?? '',
+              id: widget.categorization.id),
+        child: BlocConsumer<CreateAdCubit, CreateAdState>(
+          listener: (BuildContext context, CreateAdState state) {
+            if (state.status == CreateAdStates.updateSuccess) {
+              showSuccessMessage(
+                  context, LocaleKeys.updateSuccessfully.localize);
+            }
+          },
           builder: (context, state) {
+            final controller = context.read<CreateAdCubit>();
             if (state.status == CreateAdStates.success ||
                 state.status == CreateAdStates.loadCitiesSuccess ||
                 state.status == CreateAdStates.loadCities ||
                 state.status == CreateAdStates.imageUploading ||
                 state.status == CreateAdStates.initState) {
-              controller.titleController.text = widget.categorization.title;
-              controller.descController.text = widget.categorization.desc;
-              controller.phoneController.text = widget.categorization.phone;
+              controller.titleController.text = state.myAdById?.title ?? '';
+              controller.descController.text = state.myAdById?.desc ?? '';
+              controller.phoneController.text = state.myAdById?.phone ?? '';
+              controller.priceController.text = '${state.myAdById?.price ?? 0}';
 
               return Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -107,7 +92,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                             width: kToolbarHeight * .8,
                             height: kToolbarHeight * .8,
                             radius: 10,
-                            url: widget.categorization.subCategory.picture,
+                            url: state.myAdById!.subCategoryId.picture,
                           ),
                           const Sizer(),
                           Expanded(
@@ -115,20 +100,211 @@ class _EditMyAdsState extends State<EditMyAds> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Label(
-                                text: widget.categorization.subCategory.nameEn,
+                                text: context.locale == Locales.english
+                                    ? state.myAdById!.subCategoryId.nameEn
+                                    : state.myAdById!.subCategoryId.nameAr,
                                 style: Styles.mediumText(
                                     fontWeight: FontWeight.bold),
                               ),
                               Label(
-                                  text: widget.categorization.mainCategory
-                                          ?.nameEn ??
-                                      ''),
+                                text: context.locale == Locales.english
+                                    ? state.myAdById!.mainCategoryId.nameEn
+                                    : state.myAdById!.mainCategoryId.nameAr,
+                              ),
                             ],
                           )),
                         ],
                       ),
                       const Divider(),
-                      _buildImagePicker(),
+                      Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16.w, vertical: 16.h),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                            child: Center(
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    height: 80.h,
+                                    width: 100.w,
+                                    child: BadgedLabel(
+                                      label: '+',
+                                      onTap: () {
+                                        controller.uploadImage(
+                                          subCategoryId: widget
+                                              .categorization.subCategory.id,
+                                        );
+                                      },
+                                      isBordered: true,
+                                      style: Styles.headerText(
+                                          color: Colors.white),
+                                      color: AppColors.SECONDARY_COLOR,
+                                      isCentered: true,
+                                      close: false,
+                                    ),
+                                  ),
+                                  const Sizer(),
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                      child: Row(
+                                        children: [
+                                          if (state.myAdById?.images
+                                                  .isNotEmpty ??
+                                              false)
+                                            state.images == null?  SizedBox(
+                                              height: 80.h,
+                                              child: Row(
+                                                children: List.generate(
+                                                  state.myAdById?.images
+                                                          .length ??
+                                                      0,
+                                                  (index) => SizedBox(
+                                                    height: 100.h,
+                                                    width: 100.w,
+                                                    child: Stack(
+                                                      alignment:
+                                                          AlignmentDirectional
+                                                              .topStart,
+                                                      children: [
+                                                        ImageFromInternet(
+                                                          height: 100.h,
+                                                          width: 100.w,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      20.r),
+                                                          fit: BoxFit.fill,
+                                                          image: state
+                                                                  .myAdById
+                                                                  ?.images[
+                                                                      index]
+                                                                  .photo ??
+                                                              '',
+                                                        ),
+                                                        PositionedDirectional(
+                                                          start: 5.w,
+                                                          top: 0,
+                                                          child: IconAppButton(
+                                                            width: 35.w,
+                                                            height: 35.h,
+                                                            icon: Icons
+                                                                .close_sharp,
+                                                            color: Colors.red,
+                                                            backColor:
+                                                                Colors.white,
+                                                            size: 25.w,
+                                                            isCircle: true,
+                                                            onPressed: () =>
+                                                                showAreYouSure(
+                                                              context: context,
+                                                              title: 'Alert',
+                                                              subTitle:
+                                                                  'Are you sure you want to remove this image?',
+                                                              action: () {
+                                                                controller.removeImage(
+                                                                    image: state
+                                                                            .images![
+                                                                        index]);
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ) :const SizedBox.shrink(),
+                                          const Sizer(),
+                                          if (state.images != null &&
+                                              state.images!.isNotEmpty)
+                                            SizedBox(
+                                              height: 80.h,
+                                              child: Row(
+                                                children: List.generate(
+                                                  state.images?.length ?? 0,
+                                                  (index) => SizedBox(
+                                                    height: 100.h,
+                                                    width: 100.w,
+                                                    child: Stack(
+                                                      alignment:
+                                                          AlignmentDirectional
+                                                              .topStart,
+                                                      children: [
+                                                        Container(
+                                                          height: 100.h,
+                                                          width: 100.w,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(10),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15),
+                                                            image:
+                                                                DecorationImage(
+                                                              fit: BoxFit.fill,
+                                                              image: FileImage(
+                                                                File(state
+                                                                    .images![
+                                                                        index]
+                                                                    .file
+                                                                    .path),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        PositionedDirectional(
+                                                          start: 5.w,
+                                                          top: 0,
+                                                          child: IconAppButton(
+                                                            width: 35.w,
+                                                            height: 35.h,
+                                                            icon: Icons
+                                                                .close_sharp,
+                                                            color: Colors.red,
+                                                            backColor:
+                                                                Colors.white,
+                                                            size: 25.w,
+                                                            isCircle: true,
+                                                            onPressed: () =>
+                                                                showAreYouSure(
+                                                              context: context,
+                                                              title: 'Alert',
+                                                              subTitle:
+                                                                  'Are you sure you want to remove this image?',
+                                                              action: () {
+                                                                controller.removeImage(
+                                                                    image: state
+                                                                            .images![
+                                                                        index]);
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          const Sizer(),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       const Sizer(),
                       Row(
                         children: [
@@ -136,8 +312,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                               child: InkWell(
                             onTap: () {
                               setState(() {
-                                if (widget.categorization.subCategory
-                                        .hasAuction ==
+                                if (state.myAdById!.subCategoryId.hasAuction ==
                                     true) {
                                   state.isSale = true;
                                 } else {
@@ -157,8 +332,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                                       color: AppColors.PRIMARY_COLOR)),
                               alignment: AlignmentDirectional.center,
                               child: Text(
-                                widget.categorization.subCategory.hasAuction ==
-                                        true
+                                state.myAdById!.subCategoryId.hasAuction == true
                                     ? LocaleKeys.sale.localize
                                     : LocaleKeys.user.localize,
                                 style: Styles.mediumText(
@@ -174,8 +348,8 @@ class _EditMyAdsState extends State<EditMyAds> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  if (widget.categorization.subCategory
-                                          .hasAuction ==
+                                  if (state
+                                          .myAdById!.subCategoryId.hasAuction ==
                                       true) {
                                     state.isSale = false;
                                     print(state.isSale);
@@ -197,8 +371,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                                         color: AppColors.PRIMARY_COLOR)),
                                 alignment: AlignmentDirectional.center,
                                 child: Text(
-                                  widget.categorization.subCategory
-                                              .hasAuction ==
+                                  state.myAdById!.subCategoryId.hasAuction ==
                                           true
                                       ? LocaleKeys.rent.localize
                                       : LocaleKeys.provider.localize,
@@ -316,7 +489,11 @@ class _EditMyAdsState extends State<EditMyAds> {
                             ),
                           ),
                           hint: Text(
-                            LocaleKeys.selectGovernorate.tr(),
+                            context.locale == Locales.english
+                                ? state.myAdById?.governorateNameEn ??
+                                    LocaleKeys.selectGovernorate.tr()
+                                : state.myAdById?.governorateNameAr ??
+                                    LocaleKeys.selectGovernorate.tr(),
                             style: TextStyle(
                               color: context.isDarkMode
                                   ? AppColors.LIGHT_COLOR
@@ -338,15 +515,16 @@ class _EditMyAdsState extends State<EditMyAds> {
                                   (GovernorateEntity government) {
                             return DropdownMenuItem<GovernorateEntity>(
                               value: government,
-                              child: Text(government
-                                  .nameEn), // Change to city.nameAr for Arabic
+                              child: Text(context.locale == Locales.english
+                                  ? government.nameEn
+                                  : government.nameAr),
                             );
                           }).toList(),
                         ),
                       ),
                       const Sizer(),
                       state.status == CreateAdStates.loadCities
-                          ? const Center(child: CircularProgressIndicator())
+                          ? Center(child: const CircularProgressIndicator())
                           : state.status == CreateAdStates.loadCitiesSuccess
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -357,9 +535,6 @@ class _EditMyAdsState extends State<EditMyAds> {
                                       child:
                                           DropdownButtonFormField<CityEntity>(
                                         decoration: InputDecoration(
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  vertical: 10, horizontal: 12),
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: context.isDarkMode
@@ -378,6 +553,12 @@ class _EditMyAdsState extends State<EditMyAds> {
                                                     ? AppColors.LIGHT_COLOR
                                                     : Colors.grey),
                                           ),
+                                          fillColor: context.isDarkMode
+                                              ? Colors.transparent
+                                              : AppColors.LIGHT_COLOR,
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 10, horizontal: 12),
                                         ),
                                         hint: Text(
                                           LocaleKeys.selectCity.tr(),
@@ -420,7 +601,9 @@ class _EditMyAdsState extends State<EditMyAds> {
                               : LocaleKeys.salary.localize),
                       TextFormField(
                         maxLines: null,
+                        controller: controller.priceController,
                         onChanged: (v) => controller.price = v,
+                        keyboardType: TextInputType.number,
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
                             fillColor: context.isDarkMode
@@ -447,13 +630,27 @@ class _EditMyAdsState extends State<EditMyAds> {
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           final property = state.adProperties![index];
-                          return AdDynamicInputWidget(
+                          bool isExperienceLevel =
+                              property.nameEn == "Experience Level";
+                          bool isEducationLevel =
+                              property.nameEn == "Education Level";
+                          return AdDynamicInputEdit(
                             property: property,
-                            onChanged: (SelectionEntity v) =>
-                                controller.onChanged(v: v, index: index),
+                            // selectedPropName: selectedValue,
+                            onChanged: (SelectionEntity v) {
+                              if (isExperienceLevel) {
+                                setState(() {
+                                  selectedExperienceLevel = v;
+                                });
+                              } else if (isEducationLevel) {
+                                setState(() {
+                                  selectedEducationLevel = v;
+                                });
+                              }
+                              controller.onChangedd(v: v, index: index);
+                            },
                             onTextChanged: (String v) =>
                                 controller.onTextChanged(v: v, index: index),
-                            selectedProp: '',
                           );
                         },
                         separatorBuilder: (context, index) => const Sizer(),
@@ -462,13 +659,206 @@ class _EditMyAdsState extends State<EditMyAds> {
                       ),
                       const Sizer(),
                       DefaultButton(
-                          label: LocaleKeys.edit.localize,
-                          onPressed: () {
-                          //  controller.editMyAds(params: params)
-                            // controller.createAd(
-                            //     categorize: widget.categorization,
-                            //     context: context);
-                          }),
+                        label: LocaleKeys.edit.localize,
+                        onPressed: () {
+                          print(
+                              'state.images ${state.images?.map((e) => e.mediaId).toList() ?? []}');
+                          final List<Map<String, dynamic>> props = [];
+                          final List<Map<String, dynamic>> props2 = [];
+                          final existingProps = state.myAdById!.props;
+
+                          for (var prop in existingProps) {
+                            if (selectedExperienceLevel != null &&
+                                selectedEducationLevel == null) {
+                              props.add({
+                                "propertyId": '66f56c06414240a8e48520b3',
+                                // Experience property ID
+                                "value": {
+                                  "ar": selectedExperienceLevel!.nameAr,
+                                  "en": selectedExperienceLevel!.nameEn,
+                                },
+                              });
+                              // No need to add education level if only experience is selected
+                              continue; // Skip the rest of the loop for this iteration
+                            }
+
+                            // Check if education level is selected
+                            if (selectedEducationLevel != null &&
+                                selectedExperienceLevel == null) {
+                              props.add({
+                                "propertyId": "66f56c06414240a8e48520b2",
+                                // Education property ID
+                                "value": {
+                                  "ar": selectedEducationLevel!.nameAr,
+                                  "en": selectedEducationLevel!.nameEn,
+                                },
+                              });
+                              // No need to add experience level if only education is selected
+                              continue; // Skip the rest of the loop for this iteration
+                            }
+
+                            // Add both experience and education if both are selected
+                            if (selectedExperienceLevel != null &&
+                                selectedEducationLevel != null) {
+                              props.add({
+                                "propertyId": '66f56c06414240a8e48520b3',
+                                // Experience property ID
+                                "value": {
+                                  "ar": selectedExperienceLevel!.nameAr,
+                                  "en": selectedExperienceLevel!.nameEn,
+                                },
+                              });
+                              props.add({
+                                "propertyId": "66f56c06414240a8e48520b2",
+                                // Education property ID
+                                "value": {
+                                  "ar": selectedEducationLevel!.nameAr,
+                                  "en": selectedEducationLevel!.nameEn,
+                                },
+                              });
+                              break; // Exit the loop once both are added
+                            }
+
+                            // Default to existing values if neither experience nor education are selected
+                            if (selectedExperienceLevel == null &&
+                                selectedEducationLevel == null) {
+                              props2.add({
+                                "propertyId": prop.id,
+                                "value": {
+                                  "ar": prop.value.ar,
+                                  "en": prop.value.en,
+                                },
+                              });
+                            }
+                          }
+
+                          print('////////////////////////////');
+                          selectedExperienceLevel == null &&
+                                  selectedEducationLevel == null
+                              ? print('Props2 ${props2}')
+                              : print('Props ${props}');
+                          print('////////////////////////////');
+
+                          print(
+                              'state.myAdById!.images: ${state.myAdById!.images.map((e) => e.id).toList()}');
+
+                          controller.editMyAds(
+                            categorization: widget.categorization,
+                            selectedEducationLevel:selectedEducationLevel ,
+                            selectedExperienceLevel: selectedExperienceLevel,
+                          );
+                        },
+                      )
+                      // DefaultButton(
+                      //   label: LocaleKeys.edit.localize,
+                      //   onPressed: () {
+                      //     print(
+                      //         'state.images ${state.images?.map((e) => e.mediaId).toList() ?? []}');
+                      //     final List<Map<String, dynamic>> props = [];
+                      //     final List<Map<String, dynamic>> props2 = [];
+                      //     final existingProps = state.myAdById!.props;
+                      //
+                      //     for (var prop in existingProps) {
+                      //       if (selectedExperienceLevel != null &&
+                      //           selectedEducationLevel == null) {
+                      //         props.add({
+                      //           "propertyId": '66f56c06414240a8e48520b3',
+                      //           // Experience property ID
+                      //           "value": {
+                      //             "ar": selectedExperienceLevel!.nameAr,
+                      //             "en": selectedExperienceLevel!.nameEn,
+                      //           },
+                      //         });
+                      //         // No need to add education level if only experience is selected
+                      //         continue; // Skip the rest of the loop for this iteration
+                      //       }
+                      //
+                      //       // Check if education level is selected
+                      //       if (selectedEducationLevel != null &&
+                      //           selectedExperienceLevel == null) {
+                      //         props.add({
+                      //           "propertyId": "66f56c06414240a8e48520b2",
+                      //           // Education property ID
+                      //           "value": {
+                      //             "ar": selectedEducationLevel!.nameAr,
+                      //             "en": selectedEducationLevel!.nameEn,
+                      //           },
+                      //         });
+                      //         // No need to add experience level if only education is selected
+                      //         continue; // Skip the rest of the loop for this iteration
+                      //       }
+                      //
+                      //       // Add both experience and education if both are selected
+                      //       if (selectedExperienceLevel != null &&
+                      //           selectedEducationLevel != null) {
+                      //         props.add({
+                      //           "propertyId": '66f56c06414240a8e48520b3',
+                      //           // Experience property ID
+                      //           "value": {
+                      //             "ar": selectedExperienceLevel!.nameAr,
+                      //             "en": selectedExperienceLevel!.nameEn,
+                      //           },
+                      //         });
+                      //         props.add({
+                      //           "propertyId": "66f56c06414240a8e48520b2",
+                      //           // Education property ID
+                      //           "value": {
+                      //             "ar": selectedEducationLevel!.nameAr,
+                      //             "en": selectedEducationLevel!.nameEn,
+                      //           },
+                      //         });
+                      //         break; // Exit the loop once both are added
+                      //       }
+                      //
+                      //       // Default to existing values if neither experience nor education are selected
+                      //       if (selectedExperienceLevel == null &&
+                      //           selectedEducationLevel == null) {
+                      //         props2.add({
+                      //           "propertyId": prop.id,
+                      //           "value": {
+                      //             "ar": prop.value.ar,
+                      //             "en": prop.value.en,
+                      //           },
+                      //         });
+                      //       }
+                      //     }
+                      //
+                      //     print('////////////////////////////');
+                      //     selectedExperienceLevel == null &&
+                      //             selectedEducationLevel == null
+                      //         ? print('Props2 ${props2}')
+                      //         : print('Props ${props}');
+                      //     print('////////////////////////////');
+                      //
+                      //     print(
+                      //         'state.myAdById!.images: ${state.myAdById!.images.map((e) => e.id).toList()}');
+                      //
+                      //     controller.editMyAds(
+                      //       params: EditParams(
+                      //         id: widget.categorization.id,
+                      //         title: controller.titleController.text,
+                      //         description: controller.descController.text,
+                      //         phone: controller.phoneController.text,
+                      //         price:
+                      //             double.parse(controller.priceController.text),
+                      //         details: selectedExperienceLevel == null &&
+                      //                 selectedEducationLevel == null
+                      //             ? props2
+                      //             : props,
+                      //         subCategoryId:
+                      //             widget.categorization.subCategory.id,
+                      //         mainCategoryId:
+                      //             widget.categorization.mainCategory!.id,
+                      //         images: state.images
+                      //                 ?.map((e) => e.mediaId)
+                      //                 .toList() ??
+                      //             state.myAdById!.images
+                      //                 .map((e) => e.id)
+                      //                 .toList(),
+                      //       ),
+                      //     );
+                      //   },
+                      // )
                     ],
                   ),
                 ),
@@ -480,645 +870,7 @@ class _EditMyAdsState extends State<EditMyAds> {
             }
           },
         ),
-      );
-    });
-  }
-
-  Widget _buildImagePicker() {
-    return BlocProvider<CreateAdCubit>(
-      create: (BuildContext context) => serviceLocator(),
-      child:
-          BlocBuilder<CreateAdCubit, CreateAdState>(builder: (context, state) {
-        final controller = context.read<CreateAdCubit>();
-        return Column(
-          children: [
-            //   if (widget.item.images.isEmpty)
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(10.r)),
-              child: Center(
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: 80.h,
-                      width: 100.w,
-                      child: BadgedLabel(
-                        label: '+',
-                        isBordered: true,
-                        style: Styles.headerText(color: Colors.white),
-                        color: AppColors.SECONDARY_COLOR,
-                        isCentered: true,
-                        close: false,
-                      ),
-                    ),
-                    const Sizer(),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        // scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            if (state.images != null &&
-                                state.images!.isNotEmpty)
-                              SizedBox(
-                                height: kToolbarHeight * 1,
-                                child: Row(
-                                  children: List.generate(
-                                      state.images?.length ?? 0,
-                                      (index) => SizedBox(
-                                            height: 100.h,
-                                            width: 100.w,
-                                            child: Stack(
-                                              alignment:
-                                                  AlignmentDirectional.topStart,
-                                              children: [
-                                                // Positioned.fill(
-                                                //   child: Image.network(widget.item.images[index].photo),
-                                                // //     child: Image.file(
-                                                // //   fit: BoxFit.cover,
-                                                // //   File(image.file.path),
-                                                // // ),
-                                                // ),
-                                                // if (state.images != null &&
-                                                //     state.images!.isNotEmpty)
-                                                Container(
-                                                  height: 200,
-                                                  width: 200,
-                                                  margin:
-                                                      const EdgeInsetsDirectional
-                                                          .only(
-                                                          end: 10, bottom: 10),
-                                                  padding:
-                                                      const EdgeInsets.all(10),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                    image: DecorationImage(
-                                                      fit: BoxFit.fill,
-                                                      image: FileImage(
-                                                        File(state
-                                                            .images![index]
-                                                            .file
-                                                            .path),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                PositionedDirectional(
-                                                  start: 5.w,
-                                                  top: 0,
-                                                  child: IconAppButton(
-                                                    width: 35.w,
-                                                    height: 35.h,
-                                                    icon: Icons.close_sharp,
-                                                    color: Colors.red,
-                                                    backColor: Colors.white,
-                                                    size: 25.w,
-                                                    isCircle: true,
-                                                    onPressed: () =>
-                                                        showAreYouSure(
-                                                            context: context,
-                                                            title: 'Alert',
-                                                            subTitle:
-                                                                'Are you sure you want to remove this image?',
-                                                            action: () {
-                                                              controller.removeImage(
-                                                                  image: state
-                                                                          .images![
-                                                                      index]);
-                                                            }),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )),
-                                ),
-                              ),
-                            const Sizer(),
-                            if (widget.categorization.images.isNotEmpty)
-                              SizedBox(
-                                height: 80.h,
-                                child: Row(
-                                  children: List.generate(
-                                      widget.categorization.images.length,
-                                      (index) => SizedBox(
-                                            height: 100.h,
-                                            width: 100.w,
-                                            child: Stack(
-                                              alignment:
-                                                  AlignmentDirectional.topStart,
-                                              children: [
-                                                // Positioned.fill(
-                                                //   child: Image.network(widget.item.images[index].photo),
-                                                // //     child: Image.file(
-                                                // //   fit: BoxFit.cover,
-                                                // //   File(image.file.path),
-                                                // // ),
-                                                // ),
-                                                // if (state.images != null &&
-                                                //     state.images!.isNotEmpty)
-                                                ImageFromInternet(
-                                                  height: 100.h,
-                                                  width: 100.w,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20.r),
-                                                  fit: BoxFit.fill,
-                                                  image: widget.categorization
-                                                      .images[index].photo,
-                                                ),
-                                                // Container(
-                                                //   height: 100.h,
-                                                //   width: 100.w,
-                                                //   padding: const EdgeInsets.all(10),
-                                                //   decoration: BoxDecoration(
-                                                //     borderRadius:
-                                                //         BorderRadius.circular(20.r),
-                                                //     image: DecorationImage(
-                                                //       fit: BoxFit.fill,
-                                                //       image: NetworkImage(
-                                                //         widget.item.images[index].photo,
-                                                //       ),
-                                                //     ),
-                                                //   ),
-                                                // ),
-                                                PositionedDirectional(
-                                                  start: 5.w,
-                                                  top: 0,
-                                                  child: IconAppButton(
-                                                    width: 35.w,
-                                                    height: 35.h,
-                                                    icon: Icons.close_sharp,
-                                                    color: Colors.red,
-                                                    backColor: Colors.white,
-                                                    size: 25.w,
-                                                    isCircle: true,
-                                                    onPressed: () =>
-                                                        showAreYouSure(
-                                                            context: context,
-                                                            title: 'Alert',
-                                                            subTitle:
-                                                                'Are you sure you want to remove this image?',
-                                                            action: () {
-                                                              controller.removeImage(
-                                                                  image: state
-                                                                          .images![
-                                                                      index]);
-                                                            }),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        );
-      }),
+      ),
     );
   }
 }
-
-// import 'dart:io';
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/widgets.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-//
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-// import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
-// import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
-// import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
-// import 'package:fourtyninehub/core/extensions/string_extension.dart';
-// import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-//
-// import '../../../../../common/widgets/dynamic/sizer.dart';
-// import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
-// import '../../../../../common/widgets/stateless/labels/badged_label.dart';
-// import '../../../../../common/widgets/stateless/labels/label.dart';
-// import '../../../../../res/assets/assets.dart';
-// import '../../../../../res/style/app_colors.dart';
-// import '../../../../../res/style/styles.dart';
-// import '../../../../../service_locator/service_locator.dart';
-// import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-// import '../../domain/entity/my_ads_auction.dart';
-// import '../../domain/entity/my_auction_main_category.dart';
-// import '../../domain/entity/my_auction_sub_category_entity.dart';
-// import '../cubit/my_adds_cubit.dart';
-//
-// class EditMyAds extends StatefulWidget {
-// //  final CategorizationEntity categorization;
-//   final MyAuctionSubCategoryEntity sub;
-//   final MyAuctionMainCategory main;
-//   final MyAuctionAdsEntity item;
-//
-//   const EditMyAds({
-//     super.key,
-//     required this.sub,
-//     required this.main,
-//     required this.item,
-//   });
-//
-//   @override
-//   State<EditMyAds> createState() => _EditMyAdsState();
-// }
-//
-// class _EditMyAdsState extends State<EditMyAds> {
-//   var formKey = GlobalKey<FormState>();
-//   late TextEditingController _titleController;
-//   late TextEditingController _descController;
-//   late TextEditingController _phoneController;
-//   late TextEditingController _priceController;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     // Initialize the controllers with the existing data from widget.item
-//     _titleController = TextEditingController(text: widget.item.title);
-//     _descController = TextEditingController(text: widget.item.desc);
-//     _phoneController = TextEditingController(text: widget.item.phone);
-//     _priceController =
-//         TextEditingController(text: widget.item.price.toString());
-//   }
-//
-//   @override
-//   void dispose() {
-//     // Dispose of the controllers to avoid memory leaks
-//     _titleController.dispose();
-//     _descController.dispose();
-//     _phoneController.dispose();
-//     _priceController.dispose();
-//     super.dispose();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocProvider<MyAddsCubit>(
-//       create: (BuildContext context) => serviceLocator(),
-//       child: BlocConsumer<MyAddsCubit, MyAddsState>(
-//         listener: (context, state) {},
-//         builder: (context, state) {
-//           return Scaffold(
-//             appBar: BackAppBar(label: LocaleKeys.createAd.localize),
-//             body: Padding(
-//               padding: const EdgeInsets.all(8.0),
-//               child: Form(
-//                 key: formKey,
-//                 child: ListView(
-//                   children: [
-//                     Row(
-//                       children: [
-//                         SquareImage(
-//                           width: kToolbarHeight * .8,
-//                           height: kToolbarHeight * .8,
-//                           radius: 10,
-//                           url: widget.sub.picture,
-//                         ),
-//                         const Sizer(),
-//                         Expanded(
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               Label(
-//                                 text: widget.sub.nameEn,
-//                                 style: Styles.mediumText(
-//                                     fontWeight: FontWeight.bold),
-//                               ),
-//                               Label(text: widget.main.nameEn),
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                     const Divider(),
-//                     _buildImagePicker(),
-//                     const Sizer(),
-//                     Label(text: LocaleKeys.adTitle.localize),
-//                     TextFormField(
-//                       controller: _titleController,
-//                       // Add controller here
-//                       maxLines: null,
-//                       style: Styles.headerText(fontSize: 26),
-//                       decoration: InputDecoration(
-//                         fillColor: Colors.white,
-//                         contentPadding: const EdgeInsets.all(5),
-//                         hintText: LocaleKeys.title.localize,
-//                         hintStyle: Styles.mediumText(),
-//                         prefix: Sizer(width: 20.w),
-//                       ),
-//                       validator: (value) {
-//                         if (value == null || value.isEmpty) {
-//                           return LocaleKeys.required.localize;
-//                         }
-//                         return null;
-//                       },
-//                     ),
-//                     const Sizer(),
-//                     Label(text: LocaleKeys.desc.localize),
-//                     TextFormField(
-//                       controller: _descController,
-//                       // Add controller here
-//                       maxLines: null,
-//                       style: Styles.headerText(fontSize: 26),
-//                       decoration: InputDecoration(
-//                         fillColor: Colors.white,
-//                         contentPadding: const EdgeInsets.all(5),
-//                         hintText: LocaleKeys.desc.localize,
-//                         hintStyle: Styles.mediumText(),
-//                         prefix: Sizer(width: 20.w),
-//                       ),
-//                       validator: (value) {
-//                         if (value == null || value.isEmpty) {
-//                           return LocaleKeys.required.localize;
-//                         }
-//                         return null;
-//                       },
-//                     ),
-//                     const Sizer(),
-//                     Label(text: LocaleKeys.phone.localize),
-//                     TextFormField(
-//                       controller: _phoneController,
-//                       // Add controller here
-//                       maxLines: null,
-//                       style: Styles.headerText(fontSize: 26),
-//                       decoration: InputDecoration(
-//                         fillColor: Colors.white,
-//                         contentPadding: const EdgeInsets.all(5),
-//                         hintText: LocaleKeys.phone.localize,
-//                         hintStyle: Styles.mediumText(),
-//                         prefix: Sizer(width: 20.w),
-//                       ),
-//                       validator: (value) {
-//                         if (value == null || value.isEmpty) {
-//                           return LocaleKeys.required.localize;
-//                         }
-//                         return null;
-//                       },
-//                     ),
-//                     const Sizer(),
-//                     Label(text: LocaleKeys.price.localize),
-//                     TextFormField(
-//                       controller: _priceController,
-//                       // Add controller here
-//                       maxLines: null,
-//                       style: Styles.headerText(fontSize: 26),
-//                       decoration: InputDecoration(
-//                         fillColor: Colors.white,
-//                         contentPadding: const EdgeInsets.all(5),
-//                         hintText: LocaleKeys.price.localize,
-//                         prefix: Sizer(width: 20.w),
-//                       ),
-//                       validator: (value) {
-//                         if (value == null || value.isEmpty) {
-//                           return LocaleKeys.required.localize;
-//                         }
-//                         return null;
-//                       },
-//                     ),
-//                     const Sizer(),
-//                     DefaultButton(
-//                       label: "Edit",
-//                       onPressed: () {
-//                         // Ensure that the current values from the TextEditingControllers are passed
-//                         final updatedTitle = _titleController.text.trim();
-//                         final updatedDesc = _descController.text.trim();
-//                         final updatedPhone = _phoneController.text.trim();
-//                         final updatedPrice = _priceController.text.trim();
-//
-//                         print(context.read<MyAddsCubit>().selectedImages);
-//                         print(state.images?[0].mediaId);
-//                         // Perform validation if necessary (can also be managed in the Form's validator)
-//                         // if (formKey.currentState!.validate()) {
-//                         //   context.read<MyAddsCubit>().editMyAds(
-//                         //     params: EditParams(
-//                         //         id: widget.item.id, // Required
-//                         //         description: updatedDesc.isNotEmpty ? updatedDesc : widget.item.desc,
-//                         //         phone: updatedPhone.isNotEmpty ? updatedPhone : widget.item.phone,
-//                         //         title: updatedTitle.isNotEmpty ? updatedTitle : widget.item.title,
-//                         //         subCategoryId: widget.sub.id,
-//                         //         mainCategoryId: widget.main.id,
-//                         //         price: double.tryParse(updatedPrice) ?? widget.item.price, // Convert the price
-//                         //         images: [], // Handle image updates here if needed
-//                         //         details: [] // Update any other details if needed
-//                         //     ),
-//                         //   );
-//                         // }
-//                       },
-//                     )
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-//
-//   Widget _buildImagePicker() {
-//     return BlocProvider<MyAddsCubit>(
-//       create: (BuildContext context) => serviceLocator(),
-//       child: BlocBuilder<MyAddsCubit, MyAddsState>(builder: (context, state) {
-//         final controller = context.read<MyAddsCubit>();
-//         return Column(
-//           children: [
-//             //   if (widget.item.images.isEmpty)
-//             Container(
-//               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-//               decoration: BoxDecoration(
-//                   border: Border.all(color: Colors.grey),
-//                   borderRadius: BorderRadius.circular(10.r)),
-//               child: Center(
-//                 child: Row(
-//                   children: [
-//                     SizedBox(
-//                       height: 80.h,
-//                       width: 100.w,
-//                       child: BadgedLabel(
-//                         label: '+',
-//                         isBordered: true,
-//                         style: Styles.headerText(color: Colors.white),
-//                         color: AppColors.SECONDARY_COLOR,
-//                         isCentered: true,
-//                         close: false,
-//                       ),
-//                     ),
-//                     const Sizer(),
-//                     Expanded(
-//                       child: SingleChildScrollView(
-//                         // scrollDirection: Axis.horizontal,
-//                         child: Row(
-//                           children: [
-//                             if (state.images != null &&
-//                                 state.images!.isNotEmpty)
-//                               SizedBox(
-//                                 height: kToolbarHeight * 1,
-//                                 child: Row(
-//                                   children: List.generate(
-//                                       state.images?.length ??0,
-//                                           (index)=>SizedBox(
-//                                             height: 100.h,
-//                                             width: 100.w,
-//                                     child: Stack(
-//                                       alignment:
-//                                       AlignmentDirectional.topStart,
-//                                       children: [
-//                                         // Positioned.fill(
-//                                         //   child: Image.network(widget.item.images[index].photo),
-//                                         // //     child: Image.file(
-//                                         // //   fit: BoxFit.cover,
-//                                         // //   File(image.file.path),
-//                                         // // ),
-//                                         // ),
-//                                         // if (state.images != null &&
-//                                         //     state.images!.isNotEmpty)
-//                                         Container(
-//                                           height: 200,
-//                                           width: 200,
-//                                           margin:
-//                                           const EdgeInsetsDirectional
-//                                               .only(
-//                                               end: 10, bottom: 10),
-//                                           padding: const EdgeInsets.all(10),
-//                                           decoration: BoxDecoration(
-//                                             borderRadius:
-//                                             BorderRadius.circular(15),
-//                                             image: DecorationImage(
-//                                               fit: BoxFit.fill,
-//                                               image: FileImage(
-//                                                 File(state.images![index]
-//                                                     .file.path),
-//                                               ),
-//                                             ),
-//                                           ),
-//                                         ),
-//                                         PositionedDirectional(
-//                                           start: 5.w,
-//                                           top: 0,
-//                                           child: IconAppButton(
-//                                             width: 35.w,
-//                                             height: 35.h,
-//                                             icon: Icons.close_sharp,
-//                                             color: Colors.red,
-//                                             backColor: Colors.white,
-//                                             size: 25.w,
-//                                             isCircle: true,
-//                                             onPressed: () => showAreYouSure(
-//                                                 context: context,
-//                                                 title: 'Alert',
-//                                                 subTitle:
-//                                                 'Are you sure you want to remove this image?',
-//                                                 action: () {
-//                                                   controller.removePhoto(
-//                                                       state.images![index]);
-//                                                 }),
-//                                           ),
-//                                         ),
-//                                       ],
-//                                     ),
-//                                   )),
-//                                 ),
-//                               ),
-//                             const Sizer(),
-//                             if (widget.item.images != null &&
-//                                 widget.item.images.isNotEmpty)
-//                               SizedBox(
-//                                 height: 80.h,
-//                                 child: Row(
-//                                   children: List.generate(
-//                                       widget.item.images.length,
-//                                       (index) => SizedBox(
-//                                             height: 100.h,
-//                                             width: 100.w,
-//                                             child: Stack(
-//                                               alignment:
-//                                                   AlignmentDirectional.topStart,
-//                                               children: [
-//                                                 // Positioned.fill(
-//                                                 //   child: Image.network(widget.item.images[index].photo),
-//                                                 // //     child: Image.file(
-//                                                 // //   fit: BoxFit.cover,
-//                                                 // //   File(image.file.path),
-//                                                 // // ),
-//                                                 // ),
-//                                                 // if (state.images != null &&
-//                                                 //     state.images!.isNotEmpty)
-//                                                 ImageFromInternet(
-//                                                   height: 100.h,
-//                                                   width: 100.w,
-//                                                   borderRadius:
-//                                                       BorderRadius.circular(
-//                                                           20.r),
-//                                                   fit: BoxFit.fill,
-//                                                   image: widget
-//                                                       .item.images[index].photo,
-//                                                 ),
-//                                                 // Container(
-//                                                 //   height: 100.h,
-//                                                 //   width: 100.w,
-//                                                 //   padding: const EdgeInsets.all(10),
-//                                                 //   decoration: BoxDecoration(
-//                                                 //     borderRadius:
-//                                                 //         BorderRadius.circular(20.r),
-//                                                 //     image: DecorationImage(
-//                                                 //       fit: BoxFit.fill,
-//                                                 //       image: NetworkImage(
-//                                                 //         widget.item.images[index].photo,
-//                                                 //       ),
-//                                                 //     ),
-//                                                 //   ),
-//                                                 // ),
-//                                                 PositionedDirectional(
-//                                                   start: 5.w,
-//                                                   top: 0,
-//                                                   child: IconAppButton(
-//                                                     width: 35.w,
-//                                                     height: 35.h,
-//                                                     icon: Icons.close_sharp,
-//                                                     color: Colors.red,
-//                                                     backColor: Colors.white,
-//                                                     size: 25.w,
-//                                                     isCircle: true,
-//                                                     onPressed: () =>
-//                                                         showAreYouSure(
-//                                                             context: context,
-//                                                             title: 'Alert',
-//                                                             subTitle:
-//                                                                 'Are you sure you want to remove this image?',
-//                                                             action: () {
-//                                                               controller.removePhoto(
-//                                                                   state.images![
-//                                                                       index]);
-//                                                             }),
-//                                                   ),
-//                                                 ),
-//                                               ],
-//                                             ),
-//                                           )),
-//                                 ),
-//                               ),
-//                           ],
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           ],
-//         );
-//       }),
-//     );
-//   }
-// }

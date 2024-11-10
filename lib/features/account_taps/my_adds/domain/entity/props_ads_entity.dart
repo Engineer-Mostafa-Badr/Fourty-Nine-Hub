@@ -1,6 +1,6 @@
 class PropsAdsEntity {
   final String id;
-  final PropertyDetailsEntity propertyDetails;
+ // final PropertyDetailsEntity propertyDetails;
   final String adsId;
   final PropertyValueEntity value;
   final DateTime createdAt;
@@ -8,7 +8,7 @@ class PropsAdsEntity {
 
   PropsAdsEntity(
       {required this.id,
-      required this.propertyDetails,
+   //   required this.propertyDetails,
       required this.adsId,
       required this.value,
       required this.createdAt,
@@ -36,19 +36,6 @@ class PropertyDetailsEntity {
     required this.createdAt,
     required this.updatedAt,
   });
-
-  factory PropertyDetailsEntity.fromJson(Map<String, dynamic> json) {
-    return PropertyDetailsEntity(
-      id: json['_id'],
-      mainCategoryId: json['main_category_id'],
-      nameAr: json['name_ar'],
-      nameEn: json['name_en'],
-      index: json['index'],
-      type: json['type'],
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
-    );
-  }
 }
 
 class PropertyValueEntity {
@@ -61,12 +48,4 @@ class PropertyValueEntity {
     required this.en,
     required this.id,
   });
-
-  factory PropertyValueEntity.fromJson(Map<String, dynamic> json) {
-    return PropertyValueEntity(
-      ar: json['ar'],
-      en: json['en'],
-      id: json['_id'],
-    );
-  }
 }

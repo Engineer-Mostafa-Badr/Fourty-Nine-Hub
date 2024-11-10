@@ -217,6 +217,7 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
     final response = await _apiConsumer.get(EndPoints.getMyAdsWithId(id: id));
     return response.fold(
             (failure) => Left(failure),
-            (data) => Right(EditMyAdsModel.fromJson(data)));
+            (data) => Right(EditMyAdsModel.fromJson(data['data'])));
   }
 }
+
