@@ -23,21 +23,26 @@ class CommentsBottomSheet extends StatefulWidget {
 class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   final ScrollController scrollController = ScrollController();
   final TextEditingController _commentController = TextEditingController();
+  final FocusNode focusNode = FocusNode();
+  String? replyToUser;
+  final bool isReplying = false;
 
   @override
   void initState() {
     super.initState();
-
+    focusNode.requestFocus();
     context
         .read<ReelsCubit>()
         .getComments(widget.reel.id); // Fetch comments once when initialized
   }
-@override
+
+  @override
   void dispose() {
     scrollController.dispose();
     _commentController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     var reelsCubit = context.read<ReelsCubit>();
@@ -66,10 +71,14 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
             children: <Widget>[
               _buildHandleIndicator(isDark),
               _buildCommentsHeader(isDark, widget.reel),
-              _buildCommentsList(scrollController),
+              _buildCommentsList(
+                scrollController,
+              ),
               // Divider(color: Colors.grey[800]),
               CommentInputField(
+                focusNode: focusNode,
                 reel: widget.reel,
+                isReplying: isReplying,
                 commentController: _commentController,
                 scrollController: scrollController,
               ),
@@ -124,6 +133,11 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
               itemBuilder: (context, index) {
                 return CommentWidget(
                   commentData: comments.data.toList()[index],
+                  commentController: _commentController,
+
+                  //for reply
+                  replyingTo: replyToUser,
+                  focusNode: focusNode,
                 );
               },
             );

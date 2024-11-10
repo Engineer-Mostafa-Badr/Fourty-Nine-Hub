@@ -100,7 +100,7 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Label(
-                        text: context.isArabic?widget.item.nameAr:widget.item.nameEn,
+                        text: context.isArabic?widget.item.name:widget.item.name,
                         style: Styles.mediumText(fontWeight: FontWeight.bold),
                       ),
                       // if (!widget.isSmallCard)

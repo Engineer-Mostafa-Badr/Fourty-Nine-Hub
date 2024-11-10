@@ -14,12 +14,16 @@ class CommentInputField extends StatefulWidget {
   final TextEditingController commentController;
   final Reel reel;
   final ScrollController scrollController;
+  final FocusNode focusNode;
+  final bool isReplying;
 
   const CommentInputField({
     super.key,
     required this.reel,
     required this.commentController,
+    required this.isReplying,
     required this.scrollController,
+    required this.focusNode,
   });
 
   @override
@@ -27,27 +31,10 @@ class CommentInputField extends StatefulWidget {
 }
 
 class CommentInputFieldState extends State<CommentInputField> {
-  final FocusNode _focusNode = FocusNode();
-
-  @override
-  void dispose() {
-    // widget.commentController.dispose();
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    _focusNode.requestFocus(); // Set the initial focus to the FocusNode.
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: MediaQuery
-            .of(context)
-            .viewInsets,
+        padding: MediaQuery.of(context).viewInsets,
         child: Padding(
           padding: const EdgeInsets.all(8.0)
               .add(EdgeInsetsDirectional.only(end: 20.w, bottom: 10.h)),
@@ -63,7 +50,7 @@ class CommentInputFieldState extends State<CommentInputField> {
             SizedBox(width: 10.w),
             Expanded(
               child: TextField(
-                focusNode: _focusNode,
+                focusNode: widget.focusNode,
                 controller: widget.commentController,
                 style: TextStyle(
                   color: context.isDarkMode ? Colors.white : Colors.black87,
@@ -76,41 +63,64 @@ class CommentInputFieldState extends State<CommentInputField> {
                   filled: true,
                   suffixIcon: widget.commentController.text.isNotEmpty
                       ? Container(
-                    margin: EdgeInsetsDirectional.only(
-                        end: 10.w, top: 10, bottom: 10),
-                    padding: const EdgeInsets.all(3)
-                        .add(EdgeInsets.symmetric(horizontal: 10.w)),
-                    decoration: BoxDecoration(
-                      color: AppColors.SECONDARY_COLOR,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: InkWell(
-                      onTap: () async {
-                        final reelsCubit = context.read<ReelsCubit>();
-                        await reelsCubit.addComment(context,
-                            widget.reel.id, widget.commentController.text);
-                        // await reelsCubit.getComments(widget.reel.id);
-                        widget.scrollController.animateTo(
-                          widget
-                              .scrollController.position.minScrollExtent,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeOut,
-                        );
-                        widget.commentController.clear();
-                        _focusNode.unfocus();
+                          margin: EdgeInsetsDirectional.only(
+                              end: 10.w, top: 10, bottom: 10),
+                          padding: const EdgeInsets.all(3)
+                              .add(EdgeInsets.symmetric(horizontal: 10.w)),
+                          decoration: BoxDecoration(
+                            color: AppColors.SECONDARY_COLOR,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: InkWell(
+                            onTap: () async {
+                              final reelsCubit = context.read<ReelsCubit>();
 
-                        setState(() {});
-                      },
-                      child: Icon(
-                        Icons.arrow_upward,
-                        color: Colors.white,
-                        size: 30.h,
-                      ),
-                    ),
-                  )
+                              print(reelsCubit.parentCommentId);
+                              print(reelsCubit.receiverComment);
+                              if (reelsCubit.receiverComment != null &&
+                                  reelsCubit.parentCommentId != null) {
+                                reelsCubit.addReplayComment(
+                                  context,
+                                  widget.reel.id,
+                                  widget.commentController.text.trim(),
+                                  parentCommentId: reelsCubit.parentCommentId,
+                                  receiverComment: reelsCubit.receiverComment,
+                                );
+                              } else {
+                                await reelsCubit.addComment(
+                                    context,
+                                    widget.reel.id,
+                                    widget.commentController.text);
+                              }
+
+                              // await reelsCubit.getComments(widget.reel.id);
+                              widget.commentController.clear();
+                              widget.focusNode.unfocus();
+                              reelsCubit
+                                  .updateParentCommentIdAndReceiverComment(
+                                  receiverComment: null,
+                                  parentCommentId: null);
+                              if (widget.scrollController.hasClients &&
+                                  widget.scrollController.position.maxScrollExtent > 0) {
+                                widget.scrollController.animateTo(
+                                  widget.scrollController.position.minScrollExtent,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.easeOut,
+                                );
+                              }
+
+                              // setState(() {});
+                            },
+                            child: Icon(
+                              Icons.arrow_upward,
+                              color: Colors.white,
+                              size: 30.h,
+                            ),
+                          ),
+                        )
                       : null,
                   fillColor:
-                  context.isDarkMode ? Colors.grey[800] : Colors.black12,
+                      context.isDarkMode ? Colors.grey[800] : Colors.black12,
                   hintText: LocaleKeys.add_comment_hint.localize,
                   hintStyle: TextStyle(
                     color: context.isDarkMode ? Colors.grey : Colors.black54,

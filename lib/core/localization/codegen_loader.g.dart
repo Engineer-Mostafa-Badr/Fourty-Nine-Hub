@@ -1625,7 +1625,7 @@ static const Map<String,dynamic> en = {
   "comments_header": "Comments",
   "add_comment_hint": "Add a comment...",
   "write_reply_hint": "Write a reply...",
-  "view_replies": "View Replies",
+  "view_replies": "View 3 Replies",
   "hide_replies": "Hide Replies",
   "failed_send_reply": "Failed to send reply. Please try again.",
   "reel_audio": "Audio",
@@ -2074,6 +2074,5 @@ static const Map<String,dynamic> en = {
   "createLive": "Create Live",
   "watch": "Watch"
 };
-
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

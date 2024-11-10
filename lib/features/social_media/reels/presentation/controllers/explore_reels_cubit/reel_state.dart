@@ -1,8 +1,10 @@
 part of 'reel_cubit.dart';
 
 class ReelsState {
-  final List<Reel>? globalReels;
 
+  final bool isCreatingReply;
+
+  final List<Reel>? globalReels;
   final List<Reel>? reelsForFollower;
 
   final List<Reel>? reelsForAudio;
@@ -58,6 +60,7 @@ class ReelsState {
   final bool showPlayPauseIcon;
   ReelsState({
     this.isCreatingReelView,
+    this.isCreatingReply = false,
     this.reelViewErrorMessage,
     this.reelViewSuccess,
     this.reelsForFollower,
@@ -96,6 +99,7 @@ class ReelsState {
   });
 
   ReelsState copyWith({
+    bool? isCreatingReply,
     bool? isCreatingReelView,
     String? reelViewErrorMessage,
     bool? reelViewSuccess,
@@ -135,6 +139,7 @@ class ReelsState {
     bool? uploadReelSuccess,
   }) {
     return ReelsState(
+      isCreatingReply: isCreatingReply ?? this.isCreatingReply,
       isCreatingReelView: isCreatingReelView ?? this.isCreatingReelView,
       reelViewErrorMessage: reelViewErrorMessage ?? this.reelViewErrorMessage,
       reelViewSuccess: reelViewSuccess ?? this.reelViewSuccess,
