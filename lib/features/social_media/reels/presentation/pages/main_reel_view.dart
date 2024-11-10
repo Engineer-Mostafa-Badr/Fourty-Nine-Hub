@@ -44,7 +44,7 @@ class ReelsScreenState extends State<ReelsScreen> {
                 scrollDirection: Axis.vertical,
                 itemCount: state.urls.length,
                 onPageChanged: (index) =>
-                    context.read<PreloadBloc>().add(OnVideoIndexChanged(index)),
+                    context.read<PreloadBloc>()..onVideoIndexChanged(index),
                 itemBuilder: (context, index) {
                   // Is at end and isLoading
                   final bool _isLoading =

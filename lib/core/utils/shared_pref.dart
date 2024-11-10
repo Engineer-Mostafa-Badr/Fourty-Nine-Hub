@@ -34,8 +34,7 @@ class CacheManager {
   static Future<bool> deleteAllTokens() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.remove(_accessTokenKey);
-      await prefs.remove(_refreshTokenKey);
+      await prefs.clear();
       return true;
     } catch (e) {
       return false;

@@ -12,8 +12,7 @@ import '../../routes/pages.dart';
 
 Future createIsolate(int index) async {
   // Set loading to true
-  currentContext.read<PreloadBloc>()
-      .add(SetLoading());
+  currentContext.read<PreloadBloc>().setLoading(true);
 
   ReceivePort mainReceivePort = ReceivePort();
 
@@ -26,13 +25,12 @@ Future createIsolate(int index) async {
   isolateSendPort.send([index, isolateResponseReceivePort.sendPort]);
 
   final isolateResponse = await isolateResponseReceivePort.first;
-  final _urls = isolateResponse;
+  final urls = isolateResponse;
 
   // Update new urls
-  currentContext
-      .read<PreloadBloc>()
-      .add(UpdateUrls(_urls));
-
+  if (currentContext.mounted) {
+    currentContext.read<PreloadBloc>().updateUrls(urls);
+  }
 }
 
 void getVideosTask(SendPort mySendPort) async {
@@ -46,11 +44,11 @@ void getVideosTask(SendPort mySendPort) async {
 
       final SendPort isolateResponseSendPort = message[1];
 
-      final List<String> _urls = await getReelVideos(
+      final List<String> urls = await getReelVideos(
         id: index + kPreloadLimit,
       );
 
-      isolateResponseSendPort.send(_urls);
+      isolateResponseSendPort.send(urls);
     }
   }
 }

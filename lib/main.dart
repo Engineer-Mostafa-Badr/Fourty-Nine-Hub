@@ -109,7 +109,7 @@ class _MyAppState extends State<MyApp> {
           create: (BuildContext context) => serviceLocator<SearchCubit>(),
         ),
         BlocProvider(
-            create: (context) => serviceLocator<PreloadBloc>()..add(GetVideosFromApiEvent())),
+            create: (context) => serviceLocator<PreloadBloc>()..getVideosFromApi()),
         BlocProvider(
           create: (BuildContext context) =>
               serviceLocator<MainCategoriesCubit>()..loadData(),

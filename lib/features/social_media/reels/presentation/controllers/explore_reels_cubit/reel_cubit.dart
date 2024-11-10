@@ -94,6 +94,9 @@ class ReelsCubit extends Cubit<ReelsState> {
     String? totalPrice,
     String? advertisementType,
   }) async {
+
+    print('video size is  ${videoFile.lengthSync()} MB');
+
     // Step 1: Generate Signed URL
     final token = await CacheManager.getAccessToken();
     final response = await http.post(

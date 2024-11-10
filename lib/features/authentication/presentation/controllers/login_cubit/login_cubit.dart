@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../../domain/use_cases/apple_sign_in_usecase.dart';
@@ -49,9 +50,10 @@ class LoginCubit extends Cubit<LoginState> {
         (failure) => emit(LoginError(failure)),
         (userToken) {
           _attachToken(userToken); // Attach to dio
-          _saveTokens(userToken); // Ensure tokens are saved before proceeding
+          // _saveTokens(userToken); // Ensure tokens are saved before proceeding
           // pr('state token is  ${userToken}');
-
+          CacheManager.saveAccessToken(userToken.accessToken);
+          CacheManager.saveRefreshToken(userToken.refreshToken);
           emit(LoginSuccess(userTokensEntity: userToken));
         },
       );
