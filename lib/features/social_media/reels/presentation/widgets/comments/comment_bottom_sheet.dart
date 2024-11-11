@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/controlle
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/comment_input_field.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/no_scale_text.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
   final Reel reel;
@@ -32,15 +33,22 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   @override
   void initState() {
     super.initState();
+scrollController.addListener(_onScroll);
     focusNode.requestFocus();
     context
         .read<ReelsCubit>()
-        .getComments(widget.reel.id); // Fetch comments once when initialized
+        .loadInitialComments(widget.reel.id); // Fetch comments once when initialized
+  }
+  void _onScroll() {
+    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 200) {
+      context.read<ReelsCubit>().getComments(widget.reel.id);
+    }
   }
 
   @override
   void dispose() {
     scrollController.dispose();
+    scrollController.removeListener(_onScroll);
     _commentController.dispose();
     super.dispose();
   }
@@ -119,21 +127,21 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     return Expanded(
       child: BlocBuilder<ReelsCubit, ReelsState>(
         builder: (context, state) {
-          if (state.isFetchingComments) {
+          if (state.isFetchingComments && context.read<ReelsCubit>().comments.isEmpty) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: AppColors.SECONDARY_COLOR,),
             );
           }
-          final comments = state.fetchedComments;
-          if (comments != null && comments.data.isNotEmpty) {
+          final comments = context.read<ReelsCubit>().comments;
+          if (comments.isNotEmpty) {
             return ListView.builder(
               controller: scrollController,
               shrinkWrap: true,
               // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              itemCount: comments.data.length,
+              itemCount: comments.length,
               itemBuilder: (context, index) {
                 return CommentWidget(
-                  commentData: comments.data[index],
+                  commentData: comments[index],
                   index: index,
                   commentController: _commentController,
                   //for reply

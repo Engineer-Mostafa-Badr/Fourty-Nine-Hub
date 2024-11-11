@@ -380,10 +380,18 @@ class ReelsCubit extends Cubit<ReelsState> {
     });
   }
 
+  List<CommentData> comments = [];
   bool isLoadingMore = false;
   bool hasMoreData = true;
   int currentPage = 1;
   int pageSize = 10;
+
+  void loadInitialComments(String reelId) async {
+    comments.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await getComments(reelId);
+  }
 
   Future<void> getComments(String reelId) async {
     if (!hasMoreData || isLoadingMore) return;
@@ -393,11 +401,22 @@ class ReelsCubit extends Cubit<ReelsState> {
     final result = await _getCommentsUseCase(CommentParams(
         reelId: reelId, pagingParams: PaginationParams(page: currentPage, limit: pageSize)));
     result.fold((failure) {
+
+
       isFetching = false;
       emit(state.copyWith(
           isFetchingComments: isFetching,
           fetchCommentsErrorMessage: 'fetchCommentsError'));
     }, (data) {
+      comments.addAll(data.data);
+      if (data.data.length < pageSize) {
+        hasMoreData = false;
+      } else {
+        currentPage++;
+      }
+
+      isLoadingMore = false;
+
       isFetching = false;
       emit(state.copyWith(
           isFetchingComments: isFetching, fetchedComments: data));

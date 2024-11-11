@@ -4,7 +4,7 @@ class ReelsState {
 
   final bool isCreatingReply;
 
-  final List<Reel>? globalReels;
+  final List<Reel> globalReels;
   final List<Reel>? reelsForFollower;
 
   final List<Reel>? reelsForAudio;
@@ -76,7 +76,7 @@ class ReelsState {
     this.likeReelCommentResponseMessage = '',
     this.reelSaveResponse,
     this.reelShareResponse,
-    this.globalReels,
+    this.globalReels = const [],
     this.globalReelsIsLoading,
     this.playingIndex,
     this.globalReelsHasReachedMax,

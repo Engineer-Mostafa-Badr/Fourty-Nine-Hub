@@ -634,61 +634,6 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
   }
 }
 
-
-/// Widget for individual action buttons.
-class _ActionButton extends StatelessWidget {
-  final IconData icon;
-  final int count;
-  final VoidCallback onTap;
-  final Color? iconColor;
-
-  const _ActionButton({
-    required this.icon,
-    required this.count,
-    required this.onTap,
-    this.iconColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        children: [
-          FaIcon(
-            icon,
-            color: iconColor ?? Colors.white,
-            size: 45.h,
-          ),
-          SizedBox(height: 4.h),
-          Text(
-            (count > 0) ? '$count' : '',
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            textScaler: TextScaler.noScaling,
-            style: _countTextStyle,
-          ),
-          SizedBox(height: 16.h),
-        ],
-      ),
-    );
-  }
-
-  TextStyle get _countTextStyle =>
-      TextStyle(
-        height: 1.h,
-        fontSize: 30.sp,
-        color: Colors.white,
-        decoration: TextDecoration.none,
-        shadows: const [
-          Shadow(
-            offset: Offset(0, 1.0),
-            color: Colors.black,
-          ),
-        ],
-      );
-}
-
 /// A rotating circular button widget for audio interaction
 class RotatingCircularButton extends StatelessWidget {
   final Reel reel;
