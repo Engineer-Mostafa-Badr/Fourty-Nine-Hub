@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/domain/entities/get_price_carpool_param.dart';
@@ -36,20 +37,11 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
   @override
   void initState() {
     createCarPoolCubit = context.read<CreateCarPoolCubit>();
-
+    getPriceCarpoolCubit = context.read<GetPriceCarpoolCubit>();
     super.initState();
     Future.microtask(() {
       getCurrencyCubit = context.read<GetCurrencyCubit>()..getCurrencyData();
-      getPriceCarpoolCubit = context.read<GetPriceCarpoolCubit>()
-        ..getPriceCarpool(
-          getPriceCarpoolParam: GetPriceCarpoolParam(
-            womenOnly: false,
-            womenDriverOnly: false,
-            comfort: false,
-            startLocation: [39.862808, -4.0273727],
-            targetLocation: [40.4165207, -3.705076],
-          ),
-        );
+
       setState(() {}); // Trigger a rebuild once cubits are initialized
     });
   }
@@ -120,7 +112,9 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
               //   );
               // }
               return Text(
-                BlocProvider.of<GetCurrencyCubit>(context).currency,
+                context.isArabic
+                    ? BlocProvider.of<GetCurrencyCubit>(context).currnecyAr
+                    : BlocProvider.of<GetCurrencyCubit>(context).currnecyEn,
                 style: Styles.mediumText(
                     fontWeight: FontWeight.bold,
                     color: AppColors.SECONDARY_COLOR),
@@ -255,39 +249,40 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
   }
 
   String _getPrice() {
-    num price = 300;
-    // getPriceCarpoolCubit.carpoolRouteInfoModel?.priceForEveryUser ?? 300;
+    num price =
+        getPriceCarpoolCubit.carpoolRouteInfoModel?.priceForEveryUser ?? 0;
 
     if (isComfort) {
-      // price += getPriceCarpoolCubit.carpoolRouteInfoModel!.driverPriceComfort!;
-      price += 40;
+      price += getPriceCarpoolCubit.carpoolRouteInfoModel!.driverPriceComfort!;
+      // price += 40;
     }
     if (isWomanOnly) {
-      // price += getPriceCarpoolCubit.carpoolRouteInfoModel!.priceForWomenOnly!;
-      price += 14;
+      price += getPriceCarpoolCubit.carpoolRouteInfoModel!.priceForWomenOnly!;
+      // price += 14;
     }
     if (isDriverWomanOnly) {
-      // price += getPriceCarpoolCubit.carpoolRouteInfoModel!.priceDriverWomen!;
-      price += 25;
+      price += getPriceCarpoolCubit.carpoolRouteInfoModel!.priceDriverWomen!;
+      // price += 25;
     }
     return price.toString();
   }
 
   num _getPriceNum() {
-    num price = 300;
-    // getPriceCarpoolCubit.carpoolRouteInfoModel?.priceForEveryUser ?? 300;
+    // num price = 300;
+    num price =
+        getPriceCarpoolCubit.carpoolRouteInfoModel?.priceForEveryUser ?? 0;
 
     if (isComfort) {
-      // price += getPriceCarpoolCubit.carpoolRouteInfoModel!.driverPriceComfort!;
-      price += 40;
+      price += getPriceCarpoolCubit.carpoolRouteInfoModel!.driverPriceComfort!;
+      // price += 40;
     }
     if (isWomanOnly) {
-      // price += getPriceCarpoolCubit.carpoolRouteInfoModel!.priceForWomenOnly!;
-      price += 14;
+      price += getPriceCarpoolCubit.carpoolRouteInfoModel!.priceForWomenOnly!;
+      // price += 14;
     }
     if (isDriverWomanOnly) {
-      // price += getPriceCarpoolCubit.carpoolRouteInfoModel!.priceDriverWomen!;
-      price += 25;
+      price += getPriceCarpoolCubit.carpoolRouteInfoModel!.priceDriverWomen!;
+      // price += 25;
     }
     return price;
   }

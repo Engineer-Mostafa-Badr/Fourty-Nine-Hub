@@ -1,3 +1,6 @@
+import 'package:fourtyninehub/features/carpool/add_new_route/data/data_source/get_lat_long_from_address_remote_data_source.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/get_llat_and_long/cubit/cubit/dest_get_lat_and_long_cubit.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/get_llat_and_long/cubit/get_lat_and_long_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/data/data_source/get_all_trips_remote_data_source.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/data/repo/get_all_trips_repo_imp.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/repo/get_all_trips_repo.dart';
@@ -74,5 +77,16 @@ class JoinTripCarpoolServiceLocator {
     //Get Currency//
     serviceLocator.registerLazySingleton<GetCurrencyCubit>(
         () => GetCurrencyCubit(serviceLocator()));
+
+    //getLatAndLong
+    serviceLocator.registerFactory<GetLatAndLongCubit>(() => GetLatAndLongCubit(
+        getLatLongFromAddressRemoteDataSource: serviceLocator()));
+    serviceLocator.registerFactory<DestGetLatAndLongCubit>(() =>
+        DestGetLatAndLongCubit(
+            getLatLongFromAddressRemoteDataSource: serviceLocator()));
+
+    serviceLocator.registerLazySingleton<GetLatLongFromAddressRemoteDataSource>(
+        () => GetLatLongFromAddressRemoteDataSourceImp(
+            apiConsumer: serviceLocator()));
   }
 }

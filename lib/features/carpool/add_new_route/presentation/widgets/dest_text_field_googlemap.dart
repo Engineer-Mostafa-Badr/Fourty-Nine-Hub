@@ -4,16 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/destination_location_carpool/cubit/map_box_dest_cubit_cubit.dart';
-import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/destination_location_carpool/cubit/map_box_dest_cubit_state.dart';
-import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/mapBox_cubit/cubit/map_box_cubit_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/get_llat_and_long/cubit/cubit/dest_get_lat_and_long_cubit.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/get_llat_and_long/cubit/get_lat_and_long_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class DestinationTextFieldAndFindButonGoogleMap extends StatefulWidget {
-  const DestinationTextFieldAndFindButonGoogleMap({super.key});
-
+  const DestinationTextFieldAndFindButonGoogleMap(
+      {super.key, this.isTripJoin = false});
+  final bool isTripJoin;
   @override
   State<DestinationTextFieldAndFindButonGoogleMap> createState() =>
       _DestinationTextFieldAndFindButonState();
@@ -22,17 +21,15 @@ class DestinationTextFieldAndFindButonGoogleMap extends StatefulWidget {
 class _DestinationTextFieldAndFindButonState
     extends State<DestinationTextFieldAndFindButonGoogleMap> {
   late TextEditingController destinationController;
-  late final DestinationLocationCubit destinationLocationCubit;
-  late final MapBoxDestCubit mapBoxDestCubit;
+  late final DestGetLatAndLongCubit getLatAndLongCubit;
 
   final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    mapBoxDestCubit = context.read<MapBoxDestCubit>();
 
-    destinationLocationCubit = context.read<DestinationLocationCubit>();
+    getLatAndLongCubit = context.read<DestGetLatAndLongCubit>();
     destinationController = TextEditingController();
   }
 
@@ -47,14 +44,14 @@ class _DestinationTextFieldAndFindButonState
     return Form(
       key: formKey,
       child: Container(
-        height: 75.h,
+        height: 100.h,
         margin: EdgeInsets.only(top: 10.h),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: BlocBuilder<DestinationLocationCubit,
-                  DestinationLocationState>(
+              child:
+                  BlocBuilder<DestGetLatAndLongCubit, DestGetLatAndLongState>(
                 builder: (context, state) {
                   return TextFormField(
                     decoration: InputDecoration(
@@ -77,7 +74,10 @@ class _DestinationTextFieldAndFindButonState
               title: LocaleKeys.searchFind.localize,
               onTap: () {
                 if (formKey.currentState!.validate()) {
-                  destinationLocationCubit.getDestinationLocation(
+                  getLatAndLongCubit.getLatAndLong(
+                      context: context,
+                      isStart: false,
+                      isTripJoin: widget.isTripJoin,
                       address: destinationController.text);
                 }
               },
@@ -89,15 +89,15 @@ class _DestinationTextFieldAndFindButonState
     );
   }
 
-  Widget? _getIcon(DestinationLocationState state) {
-    if (state is DestinationLocationSuccess) {
+  Widget? _getIcon(DestGetLatAndLongState state) {
+    if (state is DestGetLatAndLongSuccess) {
       return const Icon(
         Icons.check,
         color: AppColors.CHECK_MARK_COLOR,
         size: 30,
       );
     }
-    if (state is DestinationLocationLoading) {
+    if (state is DestGetLatAndLongLoading) {
       return const SizedBox(
         width: 30,
         height: 30,
@@ -109,14 +109,14 @@ class _DestinationTextFieldAndFindButonState
         ),
       );
     }
-    if (state is DestinationLocationFailed) {
+    if (state is DestGetLatAndLongFailure) {
       return const Icon(
         Icons.error,
         color: Colors.red,
         size: 30,
       );
     }
-    if (state is DestinationLocationInitial) {
+    if (state is DestGetLatAndLongInitial) {
       return const Icon(
         Icons.error,
         color: Colors.grey,

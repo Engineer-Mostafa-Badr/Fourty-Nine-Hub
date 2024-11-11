@@ -528,6 +528,7 @@ abstract class  LocaleKeys {
   static const enterValidPhoneNumber = 'enterValidPhoneNumber';
   static const welcomeToTripjoin = 'welcomeToTripjoin';
   static const ownCar = 'ownCar';
+  static const dontOwnCar = 'dontOwnCar';
   static const startingPoint = 'startingPoint';
   static const destinationPoint = 'destinationPoint';
   static const KM = 'KM';

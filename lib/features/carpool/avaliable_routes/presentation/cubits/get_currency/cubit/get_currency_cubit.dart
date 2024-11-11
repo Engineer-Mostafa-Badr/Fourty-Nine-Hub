@@ -8,7 +8,8 @@ part 'get_currency_state.dart';
 
 class GetCurrencyCubit extends Cubit<GetCurrencyState> {
   final ApiConsumer apiConsumer;
-  String currency = "";
+  String currnecyAr = "";
+  String currnecyEn = "";
   // Inject ApiConsumer through the constructor
   GetCurrencyCubit(this.apiConsumer) : super(GetCurrencyInitial());
 
@@ -24,7 +25,9 @@ class GetCurrencyCubit extends Cubit<GetCurrencyState> {
         (failure) => emit(GetCurrencyFailure(_mapFailureToMessage(failure))),
         (data) {
           if (data['status']) {
-            currency = data['data'];
+            currnecyEn = data['data']["currencyEn"];
+            currnecyAr = data['data']["currencyAr"];
+
             emit(GetCurrencySuccess(data['data']));
           } else {
             emit(GetCurrencyFailure('Failed to fetch currency'));

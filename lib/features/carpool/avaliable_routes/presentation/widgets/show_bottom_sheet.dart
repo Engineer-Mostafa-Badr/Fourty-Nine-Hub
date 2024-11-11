@@ -42,9 +42,9 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         mainAxisSize:
-        MainAxisSize.min, // Ensure the column takes up minimal space
+            MainAxisSize.min, // Ensure the column takes up minimal space
         children: [
-          Text('LocaleKeys.bookSeat.localize', style: Styles.headerText()),
+          Text(LocaleKeys.bookSeat.localize, style: Styles.headerText()),
           const Sizer(),
           Text(LocaleKeys.pricePerSeat.localize, style: Styles.mediumText()),
           Row(
@@ -62,7 +62,7 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
               //   },
               // ),
               Text(
-                'LocaleKeys.egp.localize',
+                LocaleKeys.egp.localize,
                 style: Styles.mediumText(
                     fontWeight: FontWeight.bold,
                     color: AppColors.SECONDARY_COLOR),

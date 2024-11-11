@@ -54,7 +54,10 @@ class TripJoinRemoteDataSourceImp implements TripJoinRemoteDataSource {
     return response.fold(
       (failure) => Left(failure),
       (data) {
+        log("Before Exception");
         TripInfoModel tripInfoModel = TripInfoModel.fromJson(data['data']);
+        log("after Exception");
+
         log(tripInfoModel.toString());
         return Right(tripInfoModel);
       },

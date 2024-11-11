@@ -1,13 +1,10 @@
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
-
 import 'vehicle_id.dart';
 
 class TripJoinCardModel extends TripJoinCardEntity {
-  @override
+  // Properties
   String? id;
-  @override
   String? userId;
-  @override
   String? categoryId;
   VehicleId? vehicleId;
   String? fromAr;
@@ -18,47 +15,44 @@ class TripJoinCardModel extends TripJoinCardEntity {
   int? duration;
   int? passengers;
   double? price;
-  @override
   String? phone;
   int? time;
   String? countryCode;
-  @override
   bool? isApproved;
-  @override
   String? status;
   bool? isRepeat;
   DateTime? createdAt;
   DateTime? updatedAt;
   String? allowStatus;
-  String? paymentMethods;
-  @override
+  List<String>? paymentMethods;
   bool? subscribedPremium;
 
-  TripJoinCardModel(
-      {this.id,
-      this.userId,
-      this.categoryId,
-      this.vehicleId,
-      this.fromAr,
-      this.toAr,
-      this.fromEn,
-      this.toEn,
-      this.distance,
-      this.duration,
-      this.passengers,
-      this.price,
-      this.phone,
-      this.time,
-      this.countryCode,
-      this.isApproved,
-      this.isRepeat,
-      this.createdAt,
-      this.updatedAt,
-      this.status,
-      this.allowStatus,
-      this.paymentMethods,
-      this.subscribedPremium})
-      : super(
+  // Constructor
+  TripJoinCardModel({
+    this.id,
+    this.userId,
+    this.categoryId,
+    this.vehicleId,
+    this.fromAr,
+    this.toAr,
+    this.fromEn,
+    this.toEn,
+    this.distance,
+    this.duration,
+    this.passengers,
+    this.price,
+    this.phone,
+    this.time,
+    this.countryCode,
+    this.isApproved,
+    this.isRepeat,
+    this.createdAt,
+    this.updatedAt,
+    this.status,
+    this.allowStatus,
+    this.paymentMethods,
+    this.subscribedPremium,
+  }) : super(
           id: id,
           userId: userId,
           categoryId: categoryId,
@@ -74,15 +68,11 @@ class TripJoinCardModel extends TripJoinCardEntity {
           destinationAddressEn: toEn,
           isApproved: allowStatus == 'enable',
           publishDate: time,
-          paymentMethod: paymentMethods,
+          paymentMethod: paymentMethods?.join(', '), // Conversion
           subscribedPremium: subscribedPremium,
         );
 
-  @override
-  String toString() {
-    return 'TripJoinCardModel(id: $id, userId: $userId, categoryId: $categoryId, vehicleId: $vehicleId, fromAr: $fromAr, toAr: $toAr, fromEn: $fromEn, toEn: $toEn, distance: $distance, duration: $duration, passengers: $passengers, price: $price, phone: $phone, time: $time, countryCode: $countryCode, isApproved: $isApproved, isRepeat: $isRepeat, createdAt: $createdAt, updatedAt: $updatedAt , status: $status, allowStatus: $allowStatus , paymentMethod: $paymentMethods , subscribedPremium : $subscribedPremium)';
-  }
-
+  // JSON Handling
   factory TripJoinCardModel.fromJson(Map<String, dynamic> json) {
     return TripJoinCardModel(
       id: json['_id'] as String?,
@@ -112,7 +102,10 @@ class TripJoinCardModel extends TripJoinCardEntity {
           ? null
           : DateTime.parse(json['updatedAt'] as String),
       allowStatus: json['allowStatus'] as String?,
-      paymentMethods: json['paymentMethods'] as String?,
+      paymentMethods: json['paymentMethods'] != null
+          ? List<String>.from(json['paymentMethods']) // Updated to handle list
+          : null,
+      subscribedPremium: json['subscribedPremium'] as bool?,
     );
   }
 
@@ -138,6 +131,11 @@ class TripJoinCardModel extends TripJoinCardEntity {
         'createdAt': createdAt?.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
         'allowStatus': allowStatus,
-        'paymentMethds': paymentMethods,
+        'paymentMethods': paymentMethods,
       };
+
+  @override
+  String toString() {
+    return 'TripJoinCardModel(id: $id, userId: $userId, categoryId: $categoryId, vehicleId: $vehicleId, fromAr: $fromAr, toAr: $toAr, fromEn: $fromEn, toEn: $toEn, distance: $distance, duration: $duration, passengers: $passengers, price: $price, phone: $phone, time: $time, countryCode: $countryCode, isApproved: $isApproved, isRepeat: $isRepeat, createdAt: $createdAt, updatedAt: $updatedAt , status: $status, allowStatus: $allowStatus , paymentMethods: $paymentMethods , subscribedPremium : $subscribedPremium)';
+  }
 }

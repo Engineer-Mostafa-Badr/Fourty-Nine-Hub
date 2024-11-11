@@ -153,6 +153,8 @@ abstract class Routes {
   static const AVAILABLE_TRIPS = '/AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = '/TripJoinRequestNotification';
   static const TRIP_JOIN_REQUEST_HISTORY = '/TripJoinRequestHistory';
+  static const TRIP_JOIN_REQUEST_HISTORY_Pick_Me =
+      '/TripJoinRequestHistoryPickMe';
 
   static const CAR_POOL = '/CarPool';
   static const ADD_NEW_ROUTE = '/AddNewRoute';
@@ -161,6 +163,7 @@ abstract class Routes {
   static const SNAP = '/Snap';
   static const SEEALLBROADCASTS = '/SeeAllBroadcasts';
   static const BROADCAST = '/Broadcast';
+  static const AddNewPickMe = "/AddNeWPickMe";
 }
 
 abstract class Paths {
@@ -294,6 +297,9 @@ abstract class Paths {
   static const AVAILABLE_TRIPS = 'AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = 'TripJoinRequestNotification';
   static const TRIP_JOIN_REQUEST_HISTORY = 'TripJoinRequestHistory';
+  static const TRIP_JOIN_REQUEST_HISTORY_Pick_Me =
+      'TripJoinRequestHistoryPickMe';
+
   static const CAR_POOL = 'CarPool';
   static const ADD_NEW_ROUTE = 'AddNewRoute';
 
@@ -311,4 +317,5 @@ abstract class Paths {
   static const MyRating = 'MyRating';
   static const TripRating = 'TripRating';
   static const EDITDRIVERSCREEN = 'EditDriver';
+  static const AddNewPickMe = "AddNeWPickMe";
 }

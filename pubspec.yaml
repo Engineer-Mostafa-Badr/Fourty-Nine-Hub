@@ -57,7 +57,7 @@ dependencies:
   google_static_maps_controller: ^1.1.0
 #  image: any
 #  image_filter_pro: ^0.1.11
-  flutter_map: ^4.0.0
+  flutter_map: ^7.0.2
 
   # latlong2: ^0.8.1
   # icons_launcher: ^2.1.7
@@ -124,6 +124,7 @@ dependencies:
   # location: ^4.4.0
   location: ^4.4.0
   device_info_plus: ^10.1.2
+  latlong2: ^0.9.1
 dependency_overrides:
   http: ^0.13.3
 dev_dependencies:
