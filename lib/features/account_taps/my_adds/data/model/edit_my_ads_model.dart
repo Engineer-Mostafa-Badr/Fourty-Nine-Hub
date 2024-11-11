@@ -12,6 +12,8 @@ class EditMyAdsModel extends EditMyAdsEntity {
     required super.userId,
     required super.subCategoryId,
     required super.mainCategoryId,
+    required super.subCategory,
+    required super.mainCategory,
     required super.title,
     required super.desc,
     required super.price,
@@ -27,10 +29,12 @@ class EditMyAdsModel extends EditMyAdsEntity {
   factory EditMyAdsModel.fromJson(Map<String, dynamic> json){
     return EditMyAdsModel(id: json['_id'] ?? '',
         userId: json['userId'] ?? '',
-        subCategoryId: MyAuctionSubCategoryModel.fromJson(
-            json['subCategoryId']),
-        mainCategoryId: MyAuctionMainCategoryModel.fromJson(
-            json['mainCategoryId']),
+        subCategoryId: json['subCategoryId'] ??'',
+        mainCategoryId: json['mainCategoryId'] ??'',
+        subCategory: MyAuctionSubCategoryModel.fromJson(
+            json['subCategory']),
+        mainCategory: MyAuctionMainCategoryModel.fromJson(
+            json['mainCategory']),
         title: json['title'] ?? '',
         desc: json['desc'] ?? '',
         price: json['price'] ?? 0,

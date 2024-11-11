@@ -68,14 +68,14 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   }
 
   void loadDataInEdit({required String subCategoryId,required String id}) async {
-    emit(state.copyWith(status: CreateAdStates.loading));
+   // emit(state.copyWith(status: CreateAdStates.loading));
 
     await Future.wait([
       getAdProperties(subCategoryId: subCategoryId),
       _getGovernorates(),
       fetchMyAdsById(id: id),
     ]);
-    emit(state.copyWith(status: CreateAdStates.success));
+   // emit(state.copyWith(status: CreateAdStates.success));
   }
 
   Future<void> getAdProperties({required String subCategoryId}) async {
@@ -358,6 +358,10 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     required MyAuctionAdsEntity categorization,
     SelectionEntity? selectedExperienceLevel,
      SelectionEntity? selectedEducationLevel,
+    required String title,
+    required String desc,
+    required String phone,
+    required num price,
   }) async {
     print(
         'state.images ${state.images?.map((e) => e.mediaId).toList() ?? []}');
@@ -450,28 +454,50 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       type = "sale";
     }
 
+
+    List<CreateAdEntity> details = [];
+    for (int i = 0; i < (state.adProperties?.length ?? 0); i++) {
+      final adProperty = state.adProperties![i];
+      final propValue = state.selections![i];
+
+      if (propValue is SelectionEntity) {  // Check if propValue is of type SelectionEntity
+        details.add(CreateAdEntity(
+          propId: adProperty.id,
+          value: propValue,  // Now safely assign propValue
+        ));
+      } else {
+        // Handle the case where propValue is not of the expected type
+        print('Invalid type for propValue at index $i');
+      }
+    }
+
+    List<CreateAdEntity> selectedDetails =
+    details.where((element) => element.value.nameAr.isNotEmpty).toList();
+
+
+    emit(state.copyWith( status: CreateAdStates.loading));
+
     final response = await _editMyAdsUseCase(
         EditParams(
           id: categorization.id,
-          title: titleController.text,
-          description: descController.text,
-          phone: phoneController.text,
-          price:
-          double.parse(priceController.text),
-          details: selectedExperienceLevel == null &&
-              selectedEducationLevel == null
-              ? props2
-              : props,
-          subCategoryId:
-          categorization.subCategory.id,
-          mainCategoryId:
-          categorization.mainCategory!.id,
+          title: title,
+          description: desc,
+          phone: phone,
+          type: type,
+          price: price,
+          details: selectedDetails,
+          subCategoryId: categorization.subCategory.id,
+          mainCategoryId: categorization.mainCategory!.id,
+          governorate: (state.governorate?.isEmpty ?? true)
+              ? state.myAdById?.governmentDataId
+              : state.governorate,
+          city: (state.city?.isEmpty ?? true)
+              ? state.myAdById?.cityDataId
+              : state.city,
           images: state.images
               ?.map((e) => e.mediaId)
               .toList() ??
-              state.myAdById!.images
-                  .map((e) => e.id)
-                  .toList(),
+              state.myAdById!.images.map((e) => e.id).toList(),
         ));
     response.fold(
             (failure) =>

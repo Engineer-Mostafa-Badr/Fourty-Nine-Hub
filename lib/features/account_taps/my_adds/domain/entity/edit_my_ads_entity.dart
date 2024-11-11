@@ -9,8 +9,10 @@ import 'my_auction_sub_category_entity.dart';
 class EditMyAdsEntity {
   final String id;
   final String userId;
-  final MyAuctionSubCategoryEntity subCategoryId;
-  final MyAuctionMainCategory mainCategoryId;
+  final String subCategoryId;
+  final String mainCategoryId;
+  final MyAuctionSubCategoryEntity subCategory;
+  final MyAuctionMainCategory mainCategory;
   final String title;
   final String desc;
   final num price;
@@ -33,6 +35,8 @@ class EditMyAdsEntity {
       required this.userId,
       required this.subCategoryId,
       required this.mainCategoryId,
+      required this.subCategory,
+      required this.mainCategory,
       required this.title,
       required this.desc,
       required this.price,

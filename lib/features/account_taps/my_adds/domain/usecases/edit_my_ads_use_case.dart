@@ -43,6 +43,8 @@ class EditParams{
   final String? subCategoryId;
   final String? mainCategoryId;
   final String? userId;
+  String? city;
+  String? governorate;
   String get formatedDate => DateFormat('yyyy-MM-dd').format(createdAt!);
   Duration get restTimeDuration => DateTime.now().difference(createdAt!);
 
@@ -56,6 +58,8 @@ class EditParams{
          required this.images,
         this.price,
         this.type,
+        this.city,
+        this.governorate,
         this.isFavourite = false,
         this.hasAuction = false,
          this.address,
@@ -81,6 +85,10 @@ class EditParams{
     if (price != null) "price": price,
     // "userId": userId,
     "searchText": "testPropsAndAds",
+    "address": {
+      "government": governorate,
+      "city": city
+    },
     "images": images,
     "props": details,
   };

@@ -14,7 +14,6 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/my_ads_auction.dart';
-import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/edit_my_ads_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/widgets/ad_dynamic_input_edit.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
@@ -92,7 +91,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                             width: kToolbarHeight * .8,
                             height: kToolbarHeight * .8,
                             radius: 10,
-                            url: state.myAdById!.subCategoryId.picture,
+                            url: state.myAdById!.subCategory.picture,
                           ),
                           const Sizer(),
                           Expanded(
@@ -101,15 +100,15 @@ class _EditMyAdsState extends State<EditMyAds> {
                             children: [
                               Label(
                                 text: context.locale == Locales.english
-                                    ? state.myAdById!.subCategoryId.nameEn
-                                    : state.myAdById!.subCategoryId.nameAr,
+                                    ? state.myAdById!.subCategory.nameEn
+                                    : state.myAdById!.subCategory.nameAr,
                                 style: Styles.mediumText(
                                     fontWeight: FontWeight.bold),
                               ),
                               Label(
                                 text: context.locale == Locales.english
-                                    ? state.myAdById!.mainCategoryId.nameEn
-                                    : state.myAdById!.mainCategoryId.nameAr,
+                                    ? state.myAdById!.mainCategory.nameEn
+                                    : state.myAdById!.mainCategory.nameAr,
                               ),
                             ],
                           )),
@@ -201,9 +200,9 @@ class _EditMyAdsState extends State<EditMyAds> {
                                                             onPressed: () =>
                                                                 showAreYouSure(
                                                               context: context,
-                                                              title: 'Alert',
+                                                              title: LocaleKeys.alert.localize,
                                                               subTitle:
-                                                                  'Are you sure you want to remove this image?',
+                                                              LocaleKeys.removeImage.localize,
                                                               action: () {
                                                                 controller.removeImage(
                                                                     image: state
@@ -276,9 +275,9 @@ class _EditMyAdsState extends State<EditMyAds> {
                                                             onPressed: () =>
                                                                 showAreYouSure(
                                                               context: context,
-                                                              title: 'Alert',
+                                                              title: LocaleKeys.alert.localize,
                                                               subTitle:
-                                                                  'Are you sure you want to remove this image?',
+                                                              LocaleKeys.removeImage.localize,
                                                               action: () {
                                                                 controller.removeImage(
                                                                     image: state
@@ -312,7 +311,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                               child: InkWell(
                             onTap: () {
                               setState(() {
-                                if (state.myAdById!.subCategoryId.hasAuction ==
+                                if (state.myAdById!.subCategory.hasAuction ==
                                     true) {
                                   state.isSale = true;
                                 } else {
@@ -332,7 +331,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                                       color: AppColors.PRIMARY_COLOR)),
                               alignment: AlignmentDirectional.center,
                               child: Text(
-                                state.myAdById!.subCategoryId.hasAuction == true
+                                state.myAdById!.subCategory.hasAuction == true
                                     ? LocaleKeys.sale.localize
                                     : LocaleKeys.user.localize,
                                 style: Styles.mediumText(
@@ -349,7 +348,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                               onTap: () {
                                 setState(() {
                                   if (state
-                                          .myAdById!.subCategoryId.hasAuction ==
+                                          .myAdById!.subCategory.hasAuction ==
                                       true) {
                                     state.isSale = false;
                                     print(state.isSale);
@@ -371,7 +370,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                                         color: AppColors.PRIMARY_COLOR)),
                                 alignment: AlignmentDirectional.center,
                                 child: Text(
-                                  state.myAdById!.subCategoryId.hasAuction ==
+                                  state.myAdById!.subCategory.hasAuction ==
                                           true
                                       ? LocaleKeys.rent.localize
                                       : LocaleKeys.provider.localize,
@@ -441,6 +440,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                       TextFormField(
                         controller: controller.phoneController,
                         maxLines: null,
+                        keyboardType: TextInputType.phone,
                         onChanged: (v) => controller.phone = v,
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
@@ -661,91 +661,15 @@ class _EditMyAdsState extends State<EditMyAds> {
                       DefaultButton(
                         label: LocaleKeys.edit.localize,
                         onPressed: () {
-                          print(
-                              'state.images ${state.images?.map((e) => e.mediaId).toList() ?? []}');
-                          final List<Map<String, dynamic>> props = [];
-                          final List<Map<String, dynamic>> props2 = [];
-                          final existingProps = state.myAdById!.props;
-
-                          for (var prop in existingProps) {
-                            if (selectedExperienceLevel != null &&
-                                selectedEducationLevel == null) {
-                              props.add({
-                                "propertyId": '66f56c06414240a8e48520b3',
-                                // Experience property ID
-                                "value": {
-                                  "ar": selectedExperienceLevel!.nameAr,
-                                  "en": selectedExperienceLevel!.nameEn,
-                                },
-                              });
-                              // No need to add education level if only experience is selected
-                              continue; // Skip the rest of the loop for this iteration
-                            }
-
-                            // Check if education level is selected
-                            if (selectedEducationLevel != null &&
-                                selectedExperienceLevel == null) {
-                              props.add({
-                                "propertyId": "66f56c06414240a8e48520b2",
-                                // Education property ID
-                                "value": {
-                                  "ar": selectedEducationLevel!.nameAr,
-                                  "en": selectedEducationLevel!.nameEn,
-                                },
-                              });
-                              // No need to add experience level if only education is selected
-                              continue; // Skip the rest of the loop for this iteration
-                            }
-
-                            // Add both experience and education if both are selected
-                            if (selectedExperienceLevel != null &&
-                                selectedEducationLevel != null) {
-                              props.add({
-                                "propertyId": '66f56c06414240a8e48520b3',
-                                // Experience property ID
-                                "value": {
-                                  "ar": selectedExperienceLevel!.nameAr,
-                                  "en": selectedExperienceLevel!.nameEn,
-                                },
-                              });
-                              props.add({
-                                "propertyId": "66f56c06414240a8e48520b2",
-                                // Education property ID
-                                "value": {
-                                  "ar": selectedEducationLevel!.nameAr,
-                                  "en": selectedEducationLevel!.nameEn,
-                                },
-                              });
-                              break; // Exit the loop once both are added
-                            }
-
-                            // Default to existing values if neither experience nor education are selected
-                            if (selectedExperienceLevel == null &&
-                                selectedEducationLevel == null) {
-                              props2.add({
-                                "propertyId": prop.id,
-                                "value": {
-                                  "ar": prop.value.ar,
-                                  "en": prop.value.en,
-                                },
-                              });
-                            }
-                          }
-
-                          print('////////////////////////////');
-                          selectedExperienceLevel == null &&
-                                  selectedEducationLevel == null
-                              ? print('Props2 ${props2}')
-                              : print('Props ${props}');
-                          print('////////////////////////////');
-
-                          print(
-                              'state.myAdById!.images: ${state.myAdById!.images.map((e) => e.id).toList()}');
-
                           controller.editMyAds(
                             categorization: widget.categorization,
                             selectedEducationLevel:selectedEducationLevel ,
                             selectedExperienceLevel: selectedExperienceLevel,
+                                    title: controller.titleController.text,
+                                    desc: controller.descController.text,
+                                    phone: controller.phoneController.text,
+                                    price:
+                                        double.parse(controller.priceController.text),
                           );
                         },
                       )
@@ -845,7 +769,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                       //                 selectedEducationLevel == null
                       //             ? props2
                       //             : props,
-                      //         subCategoryId:
+                      //         subCategory:
                       //             widget.categorization.subCategory.id,
                       //         mainCategoryId:
                       //             widget.categorization.mainCategory!.id,
