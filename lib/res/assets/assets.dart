@@ -13,6 +13,8 @@ abstract class Assets {
 
   // navigator
   static String logo = 'assets/images/logo_600.png';
+  static String allRestaurants = 'assets/images/allRestaurants.png';
+  static String healthcare = 'assets/images/healthcare.png';
   static String facebookShare = 'assets/icons/share.png';
   static String savedReels = 'assets/icons/savedReels.png';
   static String userReels = 'assets/icons/userReels.png';

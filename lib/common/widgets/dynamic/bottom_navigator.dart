@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 
@@ -31,6 +32,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         icon: FontAwesomeIcons.list,
         label: 'reels',
         index: 1,
+        cacheKey:'reelsCount',
         image: Assets.reels,
         route: Routes.REELS,
       ),
@@ -38,6 +40,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         icon: FontAwesomeIcons.bowlFood,
         label: 'meal',
         index: 0,
+        cacheKey:'mealsCount',
         image: Assets.food,
         route: Routes.FOOD,
       ),
@@ -45,7 +48,8 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         icon: FontAwesomeIcons.plus,
         // Change to a health-related icon
         label: 'health',
-        image: Assets.healthRed,
+        cacheKey:'healthCount',
+        image: Assets.healthcare,
         index: 2,
         // Ensure this index matches the health item
         route: Routes.VISITA,
@@ -53,6 +57,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
       BottomItemModel(
         icon: FontAwesomeIcons.car,
         label: 'ride',
+        cacheKey:'rideCount',
         index: 3,
         image: Assets.ride,
         route:context.isUserLoggedIn? Routes.RIDE:Routes.LOGIN,
@@ -66,6 +71,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         if (selectedItem.route != ModalRoute.of(context)?.settings.name) {
           selectedItem.action(context);
         }
+        HandleCashback.setCount(pages[index].cacheKey??'',context);
       },
       items: pages,
       scrollController: scrollController,
@@ -203,6 +209,7 @@ class BottomItemModel {
   final String label;
   final int index;
   final String? image;
+  final String? cacheKey;
   final String route;
   final double height;
 
@@ -211,6 +218,7 @@ class BottomItemModel {
     required this.label,
     required this.index,
     this.image,
+    this.cacheKey,
     required this.route,
     this.height = 20,
   });

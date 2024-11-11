@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -69,7 +70,7 @@ class AvailableRoutesPointInfo extends StatelessWidget {
                   fontSize: 24,
                   color: status == "Free"
                       ? AppColors.SECONDARY_COLOR
-                      : isDarkTheme(context)
+                      : context.isDarkMode
                           ? AppColors.LIGHT_COLOR
                           : AppColors.PRIMARY_COLOR,
                 )),

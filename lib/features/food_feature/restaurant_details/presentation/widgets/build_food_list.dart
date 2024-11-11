@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/widgets/item_card.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 
 class BuildFoodList extends StatelessWidget {
   final String restaurantId;
 
-  const BuildFoodList({super.key, required this.restaurantId});
+  const BuildFoodList({super.key, required this.restaurantId,});
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +24,13 @@ class BuildFoodList extends StatelessWidget {
           child: ListView.builder(
             shrinkWrap: true,
 
-            itemCount: meals.length,
+            itemCount: context.read<RestaurantDetailsCubit>().menu.length,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
 
-              final meal = meals[index];
 
               return ItemCard(
-                meal: meal,
+                meal: context.read<RestaurantDetailsCubit>().menu[index],
                 restaurantId: restaurantId,
 
               );

@@ -1,8 +1,10 @@
-part of 'explore_reels_cubit.dart';
+part of 'reel_cubit.dart';
 
 class ReelsState {
-  final List<Reel>? globalReels;
 
+  final bool isCreatingReply;
+
+  final List<Reel> globalReels;
   final List<Reel>? reelsForFollower;
 
   final List<Reel>? reelsForAudio;
@@ -10,7 +12,7 @@ class ReelsState {
 
   final bool? globalReelsIsLoading;
   final bool? globalReelsHasReachedMax;
-  final int? globalReelsCurrentPage;
+  final int globalReelsCurrentPage;
 
   final bool reelsForFollowerIsLoading;
   final bool reelsForFollowerHasReachedMax;
@@ -53,11 +55,18 @@ class ReelsState {
   final String? reelViewErrorMessage;
   final bool? reelViewSuccess;
 
+  final bool isInitialized;
+  final bool isPlaying;
+  final bool showPlayPauseIcon;
   ReelsState({
     this.isCreatingReelView,
+    this.isCreatingReply = false,
     this.reelViewErrorMessage,
     this.reelViewSuccess,
     this.reelsForFollower,
+    this.isInitialized = false,
+    this.isPlaying = false,
+    this.showPlayPauseIcon = true,
     this.reelsForFollowerIsLoading = false,
     this.reelsForFollowerHasReachedMax = false,
     this.reelsForFollowerCurrentPage = 0,
@@ -67,11 +76,11 @@ class ReelsState {
     this.likeReelCommentResponseMessage = '',
     this.reelSaveResponse,
     this.reelShareResponse,
-    this.globalReels,
+    this.globalReels = const [],
     this.globalReelsIsLoading,
     this.playingIndex,
     this.globalReelsHasReachedMax,
-    this.globalReelsCurrentPage,
+    this.globalReelsCurrentPage = 0,
     this.isLikingReel = false,
     this.likeReelErrorMessage,
     this.likeReelResponse,
@@ -90,6 +99,7 @@ class ReelsState {
   });
 
   ReelsState copyWith({
+    bool? isCreatingReply,
     bool? isCreatingReelView,
     String? reelViewErrorMessage,
     bool? reelViewSuccess,
@@ -98,6 +108,10 @@ class ReelsState {
     bool? reelsForFollowerHasReachedMax,
     int? reelsForFollowerCurrentPage,
     int? playingIndex,
+    //for video controller
+    bool? isInitialized,
+    bool? isPlaying,
+    bool? showPlayPauseIcon,
     bool? isLikingComment,
     String? likeReelCommentErrorMessage,
     String? likeReelCommentResponseMessage,
@@ -125,46 +139,51 @@ class ReelsState {
     bool? uploadReelSuccess,
   }) {
     return ReelsState(
-        isCreatingReelView: isCreatingReelView ?? this.isCreatingReelView,
-        reelViewErrorMessage: reelViewErrorMessage ?? this.reelViewErrorMessage,
-        reelViewSuccess: reelViewSuccess ?? this.reelViewSuccess,
-        isLikingComment: isLikingComment ?? this.isLikingComment,
-        likeReelCommentErrorMessage:
-        likeReelCommentErrorMessage ?? this.likeReelCommentErrorMessage,
-        likeReelCommentResponseMessage: likeReelCommentResponseMessage ??
-            this.likeReelCommentResponseMessage,
-        globalReels: reels ?? globalReels,
-        reelsForAudio: reelsForAudio ?? this.reelsForAudio,
-        globalReelsIsLoading: isLoading ?? globalReelsIsLoading,
-        globalReelsHasReachedMax: hasReachedMax ?? globalReelsHasReachedMax,
-        globalReelsCurrentPage: currentPage ?? globalReelsCurrentPage,
-        isLikingReel: isLikingReel ?? this.isLikingReel,
-        likeReelErrorMessage: likeReelErrorMessage ?? this.likeReelErrorMessage,
-        likeReelResponse: likeReelResponse ?? this.likeReelResponse,
-        isCommenting: isCommenting ?? this.isCommenting,
-        commentErrorMessage: commentErrorMessage ?? this.commentErrorMessage,
-        commentResponse: commentResponse ?? this.commentResponse,
-        isFetchingComments: isFetchingComments ?? this.isFetchingComments,
-        fetchCommentsErrorMessage:
-        fetchCommentsErrorMessage ?? this.fetchCommentsErrorMessage,
-        fetchedComments: fetchedComments ?? this.fetchedComments,
-        isReplyingComment: isReplyingComment ?? this.isReplyingComment,
-        replyCommentErrorMessage:
-        replyCommentErrorMessage ?? this.replyCommentErrorMessage,
-        replyCommentResponse: replyCommentResponse ?? this.replyCommentResponse,
-        isUploadingReel: isUploadingReel ?? this.isUploadingReel,
-        uploadReelErrorMessage:
-        uploadReelErrorMessage ?? this.uploadReelErrorMessage,
-        uploadReelSuccess: uploadReelSuccess ?? this.uploadReelSuccess,
-        reelSaveResponse: reelSaveResponse ?? this.reelSaveResponse,
-        reelShareResponse: reelShareResponse ?? this.reelShareResponse,
-        playingIndex: playingIndex ?? this.playingIndex,
-        reelsForFollower: reelsForFollower ?? this.reelsForFollower,
-        reelsForFollowerCurrentPage:
-        reelsForFollowerCurrentPage ?? this.reelsForFollowerCurrentPage,
-        reelsForFollowerHasReachedMax:
-        reelsForFollowerHasReachedMax ?? this.reelsForFollowerHasReachedMax,
-        reelsForFollowerIsLoading:
-        reelsForFollowerIsLoading ?? this.reelsForFollowerIsLoading);
+      isCreatingReply: isCreatingReply ?? this.isCreatingReply,
+      isCreatingReelView: isCreatingReelView ?? this.isCreatingReelView,
+      reelViewErrorMessage: reelViewErrorMessage ?? this.reelViewErrorMessage,
+      reelViewSuccess: reelViewSuccess ?? this.reelViewSuccess,
+      isLikingComment: isLikingComment ?? this.isLikingComment,
+      likeReelCommentErrorMessage:
+          likeReelCommentErrorMessage ?? this.likeReelCommentErrorMessage,
+      likeReelCommentResponseMessage:
+          likeReelCommentResponseMessage ?? this.likeReelCommentResponseMessage,
+      globalReels: reels ?? globalReels,
+      reelsForAudio: reelsForAudio ?? this.reelsForAudio,
+      globalReelsIsLoading: isLoading ?? globalReelsIsLoading,
+      globalReelsHasReachedMax: hasReachedMax ?? globalReelsHasReachedMax,
+      globalReelsCurrentPage: currentPage ?? globalReelsCurrentPage,
+      isLikingReel: isLikingReel ?? this.isLikingReel,
+      likeReelErrorMessage: likeReelErrorMessage ?? this.likeReelErrorMessage,
+      likeReelResponse: likeReelResponse ?? this.likeReelResponse,
+      isCommenting: isCommenting ?? this.isCommenting,
+      commentErrorMessage: commentErrorMessage ?? this.commentErrorMessage,
+      commentResponse: commentResponse ?? this.commentResponse,
+      isFetchingComments: isFetchingComments ?? this.isFetchingComments,
+      fetchCommentsErrorMessage:
+          fetchCommentsErrorMessage ?? this.fetchCommentsErrorMessage,
+      fetchedComments: fetchedComments ?? this.fetchedComments,
+      isReplyingComment: isReplyingComment ?? this.isReplyingComment,
+      replyCommentErrorMessage:
+          replyCommentErrorMessage ?? this.replyCommentErrorMessage,
+      replyCommentResponse: replyCommentResponse ?? this.replyCommentResponse,
+      isUploadingReel: isUploadingReel ?? this.isUploadingReel,
+      uploadReelErrorMessage:
+          uploadReelErrorMessage ?? this.uploadReelErrorMessage,
+      uploadReelSuccess: uploadReelSuccess ?? this.uploadReelSuccess,
+      reelSaveResponse: reelSaveResponse ?? this.reelSaveResponse,
+      reelShareResponse: reelShareResponse ?? this.reelShareResponse,
+      playingIndex: playingIndex ?? this.playingIndex,
+      reelsForFollower: reelsForFollower ?? this.reelsForFollower,
+      reelsForFollowerCurrentPage:
+          reelsForFollowerCurrentPage ?? this.reelsForFollowerCurrentPage,
+      reelsForFollowerHasReachedMax:
+          reelsForFollowerHasReachedMax ?? this.reelsForFollowerHasReachedMax,
+      reelsForFollowerIsLoading:
+          reelsForFollowerIsLoading ?? this.reelsForFollowerIsLoading,
+      isInitialized: isInitialized ?? this.isInitialized,
+      isPlaying: isPlaying ?? this.isPlaying,
+      showPlayPauseIcon: showPlayPauseIcon ?? this.showPlayPauseIcon,
+    );
   }
 }

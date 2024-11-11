@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/banner.dart';
@@ -14,6 +16,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 class HealthView extends StatelessWidget {
   const HealthView({super.key});
@@ -25,27 +29,27 @@ class HealthView extends StatelessWidget {
         body: BlocBuilder<HealthCubit, HealthState>(
           builder: (context, state) {
             // var controller = context.read<HealthCubit>();
-            return ListView(
+            return state.isLoading ? const Center(child: CircularProgressIndicator()) : ListView(
               padding: EdgeInsets.all(16.0.w),
               children: [
-                BlocProvider.value(
-                  value: serviceLocator<HealthCubit>(),
-                  child: const HealthBanner(),
-                ),
+                const HealthBanner(),
                 if (state.isDoctor == false)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: InkWell(
+                    child: ClickableWidget(
                       onTap: () {
                         if (context.read<UserCubit>().isLoggedIn) {
-                          context.push(Routes.CREATERESTURANT);
+                          context.push(Routes.CREATEDOCTOR);
+                          // context.push(Routes.CREATERESTURANT);
                         } else {
                           context.push(Routes.REGISTER);
                         }
                       },
-                      child: const Text(
-                        "You can serve your clients as a doctor by clicking on the register button above!",
-                        style: TextStyle(
+                      child: Text(
+            LocaleKeys
+                .serveClientsByClickRegister
+                .localize,
+                        style: const TextStyle(
                           color: Colors.red,
                         ),
                       ),

@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -46,19 +44,9 @@ class DrawerWidget extends StatefulWidget {
 class _DrawerWidgetState extends State<DrawerWidget> {
   var widgejsonData;
 
-  loadJsonAsset() async {
-    final String jsonString =
-    await rootBundle.loadString('assets/json/surahs.json');
-    var data = jsonDecode(jsonString);
-    setState(() {
-      widgejsonData = data;
-    });
-  }
 
   @override
   void initState() {
-    loadJsonAsset();
-
     // TODO: implement initState
     super.initState();
   }

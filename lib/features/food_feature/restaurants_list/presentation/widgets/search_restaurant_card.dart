@@ -1,20 +1,9 @@
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/search_cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/Images_profile_for_restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchRestaurantCard extends StatefulWidget {
   const SearchRestaurantCard({
@@ -38,7 +27,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
       onTap: () {
         // context.pushNamed(Routes.RESTAURANTDETAILS,
         //     extra: widget.restaurant?.id);
-        context.push(Routes.RESTAURANTDETAILS, extra: widget.restaurant?.id);
+        context.push(Routes.RESTAURANTDETAILS, extra: widget.restaurant);
       },
       child: Card(
         color: Colors.white,

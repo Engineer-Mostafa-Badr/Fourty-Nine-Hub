@@ -35,7 +35,7 @@ class MealCategories extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) => MealCategoryCard(
                       onTap: (String id) {
-                        controller.getSubCategoryRestaurants(id: id);
+                        // controller.getSubCategoryRestaurants(id: id);
                       },
                       subCategory: state.mealCategories?[index]),
                   itemCount: state.mealCategories?.length ?? 0,

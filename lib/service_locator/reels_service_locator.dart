@@ -13,7 +13,7 @@ import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/save_reel_use_case.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/share_reel_use_case.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/toggle_comment_like_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 class ReelsServiceLocator {
@@ -26,13 +26,10 @@ class ReelsServiceLocator {
 
     // Register the ReelsRepository
     serviceLocator.registerLazySingleton<ReelsRepository>(
-          () => ReelsRepositoryImpl(serviceLocator()),
+      () => ReelsRepositoryImpl(serviceLocator()),
     );
     // Register the ReelsCubit
-    serviceLocator.registerFactory<ReelsCubit>(
-          () => ReelsCubit(serviceLocator(),
-          serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()),
-    );
+
     //
     // // use cases
     serviceLocator.registerLazySingleton<CreateReelUseCase>(
@@ -42,71 +39,69 @@ class ReelsServiceLocator {
     );
 
     serviceLocator.registerLazySingleton<CreateAdvertisementUseCase>(
-          () => CreateAdvertisementUseCase(
+      () => CreateAdvertisementUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<GetExploreReelsUseCase>(
-          () => GetExploreReelsUseCase(
+      () => GetExploreReelsUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<GetFollowersReelsUseCase>(
-          () => GetFollowersReelsUseCase(
+      () => GetFollowersReelsUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<SaveReelUseCase>(
-          () => SaveReelUseCase(
+      () => SaveReelUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<ShareReelUseCase>(
-          () => ShareReelUseCase(
+      () => ShareReelUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<LikeReelUseCase>(
-          () => LikeReelUseCase(
+      () => LikeReelUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<AddReelCommentUseCase>(
-          () => AddReelCommentUseCase(
+      () => AddReelCommentUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<AddReelReplyUseCase>(
-          () => AddReelReplyUseCase(
+      () => AddReelReplyUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<GetCommentsUseCase>(
-          () => GetCommentsUseCase(
+      () => GetCommentsUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<ToggleCommentLikeUseCase>(
-          () => ToggleCommentLikeUseCase(
+      () => ToggleCommentLikeUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<ReelsWithSameAudioUseCase>(
-          () => ReelsWithSameAudioUseCase(
+      () => ReelsWithSameAudioUseCase(
         serviceLocator(),
       ),
     );
-
-
   }
 }

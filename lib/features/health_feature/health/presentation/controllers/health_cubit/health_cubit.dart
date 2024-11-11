@@ -74,22 +74,22 @@ class HealthCubit extends Cubit<HealthState> {
   ];
 
   void loadData() async {
-    await _getMainCategoryDetails();
-    await _isDoctor();
-    await _isDoctorApproval();
-    await getSubCategories();
-    await getServices();
-    await getMyBookings();
-    await getGovernorates();
+    emit(state.copyWith(status: HealthStates.loading));
+    Future.wait([_getMainCategoryDetails(),
+      _isDoctor(),
+      _isDoctorApproval(),
+      getSubCategories(),
+      getServices(),
+      getMyBookings(),
+      getGovernorates(),]);
   }
 
   Future<void> _getMainCategoryDetails() async {
-    final response =
-        await _getMainCategoryDetailsUseCase(MainServicesEnum.health.id);
+    final response = await _getMainCategoryDetailsUseCase(MainServicesEnum.health.id);
     response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: HealthStates.error)),
-        (data) => emit(state.copyWith(mainCategory: data)));
+        (failure) => emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) => emit(state.copyWith(mainCategory: data)),
+    );
   }
 
   Future<void> getMyBookings() async {
@@ -186,7 +186,7 @@ class HealthCubit extends Cubit<HealthState> {
             mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
           emit(state.copyWith(mainCategory: mainCategoryEntity));
           result = state.mainCategory!.isFavorite!;
-          print("Salama ${data}");
+          print("Salama $data");
           return getServices();
         });
     return result;

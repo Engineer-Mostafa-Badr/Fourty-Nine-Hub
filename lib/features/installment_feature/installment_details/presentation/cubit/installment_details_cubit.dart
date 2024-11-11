@@ -29,7 +29,7 @@ class InstallmentDetailsCubit extends Cubit<InstallmentDetailsState> {
             state.copyWith(failure: l, status: InstallmentDetailsStates.error)),
         (data) => emit(state.copyWith(
             installment: data,
-            selectedPlan: data.plans?.first,
+            // selectedPlan: data.plans?.first,
             status: InstallmentDetailsStates.initState)));
   }
 

@@ -8,7 +8,6 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/c
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 
 import '../../../../../common/widgets/stateless/buttons/default_button.dart';

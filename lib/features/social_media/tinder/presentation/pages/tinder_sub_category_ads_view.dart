@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
@@ -125,7 +125,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                     ),
                     const Sizer(),
                     Text(
-                      widget.params.subCategory.name,
+                      context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn,
                       textScaler: TextScaler.noScaling,
                       style: TextStyle(
                           fontSize: 40.sp,
@@ -135,8 +135,8 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                     const Sizer(),
                     Builder(builder: (context) {
                       String provider =
-                          getServiceName(widget.params.subCategory.name);
-                      String user = getUserName(widget.params.subCategory.name);
+                          getServiceName(context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn);
+                      String user = getUserName(context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn);
                       return TabBar(
                         controller: _tabController,
                         labelColor: AppColors.SECONDARY_COLOR,
@@ -157,12 +157,12 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                         children: [
                           Center(
                               child: Text(
-                            'Provider: ${getServiceName(widget.params.subCategory.name)}',
+                            'Provider: ${getServiceName(context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn)}',
                             textScaler: TextScaler.noScaling,
                           )),
                           Center(
                               child: Text(
-                            'User: ${getUserName(widget.params.subCategory.name)}',
+                            'User: ${getUserName(context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn)}',
                             textScaler: TextScaler.noScaling,
                           )),
                         ],

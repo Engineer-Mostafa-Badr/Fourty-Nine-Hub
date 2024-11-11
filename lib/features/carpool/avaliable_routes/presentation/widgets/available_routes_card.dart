@@ -63,7 +63,7 @@ class _AvaiableRoutesCardState extends State<AvaiableRoutesCard> {
                   widget.entity.comfort
                       ? Text(LocaleKeys.comfort.localize,
                           style: Styles.mediumText(
-                              color: isDarkTheme(context)
+                              color: context.isDarkMode
                                   ? AppColors.PRIMARY_COLOR_DARK
                                   : AppColors.PRIMARY_COLOR_LIGHT,
                               fontWeight: FontWeight.w600))
@@ -111,7 +111,7 @@ class _AvaiableRoutesCardState extends State<AvaiableRoutesCard> {
                       ),
                       Text(LocaleKeys.seat.localize,
                           style: Styles.mediumText(
-                            color: isDarkTheme(context)
+                            color: context.isDarkMode
                                 ? AppColors.LIGHT_COLOR
                                 : AppColors.PRIMARY_COLOR_LIGHT,
                           )),

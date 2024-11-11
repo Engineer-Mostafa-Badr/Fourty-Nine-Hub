@@ -12,6 +12,8 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/pages/ad_requests_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_model.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_details_prop_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
@@ -150,7 +152,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
         title: LocaleKeys.showAdRequests.localize,
         color: AppColors.SECONDARY_COLOR,
         onTap: () async {
-          context.push(Routes.ADRequests,extra: widget.id);
+          context.push(Routes.ADRequests,extra:AdRequestParams(id: widget.id,userName: '') );
         },
       ),
     );
@@ -245,11 +247,25 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                 physics: ad.images.length > 1
                     ? null
                     : const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) => Padding(
-                  padding: EdgeInsets.only(bottom: 5.h),
-                  child: ImageFromInternet(
-                    image: ad.images[index],
-                    defaultLogo: true,
+                itemBuilder: (context, index) => InkWell(
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ImageGalleryPage(
+                          images: ad.images,
+                          initialIndex: index,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 5.h),
+                    child: ImageFromInternet(
+                      image: ad.images[index],
+                      defaultLogo: true,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 pagination: SwiperPagination(

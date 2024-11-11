@@ -5,13 +5,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
@@ -59,7 +56,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
               ? Colors.transparent
               : AppColors.PRIMARY_COLOR,
           image: DecorationImage(
-            fit: BoxFit.cover,
+            fit: BoxFit.fitWidth,
             image: CachedNetworkImageProvider(
               widget.category.banner,
             ),
@@ -173,16 +170,16 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                           ),
                         )
                       : const SizedBox.shrink(),
-                  Sizer(
-                    height: 15.h,
-                  ),
-                  Label(
-                    text: '${widget.category.total.toShortScale} ${Labels.ads}',
-                    style: Styles.mediumText(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  )
+                  // Sizer(
+                  //   height: 15.h,
+                  // ),
+                  // Label(
+                  //   text: '${widget.category.total.toShortScale} ${Labels.ads}',
+                  //   style: Styles.mediumText(
+                  //     fontWeight: FontWeight.bold,
+                  //     color: Colors.white,
+                  //   ),
+                  // )
                 ],
               ),
             ),

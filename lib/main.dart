@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,8 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -41,7 +45,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await CacheServiceImpl.init();
-  await DI.execute(); 
+  await DI.execute();
 
   // ZegoGiftManager().cache.cache(giftItemList);
 
@@ -84,10 +88,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    // log(CacheServiceImpl().isLogin().toString()??"null", name: "userId");
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => serviceLocator<UserCubit>(),
+          create: (context) => serviceLocator<UserCubit>()..getUser(),
         ),
         BlocProvider(
           create: (context) => serviceLocator<SecretsCubit>()..getAllSecrets(),
@@ -95,9 +100,15 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           create: (BuildContext context) => serviceLocator<WalletCubit>(),
         ),
-        BlocProvider(
-          create: (BuildContext context) =>serviceLocator<SearchCubit>(),
+        //to initialize preloading
+        BlocProvider<ReelsCubit>(
+          create: (_) => serviceLocator<ReelsCubit>()..fetchReels(),
         ),
+        BlocProvider(
+          create: (BuildContext context) => serviceLocator<SearchCubit>(),
+        ),
+        BlocProvider(
+            create: (context) => serviceLocator<PreloadBloc>()..getVideosFromApi()),
         BlocProvider(
           create: (BuildContext context) =>
               serviceLocator<MainCategoriesCubit>()..loadData(),
@@ -125,7 +136,10 @@ class _MyAppState extends State<MyApp> {
           create: (context) => ThemeCubit(),
         ),
         BlocProvider(
-          create: (context) => serviceLocator<StreamCubit>()..loadLives()..getScheduledMeetings()..getTopics(),
+          create: (context) => serviceLocator<StreamCubit>()
+            ..loadLives()
+            ..getScheduledMeetings()
+            ..getTopics(),
         ),
         BlocProvider<FirebaseNotficationsCubit>(
           create: (context) => FirebaseNotficationsCubit(serviceLocator()),
@@ -177,32 +191,31 @@ class _MyAppState extends State<MyApp> {
           return BlocBuilder<ThemeCubit, ThemeStates>(
             builder: (BuildContext context, state) {
               return FutureBuilder<bool>(
-                future: CacheManager.getMode(),
-                builder: (context, snapshot) {
-                  return MaterialApp.router(
-                    builder: (context, child) {
-                      return MediaQuery(
-                        data: MediaQuery.of(context)
-                            .copyWith(textScaler: TextScaler.noScaling),
-                        child: child!,
-                      );
-                    },
-                    themeMode: (snapshot.data??false)
-                        ? ThemeMode.dark
-                        : ThemeMode.light,
-                    theme: lightTheme,
-                    darkTheme: darkTheme,
-                    title: '49',
-                    debugShowCheckedModeBanner: false,
-                    routerConfig: AppPages.router,
-                    localizationsDelegates: context.localizationDelegates,
-                    supportedLocales: context.supportedLocales,
-                    locale: context.locale,
-                    // for device preview package
-                    // builder: DevicePreview.appBuilder,
-                  );
-                }
-              );
+                  future: CacheManager.getMode(),
+                  builder: (context, snapshot) {
+                    return MaterialApp.router(
+                      builder: (context, child) {
+                        return MediaQuery(
+                          data: MediaQuery.of(context)
+                              .copyWith(textScaler: TextScaler.noScaling),
+                          child: child!,
+                        );
+                      },
+                      themeMode: (snapshot.data ?? false)
+                          ? ThemeMode.dark
+                          : ThemeMode.light,
+                      theme: lightTheme,
+                      darkTheme: darkTheme,
+                      title: '49',
+                      debugShowCheckedModeBanner: false,
+                      routerConfig: AppPages.router,
+                      localizationsDelegates: context.localizationDelegates,
+                      supportedLocales: context.supportedLocales,
+                      locale: context.locale,
+                      // for device preview package
+                      // builder: DevicePreview.appBuilder,
+                    );
+                  });
             },
           );
         },

@@ -264,7 +264,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 class TinderView extends StatelessWidget {
-  const TinderView({Key? key}) : super(key: key);
+  const TinderView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -282,7 +282,7 @@ class TinderView extends StatelessWidget {
 }
 
 class TinderScreen extends StatefulWidget {
-  const TinderScreen({Key? key}) : super(key: key);
+  const TinderScreen({super.key});
 
   @override
   State<TinderScreen> createState() => _TinderScreenState();

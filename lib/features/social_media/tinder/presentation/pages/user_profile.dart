@@ -136,7 +136,7 @@ class UserProfilePageState extends State<UserProfilePage> {
       margin: const EdgeInsets.only(top: 10.0),
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: isDarkTheme(context) ? Colors.black26 : Colors.white,
+        color: context.isDarkMode ? Colors.black26 : Colors.white,
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5)],
       ),
@@ -148,7 +148,7 @@ class UserProfilePageState extends State<UserProfilePage> {
             textScaler: TextScaler.noScaling,
             style: TextStyle(
               color:
-                  isDarkTheme(context) ? Colors.white : AppColors.PRIMARY_COLOR,
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
               fontSize: 55.sp,
               fontWeight: FontWeight.bold,
             ),
@@ -158,7 +158,7 @@ class UserProfilePageState extends State<UserProfilePage> {
             userId?.email ?? '',
             textScaler: TextScaler.noScaling,
             style: TextStyle(
-              color: isDarkTheme(context)
+              color: context.isDarkMode
                   ? Colors.white.withOpacity(0.8)
                   : AppColors.PRIMARY_COLOR.withOpacity(0.8),
               fontSize: 40.sp,

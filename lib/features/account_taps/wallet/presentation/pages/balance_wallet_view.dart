@@ -85,7 +85,9 @@ class BalanceWalletView extends StatelessWidget {
                           ],
                         ),
                       ),
+
                     //  state.balance?.openBalance == true && state.balance!.balance >=1002
+                    if(state.balance!=null)
                        state.balance!.balance >=1002
                           ? AppButton(
                               backColor: AppColors.SECONDARY_COLOR,

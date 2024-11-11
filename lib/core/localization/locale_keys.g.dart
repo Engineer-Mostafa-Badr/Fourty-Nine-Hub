@@ -96,6 +96,7 @@ abstract class  LocaleKeys {
   static const comma = 'comma';
   static const noResultFound = 'noResultFound';
   static const restaurantDashboard = 'restaurantDashboard';
+  static const doctorDashboard = 'doctorDashboard';
   static const allRestaurants = 'allRestaurants';
   static const restaurantsForSelectedMeal = 'restaurantsForSelectedMeal';
   static const itemName = 'itemName';
@@ -921,7 +922,7 @@ abstract class  LocaleKeys {
   static const showAdRequests = 'showAdRequests';
   static const comfort = 'comfort';
   static const minutesAgo = 'minutesAgo';
-  static const mutualFriend = 'mutualFriend';
+  static const Phonenumbercannotbewrittenindescription = 'Phonenumbercannotbewrittenindescription';
   static const womenOnly = 'womenOnly';
   static const chance = 'chance';
   static const subTab = 'subTab';
@@ -1003,5 +1004,36 @@ abstract class  LocaleKeys {
   static const cancelRequest = 'cancelRequest';
   static const sendOffer = 'sendOffer';
   static const shareTransactionDetails = 'shareTransactionDetails';
+  static const yourPersonalMessages = 'yourPersonalMessages';
+  static const endToEndEncryption = 'endToEndEncryption';
+  static const liveStreamOptions = 'liveStreamOptions';
+  static const createLive = 'createLive';
+  static const watch = 'watch';
+  static const mutualFriend = 'mutualFriend';
+  static const serveClientsByClickRegister = 'serveClientsByClickRegister';
+  static const totalOrder = 'totalOrder';
+  static const totalRevenue = 'totalRevenue';
+  static const avgRating = 'avgRating';
+  static const review = 'review';
+  static const subscriptionDeadline = 'subscriptionDeadline';
+  static const available = 'available';
+  static const notAvailable = 'notAvailable';
+  static const editRegistration = 'editRegistration';
+  static const sureRemoveRestaurant = 'sureRemoveRestaurant';
+  static const yes = 'yes';
+  static const editFood = 'editFood';
+  static const updateYourRestaurant = 'updateYourRestaurant';
+  static const youHaveToChooseFavoriteSubcategory = 'youHaveToChooseFavoriteSubcategory';
+  static const youHaveToFillRestaurantName = 'youHaveToFillRestaurantName';
+  static const youHaveToFillRestaurantPhoneNumber = 'youHaveToFillRestaurantPhoneNumber';
+  static const addPhoto = 'addPhoto';
+  static const youHaveToUploadAtLeastOnePhoto = 'youHaveToUploadAtLeastOnePhoto';
+  static const youHaveToUploadThe3PagesOfCommercialRegistration = 'youHaveToUploadThe3PagesOfCommercialRegistration';
+  static const youHaveToSelectYourGovernorate = 'youHaveToSelectYourGovernorate';
+  static const youHaveToSelectYourCity = 'youHaveToSelectYourCity';
+  static const reviews = 'reviews';
+  static const addToCart = 'addToCart';
+  static const showAllOrders = 'showAllOrders';
+  static const restaurantOrders = 'restaurantOrders';
 
 }

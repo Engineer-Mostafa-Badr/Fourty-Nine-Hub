@@ -642,7 +642,6 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../data/shared/shared.dart';
 
 class TinderCardStack extends StatefulWidget {
@@ -1253,7 +1252,7 @@ class ChatBottomSheet extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: isDarkTheme(context)
+          color: context.isDarkMode
               ? Colors.black.withOpacity(0.5)
               : Colors.white.withOpacity(0.5),
         ),
@@ -1271,7 +1270,7 @@ class ChatBottomSheet extends StatelessWidget {
           children: [
             Container(
               width: double.infinity,
-              color: isDarkTheme(context) ? Colors.white10 : Colors.black12,
+              color: context.isDarkMode ? Colors.white10 : Colors.black12,
               child: Padding(
                 padding: EdgeInsets.all(screenHeight * 0.02),
                 child: Text(
@@ -1340,7 +1339,7 @@ class ChatBottomSheet extends StatelessWidget {
                   size: iconSize,
                   color: label == "Anonymous" || label == "مجهول"
                       ? AppColors.SECONDARY_COLOR
-                      : (isDarkTheme(context)
+                      : (context.isDarkMode
                           ? Colors.white
                           : AppColors.PRIMARY_COLOR),
                 ),
@@ -1369,35 +1368,35 @@ class ChatBottomSheet extends StatelessWidget {
     final chatsCubit = serviceLocator<ChatsCubit>();
 
     if (label == "Anonymous") {
-      tinderCubit.startAnonymousChat(receiverId: cardUser.id ?? '').then((_) {
-        final chatId =
-            tinderCubit.state.anonymousChatResponse?.data.chat.id ?? '';
-        if (chatId.isNotEmpty) {
-          chatsCubit.init();
-          _navigateToChatRoom(context, chatId, chatRoomCubit, chatsCubit);
-        } else {
-          log("Chat ID is empty.");
-        }
-      }).catchError((error) {
-        log("Error starting anonymous chat: $error");
-      });
+      // tinderCubit.startAnonymousChat(receiverId: cardUser.id ?? '').then((_) {
+      //   final chatId =
+      //       tinderCubit.state.anonymousChatResponse?.data.chat.id ?? '';
+      //   if (chatId.isNotEmpty) {
+      //     chatsCubit.init();
+      //     _navigateToChatRoom(context, chatId, chatRoomCubit, chatsCubit);
+      //   } else {
+      //     log("Chat ID is empty.");
+      //   }
+      // }).catchError((error) {
+      //   log("Error starting anonymous chat: $error");
+      // });
     } else {
-      tinderCubit
-          .startNormalChat(
-        receiverId: cardUser.id ?? '',
-        subCategoryId: '62c8be6f8e28a58a3edf5f4f',
-      )
-          .then((_) {
-        final chatId = tinderCubit.state.normalChatResponse?.data.chat.id ?? '';
-        if (chatId.isNotEmpty) {
-          chatsCubit.init();
-          _navigateToChatRoom(context, chatId, chatRoomCubit, chatsCubit);
-        } else {
-          log("Chat ID is empty.");
-        }
-      }).catchError((error) {
-        log("Error starting normal chat: $error");
-      });
+      // tinderCubit
+      //     .startNormalChat(
+      //   receiverId: cardUser.id ?? '',
+      //   subCategoryId: '62c8be6f8e28a58a3edf5f4f',
+      // )
+      //     .then((_) {
+      //   final chatId = tinderCubit.state.normalChatResponse?.data.chat.id ?? '';
+      //   if (chatId.isNotEmpty) {
+      //     chatsCubit.init();
+      //     _navigateToChatRoom(context, chatId, chatRoomCubit, chatsCubit);
+      //   } else {
+      //     log("Chat ID is empty.");
+      //   }
+      // }).catchError((error) {
+      //   log("Error starting normal chat: $error");
+      // });
     }
   }
 
@@ -1424,7 +1423,7 @@ void showChatBottomSheet(BuildContext context, UserData cardUser) {
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
-    backgroundColor: isDarkTheme(context)
+    backgroundColor: context.isDarkMode
         ? Colors.black.withOpacity(0.9)
         : Colors.white.withOpacity(0.9),
     builder: (BuildContext context) {

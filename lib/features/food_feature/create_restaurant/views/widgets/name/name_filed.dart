@@ -1,6 +1,7 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 
@@ -26,23 +27,20 @@ class CreateRestaurantNameField extends StatelessWidget {
             },
             controller: restaurantLoginCubit.name,
             decoration: InputDecoration(
-              // Border when the field is not focused
               enabledBorder: OutlineInputBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
                 borderSide: BorderSide(
                   color: state is ValidationState && (state.isName ?? true)
                       ? Colors.red
-                      : Colors.grey, // Use grey as the default border color
+                      : Colors.grey,
                 ),
               ),
-              // Border when the field is focused
               focusedBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 borderSide: BorderSide(
-                  color: Colors.grey, // Grey border when focused
+                  color: Colors.grey,
                 ),
               ),
-              // Default border (same as enabledBorder)
               border: OutlineInputBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
                 borderSide: BorderSide(
@@ -51,34 +49,32 @@ class CreateRestaurantNameField extends StatelessWidget {
                       : Colors.grey,
                 ),
               ),
-              // Error border when validation fails
               errorBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 borderSide: BorderSide(
-                  color: Colors.red, // Red border when there's an error
+                  color: Colors.red,
                 ),
               ),
-              // Error border when focused and invalid
               focusedErrorBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 borderSide: BorderSide(
                   color:
-                      Colors.red, // Keep red border when focused with an error
+                      Colors.red,
                 ),
               ),
               filled: false,
               contentPadding:
-                  const EdgeInsets.all(10), // Padding inside the text field
-              hintText: LocaleKeys.restaurantName.tr(), // Hint text
+                  const EdgeInsets.all(10),
+              hintText:context.isArabic?'اسم المطعم':'Restaurant Name' ,
             ),
           ),
           Visibility(
             visible: state is ValidationState && (state.isName ?? false),
-            child: const Padding(
-              padding: EdgeInsets.only(right: 5, left: 5, top: 5.0),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 5, left: 5, top: 5.0),
               child: Text(
-                "You have to fill Restaurant Name!",
-                style: TextStyle(color: Colors.red),
+                LocaleKeys.youHaveToFillRestaurantName.localize,
+                style: const TextStyle(color: Colors.red),
               ),
             ),
           )
@@ -149,18 +145,18 @@ class CreateRestaurantNumberField extends StatelessWidget {
               ),
               filled: false,
               contentPadding: const EdgeInsets.all(10), // Padding inside the text field
-              hintText: LocaleKeys.restaurantNumber.tr(), // Hint text
+              hintText:context.isArabic?'رقم المطعم':'Restaurant Number' ,
             ),
             keyboardType: TextInputType.phone,
           )
 ,
           Visibility(
             visible: state is ValidationState && (state.isNumber ?? false),
-            child: const Padding(
-              padding: EdgeInsets.only(right: 5, left: 5, top: 5.0),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 5, left: 5, top: 5.0),
               child: Text(
-                "You have to fill Restaurant Phone Number!",
-                style: TextStyle(color: Colors.red),
+                LocaleKeys.youHaveToFillRestaurantPhoneNumber.localize,
+                style: const TextStyle(color: Colors.red),
               ),
             ),
           )

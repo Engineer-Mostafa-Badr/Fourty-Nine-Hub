@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 
 import '../../../../res/style/styles.dart';
 import '../../stateless/labels/label.dart';
@@ -28,7 +27,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.transparent,
+      backgroundColor: backColor??Colors.transparent,
       elevation: 0,
       centerTitle: centerTitle,
       automaticallyImplyLeading: automaticallyImplyLeading,

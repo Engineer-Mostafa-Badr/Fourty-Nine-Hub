@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_cubit.dart';
@@ -45,10 +46,10 @@ class _CarPoolBodyState extends State<CarPoolBody>
           children: [
             TabBar(
               indicatorPadding: EdgeInsets.zero,
-              labelColor: isDarkTheme(context)
+              labelColor: context.isDarkMode
                   ? AppColors.PRIMARY_COLOR_DARK
                   : AppColors.PRIMARY_COLOR_LIGHT,
-              indicatorColor: isDarkTheme(context)
+              indicatorColor: context.isDarkMode
                   ? AppColors.PRIMARY_COLOR_DARK
                   : AppColors.PRIMARY_COLOR_LIGHT,
               labelPadding: EdgeInsets.symmetric(horizontal: 8.w),
