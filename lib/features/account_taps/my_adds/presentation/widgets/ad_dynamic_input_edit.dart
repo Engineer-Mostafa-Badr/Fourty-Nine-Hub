@@ -6,6 +6,8 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.da
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/props_ads_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/data/models/selection_model.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -19,11 +21,12 @@ class AdDynamicInputEdit extends StatefulWidget {
   final AdPropertiesEntity property;
   final Function(SelectionEntity) onChanged;
   final Function(String) onTextChanged;
+  final PropertyValueEntity val;
   const AdDynamicInputEdit(
       {super.key,
         required this.property,
         required this.onChanged,
-        required this.onTextChanged});
+        required this.onTextChanged,required this.val});
 
   @override
   State<AdDynamicInputEdit> createState() => _AdDynamicInputWidgetState();
@@ -31,12 +34,26 @@ class AdDynamicInputEdit extends StatefulWidget {
 
 class _AdDynamicInputWidgetState extends State<AdDynamicInputEdit> {
   SelectionEntity? value;
+
   @override
   void initState() {
-    if (widget.property.values.isNotEmpty) {
-      value = widget.property.values.first;
-    }
     super.initState();
+
+    // Check if the selected value exists in the property values list
+    if (widget.property.values.isNotEmpty) {
+      value = widget.property.values.firstWhere(
+            (element) => element.nameAr == widget.val.ar || element.nameEn == widget.val.en,
+        orElse: () => SelectionModel.fromJson(widget.property.values.first as Map<String, dynamic>),
+      );
+    } else {
+      value = null;
+    }
+  }
+
+
+  @override
+  void dispose(){
+    super.dispose();
   }
 
   @override
@@ -92,25 +109,28 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputEdit> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Label(
-            text: getLang() == 'ar'
-                ? widget.property.nameAr
-                : widget.property.nameEn),
+          text: getLang() == 'ar' ? widget.property.nameAr : widget.property.nameEn,
+        ),
         InkWell(
           onTap: () {
             bottomSheet(
-                context: context,
-                isScrollControlled: true,
-                widget: _buildOptionsSheet(
-                    action: (SelectionEntity v) {
-                      widget.onChanged(v);
-                      context.pop();
-                    },
-                    values: widget.property.values));
+              context: context,
+              isScrollControlled: true,
+              widget: _buildOptionsSheet(
+                action: (SelectionEntity v) {
+                  widget.onChanged(v);
+                  setState(() {
+                    value = v;
+                  });
+                  context.pop();
+                },
+                values: widget.property.values,
+              ),
+            );
           },
           child: Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 5),
-            // margin: EdgeInsets.all(5),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey),
               borderRadius: BorderRadius.circular(5),
@@ -119,11 +139,10 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputEdit> {
               children: [
                 Expanded(
                   child: Label(
-                      text: getLang() == 'ar'
-                          ? value?.nameAr ?? ''
-                          : value?.nameEn ?? ''),
+                    text: getLang() == 'ar' ? value?.nameAr ?? widget.val.ar ?? '' : value?.nameEn ?? widget.val.en ?? '',
+                  ),
                 ),
-                const Icon(Icons.arrow_drop_down)
+                const Icon(Icons.arrow_drop_down),
               ],
             ),
           ),
@@ -137,22 +156,24 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputEdit> {
     required List<SelectionEntity> values,
   }) {
     return Scaffold(
-      appBar:  BackAppBar(
+      appBar: BackAppBar(
         label: LocaleKeys.select.localize,
       ),
       body: ListView.builder(
-          itemCount: values.length,
-          itemBuilder: (context, index) {
-            final v = values[index];
-            return ListTile(
-              onTap: () {
-                action(v);
+        itemCount: values.length,
+        itemBuilder: (context, index) {
+          final v = values[index];
+          return ListTile(
+            onTap: () {
+              action(v);
+              setState(() {
                 value = v;
-                setState(() {});
-              },
-              title: Label(text: getLang() == 'ar' ? v.nameAr : v.nameEn),
-            );
-          }),
+              });
+            },
+            title: Label(text: getLang() == 'ar' ? v.nameAr : v.nameEn),
+          );
+        },
+      ),
     );
   }
 

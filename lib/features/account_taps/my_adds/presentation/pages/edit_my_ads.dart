@@ -635,6 +635,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                           bool isEducationLevel =
                               property.nameEn == "Education Level";
                           return AdDynamicInputEdit(
+                            val: state.myAdById!.props[index].value,
                             property: property,
                             // selectedPropName: selectedValue,
                             onChanged: (SelectionEntity v) {
@@ -673,116 +674,6 @@ class _EditMyAdsState extends State<EditMyAds> {
                           );
                         },
                       )
-                      // DefaultButton(
-                      //   label: LocaleKeys.edit.localize,
-                      //   onPressed: () {
-                      //     print(
-                      //         'state.images ${state.images?.map((e) => e.mediaId).toList() ?? []}');
-                      //     final List<Map<String, dynamic>> props = [];
-                      //     final List<Map<String, dynamic>> props2 = [];
-                      //     final existingProps = state.myAdById!.props;
-                      //
-                      //     for (var prop in existingProps) {
-                      //       if (selectedExperienceLevel != null &&
-                      //           selectedEducationLevel == null) {
-                      //         props.add({
-                      //           "propertyId": '66f56c06414240a8e48520b3',
-                      //           // Experience property ID
-                      //           "value": {
-                      //             "ar": selectedExperienceLevel!.nameAr,
-                      //             "en": selectedExperienceLevel!.nameEn,
-                      //           },
-                      //         });
-                      //         // No need to add education level if only experience is selected
-                      //         continue; // Skip the rest of the loop for this iteration
-                      //       }
-                      //
-                      //       // Check if education level is selected
-                      //       if (selectedEducationLevel != null &&
-                      //           selectedExperienceLevel == null) {
-                      //         props.add({
-                      //           "propertyId": "66f56c06414240a8e48520b2",
-                      //           // Education property ID
-                      //           "value": {
-                      //             "ar": selectedEducationLevel!.nameAr,
-                      //             "en": selectedEducationLevel!.nameEn,
-                      //           },
-                      //         });
-                      //         // No need to add experience level if only education is selected
-                      //         continue; // Skip the rest of the loop for this iteration
-                      //       }
-                      //
-                      //       // Add both experience and education if both are selected
-                      //       if (selectedExperienceLevel != null &&
-                      //           selectedEducationLevel != null) {
-                      //         props.add({
-                      //           "propertyId": '66f56c06414240a8e48520b3',
-                      //           // Experience property ID
-                      //           "value": {
-                      //             "ar": selectedExperienceLevel!.nameAr,
-                      //             "en": selectedExperienceLevel!.nameEn,
-                      //           },
-                      //         });
-                      //         props.add({
-                      //           "propertyId": "66f56c06414240a8e48520b2",
-                      //           // Education property ID
-                      //           "value": {
-                      //             "ar": selectedEducationLevel!.nameAr,
-                      //             "en": selectedEducationLevel!.nameEn,
-                      //           },
-                      //         });
-                      //         break; // Exit the loop once both are added
-                      //       }
-                      //
-                      //       // Default to existing values if neither experience nor education are selected
-                      //       if (selectedExperienceLevel == null &&
-                      //           selectedEducationLevel == null) {
-                      //         props2.add({
-                      //           "propertyId": prop.id,
-                      //           "value": {
-                      //             "ar": prop.value.ar,
-                      //             "en": prop.value.en,
-                      //           },
-                      //         });
-                      //       }
-                      //     }
-                      //
-                      //     print('////////////////////////////');
-                      //     selectedExperienceLevel == null &&
-                      //             selectedEducationLevel == null
-                      //         ? print('Props2 ${props2}')
-                      //         : print('Props ${props}');
-                      //     print('////////////////////////////');
-                      //
-                      //     print(
-                      //         'state.myAdById!.images: ${state.myAdById!.images.map((e) => e.id).toList()}');
-                      //
-                      //     controller.editMyAds(
-                      //       params: EditParams(
-                      //         id: widget.categorization.id,
-                      //         title: controller.titleController.text,
-                      //         description: controller.descController.text,
-                      //         phone: controller.phoneController.text,
-                      //         price:
-                      //             double.parse(controller.priceController.text),
-                      //         details: selectedExperienceLevel == null &&
-                      //                 selectedEducationLevel == null
-                      //             ? props2
-                      //             : props,
-                      //         subCategory:
-                      //             widget.categorization.subCategory.id,
-                      //         mainCategoryId:
-                      //             widget.categorization.mainCategory!.id,
-                      //         images: state.images
-                      //                 ?.map((e) => e.mediaId)
-                      //                 .toList() ??
-                      //             state.myAdById!.images
-                      //                 .map((e) => e.id)
-                      //                 .toList(),
-                      //       ),
-                      //     );
-                      //   },
-                      // )
                     ],
                   ),
                 ),
