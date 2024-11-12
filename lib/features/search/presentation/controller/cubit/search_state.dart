@@ -8,6 +8,7 @@ class SearchState {
   String? filter;
   final List<MainSubCategorySearchEntity>? search;
   final List<UserSearchEntity>? userSearch;
+  final List<AdsSearchEntity>? adsSearch;
 
 
   SearchState({
@@ -15,6 +16,7 @@ class SearchState {
     this.failure,
     this.search,
     this.userSearch,
+    this.adsSearch,
     this.filter='totalUsers',
   });
 
@@ -24,12 +26,14 @@ class SearchState {
     String? filter,
     List<MainSubCategorySearchEntity>? search,
     List<UserSearchEntity>? userSearch,
+    List<AdsSearchEntity>? adsSearch,
   }) {
     return SearchState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
       search: search ?? this.search,
       userSearch: userSearch ?? this.userSearch,
+      adsSearch: adsSearch ?? this.adsSearch,
     );
   }
 }
