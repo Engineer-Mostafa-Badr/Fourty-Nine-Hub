@@ -1029,5 +1029,6 @@
   "publishSuccessfully": "تم النشر بنجاح",
   "removeImage": "هل أنت متأكد أنك تريد إزالة هذه الصورة؟",
   "removeVideo": "هل أنت متأكد أنك تريد إزالة هذا الفيديو؟",
-  "enterImageOrVideo": "الرجاء إدخال الصور أو الفيديو"
+  "enterImageOrVideo": "الرجاء إدخال الصور أو الفيديو",
+  "noResultsFound": "لم يتم العثور على نتائج."
 }

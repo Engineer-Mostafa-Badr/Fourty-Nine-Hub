@@ -1043,5 +1043,6 @@
   "publishSuccessfully": "Publish Successfully",
   "removeImage": "Are you sure you want to remove this image?",
   "removeVideo": "Are you sure you want to remove this video?",
-  "enterImageOrVideo": "Please enter images or video"
+  "enterImageOrVideo": "Please enter images or video",
+  "noResultsFound": "No results found."
 }

@@ -1020,5 +1020,6 @@ abstract class  LocaleKeys {
   static const removeImage = 'removeImage';
   static const removeVideo = 'removeVideo';
   static const enterImageOrVideo = 'enterImageOrVideo';
+  static const noResultsFound = 'noResultsFound';
 
 }

@@ -1045,7 +1045,8 @@ class CodegenLoader extends AssetLoader{
   "publishSuccessfully": "تم النشر بنجاح",
   "removeImage": "هل أنت متأكد أنك تريد إزالة هذه الصورة؟",
   "removeVideo": "هل أنت متأكد أنك تريد إزالة هذا الفيديو؟",
-  "enterImageOrVideo": "الرجاء إدخال الصور أو الفيديو"
+  "enterImageOrVideo": "الرجاء إدخال الصور أو الفيديو",
+  "noResultsFound": "لم يتم العثور على نتائج."
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2092,7 +2093,8 @@ static const Map<String,dynamic> en = {
   "publishSuccessfully": "Publish Successfully",
   "removeImage": "Are you sure you want to remove this image?",
   "removeVideo": "Are you sure you want to remove this video?",
-  "enterImageOrVideo": "Please enter images or video"
+  "enterImageOrVideo": "Please enter images or video",
+  "noResultsFound": "No results found."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
