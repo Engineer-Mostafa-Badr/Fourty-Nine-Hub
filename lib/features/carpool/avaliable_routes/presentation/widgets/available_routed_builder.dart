@@ -18,6 +18,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 class AvailableRoutesBuilder extends StatefulWidget {
   const AvailableRoutesBuilder({super.key, required this.type});
   final String type;
+
   @override
   State<AvailableRoutesBuilder> createState() => _AvailableRoutesBuilderState();
 }
@@ -32,47 +33,65 @@ class _AvailableRoutesBuilderState extends State<AvailableRoutesBuilder> {
         if (state is GetAllTripsLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is GetAllTripsSuccess) {
+          bool hasMatchingTrips =
+              false; // Flag to check if trips match the type
+
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 20.h),
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: state.trips.length,
               itemBuilder: (context, index) {
-                // print(state.trips.length);
                 final trip = state.trips[index];
-                // print("Sucesss \n");
-                // final int time = ;
-                // print("time $time \n");
+                bool matchesFilter = false;
+
                 if (widget.type == "expired" &&
                     DateTime.now()
-                            .difference(DateTime.parse(
-                                state.trips[index].createdAt.toString()))
+                            .difference(
+                                DateTime.parse(trip.createdAt.toString()))
                             .inMinutes >
                         60) {
-                  return AvaiableRoutesCard(entity: trip);
-                }
-                if (widget.type == "available" &&
+                  matchesFilter = true;
+                } else if (widget.type == "available" &&
                     DateTime.now()
                             .difference(
                                 DateTime.parse(trip.createdAt.toString()))
                             .inMinutes <
                         60) {
+                  matchesFilter = true;
+                } else if (widget.type == "myBookings" &&
+                    (trip.ownerId == userId ||
+                        trip.locations.any(
+                            (location) => location.bookedUser?.id == userId))) {
+                  matchesFilter = true;
+                }
+
+                // Check if trip matches the current filter type
+                if (matchesFilter) {
+                  hasMatchingTrips = true;
                   return AvaiableRoutesCard(entity: trip);
                 }
 
-                if (widget.type == "myBookings" &&
-                    (trip.ownerId == userId ||
-                        trip.locations[0].bookedUser?.id == userId ||
-                        trip.locations[1].bookedUser?.id == userId ||
-                        trip.locations[2].bookedUser?.id == userId)) {
-                  return AvaiableRoutesCard(entity: trip);
+                // If no trips matched after iterating, show message at end
+                if (index == state.trips.length - 1 && !hasMatchingTrips) {
+                  return Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.35),
+                      child: Text(
+                        "There are no ${widget.type} trips .",
+                        style: TextStyle(fontSize: 24.sp, color: Colors.grey),
+                      ),
+                    ),
+                  );
                 }
-                return const SizedBox();
+
+                return const SizedBox(); // Empty widget for non-matching trips
               },
             ),
           );
         } else if (state is GetAllTripsFailure) {
-          return Center(child: Text("Error: ${state.errorMessage}"));
+          return Center(child: Text("there is no trips. try again !"));
         } else {
           return const SizedBox();
         }
@@ -253,42 +272,3 @@ class _AvailableRoutesBottomSheetState
     );
   }
 }
-
-// List<AvailableRoutesCardEntity> cards = List.generate(
-//   10,
-//   (index) {
-//     return AvailableRoutesCardEntity(
-//       price: 100,
-//       timeLeft: 20,
-//       onlyWomanAllowed: index.isEven,
-//       pointOne: PointLocationEntity(
-//         isMale: index.isOdd,
-//         booked: true,
-//         number: 1,
-//         addressEn: 'Mansoura, Samya Gamal street near Egyption hospital',
-//         addressAr: '',
-//       ),
-//       pointTwo: PointLocationEntity(
-//         isMale: index.isOdd,
-//         booked: index.isEven,
-//         number: 1,
-//         addressEn: 'Mansoura, Samya Gamal street near Egyption hospital',
-//         addressAr: '',
-//       ),
-//       pointThree: PointLocationEntity(
-//         isMale: index.isOdd,
-//         booked: index.isOdd,
-//         number: 1,
-//         addressEn: 'Mansoura, Samya Gamal street near Egyption hospital',
-//         addressAr: '',
-//       ),
-//       pointFour: PointLocationEntity(
-//         isMale: index.isEven,
-//         booked: index.isEven,
-//         number: 1,
-//         addressEn: 'Mansoura, Samya Gamal street near Egyption hospital',
-//         addressAr: '',
-//       ),
-//     );
-//   },
-// );

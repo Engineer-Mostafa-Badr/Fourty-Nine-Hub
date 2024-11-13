@@ -1,14 +1,18 @@
-import 'dart:async';
 import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/get_all_trips_entity.dart';
-import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_state.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
-class GetAllTripsCubit extends Cubit<GetAllTripsState> {
+part 'get_available_trips_for_drivers_state.dart';
+
+class GetAvailableTripsForDriversCubit
+    extends Cubit<GetAvailableTripsForDriversState> {
   final Socket _socket;
 
-  GetAllTripsCubit(this._socket) : super(GetAllTripsInitial()) {
+  GetAvailableTripsForDriversCubit(this._socket)
+      : super(GetAvailableTripsForDriversInitial()) {
     _initializeSocketListeners();
   }
 
@@ -18,20 +22,22 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
       print("Socket connection initiated...");
     }
 
-    _socket.on('carpool:getAllTrip', (data) {
-      print("Data received from server: $data");
+    _socket.on('carpool:getTripForDriver', (data) {
+      print("---------------------\n");
 
       try {
         final trips = _parseTrips(data);
-        emit(GetAllTripsSuccess(trips));
+        emit(GetAvailableTripsForDriversSuccess(trips: trips));
       } catch (e) {
-        emit(GetAllTripsFailure('there is no trips try again'));
+        emit(GetAvailableTripsForDriversFailure(
+            errorMessage: 'Parsing error: ${e.toString()}'));
       }
     });
 
     _socket.on('connect_error', (error) {
-      print("there is no trips try again");
-      emit(GetAllTripsFailure('there is no trips try again'));
+      print("Socket connection error: $error");
+      emit(GetAvailableTripsForDriversFailure(
+          errorMessage: 'Error occurred. Please try again: $error'));
     });
 
     _socket.on('disconnect', (data) {
@@ -41,8 +47,8 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
 
   void fetchAllCarpoolTrips() {
     _socket.connect();
-    emit(GetAllTripsLoading());
-    _socket.emit('carpool:getAllTrip');
+    emit(GetAvailableTripsForDriversLoading());
+    _socket.emit('carpool:getTripForDriver');
   }
 
   List<CarpoolTripParam> _parseTrips(dynamic data) {

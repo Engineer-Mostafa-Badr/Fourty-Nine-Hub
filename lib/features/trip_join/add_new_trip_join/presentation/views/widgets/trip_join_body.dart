@@ -240,7 +240,7 @@ class _TripJoinBodyState extends State<TripJoinBody> {
   }
 
   String getDefaultMapUrl() {
-    return "https://1.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/{z}/{x}/{y}/256/png8?apiKey=YOUR_HERE_API_KEY";
+    return "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
   }
 
   String getDefaultApiKey() {

@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/carpool/avaliable_routes/data/repo/get_al
 import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/repo/get_all_trips_repo.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/use_case/get_all_trips_usecase.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_cubit.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_available_trips_for_drivers/cubit/get_available_trips_for_drivers_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/carpool/create_carpool/data/data_source/create_carpool_remote_datasource.dart';
 import 'package:fourtyninehub/features/carpool/create_carpool/data/repo/create_carpool_repo_imp.dart';
@@ -36,7 +37,7 @@ class JoinTripCarpoolServiceLocator {
     serviceLocator.registerFactory(
         () => JoinTripCarpoolUsecase(joinTripCarpoolRepo: serviceLocator()));
 
-    serviceLocator.registerLazySingleton<JoinTripCarPoolCubit>(
+    serviceLocator.registerFactory<JoinTripCarPoolCubit>(
         () => JoinTripCarPoolCubit(joinTripCarpoolUsecase: serviceLocator()));
 
     //Create Car pool endPoint//
@@ -62,6 +63,8 @@ class JoinTripCarpoolServiceLocator {
     serviceLocator.registerLazySingleton<GetAllTripsRemoteDataSource>(
       () => GetAllTripsRemoteDataSourceImpl(),
     );
+    serviceLocator.registerFactory<GetAvailableTripsForDriversCubit>(
+        () => GetAvailableTripsForDriversCubit(serviceLocator()));
 
     serviceLocator.registerLazySingleton<GetAllTripsRepo>(
       () => GetAllTripsRepoImp(
@@ -75,7 +78,7 @@ class JoinTripCarpoolServiceLocator {
         () => GetAllTripsCubit(serviceLocator()));
 
     //Get Currency//
-    serviceLocator.registerLazySingleton<GetCurrencyCubit>(
+    serviceLocator.registerFactory<GetCurrencyCubit>(
         () => GetCurrencyCubit(serviceLocator()));
 
     //getLatAndLong

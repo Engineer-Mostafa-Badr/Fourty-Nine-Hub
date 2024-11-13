@@ -11,8 +11,7 @@ class CarpoolRouteInfoModel {
   String? locationForSecondMidpoint;
   List<double>? startLocation;
   List<double>? targetLocation;
-  Map<String, double?>?
-      firstMidpoint; // Changed to Map<String, double?> to allow nullable values
+  Map<String, double?>? firstMidpoint;
   Map<String, double?>?
       secondMidpoint; // Changed to Map<String, double?> to allow nullable values
   bool? womenDriverOnly;

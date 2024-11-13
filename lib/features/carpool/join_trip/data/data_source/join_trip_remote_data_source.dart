@@ -24,14 +24,14 @@ class JoinTripRemoteDataSourceImp extends JoinTripRemoteDataSource {
       EndPoints.joinTripCarPool,
       data: joinTripCarPoolParam.toMap(),
     );
-    // print("this is response1 ===============================\n");
-    // print(response);
+    print("this is response1 ===============================\n");
+    print(response);
     return response.fold((failure) => Left(pr(failure, trip)), (data) {
-      // print("this is response 2 ===============================\n");
+      print("this is response 2 ===============================\n");
 
       JoinTripCarpoolModel joinTripCarpoolModel =
           JoinTripCarpoolModel.fromJson(data);
-      // print("this is response 3===============================\n");
+      print("this is response 3===============================\n");
 
       pr(joinTripCarpoolModel.toString(), trip);
       return right(joinTripCarpoolModel);

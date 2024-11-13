@@ -20,12 +20,13 @@ class JoinTripCarPoolCubit extends Cubit<JoinTripCarPoolState> {
     emit(JoinTripCarPoolLoading());
     final response = await joinTripCarpoolUsecase.call(
         joinTripCarPoolParam: joinTripCarPoolParam);
+
     response.fold(
         (Failure failure) => emit(
-              JoinTripCarPoolFailure(message: Labels.errorHappened),
+              JoinTripCarPoolFailure(message: "you cant join this trip"),
             ), (data) {
       joinTripCarpoolModel = data;
-      print(data);
+      print("Success");
       emit(JoinTripCarPoolSuccess(joinTripCarpoolModel: data));
     });
   }
