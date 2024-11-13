@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
@@ -71,12 +72,12 @@ class BaseApiConsumer extends ApiConsumer {
   );
 
   @override
-  void attachToken(UserTokensEntity? token) {
+  void attachToken(UserTokensEntity? token) async{
     log(token?.accessToken.toString() ?? "Token", name: "Token");
     _token = token;
     log(_token?.accessToken.toString()??"Okkkk", name: "lskdjflskdjflskdjflskjdf");
-        CacheServiceImpl().saveUserToken(_token?.accessToken??"Token");
-    log("${token?.accessToken}", name: "Token");
+        // CacheServiceImpl().saveUserToken(_token?.accessToken??"Token");
+    log("${await CacheManager.getAccessToken()} attached", name: "Token");
     if (token != null) {
       log(token.accessToken.toString(), name: "Token");
       _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';

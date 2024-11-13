@@ -37,8 +37,8 @@ class _RestaurantForSelectedMealState extends State<RestaurantForSelectedMeal> {
       ),
       body: SafeArea(
         child: BlocProvider.value(
-          value: serviceLocator<RestaurantsCubit>()
-            ..getSubCategoryRestaurants(id: widget.mealId),
+          value: serviceLocator<RestaurantsCubit>(),
+            // ..getSubCategoryRestaurants(id: widget.mealId),
           child: BlocBuilder<RestaurantsCubit, RestaurantsListState>(
             builder: (context, state) {
               final subCategories = state.subCategories ?? [];
@@ -61,7 +61,7 @@ class _RestaurantForSelectedMealState extends State<RestaurantForSelectedMeal> {
                   padding: const EdgeInsets.all(8.0),
                   child: SubCategoriesRestaurantCard(
                     item: subCategories[index],
-                    mealId: widget.mealId,
+                    mealId: widget.mealId, favouriteRestaurant: (String id) {  },
                   ),
                 ),
               );

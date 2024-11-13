@@ -89,6 +89,7 @@ abstract class Routes {
   static const CusineRestaurants = '/Food/Cusine-Restaurants';
   static const SEARCHMEALS = '/Food/SearchMeals';
   static const RestaurantDashboard = '/RestaurantDashboard';
+  static const RestaurantOrders = '/RestaurantDashboard/RestaurantOrders';
   static const CREATERESTURANT = '/Food/CreateResturant';
 
   static const FOODCART = '/Food/RetaurantDetails/FoodCart';
@@ -243,6 +244,7 @@ abstract class Paths {
   static const CREATERESTURANT = 'CreateResturant';
   static const CusineRestaurants = 'Cusine-Restaurants';
   static const RestaurantDashboard = 'RestaurantDashboard';
+  static const RestaurantOrders = 'RestaurantOrders';
   static const SearchMeals = 'SearchMeals';
   static const SHIPPING = 'Shipping';
   static const SHIPPING_REGISTER = 'shippingRegister';

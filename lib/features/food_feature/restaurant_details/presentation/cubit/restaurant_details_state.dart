@@ -1,9 +1,11 @@
 part of 'restaurant_details_cubit.dart';
 
-enum RestaurantDetailsStates { loading, error, initState }
+enum RestaurantDetailsStates { loading, error,success, initState,addCart }
 
 extension RestaurantDetailsStateX on RestaurantDetailsState {
   bool get isInitial => status == RestaurantDetailsStates.initState;
+  bool get isSuccess => status == RestaurantDetailsStates.success;
+  bool get isAddToCart => status == RestaurantDetailsStates.addCart;
 
   bool get isLoading => status == RestaurantDetailsStates.loading;
 
@@ -14,7 +16,7 @@ class RestaurantDetailsState {
   final RestaurantDetailsStates? status;
   final Failure? failure;
   final List<RestaurantMenu>? meals;
-  final Restaurant? restaurant;
+  // final Restaurant? restaurant;
   final Cart? cart;
   final List<SelectedMealModel>? selectedMeals;
 
@@ -23,14 +25,14 @@ class RestaurantDetailsState {
       this.cart,
       this.failure,
       this.meals,
-      this.restaurant,
+      // this.restaurant,
       this.selectedMeals});
 
   RestaurantDetailsState copyWith({
     RestaurantDetailsStates? status,
     Failure? failure,
     List<RestaurantMenu>? meals,
-    Restaurant? restaurant,
+    // Restaurant? restaurant,
     Cart? cart,
     List<SelectedMealModel>? selectedMeals,
   }) {
@@ -38,7 +40,7 @@ class RestaurantDetailsState {
       status: status ?? this.status,
       failure: failure ?? this.failure,
       meals: meals ?? this.meals,
-      restaurant: restaurant ?? this.restaurant,
+      // restaurant: restaurant ?? this.restaurant,
       cart: cart ?? this.cart,
       selectedMeals: selectedMeals ?? this.selectedMeals,
     );

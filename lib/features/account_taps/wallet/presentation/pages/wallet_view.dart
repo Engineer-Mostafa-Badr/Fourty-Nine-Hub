@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/balance_wallet_view.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/normal_wallet_view.dart';
 import 'package:fourtyninehub/features/competition/presentation/pages/competition_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/wallet_history.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class WalletView extends StatelessWidget {
-  final WalletTypes type;
+  // final WalletTypes type;
 
-  const WalletView({super.key, required this.type});
+  const WalletView({super.key,});
 
   Widget walletInfo({
     required BuildContext context,
@@ -116,13 +113,14 @@ class WalletView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final controller = context.read<WalletCubit>();
-    if (type == WalletTypes.balance) {
-      return const BalanceWalletView();
-    } else if (type == WalletTypes.giftWallet) {
-      return const GiftWalletView();
-    } else {
-      return const NormalWalletView();
-    }
+    // if (type == WalletTypes.balance) {
+    //   return const BalanceWalletView();
+    // } else if (type == WalletTypes.giftWallet) {
+    //   return const GiftWalletView();
+    // } else {
+    //   return const NormalWalletView();
+    // }
+    return const NormalWalletView();
     //   return DefaultTabController(
     //     length: 3,
     //     child: Scaffold(

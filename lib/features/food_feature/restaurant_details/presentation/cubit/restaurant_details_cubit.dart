@@ -3,6 +3,11 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/add_food_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/change_quantity_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/delete_cart_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/delete_food_from_cart_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/delete_food_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 
@@ -21,54 +26,119 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
   final ApiConsumer apiConsumer;
 
   final AddToCartUseCase _addToCartUseCase;
+  final DeleteFoodUseCase _deleteFoodUseCase;
+  final AddFoodUseCase _addFoodUseCase;
   final GetMealsUseCase _getMealsUseCase;
   final GetRestaurantDetailsUseCase _getRestaurantDetailsUseCase;
+  final ChangeQuantityUseCase _changeQuantityUseCase;
+  final DeleteCartUseCase _deleteCartUseCase;
+  final DeleteFoodFromCartUseCase _deleteFoodFromCartUseCase;
 
   RestaurantDetailsCubit(this._addToCartUseCase, this._getMealsUseCase,
-      this._getRestaurantDetailsUseCase, this.apiConsumer)
+      this._getRestaurantDetailsUseCase, this.apiConsumer, this._deleteFoodUseCase, this._addFoodUseCase, this._changeQuantityUseCase, this._deleteCartUseCase, this._deleteFoodFromCartUseCase)
       : super(const RestaurantDetailsState());
 
-  loadData({required String id}) async {
-    await getRestaurantDetails(id: id);
+  loadInitialData({required String id}) async {
     await getMeals(id: id);
   }
 
-  Future<void> getRestaurantDetails({required String id}) async {
-    final response = await _getRestaurantDetailsUseCase(id);
-    response.fold(
-        (failure) => emit(state.copyWith(
-            failure: failure, status: RestaurantDetailsStates.error)),
-        (data) => emit(state.copyWith(
-            status: RestaurantDetailsStates.initState, restaurant: data)));
+  void loadData({required String id}) async {
+    emit(state.copyWith(status: RestaurantDetailsStates.loading));
+    menu.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await getMeals(id: id);
   }
 
-  Future<void> getMeals({required String id}) async {
-    final response = await _getMealsUseCase(id);
+  bool isLoadingMore = false;
+  bool hasMoreData = true;
+  int currentPage = 1;
+  int pageSize = 10;
+  List<RestaurantMenu> menu=[];
+
+  Future<void> getMeals({required String id,}) async {
+
+    if (!hasMoreData || isLoadingMore) return;
+
+    isLoadingMore = true;
+
+    final response = await _getMealsUseCase(GetMealsParams(restaurantId: id, page: currentPage, limit: pageSize));
+
     response.fold(
-        (failure) => emit(state.copyWith(
-            failure: failure, status: RestaurantDetailsStates.error)),
-        (data) => emit(state.copyWith(
-            status: RestaurantDetailsStates.initState, meals: data)));
+          (failure) => emit(state.copyWith(failure: failure, status: RestaurantDetailsStates.error)),
+          (data) {
+        menu.addAll(data);
+
+        if (data.length < pageSize) {
+          hasMoreData = false;
+        } else {
+          currentPage++;
+        }
+
+        isLoadingMore = false;
+        emit(state.copyWith(status: RestaurantDetailsStates.initState,meals: data));
+      },
+    );
   }
 
-  addToCart(context,
+   addToCart(context,
       {required String restaurantId,
       required String foodId,
-      required String quantity}) async {
+      required int quantity}) async {
+    bool result = false;
+    emit(state.copyWith(status: RestaurantDetailsStates.addCart));
     final response = await _addToCartUseCase(
         restaurantId: restaurantId, foodId: foodId, quantity: quantity);
     response.fold((l) {
       showErrorMessage(context, getFailureMessage(l, context));
       emit(state.copyWith(failure: l, status: RestaurantDetailsStates.error));
     }, (data) {
-      showSuccessMessage(context, data ? 'Success' : '');
+      result = true;
+      emit(state.copyWith(status: RestaurantDetailsStates.success));
     });
+    return result;
+  }
+
+  decrement(context,
+      {required String restaurantId,
+      required String foodId,
+      required int quantity}) async {
+    bool result = false;
+    emit(state.copyWith(status: RestaurantDetailsStates.addCart));
+    final response = await _changeQuantityUseCase(
+        ChangeQuantityParams(restaurantId: restaurantId, foodId: foodId, quantity: quantity));
+    response.fold((l) {
+      showErrorMessage(context, getFailureMessage(l, context));
+      emit(state.copyWith(failure: l, status: RestaurantDetailsStates.error));
+    }, (data) {
+      result = true;
+      emit(state.copyWith(status: RestaurantDetailsStates.success));
+    });
+    return result;
   }
 
   void removeFromCart({required int index}) {
+    emit(state.copyWith(status: RestaurantDetailsStates.addCart));
     List<SelectedMealModel> selectedMeals = state.selectedMeals ?? [];
     selectedMeals.removeAt(index);
-    emit(state.copyWith(selectedMeals: selectedMeals));
+    emit(state.copyWith(status: RestaurantDetailsStates.success,selectedMeals: selectedMeals));
+  }
+
+  Future<bool> removeItem({required String foodId,required BuildContext context}) async {
+    final res = await _deleteFoodUseCase(foodId);
+    bool result = false;
+    res.fold(
+          (failure) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to delete item')),
+        );
+      },
+          (r) async {
+            result=true;
+      },
+    );
+
+    return result;
   }
 
   void selectMeal({required RestaurantMenu meal, required int qty}) {
@@ -98,8 +168,8 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
     log("removed: ${state.selectedMeals?.length}");
   }
 
-  Future<void> fetchCart() async {
-    emit(state.copyWith(status: RestaurantDetailsStates.loading, cart: null));
+  Future<void> fetchCart({bool? first = false}) async {
+    if(first==true)emit(state.copyWith(status: RestaurantDetailsStates.loading, cart: null));
 
     const url = 'https://49dev.com/api/v1/food/getCart';
 
@@ -134,19 +204,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
     required String foodId,
   }) async {
     emit(state.copyWith(status: RestaurantDetailsStates.loading));
-
-    const url = 'https://49dev.com/api/v1/food/deleteFromCart';
-
-    final data = {
-      "restaurantId": restaurantId,
-      "foodId": foodId,
-    };
-
-    try {
-      final response = await apiConsumer.delete(
-        url,
-        data: data,
-      );
+      final response = await _deleteFoodFromCartUseCase(DeleteFoodFromCartParams(restaurantId: restaurantId, foodId: foodId));
 
       response.fold(
         (failure) {
@@ -157,19 +215,11 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
           showErrorMessage(context, getFailureMessage(failure, context));
         },
         (data) {
-          // Optionally update the cart items in the state
           emit(state.copyWith(
             status: RestaurantDetailsStates.initState,
-            // message: data['message'] ?? 'Item deleted successfully',
           ));
-          showSuccessMessage(context, data['data']);
         },
       );
-    } catch (e) {
-      emit(state.copyWith(
-        status: RestaurantDetailsStates.error,
-      ));
-    }
   }
 
   Future<void> createPremiumOrder(

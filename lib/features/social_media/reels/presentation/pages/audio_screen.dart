@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
@@ -18,10 +20,11 @@ import '../../../../../routes/routes.dart';
 import '../../../tinder/data/shared/shared.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
 import '../../data/models/new_reels_model.dart';
-import '../controllers/explore_reels_cubit/explore_reels_cubit.dart';
+import '../controllers/explore_reels_cubit/reel_cubit.dart';
 import '../widgets/components/snackbars.dart';
 import 'audio_reel_view.dart';
 import 'package:easy_localization/easy_localization.dart';
+
 
 class InstagramAudioScreen extends StatefulWidget {
   final Audio audio;
@@ -108,9 +111,9 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
   Widget build(BuildContext context) {
     final reelCubit = context.watch<ReelsCubit>();
     return Scaffold(
-      backgroundColor: isDarkTheme(context) ? Colors.black87 : Colors.white,
+      backgroundColor: context.isDarkMode ? Colors.black87 : Colors.white,
       appBar: AppBar(
-        backgroundColor: isDarkTheme(context) ? Colors.black87 : Colors.white,
+        backgroundColor: context.isDarkMode ? Colors.black87 : Colors.white,
         toolbarHeight: kToolbarHeight * 0.8,
         leading: IconButton(
           icon: Icon(

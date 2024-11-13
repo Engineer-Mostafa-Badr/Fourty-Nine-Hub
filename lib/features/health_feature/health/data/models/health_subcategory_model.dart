@@ -4,7 +4,8 @@ import 'package:fourtyninehub/features/health_feature/health/domain/entities/hea
 class HealthSubcategoryModel extends HealthSubcategoryEntity {
   HealthSubcategoryModel(
       {required super.id,
-      required super.name,
+      required super.nameAr,
+      required super.nameEn,
       required super.image,
       required super.isFavorite,
       required super.numberOfContent});
@@ -12,7 +13,8 @@ class HealthSubcategoryModel extends HealthSubcategoryEntity {
   factory HealthSubcategoryModel.fromJson(Map<String, dynamic> json) {
     return HealthSubcategoryModel(
         id: json['_id'],
-        name: getLang() == 'ar' ? json['nameAr'] : json['nameEn'],
+        nameAr:json['nameAr'] ,
+        nameEn:  json['nameEn'],
         image: json['picture'] ?? '',
         isFavorite: json['isFavorite'] ?? false,
         numberOfContent: json['numberOfAds']);

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/maps/map_picker.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
@@ -46,7 +47,7 @@ class TripOffersWidget extends StatelessWidget {
                     color: AppColors.PRIMARY_COLOR),
                 const Sizer(),
                 Label(
-                  text: trip.category?.name ?? '',
+                  text: context.isArabic?trip.category?.nameAr??'':trip.category?.nameEn ?? '',
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
                 ),
               ],

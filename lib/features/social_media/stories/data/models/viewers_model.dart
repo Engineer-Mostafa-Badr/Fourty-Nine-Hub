@@ -25,7 +25,7 @@ class ViewersResponse {
 // Define user data structure
 class UserData {
   final String id;
-  final User user;
+  final UserViews user;
   final String? story; // Optional field
   final DateTime? createdAt; // Optional field
   final DateTime? updatedAt; // Optional field
@@ -41,7 +41,7 @@ class UserData {
   factory UserData.fromMap(Map<String, dynamic> json) => UserData(
         id: json["_id"] ?? '',
         // Default to an empty string if missing
-        user: User.fromMap(json["user"] ?? {}),
+        user: UserViews.fromMap(json["user"] ?? {}),
         // Default to an empty map if "user" is missing
         story: json["story"],
         // Nullable, no default value needed
@@ -56,14 +56,14 @@ class UserData {
 }
 
 // Define the user structure
-class User {
+class UserViews {
   final String id;
   final String? firstName; // Optional field
   final String? lastName; // Optional field
   final String? gender; // Optional field
   final UserProfile? profile; // Optional field
 
-  User({
+  UserViews({
     required this.id,
     this.firstName,
     this.lastName,
@@ -71,7 +71,7 @@ class User {
     this.profile,
   });
 
-  factory User.fromMap(Map<String, dynamic> json) => User(
+  factory UserViews.fromMap(Map<String, dynamic> json) => UserViews(
         id: json["_id"] ?? '',
         // Required field
         firstName: json["firstName"],
