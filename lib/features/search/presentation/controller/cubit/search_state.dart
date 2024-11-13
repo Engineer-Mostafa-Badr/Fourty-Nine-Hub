@@ -9,6 +9,9 @@ class SearchState {
   final List<MainSubCategorySearchEntity>? search;
   final List<UserSearchEntity>? userSearch;
   final List<AdsSearchEntity>? adsSearch;
+  final List<PostEntity>? posts;
+  final PostEntity? postDetails;
+  final CommentEntity? newComment;
 
 
   SearchState({
@@ -17,6 +20,9 @@ class SearchState {
     this.search,
     this.userSearch,
     this.adsSearch,
+    this.posts,
+    this.postDetails,
+    this.newComment,
     this.filter='totalUsers',
   });
 
@@ -27,6 +33,9 @@ class SearchState {
     List<MainSubCategorySearchEntity>? search,
     List<UserSearchEntity>? userSearch,
     List<AdsSearchEntity>? adsSearch,
+    List<PostEntity>? posts,
+    PostEntity? postDetails,
+    CommentEntity? newComment,
   }) {
     return SearchState(
       status: status ?? this.status,
@@ -34,6 +43,9 @@ class SearchState {
       search: search ?? this.search,
       userSearch: userSearch ?? this.userSearch,
       adsSearch: adsSearch ?? this.adsSearch,
+      posts: posts ?? this.posts,
+      postDetails: postDetails ?? this.postDetails,
+      newComment: newComment ?? this.newComment,
     );
   }
 }

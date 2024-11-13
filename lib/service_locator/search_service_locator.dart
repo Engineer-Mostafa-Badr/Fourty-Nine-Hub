@@ -2,6 +2,7 @@ import 'package:fourtyninehub/features/search/data/data_source/search_remote_dat
 import 'package:fourtyninehub/features/search/data/repository/search_repository_impl.dart';
 import 'package:fourtyninehub/features/search/domain/repository/search_repository.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_ads_search_use_case.dart';
+import 'package:fourtyninehub/features/search/domain/use_case/fetch_posts_search_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_user_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
@@ -31,8 +32,21 @@ class SearchServiceLocator {
         .registerLazySingleton<FetchAdsSearchUseCase>(() => FetchAdsSearchUseCase(
               serviceLocator(),
             ));
+    serviceLocator
+        .registerLazySingleton<FetchPostsSearchUseCase>(() => FetchPostsSearchUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerFactory<SearchCubit>(() => SearchCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

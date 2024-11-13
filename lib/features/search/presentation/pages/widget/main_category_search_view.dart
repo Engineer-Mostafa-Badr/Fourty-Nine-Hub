@@ -127,8 +127,8 @@ class MainCategorySearchView extends StatelessWidget {
           }
 
           // If no search results or initial state
-          return const Center(
-            child: Text('No results found.'),
+          return Center(
+            child: Text(LocaleKeys.noResultFound.localize),
           );
         },
       ),
