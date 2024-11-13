@@ -148,13 +148,13 @@ class _SearchViewState extends State<SearchView>
       body: TabBarView(
         controller: _tabController,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [
+        children:  const [
           ProfileSearchView(),
           ReelSearchView(),
           PostsSearchView(),
           MainCategorySearchView(),
           SubCategorySearchView(),
-          AdsSearchView(),
+            AdsSearchView(),
           Center(child: Text('Trip')),
         ],
       ),

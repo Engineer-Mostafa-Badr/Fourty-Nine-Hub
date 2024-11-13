@@ -790,7 +790,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                     style: Styles.headerText(
                                         fontWeight: FontWeight.w600,
                                         ),),
-                                if (user.job.isNotEmpty)
+                                if (user.job.isNotEmpty && user.job !='Hidden')
                                   TextSpan(
                                       text: '\t(${user.job})',
                                       style: Styles.headerText(
@@ -888,7 +888,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (user.city.isNotEmpty) ...[
+                      if (user.city.isNotEmpty && user.city !='Hidden') ...[
                         Row(
                           children: [
                             const Icon(
@@ -919,7 +919,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           height: 5.h,
                         ),
                       ],
-                      if (user.country.isNotEmpty) ...[
+                      if (user.country.isNotEmpty && user.country !='Hidden') ...[
                         Row(
                           children: [
                             const Icon(
@@ -981,7 +981,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           height: 5.h,
                         ),
                       ],
-                      if (user.phone.isNotEmpty) ...[
+                      if (user.phone.isNotEmpty && user.phone !='Hidden') ...[
                         Row(
                           children: [
                             const Icon(
@@ -1010,7 +1010,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           height: 5.h,
                         ),
                       ],
-                      if (user.maritalStatus.isNotEmpty) ...[
+                      if (user.maritalStatus.isNotEmpty && user.maritalStatus !='Hidden') ...[
                         Row(
                           children: [
                             const Icon(

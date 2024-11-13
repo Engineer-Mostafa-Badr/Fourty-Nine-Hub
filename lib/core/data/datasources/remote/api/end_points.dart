@@ -1,10 +1,13 @@
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_ad_details_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/get_meals_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
+import 'package:fourtyninehub/features/azkaar/domain/use_case/fetch_azkar_use_case.dart';
+import 'package:fourtyninehub/features/azkaar/domain/use_case/fetch_details_azkar_use_case.dart';
 import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
@@ -24,6 +27,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_user_data_use_case.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
+import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
 
 import '../../../../../features/account_taps/my_adds/domain/usecases/edit_my_ads_use_case.dart';
@@ -99,8 +103,8 @@ class EndPoints {
     return '/user-transactions/mainWallet';
   }
 
-  static String geMainCategoryWallet() {
-    return '/categories/main';
+  static String geMainCategoryWallet(MainCategoryParams params) {
+    return '/categories/main/for-subscriptions?page=1&limit=60';
   }
 
   static String geSubCategoryWallet(String id) {
@@ -136,7 +140,10 @@ class EndPoints {
   static const activate = '/navigators/customPage';
 
   // Star
-  static const allStar = '/talent/';
+  static String allStar(StarPaginationParams params) =>
+      '/talent/?page=${params.page}&limit=${params.limit}';
+  static String winnerStar(StarPaginationParams params) =>
+      '/subscriber/winners?page=${params.page}&limit=${params.limit}';
   static const myStar = '/talent/my-talent';
   static const uploadStar = '/talent/upload';
   static String deleteMyStar({required String id}) =>
@@ -199,9 +206,13 @@ class EndPoints {
 
   // Quran
   static String quranSurah(QuranParams params) =>
-      '/quran/surahs?page=${params.params.page}&limit=${params.params.limit}';
+      '/quran/surahs?page=${params.page}&limit=${params.limit}';
   static String quran(int id) =>
       '/quran/surah/$id';
+  static String azkar(AzkarParams params) =>
+      '/azkar/categories?page=${params.page}&limit=${params.limit}';
+  static String azkarDetails(AzkarDetailsParams params) =>
+      '/azkar/azkar-in-category?page=${params.page}&limit=${params.limit}';
 
   static String notificationsSeen(String id) => '/notifications/$id';
 

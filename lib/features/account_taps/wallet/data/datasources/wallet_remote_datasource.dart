@@ -95,8 +95,8 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
   Future<Either<Failure, List<MainCategoryWalletEntity>>> fetchMainCategory(
       MainCategoryParams params) async {
     final response = await _apiConsumer.get(
-      EndPoints.geMainCategoryWallet(),
-      queryParameters: params.paginationParams.toJson(),
+      EndPoints.geMainCategoryWallet(params),
+     // queryParameters: params.paginationParams.toJson(),
     );
 
     return response.fold(

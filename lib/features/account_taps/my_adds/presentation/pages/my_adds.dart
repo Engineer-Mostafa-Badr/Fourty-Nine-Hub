@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/error/failure.dart';
@@ -163,32 +164,35 @@ class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateM
   }
 
   Widget _buildMyAuctionsWidget() {
-    return BlocConsumer<MyAddsCubit, MyAddsState>(listener: (BuildContext context, MyAddsState state) {
-      if (state.status == MyAddsStates.success) {
-        showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
-      }
-    }, builder: (context, state) {
-      if (state.status == MyAddsStates.initState) {
-        if (state.myAuctions?.isEmpty ?? true) {
-          return const EmptyPage();
+    return BlocProvider<MyAddsCubit>(
+      create: (BuildContext context) =>serviceLocator()..getMyAuctions(),
+      child: BlocConsumer<MyAddsCubit, MyAddsState>(listener: (BuildContext context, MyAddsState state) {
+        if (state.status == MyAddsStates.success) {
+          showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
         }
-        return RefreshIndicator(
-          onRefresh: () async => context.read<MyAddsCubit>().getMyAuctions(),
-          child: ListView.separated(
-            physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: state.myAuctions?.length ?? 0,
-              separatorBuilder: (context, index) => const Sizer(),
-              itemBuilder: (context, index) {
-                return BuildItemAuctionCard(
-                  item: state.myAuctions![index],
-                  // onDelete: (String id) => controller.cancelAd(id: id),
-                );
-              }),
-        );
-      } else {
-        return const Center(child: CircularProgressIndicator());
-      }
-    });
+      }, builder: (context, state) {
+        if (state.status == MyAddsStates.initState) {
+          if (state.myAuctions?.isEmpty ?? true) {
+            return const EmptyPage();
+          }
+          return RefreshIndicator(
+            onRefresh: () async => context.read<MyAddsCubit>().getMyAuctions(),
+            child: ListView.separated(
+              physics: const AlwaysScrollableScrollPhysics(),
+                itemCount: state.myAuctions?.length ?? 0,
+                separatorBuilder: (context, index) => const Sizer(),
+                itemBuilder: (context, index) {
+                  return BuildItemAuctionCard(
+                    item: state.myAuctions![index],
+                    // onDelete: (String id) => controller.cancelAd(id: id),
+                  );
+                }),
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      }),
+    );
   }
 
   Widget _buildMyAdsWidget() {

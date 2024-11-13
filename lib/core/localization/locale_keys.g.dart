@@ -1008,6 +1008,17 @@ abstract class  LocaleKeys {
   static const liveStreamOptions = 'liveStreamOptions';
   static const createLive = 'createLive';
   static const watch = 'watch';
+  static const Face = 'Face';
+  static const Insta = 'Insta';
+  static const day = 'day';
+  static const month = 'month';
+  static const numOfWins = 'numOfWins';
+  static const addStar = 'addStar';
+  static const publishSuccessfully = 'publishSuccessfully';
+  static const removeImage = 'removeImage';
+  static const removeVideo = 'removeVideo';
+  static const enterImageOrVideo = 'enterImageOrVideo';
+  static const noResultsFound = 'noResultsFound';
   static const mutualFriend = 'mutualFriend';
   static const serveClientsByClickRegister = 'serveClientsByClickRegister';
   static const totalOrder = 'totalOrder';

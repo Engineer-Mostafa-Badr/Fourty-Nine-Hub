@@ -1,14 +1,15 @@
 class PropsAdsEntity {
   final String id;
-  final PropertyDetailsEntity propertyDetails;
+ // final PropertyDetailsEntity propertyDetails;
   final String adsId;
   final PropertyValueEntity value;
   final DateTime createdAt;
   final DateTime updatedAt;
+  AdPropertyType get adPropertyType => getAdPropertyTypeValue('dropDown');
 
   PropsAdsEntity(
       {required this.id,
-      required this.propertyDetails,
+   //   required this.propertyDetails,
       required this.adsId,
       required this.value,
       required this.createdAt,
@@ -36,19 +37,6 @@ class PropertyDetailsEntity {
     required this.createdAt,
     required this.updatedAt,
   });
-
-  factory PropertyDetailsEntity.fromJson(Map<String, dynamic> json) {
-    return PropertyDetailsEntity(
-      id: json['_id'],
-      mainCategoryId: json['main_category_id'],
-      nameAr: json['name_ar'],
-      nameEn: json['name_en'],
-      index: json['index'],
-      type: json['type'],
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
-    );
-  }
 }
 
 class PropertyValueEntity {
@@ -61,12 +49,33 @@ class PropertyValueEntity {
     required this.en,
     required this.id,
   });
+}
 
-  factory PropertyValueEntity.fromJson(Map<String, dynamic> json) {
-    return PropertyValueEntity(
-      ar: json['ar'],
-      en: json['en'],
-      id: json['_id'],
-    );
+enum AdPropertyType { select, dropdown, number, text, image, file }
+
+extension AdPropertyTypeX on AdPropertyType {
+  bool get isSelect => this == AdPropertyType.select;
+  bool get isDropDown => this == AdPropertyType.dropdown;
+  bool get isNumber => this == AdPropertyType.number;
+  bool get isText => this == AdPropertyType.text;
+  bool get isImage => this == AdPropertyType.image;
+  bool get isFile => this == AdPropertyType.file;
+}
+
+AdPropertyType getAdPropertyTypeValue(String type) {
+  switch (type) {
+    case 'number':
+      return AdPropertyType.number;
+    case 'select':
+      return AdPropertyType.select;
+    case 'dropDown':
+      return AdPropertyType.dropdown;
+    case 'textField':
+      return AdPropertyType.text;
+    case 'pictures':
+      return AdPropertyType.image;
+    case 'file':
+      return AdPropertyType.file;
   }
+  return AdPropertyType.text;
 }
