@@ -1003,13 +1003,11 @@ abstract class  LocaleKeys {
   static const cancelRequest = 'cancelRequest';
   static const sendOffer = 'sendOffer';
   static const shareTransactionDetails = 'shareTransactionDetails';
-  static const serveClientsByClickRegister = 'serveClientsByClickRegister';
   static const yourPersonalMessages = 'yourPersonalMessages';
   static const endToEndEncryption = 'endToEndEncryption';
   static const liveStreamOptions = 'liveStreamOptions';
   static const createLive = 'createLive';
   static const watch = 'watch';
-  static const mutualFriend = 'mutualFriend';
   static const Face = 'Face';
   static const Insta = 'Insta';
   static const day = 'day';
@@ -1021,5 +1019,31 @@ abstract class  LocaleKeys {
   static const removeVideo = 'removeVideo';
   static const enterImageOrVideo = 'enterImageOrVideo';
   static const noResultsFound = 'noResultsFound';
+  static const mutualFriend = 'mutualFriend';
+  static const serveClientsByClickRegister = 'serveClientsByClickRegister';
+  static const totalOrder = 'totalOrder';
+  static const totalRevenue = 'totalRevenue';
+  static const avgRating = 'avgRating';
+  static const review = 'review';
+  static const subscriptionDeadline = 'subscriptionDeadline';
+  static const available = 'available';
+  static const notAvailable = 'notAvailable';
+  static const editRegistration = 'editRegistration';
+  static const sureRemoveRestaurant = 'sureRemoveRestaurant';
+  static const yes = 'yes';
+  static const editFood = 'editFood';
+  static const updateYourRestaurant = 'updateYourRestaurant';
+  static const youHaveToChooseFavoriteSubcategory = 'youHaveToChooseFavoriteSubcategory';
+  static const youHaveToFillRestaurantName = 'youHaveToFillRestaurantName';
+  static const youHaveToFillRestaurantPhoneNumber = 'youHaveToFillRestaurantPhoneNumber';
+  static const addPhoto = 'addPhoto';
+  static const youHaveToUploadAtLeastOnePhoto = 'youHaveToUploadAtLeastOnePhoto';
+  static const youHaveToUploadThe3PagesOfCommercialRegistration = 'youHaveToUploadThe3PagesOfCommercialRegistration';
+  static const youHaveToSelectYourGovernorate = 'youHaveToSelectYourGovernorate';
+  static const youHaveToSelectYourCity = 'youHaveToSelectYourCity';
+  static const reviews = 'reviews';
+  static const addToCart = 'addToCart';
+  static const showAllOrders = 'showAllOrders';
+  static const restaurantOrders = 'restaurantOrders';
 
 }

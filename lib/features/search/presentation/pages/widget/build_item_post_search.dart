@@ -22,6 +22,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_tweet_card.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -227,9 +228,12 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                   child: Row(
                     children: [
                       Expanded(
-                          child: BuildReactionsButtons(
-                            post: myPost,
-                            from: widget.from,
+                          child: BlocProvider<SocialPostsCubit>(
+                            create: (BuildContext context) =>serviceLocator(),
+                            child: BuildReactionsButtons(
+                              post: myPost,
+                              from: widget.from,
+                            ),
                           )),
                       if (widget.from == 'posts')
                         Expanded(

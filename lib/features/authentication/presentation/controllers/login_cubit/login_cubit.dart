@@ -35,14 +35,14 @@ class LoginCubit extends Cubit<LoginState> {
   String? token;
 
   Future<void> login(GlobalKey<FormState> formKey) async {
-    String? token = await FirebaseMessaging.instance.getToken();
+   // String? token = await FirebaseMessaging.instance.getToken();
     if (formKey.currentState!.validate()) {
       emit(LoginLoading());
       final result = await _loginUseCase(
         LoginParams(
           email: emailTextController.text.trim(),
           password: passwordTextController.text.trim(),
-          token: token!,
+          token: '8881cg3DWsLzSs-7jbJXzUEf6d:APA91bEGiKLpeMecKXpzahnTUWuulgpdSR8-wK-XDBfvvHj_eRZUXShyHNGg4vtp3-S9ohiD9P-LPmolV90wpM19e-xxjlJBrWMgU1B6Ut01OesLTN3aywOVp4ywLzZ5LTvXSTSvjr_a',
         ),
       );
 

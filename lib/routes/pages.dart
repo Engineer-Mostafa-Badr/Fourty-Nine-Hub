@@ -291,11 +291,11 @@ class AppPages {
             name: Routes.RestaurantDashboard,
             builder: (context, state) => MultiBlocProvider(
               providers: [
-                BlocProvider(
-                  create: (context) => RestaurantDashboardCubit(
-                      serviceLocator(), serviceLocator())
-                    ..loadData(),
-                ),
+                // BlocProvider(
+                //   create: (context) => RestaurantDashboardCubit(
+                //       serviceLocator(), serviceLocator())
+                //     ..loadData(),
+                // ),
                 BlocProvider(
                   create: (context) => serviceLocator<RestaurantsCubit>(),
                 ),
