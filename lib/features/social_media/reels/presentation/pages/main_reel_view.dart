@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_state.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/reels_widget.dart';
 
@@ -49,8 +50,10 @@ class ReelsScreenState extends State<ReelsScreen> {
                     // physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.vertical,
                     itemCount: state.urls.length,
-                    onPageChanged: (index) =>
-                        context.read<PreloadBloc>().onVideoIndexChanged(index),
+                    onPageChanged: (index) async {
+
+                      context.read<PreloadBloc>().onVideoIndexChanged(index);
+                    },
                     itemBuilder: (context, index) {
                       // Is at end and isLoading
                       final bool _isLoading =

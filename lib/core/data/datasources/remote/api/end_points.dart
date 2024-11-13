@@ -394,7 +394,7 @@ class EndPoints {
   static deleteStory(String id)=> '/stories/$id';
   static addFavouriteCategories(String id)=> '/favorite-sub-category/$id';
   static fetchLastSeen(String id)=> '/users/last-seen/$id';
-  static const sendGift= '/tinder/sendGifts';
+  static const sendGift= '/tinder/sendGifts?subCategory=6718f27eacb309f8b1f94d0c';
   static const fetchGifts= '/dashboard-gifts?limit=10';
   static const tinderUploadPicture= '/tinder/uploadPictures?subCategory=66af974f8bf69f9469944746';
   static const createStory= '/stories/text';

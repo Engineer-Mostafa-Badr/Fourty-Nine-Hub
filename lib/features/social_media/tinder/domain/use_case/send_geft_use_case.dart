@@ -28,6 +28,6 @@ class SendGiftParams {
   Map<String, dynamic> toJson() => {
     'receiverId': receiverId,
     'giftId': giftId,
-    'subCategory':'66af974f8bf69f9469944746',
+    // 'subCategory':'66af974f8bf69f9469944746',
   };
 }

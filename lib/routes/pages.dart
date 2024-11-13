@@ -895,8 +895,10 @@ class AppPages {
                 GoRoute(
                     path: Paths.REELS,
                     name: Routes.REELS,
-                    builder: (context, state) =>
-                        const ReelView(),
+                    builder: (context, state) {
+                      context.read<ReelsCubit>().fetchReels();
+                      return const ReelView();
+                    },
                     routes: [
                       GoRoute(
                         path: Paths.MUSICREELS,

@@ -24,6 +24,7 @@ class PreloadBloc extends Cubit<PreloadState> {
       log('Fetched URLs: $_urls');
 
       final updatedUrls = List<String>.from(state.urls)..addAll(_urls);
+      log('message urls: ${updatedUrls.length}');
       emit(state.copyWith(
         urls: updatedUrls,
         isLoading: false,
@@ -36,6 +37,7 @@ class PreloadBloc extends Cubit<PreloadState> {
 
       log('API fetch complete');
     } catch (e) {
+      log('error occurred $e');
       setLoading(false);
       rethrow;
     }
@@ -43,11 +45,11 @@ class PreloadBloc extends Cubit<PreloadState> {
 
   // Handle video index change and preload logic
   void onVideoIndexChanged(int index) {
-    final shouldFetch = (index + kPreloadLimit) % kNextLimit == 0 &&
-        state.urls.length == index + kPreloadLimit;
-
+    // final shouldFetch = (index + kPreloadLimit) % kNextLimit == 0 &&
+    //     state.urls.length == index + kPreloadLimit;
+    final shouldFetch = index + kPreloadLimit >= state.urls.length;
     if (shouldFetch) {
-      createIsolate(index);
+      preloadVideos(index);
     }
 
     if (index > state.focusedIndex) {
@@ -106,7 +108,7 @@ class PreloadBloc extends Cubit<PreloadState> {
   void _stopControllerAtIndex(int index) {
     final controller = state.controllers[index];
     controller?.pause();
-    controller?.seekTo(Duration.zero);
+    // controller?.seekTo(Duration.zero);
     log('🚀🚀🚀 STOPPED $index');
   }
 

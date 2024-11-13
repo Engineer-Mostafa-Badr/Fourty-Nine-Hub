@@ -4,7 +4,7 @@ class ReelsState {
 
   final bool isCreatingReply;
 
-  final List<Reel> globalReels;
+   List<Reel> globalReels;
   final List<Reel>? reelsForFollower;
 
   final List<Reel>? reelsForAudio;
@@ -39,7 +39,7 @@ class ReelsState {
   final bool isFetchingComments;
   final String? fetchCommentsErrorMessage;
   final GetCommentsResponse? fetchedComments;
-
+  final List<CommentData> comments;
   // New fields related to replaying a comment
   final bool isReplyingComment;
   final String? replyCommentErrorMessage;
@@ -62,6 +62,7 @@ class ReelsState {
     this.isCreatingReelView,
     this.isCreatingReply = false,
     this.reelViewErrorMessage,
+    this.comments = const [],
     this.reelViewSuccess,
     this.reelsForFollower,
     this.isInitialized = false,
@@ -108,6 +109,7 @@ class ReelsState {
     bool? reelsForFollowerHasReachedMax,
     int? reelsForFollowerCurrentPage,
     int? playingIndex,
+    List<CommentData>? comments,
     //for video controller
     bool? isInitialized,
     bool? isPlaying,
@@ -140,6 +142,7 @@ class ReelsState {
   }) {
     return ReelsState(
       isCreatingReply: isCreatingReply ?? this.isCreatingReply,
+      comments: comments ?? this.comments,
       isCreatingReelView: isCreatingReelView ?? this.isCreatingReelView,
       reelViewErrorMessage: reelViewErrorMessage ?? this.reelViewErrorMessage,
       reelViewSuccess: reelViewSuccess ?? this.reelViewSuccess,

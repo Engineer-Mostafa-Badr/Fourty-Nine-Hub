@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/audio_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
@@ -22,8 +23,8 @@ class ReelsRepositoryImpl extends ReelsRepository {
   ReelsRepositoryImpl(this._reelsRemoteDataSource);
 
   @override
-  Future<Either<Failure, ReelsResponse>> getExploreReels(int page) {
-    return _reelsRemoteDataSource.getExploreReels(page);
+  Future<Either<Failure, ReelsResponse>> getExploreReels(PaginationParams params) {
+    return _reelsRemoteDataSource.getExploreReels(params);
   }
 
   @override
