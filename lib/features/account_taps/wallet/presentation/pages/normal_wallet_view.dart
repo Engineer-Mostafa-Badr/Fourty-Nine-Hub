@@ -149,7 +149,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                           },
                         )
                       : AppButton(
-                          label: LocaleKeys.requestWithdraw.localize,
+                          label: LocaleKeys.withdraw.localize,
                           backColor: AppColors.SECONDARY_COLOR.withOpacity(.5),
                           onPressed: () {},
                         ),

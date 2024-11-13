@@ -50,7 +50,7 @@ class _CommentWidgetState extends State<CommentWidget> {
         children: [
           _buildCommentRow(
               widget.commentData.comment, widget.commentData.createdAt,false),
-          SizedBox(height: 10.h),
+          SizedBox(height: 0.h),
           if (widget.commentData.replies.isNotEmpty) _buildToggleRepliesButton(),
           if (_isRepliesVisible) ...[
             AnimatedSize(
@@ -64,7 +64,7 @@ class _CommentWidgetState extends State<CommentWidget> {
     );
   }
 
-  Widget _buildCommentRow(String comment, DateTime createdAt,bool reply) {
+  Widget _buildCommentRow(String comment, DateTime createdAt,bool reply,{String? replyId}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -110,7 +110,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                   SizedBox(width: 30.w),
                   _buildReplyButton(),
                   const Spacer(),
-                  _buildLikeButton(reply),
+                  _buildLikeButton(reply,replyId: replyId),
                 ],
               ),
             ],
@@ -167,7 +167,7 @@ class _CommentWidgetState extends State<CommentWidget> {
     }
   }
 
-  Widget _buildLikeButton(bool reply) {
+  Widget _buildLikeButton(bool reply,{String? replyId}) {
     return Row(
       children: [
         IconButton(
@@ -178,7 +178,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                 : AppColors.GREY_NORMAL_COLOR,
           ),
           onPressed: () {
-            _handleLikeComment(widget.commentData.id, reply);
+            _handleLikeComment(widget.commentData.id, reply,replyId: replyId);
           },
         ),
         NoScaleText(
@@ -193,8 +193,9 @@ class _CommentWidgetState extends State<CommentWidget> {
     );
   }
 
-  void _handleLikeComment(String commentId, bool isReply ) {
-    context.read<ReelsCubit>().toggleCommentLike(commentId,isReply).then((_) {
+  void _handleLikeComment(String commentId, bool isReply ,{String? replyId}) {
+    print('isReply : $isReply');
+    context.read<ReelsCubit>().toggleCommentLike(commentId,isReply,replyId:replyId ).then((_) {
       FocusScope.of(context).unfocus();
     }).catchError((error) {
       _showErrorSnackBar('Failed to send like. Please try again.');
@@ -210,20 +211,28 @@ class _CommentWidgetState extends State<CommentWidget> {
             : "Hide Replies")
         : "View ${widget.commentData.replies.length} ${widget.commentData.replies.length == 1 ? 'Reply' : 'Replies'}";
 
-    return TextButton(
-      onPressed: () {
-        setState(() {
-          if (_isRepliesVisible && remainingReplies > 0) {
-            _displayedRepliesCount += 3;
-          } else {
-            _isRepliesVisible = !_isRepliesVisible;
-            if (!_isRepliesVisible) {
-              _displayedRepliesCount = 3;
+    return Padding(
+      padding:  EdgeInsets.symmetric(horizontal: 40.0.w),
+      child: InkWell(
+        onTap: () {
+          setState(() {
+            if (_isRepliesVisible && remainingReplies > 0) {
+              _displayedRepliesCount += 3;
+            } else {
+              _isRepliesVisible = !_isRepliesVisible;
+              if (!_isRepliesVisible) {
+                _displayedRepliesCount = 3;
+              }
             }
-          }
-        });
-      },
-      child: Text(buttonText,style: TextStyle(color: Colors.grey,fontSize:25.sp,fontWeight:FontWeight.w600),),
+          });
+        },
+        child: Row(
+          children: [
+            Text(buttonText,style: TextStyle(color: Colors.grey,fontSize:25.sp,fontWeight:FontWeight.w600),),
+            _isRepliesVisible? const Icon(Icons.keyboard_arrow_up,color: Colors.grey,):const Icon(Icons.keyboard_arrow_down,color: Colors.grey,)
+          ],
+        ),
+      ),
     );
   }
   Widget _buildRepliesList() {
@@ -233,7 +242,7 @@ class _CommentWidgetState extends State<CommentWidget> {
       child: ListView(
         shrinkWrap:true,
         controller: context.read<ReelsCubit>().replyScrollController,
-        children: repliesToShow.map((reply) => _buildCommentRow(reply.comment,reply.createdAt,true)).toList(),
+        children: repliesToShow.map((reply) => _buildCommentRow(reply.comment,reply.createdAt,true,replyId: reply.id)).toList(),
       ),
     );
   }

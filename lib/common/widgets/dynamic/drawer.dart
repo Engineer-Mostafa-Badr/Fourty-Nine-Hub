@@ -13,7 +13,6 @@ import 'package:fourtyninehub/features/authentication/domain/entities/user_entit
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
-import 'package:fourtyninehub/features/quraan/presentation/pages/quran_page.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -82,13 +81,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         image: Assets.quran,
                         label: LocaleKeys.quraan.localize,
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (builder) => QuranPage(
-                                    suraJsonData: widgejsonData,
-                                  )));
-                        //  return context.push(Routes.QURAAN);
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (builder) => QuranPage()));
+                          return context.push(Routes.QURAAN);
                         }),
                     drawerListTile(
                         image: Assets.azkar,
