@@ -1046,7 +1046,6 @@ class CodegenLoader extends AssetLoader{
   "removeVideo": "هل أنت متأكد أنك تريد إزالة هذا الفيديو؟",
   "enterImageOrVideo": "الرجاء إدخال الصور أو الفيديو",
   "noResultsFound": "لم يتم العثور على نتائج.",
-  "mutualFriend": "صديق مشترك",
   "serveClientsByClickRegister": "اخدم عملاءك بالنقر على زر التسجيل.",
   "totalOrder": "إجمالي الطلبات",
   "totalRevenue": "إجمالي الإيرادات",
@@ -1073,7 +1072,15 @@ class CodegenLoader extends AssetLoader{
   "showAllOrders": "عرض كل الطلبات",
   "restaurantOrders": "طلبات المطعم",
   "rating": "تقييم",
-  "rateDoctor": "تقييم الطبيب"
+  "rateDoctor": "تقييم الطبيب",
+  "mutualFriend": "صديق مشترك",
+  "clearForEveryone": "مسح لدي الجميع",
+  "clearForMe": "مسح لدي",
+  "clearThisChat": "مسح هذه الدردشة؟",
+  "opened": "تمت مشاهدته",
+  "forwardMessage": "تحويل الرسائل",
+  "forwarded": "تمت اعادة توجيهه",
+  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2112,7 +2119,6 @@ static const Map<String,dynamic> en = {
   "endToEndEncryption": "end-to-end encrypted",
   "liveStreamOptions": "Live Stream Options",
   "createLive": "Create Live",
-  "watch": "Watch",
   "Face": "Face",
   "Insta": "Insta",
   "day": "Day",
@@ -2151,7 +2157,15 @@ static const Map<String,dynamic> en = {
   "showAllOrders": "Show All Orders",
   "restaurantOrders": "Restaurant Orders",
   "rating": "Rating",
-  "rateDoctor": "Rate Doctor"
+  "rateDoctor": "Rate Doctor",
+  "watch": "Watch",
+  "clearForEveryone": "Clear for Everyone",
+  "clearForMe": "Clear for Me",
+  "clearThisChat": "Clear this Chat?",
+  "opened": "Opened",
+  "forwardMessage": "Forward Message",
+  "forwarded": "Forwarded",
+  "continueUsingChatServices": " , To continue using chat services"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
