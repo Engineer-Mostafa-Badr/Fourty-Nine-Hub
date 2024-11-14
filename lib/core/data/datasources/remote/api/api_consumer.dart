@@ -283,7 +283,7 @@ class BaseApiConsumer extends ApiConsumer {
 
   Failure _getFailure(dynamic e) {
     final error = e.response?.data['error'] as Map;
-
+    log("Erorrrrr $error");
     if (e is DioException) {
       if (e.response?.statusCode == 413) {
         return const ServerFailure(

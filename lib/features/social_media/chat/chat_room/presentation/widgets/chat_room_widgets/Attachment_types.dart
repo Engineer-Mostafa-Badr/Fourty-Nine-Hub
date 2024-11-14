@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/one_time_document_message.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -46,15 +47,10 @@ class _AttachmentTypesState extends State<AttachmentTypes> {
                   });
                   await widget.chatRoomCubit.pickDocuments();
                   if (widget.chatRoomCubit.media.isNotEmpty) {
-                    List<File> tempMedia = [
-                      ...widget.chatRoomCubit.media
-                    ]; // spread operator
-                    widget.chatRoomCubit.media.clear();
-                    for (var media in tempMedia) {
-                      widget.chatRoomCubit.media.add(media);
-                      await widget.chatRoomCubit.sendMessage();
-                      widget.chatRoomCubit.media.clear();
-                    }
+                    context.push(Routes.ONETIMEDOCUMENTMESSAGE,
+                      extra: OneTimeDocumentMessageViewParams(
+                        chatRoomCubit: widget.chatRoomCubit,
+                      ));
                   }
                   setState(() {
                     isLoading = false;
