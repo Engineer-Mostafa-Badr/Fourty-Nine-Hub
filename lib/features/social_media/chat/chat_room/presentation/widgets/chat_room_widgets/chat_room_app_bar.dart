@@ -24,178 +24,176 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
       builder: (context, state) {
         return Column(
           children: [
-            Expanded(
-              child: AppBar(
-                backgroundColor: AppColors.PRIMARY_COLOR, // Background color
-                elevation: 0,
-                leadingWidth: 26,
-                leading: IconButton(
-                  onPressed: () => context.pop(),
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
+            AppBar(
+              backgroundColor: AppColors.PRIMARY_COLOR, // Background color
+              elevation: 0,
+              leadingWidth: 26,
+              leading: IconButton(
+                onPressed: () => context.pop(),
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
                 ),
-                title: chatRoomCubit.selectedMessages.isEmpty
-                    ? GestureDetector(
-                        onTap: () => context.push(Routes.VIEWCONTACT,
-                            extra:
-                                context.read<ChatsCubit>().selectedChat.name),
-                        child: Row(
-                          children: [
-                            const CircleAvatar(
-                              backgroundColor: Colors.white,
-                              backgroundImage:
-                                  NetworkImage(UIConst.profilePlaceHolder),
-                            ),
-                            const SizedBox(
-                                width: 12), // Spacing between avatar and text
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                      maxWidth:
-                                          MediaQuery.of(context).size.width *
-                                              0.4),
-                                  child: Text(
-                                    context
-                                        .read<ChatsCubit>()
-                                        .selectedChat
-                                        .name,
-                                    // 'state.chatData?.chat?.contact?.name',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: Styles.headerText(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                    : Text(
-                        chatRoomCubit.selectedMessages.length.toString(),
-                        // 'state.chatData?.chat?.contact?.name',
-                        overflow: TextOverflow.ellipsis,
-                        style: Styles.mediumText(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                actions: chatRoomCubit.selectedMessages.isEmpty
-                    ? [
-                        // video call
-                        IconAppButton(
-                          icon: Icons.videocam,
-                          size: 24,
-                          onPressed: () {},
-                          color: Colors.white,
-                        ),
-                        const Sizer(
-                          width: 15,
-                        ),
-                        // call
-                        IconAppButton(
-                          icon: Icons.call,
-                          size: 20,
-                          onPressed: () {},
-                          color: Colors.white,
-                        ),
-                        PopupMenuButton(
-                          icon: const Icon(
-                            Icons.more_vert,
-                            color: Colors.white,
+              ),
+              title: chatRoomCubit.selectedMessages.isEmpty
+                  ? GestureDetector(
+                      onTap: () => context.push(Routes.VIEWCONTACT,
+                          extra:
+                              context.read<ChatsCubit>().selectedChat.name),
+                      child: Row(
+                        children: [
+                          const CircleAvatar(
+                            backgroundColor: Colors.white,
+                            backgroundImage:
+                                NetworkImage(UIConst.profilePlaceHolder),
                           ),
-                          color: context.isDarkMode
-                              ? AppColors.PRIMARY_COLOR
-                              : AppColors.BACKGROUND_COLOR,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(16.0)),
-                          ),
-                          offset: const Offset(0, 50),
-                          onSelected: (int value) async {
-                            if (value == 0) {
-                              context.push(Routes.VIEWCONTACT,
-                                  extra: context
+                          const SizedBox(
+                              width: 12), // Spacing between avatar and text
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ConstrainedBox(
+                                constraints: BoxConstraints(
+                                    maxWidth:
+                                        MediaQuery.of(context).size.width *
+                                            0.4),
+                                child: Text(
+                                  context
                                       .read<ChatsCubit>()
                                       .selectedChat
-                                      .name);
-                            }
-                            if (value == 1) {
-                              context.push(
-                                Routes.ATTACHMENTSVIEW,
-                                extra: chatRoomCubit,
-                              );
-                            }
-                            if (value == 6) {
-                              _showMoreMenu(context, chatRoomCubit);
-                            }
-                          },
-                          itemBuilder: (context) {
-                            return _mainMenuBuilder(context);
-                          },
-                        )
-                      ]
-                    : [
-                        chatRoomCubit.selectedMessages.length == 1
-                            ? IconAppButton(
-                                icon: Icons.copy,
-                                size: 20,
-                                onPressed: () async {
-                                  await chatRoomCubit.copyMessage(
-                                    chatRoomCubit.selectedMessages.first,
-                                  );
-                                  chatRoomCubit.clearSelectedMessages();
-                                },
-                                color: Colors.white,
-                              )
-                            : const SizedBox(),
-                        const Sizer(width: 15),
-                        chatRoomCubit.selectedMessages.length == 1
-                            ? IconButton(
-                                onPressed: () async {
-                                  await chatRoomCubit.pinMessage(
-                                    message:
-                                        chatRoomCubit.selectedMessages.first,
-                                  );
-                                },
-                                icon: const Icon(Icons.push_pin),
-                                color: Colors.white,
-                              )
-                            : const SizedBox(),
-                        const Sizer(width: 15),
-                        IconButton(
-                          onPressed: () async {
-                            // await context.read<ChatsCubit>().deleteChat();
-                          },
-                          icon: const Icon(
-                            Icons.delete_forever,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const Sizer(width: 15),
-                        IconButton(
-                          onPressed: () async {
-                            context.push(
-                                Routes.FORWARDMESSAGES,
-                                extra: ForwardMessagesViewParams(
-                                  chatRoomCubit: chatRoomCubit,
-                                  chatsCubit: context.read<ChatsCubit>(),
+                                      .name,
+                                  // 'state.chatData?.chat?.contact?.name',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Styles.headerText(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
-                              );
-                          },
-                          icon: const Icon(
-                            Icons.shortcut,
-                            color: Colors.white,
+                              ),
+                            ],
                           ),
+                        ],
+                      ),
+                    )
+                  : Text(
+                      chatRoomCubit.selectedMessages.length.toString(),
+                      // 'state.chatData?.chat?.contact?.name',
+                      overflow: TextOverflow.ellipsis,
+                      style: Styles.mediumText(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+              actions: chatRoomCubit.selectedMessages.isEmpty
+                  ? [
+                      // video call
+                      IconAppButton(
+                        icon: Icons.videocam,
+                        size: 24,
+                        onPressed: () {},
+                        color: Colors.white,
+                      ),
+                      const Sizer(
+                        width: 15,
+                      ),
+                      // call
+                      IconAppButton(
+                        icon: Icons.call,
+                        size: 20,
+                        onPressed: () {},
+                        color: Colors.white,
+                      ),
+                      PopupMenuButton(
+                        icon: const Icon(
+                          Icons.more_vert,
+                          color: Colors.white,
                         ),
-                      ],
-              ),
+                        color: context.isDarkMode
+                            ? AppColors.PRIMARY_COLOR
+                            : AppColors.BACKGROUND_COLOR,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(16.0)),
+                        ),
+                        offset: const Offset(0, 50),
+                        onSelected: (int value) async {
+                          if (value == 0) {
+                            context.push(Routes.VIEWCONTACT,
+                                extra: context
+                                    .read<ChatsCubit>()
+                                    .selectedChat
+                                    .name);
+                          }
+                          if (value == 1) {
+                            context.push(
+                              Routes.ATTACHMENTSVIEW,
+                              extra: chatRoomCubit,
+                            );
+                          }
+                          if (value == 6) {
+                            _showMoreMenu(context, chatRoomCubit);
+                          }
+                        },
+                        itemBuilder: (context) {
+                          return _mainMenuBuilder(context);
+                        },
+                      )
+                    ]
+                  : [
+                      chatRoomCubit.selectedMessages.length == 1
+                          ? IconAppButton(
+                              icon: Icons.copy,
+                              size: 20,
+                              onPressed: () async {
+                                await chatRoomCubit.copyMessage(
+                                  chatRoomCubit.selectedMessages.first,
+                                );
+                                chatRoomCubit.clearSelectedMessages();
+                              },
+                              color: Colors.white,
+                            )
+                          : const SizedBox(),
+                      const Sizer(width: 15),
+                      chatRoomCubit.selectedMessages.length == 1
+                          ? IconButton(
+                              onPressed: () async {
+                                await chatRoomCubit.pinMessage(
+                                  message:
+                                      chatRoomCubit.selectedMessages.first,
+                                );
+                              },
+                              icon: const Icon(Icons.push_pin),
+                              color: Colors.white,
+                            )
+                          : const SizedBox(),
+                      const Sizer(width: 15),
+                      IconButton(
+                        onPressed: () async {
+                          // await context.read<ChatsCubit>().deleteChat();
+                        },
+                        icon: const Icon(
+                          Icons.delete_forever,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const Sizer(width: 15),
+                      IconButton(
+                        onPressed: () async {
+                          context.push(
+                              Routes.FORWARDMESSAGES,
+                              extra: ForwardMessagesViewParams(
+                                chatRoomCubit: chatRoomCubit,
+                                chatsCubit: context.read<ChatsCubit>(),
+                              ),
+                            );
+                        },
+                        icon: const Icon(
+                          Icons.shortcut,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
             ),
             chatRoomCubit.chat.pinnedMessageId != null
                 ? _buildPinnedMessageCard(context)
@@ -209,7 +207,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget _buildPinnedMessageCard(BuildContext context) {
     return BlocBuilder<ChatRoomCubit, ChatRoomState>(
       builder: (context, state) {
-        return Container(
+        return chatRoomCubit.chat.pinnedMessage == null? const SizedBox(): Container(
           width: double.infinity,
           // height: 50,
           color: AppColors.PRIMARY_COLOR,
