@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
@@ -28,10 +27,8 @@ import 'package:fourtyninehub/features/social_media/reels/domain/use_case/share_
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/toggle_comment_like_use_case.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:http/http.dart' as http;
-import 'package:video_player/video_player.dart';
 
 import '../../../../../../core/utils/shared_pref.dart';
-import '../../../../../trip_join/helpers/print_helper.dart';
 import '../../../data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/data_sources/reels_remote_data_source.dart';
 
