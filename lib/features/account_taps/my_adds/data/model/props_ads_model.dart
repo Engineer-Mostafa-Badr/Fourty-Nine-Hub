@@ -4,7 +4,7 @@ import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/props_
 class PropsAdsModel extends PropsAdsEntity {
   PropsAdsModel(
       {required super.id,
-      required super.propertyDetails,
+    //  required super.propertyDetails,
       required super.adsId,
       required super.value,
       required super.createdAt,
@@ -13,7 +13,7 @@ class PropsAdsModel extends PropsAdsEntity {
   factory PropsAdsModel.fromJson(Map<String, dynamic> json) {
     return PropsAdsModel(
       id: json['_id'],
-      propertyDetails: PropertyDetailsModel.fromJson(json['propertyId']),
+     // propertyDetails: PropertyDetailsModel.fromJson(json['propertyId']),
       adsId: json['adsId'],
       value: PropertyValueModel.fromJson(json['value']),
       createdAt: DateTime.parse(json['createdAt']),

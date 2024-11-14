@@ -5,6 +5,9 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/edit_my_ads_entity.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/my_ads_auction.dart';
+import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/edit_my_ads_use_case.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
@@ -24,6 +27,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../core/error/failure.dart';
 
 import '../../../../../routes/routes.dart';
+import '../../../../account_taps/my_adds/domain/usecases/fetch_my_ads_by_id_usecase.dart';
 import '../../domain/entities/categorization_entity.dart';
 import '../../domain/usecases/create_ad_usecase.dart';
 import '../../domain/usecases/get_ad_properties_usecase.dart';
@@ -36,6 +40,8 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   final GetCitiesUseCase _citiesUseCase;
   final CreateAdUseCase _createAdUseCase;
   final FilterAdUseCase _filterAdUseCase;
+  final EditMyAdsUseCase _editMyAdsUseCase;
+  final FetchMyAdsByIdUseCase _adsByIdUseCase;
 
   List<SelectionEntity> values = [];
 
@@ -43,11 +49,12 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   TextEditingController titleController=TextEditingController();
   TextEditingController descController=TextEditingController();
   TextEditingController phoneController=TextEditingController();
+  TextEditingController priceController=TextEditingController();
   final formState = GlobalKey<FormState>();
   final formStatic = GlobalKey<FormState>();
 
   CreateAdCubit(this._getAdPropertiesUsecase, this._createAdUseCase,
-      this._governoratesUseCase, this._citiesUseCase, this._filterAdUseCase)
+      this._governoratesUseCase, this._citiesUseCase, this._filterAdUseCase, this._editMyAdsUseCase, this._adsByIdUseCase)
       : super(CreateAdState());
 
   void loadData({required String subCategoryId}) async {
@@ -58,6 +65,17 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       _getGovernorates(),
     ]);
     emit(state.copyWith(status: CreateAdStates.success));
+  }
+
+  void loadDataInEdit({required String subCategoryId,required String id}) async {
+   // emit(state.copyWith(status: CreateAdStates.loading));
+
+    await Future.wait([
+      getAdProperties(subCategoryId: subCategoryId),
+      _getGovernorates(),
+      fetchMyAdsById(id: id),
+    ]);
+   // emit(state.copyWith(status: CreateAdStates.success));
   }
 
   Future<void> getAdProperties({required String subCategoryId}) async {
@@ -91,6 +109,17 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     values[index] = v;
     print(values.length);
   }
+
+  void onChangedd({required SelectionEntity v, required int index}) {
+    // Ensure the list is large enough to accommodate the index
+    while (index >= values.length) {
+      values.add(SelectionEntity(nameAr: v.nameAr,nameEn: v.nameEn)); // Add a default SelectionEntity for each missing slot
+    }
+
+    values[index] = v; // Assign the actual value
+    print(values[index].nameEn);
+  }
+
 
   void onTextChanged(
       {required String v,
@@ -322,5 +351,171 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       (data) => emit(state.copyWith(
           cities: data, status: CreateAdStates.loadCitiesSuccess)),
     );
+  }
+
+
+  Future<void> editMyAds({
+    required MyAuctionAdsEntity categorization,
+    SelectionEntity? selectedExperienceLevel,
+     SelectionEntity? selectedEducationLevel,
+    required String title,
+    required String desc,
+    required String phone,
+    required num price,
+  }) async {
+    print(
+        'state.images ${state.images?.map((e) => e.mediaId).toList() ?? []}');
+    // final List<Map<String, dynamic>> props = [];
+    // final List<Map<String, dynamic>> props2 = [];
+    // final existingProps = state.myAdById!.props;
+
+    // for (var prop in existingProps) {
+    //   if (selectedExperienceLevel != null &&
+    //       selectedEducationLevel == null) {
+    //     props.add({
+    //       "propertyId": '66f56c06414240a8e48520b3',
+    //       // Experience property ID
+    //       "value": {
+    //         "ar": selectedExperienceLevel.nameAr,
+    //         "en": selectedExperienceLevel.nameEn,
+    //       },
+    //     });
+    //     // No need to add education level if only experience is selected
+    //     continue; // Skip the rest of the loop for this iteration
+    //   }
+    //
+    //   // Check if education level is selected
+    //   if (selectedEducationLevel != null &&
+    //       selectedExperienceLevel == null) {
+    //     props.add({
+    //       "propertyId": "66f56c06414240a8e48520b2",
+    //       // Education property ID
+    //       "value": {
+    //         "ar": selectedEducationLevel.nameAr,
+    //         "en": selectedEducationLevel.nameEn,
+    //       },
+    //     });
+    //     // No need to add experience level if only education is selected
+    //     continue; // Skip the rest of the loop for this iteration
+    //   }
+    //
+    //   // Add both experience and education if both are selected
+    //   if (selectedExperienceLevel != null &&
+    //       selectedEducationLevel != null) {
+    //     props.add({
+    //       "propertyId": '66f56c06414240a8e48520b3',
+    //       // Experience property ID
+    //       "value": {
+    //         "ar": selectedExperienceLevel.nameAr,
+    //         "en": selectedExperienceLevel.nameEn,
+    //       },
+    //     });
+    //     props.add({
+    //       "propertyId": "66f56c06414240a8e48520b2",
+    //       // Education property ID
+    //       "value": {
+    //         "ar": selectedEducationLevel.nameAr,
+    //         "en": selectedEducationLevel.nameEn,
+    //       },
+    //     });
+    //     break; // Exit the loop once both are added
+    //   }
+    //
+    //   // Default to existing values if neither experience nor education are selected
+    //   if (selectedExperienceLevel == null &&
+    //       selectedEducationLevel == null) {
+    //     props2.add({
+    //       "propertyId": prop.id,
+    //       "value": {
+    //         "ar": prop.value.ar,
+    //         "en": prop.value.en,
+    //       },
+    //     });
+    //   }
+    // }
+
+    String type = '';
+    if(categorization.mainCategory?.nameEn=='Dating'&& state.isMale == true){
+      type='male';
+    }else if(categorization.mainCategory?.nameEn=='Dating'&& state.isMale == false){
+      type='female';
+    }else if (categorization.subCategory.hasAuction == false && state.isUser == false) {
+      type = "provider";
+    } else if (categorization.subCategory.hasAuction == false &&
+        state.isUser == true) {
+      type = "user";
+    } else if (categorization.subCategory.hasAuction == true &&
+        state.isSale == false) {
+      print(state.isSale);
+      type = "rent";
+    } else if (categorization.subCategory.hasAuction == true &&
+        state.isSale == true) {
+      print(state.isSale);
+      type = "sale";
+    }
+
+
+    List<CreateAdEntity> details = [];
+    for (int i = 0; i < (state.adProperties?.length ?? 0); i++) {
+      final adProperty = state.adProperties![i];
+      final propValue = state.selections![i];
+
+      if (propValue is SelectionEntity) {  // Check if propValue is of type SelectionEntity
+        details.add(CreateAdEntity(
+          propId: adProperty.id,
+          value: propValue,  // Now safely assign propValue
+        ));
+      } else {
+        // Handle the case where propValue is not of the expected type
+        print('Invalid type for propValue at index $i');
+      }
+    }
+
+    List<CreateAdEntity> selectedDetails =
+    details.where((element) => element.value.nameAr.isNotEmpty).toList();
+
+
+    emit(state.copyWith( status: CreateAdStates.loading));
+
+    final response = await _editMyAdsUseCase(
+        EditParams(
+          id: categorization.id,
+          title: title,
+          description: desc,
+          phone: phone,
+          type: type,
+          price: price,
+          details: selectedDetails,
+          subCategoryId: categorization.subCategory.id,
+          mainCategoryId: categorization.mainCategory!.id,
+          governorate: (state.governorate?.isEmpty ?? true)
+              ? state.myAdById?.governmentDataId
+              : state.governorate,
+          city: (state.city?.isEmpty ?? true)
+              ? state.myAdById?.cityDataId
+              : state.city,
+          images: state.images
+              ?.map((e) => e.mediaId)
+              .toList() ??
+              state.myAdById!.images.map((e) => e.id).toList(),
+        ));
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: CreateAdStates.error)),
+            (r) {
+              emit(state.copyWith(status: CreateAdStates.updateSuccess));
+              fetchMyAdsById(id: categorization.id);
+            });
+  }
+
+  Future<void> fetchMyAdsById({
+    required String id,
+  }) async {
+    final response = await _adsByIdUseCase(id);
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: CreateAdStates.error)),
+            (r) =>
+            emit(state.copyWith(myAdById: r,status: CreateAdStates.success)));
   }
 }

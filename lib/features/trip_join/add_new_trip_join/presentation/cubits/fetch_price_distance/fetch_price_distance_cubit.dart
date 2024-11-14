@@ -10,6 +10,7 @@ part 'fetch_price_distance_state.dart';
 
 class FetchPriceDistanceCubit extends Cubit<FetchPriceDistanceState> {
   final FetchPriceDistanceUsecase fetchPriceDistanceUsecase;
+  String? polyline;
   TripInfoEntity? tripInfoEntity;
   FetchPriceDistanceCubit({
     required this.fetchPriceDistanceUsecase,
@@ -29,8 +30,12 @@ class FetchPriceDistanceCubit extends Cubit<FetchPriceDistanceState> {
       ),
       (TripInfoEntity tripInfo) {
         tripInfoEntity = tripInfo;
+        polyline = tripInfo.polyline;
+        print("in Fetch Price Cubit \n");
+        print("tripInfoEntity  $tripInfoEntity \n");
+
         emit(
-          FetchPriceDistanceSuccess(tripInfoEntity: tripInfo),
+          FetchPriceDistanceSuccess(tripInfoEntity: tripInfoEntity!),
         );
       },
     );

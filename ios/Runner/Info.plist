@@ -12,6 +12,10 @@
      <string>We need access to your photo library to save the videos.</string>
      <key>NSPhotoLibraryUsageDescription</key>
      <string>We need access to your photo library to save the videos.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to your location to show your current position.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app needs access to your location to show your current position.</string>
 
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) Camera Usage!</string>

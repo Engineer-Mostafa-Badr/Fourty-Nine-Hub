@@ -13,6 +13,7 @@ abstract class Assets {
 
   // navigator
   static String logo = 'assets/images/logo_600.png';
+  static String allRestaurants = 'assets/images/allRestaurants.png';
   static String healthcare = 'assets/images/healthcare.png';
   static String facebookShare = 'assets/icons/share.png';
   static String savedReels = 'assets/icons/savedReels.png';
@@ -126,4 +127,5 @@ abstract class Assets {
   //Quran
   static String maka = 'assets/images/maka.png';
   static String madina = 'assets/images/madina.png';
+  static String win = 'assets/images/win.jpg';
 }

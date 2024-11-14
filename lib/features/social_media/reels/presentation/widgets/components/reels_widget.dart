@@ -9,7 +9,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/c
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/unified_widget_view.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../controllers/explore_reels_cubit/explore_reels_cubit.dart';
+import '../../controllers/explore_reels_cubit/reel_cubit.dart';
 import '../../pages/profile_buttom_sheet.dart';
 import '../../pages/reel_actions.dart';
 

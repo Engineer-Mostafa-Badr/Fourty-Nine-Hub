@@ -27,7 +27,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
       onTap: () {
         // context.pushNamed(Routes.RESTAURANTDETAILS,
         //     extra: widget.restaurant?.id);
-        context.push(Routes.RESTAURANTDETAILS, extra: widget.restaurant?.id);
+        context.push(Routes.RESTAURANTDETAILS, extra: widget.restaurant);
       },
       child: Card(
         color: Colors.white,

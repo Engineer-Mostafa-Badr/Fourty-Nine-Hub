@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -6,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/domain/entities/tripjoin_request_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
@@ -189,11 +191,26 @@ class TripJoinRequestCard extends StatelessWidget {
                 context.isArabic ? TextDirection.rtl : TextDirection.ltr,
             child: Column(
               children: [
-                Text(
-                    tripJoinRequestEntity.journeyPrice?.toStringAsFixed(0) ??
-                        '',
-                    style: Styles.headerText(
-                        fontSize: 70, color: Colors.green[600])),
+                Row(
+                  children: [
+                    Text(
+                        tripJoinRequestEntity.journeyPrice
+                                ?.toStringAsFixed(0) ??
+                            '',
+                        style: Styles.headerText(
+                            fontSize: 70, color: Colors.green[600])),
+                    Text(
+                      context.isArabic
+                          ? BlocProvider.of<GetCurrencyCubit>(context)
+                              .currnecyAr
+                          : BlocProvider.of<GetCurrencyCubit>(context)
+                              .currnecyEn,
+                      style: Styles.mediumText(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.SECONDARY_COLOR),
+                    )
+                  ],
+                ),
                 Text(
                     _localizeStatus(
                         context, tripJoinRequestEntity.status ?? ''),

@@ -9,7 +9,7 @@ class CreateAdEntity {
 
   Map<String, dynamic> toJson() {
     return {
-      "propId": propId,
+      "propertyId": propId,
       "type": type,
       "value": value.toJson(),
     };

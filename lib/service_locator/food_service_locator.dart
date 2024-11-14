@@ -7,7 +7,15 @@ import 'package:fourtyninehub/features/food_feature/food_cart/domain/usecases/re
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/cubit/food_cart_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/data/datasources/restaurant_dashboard_remote_datasource.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/data/repositories/restaurant_dashboard_repo_impl.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/delete_restaurant_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_orders_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/update_restaurant_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/add_food_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/change_quantity_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/delete_cart_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/delete_food_from_cart_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/delete_food_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/change_connectivity_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_all_restaurant_use_case.dart';
@@ -19,6 +27,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usec
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/search_restaurants_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/toggle_restaurant_favourite_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/search_cubit/search_cubit.dart';
 import 'package:get_it/get_it.dart';
 
@@ -47,7 +56,7 @@ class FoodServiceLocator {
     serviceLocator.registerLazySingleton<GetAllRestaurantUseCase>(
         () => GetAllRestaurantUseCase(serviceLocator()));
     serviceLocator.registerFactory<RestaurantDashboardRemoteDataSource>(
-        () => RestaurantDashboardRemoteDataSourceImpl(serviceLocator()));
+        () => RestaurantDashboardRemoteDataSourceImpl(serviceLocator(),serviceLocator()));
     serviceLocator.registerLazySingleton<RestaurantsRemoteDataSource>(
         () => RestaurantsRemoteDataSourceImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<FoodCartRemoteDataSource>(
@@ -73,12 +82,50 @@ class FoodServiceLocator {
         () => GetExpiredOrdersUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<AddFoodUseCase>(
+        () => AddFoodUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<DeleteFoodUseCase>(
+        () => DeleteFoodUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<DeleteRestaurantUseCase>(
+        () => DeleteRestaurantUseCase(
+              serviceLocator(),
+            ));
+
+ serviceLocator.registerLazySingleton<UpdateRestaurantUseCase>(
+        () => UpdateRestaurantUseCase(
+              serviceLocator(),
+            ));
+
+ serviceLocator.registerLazySingleton<DeleteFoodFromCartUseCase>(
+        () => DeleteFoodFromCartUseCase(
+              serviceLocator(),
+            ));
+
+ serviceLocator.registerLazySingleton<DeleteCartUseCase>(
+        () => DeleteCartUseCase(
+              serviceLocator(),
+            ));
+
+ serviceLocator.registerLazySingleton<ChangeQuantityUseCase>(
+        () => ChangeQuantityUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<ToggleRestaurantFavouriteUseCase>(
+        () => ToggleRestaurantFavouriteUseCase(
+              serviceLocator(),
+            ));
     serviceLocator.registerLazySingleton<RestaurantMenuCubit>(
         () => RestaurantMenuCubit(serviceLocator()));
     serviceLocator.registerLazySingleton<RestaurantSharedData>(
         () => RestaurantSharedData());
     serviceLocator.registerFactory<CreateRestaurantCubit>(
       () => CreateRestaurantCubit(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
@@ -100,10 +147,14 @@ class FoodServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
-          serviceLocator(),
         ));
     serviceLocator
         .registerFactory<RestaurantDetailsCubit>(() => RestaurantDetailsCubit(
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
@@ -120,9 +171,11 @@ class FoodServiceLocator {
           serviceLocator(),
         ));
     serviceLocator.registerFactory<RestaurantDashboardCubit>(
-        () => RestaurantDashboardCubit(serviceLocator(), serviceLocator()));
+        () => RestaurantDashboardCubit(serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
     serviceLocator.registerLazySingleton<GetRestaurantDetailsUseCase>(
         () => GetRestaurantDetailsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetRestaurantInfoUseCase>(
+        () => GetRestaurantInfoUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetRestaurantOrdersUseCase>(
         () => GetRestaurantOrdersUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetMealsUseCase>(

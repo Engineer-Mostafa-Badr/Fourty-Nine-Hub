@@ -50,13 +50,12 @@ class LoginCubit extends Cubit<LoginState> {
 
       result.fold(
         (failure) => emit(LoginError(failure)),
-        (userToken)async {
-          log('token is login server : ${userToken.accessToken}');
-          _attachToken(userToken); // Attach to dio
+        (userToken) {
+          //_attachToken(userToken); // Attach to dio
           // _saveTokens(userToken); // Ensure tokens are saved before proceeding
-          await CacheManager.saveAccessToken(userToken.accessToken);
           // pr('state token is  ${userToken}');
-      log('token is login cache : ${await CacheManager.getAccessToken()}');
+          CacheManager.saveAccessToken(userToken.accessToken);
+          CacheManager.saveRefreshToken(userToken.refreshToken);
           emit(LoginSuccess(userTokensEntity: userToken));
         },
       );

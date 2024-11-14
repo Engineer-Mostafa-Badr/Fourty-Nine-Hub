@@ -13,7 +13,8 @@ import 'package:fourtyninehub/res/style/const.dart';
 abstract class TripJoinRequestHistoryRemoteDataSource {
   Future<Either<Failure, List<TripJoinMyRequestEntity>>> fetchMyTripJoinAds(
       {required int page});
-  Future<Either<Failure, bool>> deleteTrip({required String id});
+  Future<Either<Failure, bool>> deleteTrip(
+      {required String subCategory, required String url, required String id});
   Future<Either<Failure, List<TripJoinRequestHistoryEntity>>> getRequests(
       {required String id, required int page});
 }
@@ -62,12 +63,16 @@ class TripJoinRequestHistoryRemoteDataSourceImp
   }
 
   @override
-  Future<Either<Failure, bool>> deleteTrip({required String id}) async {
+  Future<Either<Failure, bool>> deleteTrip(
+      {required String subCategory,
+      required String url,
+      required String id}) async {
     const t = 'deleteTrip - TripJoinRequestHistoryRemoteDataSource';
     final response = await apiConsumer.delete(
-      EndPoints.deleteTrip(id),
+      EndPoints.deleteTrip(url, id),
       queryParameters: {
-        'subCategory': UIConst.tripJoinCategoryId,
+        'subCategory': subCategory,
+        // 'subCategory': UIConst.tripJoinCategoryId,
       },
     );
 

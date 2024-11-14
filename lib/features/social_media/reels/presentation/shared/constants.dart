@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 import '../../../../../routes/pages.dart';
 
-const int kPreloadLimit = 3;
+const int kPreloadLimit = 5;
 
 // Customize
-const int kNextLimit = 5;
+const int kNextLimit = 150;
 
 // For better UX, latency should be minimum.
 // For demo: 2s is taken but something under a second will be better

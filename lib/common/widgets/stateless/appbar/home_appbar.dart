@@ -9,6 +9,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart'
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
+import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -33,6 +34,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   final Color color;
   final bool language;
   final double? toolbarHeight;
+  final Widget? leading;
   final PreferredSizeWidget? bottom;
 
   const HomeAppbar({
@@ -42,6 +44,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.inNotifications = false,
     this.isMenu = false,
     this.bottom,
+    this.leading,
     this.toolbarHeight,
     this.isDetailsCardService = false,
     this.showChat = true,
@@ -53,9 +56,14 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isCurrentRoute(BuildContext context, String targetRoute) {
+      final currentRoute = ModalRoute.of(context)?.settings.name;
+      return currentRoute == targetRoute;
+    }
     return AppBar(
       toolbarHeight: toolbarHeight,
       bottom: bottom,
+      leading: leading,
       title: Row(
         children: [
           if (isShowLogo)
@@ -97,6 +105,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   label: LocaleKeys.lang.tr(),
                   style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
                   onPressed: () {
+                    HandleCashback.setCount('langCount',context);
                     if (context.locale == Locales.english) {
                       changeLang(locale: Locales.arabic, context: context);
                     } else {
@@ -159,24 +168,34 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     text: LocaleKeys.register.localize,
                     style: Styles.mediumText())),
           // if (language)
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15.w),
-            child: InkWell(
-              onTap: () {
-                context.push(Routes.CHAT);
-              },
-              child: SvgPicture.asset(
-                Assets.message,
-                height: 30.h,
+            Padding(
+              padding:  EdgeInsets.symmetric(horizontal:15.w),
+              child: InkWell(
+                onTap: () {
+                  if(isCurrentRoute(context, Routes.CHAT)==true){
+                    return;
+                  }
+                  HandleCashback.setCount('chatCount',context);
+
+                     context.push(Routes.CHAT);
+
+                },
+                child: SvgPicture.asset(
+                  Assets.message,
+                  height: 30.h,
+                ),
               ),
             ),
-          ),
 
           SizedBox(
             width: 40.w,
           ),
           GestureDetector(
             onTap: () {
+              if(isCurrentRoute(context, Routes.NOTIFICATIONS)==true){
+                return;
+              }
+              HandleCashback.setCount('notificationCount',context);
               context.push(context.read<UserCubit>().isLoggedIn
                   ? Routes.NOTIFICATIONS
                   : Routes.LOGIN);

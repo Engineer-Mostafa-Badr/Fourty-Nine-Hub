@@ -24,6 +24,7 @@ class LiveStreamHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
+
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 30,
@@ -33,6 +34,7 @@ automaticallyImplyLeading: false,
             child: Stack(
               children: [
                 TabBar(
+                  isScrollable: false,
                   indicatorColor:
                       context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
                   labelColor:

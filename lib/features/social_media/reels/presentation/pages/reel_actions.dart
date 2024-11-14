@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/show_comments_sheet.dart';
 import 'package:go_router/go_router.dart';
 import 'package:readmore/readmore.dart';
 import 'package:share_plus/share_plus.dart';
@@ -20,13 +21,10 @@ import '../../../../ads_feature/create_company_ad/presentation/pages/widgets/ree
 import '../../../tinder/data/shared/shared.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
 import '../../data/models/new_reels_model.dart';
-import '../controllers/explore_reels_cubit/explore_reels_cubit.dart';
+import '../controllers/explore_reels_cubit/reel_cubit.dart';
 import '../widgets/components/unified_widget_view.dart';
 import 'audio_screen.dart';
 
-/// A unified reel item widget that can function as MainReelItem, ReelItemForInstagram, or SpotlightReelItem.
-
-/// Widget to display reel information such as user info, actions, and audio.
 class ReelActions extends StatefulWidget {
   final Reel reel;
   final ReelItemType itemType;
@@ -45,8 +43,14 @@ class ReelActions extends StatefulWidget {
 class _ReelActionsState extends State<ReelActions> {
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final double width = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     return SizedBox(
       height: height,
@@ -161,8 +165,9 @@ class _UserInfo extends StatefulWidget {
 }
 
 class _UserInfoState extends State<_UserInfo> {
-  String get _displayName => capitalizeAndSplit(
-      '${widget.reel.user.firstName} ${widget.reel.user.lastName}');
+  String get _displayName =>
+      capitalizeAndSplit(
+          '${widget.reel.user.firstName} ${widget.reel.user.lastName}');
 
   String get _displayReelName {
     final maxLength = (widget.reel.name.length * 0.75).round();
@@ -209,7 +214,8 @@ class _UserInfoState extends State<_UserInfo> {
           child: SizedBox(
             width: 0.7.sw,
             child: ReadMoreText(
-              "${widget.reel.name}\n${widget.reel.audio.audioName}\nعايز نحط ايه هنا  ",
+              "${widget.reel.name}\n${widget.reel.audio
+                  .audioName}\nعايز نحط ايه هنا  ",
               trimLines: 1,
               colorClickableText: AppColors.PRIMARY_COLOR_DARK,
               trimMode: TrimMode.Line,
@@ -234,7 +240,8 @@ class _UserInfoState extends State<_UserInfo> {
     );
   }
 
-  TextStyle get _nameTextStyle => TextStyle(
+  TextStyle get _nameTextStyle =>
+      TextStyle(
         fontSize: 50.sp,
         color: Colors.white,
         decoration: TextDecoration.none,
@@ -287,7 +294,8 @@ class _ReelDetails extends StatelessWidget {
     );
   }
 
-  TextStyle get _detailsTextStyle => TextStyle(
+  TextStyle get _detailsTextStyle =>
+      TextStyle(
         fontSize: 30.sp,
         color: Colors.white60,
         decoration: TextDecoration.none,
@@ -535,9 +543,9 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
         children: [
           isReversed
               ? Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: animatedIcon,
-                )
+            textDirection: TextDirection.rtl,
+            child: animatedIcon,
+          )
               : animatedIcon,
           Text(
             count,
@@ -566,8 +574,8 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
     }
   }
 
-  Future<void> _handleCommentAction(
-      BuildContext context, ReelsCubit cubit) async {
+  Future<void> _handleCommentAction(BuildContext context,
+      ReelsCubit cubit) async {
     try {
       await showCommentsBottomSheet(context, reel: reel);
     } catch (e) {
@@ -626,240 +634,6 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
   }
 }
 
-class _ActionButtons extends StatelessWidget {
-  final Reel reel;
-  final ReelItemType itemType;
-  final AnimationController rotationController;
-
-  const _ActionButtons({
-    required this.reel,
-    required this.itemType,
-    required this.rotationController,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final ReelsCubit reelsCubit = context.read<ReelsCubit>();
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 4.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          _ActionButton(
-            icon: reel.likeCount > 0
-                ? FontAwesomeIcons.solidHeart
-                : FontAwesomeIcons.heart,
-            count: reel.likeCount,
-            onTap: () {
-              if (!serviceLocator<UserCubit>().isLoggedIn) {
-                context.push(Routes.LOGIN);
-              } else {
-                _handleLikeAction(context, reelsCubit);
-              }
-            },
-            iconColor: reel.likeCount == 0 ? Colors.white : Colors.red,
-          ),
-          _ActionButton(
-            icon: FontAwesomeIcons.comment,
-            count: reel.commentCount,
-            onTap: () {
-              if (!serviceLocator<UserCubit>().isLoggedIn) {
-                context.push(Routes.LOGIN);
-              } else {
-                _handleCommentAction(context, reelsCubit);
-              }
-            },
-          ),
-          _ActionButton(
-            icon: FontAwesomeIcons.paperPlane,
-            count: reel.shareCount,
-            onTap: () {
-              if (!serviceLocator<UserCubit>().isLoggedIn) {
-                context.push(Routes.LOGIN);
-              } else {
-                _handleShareAction(context, reel.videoMedia);
-              }
-            },
-          ),
-          _ActionButton(
-            icon: reel.saveCount == 0
-                ? FontAwesomeIcons.bookmark
-                : FontAwesomeIcons.solidBookmark,
-            count: reel.saveCount,
-            onTap: () {
-              if (!serviceLocator<UserCubit>().isLoggedIn) {
-                context.push(Routes.LOGIN);
-              } else {
-                _handleSaveAction(context, reelsCubit);
-              }
-            },
-            iconColor: reel.saveCount == 0 ? Colors.white : Colors.yellowAccent,
-          ),
-          _ActionButton(
-            icon: Icons.card_giftcard,
-            count: 0,
-            onTap: () {
-              if (!serviceLocator<UserCubit>().isLoggedIn) {
-                context.push(Routes.LOGIN);
-              } else {
-                _showGiftBottomSheet(context);
-              }
-            },
-          ),
-          _ActionButton(
-            icon: Icons.report_outlined,
-            count: 0,
-            onTap: () {
-              if (!serviceLocator<UserCubit>().isLoggedIn) {
-                context.push(Routes.LOGIN);
-              } else {
-                _showReportBottomSheet(context);
-              }
-            },
-          ),
-          if (itemType != ReelItemType.instagram)
-            RotatingCircularButton(
-              reel: reel,
-              rotationController: rotationController,
-            ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _handleLikeAction(BuildContext context, ReelsCubit cubit) async {
-    try {
-      await cubit.likeReel(reel.id).then((value) {
-        final response = cubit.state.likeReelResponse;
-        if (response?.message == "Reel liked successfully") {
-          (++reel.likeCount);
-        } else if (response?.message == "Reel unlike successfully") {
-          if (reel.likeCount > 0) --reel.likeCount;
-        }
-      });
-
-      // Force rebuild to update UI
-      (context as Element).markNeedsBuild();
-    } catch (e) {
-      _showSnackBar(context, 'Error liking reel: $e');
-    }
-  }
-
-  Future<void> _handleCommentAction(
-      BuildContext context, ReelsCubit cubit) async {
-    try {
-      await cubit.getComments(reel.id);
-    } catch (e) {
-      _showSnackBar(context, 'Error fetching comments: $e');
-    }
-  }
-
-  Future<void> _handleShareAction(context, String videoUrl) async {
-    await Share.share(
-      videoUrl,
-      subject: 'Check out this reel!',
-    );
-  }
-
-  Future<void> _handleSaveAction(BuildContext context, ReelsCubit cubit) async {
-    try {
-      await cubit.saveReel(reel.id);
-      final response = cubit.state.reelSaveResponse;
-      if (response?.message == "saved successfully") {
-        (reel.saveCount++);
-      } else if (response?.message == "unsaved successfully") {
-        (reel.saveCount--);
-      }
-      // Force rebuild to update UI
-      (context as Element).markNeedsBuild();
-    } catch (e) {
-      _showSnackBar(context, 'Error saving reel: $e');
-    }
-  }
-
-  Future<void> _showGiftBottomSheet(BuildContext context) async {
-    await showGiftBottomSheet(context, receiverId: reel.user.id);
-  }
-
-  Future<void> _showReportBottomSheet(BuildContext context) async {
-    await showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      builder: (context) {
-        return SizedBox(
-          height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
-          child: ReportView(
-            id: reel.user.id,
-            categoryId: '66684135dbb427ee42aa0141',
-          ),
-        );
-      },
-    );
-  }
-
-  void _showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-  }
-}
-
-/// Widget for individual action buttons.
-class _ActionButton extends StatelessWidget {
-  final IconData icon;
-  final int count;
-  final VoidCallback onTap;
-  final Color? iconColor;
-
-  const _ActionButton({
-    required this.icon,
-    required this.count,
-    required this.onTap,
-    this.iconColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        children: [
-          FaIcon(
-            icon,
-            color: iconColor ?? Colors.white,
-            size: 45.h,
-          ),
-          SizedBox(height: 4.h),
-          Text(
-            (count > 0) ? '$count' : '',
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            textScaler: TextScaler.noScaling,
-            style: _countTextStyle,
-          ),
-          SizedBox(height: 16.h),
-        ],
-      ),
-    );
-  }
-
-  TextStyle get _countTextStyle => TextStyle(
-        height: 1.h,
-        fontSize: 30.sp,
-        color: Colors.white,
-        decoration: TextDecoration.none,
-        shadows: const [
-          Shadow(
-            offset: Offset(0, 1.0),
-            color: Colors.black,
-          ),
-        ],
-      );
-}
-
 /// A rotating circular button widget for audio interaction
 class RotatingCircularButton extends StatelessWidget {
   final Reel reel;
@@ -885,10 +659,10 @@ class RotatingCircularButton extends StatelessWidget {
                 : Colors.transparent,
             image: reel.audio.audioPicture.isNotEmpty
                 ? DecorationImage(
-                    image: NetworkImage(reel.audio.audioPicture),
-                    fit: BoxFit.cover,
-                    onError: (_, __) {},
-                  )
+              image: NetworkImage(reel.audio.audioPicture),
+              fit: BoxFit.cover,
+              onError: (_, __) {},
+            )
                 : null,
           ),
           child: InkWell(
@@ -899,14 +673,15 @@ class RotatingCircularButton extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => BlocProvider.value(
-                      value: serviceLocator<ReelsCubit>()
-                        ..fetchReelsWithSameAudio(reel.audio.id),
-                      child: InstagramAudioScreen(
-                        audio: reel.audio,
-                        reel: reel,
-                      ),
-                    ),
+                    builder: (context) =>
+                        BlocProvider.value(
+                          value: serviceLocator<ReelsCubit>()
+                            ..fetchReelsWithSameAudio(reel.audio.id),
+                          child: InstagramAudioScreen(
+                            audio: reel.audio,
+                            reel: reel,
+                          ),
+                        ),
                   ),
                 );
               }

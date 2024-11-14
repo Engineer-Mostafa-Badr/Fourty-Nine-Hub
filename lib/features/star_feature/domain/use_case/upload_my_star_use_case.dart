@@ -16,15 +16,18 @@ class UploadMyStarUseCase extends UseCase<bool, StarParams> {
 
 class StarParams {
   final String title;
-  final String videoUrl;
+  final List<String>? mediaUrl;
   final String description;
+  final String type;
 
   StarParams(
-      {required this.title, required this.videoUrl, required this.description});
+      {required this.title, required this.mediaUrl, required this.description, required this.type,});
 
-  Map<String,dynamic>toJson()=>{
-    'title':title,
-    'videoUrl':videoUrl,
-    'description':description,
-  };
+  Map<String, dynamic> toJson() =>
+      {
+        'title': title,
+        'mediaUrl': mediaUrl,
+        'description': description,
+        'type': type,
+      };
 }

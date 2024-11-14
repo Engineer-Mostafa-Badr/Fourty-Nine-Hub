@@ -30,19 +30,21 @@ class EditParams{
   bool? hasAuction;
   bool? isFavourite;
   final String? description;
-  final List<MyAuctionImageEntity>? images;
+  final List<dynamic> images;
   final num? price;
   final bool? active;
   final bool? approved;
   final AdStatisticsEntity? statistics;
   final AddressEntity? address;
   final UserEntity? user;
-  List<CreateAdEntity>? details;
+  List<dynamic>? details;
   DateTime? createdAt;
   final String? phone;
   final String? subCategoryId;
   final String? mainCategoryId;
   final String? userId;
+  String? city;
+  String? governorate;
   String get formatedDate => DateFormat('yyyy-MM-dd').format(createdAt!);
   Duration get restTimeDuration => DateTime.now().difference(createdAt!);
 
@@ -53,9 +55,11 @@ class EditParams{
       {required this.id,
          this.title,
          this.description,
-         this.images,
+         required this.images,
         this.price,
         this.type,
+        this.city,
+        this.governorate,
         this.isFavourite = false,
         this.hasAuction = false,
          this.address,
@@ -81,14 +85,11 @@ class EditParams{
     if (price != null) "price": price,
     // "userId": userId,
     "searchText": "testPropsAndAds",
+    "address": {
+      "government": governorate,
+      "city": city
+    },
     "images": images,
-    "props": details?.map((e) {
-      if (e.value.nameEn.isNotEmpty) {
-        return {
-          "value": {"ar": e.value.nameAr, "en": e.value.nameEn},
-          "propertyId": e.propId
-        };
-      }
-    }).toList()
+    "props": details,
   };
 }

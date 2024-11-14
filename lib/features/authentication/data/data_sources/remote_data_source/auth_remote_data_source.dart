@@ -69,14 +69,18 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       EndPoints.login,
       data: await loginParams.toJson(),
     );
-
     return result.fold(
       (failure) => Left(failure),
-      (response) => Right(
+      (response) {
+        _apiConsumer.attachToken(UserTokensModel.fromJson(
+          response['data'],
+        ));
+        return Right(
         UserTokensModel.fromJson(
           response['data'],
         ),
-      ),
+      );
+      },
     );
   }
 

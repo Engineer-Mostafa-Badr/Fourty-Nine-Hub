@@ -51,119 +51,118 @@ class _AdCardState extends State<AdCard> {
         .where((e) => e.value.nameAr != 'السعر' && e.value.nameAr != 'المرتب')
         .toList();
     return BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
-      return Container(
-        width: kToolbarHeight * 2.5,
-        height: 600.h,
-        margin: EdgeInsetsDirectional.all(10.w),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5.r),
-          border: Border.all(
-              color: context.isDarkMode
-                  ? AppColors.LIGHT_COLOR
-                  : AppColors.GREY_DARK_COLOR,
-              width: 1),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if(context.read<UserCubit>().isLoggedIn) _buildTag(status: widget.item.subscriptionStatus ?? ''),
-            Expanded(
-              child: Stack(
-                alignment: AlignmentDirectional.topStart,
-                children: [
-                  SizedBox(
-                    height: kToolbarHeight * 4,
-                    width: double.infinity,
-                    child: Swiper(
-                      itemCount: widget.item.images.length > 4
-                          ? 4
-                          : widget.item.images.length,
-                      onIndexChanged: (i) {},
-                      outer: false,
-                      loop: false,
-                      physics: widget.item.images.length > 1
-                          ? null
-                          : const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) => Padding(
-                        padding: EdgeInsets.only(bottom: 5.h),
-                        child: Stack(
-                          children: [
-                            ImageFromInternet(
-                              width: double.infinity,
-                              image: widget.item.images[index],
-                              defaultLogo: true,
-                              fit: BoxFit.fill,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(5.r),
-                                  topRight: Radius.circular(5.r)),
-                            ),
-                            if (index == 3)
-                              Positioned.fill(
-                                  child: InkWell(
-                                onTap: () => context.push(Routes.ADdetails,
-                                    extra: widget.item.id),
-                                child: Container(
-                                  color: Colors.black.withOpacity(0.8),
-                                  alignment: AlignmentDirectional.center,
-                                  child: Label(
-                                    text: LocaleKeys.seeAll.localize,
-                                    style: Styles.headerText(
-                                        color: Colors.white,
-                                        decoration: TextDecoration.underline),
-                                  ),
-                                ),
-                              ))
-                          ],
+      return InkWell(
+        splashColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        onTap: () => context.push(Routes.ADdetails,
+            extra: widget.item.id),
+        child: Container(
+          width: kToolbarHeight * 2.5,
+          height: 600.h,
+          margin: EdgeInsetsDirectional.all(10.w),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.r),
+            border: Border.all(
+                color: context.isDarkMode
+                    ? AppColors.LIGHT_COLOR
+                    : AppColors.GREY_DARK_COLOR,
+                width: 1),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if(context.read<UserCubit>().isLoggedIn) _buildTag(status: widget.item.subscriptionStatus ?? ''),
+              Expanded(
+                child: Stack(
+                  alignment: AlignmentDirectional.topStart,
+                  children: [
+                    SizedBox(
+                      height: kToolbarHeight * 4,
+                      width: double.infinity,
+                      child: Swiper(
+                        itemCount: widget.item.images.length > 4
+                            ? 4
+                            : widget.item.images.length,
+                        onIndexChanged: (i) {},
+                        outer: false,
+                        loop: false,
+                        physics: widget.item.images.length > 1
+                            ? null
+                            : const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) => Padding(
+                          padding: EdgeInsets.only(bottom: 5.h),
+                          child: Stack(
+                            children: [
+                              ImageFromInternet(
+                                width: double.infinity,
+                                image: widget.item.images[index],
+                                defaultLogo: true,
+                                fit: BoxFit.cover,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(5.r),
+                                    topRight: Radius.circular(5.r)),
+                              ),
+                              if (index == 3)
+                                Positioned.fill(
+                                    child: Container(
+                                      color: Colors.black.withOpacity(0.8),
+                                      alignment: AlignmentDirectional.center,
+                                      child: Label(
+                                        text: LocaleKeys.seeAll.localize,
+                                        style: Styles.headerText(
+                                            color: Colors.white,
+                                            decoration: TextDecoration.underline),
+                                      ),
+                                    ))
+                            ],
+                          ),
                         ),
+                        pagination: SwiperPagination(builder:
+                            SwiperCustomPagination(builder: (context, config) {
+                          return const DotSwiperPaginationBuilder(
+                                  color: AppColors.GREY_DARK_COLOR,
+                                  activeColor: AppColors.SECONDARY_COLOR,
+                                  size: 10.0,
+                                  activeSize: 10.0)
+                              .build(context, config);
+                        })),
                       ),
-                      pagination: SwiperPagination(builder:
-                          SwiperCustomPagination(builder: (context, config) {
-                        return const DotSwiperPaginationBuilder(
-                                color: AppColors.GREY_DARK_COLOR,
-                                activeColor: AppColors.SECONDARY_COLOR,
-                                size: 10.0,
-                                activeSize: 10.0)
-                            .build(context, config);
-                      })),
                     ),
-                  ),
-                  PositionedDirectional(
-                    start: 10.w,
-                    child: IconAppButton(
-                        size: 18,
-                        icon: widget.item.isFavourite == false
-                            ? Icons.favorite_border
-                            : Icons.favorite,
-                        color: AppColors.SECONDARY_COLOR,
-                        onPressed: () async {
-                          if (widget.item.isFavourite == false) {
-                            var result = await widget.onFav(widget.item.id);
-                            if (result == true) {
-                              widget.item.isFavourite =
-                                  !widget.item.isFavourite!;
+                    PositionedDirectional(
+                      start: 10.w,
+                      child: IconAppButton(
+                          size: 18,
+                          icon: widget.item.isFavourite == false
+                              ? Icons.favorite_border
+                              : Icons.favorite,
+                          color: AppColors.SECONDARY_COLOR,
+                          onPressed: () async {
+                            if (widget.item.isFavourite == false) {
+                              var result = await widget.onFav(widget.item.id);
+                              if (result == true) {
+                                widget.item.isFavourite =
+                                    !widget.item.isFavourite!;
+                              }
+                            } else {
+                              var result =
+                                  await widget.onRemoveFav(widget.item.id);
+                              if (result == true) {
+                                widget.item.isFavourite =
+                                    !widget.item.isFavourite!;
+                              }
                             }
-                          } else {
-                            var result =
-                                await widget.onRemoveFav(widget.item.id);
-                            if (result == true) {
-                              widget.item.isFavourite =
-                                  !widget.item.isFavourite!;
-                            }
-                          }
-                        }),
-                  ),
-                ],
+                          }),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 15.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  InkWell(
-                    onTap: () =>
-                        context.push(Routes.ADdetails, extra: widget.item.id),
-                    child: Column(
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 15.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
@@ -252,85 +251,85 @@ class _AdCardState extends State<AdCard> {
                             maxLines: 1,
                           ),
                         ]),
-                  ),
-                  Divider(
-                    color: context.isDarkMode
-                        ? AppColors.LIGHT_COLOR
-                        : AppColors.GREY_DARK_COLOR,
-                  ),
-                  const Sizer(),
-                  widget.item.userId != userId
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  flex: 3,
-                                  child: PremiumRequestButton(
-                                    adId: widget.item.id,
-                                    subCategoryId:
-                                        widget.item.subCategoryId ?? '',
-                                    subscriptionStatus:
-                                        widget.item.subscriptionStatus ?? '',
+                    Divider(
+                      color: context.isDarkMode
+                          ? AppColors.LIGHT_COLOR
+                          : AppColors.GREY_DARK_COLOR,
+                    ),
+                    const Sizer(),
+                    widget.item.userId != userId
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    flex: 3,
+                                    child: PremiumRequestButton(
+                                      adId: widget.item.id,
+                                      subCategoryId:
+                                          widget.item.subCategoryId ?? '',
+                                      subscriptionStatus:
+                                          widget.item.subscriptionStatus ?? '',
+                                    ),
+                                  ),
+                                  const Sizer(width: 5),
+                                  Expanded(
+                                    flex: 3,
+                                    child: RequestButton(
+                                      adId: widget.item.id,
+                                      subscriptionStatus:
+                                          widget.item.subscriptionStatus ?? '',
+                                    ),
+                                  )
+                                ],
+                              ),
+                              const Sizer(),
+                              CallMessageButtons(
+                                otherUserId: widget.item.userId ?? '',
+                                subcategoryId: widget.item.subCategoryId ?? '',
+                                phone: widget.item.phone ?? '',
+                                id: widget.item.id,
+                                hasReport: true,
+                              ),
+                            ],
+                          )
+                        : Row(
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                  height: 60.h,
+                                  child: AvaialbleTripsButton(
+                                    title: LocaleKeys.edit.localize,
+                                    color: AppColors.SECONDARY_COLOR,
+                                    onTap: () async {},
                                   ),
                                 ),
-                                const Sizer(width: 5),
-                                Expanded(
-                                  flex: 3,
-                                  child: RequestButton(
-                                    adId: widget.item.id,
-                                    subscriptionStatus:
-                                        widget.item.subscriptionStatus ?? '',
+                              ),
+                              const Sizer(),
+                              Expanded(
+                                child: SizedBox(
+                                  height: 60.h,
+                                  child: AvaialbleTripsButton(
+                                    title: LocaleKeys.subscription.localize,
+                                    color: AppColors.SECONDARY_COLOR,
+                                    onTap: () async {
+                                      SubscriptionMethod().subscribe(
+                                          subscribeId:
+                                              widget.item.subCategoryId ?? '',
+                                          title: LocaleKeys.ads.localize);
+                                    },
                                   ),
-                                )
-                              ],
-                            ),
-                            const Sizer(),
-                            CallMessageButtons(
-                              otherUserId: widget.item.userId ?? '',
-                              subcategoryId: widget.item.subCategoryId ?? '',
-                              phone: widget.item.phone ?? '',
-                              id: widget.item.id,
-                              hasReport: true,
-                            ),
-                          ],
-                        )
-                      : Row(
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                height: 60.h,
-                                child: AvaialbleTripsButton(
-                                  title: LocaleKeys.edit.localize,
-                                  color: AppColors.SECONDARY_COLOR,
-                                  onTap: () async {},
                                 ),
-                              ),
-                            ),
-                            const Sizer(),
-                            Expanded(
-                              child: SizedBox(
-                                height: 60.h,
-                                child: AvaialbleTripsButton(
-                                  title: LocaleKeys.subscription.localize,
-                                  color: AppColors.SECONDARY_COLOR,
-                                  onTap: () async {
-                                    SubscriptionMethod().subscribe(
-                                        subscribeId:
-                                            widget.item.subCategoryId ?? '',
-                                        title: LocaleKeys.ads.localize);
-                                  },
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                ],
+                              )
+                            ],
+                          ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     });

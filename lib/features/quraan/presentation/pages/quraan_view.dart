@@ -2,69 +2,103 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/features/quraan/domain/entity/quran_surah_entity.dart';
-import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_use_case.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_state.dart';
+import 'package:fourtyninehub/features/quraan/presentation/pages/quran_details.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class QuraanView extends StatelessWidget {
+class QuraanView extends StatefulWidget {
   const QuraanView({super.key});
 
   @override
+  State<QuraanView> createState() => _QuraanViewState();
+}
+
+class _QuraanViewState extends State<QuraanView> {
+  late ScrollController _scrollController;
+  late QuranCubit _cubit;
+  @override
+  void initState() {
+    super.initState();
+    _cubit = context.read<QuranCubit>();
+    _scrollController = ScrollController()..addListener(_onScroll);
+    _cubit.loadInitialData();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      _cubit.fetchQuranSurah();
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(label: 'Quran'), // AppBar remains the same
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              'القران الكريم',
+              style:  TextStyle(fontSize: 40.sp),
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.arrow_forward,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Pop the current screen
+              },
+            ),
+          ],
+        ),
+      ),
       body: Directionality(
         textDirection: TextDirection.rtl, // Set the whole screen to RTL
-        child: BlocProvider<QuranCubit>(
-          create: (BuildContext context) => serviceLocator()..loadData(),
-          child: BlocBuilder<QuranCubit, QuranState>(
-            builder: (BuildContext context, state) {
-              var controller=context.read<QuranCubit>();
-              return Padding(
-                  padding: EdgeInsets.all(12.w),
-                  child: PagedListView<int, QuranSurahEntity>(
-                    pagingController: controller.quranSurahPagingController,
-                    builderDelegate: PagedChildBuilderDelegate<
-                        QuranSurahEntity>(
-                      itemBuilder: (context, item, index) {
-                        return InkWell(
-                          onTap: () {
-                            // context.push(Routes.SUBCATEGORIES,
-                            //     extra: state.search![index]);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: buildItem(
-                              context,
-                               item,
-                            ),
-                          ),
-                        );
-                      },
-                      noMoreItemsIndicatorBuilder: (context) => Container(),
-                      firstPageProgressIndicatorBuilder: (context) =>
-                      const CupertinoActivityIndicator(),
-                      newPageProgressIndicatorBuilder: (context) =>
-                      const CupertinoActivityIndicator(),
-                    ),
-                  ),
-                // child: ListView.separated(
-                //   itemBuilder: (context,index)=>buildItem(context),
-                //   separatorBuilder: (context,index)=>const Divider(color: AppColors.GREY_NORMAL_COLOR,),
-                //   itemCount: 10,
-                // ),
-              );
-            },
-          ),
+        child: BlocBuilder<QuranCubit, QuranState>(
+          builder: (BuildContext context, state) {
+            if(state.status ==QuranStates.loading){
+              return const CustomLoading();
+            }
+            return Padding(
+                padding: EdgeInsets.all(12.w),
+              child: ListView.separated(
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemBuilder: (context,index) {
+                  if (index == _cubit.quran.length) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => QuranViewPage(
+                            surahId: state.quranSurah![index].surahNo, pageNumber: 0,),
+                        ),
+                      );
+                    },
+                    child: buildItem(context,state.quranSurah![index]));
+                },
+                separatorBuilder: (context,index)=>const Divider(color: AppColors.GREY_NORMAL_COLOR,),
+                itemCount: state.quranSurah?.length ??0,
+              ),
+            );
+          },
         ),
       ),
     );
@@ -74,21 +108,22 @@ class QuraanView extends StatelessWidget {
       Row(
         children: [
           Container(
-            width: 100.w,
-             height: 100.h,
-             // padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 30.w),
+            width: 80.w,
+             height: 80.h,
               decoration: BoxDecoration(
                 color: Theme
                     .of(context)
                     .primaryColor,
                 borderRadius: BorderRadius.circular(12.r),
               ),
-              child: Label(
-                text: '${model.surahNo}',
-                style: Styles.headerText(
-                    color: Theme
-                        .of(context)
-                        .scaffoldBackgroundColor),
+              child: Center(
+                child: Label(
+                  text: '${model.surahNo}',
+                  style: Styles.headerText(
+                      color: Theme
+                          .of(context)
+                          .scaffoldBackgroundColor),
+                ),
               )),
           Expanded(
             child: Container(
@@ -121,7 +156,7 @@ class QuraanView extends StatelessWidget {
                         textAlign: TextAlign.right,
                       ),
                       Text(
-                        '7',
+                       '${ model.total_ayah_surah}',
                         style: Styles.headerText(
                             color: Theme
                                 .of(context)
@@ -132,7 +167,7 @@ class QuraanView extends StatelessWidget {
                   ),
                   const Sizer(),
                   Image.asset(
-                    Assets.maka,
+                   model.place_of_revelation=='Meccan'? Assets.maka:Assets.madina,
                     height: 70.h,
                     width: 70.w,
                   )

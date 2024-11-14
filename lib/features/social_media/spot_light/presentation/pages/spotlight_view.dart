@@ -13,7 +13,7 @@ import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../reels/data/models/new_reels_model.dart';
-import '../../../reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart';
+import '../../../reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import '../../../reels/presentation/widgets/comments.dart';
 import '../../../stories/presentation/cubit/stories_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

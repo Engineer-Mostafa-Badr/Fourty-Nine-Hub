@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/quraan/domain/entity/quran_surah_entity.dart';
@@ -18,8 +17,10 @@ class FetchQuranSurahUseCase extends UseCase<List<QuranSurahEntity>,QuranParams>
 }
 
 class QuranParams {
-  final PaginationParams params;
+  final int page;
+  final int limit;
 
-  QuranParams(
-      { required this.params, });
+  QuranParams({required this.page, required this.limit});
+
+
 }

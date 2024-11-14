@@ -40,8 +40,10 @@ class AdCardDrawerFavourite extends StatefulWidget {
 }
 
 class _AdCardState extends State<AdCardDrawerFavourite> {
-  String get formatedDate => DateFormat('yyyy-MM-dd').format(widget.item.createdAt);
-  Duration get restTimeDuration => DateTime.now().difference(widget.item.createdAt);
+  String get formatedDate =>
+      DateFormat('yyyy-MM-dd').format(widget.item.createdAt);
+  Duration get restTimeDuration =>
+      DateTime.now().difference(widget.item.createdAt);
 
   String get formattedRestTime =>
       DurationHelper().sinceTime(duration: restTimeDuration);
@@ -247,8 +249,9 @@ class _AdCardState extends State<AdCardDrawerFavourite> {
                             child: PremiumRequestButton(
                               adId: widget.item.id,
                               subCategoryId: widget.item.subCategoryId,
-                              subscriptionStatus: widget.item.subscriptionStatus,
-                            //  subscriptionStatus: widget.item.subscriptionStatus??'',
+                              subscriptionStatus:
+                                  widget.item.subscriptionStatus,
+                              //  subscriptionStatus: widget.item.subscriptionStatus??'',
                             ),
                           ),
                           const Sizer(width: 5),
@@ -256,7 +259,8 @@ class _AdCardState extends State<AdCardDrawerFavourite> {
                             flex: 3,
                             child: RequestButton(
                               adId: widget.item.id,
-                              subscriptionStatus: widget.item.subscriptionStatus,
+                              subscriptionStatus:
+                                  widget.item.subscriptionStatus,
                               //subscriptionStatus: widget.item.subscriptionStatus??'',
                             ),
                           )

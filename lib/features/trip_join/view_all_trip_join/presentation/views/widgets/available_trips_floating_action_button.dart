@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -17,7 +19,9 @@ class AvailableTripsFloatingActionButton extends StatelessWidget {
       textDirection: context.isArabic ? TextDirection.rtl : TextDirection.ltr,
       child: FloatingActionButton(
         onPressed: () {
-          context.push(Routes.TRIP_JOIN);
+          context.read<UserCubit>().isLoggedIn
+              ? context.push(Routes.TRIP_JOIN)
+              : context.push(Routes.LOGIN);
         },
         backgroundColor: AppColors.PRIMARY_COLOR,
         child: const Icon(Icons.add, color: Colors.white),

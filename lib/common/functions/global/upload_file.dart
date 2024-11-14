@@ -62,6 +62,49 @@ class UploadFile {
     return null;
   }
 
+  Future<Either<Failure, bool>?> uploadVideo({
+    bool isGallery = true,
+    required String subCategoryId,
+    required Function(UploadFileEntity) onUploaded,
+  }) async {
+    final file = await FilePickerHelper()
+        .pickVideo(isGallery: isGallery) // Assuming you have a method to pick video files
+        .then((file) async {
+      if (file != null) {
+        final bytes = await file.readAsBytes();
+        int size = bytes.length;
+        // Get signed URL
+        final signedURLResponse = await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
+          "type": "video/${file.mimeType ?? 'mp4'}", // Change to video MIME type
+          "size": size,
+          "subcategoryId": subCategoryId
+        });
+
+        // Send to W3 storage
+        signedURLResponse.fold((l) {
+          print(l.toString());
+        }, (data) async {
+          log("responseData: ${jsonEncode(data)}");
+          await sendBinaryFileData(file: file, signedUrl: data['data']['signedUrl'])
+              .then((value) async {
+            final mediaId = data['data']['mediaId'];
+            final confirmUploadResponse = await serviceLocator<ApiConsumer>()
+                .put(EndPoints.confirmUpload(mediaId));
+
+            confirmUploadResponse.fold((l) {
+              return Left(l);
+            }, (data) {
+              onUploaded(UploadFileEntity(mediaId: mediaId, file: file));
+              return const Right(true);
+            });
+          });
+        });
+      }
+    });
+    return null;
+  }
+
+
   static Future<String?> uploadPickedFile({
     required File file,
     required String subCategoryId,
