@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -32,6 +33,7 @@ import 'package:video_player/video_player.dart';
 import '../../../../../../core/utils/shared_pref.dart';
 import '../../../../../trip_join/helpers/print_helper.dart';
 import '../../../data/models/new_reels_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/data_sources/reels_remote_data_source.dart';
 
 part 'reel_state.dart';
 
@@ -92,6 +94,8 @@ class ReelsCubit extends Cubit<ReelsState> {
     String? totalPrice,
     String? advertisementType,
   }) async {
+    print('video size is  ${videoFile.lengthSync()} MB');
+
     // Step 1: Generate Signed URL
     final token = await CacheManager.getAccessToken();
     final response = await http.post(
@@ -154,19 +158,25 @@ class ReelsCubit extends Cubit<ReelsState> {
     );
   }
 
+
+  bool isLoadingReelsMore = false;
+  bool hasMoreReelsData = true;
+  int currentReelPage = 1;
+  int reelPageSize = 10;
+
   Future<void> fetchReels() async {
     if ((state.globalReelsIsLoading ?? false) ||
         (state.globalReelsHasReachedMax ?? false)) return;
 
     emit(state.copyWith(isLoading: true));
-    final result = await _getExploreReelsUseCase(1);
+    final result = await _getExploreReelsUseCase(PaginationParams(page: currentReelPage,limit: reelPageSize));
 
     result.fold(
       (failure) =>
           emit(state.copyWith(reelViewErrorMessage: failure.toString())),
       (data) {
         emit(state.copyWith(
-          reels: [...state.globalReels ?? [], ...data.data.reels],
+          reels: [...state.globalReels, ...data.data.reels],
           isLoading: false,
           hasReachedMax: data.data.pagination.currentPage >=
               data.data.pagination.pageCount,
@@ -233,19 +243,35 @@ class ReelsCubit extends Cubit<ReelsState> {
     );
   }
 
+  Future<String> likeReel(String reelId) async {
+    emit(state.copyWith(
+        isLikingReel: true, likeReelErrorMessage: 'loadingLike'));
+    final result = await _likeReelUseCase(reelId);
+    String message = '';
+    result.fold(
+        (failure) => emit(state.copyWith(
+            isLikingReel: false, likeReelErrorMessage: 'errorLike')), (data) {
+      message = data.message;
+      emit(state.copyWith(
+          likeReelResponse: data,
+          isLikingReel:
+              data.message == "Reel liked successfully" ? true : false));
+    });
+    return message;
+  }
+
   Future<void> addComment(BuildContext context, String reelId, String comment,
       {String? receiverComment, String? parentCommentId}) async {
     emit(state.copyWith(isCommenting: true));
     final result = await _addCommentUseCase(
         AddReelCommentParams(comment: comment, reelId: reelId));
-    result.fold(
-        (failure) {
-          showErrorMessage(context,getFailureMessage(failure, context));
-          emit(state.copyWith(
-              isCommenting: false,
-              commentErrorMessage: "An error occurred while adding the comment",
-            ));
-        }, (addCommentResponse) {
+    result.fold((failure) {
+      showErrorMessage(context, getFailureMessage(failure, context));
+      emit(state.copyWith(
+        isCommenting: false,
+        commentErrorMessage: "An error occurred while adding the comment",
+      ));
+    }, (addCommentResponse) {
       final newComment = CommentData(
         id: addCommentResponse.data.id,
         reelId: addCommentResponse.data.reelId,
@@ -266,7 +292,7 @@ class ReelsCubit extends Cubit<ReelsState> {
         receiverComment: addCommentResponse.data.receiverComment,
         replies: [], // Initialize with an empty replies list
       );
-      state.fetchedComments!.data.insert(0, newComment);
+      comments.insert(0, newComment);
       emit(state.copyWith(
         isCommenting: false,
         commentResponse: addCommentResponse,
@@ -274,24 +300,8 @@ class ReelsCubit extends Cubit<ReelsState> {
     });
   }
 
-  Future<String> likeReel(String reelId) async {
-    emit(state.copyWith(
-        isLikingReel: true, likeReelErrorMessage: 'loadingLike'));
-    final result = await _likeReelUseCase(reelId);
-    String message = '';
-    result.fold(
-        (failure) => emit(state.copyWith(
-            isLikingReel: false, likeReelErrorMessage: 'errorLike')), (data) {
-      message = data.message;
-      emit(state.copyWith(
-          likeReelResponse: data,
-          isLikingReel:
-              data.message == "Reel liked successfully" ? true : false));
-    });
-    return message;
-  }
-
-  Future<void> addReplayComment(String reelId, String comment,
+  Future<void> addReplayComment(
+      BuildContext context, String reelId, String comment,
       {String? receiverComment, String? parentCommentId}) async {
     //parent comment id is comment (global) Main comment
     //receiver comment is reply or
@@ -305,47 +315,179 @@ class ReelsCubit extends Cubit<ReelsState> {
         (failure) => emit(state.copyWith(
               isReplyingComment: false,
               commentErrorMessage: "An error occurred while adding the comment",
-            )), (data) {
+            )), (AddCommentResponse addCommentResponse) {
+      final newReply = CommentData(
+        id: addCommentResponse.data.id,
+        reelId: addCommentResponse.data.reelId,
+        comment: addCommentResponse.data.comment,
+        createdAt: addCommentResponse.data.createdAt,
+        updatedAt: addCommentResponse.data.updatedAt,
+        likeCount: 0,
+        isLiked: false,
+        user: UserComment(
+          firstName: context.read<UserCubit>().state.data!.firstName,
+          id: context.read<UserCubit>().state.data!.id,
+          lastName: context.read<UserCubit>().state.data!.lastName,
+          profilePictureSignedUrl:
+              context.read<UserCubit>().state.data!.profilePicture ??
+                  UIConst.profilePlaceHolder,
+        ),
+        parentId: addCommentResponse.data.parentId,
+        receiverComment: addCommentResponse.data.receiverComment,
+        replies: [],
+      );
+      final parentCommentIndex = comments.indexWhere(
+        (comment) => comment.id == parentCommentId,
+      );
+      if (parentCommentIndex != -1) {
+        comments[parentCommentIndex].replies.insert(0, newReply);
+      }
+      if (comments[parentCommentIndex].replies.length == 1) {
+        print('first reply');
+        _scrollToFirstReply();
+      } else {
+        print('latest reply');
+        _scrollToLatestReply();
+      }
       emit(state.copyWith(
         isReplyingComment: false,
-        commentResponse: data,
-        commentErrorMessage: data.status ? null : "Failed to add comment",
+        commentResponse: addCommentResponse,
+        commentErrorMessage:
+            addCommentResponse.status ? null : "Failed to add comment",
       ));
     });
   }
 
+  final ScrollController replyScrollController = ScrollController();
+
+  void _scrollToLatestReply() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (replyScrollController.hasClients) {
+        replyScrollController.animateTo(
+          replyScrollController.position.minScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  void _scrollToFirstReply() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (replyScrollController.hasClients) {
+        replyScrollController.animateTo(
+          0.0, // Scroll to the top of replies
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  List<CommentData> comments = [];
+  bool isLoadingMore = false;
+  bool hasMoreData = true;
+  int currentPage = 1;
+  int pageSize = 10;
+
+  void loadInitialComments(String reelId) async {
+    comments.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await getComments(reelId);
+  }
+
   Future<void> getComments(String reelId) async {
+    if (!hasMoreData || isLoadingMore) return;
+
     bool isFetching = true;
-    print('initial isFetching: $isFetching');
     emit(state.copyWith(isFetchingComments: isFetching));
-    print('reelId: $reelId');
-    final result = await _getCommentsUseCase(reelId);
+    final result = await _getCommentsUseCase(CommentParams(
+        reelId: reelId,
+        pagingParams: PaginationParams(page: currentPage, limit: pageSize)));
     result.fold((failure) {
       isFetching = false;
-      print('isFetching is false and failure');
       emit(state.copyWith(
           isFetchingComments: isFetching,
           fetchCommentsErrorMessage: 'fetchCommentsError'));
     }, (data) {
+      comments.addAll(data.data);
+      if (data.data.length < pageSize) {
+        hasMoreData = false;
+      } else {
+        currentPage++;
+      }
+
+      isLoadingMore = false;
+
       isFetching = false;
-      print('isFetching is false and success');
       emit(state.copyWith(
           isFetchingComments: isFetching, fetchedComments: data));
     });
   }
 
-  Future<void> toggleCommentLike(String commentId) async {
+  Future<void> toggleCommentLike(String commentId, bool isReply,{String? replyId}) async {
     emit(state.copyWith(isLikingComment: true));
     final result = await _toggleCommentLikeUseCase(commentId);
-    result.fold(
-        (failure) => emit(state.copyWith(
-            isLikingComment: false,
-            likeReelErrorMessage:
-                'An error occurred while liking/unliking the comment')),
-        (data) {
+    result.fold((failure) {
+      print('failure message');
       emit(state.copyWith(
+          isLikingComment: false,
+          likeReelErrorMessage:
+              'An error occurred while liking/unliking the comment'));
+    }, (data) {
+      print("Toggle Like Result: $data"); // Debugging output
+
+      final updatedComments = comments.map((comment) {
+        if (isReply) {
+          // Debug: Check if we are updating a reply
+          // print("Updating a reply with commentId: $commentId");
+
+          // If it's a reply, find the specific reply to update
+          final updatedReplies = comment.replies.map((reply) {
+            if (reply.id == replyId) {
+              // print("Found matching reply with id: ${reply.id}"); // Debugging output
+
+              final isLiked = data == "like";
+            print('Updated replies: $isLiked');
+            print('Updated replies: ${reply.id}');
+              return reply.copyWith(
+                isLiked: isLiked,
+                likeCount: isLiked ? reply.likeCount + 1 : reply.likeCount - 1,
+              );
+            }
+            return reply;
+          }).toList();
+          // Return the comment with updated replies
+          return comment.copyWith(replies: updatedReplies);
+        } else {
+          // Debug: Check if we are updating a main comment
+          // print("Updating a main comment with commentId: $commentId");
+
+          // If it's a main comment, update the main comment like data
+          if (comment.id == commentId) {
+            // print("Found matching main comment with id: ${comment.id}"); // Debugging output
+
+            final isLiked = data == "like";
+        print('Normal like $isLiked');
+            return comment.copyWith(
+              isLiked: isLiked,
+              likeCount:
+                  isLiked ? comment.likeCount + 1 : comment.likeCount - 1,
+            );
+          }
+        }
+        return comment; // Return the original comment if no changes were made
+      }).toList();
+
+      GetCommentsResponse updatedCommentsResponse =
+          state.fetchedComments!.copyWith(data: updatedComments);
+
+      emit(state.copyWith(
+        isLikingComment: false,
+        fetchedComments: updatedCommentsResponse,
         likeReelCommentResponseMessage: data,
-      )); // Save the message ("like" or "unlike")
+      ));
     });
   }
 
@@ -356,7 +498,7 @@ class ReelsCubit extends Cubit<ReelsState> {
 
     emit(state.copyWith(isLoading: true));
     final int pageToFetch =
-        isInitialLoad ? 1 : (state.globalReelsCurrentPage ?? 0) + 1;
+        isInitialLoad ? 1 : (state.globalReelsCurrentPage) + 1;
     final result = await _reelsWithSameAudioUseCase(
         ReelsWithSameAudioParams(audioId: audioId));
     result.fold((failure) => emit(state.copyWith(isLoading: false)), (data) {
@@ -377,5 +519,16 @@ class ReelsCubit extends Cubit<ReelsState> {
 
   void updatePlayingIndex(int? index) {
     emit(state.copyWith(playingIndex: index));
+  }
+
+  String? parentCommentId;
+  String? receiverComment;
+
+  void updateParentCommentIdAndReceiverComment(
+      {String? parentCommentId, String? receiverComment}) {
+    emit(state.copyWith(isCreatingReply: false));
+    this.parentCommentId = parentCommentId;
+    this.receiverComment = receiverComment;
+    emit(state.copyWith(isCreatingReply: true));
   }
 }

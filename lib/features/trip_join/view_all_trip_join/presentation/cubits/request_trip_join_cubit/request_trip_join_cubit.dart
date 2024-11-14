@@ -13,9 +13,13 @@ class RequestTripJoinCubit extends Cubit<RequestTripJoinState> {
   Future<void> makeTripJoinRequest(
       {required String addId,
       required String mobile,
+      required String subCategory,
+      required String url,
       bool premuimRequest = false}) async {
     emit(RequestTripJoinLoading());
     final response = await requestTripJoinUseCase.call(
+      url: url,
+      subCategory: subCategory,
       addId: addId,
       mobile: mobile,
       premuimRequest: premuimRequest,

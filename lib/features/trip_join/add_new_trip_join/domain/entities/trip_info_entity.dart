@@ -5,11 +5,14 @@ class TripInfoEntity {
   final double? duration;
   final String? originAddress;
   final String? destinationAddress;
-  TripInfoEntity({
-    this.price,
-    this.distance,
-    this.duration,
-    this.originAddress,
-    this.destinationAddress,
-  });
+  final String? polyline;
+  final String? type;
+  TripInfoEntity(
+      {this.price,
+      this.distance,
+      this.duration,
+      this.originAddress,
+      this.destinationAddress,
+      this.polyline,
+      this.type});
 }

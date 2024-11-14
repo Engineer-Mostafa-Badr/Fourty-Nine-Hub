@@ -107,6 +107,7 @@ abstract class Routes {
   static const YOUTUBE = '/Youtube';
   static const QURAAN = '/Quraan';
   static const AZKAAR = '/Azkaar';
+  static const AZKAARDETAILS = '/Azkaar/AZKAARDETAILS';
   static const PLAYVIDEO = '/Youtube/PlayVideo';
 
   static const MAZADDETAILS = '/Mazadat/MazadDetails';
@@ -154,9 +155,12 @@ abstract class Routes {
 
   static const TRIP_JOIN = '/TripJoin';
   static const BE_STAR = '/BeAStar';
+  static const BE_STAR_DETAILS = '/BeAStar/BeAStarDetails';
   static const AVAILABLE_TRIPS = '/AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = '/TripJoinRequestNotification';
   static const TRIP_JOIN_REQUEST_HISTORY = '/TripJoinRequestHistory';
+  static const TRIP_JOIN_REQUEST_HISTORY_Pick_Me =
+      '/TripJoinRequestHistoryPickMe';
 
   static const CAR_POOL = '/CarPool';
   static const ADD_NEW_ROUTE = '/AddNewRoute';
@@ -165,6 +169,7 @@ abstract class Routes {
   static const SNAP = '/Snap';
   static const SEEALLBROADCASTS = '/SeeAllBroadcasts';
   static const BROADCAST = '/Broadcast';
+  static const AddNewPickMe = "/AddNeWPickMe";
 }
 
 abstract class Paths {
@@ -294,14 +299,19 @@ abstract class Paths {
   static const SETTINGS = 'Settings';
   static const QURAAN = 'Quraan';
   static const AZKAAR = 'Azkaar';
+  static const AZKAARDETAILS = 'AZKAARDETAILS';
   static const PAYMENT = 'Payment';
   static const SUBSCRIPTIONPLANS = 'SubscriptionPlans';
 
   static const TRIP_JOIN = 'TripJoin';
   static const BE_STAR = 'BeAStar';
+  static const BE_STAR_DETAILS = 'BeAStarDetails';
   static const AVAILABLE_TRIPS = 'AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = 'TripJoinRequestNotification';
   static const TRIP_JOIN_REQUEST_HISTORY = 'TripJoinRequestHistory';
+  static const TRIP_JOIN_REQUEST_HISTORY_Pick_Me =
+      'TripJoinRequestHistoryPickMe';
+
   static const CAR_POOL = 'CarPool';
   static const ADD_NEW_ROUTE = 'AddNewRoute';
 
@@ -319,4 +329,5 @@ abstract class Paths {
   static const MyRating = 'MyRating';
   static const TripRating = 'TripRating';
   static const EDITDRIVERSCREEN = 'EditDriver';
+  static const AddNewPickMe = "AddNeWPickMe";
 }

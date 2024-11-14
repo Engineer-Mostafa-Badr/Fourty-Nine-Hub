@@ -12,6 +12,17 @@ class GetCommentsResponse {
     required this.message,
     required this.data,
   });
+GetCommentsResponse copyWith({
+    bool? status,
+    String? message,
+    List<CommentData>? data,
+  }) {
+    return GetCommentsResponse(
+      status: status ?? this.status,
+      message: message ?? this.message,
+      data: data ?? this.data,
+    );
+  }
 
   factory GetCommentsResponse.fromJson(Map<String, dynamic> json) {
     return GetCommentsResponse(
@@ -61,6 +72,34 @@ class CommentData {
     required this.replies,
   });
 
+  CommentData copyWith({
+    String? id,
+    String? reelId,
+    String? comment,
+    String? parentId,
+    ReceiverCommentEntity? receiverComment,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    int? likeCount,
+    bool? isLiked,
+    UserComment? user,
+    List<CommentData>? replies,
+  }) {
+    return CommentData(
+      id: id ?? this.id,
+      reelId: reelId ?? this.reelId,
+      comment: comment ?? this.comment,
+      parentId: parentId ?? this.parentId,
+      receiverComment: receiverComment ?? this.receiverComment,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      likeCount: likeCount ?? this.likeCount,
+      isLiked: isLiked ?? this.isLiked,
+      user: user ?? this.user,
+      replies: replies ?? this.replies,
+    );
+  }
+
   factory CommentData.fromJson(Map<String, dynamic> json) {
     return CommentData(
       id: json['_id'] as String? ?? '',
@@ -85,6 +124,8 @@ class CommentData {
           [],
     );
   }
+
+
 
   Map<String, dynamic> toJson() {
     return {

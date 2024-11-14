@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/controlle
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/comment_input_field.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/no_scale_text.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
   final Reel reel;
@@ -23,21 +24,35 @@ class CommentsBottomSheet extends StatefulWidget {
 class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   final ScrollController scrollController = ScrollController();
   final TextEditingController _commentController = TextEditingController();
+  final FocusNode focusNode = FocusNode();
+  String? replyToUser;
+  final bool isReplying = false;
+
+
 
   @override
   void initState() {
     super.initState();
-
+scrollController.addListener(_onScroll);
+    focusNode.requestFocus();
     context
         .read<ReelsCubit>()
-        .getComments(widget.reel.id); // Fetch comments once when initialized
+        .loadInitialComments(widget.reel.id); // Fetch comments once when initialized
   }
-@override
+  void _onScroll() {
+    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 200) {
+      context.read<ReelsCubit>().getComments(widget.reel.id);
+    }
+  }
+
+  @override
   void dispose() {
     scrollController.dispose();
+    scrollController.removeListener(_onScroll);
     _commentController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     var reelsCubit = context.read<ReelsCubit>();
@@ -64,12 +79,15 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
           ),
           child: Column(
             children: <Widget>[
-              _buildHandleIndicator(isDark),
-              _buildCommentsHeader(isDark, widget.reel),
-              _buildCommentsList(scrollController),
-              // Divider(color: Colors.grey[800]),
+              _buildHandleIndicator(),
+              _buildCommentsHeader(widget.reel),
+              _buildCommentsList(
+                scrollController,
+              ),
               CommentInputField(
+                focusNode: focusNode,
                 reel: widget.reel,
+                isReplying: isReplying,
                 commentController: _commentController,
                 scrollController: scrollController,
               ),
@@ -80,24 +98,24 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     );
   }
 
-  Widget _buildHandleIndicator(bool isDark) {
+  Widget _buildHandleIndicator() {
     return Container(
       width: 50,
       height: 5.h,
       margin: EdgeInsets.symmetric(vertical: 10.h),
       decoration: BoxDecoration(
-        color: isDark ? Colors.grey[700] : Colors.black87,
+        color: context.isDarkMode ? Colors.grey[700] : Colors.black87,
         borderRadius: BorderRadius.circular(10),
       ),
     );
   }
 
-  Widget _buildCommentsHeader(bool isDark, Reel reel) {
+  Widget _buildCommentsHeader(Reel reel) {
     return Center(
       child: NoScaleText(
         '${reel.commentCount} ${LocaleKeys.comments_header.localize}',
         style: TextStyle(
-          color: isDark ? Colors.white : Colors.black87,
+          color: context.isDarkMode ? Colors.white : Colors.black87,
           fontWeight: FontWeight.bold,
           fontSize: 30.sp,
         ),
@@ -109,21 +127,26 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     return Expanded(
       child: BlocBuilder<ReelsCubit, ReelsState>(
         builder: (context, state) {
-          if (state.isFetchingComments) {
+          if (state.isFetchingComments && context.read<ReelsCubit>().comments.isEmpty) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: AppColors.SECONDARY_COLOR,),
             );
           }
-          final comments = state.fetchedComments;
-          if (comments != null && comments.data.isNotEmpty) {
+          final comments = context.read<ReelsCubit>().comments;
+          if (comments.isNotEmpty) {
             return ListView.builder(
               controller: scrollController,
               shrinkWrap: true,
               // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              itemCount: comments.data.length,
+              itemCount: comments.length,
               itemBuilder: (context, index) {
                 return CommentWidget(
-                  commentData: comments.data.toList()[index],
+                  commentData: comments[index],
+                  index: index,
+                  commentController: _commentController,
+                  //for reply
+                  replyingTo: replyToUser,
+                  focusNode: focusNode,
                 );
               },
             );

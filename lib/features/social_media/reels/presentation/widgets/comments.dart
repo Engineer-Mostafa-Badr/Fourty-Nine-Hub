@@ -14,11 +14,20 @@ import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../tinder/data/shared/shared.dart';
 import 'dart:ui';
 
-
 class CommentWidget extends StatefulWidget {
   final CommentData commentData;
-
-  const CommentWidget({super.key, required this.commentData});
+  final int index;
+  final FocusNode focusNode;
+  String? replyingTo;
+  final TextEditingController commentController;
+  CommentWidget({
+    super.key,
+    required this.commentData,
+    required this.focusNode,
+    required this.index,
+    this.replyingTo,
+    required this.commentController
+  });
 
   @override
   _CommentWidgetState createState() => _CommentWidgetState();
@@ -26,49 +35,36 @@ class CommentWidget extends StatefulWidget {
 
 class _CommentWidgetState extends State<CommentWidget> {
   bool _isRepliesVisible = false;
-  final TextEditingController _replyController = TextEditingController();
-  final FocusNode _replyFocusNode = FocusNode();
+  int _displayedRepliesCount = 3;
 
-  @override
-  void dispose() {
-    _replyController.dispose();
-    _replyFocusNode.dispose();
-    super.dispose();
-  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
-    bool isDark = context.isDarkMode;
-    final TextStyle userNameStyle = TextStyle(
-      fontSize: 40.sp,
-      fontWeight: FontWeight.bold,
-      color: isDark ? Colors.white : Colors.black87,
-    );
-
-    final TextStyle commentTextStyle = TextStyle(
-      color: isDark ? Colors.white70 : Colors.black87,
-      fontSize: 35.sp,
-    );
-
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildCommentRow(isDark, userNameStyle, commentTextStyle),
-          SizedBox(height: 10.h),
-          _buildToggleRepliesButton(isDark),
+          _buildCommentRow(
+              widget.commentData.comment, widget.commentData.createdAt,false),
+          SizedBox(height: 0.h),
+          if (widget.commentData.replies.isNotEmpty) _buildToggleRepliesButton(),
           if (_isRepliesVisible) ...[
-            _buildRepliesList(isDark, userNameStyle, commentTextStyle),
-            _buildReplyInputField(isDark),
+            AnimatedSize(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              child: _isRepliesVisible ? _buildRepliesList() : Container(),
+            ),
           ],
         ],
       ),
     );
   }
 
-  Widget _buildCommentRow(
-      bool isDark, TextStyle userNameStyle, TextStyle commentTextStyle) {
+  Widget _buildCommentRow(String comment, DateTime createdAt,bool reply,{String? replyId}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -89,24 +85,23 @@ class _CommentWidgetState extends State<CommentWidget> {
                 capitalizeAndSplit(
                     '${widget.commentData.user.firstName} ${widget.commentData.user.lastName}'),
                 style: TextStyle(
-                  color: isDark ? Colors.white70 : Colors.grey,
+                  color: context.isDarkMode ? Colors.white70 : Colors.grey,
                   fontSize: 25.sp,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 5.h),
+              // SizedBox(height: 5.h),
               NoScaleText(
-                widget.commentData.comment,
+                comment,
                 style: TextStyle(
-                  color: isDark ? Colors.white70 : Colors.black87,
-                  fontSize: 35.sp,
+                  color: context.isDarkMode ? Colors.white70 : Colors.black87,
+                  fontSize: 25.sp,
                 ),
               ),
-              SizedBox(height: 5.h),
               Row(
                 children: [
                   NoScaleText(
-                    formatDateTime(widget.commentData.createdAt),
+                    formatDateTime(createdAt),
                     style: TextStyle(
                       color: Colors.grey[500],
                       fontWeight: FontWeight.w400,
@@ -115,7 +110,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                   SizedBox(width: 30.w),
                   _buildReplyButton(),
                   const Spacer(),
-                  _buildLikeButton(isDark),
+                  _buildLikeButton(reply,replyId: replyId),
                 ],
               ),
             ],
@@ -125,10 +120,30 @@ class _CommentWidgetState extends State<CommentWidget> {
     );
   }
 
+  void _toggleReplyMode(String? userName) {
+    setState(() {
+      context.read<ReelsCubit>().updateParentCommentIdAndReceiverComment(
+          parentCommentId: widget.commentData.id,
+          receiverComment: widget.commentData.user.id);
+      widget.replyingTo = userName;
+      if (userName != null) {
+        widget.commentController.text = '@$userName ';
+        widget.commentController.selection = TextSelection.fromPosition(
+          TextPosition(offset: widget.commentController.text.length),
+        );
+        widget.focusNode.requestFocus();
+      } else {
+        widget.commentController.clear();
+        widget.focusNode.unfocus();
+      }
+    });
+  }
+
   Widget _buildReplyButton() {
     return InkWell(
       onTap: () {
-        print('tapped');
+        _toggleReplyMode(
+            '${widget.commentData.user.firstName} ${widget.commentData.user.lastName}');
       },
       child: NoScaleText(
         LocaleKeys.reply.localize,
@@ -148,12 +163,11 @@ class _CommentWidgetState extends State<CommentWidget> {
     } else if (difference.inHours < 24) {
       return '${difference.inHours}h ago';
     } else {
-      // Format as "MM-dd" for dates older than 24 hours
       return '${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
     }
   }
 
-  Widget _buildLikeButton(bool isDark) {
+  Widget _buildLikeButton(bool reply,{String? replyId}) {
     return Row(
       children: [
         IconButton(
@@ -164,14 +178,13 @@ class _CommentWidgetState extends State<CommentWidget> {
                 : AppColors.GREY_NORMAL_COLOR,
           ),
           onPressed: () {
-            print('Like comment ${widget.commentData.id}');
-            _handleLikeComment(widget.commentData.id);
+            _handleLikeComment(widget.commentData.id, reply,replyId: replyId);
           },
         ),
         NoScaleText(
           widget.commentData.likeCount.toString(),
           style: TextStyle(
-            color: isDark ? Colors.white70 : Colors.black87,
+            color: context.isDarkMode ? Colors.white70 : Colors.black87,
             fontSize: 25.sp,
           ),
         ),
@@ -180,173 +193,58 @@ class _CommentWidgetState extends State<CommentWidget> {
     );
   }
 
-  void _handleLikeComment(String commentId) {
-    context.read<ReelsCubit>().toggleCommentLike(commentId).then((_) {
+  void _handleLikeComment(String commentId, bool isReply ,{String? replyId}) {
+    print('isReply : $isReply');
+    context.read<ReelsCubit>().toggleCommentLike(commentId,isReply,replyId:replyId ).then((_) {
       FocusScope.of(context).unfocus();
-      context.read<ReelsCubit>().getComments(widget.commentData.reelId);
     }).catchError((error) {
       _showErrorSnackBar('Failed to send like. Please try again.');
     });
   }
 
-  Widget _buildToggleRepliesButton(bool isDark) {
-    if (widget.commentData.replies.isEmpty) return const SizedBox.shrink();
+  Widget _buildToggleRepliesButton() {
+    final remainingReplies =
+        widget.commentData.replies.length - _displayedRepliesCount;
+    final buttonText = _isRepliesVisible
+        ? (remainingReplies > 0
+            ? "View ${remainingReplies > 3 ? 'More' : remainingReplies} Replies"
+            : "Hide Replies")
+        : "View ${widget.commentData.replies.length} ${widget.commentData.replies.length == 1 ? 'Reply' : 'Replies'}";
 
-    return GestureDetector(
-      onTap: () => setState(() => _isRepliesVisible = !_isRepliesVisible),
-      child: NoScaleText(
-        _isRepliesVisible
-            ? LocaleKeys.hide_replies.localize
-            : LocaleKeys.view_replies.localize,
-        style: TextStyle(color: AppColors.LIGHT_BLUE, fontSize: 30.sp),
+    return Padding(
+      padding:  EdgeInsets.symmetric(horizontal: 40.0.w),
+      child: InkWell(
+        onTap: () {
+          setState(() {
+            if (_isRepliesVisible && remainingReplies > 0) {
+              _displayedRepliesCount += 3;
+            } else {
+              _isRepliesVisible = !_isRepliesVisible;
+              if (!_isRepliesVisible) {
+                _displayedRepliesCount = 3;
+              }
+            }
+          });
+        },
+        child: Row(
+          children: [
+            Text(buttonText,style: TextStyle(color: Colors.grey,fontSize:25.sp,fontWeight:FontWeight.w600),),
+            _isRepliesVisible? const Icon(Icons.keyboard_arrow_up,color: Colors.grey,):const Icon(Icons.keyboard_arrow_down,color: Colors.grey,)
+          ],
+        ),
       ),
     );
   }
-
-  Widget _buildRepliesList(
-      bool isDark, TextStyle userNameStyle, TextStyle commentTextStyle) {
+  Widget _buildRepliesList() {
+    final repliesToShow = widget.commentData.replies.take(_displayedRepliesCount).toList();
     return Padding(
       padding: const EdgeInsets.only(left: 40.0, bottom: 8, top: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: widget.commentData.replies
-            .map((reply) => _buildSingleReply(
-                reply, isDark, userNameStyle, commentTextStyle))
-            .toList(),
+      child: ListView(
+        shrinkWrap:true,
+        controller: context.read<ReelsCubit>().replyScrollController,
+        children: repliesToShow.map((reply) => _buildCommentRow(reply.comment,reply.createdAt,true,replyId: reply.id)).toList(),
       ),
     );
-  }
-
-  Widget _buildSingleReply(CommentData reply, bool isDark,
-      TextStyle userNameStyle, TextStyle commentTextStyle) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 5.h),
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                backgroundImage:
-                    NetworkImage(reply.user.profilePictureSignedUrl),
-                radius: 16,
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    NoScaleText(
-                      '${reply.user.firstName} ${reply.user.lastName}',
-                      style: userNameStyle,
-                    ),
-                    SizedBox(height: 5.h),
-                    NoScaleText(
-                      reply.comment,
-                      style: commentTextStyle,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(
-                  Icons.favorite,
-                  color: reply.isLiked
-                      ? AppColors.PRIMARY_COLOR_DARK
-                      : AppColors.GREY_NORMAL_COLOR,
-                ),
-                onPressed: () => _handleLikeComment(reply.id),
-              ),
-              NoScaleText(
-                reply.likeCount.toString(),
-                style: TextStyle(
-                  color: isDark ? Colors.white70 : Colors.black87,
-                  fontSize: 35.sp,
-                ),
-              ),
-              const Spacer(),
-              IconButton(
-                icon: Icon(Icons.reply,
-                    color: isDark ? Colors.white70 : Colors.black87),
-                onPressed: () =>
-                    _showReplyInput(reply.reelId, reply.id, reply.user.id),
-              ),
-            ],
-          ),
-          const Divider(thickness: 0.1),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildReplyInputField(bool isDark) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 40.0, top: 10),
-      child: Row(
-        children: [
-          Expanded(
-            child: MediaQuery(
-              data: MediaQuery.of(context)
-                  .copyWith(textScaler: const TextScaler.linear(1.0)),
-              child: TextField(
-                controller: _replyController,
-                focusNode: _replyFocusNode,
-                style: TextStyle(color: isDark ? Colors.white : Colors.black87),
-                maxLines: null,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: isDark ? Colors.grey[800] : Colors.black12,
-                  hintStyle: TextStyle(
-                    color: isDark ? Colors.grey : Colors.black54,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide.none,
-                  ),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 20, vertical: 10.h),
-                  hintText: LocaleKeys.write_reply_hint.localize,
-                ),
-              ),
-            ),
-          ),
-          IconButton(
-            icon: Icon(Icons.send,
-                color: isDark ? AppColors.LIGHT_BLUE : AppColors.PRIMARY_COLOR),
-            onPressed: _handleSendReply,
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showReplyInput(
-      [String? reelId, String? parentCommentId, String? receiverCommentId]) {
-    setState(() {
-      _isRepliesVisible = true;
-      _replyFocusNode.requestFocus(); // Focus on the reply input field
-    });
-  }
-
-  void _handleSendReply() async {
-    final replyText = _replyController.text.trim();
-    if (replyText.isNotEmpty) {
-      await context.read<ReelsCubit>().addReplayComment(
-            widget.commentData.reelId,
-            replyText,
-            parentCommentId: widget.commentData.id,
-            receiverComment: widget.commentData.user.id,
-          );
-
-      print('Reply sent successfully ${widget.commentData.id}');
-      _replyController.clear();
-      FocusScope.of(context).unfocus();
-      context.read<ReelsCubit>().getComments(widget.commentData.reelId);
-    }
   }
 
   void _showErrorSnackBar(String message) {
@@ -355,6 +253,7 @@ class _CommentWidgetState extends State<CommentWidget> {
     );
   }
 }
+
 bool isKeyboardVisible(BuildContext context) {
   return MediaQuery.of(context).viewInsets.bottom != 0;
 }

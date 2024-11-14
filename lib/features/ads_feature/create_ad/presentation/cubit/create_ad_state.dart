@@ -7,7 +7,8 @@ enum CreateAdStates {
   success,
   loadCities,
   loadCitiesSuccess,
-  imageUploading
+  imageUploading,
+  updateSuccess,
 }
 
 extension CreateAdStateX on CreateAdState {
@@ -35,6 +36,7 @@ class CreateAdState {
   final MainCategoryEntity? selectedCategory;
   final SubCategoryEntity? selectedSubCategory;
   final List<GovernorateEntity>? governorates;
+  final EditMyAdsEntity? myAdById;
   bool? isUser;
   bool? isSale;
   bool? isMale;
@@ -52,6 +54,7 @@ class CreateAdState {
       this.cities,
       this.city='',
       this.governorates,
+      this.myAdById,
       this.isUser = true,
       this.isSale = true,
       this.isPrice = true,
@@ -70,6 +73,7 @@ class CreateAdState {
     MainCategoryEntity? selectedCategory,
     List<SelectionEntity>? selections,
     List<GovernorateEntity>? governorates,
+    EditMyAdsEntity? myAdById,
     bool? isUser,
     bool? isSale,
     bool? isMale,
@@ -100,6 +104,7 @@ class CreateAdState {
       governorate: governorate ?? this.governorate,
       governorates: governorates ?? this.governorates,
       selections: selections ?? this.selections,
+      myAdById: myAdById ?? this.myAdById,
     );
   }
 }

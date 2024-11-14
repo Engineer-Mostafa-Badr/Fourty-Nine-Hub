@@ -125,9 +125,9 @@ class TinderRemoteDataSourceImpl implements TinderRemoteDataSource {
 
   @override
   Future<Either<Failure, dynamic>> sendGift(SendGiftParams params) async {
-    final response = await _apiConsumer.get(
+    final response = await _apiConsumer.post(
       EndPoints.sendGift,
-      queryParameters: params.toJson()
+      data: params.toJson()
     );
     return response.fold(
           (failure) => Left(failure),

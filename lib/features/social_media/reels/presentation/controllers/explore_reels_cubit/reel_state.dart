@@ -1,8 +1,10 @@
 part of 'reel_cubit.dart';
 
 class ReelsState {
-  final List<Reel>? globalReels;
 
+  final bool isCreatingReply;
+
+   List<Reel> globalReels;
   final List<Reel>? reelsForFollower;
 
   final List<Reel>? reelsForAudio;
@@ -37,7 +39,7 @@ class ReelsState {
   final bool isFetchingComments;
   final String? fetchCommentsErrorMessage;
   final GetCommentsResponse? fetchedComments;
-
+  final List<CommentData> comments;
   // New fields related to replaying a comment
   final bool isReplyingComment;
   final String? replyCommentErrorMessage;
@@ -58,7 +60,9 @@ class ReelsState {
   final bool showPlayPauseIcon;
   ReelsState({
     this.isCreatingReelView,
+    this.isCreatingReply = false,
     this.reelViewErrorMessage,
+    this.comments = const [],
     this.reelViewSuccess,
     this.reelsForFollower,
     this.isInitialized = false,
@@ -73,7 +77,7 @@ class ReelsState {
     this.likeReelCommentResponseMessage = '',
     this.reelSaveResponse,
     this.reelShareResponse,
-    this.globalReels,
+    this.globalReels = const [],
     this.globalReelsIsLoading,
     this.playingIndex,
     this.globalReelsHasReachedMax,
@@ -96,6 +100,7 @@ class ReelsState {
   });
 
   ReelsState copyWith({
+    bool? isCreatingReply,
     bool? isCreatingReelView,
     String? reelViewErrorMessage,
     bool? reelViewSuccess,
@@ -104,6 +109,7 @@ class ReelsState {
     bool? reelsForFollowerHasReachedMax,
     int? reelsForFollowerCurrentPage,
     int? playingIndex,
+    List<CommentData>? comments,
     //for video controller
     bool? isInitialized,
     bool? isPlaying,
@@ -135,6 +141,8 @@ class ReelsState {
     bool? uploadReelSuccess,
   }) {
     return ReelsState(
+      isCreatingReply: isCreatingReply ?? this.isCreatingReply,
+      comments: comments ?? this.comments,
       isCreatingReelView: isCreatingReelView ?? this.isCreatingReelView,
       reelViewErrorMessage: reelViewErrorMessage ?? this.reelViewErrorMessage,
       reelViewSuccess: reelViewSuccess ?? this.reelViewSuccess,

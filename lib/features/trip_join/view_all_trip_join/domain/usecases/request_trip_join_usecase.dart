@@ -11,8 +11,12 @@ class RequstTripJoinUseCase {
   Future<Either<Failure, bool>> call(
       {required String addId,
       required String mobile,
+      required String subCategory,
+      required String url,
       bool premuimRequest = false}) {
     return viewAllTripJoinRepo.requestTripJoin(
+      subCategory: subCategory,
+      url: url,
       addId: addId,
       mobile: mobile,
       premuimRequest: premuimRequest,

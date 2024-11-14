@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/domain/entities/join_trip_entity.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
@@ -27,10 +29,6 @@ void showCreateRouteModalSheet(BuildContext context,
     context: context,
     isScrollControlled: true,
     builder: (BuildContext context) {
-      // return BlocProvider<JoinTripCarPoolCubit>(
-      //   create: (context) => serviceLocator(),
-      //   child: CreateRouteBottomSheet(isComfort: isComfort),
-      // );
       return MultiBlocProvider(
           providers: [
             BlocProvider<JoinTripCarPoolCubit>(
@@ -64,6 +62,7 @@ class CreateRouteBottomSheet extends StatefulWidget {
       required this.userLocation});
 
   @override
+  // ignore: library_private_types_in_public_api
   _CreateRouteBottomSheetState createState() => _CreateRouteBottomSheetState();
 }
 
@@ -72,7 +71,7 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
   bool isDriverWomanOnly = false;
   late final JoinTripCarPoolCubit joinTripCarPoolCubit;
   late final GetCurrencyCubit getCurrencyCubit;
-
+  bool localComfortToggle = false;
   @override
   void initState() {
     getCurrencyCubit = context.read<GetCurrencyCubit>()..getCurrencyData();
@@ -85,20 +84,37 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
   void dispose() {
     // TODO: implement dispose
     joinTripCarPoolCubit.close();
-
+    getCurrencyCubit.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: BlocBuilder<JoinTripCarPoolCubit, JoinTripCarPoolState>(
-        builder: (context, state) {
-          return Column(
+    return BlocListener<JoinTripCarPoolCubit, JoinTripCarPoolState>(
+        listener: (context, state) {
+          if (state is JoinTripCarPoolFailure) {
+            print("Failure State Reached");
+            Navigator.pop(context);
+
+            showErrorMessage(
+              context,
+              context.isArabic
+                  ? "لا يمكنك الانضمام لهذه الرحلة"
+                  : "You can't join this trip",
+            );
+          }
+          if (state is JoinTripCarPoolSuccess) {
+            print("Success State Reached");
+            Navigator.pop(context);
+            showSuccessMessage(context, LocaleKeys.done.localize);
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('LocaleKeys.bookSeat.localize', style: Styles.headerText()),
+              Text(LocaleKeys.bookSeat.localize, style: Styles.headerText()),
               const Sizer(),
               Text(LocaleKeys.pricePerSeat.localize,
                   style: Styles.mediumText()),
@@ -106,35 +122,19 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // BlocBuilder<GetPriceCarpoolCubit, GetPriceCarpoolState>(
-                  //   builder: (context, state) {
-                  //     return
                   Text(
                     "${widget.price}",
                     style: Styles.headerText(
                         fontWeight: FontWeight.bold, fontSize: 50),
                   ),
-                  //   },
-                  // ),
                   BlocBuilder<GetCurrencyCubit, GetCurrencyState>(
                     builder: (context, state) {
-                      // if (state is GetCurrencySuccess) {
-                      //   return Text(
-                      //     " ${state.currency}",
-                      //     style: Styles.mediumText(
-                      //         fontWeight: FontWeight.bold,
-                      //         color: AppColors.SECONDARY_COLOR),
-                      //   );
-                      // } else {
-                      //   return Text(
-                      //     "",
-                      //     style: Styles.mediumText(
-                      //         fontWeight: FontWeight.bold,
-                      //         color: AppColors.SECONDARY_COLOR),
-                      //   );
-                      // }
                       return Text(
-                        BlocProvider.of<GetCurrencyCubit>(context).currency,
+                        context.isArabic
+                            ? BlocProvider.of<GetCurrencyCubit>(context)
+                                .currnecyAr
+                            : BlocProvider.of<GetCurrencyCubit>(context)
+                                .currnecyEn,
                         style: Styles.mediumText(
                             fontWeight: FontWeight.bold,
                             color: AppColors.SECONDARY_COLOR),
@@ -153,15 +153,15 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
                         Transform.scale(
                           scale: 0.8,
                           child: Switch(
-                            value: widget.isComfort,
+                            value: localComfortToggle,
                             onChanged: (value) {
                               setState(() {
-                                widget.isComfort = value; // Update the state
+                                localComfortToggle = !localComfortToggle;
                               });
                             },
                             activeColor: AppColors.PRIMARY_COLOR,
                             trackOutlineColor:
-                            const MaterialStatePropertyAll(Colors.grey),
+                                const MaterialStatePropertyAll(Colors.grey),
                             activeTrackColor: Colors.grey,
                             inactiveTrackColor: Colors.white,
                             inactiveThumbColor: Colors.grey,
@@ -194,7 +194,7 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
                       onTap: () {
                         print("object");
                         bookTrip(
-                          isComfort: widget.isComfort,
+                          isComfort: localComfortToggle,
                           seat: widget.seatId,
                           tripId: widget.tripId,
                           userLocation: widget.userLocation,
@@ -205,18 +205,16 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
                 ],
               ),
             ],
-          );
-        },
-      ),
-    );
+          ),
+        ));
   }
 
   void bookTrip(
       {required String seat,
       required String tripId,
       required List<double> userLocation,
-      required bool isComfort}) {
-    joinTripCarPoolCubit.joinTripCarPool(
+      required bool isComfort}) async {
+    await joinTripCarPoolCubit.joinTripCarPool(
       joinTripCarPoolParam: JoinTripCarPoolParam(
         seatName: seat,
         tripId: tripId,
@@ -224,10 +222,6 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
         comfort: isComfort,
       ),
     );
-    Navigator.pop(context);
-    // Optionally, show a success or loading message
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Booking in progress...')),
-    );
+    // Navigator.pop(context);
   }
 }

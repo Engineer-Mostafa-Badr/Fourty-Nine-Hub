@@ -6,7 +6,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/usecases/pay_company_ad_use_case.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/custom_container.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/show_post_company_advertise.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
@@ -219,11 +218,11 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                             child: GestureDetector(
                               onTap: totalPrice > 0
                                   ? () {
-                                      context
-                                          .read<CreateCompanyAdCubit>()
-                                          .payCompanyAd(
-                                            PayCompanyAdParams(amount: totalPrice),
-                                          );
+                                      // context
+                                      //     .read<CreateCompanyAdCubit>()
+                                      //     .payCompanyAd(
+                                      //       PayCompanyAdParams(amount: totalPrice),
+                                      //     );
                                       // Navigator.push(
                                       //   context,
                                       //   MaterialPageRoute(

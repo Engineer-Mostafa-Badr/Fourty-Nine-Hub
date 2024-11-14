@@ -1,12 +1,15 @@
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_ad_details_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/get_meals_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_Id_usecase.dart';
+import 'package:fourtyninehub/features/azkaar/domain/use_case/fetch_azkar_use_case.dart';
+import 'package:fourtyninehub/features/azkaar/domain/use_case/fetch_details_azkar_use_case.dart';
 import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
@@ -26,6 +29,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_user_data_use_case.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
+import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
 
 import '../../../../../features/account_taps/my_adds/domain/usecases/edit_my_ads_use_case.dart';
@@ -101,8 +105,8 @@ class EndPoints {
     return '/user-transactions/mainWallet';
   }
 
-  static String geMainCategoryWallet() {
-    return '/categories/main';
+  static String geMainCategoryWallet(MainCategoryParams params) {
+    return '/categories/main/for-subscriptions?page=1&limit=60';
   }
 
   static String geSubCategoryWallet(String id) {
@@ -120,7 +124,8 @@ class EndPoints {
   static String deleteCompanyAd(String id) {
     return '/advertisementCompany/$id';
   }
-  static const payCompanyAd='/advertisementCompany/payment';
+
+  static const payCompanyAd = '/advertisementCompany/payment';
 
   static String getPostsCompanyAd(FetchPostCompanyAdvertiseParams params) {
     return '/advertisementCompany/my-advertisement?page=${params.paginationParams.page}&filter=${params.filter}&limit=${params.paginationParams.limit}&subCategory=66adecd7aa2ff24015872e9f';
@@ -138,7 +143,10 @@ class EndPoints {
   static const activate = '/navigators/customPage';
 
   // Star
-  static const allStar = '/talent/';
+  static String allStar(StarPaginationParams params) =>
+      '/talent/?page=${params.page}&limit=${params.limit}';
+  static String winnerStar(StarPaginationParams params) =>
+      '/subscriber/winners?page=${params.page}&limit=${params.limit}';
   static const myStar = '/talent/my-talent';
   static const uploadStar = '/talent/upload';
   static String deleteMyStar({required String id}) =>
@@ -201,9 +209,13 @@ class EndPoints {
 
   // Quran
   static String quranSurah(QuranParams params) =>
-      '/quran/surahs?page=${params.params.page}&limit=${params.params.limit}';
+      '/quran/surahs?page=${params.page}&limit=${params.limit}';
   static String quran(int id) =>
       '/quran/surah/$id';
+  static String azkar(AzkarParams params) =>
+      '/azkar/categories?page=${params.page}&limit=${params.limit}';
+  static String azkarDetails(AzkarDetailsParams params) =>
+      '/azkar/azkar-in-category?page=${params.page}&limit=${params.limit}';
 
   static String notificationsSeen(String id) => '/notifications/$id';
 
@@ -324,8 +336,6 @@ class EndPoints {
   static const getAllDoctorReservations =
       '/health/dashboard/number-of-reservations';
 
-
-
   static const isDoctorApproval = '/health/check-doctor-approval';
   static const getDoctorProfile = '/health/doctor-profile';
   static const updateDoctorProfilePhoto = '/health/doctor/picture';
@@ -401,7 +411,7 @@ class EndPoints {
   static deleteStory(String id)=> '/stories/$id';
   static addFavouriteCategories(String id)=> '/favorite-sub-category/$id';
   static fetchLastSeen(String id)=> '/users/last-seen/$id';
-  static const sendGift= '/tinder/sendGifts';
+  static const sendGift= '/tinder/sendGifts?subCategory=6718f27eacb309f8b1f94d0c';
   static const fetchGifts= '/dashboard-gifts?limit=10';
   static const tinderUploadPicture= '/tinder/uploadPictures?subCategory=66af974f8bf69f9469944746';
   static const createStory= '/stories/text';
@@ -552,8 +562,6 @@ class EndPoints {
   static String createAdvertisement(CreateAdvertisementParams params) {
     return '/advertisementCompany';
   }
-
-
 
   static String getAdvertisement(TwitterFeedParams params) {
     return '/advertisementCompany?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
@@ -963,18 +971,27 @@ class EndPoints {
 
   static String getAllTripJoin = '/ride/come-with-you/get-all';
   static String getAllPickMe = '/ride/pick-me/get-all';
+  static String addNewPickMeTrip =
+      '/ride/pick-me?subCategory=62ea008d69ea29c91dfc3908';
+  static String makeTripJoinRequest(
+      String addId, String subCategory, String url) {
+    return '$url$addId?subCategory=$subCategory';
 
-  static String makeTripJoinRequest(String addId) {
-    return '/ride/come-with-you/request/$addId?subCategory=62ea00e269ea29c91dfc390c';
+    // return '/ride/come-with-you/request/$addId?subCategory=62ea00e269ea29c91dfc390c';
   }
 
   static String getAllMyTripJoin = '/ride/come-with-you/my';
+  static String getAllMyPickMeTrips = '/ride/pick-me/my';
+  static String getRequestPickMeTrips = '/ride/pick-me/trip/requests';
 
-  static String deleteTrip(String id) => '/ride/come-with-you/Delete/$id';
+  static String deleteTrip(String url, String id) => '$url/$id';
 
   static String getRequest(String id) =>
       '/ride/come-with-you/trip/requests//$id';
   static String carpoolRoutePrice = '/carpool/price';
+  static String acceptTripForDriver(String id) =>
+      '/carpool/driverAcceptCarpool/$id';
+  static String getLatAndLongFromAddress = '/ride/trips/address/latAndLong';
 
   // Chance
   static String chance = '/chance-ads/my-ads';
@@ -990,5 +1007,4 @@ class EndPoints {
 
   static String joinTripCarPool = '/carpool/joinCompleteBus';
   static String createCarPool = '/carpool/create';
-
 }

@@ -23,9 +23,13 @@ class ViewAllTripJoinRepoImp implements ViewAllTripJoinRepo {
   Future<Either<Failure, bool>> requestTripJoin(
       {required String addId,
       required String mobile,
+      required String subCategory,
+      required String url,
       bool premuimRequest = false}) {
     return viewripJoinRemoteDataSource.requestTripJoin(
       addId: addId,
+      subCategory: subCategory,
+      url: url,
       mobile: mobile,
       premuimRequest: premuimRequest,
     );
