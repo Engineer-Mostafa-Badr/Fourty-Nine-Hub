@@ -1031,7 +1031,6 @@
   "removeVideo": "هل أنت متأكد أنك تريد إزالة هذا الفيديو؟",
   "enterImageOrVideo": "الرجاء إدخال الصور أو الفيديو",
   "noResultsFound": "لم يتم العثور على نتائج.",
-  "mutualFriend": "صديق مشترك",
   "serveClientsByClickRegister": "اخدم عملاءك بالنقر على زر التسجيل.",
   "totalOrder": "إجمالي الطلبات",
   "totalRevenue": "إجمالي الإيرادات",
@@ -1056,7 +1055,7 @@
   "reviews": "مراجعة",
   "addToCart": "إضافة الي السلة",
   "showAllOrders": "عرض كل الطلبات",
-  "restaurantOrders": "طلبات المطعم"
+  "restaurantOrders": "طلبات المطعم",
   "mutualFriend": "صديق مشترك",
   "clearForEveryone": "مسح لدي الجميع",
   "clearForMe": "مسح لدي",

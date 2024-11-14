@@ -1037,7 +1037,6 @@
   "endToEndEncryption": "end-to-end encrypted",
   "liveStreamOptions": "Live Stream Options",
   "createLive": "Create Live",
-  "watch": "Watch",
   "Face":"Face",
   "Insta":"Insta",
   "day": "Day",
@@ -1074,7 +1073,7 @@
   "reviews": "Reviews",
   "addToCart": "Add To Cart",
   "showAllOrders": "Show All Orders",
-  "restaurantOrders": "Restaurant Orders"
+  "restaurantOrders": "Restaurant Orders",
   "watch": "Watch",
   "clearForEveryone": "Clear for Everyone",
   "clearForMe": "Clear for Me",
