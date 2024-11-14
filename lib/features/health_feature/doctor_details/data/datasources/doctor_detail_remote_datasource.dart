@@ -64,7 +64,7 @@ class DoctorDetailsRemoteDataSourceImpl
       (failure) => Left(failure),
       (data) => Right(
         List<UserDoctorRateEntity>.from(
-          (data['data']['doctorRate'] as List).map((e) => UserDoctorRateModel.fromJson(e)),
+          (data['data'] as List).map((e) => UserDoctorRateModel.fromJson(e)),
         ),
       ),
     );

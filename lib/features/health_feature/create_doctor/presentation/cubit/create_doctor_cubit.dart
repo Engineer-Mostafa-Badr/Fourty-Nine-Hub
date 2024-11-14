@@ -134,10 +134,13 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   ];
 
   void _saveWorkDays() {
+    _createDoctorParams.clinic?.workDays.clear();
+    _createDoctorParams.calls?.workDays.clear();
+    _createDoctorParams.visitHome?.workDays.clear();
     for (var element in clinicTimetable) {
-      if (element.isAvailable) {
-        _createDoctorParams.clinic?.workDays
-            .add(DoctorDayModel.fromEntity(element));
+      if (element.isAvailable==true) {
+          _createDoctorParams.clinic?.workDays
+              .add(DoctorDayModel.fromEntity(element));
       }
     }
 
@@ -154,6 +157,10 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
             .add(DoctorDayModel.fromEntity(element));
       }
     }
+    _createDoctorParams.clinic?.workDays.toSet().toList();
+    _createDoctorParams.calls?.workDays.toSet().toList();
+    _createDoctorParams.visitHome?.workDays.toSet().toList();
+
   }
 
   // ================================ DatePickers ===============================

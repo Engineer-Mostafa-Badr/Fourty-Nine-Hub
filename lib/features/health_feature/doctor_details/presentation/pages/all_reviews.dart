@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/doctor_review_card.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
@@ -11,9 +13,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/styles.dart';
 
-import '../../../../../common/widgets/stateless/dynamic/review_card.dart';
 import '../../../../../res/style/app_colors.dart';
-import '../../../../ride/RideRequest/domain/entity/driver_review_entity.dart';
 
 class AllReviews extends StatelessWidget {
   const AllReviews({super.key, });
@@ -21,8 +21,9 @@ class AllReviews extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(
+      appBar: BackAppBar(
         label: Labels.reviews,
+        backColor: cardDarkColor(context),
       ),
       body: BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
           buildWhen: (previous, current) =>
@@ -33,8 +34,8 @@ class AllReviews extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }else if(state is DoctorDetailsReviewsLoaded){
             return ListView.separated(
-                itemBuilder: (context, index) => ReviewCard(
-                  review: ReviewEntity(id: '',comment: state.rates[index].comment,rate: state.rates[index].rate,createdAt: '',name: state.rates[index].userName),
+                itemBuilder: (context, index) => DoctorReviewCard(
+                  review: state.rates[index],
                 ),
                 separatorBuilder: (context, index) => const Divider(
                   color: Colors.grey,

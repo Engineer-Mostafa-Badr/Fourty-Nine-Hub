@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/charts/bar_chart.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -47,7 +46,7 @@ class DoctorHistoryCard extends StatelessWidget {
                 width: 20,
               ),
               Label(
-                text: (totalValue).toShortScale,
+                text: title=='Total Appointments'?totalEarnedMoney.fold(0, (sum, element) => sum + element.count.toInt()).toString():totalEarnedMoney.fold(0, (sum, element) => sum + element.totalEarned.toInt()).toString(),
                 style: Styles.headerText(),
               ),
             ],
@@ -65,10 +64,15 @@ class DoctorHistoryCard extends StatelessWidget {
         .where((element) => element.appointmentType == 'clinic')
         .fold(0, (sum, element) => sum + element.totalEarned),
               ),
-              if(totalEarnedMoney.any((element) => element.appointmentType=='call'))BarData(
+              if(totalEarnedMoney.any((element) => element.appointmentType=='calls'))BarData(
                 label: Labels.call,
-                value: callValue,
-              ),
+                value: title=='Total Appointments'?totalEarnedMoney
+        .where((element) => element.appointmentType == 'calls')
+        .fold(0, (sum, element) => sum + element.count):totalEarnedMoney
+        .where((element) => element.appointmentType == 'calls')
+        .fold(0, (sum, element) => sum + element.totalEarned),
+    ),
+
               if(totalEarnedMoney.any((element) => element.appointmentType=='homevisit'))BarData(
                 label: Labels.homeVist,
                 value: homeVisitValue,

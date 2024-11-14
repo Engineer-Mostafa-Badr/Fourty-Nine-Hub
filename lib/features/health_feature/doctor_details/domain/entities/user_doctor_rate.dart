@@ -2,9 +2,14 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/domain/enti
 
 class UserDoctorRateEntity extends DoctorRateEntity {
   final String userName;
+  final String? userId;
+  final String? phone;
+  final String? gender;
+  final bool? openCall;
   UserDoctorRateEntity(
       {required super.id,
       required super.comment,
+        this.phone,this.userId, this.gender, this.openCall,
       required super.rate,
       required this.userName});
 }
