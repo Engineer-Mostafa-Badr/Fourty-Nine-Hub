@@ -120,6 +120,62 @@ class _CommentWidgetState extends State<CommentWidget> {
     );
   }
 
+  Widget _buildReplyRow(String comment, DateTime createdAt,bool reply,{String? replyId,bool? isLike,int? replyCount}) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ImageFromInternet(
+          width: 50,
+          height: 50,
+          isCircle: true,
+          image: widget.commentData.user.profilePictureSignedUrl.isEmpty
+              ? UIConst.profilePlaceHolder
+              : widget.commentData.user.profilePictureSignedUrl,
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              NoScaleText(
+                capitalizeAndSplit(
+                    '${widget.commentData.user.firstName} ${widget.commentData.user.lastName}'),
+                style: TextStyle(
+                  color: context.isDarkMode ? Colors.white70 : Colors.grey,
+                  fontSize: 25.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              // SizedBox(height: 5.h),
+              NoScaleText(
+                comment,
+                style: TextStyle(
+                  color: context.isDarkMode ? Colors.white70 : Colors.black87,
+                  fontSize: 25.sp,
+                ),
+              ),
+              Row(
+                children: [
+                  NoScaleText(
+                    formatDateTime(createdAt),
+                    style: TextStyle(
+                      color: Colors.grey[500],
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  SizedBox(width: 30.w),
+                  _buildReplyButton(),
+                  const Spacer(),
+                  _buildReplyLikeButton(reply,replyId: replyId,isLike: isLike,likeCount: replyCount),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   void _toggleReplyMode(String? userName) {
     setState(() {
       context.read<ReelsCubit>().updateParentCommentIdAndReceiverComment(
@@ -193,6 +249,32 @@ class _CommentWidgetState extends State<CommentWidget> {
     );
   }
 
+  Widget _buildReplyLikeButton(bool reply,{String? replyId,bool? isLike,int? likeCount}) {
+    return Row(
+      children: [
+        IconButton(
+          icon: Icon(
+            Icons.favorite,
+            color: isLike==true
+                ? AppColors.PRIMARY_COLOR_DARK
+                : AppColors.GREY_NORMAL_COLOR,
+          ),
+          onPressed: () {
+            _handleLikeComment(widget.commentData.id, reply,replyId: replyId);
+          },
+        ),
+        NoScaleText(
+          likeCount.toString(),
+          style: TextStyle(
+            color: context.isDarkMode ? Colors.white70 : Colors.black87,
+            fontSize: 25.sp,
+          ),
+        ),
+        SizedBox(width: 10.w),
+      ],
+    );
+  }
+
   void _handleLikeComment(String commentId, bool isReply ,{String? replyId}) {
     print('isReply : $isReply');
     context.read<ReelsCubit>().toggleCommentLike(commentId,isReply,replyId:replyId ).then((_) {
@@ -242,7 +324,7 @@ class _CommentWidgetState extends State<CommentWidget> {
       child: ListView(
         shrinkWrap:true,
         controller: context.read<ReelsCubit>().replyScrollController,
-        children: repliesToShow.map((reply) => _buildCommentRow(reply.comment,reply.createdAt,true,replyId: reply.id)).toList(),
+        children: repliesToShow.map((reply) => _buildReplyRow(reply.comment,reply.createdAt,true,replyId: reply.id,isLike: reply.isLiked,replyCount: reply.likeCount)).toList(),
       ),
     );
   }

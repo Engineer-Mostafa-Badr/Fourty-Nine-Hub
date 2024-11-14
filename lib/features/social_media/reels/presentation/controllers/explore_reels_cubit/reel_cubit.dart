@@ -428,7 +428,7 @@ class ReelsCubit extends Cubit<ReelsState> {
 
   Future<void> toggleCommentLike(String commentId, bool isReply,{String? replyId}) async {
     emit(state.copyWith(isLikingComment: true));
-    final result = await _toggleCommentLikeUseCase(commentId);
+    final result = await _toggleCommentLikeUseCase(isReply==true?replyId??'':commentId);
     result.fold((failure) {
       print('failure message');
       emit(state.copyWith(
@@ -441,7 +441,7 @@ class ReelsCubit extends Cubit<ReelsState> {
       final updatedComments = comments.map((comment) {
         if (isReply) {
           // Debug: Check if we are updating a reply
-          // print("Updating a reply with commentId: $commentId");
+          print("Updating a reply with commentId: $commentId");
 
           // If it's a reply, find the specific reply to update
           final updatedReplies = comment.replies.map((reply) {
@@ -451,30 +451,34 @@ class ReelsCubit extends Cubit<ReelsState> {
               final isLiked = data == "like";
             print('Updated replies: $isLiked');
             print('Updated replies: ${reply.id}');
-              return reply.copyWith(
-                isLiked: isLiked,
-                likeCount: isLiked ? reply.likeCount + 1 : reply.likeCount - 1,
-              );
+            reply.isLiked = isLiked;
+            reply.likeCount = isLiked ? reply.likeCount + 1 : reply.likeCount - 1;
+              return reply;
             }
             return reply;
           }).toList();
           // Return the comment with updated replies
-          return comment.copyWith(replies: updatedReplies);
+          comment.replies.clear();
+          comment.replies.addAll(updatedReplies);
+          return comment;
         } else {
           // Debug: Check if we are updating a main comment
-          // print("Updating a main comment with commentId: $commentId");
+          print("Updating a main comment with commentId: $commentId");
 
           // If it's a main comment, update the main comment like data
           if (comment.id == commentId) {
-            // print("Found matching main comment with id: ${comment.id}"); // Debugging output
+            print("Found matching main comment with id: ${comment.id}"); // Debugging output
 
             final isLiked = data == "like";
         print('Normal like $isLiked');
-            return comment.copyWith(
-              isLiked: isLiked,
-              likeCount:
-                  isLiked ? comment.likeCount + 1 : comment.likeCount - 1,
-            );
+            // return comment.copyWith(
+            //   isLiked: isLiked,
+            //   likeCount:
+            //       isLiked ? comment.likeCount + 1 : comment.likeCount - 1,
+            // );
+            comment.isLiked = isLiked;
+            comment.likeCount = isLiked ? comment.likeCount + 1 : comment.likeCount - 1;
+            return comment;
           }
         }
         return comment; // Return the original comment if no changes were made
