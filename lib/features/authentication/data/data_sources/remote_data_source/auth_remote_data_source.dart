@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_ot
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../../core/utils/shared_pref.dart';
+import '../../../../../main.dart';
 
 abstract class AuthRemoteDataSource {
   const AuthRemoteDataSource();
@@ -71,10 +72,11 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     );
     return result.fold(
       (failure) => Left(failure),
-      (response) {
+      (response)async {
         _apiConsumer.attachToken(UserTokensModel.fromJson(
           response['data'],
         ));
+        await registerSocket();
         return Right(
         UserTokensModel.fromJson(
           response['data'],
@@ -287,6 +289,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     return result.fold((l) => Left(l), (r) async {
       await CacheManager.deleteAllTokens();
       _apiConsumer.removeTokenFromHeader();
+      await registerSocket();
       return Right(r);
     });
   }

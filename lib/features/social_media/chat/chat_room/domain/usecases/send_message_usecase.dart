@@ -25,6 +25,7 @@ class SendMessageParams {
   final String? replyMessageId;
   List<File> media;
   final bool oneTimeView;
+  bool isForward = false;
   List<MessageSharedContactsEntity> sharedContacts;
 
   SendMessageParams({
@@ -34,6 +35,7 @@ class SendMessageParams {
     required this.media,
     required this.oneTimeView,
     required this.sharedContacts,
+    required this.isForward,
   });
 
   @override

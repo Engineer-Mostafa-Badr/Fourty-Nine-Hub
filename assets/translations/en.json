@@ -1037,7 +1037,6 @@
   "endToEndEncryption": "end-to-end encrypted",
   "liveStreamOptions": "Live Stream Options",
   "createLive": "Create Live",
-  "watch": "Watch",
   "Face":"Face",
   "Insta":"Insta",
   "day": "Day",
@@ -1076,5 +1075,14 @@
   "showAllOrders": "Show All Orders",
   "restaurantOrders": "Restaurant Orders",
   "rating": "Rating",
-  "rateDoctor": "Rate Doctor"
+  "rateDoctor": "Rate Doctor",
+  "restaurantOrders": "Restaurant Orders",
+  "watch": "Watch",
+  "clearForEveryone": "Clear for Everyone",
+  "clearForMe": "Clear for Me",
+  "clearThisChat": "Clear this Chat?",
+  "opened": "Opened",
+  "forwardMessage": "Forward Message",
+  "forwarded": "Forwarded",
+  "continueUsingChatServices": " , To continue using chat services"
 }

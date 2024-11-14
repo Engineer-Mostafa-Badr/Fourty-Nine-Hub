@@ -50,6 +50,9 @@ abstract class Routes {
   static const ARCHIVEDCHATS = '/ArchivedChatsView';
   static const CHATROOMCAMERAPICKER = '/ChatRoom/CameraPicker';
   static const MEDIASLIDER = '/ChatRoom/MediaSlider';
+  static const ONETIMEVOICEMESSAGE = '/OneTimeVoiceMessageView';
+  static const ONETIMEDOCUMENTMESSAGE = '/OneTimeDocumentMessageView';
+  static const FORWARDMESSAGES = '/ForwardMessagesView';
   static const VIEWCONTACT = '/ChatRoom/ViewContact';
   static const IMAGESPAGEVIEW = '/ImagesPageView';
   static const SHOWIMAGEVIEW = '/ShowImagesView';
@@ -211,6 +214,9 @@ abstract class Paths {
   static const VIEWCONTACT = 'ViewContact';
   static const ATTACHMENTSVIEW = 'AttachmentsView';
   static const CHATPROFILEVIEW = 'ChatProfileView';
+  static const ONETIMEVOICEMESSAGEVIEW = 'OneTimeVoiceMessageView';
+  static const ONETIMEDOCUMENTMESSAGEVIEW = 'OneTimeDocumentMessageView';
+  static const FORWARDMESSAGESVIEW = 'ForwardMessagesView';
   static const CHATROOMCAMERAPICKER = 'CameraPicker';
   static const MEDIASLIDER = 'MediaSlider';
   static const REELS = 'Reels';

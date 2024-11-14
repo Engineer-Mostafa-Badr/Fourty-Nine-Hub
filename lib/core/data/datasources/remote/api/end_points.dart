@@ -149,8 +149,7 @@ class EndPoints {
       '/subscriber/winners?page=${params.page}&limit=${params.limit}';
   static const myStar = '/talent/my-talent';
   static const uploadStar = '/talent/upload';
-  static String deleteMyStar({required String id}) =>
-      '/talent/$id';
+  static String deleteMyStar({required String id}) => '/talent/$id';
 
   //My Ads
   static const myAdsAuction = '/ads/allMyAds/auction';
@@ -236,8 +235,10 @@ class EndPoints {
   static String expectedPrice = "$developmentBaseUrl/ride/trips/expected/price";
   static String acceptOfferRide =
       "$developmentBaseUrl/ride/offers/accept/offer";
-  static String declineOfferRide = "$developmentBaseUrl/ride/offers/decline/offer";
-  static String expiredTripRider = "$developmentBaseUrl/ride/trips/user?limit=10&page=1&subCategory=667382a7f87288ce577e723b";
+  static String declineOfferRide =
+      "$developmentBaseUrl/ride/offers/decline/offer";
+  static String expiredTripRider =
+      "$developmentBaseUrl/ride/trips/user?limit=10&page=1&subCategory=667382a7f87288ce577e723b";
   static String pictureOptional =
       "$developmentBaseUrl/ride/info/picture-optional";
   static String newTripRide = "$developmentBaseUrl/ride/trips/newTrip";
@@ -420,9 +421,12 @@ class EndPoints {
   static fetchStories(PaginationParams params)=> '/stories/explore?limit=${params.limit}&page=${params.page}';
   static const muteUserStories = '/stories/muteUserStory';
   static const updatePrivacy = '/stories/privacy';
-  static const getFollowers = '/follow/followers?subCategory=62ef7cf658c90d4a7ed48120';
-  static addReelComment(AddReelCommentParams params)=> '/reels/comments/${params.reelId}';
-  static addReelReply(AddReelReplyParams params)=> '/reels/comments/${params.reelId}';
+  static const getFollowers =
+      '/follow/followers?subCategory=62ef7cf658c90d4a7ed48120';
+  static addReelComment(AddReelCommentParams params) =>
+      '/reels/comments/${params.reelId}';
+  static addReelReply(AddReelReplyParams params) =>
+      '/reels/comments/${params.reelId}';
 
   // ride request
   // static const expectedPrice = '/ride/trips/expected/price';
@@ -740,6 +744,7 @@ class EndPoints {
   static String getNumOfResturants = '/restaurants/num-of-restaurants';
   static String foodExpiredOrders(PaginationParams params) => '/food/expired-orders?page=${params.page}&limit=${params.limit}';
   static String toggleRestaurantFavourite(String id) => '/food/favorite-restaurant/$id';
+
   static String isResturant = '/restaurants/check-user-have-restaurant';
   static String createRestaurant = '/restaurants/create-restaurant';
   static String changeConnectivity = '/restaurants/modify-active';
@@ -790,7 +795,7 @@ class EndPoints {
   }
 
   static String subCategoryAds(GetAdsParams params) {
-    return '/ads/subCategoryAds/${params.subCategoryId}?filter=${params.filter}&page=${params.page}&limit=${params.limit}${(params.userId!=null&&params.userId!="")?"&userId=${params.userId}":""}';
+    return '/ads/subCategoryAds/${params.subCategoryId}?filter=${params.filter}&page=${params.page}&limit=${params.limit}${(params.userId != null && params.userId != "") ? "&userId=${params.userId}" : ""}';
   }
 
   static String createAuction(String id) {
@@ -825,7 +830,7 @@ class EndPoints {
   }
 
   static String adDetails(GetAdDetailsParams params) {
-    return '/ads/getAd/${params.adId}${params.userId.isNotEmpty?"?userId=${params.userId}":""}';
+    return '/ads/getAd/${params.adId}${params.userId.isNotEmpty ? "?userId=${params.userId}" : ""}';
   }
 
   static String adRequests(String id) {
@@ -867,6 +872,10 @@ class EndPoints {
 
   static String getChatMessages(String chatId) {
     return '/chat/get-chat/$chatId';
+  }
+
+  static String getChatDetails(String chatId) {
+    return '/chat/get-chat-details/$chatId';
   }
 
   static String createNormalChat(
@@ -949,6 +958,22 @@ class EndPoints {
 
   static String updateUnLockChatPassword() {
     return '/chat/update-lock-chat';
+  }
+
+  static String getOneTimeViewMessage() {
+    return '/chat/message/one-time-message';
+  }
+
+  static String clearChat(String chatId) {
+    return '/chat/clear-chat/$chatId';
+  }
+
+  static String pinMessage(String chatId) {
+    return '/chat/pin-chat-message/$chatId';
+  }
+
+  static String unPinMessage(String chatId) {
+    return '/chat/unpin-chat-message/$chatId';
   }
 
   static String getChatGroups = '/chat/group/get-groups/';
