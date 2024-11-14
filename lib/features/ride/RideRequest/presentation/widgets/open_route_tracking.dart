@@ -85,14 +85,14 @@ class _OpenRouteTrackingState extends State<OpenRouteTracking> {
 
   void _addDestinationMarker(LatLng point) {
     setState(() {
-      markers.add(
-        Marker(
-          width: 80.0,
-          height: 80.0,
-          point: point,
-          builder: (_) => const Icon(Icons.location_on, color: Colors.red, size: 40.0),
-        ),
-      );
+      // markers.add(
+      //   Marker(
+      //     width: 80.0,
+      //     height: 80.0,
+      //     point: point,
+      //     builder: (_) => const Icon(Icons.location_on, color: Colors.red, size: 40.0),
+      //   ),
+      // );
     });
     _getRoute(point);
   }
@@ -103,10 +103,10 @@ class _OpenRouteTrackingState extends State<OpenRouteTracking> {
       appBar: AppBar(
         title: const Text('OpenStreetMap with Flutter'),
       ),
-      body: 
-      // currentLocation == null
-      //     ? const Center(child: CircularProgressIndicator())
-      //     : 
+      body:
+          // currentLocation == null
+          //     ? const Center(child: CircularProgressIndicator())
+          //     :
           FlutterMap(
         mapController: mapController,
         options: MapOptions(
@@ -117,8 +117,7 @@ class _OpenRouteTrackingState extends State<OpenRouteTracking> {
         ),
         children: [
           TileLayer(
-            urlTemplate:
-            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             subdomains: const ['a', 'b', 'c'],
           ),
           MarkerLayer(

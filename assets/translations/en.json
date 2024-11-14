@@ -533,6 +533,8 @@
   "enterValidPhoneNumber": "Please enter valid mobile number",
   "welcomeToTripjoin": "Welcome To Trip Join",
   "ownCar": "You own a car!\nSomeone will share trip with you / pay half price",
+  "dontOwnCar": "You don't own a car!\nSomeone will share trip with you / pay half price",
+
   "startingPoint": "Starting Point",
   "destinationPoint": "Destination Point",
   "KM": "KM",

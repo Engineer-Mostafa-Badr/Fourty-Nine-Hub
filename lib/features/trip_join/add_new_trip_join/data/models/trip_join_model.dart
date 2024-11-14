@@ -1,17 +1,22 @@
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/trip_info_entity.dart';
 
 class TripInfoModel extends TripInfoEntity {
+  final String? type;
+  final String? polyline;
+
   TripInfoModel({
     super.price,
     super.distance,
     super.duration,
     super.destinationAddress,
     super.originAddress,
+    this.type,
+    this.polyline,
   });
 
   @override
   String toString() {
-    return 'TripJoinModel(price: $price, distance: $distance, duration: $duration, destinationAddress: $destinationAddress, originAddress: $originAddress)';
+    return 'TripJoinModel(price: $price, distance: $distance, duration: $duration, destinationAddress: $destinationAddress, originAddress: $originAddress, type: $type, polyline: $polyline)';
   }
 
   factory TripInfoModel.fromJson(Map<String, dynamic> json) => TripInfoModel(
@@ -20,6 +25,8 @@ class TripInfoModel extends TripInfoEntity {
         duration: (json['duration'] as num?)?.toDouble(),
         destinationAddress: json['destinationAddress'] as String?,
         originAddress: json['originAddress'] as String?,
+        type: json['type'] as String?,
+        polyline: json['polyline'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -28,5 +35,7 @@ class TripInfoModel extends TripInfoEntity {
         'duration': duration,
         'destinationAddress': destinationAddress,
         'originAddress': originAddress,
+        'type': type,
+        'polyline': polyline,
       };
 }

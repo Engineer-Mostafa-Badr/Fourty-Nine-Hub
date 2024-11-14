@@ -9,18 +9,15 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
   final Socket _socket;
 
   GetAllTripsCubit(this._socket) : super(GetAllTripsInitial()) {
-    // Constructor body
     _initializeSocketListeners();
   }
 
   void _initializeSocketListeners() {
-    // Connect the socket
     if (!_socket.connected) {
       _socket.connect();
       print("Socket connection initiated...");
     }
 
-    // Listen for real-time trip updates from the server
     _socket.on('carpool:getAllTrip', (data) {
       print("Data received from server: $data");
 
@@ -28,14 +25,13 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
         final trips = _parseTrips(data);
         emit(GetAllTripsSuccess(trips));
       } catch (e) {
-        emit(GetAllTripsFailure('Parsing error: ${e.toString()}'));
+        emit(GetAllTripsFailure('there is no trips try again'));
       }
     });
 
-    // Handle potential socket errors
     _socket.on('connect_error', (error) {
-      print("Socket connection error: $error");
-      emit(GetAllTripsFailure('Erorr happend . Please Try again: $error'));
+      print("there is no trips try again");
+      emit(GetAllTripsFailure('there is no trips try again'));
     });
 
     _socket.on('disconnect', (data) {
@@ -45,14 +41,10 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
 
   void fetchAllCarpoolTrips() {
     _socket.connect();
-
     emit(GetAllTripsLoading());
-
-    // Request the server to send the current list of carpool trips
     _socket.emit('carpool:getAllTrip');
   }
 
-  // Parse the raw data from the socket into CarpoolTripParam objects
   List<CarpoolTripParam> _parseTrips(dynamic data) {
     if (data is String) {
       print("Received data as String, decoding...");
@@ -76,26 +68,26 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
       if (tripData['CARPOOL_LOCATIONS'] is List) {
         locations = (tripData['CARPOOL_LOCATIONS'] as List).map((loc) {
           return CarpoolLocation(
-            id: loc['_id'],
-            carpoolId: loc['carpoolId'],
-            type: loc['type'],
+            id: loc['_id'] ?? '',
+            carpoolId: loc['carpoolId'] ?? '',
+            type: loc['type'] ?? '',
             locationTitle: loc['locationTitle'],
             coordinates: LocationCoordinates(
-              latitude: loc['location']?['coordinates']?[0] != null
-                  ? loc['location']['coordinates'][0] as double
-                  : null,
-              longitude: loc['location']?['coordinates']?[1] != null
-                  ? loc['location']['coordinates'][1] as double
-                  : null,
+              latitude: loc['location']?['coordinates']?[0] as double?,
+              longitude: loc['location']?['coordinates']?[1] as double?,
             ),
             comfort: loc['comfort'] ?? false,
             booked: loc['booked'] ?? false,
+            otp: loc['OTP'] as String?,
+            verifiedOtp: loc['verifiedOTP'] ?? false,
+            gender: loc['gender'] as String?,
+            tripStatusForUser: loc['tripStatusForUser'] as String?,
             bookedUser: loc['bookedUser'] != null
                 ? BookedUser(
-                    id: loc['bookedUser']['_id'],
-                    firstName: loc['bookedUser']['firstName'],
-                    lastName: loc['bookedUser']['lastName'],
-                    gender: loc['bookedUser']['gender'],
+                    id: loc['bookedUser']['_id'] ?? '',
+                    firstName: loc['bookedUser']['firstName'] ?? '',
+                    lastName: loc['bookedUser']['lastName'] ?? '',
+                    gender: loc['bookedUser']['gender'] ?? '',
                   )
                 : null,
           );
@@ -103,19 +95,21 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
       }
 
       return CarpoolTripParam(
-        id: tripData['_id'],
-        ownerId: tripData['ownerId'],
-        seats: tripData['seats'],
-        driverId: tripData['driverId'],
-        driverStatus: tripData['driverStatus'],
-        womenDriverOnly: tripData['womenDriverOnly'],
-        womenOnly: tripData['womenOnly'],
-        comfort: tripData['comfort'],
-        tripStatus: tripData['tripStatus'],
-        priceForEveryUser: tripData['priceForEveryUser'],
-        priceForDriver: tripData['priceForDriver'],
-        duration: tripData['duration'],
-        distance: tripData['distance'],
+        id: tripData['_id'] ?? '',
+        ownerId: tripData['ownerId'] ?? '',
+        subcategoryId: tripData['subcategoryId'] as String?,
+        seats: (tripData['seats'] ?? 0).toInt(),
+        driverId: tripData['driverId'] as String?,
+        driverStatus: tripData['driverStatus'] as String?,
+        womenDriverOnly: tripData['womenDriverOnly'] ?? false,
+        womenOnly: tripData['womenOnly'] ?? false,
+        comfort: tripData['comfort'] ?? false,
+        tripStatus: tripData['tripStatus'] as String?,
+        priceForEveryUser: (tripData['priceForEveryUser'] ?? 0).toDouble(),
+        priceForDriver: (tripData['priceForDriver'] ?? 0).toDouble(),
+        duration: (tripData['duration'] ?? 0).toInt(),
+        distance: (tripData['distance'] ?? 0).toInt(),
+        polyline: tripData['polyline'] as String?,
         expireAt: DateTime.parse(tripData['expireAt']),
         createdAt: DateTime.parse(tripData['createdAt']),
         updatedAt: DateTime.parse(tripData['updatedAt']),
@@ -126,7 +120,6 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
 
   @override
   Future<void> close() {
-    // Clean up the socket connection when the Cubit is closed
     _socket.dispose();
     return super.close();
   }

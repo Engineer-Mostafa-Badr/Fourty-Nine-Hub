@@ -5,14 +5,21 @@ import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widget
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widgets/map_and_address_finder_car_pool.dart';
 import 'package:fourtyninehub/features/carpool/create_carpool/presentation/cubits/cubit/create_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/carpool/create_carpool/presentation/cubits/cubit/create_car_pool_cubit.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 
 class AddNewRouteBody extends StatelessWidget {
   const AddNewRouteBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateCarPoolCubit, CreateCarPoolState>(
+    return BlocConsumer<CreateCarPoolCubit, CreateCarPoolState>(
+      listener: (context, state) {
+        if (state is CreateCarPoolSuccess) {
+          context.pushReplacement(Routes.CAR_POOL);
+        }
+      },
       builder: (context, state) {
         if (state is CreateCarPoolSuccess) {
           WidgetsBinding.instance.addPostFrameCallback((_) {

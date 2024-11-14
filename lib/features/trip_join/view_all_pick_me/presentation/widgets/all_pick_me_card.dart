@@ -1,10 +1,12 @@
 import 'package:easy_localization/easy_localization.dart' as easyLocale;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_pick_me/domain/entities/pickme_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
@@ -220,10 +222,25 @@ class AllPickMeCard extends StatelessWidget {
                     context.isArabic ? TextDirection.rtl : TextDirection.ltr,
                 child: Column(
                   children: [
-                    Text(
-                        pickMeCardEntity.journeyPrice?.toStringAsFixed(0) ?? '',
-                        style: Styles.headerText(
-                            fontSize: 70, color: Colors.green[600])),
+                    Row(
+                      children: [
+                        Text(
+                            pickMeCardEntity.journeyPrice?.toStringAsFixed(0) ??
+                                '',
+                            style: Styles.headerText(
+                                fontSize: 70, color: Colors.green[600])),
+                        Text(
+                          context.isArabic
+                              ? BlocProvider.of<GetCurrencyCubit>(context)
+                                  .currnecyAr
+                              : BlocProvider.of<GetCurrencyCubit>(context)
+                                  .currnecyEn,
+                          style: Styles.mediumText(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.SECONDARY_COLOR),
+                        )
+                      ],
+                    ),
                     Text(
                       _localizeStatus(context, pickMeCardEntity.status ?? ''),
                       style: Styles.headerText(
@@ -237,20 +254,6 @@ class AllPickMeCard extends StatelessWidget {
             ],
           ),
           const Sizer(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: InkWell(
-              onTap: subscribeMessageOnTap,
-              child: Text(
-                LocaleKeys.subscribeToContactClient.localize,
-                style: Styles.headerText(
-                  color: AppColors.getSecondryColor(context),
-                  fontSize: 30,
-                ),
-                textAlign: TextAlign.start,
-              ),
-            ),
-          )
         ],
       ),
     );
@@ -276,31 +279,3 @@ class AllPickMeCard extends StatelessWidget {
     }
   }
 }
-
-List<PickMeCardEntity> pickMeStaticData = List.generate(
-  20,
-  (index) {
-    return PickMeCardEntity(
-      id: '',
-      userId: '',
-      firstName: index.isEven ? 'Eslam' : 'Amina',
-      categoryId: '',
-      journeyPrice: 200,
-      status: index.isEven ? 'regular' : 'premium',
-      //  seatNumber:'' ,
-      isRepeated: index.isEven,
-      startingAddressAr:
-          '"29J7+W7G، سامية الجمل، المنصورة (قسم 2)، المنصورة، محافظة الدقهلية 7650310، مصر"',
-      destinationAddressAr:
-          '29WF+QFJ، المنصورة (قسم 2)، اول المنصورة، محافظة الدقهلية، مص',
-      startingAddressEn: 'samya gamak 762882',
-      destinationAddressEn: 'mansora 54',
-      isApproved: index.isEven,
-      publishDate: 1727539200,
-      phone: '01008962554',
-      gender: index.isEven ? 'male' : 'female',
-      paymentMethod: 'mainWallet',
-      subscribedPremium: index.isEven,
-    );
-  },
-);

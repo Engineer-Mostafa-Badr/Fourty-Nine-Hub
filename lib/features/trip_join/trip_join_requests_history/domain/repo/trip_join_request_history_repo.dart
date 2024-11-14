@@ -6,7 +6,8 @@ import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/doma
 abstract class TripJoinRequestHistoryRepo {
   Future<Either<Failure, List<TripJoinMyRequestEntity>>> fetchMyTripJoinAds(
       {required int page});
-  Future<Either<Failure, bool>> deleteTrip({required String id});
+  Future<Either<Failure, bool>> deleteTrip(
+      {required String subCategory, required String url, required String id});
   Future<Either<Failure, List<TripJoinRequestHistoryEntity>>> getRequests(
       {required String id, required int page});
 }

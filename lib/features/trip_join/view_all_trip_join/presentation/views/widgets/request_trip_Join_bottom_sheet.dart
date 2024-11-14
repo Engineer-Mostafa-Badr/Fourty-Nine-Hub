@@ -13,10 +13,16 @@ import 'package:go_router/go_router.dart';
 class RequstTripJoinBottomSheet extends StatefulWidget {
   const RequstTripJoinBottomSheet({
     super.key,
-    required this.tripJoinCardEntity,
+    // required this.tripJoinCardEntity,
     this.isPremium = false,
+    required this.subCategory,
+    required this.url,
+    required this.tripId,
   });
-  final TripJoinCardEntity tripJoinCardEntity;
+  // final TripJoinCardEntity tripJoinCardEntity;
+  final String subCategory;
+  final String url;
+  final String tripId;
   final bool isPremium;
   @override
   State<RequstTripJoinBottomSheet> createState() =>
@@ -70,7 +76,9 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                 onTap: () {
                   if (formKey.currentState!.validate()) {
                     context.read<RequestTripJoinCubit>().makeTripJoinRequest(
-                          addId: widget.tripJoinCardEntity.id ?? '',
+                          subCategory: widget.subCategory,
+                          url: widget.url,
+                          addId: widget.tripId,
                           mobile: phoneNumber,
                           premuimRequest: widget.isPremium,
                         );

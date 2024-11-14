@@ -122,7 +122,8 @@ class EndPoints {
   static String deleteCompanyAd(String id) {
     return '/advertisementCompany/$id';
   }
-  static const payCompanyAd='/advertisementCompany/payment';
+
+  static const payCompanyAd = '/advertisementCompany/payment';
 
   static String getPostsCompanyAd(FetchPostCompanyAdvertiseParams params) {
     return '/advertisementCompany/my-advertisement?page=${params.paginationParams.page}&filter=${params.filter}&limit=${params.paginationParams.limit}&subCategory=66adecd7aa2ff24015872e9f';
@@ -327,8 +328,6 @@ class EndPoints {
       '/health/book-appointment/reject/$appointmentId';
   static const getAllDoctorReservations =
       '/health/dashboard/number-of-reservations';
-
-
 
   static const isDoctorApproval = '/health/check-doctor-approval';
   static const getDoctorProfile = '/health/doctor-profile';
@@ -556,8 +555,6 @@ class EndPoints {
   static String createAdvertisement(CreateAdvertisementParams params) {
     return '/advertisementCompany';
   }
-
-
 
   static String getAdvertisement(TwitterFeedParams params) {
     return '/advertisementCompany?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
@@ -967,18 +964,27 @@ class EndPoints {
 
   static String getAllTripJoin = '/ride/come-with-you/get-all';
   static String getAllPickMe = '/ride/pick-me/get-all';
+  static String addNewPickMeTrip =
+      '/ride/pick-me?subCategory=62ea008d69ea29c91dfc3908';
+  static String makeTripJoinRequest(
+      String addId, String subCategory, String url) {
+    return '$url$addId?subCategory=$subCategory';
 
-  static String makeTripJoinRequest(String addId) {
-    return '/ride/come-with-you/request/$addId?subCategory=62ea00e269ea29c91dfc390c';
+    // return '/ride/come-with-you/request/$addId?subCategory=62ea00e269ea29c91dfc390c';
   }
 
   static String getAllMyTripJoin = '/ride/come-with-you/my';
+  static String getAllMyPickMeTrips = '/ride/pick-me/my';
+  static String getRequestPickMeTrips = '/ride/pick-me/trip/requests';
 
-  static String deleteTrip(String id) => '/ride/come-with-you/Delete/$id';
+  static String deleteTrip(String url, String id) => '$url/$id';
 
   static String getRequest(String id) =>
       '/ride/come-with-you/trip/requests//$id';
   static String carpoolRoutePrice = '/carpool/price';
+  static String acceptTripForDriver(String id) =>
+      '/carpool/driverAcceptCarpool/$id';
+  static String getLatAndLongFromAddress = '/ride/trips/address/latAndLong';
 
   // Chance
   static String chance = '/chance-ads/my-ads';
@@ -994,5 +1000,4 @@ class EndPoints {
 
   static String joinTripCarPool = '/carpool/joinCompleteBus';
   static String createCarPool = '/carpool/create';
-
 }
