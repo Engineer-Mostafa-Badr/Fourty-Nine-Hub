@@ -290,184 +290,194 @@ class _ChatRoomViewState extends State<ChatRoomView>
         BlocProvider.value(value: widget.chatsCubit),
         BlocProvider(
           create: (context) => serviceLocator<ChatRoomCubit>()
-            ..init(chat: widget.chatsCubit.selectedChat),
+            ..init(selectedChat: widget.chatsCubit.selectedChat),
         ),
       ],
       child: Builder(builder: (context) {
-        return Scaffold(
-          appBar: ChatRoomAppBar(
-            chatRoomCubit: context.read<ChatRoomCubit>(),
-          ),
-          body: Stack(
-            children: [
-              // Background image
-              Positioned.fill(
-                child: Image.asset(
-                  Assets.chatRoomBackground,
-                  scale: 7,
-                  repeat: ImageRepeat.repeat,
-                  opacity: context.isDarkMode
-                      ? const AlwaysStoppedAnimation(0.1)
-                      : const AlwaysStoppedAnimation(0.7),
+        ChatRoomCubit chatRoomCubit = context.read<ChatRoomCubit>();
+        return BlocBuilder<ChatRoomCubit, ChatRoomState>(
+          builder: (context, state) {
+            return Scaffold(
+              appBar: PreferredSize(
+                preferredSize: chatRoomCubit.chat.pinnedMessageId != null
+                    ? const Size.fromHeight(100)
+                    : const Size.fromHeight(60),
+                child: ChatRoomAppBar(
+                  chatRoomCubit: chatRoomCubit,
                 ),
               ),
-              // Main content
-              SafeArea(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Expanded(child: MessagesListView()),
-                    BlocConsumer<ChatsCubit, ChatsState>(
-                      builder: (context, state) {
-                        if (isTyping) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                CircleAvatar(
-                                  radius: 15,
-                                  backgroundColor: context.isDarkMode
-                                      ? AppColors.QUANTITY_COLOR
-                                      : Colors.white,
-                                  backgroundImage: const NetworkImage(
-                                      UIConst.profilePlaceHolder),
-                                ),
-                                const Sizer(width: 5),
-                                ScaleTransition(
-                                  scale: _typingAnimation,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: context.isDarkMode
-                                          ? AppColors.QUANTITY_COLOR
-                                          : Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: const Radius.circular(12),
-                                        topRight: const Radius.circular(12),
-                                        bottomLeft: isArabic
-                                            ? const Radius.circular(0)
-                                            : const Radius.circular(12),
-                                        bottomRight: isArabic
-                                            ? const Radius.circular(12)
-                                            : const Radius.circular(0),
-                                      ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: context.isDarkMode
-                                              ? AppColors.BACKGROUND_COLOR
-                                                  .withOpacity(0.05)
-                                              : Colors.black12,
-                                          blurRadius: 8,
-                                          offset: const Offset(0, 4),
-                                        ),
-                                      ],
-                                    ),
-                                    child: const Center(
-                                      child: Icon(
-                                        Icons.more_horiz,
-                                        color: AppColors.PRIMARY_COLOR_DARK,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          );
-                        }
-                        if (isRecording) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                CircleAvatar(
-                                  radius: 15,
-                                  backgroundColor: context.isDarkMode
-                                      ? AppColors.QUANTITY_COLOR
-                                      : Colors.white,
-                                  backgroundImage: const NetworkImage(
-                                      UIConst.profilePlaceHolder),
-                                ),
-                                const Sizer(width: 5),
-                                ScaleTransition(
-                                  scale: _recordingAnimation,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: context.isDarkMode
-                                          ? AppColors.QUANTITY_COLOR
-                                          : Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: const Radius.circular(12),
-                                        topRight: const Radius.circular(12),
-                                        bottomLeft: isArabic
-                                            ? const Radius.circular(0)
-                                            : const Radius.circular(12),
-                                        bottomRight: isArabic
-                                            ? const Radius.circular(12)
-                                            : const Radius.circular(0),
-                                      ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: context.isDarkMode
-                                              ? AppColors.BACKGROUND_COLOR
-                                                  .withOpacity(0.05)
-                                              : Colors.black12,
-                                          blurRadius: 8,
-                                          offset: const Offset(0, 4),
-                                        ),
-                                      ],
-                                    ),
-                                    child: const Center(
-                                      child: Icon(
-                                        Icons.mic,
-                                        color: AppColors.PRIMARY_COLOR_DARK,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          );
-                        }
-                        return const SizedBox.shrink();
-                      },
-                      listener: (context, state) async {
-                        if (state.status == ChatsStates.typing) {
-                          setState(() {
-                            isTyping = state.listenToTypingParams!.isTyping;
-                            log("typing chat card in chat room = ${state.listenToTypingParams!.isTyping}");
-                          });
-                        }
-                        if (state.status == ChatsStates.recording) {
-                          setState(() {
-                            isRecording =
-                                state.listenToRecordingParams!.isRecording;
-                            log("recording chat card in chat room = ${state.listenToRecordingParams!.isRecording}");
-                          });
-                        }
-                        if (state.status == ChatsStates.newMessage) {
-                          if (state.newMessage != null &&
-                              (!state.newMessage!.byMe)) {
-                            log("sound before receive message");
-                            final player =
-                                AudioPlayer(); // Initialize the player
-                            await player.play(
-                                AssetSource('ChatSounds/Incoming Message.mp3'));
-                            log("sound after receive message");
-                          }
-                        }
-                      },
+              body: Stack(
+                children: [
+                  // Background image
+                  Positioned.fill(
+                    child: Image.asset(
+                      Assets.chatRoomBackground,
+                      scale: 7,
+                      repeat: ImageRepeat.repeat,
+                      opacity: context.isDarkMode
+                          ? const AlwaysStoppedAnimation(0.1)
+                          : const AlwaysStoppedAnimation(0.7),
                     ),
-                    const SendMessageWidget(),
-                  ],
-                ),
+                  ),
+                  // Main content
+                  SafeArea(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Expanded(child: MessagesListView()),
+                        BlocConsumer<ChatsCubit, ChatsState>(
+                          builder: (context, state) {
+                            if (isTyping) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 15,
+                                      backgroundColor: context.isDarkMode
+                                          ? AppColors.QUANTITY_COLOR
+                                          : Colors.white,
+                                      backgroundImage: const NetworkImage(
+                                          UIConst.profilePlaceHolder),
+                                    ),
+                                    const Sizer(width: 5),
+                                    ScaleTransition(
+                                      scale: _typingAnimation,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          color: context.isDarkMode
+                                              ? AppColors.QUANTITY_COLOR
+                                              : Colors.white,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: const Radius.circular(12),
+                                            topRight: const Radius.circular(12),
+                                            bottomLeft: isArabic
+                                                ? const Radius.circular(0)
+                                                : const Radius.circular(12),
+                                            bottomRight: isArabic
+                                                ? const Radius.circular(12)
+                                                : const Radius.circular(0),
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: context.isDarkMode
+                                                  ? AppColors.BACKGROUND_COLOR
+                                                      .withOpacity(0.05)
+                                                  : Colors.black12,
+                                              blurRadius: 8,
+                                              offset: const Offset(0, 4),
+                                            ),
+                                          ],
+                                        ),
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.more_horiz,
+                                            color: AppColors.PRIMARY_COLOR_DARK,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              );
+                            }
+                            if (isRecording) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 15,
+                                      backgroundColor: context.isDarkMode
+                                          ? AppColors.QUANTITY_COLOR
+                                          : Colors.white,
+                                      backgroundImage: const NetworkImage(
+                                          UIConst.profilePlaceHolder),
+                                    ),
+                                    const Sizer(width: 5),
+                                    ScaleTransition(
+                                      scale: _recordingAnimation,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          color: context.isDarkMode
+                                              ? AppColors.QUANTITY_COLOR
+                                              : Colors.white,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: const Radius.circular(12),
+                                            topRight: const Radius.circular(12),
+                                            bottomLeft: isArabic
+                                                ? const Radius.circular(0)
+                                                : const Radius.circular(12),
+                                            bottomRight: isArabic
+                                                ? const Radius.circular(12)
+                                                : const Radius.circular(0),
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: context.isDarkMode
+                                                  ? AppColors.BACKGROUND_COLOR
+                                                      .withOpacity(0.05)
+                                                  : Colors.black12,
+                                              blurRadius: 8,
+                                              offset: const Offset(0, 4),
+                                            ),
+                                          ],
+                                        ),
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.mic,
+                                            color: AppColors.PRIMARY_COLOR_DARK,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          },
+                          listener: (context, state) async {
+                            if (state.status == ChatsStates.typing) {
+                              setState(() {
+                                isTyping = state.listenToTypingParams!.isTyping;
+                                log("typing chat card in chat room = ${state.listenToTypingParams!.isTyping}");
+                              });
+                            }
+                            if (state.status == ChatsStates.recording) {
+                              setState(() {
+                                isRecording =
+                                    state.listenToRecordingParams!.isRecording;
+                                log("recording chat card in chat room = ${state.listenToRecordingParams!.isRecording}");
+                              });
+                            }
+                            if (state.status == ChatsStates.newMessage) {
+                              if (state.newMessage != null &&
+                                  (!state.newMessage!.byMe)) {
+                                log("sound before receive message");
+                                final player =
+                                    AudioPlayer(); // Initialize the player
+                                await player.play(AssetSource(
+                                    'ChatSounds/Incoming Message.mp3'));
+                                log("sound after receive message");
+                              }
+                            }
+                          },
+                        ),
+                        const SendMessageWidget(),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       }),
     );

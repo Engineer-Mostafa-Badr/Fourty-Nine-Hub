@@ -10,24 +10,35 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/clear_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_one_time_view_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_pin_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_recording_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_typing_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_unpin_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/pin_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/set_record_as_listened.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/unpin_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 abstract class MessagesRemoteDataSource {
   void listenToNewMessages(Function(MessageEntity message) params);
-  void listenToRecordListened(Function(SetRecordAsListenedParams setRecordAsListenedParams) params);
+  void listenToRecordListened(
+      Function(SetRecordAsListenedParams setRecordAsListenedParams) params);
   void listenToSeenOneTimeViewMessage(Function(MessageEntity message) params);
   Future<Either<Failure, MessageEntity>> getOneTimeViewMessage(
       GetOneTimeViewMessageParams params);
+
+  void listenToPinMessage(Function(ListenToPinMessageParams params) params);
+  void listenToUnPinMessage(Function(ListenToUnPinMessageParams params) params);
 
   Future<Either<Failure, bool>> sendMessage(SendMessageParams params);
 
@@ -52,9 +63,13 @@ abstract class MessagesRemoteDataSource {
 
   Future<Either<Failure, List<MessageEntity>>> getMessages(
       GetMessagesParams params);
+  Future<Either<Failure, String?>> getChatPinnedMessage(GetChatParams params);
 
   Future<Either<Failure, bool>> markMessageAsSeen(
       MarkMessageAsSeenParams params);
+  Future<Either<Failure, bool>> pinMessage(PinMessageParams params);
+  Future<Either<Failure, bool>> unPinMessage(UnPinMessageParams params);
+
   Future<Either<Failure, bool>> setRecordAsListened(
       SetRecordAsListenedParams params);
 
@@ -108,7 +123,8 @@ class MessagesRemoteDataSourceImplementation
         MessageModel messageModel = MessageModel.fromJson(data);
         params(messageModel);
       });
-      serviceLocator<Socket>().on(SocketIOListeners.newMessageFromOther, (data) {
+      serviceLocator<Socket>().on(SocketIOListeners.newMessageFromOther,
+          (data) {
         final decodedData = jsonDecode(data);
         log("listenToNewMessagesssssssssssss From Other");
         log("listenToNewMessagesssssssssssss  From Other$decodedData");
@@ -149,6 +165,7 @@ class MessagesRemoteDataSourceImplementation
             "groupId": null,
             "replyMessageId": params.replyMessageId,
             "oneTimeView": params.oneTimeView,
+            "isForward": params.isForward,
             "sharedContacts": params.sharedContacts
                 .map((contact) => contact.toJson())
                 .toList(),
@@ -466,7 +483,7 @@ class MessagesRemoteDataSourceImplementation
 
   @override
   Future<Either<Failure, bool>> setRecordAsListened(
-      SetRecordAsListenedParams params) async{
+      SetRecordAsListenedParams params) async {
     try {
       // _socket.connect();
       CliLogger.info(
@@ -484,12 +501,15 @@ class MessagesRemoteDataSourceImplementation
       return const Left(ServerFailure(message: "can't set record as listened"));
     }
   }
-  
+
   @override
-  void listenToRecordListened(Function(SetRecordAsListenedParams setRecordAsListenedParams) params) async{
+  void listenToRecordListened(
+      Function(SetRecordAsListenedParams setRecordAsListenedParams)
+          params) async {
     try {
       // _socket.connect();
-      serviceLocator<Socket>().on(SocketIOListeners.setRecordAsListened, (data) {
+      serviceLocator<Socket>().on(SocketIOListeners.setRecordAsListened,
+          (data) {
         final decodedData = jsonDecode(data);
         log("listenToRecordListened remote data source :  $data");
         log("listenToRecordListened remote data source : $decodedData");
@@ -499,28 +519,30 @@ class MessagesRemoteDataSourceImplementation
           data = decodedData;
         }
         CliLogger.info("listenToRecordListened remote data source :  $data");
-        SetRecordAsListenedParams messageModel = SetRecordAsListenedParams(chatId: data['chatId'], messageId: data['messageId']);
+        SetRecordAsListenedParams messageModel = SetRecordAsListenedParams(
+            chatId: data['chatId'], messageId: data['messageId']);
         params(messageModel);
       });
     } catch (e) {
       CliLogger.info("can't read last message error $e");
     }
   }
-  
+
   @override
-  Future<Either<Failure, bool>> clearChat(ClearChatParams params) async{
+  Future<Either<Failure, bool>> clearChat(ClearChatParams params) async {
     var data = {
       "clearBoth": params.clearForAll,
     };
     final response =
         await _apiConsumer.put(EndPoints.clearChat(params.chatId), data: data);
     log("Clear Chat: $response");
-    return response.fold((failure) => Left(failure), (data) => Right(data['status']));
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
   }
-  
+
   @override
   void listenToClearChatStatus(Function(String chatId) params) {
-     try {
+    try {
       // _socket.connect();
       serviceLocator<Socket>().on(SocketIOListeners.clearChat, (data) {
         final decodedData = jsonDecode(data);
@@ -537,5 +559,88 @@ class MessagesRemoteDataSourceImplementation
     } catch (e) {
       CliLogger.info("can't read clear chat error $e");
     }
+  }
+
+  @override
+  Future<Either<Failure, bool>> pinMessage(PinMessageParams params) async {
+    var data = {
+      "chatId": params.chatId,
+      "messageId": params.messageId,
+    };
+    final response =
+        await _apiConsumer.put(EndPoints.pinMessage(params.chatId), data: data);
+    log("Pin Message Remote Data Source: $response");
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> unPinMessage(UnPinMessageParams params) async {
+    var data = {
+      "chatId": params.chatId,
+    };
+    final response = await _apiConsumer
+        .put(EndPoints.unPinMessage(params.chatId), data: data);
+    log("UnPin Message Remote Data Source: $response");
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  void listenToPinMessage(Function(ListenToPinMessageParams params) params) {
+    try {
+      // _socket.connect();
+      serviceLocator<Socket>().on(SocketIOListeners.pinMessage, (data) {
+        final decodedData = jsonDecode(data);
+        log("Pin Message remote data source :  $data");
+        log("Pin Message remote data source : $decodedData");
+        if (decodedData is List) {
+          data = decodedData[0];
+        } else {
+          data = decodedData;
+        }
+        CliLogger.info("Pin Message remote data source :  $data");
+        params(ListenToPinMessageParams(
+            chatId: data['chatId'], messageId: data['messageId']));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to pin message error $e");
+    }
+  }
+
+  @override
+  void listenToUnPinMessage(
+      Function(ListenToUnPinMessageParams params) params) {
+    try {
+      // _socket.connect();
+      serviceLocator<Socket>().on(SocketIOListeners.unPinMessage, (data) {
+        final decodedData = jsonDecode(data);
+        log("UnPin Message remote data source :  $data");
+        log("UnPin Message remote data source : $decodedData");
+        if (decodedData is List) {
+          data = decodedData[0];
+        } else {
+          data = decodedData;
+        }
+        CliLogger.info("UnPin Message remote data source :  $data");
+        params(ListenToUnPinMessageParams(chatId: data['chatId']));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to unPin message error $e");
+    }
+  }
+
+  @override
+  Future<Either<Failure, String?>> getChatPinnedMessage(GetChatParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.getChatDetails(params.chatId));
+    return response.fold((failure){
+      log("Get Chat Remote Data Source: $failure");
+      return Left(failure);
+    }, (data) {
+      log("Get Chat Remote Data Source: $data");
+      log("Get Chat Remote Data Source pinnedMessage: ${data['data']['pinnedMessage']}");
+      return Right(data['data']['pinnedMessage']);
+    });
   }
 }

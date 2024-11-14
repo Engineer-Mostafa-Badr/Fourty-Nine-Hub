@@ -833,6 +833,10 @@ class EndPoints {
     return '/chat/get-chat/$chatId';
   }
 
+  static String getChatDetails(String chatId) {
+    return '/chat/get-chat-details/$chatId';
+  }
+
   static String createNormalChat(
       {required String categoryId, required String otherUserId}) {
     return '/chat/start-chat/$otherUserId?categoryId=$categoryId';
@@ -921,6 +925,14 @@ class EndPoints {
 
   static String clearChat(String chatId) {
     return '/chat/clear-chat/$chatId';
+  }
+
+  static String pinMessage(String chatId) {
+    return '/chat/pin-chat-message/$chatId';
+  }
+
+  static String unPinMessage(String chatId) {
+    return '/chat/unpin-chat-message/$chatId';
   }
 
   static String getChatGroups = '/chat/group/get-groups/';

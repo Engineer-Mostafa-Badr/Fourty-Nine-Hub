@@ -81,6 +81,10 @@ class ChatsCubit extends Cubit<ChatsState> {
     _listenToNewChat();
     _listenToTyping();
     _listenToRecording();
+    serviceLocator<Socket>().connect();
+    serviceLocator<Socket>().on("error", (date) {
+      log("error from socket : $date");
+    });
   }
 
   // ======================================= get chats =======================================

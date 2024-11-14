@@ -58,6 +58,8 @@ abstract class SocketIOListeners {
   static const String oneTimeMessageSeen = 'oneTimeMessageSeen';
   static const String setRecordAsListened = 'messageListen';
   static const String clearChat = 'clearChat';
+  static const String pinMessage = 'pinMessage';
+  static const String unPinMessage = 'unPinMessage';
 }
 
 abstract class SocketIOEvents {

@@ -6,14 +6,20 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasour
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/clear_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_one_time_view_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_pin_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_recording_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_typing_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_unpin_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/pin_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/set_record_as_listened.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/unpin_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 
 class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   final MessagesRemoteDataSource _chatRemoteDataSource;
@@ -133,5 +139,30 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   @override
   void listenToClearChatStatus(Function(String chatId) params) {
     _chatRemoteDataSource.listenToClearChatStatus(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> pinMessage(PinMessageParams params) {
+    return _chatRemoteDataSource.pinMessage(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> unPinMessage(UnPinMessageParams params) {
+    return _chatRemoteDataSource.unPinMessage(params);
+  }
+
+  @override
+  void listenToPinMessage(Function(ListenToPinMessageParams params) params) {
+    _chatRemoteDataSource.listenToPinMessage(params);
+  }
+
+  @override
+  void listenToUnPinMessage(Function(ListenToUnPinMessageParams params) params) {
+    _chatRemoteDataSource.listenToUnPinMessage(params);
+  }
+
+  @override
+  Future<Either<Failure, String?>> getChatPinnedMessage(GetChatParams params) async{
+    return await _chatRemoteDataSource.getChatPinnedMessage(params);
   }
 }

@@ -508,57 +508,82 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
 
   Widget _micButton(BuildContext context) {
     final AudioPlayer audioPlayer = AudioPlayer();
-    return SocialMediaRecorder(
-      startRecording: () async {
-        await context.read<ChatRoomCubit>().startRecording();
-        _isRecording = true;
-        setState(() {});
-      },
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        SocialMediaRecorder(
+          startRecording: () async {
+            await context.read<ChatRoomCubit>().startRecording();
+            _isRecording = true;
+            setState(() {});
+          },
 
-      stopRecording: (time) async {
-        await context.read<ChatRoomCubit>().stopRecording();
-        _isRecording = false;
+          stopRecording: (time) async {
+            await context.read<ChatRoomCubit>().stopRecording();
+            _isRecording = false;
 
-        setState(() {});
-      },
-      encode: AudioEncoderType.AAC, // Ensure it's recorded in AAC
+            setState(() {});
+          },
+          encode: AudioEncoderType.AAC, // Ensure it's recorded in AAC
 
-      sendRequestFunction: (File soundFile, String time) async {
-        await context.read<ChatRoomCubit>().stopRecording();
-        _isRecording = false;
-        setState(() {});
-        log("sound file path is : ${soundFile.path}");
-        // Rename the file to .mp3
-        String newPath = soundFile.path.replaceAll('.m4a', '.mp3');
-        log("new path is : $newPath");
-        File mp3File = await soundFile.rename(newPath);
+          sendRequestFunction: (File soundFile, String time) async {
+            await context.read<ChatRoomCubit>().stopRecording();
+            _isRecording = false;
+            setState(() {});
+            log("sound file path is : ${soundFile.path}");
+            // Rename the file to .mp3
+            String newPath = soundFile.path.replaceAll('.m4a', '.mp3');
+            log("new path is : $newPath");
+            File mp3File = await soundFile.rename(newPath);
 
-        log(mp3File.path); // Log the new file path
+            log(mp3File.path); // Log the new file path
 
-        // Play the audio file locally
-        await audioPlayer.play(
-          DeviceFileSource(mp3File.path),
-          volume: 0,
-        );
+            // Play the audio file locally
+            await audioPlayer.play(
+              DeviceFileSource(mp3File.path),
+              volume: 0,
+            );
 
-        // Add the renamed MP3 file to the media list
-        // ignore: use_build_context_synchronously
-        context.read<ChatRoomCubit>().media.add(mp3File);
-        // ignore: use_build_context_synchronously
-        await context.read<ChatRoomCubit>().sendMessage();
-      },
-      initRecordPackageWidth: 50,
-      fullRecordPackageHeight: 50,
-      recordIcon:
-          Icon(Icons.mic, color: AppColors.BACKGROUND_COLOR, size: 50.h),
-      recordIconBackGroundColor: AppColors.PRIMARY_COLOR,
-      recordIconWhenLockBackGroundColor: AppColors.PRIMARY_COLOR,
-      counterBackGroundColor: AppColors.PRIMARY_COLOR,
-      cancelTextBackGroundColor: AppColors.PRIMARY_COLOR,
-      backGroundColor: AppColors.PRIMARY_COLOR,
-      cancelTextStyle: const TextStyle(color: Colors.white),
-      counterTextStyle: const TextStyle(color: Colors.white),
-      radius: BorderRadius.circular(50),
+            // Add the renamed MP3 file to the media list
+            // ignore: use_build_context_synchronously
+            context.read<ChatRoomCubit>().media.add(mp3File);
+            // ignore: use_build_context_synchronously
+            await context.read<ChatRoomCubit>().sendMessage();
+          },
+          initRecordPackageWidth: 50,
+          fullRecordPackageHeight: 50,
+          recordIcon:
+              Icon(Icons.mic, color: AppColors.BACKGROUND_COLOR, size: 50.h),
+          recordIconBackGroundColor: AppColors.PRIMARY_COLOR,
+          recordIconWhenLockBackGroundColor: AppColors.PRIMARY_COLOR,
+          counterBackGroundColor: AppColors.PRIMARY_COLOR,
+          cancelTextBackGroundColor: AppColors.PRIMARY_COLOR,
+          backGroundColor: AppColors.PRIMARY_COLOR,
+          cancelTextStyle: const TextStyle(color: Colors.white),
+          counterTextStyle: const TextStyle(color: Colors.white),
+          radius: BorderRadius.circular(50),
+        ),
+        _isRecording
+            ? Positioned(
+                // top: 10,
+                right: 40,
+                left: 0,
+                child: IconButton(
+                  icon: Icon(
+                      context.read<ChatRoomCubit>().isOneTimeView
+                          ? Icons.looks_one
+                          : Icons.looks_one_outlined,
+                      color: Colors.grey),
+                  onPressed: () async {
+                    setState(() {
+                      context.read<ChatRoomCubit>().isOneTimeView =
+                          !context.read<ChatRoomCubit>().isOneTimeView;
+                    });
+                  },
+                ),
+              )
+            : const SizedBox.shrink(),
+      ],
     );
   }
 

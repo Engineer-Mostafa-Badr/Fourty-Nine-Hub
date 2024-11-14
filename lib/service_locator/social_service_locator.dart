@@ -3,18 +3,22 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasour
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/repositories/chat_room_repository_implement.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/clear_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_one_time_view_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_clear_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_delivered_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_one_time_message_seen.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_pin_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_record_listend.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_recording_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_seen_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_typing_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_unpin_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/pin_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/set_record_as_listened.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/start_recording_uecase.dart';
@@ -24,6 +28,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_seen_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_recording_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_typing_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/unpin_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/datasources/chats_remote_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/repositories/chats_repository_implement.dart';
@@ -68,6 +73,25 @@ class SocialServiceLocator {
     serviceLocator.registerLazySingleton<GetChatsUseCase>(() => GetChatsUseCase(
           serviceLocator(),
         ));
+    serviceLocator.registerLazySingleton<GetChatUseCase>(() => GetChatUseCase(
+          serviceLocator(),
+        ));
+    serviceLocator
+        .registerLazySingleton<PinMessageUseCase>(() => PinMessageUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator
+        .registerLazySingleton<UnPinMessageUseCase>(() => UnPinMessageUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToPinMessageUseCase>(
+        () => ListenToPinMessageUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToUnPinMessageUseCase>(
+        () => ListenToUnPinMessageUseCase(
+              serviceLocator(),
+            ));
     serviceLocator
         .registerLazySingleton<ClearChatUseCase>(() => ClearChatUseCase(
               serviceLocator(),
@@ -237,6 +261,11 @@ class SocialServiceLocator {
         ));
 
     serviceLocator.registerFactory<ChatRoomCubit>(() => ChatRoomCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

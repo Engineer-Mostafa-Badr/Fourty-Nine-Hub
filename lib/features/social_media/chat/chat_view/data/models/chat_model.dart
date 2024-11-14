@@ -18,6 +18,7 @@ class ChatModel extends ChatEntity {
     required super.isService,
     required super.isPinned,
     super.lastMessage,
+    super.pinnedMessageId,
   });
 
   factory ChatModel.fromJson(Map<String, dynamic> json) => ChatModel(
@@ -38,5 +39,7 @@ class ChatModel extends ChatEntity {
         lastMessage: json['lastMessage'] != null
             ? MessageModel.fromJson(json['lastMessage'])
             : null,
+        // ignore: prefer_if_null_operators
+        pinnedMessageId: json['pinnedMessage'],
       );
 }

@@ -1037,5 +1037,8 @@
   "clearForEveryone": "Clear for Everyone",
   "clearForMe": "Clear for Me",
   "clearThisChat": "Clear this Chat?",
-  "opened": "Opened"
+  "opened": "Opened",
+  "forwardMessage": "Forward Message",
+  "forwarded": "Forwarded",
+  "continueUsingChatServices": " , To continue using chat services"
 }

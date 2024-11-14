@@ -1014,5 +1014,8 @@ abstract class  LocaleKeys {
   static const clearForMe = 'clearForMe';
   static const clearThisChat = 'clearThisChat';
   static const opened = 'opened';
+  static const forwardMessage = 'forwardMessage';
+  static const forwarded = 'forwarded';
+  static const continueUsingChatServices = 'continueUsingChatServices';
 
 }

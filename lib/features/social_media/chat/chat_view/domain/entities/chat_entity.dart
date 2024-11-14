@@ -16,6 +16,8 @@ class ChatEntity {
   bool recording = false;
   bool online;
   MessageEntity? lastMessage;
+  String? pinnedMessageId;
+  MessageEntity? pinnedMessage;
   bool isSelected = false;
   bool isPinned = false;
 
@@ -35,6 +37,8 @@ class ChatEntity {
     this.recording = false,
     required this.online,
     this.lastMessage,
+    this.pinnedMessage,
+    this.pinnedMessageId,
     this.isSelected = false,
     this.isPinned = false,
   });

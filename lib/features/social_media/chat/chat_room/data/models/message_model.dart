@@ -27,6 +27,7 @@ class MessageModel extends MessageEntity {
     required super.isOneTimeViewMessage,
     required super.isOneTimeSeenMessage,
     required super.isListened,
+    required super.isForwarded,
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
@@ -73,6 +74,7 @@ class MessageModel extends MessageEntity {
       isOneTimeViewMessage: json['oneTimeView'] ?? false,
       isOneTimeSeenMessage: json['oneTimeSeen'] ?? false,
       isListened: json['listen'] ?? false,
+      isForwarded: json['isForward'] ?? false,
     );
   }
 }

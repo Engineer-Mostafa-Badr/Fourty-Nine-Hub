@@ -1023,5 +1023,8 @@
   "clearForEveryone": "مسح لدي الجميع",
   "clearForMe": "مسح لدي",
   "clearThisChat": "مسح هذه الدردشة؟",
-  "opened": "تمت مشاهدته"
+  "opened": "تمت مشاهدته",
+  "forwardMessage": "تحويل الرسائل",
+  "forwarded": "تمت اعادة توجيهه",
+  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة"
 }

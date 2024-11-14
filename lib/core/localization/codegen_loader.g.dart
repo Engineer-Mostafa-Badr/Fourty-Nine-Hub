@@ -1039,7 +1039,10 @@ class CodegenLoader extends AssetLoader{
   "clearForEveryone": "مسح لدي الجميع",
   "clearForMe": "مسح لدي",
   "clearThisChat": "مسح هذه الدردشة؟",
-  "opened": "تمت مشاهدته"
+  "opened": "تمت مشاهدته",
+  "forwardMessage": "تحويل الرسائل",
+  "forwarded": "تمت اعادة توجيهه",
+  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2080,7 +2083,10 @@ static const Map<String,dynamic> en = {
   "clearForEveryone": "Clear for Everyone",
   "clearForMe": "Clear for Me",
   "clearThisChat": "Clear this Chat?",
-  "opened": "Opened"
+  "opened": "Opened",
+  "forwardMessage": "Forward Message",
+  "forwarded": "Forwarded",
+  "continueUsingChatServices": " , To continue using chat services"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
