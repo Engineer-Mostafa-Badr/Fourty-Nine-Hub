@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/time_of_day_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -68,18 +69,28 @@ class _WeekWidgetState extends State<_WeekWidget> {
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
       child: Row(
         children: [
-          Checkbox(
-              value: time.isAvailable,
-              onChanged: (v) {
-                setState(() {
-                  time.isAvailable = v!;
-                });
-              }),
-          Text(
-            time.day.name,
-            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
+          Expanded(
+            child: Row(
+              children: [
+                Checkbox(
+                    value: time.isAvailable,
+                    onChanged: (v) {
+                      setState(() {
+                        time.isAvailable = v!;
+                        print(v);
+                      });
+                    }),
+                Expanded(
+                  child: Text(
+                    time.day.name,
+                    style: Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
           ),
-          const Spacer(flex: 1),
           InkWell(
             onTap: () {
               showTimePicker(
@@ -111,7 +122,7 @@ class _WeekWidgetState extends State<_WeekWidget> {
               ),
             ),
           ),
-          const Spacer(flex: 2),
+          Sizer(),
           InkWell(
             onTap: () {
               showTimePicker(

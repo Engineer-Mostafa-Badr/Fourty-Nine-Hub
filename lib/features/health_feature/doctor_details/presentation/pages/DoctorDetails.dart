@@ -10,9 +10,15 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/presentatio
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/waiting.dart';
 import '../../../../../res/strings/labels.dart';
 
-class DoctorDetailsView extends StatefulWidget {
+class DoctorDetailsParams{
   final String doctorId;
-  const DoctorDetailsView({super.key, required this.doctorId});
+  final bool fromSearch;
+  DoctorDetailsParams({required this.doctorId,required this.fromSearch});
+}
+
+class DoctorDetailsView extends StatefulWidget {
+  final DoctorDetailsParams params;
+  const DoctorDetailsView({super.key, required this.params});
 
   @override
   State<DoctorDetailsView> createState() => _DoctorDetailsViewState();
@@ -21,7 +27,7 @@ class DoctorDetailsView extends StatefulWidget {
 class _DoctorDetailsViewState extends State<DoctorDetailsView> {
   @override
   void initState() {
-    context.read<DoctorDetailsCubit>().loadData(widget.doctorId);
+    context.read<DoctorDetailsCubit>().loadData(widget.params);
     super.initState();
   }
 

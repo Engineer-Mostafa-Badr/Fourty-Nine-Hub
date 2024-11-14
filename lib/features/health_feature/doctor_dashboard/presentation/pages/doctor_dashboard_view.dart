@@ -38,10 +38,10 @@ class DoctorDashboardView extends StatelessWidget {
         }
       },
       child: Scaffold(
-        appBar: const BackAppBar(
+        appBar: BackAppBar(
           label: Labels.doctorDashboard,
           actions: [
-            DoctorDashboardPopupMenuButton(),
+            DoctorDashboardPopupMenuButton(earnedMoney: context.read<DoctorDashboardCubit>().totalEarnedMoney,),
           ],
         ),
         body: ListView(

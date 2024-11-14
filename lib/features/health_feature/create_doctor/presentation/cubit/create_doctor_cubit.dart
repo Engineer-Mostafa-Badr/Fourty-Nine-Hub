@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/week_days.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/doctor_day_model.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
@@ -59,9 +60,11 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   }
 
   Future<void> _getSubCategories() async {
+    final userId = UserCubit.to.state.data?.id;
+
     if (_shareCubit.subCategories.isEmpty) {
       final response =
-          await _getHealthSubcategoriesUseCase.call(const NoParams());
+          await _getHealthSubcategoriesUseCase.call(userId??'');
       response
           .fold((failure) => emit(CreateDoctorError("Can't Load Specialities")),
               (data) {
@@ -131,10 +134,13 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   ];
 
   void _saveWorkDays() {
+    _createDoctorParams.clinic?.workDays.clear();
+    _createDoctorParams.calls?.workDays.clear();
+    _createDoctorParams.visitHome?.workDays.clear();
     for (var element in clinicTimetable) {
-      if (element.isAvailable) {
-        _createDoctorParams.clinic?.workDays
-            .add(DoctorDayModel.fromEntity(element));
+      if (element.isAvailable==true) {
+          _createDoctorParams.clinic?.workDays
+              .add(DoctorDayModel.fromEntity(element));
       }
     }
 
@@ -151,6 +157,10 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
             .add(DoctorDayModel.fromEntity(element));
       }
     }
+    _createDoctorParams.clinic?.workDays.toSet().toList();
+    _createDoctorParams.calls?.workDays.toSet().toList();
+    _createDoctorParams.visitHome?.workDays.toSet().toList();
+
   }
 
   // ================================ DatePickers ===============================
@@ -257,7 +267,7 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
     _createDoctorParams.detectionPeriodCalls =
         callExamineDurationController.text;
     _createDoctorParams.detectionPeriodvisitHome =
-        homeVisitExamineDurationController.text;
+        '84864';
     _createDoctorParams.callsPrice = callPriceController.text;
     _createDoctorParams.visitHomePrice = homeVisitPriceController.text;
     _createDoctorParams.clinicPrice = clinicPriceController.text;

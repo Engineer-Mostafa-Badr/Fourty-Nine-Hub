@@ -12,118 +12,175 @@ class CreateDoctorNameField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final doctorLoginCubit = context.read<CreateDoctorCubit>();
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
       children: [
-        Expanded(
-          child: TextFormField(
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return null;
-              }
-              return null;
-            },
-            controller: doctorLoginCubit.firstNameController,
-            decoration: InputDecoration(
-              // Border when the field is not focused
-              enabledBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                borderSide: BorderSide(
-                  color: Colors.grey, // Use grey as the default border color
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return null;
+                  }
+                  return null;
+                },
+                controller: doctorLoginCubit.firstNameController,
+                decoration: InputDecoration(
+                  // Border when the field is not focused
+                  enabledBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(
+                      color: Colors.grey, // Use grey as the default border color
+                    ),
+                  ),
+                  // Border when the field is focused
+                  focusedBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(
+                      color: Colors.grey, // Grey border when focused
+                    ),
+                  ),
+                  // Default border (same as enabledBorder)
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  // Error border when validation fails
+                  errorBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(
+                      color: Colors.red, // Red border when there's an error
+                    ),
+                  ),
+                  // Error border when focused and invalid
+                  focusedErrorBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(
+                      color:
+                          Colors.red, // Keep red border when focused with an error
+                    ),
+                  ),
+                  filled: false,
+                  contentPadding:
+                      const EdgeInsets.all(10), // Padding inside the text field
+                  hintText: LocaleKeys.firstName.tr(),
+                  hintStyle: Styles.mediumText(), // Hint text
                 ),
               ),
-              // Border when the field is focused
-              focusedBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                borderSide: BorderSide(
-                  color: Colors.grey, // Grey border when focused
-                ),
-              ),
-              // Default border (same as enabledBorder)
-              border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                borderSide: BorderSide(
-                  color: Colors.grey,
-                ),
-              ),
-              // Error border when validation fails
-              errorBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                borderSide: BorderSide(
-                  color: Colors.red, // Red border when there's an error
-                ),
-              ),
-              // Error border when focused and invalid
-              focusedErrorBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                borderSide: BorderSide(
-                  color:
-                      Colors.red, // Keep red border when focused with an error
-                ),
-              ),
-              filled: false,
-              contentPadding:
-                  const EdgeInsets.all(10), // Padding inside the text field
-              hintText: LocaleKeys.firstName.tr(),
-              hintStyle: Styles.mediumText(), // Hint text
             ),
-          ),
+            const Sizer(),
+            Expanded(
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return null;
+                  }
+                  return null;
+                },
+                controller: doctorLoginCubit.lastNameController,
+                decoration: InputDecoration(
+                  // Border when the field is not focused
+                  enabledBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(
+                      color: Colors.grey, // Use grey as the default border color
+                    ),
+                  ),
+                  // Border when the field is focused
+                  focusedBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(
+                      color: Colors.grey, // Grey border when focused
+                    ),
+                  ),
+                  // Default border (same as enabledBorder)
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  // Error border when validation fails
+                  errorBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(
+                      color: Colors.red, // Red border when there's an error
+                    ),
+                  ),
+                  // Error border when focused and invalid
+                  focusedErrorBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(
+                      color:
+                          Colors.red, // Keep red border when focused with an error
+                    ),
+                  ),
+                  filled: false,
+                  contentPadding:
+                      const EdgeInsets.all(10), // Padding inside the text field
+                  hintText: LocaleKeys.lastName.tr(),
+                  hintStyle: Styles.mediumText(), // Hint text
+                ),
+              ),
+            ),
+          ],
         ),
         const Sizer(),
-        Expanded(
-          child: TextFormField(
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return null;
-              }
+        TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
               return null;
-            },
-            controller: doctorLoginCubit.lastNameController,
-            decoration: InputDecoration(
-              // Border when the field is not focused
-              enabledBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                borderSide: BorderSide(
-                  color: Colors.grey, // Use grey as the default border color
-                ),
+            }
+            return null;
+          },
+          controller: doctorLoginCubit.phoneController,
+          decoration: InputDecoration(
+            // Border when the field is not focused
+            enabledBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              borderSide: BorderSide(
+                color: Colors.grey, // Use grey as the default border color
               ),
-              // Border when the field is focused
-              focusedBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                borderSide: BorderSide(
-                  color: Colors.grey, // Grey border when focused
-                ),
-              ),
-              // Default border (same as enabledBorder)
-              border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                borderSide: BorderSide(
-                  color: Colors.grey,
-                ),
-              ),
-              // Error border when validation fails
-              errorBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                borderSide: BorderSide(
-                  color: Colors.red, // Red border when there's an error
-                ),
-              ),
-              // Error border when focused and invalid
-              focusedErrorBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                borderSide: BorderSide(
-                  color:
-                      Colors.red, // Keep red border when focused with an error
-                ),
-              ),
-              filled: false,
-              contentPadding:
-                  const EdgeInsets.all(10), // Padding inside the text field
-              hintText: LocaleKeys.lastName.tr(),
-              hintStyle: Styles.mediumText(), // Hint text
             ),
+            // Border when the field is focused
+            focusedBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              borderSide: BorderSide(
+                color: Colors.grey, // Grey border when focused
+              ),
+            ),
+            // Default border (same as enabledBorder)
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              borderSide: BorderSide(
+                color: Colors.grey,
+              ),
+            ),
+            // Error border when validation fails
+            errorBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              borderSide: BorderSide(
+                color: Colors.red, // Red border when there's an error
+              ),
+            ),
+            // Error border when focused and invalid
+            focusedErrorBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              borderSide: BorderSide(
+                color:
+                Colors.red, // Keep red border when focused with an error
+              ),
+            ),
+            filled: false,
+            contentPadding:
+            const EdgeInsets.all(10), // Padding inside the text field
+            hintText: LocaleKeys.phone.tr(),
+            hintStyle: Styles.mediumText(), // Hint text
           ),
-        ),
+        )
       ],
     );
   }

@@ -157,6 +157,7 @@ class BaseApiConsumer extends ApiConsumer {
       Map<String, dynamic>? data,
       Map<String, dynamic>? headers}) async {
     try {
+      log(data.toString());
       final result = await _dio.get(url,
           data: data,
           queryParameters: queryParameters,

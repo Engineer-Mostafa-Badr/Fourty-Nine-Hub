@@ -33,11 +33,11 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                 child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
                   buildWhen: (previous, current) =>
                       current is DoctorDashboardInitial ||
-                      current is DoctorDashboardSupscriptionRemainingDays,
+                      current is DoctorInfoSuccessState,
                   builder: (context, state) {
                     String days = '0';
-                    if (state is DoctorDashboardSupscriptionRemainingDays) {
-                      days = state.days.toString();
+                    if (state is DoctorInfoSuccessState) {
+                      days = state.info.remainingDaysToEndSubscription.toString();
                     }
                     return _Item(
                       numerOfDays: days,
@@ -52,11 +52,11 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                 child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
                   buildWhen: (previous, current) =>
                       current is DoctorDashboardInitial ||
-                      current is DoctorDashboardIDRemainingDays,
+                      current is DoctorInfoSuccessState,
                   builder: (context, state) {
                     String days = '0';
-                    if (state is DoctorDashboardIDRemainingDays) {
-                      days = state.days.toString();
+                    if (state is DoctorInfoSuccessState) {
+                      days = state.info.remainingDaysToExpiryId.toString();
                     }
                     return _Item(
                       numerOfDays: days,
@@ -71,11 +71,11 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                 child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
                   buildWhen: (previous, current) =>
                       current is DoctorDashboardInitial ||
-                      current is DoctorDashboardPracticingRemainingDays,
+                      current is DoctorInfoSuccessState,
                   builder: (context, state) {
                     String days = '0';
-                    if (state is DoctorDashboardPracticingRemainingDays) {
-                      days = state.days.toString();
+                    if (state is DoctorInfoSuccessState) {
+                      days = state.info.remainingDaysToExpiryPracticingId.toString();
                     }
                     return _Item(
                       numerOfDays: days,

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
@@ -28,10 +27,8 @@ import 'package:fourtyninehub/features/social_media/reels/domain/use_case/share_
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/toggle_comment_like_use_case.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:http/http.dart' as http;
-import 'package:video_player/video_player.dart';
 
 import '../../../../../../core/utils/shared_pref.dart';
-import '../../../../../trip_join/helpers/print_helper.dart';
 import '../../../data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/data_sources/reels_remote_data_source.dart';
 
@@ -428,7 +425,7 @@ class ReelsCubit extends Cubit<ReelsState> {
 
   Future<void> toggleCommentLike(String commentId, bool isReply,{String? replyId}) async {
     emit(state.copyWith(isLikingComment: true));
-    final result = await _toggleCommentLikeUseCase(commentId);
+    final result = await _toggleCommentLikeUseCase(isReply==true?replyId??'':commentId);
     result.fold((failure) {
       print('failure message');
       emit(state.copyWith(
@@ -440,6 +437,8 @@ class ReelsCubit extends Cubit<ReelsState> {
 
       final updatedComments = comments.map((comment) {
         if (isReply) {
+          // Debug: Check if we are updating a reply
+          print("Updating a reply with commentId: $commentId");
 
           final updatedReplies = comment.replies.map((reply) {
             if (reply.id == replyId) {
@@ -448,30 +447,34 @@ class ReelsCubit extends Cubit<ReelsState> {
               final isLiked = data == "like";
             print('Updated replies: $isLiked');
             print('Updated replies: ${reply.id}');
-              return reply.copyWith(
-                isLiked: isLiked,
-                likeCount: isLiked ? reply.likeCount + 1 : reply.likeCount - 1,
-              );
+            reply.isLiked = isLiked;
+            reply.likeCount = isLiked ? reply.likeCount + 1 : reply.likeCount - 1;
+              return reply;
             }
             return reply;
           }).toList();
           // Return the comment with updated replies
-          return comment.copyWith(replies: updatedReplies);
+          comment.replies.clear();
+          comment.replies.addAll(updatedReplies);
+          return comment;
         } else {
           // Debug: Check if we are updating a main comment
-          // print("Updating a main comment with commentId: $commentId");
+          print("Updating a main comment with commentId: $commentId");
 
           // If it's a main comment, update the main comment like data
           if (comment.id == commentId) {
-            // print("Found matching main comment with id: ${comment.id}"); // Debugging output
+            print("Found matching main comment with id: ${comment.id}"); // Debugging output
 
             final isLiked = data == "like";
-          print('Normal like $isLiked');
-            return comment.copyWith(
-              isLiked: isLiked,
-              likeCount:
-                  isLiked ? comment.likeCount + 1 : comment.likeCount - 1,
-            );
+        print('Normal like $isLiked');
+            // return comment.copyWith(
+            //   isLiked: isLiked,
+            //   likeCount:
+            //       isLiked ? comment.likeCount + 1 : comment.likeCount - 1,
+            // );
+            comment.isLiked = isLiked;
+            comment.likeCount = isLiked ? comment.likeCount + 1 : comment.likeCount - 1;
+            return comment;
           }
         }
         return comment; // Return the original comment if no changes were made

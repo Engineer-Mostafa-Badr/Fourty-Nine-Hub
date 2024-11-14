@@ -1045,6 +1045,8 @@ abstract class  LocaleKeys {
   static const addToCart = 'addToCart';
   static const showAllOrders = 'showAllOrders';
   static const restaurantOrders = 'restaurantOrders';
+  static const rating = 'rating';
+  static const rateDoctor = 'rateDoctor';
   static const mutualFriend = 'mutualFriend';
   static const clearForEveryone = 'clearForEveryone';
   static const clearForMe = 'clearForMe';
