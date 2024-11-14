@@ -43,9 +43,7 @@ import 'package:fourtyninehub/features/carpool/create_carpool/presentation/cubit
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/edit_food/presentation/cubit/edit_food_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/edit_food/presentation/pages/edit_food_view.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_orders.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/create_resturant_view.dart';
@@ -1278,8 +1276,8 @@ class AppPages {
                 GoRoute(
                     path: Paths.RESTAURANTDETAILS,
                     name: Routes.RESTAURANTDETAILS,
-                    builder: (context, state) => BlocProvider.value(
-                          value: serviceLocator<RestaurantDetailsCubit>(),
+                    builder: (context, state) => BlocProvider(
+                      create:(context)=>  serviceLocator<RestaurantDetailsCubit>(),
                           child: RestaurantDetailsView(
                             restaurant: state.extra as Restaurant,
                           ),
@@ -1289,8 +1287,8 @@ class AppPages {
                           path: Paths.FOODCART,
                           name: Routes.FOODCART,
                           builder: (context, state) =>
-                              BlocProvider.value(
-                                value: serviceLocator<RestaurantDetailsCubit>(),
+                              BlocProvider(
+                                create:(context)=> serviceLocator<RestaurantDetailsCubit>(),
                                 child: const FoodCartView(),
                               ))
                     ])

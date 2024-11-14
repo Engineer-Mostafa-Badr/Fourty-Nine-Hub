@@ -9,7 +9,6 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_item.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/data/models/cart_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -100,12 +99,22 @@ class _FoodCartViewState extends State<FoodCartView> {
     required String restaurantId,
     required String foodId,
   }) async {
-    await context.read<RestaurantDetailsCubit>().deleteFromCart(
-          context,
-          restaurantId: restaurantId,
-          foodId: foodId,
-        );
-    await context.read<RestaurantDetailsCubit>().fetchCart();
+    if(context.read<RestaurantDetailsCubit>().state.cart?.allItems.length==1){
+      await context.read<RestaurantDetailsCubit>().deleteFromCart(
+        context,
+        restaurantId: restaurantId,
+        foodId: foodId,
+      );
+      context.pop();
+    }else{
+      await context.read<RestaurantDetailsCubit>().deleteFromCart(
+        context,
+        restaurantId: restaurantId,
+        foodId: foodId,
+      );
+      await context.read<RestaurantDetailsCubit>().fetchCart();
+    }
+
   }
 
   void _showFoodRequestBottomSheet({
@@ -249,7 +258,7 @@ class _FoodCartViewState extends State<FoodCartView> {
             ),
           ],
         ),
-        child: BuildCartItem(foodImageUrl: foodImageUrl,quantity: quantity,currency: currency,cartItem: cartItem,foodId: foodId,foodName: foodName,totalPrice: totalPrice,
+        child: BuildCartItem(foodImageUrl: foodImageUrl,quantity: quantity,currency: currency,cartItem: cartItem,foodId: foodId,foodName: foodName,totalPrice: totalPrice, restaurantId: cartItem.restaurant?.id ?? '', removeItem: (String restaurantId, String foodId)=>_removeItem(restaurantId: restaurantId, foodId: foodId),
 
         ),
       ),
