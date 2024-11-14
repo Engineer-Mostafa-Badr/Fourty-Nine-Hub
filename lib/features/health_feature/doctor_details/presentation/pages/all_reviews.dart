@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
@@ -14,8 +16,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../ride/RideRequest/domain/entity/driver_review_entity.dart';
 
 class AllReviews extends StatelessWidget {
-  final List<ReviewEntity> reviews;
-  const AllReviews({super.key, required this.reviews});
+  const AllReviews({super.key, });
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +24,27 @@ class AllReviews extends StatelessWidget {
       appBar: const BackAppBar(
         label: Labels.reviews,
       ),
-      body: ListView.separated(
-          itemBuilder: (context, index) => ReviewCard(
-                review: reviews[index],
-              ),
-          separatorBuilder: (context, index) => const Divider(
-                color: Colors.grey,
-              ),
-          itemCount: reviews.length),
+      body: BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
+          buildWhen: (previous, current) =>
+          current is DoctorDetailsReviewsLoaded ,
+        builder: (context,state) {
+
+          if(state is DoctorDetailsStartLoading){
+            return const Center(child: CircularProgressIndicator());
+          }else if(state is DoctorDetailsReviewsLoaded){
+            return ListView.separated(
+                itemBuilder: (context, index) => ReviewCard(
+                  review: ReviewEntity(id: '',comment: state.rates[index].comment,rate: state.rates[index].rate,createdAt: '',name: state.rates[index].userName),
+                ),
+                separatorBuilder: (context, index) => const Divider(
+                  color: Colors.grey,
+                ),
+                itemCount: state.rates.length);
+          }else{
+            return Container();
+          }
+        }
+      ),
     );
   }
 

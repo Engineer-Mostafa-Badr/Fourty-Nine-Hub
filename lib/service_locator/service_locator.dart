@@ -155,6 +155,7 @@ class DI {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+
           },
         ),
       )..interceptors.addAll([

@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/domain/usecases/book_emergency.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_health_subcategories.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
@@ -25,9 +26,11 @@ class HealthEmergencyCubit extends Cubit<HealthEmergencyState> {
   }
 
   Future<void> _getSubCategories() async {
+    final userId = UserCubit.to.state.data?.id;
+
     if (_healthShare.subCategories.isEmpty) {
       final response =
-          await _getHealthSubcategoriesUseCase.call(const NoParams());
+          await _getHealthSubcategoriesUseCase.call(userId??'');
       response.fold(
           (failure) =>
               emit(HealthEmergencyError(message: Labels.errorHappened)),

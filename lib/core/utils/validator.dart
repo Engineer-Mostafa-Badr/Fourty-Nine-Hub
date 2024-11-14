@@ -43,6 +43,12 @@ class Validator {
     }
     return null;
   }
+  String? emptyValidation(String? text) {
+    if (text == null || text.isEmpty) {
+      return "Empty Field Not Valid";
+    }
+    return null;
+  }
 
   String? validateLandLineNumber(String? landLineNumber) {
     if (landLineNumber == null || landLineNumber.isEmpty) {

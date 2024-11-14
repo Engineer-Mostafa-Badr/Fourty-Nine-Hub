@@ -125,6 +125,7 @@ dependencies:
   # location: ^4.4.0
   location: ^4.4.0
   device_info_plus: ^10.1.2
+  flutter_rating_bar:
 dependency_overrides:
   http: ^0.13.3
 dev_dependencies:

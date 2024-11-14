@@ -3,11 +3,13 @@ import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/charts/bar_chart.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/earned_mony_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorHistoryCard extends StatelessWidget {
+  final List<EarnedMoneyEntity> totalEarnedMoney;
   final String title;
   final num totalValue;
   final num clinicValue;
@@ -19,7 +21,7 @@ class DoctorHistoryCard extends StatelessWidget {
       required this.totalValue,
       required this.clinicValue,
       required this.callValue,
-      required this.homeVisitValue});
+      required this.homeVisitValue, required this.totalEarnedMoney});
 
   @override
   Widget build(BuildContext context) {
@@ -55,15 +57,19 @@ class DoctorHistoryCard extends StatelessWidget {
           ),
           CustomBarChart(
             data: [
-              BarData(
+              if(totalEarnedMoney.any((element) => element.appointmentType=='clinic'))BarData(
                 label: Labels.clinic,
-                value: clinicValue,
+                value: title=='Total Appointments'?totalEarnedMoney
+                    .where((element) => element.appointmentType == 'clinic')
+                    .fold(0, (sum, element) => sum + element.count):totalEarnedMoney
+        .where((element) => element.appointmentType == 'clinic')
+        .fold(0, (sum, element) => sum + element.totalEarned),
               ),
-              BarData(
+              if(totalEarnedMoney.any((element) => element.appointmentType=='call'))BarData(
                 label: Labels.call,
                 value: callValue,
               ),
-              BarData(
+              if(totalEarnedMoney.any((element) => element.appointmentType=='homevisit'))BarData(
                 label: Labels.homeVist,
                 value: homeVisitValue,
               ),

@@ -3,8 +3,10 @@ import 'package:fourtyninehub/core/constants/constants.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_ad_details_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/get_meals_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_Id_usecase.dart';
 import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
@@ -75,8 +77,8 @@ class EndPoints {
   static const getWalletHome = '/main-wallet/user-wallets-amount';
   static const getCurrency = '/main-wallet/app-currency';
   static const anyCashBack = '/cashback/any';
-
-  static String getMainCategoryDetails(String id) => '/categories/main/$id';
+  static String loggedUserId = UserCubit.to.state.data?.id??'';
+  static String getMainCategoryDetails(String id) => '/categories/main/$id${loggedUserId.isNotEmpty?'?userId=$loggedUserId':''}';
   static const getCurrencyCarPool = '/main-wallet/app-currency';
 
   static String addMainCategoryToFavorite(String id) =>
@@ -250,7 +252,7 @@ class EndPoints {
       '/health/cities/$governorateId';
   static const getGovernorates = '/health/governorate';
   static const createDoctor = '/health/doctor';
-  static const doctorSearch = '/health/doctor-search';
+  static String doctorSearch = '/health/doctor-search${loggedUserId.isNotEmpty?"?userId=$loggedUserId":""}';
   static const bookEmergency = '/health/book-emergency';
 
   static String bookRegularAppointment(String appointmentId) =>
@@ -264,17 +266,22 @@ class EndPoints {
 
   static String getDoctorReviewsForUsers(String doctorId) =>
       '/health/doctor/rate/$doctorId';
+  static const String getDoctorReviews =
+      '/health/doctor/rate';
+  static String getDoctorDetailsId(GetDoctorDetailsIdParams params) =>
+      '/health/doctor-details/${params.doctorId}${loggedUserId.isNotEmpty?"?userId=$loggedUserId":""}';
 
   static String getDoctorDetails(String doctorId) =>
       '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
 
   static String toggleFavoriteCategory(String subCategoryId) =>
       '/favorite-category/$subCategoryId';
-  static const getHealthSubcategories = '/health/subCategories-health-with-ads';
-  static const getMedicalServices =
-      '/health/subCategories-medicalServices-with-ads';
+  static getHealthSubcategories(String userId) => '/health/subCategories-health-with-ads${userId.isNotEmpty?"?userId=$userId":""}';
+  static  getMedicalServices(String userId) =>
+      '/health/subCategories-medicalServices-with-ads${userId.isNotEmpty?"?userId=$userId":""}';
   static const getFavoriteCategory = '/favorite-category';
-  static const String getUpcomingUserAppointments = '/health/book-appointment';
+  static const getDoctorInfo = '/health/dashboard/doctor-infos';
+  static String getUpcomingUserAppointments(String userId ) => '/health/book-appointment${userId.isNotEmpty?"?userId=$userId":""}';
   static const String getHealthRequestsHistory =
       '/health/history-patient-booking';
   static const remainingDaysOfDoctorPracticing =

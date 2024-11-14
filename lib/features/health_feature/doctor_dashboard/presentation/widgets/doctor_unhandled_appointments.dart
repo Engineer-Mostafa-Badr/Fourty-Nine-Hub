@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
@@ -32,7 +33,15 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Theme.of(context).primaryColor,
+            color: cardDarkColor(context),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 2,
+                  offset: const Offset(0, 3),
+                ),
+              ]
           ),
           child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
             builder: (context, state) {
@@ -120,12 +129,14 @@ class DoctorUnhandledAppointmentCard extends StatelessWidget {
             children: [
               AppButton(
                 label: Labels.accept,
+                color: Colors.white,
                 onPressed: () => onAccept?.call(),
                 backColor: AppColors.PRIMARY_COLOR,
               ),
               const Sizer(),
               AppButton(
                 label: Labels.reject,
+                color: Colors.white,
                 onPressed: () => onReject?.call(),
               ),
             ],

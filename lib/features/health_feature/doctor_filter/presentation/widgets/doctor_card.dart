@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/pages/DoctorDetails.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -25,7 +27,11 @@ class DoctorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.push(Routes.VISITADOCTORDETAILS, extra: doctor.id);
+        if(UserCubit.to.isLoggedIn){
+          context.push(Routes.VISITADOCTORDETAILS, extra:DoctorDetailsParams(doctorId: doctor.id,fromSearch: false));
+        }else{
+          context.push(Routes.LOGIN);
+        }
       },
       child: Container(
         padding: const EdgeInsets.all(10),
@@ -69,7 +75,7 @@ class DoctorCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
+                if(doctor.classification!='NotSubscribed')Container(
                   padding:
                       EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.h),
                   decoration: BoxDecoration(
@@ -92,7 +98,7 @@ class DoctorCard extends StatelessWidget {
                         : null,
                   ),
                   child: Text(
-                    doctor.isPremium ? "Premium" : "Regular",
+                    doctor.classification=='Premium' ? "Premium" : "Regular",
                     style: TextStyle(
                       color: doctor.isPremium ? Colors.amber : Colors.grey,
                       fontWeight: doctor.isPremium

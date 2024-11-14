@@ -34,13 +34,17 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_details/data/datasources/doctor_detail_remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/data/repositories/doctor_details_repo_impl.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/repositories/doctor_details_repo.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/add_doctor_rating_use_case.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_Id_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_ratings.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_reviews.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/data/datasources/doctor_list_remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/data/repositories/doctor_list_repo_impl.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/repositories/doctor_list_repo.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/usecases/get_doctor_list_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/usecases/get_subcategory_doctors_list_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/city_filter_cubit/doctor_city_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/governorate_filter_cubit/doctor_governorate_filter_cubit.dart';
@@ -53,6 +57,7 @@ import 'package:fourtyninehub/features/health_feature/emergency/presentation/cub
 import 'package:fourtyninehub/features/health_feature/health/data/datasources/health_remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/repositories/health_repo_impl.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/repositories/health_repo.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/doctor_info_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_health_subcategories.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_medical_services.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_my_appointment_bookings_usecase.dart';
@@ -210,11 +215,22 @@ class HealthServiceLocator {
         () => ToggleFavoriteCategoryUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<DeleteFavoriteCategoryUseCase>(
         () => DeleteFavoriteCategoryUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<DoctorInfoUseCase>(
+        () => DoctorInfoUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetDoctorDetailsIdUseCase>(
+        () => GetDoctorDetailsIdUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetSubCategoryDoctorsListUseCase>(
+        () => GetSubCategoryDoctorsListUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<AddDoctorRatingUseCase>(
+        () => AddDoctorRatingUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetDoctorReviewsUseCase>(
+        () => GetDoctorReviewsUseCase(serviceLocator()));
     // -------------------------- cubits --------------------------
     serviceLocator.registerSingleton<HealthSharedData>(HealthSharedData());
     serviceLocator.registerFactory<DoctorDetailsCubit>(() => DoctorDetailsCubit(
-        serviceLocator(), serviceLocator(), serviceLocator()));
+        serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
     serviceLocator.registerFactory<DoctorsListCubit>(() => DoctorsListCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
         ));
@@ -273,6 +289,7 @@ class HealthServiceLocator {
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
+              serviceLocator(),
             )..loadData());
 
     serviceLocator.registerFactory<DoctorTodayAppointmentsCubit>(
@@ -290,7 +307,7 @@ class HealthServiceLocator {
     serviceLocator
         .registerFactory<DoctorStatisticsCubit>(() => DoctorStatisticsCubit(
               serviceLocator(),
-            )..loadData());
+            ));
 
     serviceLocator.registerFactory<AllDoctorReservationsCubit>(
         () => AllDoctorReservationsCubit(serviceLocator())..loadData());

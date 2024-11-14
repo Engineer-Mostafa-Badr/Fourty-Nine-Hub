@@ -34,7 +34,7 @@ class HealthSubCategories extends StatelessWidget {
                 ),
               ) :state.subCategories==[]?
               const SizedBox.shrink():Label(
-                text: LocaleKeys.medicalService.localize,
+                text: LocaleKeys.specialities.localize,
                 style: Styles.headerText(),
               ),
               const Sizer(),

@@ -13,8 +13,7 @@ class DoctorDetailsReviewsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 500.h,
+    return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -33,6 +32,7 @@ class DoctorDetailsReviewsWidget extends StatelessWidget {
                 switch (state) {
                   case DoctorDetailsReviewsLoaded _:
                     return ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: state.rates.length,
                       separatorBuilder: (context, index) =>

@@ -13,3 +13,5 @@ class GetMainCategoryDetailsUseCase
     return _repo.getMainCategoryDetails(params);
   }
 }
+
+

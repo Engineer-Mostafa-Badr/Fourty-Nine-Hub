@@ -1043,5 +1043,7 @@
   "reviews": "مراجعة",
   "addToCart": "إضافة الي السلة",
   "showAllOrders": "عرض كل الطلبات",
-  "restaurantOrders": "طلبات المطعم"
+  "restaurantOrders": "طلبات المطعم",
+  "rating": "تقييم",
+  "rateDoctor": "تقييم الطبيب"
 }

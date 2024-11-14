@@ -5,13 +5,13 @@ import 'package:fourtyninehub/features/health_feature/health/domain/entities/hea
 import 'package:fourtyninehub/features/health_feature/health/domain/repositories/health_repo.dart';
 
 class GetHealthSubcategoriesUseCase
-    extends UseCase<List<HealthSubcategoryEntity>, NoParams> {
+    extends UseCase<List<HealthSubcategoryEntity>, String> {
   final HealthRepo _healthRepo;
 
   GetHealthSubcategoriesUseCase(this._healthRepo);
 
   @override
-  Future<Either<Failure, List<HealthSubcategoryEntity>>> call(NoParams params) {
-    return _healthRepo.getHealthSubcategories();
+  Future<Either<Failure, List<HealthSubcategoryEntity>>> call(String params) {
+    return _healthRepo.getHealthSubcategories(params);
   }
 }

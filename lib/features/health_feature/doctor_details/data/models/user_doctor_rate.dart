@@ -11,7 +11,7 @@ class UserDoctorRateModel extends UserDoctorRateEntity {
     return UserDoctorRateModel(
       id: json['_id'],
       comment: json['comment'],
-      userName: json['userId']['firstName'],
+      userName: json['userId']!=null?json['userId']['firstName']:'',
       rate: (json['rate'] as num).toDouble(),
     );
   }
