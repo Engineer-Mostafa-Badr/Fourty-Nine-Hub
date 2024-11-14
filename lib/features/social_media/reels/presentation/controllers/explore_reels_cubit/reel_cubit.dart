@@ -391,6 +391,7 @@ class ReelsCubit extends Cubit<ReelsState> {
   int pageSize = 10;
 
   void loadInitialComments(String reelId) async {
+    emit(state.copyWith(isFetchingComments: true));
     comments.clear();
     currentPage = 1;
     hasMoreData = true;
@@ -401,7 +402,6 @@ class ReelsCubit extends Cubit<ReelsState> {
     if (!hasMoreData || isLoadingMore) return;
 
     bool isFetching = true;
-    emit(state.copyWith(isFetchingComments: isFetching));
     final result = await _getCommentsUseCase(CommentParams(
         reelId: reelId,
         pagingParams: PaginationParams(page: currentPage, limit: pageSize)));
@@ -440,10 +440,7 @@ class ReelsCubit extends Cubit<ReelsState> {
 
       final updatedComments = comments.map((comment) {
         if (isReply) {
-          // Debug: Check if we are updating a reply
-          // print("Updating a reply with commentId: $commentId");
 
-          // If it's a reply, find the specific reply to update
           final updatedReplies = comment.replies.map((reply) {
             if (reply.id == replyId) {
               // print("Found matching reply with id: ${reply.id}"); // Debugging output
@@ -469,7 +466,7 @@ class ReelsCubit extends Cubit<ReelsState> {
             // print("Found matching main comment with id: ${comment.id}"); // Debugging output
 
             final isLiked = data == "like";
-        print('Normal like $isLiked');
+          print('Normal like $isLiked');
             return comment.copyWith(
               isLiked: isLiked,
               likeCount:
