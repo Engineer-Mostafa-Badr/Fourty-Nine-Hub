@@ -104,15 +104,17 @@ class ReelsCubit extends Cubit<ReelsState> {
       },
       body: jsonEncode({
         "subcategoryId": "66684135dbb427ee42aa0141",
-        "isAudioOriginal": false,
+        //if it's true inputAudioId is null
+        "isAudioOriginal": true,
         "metadata": {
+          //name is bio
           "name": videoFile.path.split('/').last,
           "size": videoFile.lengthSync(),
           "type": "video/mp4",
           "videoWidth": 640,
           // Adjust these values according to your video metadata
           "videoHeight": 360,
-          "inputAudioId": "66ba3fb7baf9033183036cd0"
+          // "inputAudioId": "66ba3fb7baf9033183036cd0"
         }
       }),
     );
@@ -133,6 +135,7 @@ class ReelsCubit extends Cubit<ReelsState> {
 
       if (uploadResponse.statusCode == 200) {
         log('Video uploaded successfully!>>>>${responseData['data']['mediaId']}/////////1111111111111111111111111111111111111111111111111111111111111111111111');
+        log('video id is ${responseData['data']}');
         if (comeFrom == 'company') {
           createAdvertisement([responseData['data']['mediaId']],
               advertisementType!, double.parse(totalPrice!));
@@ -159,7 +162,7 @@ class ReelsCubit extends Cubit<ReelsState> {
   bool isLoadingReelsMore = false;
   bool hasMoreReelsData = true;
   int currentReelPage = 1;
-  int reelPageSize = 10;
+  int reelPageSize = 100;
 
   Future<void> fetchReels() async {
     if ((state.globalReelsIsLoading ?? false) ||

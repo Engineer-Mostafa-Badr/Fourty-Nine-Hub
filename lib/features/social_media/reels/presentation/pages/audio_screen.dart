@@ -222,15 +222,6 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          capitalizeAndSplit2Only(widget.audio.audioName),
-                          softWrap: true,
-                          style: TextStyle(
-                            fontSize: 40.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
                           capitalizeAndSplit(widget.audio.username),
                           softWrap: true,
                           style: TextStyle(
