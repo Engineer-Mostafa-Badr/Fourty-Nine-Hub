@@ -73,7 +73,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
   }
 
   void _pauseVideo() {
-    if (_isPlaying && widget.controller.value.isPlaying) {
+    if (_isPlaying) {
       widget.controller.pause();
 
       // _chewieController?.pause();
@@ -91,7 +91,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
   }
 
   void _playVideo() {
-    if (!_isPlaying && !widget.controller.value.isPlaying) {
+    if (!_isPlaying) {
       widget.controller.play();
       // _chewieController?.play();
       setState(() {

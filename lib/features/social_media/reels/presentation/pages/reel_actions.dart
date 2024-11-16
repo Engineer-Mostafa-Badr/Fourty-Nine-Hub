@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/show_comments_sheet.dart';
@@ -670,6 +671,16 @@ class RotatingCircularButton extends StatelessWidget {
               if (!serviceLocator<UserCubit>().isLoggedIn) {
                 context.push(Routes.LOGIN);
               } else {
+                if (context
+                    .read<PreloadBloc>()
+                    .state
+                    .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+                  context
+                      .read<PreloadBloc>()
+                      .state
+                      .controllers[context.read<PreloadBloc>().state.focusedIndex]
+                      ?.pause();
+                }
                 Navigator.push(
                   context,
                   MaterialPageRoute(

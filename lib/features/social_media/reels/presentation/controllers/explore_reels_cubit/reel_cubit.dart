@@ -104,7 +104,8 @@ class ReelsCubit extends Cubit<ReelsState> {
       },
       body: jsonEncode({
         "subcategoryId": "66684135dbb427ee42aa0141",
-        "isAudioOriginal": false,
+        //if it's true inputAudioId is null
+        "isAudioOriginal": true,
         "metadata": {
           "name": videoFile.path.split('/').last,
           "size": videoFile.lengthSync(),
@@ -112,7 +113,7 @@ class ReelsCubit extends Cubit<ReelsState> {
           "videoWidth": 640,
           // Adjust these values according to your video metadata
           "videoHeight": 360,
-          "inputAudioId": "66ba3fb7baf9033183036cd0"
+          // "inputAudioId": "66ba3fb7baf9033183036cd0"
         }
       }),
     );
