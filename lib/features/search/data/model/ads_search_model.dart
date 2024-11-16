@@ -4,7 +4,7 @@ import 'package:fourtyninehub/features/search/domain/entity/ads_search_entity.da
 class AdsSearchModel extends AdsSearchEntity {
   AdsSearchModel({
     required super.id,
-    required super.userId,
+     super.userId,
     required super.subCategoryId,
     required super.mainCategoryId,
     required super.title,

@@ -5,18 +5,20 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/change_react.dart';
 import 'package:fourtyninehub/features/search/domain/entity/ads_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/entity/main_category_search_entity.dart';
+import 'package:fourtyninehub/features/search/domain/entity/trip_come_with_you_entity.dart';
 import 'package:fourtyninehub/features/search/domain/entity/user_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_ads_search_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_posts_search_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
+import 'package:fourtyninehub/features/search/domain/use_case/fetch_trip_come_search_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_user_search_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/edit_comment_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/hide_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
@@ -33,6 +35,7 @@ class SearchCubit extends Cubit<SearchState> {
   final FetchUserSearchUseCase _fetchUserSearchUseCase;
   final FetchAdsSearchUseCase _fetchAdsSearchUseCase;
   final FetchPostsSearchUseCase _fetchPostsSearchUseCase;
+  final FetchTripComeSearchUseCase _fetchTripComeSearchUseCase;
   final SharePostUseCase _sharePostUseCase;
   final DeletePostUseCase _deletePostUseCase;
   final DeleteCommentUseCase _deleteCommentUseCase;
@@ -41,6 +44,7 @@ class SearchCubit extends Cubit<SearchState> {
   final PostCommentUseCase _postCommentUseCase;
   final ReplyOnCommentUseCase _replyOnCommentUseCase;
   final EditCommentUseCase _editCommentUseCase;
+  final CommentReactUseCase _commentReactUseCase;
 
   SearchCubit(this._fetchSearchUseCase,
       this._toggleFavoriteCategoryUseCase,
@@ -49,7 +53,7 @@ class SearchCubit extends Cubit<SearchState> {
       this._sharePostUseCase,
       this._deletePostUseCase, this._deleteCommentUseCase,
       this._hidePostUseCase, this._postReactUseCase,
-       this._postCommentUseCase, this._replyOnCommentUseCase, this._editCommentUseCase,) : super(SearchState());
+       this._postCommentUseCase, this._replyOnCommentUseCase, this._editCommentUseCase, this._commentReactUseCase, this._fetchTripComeSearchUseCase,) : super(SearchState());
 
   TextEditingController searchController = TextEditingController();
   final shareFormKey = GlobalKey<FormState>();
@@ -68,6 +72,7 @@ class SearchCubit extends Cubit<SearchState> {
     searchPagingUserController.refresh();
     searchPagingAdsController.refresh();
     searchPagingPostsController.refresh();
+    searchPagingTripComeController.refresh();
   }
 
   initPref() async {
@@ -81,6 +86,7 @@ class SearchCubit extends Cubit<SearchState> {
     getPaginatedUserSearch(params, 1);
     getPaginatedAdsSearch(params, 1);
     getPaginatedPostsSearch(params, 1);
+    getPaginatedTripComeSearch(params, 1);
     searchPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
       getPaginatedSearch(params, pageKey);
@@ -97,6 +103,10 @@ class SearchCubit extends Cubit<SearchState> {
       print("initStatePageKey : $pageKey");
       getPaginatedPostsSearch(params, pageKey);
     });
+    searchPagingTripComeController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getPaginatedPostsSearch(params, pageKey);
+    });
   }
 
   final PagingController<int, MainSubCategorySearchEntity>
@@ -108,6 +118,8 @@ class SearchCubit extends Cubit<SearchState> {
   final PagingController<int, PostEntity> searchPagingPostsController =
   PagingController(firstPageKey: 1);
   final int pageSize = 10;
+  final PagingController<int, TripComeWithYouEntity> searchPagingTripComeController =
+  PagingController(firstPageKey: 1);
 
   Future<List<MainSubCategorySearchEntity>> getPaginatedSearch(
       SearchParams params, int page) async {
@@ -199,6 +211,38 @@ class SearchCubit extends Cubit<SearchState> {
     });
     return ads;
   }
+
+
+  Future<List<TripComeWithYouEntity>> getPaginatedTripComeSearch(SearchParams params,
+      int page) async {
+    emit(state.copyWith(status: SearchStates.loading));
+    List<TripComeWithYouEntity> tripCome = [];
+    final response = await _fetchTripComeSearchUseCase.call(params);
+
+    response.fold((l) {
+      print('Errrrrrrror :$l');
+      emit(state.copyWith(failure: l, status: SearchStates.error));
+    }, (data) {
+      final isLastPage = data.length < pageSize;
+      if (page == 1) {
+        print("page == 1 $page");
+        searchPagingTripComeController.itemList = [];
+      }
+      if (isLastPage) {
+        print("isLastPage = $isLastPage");
+        searchPagingTripComeController.appendLastPage(data);
+      } else {
+        print("isNotLastPage = $isLastPage");
+        final nextPageKey = page + 1;
+        searchPagingTripComeController.appendPage(data, nextPageKey);
+      }
+      print('Sussecc :$data');
+      tripCome = data;
+      emit(state.copyWith(tripCome: data, status: SearchStates.success));
+    });
+    return tripCome;
+  }
+
 
 
   Future<List<PostEntity>> getPaginatedPostsSearch(SearchParams params,
@@ -407,6 +451,31 @@ class SearchCubit extends Cubit<SearchState> {
             (failure) =>
             emit(state.copyWith(failure: failure, status: SearchStates.error)),
             (r) {
+          value = r;
+        });
+    return value;
+  }
+
+
+  final PagingController<int, CommentEntity> commentsPagingController =
+  PagingController(firstPageKey: 1);
+  final PagingController<int, CommentEntity> repliesPagingController =
+  PagingController(firstPageKey: 1);
+
+  Future<bool> onCommentReact({required PostReactParams params}) async {
+    var response = await _commentReactUseCase(params);
+    bool value = false;
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: SearchStates.error)),
+            (r) {
+          print(params.postId);
+          var currentComment = commentsPagingController.itemList
+              ?.firstWhere((element) => element.id == params.postId);
+          var currentReply = repliesPagingController.itemList
+              ?.firstWhere((element) => element.id == params.postId);
+          changeReaction(currentComment, params.react);
+          changeReaction(currentReply, params.react);
           value = r;
         });
     return value;

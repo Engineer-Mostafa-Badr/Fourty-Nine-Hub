@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 class AdsSearchEntity {
   final String id;
-  final String userId;
+   String? userId;
   final String subCategoryId;
   final String mainCategoryId;
   final String title;
@@ -49,7 +49,7 @@ class AdsSearchEntity {
 
   AdsSearchEntity(
       {required this.id,
-      required this.userId,
+       this.userId,
       required this.subCategoryId,
       required this.mainCategoryId,
       required this.title,

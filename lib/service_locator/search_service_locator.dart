@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/search/domain/repository/search_repositor
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_ads_search_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_posts_search_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
+import 'package:fourtyninehub/features/search/domain/use_case/fetch_trip_come_search_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_user_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:get_it/get_it.dart';
@@ -37,7 +38,14 @@ class SearchServiceLocator {
               serviceLocator(),
             ));
 
+    serviceLocator
+        .registerLazySingleton<FetchTripComeSearchUseCase>(() => FetchTripComeSearchUseCase(
+              serviceLocator(),
+            ));
+
     serviceLocator.registerFactory<SearchCubit>(() => SearchCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

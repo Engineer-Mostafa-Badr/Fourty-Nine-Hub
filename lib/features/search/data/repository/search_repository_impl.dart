@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/search/data/data_source/search_remote_data_source.dart';
 import 'package:fourtyninehub/features/search/domain/entity/ads_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/entity/main_category_search_entity.dart';
+import 'package:fourtyninehub/features/search/domain/entity/trip_come_with_you_entity.dart';
 import 'package:fourtyninehub/features/search/domain/entity/user_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
@@ -31,5 +32,10 @@ class SearchRepositoryImpl extends SearchRepository{
   @override
   Future<Either<Failure, List<PostEntity>>> fetchPostsSearch(SearchParams params) {
     return _searchRemoteDataSource.fetchPostsSearch(params);
+  }
+
+  @override
+  Future<Either<Failure, List<TripComeWithYouEntity>>> fetchTripComeSearch(SearchParams params) {
+    return _searchRemoteDataSource.fetchTripComeSearch(params);
   }
 }

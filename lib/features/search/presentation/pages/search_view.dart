@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.da
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/ads_search_view.dart';
+import 'package:fourtyninehub/features/search/presentation/pages/widget/come_with_me_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/main_category_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/posts_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/profile_search_view.dart';
@@ -31,7 +32,7 @@ class _SearchViewState extends State<SearchView>
   void initState() {
     context.read<SearchCubit>().initPref();
     super.initState();
-    _tabController = TabController(length: 7, vsync: this); // Updated length
+    _tabController = TabController(length: 9, vsync: this); // Updated length
   }
 
   @override
@@ -114,7 +115,11 @@ class _SearchViewState extends State<SearchView>
             }else if(i==5){
               await prefs.setString('filter', 'ads');
             }else if(i==6){
-              await prefs.setString('filter', 'trip');
+              await prefs.setString('filter', 'comeWithYouTrips');
+            }else if(i==7){
+              await prefs.setString('filter', 'carpoolTrips');
+            }else if(i==8){
+              await prefs.setString('filter', 'rideTrips');
             }
             String? filter =  prefs.getString('filter');
 
@@ -141,7 +146,9 @@ class _SearchViewState extends State<SearchView>
             Tab(text: 'Main Category'),
             Tab(text: 'Sub Category'),
             Tab(text: 'Ads'),
-            Tab(text: 'Trip'),
+            Tab(text: 'Come With you'),
+            Tab(text: 'Carpool'),
+            Tab(text: 'Ride'),
           ],
         ),
       ),
@@ -155,6 +162,8 @@ class _SearchViewState extends State<SearchView>
           MainCategorySearchView(),
           SubCategorySearchView(),
             AdsSearchView(),
+          ComeWithMeSearchView(),
+          Center(child: Text('Trip')),
           Center(child: Text('Trip')),
         ],
       ),
