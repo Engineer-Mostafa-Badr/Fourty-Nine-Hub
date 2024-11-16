@@ -1071,7 +1071,8 @@ class CodegenLoader extends AssetLoader{
   "reviews": "مراجعة",
   "addToCart": "إضافة الي السلة",
   "showAllOrders": "عرض كل الطلبات",
-  "restaurantOrders": "طلبات المطعم"
+  "restaurantOrders": "طلبات المطعم",
+  "viewRoute": "عرض المسار"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2147,7 +2148,8 @@ static const Map<String,dynamic> en = {
   "reviews": "Reviews",
   "addToCart": "Add To Cart",
   "showAllOrders": "Show All Orders",
-  "restaurantOrders": "Restaurant Orders"
+  "restaurantOrders": "Restaurant Orders",
+  "viewRoute": "View Route"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

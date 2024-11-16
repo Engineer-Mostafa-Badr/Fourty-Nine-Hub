@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// Function to open Google Maps with a polyline, start, and end points
 Future<void> openGoogleMapsWithRoute(
     String start, String end, String polyline) async {
-  // Base URL for Google Maps
-  final String baseUrl = 'https://www.google.com/maps/dir/?api=1';
+  const String baseUrl = 'https://www.google.com/maps/dir/?api=1';
 
-  // Format the URL for Google Maps with start, end, and polyline
   final String url =
       '$baseUrl&origin=$start&destination=$end&path=enc:$polyline';
 
-  // Check if the URL can be launched
   if (await canLaunch(url)) {
     await launch(url);
   } else {
@@ -20,23 +20,25 @@ Future<void> openGoogleMapsWithRoute(
 }
 
 class TestPolyLineWithGoogleMap extends StatelessWidget {
-  // Sample polyline string
-  final String polylineString =
-      "_swvDqhc~DnAkDa@UiAo@aGkDwDwBl@gBdB}Et@iBR]\\e@Z]rBcB~EcEnA}@zDgDx@u@Zi@T_@fAkBx@uBJk@Ts@|CaGtDcHnFaLrCgFh@_An@o@l@qAj@u@pDeH|@iCXg@Pe@hA{B|A_DrBkEbAuBvB{DzA}Ct@sAtCgFl@m@b@S`BN|ANdFb@|E\\JAPI`AL|@LnAJpBLvBJtBP~El@dBP~BRpACfAFV@lCRnCRxFd@lOlAjD`@~@NVNzAD~D^nCZ|NnAhGd@tCTjF`@pE`@dABfALZBZNPNPTVv@P`AF|AFbANTh@Rj@J`@Cj@EfAGhAG~BMrEa@|@QfAIxBOnE[`CMVAF^RtBRbD\\vFFl@Lj@LnCPlE`@hHBp@V\\@@?@B@H@FCBI?ICGCCA?C[Ea@EgBMmB";
+  // final String startLocation = '30.1088,31.31545'; // Example: San Francisco
+  // final String endLocation = '30.06141,31.33169'; // Example: Los Angeles
+  final String start;
+  final String end;
+  final String polyLine;
 
-  // Define the start and end points
-  final String startLocation = '30.1088,31.31545'; // Example: San Francisco
-  final String endLocation = '30.06141,31.33169'; // Example: Los Angeles
-
+  const TestPolyLineWithGoogleMap(
+      {super.key,
+      required this.start,
+      required this.end,
+      required this.polyLine});
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ElevatedButton(
-        onPressed: () async {
-          await openGoogleMapsWithRoute(
-              startLocation, endLocation, polylineString);
+      child: AvaialbleTripsButton(
+        onTap: () async {
+          await openGoogleMapsWithRoute(start, end, polyLine);
         },
-        child: Text('Show Route in Google Maps'),
+        title: LocaleKeys.viewRoute.localize,
       ),
     );
   }

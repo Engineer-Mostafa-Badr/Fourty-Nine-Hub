@@ -1074,5 +1074,6 @@
   "reviews": "Reviews",
   "addToCart": "Add To Cart",
   "showAllOrders": "Show All Orders",
-  "restaurantOrders": "Restaurant Orders"
+  "restaurantOrders": "Restaurant Orders",
+  "viewRoute":"View Route"
 }

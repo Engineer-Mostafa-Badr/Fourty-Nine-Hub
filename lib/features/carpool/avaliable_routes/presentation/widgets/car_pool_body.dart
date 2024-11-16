@@ -60,7 +60,7 @@ class _CarPoolBodyState extends State<CarPoolBody>
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 15.h),
       child: DefaultTabController(
-        length: 4,
+        length: 5,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -124,18 +124,18 @@ class _CarPoolBodyState extends State<CarPoolBody>
                     ),
                   ),
                 ),
-                // Tab(
-                //   child: Container(
-                //     height: 80.h,
-                //     alignment: Alignment.center,
-                //     child: Text(
-                //       "DashBoard",
-                //       textAlign: TextAlign.center,
-                //       softWrap: true, // Allow text wrapping
-                //       style: TextStyle(fontSize: 22.sp), // Adjust font size
-                //     ),
-                //   ),
-                // ),
+                Tab(
+                  child: Container(
+                    height: 80.h,
+                    alignment: Alignment.center,
+                    child: Text(
+                      "DashBoard",
+                      textAlign: TextAlign.center,
+                      softWrap: true, // Allow text wrapping
+                      style: TextStyle(fontSize: 22.sp), // Adjust font size
+                    ),
+                  ),
+                ),
               ],
             ),
             // Expanded to fit the available height
@@ -147,60 +147,57 @@ class _CarPoolBodyState extends State<CarPoolBody>
                   _buildTabContent(context, "myBookings"),
                   _buildTabContent(context, "running"),
                   _buildTabContent(context, "expired"),
-                  // BlocBuilder<GetAvailableTripsForDriversCubit,
-                  //     GetAvailableTripsForDriversState>(
-                  //   builder: (context, state) {
-                  //     if (state is GetAvailableTripsForDriversLoading) {
-                  //       return const Center(
-                  //           child: CircularProgressIndicator(
-                  //         color: AppColors.PRIMARY_COLOR,
-                  //       ));
-                  //     } else if (state
-                  //         is GetAvailableTripsForDriversSuccess) {
-                  //       return ListView.builder(
-                  //         itemCount: state.trips.length,
-                  //         itemBuilder: (context, index) {
-                  //           final trip = state.trips[index];
-                  //           return BlocProvider(
-                  //             create: (context) =>
-                  //                 AcceptTripForDriverCubit(serviceLocator()),
-                  //             child: TestCardDashboard(entity: trip),
-                  //           );
-                  //         },
-                  //       );
-                  //     } else if (state
-                  //         is GetAvailableTripsForDriversFailure) {
-                  //       // Show an error message and retry option on failure
-                  //       return Center(
-                  //         child: Column(
-                  //           mainAxisAlignment: MainAxisAlignment.center,
-                  //           children: [
-                  //             Text('Error loading trips. Please try again.'),
-                  //             SizedBox(height: 16),
-                  //             ElevatedButton(
-                  //               style: const ButtonStyle(
-                  //                   backgroundColor: WidgetStatePropertyAll(
-                  //                       AppColors.PRIMARY_COLOR)),
-                  //               onPressed: () {
-                  //                 context
-                  //                     .read<
-                  //                         GetAvailableTripsForDriversCubit>()
-                  //                     .fetchAllCarpoolTrips();
-                  //               },
-                  //               child: const Text(
-                  //                 'Retry',
-                  //                 style: TextStyle(
-                  //                     color: AppColors.AUTH_CONTAINER_COLOR),
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       );
-                  //     }
-                  //     // Initial or unexpected state
-                  //     return const Center(child: Text('No data available.'));
-                  //   },
-                  // ),
+                  BlocBuilder<GetAvailableTripsForDriversCubit,
+                      GetAvailableTripsForDriversState>(
+                    builder: (context, state) {
+                      if (state is GetAvailableTripsForDriversLoading) {
+                        return const Center(
+                            child: CircularProgressIndicator(
+                          color: AppColors.PRIMARY_COLOR,
+                        ));
+                      } else if (state is GetAvailableTripsForDriversSuccess) {
+                        return ListView.builder(
+                          itemCount: state.trips.length,
+                          itemBuilder: (context, index) {
+                            final trip = state.trips[index];
+                            return BlocProvider(
+                              create: (context) =>
+                                  AcceptTripForDriverCubit(serviceLocator()),
+                              child: TestCardDashboard(entity: trip),
+                            );
+                          },
+                        );
+                      } else if (state is GetAvailableTripsForDriversFailure) {
+                        // Show an error message and retry option on failure
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Error loading trips. Please try again.'),
+                              SizedBox(height: 16),
+                              ElevatedButton(
+                                style: const ButtonStyle(
+                                    backgroundColor: WidgetStatePropertyAll(
+                                        AppColors.PRIMARY_COLOR)),
+                                onPressed: () {
+                                  context
+                                      .read<GetAvailableTripsForDriversCubit>()
+                                      .fetchAllCarpoolTrips();
+                                },
+                                child: const Text(
+                                  'Retry',
+                                  style: TextStyle(
+                                      color: AppColors.AUTH_CONTAINER_COLOR),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      // Initial or unexpected state
+                      return const Center(child: Text('No data available.'));
+                    },
+                  ),
                 ],
               ),
             ),
