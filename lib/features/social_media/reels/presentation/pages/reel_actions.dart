@@ -215,8 +215,7 @@ class _UserInfoState extends State<_UserInfo> {
           child: SizedBox(
             width: 0.7.sw,
             child: ReadMoreText(
-              "${widget.reel.name}\n${widget.reel.audio
-                  .audioName}\nعايز نحط ايه هنا  ",
+              "Simple Description",
               trimLines: 1,
               colorClickableText: AppColors.PRIMARY_COLOR_DARK,
               trimMode: TrimMode.Line,
