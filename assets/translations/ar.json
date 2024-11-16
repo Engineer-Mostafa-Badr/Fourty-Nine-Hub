@@ -532,7 +532,9 @@
   "enterPhoneNumber": "من فضلك ادخل رقم الهاتف",
   "enterValidPhoneNumber": "من فضلك ادخل رقم هاتف صحيح",
   "welcomeToTripjoin": "مرحبا بك في مشاركة الرحلات",
-  "ownCar": "انت تملك سيارة\nشحص سيشارك الرحلة معك ويدفع نصف الثمن",
+  "ownCar": "انت تملك سيارة\nشحص سيشارك الرحلة معك وتدفع نصف الثمن",
+  "dontOwnCar": "انت لا تملك سيارة\nشحص سيشارك الرحلة معك وتدفع نصف الثمن",
+
   "startingPoint": "البداية",
   "destinationPoint": "الوجهة",
   "KM": "كم",
@@ -1029,7 +1031,6 @@
   "removeVideo": "هل أنت متأكد أنك تريد إزالة هذا الفيديو؟",
   "enterImageOrVideo": "الرجاء إدخال الصور أو الفيديو",
   "noResultsFound": "لم يتم العثور على نتائج.",
-  "mutualFriend": "صديق مشترك",
   "serveClientsByClickRegister": "اخدم عملاءك بالنقر على زر التسجيل.",
   "totalOrder": "إجمالي الطلبات",
   "totalRevenue": "إجمالي الإيرادات",
@@ -1054,5 +1055,16 @@
   "reviews": "مراجعة",
   "addToCart": "إضافة الي السلة",
   "showAllOrders": "عرض كل الطلبات",
-  "restaurantOrders": "طلبات المطعم"
+  "restaurantOrders": "طلبات المطعم",
+  "rating": "تقييم",
+  "rateDoctor": "تقييم الطبيب",
+  "restaurantOrders": "طلبات المطعم",
+  "mutualFriend": "صديق مشترك",
+  "clearForEveryone": "مسح لدي الجميع",
+  "clearForMe": "مسح لدي",
+  "clearThisChat": "مسح هذه الدردشة؟",
+  "opened": "تمت مشاهدته",
+  "forwardMessage": "تحويل الرسائل",
+  "forwarded": "تمت اعادة توجيهه",
+  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة"
 }

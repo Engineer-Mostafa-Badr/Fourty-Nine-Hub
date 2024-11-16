@@ -61,7 +61,7 @@ class BarChartPainter extends CustomPainter {
         text: TextSpan(
           text: data[i].value.toShortScale,
           style:
-              TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.sp),
+              TextStyle(color: Theme.of(context).primaryColor, fontSize: 28.sp),
         ),
         textDirection: TextDirection.ltr,
       );
@@ -76,7 +76,7 @@ class BarChartPainter extends CustomPainter {
         text: TextSpan(
           text: data[i].label,
           style:
-              TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.sp),
+              TextStyle(color: Theme.of(context).primaryColor, fontSize: 30.sp),
         ),
         textDirection: TextDirection.ltr,
       );

@@ -4,13 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/mapBox_cubit/cubit/map_box_cubit_cubit.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/get_llat_and_long/cubit/get_lat_and_long_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class StartTextFieldAndFindButonGoogleMap extends StatefulWidget {
-  const StartTextFieldAndFindButonGoogleMap({super.key});
+  const StartTextFieldAndFindButonGoogleMap(
+      {super.key, this.isTripJoin = false});
+  final bool isTripJoin;
 
   @override
   State<StartTextFieldAndFindButonGoogleMap> createState() =>
@@ -20,15 +22,13 @@ class StartTextFieldAndFindButonGoogleMap extends StatefulWidget {
 class _StartTextFieldAndFindButonState
     extends State<StartTextFieldAndFindButonGoogleMap> {
   late TextEditingController startingController;
-  late final StartingLocationCubit startingLocationCubit;
-  late final MapBoxCubit mapBoxCubit;
+  // late final StartingLocationCubit startingLocationCubit;
+  late final GetLatAndLongCubit getLatAndLongCubit;
   final formKey = GlobalKey<FormState>();
-
   @override
   void initState() {
     super.initState();
-    mapBoxCubit = context.read<MapBoxCubit>();
-    startingLocationCubit = context.read<StartingLocationCubit>();
+    getLatAndLongCubit = context.read<GetLatAndLongCubit>();
     startingController = TextEditingController();
   }
 
@@ -43,13 +43,13 @@ class _StartTextFieldAndFindButonState
     return Form(
       key: formKey,
       child: Container(
-        height: 75.h,
+        height: 100.h,
         margin: EdgeInsets.only(top: 10.h),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: BlocBuilder<StartingLocationCubit, StartingLocationState>(
+              child: BlocBuilder<GetLatAndLongCubit, GetLatAndLongState>(
                 builder: (context, state) {
                   return TextFormField(
                     decoration: InputDecoration(
@@ -74,7 +74,10 @@ class _StartTextFieldAndFindButonState
               title: LocaleKeys.searchFind.localize,
               onTap: () {
                 if (formKey.currentState!.validate()) {
-                  startingLocationCubit.getStartingLocation(
+                  getLatAndLongCubit.getLatAndLong(
+                      context: context,
+                      isStart: true,
+                      isTripJoin: widget.isTripJoin,
                       address: startingController.text);
                 }
               },
@@ -86,15 +89,15 @@ class _StartTextFieldAndFindButonState
     );
   }
 
-  Widget? _getIcon(StartingLocationState state) {
-    if (state is StartingLocationSuccess) {
+  Widget? _getIcon(GetLatAndLongState state) {
+    if (state is GetLatAndLongSuccess) {
       return const Icon(
         Icons.check,
         color: AppColors.CHECK_MARK_COLOR,
         size: 30,
       );
     }
-    if (state is StartingLocationLoading) {
+    if (state is GetLatAndLongLoading) {
       return const SizedBox(
         width: 30,
         height: 30,
@@ -106,14 +109,14 @@ class _StartTextFieldAndFindButonState
         ),
       );
     }
-    if (state is StartingLocationFailed) {
+    if (state is GetLatAndLongFailure) {
       return const Icon(
         Icons.error,
         color: Colors.red,
         size: 30,
       );
     }
-    if (state is StartingLocationInitial) {
+    if (state is GetLatAndLongInitial) {
       return const Icon(
         Icons.error,
         color: Colors.grey,

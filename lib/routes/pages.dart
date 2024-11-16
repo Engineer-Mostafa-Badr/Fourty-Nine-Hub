@@ -27,21 +27,23 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_cubit.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/pages/azkar_details.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/destination_location_carpool/cubit/map_box_dest_cubit_cubit.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/get_llat_and_long/cubit/cubit/dest_get_lat_and_long_cubit.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/get_llat_and_long/cubit/get_lat_and_long_cubit.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/get_price_carpool/get_price_carpool_cubit.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/here_cubit/cubit/here_location_cubit.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/mapBox_cubit/cubit/map_box_cubit_cubit.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/views/add_new_route_view.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/views/carpool_view.dart';
+import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/carpool/create_carpool/presentation/cubits/cubit/create_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/edit_food/presentation/cubit/edit_food_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/edit_food/presentation/pages/edit_food_view.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_orders.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/create_resturant_view.dart';
@@ -64,6 +66,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/edit_doctor_profile.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/today_doctor_appointments_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/pages/unhandled_doctor_appointments_view.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/pages/all_reviews.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/city_filter_cubit/doctor_city_filter_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/governorate_filter_cubit/doctor_governorate_filter_cubit.dart';
@@ -73,6 +76,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/pages/subcategory_filter_view.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/presentation/cubit/emergency_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/presentation/pages/emergnce_view.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/earned_mony_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/create_installment/presentation/cubit/create_installment_cubit.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_details/presentation/cubit/installment_details_cubit.dart';
@@ -119,6 +123,9 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/contacts_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/forward_messages_view.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/one_time_document_message.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/one_time_voice_message_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/select_contacts_to_share_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/show_image_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/show_images_view.dart';
@@ -148,6 +155,8 @@ import 'package:fourtyninehub/features/star_feature/presentation/controller/cubi
 import 'package:fourtyninehub/features/star_feature/presentation/pages/be_star_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/star_winner_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
+import 'package:fourtyninehub/features/trip_join/add_new_pick_me/presentation/cubits/cubit/add_new_pick_me_trip_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/add_new_pick_me/presentation/views/add_new_pick_me_view.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_brand_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_model_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_year_type_usecase.dart';
@@ -163,6 +172,9 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/trip_join_view.dart';
+import 'package:fourtyninehub/features/trip_join/get_requests_pick_me/data/models/get_requests_pick_me_model.dart';
+import 'package:fourtyninehub/features/trip_join/get_requests_pick_me/presentation/cubits/cubit/get_requests_pick_me_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/get_requests_pick_me/presentation/views/get_requests_pick_me_view.dart';
 import 'package:fourtyninehub/features/trip_join/notifications/presentation/views/request_trip_join_notification.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/cubits/get_request/get_request_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/pages/tripjoin_request_history_view.dart';
@@ -337,6 +349,27 @@ class AppPages {
             name: Routes.CONTACTSVIEW,
             builder: (context, state) => ContactsView(
               contactsViewParams: state.extra as ContactsViewParams,
+            ),
+          ),
+          GoRoute(
+            path: Paths.ONETIMEVOICEMESSAGEVIEW,
+            name: Routes.ONETIMEVOICEMESSAGE,
+            builder: (context, state) => OneTimeVoiceMessageView(
+              messageEntity: state.extra as MessageEntity,
+            ),
+          ),
+          GoRoute(
+            path: Paths.ONETIMEDOCUMENTMESSAGEVIEW,
+            name: Routes.ONETIMEDOCUMENTMESSAGE,
+            builder: (context, state) => OneTimeDocumentMessageView(
+              oneTimeDocumentMessageViewParams: state.extra as OneTimeDocumentMessageViewParams,
+            ),
+          ),
+          GoRoute(
+            path: Paths.FORWARDMESSAGESVIEW,
+            name: Routes.FORWARDMESSAGES,
+            builder: (context, state) => ForwardMessagesView(
+              forwardMessagesViewParams: state.extra as ForwardMessagesViewParams,
             ),
           ),
           GoRoute(
@@ -1102,10 +1135,11 @@ class AppPages {
                 GoRoute(
                   path: Paths.VISITADOCTORLIST,
                   name: Routes.VISITADOCTORLIST,
-                  builder: (context, state) => BlocProvider<DoctorsListCubit>(
-                    create: (context) => serviceLocator(),
-                    child: const DoctorsListView(),
-                  ),
+                  builder: (context, state) =>
+                      BlocProvider<DoctorsListCubit>(
+                        create: (context) => serviceLocator(),
+                        child: DoctorsListView(params: state.extra as DoctorsListParams,),
+                      ),
                 ),
                 GoRoute(
                     path: Paths.VISITADOCTORDETAILS,
@@ -1113,7 +1147,7 @@ class AppPages {
                     builder: (context, state) {
                       return BlocProvider<DoctorDetailsCubit>(
                           child: DoctorDetailsView(
-                            doctorId: (state.extra) as String,
+                            params: (state.extra) as DoctorDetailsParams,
                           ),
                           create: (_) => serviceLocator());
                     }),
@@ -1131,6 +1165,7 @@ class AppPages {
                 GoRoute(
                     path: Paths.DOCTORDASHBOARD,
                     name: Routes.DOCTORDASHBOARD,
+
                     builder: (context, state) =>
                         BlocProvider<DoctorDashboardCubit>(
                             create: (_) => serviceLocator(),
@@ -1154,8 +1189,15 @@ class AppPages {
                     builder: (context, state) =>
                         BlocProvider<DoctorStatisticsCubit>(
                           create: (context) => serviceLocator(),
-                          child: const DoctorStatisticsView(),
+                          child: DoctorStatisticsView(totalEarnedMoney: state.extra as List<EarnedMoneyEntity>,),
                         )),
+                GoRoute(
+                    path: Paths.DOCTORREVIEWS,
+                    name: Routes.DOCTORREVIEWS,
+                    builder: (context, state) =>
+                        BlocProvider<DoctorDetailsCubit>(
+                            create: (_) => serviceLocator()..getDoctorReviews(),
+                            child: AllReviews())),
                 GoRoute(
                     path: Paths.DOCTORTODAYAPPOINTMENTS,
                     name: Routes.DOCTORTODAYAPPOINTMENTS,
@@ -1215,8 +1257,8 @@ class AppPages {
                 GoRoute(
                     path: Paths.RESTAURANTDETAILS,
                     name: Routes.RESTAURANTDETAILS,
-                    builder: (context, state) => BlocProvider.value(
-                          value: serviceLocator<RestaurantDetailsCubit>(),
+                    builder: (context, state) => BlocProvider(
+                      create:(context)=>  serviceLocator<RestaurantDetailsCubit>(),
                           child: RestaurantDetailsView(
                             restaurant: state.extra as Restaurant,
                           ),
@@ -1225,8 +1267,9 @@ class AppPages {
                       GoRoute(
                           path: Paths.FOODCART,
                           name: Routes.FOODCART,
-                          builder: (context, state) => BlocProvider.value(
-                                value: serviceLocator<RestaurantDetailsCubit>(),
+                          builder: (context, state) =>
+                              BlocProvider(
+                                create:(context)=> serviceLocator<RestaurantDetailsCubit>(),
                                 child: const FoodCartView(),
                               ))
                     ])
@@ -1703,11 +1746,66 @@ class AppPages {
                         serviceLocator<PublishTripJoinUseCase>(),
                   ),
                 ),
+                BlocProvider(
+                  create: (_) => GetLatAndLongCubit(
+                      getLatLongFromAddressRemoteDataSource: serviceLocator()),
+                ),
+                BlocProvider(
+                  create: (_) => DestGetLatAndLongCubit(
+                      getLatLongFromAddressRemoteDataSource: serviceLocator()),
+                ),
                 BlocProvider(create: (_) => TripJoinViewCubit()),
               ],
               child: const TripJoinView(),
             ),
           ),
+
+          //________________________AddNewPickMe____________________-
+          GoRoute(
+            path: Paths.AddNewPickMe,
+            name: Routes.AddNewPickMe,
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) => StartingLocationCubit(
+                    fetchLocationCordinatesUseCase:
+                        serviceLocator<FetchLocationCordinatesUseCase>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (_) => TripJoinViewCubit(),
+                ),
+                BlocProvider(
+                  create: (_) => DestinationLocationCubit(
+                    fetchLocationCordinatesUseCase:
+                        serviceLocator<FetchLocationCordinatesUseCase>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (_) => FetchPriceDistanceCubit(
+                    fetchPriceDistanceUsecase:
+                        serviceLocator<FetchPriceDistanceUsecase>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (_) => AddNewPickMeTripCubit(
+                    addNewPickMeUsecase: serviceLocator(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (_) => GetLatAndLongCubit(
+                      getLatLongFromAddressRemoteDataSource: serviceLocator()),
+                ),
+                BlocProvider(
+                  create: (_) => DestGetLatAndLongCubit(
+                      getLatLongFromAddressRemoteDataSource: serviceLocator()),
+                ),
+                BlocProvider(create: (_) => TripJoinViewCubit()),
+              ],
+              child: const AddNewPickMeView(),
+            ),
+          ),
+
           // ___________________ Available Trips ______________
           GoRoute(
             path: Paths.AVAILABLE_TRIPS,
@@ -1732,6 +1830,11 @@ class AppPages {
                         serviceLocator<ViewAllPickMeUseCase>(),
                   ),
                 ),
+                BlocProvider<GetCurrencyCubit>(
+                  create: (context) => GetCurrencyCubit(
+                    serviceLocator(),
+                  ),
+                ),
               ],
               child: const AvailableTripsView(),
             ),
@@ -1745,6 +1848,16 @@ class AppPages {
             },
           ),
           GoRoute(
+              path: Paths.TRIP_JOIN_REQUEST_HISTORY_Pick_Me,
+              name: Routes.TRIP_JOIN_REQUEST_HISTORY_Pick_Me,
+              builder: (context, state) => BlocProvider<GetRequestsPickMeCubit>(
+                    create: (context) => GetRequestsPickMeCubit(
+                        getRequestsPickMeUseCase: serviceLocator()),
+                    child: GetRequestsPickMeView(
+                      pickMeRequests: state.extra as List<PickMeRequest>,
+                    ),
+                  )),
+          GoRoute(
             path: Paths.TRIP_JOIN_REQUEST_HISTORY,
             name: Routes.TRIP_JOIN_REQUEST_HISTORY,
             builder: (context, state) {
@@ -1753,6 +1866,10 @@ class AppPages {
                   BlocProvider<GetRequestCubit>(
                     create: (context) =>
                         GetRequestCubit(getRequestUsecase: serviceLocator()),
+                  ),
+                  BlocProvider<GetRequestsPickMeCubit>(
+                    create: (context) => GetRequestsPickMeCubit(
+                        getRequestsPickMeUseCase: serviceLocator()),
                   ),
                 ],
                 child: TripJoinRequestHistoryView(
@@ -1770,6 +1887,10 @@ class AppPages {
                 ),
                 BlocProvider<GetCurrencyCubit>(
                   create: (context) => GetCurrencyCubit(serviceLocator()),
+                ),
+                BlocProvider<JoinTripCarPoolCubit>(
+                  create: (context) => JoinTripCarPoolCubit(
+                      joinTripCarpoolUsecase: serviceLocator()),
                 ),
               ], child: const CarPoolView());
             },
@@ -1812,6 +1933,17 @@ class AppPages {
                 ),
                 BlocProvider<MapBoxCubit>(
                   create: (context) => MapBoxCubit(),
+                ),
+                BlocProvider<HereLocationCubit>(
+                  create: (context) => HereLocationCubit(),
+                ),
+                BlocProvider<GetLatAndLongCubit>(
+                  create: (context) => GetLatAndLongCubit(
+                      getLatLongFromAddressRemoteDataSource: serviceLocator()),
+                ),
+                BlocProvider<DestGetLatAndLongCubit>(
+                  create: (context) => DestGetLatAndLongCubit(
+                      getLatLongFromAddressRemoteDataSource: serviceLocator()),
                 ),
               ], child: const AddNewRouteView());
             },

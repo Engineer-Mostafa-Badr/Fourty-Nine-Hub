@@ -22,6 +22,11 @@ class MessageEntity {
   bool delivered;
   bool hasReply;
   bool isDeleted;
+  bool isOneTimeViewMessage;
+  bool isOneTimeSeenMessage;
+  bool isListened;
+  bool isSelected = false;
+  bool isForwarded = false;
 
   MessageEntity(
       {required this.id,
@@ -40,11 +45,30 @@ class MessageEntity {
       this.groupId,
       required this.time,
       required this.isDeleted,
-      required this.sharedContacts});
+      required this.sharedContacts,
+      required this.isOneTimeViewMessage,
+      required this.isOneTimeSeenMessage,
+      required this.isListened,
+      this.isSelected = false,
+      this.isForwarded = false
+      });
 
   void markAsSeen() {
     seen = true;
     delivered = true;
+    // isOneTimeSeenMessage = true;
+  }
+
+  void markAsListened() {
+    isListened = true;
+  }
+
+  void markAsOneTimeView() {
+    isOneTimeSeenMessage = true;
+  }
+
+  void markRecordAsListened() {
+    isListened = true;
   }
 
   void markAsDelivered() {
@@ -56,6 +80,6 @@ class MessageEntity {
 
   @override
   String toString() {
-    return "MessageEntity: { text: $text, sender: $sender, id: $id,chatId: $chatId, reply: $reply, time: $time, byMe: $byMe, isUpdated: $isUpdated, seen: $seen, delivered: $delivered, hasReply: $hasReply, media: $media, sharedContacts: $sharedContacts }";
+    return "MessageEntity: { text: $text, sender: $sender, id: $id,chatId: $chatId, reply: $reply, time: $time, byMe: $byMe, isUpdated: $isUpdated, seen: $seen, delivered: $delivered, hasReply: $hasReply, media: $media, sharedContacts: $sharedContacts, isOneTimeViewMessage: $isOneTimeViewMessage, isOneTimeSeenMessage: $isOneTimeSeenMessage, isListened: $isListened }";
   }
 }

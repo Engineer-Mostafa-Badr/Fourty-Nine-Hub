@@ -4,6 +4,8 @@ import 'package:fourtyninehub/core/error/failure.dart';
 
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/user_doctor_rate.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/add_doctor_rating_use_case.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_Id_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_usecase.dart';
 
 import '../../domain/repositories/doctor_details_repo.dart';
@@ -23,4 +25,21 @@ class DoctorDetailsRepoImpl implements DoctorDetailsRepo {
       String doctorId) {
     return _remoteDataSource.getDoctorReviews(doctorId);
   }
+
+  @override
+  Future<Either<Failure, DoctorEntity>> getDoctorDetailsId(GetDoctorDetailsIdParams params) async {
+    return await _remoteDataSource.getDoctorDetailsId(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> addDoctorRating(AddDoctorRatingParams params) async{
+    return await _remoteDataSource.addDoctorRating(params);
+  }
+
+  @override
+  Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorRatings() async {
+    return await _remoteDataSource.getDoctorRatings();
+  }
+
+
 }

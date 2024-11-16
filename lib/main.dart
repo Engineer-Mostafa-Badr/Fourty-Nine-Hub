@@ -30,6 +30,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/controlle
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 import 'core/service/background_service.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
@@ -222,5 +223,20 @@ class _MyAppState extends State<MyApp> {
         },
       ),
     );
+  }
+}
+
+Future<void> registerSocket() async {
+  try{
+    final token = await CacheManager.getAccessToken();
+    serviceLocator.registerLazySingleton<Socket>(() => io(
+        'https://49dev.com',
+        OptionBuilder()
+            .setTransports(['websocket'])
+            .disableAutoConnect()
+            .setExtraHeaders({'Authorization': token})
+            .build()));
+  }catch (e){
+    log("errorrrrrrrr $e");
   }
 }

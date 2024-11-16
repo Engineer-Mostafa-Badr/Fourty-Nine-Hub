@@ -32,11 +32,9 @@ class AvaiableRoutesCard extends StatefulWidget {
 
 class _AvaiableRoutesCardState extends State<AvaiableRoutesCard> {
   DateTime? createdAt;
-  late final GetCurrencyCubit getCurrencyCubit;
 
   @override
   void initState() {
-    getCurrencyCubit = context.read<GetCurrencyCubit>()..getCurrencyData();
     final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
 
     print(userId);
@@ -98,8 +96,11 @@ class _AvaiableRoutesCardState extends State<AvaiableRoutesCard> {
                               //   }
 
                               return Text(
-                                BlocProvider.of<GetCurrencyCubit>(context)
-                                    .currency,
+                                context.isArabic
+                                    ? BlocProvider.of<GetCurrencyCubit>(context)
+                                        .currnecyAr
+                                    : BlocProvider.of<GetCurrencyCubit>(context)
+                                        .currnecyEn,
                                 style: Styles.mediumText(
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.SECONDARY_COLOR),

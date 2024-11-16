@@ -157,6 +157,7 @@ class BaseApiConsumer extends ApiConsumer {
       Map<String, dynamic>? data,
       Map<String, dynamic>? headers}) async {
     try {
+      log(data.toString());
       final result = await _dio.get(url,
           data: data,
           queryParameters: queryParameters,
@@ -283,7 +284,7 @@ class BaseApiConsumer extends ApiConsumer {
 
   Failure _getFailure(dynamic e) {
     final error = e.response?.data['error'] as Map;
-
+    log("Erorrrrr $error");
     if (e is DioException) {
       if (e.response?.statusCode == 413) {
         return const ServerFailure(

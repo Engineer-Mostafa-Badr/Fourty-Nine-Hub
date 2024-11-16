@@ -2,10 +2,12 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_pick_me/data/models/pick_me_card_model/pick_me_card_model.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_pick_me/domain/entities/pickme_entity.dart';
 import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 abstract class ViewAllPickMeRemoteDataSource {
   Future<Either<Failure, List<PickMeCardEntity>>> getAllPickMe(
@@ -28,6 +30,9 @@ class ViewAllPickMeRemoteDataSourceImp
     final response = await apiConsumer.get(
       EndPoints.getAllPickMe,
       queryParameters: {
+        'userId': serviceLocator<UserCubit>().isLoggedIn
+            ? serviceLocator<UserCubit>().state.data?.id
+            : '',
         'subCategory': UIConst.pickmeCategoryId,
         'page': page,
         'limit': 10,

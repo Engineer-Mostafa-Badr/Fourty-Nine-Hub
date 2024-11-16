@@ -50,6 +50,9 @@ abstract class Routes {
   static const ARCHIVEDCHATS = '/ArchivedChatsView';
   static const CHATROOMCAMERAPICKER = '/ChatRoom/CameraPicker';
   static const MEDIASLIDER = '/ChatRoom/MediaSlider';
+  static const ONETIMEVOICEMESSAGE = '/OneTimeVoiceMessageView';
+  static const ONETIMEDOCUMENTMESSAGE = '/OneTimeDocumentMessageView';
+  static const FORWARDMESSAGES = '/ForwardMessagesView';
   static const VIEWCONTACT = '/ChatRoom/ViewContact';
   static const IMAGESPAGEVIEW = '/ImagesPageView';
   static const SHOWIMAGEVIEW = '/ShowImagesView';
@@ -79,6 +82,7 @@ abstract class Routes {
   static const DOCTORDASHBOARD = '/Visita/DoctorDashboard';
   static const EDITDOCTORPERSONALINFO = '/Visita/EditDoctorPersonalInfo';
   static const DOCTORSTATISTICS = '/Visita/DoctorStatistics';
+  static const DOCTORREVIEWS = '/Visita/DoctorReviews';
   static const DOCTORTODAYAPPOINTMENTS = '/Visita/DoctorTodayAppointments';
   static const DOCTORUNHANDLEDAPPOINTMENTS =
       '/Visita/DoctorUnhandledAppointments';
@@ -158,6 +162,8 @@ abstract class Routes {
   static const AVAILABLE_TRIPS = '/AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = '/TripJoinRequestNotification';
   static const TRIP_JOIN_REQUEST_HISTORY = '/TripJoinRequestHistory';
+  static const TRIP_JOIN_REQUEST_HISTORY_Pick_Me =
+      '/TripJoinRequestHistoryPickMe';
 
   static const CAR_POOL = '/CarPool';
   static const ADD_NEW_ROUTE = '/AddNewRoute';
@@ -166,6 +172,7 @@ abstract class Routes {
   static const SNAP = '/Snap';
   static const SEEALLBROADCASTS = '/SeeAllBroadcasts';
   static const BROADCAST = '/Broadcast';
+  static const AddNewPickMe = "/AddNeWPickMe";
 }
 
 abstract class Paths {
@@ -207,6 +214,9 @@ abstract class Paths {
   static const VIEWCONTACT = 'ViewContact';
   static const ATTACHMENTSVIEW = 'AttachmentsView';
   static const CHATPROFILEVIEW = 'ChatProfileView';
+  static const ONETIMEVOICEMESSAGEVIEW = 'OneTimeVoiceMessageView';
+  static const ONETIMEDOCUMENTMESSAGEVIEW = 'OneTimeDocumentMessageView';
+  static const FORWARDMESSAGESVIEW = 'ForwardMessagesView';
   static const CHATROOMCAMERAPICKER = 'CameraPicker';
   static const MEDIASLIDER = 'MediaSlider';
   static const REELS = 'Reels';
@@ -235,6 +245,7 @@ abstract class Paths {
   static const FILTERDOCTORCITY = 'FilterDoctorCity';
   static const FILTERDOCTORAREA = 'FilterDoctorArea';
   static const DOCTORDASHBOARD = 'DoctorDashboard';
+  static const DOCTORREVIEWS = 'DoctorReviews';
   static const EDITDOCTORPERSONALINFO = 'EditDoctorPersonalInfo';
   static const DOCTORSTATISTICS = 'DoctorStatistics';
   static const DOCTORTODAYAPPOINTMENTS = 'DoctorTodayAppointments';
@@ -304,6 +315,9 @@ abstract class Paths {
   static const AVAILABLE_TRIPS = 'AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = 'TripJoinRequestNotification';
   static const TRIP_JOIN_REQUEST_HISTORY = 'TripJoinRequestHistory';
+  static const TRIP_JOIN_REQUEST_HISTORY_Pick_Me =
+      'TripJoinRequestHistoryPickMe';
+
   static const CAR_POOL = 'CarPool';
   static const ADD_NEW_ROUTE = 'AddNewRoute';
 
@@ -321,4 +335,5 @@ abstract class Paths {
   static const MyRating = 'MyRating';
   static const TripRating = 'TripRating';
   static const EDITDRIVERSCREEN = 'EditDriver';
+  static const AddNewPickMe = "AddNeWPickMe";
 }

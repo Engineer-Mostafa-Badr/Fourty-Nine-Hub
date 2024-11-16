@@ -41,14 +41,6 @@ class _TripJoinRequestHistoryBuilderState
 
   @override
   Widget build(BuildContext context) {
-    // serviceLocator<GetRequestUsecase>().call(id: widget.id, page: 1);
-    // List<TripJoinRequestHistoryEntity> staticData = List.generate(10, (_) {
-    //   return TripJoinRequestHistoryEntity(
-    //     firstName: 'Eslam',
-    //     gender: 'Male',
-    //     allowStatus: 'disable',
-    //   );
-    // });
     return BlocConsumer<GetRequestCubit, GetRequestState>(
       listener: (context, state) {
         if (state is GetRequestFailed) {

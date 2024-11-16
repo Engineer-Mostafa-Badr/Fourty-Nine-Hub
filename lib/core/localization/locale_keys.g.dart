@@ -529,6 +529,7 @@ abstract class  LocaleKeys {
   static const enterValidPhoneNumber = 'enterValidPhoneNumber';
   static const welcomeToTripjoin = 'welcomeToTripjoin';
   static const ownCar = 'ownCar';
+  static const dontOwnCar = 'dontOwnCar';
   static const startingPoint = 'startingPoint';
   static const destinationPoint = 'destinationPoint';
   static const KM = 'KM';
@@ -1019,7 +1020,6 @@ abstract class  LocaleKeys {
   static const removeVideo = 'removeVideo';
   static const enterImageOrVideo = 'enterImageOrVideo';
   static const noResultsFound = 'noResultsFound';
-  static const mutualFriend = 'mutualFriend';
   static const serveClientsByClickRegister = 'serveClientsByClickRegister';
   static const totalOrder = 'totalOrder';
   static const totalRevenue = 'totalRevenue';
@@ -1045,5 +1045,15 @@ abstract class  LocaleKeys {
   static const addToCart = 'addToCart';
   static const showAllOrders = 'showAllOrders';
   static const restaurantOrders = 'restaurantOrders';
+  static const rating = 'rating';
+  static const rateDoctor = 'rateDoctor';
+  static const mutualFriend = 'mutualFriend';
+  static const clearForEveryone = 'clearForEveryone';
+  static const clearForMe = 'clearForMe';
+  static const clearThisChat = 'clearThisChat';
+  static const opened = 'opened';
+  static const forwardMessage = 'forwardMessage';
+  static const forwarded = 'forwarded';
+  static const continueUsingChatServices = 'continueUsingChatServices';
 
 }

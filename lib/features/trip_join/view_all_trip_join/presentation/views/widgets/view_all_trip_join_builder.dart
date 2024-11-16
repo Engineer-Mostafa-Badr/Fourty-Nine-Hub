@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/request_trip_join_cubit/request_trip_join_cubit.dart';
@@ -13,7 +14,9 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/report_view_trip_join.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/request_trip_Join_bottom_sheet.dart';
 import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class ViewAllTripJoinCardBuilder extends StatefulWidget {
@@ -62,14 +65,39 @@ class _ViewAllTripJoinCardBuilderState
               return AvailableTripCard(
                 tripJoinCardEntity: tripJoinCardEntity,
                 reportOnTap: () {
-                  _reportOnTap(context, index);
+                  context.read<UserCubit>().isLoggedIn
+                      ? _reportOnTap(context, index)
+                      : context.push(Routes.LOGIN);
                 },
                 premuimRequestOnTap: () async {
-                  if (await _isPremuim(
-                    tripJoinCardEntity,
-                    tripJoinCardEntity.categoryId ?? '',
-                    LocaleKeys.tripjoinPremuimSubscription.localize,
-                  )) {
+                  if (context.read<UserCubit>().isLoggedIn) {
+                    if (await _isPremuim(
+                      tripJoinCardEntity,
+                      tripJoinCardEntity.categoryId ?? '',
+                      LocaleKeys.tripjoinPremuimSubscription.localize,
+                    )) {
+                      await showModalBottomSheet(
+                        context: context,
+                        isDismissible: true,
+                        isScrollControlled: true,
+                        builder: (_) {
+                          return BlocProvider.value(
+                              value: BlocProvider.of<RequestTripJoinCubit>(
+                                  context),
+                              child: RequstTripJoinBottomSheet(
+                                  subCategory: "62ea00e269ea29c91dfc390c",
+                                  url: "/ride/come-with-you/request/",
+                                  tripId: tripJoinCardEntity.id ?? '',
+                                  isPremium: true));
+                        },
+                      );
+                    }
+                  } else {
+                    context.push(Routes.LOGIN);
+                  }
+                },
+                requestOnTap: () async {
+                  if (context.read<UserCubit>().isLoggedIn) {
                     await showModalBottomSheet(
                       context: context,
                       isDismissible: true,
@@ -79,49 +107,53 @@ class _ViewAllTripJoinCardBuilderState
                             value:
                                 BlocProvider.of<RequestTripJoinCubit>(context),
                             child: RequstTripJoinBottomSheet(
-                                tripJoinCardEntity: tripJoinCardEntity,
-                                isPremium: true));
+                              subCategory: "62ea00e269ea29c91dfc390c",
+                              url: "/ride/come-with-you/request/",
+                              tripId: tripJoinCardEntity.id ?? '',
+                            ));
                       },
                     );
+                  } else {
+                    context.push(Routes.LOGIN);
                   }
-                },
-                requestOnTap: () async {
-                  await showModalBottomSheet(
-                    context: context,
-                    isDismissible: true,
-                    isScrollControlled: true,
-                    builder: (_) {
-                      return BlocProvider.value(
-                          value: BlocProvider.of<RequestTripJoinCubit>(context),
-                          child: RequstTripJoinBottomSheet(
-                              tripJoinCardEntity: tripJoinCardEntity));
-                    },
-                  );
                 },
                 callOnTap: () async {
+                  if (context.read<UserCubit>().isLoggedIn) {
+                    if (await _isPremuim(
+                      tripJoinCardEntity,
+                      UIConst.chatNormalId,
+                      LocaleKeys.chatSubscription.localize,
+                    )) {
+                      launchUrlString("tel://${tripJoinCardEntity.phone}");
+                    }
+                  } else {
+                    context.push(Routes.LOGIN);
+                  }
                   // launchUrlString("tel://${tripJoinCardEntity.phone}");
                   // return;
-                  if (await _isPremuim(
-                    tripJoinCardEntity,
-                    UIConst.chatNormalId,
-                    LocaleKeys.chatSubscription.localize,
-                  )) {
-                    launchUrlString("tel://${tripJoinCardEntity.phone}");
-                  }
                 },
                 messageOnTap: () async {
-                  if (await _isPremuim(
-                    tripJoinCardEntity,
-                    UIConst.chatNormalId,
-                    LocaleKeys.chatSubscription.localize,
-                  )) {}
+                  if (context.read<UserCubit>().isLoggedIn) {
+                    if (await _isPremuim(
+                      tripJoinCardEntity,
+                      UIConst.chatNormalId,
+                      LocaleKeys.chatSubscription.localize,
+                    )) {}
+                  } else {
+                    context.push(Routes.LOGIN);
+                  }
                 },
                 subscribeMessageOnTap: () async {
-                  if (await _isPremuim(
-                    tripJoinCardEntity,
-                    tripJoinCardEntity.categoryId ?? '',
-                    LocaleKeys.tripjoinPremuimSubscription.localize,
-                  )) {}
+                  if (context.read<UserCubit>().isLoggedIn) {
+                    if (await _isPremuim(
+                      tripJoinCardEntity,
+                      tripJoinCardEntity.categoryId ?? '',
+                      LocaleKeys.tripjoinPremuimSubscription.localize,
+                    )) {
+                    } else {
+                      context.push(Routes.LOGIN);
+                    }
+                  }
                 },
               );
             }
@@ -139,6 +171,7 @@ class _ViewAllTripJoinCardBuilderState
       String subCategoryId, String title) async {
     if (tripJoinCardEntity.subscribedPremium == null ||
         tripJoinCardEntity.subscribedPremium == false) {
+      print("=========0=========");
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
         wallets: [
           tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
@@ -146,6 +179,7 @@ class _ViewAllTripJoinCardBuilderState
         subCategoryId: subCategoryId,
         title: title,
       );
+      print("=========1=========");
       return false;
     }
     return true;

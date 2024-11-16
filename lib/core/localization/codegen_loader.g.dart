@@ -548,7 +548,8 @@ class CodegenLoader extends AssetLoader{
   "enterPhoneNumber": "من فضلك ادخل رقم الهاتف",
   "enterValidPhoneNumber": "من فضلك ادخل رقم هاتف صحيح",
   "welcomeToTripjoin": "مرحبا بك في مشاركة الرحلات",
-  "ownCar": "انت تملك سيارة\nشحص سيشارك الرحلة معك ويدفع نصف الثمن",
+  "ownCar": "انت تملك سيارة\nشحص سيشارك الرحلة معك وتدفع نصف الثمن",
+  "dontOwnCar": "انت لا تملك سيارة\nشحص سيشارك الرحلة معك وتدفع نصف الثمن",
   "startingPoint": "البداية",
   "destinationPoint": "الوجهة",
   "KM": "كم",
@@ -1045,7 +1046,6 @@ class CodegenLoader extends AssetLoader{
   "removeVideo": "هل أنت متأكد أنك تريد إزالة هذا الفيديو؟",
   "enterImageOrVideo": "الرجاء إدخال الصور أو الفيديو",
   "noResultsFound": "لم يتم العثور على نتائج.",
-  "mutualFriend": "صديق مشترك",
   "serveClientsByClickRegister": "اخدم عملاءك بالنقر على زر التسجيل.",
   "totalOrder": "إجمالي الطلبات",
   "totalRevenue": "إجمالي الإيرادات",
@@ -1070,7 +1070,17 @@ class CodegenLoader extends AssetLoader{
   "reviews": "مراجعة",
   "addToCart": "إضافة الي السلة",
   "showAllOrders": "عرض كل الطلبات",
-  "restaurantOrders": "طلبات المطعم"
+  "restaurantOrders": "طلبات المطعم",
+  "rating": "تقييم",
+  "rateDoctor": "تقييم الطبيب",
+  "mutualFriend": "صديق مشترك",
+  "clearForEveryone": "مسح لدي الجميع",
+  "clearForMe": "مسح لدي",
+  "clearThisChat": "مسح هذه الدردشة؟",
+  "opened": "تمت مشاهدته",
+  "forwardMessage": "تحويل الرسائل",
+  "forwarded": "تمت اعادة توجيهه",
+  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1607,6 +1617,7 @@ static const Map<String,dynamic> en = {
   "enterValidPhoneNumber": "Please enter valid mobile number",
   "welcomeToTripjoin": "Welcome To Trip Join",
   "ownCar": "You own a car!\nSomeone will share trip with you / pay half price",
+  "dontOwnCar": "You don't own a car!\nSomeone will share trip with you / pay half price",
   "startingPoint": "Starting Point",
   "destinationPoint": "Destination Point",
   "KM": "KM",
@@ -2108,7 +2119,6 @@ static const Map<String,dynamic> en = {
   "endToEndEncryption": "end-to-end encrypted",
   "liveStreamOptions": "Live Stream Options",
   "createLive": "Create Live",
-  "watch": "Watch",
   "Face": "Face",
   "Insta": "Insta",
   "day": "Day",
@@ -2145,7 +2155,17 @@ static const Map<String,dynamic> en = {
   "reviews": "Reviews",
   "addToCart": "Add To Cart",
   "showAllOrders": "Show All Orders",
-  "restaurantOrders": "Restaurant Orders"
+  "restaurantOrders": "Restaurant Orders",
+  "rating": "Rating",
+  "rateDoctor": "Rate Doctor",
+  "watch": "Watch",
+  "clearForEveryone": "Clear for Everyone",
+  "clearForMe": "Clear for Me",
+  "clearThisChat": "Clear this Chat?",
+  "opened": "Opened",
+  "forwardMessage": "Forward Message",
+  "forwarded": "Forwarded",
+  "continueUsingChatServices": " , To continue using chat services"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

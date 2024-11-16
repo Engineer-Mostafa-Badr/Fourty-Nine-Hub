@@ -2,13 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/pages/doctors_list.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
@@ -18,7 +19,6 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../common/theme/cubit/cubit.dart';
-import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/style/app_colors.dart';
 
 class HealthSubCategoryCard extends StatelessWidget {
@@ -28,16 +28,17 @@ class HealthSubCategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(subCategory.id);
     return GestureDetector(
       onTap: () {
         serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
             subCategory;
-        context.push(Routes.VISITADOCTORLIST);
+        context.push(Routes.VISITADOCTORLIST,extra: DoctorsListParams(fromHome: true,subCategoryId: subCategory.id));
       },
       child: Container(
         width: 200,
         padding: const EdgeInsets.all(10),
-        margin: const EdgeInsetsDirectional.only(end: 10,bottom: 10,top: 10),
+        margin: EdgeInsetsDirectional.only(end: 10.w,bottom: 10.h,top: 10.h,start: 5.w),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(10),
@@ -64,7 +65,7 @@ class HealthSubCategoryCard extends StatelessWidget {
                       url: subCategory.image,
                     ),
                   ),
-                  Positioned(
+                  if(context.read<UserCubit>().isLoggedIn)Positioned(
                       top: 5,
                       right: 5,
                       child: IconAppButton(
@@ -76,13 +77,17 @@ class HealthSubCategoryCard extends StatelessWidget {
                               ? AppColors.QUANTITY_COLOR
                               : AppColors.PRIMARY_COLOR_DARK,
                           onPressed: () {
-                            log("${subCategory.isFavorite}777777777777777777777777777777777");
+                            if (context.read<UserCubit>().isLoggedIn) {
+                              log("${subCategory.isFavorite}777777777777777777777777777777777");
 
-                            context
-                                .read<HealthCubit>()
-                                .toggleFavoriteSubcategory(subCategory.id);
+                              context
+                                  .read<HealthCubit>()
+                                  .toggleFavoriteSubcategory(subCategory.id);
 
-                            log("${subCategory.isFavorite}777777777777777777777777777777777");
+                              log("${subCategory.isFavorite}777777777777777777777777777777777");                            }else {
+                              context.push(Routes.REGISTER);
+                            }
+
                           })),
                 ],
               ),
@@ -104,12 +109,7 @@ class HealthSubCategoryCard extends StatelessWidget {
                   text: context.isArabic?subCategory.nameAr:subCategory.nameEn,
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
                 ),
-                Label(
-                  text: subCategory.numberOfContent.toShortScale == '1'
-                      ? '${subCategory.numberOfContent.toShortScale} ${LocaleKeys.doctor.localize}'
-                      : '${subCategory.numberOfContent.toShortScale} ${LocaleKeys.doctors.localize}',
-                  style: Styles.mediumText(),
-                ),
+
               ],
             ),
           ],

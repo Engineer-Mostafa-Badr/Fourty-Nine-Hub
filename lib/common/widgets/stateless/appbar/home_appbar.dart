@@ -164,7 +164,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           if (showLanguage)
             TextButton(
                 onPressed: () {},
-                child: Label(text: LocaleKeys.register.localize, style: Styles.mediumText())),
+                child: Label(
+                    text: LocaleKeys.register.localize,
+                    style: Styles.mediumText())),
           // if (language)
             Padding(
               padding:  EdgeInsets.symmetric(horizontal:15.w),
@@ -174,9 +176,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     return;
                   }
                   HandleCashback.setCount('chatCount',context);
-                  context.read<UserCubit>().isLoggedIn
-                      ? context.push(Routes.CHAT)
-                      : context.push(Routes.LOGIN);
+
+                     context.push(Routes.CHAT);
+
                 },
                 child: SvgPicture.asset(
                   Assets.message,

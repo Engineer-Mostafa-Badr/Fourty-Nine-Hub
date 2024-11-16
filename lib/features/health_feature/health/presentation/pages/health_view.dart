@@ -13,10 +13,8 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/widget
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/sub_categories/sub_categories.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 class HealthView extends StatelessWidget {
@@ -41,8 +39,6 @@ class HealthView extends StatelessWidget {
                         if (context.read<UserCubit>().isLoggedIn) {
                           context.push(Routes.CREATEDOCTOR);
                           // context.push(Routes.CREATERESTURANT);
-                        } else {
-                          context.push(Routes.REGISTER);
                         }
                       },
                       child: Text(

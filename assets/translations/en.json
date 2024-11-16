@@ -533,6 +533,8 @@
   "enterValidPhoneNumber": "Please enter valid mobile number",
   "welcomeToTripjoin": "Welcome To Trip Join",
   "ownCar": "You own a car!\nSomeone will share trip with you / pay half price",
+  "dontOwnCar": "You don't own a car!\nSomeone will share trip with you / pay half price",
+
   "startingPoint": "Starting Point",
   "destinationPoint": "Destination Point",
   "KM": "KM",
@@ -1035,7 +1037,6 @@
   "endToEndEncryption": "end-to-end encrypted",
   "liveStreamOptions": "Live Stream Options",
   "createLive": "Create Live",
-  "watch": "Watch",
   "Face":"Face",
   "Insta":"Insta",
   "day": "Day",
@@ -1072,5 +1073,16 @@
   "reviews": "Reviews",
   "addToCart": "Add To Cart",
   "showAllOrders": "Show All Orders",
-  "restaurantOrders": "Restaurant Orders"
+  "restaurantOrders": "Restaurant Orders",
+  "rating": "Rating",
+  "rateDoctor": "Rate Doctor",
+  "restaurantOrders": "Restaurant Orders",
+  "watch": "Watch",
+  "clearForEveryone": "Clear for Everyone",
+  "clearForMe": "Clear for Me",
+  "clearThisChat": "Clear this Chat?",
+  "opened": "Opened",
+  "forwardMessage": "Forward Message",
+  "forwarded": "Forwarded",
+  "continueUsingChatServices": " , To continue using chat services"
 }

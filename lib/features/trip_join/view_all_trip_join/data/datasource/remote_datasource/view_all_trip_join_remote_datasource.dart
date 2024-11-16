@@ -19,6 +19,8 @@ abstract class ViewAllTripJoinRemoteDataSource {
   Future<Either<Failure, bool>> requestTripJoin(
       {required String addId,
       required String mobile,
+      required String subCategory,
+      required String url,
       bool premuimRequest = false});
 }
 
@@ -69,10 +71,13 @@ class ViewAllTripJoinRemoteDataSourceImp
   @override
   Future<Either<Failure, bool>> requestTripJoin(
       {required String addId,
+      required String subCategory,
+      required String url,
       required String mobile,
       bool premuimRequest = false}) async {
+    print("premuimRequest ==================== $premuimRequest \n");
     final response = await apiConsumer.post(
-      EndPoints.makeTripJoinRequest(addId),
+      EndPoints.makeTripJoinRequest(addId, subCategory, url),
       data: {
         'phone': mobile,
         'isPremium': premuimRequest,

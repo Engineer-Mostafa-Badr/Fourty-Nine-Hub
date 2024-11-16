@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,23 +37,24 @@ class LoginCubit extends Cubit<LoginState> {
   String? token;
 
   Future<void> login(GlobalKey<FormState> formKey) async {
-   // String? token = await FirebaseMessaging.instance.getToken();
+    String? token = await FirebaseMessaging.instance.getToken();
     if (formKey.currentState!.validate()) {
       emit(LoginLoading());
       final result = await _loginUseCase(
         LoginParams(
           email: emailTextController.text.trim(),
           password: passwordTextController.text.trim(),
-          token: '8881cg3DWsLzSs-7jbJXzUEf6d:APA91bEGiKLpeMecKXpzahnTUWuulgpdSR8-wK-XDBfvvHj_eRZUXShyHNGg4vtp3-S9ohiD9P-LPmolV90wpM19e-xxjlJBrWMgU1B6Ut01OesLTN3aywOVp4ywLzZ5LTvXSTSvjr_a',
+          token: token!,
         ),
       );
 
       result.fold(
         (failure) => emit(LoginError(failure)),
-        (userToken) {
-          _attachToken(userToken); // Attach to dio
+        (userToken)async {
+          //_attachToken(userToken); // Attach to dio
           // _saveTokens(userToken); // Ensure tokens are saved before proceeding
           // pr('state token is  ${userToken}');
+          log("Token logout ${await CacheManager.getAccessToken()}");
           CacheManager.saveAccessToken(userToken.accessToken);
           CacheManager.saveRefreshToken(userToken.refreshToken);
           emit(LoginSuccess(userTokensEntity: userToken));
