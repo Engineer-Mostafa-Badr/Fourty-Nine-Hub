@@ -185,6 +185,8 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                       addId: widget.tripJoinCardEntity.id,
                       mobile: phoneNumber,
                       premuimRequest: widget.isPremium,
+                      subCategory: widget.tripJoinCardEntity.categoryId,
+                      url: '/ride/pick-me/request/'
                     );
                     Future.delayed(const Duration(seconds: 2))
                         .then((value) => context.pop());
