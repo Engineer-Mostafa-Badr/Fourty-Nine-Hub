@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/animated_heart_wiidget.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/custom_progress_bar.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/unified_widget_view.dart';
@@ -72,7 +73,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
   }
 
   void _pauseVideo() {
-    if (_isPlaying) {
+    if (_isPlaying && widget.controller.value.isPlaying) {
       widget.controller.pause();
 
       // _chewieController?.pause();
@@ -90,7 +91,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
   }
 
   void _playVideo() {
-    if (!_isPlaying) {
+    if (!_isPlaying && !widget.controller.value.isPlaying) {
       widget.controller.play();
       // _chewieController?.play();
       setState(() {
@@ -203,7 +204,9 @@ class _ReelsWidgetState extends State<ReelsWidget>
       duration: const Duration(milliseconds: 300),
       child: Center(
         child: Icon(
-          _isPlaying ? Icons.pause : Icons.play_arrow,
+          widget.controller.value.isPlaying
+              ? Icons.pause
+              : Icons.play_arrow,
           color: Colors.white,
           size: 100,
         ),
