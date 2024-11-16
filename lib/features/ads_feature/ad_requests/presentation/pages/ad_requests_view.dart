@@ -172,35 +172,6 @@ class _AdRequestsViewState extends State<AdRequestsView> {
   }
 }
 
-  Widget _buildRelevantAdsWidget() {
-    return BlocBuilder<AdDetailsCubit, AdDetailsState>(
-        builder: (context, state) {
-          if (state.relevantAds?.isEmpty ?? true) {
-            return const SizedBox();
-          }
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Label(
-                text: 'Relevant Ads',
-                style: Styles.mediumText(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: kToolbarHeight * 3.5,
-                child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => AdCard(
-                      item: state.relevantAds![index],
-                      onFav: (String) {},
-                      onRemoveFav: (String) {},
-                    ),
-                    separatorBuilder: (context, index) => const Sizer(),
-                    itemCount: state.relevantAds?.length ?? 0),
-              ),
-            ],
-          );
-        });
-  }
 
 
   class AdRequestParams{

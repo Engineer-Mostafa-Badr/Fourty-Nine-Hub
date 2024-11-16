@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/datasources/remote_datasource.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_statistics_entity.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_work_days_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/repositories/doctor_dashboard_repo.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_appointments_by_day.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_id_usecase.dart';
@@ -98,5 +99,10 @@ class DoctorDashboardRepoImpl implements DoctorDashboardRepo {
   @override
   Future<Either<Failure, bool>> updateTimetable(DoctorTimetableParams params) {
     return remoteDataSource.updateTimetable(params);
+  }
+
+  @override
+  Future<Either<Failure, DoctorWorkDaysEntity>> getWorkDays() {
+    return remoteDataSource.getWorkDays();
   }
 }

@@ -339,6 +339,7 @@ class EndPoints {
 
   static const isDoctorApproval = '/health/check-doctor-approval';
   static const getDoctorProfile = '/health/doctor-profile';
+  static const getDoctorWorkDays = '/health/doctor-work-days';
   static const updateDoctorProfilePhoto = '/health/doctor/picture';
   static const updateDoctorPractcing =
       '/health/doctor-upload-license-practicing';

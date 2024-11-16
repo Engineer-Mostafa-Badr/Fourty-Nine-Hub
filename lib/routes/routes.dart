@@ -81,6 +81,7 @@ abstract class Routes {
   static const VISITABOOKING = '/Visita/VisitaBooking';
   static const DOCTORDASHBOARD = '/Visita/DoctorDashboard';
   static const EDITDOCTORPERSONALINFO = '/Visita/EditDoctorPersonalInfo';
+  static const EDITDOCTORTIMETABLE = '/Visita/EditDoctorTimeTable';
   static const DOCTORSTATISTICS = '/Visita/DoctorStatistics';
   static const DOCTORREVIEWS = '/Visita/DoctorReviews';
   static const DOCTORTODAYAPPOINTMENTS = '/Visita/DoctorTodayAppointments';
@@ -247,6 +248,7 @@ abstract class Paths {
   static const DOCTORDASHBOARD = 'DoctorDashboard';
   static const DOCTORREVIEWS = 'DoctorReviews';
   static const EDITDOCTORPERSONALINFO = 'EditDoctorPersonalInfo';
+  static const EDITDOCTORTIMETABLE = 'EditDoctorTimeTable';
   static const DOCTORSTATISTICS = 'DoctorStatistics';
   static const DOCTORTODAYAPPOINTMENTS = 'DoctorTodayAppointments';
   static const DOCTORUNHANDLEDAPPOINTMENTS = 'DoctorUnhandledAppointments';

@@ -11,13 +11,20 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // ignore: must_be_immutable
-class EditDoctorDocsView extends StatelessWidget {
+class EditDoctorDocsView extends StatefulWidget {
   final Function(DoctorDocsParams doctorDocsParams) onSubmit;
+  final String subCategoryId;
+  final String from;
   EditDoctorDocsView({
     super.key,
-    required this.onSubmit,
+    required this.onSubmit, required this.subCategoryId, required this.from,
   });
 
+  @override
+  State<EditDoctorDocsView> createState() => _EditDoctorDocsViewState();
+}
+
+class _EditDoctorDocsViewState extends State<EditDoctorDocsView> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -31,7 +38,7 @@ class EditDoctorDocsView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ImageUploaderWidget(
-                subCategoryId: '1',
+                subCategoryId: widget.subCategoryId,
                 tilte: Labels.front,
                 onUploaded: (data) {
                   _frontId = data.mediaId;
@@ -39,7 +46,7 @@ class EditDoctorDocsView extends StatelessWidget {
               ),
               ImageUploaderWidget(
                 tilte: Labels.back,
-                subCategoryId: '5',
+                subCategoryId: widget.subCategoryId,
                 onUploaded: (data) {
                   _backId = data.mediaId;
                 },
@@ -57,7 +64,9 @@ class EditDoctorDocsView extends StatelessWidget {
             minDate: now,
             maxDate: DateTime(now.year + 5, now.month, now.day),
             onDateSelected: (date) {
-              _expireDate = date;
+             setState(() {
+               _expireDate = date;
+             });
             },
           ),
           Sizer(
@@ -67,15 +76,19 @@ class EditDoctorDocsView extends StatelessWidget {
             height: 50.h,
             label: Labels.update,
             onPressed: () {
+              print(_frontId);
+              print(_backId);
+              print(_expireDate);
+              print(_expireDate != null);
               if (_frontId.isEmpty || _backId.isEmpty) {
                 showSuccessDialog(context, Labels.uploadPhotos);
-              } else if (_expireDate != null) {
+              } else if (_expireDate == null) {
                 showSuccessDialog(context, Labels.expireDate);
               } else {
-                onSubmit(DoctorDocsParams(
+                widget.onSubmit(DoctorDocsParams(
                     backImageId: _backId,
                     frontImageId: _frontId,
-                    expireDate: _expireDate!));
+                    expireDate: _expireDate!, from: widget.from));
               }
             },
           )
@@ -85,7 +98,10 @@ class EditDoctorDocsView extends StatelessWidget {
   }
 
   String _frontId = '';
+
   String _backId = '';
+
   DateTime? _expireDate;
+
   final now = DateTime.now();
 }

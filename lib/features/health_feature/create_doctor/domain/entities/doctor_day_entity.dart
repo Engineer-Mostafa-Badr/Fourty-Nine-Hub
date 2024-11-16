@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/enums/week_days.dart';
 
 class DoctorDayEntity {
-  final WeekDays day;
+  WeekDays day;
   bool isAvailable;
   TimeOfDay from;
   TimeOfDay to;

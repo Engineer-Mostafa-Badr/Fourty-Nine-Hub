@@ -23,6 +23,7 @@ class UpdateProfilePhotoCard extends StatelessWidget {
                   current.status == EditDoctorProfileStateStatus.getDoctor ||
                   current.status == EditDoctorProfileStateStatus.initial,
               builder: (context, state) {
+                print("state.doctor?.subCategory.id ?? ''${state.doctor?.subCategory.id ?? ''}");
                 if (state.doctor != null) {
                   return ImageUploaderWidget(
                     subCategoryId: state.doctor?.subCategory.id ?? '',

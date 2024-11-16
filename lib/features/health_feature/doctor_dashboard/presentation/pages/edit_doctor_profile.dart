@@ -20,7 +20,7 @@ class EditDoctorProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<EditDoctorProfileCubit, EditDoctorProfileState>(
+    return BlocConsumer<EditDoctorProfileCubit, EditDoctorProfileState>(
       listener: (context, state) {
         switch (state.status) {
           case EditDoctorProfileStateStatus.startLoading:
@@ -45,24 +45,24 @@ class EditDoctorProfileView extends StatelessWidget {
             break;
         }
       },
-      child: Scaffold(
+      builder: (context, state)=>Scaffold(
         appBar: const BackAppBar(
           label: Labels.editProfile,
         ),
-        body: ListView(
+        body: state.status==EditDoctorProfileStateStatus.initial?const Center(child: CircularProgressIndicator()):ListView(
           padding: const EdgeInsets.all(18),
-          children: const [
-            UpdateProfilePhotoCard(),
-            Sizer(),
-            UpdateDoctorIdCard(),
-            Sizer(),
-            UpdateDoctorPracticingCirtificateCard(),
-            Sizer(),
-            UpdateDoctorTimetableCard(),
-            Sizer(),
-            UpdateDoctorPersonalInfo(),
-            Sizer(),
-            DeleteDoctorAccountCard(),
+          children: [
+            const UpdateProfilePhotoCard(),
+            const Sizer(),
+            UpdateDoctorIdCard(subCategoryId: state.doctor?.subCategory.id??'',),
+            const Sizer(),
+            UpdateDoctorPracticingCirtificateCard(subCategoryId: state.doctor?.subCategory.id??'',),
+            const Sizer(),
+            const UpdateDoctorTimetableCard(),
+            const Sizer(),
+            UpdateDoctorPersonalInfo(doctor: state.doctor!,),
+            const Sizer(),
+            const DeleteDoctorAccountCard(),
           ],
         ),
       ),
