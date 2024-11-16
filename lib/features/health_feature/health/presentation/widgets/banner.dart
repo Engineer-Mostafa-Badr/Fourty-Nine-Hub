@@ -56,7 +56,9 @@ class _HealthBannerState extends State<HealthBanner> {
                   .read<HealthCubit>()
                   .toggleFavoriteCategory(state.mainCategory!.id);
             },
-            isFavorite: false,
+            isFavorite: context
+                .read<HealthCubit>()
+                .state.mainCategory?.isFavorite??false,
           );
         } else {
           return const SizedBox.shrink();

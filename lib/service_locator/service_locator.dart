@@ -65,6 +65,7 @@ import 'package:fourtyninehub/service_locator/trip_join_service_locator.dart';
 import 'package:fourtyninehub/service_locator/twitter_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
 import 'package:get_it/get_it.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:sqflite/sqflite.dart';
@@ -91,13 +92,12 @@ import 'subscribe_service_locator.dart';
 final serviceLocator = GetIt.instance;
 
 class DI {
-  static Future<void> execute() async {
-
-
+  static Future<void> execute({String? token}) async {
+    print('executed');
     // //preloading
     serviceLocator.registerLazySingleton(() => PreloadBloc());
     serviceLocator.registerLazySingleton<ReelsCubit>(
-          () => ReelsCubit(
+      () => ReelsCubit(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
@@ -131,14 +131,16 @@ class DI {
 
     await LocalizationService.init();
     await SQFLiteDataSource.instance.initDatabase();
-    final token = await CacheManager.getAccessToken();
+    final cred = await CacheManager.getAccessToken();
+    CliLogger.info('token from getit $cred');
+    CliLogger.info('token outside getit $token');
     // socket
     serviceLocator.registerLazySingleton<Socket>(() => io(
         'https://49dev.com',
         OptionBuilder()
             .setTransports(['websocket'])
             .disableAutoConnect()
-            .setExtraHeaders({'Authorization': token}) // optional
+            .setExtraHeaders({'Authorization': token??cred}) // optional
             .build()));
     // database
     serviceLocator.registerLazySingleton<Database>(
@@ -187,9 +189,6 @@ class DI {
       () => GetGiftsUseCase(serviceLocator()),
     );
 
-
-
-
     // serviceLocator
     //     .registerFactory<SliderCubit>(() => SliderCubit(serviceLocator()));
     //
@@ -208,80 +207,79 @@ class DI {
     //
     // // Register the TinderCubit
     serviceLocator.registerLazySingleton<TinderViewCubit>(() => TinderViewCubit(
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-    ));
-
-    serviceLocator.registerLazySingleton<TinderRemoteDataSource>(
-            () => TinderRemoteDataSourceImpl(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
         ));
+
+    serviceLocator.registerLazySingleton<TinderRemoteDataSource>(
+        () => TinderRemoteDataSourceImpl(
+              serviceLocator(),
+            ));
     serviceLocator.registerLazySingleton<TinderRepository>(
-            () => TinderRepositoryImpl(serviceLocator()));
+        () => TinderRepositoryImpl(serviceLocator()));
 
     serviceLocator
         .registerLazySingleton<GetUserDataUseCase>(() => GetUserDataUseCase(
-      serviceLocator(),
-    ));
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<GetTinderFavouritesCategoryUseCase>(
-            () => GetTinderFavouritesCategoryUseCase(
-          serviceLocator(),
-        ));
+        () => GetTinderFavouritesCategoryUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<GetTinderProfileUseCase>(
-            () => GetTinderProfileUseCase(
-          serviceLocator(),
-        ));
+        () => GetTinderProfileUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<GetTinderFavouritesUseCase>(
-            () => GetTinderFavouritesUseCase(
-          serviceLocator(),
-        ));
+        () => GetTinderFavouritesUseCase(
+              serviceLocator(),
+            ));
     serviceLocator
         .registerLazySingleton<FetchLastSeenUseCase>(() => FetchLastSeenUseCase(
-      serviceLocator(),
-    ));
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<SendGiftUseCase>(() => SendGiftUseCase(
-      serviceLocator(),
-    ));
+          serviceLocator(),
+        ));
 
     serviceLocator
         .registerLazySingleton<FetchGiftsUseCase>(() => FetchGiftsUseCase(
-      serviceLocator(),
-    ));
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<CheckUserNearbyUseCase>(
-            () => CheckUserNearbyUseCase(
-          serviceLocator(),
-        ));
+        () => CheckUserNearbyUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<FetchSubCategoryDataUseCase>(
-            () => FetchSubCategoryDataUseCase(
-          serviceLocator(),
-        ));
+        () => FetchSubCategoryDataUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<UploadTinderPictureUseCase>(
-            () => UploadTinderPictureUseCase(
-          serviceLocator(),
-        ));
+        () => UploadTinderPictureUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<AddTinderFavouriteCategoryUseCase>(
-            () => AddTinderFavouriteCategoryUseCase(
-          serviceLocator(),
-        ));
-
+        () => AddTinderFavouriteCategoryUseCase(
+              serviceLocator(),
+            ));
 
     // Register other dependencies...
     // serviceLocator
@@ -368,5 +366,8 @@ class DI {
     StarServiceLocator.execute(serviceLocator: serviceLocator);
     QuranServiceLocator.execute(serviceLocator: serviceLocator);
     StoriesServiceLocator.execute(serviceLocator: serviceLocator);
+  }
+  static Future<void> reset() async {
+    await serviceLocator.reset();
   }
 }

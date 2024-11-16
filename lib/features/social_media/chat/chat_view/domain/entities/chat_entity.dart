@@ -12,9 +12,12 @@ class ChatEntity {
   int unreadCount;
   String userId;
   String avatar;
-  bool typing;
+  bool typing = false;
+  bool recording = false;
   bool online;
   MessageEntity? lastMessage;
+  String? pinnedMessageId;
+  MessageEntity? pinnedMessage;
   bool isSelected = false;
   bool isPinned = false;
 
@@ -30,9 +33,12 @@ class ChatEntity {
     required this.unreadCount,
     required this.userId,
     required this.avatar,
-    required this.typing,
+    this.typing = false,
+    this.recording = false,
     required this.online,
     this.lastMessage,
+    this.pinnedMessage,
+    this.pinnedMessageId,
     this.isSelected = false,
     this.isPinned = false,
   });

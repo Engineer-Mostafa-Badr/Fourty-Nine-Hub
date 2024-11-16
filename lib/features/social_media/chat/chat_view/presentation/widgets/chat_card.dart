@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -27,7 +29,7 @@ class ChatCard extends StatefulWidget {
 class _ChatCardState extends State<ChatCard> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatsCubit, ChatsState>(
+    return BlocConsumer<ChatsCubit, ChatsState>(
       builder: (context, state) {
         return InkWell(
           splashColor: context.isDarkMode
@@ -42,6 +44,8 @@ class _ChatCardState extends State<ChatCard> {
             if (context.read<ChatsCubit>().selectedChats.isEmpty) {
               context.read<ChatsCubit>().selectChat = widget.chat!;
               context.push(Routes.CHATROOM, extra: widget.chatsCubit);
+              // log("typiiiiiiiing = ${widget.chat!.typing}");
+              // log("recordiiiiiiing = ${widget.chat!.recording}");
             } else {
               setState(() {
                 if (!widget.chat!.isSelected) {
@@ -164,29 +168,37 @@ class _ChatCardState extends State<ChatCard> {
                             Row(
                               children: [
                                 const SizedBox(width: 10),
-                                widget.chat!.lastMessage?.byMe ?? false
-                                    ? widget.chat!.lastMessage?.seen ?? false
-                                        ? const Icon(
-                                            FontAwesomeIcons.checkDouble,
-                                            color: AppColors.GREY_DARK_COLOR,
-                                            size: 10,
-                                          )
-                                        : const Icon(
-                                            FontAwesomeIcons.check,
-                                            color: AppColors.GREY_DARK_COLOR,
-                                            size: 10,
-                                          )
-                                    : const SizedBox(),
+                                widget.chat!.typing || widget.chat!.recording
+                                    ? const SizedBox()
+                                    : widget.chat!.lastMessage?.byMe ?? false
+                                        ? widget.chat!.lastMessage?.seen ??
+                                                false
+                                            ? const Icon(
+                                                FontAwesomeIcons.checkDouble,
+                                                color:
+                                                    AppColors.GREY_DARK_COLOR,
+                                                size: 10,
+                                              )
+                                            : const Icon(
+                                                FontAwesomeIcons.check,
+                                                color:
+                                                    AppColors.GREY_DARK_COLOR,
+                                                size: 10,
+                                              )
+                                        : const SizedBox(),
                                 if (widget.chat!.lastMessage?.seen ?? false)
                                   const SizedBox(width: 10),
                                 Expanded(
                                   child: Label(
                                       text: widget.chat!.typing
-                                          ? "Typing now..."
-                                          : widget.chat?.lastMessage?.text ==
-                                                  null
-                                              ? "No messages until now"
-                                              : '${widget.chat?.lastMessage?.text}',
+                                          ? "Typing..."
+                                          : widget.chat!.recording
+                                              ? "Recording..."
+                                              : widget.chat?.lastMessage
+                                                          ?.text ==
+                                                      null
+                                                  ? "No messages until now"
+                                                  : '${widget.chat?.lastMessage?.text}',
                                       style: Styles.mediumText(
                                         fontSize: 24,
                                         color: widget.chat!.typing
@@ -267,6 +279,24 @@ class _ChatCardState extends State<ChatCard> {
             ),
           ),
         );
+      },
+      listener: (context, state) {
+        // ignore: unrelated_type_equality_checks
+        if (state.status == ChatsStates.typing &&
+            widget.chat!.id == state.listenToTypingParams!.chatId) {
+          setState(() {
+            widget.chat!.typing = state.listenToTypingParams!.isTyping;
+            log("typing chat card = ${widget.chat!.typing}");
+          });
+        }
+        // ignore: unrelated_type_equality_checks
+        if (state.status == ChatsStates.recording &&
+            widget.chat!.id == state.listenToRecordingParams!.chatId) {
+          setState(() {
+            widget.chat!.recording = state.listenToRecordingParams!.isRecording;
+            log("recording chat card = ${widget.chat!.recording}");
+          });
+        }
       },
     );
   }

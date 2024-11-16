@@ -117,7 +117,7 @@ class MessagesListView extends StatelessWidget {
             );
           } else {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: SizedBox(),
             );
           }
         },

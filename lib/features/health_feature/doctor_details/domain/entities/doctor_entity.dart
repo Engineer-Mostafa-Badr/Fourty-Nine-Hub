@@ -29,7 +29,8 @@ class DoctorEntity {
   final bool isActive;
   final bool isPremium;
   final String description;
-  final int rating;
+  final String classification;
+  final num rating;
   final String createdAt;
   final String updatedAt;
   final List<AppointmentEntity> appointments;
@@ -59,6 +60,7 @@ class DoctorEntity {
     required this.isActive,
     required this.isPremium,
     required this.description,
+    required this.classification,
     required this.rating,
     required this.createdAt,
     required this.updatedAt,

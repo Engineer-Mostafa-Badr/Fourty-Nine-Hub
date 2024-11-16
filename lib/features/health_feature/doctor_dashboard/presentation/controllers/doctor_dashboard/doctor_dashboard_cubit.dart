@@ -11,6 +11,9 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/us
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_id_remaining_days.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_practicing_remaining_days.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_subscription_remaining_days.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/doctor_info_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/earned_mony_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/doctor_info_usecase.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 
 part 'doctor_dashboard_state.dart';
@@ -21,6 +24,7 @@ class DoctorDashboardCubit extends Cubit<DoctorDashboardState> {
   final GetDoctorPracticingRemainingDaysUseCase
       _getDoctorPracticingRemainingDaysUseCase;
   final GetDoctorIDRemainingDaysUseCase _getDoctorIDRemainingDaysUseCase;
+  final DoctorInfoUseCase _doctorInfoUseCase;
   final GetDoctorAppointmentsByDayUseCase _getDoctorAppointmentsByDayUseCase;
   final GetDoctorUnhandledAppointmentsUseCase
       _getDoctorUnhandledAppointmentsUseCase;
@@ -33,42 +37,38 @@ class DoctorDashboardCubit extends Cubit<DoctorDashboardState> {
     this._getDoctorAppointmentsByDayUseCase,
     this._getDoctorUnhandledAppointmentsUseCase,
     this._doctorAcceptAppointmentUseCase,
-    this._doctorRejectAppointmentUsecase,
+    this._doctorRejectAppointmentUsecase, this._doctorInfoUseCase,
   ) : super(DoctorDashboardInitial());
 
   Future<void> loadData() async {
-    await _getSubscriptionRemainingDays();
-    await _getPracticingRemainingDays();
-    await _getIDRemainingDays();
+    // await _getSubscriptionRemainingDays();
+    // await _getPracticingRemainingDays();
+    // await _getIDRemainingDays();
+    await _getDoctorInfo();
     await _getAppointmentsByDay();
     await _getUnhandledAppointments();
   }
 
-  Future<void> _getSubscriptionRemainingDays() async {
+  List<EarnedMoneyEntity> totalEarnedMoney =[];
+  Future<void> _getDoctorInfo() async {
     final response =
-        await _getDoctorSubscriptionRemainingDaysUseCase.call(const NoParams());
+        await _doctorInfoUseCase.call(const NoParams());
     response.fold((l) {
       if (l is ServerFailure) {
         emit(DoctorDashboardError(l.message));
       } else {
         emit(DoctorDashboardError(Labels.errorHappened));
       }
-    }, (r) => emit(DoctorDashboardSupscriptionRemainingDays(r)));
+    }, (r) {
+      print("A7oooo ${r.totalEarnedMoney.toString()}");
+      print("A7oooo ${r.remainingDaysToEndSubscription}");
+      totalEarnedMoney.addAll(r.totalEarnedMoney);
+      print("A7a Gemmy ${totalEarnedMoney.toString()}");
+      emit(DoctorInfoSuccessState(r));
+      print("A7eeee Gemmy ${totalEarnedMoney.toString()}");
+    });
   }
 
-  Future<void> _getPracticingRemainingDays() async {
-    final response =
-        await _getDoctorPracticingRemainingDaysUseCase.call(const NoParams());
-    response.fold((l) => emit(DoctorDashboardError(Labels.errorHappened)),
-        (r) => emit(DoctorDashboardPracticingRemainingDays(r)));
-  }
-
-  Future<void> _getIDRemainingDays() async {
-    final response =
-        await _getDoctorIDRemainingDaysUseCase.call(const NoParams());
-    response.fold((l) => emit(DoctorDashboardError(Labels.errorHappened)),
-        (r) => emit(DoctorDashboardIDRemainingDays(r)));
-  }
 
   Future<void> _getAppointmentsByDay() async {
     final response = await _getDoctorAppointmentsByDayUseCase.call(

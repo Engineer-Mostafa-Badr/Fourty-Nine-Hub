@@ -9,17 +9,50 @@ import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_so
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/clear_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_one_time_view_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_pin_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_recording_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_typing_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_unpin_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/pin_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/set_record_as_listened.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/unpin_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 abstract class MessagesRemoteDataSource {
   void listenToNewMessages(Function(MessageEntity message) params);
+  void listenToRecordListened(
+      Function(SetRecordAsListenedParams setRecordAsListenedParams) params);
+  void listenToSeenOneTimeViewMessage(Function(MessageEntity message) params);
+  Future<Either<Failure, MessageEntity>> getOneTimeViewMessage(
+      GetOneTimeViewMessageParams params);
+
+  void listenToPinMessage(Function(ListenToPinMessageParams params) params);
+  void listenToUnPinMessage(Function(ListenToUnPinMessageParams params) params);
 
   Future<Either<Failure, bool>> sendMessage(SendMessageParams params);
+
+  Future<Either<Failure, bool>> startTyping({required String chatId});
+  Future<Either<Failure, bool>> stopTyping({required String chatId});
+
+  Future<Either<Failure, bool>> clearChat(ClearChatParams params);
+  void listenToTypingStatus(
+      Function(ListenToTypingParams listenToTypingParams) params);
+
+  Future<Either<Failure, bool>> startRecording({required String chatId});
+  Future<Either<Failure, bool>> stopRecording({required String chatId});
+  void listenToRecordingStatus(
+      Function(ListenToRecordingParams listenToTypingParams) params);
 
   Future<Either<Failure, bool>> deleteMessage({
     required String chatId,
@@ -30,15 +63,23 @@ abstract class MessagesRemoteDataSource {
 
   Future<Either<Failure, List<MessageEntity>>> getMessages(
       GetMessagesParams params);
+  Future<Either<Failure, String?>> getChatPinnedMessage(GetChatParams params);
 
   Future<Either<Failure, bool>> markMessageAsSeen(
       MarkMessageAsSeenParams params);
+  Future<Either<Failure, bool>> pinMessage(PinMessageParams params);
+  Future<Either<Failure, bool>> unPinMessage(UnPinMessageParams params);
+
+  Future<Either<Failure, bool>> setRecordAsListened(
+      SetRecordAsListenedParams params);
 
   void listenToSeenStatus(Function(List<MessageEntity> messages) params);
 
   void stopListenToSeenStatus();
 
   void listenToDeliveredStatus(Function(String chatId) params);
+
+  void listenToClearChatStatus(Function(String chatId) params);
 
   void stopListenToDeliveredStatus();
 
@@ -49,9 +90,8 @@ abstract class MessagesRemoteDataSource {
 class MessagesRemoteDataSourceImplementation
     implements MessagesRemoteDataSource {
   final ApiConsumer _apiConsumer;
-  final Socket _socket;
 
-  MessagesRemoteDataSourceImplementation(this._apiConsumer, this._socket);
+  MessagesRemoteDataSourceImplementation(this._apiConsumer);
 
   @override
   Future<Either<Failure, bool>> deleteMessage(
@@ -69,8 +109,8 @@ class MessagesRemoteDataSourceImplementation
   @override
   void listenToNewMessages(Function(MessageEntity message) params) {
     try {
-      _socket.connect();
-      _socket.on(SocketIOListeners.newMessageFromMe, (data) {
+      // _socket.connect();
+      serviceLocator<Socket>().on(SocketIOListeners.newMessageFromMe, (data) {
         final decodedData = jsonDecode(data);
         log("listenToNewMessagesssssssssssss From me");
         log("listenToNewMessagesssssssssssss  From me$decodedData");
@@ -83,7 +123,8 @@ class MessagesRemoteDataSourceImplementation
         MessageModel messageModel = MessageModel.fromJson(data);
         params(messageModel);
       });
-      _socket.on(SocketIOListeners.newMessageFromOther, (data) {
+      serviceLocator<Socket>().on(SocketIOListeners.newMessageFromOther,
+          (data) {
         final decodedData = jsonDecode(data);
         log("listenToNewMessagesssssssssssss From Other");
         log("listenToNewMessagesssssssssssss  From Other$decodedData");
@@ -104,7 +145,7 @@ class MessagesRemoteDataSourceImplementation
   @override
   Future<Either<Failure, bool>> sendMessage(SendMessageParams params) async {
     try {
-      _socket.connect();
+      // _socket.connect();
       CliLogger.info('you send message : ${params.toString()}');
       List<String> mediaIds = [];
       for (var file in params.media) {
@@ -114,7 +155,7 @@ class MessagesRemoteDataSourceImplementation
           mediaIds.add(id);
         }
       }
-      _socket.emit(
+      serviceLocator<Socket>().emit(
           SocketIOEvents.sendMessage,
           jsonEncode({
             "chatId": params.chat.id,
@@ -124,8 +165,10 @@ class MessagesRemoteDataSourceImplementation
             "groupId": null,
             "replyMessageId": params.replyMessageId,
             "oneTimeView": params.oneTimeView,
-            "sharedContacts":
-              params.sharedContacts.map((contact) => contact.toJson()).toList(),
+            "isForward": params.isForward,
+            "sharedContacts": params.sharedContacts
+                .map((contact) => contact.toJson())
+                .toList(),
           }));
       return const Right(true);
     } catch (e) {
@@ -162,8 +205,8 @@ class MessagesRemoteDataSourceImplementation
   //         "groupId": null,
   //         "replyMessageId": params.replyMessageId,
   //         "oneTimeView": params.oneTimeView,
-          // "sharedContacts":
-          //     params.sharedContacts.map((contact) => contact.toJson()).toList(),
+  // "sharedContacts":
+  //     params.sharedContacts.map((contact) => contact.toJson()).toList(),
   //       }),
   //     );
   //     return const Right(true);
@@ -175,8 +218,8 @@ class MessagesRemoteDataSourceImplementation
 
   @override
   void stopListenToMessages() {
-    _socket.off(SocketIOListeners.newMessageFromOther);
-    _socket.off(SocketIOListeners.newMessageFromMe);
+    serviceLocator<Socket>().off(SocketIOListeners.newMessageFromOther);
+    serviceLocator<Socket>().off(SocketIOListeners.newMessageFromMe);
   }
 
   @override
@@ -201,9 +244,9 @@ class MessagesRemoteDataSourceImplementation
   Future<Either<Failure, bool>> markMessageAsSeen(
       MarkMessageAsSeenParams params) async {
     try {
-      _socket.connect();
+      // _socket.connect();
       CliLogger.info("you mark messages as seen : chatId ${params.chatId}");
-      _socket.emit(
+      serviceLocator<Socket>().emit(
           SocketIOEvents.markMessageAsSeen,
           jsonEncode({
             "chatId": params.chatId,
@@ -218,8 +261,8 @@ class MessagesRemoteDataSourceImplementation
   @override
   void listenToDeliveredStatus(Function(String chatId) params) {
     try {
-      _socket.connect();
-      _socket.on(SocketIOListeners.messageDelivered, (data) {
+      // _socket.connect();
+      serviceLocator<Socket>().on(SocketIOListeners.messageDelivered, (data) {
         final decodedData = jsonDecode(data);
         if (decodedData is List) {
           data = decodedData[0];
@@ -238,8 +281,8 @@ class MessagesRemoteDataSourceImplementation
   @override
   void listenToSeenStatus(Function(List<MessageEntity> messages) params) {
     try {
-      _socket.connect();
-      _socket.on(SocketIOListeners.messageSeen, (data) {
+      // _socket.connect();
+      serviceLocator<Socket>().on(SocketIOListeners.messageSeen, (data) {
         CliLogger.info("messageSeen :  $data");
         params((jsonDecode(data) as List)
             .map((e) => MessageModel.fromJson(e))
@@ -252,21 +295,21 @@ class MessagesRemoteDataSourceImplementation
 
   @override
   void stopListenToDeliveredStatus() {
-    _socket.off(SocketIOListeners.messageDelivered);
+    serviceLocator<Socket>().off(SocketIOListeners.messageDelivered);
   }
 
   @override
   void stopListenToSeenStatus() {
-    _socket.off(SocketIOListeners.messageSeen);
+    serviceLocator<Socket>().off(SocketIOListeners.messageSeen);
   }
 
   @override
   Future<Either<Failure, bool>> markMessageAsDelivered(
       MarkMessagesAsDeliveredParams params) async {
     try {
-      _socket.connect();
+      // _socket.connect();
       CliLogger.info("you mark messages as delivered");
-      _socket.emit(SocketIOEvents.markMessageAsDelivered,
+      serviceLocator<Socket>().emit(SocketIOEvents.markMessageAsDelivered,
           jsonEncode({"chatId": params.chatId}));
       return const Right(true);
     } catch (e) {
@@ -274,5 +317,330 @@ class MessagesRemoteDataSourceImplementation
       return const Left(
           ServerFailure(message: "can't mark message as delivered"));
     }
+  }
+
+  @override
+  Future<Either<Failure, bool>> startTyping({required String chatId}) async {
+    try {
+      // _socket.connect();
+      CliLogger.info('you start typing : $chatId');
+
+      serviceLocator<Socket>().emit(
+          SocketIOEvents.startTypingMessage,
+          jsonEncode({
+            "chatId": chatId,
+          }));
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error(' can\'t start typing $e');
+      return const Left(ServerFailure(message: "can't start typing"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> stopTyping({required String chatId}) async {
+    try {
+      serviceLocator<Socket>().connect();
+      CliLogger.info('you stop typing : $chatId');
+
+      serviceLocator<Socket>().emit(
+          SocketIOEvents.stopTypingMessage,
+          jsonEncode({
+            "chatId": chatId,
+          }));
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error(' can\'t stop typing $e');
+      return const Left(ServerFailure(message: "can't stop typing"));
+    }
+  }
+
+  @override
+  void listenToTypingStatus(
+      Function(ListenToTypingParams listenToTypingParams) params) {
+    try {
+      // _socket.connect();
+      serviceLocator<Socket>().on(SocketIOListeners.typingMessage, (data) {
+        log(data.toString());
+        final decodedData = jsonDecode(data);
+        log("listenToTypingStatus :  $data");
+        CliLogger.info("typingChats :  $data");
+        log("listenToTypingStatus decodedData:  $decodedData");
+        if (decodedData is List) {
+          data = decodedData[0];
+        } else {
+          data = decodedData;
+        }
+        ListenToTypingParams listenToTypingParams =
+            ListenToTypingParams.fromJson(data);
+        params(listenToTypingParams);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to typing status error $e");
+    }
+  }
+
+  @override
+  void listenToRecordingStatus(
+      Function(ListenToRecordingParams listenToRecordingParams) params) {
+    try {
+      // _socket.connect();
+      serviceLocator<Socket>().on(SocketIOListeners.recordingMessage, (data) {
+        log(data.toString());
+        final decodedData = jsonDecode(data);
+        log("listenToRecordingStatus :  $data");
+        CliLogger.info("recordingChats :  $data");
+        log("listenToRecordingStatus decodedData:  $decodedData");
+        if (decodedData is List) {
+          data = decodedData[0];
+        } else {
+          data = decodedData;
+        }
+        ListenToRecordingParams listenToRecordingParams =
+            ListenToRecordingParams.fromJson(data);
+        params(listenToRecordingParams);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to recording status error $e");
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> startRecording({required String chatId}) async {
+    try {
+      // _socket.connect();
+      CliLogger.info('you start recording : $chatId');
+
+      serviceLocator<Socket>().emit(
+          SocketIOEvents.startRecordingMessage,
+          jsonEncode({
+            "chatId": chatId,
+          }));
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error(' can\'t start recording $e');
+      return const Left(ServerFailure(message: "can't start recording"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> stopRecording({required String chatId}) async {
+    try {
+      // _socket.connect();
+      CliLogger.info('you stop recording : $chatId');
+
+      serviceLocator<Socket>().emit(
+          SocketIOEvents.stopRecordingMessage,
+          jsonEncode({
+            "chatId": chatId,
+          }));
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error(' can\'t stop recording $e');
+      return const Left(ServerFailure(message: "can't stop recording"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, MessageEntity>> getOneTimeViewMessage(
+      GetOneTimeViewMessageParams params) async {
+    var data = {
+      "chatId": params.chatId,
+      "messageId": params.messageId,
+    };
+    final response =
+        await _apiConsumer.post(EndPoints.getOneTimeViewMessage(), data: data);
+    log("One Time View Message: $response");
+    return response.fold((failure) => Left(failure), (data) {
+      MessageModel messageModel = MessageModel.fromJson(data['data']);
+      return Right(messageModel);
+    });
+  }
+
+  @override
+  void listenToSeenOneTimeViewMessage(Function(MessageEntity message) params) {
+    try {
+      // _socket.connect();
+      serviceLocator<Socket>().on(SocketIOListeners.oneTimeMessageSeen, (data) {
+        final decodedData = jsonDecode(data);
+        log(" listenToSeenOneTimeViewMessage :  $data");
+        log(" listenToSeenOneTimeViewMessage decodedData:  $decodedData");
+        if (decodedData is List) {
+          data = decodedData[0];
+        } else {
+          data = decodedData;
+        }
+        CliLogger.info("oneTimeMessageSeen :  $data");
+        MessageModel messageModel = MessageModel.fromJson(data['message']);
+        // messageModel.isOneTimeSeenMessage = true;
+        log("isOneTimeSeenMessage: ${messageModel.isOneTimeSeenMessage}");
+        params(messageModel);
+      });
+    } catch (e) {
+      CliLogger.info("can't read last message error $e");
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> setRecordAsListened(
+      SetRecordAsListenedParams params) async {
+    try {
+      // _socket.connect();
+      CliLogger.info(
+          'you set record as listened remote data source : ${params.chatId}');
+
+      serviceLocator<Socket>().emit(
+          SocketIOEvents.setRecordAsListened,
+          jsonEncode({
+            "chatId": params.chatId,
+            "messageId": params.messageId,
+          }));
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error(' can\'t set record as listened $e');
+      return const Left(ServerFailure(message: "can't set record as listened"));
+    }
+  }
+
+  @override
+  void listenToRecordListened(
+      Function(SetRecordAsListenedParams setRecordAsListenedParams)
+          params) async {
+    try {
+      // _socket.connect();
+      serviceLocator<Socket>().on(SocketIOListeners.setRecordAsListened,
+          (data) {
+        final decodedData = jsonDecode(data);
+        log("listenToRecordListened remote data source :  $data");
+        log("listenToRecordListened remote data source : $decodedData");
+        if (decodedData is List) {
+          data = decodedData[0];
+        } else {
+          data = decodedData;
+        }
+        CliLogger.info("listenToRecordListened remote data source :  $data");
+        SetRecordAsListenedParams messageModel = SetRecordAsListenedParams(
+            chatId: data['chatId'], messageId: data['messageId']);
+        params(messageModel);
+      });
+    } catch (e) {
+      CliLogger.info("can't read last message error $e");
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> clearChat(ClearChatParams params) async {
+    var data = {
+      "clearBoth": params.clearForAll,
+    };
+    final response =
+        await _apiConsumer.put(EndPoints.clearChat(params.chatId), data: data);
+    log("Clear Chat: $response");
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  void listenToClearChatStatus(Function(String chatId) params) {
+    try {
+      // _socket.connect();
+      serviceLocator<Socket>().on(SocketIOListeners.clearChat, (data) {
+        final decodedData = jsonDecode(data);
+        log("Clear Chat remote data source :  $data");
+        log("Clear Chat remote data source : $decodedData");
+        if (decodedData is List) {
+          data = decodedData[0];
+        } else {
+          data = decodedData;
+        }
+        CliLogger.info("Clear Chat remote data source :  $data");
+        params(data['chatId']);
+      });
+    } catch (e) {
+      CliLogger.info("can't read clear chat error $e");
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> pinMessage(PinMessageParams params) async {
+    var data = {
+      "chatId": params.chatId,
+      "messageId": params.messageId,
+    };
+    final response =
+        await _apiConsumer.put(EndPoints.pinMessage(params.chatId), data: data);
+    log("Pin Message Remote Data Source: $response");
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> unPinMessage(UnPinMessageParams params) async {
+    var data = {
+      "chatId": params.chatId,
+    };
+    final response = await _apiConsumer
+        .put(EndPoints.unPinMessage(params.chatId), data: data);
+    log("UnPin Message Remote Data Source: $response");
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  void listenToPinMessage(Function(ListenToPinMessageParams params) params) {
+    try {
+      // _socket.connect();
+      serviceLocator<Socket>().on(SocketIOListeners.pinMessage, (data) {
+        final decodedData = jsonDecode(data);
+        log("Pin Message remote data source :  $data");
+        log("Pin Message remote data source : $decodedData");
+        if (decodedData is List) {
+          data = decodedData[0];
+        } else {
+          data = decodedData;
+        }
+        CliLogger.info("Pin Message remote data source :  $data");
+        params(ListenToPinMessageParams(
+            chatId: data['chatId'], messageId: data['messageId']));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to pin message error $e");
+    }
+  }
+
+  @override
+  void listenToUnPinMessage(
+      Function(ListenToUnPinMessageParams params) params) {
+    try {
+      // _socket.connect();
+      serviceLocator<Socket>().on(SocketIOListeners.unPinMessage, (data) {
+        final decodedData = jsonDecode(data);
+        log("UnPin Message remote data source :  $data");
+        log("UnPin Message remote data source : $decodedData");
+        if (decodedData is List) {
+          data = decodedData[0];
+        } else {
+          data = decodedData;
+        }
+        CliLogger.info("UnPin Message remote data source :  $data");
+        params(ListenToUnPinMessageParams(chatId: data['chatId']));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to unPin message error $e");
+    }
+  }
+
+  @override
+  Future<Either<Failure, String?>> getChatPinnedMessage(GetChatParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.getChatDetails(params.chatId));
+    return response.fold((failure){
+      log("Get Chat Remote Data Source: $failure");
+      return Left(failure);
+    }, (data) {
+      log("Get Chat Remote Data Source: $data");
+      log("Get Chat Remote Data Source pinnedMessage: ${data['data']['pinnedMessage']}");
+      return Right(data['data']['pinnedMessage']);
+    });
   }
 }
