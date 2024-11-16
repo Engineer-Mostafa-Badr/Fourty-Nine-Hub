@@ -19,6 +19,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../main.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 abstract class AuthRemoteDataSource {
   const AuthRemoteDataSource();
@@ -76,7 +77,9 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         _apiConsumer.attachToken(UserTokensModel.fromJson(
           response['data'],
         ));
-        await registerSocket();
+
+
+        // await registerSocket();
         return Right(
         UserTokensModel.fromJson(
           response['data'],
@@ -289,7 +292,8 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     return result.fold((l) => Left(l), (r) async {
       await CacheManager.deleteAllTokens();
       _apiConsumer.removeTokenFromHeader();
-      await registerSocket();
+      // await registerSocket();
+
       return Right(r);
     });
   }
