@@ -30,7 +30,7 @@ class EditDoctorTimetableCubit extends Cubit<EditDoctorTimetableState> {
     clinicTimetable.addAll(timetable);
     callTimetable.addAll(timetable);
     homeVisitTimetable.addAll(timetable);
-    emit(state.copyWith( showCall: state.doctorWorkDays?.calls!=[]?true:false,showClinic: state.doctorWorkDays?.clinic!=[]?true:false,showHomeVisit: state.doctorWorkDays?.visitHome!=[]?true:false));
+    emit(state.copyWith( showCall: state.doctorWorkDays!=null&&state.doctorWorkDays?.calls!=[]?true:false,showClinic: state.doctorWorkDays!=null&&state.doctorWorkDays?.clinic!=[]?true:false,showHomeVisit: state.doctorWorkDays!=null&&state.doctorWorkDays?.visitHome!=[]?true:false));
 
     print("state.doctorWorkDays?.clinic${state.doctorWorkDays?.clinic.toString()}");
     for (WorkDayEntity clinicDay in state.doctorWorkDays?.clinic ?? []) {
