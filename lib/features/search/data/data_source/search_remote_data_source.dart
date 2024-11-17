@@ -14,11 +14,14 @@ import 'package:fourtyninehub/features/search/domain/entity/user_search_entity.d
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/post_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
+import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 import '../../../../core/error/failure.dart';
 
 abstract class SearchRemoteDataSource {
   Future<Either<Failure, List<MainCategoryEntity>>> fetchSearch(SearchParams params);
+  Future<Either<Failure,List<SubCategoryEntity>>> fetchSearchSubCategory(SearchParams params);
   Future<Either<Failure,List<UserSearchEntity>>> fetchUserSearch(SearchParams params);
   Future<Either<Failure,List<AdsSearchEntity>>> fetchAdsSearch(SearchParams params);
   Future<Either<Failure,List<PostEntity>>> fetchPostsSearch(SearchParams params);
@@ -42,6 +45,20 @@ class SearchRemoteDataSourceImpl extends SearchRemoteDataSource {
       (failure)=>Left(failure),
       (response)=>Right((response['data'] as List)
           .map((e) => MainCategoryModel.fromJson(e))
+          .toList()),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<SubCategoryEntity>>> fetchSearchSubCategory(SearchParams params) async {
+    final response = await _apiConsumer.get(
+        EndPoints.search(params),
+        data: params.toJson()
+    );
+    return response.fold(
+          (failure)=>Left(failure),
+          (response)=>Right((response['data'] as List)
+          .map((e) => SubCategoryModel.fromJson(e))
           .toList()),
     );
   }
@@ -115,4 +132,6 @@ class SearchRemoteDataSourceImpl extends SearchRemoteDataSource {
           .toList()),
     );
 }
+
+
 }

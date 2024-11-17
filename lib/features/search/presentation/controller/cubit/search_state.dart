@@ -7,6 +7,7 @@ class SearchState {
   final Failure? failure;
   String? filter;
   final List<MainCategoryEntity>? search;
+  final List<SubCategoryEntity>? searchSubCategory;
   final List<UserSearchEntity>? userSearch;
   final List<AdsSearchEntity>? adsSearch;
   final List<PostEntity>? posts;
@@ -20,6 +21,7 @@ class SearchState {
     this.status = SearchStates.loading,
     this.failure,
     this.search,
+    this.searchSubCategory,
     this.userSearch,
     this.adsSearch,
     this.posts,
@@ -35,6 +37,7 @@ class SearchState {
     Failure? failure,
     String? filter,
     List<MainCategoryEntity>? search,
+    List<SubCategoryEntity>? searchSubCategory,
     List<UserSearchEntity>? userSearch,
     List<AdsSearchEntity>? adsSearch,
     List<PostEntity>? posts,
@@ -47,6 +50,7 @@ class SearchState {
       status: status ?? this.status,
       failure: failure ?? this.failure,
       search: search ?? this.search,
+      searchSubCategory: searchSubCategory ?? this.searchSubCategory,
       userSearch: userSearch ?? this.userSearch,
       adsSearch: adsSearch ?? this.adsSearch,
       posts: posts ?? this.posts,

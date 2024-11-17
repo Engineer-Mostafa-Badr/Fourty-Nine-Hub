@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -34,9 +36,9 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
         builder: (BuildContext context, state) {
           final controller = context.read<SearchCubit>();
           if (controller.searchController.text.isNotEmpty) {
-            return PagedGridView<int, MainCategoryEntity>(
-              pagingController: controller.searchPagingController,
-              builderDelegate: PagedChildBuilderDelegate<MainCategoryEntity>(
+            return PagedGridView<int, SubCategoryEntity>(
+              pagingController: controller.searchPagingSubCategoryController,
+              builderDelegate: PagedChildBuilderDelegate<SubCategoryEntity>(
                 noItemsFoundIndicatorBuilder: (context) {
                   return Center(
                     child: Text(
@@ -52,7 +54,8 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
-                      child:  buildItem(item,
+                      child:  buildItem(
+                          item,
                           () async{
                             var result = await controller
                                 .toggleSubCategoryToFavorites(item.id);
@@ -61,7 +64,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                           item.isFavorite == true
                               ? Icons.favorite
                               : Icons.favorite_border,
-                        item
+                          state.search![index]
                       ),
                     ),
                   );
@@ -80,34 +83,15 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
           return const Center(
             child: Text('No results found.'),
           );
-          // return GridView.builder(
-          //   itemCount: 10,
-          //   //      controller: controller.scrollController,
-          //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          //       crossAxisCount: 2, childAspectRatio: 1),
-          //   itemBuilder: (context, index) {
-          //     return buildItem(context);
-          //     // final subCategory = state.subCategories![index];
-          //     // return SubCategoryCard(
-          //     //   mainCategory: controller.selectedCategory,
-          //     //   item: subCategory,
-          //     //   onFav: () {
-          //     //     print("object");
-          //     //     return controller.toggleSubCategoryToFavorites(
-          //     //         state.subCategories![index].id);
-          //     //   },
-          //     // );
-          //   },
-          // );
         },
       ),
     );
   }
 
-  Widget buildItem(MainCategoryEntity model,Function() fav,IconData icon,item) => InkWell(
+  Widget buildItem(SubCategoryEntity model,Function() fav,IconData icon,item) => InkWell(
     onTap: () => context.push(Routes.ADS,
         extra: AdsViewParams(
-            mainCategory: model, subCategory: item)),
+            mainCategory: item, subCategory: model)),
         child: Container(
           margin: EdgeInsets.all(10.w),
           decoration: BoxDecoration(
@@ -130,7 +114,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                       child: SquareImage(
                         fit: BoxFit.cover,
                         radius: 5,
-                        url: model.banner,
+                        url: model.image,
                       ),
                     ),
                     Positioned(
@@ -166,8 +150,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Label(
-                            text:model.nameEn ??'',
-                            // text:context.locale == Locales.english? model.nameEn :model.nameAr,
+                            text:model.nameEn,
                             style:
                                 Styles.mediumText(fontWeight: FontWeight.bold),
                           ),
@@ -178,14 +161,14 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                         icon: Icons.add_box_rounded,
                         size: 40.h,
                         onPressed: () {
-                          // if (AuthHelper().isLoggedIn()) {
-                          //   context.push(Routes.CREATEAD,
-                          //       extra: CategorizationEntity(
-                          //           mainCategory: widget.mainCategory,
-                          //           subCategory: widget.item));
-                          // } else {
-                          //   context.push(Routes.LOGIN);
-                          // }
+                          if (AuthHelper().isLoggedIn()) {
+                            context.push(Routes.CREATEAD,
+                                extra: CategorizationEntity(
+                                    mainCategory: item,
+                                    subCategory: model));
+                          } else {
+                            context.push(Routes.LOGIN);
+                          }
                         })
                   ],
                 ),

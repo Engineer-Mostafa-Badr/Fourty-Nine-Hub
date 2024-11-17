@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/search/domain/entity/trip_come_with_you_e
 import 'package:fourtyninehub/features/search/domain/entity/user_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 import '../../domain/repository/search_repository.dart';
 
@@ -43,5 +44,10 @@ class SearchRepositoryImpl extends SearchRepository{
   @override
   Future<Either<Failure, List<ReelsSearchEntity>>> fetchReelSearch(SearchParams params) {
     return _searchRemoteDataSource.fetchReelSearch(params);
+  }
+
+  @override
+  Future<Either<Failure, List<SubCategoryEntity>>> fetchSearchSubCategory(SearchParams params) {
+    return _searchRemoteDataSource.fetchSearchSubCategory(params);
   }
 }

@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/search/domain/entity/user_search_entity.d
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_ads_search_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_posts_search_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_reel_search_use_case.dart';
+import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_sub_category_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_trip_come_search_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_user_search_use_case.dart';
@@ -25,6 +26,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/share_post_usecase.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,6 +35,7 @@ part 'search_state.dart';
 
 class SearchCubit extends Cubit<SearchState> {
   final FetchSearchUseCase _fetchSearchUseCase;
+  final FetchSearchSubCategoryUseCase _fetchSearchSubCategoryUseCase;
   final ToggleFavoriteCategoryUseCase _toggleFavoriteCategoryUseCase;
   final FetchUserSearchUseCase _fetchUserSearchUseCase;
   final FetchAdsSearchUseCase _fetchAdsSearchUseCase;
@@ -56,7 +59,7 @@ class SearchCubit extends Cubit<SearchState> {
       this._sharePostUseCase,
       this._deletePostUseCase, this._deleteCommentUseCase,
       this._hidePostUseCase, this._postReactUseCase,
-       this._postCommentUseCase, this._replyOnCommentUseCase, this._editCommentUseCase, this._commentReactUseCase, this._fetchTripComeSearchUseCase, this._fetchReelSearchUseCase,) : super(SearchState());
+       this._postCommentUseCase, this._replyOnCommentUseCase, this._editCommentUseCase, this._commentReactUseCase, this._fetchTripComeSearchUseCase, this._fetchReelSearchUseCase, this._fetchSearchSubCategoryUseCase,) : super(SearchState());
 
   TextEditingController searchController = TextEditingController();
   final shareFormKey = GlobalKey<FormState>();
@@ -72,6 +75,7 @@ class SearchCubit extends Cubit<SearchState> {
 
   void onRefresh() async {
     searchPagingController.refresh();
+    searchPagingSubCategoryController.refresh();
     searchPagingUserController.refresh();
     searchPagingAdsController.refresh();
     searchPagingPostsController.refresh();
@@ -87,12 +91,17 @@ class SearchCubit extends Cubit<SearchState> {
   void loadData(SearchParams params) async {
     //   await getFeed(1);
     getPaginatedSearch(params, 1);
+    getPaginatedSubCategorySearch(params, 1);
     getPaginatedUserSearch(params, 1);
     getPaginatedAdsSearch(params, 1);
     getPaginatedPostsSearch(params, 1);
     getPaginatedTripComeSearch(params, 1);
     getPaginatedReelsSearch(params, 1);
     searchPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getPaginatedSearch(params, pageKey);
+    });
+    searchPagingSubCategoryController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
       getPaginatedSearch(params, pageKey);
     });
@@ -120,6 +129,8 @@ class SearchCubit extends Cubit<SearchState> {
 
   final PagingController<int, MainCategoryEntity>
   searchPagingController = PagingController(firstPageKey: 1);
+  final PagingController<int, SubCategoryEntity>
+  searchPagingSubCategoryController = PagingController(firstPageKey: 1);
   final PagingController<int, UserSearchEntity> searchPagingUserController =
   PagingController(firstPageKey: 1);
   final PagingController<int, AdsSearchEntity> searchPagingAdsController =
@@ -160,6 +171,36 @@ class SearchCubit extends Cubit<SearchState> {
       emit(state.copyWith(search: data, status: SearchStates.success));
     });
     return main;
+  }
+
+  Future<List<SubCategoryEntity>> getPaginatedSubCategorySearch(
+      SearchParams params, int page) async {
+    emit(state.copyWith(status: SearchStates.loading));
+    List<SubCategoryEntity> sub = [];
+    final response = await _fetchSearchSubCategoryUseCase.call(params);
+
+    response.fold((l) {
+      print('Errrrrrrror :$l');
+      emit(state.copyWith(failure: l, status: SearchStates.error));
+    }, (data) {
+      final isLastPage = data.length < pageSize;
+      if (page == 1) {
+        print("page == 1 $page");
+        searchPagingSubCategoryController.itemList = [];
+      }
+      if (isLastPage) {
+        print("isLastPage = $isLastPage");
+        searchPagingSubCategoryController.appendLastPage(data);
+      } else {
+        print("isNotLastPage = $isLastPage");
+        final nextPageKey = page + 1;
+        searchPagingSubCategoryController.appendPage(data, nextPageKey);
+      }
+      print('Sussecc :$data');
+      sub = data;
+      emit(state.copyWith(searchSubCategory: data, status: SearchStates.success));
+    });
+    return sub;
   }
 
   Future<List<UserSearchEntity>> getPaginatedUserSearch(SearchParams params,
