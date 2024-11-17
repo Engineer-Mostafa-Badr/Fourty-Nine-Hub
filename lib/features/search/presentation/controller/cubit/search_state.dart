@@ -6,7 +6,7 @@ class SearchState {
   final SearchStates status;
   final Failure? failure;
   String? filter;
-  final List<MainSubCategorySearchEntity>? search;
+  final List<MainCategoryEntity>? search;
   final List<UserSearchEntity>? userSearch;
   final List<AdsSearchEntity>? adsSearch;
   final List<PostEntity>? posts;
@@ -34,7 +34,7 @@ class SearchState {
     SearchStates? status,
     Failure? failure,
     String? filter,
-    List<MainSubCategorySearchEntity>? search,
+    List<MainCategoryEntity>? search,
     List<UserSearchEntity>? userSearch,
     List<AdsSearchEntity>? adsSearch,
     List<PostEntity>? posts,

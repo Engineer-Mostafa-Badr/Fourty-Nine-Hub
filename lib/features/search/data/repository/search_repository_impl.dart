@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/search/data/data_source/search_remote_data_source.dart';
 import 'package:fourtyninehub/features/search/domain/entity/ads_search_entity.dart';
-import 'package:fourtyninehub/features/search/domain/entity/main_category_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/entity/reels_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/entity/trip_come_with_you_entity.dart';
 import 'package:fourtyninehub/features/search/domain/entity/user_search_entity.dart';
@@ -16,7 +16,7 @@ class SearchRepositoryImpl extends SearchRepository{
 
   SearchRepositoryImpl(this._searchRemoteDataSource);
   @override
-  Future<Either<Failure, List<MainSubCategorySearchEntity>>> fetchSearch(SearchParams params) {
+  Future<Either<Failure, List<MainCategoryEntity>>> fetchSearch(SearchParams params) {
    return _searchRemoteDataSource.fetchSearch(params);
   }
 

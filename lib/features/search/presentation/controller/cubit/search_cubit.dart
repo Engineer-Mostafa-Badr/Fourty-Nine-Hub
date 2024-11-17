@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/change_react.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/search/domain/entity/ads_search_entity.dart';
-import 'package:fourtyninehub/features/search/domain/entity/main_category_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/entity/reels_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/entity/trip_come_with_you_entity.dart';
 import 'package:fourtyninehub/features/search/domain/entity/user_search_entity.dart';
@@ -118,7 +118,7 @@ class SearchCubit extends Cubit<SearchState> {
     });
   }
 
-  final PagingController<int, MainSubCategorySearchEntity>
+  final PagingController<int, MainCategoryEntity>
   searchPagingController = PagingController(firstPageKey: 1);
   final PagingController<int, UserSearchEntity> searchPagingUserController =
   PagingController(firstPageKey: 1);
@@ -132,10 +132,10 @@ class SearchCubit extends Cubit<SearchState> {
   final PagingController<int, ReelsSearchEntity> searchPagingReelsController =
   PagingController(firstPageKey: 1);
 
-  Future<List<MainSubCategorySearchEntity>> getPaginatedSearch(
+  Future<List<MainCategoryEntity>> getPaginatedSearch(
       SearchParams params, int page) async {
     emit(state.copyWith(status: SearchStates.loading));
-    List<MainSubCategorySearchEntity> main = [];
+    List<MainCategoryEntity> main = [];
     final response = await _fetchSearchUseCase.call(params);
 
     response.fold((l) {

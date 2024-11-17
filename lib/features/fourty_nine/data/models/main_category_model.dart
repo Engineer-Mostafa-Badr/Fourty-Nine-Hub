@@ -18,20 +18,26 @@ class MainCategoryModel extends MainCategoryEntity {
     super.subcategories,
   });
 
-  factory MainCategoryModel.fromJson(Map<String, dynamic> json) =>
-      MainCategoryModel(
-          id: json['_id'],
-          name: getLang() == 'ar' ? json['nameAr'] : json['nameEn'],
-          nameEn: json['nameEn'],
-          image: json['image'] ?? UIConst.imagePlaceHolder,
-          banner: json['banner'] ?? '',
-          cover: json['cover'] ?? '',
-          isFavorite: json['isFavorite'] ?? false,
-          total: json['totalAds'] ?? 0,
-          numberOfAdsCount: json['numberOfAdsCount'] ?? 0,
-          subcategories: json['subCategories'] == null
-              ? []
-              : (json['subCategories'] as List)
-                  .map((e) => SubCategoryModel.fromJson(e))
-                  .toList());
+  factory MainCategoryModel.fromJson(Map<String, dynamic> json) {
+    // Determine whether to use the 'banner' or 'picture' field
+    String banner = json['banner'] ?? json['picture'] ?? '';
+
+    return MainCategoryModel(
+      id: json['_id'],
+      name: getLang() == 'ar' ? json['nameAr'] : json['nameEn'],
+      nameEn: json['nameEn'],
+      image: json['image'] ?? UIConst.imagePlaceHolder,
+      banner: banner,
+      cover: json['cover'] ?? '',
+      isFavorite: json['isFavorite'] ?? false,
+      total: json['totalAds'] ?? 0,
+      numberOfAdsCount: json['numberOfAdsCount'] ?? 0,
+      subcategories: json['subCategories'] == null
+          ? []
+          : (json['subCategories'] as List)
+          .map((e) => SubCategoryModel.fromJson(e))
+          .toList(),
+    );
+  }
 }
+
