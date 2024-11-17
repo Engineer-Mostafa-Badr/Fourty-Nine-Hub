@@ -99,8 +99,8 @@ class AccountServiceLocator {
         () => FavouriteAdsCubit(serviceLocator())..loadData());
 
     serviceLocator.registerFactory<FavouriteSubCategoryCubit>(() =>
-        FavouriteSubCategoryCubit(serviceLocator(), serviceLocator())
-          ..loadData());
+        FavouriteSubCategoryCubit(serviceLocator(), serviceLocator(),serviceLocator())
+          ..loadData()..loadDataMain());
     serviceLocator.registerFactory<FavouriteCategoryCubit>(() =>
         FavouriteCategoryCubit(serviceLocator(), serviceLocator())..loadData());
     serviceLocator.registerFactory<ShareAppCubit>(() => ShareAppCubit(serviceLocator()));

@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -28,6 +29,7 @@ class SubCategorySearchView extends StatefulWidget {
 }
 
 class _SubCategorySearchViewState extends State<SubCategorySearchView> {
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -88,7 +90,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
     );
   }
 
-  Widget buildItem(SubCategoryEntity model,Function() fav,IconData icon,item) => InkWell(
+  Widget buildItem(SubCategoryEntity model,Function() fav,IconData icon,MainCategoryEntity item) => InkWell(
     onTap: () => context.push(Routes.ADS,
         extra: AdsViewParams(
             mainCategory: item, subCategory: model)),
@@ -166,6 +168,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                                 extra: CategorizationEntity(
                                     mainCategory: item,
                                     subCategory: model));
+                            print('item.id: ${item.id}');
                           } else {
                             context.push(Routes.LOGIN);
                           }

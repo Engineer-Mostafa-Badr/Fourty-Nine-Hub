@@ -6,9 +6,9 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_subcategory_entity.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/favourite_sub_category_card.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
@@ -29,9 +29,9 @@ class FavSubCategoryView extends StatelessWidget {
         final controller = context.read<FavouriteSubCategoryCubit>();
         return Padding(
           padding: EdgeInsets.all(16.w),
-          child: PaginationView<FavouriteSubcategoryEntity>(
+          child: PaginationView<SubCategoryEntity>(
             build: (ScrollController scrollController,
-                List<FavouriteSubcategoryEntity> data) {
+                List<SubCategoryEntity> data) {
               if (data.isNotEmpty) {
                 return GridView.builder(
                   itemCount: data.length,
@@ -47,7 +47,7 @@ class FavSubCategoryView extends StatelessWidget {
                         data.removeWhere(
                             (element) => element.id == data[index].id);
                       }
-                    },
+                    }, mainCategory: state.mainCategory![index],
                   ),
                 );
               } else {

@@ -72,7 +72,7 @@ class _MainCategoryBannerState extends State<BuildItemSearchMainCategory> {
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: widget.category.nameEn ??'',
+              text: widget.category.name,
               // text:context.locale == Locales.english? widget.category.nameEn :widget.category.nameAr,
               style: TextStyle(
                   color: Colors.white,
@@ -144,7 +144,7 @@ class _MainCategoryBannerState extends State<BuildItemSearchMainCategory> {
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: widget.category.nameEn ??'',
+              text: widget.category.name,
               // text: context.locale == Locales.english? widget.category.nameEn :widget.category.nameAr,
               style: TextStyle(
                   color: Colors.white,

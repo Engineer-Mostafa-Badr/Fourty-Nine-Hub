@@ -9,6 +9,8 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/favourite_main_category_banner.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../res/style/styles.dart';
 import '../cubit/managers/favourite_categories_cubit.dart';
 
@@ -45,18 +47,8 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: InkWell(
                           onTap: () {
-                            // context.push(Routes.SUBCATEGORIES,
-                            //     extra: state.data![i]);
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => BlocProvider(
-                            //       create: (_) => serviceLocator<SubcategoriesCubit>(),
-                            //       child: SubCategoriesView(
-                            //           mainCategory: state.data![i]),
-                            //     ),
-                            //   ),
-                            // );
+                            context.push(Routes.SUBCATEGORIES, extra: state.data![i]);
+                            print('state.data![i]: ${state.data![i].id}');
                           },
                           child: FavouriteMainCategoryBanner(
                             category: state.data![i],

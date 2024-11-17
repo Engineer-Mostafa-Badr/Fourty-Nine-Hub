@@ -103,7 +103,7 @@ class SearchCubit extends Cubit<SearchState> {
     });
     searchPagingSubCategoryController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getPaginatedSearch(params, pageKey);
+      getPaginatedSubCategorySearch(params, pageKey);
     });
     searchPagingUserController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
