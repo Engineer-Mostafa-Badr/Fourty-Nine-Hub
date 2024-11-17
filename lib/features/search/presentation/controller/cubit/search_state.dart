@@ -11,6 +11,7 @@ class SearchState {
   final List<AdsSearchEntity>? adsSearch;
   final List<PostEntity>? posts;
   final List<TripComeWithYouEntity>? tripCome;
+  final List<ReelsSearchEntity>? reels;
   final PostEntity? postDetails;
   final CommentEntity? newComment;
 
@@ -25,6 +26,7 @@ class SearchState {
     this.postDetails,
     this.tripCome,
     this.newComment,
+    this.reels,
     this.filter='totalUsers',
   });
 
@@ -39,6 +41,7 @@ class SearchState {
     List<TripComeWithYouEntity>? tripCome,
     PostEntity? postDetails,
     CommentEntity? newComment,
+    List<ReelsSearchEntity>? reels
   }) {
     return SearchState(
       status: status ?? this.status,
@@ -50,6 +53,7 @@ class SearchState {
       postDetails: postDetails ?? this.postDetails,
       newComment: newComment ?? this.newComment,
       tripCome: tripCome ?? this.tripCome,
+      reels: reels ?? this.reels,
     );
   }
 }

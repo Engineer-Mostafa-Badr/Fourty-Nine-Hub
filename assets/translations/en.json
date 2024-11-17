@@ -1084,5 +1084,7 @@
   "opened": "Opened",
   "forwardMessage": "Forward Message",
   "forwarded": "Forwarded",
-  "continueUsingChatServices": " , To continue using chat services"
+  "continueUsingChatServices": " , To continue using chat services",
+  "mainCategory" : "Main Category",
+  "comeWithMe" : "Come With Me"
 }

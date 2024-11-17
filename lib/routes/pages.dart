@@ -104,6 +104,8 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/selec
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/all_rider_trip_screen.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/rider_register_view.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/shipping_rider_tab_screen.dart';
+import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
+import 'package:fourtyninehub/features/search/presentation/pages/search_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/driverStatistics_cubit.dart';
@@ -339,6 +341,13 @@ class AppPages {
             ),
           ),
           // FLIP CARDS
+          GoRoute(
+            path: Paths.SEARCH,
+            name: Routes.SEARCH,
+            builder: (context, state) => BlocProvider(
+                create: (context) =>serviceLocator<SearchCubit>(),
+                child: const SearchView()),
+          ),
           GoRoute(
             path: Paths.MAINCATEGORIESCARDS,
             name: Routes.MAINCATEGORIESCARDS,

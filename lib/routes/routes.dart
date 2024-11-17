@@ -5,6 +5,7 @@ abstract class Routes {
 
   static const HOME = '/';
   static const MAINCATEGORIESCARDS = '/MainCategoriesCards';
+  static const SEARCH = '/Search';
   static const RESTAURANTORDERS = '/RestaurantOrders';
   static const EditFoodView = '/EditFoodView';
   static const MAINCATEGORIESTREE = '/MainCategoriesTree';
@@ -180,6 +181,7 @@ abstract class Paths {
 
   static const HOME = '/';
   static const MAINCATEGORIESCARDS = 'MainCategoriesCards';
+  static const SEARCH = 'Search';
   static const RESTAURANTORDERS = 'RestaurantOrders';
   static const EditFoodView = 'EditFoodView';
   static const MAINCATEGORIESTREE = 'MainCategoriesTree';

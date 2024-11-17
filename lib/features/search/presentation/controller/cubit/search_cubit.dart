@@ -5,10 +5,12 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/change_react.dart';
 import 'package:fourtyninehub/features/search/domain/entity/ads_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/entity/main_category_search_entity.dart';
+import 'package:fourtyninehub/features/search/domain/entity/reels_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/entity/trip_come_with_you_entity.dart';
 import 'package:fourtyninehub/features/search/domain/entity/user_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_ads_search_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_posts_search_use_case.dart';
+import 'package:fourtyninehub/features/search/domain/use_case/fetch_reel_search_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_trip_come_search_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_user_search_use_case.dart';
@@ -36,6 +38,7 @@ class SearchCubit extends Cubit<SearchState> {
   final FetchAdsSearchUseCase _fetchAdsSearchUseCase;
   final FetchPostsSearchUseCase _fetchPostsSearchUseCase;
   final FetchTripComeSearchUseCase _fetchTripComeSearchUseCase;
+  final FetchReelSearchUseCase _fetchReelSearchUseCase;
   final SharePostUseCase _sharePostUseCase;
   final DeletePostUseCase _deletePostUseCase;
   final DeleteCommentUseCase _deleteCommentUseCase;
@@ -53,7 +56,7 @@ class SearchCubit extends Cubit<SearchState> {
       this._sharePostUseCase,
       this._deletePostUseCase, this._deleteCommentUseCase,
       this._hidePostUseCase, this._postReactUseCase,
-       this._postCommentUseCase, this._replyOnCommentUseCase, this._editCommentUseCase, this._commentReactUseCase, this._fetchTripComeSearchUseCase,) : super(SearchState());
+       this._postCommentUseCase, this._replyOnCommentUseCase, this._editCommentUseCase, this._commentReactUseCase, this._fetchTripComeSearchUseCase, this._fetchReelSearchUseCase,) : super(SearchState());
 
   TextEditingController searchController = TextEditingController();
   final shareFormKey = GlobalKey<FormState>();
@@ -73,6 +76,7 @@ class SearchCubit extends Cubit<SearchState> {
     searchPagingAdsController.refresh();
     searchPagingPostsController.refresh();
     searchPagingTripComeController.refresh();
+    searchPagingReelsController.refresh();
   }
 
   initPref() async {
@@ -87,6 +91,7 @@ class SearchCubit extends Cubit<SearchState> {
     getPaginatedAdsSearch(params, 1);
     getPaginatedPostsSearch(params, 1);
     getPaginatedTripComeSearch(params, 1);
+    getPaginatedReelsSearch(params, 1);
     searchPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
       getPaginatedSearch(params, pageKey);
@@ -105,7 +110,11 @@ class SearchCubit extends Cubit<SearchState> {
     });
     searchPagingTripComeController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getPaginatedPostsSearch(params, pageKey);
+      getPaginatedTripComeSearch(params, pageKey);
+    });
+    searchPagingReelsController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getPaginatedReelsSearch(params, pageKey);
     });
   }
 
@@ -119,6 +128,8 @@ class SearchCubit extends Cubit<SearchState> {
   PagingController(firstPageKey: 1);
   final int pageSize = 10;
   final PagingController<int, TripComeWithYouEntity> searchPagingTripComeController =
+  PagingController(firstPageKey: 1);
+  final PagingController<int, ReelsSearchEntity> searchPagingReelsController =
   PagingController(firstPageKey: 1);
 
   Future<List<MainSubCategorySearchEntity>> getPaginatedSearch(
@@ -241,6 +252,36 @@ class SearchCubit extends Cubit<SearchState> {
       emit(state.copyWith(tripCome: data, status: SearchStates.success));
     });
     return tripCome;
+  }
+
+  Future<List<ReelsSearchEntity>> getPaginatedReelsSearch(SearchParams params,
+      int page) async {
+    emit(state.copyWith(status: SearchStates.loading));
+    List<ReelsSearchEntity> reels = [];
+    final response = await _fetchReelSearchUseCase.call(params);
+
+    response.fold((l) {
+      print('Errrrrrrror :$l');
+      emit(state.copyWith(failure: l, status: SearchStates.error));
+    }, (data) {
+      final isLastPage = data.length < pageSize;
+      if (page == 1) {
+        print("page == 1 $page");
+        searchPagingReelsController.itemList = [];
+      }
+      if (isLastPage) {
+        print("isLastPage = $isLastPage");
+        searchPagingReelsController.appendLastPage(data);
+      } else {
+        print("isNotLastPage = $isLastPage");
+        final nextPageKey = page + 1;
+        searchPagingReelsController.appendPage(data, nextPageKey);
+      }
+      print('Sussecc :$data');
+      reels = data;
+      emit(state.copyWith(reels: data, status: SearchStates.success));
+    });
+    return reels;
   }
 
 
