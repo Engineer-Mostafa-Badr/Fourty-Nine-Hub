@@ -59,7 +59,7 @@ class AdsSearchModel extends AdsSearchEntity {
         isApproved: json['isApproved'] ?? false,
         isPremium: json['isPremium'] ?? false,
         countryCode: json['countryCode'] ?? '',
-        price: json['price'].toDouble() ?? 0,
+        price: json['price'] ?? 0,
         status: json['status'] ?? '',
         searchText: json['searchText'] ?? '',
         subscriptionType: json['subscriptionType'] ?? '',

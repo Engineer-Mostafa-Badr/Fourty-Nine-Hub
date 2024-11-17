@@ -1057,5 +1057,6 @@ abstract class  LocaleKeys {
   static const continueUsingChatServices = 'continueUsingChatServices';
   static const mainCategory = 'mainCategory';
   static const comeWithMe = 'comeWithMe';
+  static const publishSubmitted = 'publishSubmitted';
 
 }

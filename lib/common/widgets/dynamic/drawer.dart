@@ -95,10 +95,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         icon: Icons.maps_home_work_rounded,
                         label: LocaleKeys.customPage.localize,
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const CustomPage()));
+                          context.push(Routes.CUSTOMPAGE);
                         }),
                     drawerListTile(
                         image: Assets.favorite_main_category_icon,

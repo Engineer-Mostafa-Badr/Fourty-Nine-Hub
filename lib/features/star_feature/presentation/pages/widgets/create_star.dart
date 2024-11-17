@@ -79,7 +79,7 @@ class _CreateStarState extends State<CreateStar> {
               child: BlocConsumer<StarCubit, StarState>(
                 listener: (BuildContext context, state) {
                   if(state.status ==StarStates.uploadSuccess){
-                    showSuccessMessage(context, LocaleKeys.publishSuccessfully.localize);
+                    showSuccessMessage(context, LocaleKeys.publishSubmitted.localize);
                    // context.read<CreatePostCubit>().clearSelectedImages();
                   //  context.read<StarCubit>().clearSelectedVideos();
                     setState(() {

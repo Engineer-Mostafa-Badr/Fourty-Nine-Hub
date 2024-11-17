@@ -4,6 +4,8 @@ abstract class Routes {
   Routes._();
 
   static const HOME = '/';
+  static const CUSTOMPAGE = '/CustomPage';
+  static const PAGEPREVIEW = '/CustomPage/PagePreview';
   static const MAINCATEGORIESCARDS = '/MainCategoriesCards';
   static const SEARCH = '/Search';
   static const RESTAURANTORDERS = '/RestaurantOrders';
@@ -180,6 +182,8 @@ abstract class Paths {
   Paths._();
 
   static const HOME = '/';
+  static const CUSTOMPAGE = 'CustomPage';
+  static const PAGEPREVIEW = 'PagePreview';
   static const MAINCATEGORIESCARDS = 'MainCategoriesCards';
   static const SEARCH = 'Search';
   static const RESTAURANTORDERS = 'RestaurantOrders';

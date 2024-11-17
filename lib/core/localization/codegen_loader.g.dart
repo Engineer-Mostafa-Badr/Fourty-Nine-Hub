@@ -1082,7 +1082,8 @@ class CodegenLoader extends AssetLoader{
   "forwarded": "تمت اعادة توجيهه",
   "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة",
   "mainCategory": "الفئة الرئيسية",
-  "comeWithMe": "تعال معي"
+  "comeWithMe": "تعال معي",
+  "publishSubmitted": "تم إرسال موهبتك بنجاح، انتظر موافقة الإدارة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2169,7 +2170,8 @@ static const Map<String,dynamic> en = {
   "forwarded": "Forwarded",
   "continueUsingChatServices": " , To continue using chat services",
   "mainCategory": "Main Category",
-  "comeWithMe": "Come With Me"
+  "comeWithMe": "Come With Me",
+  "publishSubmitted": "Your talent submitted successfully wait for administration approved"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

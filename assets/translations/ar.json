@@ -1068,5 +1068,7 @@
   "forwarded": "تمت اعادة توجيهه",
   "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة",
   "mainCategory" : "الفئة الرئيسية",
-  "comeWithMe" : "تعال معي"
+  "comeWithMe" : "تعال معي",
+  "publishSubmitted": "تم إرسال موهبتك بنجاح، انتظر موافقة الإدارة"
+
 }

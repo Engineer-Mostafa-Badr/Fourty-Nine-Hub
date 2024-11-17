@@ -7,7 +7,9 @@ import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_pag
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page_preview.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';
@@ -79,12 +81,7 @@ class _CustomPageState extends State<CustomPage> {
                       style: Styles.mediumText(
                           fontSize: 65.sp, fontWeight: FontWeight.w400)),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const PagePreview(),
-                      ),
-                    );
+                    context.push(Routes.PAGEPREVIEW);
                   },
                   trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
                 ),

@@ -51,7 +51,7 @@ class _ViewAllTripJoinCardBuilderState
 
                 itemBuilder: (context, item, index) {
                   return BuildItemTripCome(
-                    tripJoinCardEntity: state.tripCome![index],
+                    tripJoinCardEntity: item,
                     requestOnTap: () async {
                       await showModalBottomSheet(
                         context: context,

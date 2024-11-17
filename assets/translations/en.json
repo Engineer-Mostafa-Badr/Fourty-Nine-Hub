@@ -1086,5 +1086,6 @@
   "forwarded": "Forwarded",
   "continueUsingChatServices": " , To continue using chat services",
   "mainCategory" : "Main Category",
-  "comeWithMe" : "Come With Me"
+  "comeWithMe" : "Come With Me",
+  "publishSubmitted": "Your talent submitted successfully wait for administration approved"
 }
