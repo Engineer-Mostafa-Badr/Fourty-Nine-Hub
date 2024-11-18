@@ -56,7 +56,7 @@ class ShareTheApp extends StatelessWidget {
                         maxLines: 5,
                       ),
                       const Sizer(),
-                      _buildLinkWidget(context: context),
+                      _buildLinkWidget(context: context,referralGift:state.shareApp?.referralGift ?? 0),
                       const Sizer(),
                     ],
                   ),
@@ -68,7 +68,7 @@ class ShareTheApp extends StatelessWidget {
         ));
   }
 
-  Widget _buildLinkWidget({required BuildContext context}) {
+  Widget _buildLinkWidget({required BuildContext context,required num referralGift,}) {
     final controller = context.read<ShareAppCubit>();
     final referralId = controller.state.shareApp?.referralId ?? '';
 
@@ -84,8 +84,10 @@ class ShareTheApp extends StatelessWidget {
             });
           },
           child: BadgedLabel(
+            height: 50,
             width: double.infinity,
-            color: AppColors.GREY_NORMAL_COLOR,
+            color: AppColors.PRIMARY_COLOR,
+            style: Styles.mediumText(),
             label: referralId.isNotEmpty
                 ? 'Your Referral ID: $referralId'
                 : 'Fetching Referral ID...',
@@ -98,11 +100,12 @@ class ShareTheApp extends StatelessWidget {
           onPressed: () async {
             if (referralId.isNotEmpty) {
               await Share.share("""
-سجل للحصول على 400 جنيه مصرى كهدية ترحيبية واستخدم التطبيق واحصل على استرداد نقدي فى معاملاتك وعندما تحصل على 1000 جنية مصرى سوف تحصل عليها نقداً
+سجل للحصول على $referralGift جنيه مصرى كهدية ترحيبية واستخدم التطبيق واحصل على استرداد نقدي فى معاملاتك وعندما تحصل على 1000 جنية مصرى سوف تحصل عليها نقداً
 
 استخدم رمز الإحالة الخاص بي $referralId
 
 إذا لم يكن لديك تطبيق 49 في هاتفك المحمول ، فقم بتحميله من المتجر
+
 اندرويد
 
 https://example.com/download
@@ -138,48 +141,6 @@ https://example.com/download
     await Future.delayed(const Duration(seconds: 2)); // Simulate network delay
     return true; // Simulate successful referral
   }
-
-  // Widget _buildLinkWidget({required BuildContext context}) {
-  //   final controller = context.read<ShareAppCubit>();
-  //   final referralId = controller.state.shareApp?.referralId ?? '';
-  //
-  //   return Column(
-  //     children: [
-  //       InkWell(
-  //         onLongPress: () {
-  //           Clipboard.setData(ClipboardData(text: referralId)).then((_) {
-  //             ScaffoldMessenger.of(context).showSnackBar(
-  //               SnackBar(content: Text('Referral ID copied to clipboard!')),
-  //             );
-  //           });
-  //         },
-  //         child: BadgedLabel(
-  //           width: double.infinity,
-  //           color: AppColors.GREY_NORMAL_COLOR,
-  //           label: referralId.isNotEmpty
-  //               ? 'Your Referral ID: $referralId'
-  //               : 'Fetching Referral ID...',
-  //         ),
-  //       ),
-  //       const Sizer(),
-  //       AppButton(
-  //         color: AppColors.AUTH_CONTAINER_COLOR,
-  //         label: 'Share The App',
-  //         onPressed: () async {
-  //           if (referralId.isNotEmpty) {
-  //             final shareText =
-  //                 ' سجل للحصول على 400 جنيه مصرى كهدية ترحيبية واستخدم التطبيق واحصل على استرداد نقدي فى معاملاتك وعندما تحصل على 1000 جنية مصرى سوف تحصل عليها نقداً. Use my referral code$referralId" and join now: https://49dev.com';
-  //             await Share.share(shareText);
-  //           } else {
-  //             ScaffoldMessenger.of(context).showSnackBar(
-  //               const SnackBar(content: Text('Referral ID not available.')),
-  //             );
-  //           }
-  //         },
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget _buildStatisticsWidget({
     required BuildContext context,
@@ -232,117 +193,4 @@ https://example.com/download
     );
   }
 
-// Widget _buildShareChannelsWidget() {
-//   return Container(
-//     padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10),
-//     margin: const EdgeInsets.symmetric(
-//       horizontal: 20,
-//     ),
-//     decoration: BoxDecoration(
-//         color: Colors.white, borderRadius: BorderRadius.circular(10)),
-//     child: Row(
-//       children: [
-//         Expanded(
-//             child: Center(
-//           child: _buildShareChannelItem(
-//               label: 'Facebook',
-//               icon: FontAwesomeIcons.facebook,
-//               color: Colors.blue,
-//               onTap: () {}),
-//         )),
-//         Expanded(
-//             child: Center(
-//           child: _buildShareChannelItem(
-//               label: 'Instagram',
-//               icon: FontAwesomeIcons.instagram,
-//               color: Colors.purple,
-//               onTap: () {}),
-//         )),
-//         Expanded(
-//             child: Center(
-//           child: _buildShareChannelItem(
-//               label: 'WhatsApp',
-//               icon: FontAwesomeIcons.whatsapp,
-//               color: Colors.green,
-//               onTap: () {}),
-//         )),
-//         Expanded(
-//             child: Center(
-//           child: _buildShareChannelItem(
-//               label: 'Twitter',
-//               icon: FontAwesomeIcons.twitter,
-//               color: Colors.blue,
-//               onTap: () {}),
-//         )),
-//       ],
-//     ),
-//   );
-// }
-//
-// Widget _buildShareChannelItem(
-//     {required String label,
-//     required IconData icon,
-//     required Color color,
-//     required Function onTap}) {
-//   return InkWell(
-//     onTap: () => onTap(),
-//     child: Container(
-//       padding: const EdgeInsets.all(10),
-//       decoration: BoxDecoration(
-//         color: color,
-//         borderRadius: BorderRadius.circular(5),
-//       ),
-//       child: Icon(
-//         icon,
-//         color: Colors.white,
-//       ),
-//     ),
-//   );
-// }
-
-// Widget _buildHistoryWidget() {
-//   return Column(
-//     children: [
-//       Row(
-//         children: [
-//           Expanded(
-//               child: Label(
-//             text: 'Joined At',
-//             style: Styles.headerText(),
-//           )),
-//           TextButton(onPressed: () {}, child: const Label(text: 'See All'))
-//         ],
-//       ),
-//       ListView.separated(
-//           shrinkWrap: true,
-//           physics: const NeverScrollableScrollPhysics(),
-//           itemBuilder: (context, index) => _buildHistoryItemWidget(),
-//           separatorBuilder: (context, index) => const Sizer(),
-//           itemCount: 10),
-//     ],
-//   );
-// }
-//
-// Widget _buildHistoryItemWidget() {
-//   return Row(
-//     children: [
-//       const ProfileImage(
-//         accountId: 0,
-//         userId: '',
-//       ),
-//       const Sizer(),
-//       Expanded(
-//           child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Label(
-//             text: 'Farouk Shahin',
-//             style: Styles.mediumText(fontWeight: FontWeight.bold),
-//           ),
-//           const Label(text: 'Joined At: 2024-05-29')
-//         ],
-//       ))
-//     ],
-//   );
-// }
 }
