@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
@@ -12,7 +13,9 @@ import 'package:fourtyninehub/features/authentication/domain/entities/user_entit
 import 'package:fourtyninehub/features/authentication/domain/use_cases/attach_token_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/shared/constants.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 import '../../../../../common/functions/global/upload_file.dart';
@@ -58,6 +61,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   Future<Either<Failure, UserEntity>?> getUser() async {
     if (!isTokenAttached) return null;
     final result = await _getUserUseCase(const NoParams());
+    SharedWebSocket.instance.connect(token: (await CacheManager.getAccessToken())!);
     emit(
       result.fold(
         (failure) {
@@ -66,8 +70,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
             failure: failure,
           );
         },
-        (user) {
-          serviceLocator<Socket>().connect();
+        (user){
           log("user is :${user.id}");
           return state.copyWith(status: StateStatus.success, data: user);
         },
@@ -108,7 +111,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     getUser();
   }
 
-  void logout() async {
+  void logout(BuildContext context) async {
     // cacheService.setLogin(false);
     // _attachTokenUseCase(null);
     // _saveTokensUseCase(null);
@@ -131,8 +134,9 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
               followersCount: null,
               followingCount: null,
               wallet: null)));
-      await DI.reset();
-      await DI.execute();
+      // await DI.reset();
+      // await DI.execute();
+      SharedWebSocket.instance.disconnect();
     });
     // if(result == true){
     //   emit(state.copyWith(status: StateStatus.success,data: null,token: null));

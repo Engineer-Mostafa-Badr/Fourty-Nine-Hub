@@ -23,6 +23,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/pin_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unpin_chat_use_case.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -81,8 +82,7 @@ class ChatsCubit extends Cubit<ChatsState> {
     _listenToNewChat();
     _listenToTyping();
     _listenToRecording();
-    serviceLocator<Socket>().connect();
-    serviceLocator<Socket>().on("error", (date) {
+    SharedWebSocket.instance.socket!.on("error", (date) {
       log("error from socket : $date");
     });
   }
@@ -280,9 +280,9 @@ class ChatsCubit extends Cubit<ChatsState> {
   @override
   Future<void> close() {
     _stopListenToMessagesUseCase(const NoParams());
-    serviceLocator<Socket>().off(SocketIOListeners.typingMessage);
-    serviceLocator<Socket>().off(SocketIOListeners.recordingMessage);
-    serviceLocator<Socket>().off(SocketIOListeners.creatingNewChat);
+    SharedWebSocket.instance.socket!.off(SocketIOListeners.typingMessage);
+    SharedWebSocket.instance.socket!.off(SocketIOListeners.recordingMessage);
+    SharedWebSocket.instance.socket!.off(SocketIOListeners.creatingNewChat);
     return super.close();
   }
 

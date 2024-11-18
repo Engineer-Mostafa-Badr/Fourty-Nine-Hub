@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entiti
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_anonymous_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_normal_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -63,9 +64,9 @@ abstract class ChatsRemoteDataSource {
 
 class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
   final ApiConsumer _apiConsumer;
-  final Socket _socket;
+  // final Socket _socket;
 
-  ChatsRemoteDataSourceImplementation(this._apiConsumer, this._socket);
+  ChatsRemoteDataSourceImplementation(this._apiConsumer);
 
   @override
   Future<Either<Failure, List<ChatEntity>>> getChats(
@@ -183,9 +184,9 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
   @override
   void listenToNewChats(Function(ChatEntity) params) {
     try {
-      _socket.connect();
+      // SharedWebSocket.instance.socket!.connect();
 
-      _socket.on(SocketIOListeners.creatingNewChat, (data) {
+      SharedWebSocket.instance.socket!.on(SocketIOListeners.creatingNewChat, (data) {
         log("decoded data : \n$data");
         try {
           final decodedData =

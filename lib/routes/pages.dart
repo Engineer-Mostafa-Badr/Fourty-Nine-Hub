@@ -1883,10 +1883,12 @@ class AppPages {
             builder: (context, state) {
               return MultiBlocProvider(providers: [
                 BlocProvider<GetAllTripsCubit>(
-                  create: (context) => GetAllTripsCubit(serviceLocator()),
+                  create: (context) => GetAllTripsCubit(),
                 ),
                 BlocProvider<GetCurrencyCubit>(
-                  create: (context) => GetCurrencyCubit(serviceLocator()),
+                  create: (context) => GetCurrencyCubit(
+                    serviceLocator(),
+                  ),
                 ),
                 BlocProvider<JoinTripCarPoolCubit>(
                   create: (context) => JoinTripCarPoolCubit(
@@ -1913,7 +1915,7 @@ class AppPages {
                       getPriceCarpoolUsecase: serviceLocator()),
                 ),
                 BlocProvider<GetAllTripsCubit>(
-                  create: (context) => GetAllTripsCubit(serviceLocator()),
+                  create: (context) => GetAllTripsCubit(),
                 ),
                 BlocProvider<CreateCarPoolCubit>(
                   create: (context) => CreateCarPoolCubit(
@@ -1924,7 +1926,7 @@ class AppPages {
                   create: (context) => MapBoxDestCubit(),
                 ),
                 BlocProvider<GetAllTripsCubit>(
-                  create: (context) => GetAllTripsCubit(serviceLocator()),
+                  create: (context) => GetAllTripsCubit(),
                 ),
                 BlocProvider<GetCurrencyCubit>(
                   create: (context) => GetCurrencyCubit(

@@ -3,22 +3,23 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/get_all_trips_entity.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_state.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class GetAllTripsCubit extends Cubit<GetAllTripsState> {
-  final Socket _socket;
+  // final Socket SharedWebSocket.instance.socket!;
 
-  GetAllTripsCubit(this._socket) : super(GetAllTripsInitial()) {
+  GetAllTripsCubit() : super(GetAllTripsInitial()) {
     _initializeSocketListeners();
   }
 
   void _initializeSocketListeners() {
-    if (!_socket.connected) {
-      _socket.connect();
+    if (!SharedWebSocket.instance.socket!.connected) {
+      SharedWebSocket.instance.socket!.connect();
       print("Socket connection initiated...");
     }
 
-    _socket.on('carpool:getAllTrip', (data) {
+    SharedWebSocket.instance.socket!.on('carpool:getAllTrip', (data) {
       print("Data received from server: $data");
 
       try {
@@ -29,20 +30,20 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
       }
     });
 
-    _socket.on('connect_error', (error) {
+    SharedWebSocket.instance.socket!.on('connect_error', (error) {
       print("there is no trips try again");
       emit(GetAllTripsFailure('there is no trips try again'));
     });
 
-    _socket.on('disconnect', (data) {
+    SharedWebSocket.instance.socket!.on('disconnect', (data) {
       print('Socket disconnected: $data');
     });
   }
 
   void fetchAllCarpoolTrips() {
-    _socket.connect();
+    // SharedWebSocket.instance.socket!.connect();
     emit(GetAllTripsLoading());
-    _socket.emit('carpool:getAllTrip');
+    SharedWebSocket.instance.socket!.emit('carpool:getAllTrip');
   }
 
   List<CarpoolTripParam> _parseTrips(dynamic data) {
@@ -120,7 +121,7 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
 
   @override
   Future<void> close() {
-    _socket.dispose();
+    // SharedWebSocket.instance.socket!.dispose();
     return super.close();
   }
 }

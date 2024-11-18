@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:go_router/go_router.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -24,7 +25,7 @@ class LogoutWidget extends StatefulWidget {
 }
 
 class _LogoutWidgetState extends State<LogoutWidget> {
-  final Socket _socket = serviceLocator<Socket>();
+  // final Socket _socket = serviceLocator<Socket>();
 
   @override
   Widget build(BuildContext context) {
@@ -58,12 +59,11 @@ class _LogoutWidgetState extends State<LogoutWidget> {
                 label: LocaleKeys.logout.localize,
                 color: AppColors.AUTH_CONTAINER_COLOR,
                 onPressed: () {
-                  controller.logout();
+                  controller.logout(context);
                   //Phoenix.rebirth(context);
                   // setState(() {});
                   // context.pop();
-                  _socket.connect();
-                  _socket.emit(
+                  SharedWebSocket.instance.socket!.emit(
                     'disconnectMe',
                   );
                   context.pop();

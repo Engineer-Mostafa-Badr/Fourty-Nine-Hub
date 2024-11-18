@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/offer_data_m
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rider_register_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_response_model/trip_response_model.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 // import 'package:mapbox_gl/mapbox_gl.dart';
 
 class ReiderRequestRepository {
@@ -42,7 +43,7 @@ class ReiderRequestRepository {
 
   Future<Either<Failure, Map<String, dynamic>>> request(
       {required TripRequestModel model}) async {
-    // await socket.socket.connect();
+    // await SharedWebSocket.instance.socket!.connect();
     // tripSoketOn();
     return dataSource.requestTrip(model: model);
   }
@@ -53,7 +54,7 @@ class ReiderRequestRepository {
       "address":
           "٧٣ شارع أحمد عيسى من، شجرة مريم، قسم المطرية، محافظة  4532331، مصر"
     });
-    socket.socket.io.emit("subcategory:driver", [data]);
+    SharedWebSocket.instance.socket!.io.emit("subcategory:driver", [data]);
   }
 
   updateDriverLocationEmit() {
@@ -63,8 +64,8 @@ class ReiderRequestRepository {
       "subcategoryId": "string",
     });
 
-    socket.socket.io.emit("driver:location", [data]);
-    socket.socket.io.on(
+    SharedWebSocket.instance.socket!.io.emit("driver:location", [data]);
+    SharedWebSocket.instance.socket!.io.on(
       "driver:location",
       (data) {
         log("-----------------------------------------------------",
@@ -77,7 +78,7 @@ class ReiderRequestRepository {
   }
 
   updateDriverLocationOn() {
-    socket.socket.io.on(
+    SharedWebSocket.instance.socket!.io.on(
       "driver:location",
       (data) {
         log(data.toString());
@@ -95,12 +96,12 @@ class ReiderRequestRepository {
       "subcategoryId": "62c8ba9f8e28a58a3edf57eb",
       "tripId": "66f0cb0681573362b3c41e18"
     });
-    socket.socket.emit("drivers:nearBy", [data]);
+    SharedWebSocket.instance.socket!.emit("drivers:nearBy", [data]);
   }
 
 //   RequestSocketResponse nearbyDriversOn() {
 //     Map<String, dynamic> response = {};
-//     socket.socket.on(
+//     SharedWebSocket.instance.socket!.on(
 //       "drivers:near",
 //       (data) {
 //         log(jsonDecode(data).toString(),
@@ -161,7 +162,7 @@ class ReiderRequestRepository {
 //   }
 
   riseFare({required String offer, required String tripId}) {
-    socket.socket
+    SharedWebSocket.instance.socket!
         .emit("trip:updatePrice", jsonEncode({"offer": offer, tripId: tripId}));
   }
 
@@ -177,7 +178,7 @@ class ReiderRequestRepository {
 
   void tripSoketOn(Function(OfferDataModel data) onData) {
     log("llllllllllllllllllllllllllllllllllllllllllllllllllll");
-    socket.socket.on(
+    SharedWebSocket.instance.socket!.on(
       "Ride:sendOffer",
       (data) {
         OfferDataModel model = OfferDataModel.fromJson(jsonDecode(data));
@@ -193,8 +194,8 @@ class ReiderRequestRepository {
 
   List<TripResponseModel> getAllTripRider() {
     List<TripResponseModel> list = [];
-    socket.socket.emit("Ride:getAllTrip");
-    socket.socket.on(
+    SharedWebSocket.instance.socket!.emit("Ride:getAllTrip");
+    SharedWebSocket.instance.socket!.on(
       "Ride:getAllTrip",
       (data) {
         log(data.toString(), name: "lksdjfkdjjdjdjdjdjdjdjdjdjjddddd");

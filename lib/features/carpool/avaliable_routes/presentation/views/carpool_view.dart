@@ -25,10 +25,10 @@ class CarPoolView extends StatelessWidget {
           ),
         ),
         body: BlocProvider(
-          create: (context) => GetAllTripsCubit(serviceLocator()),
+          create: (context) => GetAllTripsCubit(),
           child: BlocProvider(
             create: (context) =>
-                GetAvailableTripsForDriversCubit(serviceLocator()),
+                GetAvailableTripsForDriversCubit(),
             child: const CarPoolBody(),
           ),
         ),

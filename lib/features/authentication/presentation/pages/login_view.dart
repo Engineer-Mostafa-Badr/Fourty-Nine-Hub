@@ -239,7 +239,7 @@ class _LoginViewState extends State<LoginView> {
                               labelStyle: TextStyle(
                                   fontSize: 35.sp,
                                   color: AppColors.AUTH_CONTAINER_COLOR),
-                              onPressed: () => loginCubit.login(formKey),
+                              onPressed: () => loginCubit.login(formKey, context),
                             ),
                     ],
                   )),

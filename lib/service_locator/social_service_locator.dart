@@ -52,9 +52,10 @@ import 'package:get_it/get_it.dart';
 class SocialServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     // ---------------------------------- data sources ----------------------------------
-    serviceLocator.registerLazySingleton<ChatsRemoteDataSource>(() =>
-        ChatsRemoteDataSourceImplementation(
-            serviceLocator(), serviceLocator()));
+    serviceLocator.registerLazySingleton<ChatsRemoteDataSource>(
+        () => ChatsRemoteDataSourceImplementation(
+              serviceLocator(),
+            ));
     // serviceLocator.registerLazySingleton<MessagesRemoteDataSource>(() =>
     //     MessagesRemoteDataSourceImplementation(
     //         serviceLocator(), serviceLocator()));

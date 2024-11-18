@@ -9,8 +9,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/shared/constants.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 import '../../../domain/use_cases/apple_sign_in_usecase.dart';
 import '../../../domain/use_cases/login_use_case.dart';
 import '../../../domain/use_cases/save_tokens_use_case.dart';
@@ -37,7 +40,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   String? token;
 
-  Future<void> login(GlobalKey<FormState> formKey) async {
+  Future<void> login(GlobalKey<FormState> formKey, BuildContext context) async {
     String? token = await FirebaseMessaging.instance.getToken();
     if (formKey.currentState!.validate()) {
       emit(LoginLoading());
@@ -47,7 +50,7 @@ class LoginCubit extends Cubit<LoginState> {
           password: passwordTextController.text.trim(),
           token: token!,
         ),
-      );
+    );
 
       result.fold(
         (failure) => emit(LoginError(failure)),
@@ -56,10 +59,14 @@ class LoginCubit extends Cubit<LoginState> {
           // _saveTokens(userToken); // Ensure tokens are saved before proceeding
           // pr('state token is  ${userToken}');
           log("Token logout ${await CacheManager.getAccessToken()}");
-          CacheManager.saveAccessToken(userToken.accessToken);
-          CacheManager.saveRefreshToken(userToken.refreshToken);
-          await DI.reset();
-          await DI.execute(token: await CacheManager.getAccessToken());
+          await CacheManager.saveAccessToken(userToken.accessToken);
+          await CacheManager.saveRefreshToken(userToken.refreshToken);
+
+          // await DI.reset();
+          // await DI.execute(token: await CacheManager.getAccessToken());
+          // serviceLocator<Socket>().connect();
+          // ignore: use_build_context_synchronously
+          // SharedWebSocket.instance.connect(token: userToken.accessToken);
           emit(LoginSuccess(userTokensEntity: userToken));
         },
       );

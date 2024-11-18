@@ -41,6 +41,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/unpin_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -118,7 +119,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     _listenToClearChat();
     _listenToPinMessage();
     _listenToUnPinMessage();
-    serviceLocator<Socket>().emit('Chat:getRooms');
+    SharedWebSocket.instance.socket!.emit('Chat:getRooms');
   }
 
   Future<void> init({required ChatEntity selectedChat}) async {
@@ -605,11 +606,11 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   Future<void> close() {
     _stopListenToSeenMessagesUseCase(const NoParams());
     _stopListenToDeliveredMessagesUseCase(const NoParams());
-    serviceLocator<Socket>().off(SocketIOListeners.setRecordAsListened);
-    serviceLocator<Socket>().off(SocketIOListeners.oneTimeMessageSeen);
-    serviceLocator<Socket>().off(SocketIOListeners.clearChat);
-    serviceLocator<Socket>().off(SocketIOListeners.pinMessage);
-    serviceLocator<Socket>().off(SocketIOListeners.unPinMessage);
+    SharedWebSocket.instance.socket!.off(SocketIOListeners.setRecordAsListened);
+    SharedWebSocket.instance.socket!.off(SocketIOListeners.oneTimeMessageSeen);
+    SharedWebSocket.instance.socket!.off(SocketIOListeners.clearChat);
+    SharedWebSocket.instance.socket!.off(SocketIOListeners.pinMessage);
+    SharedWebSocket.instance.socket!.off(SocketIOListeners.unPinMessage);
     return super.close();
   }
 }
