@@ -1059,5 +1059,6 @@ abstract class  LocaleKeys {
   static const mainCategory = 'mainCategory';
   static const comeWithMe = 'comeWithMe';
   static const publishSubmitted = 'publishSubmitted';
+  static const noFavouriteAds = 'noFavouriteAds';
 
 }

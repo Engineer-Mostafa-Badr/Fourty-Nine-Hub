@@ -6,7 +6,6 @@ import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/my_adds_cubit.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/error/failure.dart';
@@ -24,30 +23,32 @@ class MyAddsView extends StatefulWidget {
 class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late ScrollController _scrollController;
+  late MyAddsCubit _myAddsCubit;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     _scrollController = ScrollController();
+    _myAddsCubit = context.read<MyAddsCubit>();
 
-    // Listen for tab changes
+    // Fetch initial data for the first tab
+    _myAddsCubit.getMyTripJoin();
+
+    // Listen for tab changes and fetch data for the selected tab
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
-        _scrollToSelectedTab(_tabController.index);
+        _fetchTabData(_tabController.index);
       }
     });
   }
 
-  void _scrollToSelectedTab(int index) {
-    // The width of each tab (adjust as needed based on the UI)
-    double tabWidth = 100.w; // Example width, adjust based on your layout
-    // Scroll to the selected tab
-    _scrollController.animateTo(
-      tabWidth * index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
+  void _fetchTabData(int index) {
+    if (index == 0) {
+      _myAddsCubit.getMyTripJoin();
+    } else if (index == 1) {
+      _myAddsCubit.getMyOtherAds();
+    }
   }
 
   @override
@@ -60,71 +61,50 @@ class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 2,
       child: Scaffold(
-        appBar: BackAppBar(
-          label: LocaleKeys.myAds.localize,
-        ),
+        appBar: BackAppBar(label: LocaleKeys.myAds.localize),
         body: BlocConsumer<MyAddsCubit, MyAddsState>(
           listener: (context, state) {
             if (state.status == MyAddsStates.error && state.failure != null) {
               showErrorMessage(
                 context,
-                getFailureMessage(
-                  state.failure!,
-                  context,
-                ),
+                getFailureMessage(state.failure!, context),
               );
             }
           },
           builder: (context, state) {
             return RefreshIndicator(
-              onRefresh: () async => context.read<MyAddsCubit>().loadData(),
+              onRefresh: () async {
+                _fetchTabData(_tabController.index);
+              },
               child: Column(
                 children: [
-                  SingleChildScrollView(
-                    controller: _scrollController,
-                    scrollDirection: Axis.horizontal,
-                    child: TabBar(
-                      // padding: EdgeInsets.zero,
-                      // labelPadding:
-                      //     EdgeInsetsDirectional.symmetric(horizontal: 20.w),
-                      tabAlignment: TabAlignment.start,
-                      controller: _tabController,
-                      onTap: (i) {
-                        i == 0
-                            ? context.read<MyAddsCubit>().getMyAuctions()
-                            : i == 1
-                                ? context.read<MyAddsCubit>().getMyInstallment()
-                                : i == 2
-                                    ? context.read<MyAddsCubit>().getMyTripJoin()
-                                    : i == 3
-                                        ? context.read<MyAddsCubit>().getMyOtherAds()
-                                        : null;
-                      },
-                      isScrollable: true,
-
-                      tabs: [
-                        Tab(text: LocaleKeys.auction.localize),
-                        Tab(text: LocaleKeys.installments.localize),
-                        Tab(text: LocaleKeys.tripJoin.localize),
-                        Tab(text:  LocaleKeys.Other.localize),
-                      ],
-                    ),
+                  TabBar(
+                    controller: _tabController,
+                    onTap: (index) {
+                      // Explicitly fetch data only if the user taps the tab
+                      _fetchTabData(index);
+                    },
+                    isScrollable: false,
+                    tabs: [
+                      Tab(text: LocaleKeys.tripJoin.localize),
+                      Tab(text: LocaleKeys.Other.localize),
+                    ],
                   ),
                   Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TabBarView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TabBarView(
                         controller: _tabController,
                         physics: const NeverScrollableScrollPhysics(),
                         children: [
-                          _buildMyAuctionsWidget(),
-                          _buildMyInstallmentsWidget(),
                           _buildMyPickMeTripsWidget(),
                           _buildMyAdsWidget(),
-                        ]),
-                  )),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             );
@@ -134,123 +114,44 @@ class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateM
     );
   }
 
-  Widget _buildMyInstallmentsWidget() {
-    return BlocConsumer<MyAddsCubit, MyAddsState>(listener: (BuildContext context, MyAddsState state) {
-      if (state.status == MyAddsStates.success) {
-        showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
-      }
-    }, builder: (context, state) {
-      if (state.status == MyAddsStates.initState) {
-        if (state.myInstallments!.isEmpty) {
+  Widget _buildMyAdsWidget() {
+    return BlocBuilder<MyAddsCubit, MyAddsState>(
+      builder: (context, state) {
+        if (state.status == MyAddsStates.loading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state.status == MyAddsStates.error) {
+          return const Center(child: Text('Error loading data'));
+        } else if (state.myOtherAds?.isEmpty ?? true) {
           return const EmptyPage();
         }
-        return RefreshIndicator(
-          onRefresh: () async => context.read<MyAddsCubit>().getMyInstallment(),
-          child: ListView.separated(
-            physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: state.myInstallments?.length ?? 0,
-              separatorBuilder: (context, index) => const Sizer(),
-              itemBuilder: (context, index) {
-                return BuildItemAuctionCard(
-                  item: state.myInstallments![index],
-                  // onDelete: (String id) => controller.cancelAd(id: id),
-                );
-              }),
+        return ListView.separated(
+          itemCount: state.myOtherAds!.length,
+          separatorBuilder: (context, index) => const Sizer(),
+          itemBuilder: (context, index) {
+            return BuildItemAuctionCard(item: state.myOtherAds![index]);
+          },
         );
-      } else {
-        return const Center(child: CircularProgressIndicator());
-      }
-    });
-  }
-
-  Widget _buildMyAuctionsWidget() {
-    return BlocProvider<MyAddsCubit>(
-      create: (BuildContext context) =>serviceLocator()..getMyAuctions(),
-      child: BlocConsumer<MyAddsCubit, MyAddsState>(listener: (BuildContext context, MyAddsState state) {
-        if (state.status == MyAddsStates.success) {
-          showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
-        }
-      }, builder: (context, state) {
-        if (state.status == MyAddsStates.initState) {
-          if (state.myAuctions?.isEmpty ?? true) {
-            return const EmptyPage();
-          }
-          return RefreshIndicator(
-            onRefresh: () async => context.read<MyAddsCubit>().getMyAuctions(),
-            child: ListView.separated(
-              physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: state.myAuctions?.length ?? 0,
-                separatorBuilder: (context, index) => const Sizer(),
-                itemBuilder: (context, index) {
-                  return BuildItemAuctionCard(
-                    item: state.myAuctions![index],
-                    // onDelete: (String id) => controller.cancelAd(id: id),
-                  );
-                }),
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      }),
+      },
     );
   }
 
-  Widget _buildMyAdsWidget() {
-    return BlocConsumer<MyAddsCubit, MyAddsState>(listener: (BuildContext context, MyAddsState state) {
-      if (state.status == MyAddsStates.success) {
-        showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
-      }
-    }, builder: (context, state) {
-      if (state.status == MyAddsStates.initState) {
-        if (state.myOtherAds?.isEmpty ?? true) {
+  Widget _buildMyPickMeTripsWidget() {
+    return BlocBuilder<MyAddsCubit, MyAddsState>(
+      builder: (context, state) {
+        if (state.status == MyAddsStates.loading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state.status == MyAddsStates.error) {
+          return const Center(child: Text('Error loading data'));
+        } else if (state.tripJoin?.docs.isEmpty ?? true) {
           return const EmptyPage();
         }
-        return RefreshIndicator(
-          onRefresh: () async => context.read<MyAddsCubit>().getMyOtherAds(),
-          child: ListView.separated(
-            physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: state.myOtherAds?.length ?? 0,
-              separatorBuilder: (context, index) => const Sizer(),
-              itemBuilder: (context, index) {
-                return BuildItemAuctionCard(
-                  item: state.myOtherAds![index],
-                  // onDelete: (String id) => controller.cancelAd(id: id),
-                );
-              }),
+        return ListView.separated(
+          itemCount: state.tripJoin!.docs.length,
+          separatorBuilder: (context, index) => const Sizer(),
+          itemBuilder: (context, index) {
+            return MyAdsTripJoin(tripJoinCardEntity: state.tripJoin!.docs[index]);
+          },
         );
-      } else {
-        return const Center(child: CircularProgressIndicator());
-      }
-    });
-  }
-
-  Widget _buildMyPickMeTripsWidget() {
-    return BlocConsumer<MyAddsCubit, MyAddsState>(
-      listener: (BuildContext context, MyAddsState state) {
-        if (state.status == MyAddsStates.success) {
-          showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
-        }
-      },
-      builder: (context, state) {
-        if (state.status == MyAddsStates.initState) {
-          if (state.tripJoin!.docs.isEmpty) {
-            return const EmptyPage();
-          }
-          return RefreshIndicator(
-            onRefresh: () async => context.read<MyAddsCubit>().getMyTripJoin(),
-            child: ListView.separated(
-              physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: state.tripJoin?.docs.length ?? 0,
-                separatorBuilder: (context, index) => const Sizer(),
-                itemBuilder: (context, index) {
-                  return MyAdsTripJoin(
-                    tripJoinCardEntity: state.tripJoin!.docs[index],
-                  );
-                }),
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
       },
     );
   }
