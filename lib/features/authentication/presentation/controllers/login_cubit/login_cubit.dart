@@ -59,8 +59,8 @@ class LoginCubit extends Cubit<LoginState> {
           log("Token logout ${await CacheManager.getAccessToken()}");
           CacheManager.saveAccessToken(userToken.accessToken);
           CacheManager.saveRefreshToken(userToken.refreshToken);
-          await DI.reset();
-          await DI.execute(token: await CacheManager.getAccessToken());
+          // await DI.reset();
+          // await DI.execute(token: await CacheManager.getAccessToken());
           emit(LoginSuccess(userTokensEntity: userToken));
         },
       );
