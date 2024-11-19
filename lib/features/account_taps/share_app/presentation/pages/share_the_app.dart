@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/account_taps/share_app/presentation/cubit/share_app_state.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
@@ -22,112 +27,127 @@ class ShareTheApp extends StatelessWidget {
         appBar: const BackAppBar(
           label: 'Share App',
         ),
-        body: Padding(
-          padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 30.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildStatisticsWidget(context: context),
-              const Sizer(),
-              Expanded(child: Image.asset(Assets.share)),
-              const Sizer(),
-              Label(
-                text: 'Recommend Us',
-                style: Styles.headerText(),
-              ),
-              const Sizer(),
-              const Label(
-                text:
-                    'Share code with your friends and get 50 EGP for every one',
-                maxLines: 5,
-              ),
-              const Sizer(),
-              _buildLinkWidget(context: context),
-              const Sizer(),
-              // Stack(
-              //   children: [
-              //     Positioned.fill(
-              //       child: Column(
-              //         children: [
-              //           Expanded(
-              //               child: Container(
-              //             decoration: BoxDecoration(
-              //                 color: Theme.of(context).scaffoldBackgroundColor),
-              //           )),
-              //           Expanded(
-              //               child: Container(
-              //             decoration: BoxDecoration(
-              //                 color: Theme.of(context).scaffoldBackgroundColor),
-              //           )),
-              //         ],
-              //       ),
-              //     ),
-              //     Positioned.fill(
-              //         child: Center(
-              //       child: Column(
-              //         mainAxisAlignment: MainAxisAlignment.center,
-              //         children: [
-              //           Padding(
-              //             padding: const EdgeInsets.symmetric(
-              //               horizontal: 20,
-              //             ),
-              //             child: Card(
-              //               shadowColor: Theme.of(context).primaryColor,
-              //               elevation: 10,
-              //               child: Container(
-              //                 padding: const EdgeInsets.all(20),
-              //                 decoration: BoxDecoration(
-              //                   color: Theme.of(context).scaffoldBackgroundColor,
-              //                   borderRadius: BorderRadius.circular(10),
-              //                   boxShadow: [
-              //                     BoxShadow(color: Theme.of(context).primaryColor)
-              //                   ],
-              //                 ),
-              //                 child: Column(
-              //                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //                   children: [
-              //                     Image.asset(Assets.share),
-              //                     const Sizer(),
-              //                     _buildLinkWidget(context: context),
-              //                     const Sizer(),
-              //
-              //                   ],
-              //                 ),
-              //               ),
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //     ))
-              //   ],
-              // ),
-            ],
+        body: BlocProvider<ShareAppCubit>(
+          create: (BuildContext context) => serviceLocator()..shareApp(),
+          child: BlocBuilder<ShareAppCubit, ShareAppState>(
+            builder: (BuildContext context, state) {
+              if (state.status == ShareAppStates.success) {
+                return Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 20.h, horizontal: 30.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildStatisticsWidget(
+                        context: context,
+                        user: state.shareApp?.userCount ?? 0,
+                        balance: state.shareApp?.shareBalance ?? 0,
+                      ),
+                      const Sizer(),
+                      Expanded(child: Image.asset(Assets.share)),
+                      const Sizer(),
+                      Label(
+                        text: 'Recommend Us',
+                        style: Styles.headerText(),
+                      ),
+                      const Sizer(),
+                      const Label(
+                        text:
+                            'Share code with your friends and get 50 EGP for every one',
+                        maxLines: 5,
+                      ),
+                      const Sizer(),
+                      _buildLinkWidget(context: context,referralGift:state.shareApp?.referralGift ?? 0),
+                      const Sizer(),
+                    ],
+                  ),
+                );
+              }
+              return const Center(child: CircularProgressIndicator());
+            },
           ),
         ));
   }
 
-  Widget _buildLinkWidget({required BuildContext context}) {
+  Widget _buildLinkWidget({required BuildContext context,required num referralGift,}) {
     final controller = context.read<ShareAppCubit>();
+    final referralId = controller.state.shareApp?.referralId ?? '';
+
     return Column(
       children: [
         InkWell(
-          onLongPress: () => controller.copyToClipboard(context),
+          onLongPress: () {
+            Clipboard.setData(ClipboardData(text: referralId)).then((_) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    content: Text('Referral ID copied to clipboard!')),
+              );
+            });
+          },
           child: BadgedLabel(
-              // height: kToolbarHeight,
-              width: double.infinity,
-              color: AppColors.GREY_NORMAL_COLOR,
-              label: controller.link),
+            height: 50,
+            width: double.infinity,
+            color: AppColors.PRIMARY_COLOR,
+            style: Styles.mediumText(),
+            label: referralId.isNotEmpty
+                ? 'Your Referral ID: $referralId'
+                : 'Fetching Referral ID...',
+          ),
         ),
         const Sizer(),
         AppButton(
-            color: AppColors.AUTH_CONTAINER_COLOR,
-            label: 'Share The App',
-            onPressed: () => controller.shareTheApp()),
+          color: AppColors.AUTH_CONTAINER_COLOR,
+          label: 'Share The App',
+          onPressed: () async {
+            if (referralId.isNotEmpty) {
+              await Share.share("""
+سجل للحصول على $referralGift جنيه مصرى كهدية ترحيبية واستخدم التطبيق واحصل على استرداد نقدي فى معاملاتك وعندما تحصل على 1000 جنية مصرى سوف تحصل عليها نقداً
+
+استخدم رمز الإحالة الخاص بي $referralId
+
+إذا لم يكن لديك تطبيق 49 في هاتفك المحمول ، فقم بتحميله من المتجر
+
+اندرويد
+
+https://example.com/download
+ايفون
+
+
+https://example.com/download
+""", subject: '49Hub');
+
+              // Simulate backend call to fetch updated user count and balance
+              bool isReferredUserDownloaded = await simulateReferralDownload();
+              if (isReferredUserDownloaded) {
+                // controller.updateShareStatistics(); // Call your cubit method to update statistics
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content:
+                          Text('Referral was successful! Statistics updated.')),
+                );
+              }
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Referral ID not available.')),
+              );
+            }
+          },
+        ),
       ],
     );
   }
 
-  Widget _buildStatisticsWidget({required BuildContext context}) {
+// Example simulated backend call (replace with your actual API call)
+  Future<bool> simulateReferralDownload() async {
+    await Future.delayed(const Duration(seconds: 2)); // Simulate network delay
+    return true; // Simulate successful referral
+  }
+
+  Widget _buildStatisticsWidget({
+    required BuildContext context,
+    required num user,
+    required num balance,
+  }) {
     return InkWell(
       onTap: () => context.push(Routes.WALLET),
       child: Row(
@@ -136,14 +156,14 @@ class ShareTheApp extends StatelessWidget {
             child: _buildStatisticsItem(
                 color: AppColors.PRIMARY_COLOR,
                 title: 'Users',
-                subTitle: '30 user'),
+                subTitle: '$user user'),
           ),
           const Sizer(),
           Expanded(
             child: _buildStatisticsItem(
                 color: AppColors.PRIMARY_COLOR,
                 title: 'Balance',
-                subTitle: '1500'),
+                subTitle: '$balance'),
           ),
         ],
       ),
@@ -174,117 +194,41 @@ class ShareTheApp extends StatelessWidget {
     );
   }
 
-  // Widget _buildShareChannelsWidget() {
-  //   return Container(
-  //     padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10),
-  //     margin: const EdgeInsets.symmetric(
-  //       horizontal: 20,
-  //     ),
-  //     decoration: BoxDecoration(
-  //         color: Colors.white, borderRadius: BorderRadius.circular(10)),
-  //     child: Row(
-  //       children: [
-  //         Expanded(
-  //             child: Center(
-  //           child: _buildShareChannelItem(
-  //               label: 'Facebook',
-  //               icon: FontAwesomeIcons.facebook,
-  //               color: Colors.blue,
-  //               onTap: () {}),
-  //         )),
-  //         Expanded(
-  //             child: Center(
-  //           child: _buildShareChannelItem(
-  //               label: 'Instagram',
-  //               icon: FontAwesomeIcons.instagram,
-  //               color: Colors.purple,
-  //               onTap: () {}),
-  //         )),
-  //         Expanded(
-  //             child: Center(
-  //           child: _buildShareChannelItem(
-  //               label: 'WhatsApp',
-  //               icon: FontAwesomeIcons.whatsapp,
-  //               color: Colors.green,
-  //               onTap: () {}),
-  //         )),
-  //         Expanded(
-  //             child: Center(
-  //           child: _buildShareChannelItem(
-  //               label: 'Twitter',
-  //               icon: FontAwesomeIcons.twitter,
-  //               color: Colors.blue,
-  //               onTap: () {}),
-  //         )),
-  //       ],
-  //     ),
-  //   );
+
+  // void initDynamicLinks() async {
+  //   FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
+  //     final Uri deepLink = dynamicLinkData.link;
+  //     final referralId = deepLink.queryParameters['referralId'];
+  //     if (referralId != null) {
+  //       // Save the referral ID for later use
+  //       await saveReferralId(referralId);
+  //     }
+  //   }).onError((error) {
+  //     print('Error handling dynamic link: $error');
+  //   });
+  //
+  //   // Handle deep link when app is launched from a terminated state
+  //   final PendingDynamicLinkData? initialLink =
+  //   await FirebaseDynamicLinks.instance.getInitialLink();
+  //   if (initialLink != null) {
+  //     final Uri deepLink = initialLink.link;
+  //     final referralId = deepLink.queryParameters['referralId'];
+  //     if (referralId != null) {
+  //       await saveReferralId(referralId);
+  //     }
+  //   }
   // }
   //
-  // Widget _buildShareChannelItem(
-  //     {required String label,
-  //     required IconData icon,
-  //     required Color color,
-  //     required Function onTap}) {
-  //   return InkWell(
-  //     onTap: () => onTap(),
-  //     child: Container(
-  //       padding: const EdgeInsets.all(10),
-  //       decoration: BoxDecoration(
-  //         color: color,
-  //         borderRadius: BorderRadius.circular(5),
-  //       ),
-  //       child: Icon(
-  //         icon,
-  //         color: Colors.white,
-  //       ),
-  //     ),
-  //   );
+  // Future<void> saveReferralId(String referralId) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('referralId', referralId);
+  // }
+  //
+  // Future<String?> getReferralId() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   return prefs.getString('referralId');
   // }
 
-  // Widget _buildHistoryWidget() {
-  //   return Column(
-  //     children: [
-  //       Row(
-  //         children: [
-  //           Expanded(
-  //               child: Label(
-  //             text: 'Joined At',
-  //             style: Styles.headerText(),
-  //           )),
-  //           TextButton(onPressed: () {}, child: const Label(text: 'See All'))
-  //         ],
-  //       ),
-  //       ListView.separated(
-  //           shrinkWrap: true,
-  //           physics: const NeverScrollableScrollPhysics(),
-  //           itemBuilder: (context, index) => _buildHistoryItemWidget(),
-  //           separatorBuilder: (context, index) => const Sizer(),
-  //           itemCount: 10),
-  //     ],
-  //   );
-  // }
-  //
-  // Widget _buildHistoryItemWidget() {
-  //   return Row(
-  //     children: [
-  //       const ProfileImage(
-  //         accountId: 0,
-  //         userId: '',
-  //       ),
-  //       const Sizer(),
-  //       Expanded(
-  //           child: Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           Label(
-  //             text: 'Farouk Shahin',
-  //             style: Styles.mediumText(fontWeight: FontWeight.bold),
-  //           ),
-  //           const Label(text: 'Joined At: 2024-05-29')
-  //         ],
-  //       ))
-  //     ],
-  //   );
-  // }
+
+
 }

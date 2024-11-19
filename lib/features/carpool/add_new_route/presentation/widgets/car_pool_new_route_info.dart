@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/domain/entities/get_price_carpool_param.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/get_price_carpool/get_price_carpool_cubit.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/mapBox_cubit/cubit/map_box_cubit_cubit.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/carpool/create_carpool/domain/entities/create_carpool.dart';
 import 'package:fourtyninehub/features/carpool/create_carpool/presentation/cubits/cubit/create_car_pool_cubit.dart';
@@ -15,6 +18,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class CarPoolNewRouteInfo extends StatefulWidget {
   const CarPoolNewRouteInfo({super.key});
@@ -28,26 +32,20 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
   bool isWomanOnly = false;
   bool isDriverWomanOnly = false;
   bool isComfort = false;
+  final userGender = serviceLocator<UserCubit>().isLoggedIn
+      ? serviceLocator<UserCubit>().state.data?.gender
+      : '';
   late final GetPriceCarpoolCubit getPriceCarpoolCubit;
   late final CreateCarPoolCubit createCarPoolCubit;
   late final GetCurrencyCubit getCurrencyCubit;
   @override
   void initState() {
     createCarPoolCubit = context.read<CreateCarPoolCubit>();
-
+    getPriceCarpoolCubit = context.read<GetPriceCarpoolCubit>();
     super.initState();
     Future.microtask(() {
       getCurrencyCubit = context.read<GetCurrencyCubit>()..getCurrencyData();
-      getPriceCarpoolCubit = context.read<GetPriceCarpoolCubit>()
-        ..getPriceCarpool(
-          getPriceCarpoolParam: GetPriceCarpoolParam(
-            womenOnly: false,
-            womenDriverOnly: false,
-            comfort: false,
-            startLocation: [39.862808, -4.0273727],
-            targetLocation: [40.4165207, -3.705076],
-          ),
-        );
+
       setState(() {}); // Trigger a rebuild once cubits are initialized
     });
   }
@@ -72,15 +70,6 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
         children: [
           BlocBuilder<MapBoxCubit, MapBoxCubitState>(
             builder: (context, state) {
-              // if (state is MapBoxCubitSuccess) {
-              //   print("from herre");
-              //   print(state.coordinates);
-              //   return Text(
-              //     "3333",
-              //     style: Styles.headerText(
-              //         fontWeight: FontWeight.bold, fontSize: 50),
-              //   );
-              // }
               return BlocBuilder<GetPriceCarpoolCubit, GetPriceCarpoolState>(
                 builder: (context, state) {
                   if (state is GetPriceCarpoolSuccess) {
@@ -102,23 +91,10 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
           ),
           BlocBuilder<GetCurrencyCubit, GetCurrencyState>(
             builder: (context, state) {
-              // if (state is GetCurrencySuccess) {
-              //   return Text(
-              //     " ${state.currency}",
-              //     style: Styles.mediumText(
-              //         fontWeight: FontWeight.bold,
-              //         color: AppColors.SECONDARY_COLOR),
-              //   );
-              // } else {
-              //   return Text(
-              //     "",
-              //     style: Styles.mediumText(
-              //         fontWeight: FontWeight.bold,
-              //         color: AppColors.SECONDARY_COLOR),
-              //   );
-              // }
               return Text(
-                BlocProvider.of<GetCurrencyCubit>(context).currency,
+                context.isArabic
+                    ? BlocProvider.of<GetCurrencyCubit>(context).currnecyAr
+                    : BlocProvider.of<GetCurrencyCubit>(context).currnecyEn,
                 style: Styles.mediumText(
                     fontWeight: FontWeight.bold,
                     color: AppColors.SECONDARY_COLOR),
@@ -142,7 +118,7 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
                 setState(() {});
               },
               activeColor: AppColors.PRIMARY_COLOR,
-              trackOutlineColor: const WidgetStatePropertyAll(Colors.grey),
+              trackOutlineColor: const MaterialStatePropertyAll(Colors.grey),
               activeTrackColor: Colors.grey,
               inactiveTrackColor: Colors.white,
               inactiveThumbColor: Colors.grey,
@@ -150,28 +126,31 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
           ),
         ],
       ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(LocaleKeys.womenOnly.localize, style: Styles.headerText()),
-          Transform.scale(
-            scale: 0.8,
-            child: Switch(
-              value: isWomanOnly,
-              onChanged: (value) {
-                isWomanOnly = !isWomanOnly;
-                pr(isWomanOnly);
-                setState(() {});
-              },
-              activeColor: AppColors.PRIMARY_COLOR,
-              trackOutlineColor: const WidgetStatePropertyAll(Colors.grey),
-              activeTrackColor: Colors.grey,
-              inactiveTrackColor: Colors.white,
-              inactiveThumbColor: Colors.grey,
-            ),
-          ),
-        ],
-      ),
+      userGender == "female"
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(LocaleKeys.womenOnly.localize, style: Styles.headerText()),
+                Transform.scale(
+                  scale: 0.8,
+                  child: Switch(
+                    value: isWomanOnly,
+                    onChanged: (value) {
+                      isWomanOnly = !isWomanOnly;
+                      pr(isWomanOnly);
+                      setState(() {});
+                    },
+                    activeColor: AppColors.PRIMARY_COLOR,
+                    trackOutlineColor:
+                        const MaterialStatePropertyAll(Colors.grey),
+                    activeTrackColor: Colors.grey,
+                    inactiveTrackColor: Colors.white,
+                    inactiveThumbColor: Colors.grey,
+                  ),
+                ),
+              ],
+            )
+          : const SizedBox(),
       Column(
         children: [
           Row(
@@ -189,7 +168,8 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
                     setState(() {});
                   },
                   activeColor: AppColors.PRIMARY_COLOR,
-                  trackOutlineColor: const WidgetStatePropertyAll(Colors.grey),
+                  trackOutlineColor:
+                      const MaterialStatePropertyAll(Colors.grey),
                   activeTrackColor: Colors.grey,
                   inactiveTrackColor: Colors.white,
                   inactiveThumbColor: Colors.grey,
@@ -252,39 +232,46 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
   }
 
   String _getPrice() {
-    num price = 300;
-    // getPriceCarpoolCubit.carpoolRouteInfoModel?.priceForEveryUser ?? 300;
+    num price =
+        getPriceCarpoolCubit.carpoolRouteInfoModel?.priceForEveryUser ?? 0;
 
     if (isComfort) {
-      // price += getPriceCarpoolCubit.carpoolRouteInfoModel!.driverPriceComfort!;
-      price += 40;
+      price +=
+          getPriceCarpoolCubit.carpoolRouteInfoModel?.driverPriceComfort ?? 0;
+      // price += 40;
     }
     if (isWomanOnly) {
-      // price += getPriceCarpoolCubit.carpoolRouteInfoModel!.priceForWomenOnly!;
-      price += 14;
+      price +=
+          getPriceCarpoolCubit.carpoolRouteInfoModel?.priceForWomenOnly ?? 0;
+      // price += 14;
     }
     if (isDriverWomanOnly) {
-      // price += getPriceCarpoolCubit.carpoolRouteInfoModel!.priceDriverWomen!;
-      price += 25;
+      price +=
+          getPriceCarpoolCubit.carpoolRouteInfoModel?.priceDriverWomen ?? 0;
+      // price += 25;
     }
     return price.toString();
   }
 
   num _getPriceNum() {
-    num price = 300;
-    // getPriceCarpoolCubit.carpoolRouteInfoModel?.priceForEveryUser ?? 300;
+    // num price = 300;
+    num price =
+        getPriceCarpoolCubit.carpoolRouteInfoModel?.priceForEveryUser ?? 0;
 
     if (isComfort) {
-      // price += getPriceCarpoolCubit.carpoolRouteInfoModel!.driverPriceComfort!;
-      price += 40;
+      price +=
+          getPriceCarpoolCubit.carpoolRouteInfoModel?.driverPriceComfort ?? 0;
+      // price += 40;
     }
     if (isWomanOnly) {
-      // price += getPriceCarpoolCubit.carpoolRouteInfoModel!.priceForWomenOnly!;
-      price += 14;
+      price +=
+          getPriceCarpoolCubit.carpoolRouteInfoModel?.priceForWomenOnly ?? 0;
+      // price += 14;
     }
     if (isDriverWomanOnly) {
-      // price += getPriceCarpoolCubit.carpoolRouteInfoModel!.priceDriverWomen!;
-      price += 25;
+      price +=
+          getPriceCarpoolCubit.carpoolRouteInfoModel?.priceDriverWomen ?? 0;
+      // price += 25;
     }
     return price;
   }
@@ -293,23 +280,35 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
     final num finalPrice = _getPriceNum();
     await createCarPoolCubit.createCarPool(
       createCarpoolParam: CreateCarpoolParam(
-        comfort: false,
-        destinationAddress: "Madrid, Spain",
-        distance: 74327,
-        duration: 3446,
-        firstMidpoint: [40.0333486, -3.925665899999999],
-        locationForFirstMidpoint:
-            "Autovía de Toledo, El Pinar de la Sagra, Villaluenga de la Sagra, Castilla-La Mancha, 45529, España",
-        locationForSecondMidpoint:
-            "Autovía de Toledo, Chopera, Arganzuela, Madrid, Comunidad de Madrid, 28045, España",
-        originAddress: "Toledo, Spain",
+        comfort: isComfort,
+        destinationAddress:
+            getPriceCarpoolCubit.carpoolRouteInfoModel?.destinationAddress,
+        distance: getPriceCarpoolCubit.carpoolRouteInfoModel?.distance?.toInt(),
+        duration: getPriceCarpoolCubit.carpoolRouteInfoModel?.duration?.toInt(),
+        firstMidpoint: [
+          getPriceCarpoolCubit.carpoolRouteInfoModel?.firstMidpoint?["lat"] ??
+              0,
+          getPriceCarpoolCubit.carpoolRouteInfoModel?.firstMidpoint?["lng"] ?? 0
+        ],
+        locationForFirstMidpoint: getPriceCarpoolCubit
+            .carpoolRouteInfoModel?.locationForFirstMidpoint,
+        locationForSecondMidpoint: getPriceCarpoolCubit
+            .carpoolRouteInfoModel?.locationForSecondMidpoint,
+        originAddress:
+            getPriceCarpoolCubit.carpoolRouteInfoModel?.originAddress,
         priceForEveryUser: finalPrice.toInt(),
-        // priceForEveryUser: 500,
-        secondMidpoint: [40.3957623, -3.7039499],
-        startLocation: [39.862808, -4.0273727],
-        targetLocation: [40.4165207, -3.705076],
-        womenDriverOnly: false,
-        womenOnly: false,
+        secondMidpoint: [
+          getPriceCarpoolCubit.carpoolRouteInfoModel?.secondMidpoint?["lat"] ??
+              0,
+          getPriceCarpoolCubit.carpoolRouteInfoModel?.secondMidpoint?["lng"] ??
+              0
+        ],
+        startLocation:
+            getPriceCarpoolCubit.carpoolRouteInfoModel?.startLocation,
+        targetLocation:
+            getPriceCarpoolCubit.carpoolRouteInfoModel?.targetLocation,
+        womenDriverOnly: isDriverWomanOnly,
+        womenOnly: isWomanOnly,
       ),
     );
   }

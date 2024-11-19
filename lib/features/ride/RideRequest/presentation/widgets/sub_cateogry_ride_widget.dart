@@ -63,7 +63,8 @@ class _SubCateogryRideWidgetState extends State<SubCateogryRideWidget> {
                                     numberOfContent: e.driverCount,
                                     image: e.picture!,
                                     isFavorite: e.isFavorite ?? false,
-                                    name: e.subCategoryNameEn!),
+                                    nameAr: e.subCategoryNameAr??'',
+                                nameEn: e.subCategoryNameEn??''),
                               )
                               .toList()),
                     ),
@@ -283,7 +284,8 @@ class _SubCateogryRideWidgetState extends State<SubCateogryRideWidget> {
     // isSelect = true;
     return SubCategoryEntity(
         id: model?.subCategoryId ?? "",
-        name: model?.subCategoryNameEn ?? "",
+        nameEn: model?.subCategoryNameEn ?? "",
+        nameAr: model?.subCategoryNameAr ?? "",
         image: model?.picture ?? "",
         isFavorite: model?.isFavorite ?? false);
   }

@@ -195,13 +195,57 @@ class _MediaSliderViewState extends State<MediaSliderView> {
                             filled: true,
                             fillColor: Colors.grey[850],
                             prefixIcon: IconButton(
-                              icon: const Icon(Icons.add_photo_alternate,
-                                  color: Colors.grey),
+                              icon: Icon(Icons.add_photo_alternate,
+                                  color: context
+                                                  .read<ChatRoomCubit>()
+                                                  .media
+                                                  .length ==
+                                              1 &&
+                                          context
+                                              .read<ChatRoomCubit>()
+                                              .isOneTimeView
+                                      ? Colors.grey.withOpacity(0.3)
+                                      : Colors.grey),
                               onPressed: () async {
-                                await context.read<ChatRoomCubit>().pickMedia();
-                                setState(() {});
+                                if (!(context
+                                            .read<ChatRoomCubit>()
+                                            .media
+                                            .length ==
+                                        1 &&
+                                    context
+                                        .read<ChatRoomCubit>()
+                                        .isOneTimeView)) {
+                                  await context
+                                      .read<ChatRoomCubit>()
+                                      .pickMedia();
+                                  setState(() {});
+                                }
                               },
                             ),
+                            suffixIcon:
+                                context.read<ChatRoomCubit>().media.length == 1
+                                    ? IconButton(
+                                        icon: Icon(
+                                            context
+                                                    .read<ChatRoomCubit>()
+                                                    .isOneTimeView
+                                                ? Icons.looks_one
+                                                : Icons.looks_one_outlined,
+                                            color: Colors.grey),
+                                        onPressed: () async {
+                                          setState(() {
+                                            context
+                                                    .read<ChatRoomCubit>()
+                                                    .isOneTimeView =
+                                                !context
+                                                    .read<ChatRoomCubit>()
+                                                    .isOneTimeView;
+                                          });
+                                        },
+                                      )
+                                    : null,
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 20.w, vertical: 10.h),
                             hintText: LocaleKeys.addACaption.tr(),
                             hintStyle: const TextStyle(color: Colors.grey),
                             border: OutlineInputBorder(
@@ -219,18 +263,22 @@ class _MediaSliderViewState extends State<MediaSliderView> {
               ),
               // Floating Action Button for sending message
               floatingActionButton: FloatingActionButton(
-                onPressed: () async {
-                  setState(() {
-                    isLoading = true;
-                  });
-                  await context.read<ChatRoomCubit>().sendMessage();
-                  // await Future.delayed(const Duration(seconds: 6), () {});
-                  setState(() {
-                    isLoading = false;
-                  });
-                  context.pop();
-                },
-                backgroundColor: AppColors.BACKGROUND_COLOR,
+                onPressed: context.read<ChatRoomCubit>().media.isNotEmpty
+                    ? () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await context.read<ChatRoomCubit>().sendMessage();
+                        // await Future.delayed(const Duration(seconds: 6), () {});
+                        setState(() {
+                          isLoading = false;
+                        });
+                        context.pop();
+                      }
+                    : null,
+                backgroundColor: context.read<ChatRoomCubit>().media.isNotEmpty
+                    ? AppColors.BACKGROUND_COLOR
+                    : Colors.grey,
                 child: isLoading
                     ? const CircularProgressIndicator(
                         color: AppColors.PRIMARY_COLOR)

@@ -45,50 +45,62 @@ class MessageCard extends StatelessWidget {
     final chatRoomCubit = context.read<ChatRoomCubit>();
 
     return messageEntity.byMe
-        ? messageEntity.sharedContacts.isNotEmpty
-            ? SentContactsCard(messageEntity: messageEntity)
-            : messageEntity.media.isEmpty
-                ? _buildMineMessage(
-                    width: width,
-                    messageEntity: messageEntity,
-                    context: context)
-                : messageEntity.media[0].type == FileTypeEnum.document
-                    ? SentFileCard(
+        ? messageEntity.isOneTimeViewMessage
+            ? _buildSendOneTimeViewMessage(
+                width: width,
+                messageEntity: messageEntity,
+                context: context,
+              )
+            : messageEntity.sharedContacts.isNotEmpty
+                ? SentContactsCard(messageEntity: messageEntity)
+                : messageEntity.media.isEmpty
+                    ? _buildMineMessage(
+                        width: width,
                         messageEntity: messageEntity,
-                      )
-                    : messageEntity.media[0].type == FileTypeEnum.audio
-                        ? VoiceMessageCard(
+                        context: context)
+                    : messageEntity.media[0].type == FileTypeEnum.document
+                        ? SentFileCard(
                             messageEntity: messageEntity,
-                            isSend: true,
                           )
-                        : _buildSendMediaCard(
-                            isArabic: isArabic,
-                            chatRoomCubit: chatRoomCubit,
-                            context: context,
-                            width: width,
-                          )
-        : messageEntity.sharedContacts.isNotEmpty
-            ? ReceivedContactsCard(messageEntity: messageEntity)
-            : messageEntity.media.isEmpty
-                ? _buildOtherMessage(
-                    width: width,
-                    messageEntity: messageEntity,
-                    context: context)
-                : messageEntity.media[0].type == FileTypeEnum.document
-                    ? ReceivedFileCard(
+                        : messageEntity.media[0].type == FileTypeEnum.audio
+                            ? VoiceMessageCard(
+                                messageEntity: messageEntity,
+                                isSend: true,
+                              )
+                            : _buildSendMediaCard(
+                                isArabic: isArabic,
+                                chatRoomCubit: chatRoomCubit,
+                                context: context,
+                                width: width,
+                              )
+        : messageEntity.isOneTimeViewMessage
+            ? _buildReceiveOneTimeViewMessage(
+                width: width,
+                messageEntity: messageEntity,
+                context: context,
+              )
+            : messageEntity.sharedContacts.isNotEmpty
+                ? ReceivedContactsCard(messageEntity: messageEntity)
+                : messageEntity.media.isEmpty
+                    ? _buildOtherMessage(
+                        width: width,
                         messageEntity: messageEntity,
-                      )
-                    : messageEntity.media[0].type == FileTypeEnum.audio
-                        ? VoiceMessageCard(
+                        context: context)
+                    : messageEntity.media[0].type == FileTypeEnum.document
+                        ? ReceivedFileCard(
                             messageEntity: messageEntity,
-                            isSend: false,
                           )
-                        : _buildReceiveMediaCard(
-                            isArabic: isArabic,
-                            chatRoomCubit: chatRoomCubit,
-                            context: context,
-                            width: width,
-                          );
+                        : messageEntity.media[0].type == FileTypeEnum.audio
+                            ? VoiceMessageCard(
+                                messageEntity: messageEntity,
+                                isSend: false,
+                              )
+                            : _buildReceiveMediaCard(
+                                isArabic: isArabic,
+                                chatRoomCubit: chatRoomCubit,
+                                context: context,
+                                width: width,
+                              );
   }
 
   SwipeTo _buildSendMediaCard(
@@ -298,36 +310,6 @@ class MessageCard extends StatelessWidget {
                   : const SizedBox(),
             ],
           ),
-          // Row(
-          //   crossAxisAlignment: CrossAxisAlignment.end,
-          //   children: [
-          //     ConstrainedBox(
-          //       constraints: BoxConstraints(
-          //         maxWidth: MediaQuery.of(context).size.width * 0.6,
-          //       ),
-          //       child: Text(
-          //         messageEntity.text,
-          //         style: Styles.mediumText(
-          //           color: AppColors.PRIMARY_COLOR,
-          //         ),
-          //         textAlign: TextAlign.left,
-          //       ),
-          //     ),
-          //     const Spacer(),
-          //     Label(
-          //       text: messageEntity.time,
-          //       style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
-          //     ),
-          //     const SizedBox(width: 4),
-          //     messageEntity.byMe
-          //         ? Icon(
-          //             _getMessageIcon(messageEntity),
-          //             color: _getMessageIconColor(messageEntity),
-          //             size: 12,
-          //           )
-          //         : const SizedBox(width: 4),
-          //   ],
-          // ),
         ],
       ),
     );
@@ -340,39 +322,477 @@ class MessageCard extends StatelessWidget {
   }) {
     final chatRoomCubit = context.read<ChatRoomCubit>();
     final isArabic = LocaleKeys.more.tr() == "More";
-    return SwipeTo(
-      onRightSwipe: !isArabic
-          ? null
-          : (details) {
-              chatRoomCubit.selectMessageForReplaying(messageEntity);
-            },
-      onLeftSwipe: isArabic
-          ? null
-          : (details) {
-              chatRoomCubit.selectMessageForReplaying(messageEntity);
-            },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            IntrinsicWidth(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: width * 0.85),
-                child: Column(
-                  children: [
-                    messageEntity.hasReply
-                        ? ReplySendMessageCard(
-                            width: width, messageEntity: messageEntity)
-                        : const SizedBox(),
-                    _buildSendTextMessage(messageEntity, isArabic),
-                  ],
-                ),
+    return InkWell(
+      onTap: () {
+        if (messageEntity.isSelected) {
+          context
+              .read<ChatRoomCubit>()
+              .removeMessageFromSelectedMessages(message: messageEntity);
+        } else {
+          if (context.read<ChatRoomCubit>().selectedMessages.isNotEmpty) {
+            context
+                .read<ChatRoomCubit>()
+                .addMessageToSelectedMessages(message: messageEntity);
+          }
+        }
+      },
+      onLongPress: () {
+        if (!messageEntity.isSelected) {
+          log("messageEntity.isSelected: ${messageEntity.isSelected}");
+          context
+              .read<ChatRoomCubit>()
+              .addMessageToSelectedMessages(message: messageEntity);
+        } else {
+          context
+              .read<ChatRoomCubit>()
+              .removeMessageFromSelectedMessages(message: messageEntity);
+        }
+      },
+      child: SwipeTo(
+        onRightSwipe: !isArabic
+            ? null
+            : (details) {
+                chatRoomCubit.selectMessageForReplaying(messageEntity);
+              },
+        onLeftSwipe: isArabic
+            ? null
+            : (details) {
+                chatRoomCubit.selectMessageForReplaying(messageEntity);
+              },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            decoration: BoxDecoration(
+              color: messageEntity.isSelected
+                  ? AppColors.DARK_GRAY_COLOR.withOpacity(0.5)
+                  : Colors.transparent,
+              // borderRadius: BorderRadius.circular(8),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IntrinsicWidth(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: width * 0.85),
+                      child: Column(
+                        children: [
+                          messageEntity.hasReply
+                              ? ReplySendMessageCard(
+                                  width: width, messageEntity: messageEntity)
+                              : const SizedBox(),
+                          _buildSendTextMessage(messageEntity, isArabic),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSendOneTimeViewMessage({
+    required double width,
+    required MessageEntity messageEntity,
+    required BuildContext context,
+  }) {
+    final chatRoomCubit = context.read<ChatRoomCubit>();
+    final isArabic = LocaleKeys.more.tr() == "More";
+    return BlocBuilder<ChatRoomCubit, ChatRoomState>(
+      builder: (context, state) {
+        return SwipeTo(
+          onRightSwipe: !isArabic
+              ? null
+              : (details) {
+                  chatRoomCubit.selectMessageForReplaying(messageEntity);
+                },
+          onLeftSwipe: isArabic
+              ? null
+              : (details) {
+                  chatRoomCubit.selectMessageForReplaying(messageEntity);
+                },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IntrinsicWidth(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: width * 0.85),
+                    child: Column(
+                      children: [
+                        messageEntity.hasReply
+                            ? ReplySendMessageCard(
+                                width: width, messageEntity: messageEntity)
+                            : const SizedBox(),
+                        BlocBuilder<ChatRoomCubit, ChatRoomState>(
+                          builder: (context, state) {
+                            return Container(
+                              padding: const EdgeInsets.all(12),
+                              // margin: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: AppColors.MESSAGE_COLOR,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: messageEntity.hasReply
+                                      ? const Radius.circular(0)
+                                      : const Radius.circular(12),
+                                  topRight: messageEntity.hasReply
+                                      ? const Radius.circular(0)
+                                      : const Radius.circular(12),
+                                  bottomLeft: isArabic
+                                      ? const Radius.circular(12)
+                                      : const Radius.circular(0),
+                                  bottomRight: isArabic
+                                      ? const Radius.circular(0)
+                                      : const Radius.circular(12),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black26.withOpacity(0.2),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Expanded(
+                                    child: messageEntity.isDeleted
+                                        ? Row(
+                                            children: [
+                                              const Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Icon(
+                                                  Icons.not_interested,
+                                                  color: Colors.black54,
+                                                ),
+                                              ),
+                                              Label(
+                                                text: "This message is deleted",
+                                                style: Styles.mediumText(
+                                                    color: Colors.black54),
+                                              ),
+                                            ],
+                                          )
+                                        : Row(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8),
+                                                child: Icon(
+                                                    Icons.looks_one_outlined,
+                                                    color: AppColors
+                                                        .PRIMARY_COLOR
+                                                        .withOpacity(0.5)),
+                                              ),
+                                              Stack(
+                                                children: [
+                                                  messageEntity
+                                                          .isOneTimeSeenMessage
+                                                      ? ReadMoreLabel(
+                                                          // trimLines: 5,
+                                                          text: LocaleKeys
+                                                              .opened
+                                                              .tr(),
+                                                          style:
+                                                              Styles.mediumText(
+                                                            color: AppColors
+                                                                .PRIMARY_COLOR,
+                                                            fontStyle: FontStyle
+                                                                .italic,
+                                                          ),
+
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                        )
+                                                      : ReadMoreLabel(
+                                                          // trimLines: 5,
+                                                          text: messageEntity
+                                                                  .media.isEmpty
+                                                              ? ""
+                                                              : messageEntity
+                                                                          .media[
+                                                                              0]
+                                                                          .type ==
+                                                                      FileTypeEnum
+                                                                          .image
+                                                                  ? LocaleKeys
+                                                                      .photo
+                                                                      .tr()
+                                                                  : messageEntity
+                                                                              .media[
+                                                                                  0]
+                                                                              .type ==
+                                                                          FileTypeEnum
+                                                                              .video
+                                                                      ? LocaleKeys
+                                                                          .video
+                                                                          .tr()
+                                                                      : messageEntity.media[0].type ==
+                                                                              FileTypeEnum
+                                                                                  .audio
+                                                                          ? LocaleKeys
+                                                                              .audio
+                                                                              .tr()
+                                                                          : LocaleKeys
+                                                                              .file
+                                                                              .tr(),
+                                                          style:
+                                                              Styles.mediumText(
+                                                            color: AppColors
+                                                                .PRIMARY_COLOR,
+                                                          ),
+
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                        ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Row(
+                                    children: [
+                                      Label(
+                                        text: messageEntity.time,
+                                        style: Styles.smallText(
+                                            color: AppColors.PRIMARY_COLOR),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Icon(
+                                        _getMessageIcon(messageEntity),
+                                        color:
+                                            _getMessageIconColor(messageEntity),
+                                        size: 12,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildReceiveOneTimeViewMessage({
+    required double width,
+    required MessageEntity messageEntity,
+    required BuildContext context,
+  }) {
+    final chatRoomCubit = context.read<ChatRoomCubit>();
+    final isArabic = LocaleKeys.more.tr() == "More";
+    return BlocBuilder<ChatRoomCubit, ChatRoomState>(
+      builder: (context, state) {
+        return SwipeTo(
+          onRightSwipe: !isArabic
+              ? null
+              : (details) {
+                  chatRoomCubit.selectMessageForReplaying(messageEntity);
+                },
+          onLeftSwipe: isArabic
+              ? null
+              : (details) {
+                  chatRoomCubit.selectMessageForReplaying(messageEntity);
+                },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                CircleAvatar(
+                  radius: 15,
+                  backgroundColor: context.isDarkMode
+                      ? AppColors.QUANTITY_COLOR
+                      : Colors.white,
+                  backgroundImage:
+                      const NetworkImage(UIConst.profilePlaceHolder),
+                ),
+                const Sizer(width: 5),
+                BlocBuilder<ChatRoomCubit, ChatRoomState>(
+                    builder: (context, state) {
+                  return IntrinsicWidth(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: width * 0.65),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          messageEntity.hasReply
+                              ? ReplyRecivedMessageCard(
+                                  width: width,
+                                  messageEntity: messageEntity,
+                                )
+                              : const SizedBox(),
+                          InkWell(
+                            onTap: () async {
+                              if ((!messageEntity.isOneTimeSeenMessage) &&
+                                  (messageEntity.media[0].type ==
+                                          FileTypeEnum.image ||
+                                      messageEntity.media[0].type ==
+                                          FileTypeEnum.video)) {
+                                await chatRoomCubit.getOneTimeViewMessage(
+                                  message: messageEntity,
+                                );
+                                // ignore: use_build_context_synchronously
+                                context.push(
+                                  Routes.IMAGESPAGEVIEW,
+                                  extra: ImagesPageViewParams(
+                                    messageEntity: messageEntity,
+                                    index: 0,
+                                  ),
+                                );
+                              } else if ((!messageEntity
+                                      .isOneTimeSeenMessage) &&
+                                  (messageEntity.media[0].type ==
+                                      FileTypeEnum.audio)) {
+                                await chatRoomCubit.getOneTimeViewMessage(
+                                  message: messageEntity,
+                                );
+                                // ignore: use_build_context_synchronously
+                                context.push(
+                                  Routes.ONETIMEVOICEMESSAGE,
+                                  extra: messageEntity,
+                                );
+                              } else if ((!messageEntity
+                                      .isOneTimeSeenMessage) &&
+                                  (messageEntity.media[0].type ==
+                                      FileTypeEnum.document)) {
+                                await chatRoomCubit.getOneTimeViewMessage(
+                                  message: messageEntity,
+                                );
+                                await downloadAndOpenFile(
+                                  fileUrl: messageEntity.media[0].url,
+                                );
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(12),
+                              margin: const EdgeInsets.all(0),
+                              decoration: BoxDecoration(
+                                color: context.isDarkMode
+                                    ? AppColors.QUANTITY_COLOR
+                                    : Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: messageEntity.hasReply
+                                      ? const Radius.circular(0)
+                                      : const Radius.circular(12),
+                                  topRight: messageEntity.hasReply
+                                      ? const Radius.circular(0)
+                                      : const Radius.circular(12),
+                                  bottomLeft: isArabic
+                                      ? const Radius.circular(0)
+                                      : const Radius.circular(12),
+                                  bottomRight: isArabic
+                                      ? const Radius.circular(12)
+                                      : const Radius.circular(0),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: context.isDarkMode
+                                        ? AppColors.BACKGROUND_COLOR
+                                            .withOpacity(0.05)
+                                        : Colors.black12,
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: Icon(Icons.looks_one_outlined,
+                                        color: context.isDarkMode
+                                            ? Colors.white.withOpacity(0.5)
+                                            : AppColors.PRIMARY_COLOR
+                                                .withOpacity(0.5)),
+                                  ),
+                                  Expanded(
+                                    child: messageEntity.isOneTimeSeenMessage
+                                        ? ReadMoreLabel(
+                                            // trimLines: 5,
+                                            text: LocaleKeys.opened.tr(),
+                                            style: Styles.mediumText(
+                                              color: context.isDarkMode
+                                                  ? AppColors.BACKGROUND_COLOR
+                                                  : AppColors.PRIMARY_COLOR,
+                                              fontStyle: FontStyle.italic,
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          )
+                                        : ReadMoreLabel(
+                                            // trimLines: 5,
+                                            text: messageEntity.media.isEmpty
+                                                ? ""
+                                                : messageEntity.media[0].type ==
+                                                        FileTypeEnum.image
+                                                    ? LocaleKeys.photo.tr()
+                                                    : messageEntity.media[0]
+                                                                .type ==
+                                                            FileTypeEnum.video
+                                                        ? LocaleKeys.video.tr()
+                                                        : messageEntity.media[0]
+                                                                    .type ==
+                                                                FileTypeEnum
+                                                                    .audio
+                                                            ? LocaleKeys.audio
+                                                                .tr()
+                                                            : LocaleKeys.file
+                                                                .tr(),
+                                            style: Styles.mediumText(
+                                              color: context.isDarkMode
+                                                  ? AppColors.BACKGROUND_COLOR
+                                                  : AppColors.PRIMARY_COLOR,
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Label(
+                                    text: messageEntity.time,
+                                    style: Styles.smallText(
+                                        color: context.isDarkMode
+                                            ? AppColors.BACKGROUND_COLOR
+                                            : AppColors.PRIMARY_COLOR),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -423,11 +843,40 @@ class MessageCard extends StatelessWidget {
                       ),
                     ],
                   )
-                : ReadMoreLabel(
-                    // trimLines: 5,
-                    text: messageEntity.text,
-                    style: Styles.mediumText(color: AppColors.PRIMARY_COLOR),
-                    textAlign: TextAlign.left,
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      messageEntity.isForwarded
+                          ? SizedBox(
+                              height: 30,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.reply,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                  Label(
+                                    text: LocaleKeys.forwarded.tr(),
+                                    style: Styles.mediumText(
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : const SizedBox(),
+                      ReadMoreLabel(
+                        // trimLines: 5,
+                        text: messageEntity.text,
+                        style:
+                            Styles.mediumText(color: AppColors.PRIMARY_COLOR),
+                        textAlign: TextAlign.left,
+                      ),
+                    ],
                   ),
           ),
           const SizedBox(width: 8),
@@ -477,104 +926,183 @@ class MessageCard extends StatelessWidget {
   }) {
     final chatRoomCubit = context.read<ChatRoomCubit>();
     final isArabic = LocaleKeys.more.tr() == "More";
-    return SwipeTo(
-      onRightSwipe: !isArabic
-          ? null
-          : (details) {
-              chatRoomCubit.selectMessageForReplaying(messageEntity);
-            },
-      onLeftSwipe: isArabic
-          ? null
-          : (details) {
-              chatRoomCubit.selectMessageForReplaying(messageEntity);
-            },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            CircleAvatar(
-              radius: 15,
-              backgroundColor:
-                  context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
-              backgroundImage: const NetworkImage(UIConst.profilePlaceHolder),
+    return InkWell(
+      // splashColor: context.isDarkMode
+      //     ? Colors.white
+      //     : AppColors.PRIMARY_COLOR.withOpacity(0.05),
+      // // Ripple effect color
+      // highlightColor: context.isDarkMode
+      //     ? AppColors.QUANTITY_COLOR
+      //     : AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2),
+      onTap: () {
+        if (messageEntity.isSelected) {
+          context
+              .read<ChatRoomCubit>()
+              .removeMessageFromSelectedMessages(message: messageEntity);
+        } else {
+          if (context.read<ChatRoomCubit>().selectedMessages.isNotEmpty) {
+            context
+                .read<ChatRoomCubit>()
+                .addMessageToSelectedMessages(message: messageEntity);
+          }
+        }
+      },
+      onLongPress: () {
+        if (!messageEntity.isSelected) {
+          log("messageEntity.isSelected: ${messageEntity.isSelected}");
+          context
+              .read<ChatRoomCubit>()
+              .addMessageToSelectedMessages(message: messageEntity);
+        } else {
+          context
+              .read<ChatRoomCubit>()
+              .removeMessageFromSelectedMessages(message: messageEntity);
+        }
+      },
+      child: SwipeTo(
+        onRightSwipe: !isArabic
+            ? null
+            : (details) {
+                chatRoomCubit.selectMessageForReplaying(messageEntity);
+              },
+        onLeftSwipe: isArabic
+            ? null
+            : (details) {
+                chatRoomCubit.selectMessageForReplaying(messageEntity);
+              },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            decoration: BoxDecoration(
+              color: messageEntity.isSelected
+                  ? AppColors.DARK_GRAY_COLOR.withOpacity(0.5)
+                  : Colors.transparent,
+              // borderRadius: BorderRadius.circular(8),
             ),
-            const Sizer(width: 5),
-            IntrinsicWidth(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: width * 0.65),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    messageEntity.hasReply
-                        ? ReplyRecivedMessageCard(
-                            width: width,
-                            messageEntity: messageEntity,
-                          )
-                        : const SizedBox(),
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      margin: const EdgeInsets.all(0),
-                      decoration: BoxDecoration(
-                        color: context.isDarkMode
-                            ? AppColors.QUANTITY_COLOR
-                            : Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: messageEntity.hasReply
-                              ? const Radius.circular(0)
-                              : const Radius.circular(12),
-                          topRight: messageEntity.hasReply
-                              ? const Radius.circular(0)
-                              : const Radius.circular(12),
-                          bottomLeft: isArabic
-                              ? const Radius.circular(0)
-                              : const Radius.circular(12),
-                          bottomRight: isArabic
-                              ? const Radius.circular(12)
-                              : const Radius.circular(0),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: context.isDarkMode
-                                ? AppColors.BACKGROUND_COLOR.withOpacity(0.05)
-                                : Colors.black12,
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  CircleAvatar(
+                    radius: 15,
+                    backgroundColor: context.isDarkMode
+                        ? AppColors.QUANTITY_COLOR
+                        : Colors.white,
+                    backgroundImage:
+                        const NetworkImage(UIConst.profilePlaceHolder),
+                  ),
+                  const Sizer(width: 5),
+                  IntrinsicWidth(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: width * 0.65),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: ReadMoreLabel(
-                              // trimLines: 5,
-                              text: messageEntity.text,
-                              style: Styles.mediumText(
-                                color: context.isDarkMode
-                                    ? AppColors.BACKGROUND_COLOR
-                                    : AppColors.PRIMARY_COLOR,
+                          messageEntity.hasReply
+                              ? ReplyRecivedMessageCard(
+                                  width: width,
+                                  messageEntity: messageEntity,
+                                )
+                              : const SizedBox(),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              messageEntity.isForwarded
+                                  ? SizedBox(
+                                      height: 30,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Icon(
+                                              Icons.reply,
+                                              color: Colors.black54,
+                                            ),
+                                          ),
+                                          Label(
+                                            text: LocaleKeys.forwarded.tr(),
+                                            style: Styles.mediumText(
+                                                color: Colors.black54),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              Container(
+                                padding: const EdgeInsets.all(12),
+                                margin: const EdgeInsets.all(0),
+                                decoration: BoxDecoration(
+                                  color: context.isDarkMode
+                                      ? AppColors.QUANTITY_COLOR
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: messageEntity.hasReply
+                                        ? const Radius.circular(0)
+                                        : const Radius.circular(12),
+                                    topRight: messageEntity.hasReply
+                                        ? const Radius.circular(0)
+                                        : const Radius.circular(12),
+                                    bottomLeft: isArabic
+                                        ? const Radius.circular(0)
+                                        : const Radius.circular(12),
+                                    bottomRight: isArabic
+                                        ? const Radius.circular(12)
+                                        : const Radius.circular(0),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: context.isDarkMode
+                                          ? AppColors.BACKGROUND_COLOR
+                                              .withOpacity(0.05)
+                                          : Colors.black12,
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Expanded(
+                                      child: ReadMoreLabel(
+                                        // trimLines: 5,
+                                        text: messageEntity.text,
+                                        style: Styles.mediumText(
+                                          color: context.isDarkMode
+                                              ? AppColors.BACKGROUND_COLOR
+                                              : AppColors.PRIMARY_COLOR,
+                                        ),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Label(
+                                      text: messageEntity.time,
+                                      style: Styles.smallText(
+                                          color: context.isDarkMode
+                                              ? AppColors.BACKGROUND_COLOR
+                                              : AppColors.PRIMARY_COLOR),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Label(
-                            text: messageEntity.time,
-                            style: Styles.smallText(
-                                color: context.isDarkMode
-                                    ? AppColors.BACKGROUND_COLOR
-                                    : AppColors.PRIMARY_COLOR),
+                            ],
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -602,7 +1130,7 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
     final isArabic = LocaleKeys.more.tr() == "More";
     return GestureDetector(
       onTap: () {
-        log("voice message card tap : ${widget.messageEntity.media[0].url}");
+        log("voice message card tap : ${widget.messageEntity.isListened}");
       },
       child: SwipeTo(
         onRightSwipe: !isArabic
@@ -679,48 +1207,84 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
                       width: MediaQuery.of(context).size.width * 0.65,
                       child: Stack(
                         children: [
-                          VoiceMessageView(
-                            activeSliderColor: widget.isSend
-                                ? context.isDarkMode
-                                    ? AppColors.PRIMARY_COLOR
-                                    : AppColors.PRIMARY_COLOR
-                                : context.isDarkMode
-                                    ? AppColors.BACKGROUND_COLOR
-                                        .withOpacity(0.5)
-                                    : AppColors.LIGHT_GRAY_COLOR2,
-                            circlesColor: AppColors.PRIMARY_COLOR,
-                            notActiveSliderColor: widget.isSend
-                                ? AppColors.MESSAGE_COLOR
-                                : context.isDarkMode
-                                    ? AppColors.QUANTITY_COLOR
-                                    : AppColors.BACKGROUND_COLOR,
-                            backgroundColor: widget.isSend
-                                ? AppColors.MESSAGE_COLOR
-                                : context.isDarkMode
-                                    ? AppColors.QUANTITY_COLOR
-                                    : AppColors.BACKGROUND_COLOR,
-                            innerPadding: 12,
-                            cornerRadius: 12,
+                          GestureDetector(
+                            onTap: () {
+                              log("voice message card tap is listened : ${widget.messageEntity.isListened}");
+                              log("voice message card tap : ${widget.messageEntity.toString()}");
+                            },
+                            child: VoiceMessageView(
+                              activeSliderColor: widget.isSend
+                                  ? context.isDarkMode
+                                      ? AppColors.PRIMARY_COLOR
+                                      : AppColors.PRIMARY_COLOR
+                                  : context.isDarkMode
+                                      ? AppColors.BACKGROUND_COLOR
+                                          .withOpacity(0.5)
+                                      : AppColors.LIGHT_GRAY_COLOR2,
+                              circlesColor:
+                                  // AppColors.PRIMARY_COLOR,
+                                  widget.messageEntity.isListened
+                                      ? AppColors.PRIMARY_COLOR
+                                      : AppColors.PRIMARY_COLOR_DARK,
+                              notActiveSliderColor: widget.isSend
+                                  ? AppColors.MESSAGE_COLOR
+                                  : context.isDarkMode
+                                      ? AppColors.QUANTITY_COLOR
+                                      : AppColors.BACKGROUND_COLOR,
+                              backgroundColor: widget.isSend
+                                  ? AppColors.MESSAGE_COLOR
+                                  : context.isDarkMode
+                                      ? AppColors.QUANTITY_COLOR
+                                      : AppColors.BACKGROUND_COLOR,
+                              innerPadding: 12,
+                              cornerRadius: 12,
 
-                            // notActiveSliderColor:
-                            //     AppColors.PRIMARY_COLOR.withOpacity(0.1),
-                            // size: ,
-                            controller: VoiceController(
-                              audioSrc: widget.messageEntity.media[0].url,
-                              // audioSrc:
-                              //     "https://server8.mp3quran.net/afs/056.mp3",
-                              maxDuration: const Duration(minutes: 1000),
-
-                              // cacheKey: messageEntity.media[0].url,
-                              isFile: false,
-                              onComplete: () {},
-                              onPause: () {},
-                              onPlaying: () {},
-                              onError: (p0) {
-                                // setState(() {
-                                log("voice error : $p0");
-                                // });
-                              },
+                              // notActiveSliderColor:
+                              //     AppColors.PRIMARY_COLOR.withOpacity(0.1),
+                              // size: ,
+                              controller: VoiceController(
+                                audioSrc: widget.messageEntity.media[0].url,
+                                maxDuration: const Duration(minutes: 1000),
+                                isFile: false,
+                                onComplete: () async {
+                                  if (!widget.messageEntity.byMe &&
+                                      !widget.messageEntity.isListened) {
+                                    await chatRoomCubit.setRecordAsListened(
+                                        message: widget.messageEntity);
+                                    // setState(() {
+                                    // widget.messageEntity.isListened = true;
+                                    // });
+                                  }
+                                  // log("Playing voice by me: ${widget.messageEntity.byMe}");
+                                  // log("Playing voice listened: ${widget.messageEntity.isListened}");
+                                  // setState(() {});
+                                },
+                                onPause: () async {
+                                  if (!widget.messageEntity.byMe &&
+                                      !widget.messageEntity.isListened) {
+                                    await chatRoomCubit.setRecordAsListened(
+                                        message: widget.messageEntity);
+                                    // setState(() {
+                                    // widget.messageEntity.isListened = true;
+                                    // });
+                                  }
+                                },
+                                onPlaying: () async {
+                                  // if (!widget.messageEntity.byMe &&
+                                  //     !widget.messageEntity.isListened) {
+                                  //   await chatRoomCubit.setRecordAsListened(
+                                  //       message: widget.messageEntity);
+                                  //   // setState(() {
+                                  //   // widget.messageEntity.isListened = true;
+                                  //   // });
+                                  // }
+                                },
+                                onError: (p0) {
+                                  // setState(() {
+                                  log("voice error : $p0");
+                                  // });
+                                },
+                              ),
                             ),
                           ),
                           const Divider(
@@ -729,7 +1293,7 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
                             indent: 70,
                             endIndent: 90,
                             // thickness: 2,
-                          )
+                          ),
                         ],
                       ),
                     ),

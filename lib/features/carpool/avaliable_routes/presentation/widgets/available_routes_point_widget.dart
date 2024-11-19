@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -69,7 +70,7 @@ class AvailableRoutesPointInfo extends StatelessWidget {
                   fontSize: 24,
                   color: status == "Free"
                       ? AppColors.SECONDARY_COLOR
-                      : isDarkTheme(context)
+                      : context.isDarkMode
                           ? AppColors.LIGHT_COLOR
                           : AppColors.PRIMARY_COLOR,
                 )),
@@ -166,12 +167,17 @@ class AvailableRoutesPointInfo extends StatelessWidget {
                           .difference(DateTime.parse(createdAt.toString()))
                           .inMinutes <
                       60
-                  ? showCreateRouteModalSheet(context,
-                      seatId: seatId,
-                      tripId: tripId,
-                      userLocation: userLocation,
-                      isComfort: isComfort,
-                      price: price)
+                  ? context.read<UserCubit>().isLoggedIn &&
+                          entity.locations[0].bookedUser?.id != userId &&
+                          entity.locations[1].bookedUser?.id != userId &&
+                          entity.locations[2].bookedUser?.id != userId
+                      ? showCreateRouteModalSheet(context,
+                          seatId: seatId,
+                          tripId: tripId,
+                          userLocation: userLocation,
+                          isComfort: isComfort,
+                          price: price)
+                      : const SizedBox()
                   : const SizedBox()
               : context.push(Routes.LOGIN);
         }
@@ -187,15 +193,20 @@ class AvailableRoutesPointInfo extends StatelessWidget {
                           .difference(DateTime.parse(createdAt.toString()))
                           .inMinutes <
                       60
-                  ? Container(
-                      width: 65, // Size of the outer circle (border)
-                      height: 65, // Size of the outer circle (border)
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                            color: Colors.red, width: 3), // Red border
-                      ),
-                    )
+                  ? context.read<UserCubit>().isLoggedIn &&
+                          entity.locations[0].bookedUser?.id != userId &&
+                          entity.locations[1].bookedUser?.id != userId &&
+                          entity.locations[2].bookedUser?.id != userId
+                      ? Container(
+                          width: 65, // Size of the outer circle (border)
+                          height: 65, // Size of the outer circle (border)
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                                color: Colors.red, width: 3), // Red border
+                          ),
+                        )
+                      : const SizedBox()
                   : const SizedBox(),
             // Display the image inside the circle
             Container(

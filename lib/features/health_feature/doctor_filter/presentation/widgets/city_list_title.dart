@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/pages/doctors_list.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -16,7 +17,7 @@ class CityListTitle extends StatelessWidget {
       onTap: () {
         serviceLocator<HealthSharedData>().doctorSearchParams.city = city;
 
-        context.push(Routes.VISITADOCTORLIST);
+        context.push(Routes.VISITADOCTORLIST,extra: DoctorsListParams(fromHome: false, subCategoryId: ''));
       },
     );
   }

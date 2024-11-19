@@ -72,7 +72,7 @@ class CreateDoctorParams {
     if (hasHomeVisit &&
         detectionPeriodvisitHome != null &&
         detectionPeriodvisitHome!.isNotEmpty) {
-      data['detectionPeriodvisitHome'] = '$detectionPeriodvisitHome min';
+      data['detectionPeriodVisitHome'] = '$detectionPeriodvisitHome min';
     }
     if (hasClinic && clinicPrice != null && clinicPrice!.isNotEmpty) {
       data['clinicPrice'] = '$clinicPrice EGP';
@@ -96,7 +96,7 @@ class CreateDoctorParams {
   }
 
   String? isFilled() {
-    if (subCategoryId.isEmpty) return "Please choose your spiciality";
+    if (subCategoryId.isEmpty) return "Please choose your specialty";
 
     if (mediaId.isEmpty) return "Please upload your photo";
 

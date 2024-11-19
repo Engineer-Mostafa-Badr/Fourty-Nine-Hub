@@ -12,12 +12,13 @@ class ChatModel extends ChatEntity {
     required super.lastSeenCount,
     required super.unreadCount,
     required super.userId,
-    required super.typing,
+    super.typing,
     required super.avatar,
     required super.online,
     required super.isService,
     required super.isPinned,
     super.lastMessage,
+    super.pinnedMessageId,
   });
 
   factory ChatModel.fromJson(Map<String, dynamic> json) => ChatModel(
@@ -31,12 +32,14 @@ class ChatModel extends ChatEntity {
         unreadCount: json['unreadCount'],
         userId: json['userId'],
         avatar: json['avatar'],
-        typing: false,
+        // typing: false,
         online: false,
         isPinned: json['pinned'] ?? false,
         isService: json['isService'] ?? false,
         lastMessage: json['lastMessage'] != null
             ? MessageModel.fromJson(json['lastMessage'])
             : null,
+        // ignore: prefer_if_null_operators
+        pinnedMessageId: json['pinnedMessage'],
       );
 }

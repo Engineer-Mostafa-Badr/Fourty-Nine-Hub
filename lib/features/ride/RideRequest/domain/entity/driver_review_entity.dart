@@ -2,6 +2,7 @@ class ReviewEntity {
   final String id;
   final String name;
   final String? image;
+
   final String comment;
   final num rate;
   final String createdAt;

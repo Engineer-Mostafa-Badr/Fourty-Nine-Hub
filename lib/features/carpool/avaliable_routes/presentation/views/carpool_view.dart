@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_cubit.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_available_trips_for_drivers/cubit/get_available_trips_for_drivers_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/car_pool_body.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -25,7 +26,11 @@ class CarPoolView extends StatelessWidget {
         ),
         body: BlocProvider(
           create: (context) => GetAllTripsCubit(serviceLocator()),
-          child: const CarPoolBody(),
+          child: BlocProvider(
+            create: (context) =>
+                GetAvailableTripsForDriversCubit(serviceLocator()),
+            child: const CarPoolBody(),
+          ),
         ),
       ),
     );

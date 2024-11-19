@@ -36,6 +36,28 @@ class CreateDoctorHomeVisitTimeTable extends StatelessWidget {
                     hint: 'Home Visit Examine Duration (in minutes)',
                     keyboardType: TextInputType.number,
                     isRequired: true,
+                    nextFocusNode: createDoctorCubit.waitingTimeFocusNode,
+                    currentFocusNode:
+                    createDoctorCubit.homeVisitExamineDurationFocusNode,
+                    currentController:
+                    createDoctorCubit.homeVisitExamineDurationController,
+                  ),
+                  const Sizer(),
+                  DefaultTextFormField(
+                    hint: 'Home Visit Examine Duration (in minutes)',
+                    keyboardType: TextInputType.number,
+                    isRequired: true,
+                    nextFocusNode: createDoctorCubit.waitingTimeFocusNode,
+                    currentFocusNode:
+                    createDoctorCubit.homeVisitExamineDurationFocusNode,
+                    currentController:
+                    createDoctorCubit.homeVisitExamineDurationController,
+                  ),
+                  const Sizer(),
+                  DefaultTextFormField(
+                    hint: 'Home Visit Examine Duration (in minutes)',
+                    keyboardType: TextInputType.number,
+                    isRequired: true,
                     currentFocusNode:
                         createDoctorCubit.homeVisitExamineDurationFocusNode,
                     currentController:

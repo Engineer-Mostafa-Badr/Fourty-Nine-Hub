@@ -34,10 +34,7 @@ class ProfileSearchView extends StatelessWidget {
                   return Center(
                     child: Text(
                       LocaleKeys.noData.localize,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                      ),
+                      style: Styles.mediumText(),
                     ),
                   );
                 },

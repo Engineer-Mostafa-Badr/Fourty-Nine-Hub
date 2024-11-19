@@ -1,7 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -27,49 +30,47 @@ class CreateRestaurantGovernorateDropdown extends StatelessWidget {
                 children: [
                   BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                       builder: (context, st) {
-                    return DropdownMenu(
-                        menuHeight: MediaQuery.of(context).size.height / 1.5,
-                        menuStyle: const MenuStyle(
-                          visualDensity: VisualDensity.comfortable,
-                        ),
-                        inputDecorationTheme: InputDecorationTheme(
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8)),
-                            borderSide: BorderSide(
-                                color: st is ValidationState &&
-                                        (st.isSubCategory ?? true)
-                                    ? Colors.red
-                                    : Colors.grey),
-                          ),
-                          constraints:
-                              BoxConstraints.loose(Size.fromHeight(90.h)),
-                          border: OutlineInputBorder(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8)),
-                            borderSide: BorderSide(
-                                color: st is ValidationState &&
-                                        (st.isGovernorate ?? true)
-                                    ? Colors.red
-                                    : Colors.grey),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8)),
-                            borderSide: BorderSide(
-                                color: st is ValidationState &&
-                                        (st.isGovernorate ?? true)
-                                    ? Colors.red
-                                    : Colors.grey),
+                    return DropdownButtonFormField(
+                      dropdownColor: cardDarkColor(context),
+                      decoration: InputDecoration(
+                        fillColor: Colors.transparent,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(Radius.circular(8)),
+                          borderSide: BorderSide(
+                            color: st is ValidationState && (st.isSubCategory ?? true)
+                                ? Colors.red
+                                : Colors.grey,
                           ),
                         ),
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        hintText: LocaleKeys.selectGovernorate.tr(),
-                        dropdownMenuEntries: state.governorates
-                            .map((e) =>
-                                DropdownMenuEntry(value: e, label: e.nameEn))
-                            .toList(),
-                        onSelected: onSelected);
+                        constraints: BoxConstraints.loose(Size.fromHeight(90.h)),
+                        border: OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(Radius.circular(8)),
+                          borderSide: BorderSide(
+                            color: st is ValidationState && (st.isGovernorate ?? true)
+                                ? Colors.red
+                                : Colors.grey,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(Radius.circular(8)),
+                          borderSide: BorderSide(
+                            color: st is ValidationState && (st.isGovernorate ?? true)
+                                ? Colors.red
+                                : Colors.grey,
+                          ),
+                        ),
+                      ),
+                      hint: Text(LocaleKeys.selectGovernorate.tr()),
+                      items: state.governorates.map((e) {
+                        return DropdownMenuItem(
+                          value: e,
+                          child: Text(context.isArabic?e.nameAr:e.nameEn),
+                        );
+                      }).toList(),
+                      onChanged: onSelected,
+                      isExpanded: true,
+                    )
+                    ;
                   }),
                   if (field.hasError)
                     Column(
@@ -86,11 +87,11 @@ class CreateRestaurantGovernorateDropdown extends StatelessWidget {
                     return Visibility(
                       visible: state is ValidationState &&
                           (state.isGovernorate ?? true),
-                      child: const Padding(
-                        padding: EdgeInsets.only(right: 5, left: 5, top: 5.0),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 5, left: 5, top: 5.0),
                         child: Text(
-                          "You have to selecte your governorate!",
-                          style: TextStyle(color: Colors.red),
+                          LocaleKeys.youHaveToSelectYourGovernorate.localize,
+                          style: const TextStyle(color: Colors.red),
                         ),
                       ),
                     );

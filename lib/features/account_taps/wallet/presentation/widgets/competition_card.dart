@@ -26,6 +26,7 @@ class CompetitionCard extends StatelessWidget {
     final int countOfRequest =
         (competitionsWalletEntity.countOfRequest).toInt();
     final int maxRequests = (competitionsWalletEntity.maxRequests).toInt();
+    print('max request is $maxRequests');
     return GestureDetector(
       onTap: () => onTap(context),
       child: Container(

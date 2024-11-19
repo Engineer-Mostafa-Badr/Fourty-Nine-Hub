@@ -3,6 +3,8 @@ part of 'create_resturant_cubit.dart';
 sealed class CreateRestaurantState {}
 
 final class CreateRestaurantInitial extends CreateRestaurantState {}
+final class CreateRestaurantLoading extends CreateRestaurantState {}
+final class CreateRestaurantFinish extends CreateRestaurantState {}
 
 final class CreateResturantLoading extends CreateRestaurantState {
   final String message;
@@ -26,6 +28,17 @@ final class CreateResturantError extends CreateRestaurantState {
   CreateResturantError(this.message);
 }
 
+enum ValidationStates { loading,filterLoading, initState, error, success,requestSuccess,requestLoading }
+
+extension ValidationStateX on ValidationState {
+  bool get isInitial => status == ValidationStates.initState;
+  bool get isLoading => status == ValidationStates.loading;
+  bool get isFilterLoading => status == ValidationStates.filterLoading;
+  bool get isError => status == ValidationStates.error;
+  bool get isSuccess => status == ValidationStates.success;
+  bool get isRequestSuccess => status == ValidationStates.requestSuccess;
+  bool get isRequestLoading => status == ValidationStates.requestLoading;}
+
 class ValidationState extends CreateRestaurantState {
   final bool? isName;
   final bool? isNumber;
@@ -37,6 +50,7 @@ class ValidationState extends CreateRestaurantState {
   final bool? isCommercialThirdPage;
   final bool? isGovernorate;
   final bool? isCity;
+  final ValidationStates? status;
   final bool? isMneu;
 
   ValidationState({
@@ -45,6 +59,7 @@ class ValidationState extends CreateRestaurantState {
     this.isSubCategory,
     this.isRestaurantPhoto,
     this.isCommercialPhoto,
+    this.status,
     this.isCommercialFirstPage,
     this.isCommercialSecondPage,
     this.isCommercialThirdPage,
@@ -59,6 +74,7 @@ class ValidationState extends CreateRestaurantState {
     bool? isSubCategory,
     bool? isRestaurantPhoto,
     bool? isCommercialPhoto,
+    ValidationStates? status,
     bool? isCommercialFirstPage,
     bool? isCommercialSecondPage,
     bool? isCommercialThirdPage,
@@ -68,6 +84,7 @@ class ValidationState extends CreateRestaurantState {
   }) {
     return ValidationState(
       isName: isName ?? this.isName,
+      status: status ?? this.status,
       isNumber: isNumber ?? this.isNumber,
       isSubCategory: isSubCategory ?? this.isSubCategory,
       isRestaurantPhoto: isRestaurantPhoto ?? this.isRestaurantPhoto,

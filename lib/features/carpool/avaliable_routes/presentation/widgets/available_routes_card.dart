@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -31,11 +32,9 @@ class AvaiableRoutesCard extends StatefulWidget {
 
 class _AvaiableRoutesCardState extends State<AvaiableRoutesCard> {
   DateTime? createdAt;
-  late final GetCurrencyCubit getCurrencyCubit;
 
   @override
   void initState() {
-    getCurrencyCubit = context.read<GetCurrencyCubit>()..getCurrencyData();
     final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
 
     print(userId);
@@ -64,7 +63,7 @@ class _AvaiableRoutesCardState extends State<AvaiableRoutesCard> {
                   widget.entity.comfort
                       ? Text(LocaleKeys.comfort.localize,
                           style: Styles.mediumText(
-                              color: isDarkTheme(context)
+                              color: context.isDarkMode
                                   ? AppColors.PRIMARY_COLOR_DARK
                                   : AppColors.PRIMARY_COLOR_LIGHT,
                               fontWeight: FontWeight.w600))
@@ -97,8 +96,11 @@ class _AvaiableRoutesCardState extends State<AvaiableRoutesCard> {
                               //   }
 
                               return Text(
-                                BlocProvider.of<GetCurrencyCubit>(context)
-                                    .currency,
+                                context.isArabic
+                                    ? BlocProvider.of<GetCurrencyCubit>(context)
+                                        .currnecyAr
+                                    : BlocProvider.of<GetCurrencyCubit>(context)
+                                        .currnecyEn,
                                 style: Styles.mediumText(
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.SECONDARY_COLOR),
@@ -109,7 +111,7 @@ class _AvaiableRoutesCardState extends State<AvaiableRoutesCard> {
                       ),
                       Text(LocaleKeys.seat.localize,
                           style: Styles.mediumText(
-                            color: isDarkTheme(context)
+                            color: context.isDarkMode
                                 ? AppColors.LIGHT_COLOR
                                 : AppColors.PRIMARY_COLOR_LIGHT,
                           )),

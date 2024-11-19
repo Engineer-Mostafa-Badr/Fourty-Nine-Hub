@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/create_shipping_request_cubit.dart';
 
@@ -167,7 +168,7 @@ class FromAndToWidget extends StatelessWidget {
                                     source: NetworkImage(subCategory.image),
                                   )),
                                   Label(
-                                      text: subCategory.name,
+                                      text: context.isArabic?subCategory.nameAr:subCategory.nameEn,
                                       style: Styles.mediumText()),
                                 ],
                               ),

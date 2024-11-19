@@ -1,8 +1,10 @@
 import 'package:dartz/dartz.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/health_feature/health/data/models/doctor_info_model.dart';
 
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/doctor_info_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/favorite_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 
@@ -20,19 +22,19 @@ class HealthRepoImpl implements HealthRepo {
   }
 
   @override
-  Future<Either<Failure, List<BookedAppointmentEntity>>> getUpcomingBookings() {
-    return _remoteDataSource.getUpcomingBookings();
+  Future<Either<Failure, List<BookedAppointmentEntity>>> getUpcomingBookings(String userId) {
+    return _remoteDataSource.getUpcomingBookings(userId);
   }
 
   @override
   Future<Either<Failure, List<HealthSubcategoryEntity>>>
-      getHealthSubcategories() {
-    return _remoteDataSource.getHealthSubcategories();
+      getHealthSubcategories(String id) {
+    return _remoteDataSource.getHealthSubcategories(id);
   }
 
   @override
-  Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices() {
-    return _remoteDataSource.getMedicalServices();
+  Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices(String userId) {
+    return _remoteDataSource.getMedicalServices(userId);
   }
 
   @override
@@ -49,5 +51,10 @@ class HealthRepoImpl implements HealthRepo {
   Future<Either<Failure, List<FavoriteCategoryBannersEntity>>>
       getCategoryFavorite() {
     return _remoteDataSource.getFavoriteCategory();
+  }
+
+  @override
+  Future<Either<Failure, DoctorInfoEntity>> getDoctorInfo() {
+    return _remoteDataSource.getDoctorInfo();
   }
 }

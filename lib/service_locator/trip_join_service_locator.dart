@@ -2,6 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/google_api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/subscription_interceptor.dart';
+import 'package:fourtyninehub/features/trip_join/add_new_pick_me/data/data_source/add_new_pick_me_remote_datasource.dart';
+import 'package:fourtyninehub/features/trip_join/add_new_pick_me/data/repo/add_new_pick_me_repo_imp.dart';
+import 'package:fourtyninehub/features/trip_join/add_new_pick_me/domain/repo/add_new_pick_me_repo.dart';
+import 'package:fourtyninehub/features/trip_join/add_new_pick_me/domain/use_cases/add_new_pick_me_usecase.dart';
+import 'package:fourtyninehub/features/trip_join/add_new_pick_me/presentation/cubits/cubit/add_new_pick_me_trip_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/data/remote_data_source/fetch_location_remote_datasource.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/data/remote_data_source/trip_join_remote_datasource.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/data/repo/trip_join_google_api_repo_imp.dart';
@@ -14,6 +19,16 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecas
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_location_cordinates_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_price_distance_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/publish_trip_join_usecase.dart';
+import 'package:fourtyninehub/features/trip_join/fetch_my_pick_me_trips/data/data_source/fetch_my_all_pick_me_remote_data_source.dart';
+import 'package:fourtyninehub/features/trip_join/fetch_my_pick_me_trips/data/repo/fetch_my_pick_me_repo_imp.dart';
+import 'package:fourtyninehub/features/trip_join/fetch_my_pick_me_trips/domain/repo/fetch_my_pick_me_repo.dart';
+import 'package:fourtyninehub/features/trip_join/fetch_my_pick_me_trips/domain/use_cases/fetch_my_pick_me_use_case.dart';
+import 'package:fourtyninehub/features/trip_join/fetch_my_pick_me_trips/presentation/cubits/fetch_my_pick_me_trips/cubit/fetch_my_pick_me_trips_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/get_requests_pick_me/data/data_source/get_requests_pick_me_remote_data_source.dart';
+import 'package:fourtyninehub/features/trip_join/get_requests_pick_me/data/repo/get_requests_pick_me_repo_imp.dart';
+import 'package:fourtyninehub/features/trip_join/get_requests_pick_me/domain/repo/get_requests_pick_me_repo.dart';
+import 'package:fourtyninehub/features/trip_join/get_requests_pick_me/domain/use_case/get_requests_pick_me_use_case.dart';
+import 'package:fourtyninehub/features/trip_join/get_requests_pick_me/presentation/cubits/cubit/get_requests_pick_me_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/data/datasource/trip_join_request_history_remote_datasource.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/data/repo/trip_join_request_history_repo_impl.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/domain/repo/trip_join_request_history_repo.dart';
@@ -146,6 +161,54 @@ class TripJoinServiceLocator {
     );
     serviceLocator.registerLazySingleton<ViewAllPickMeUseCase>(
       () => ViewAllPickMeUseCase(viewAllPickMeRepo: serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<AddNewPickMeRemoteDatasource>(
+      () => AddNewPickMeRemoteDatasourceImp(apiConsumer: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<AddNewPickMeRepo>(
+      () => AddNewPickMeRepoImp(addNewPickMeRemoteDatasource: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<AddNewPickMeUsecase>(
+      () => AddNewPickMeUsecase(addNewPickMeRepo: serviceLocator()),
+    );
+
+    serviceLocator.registerFactory<AddNewPickMeTripCubit>(
+      () => AddNewPickMeTripCubit(addNewPickMeUsecase: serviceLocator()),
+    );
+
+    //____________FetchMyPickMe_______________//
+
+    serviceLocator.registerLazySingleton<FetchMyAllPickMeRemoteDataSource>(
+      () => FetchMyAllPickMeRemoteDataSourceImp(apiConsumer: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<FetchMyPickMeRepo>(
+      () => FetchMyPickMeRepoImp(
+          fetchMyAllPickMeRemoteDataSource: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<FetchMyPickMeUseCase>(
+      () => FetchMyPickMeUseCase(fetchMyPickMeRepo: serviceLocator()),
+    );
+
+    serviceLocator.registerFactory<FetchMyPickMeTripsCubit>(
+      () => FetchMyPickMeTripsCubit(fetchMyPickMeUseCase: serviceLocator()),
+    );
+
+    //_________get_requests_pickMe//
+
+    serviceLocator.registerLazySingleton<GetRequestsPickMeRemoteDataSource>(
+      () => GetRequestsPickMeRemoteDataSourceImp(apiConsumer: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<GetRequestsPickMeRepo>(
+      () => GetRequestsPickMeRepoImp(
+          getRequestsPickMeRemoteDataSource: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<GetRequestsPickMeUseCase>(
+      () => GetRequestsPickMeUseCase(getRequestsPickMeRepo: serviceLocator()),
+    );
+
+    serviceLocator.registerFactory<GetRequestsPickMeCubit>(
+      () => GetRequestsPickMeCubit(getRequestsPickMeUseCase: serviceLocator()),
     );
   }
 }

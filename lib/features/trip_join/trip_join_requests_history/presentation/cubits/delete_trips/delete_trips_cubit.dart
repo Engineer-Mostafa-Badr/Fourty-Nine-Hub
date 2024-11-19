@@ -9,9 +9,13 @@ class DeleteTripsCubit extends Cubit<DeleteTripsState> {
   final DeleteTripUseCase deleteTripUseCase;
   DeleteTripsCubit({required this.deleteTripUseCase})
       : super(DeleteTripsInitial());
-  Future<void> deleteTrip({required String id}) async {
+  Future<void> deleteTrip(
+      {required String subCategory,
+      required String url,
+      required String id}) async {
     emit(DeleteTripsLoading());
-    final response = await deleteTripUseCase.call(id: id);
+    final response = await deleteTripUseCase.call(
+        subCategory: subCategory, url: url, id: id);
     response.fold(
       (Failure failure) {
         emit(DeleteTripsFailed(Labels.errorHappened));

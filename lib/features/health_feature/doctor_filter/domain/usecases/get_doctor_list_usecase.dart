@@ -26,7 +26,8 @@ class DoctorSearchParams {
   CityEntity city = CityEntity(id: '', nameEn: '', nameAr: '');
   SubCategoryEntity subCategory = SubCategoryEntity(
     id: '',
-    name: '',
+    nameAr: '',
+    nameEn: '',
     image: '',
     isFavorite: false,
   );
@@ -38,7 +39,7 @@ class DoctorSearchParams {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['subCategoryId'] = subCategory.id;
     if (bookingType != null) {
-      data['type'] = bookingType?.name;
+      data['type'] = bookingType?.name=='home'?'visitHome':bookingType?.name=='call'?'calls':'clinic';
       if (bookingType != BookingTypes.call) {
         data['governorateId'] = governorate.id;
         data['cityId'] = city.id;

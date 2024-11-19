@@ -1,13 +1,17 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/core/enums/chat_categories.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_recording_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_typing_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
@@ -18,12 +22,17 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/listen_to_new_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/pin_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unpin_chat_use_case.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 part 'chats_state.dart';
 
 class ChatsCubit extends Cubit<ChatsState> {
   final ListenToNewChatUseCase _listenToNewChatUseCase;
   final ListenToNewMessageUseCase _listenToNewMessageUseCase;
+  final ListenToTypingUseCase _listenToTypingUseCase;
+  final ListenToRecordingUseCase _listenToRecordingUseCase;
   final StopListenToMessagesUseCase _stopListenToMessagesUseCase;
   final MarkMessagesAsDeliveredUseCase _markMeesagesAsDeliveredUseCase;
   final GetChatsUseCase _getChatsUseCase;
@@ -48,6 +57,8 @@ class ChatsCubit extends Cubit<ChatsState> {
     this._pinChatUseCase,
     this._unPinChatUseCase,
     this._listenToNewChatUseCase,
+    this._listenToTypingUseCase,
+    this._listenToRecordingUseCase,
   ) : super(const ChatsState());
 
   // Selected Chats
@@ -68,6 +79,12 @@ class ChatsCubit extends Cubit<ChatsState> {
 
     _listenToNewMessages();
     _listenToNewChat();
+    _listenToTyping();
+    _listenToRecording();
+    serviceLocator<Socket>().connect();
+    serviceLocator<Socket>().on("error", (date) {
+      log("error from socket : $date");
+    });
   }
 
   // ======================================= get chats =======================================
@@ -216,14 +233,41 @@ class ChatsCubit extends Cubit<ChatsState> {
   }
 
   _listenToNewChat() {
-    _listenToNewChatUseCase((chat) {
-      log("new chat = $chat");
-      // _chats[chat.id] = chat;
+    _listenToNewMessageUseCase((message) {
+      log("new message = $message");
+      _chats[message.chatId]?.lastMessage = message;
+      _chats[message.chatId]?.unreadCount =
+          _chats[message.chatId]?.unreadCount ?? 0 + 1;
       // if (!message.byMe && message.chatId != null) {
       //   _markMeesagesAsDeliveredUseCase(MarkMessagesAsDeliveredParams(chatId: message.chatId!));
       // }
-      emit(state.copyWith(status: ChatsStates.success));
-      getChatsByCategory(_selectedChatCategory);
+      // emit(state.copyWith(status: ChatsStates.success));
+      emit(state.copyWith(newMessage: message, status: ChatsStates.newMessage));
+      // getChatsByCategory(_selectedChatCategory);
+    });
+  }
+
+  _listenToTyping() {
+    _listenToTypingUseCase((listenToTypingParams) {
+      log("listenToTypingParams = ${listenToTypingParams.isTyping} , chatId = ${listenToTypingParams.chatId}");
+      _chats[listenToTypingParams.chatId]?.typing =
+          listenToTypingParams.isTyping;
+      log("listenToTypingParams after set = ${_chats[listenToTypingParams.chatId]?.typing} , name = ${_chats[listenToTypingParams.chatId]?.name}}");
+      emit(state.copyWith(
+          listenToTypingParams: listenToTypingParams,
+          status: ChatsStates.typing));
+    });
+  }
+
+  _listenToRecording() {
+    _listenToRecordingUseCase((listenToRecordingParams) {
+      log("listenToRecordingParams = ${listenToRecordingParams.isRecording} , chatId = ${listenToRecordingParams.chatId}");
+      _chats[listenToRecordingParams.chatId]?.recording =
+          listenToRecordingParams.isRecording;
+      log("listenToRecording after ser = ${_chats[listenToRecordingParams.chatId]?.recording} , name = ${_chats[listenToRecordingParams.chatId]?.name}");
+      emit(state.copyWith(
+          listenToRecordingParams: listenToRecordingParams,
+          status: ChatsStates.recording));
     });
   }
 
@@ -236,6 +280,9 @@ class ChatsCubit extends Cubit<ChatsState> {
   @override
   Future<void> close() {
     _stopListenToMessagesUseCase(const NoParams());
+    serviceLocator<Socket>().off(SocketIOListeners.typingMessage);
+    serviceLocator<Socket>().off(SocketIOListeners.recordingMessage);
+    serviceLocator<Socket>().off(SocketIOListeners.creatingNewChat);
     return super.close();
   }
 

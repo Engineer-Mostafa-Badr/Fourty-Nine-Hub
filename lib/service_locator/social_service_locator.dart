@@ -2,16 +2,33 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasour
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasources/remote/chat_message_remote_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/repositories/chat_room_repository_implement.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/clear_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_one_time_view_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_clear_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_delivered_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_one_time_message_seen.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_pin_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_record_listend.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_recording_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_seen_messages.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_typing_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_unpin_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_message_as_seen_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/pin_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/set_record_as_listened.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/start_recording_uecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/start_typing_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_delivered_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_seen_messages.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_recording_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_typing_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/unpin_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/datasources/chats_remote_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/repositories/chats_repository_implement.dart';
@@ -38,9 +55,13 @@ class SocialServiceLocator {
     serviceLocator.registerLazySingleton<ChatsRemoteDataSource>(() =>
         ChatsRemoteDataSourceImplementation(
             serviceLocator(), serviceLocator()));
-    serviceLocator.registerLazySingleton<MessagesRemoteDataSource>(() =>
-        MessagesRemoteDataSourceImplementation(
-            serviceLocator(), serviceLocator()));
+    // serviceLocator.registerLazySingleton<MessagesRemoteDataSource>(() =>
+    //     MessagesRemoteDataSourceImplementation(
+    //         serviceLocator(), serviceLocator()));
+    serviceLocator.registerLazySingleton<MessagesRemoteDataSource>(
+        () => MessagesRemoteDataSourceImplementation(
+              serviceLocator(),
+            ));
     serviceLocator.registerLazySingleton<MessagesLocalDataSource>(
         () => SQFLiteMessagesLocalDataSourceImplementation(serviceLocator()));
     // ---------------------------------- repositories ----------------------------------
@@ -52,6 +73,75 @@ class SocialServiceLocator {
     serviceLocator.registerLazySingleton<GetChatsUseCase>(() => GetChatsUseCase(
           serviceLocator(),
         ));
+    serviceLocator.registerLazySingleton<GetChatUseCase>(() => GetChatUseCase(
+          serviceLocator(),
+        ));
+    serviceLocator
+        .registerLazySingleton<PinMessageUseCase>(() => PinMessageUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator
+        .registerLazySingleton<UnPinMessageUseCase>(() => UnPinMessageUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToPinMessageUseCase>(
+        () => ListenToPinMessageUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToUnPinMessageUseCase>(
+        () => ListenToUnPinMessageUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator
+        .registerLazySingleton<ClearChatUseCase>(() => ClearChatUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToClearChatUseCase>(
+        () => ListenToClearChatUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToOneTimeMessageSeenUseCase>(
+        () => ListenToOneTimeMessageSeenUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<StartTypingMessageUseCase>(
+        () => StartTypingMessageUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<ListenToRecordListened>(
+        () => ListenToRecordListened(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<SetRecordAsListenedUseCase>(
+        () => SetRecordAsListenedUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<StopTypingMessageUseCase>(
+        () => StopTypingMessageUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToTypingUseCase>(
+        () => ListenToTypingUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<StartRecordingMessageUseCase>(
+        () => StartRecordingMessageUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<StopRecordingMessageUseCase>(
+        () => StopRecordingMessageUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<ListenToRecordingUseCase>(
+        () => ListenToRecordingUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator
         .registerLazySingleton<GroupsChatsUseCase>(() => GroupsChatsUseCase(
@@ -68,6 +158,11 @@ class SocialServiceLocator {
             ));
     serviceLocator.registerLazySingleton<CreateAnonymousChatUseCase>(
         () => CreateAnonymousChatUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<GetOneTimeViewMessageUseCase>(
+        () => GetOneTimeViewMessageUseCase(
               serviceLocator(),
             ));
 
@@ -161,9 +256,26 @@ class SocialServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
         ));
 
     serviceLocator.registerFactory<ChatRoomCubit>(() => ChatRoomCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

@@ -113,9 +113,9 @@ class _TwitterViewState extends State<TwitterView> {
               // const BuildTwitterDocumentCard(),
               // Expanded(child: TwitterGlobalPosts(userData: userData!,)),
 
-              SliverToBoxAdapter(
-                child: _buildTwitterTitle(),
-              ),
+              // SliverToBoxAdapter(
+              //   child: _buildTwitterTitle(),
+              // ),
               const SliverToBoxAdapter(
                 child: BuildTwitterDocumentCard(),
               ),
@@ -291,9 +291,9 @@ class _TwitterViewState extends State<TwitterView> {
           onRefresh: () async => controller.onGlobalRefresh(),
           child: CustomScrollView(
             slivers: [
-              SliverToBoxAdapter(
-                child: _buildTwitterTitle(),
-              ),
+              // SliverToBoxAdapter(
+              //   child: _buildTwitterTitle(),
+              // ),
               const SliverToBoxAdapter(
                 child: BuildTwitterDocumentCard(),
               ),

@@ -2,7 +2,20 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/add_favourite_category_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/chech_user_nearby_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_favourites_category_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_favourites_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_gifts_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_last_seen_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_subcategory_data_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_tinder_profile_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_user_data_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/send_geft_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/upload_tinder_picture_use_case.dart';
+import '../../../../chance_feature/domain/entity/main_categry_entity.dart';
 import '../../../../fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import '../../data/models/near_by_model.dart';
 import '../../data/models/tinder_person_model.dart';
@@ -10,16 +23,25 @@ import '../../data/repo/tinder_repo.dart';
 import 'tinder_state.dart';
 
 class TinderViewCubit extends Cubit<TinderViewState> {
-  final TinderRepository tinderRepository;
   int _currentPage = 1;
   bool _isLoadingMore = false;
   final bool _hasMoreData = true;
   String? _currentGender;
   final GetMainCategoryDetailsUseCase getMainCategoryDetailsUseCase;
+  final GetTinderFavouritesCategoryUseCase _getTinderFavouritesCategoryUseCase;
+  final GetUserDataUseCase _getUserDataUseCase;
+  final GetTinderFavouritesUseCase _getTinderFavouritesUseCase;
+  final GetTinderProfileUseCase _getTinderProfileUseCase;
+  final AddTinderFavouriteCategoryUseCase _addTinderFavouriteCategoryUseCase;
+  final FetchLastSeenUseCase _fetchLastSeenUseCase;
+  final SendGiftUseCase _sendGiftUseCase;
+  final FetchGiftsUseCase _fetchGiftsUseCase;
+  final CheckUserNearbyUseCase _checkUserNearbyUseCase;
+  final FetchSubCategoryDataUseCase _fetchSubCategoryDataUseCase;
+  final UploadTinderPictureUseCase _uploadTinderPictureUseCase;
 
-  TinderViewCubit(
-      {required this.tinderRepository,
-      required this.getMainCategoryDetailsUseCase})
+  TinderViewCubit(this._getUserDataUseCase, this._getTinderProfileUseCase, this._getTinderFavouritesUseCase, this._getTinderFavouritesCategoryUseCase,
+      this.getMainCategoryDetailsUseCase, this._addTinderFavouriteCategoryUseCase, this._fetchLastSeenUseCase, this._sendGiftUseCase, this._fetchGiftsUseCase, this._checkUserNearbyUseCase, this._fetchSubCategoryDataUseCase, this._uploadTinderPictureUseCase)
       : super(TinderViewState());
 
   Future<void> fetchUserData({
@@ -41,28 +63,35 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     final page = isLoadMore ? _currentPage + 1 : 1;
     _isLoadingMore = true;
 
-    final userData = await tinderRepository.fetchUserData(gender, page);
+    var response = await _getUserDataUseCase.call(GetUsersParams(gender: gender, page: page, limit: 20,));
+    response.fold(
+            (failure) {
+          throw Exception("Failed to fetch fetchUserData");
+        },
+            (data) async{
+              if (data != null) {
+                if (data.isEmpty) {
+                  // _hasMoreData = false;
+                } else {
+                  _currentPage = page;
+                  final List<UserData> updatedUserData = isLoadMore
+                      ? (List.from(state.userData!)..addAll(data))
+                      : data;
+                  log("$gender/***************************************************************************************************************************************************************");
 
-    if (userData != null) {
-      if (userData.isEmpty) {
-        // _hasMoreData = false;
-      } else {
-        _currentPage = page;
-        final List<UserData> updatedUserData = isLoadMore
-            ? (List.from(state.userData!)..addAll(userData))
-            : userData;
-        log("$gender/***************************************************************************************************************************************************************");
+                  emit(state.copyWith(
+                      userData: updatedUserData,
+                      userDataState: TinderStates.success,
+                      gender: state.gender));
+                }
+              } else {
+                emit(state.copyWith(userDataState: TinderStates.failure));
+              }
 
-        emit(state.copyWith(
-            userData: updatedUserData,
-            userDataState: TinderStates.success,
-            gender: state.gender));
-      }
-    } else {
-      emit(state.copyWith(userDataState: TinderStates.failure));
-    }
+              _isLoadingMore = false;
+        });
 
-    _isLoadingMore = false;
+
   }
 
   Future<void> loadMoreUserData(String gender) async {
@@ -78,14 +107,15 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     final mainCategoryResponse = await getMainCategoryDetailsUseCase(id);
     // log('main categoty response ${mainCategoryResponse?.data.mainCategory.nameEn}');
 
-    mainCategoryResponse.fold((l) {
-      log('there is a failure ${getFailureMessage(l, context)}');
+    mainCategoryResponse.fold(
+        (l) {
+          log('there is a failure ${getFailureMessage(l, context)}');
 
-      emit(state.copyWith(
-        mainCategoryResponseState: TinderStates.failure,
-        status: TinderStates.failure,
-      ));
-    }, (r) {
+          emit(state.copyWith(
+              mainCategoryResponseState: TinderStates.failure,
+              status: TinderStates.failure,
+            ));
+        }, (r) {
       emit(state.copyWith(
         mainCategoryResponseState: TinderStates.success,
         mainCategoryEntity: r,
@@ -105,107 +135,143 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     // }
   }
 
-  Future<bool> startNormalChat({
-    required String receiverId,
-    required String subCategoryId,
-  }) async {
-    emit(state.copyWith(normalChatResponseState: TinderStates.initial));
-    final normalChatModel =
-        await tinderRepository.startNormalChat(receiverId, subCategoryId);
-    if (normalChatModel != null) {
-      emit(state.copyWith(
-          normalChatResponse: normalChatModel,
-          normalChatResponseState: TinderStates.success));
-      return true;
-    } else {
-      emit(state.copyWith(normalChatResponseState: TinderStates.failure));
-      return false;
-    }
-  }
-
-  Future<bool> startAnonymousChat({
-    required String receiverId,
-  }) async {
-    emit(state.copyWith(anonymousChatResponseState: TinderStates.initial));
-    final anonymousChatModel =
-        await tinderRepository.startAnonymousChat(receiverId);
-    if (anonymousChatModel != null) {
-      emit(state.copyWith(
-          anonymousChatResponse: anonymousChatModel,
-          anonymousChatResponseState: TinderStates.success));
-      return true;
-    } else {
-      emit(state.copyWith(anonymousChatResponseState: TinderStates.failure));
-      return false;
-    }
-  }
+  // Future<bool> startNormalChat({
+  //   required String receiverId,
+  //   required String subCategoryId,
+  // }) async {
+  //   emit(state.copyWith(normalChatResponseState: TinderStates.initial));
+  //   final normalChatModel =
+  //       await tinderRepository.startNormalChat(receiverId, subCategoryId);
+  //   if (normalChatModel != null) {
+  //     emit(state.copyWith(
+  //         normalChatResponse: normalChatModel,
+  //         normalChatResponseState: TinderStates.success));
+  //     return true;
+  //   } else {
+  //     emit(state.copyWith(normalChatResponseState: TinderStates.failure));
+  //     return false;
+  //   }
+  // }
+  //
+  // Future<bool> startAnonymousChat({
+  //   required String receiverId,
+  // }) async {
+  //   emit(state.copyWith(anonymousChatResponseState: TinderStates.initial));
+  //   final anonymousChatModel =
+  //       await tinderRepository.startAnonymousChat(receiverId);
+  //   if (anonymousChatModel != null) {
+  //     emit(state.copyWith(
+  //         anonymousChatResponse: anonymousChatModel,
+  //         anonymousChatResponseState: TinderStates.success));
+  //     return true;
+  //   } else {
+  //     emit(state.copyWith(anonymousChatResponseState: TinderStates.failure));
+  //     return false;
+  //   }
+  // }
 
   Future<void> fetchUserProfile({required String userId}) async {
     emit(state.copyWith(profileUserState: TinderStates.initial));
-    final userModel = await tinderRepository.fetchUserProfile(userId);
-    if (userModel != null) {
+    final response = await _getTinderProfileUseCase(userId);
+    // log('main categoty response ${response?.data.mainCategory.nameEn}');
+
+    response.fold(
+            (l) {
+              emit(state.copyWith(profileUserState: TinderStates.failure));
+            }, (r) {
       emit(state.copyWith(
           profileUserState: TinderStates.success,
-          profileUserData: userModel.data));
-    } else {
-      emit(state.copyWith(profileUserState: TinderStates.failure));
-    }
+          profileUserData:r.data));
+    });
   }
 
   Future<void> fetchFavorites() async {
     emit(state.copyWith(getFavCategoryListState: TinderStates.initial));
-    final apiResponse = await tinderRepository.fetchFavorites();
-    if (apiResponse != null) {
+    final response = await _getTinderFavouritesUseCase(const NoParams());
+    response.fold(
+            (l) {
+              emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
+        }, (r) {
       emit(state.copyWith(
           getFavCategoryListState: TinderStates.success,
-          getFavCategoryList: apiResponse));
-    } else {
-      emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
-    }
+          getFavCategoryList: r));
+    });
   }
 
   Future<void> fetchFavoritesCategory() async {
     emit(state.copyWith(getFavCategoryListState: TinderStates.initial));
-    final apiResponse = await tinderRepository.fetchFavoritesCategory();
-    if (apiResponse != null) {
+    final response = await _getTinderFavouritesCategoryUseCase(const NoParams());
+    response.fold(
+            (l) {
+          emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
+        }, (r) {
       emit(state.copyWith(
           getFavCategoryListState: TinderStates.success,
-          FavoriteCategoryList: apiResponse));
-    } else {
-      emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
-    }
+          FavoriteCategoryList: r));});
+    // emit(state.copyWith(getFavCategoryListState: TinderStates.initial));
+    // final apiResponse = await tinderRepository.fetchFavoritesCategory();
+    // if (apiResponse != null) {
+    //   emit(state.copyWith(
+    //       getFavCategoryListState: TinderStates.success,
+    //       FavoriteCategoryList: apiResponse));
+    // } else {
+    //   emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
+    // }
   }
 
-  Future<void> addFavoriteCategory({String? categoryId}) async {
+  Future<void> addFavoriteCategory({required String categoryId}) async {
     emit(state.copyWith(addCategoryModelState: TinderStates.initial));
-    final isSuccess = await tinderRepository.addFavoriteCategory(categoryId!);
-    if (isSuccess) {
+    final response = await _addTinderFavouriteCategoryUseCase(categoryId);
+    response.fold(
+            (l) {
+          emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
+        }, (r) {
       emit(state.copyWith(addCategoryModelState: TinderStates.success));
-    } else {
-      emit(state.copyWith(addCategoryModelState: TinderStates.failure));
-    }
+            });
+    // final isSuccess = await tinderRepository.addFavoriteCategory(categoryId!);
+    // if (isSuccess) {
+    //   emit(state.copyWith(addCategoryModelState: TinderStates.success));
+    // } else {
+    //   emit(state.copyWith(addCategoryModelState: TinderStates.failure));
+    // }
   }
 
   Future<bool> fetchLastSeen({
     required String userId,
   }) async {
+    bool result = false;
     emit(state.copyWith(
       lastSeenModelState: TinderStates.initial,
     ));
-
-    final lastSeenModel = await tinderRepository.fetchLastSeen(userId);
-    if (lastSeenModel != null) {
+    final response = await _fetchLastSeenUseCase(userId);
+    response.fold(
+            (l) {
+              emit(state.copyWith(lastSeenModelState: TinderStates.failure));
+        }, (r) {
+      result=true;
       emit(state.copyWith(
-          lastSeenModel: lastSeenModel,
+          lastSeenModel: r,
           lastSeenModelState: TinderStates.success));
-      return true;
-      // print(lastSeenModel.data!.status.toString() +
-      //     "sssssssssssssssssssssssssssssssss");
-    } else {
-      print("sssssssssssssssssssssssssssssssss");
-      emit(state.copyWith(lastSeenModelState: TinderStates.failure));
-      return false;
-    }
+    });
+
+    // emit(state.copyWith(
+    //   lastSeenModelState: TinderStates.initial,
+    // ));
+    //
+    // final lastSeenModel = await tinderRepository.fetchLastSeen(userId);
+    // if (lastSeenModel != null) {
+    //   emit(state.copyWith(
+    //       lastSeenModel: lastSeenModel,
+    //       lastSeenModelState: TinderStates.success));
+    //   return true;
+    //   // print(lastSeenModel.data!.status.toString() +
+    //   //     "sssssssssssssssssssssssssssssssss");
+    // } else {
+    //   print("sssssssssssssssssssssssssssssssss");
+    //   emit(state.copyWith(lastSeenModelState: TinderStates.failure));
+    //   return result;
+    // }
+    return result;
   }
 
   Future<dynamic> sendGift({
@@ -213,56 +279,99 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     required String giftId,
     required String subCategoryId,
   }) async {
-    emit(state.copyWith(sendGiftErrorDataState: TinderStates.initial));
-    final response =
-        await tinderRepository.sendGift(receiverId, giftId, subCategoryId);
-    if (response != null) {
-      log("$response--------------------------------------");
+    emit(state.copyWith(
+      sendGiftErrorDataState: TinderStates.initial,
+    ));
+    final response = await _sendGiftUseCase(SendGiftParams(
+      giftId: giftId,
+      receiverId: receiverId,
+    ));
+    response.fold(
+            (l) {
+              emit(state.copyWith(sendGiftErrorDataState: TinderStates.success));
+        }, (r) {
       emit(state.copyWith(sendGiftErrorDataState: TinderStates.success));
-      return response;
-    } else {
-      emit(state.copyWith(sendGiftErrorDataState: TinderStates.failure));
-    }
-    return '';
+    });
+    // emit(state.copyWith(sendGiftErrorDataState: TinderStates.initial));
+    // if (response != null) {
+    //   log("$response--------------------------------------");
+    //   emit(state.copyWith(sendGiftErrorDataState: TinderStates.success));
+    //   return response;
+    // } else {
+    //   emit(state.copyWith(sendGiftErrorDataState: TinderStates.failure));
+    // }
+    // return '';
   }
 
   Future<void> fetchGifts() async {
-    emit(state.copyWith(giftsState: TinderStates.initial));
-    final giftData = await tinderRepository.fetchGifts();
-    log("${giftData}dsssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-    if (giftData != null) {
-      emit(state.copyWith(gifts: giftData, giftsState: TinderStates.success));
-    } else {
-      emit(state.copyWith(giftsState: TinderStates.failure));
-    }
+    emit(state.copyWith(
+      giftsState: TinderStates.initial,
+    ));
+    final response = await _fetchGiftsUseCase(const NoParams());
+    response.fold(
+            (l) {
+          emit(state.copyWith(giftsState: TinderStates.success));
+        }, (r) {
+      emit(state.copyWith(gifts: r.data?.gifts, giftsState: TinderStates.success));
+    });
+    // emit(state.copyWith(giftsState: TinderStates.initial));
+    // final giftData = await tinderRepository.fetchGifts();
+    // log("${giftData}dsssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    // if (giftData != null) {
+    //   emit(state.copyWith(gifts: giftData, giftsState: TinderStates.success));
+    // } else {
+    //   emit(state.copyWith(giftsState: TinderStates.failure));
+    // }
   }
 
   Future<void> checkUserNearby({
     required String cardUserId,
   }) async {
     emit(state.copyWith(isUserNearbyState: TinderStates.initial));
-    final nearByModel = await tinderRepository.checkUserNearby(cardUserId);
-    if (nearByModel != null) {
+
+    final response = await _checkUserNearbyUseCase(cardUserId);
+    response.fold(
+            (l) {
+              emit(state.copyWith(
+                  isUserNearbyState: TinderStates.failure,
+                  isUserNearby: NearByModel()));
+              }, (r) {
       emit(state.copyWith(
-          isUserNearby: nearByModel, isUserNearbyState: TinderStates.success));
-    } else {
-      emit(state.copyWith(
-          isUserNearbyState: TinderStates.failure,
-          isUserNearby: NearByModel()));
-    }
+          isUserNearby: r, isUserNearbyState: TinderStates.success));
+            });
+    // final nearByModel = await tinderRepository.checkUserNearby(cardUserId);
+    // if (nearByModel != null) {
+    //   emit(state.copyWith(
+    //       isUserNearby: nearByModel, isUserNearbyState: TinderStates.success));
+    // } else {
+    //   emit(state.copyWith(
+    //       isUserNearbyState: TinderStates.failure,
+    //       isUserNearby: NearByModel()));
+    // }
   }
 
   Future<void> fetchSubCategoryData() async {
     emit(state.copyWith(subCategoryDataState: TinderStates.initial));
-    final subCategoryData = await tinderRepository.fetchSubCategoryData();
-    if (subCategoryData != null) {
-      // fetchMainCategoryById('62c8b5b09332225799fe335e');
+
+    final response = await _fetchSubCategoryDataUseCase(const NoParams());
+    response.fold(
+            (l) {
+              emit(state.copyWith(subCategoryDataState: TinderStates.failure));
+        }, (r) {
       emit(state.copyWith(
-          subCategoryData: subCategoryData,
+          subCategoryData: r,
           subCategoryDataState: TinderStates.success));
-    } else {
-      emit(state.copyWith(subCategoryDataState: TinderStates.failure));
-    }
+    });
+    // emit(state.copyWith(subCategoryDataState: TinderStates.initial));
+    // final subCategoryData = await tinderRepository.fetchSubCategoryData();
+    // if (subCategoryData != null) {
+    //   // fetchMainCategoryById('62c8b5b09332225799fe335e');
+    //   emit(state.copyWith(
+    //       subCategoryData: subCategoryData,
+    //       subCategoryDataState: TinderStates.success));
+    // } else {
+    //   emit(state.copyWith(subCategoryDataState: TinderStates.failure));
+    // }
   }
 
   // Future<void> fetchUserData({
@@ -284,7 +393,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     required List<String> pictures,
   }) async {
     emit(state.copyWith(uploadImageState: TinderStates.initial));
-    await tinderRepository.uploadPictures(pictures);
+    await _uploadTinderPictureUseCase(pictures);
     emit(state.copyWith(uploadImageState: TinderStates.success));
   }
 

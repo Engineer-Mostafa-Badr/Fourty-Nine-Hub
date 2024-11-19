@@ -4,4 +4,5 @@ extension StringExtension on String {
   String get localize => this.tr();
   int get toInt => int.parse(this);
   DateTime get toDataTime => DateTime.parse(this);
+  Uri get toUri => Uri.parse(this);
 }

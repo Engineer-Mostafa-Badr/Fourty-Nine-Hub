@@ -15,7 +15,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../service_locator/service_locator.dart';
-import '../../controllers/explore_reels_cubit/explore_reels_cubit.dart';
+import '../../controllers/explore_reels_cubit/reel_cubit.dart';
 import '../../shared/filter_utiles.dart';
 import 'recording_shared.dart';
 

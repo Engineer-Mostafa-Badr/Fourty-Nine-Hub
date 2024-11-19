@@ -2,8 +2,20 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/delete_restaurant_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_statistics_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_statistics_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/change_connectivity_use_case.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/is_resturant_usecase.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../../../core/error/failure.dart';
@@ -15,173 +27,154 @@ import '../../domain/usecases/get_restaurant_orders_usecase.dart';
 part 'restaurant_dashboard_state.dart';
 
 class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
+  final GetRestaurantStatisticUseCase _getRestaurantStatisticUseCase;
+  final GetRestaurantInfoUseCase _getRestaurantInfoUseCase;
+  final IsResturantUsecase _isRestaurantUsecase;
+  final DeleteRestaurantUseCase _deleteRestaurantUseCase;
   final GetRestaurantOrdersUseCase _getRestaurantOrdersUseCase;
-  final ApiConsumer apiConsumer;
+  final ChangeConnectivityUseCase _changeConnectivityUseCase;
 
-  RestaurantDashboardCubit(this._getRestaurantOrdersUseCase, this.apiConsumer)
-      : super(const RestaurantDashboardState());
+  RestaurantDashboardCubit(this._getRestaurantStatisticUseCase, this._getRestaurantOrdersUseCase, this._getRestaurantInfoUseCase, this._isRestaurantUsecase, this._changeConnectivityUseCase, this._deleteRestaurantUseCase)
+      : super( RestaurantDashboardState());
 
-  void loadData() async {
-    print('fromRestaurantDashboardCubitloadData');
-
-    await getRestaurantOrders1();
+  void initialize(){
+    getRestaurantInfo();
   }
 
-  String? _token;
 
-  Future<void> _ensureTokenInitialized() async {
-    _token ??= await CacheManager.getAccessToken();
-  }
 
-  // Future<void> getRestaurantOrders() async {
-  //   final response = await _getRestaurantOrdersUseCase.call(const NoParams());
+  // Future<void> getRestaurantOrders () async{
+  //   emit(state.copyWith(status: RestaurantDashboardStates.loading));
+  //
+  //   final response = await _getRestaurantOrdersUseCase(const NoParams());
   //   response.fold(
-  //       (l) => emit(state.copyWith(
-  //           failure: l, status: RestaurantDashboardStates.error)),
-  //       (data) => emit(state.copyWith(
-  //           orders: data, status: RestaurantDashboardStates.initState)));
+  //         (failure) {
+  //       emit(state.copyWith(status: RestaurantDashboardStates.error));
+  //     },
+  //         (data) async{
+  //       emit(state.copyWith(orders: data,status: RestaurantDashboardStates.success));
+  //     },
+  //   );
   // }
 
-  Future<void> getRestaurantOrders() async {
-    await _ensureTokenInitialized(); // Ensure token is initialized
+  void loadData() async {
+    emit(state.copyWith(status: RestaurantDashboardStates.loading));
+    orders.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await getOrders();
+  }
 
-    emit(state.copyWith(status: RestaurantDashboardStates.initState));
+  bool isLoadingMore = false;
+  bool hasMoreData = true;
+  int currentPage = 1;
+  int pageSize = 3;
+  List<RestaurantOrder> orders=[];
 
-    final url =
-        Uri.parse('https://49dev.com/api/v1/food/get-restaurant-orders');
+  Future<void> getOrders() async {
 
-    try {
-      final response = await http.get(
-        url,
-        headers: {
-          'Authorization': 'Bearer $_token',
-          'Content-Type': 'application/json',
-        },
-      );
-      print("${response.body}$_token aaaaaaaaaa");
+    if (!hasMoreData || isLoadingMore) return;
 
-      if (response.statusCode == 200) {
-        // Assuming the response is a JSON array with a single object
-        final List<dynamic> jsonList = json.decode(response.body);
+    isLoadingMore = true;
 
-        if (jsonList.isNotEmpty) {
-          final RestaurantOrdersModel ordersResponse =
-              RestaurantOrdersModel.fromJson(jsonList[0]);
+    final response = await _getRestaurantOrdersUseCase(PaginationParams( page: currentPage, limit: pageSize));
 
-          print("${ordersResponse.data.orders.length}aaaaaaaaaa");
-          emit(state.copyWith(orders: ordersResponse));
+    response.fold(
+          (failure) => emit(state.copyWith(failure: failure, status: RestaurantDashboardStates.error)),
+          (data) {
+        orders.addAll(data.data.orders);
+
+        if (data.data.orders.length < pageSize) {
+          hasMoreData = false;
         } else {
-          emit(state.copyWith(status: RestaurantDashboardStates.error));
+          currentPage++;
         }
-      } else {
+
+        isLoadingMore = false;
+        emit(state.copyWith(status: RestaurantDashboardStates.initState,orders: data));
+      },
+    );
+  }
+
+  Future<void> getRestaurantInfo () async{
+    emit(state.copyWith(status: RestaurantDashboardStates.loading));
+
+    final response = await _getRestaurantInfoUseCase(const NoParams());
+    response.fold(
+          (failure) {
         emit(state.copyWith(status: RestaurantDashboardStates.error));
-      }
-    } catch (e) {
-      emit(state.copyWith(status: RestaurantDashboardStates.error));
-    }
+      },
+          (data) async{
+            await isRestaurant();
+            await getRestaurantStatistics();
+            // await getRestaurantOrders();
+            emit(state.copyWith(info: data,status: RestaurantDashboardStates.success));
+      },
+    );
   }
 
-  Future<void> getRestaurantOrders1() async {
-    emit(state.copyWith(status: RestaurantDashboardStates.initState));
+  Future<void> getRestaurantStatistics () async{
+    emit(state.copyWith(status: RestaurantDashboardStates.loading));
 
-    // The API endpoint URL
-    const String url = 'https://49dev.com/api/v1/food/get-restaurant-orders';
-
-    try {
-      // Make the GET request using ApiConsumer
-      final response = await apiConsumer.get(
-        url,
-      );
-
-      // Handle the response from the API
-      response.fold(
-        (failure) {
-          print('asffadvvvdbsdv11b');
-
-          // Handle error state
-          emit(state.copyWith(status: RestaurantDashboardStates.error));
-        },
-        (jsonList) {
-          print('asffadvvvdbsdvb');
-
-          // Assuming the response is a JSON array with a single object
-          if (jsonList.isNotEmpty) {
-            print('asffadvvvdbsdvb11');
-
-            final ordersResponse = RestaurantOrdersModel.fromJson(jsonList);
-
-            print("$jsonList aaaaaaaaaa");
-            emit(state.copyWith(orders: ordersResponse));
-          } else {
-            // Handle the case where the response is empty
-            emit(state.copyWith(status: RestaurantDashboardStates.error));
-          }
-        },
-      );
-    } catch (e) {
-      // Handle exceptions
-      emit(state.copyWith(status: RestaurantDashboardStates.error));
-    }
+    final response = await _getRestaurantStatisticUseCase(const NoParams());
+    response.fold(
+          (failure) {
+        emit(state.copyWith(status: RestaurantDashboardStates.error));
+      },
+          (data) async{
+            emit(state.copyWith(statistics: data,status: RestaurantDashboardStates.success));
+      },
+    );
   }
 
-  Future<void> deleteRestaurantById(context, {required String id}) async {
-    emit(state.copyWith(status: RestaurantDashboardStates.initState));
+  Future<void> isRestaurant() async {
+    final response = await _isRestaurantUsecase(const NoParams());
+    response.fold((failure) => {}, (data) {
+      emit(state.copyWith( isRestaurant: data));});
+  }
 
-    // The API endpoint URL
-    final String url =
-        'https://49dev.com/api/v1/restaurants/delete-restaurant/$id';
+  Future<void> changeConnectivityStatus(isActive) async {
+    print("objectssssss$isActive");
+    final response = await _changeConnectivityUseCase(params:isActive);
+    response.fold(
+            (failure) => emit(state.copyWith(status: RestaurantDashboardStates.error)),
+            (data) async {
+          await isRestaurant();
+        });
+  }
 
-    try {
-      // Make the GET request using ApiConsumer
-      final response = await apiConsumer.delete(
-        url,
-      );
-
-      // Handle the response from the API
-      response.fold(
-        (failure) {
-          // Handle error state
-          showErrorMessage(context, getFailureMessage(failure, context));
-          Navigator.pop(context);
-
-          emit(state.copyWith(status: RestaurantDashboardStates.error));
-        },
-        (jsonList) {
-          showSuccessMessage(context, jsonList['message']);
-          Navigator.pop(context);
-
-          print('${jsonList}1111111111111111');
-        },
-      );
-    } catch (e) {
-      // Handle exceptions
-      emit(state.copyWith(status: RestaurantDashboardStates.error));
-    }
+  Future<void> deleteRestaurantById(BuildContext context, {required String id}) async {
+    final response = await _deleteRestaurantUseCase(id);
+    response.fold(
+            (failure) => emit(state.copyWith(status: RestaurantDashboardStates.error)),
+            (data) async {
+              context.pop(true);
+        });
   }
 
   Future<void> approveRequest({required int id}) async {
     emit(state.copyWith(
         status: RestaurantDashboardStates.success,
         successMessage: Labels.bookingApproved));
-    getRestaurantOrders();
+    // getRestaurantOrders();
   }
 
-  Future<void> changeConnectivityStatus(isActive) async {
-    const url = 'https://49dev.com/api/v1/restaurants/modify-active';
-
-    final res = apiConsumer.patch(url, data: {
-      'isActive': isActive,
-    });
-
-    emit(state.copyWith(
-      connected: !state.connected,
-    ));
-  }
+  // Future<void> changeConnectivityStatus(isActive) async {
+  //   const url = 'https://49dev.com/api/v1/restaurants/modify-active';
+  //
+  //   final res =await apiConsumer.patch(url, data: {
+  //     'isActive': isActive,
+  //   });
+  //
+  //   emit(state.copyWith(
+  //     connected: !state.connected,
+  //   ));
+  // }
 
   Future<void> cancelBooking({required int id}) async {
     emit(state.copyWith(
         status: RestaurantDashboardStates.success,
         successMessage: Labels.bookingRejected));
-    getRestaurantOrders();
+    // getRestaurantOrders();
   }
 }

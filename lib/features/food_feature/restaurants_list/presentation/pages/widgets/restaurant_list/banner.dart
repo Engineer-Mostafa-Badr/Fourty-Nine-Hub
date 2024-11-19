@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
@@ -22,25 +25,23 @@ class MealBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
       builder: (context, state) {
-        if (state.isLoading) {
+        if (state.mainCategory==null) {
           return Shimmer.fromColors(
             baseColor: Colors.grey[100]!,
             highlightColor: Colors.white,
             child: Container(
-              height: 150.h,
+              height: MediaQuery.sizeOf(context).height * 0.13.h,
               width: double.infinity,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(10)),
             ),
           );
         }
-        if (state.isSuccess &&
-            (state.mainCategory != null || state.banner != null)) {
           return MainCategoryBanner(
             category: state.mainCategory != null
                 ? MainCategoryEntity(
                     id: state.mainCategory?.id ?? "",
-                    name: LocaleKeys.meal.tr(),
+                    name: context.isArabic?'أكلة':'Meal',
                     image: state.mainCategory?.image ?? "",
                     banner: state.mainCategory?.banner ?? "",
                     cover: state.mainCategory?.cover ?? "",
@@ -50,7 +51,7 @@ class MealBanner extends StatelessWidget {
                   )
                 : MainCategoryEntity(
                     id: state.banner?.id ?? "",
-                    name: LocaleKeys.meal.tr(),
+                    name: context.isArabic?'أكلة':'Meal',
                     image: state.banner?.banner ?? "",
                     banner: state.banner?.banner ?? "",
                     cover: state.banner?.cover ?? "",
@@ -77,15 +78,14 @@ class MealBanner extends StatelessWidget {
               }
             },
             onFavorite: () {
+              print("object");
               context
                   .read<RestaurantsCubit>()
                   .toggleFavoriteCategory(state.mainCategory!.id);
             },
-            isFavorite: false,
+            isFavorite: !(state.mainCategory?.isFavorite??false),
           );
-        } else {
-          return const SizedBox.shrink();
-        }
+
       },
     );
   }

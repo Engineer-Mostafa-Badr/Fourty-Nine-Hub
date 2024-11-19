@@ -1,4 +1,6 @@
 import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -16,20 +18,32 @@ import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_with_same_audia_use_case.dart';
 
 abstract class ReelsRemoteDataSource {
-  Future<Either<Failure, ReelsResponse>> getExploreReels(int page);
+  Future<Either<Failure, ReelsResponse>> getExploreReels(PaginationParams params);
+
   Future<Either<Failure, ReelsResponse>> getFollowersReels(int page);
+
   Future<Either<Failure, ReelSaveResponse>> saveReel(String reelId);
+
   Future<Either<Failure, ReelShareResponse>> shareReel(String reelId);
+
   Future<Either<Failure, ReelLikeResponse>> likeReel(String reelId);
+
   Future<Either<Failure, AddCommentResponse>> addComment(
       AddReelCommentParams params);
+
   Future<Either<Failure, AddCommentResponse>> addReply(
       AddReelReplyParams params);
-  Future<Either<Failure, GetCommentsResponse>> getComments(String reelId);
+
+  Future<Either<Failure, GetCommentsResponse>> getComments(
+      CommentParams params);
+
   Future<Either<Failure, String>> toggleCommentLike(String commentId);
+
   Future<Either<Failure, ReelsForAudioResponse>> getReelsWithSameAudio(
       ReelsWithSameAudioParams params);
+
   Future<Either<Failure, bool>> createReel(CreateReelParams params);
+
   Future<Either<Failure, bool>> createAdvertisement(
       CreateAdvertisementParams params);
 }
@@ -40,13 +54,10 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
   ReelsRemoteDataSourceImpl(this._apiConsumer);
 
   @override
-  Future<Either<Failure, ReelsResponse>> getExploreReels(int page) async {
+  Future<Either<Failure, ReelsResponse>> getExploreReels(PaginationParams params) async {
     final response = await _apiConsumer.get(
       EndPoints.getExploreReels,
-      queryParameters: {
-        'page': page,
-        'limit': EndPoints.pageSize,
-      },
+      queryParameters: params.toJson(),
     );
     return response.fold(
       (failure) => Left(failure),
@@ -147,6 +158,7 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
       AddReelCommentParams params) async {
     final response = await _apiConsumer.post(
       EndPoints.addReelComment(params),
+      data: params.toJson(),
     );
     return response.fold(
       (failure) => Left(failure),
@@ -161,6 +173,7 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
       AddReelReplyParams params) async {
     final response = await _apiConsumer.post(
       EndPoints.addReelReply(params),
+      data: params.toJson(),
     );
     return response.fold(
       (failure) => Left(failure),
@@ -172,9 +185,10 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
 
   @override
   Future<Either<Failure, GetCommentsResponse>> getComments(
-      String reelId) async {
+      CommentParams params) async {
     final response = await _apiConsumer.get(
-      EndPoints.getComments(reelId),
+      EndPoints.getComments(params.reelId),
+      queryParameters: params.toJson(),
     );
     return response.fold(
       (failure) => Left(failure),
@@ -186,7 +200,7 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
 
   @override
   Future<Either<Failure, String>> toggleCommentLike(String commentId) async {
-    final response = await _apiConsumer.get(
+    final response = await _apiConsumer.post(
       EndPoints.toggleCommentLike(commentId),
     );
     return response.fold(
@@ -210,4 +224,17 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
       ),
     );
   }
+}
+
+class CommentParams extends Equatable {
+  final String reelId;
+  final PaginationParams pagingParams;
+
+  const CommentParams({required this.reelId, required this.pagingParams});
+
+  Map<String, dynamic> toJson() =>
+      {'page': pagingParams.page, 'limit': pagingParams.limit};
+
+  @override
+  List<Object?> get props => [reelId, pagingParams];
 }

@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 
 import '../../domain/repositories/resturant_list_repo.dart';
@@ -31,8 +32,8 @@ class RestaurantListRepoImpl implements RestaurantListRepo {
 
   @override
   Future<Either<Failure, List<Restaurant2Model>>> getSubCategoryRestaurants(
-      {required String id}) {
-    return _remoteDataSource.getSubCategoryRestaurants(id: id);
+      {required GetSubCategoryRestaurants params}) {
+    return _remoteDataSource.getSubCategoryRestaurants(params: params);
   }
 
   @override
@@ -80,13 +81,18 @@ class RestaurantListRepoImpl implements RestaurantListRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> changeConnectivity() {
-    return _remoteDataSource.changeConnectivity();
+  Future<Either<Failure, bool>> changeConnectivity(bool isActive) {
+    return _remoteDataSource.changeConnectivity(isActive);
   }
 
   @override
   Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(
       PaginationParams params) {
     return _remoteDataSource.getExpiredOrders(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> toggleRestaurantFavourite({required String params}) {
+    return _remoteDataSource.toggleRestaurantFavourite(params:params);
   }
 }

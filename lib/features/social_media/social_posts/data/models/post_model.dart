@@ -63,7 +63,7 @@ class PostModel extends PostEntity {
         type: json['type'] ?? '',
         images: json['media'] != null
             ? List<String>.from(
-                json['media'].map((mediaItem) => mediaItem['photo']))
+            json['media'].map((mediaItem) => mediaItem['photo'] ?? mediaItem['mediaKey']))
             : null,
         isShared: json['isShared'] ?? false,
         advertisementType: json['advertisement_type'] ?? '',

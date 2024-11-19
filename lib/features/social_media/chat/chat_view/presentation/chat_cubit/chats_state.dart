@@ -5,6 +5,7 @@ enum ChatsStates {
   init,
   error,
   typing,
+  recording,
   newMessage,
   loading,
   chatsSelected,
@@ -27,6 +28,8 @@ extension ChatMessagesStateX on ChatsState {
   bool get isChatsSelected => status == ChatsStates.chatsSelected;
 
   bool get isArchived => status == ChatsStates.archived;
+
+  bool get isRecording => status == ChatsStates.recording;
 }
 
 @immutable
@@ -37,6 +40,8 @@ class ChatsState {
   final MessageEntity? newMessage;
   final bool? archived;
   final List<ChatEntity>? archivedChats;
+  final ListenToTypingParams? listenToTypingParams;
+  final ListenToRecordingParams? listenToRecordingParams;
 
   const ChatsState({
     this.status = ChatsStates.init,
@@ -45,6 +50,8 @@ class ChatsState {
     this.newMessage,
     this.archived,
     this.archivedChats = const [],
+    this.listenToTypingParams ,
+    this.listenToRecordingParams,
   });
 
   ChatsState copyWith({
@@ -54,6 +61,8 @@ class ChatsState {
     MessageEntity? newMessage,
     bool? archived,
     List<ChatEntity>? archivedChats,
+    ListenToTypingParams? listenToTypingParams,
+    ListenToRecordingParams? listenToRecordingParams,
   }) {
     return ChatsState(
       status: status ?? this.status,
@@ -62,6 +71,8 @@ class ChatsState {
       newMessage: newMessage,
       archived: archived ?? this.archived,
       archivedChats: archivedChats ?? this.archivedChats,
+      listenToTypingParams: listenToTypingParams,
+      listenToRecordingParams: listenToRecordingParams,
     );
   }
 }

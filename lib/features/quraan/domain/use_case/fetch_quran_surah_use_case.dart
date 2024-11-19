@@ -1,26 +1,26 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/quraan/domain/entity/quran_surah_entity.dart';
 import 'package:fourtyninehub/features/quraan/domain/repository/quran_repository.dart';
 
-class FetchQuranSurahUseCase
-    extends UseCase<List<QuranSurahEntity>, QuranParams> {
+class FetchQuranSurahUseCase extends UseCase<List<QuranSurahEntity>,QuranParams>{
   final QuranRepository _quranRepository;
 
   FetchQuranSurahUseCase(this._quranRepository);
   @override
-  Future<Either<Failure, List<QuranSurahEntity>>> call(
-      QuranParams params) async {
+  Future<Either<Failure, List<QuranSurahEntity>>> call(QuranParams params) async{
     return await _quranRepository.fetchQuranSurah(params);
   }
+
+
 }
 
 class QuranParams {
-  final PaginationParams params;
+  final int page;
+  final int limit;
 
-  QuranParams({
-    required this.params,
-  });
+  QuranParams({required this.page, required this.limit});
+
+
 }

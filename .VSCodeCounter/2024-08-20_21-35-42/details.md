@@ -1255,7 +1255,7 @@ Total : 1472 files,  95704 codes, 8632 comments, 11769 blanks, all 116105 lines
 | [lib/features/social_media/reels/domain/entities/reel_entity.dart](/lib/features/social_media/reels/domain/entities/reel_entity.dart) | Dart | 32 | 0 | 4 | 36 |
 | [lib/features/social_media/reels/domain/repositories/reels_repository.dart](/lib/features/social_media/reels/domain/repositories/reels_repository.dart) | Dart | 6 | 0 | 3 | 9 |
 | [lib/features/social_media/reels/domain/use_case/get_explore_reels_use_case.dart](/lib/features/social_media/reels/domain/use_case/get_explore_reels_use_case.dart) | Dart | 13 | 0 | 5 | 18 |
-| [lib/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart](/lib/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart) | Dart | 48 | 38 | 10 | 96 |
+| [lib/features/social_media/reels/presentation/controllers/explore_reels_cubit/explore_reels_cubit.dart](/lib/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart) | Dart | 48 | 38 | 10 | 96 |
 | [lib/features/social_media/reels/presentation/pages/music_reels.dart](/lib/features/social_media/reels/presentation/pages/music_reels.dart) | Dart | 72 | 0 | 6 | 78 |
 | [lib/features/social_media/reels/presentation/pages/reel_view.dart](/lib/features/social_media/reels/presentation/pages/reel_view.dart) | Dart | 605 | 54 | 64 | 723 |
 | [lib/features/social_media/reels/presentation/widgets/add_comment.dart](/lib/features/social_media/reels/presentation/widgets/add_comment.dart) | Dart | 0 | 19 | 5 | 24 |

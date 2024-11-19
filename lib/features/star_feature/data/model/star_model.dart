@@ -5,33 +5,43 @@ class StarModel extends StarEntity {
   StarModel(
       {required super.id,
       required super.user,
-      required super.videoUrlId,
-      required super.videoUrlMediaKey,
-      required super.videoUrlVideo,
+      required super.mediaUrl,
       required super.title,
       required super.description,
       required super.isApproved,
       required super.totalViews,
-      required super.totalRatings,
-      required super.totalPoints,
       required super.averageRating,
-      required super.averageRatingPercentage});
+          super.createdAt,
+          super.createAt,
+      });
 
   factory StarModel.fromJson(Map<String, dynamic> json) {
-    return StarModel(
-      id: json['_id'],
-      videoUrlId: json['videoUrl']['_id'] ?? '',
-      videoUrlMediaKey: json['videoUrl']['mediaKey'] ?? '',
-      videoUrlVideo: json['videoUrl']['video'] ?? '',
-      user: UserStarModel.fromJson(json['userId']),
-      title: json['title'] ?? '',
-      description: json['description'] ?? '',
-      isApproved: json['isApprove'] ?? false,
-      totalViews: json['totalViews'] ?? 0,
-      totalRatings: json['totalRatings'] ?? 0,
-      totalPoints: json['totalPoints'] ?? 0,
-      averageRating: json['averageRating'] ?? 0,
-      averageRatingPercentage: json['averageRatingPercentage'] ?? 0,
-    );
+      return StarModel(
+          id: json['_id'],
+          mediaUrl: (json['mediaUrl'] as List)
+              .map((e) => MediaUrlModel.fromJson(e))
+              .toList(),
+          user: UserStarModel.fromJson(json['userId']),
+          title: json['title'] ??'',
+          description: json['description'] ??'',
+          isApproved: json['isApprove'] ??false,
+          totalViews: json['viewNumber'] ??0,
+          averageRating: json['avgRating'] ??0,
+          createAt: json['createAt']??'',
+          createdAt: json['createdAt'] != null
+              ? DateTime.parse(json['createdAt'])
+              : null,
+      );
+  }
+}
+
+class MediaUrlModel extends MediaUrlEntity{
+  MediaUrlModel({required super.id, required super.mediaKey});
+
+  factory MediaUrlModel.fromJson(Map<String, dynamic> json) {
+      return MediaUrlModel(
+          id: json['_id'] ??'',
+          mediaKey: json['mediaKey'] ??'',
+      );
   }
 }

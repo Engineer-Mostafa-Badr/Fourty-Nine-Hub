@@ -16,37 +16,75 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../cubit/restaurants_list_cubit.dart';
 
-class RestaurantExpiredRequestsScreen extends StatelessWidget {
+class RestaurantExpiredRequestsScreen extends StatefulWidget {
   const RestaurantExpiredRequestsScreen({super.key});
 
   @override
+  State<RestaurantExpiredRequestsScreen> createState() => _RestaurantExpiredRequestsScreenState();
+}
+
+class _RestaurantExpiredRequestsScreenState extends State<RestaurantExpiredRequestsScreen> {
+
+  late ScrollController _scrollController;
+  bool isFirstSearchListenerCall = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()..addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      context.read<RestaurantsCubit>().getExpiredOrders();
+    }
+  }
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
-    final state = context.watch<RestaurantsCubit>().state;
 
     return Scaffold(
       backgroundColor: scaffoldDarkColor(context),
       appBar: BackAppBar(
         label: LocaleKeys.expiredRequests.tr(),
       ),
-      body: state.expiredRequestsResponse != null
-          ? ListView.separated(
-              itemCount: state.expiredRequestsResponse!.data!.length,
-              itemBuilder: (context, index) {
-                final request = state.expiredRequestsResponse!.data![index];
-                return request != null
-                    ? Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: TripRequestCard(orderData: request),
-                      )
-                    : const SizedBox.shrink();
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return const Sizer();
-              },
-            )
-          : const Center(
-              child: CircularProgressIndicator(),
+      body: BlocBuilder<RestaurantsCubit, RestaurantsListState>(
+    builder: (context, state) {
+      final controller = context.read<RestaurantsCubit>();
+
+      if(!state.isLoading){
+        return Column(
+          children: [
+            Expanded(
+              child: ListView.separated(
+                controller: _scrollController,
+                itemCount: controller.expiredOrders.length,
+                itemBuilder: (context, index) {
+                  final request = controller.expiredOrders[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: TripRequestCard(orderData: request),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return const Sizer();
+                },
+              ),
             ),
+            if(controller.isLoadingExpiredOrdersMore) const Center(child: CircularProgressIndicator(),)
+          ],
+        );
+      }else{
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+    }),
     );
   }
 }
@@ -63,7 +101,7 @@ class TripRequestCard extends StatelessWidget {
             orderData.restaurant != null ||
             orderData.restaurant!.id!.isNotEmpty
         ? Card(
-            elevation: isDarkTheme(context) ? 0 : 2,
+            elevation: context.isDarkMode ? 0 : 2,
             color: cardDarkColor(context),
             child: Padding(
               padding: const EdgeInsets.all(12.0),

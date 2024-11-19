@@ -18,6 +18,7 @@ abstract class FourtyNineRepository {
   Future<Either<Failure, MainCategoryEntity>> getMainCategoryDetails(String id);
 
   Future<Either<Failure, bool>> addMainCategoryToFavorites(String id);
+  Future<Either<Failure, bool>> anyCashBack();
   Future<Either<Failure, bool>> toggleSubCategoryToFavorites(String id);
 
   Future<Either<Failure, bool>> removeMainCategoryFromFavorites(String id);

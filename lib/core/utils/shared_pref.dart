@@ -34,8 +34,7 @@ class CacheManager {
   static Future<bool> deleteAllTokens() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.remove(_accessTokenKey);
-      await prefs.remove(_refreshTokenKey);
+      await prefs.clear();
       return true;
     } catch (e) {
       return false;
@@ -59,5 +58,18 @@ class CacheManager {
     } catch (e) {
       return false;
     }
+  }
+
+
+  //set int
+  static Future<void> setInt(String key, int value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(key, value);
+  }
+
+  //get int
+  static Future<int?> getInt(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(key);
   }
 }

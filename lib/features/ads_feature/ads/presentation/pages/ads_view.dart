@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
@@ -113,7 +114,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                       )),
                   const Sizer(),
                   Label(
-                    text: widget.params.subCategory.name,
+                    text: context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn,
                     style: Styles.headerText(),
                   ),
                   const Sizer(),

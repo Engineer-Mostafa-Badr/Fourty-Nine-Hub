@@ -38,8 +38,7 @@ class BalanceWalletView extends StatelessWidget {
           child: BlocConsumer<BalanceCubit, BalanceState>(
             listener: (BuildContext context, BalanceState state) {
               if (state.status == BalanceStates.initial) {
-                showSuccessMessage(
-                    context, LocaleKeys.requestWithdrawal.localize);
+                showSuccessMessage(context, LocaleKeys.requestWithdrawal.localize);
               }
               if (state.status == BalanceStates.errorRequest) {
                 showErrorMessage(
@@ -65,8 +64,7 @@ class BalanceWalletView extends StatelessWidget {
                       WalletCardWidget(
                         balance: '${state.balance?.balance ?? ''}',
                         target: 1002,
-                        type: WalletTypes.balance,
-                        currency: state.balance?.currency ?? '',
+                        type: WalletTypes.balance, currency: state.balance?.currency ??'',
                       ),
                       const Sizer(),
                       Padding(
@@ -80,24 +78,23 @@ class BalanceWalletView extends StatelessWidget {
                             const Sizer(),
                             Expanded(
                               child: Label(
-                                text:
-                                    '${LocaleKeys.minimum.localize}1002 ${LocaleKeys.transaction.localize}',
+                                text: '${LocaleKeys.minimum.localize}1002 ${LocaleKeys.transaction.localize}',
                                 style: Styles.mediumText(color: Colors.grey),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      //  state.balance?.openBalance == true && state.balance!.balance >=1002
-                      state.balance!.balance >= 1002
+
+                    //  state.balance?.openBalance == true && state.balance!.balance >=1002
+                    if(state.balance!=null)
+                       state.balance!.balance >=1002
                           ? AppButton(
                               backColor: AppColors.SECONDARY_COLOR,
                               color: AppColors.AUTH_CONTAINER_COLOR,
                               label: LocaleKeys.requestWithdraw.localize,
                               onPressed: () {
-                                context
-                                    .read<BalanceCubit>()
-                                    .requestWithdrawBalance();
+                                context.read<BalanceCubit>().requestWithdrawBalance();
                                 //Your request withdrawal sent successfully waiting for administration approval
                               },
                               margin: 10,
@@ -112,17 +109,14 @@ class BalanceWalletView extends StatelessWidget {
                       //   Label(text: LocaleKeys.checkRequest.localize,color:AppColors.SECONDARY_COLOR,),
 
                       _buildWalletActionItem(
-                          label:
-                              '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',
+                          label: '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',
                           subTitle:
                               '${state.balance?.fiveYears ?? ''} . ${state.balance?.fiveYearsLeft ?? ''} ${LocaleKeys.yearsLast.localize}',
                           ontap: state.balance?.fiveYearsComplete == true
                               ? () {}
                               : state.balance?.fiveYearsTransfer == true
                                   ? () {
-                                      context
-                                          .read<BalanceCubit>()
-                                          .transferFiveBalance();
+                                      context.read<BalanceCubit>().transferFiveBalance();
                                     }
                                   : () {},
                           color: state.balance?.fiveYearsComplete == true
@@ -135,17 +129,14 @@ class BalanceWalletView extends StatelessWidget {
                               : LocaleKeys.transfer.localize,
                           textColor: Theme.of(context).scaffoldBackgroundColor),
                       _buildWalletActionItem(
-                          label:
-                              '${LocaleKeys.gift.localize} / 10 ${LocaleKeys.years.localize}',
+                          label: '${LocaleKeys.gift.localize} / 10 ${LocaleKeys.years.localize}',
                           subTitle:
                               '${state.balance?.tenYears ?? ''} . ${state.balance?.tenYearsLeft ?? ''} ${LocaleKeys.yearsLast.localize}',
                           ontap: state.balance?.tenYearsTransfer == true
                               ? () {}
                               : state.balance?.tenYearsTransfer == true
                                   ? () {
-                                      context
-                                          .read<BalanceCubit>()
-                                          .transferFiveBalance();
+                                      context.read<BalanceCubit>().transferFiveBalance();
                                     }
                                   : () {},
                           color: state.balance?.tenYearsComplete == true
@@ -166,8 +157,7 @@ class BalanceWalletView extends StatelessWidget {
                       ),
                       PaginationView<BalanceHistoryEntity>(
                         loadingWidget: const SizedBox.shrink(),
-                        build: (ScrollController scrollController,
-                            List<BalanceHistoryEntity> data) {
+                        build: (ScrollController scrollController, List<BalanceHistoryEntity> data) {
                           return data.isNotEmpty
                               ? ListView.separated(
                                   controller: scrollController,
@@ -175,18 +165,12 @@ class BalanceWalletView extends StatelessWidget {
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     //  final item = state.history![index];
-                                    final DateTime createdAt =
-                                        DateTime.parse(data[index].createdAt);
-                                    final DateTime egyptTime = createdAt
-                                        .toUtc()
-                                        .add(const Duration(hours: 3));
-                                    final String formattedDateTime =
-                                        DateFormat('dd/MM/yyyy, h:mm a')
-                                            .format(egyptTime);
+                                    final DateTime createdAt = DateTime.parse(data[index].createdAt);
+                                    final DateTime egyptTime = createdAt.toUtc().add(const Duration(hours: 3));
+                                    final String formattedDateTime = DateFormat('dd/MM/yyyy, h:mm a').format(egyptTime);
 
                                     return WalletHistoryCard(
-                                        title:
-                                            '${data[index].transactionAmount}',
+                                        title: '${data[index].transactionAmount}',
                                         subTitle: formattedDateTime,
                                         onTap: () {},
                                         //amount: item.amount,
@@ -196,16 +180,10 @@ class BalanceWalletView extends StatelessWidget {
                                     return const SizedBox();
                                   },
                                   itemCount: data.length)
-                              : Center(
-                                  child: Label(
-                                      text: LocaleKeys
-                                          .noHistoryAvailable.localize));
+                              : Center(child: Label(text: LocaleKeys.noHistoryAvailable.localize));
                         },
                         fetchData: (PaginationParams paginationParams) {
-                          return context
-                              .read<BalanceCubit>()
-                              .fetchBalanceHistory(
-                                  paginationParams: paginationParams);
+                          return context.read<BalanceCubit>().fetchBalanceHistory(paginationParams: paginationParams);
                         },
                       )
                     ],
@@ -240,9 +218,7 @@ class BalanceWalletView extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Label(
-              text: transfer,
-              style: Styles.mediumText(color: textColor ?? Colors.white)),
+          child: Label(text: transfer, style: Styles.mediumText(color: textColor ?? Colors.white)),
         ),
       ),
     );

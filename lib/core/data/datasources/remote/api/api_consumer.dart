@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
@@ -71,13 +72,12 @@ class BaseApiConsumer extends ApiConsumer {
   );
 
   @override
-  void attachToken(UserTokensEntity? token) {
+  void attachToken(UserTokensEntity? token) async{
     log(token?.accessToken.toString() ?? "Token", name: "Token");
     _token = token;
-    log(_token?.accessToken.toString() ?? "Okkkk",
-        name: "lskdjflskdjflskdjflskjdf");
-    CacheServiceImpl().saveUserToken(_token?.accessToken ?? "Token");
-    log("${token?.accessToken}", name: "Token");
+    log(_token?.accessToken.toString()??"Okkkk", name: "lskdjflskdjflskdjflskjdf");
+        // CacheServiceImpl().saveUserToken(_token?.accessToken??"Token");
+    log("${await CacheManager.getAccessToken()} attached", name: "Token");
     if (token != null) {
       log(token.accessToken.toString(), name: "Token");
       _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
@@ -157,6 +157,7 @@ class BaseApiConsumer extends ApiConsumer {
       Map<String, dynamic>? data,
       Map<String, dynamic>? headers}) async {
     try {
+      log(data.toString());
       final result = await _dio.get(url,
           data: data,
           queryParameters: queryParameters,
@@ -276,7 +277,6 @@ class BaseApiConsumer extends ApiConsumer {
           ),
         );
       } else {
-        log(e.toString(), name: "lskdjflskdjlskdjf");
         return Left(_getFailure(e));
       }
     }
@@ -284,7 +284,7 @@ class BaseApiConsumer extends ApiConsumer {
 
   Failure _getFailure(dynamic e) {
     final error = e.response?.data['error'] as Map;
-
+    log("Erorrrrr $error");
     if (e is DioException) {
       if (e.response?.statusCode == 413) {
         return const ServerFailure(
@@ -292,9 +292,7 @@ class BaseApiConsumer extends ApiConsumer {
         );
       } else if (e.response?.statusCode == 401) {
         final error = e.response?.data['error'] as Map;
-        return UnauthorizedFailure(
-          error['message'] as String,
-        );
+        return  UnauthorizedFailure(error['message'] as String,);
       } else if (e.response?.data is Map &&
           e.response?.data['message'] is String) {
         return ServerFailure(
@@ -347,6 +345,7 @@ class BaseApiConsumer extends ApiConsumer {
 
         attachToken(newToken);
         _authLocalDataSource.saveUserTokens(newToken.toModel());
+        
       },
     );
   }

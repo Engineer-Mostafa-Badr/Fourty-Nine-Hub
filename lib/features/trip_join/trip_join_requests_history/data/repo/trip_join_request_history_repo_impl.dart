@@ -20,8 +20,10 @@ class TripJoinRequestHistoryRepoImp implements TripJoinRequestHistoryRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> deleteTrip({required String id}) {
-    return tripJoinRequestHistoryRemoteDataSource.deleteTrip(id: id);
+  Future<Either<Failure, bool>> deleteTrip(
+      {required String subCategory, required String url, required String id}) {
+    return tripJoinRequestHistoryRemoteDataSource.deleteTrip(
+        subCategory: subCategory, url: url, id: id);
   }
 
   @override

@@ -1,8 +1,10 @@
+
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/main_services_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/banner.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
@@ -71,11 +73,13 @@ class HealthCubit extends Cubit<HealthState> {
         image: Assets.emergency,
         route: Routes.VISITAEMERGENCY),
   ];
-
+  final userId = UserCubit.to.state.data?.id;
   void loadData() async {
-    await _getMainCategoryDetails();
+    print("UseeeeeeertId$userId");
+    emit(state.copyWith(status: HealthStates.loading));
+      await _getMainCategoryDetails();
     await _isDoctor();
-    await _isDoctorApproval();
+    await  _isDoctorApproval();
     await getSubCategories();
     await getServices();
     await getMyBookings();
@@ -83,17 +87,16 @@ class HealthCubit extends Cubit<HealthState> {
   }
 
   Future<void> _getMainCategoryDetails() async {
-    final response =
-        await _getMainCategoryDetailsUseCase(MainServicesEnum.health.id);
+    final response = await _getMainCategoryDetailsUseCase(MainServicesEnum.health.id);
     response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: HealthStates.error)),
-        (data) => emit(state.copyWith(mainCategory: data)));
+        (failure) => emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) => emit(state.copyWith(mainCategory: data)),
+    );
   }
 
   Future<void> getMyBookings() async {
     final response =
-        await _getUserUpcomingAppointmentsUseCase.call(const NoParams());
+        await _getUserUpcomingAppointmentsUseCase.call(userId??'');
     response.fold(
         (failure) =>
             emit(state.copyWith(failure: failure, status: HealthStates.error)),
@@ -118,7 +121,7 @@ class HealthCubit extends Cubit<HealthState> {
   }
 
   Future<void> getServices() async {
-    final response = await _getMedicalServicesUseCase.call(const NoParams());
+    final response = await _getMedicalServicesUseCase.call(userId??'');
     response.fold(
         (failure) =>
             emit(state.copyWith(failure: failure, status: HealthStates.error)),
@@ -129,7 +132,7 @@ class HealthCubit extends Cubit<HealthState> {
   Future<void> getSubCategories({bool reload = false}) async {
     // if (_healthShare.subCategories.isEmpty || reload) {
     final response =
-        await _getHealthSubcategoriesUseCase.call(const NoParams());
+        await _getHealthSubcategoriesUseCase.call(userId??'');
     response.fold(
         (failure) =>
             emit(state.copyWith(failure: failure, status: HealthStates.error)),
@@ -169,7 +172,12 @@ class HealthCubit extends Cubit<HealthState> {
   Future<void> toggleFavoriteSubcategory(String subcategoryId) async {
     final response = await _toggleFavoriteSubcategoryUseCase(subcategoryId);
     response.fold((failure) => emit(state.copyWith(status: HealthStates.error)),
-        (data) => getSubCategories(reload: true));
+        (data) {
+          List<HealthSubcategoryEntity> newSubCategories = state.subCategories??[];
+          newSubCategories.firstWhere((element) => element.id==subcategoryId).isFavorite=!(newSubCategories.firstWhere((element) => element.id==subcategoryId).isFavorite??false);
+           // getSubCategories(reload: true);
+          emit(state.copyWith(subCategories:newSubCategories ));
+        });
   }
 
   Future<bool> toggleFavoriteMedicalService(String subcategoryId) async {
@@ -180,17 +188,12 @@ class HealthCubit extends Cubit<HealthState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: HealthStates.error)),
         (data) {
-      MainCategoryEntity mainCategoryEntity;
-      mainCategoryEntity = state.mainCategory!;
-      mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
-      emit(state.copyWith(mainCategory: mainCategoryEntity));
-      result = state.mainCategory!.isFavorite!;
-      print("Salama $data");
-      return getServices();
-    });
+          List<HealthSubcategoryEntity> newMedicalServices=state.medicalServices??[];
+          newMedicalServices.firstWhere((element) => element.id==subcategoryId).isFavorite=!(newMedicalServices.firstWhere((element) => element.id==subcategoryId).isFavorite??false);
+          emit(state.copyWith(medicalServices: newMedicalServices));
+        });
     return result;
   }
-
   Future<bool> toggleFavoriteCategory(String subcategoryId) async {
     final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
     bool result = false;
@@ -198,16 +201,19 @@ class HealthCubit extends Cubit<HealthState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: HealthStates.error)),
         (data) {
-      // MainCategoryEntity mainCategoryEntity;
-      //   mainCategoryEntity = state.mainCategory!;
-      //   mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
-      // emit(state.copyWith(mainCategory: mainCategoryEntity));
-      // result = state.mainCategory!.isFavorite!;
-      // print("Salama ${data}");
-      _getMainCategoryDetails();
+          // MainCategoryEntity mainCategoryEntity;
+          //   mainCategoryEntity = state.mainCategory!;
+          //   mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
+          // emit(state.copyWith(mainCategory: mainCategoryEntity));
+          // result = state.mainCategory!.isFavorite!;
+          // print("Salama ${data}");
+          MainCategoryEntity newMainCategory = state.mainCategory!;
+          newMainCategory.isFavorite = !(state.mainCategory?.isFavorite??false);
+          emit(state.copyWith(mainCategory: newMainCategory));
+          // _getMainCategoryDetails();
 
-      return getServices();
-    });
+          // return getServices();
+        });
     return result;
   }
 
@@ -216,6 +222,7 @@ class HealthCubit extends Cubit<HealthState> {
   Future<void> _ensureTokenInitialized() async {
     token ??= await CacheManager.getAccessToken();
   }
+
 
   Future<bool> deleteMedicalService(String subcategoryId) async {
     final response = await _deleteFavoriteCategoryUseCase(subcategoryId);

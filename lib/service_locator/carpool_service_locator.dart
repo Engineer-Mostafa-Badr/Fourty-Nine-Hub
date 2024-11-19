@@ -2,11 +2,11 @@ import 'package:fourtyninehub/features/carpool/add_new_route/data/data_source/ad
 import 'package:fourtyninehub/features/carpool/add_new_route/data/repo/add_new_route_carpool_repo_imp.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/domain/repo/add_new_route_carpool_repo.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/domain/usecases/get_price_carpool_usecase.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/accept_trip/cubit/accept_trip_for_driver_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 class CarpoolServiceLocator {
   static void execute({required GetIt serviceLocator}) {
-    //! add new carpool route
     serviceLocator.registerLazySingleton<AddNewRouteRemoteDataSource>(
       () => AddNewRouteRemoteDataSourceImp(apiConsumer: serviceLocator()),
     );
@@ -18,6 +18,9 @@ class CarpoolServiceLocator {
 
     serviceLocator.registerLazySingleton<GetPriceCarpoolUsecase>(
       () => GetPriceCarpoolUsecase(addNewRouteCarpoolRepo: serviceLocator()),
+    );
+    serviceLocator.registerFactory<AcceptTripForDriverCubit>(
+      () => AcceptTripForDriverCubit(serviceLocator()),
     );
   }
 }

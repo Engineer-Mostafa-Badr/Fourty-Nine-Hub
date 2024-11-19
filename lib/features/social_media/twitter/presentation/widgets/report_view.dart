@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/enums/reports_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -165,7 +166,7 @@ class _ReportViewState extends State<ReportView> {
                   fontWeight: FontWeight.bold,
                   color: selectedReport == report
                       ? AppColors.SECONDARY_COLOR
-                      : (isDarkTheme(context)
+                      : (context.isDarkMode
                           ? Colors.white70
                           : AppColors.DARK_GRAY_COLOR),
                 ),
@@ -205,7 +206,7 @@ class _ReportViewState extends State<ReportView> {
                 style: TextStyle(
                   fontSize: 35.sp,
                   fontWeight: FontWeight.bold,
-                  color: isDarkTheme(context)
+                  color: context.isDarkMode
                       ? Colors.white70
                       : AppColors.PRIMARY_COLOR_LIGHT,
                 ),
@@ -214,7 +215,7 @@ class _ReportViewState extends State<ReportView> {
                 },
                 controller: reportTextController,
                 decoration: InputDecoration(
-                  fillColor: isDarkTheme(context)
+                  fillColor: context.isDarkMode
                       ? Colors.transparent
                       : AppColors.LIGHT_COLOR,
                   contentPadding: EdgeInsets.symmetric(
@@ -224,7 +225,7 @@ class _ReportViewState extends State<ReportView> {
                   hintText: '${LocaleKeys.typeReportReason.localize}...',
                   hintStyle: TextStyle(
                     fontSize: 35.sp,
-                    color: isDarkTheme(context)
+                    color: context.isDarkMode
                         ? Colors.white70
                         : AppColors.DARK_GRAY_COLOR,
                   ),

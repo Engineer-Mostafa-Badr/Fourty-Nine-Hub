@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/week_days.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/doctor_day_model.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
@@ -46,9 +47,11 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
   }
 
   Future<void> _getSubCategories() async {
+    final userId = UserCubit.to.state.data?.id;
+
     if (_shareCubit.subCategories.isEmpty) {
       final response =
-          await _getHealthSubcategoriesUseCase.call(const NoParams());
+          await _getHealthSubcategoriesUseCase.call(userId??'');
       response.fold(
           (failure) => emit(CreateResturantError("Can't Load Specialities")),
           (data) {

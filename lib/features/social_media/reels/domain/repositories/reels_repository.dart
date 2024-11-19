@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/data_sources/reels_remote_data_source.dart';
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/audio_reels_model.dart';
@@ -15,21 +17,17 @@ import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_
 import '../../../../../core/error/failure.dart';
 
 abstract class ReelsRepository {
-  Future<Either<Failure, ReelsResponse>> getExploreReels(int page);
-  Future<Either<Failure, AddCommentResponse>> addComment(
-      AddReelCommentParams params);
-  Future<Either<Failure, GetCommentsResponse>> getComments(String reelId);
+  Future<Either<Failure, ReelsResponse>> getExploreReels(PaginationParams params);
+  Future<Either<Failure, AddCommentResponse>> addComment(AddReelCommentParams params);
+  Future<Either<Failure, GetCommentsResponse>> getComments(CommentParams params);
   Future<Either<Failure, String>> toggleCommentLike(String commentId);
-  Future<Either<Failure, ReelsForAudioResponse>> getReelsWithSameAudio(
-      ReelsWithSameAudioParams params);
-  Future<Either<Failure, AddCommentResponse>> addReply(
-      AddReelReplyParams params);
+  Future<Either<Failure, ReelsForAudioResponse>> getReelsWithSameAudio(ReelsWithSameAudioParams params);
+  Future<Either<Failure, AddCommentResponse>> addReply(AddReelReplyParams params);
   Future<Either<Failure, ReelsResponse>> getFollowersReels(int page);
   Future<Either<Failure, ReelSaveResponse>> saveReel(String reelId);
   Future<Either<Failure, ReelShareResponse>> shareReel(String reelId);
   Future<Either<Failure, ReelLikeResponse>> likeReel(String reelId);
   // Future<Either<Failure, List<ReelEntity>>> fetchReels(int page);
   Future<Either<Failure, bool>> createReel(CreateReelParams params);
-  Future<Either<Failure, bool>> createAdvertisement(
-      CreateAdvertisementParams params);
+  Future<Either<Failure, bool>> createAdvertisement(CreateAdvertisementParams params);
 }

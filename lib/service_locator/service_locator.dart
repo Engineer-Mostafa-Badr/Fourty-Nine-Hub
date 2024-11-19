@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -18,12 +16,30 @@ import 'package:fourtyninehub/features/competition/data/repository/competition_r
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/repositories/StoriesRpo.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/repo/tinder_repo.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/data_sources/tinder_data_source.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/repositories/tinder_repository_impl.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/add_favourite_category_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/chech_user_nearby_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_favourites_category_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_favourites_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_gifts_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_last_seen_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_subcategory_data_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_gifts_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_tinder_profile_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_user_data_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/send_geft_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/upload_tinder_picture_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/carpool_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
+import 'package:fourtyninehub/service_locator/edit_food_service_locator.dart';
 import 'package:fourtyninehub/service_locator/face_book_service_locator.dart';
 import 'package:fourtyninehub/service_locator/instagram_service_locator.dart';
 import 'package:fourtyninehub/service_locator/join_trip_carpool_service_locator.dart';
@@ -36,6 +52,7 @@ import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
 import 'package:fourtyninehub/service_locator/search_service_locator.dart';
 import 'package:fourtyninehub/service_locator/secrets_service_locator.dart';
 import 'package:fourtyninehub/service_locator/setting_service_locator.dart';
+import 'package:fourtyninehub/service_locator/share_app_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
 import 'package:fourtyninehub/service_locator/star_service_locator.dart';
 import 'package:fourtyninehub/service_locator/stories_service_locator.dart';
@@ -45,6 +62,7 @@ import 'package:fourtyninehub/service_locator/trip_join_service_locator.dart';
 import 'package:fourtyninehub/service_locator/twitter_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
 import 'package:get_it/get_it.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:sqflite/sqflite.dart';
@@ -71,7 +89,26 @@ import 'subscribe_service_locator.dart';
 final serviceLocator = GetIt.instance;
 
 class DI {
-  static Future<void> execute() async {
+  static Future<void> execute({String? token}) async {
+    print('executed');
+    // //preloading
+    serviceLocator.registerLazySingleton(() => PreloadBloc());
+    serviceLocator.registerLazySingleton<ReelsCubit>(
+      () => ReelsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator()),
+    );
+
     await Firebase.initializeApp(
       name: "49-App",
       options: DefaultFirebaseOptions.currentPlatform,
@@ -91,15 +128,16 @@ class DI {
 
     await LocalizationService.init();
     await SQFLiteDataSource.instance.initDatabase();
-    final token = await CacheManager.getAccessToken();
+    final cred = await CacheManager.getAccessToken();
+    CliLogger.info('token from getit $cred');
+    CliLogger.info('token outside getit $token');
     // socket
-    log(token ?? "", name: "Socket Token");
     serviceLocator.registerLazySingleton<Socket>(() => io(
         'https://49dev.com',
         OptionBuilder()
             .setTransports(['websocket'])
             .disableAutoConnect()
-            .setExtraHeaders({'Authorization': token}) // optional
+            .setExtraHeaders({'Authorization': token??cred}) // optional
             .build()));
     // database
     serviceLocator.registerLazySingleton<Database>(
@@ -133,7 +171,7 @@ class DI {
         ]),
     );
     //for gifts
-    serviceLocator.registerLazySingleton(() => GiftsCubit());
+    serviceLocator.registerLazySingleton(() => GiftsCubit(serviceLocator()));
 //tinder getIt register
     serviceLocator.registerLazySingleton<CompetitionRepoImpl>(
       () => CompetitionRepoImpl(ApiService(Dio())),
@@ -143,6 +181,9 @@ class DI {
     // Register the StoryRepository
     serviceLocator.registerLazySingleton<StoryRepository>(
       () => StoryRepository(),
+    );
+    serviceLocator.registerLazySingleton<GetGiftsUseCase>(
+      () => GetGiftsUseCase(serviceLocator()),
     );
 
     // serviceLocator
@@ -162,19 +203,80 @@ class DI {
 
     //
     // // Register the TinderCubit
-    // serviceLocator.registerFactory<TinderViewCubit>(
-    //   () =>
-    //       TinderViewCubit(tinderRepository: serviceLocator<TinderRepository>()),
-    // );
+    serviceLocator.registerLazySingleton<TinderViewCubit>(() => TinderViewCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
 
-    // Register the TinderRepository as a singleton
+    serviceLocator.registerLazySingleton<TinderRemoteDataSource>(
+        () => TinderRemoteDataSourceImpl(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<TinderRepository>(
+        () => TinderRepositoryImpl(serviceLocator()));
+
     serviceLocator
-        .registerLazySingleton<TinderRepository>(() => TinderRepository());
+        .registerLazySingleton<GetUserDataUseCase>(() => GetUserDataUseCase(
+              serviceLocator(),
+            ));
 
-    // Register the TinderViewCubit and inject the TinderRepository dependency
-    serviceLocator.registerFactory<TinderViewCubit>(() => TinderViewCubit(
-        tinderRepository: serviceLocator<TinderRepository>(),
-        getMainCategoryDetailsUseCase: serviceLocator()));
+    serviceLocator.registerLazySingleton<GetTinderFavouritesCategoryUseCase>(
+        () => GetTinderFavouritesCategoryUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<GetTinderProfileUseCase>(
+        () => GetTinderProfileUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<GetTinderFavouritesUseCase>(
+        () => GetTinderFavouritesUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator
+        .registerLazySingleton<FetchLastSeenUseCase>(() => FetchLastSeenUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<SendGiftUseCase>(() => SendGiftUseCase(
+          serviceLocator(),
+        ));
+
+    serviceLocator
+        .registerLazySingleton<FetchGiftsUseCase>(() => FetchGiftsUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<CheckUserNearbyUseCase>(
+        () => CheckUserNearbyUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<FetchSubCategoryDataUseCase>(
+        () => FetchSubCategoryDataUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<UploadTinderPictureUseCase>(
+        () => UploadTinderPictureUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerLazySingleton<AddTinderFavouriteCategoryUseCase>(
+        () => AddTinderFavouriteCategoryUseCase(
+              serviceLocator(),
+            ));
 
     // Register other dependencies...
     // serviceLocator
@@ -186,7 +288,9 @@ class DI {
         serviceLocator(),
       ),
     );
-
+    serviceLocator.registerLazySingleton<ApiClientHelper>(
+      () => ApiClientHelperImp(),
+    );
     //cacheService
     serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     // base repo
@@ -252,10 +356,15 @@ class DI {
     CarpoolServiceLocator.execute(serviceLocator: serviceLocator);
     ChanceServiceLocator.execute(serviceLocator: serviceLocator);
     SearchServiceLocator.execute(serviceLocator: serviceLocator);
+    EditFoodServiceLocator.execute(serviceLocator: serviceLocator);
     JoinTripCarpoolServiceLocator.execute(serviceLocator: serviceLocator);
     ReelsServiceLocator.execute(serviceLocator: serviceLocator);
     StarServiceLocator.execute(serviceLocator: serviceLocator);
     QuranServiceLocator.execute(serviceLocator: serviceLocator);
     StoriesServiceLocator.execute(serviceLocator: serviceLocator);
+    ShareAppServiceLocator.execute(serviceLocator: serviceLocator);
+  }
+  static Future<void> reset() async {
+    await serviceLocator.reset();
   }
 }

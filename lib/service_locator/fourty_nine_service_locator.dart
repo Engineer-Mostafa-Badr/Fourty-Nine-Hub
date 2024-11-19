@@ -38,9 +38,11 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/data/repositories/c
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/create_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/filter_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/get_ad_properties_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_statistics_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/data_sources/remote_data_source/fourty_nine_remote_data_source.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/repositories/fourty_nine_repository_impl.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/repositories/fourty_nine_repository.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/any_cashback_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_banner_by_id_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/add_main_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_currency_use_case.dart';
@@ -404,6 +406,12 @@ class FourtyNineServiceLocator {
     serviceLocator.registerLazySingleton<MakeAdPremiumRequestUsecase>(
       () => MakeAdPremiumRequestUsecase(serviceLocator()),
     );
+    serviceLocator.registerLazySingleton<AnyCashBackUseCase>(
+      () => AnyCashBackUseCase(serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<GetRestaurantStatisticUseCase>(
+      () => GetRestaurantStatisticUseCase(serviceLocator()),
+    );
 
     // cubits
     serviceLocator.registerLazySingleton<GetSliderItemsUseCase>(
@@ -447,6 +455,7 @@ class FourtyNineServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
       ),
     );
 
@@ -467,6 +476,8 @@ class FourtyNineServiceLocator {
     // CreateAdCubit
     serviceLocator.registerFactory<CreateAdCubit>(
       () => CreateAdCubit(
+        serviceLocator(),
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

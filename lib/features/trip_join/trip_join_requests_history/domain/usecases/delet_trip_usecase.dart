@@ -6,7 +6,9 @@ class DeleteTripUseCase {
   final TripJoinRequestHistoryRepo tripJoinRequestHistoryRepo;
 
   DeleteTripUseCase({required this.tripJoinRequestHistoryRepo});
-  Future<Either<Failure, bool>> call({required String id}) {
-    return tripJoinRequestHistoryRepo.deleteTrip(id: id);
+  Future<Either<Failure, bool>> call(
+      {required String subCategory, required String url, required String id}) {
+    return tripJoinRequestHistoryRepo.deleteTrip(
+        subCategory: subCategory, url: url, id: id);
   }
 }

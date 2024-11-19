@@ -32,6 +32,7 @@ class DoctorModel extends DoctorEntity {
     required super.isActive,
     required super.isPremium,
     required super.description,
+    required super.classification,
     required super.rating,
     required super.createdAt,
     required super.updatedAt,
@@ -50,13 +51,15 @@ class DoctorModel extends DoctorEntity {
           ? SubCategoryModel.fromJson(json['subCategoryId'])
           : SubCategoryEntity(
               id: '',
-              name: '',
+              nameAr: '',
+              nameEn: '',
               image: '',
               isFavorite: false,
             ),
       image: json['mediaId']['mediaKey'] ?? '',
       phone: json['phone'] ?? '',
       email: json['email'] ?? '',
+      classification: json['classification'] ?? '',
       address: json['address'] != null
           ? DoctorAddressModel.fromJson(json['address'])
           : DoctorAddressEntity(governorateId: '', cityId: '', address: ''),

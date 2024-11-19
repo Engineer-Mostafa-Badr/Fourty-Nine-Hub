@@ -39,7 +39,7 @@ class BalanceCubit extends Cubit<BalanceState> {
     response.fold((l) {
       emit(state.copyWith(failure: l, status: BalanceStates.error));
     }, (data) {
-      emit(state.copyWith(balance: data));
+      emit(state.copyWith(balance: data,status: BalanceStates.success));
     });
   }
 

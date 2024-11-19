@@ -8,15 +8,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/search/domain/entity/main_category_search_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../../../../core/localization/locales.dart';
 
 class BuildItemSearchMainCategory extends StatefulWidget {
-  final MainSubCategorySearchEntity category;
+  final MainCategoryEntity category;
   final bool canRegister;
   final Function()? onRegister;
   final Function() onFavorite;
@@ -32,8 +31,7 @@ class BuildItemSearchMainCategory extends StatefulWidget {
   });
 
   @override
-  State<BuildItemSearchMainCategory> createState() =>
-      _MainCategoryBannerState();
+  State<BuildItemSearchMainCategory> createState() => _MainCategoryBannerState();
 }
 
 class _MainCategoryBannerState extends State<BuildItemSearchMainCategory> {
@@ -41,7 +39,7 @@ class _MainCategoryBannerState extends State<BuildItemSearchMainCategory> {
 
   @override
   void initState() {
-    // widget.isFavorite = widget.category.isFavorite ?? false;
+   // widget.isFavorite = widget.category.isFavorite ?? false;
     super.initState();
   }
 
@@ -74,9 +72,8 @@ class _MainCategoryBannerState extends State<BuildItemSearchMainCategory> {
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: context.locale == Locales.english
-                  ? widget.category.nameEn
-                  : widget.category.nameAr,
+              text: widget.category.name,
+              // text:context.locale == Locales.english? widget.category.nameEn :widget.category.nameAr,
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -89,26 +86,26 @@ class _MainCategoryBannerState extends State<BuildItemSearchMainCategory> {
                 children: [
                   context.read<UserCubit>().isLoggedIn
                       ? IconButton(
-                          color: AppColors.SECONDARY_COLOR,
-                          onPressed: () async {
-                            final result = await widget.onFavorite();
-                            print("resutlt=$result");
-                            if (result == true) {
-                              print(result);
-                              setState(() {
-                                widget.category.isFavorite =
-                                    !widget.category.isFavorite!;
-                                print(widget.category.isFavorite);
-                                widget.isFavorite = result;
-                                print("===================$result");
-                              });
-                            }
-                          },
-                          // icon: Icon( Icons.favorite_border),
-                          icon: Icon(widget.category.isFavorite == true
-                              ? Icons.favorite
-                              : Icons.favorite_border),
-                        )
+                    color: AppColors.SECONDARY_COLOR,
+                    onPressed: () async {
+                      final result = await widget.onFavorite();
+                      print("resutlt=$result");
+                      if (result == true) {
+                        print(result);
+                        setState(() {
+                          widget.category.isFavorite =
+                          !widget.category.isFavorite!;
+                          print(widget.category.isFavorite);
+                          widget.isFavorite = result;
+                          print("===================$result");
+                        });
+                      }
+                    },
+                   // icon: Icon( Icons.favorite_border),
+                    icon: Icon(widget.category.isFavorite == true
+                        ? Icons.favorite
+                        : Icons.favorite_border),
+                  )
                       : const SizedBox.shrink(),
                   // Label(
                   //   text:
@@ -147,9 +144,8 @@ class _MainCategoryBannerState extends State<BuildItemSearchMainCategory> {
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: context.locale == Locales.english
-                  ? widget.category.nameEn
-                  : widget.category.nameAr,
+              text: widget.category.name,
+              // text: context.locale == Locales.english? widget.category.nameEn :widget.category.nameAr,
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -161,22 +157,22 @@ class _MainCategoryBannerState extends State<BuildItemSearchMainCategory> {
                 children: [
                   context.read<UserCubit>().isLoggedIn
                       ? InkWell(
-                          onTap: () async {
-                            final result = await widget.onFavorite();
-                            if (result != null && result != widget.isFavorite) {
-                              setState(() {
-                                widget.isFavorite = result;
-                                print("===================$result");
-                              });
-                            }
-                          },
-                          child: Icon(
-                            widget.isFavorite == true
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            color: AppColors.SECONDARY_COLOR,
-                          ),
-                        )
+                    onTap: () async {
+                      final result = await widget.onFavorite();
+                      if (result != null && result != widget.isFavorite) {
+                        setState(() {
+                          widget.isFavorite = result;
+                          print("===================$result");
+                        });
+                      }
+                    },
+                    child: Icon(
+                      widget.isFavorite == true
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      color: AppColors.SECONDARY_COLOR,
+                    ),
+                  )
                       : const SizedBox.shrink(),
                   // Sizer(
                   //   height: 15.h,

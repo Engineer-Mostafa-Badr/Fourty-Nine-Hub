@@ -1,17 +1,22 @@
+import 'package:fourtyninehub/core/utils/duration_helper.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
+import 'package:intl/intl.dart';
+
 class AdsSearchEntity {
   final String id;
-  final String userId;
+   String? userId;
   final String subCategoryId;
   final String mainCategoryId;
   final String title;
   final String description;
   final bool adminIgnore;
-  final List<String> images;
+  final List<ImageSearchEntity> images;
   final bool isActive;
   final bool isApproved;
   final bool isPremium;
   final String countryCode;
-  final double price;
+  final String subscriptionType;
+  final num price;
   final String status;
   final String searchText;
   final List<String> adminComments;
@@ -22,7 +27,7 @@ class AdsSearchEntity {
   final String type;
   final bool isDeleted;
   final DateTime? deletedAt;
-  final DateTime createdAt;
+   DateTime createdAt;
   final DateTime updatedAt;
   final List<String> phoneCount;
   final List<String> chatCount;
@@ -31,11 +36,20 @@ class AdsSearchEntity {
   final bool isBanned;
   final bool isBlocked;
   final bool isRejected;
+   bool? isFavorite;
   final List<double> coordinates;
+  List<CreateAdEntity> details;
+
+  String get formatedDate => DateFormat('yyyy-MM-dd').format(createdAt);
+  Duration get restTimeDuration => DateTime.now().difference(createdAt);
+
+  String get formattedRestTime =>
+      DurationHelper().sinceTime(duration: restTimeDuration);
+
 
   AdsSearchEntity(
       {required this.id,
-      required this.userId,
+       this.userId,
       required this.subCategoryId,
       required this.mainCategoryId,
       required this.title,
@@ -50,6 +64,7 @@ class AdsSearchEntity {
       required this.status,
       required this.searchText,
       required this.adminComments,
+      required this.subscriptionType,
       required this.phone,
       required this.totalRating,
       required this.views,
@@ -66,5 +81,15 @@ class AdsSearchEntity {
       required this.isBanned,
       required this.isBlocked,
       required this.isRejected,
-      required this.coordinates});
+       this.isFavorite=false,
+      required this.coordinates,
+      required this.details,
+      });
+}
+
+class ImageSearchEntity{
+  final String id;
+  final String mediaKey;
+
+  ImageSearchEntity({required this.id, required this.mediaKey});
 }

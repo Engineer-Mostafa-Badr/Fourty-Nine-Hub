@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
@@ -18,9 +20,11 @@ import '../../../../../routes/routes.dart';
 import '../../../tinder/data/shared/shared.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
 import '../../data/models/new_reels_model.dart';
-import '../controllers/explore_reels_cubit/explore_reels_cubit.dart';
+import '../controllers/explore_reels_cubit/reel_cubit.dart';
+import '../widgets/components/snackbars.dart';
 import 'audio_reel_view.dart';
 import 'package:easy_localization/easy_localization.dart';
+
 
 class InstagramAudioScreen extends StatefulWidget {
   final Audio audio;
@@ -107,9 +111,9 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
   Widget build(BuildContext context) {
     final reelCubit = context.watch<ReelsCubit>();
     return Scaffold(
-      backgroundColor: isDarkTheme(context) ? Colors.black87 : Colors.white,
+      backgroundColor: context.isDarkMode ? Colors.black87 : Colors.white,
       appBar: AppBar(
-        backgroundColor: isDarkTheme(context) ? Colors.black87 : Colors.white,
+        backgroundColor: context.isDarkMode ? Colors.black87 : Colors.white,
         toolbarHeight: kToolbarHeight * 0.8,
         leading: IconButton(
           icon: Icon(
@@ -122,7 +126,6 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
         ),
         title: Text(
           LocaleKeys.audio.tr(), // Localized "Audio"
-          textScaleFactor: 1.0,
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40.sp),
         ),
         actions: [
@@ -219,19 +222,8 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          capitalizeAndSplit2Only(widget.audio.audioName),
-                          softWrap: true,
-                          textScaleFactor: 1.0,
-                          style: TextStyle(
-                            fontSize: 40.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
                           capitalizeAndSplit(widget.audio.username),
                           softWrap: true,
-                          textScaleFactor: 1.0,
                           style: TextStyle(
                             fontSize: 35.sp,
                             fontWeight: FontWeight.bold,
@@ -243,7 +235,6 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                         ),
                         Text(
                           reelText(widget.audio.reelsCount),
-                          textScaleFactor: 1.0,
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 30.sp,
@@ -267,7 +258,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                   child: ElevatedButton(
                     style: const ButtonStyle(
                         backgroundColor:
-                            WidgetStatePropertyAll(AppColors.PRIMARY_COLOR)),
+                            MaterialStatePropertyAll(AppColors.PRIMARY_COLOR)),
                     onPressed: () {
                       _player.dispose();
                       Navigator.push(
@@ -280,7 +271,6 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                     },
                     child: Text(
                       LocaleKeys.use_audio.tr(),
-                      textScaleFactor: 1.0,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -295,7 +285,6 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
               ? Center(
                   child: Text(
                     LocaleKeys.audio_load_fail.tr(),
-                    textScaleFactor: 1.0,
                     style: const TextStyle(),
                   ),
                 )
@@ -358,7 +347,6 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                           final positionText = formatDuration(position);
                           return Text(
                             positionText,
-                            textScaleFactor: 1.0,
                             style: TextStyle(
                               fontSize: 30.sp,
                               fontWeight: FontWeight.bold,
@@ -422,7 +410,6 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                                       Text(
                                         state.reelsForAudio![index].viewCount
                                             .toString(),
-                                        textScaleFactor: 1.0,
                                         style: TextStyle(
                                           fontSize: 25.sp,
                                           fontWeight: FontWeight.normal,

@@ -5,16 +5,21 @@ import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_pick_me/domain/entities/pickme_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_pick_me/presentation/cubits/view_all_pick_me/view_all_pick_me_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_pick_me/presentation/widgets/all_pick_me_card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_pick_me/presentation/widgets/all_pick_me_card_loading.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/request_trip_join_cubit/request_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/report_view_trip_join.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/request_trip_Join_bottom_sheet.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class AllPickMeBuilder extends StatefulWidget {
@@ -71,62 +76,101 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
               return AllPickMeCard(
                 pickMeCardEntity: pickMeCardEntity,
                 reportOnTap: () {
-                  _reportOnTap(context, pickMeCardEntity);
+                  if (context.read<UserCubit>().isLoggedIn) {
+                    _reportOnTap(context, pickMeCardEntity);
+                  } else {
+                    context.push(Routes.LOGIN);
+                  }
                 },
                 premuimRequestOnTap: () async {
-                  if (await _isPremuim(
-                    pickMeCardEntity,
-                    pickMeCardEntity.categoryId ?? '',
-                    LocaleKeys.tripjoinPremuimSubscription.localize,
-                  )) {
-                    // await showModalBottomSheet(
-                    //   context: context,
-                    //   isDismissible: true,
-                    //   isScrollControlled: true,
-                    //   builder: (_) {
-                    //     return BlocProvider.value(
-                    //         value: BlocProvider.of<RequestTripJoinCubit>(context),
-                    //         child: RequstTripJoinBottomSheet(tripJoinCardEntity: tripJoinCardEntity, isPremium: true));
-                    //   },
-                    // );
+                  if (context.read<UserCubit>().isLoggedIn) {
+                    print(
+                        "pickMeCardEntity.categoryId ${pickMeCardEntity.categoryId} \n");
+                    if (await _isPremuim(
+                      pickMeCardEntity,
+                      pickMeCardEntity.categoryId ?? '',
+                      LocaleKeys.tripjoinPremuimSubscription.localize,
+                    )) {
+                      print("====heeeeeeel==");
+                      await showModalBottomSheet(
+                        context: context,
+                        isDismissible: true,
+                        isScrollControlled: true,
+                        builder: (_) {
+                          return BlocProvider.value(
+                              value: BlocProvider.of<RequestTripJoinCubit>(
+                                  context),
+                              child: RequstTripJoinBottomSheet(
+                                  tripId: pickMeCardEntity.id ?? '',
+                                  subCategory: "62ea008d69ea29c91dfc3908",
+                                  url: "/ride/pick-me/request/",
+                                  isPremium: true));
+                        },
+                      );
+                    }
+                  } else {
+                    context.push(Routes.LOGIN);
                   }
                 },
                 requestOnTap: () async {
-                  // await showModalBottomSheet(
-                  //   context: context,
-                  //   isDismissible: true,
-                  //   isScrollControlled: true,
-                  //   builder: (_) {
-                  //     return BlocProvider.value(
-                  //         value: BlocProvider.of<RequestTripJoinCubit>(context),
-                  //         child: RequstTripJoinBottomSheet(tripJoinCardEntity: tripJoinCardEntity));
-                  //   },
-                  // );
+                  if (context.read<UserCubit>().isLoggedIn) {
+                    await showModalBottomSheet(
+                      context: context,
+                      isDismissible: true,
+                      isScrollControlled: true,
+                      builder: (_) {
+                        print("hello");
+                        return BlocProvider.value(
+                            value:
+                                BlocProvider.of<RequestTripJoinCubit>(context),
+                            child: RequstTripJoinBottomSheet(
+                              tripId: pickMeCardEntity.id ?? '',
+                              subCategory: "62ea008d69ea29c91dfc3908",
+                              url: "/ride/pick-me/request/",
+                              isPremium: false,
+                            ));
+                      },
+                    );
+                  } else {
+                    context.push(Routes.LOGIN);
+                  }
                 },
                 callOnTap: () async {
-                  // launchUrlString("tel://${tripJoinCardEntity.phone}");
-                  // return;
-                  if (await _userApproved(
-                    pickMeCardEntity,
-                    UIConst.chatNormalId,
-                    LocaleKeys.chatSubscription.localize,
-                  )) {
-                    launchUrlString("tel://${pickMeCardEntity.phone}");
+                  if (context.read<UserCubit>().isLoggedIn) {
+// launchUrlString("tel://${tripJoinCardEntity.phone}");
+                    // return;
+                    if (await _userApproved(
+                      pickMeCardEntity,
+                      UIConst.chatNormalId,
+                      LocaleKeys.chatSubscription.localize,
+                    )) {
+                      launchUrlString("tel://${pickMeCardEntity.phone}");
+                    }
+                  } else {
+                    context.push(Routes.LOGIN);
                   }
                 },
                 messageOnTap: () async {
-                  if (await _userApproved(
-                    pickMeCardEntity,
-                    UIConst.chatNormalId,
-                    LocaleKeys.chatSubscription.localize,
-                  )) {}
+                  if (context.read<UserCubit>().isLoggedIn) {
+                    if (await _userApproved(
+                      pickMeCardEntity,
+                      UIConst.chatNormalId,
+                      LocaleKeys.chatSubscription.localize,
+                    )) {}
+                  } else {
+                    context.push(Routes.LOGIN);
+                  }
                 },
                 subscribeMessageOnTap: () async {
-                  if (await _userApproved(
-                    pickMeCardEntity,
-                    pickMeCardEntity.categoryId ?? '',
-                    LocaleKeys.tripjoinPremuimSubscription.localize,
-                  )) {}
+                  if (context.read<UserCubit>().isLoggedIn) {
+                    if (await _userApproved(
+                      pickMeCardEntity,
+                      pickMeCardEntity.categoryId ?? '',
+                      LocaleKeys.tripjoinPremuimSubscription.localize,
+                    )) {}
+                  } else {
+                    context.push(Routes.LOGIN);
+                  }
                 },
               );
             }
@@ -141,16 +185,26 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
 
   Future<bool> _isPremuim(PickMeCardEntity pickMeCardEntity,
       String subCategoryId, String title) async {
+    print("-1========");
+    print(pickMeCardEntity.subscribedPremium);
     if (pickMeCardEntity.subscribedPremium == null ||
         pickMeCardEntity.subscribedPremium == false) {
+      print("=========0=========");
+
+      // Await the completion of showSubscriptionPlans
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
         wallets: [
-          pickMeCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
+          pickMeCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance,
         ],
         subCategoryId: subCategoryId,
         title: title,
       );
-      return false;
+
+      print("==========1========");
+
+      // Assuming user subscription could happen here,
+      // check if the user subscribed after showing the subscription plans.
+      return pickMeCardEntity.subscribedPremium == true;
     }
     return true;
   }

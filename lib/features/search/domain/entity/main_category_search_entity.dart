@@ -1,6 +1,6 @@
 class MainSubCategorySearchEntity {
   final String id;
-  final String banner;
+  dynamic banner;
   final String cover;
   final int index;
   final DateTime createdAt;

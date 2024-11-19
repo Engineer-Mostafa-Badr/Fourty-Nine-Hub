@@ -4,18 +4,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/views/create_resturant_view.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/widgets/restaurant_statistics_view.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/is_resturant_usecase.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
+import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/styles.dart';
@@ -36,58 +34,29 @@ class RestaurantDashboardView extends StatefulWidget {
 }
 
 class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
-  IsRestaurantModel isRestaurantModel = IsRestaurantModel(
-      restaurantId: '', approved: false, isActive: false, isRestaurant: false);
-  final ApiConsumer apiConsumer =
-      BaseApiConsumer(serviceLocator(), serviceLocator());
-
-  Restaurant2Model? myRestaurant;
-
-  Future<void> isRestaurant() async {
-    final response =
-        await IsResturantUsecase(serviceLocator()).call(const NoParams());
-    response.fold((failure) => {}, (data) {
-      setState(() {
-        isRestaurantModel = data;
-      });
-    });
-  }
-
-  Future<void> myRes() async {
-    final res = await apiConsumer
-        .get('https://49dev.com/api/v1/restaurants/info-restaurant');
-
-    res.fold((l) {}, (r) {
-      if (r["data"] != null) {
-        myRestaurant = Restaurant2Model.fromJson(r["data"]);
-      }
-    });
-  }
 
   @override
   void initState() {
     super.initState();
-    initialize();
+    // context.read<RestaurantDashboardCubit>().initialize();
   }
 
-  initialize() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await myRes();
-      await isRestaurant();
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RestaurantDashboardCubit, RestaurantDashboardState>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          return Scaffold(
-              backgroundColor: scaffoldDarkColor(context),
-              appBar: const BackAppBar(
-                label: 'Restaurant Dashboard',
-              ),
-              body: Padding(
+    return Scaffold(
+      backgroundColor: scaffoldDarkColor(context),
+      appBar: BackAppBar(
+        label: LocaleKeys.restaurantDashboard.localize,
+      ),
+      body: BlocConsumer<RestaurantDashboardCubit, RestaurantDashboardState>(
+          listener: (context, state) {},
+          builder: (context, state) {
+            if(state.isLoading){
+              return const Center(child: CircularProgressIndicator(),);
+            }else if(state.isSuccess){
+              return Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: CustomScrollView(
                   slivers: [
@@ -95,40 +64,43 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (myRestaurant != null)
+                          if (state.info != null)
                             SizedBox(
                               height: 0.25.sh,
                               child: PropertyCard(
-                                  myRestaurant: true,
-                                  item: myRestaurant!,
-                                  mealId: 'mealId'),
+                                myRestaurant: true,
+                                item: state.info!,
+                                mealId: 'mealId', favouriteRestaurant: (String id) {  },),
                             ),
                           Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Row(
                                 children: [
                                   Expanded(
                                       child: Label(
-                                    text: isRestaurantModel.isActive ?? false
-                                        ? Labels.available
-                                        : Labels.notAvailable,
-                                    style: Styles.headerText(),
-                                  )),
+                                        text: state.isRestaurant?.isActive ?? false
+                                            ? LocaleKeys.available.localize
+                                            : LocaleKeys.notAvailable.localize,
+                                        style: Styles.headerText(),
+                                      )),
                                   Switch(
-                                      value:
-                                          isRestaurantModel.isActive ?? false,
+                                      value: state.isRestaurant?.isActive ?? false,
                                       inactiveThumbColor: Colors.white,
                                       activeTrackColor: Colors.grey,
                                       activeColor: AppColors.SECONDARY_COLOR,
                                       trackOutlineColor:
-                                          const WidgetStatePropertyAll(
-                                              Colors.white),
+                                      MaterialStateProperty.resolveWith (
+                                              (sattes)=>Colors.white),
                                       onChanged: (v) async {
-                                        await context
-                                            .read<RestaurantsCubit>()
-                                            .changeConnectivityStatus(v)
-                                            .then((value) => isRestaurant());
+
+                                        print("vsssss${!v}");
+                                        await context.read<RestaurantDashboardCubit>().changeConnectivityStatus(v);
+
+                                        // await context
+                                        //     .read<RestaurantsCubit>()
+                                        //     .changeConnectivityStatus(v)
+                                        //     .then((value) => context.read<RestaurantDashboardCubit>().isRestaurant());
                                       })
                                 ],
                               )),
@@ -139,20 +111,20 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                           ),
                           const Sizer(),
                           Padding(
-                            padding: const EdgeInsets.all(4.0),
+                            padding: EdgeInsets.all(4.w),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Expanded(
                                   child: AppButton(
-                                    label: 'Edit Registration',
+                                    label: LocaleKeys.editRegistration.localize,
                                     onPressed: () async {
-                                      if (isRestaurantModel.restaurantId !=
-                                              null &&
-                                          isRestaurantModel.restaurantId !=
+                                      if (state.isRestaurant?.restaurantId !=
+                                          null &&
+                                          state.isRestaurant?.restaurantId !=
                                               '' &&
-                                          myRestaurant?.subcategoryId?.id !=
+                                          state.info?.subcategoryId?.id !=
                                               null) {
                                         await Navigator.push(
                                             context,
@@ -160,51 +132,48 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                                               builder: (context) =>
                                                   BlocProvider<
                                                       CreateRestaurantCubit>(
-                                                create: (context) =>
-                                                    serviceLocator()
-                                                      ..loadData(),
-                                                child: CreateRestaurantForm(
-                                                    from: 'update',
-                                                    restaurantId:
-                                                        isRestaurantModel
-                                                            .restaurantId,
-                                                    subcategoryId: myRestaurant!
-                                                        .subcategoryId!.id),
-                                              ),
+                                                    create: (context) =>
+                                                    serviceLocator(),
+                                                    child: CreateRestaurantForm(
+                                                        from: 'update',
+                                                        restaurantId:
+                                                        state.isRestaurant?.restaurantId,
+                                                        subcategoryId: state.info?.subcategoryId?.id??''),
+                                                  ),
                                             ));
-                                        initialize();
+                                        context.read<RestaurantDashboardCubit>().initialize();
                                       }
                                     },
                                     backColor: AppColors.PRIMARY_COLOR,
                                     style:
-                                        Styles.headerText(color: Colors.white),
+                                    Styles.headerText(color: Colors.white),
                                   ),
                                 ),
                                 const Sizer(),
                                 Expanded(
                                   child: AppButton(
-                                    label: 'Delete Registration',
+                                    label: LocaleKeys.deleteRegistration.localize,
                                     onPressed: () {
                                       showConfirmationDialog(
                                         context,
-                                        title: "Delete Restaurant",
+                                        title: LocaleKeys.deleteRegistration.localize,
                                         message:
-                                            "Are you sure you want to remove this restaurant?",
+                                        LocaleKeys.sureRemoveRestaurant.localize,
                                         onConfirm: () async {
                                           if (widget.restaurantId.isNotEmpty) {
                                             await context
-                                                .read<
-                                                    RestaurantDashboardCubit>()
+                                                .read<RestaurantDashboardCubit>()
                                                 .deleteRestaurantById(context,
-                                                    id: widget.restaurantId);
-                                            Navigator.pop(context);
+                                                id: widget.restaurantId);
+                                            context.pop(true);
+                                            // Future.delayed(const Duration(seconds: 1),()=>context.pop(true));
                                           }
                                         },
                                       );
                                     },
                                     backColor: AppColors.PRIMARY_COLOR_DARK,
                                     style:
-                                        Styles.headerText(color: Colors.white),
+                                    Styles.headerText(color: Colors.white),
                                   ),
                                 ),
                               ],
@@ -213,22 +182,34 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                         ],
                       ),
                     ),
+                    SliverToBoxAdapter(child: Padding(
+                      padding: EdgeInsets.only(top:15.h,left: 4.w,right: 4.w,bottom: 15.h),
+                      child: AppButton(
+                        label: LocaleKeys.subscribe.localize,
+                        onPressed: () {
+                          SubscriptionMethod().subscribe(subscribeId: state.info?.subcategoryId?.id??'', title: LocaleKeys.restaurantDashboard.localize);
+                        },
+                        backColor: AppColors.PRIMARY_COLOR_DARK,
+                        style:
+                        Styles.headerText(color: Colors.white),
+                      ),
+                    ),),
                     SliverToBoxAdapter(
                       child: ListView.separated(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             if (state.orders?.data.orders.length != null &&
-                                index < state.orders!.data.orders.length) {
+                                index < (state.orders?.data.orders.length??0)) {
                               final order = state.orders!.data.orders[index];
                               return Column(
                                 children: [
-                                  RestaurantOrderCard(item: order),
+                                  RestaurantOrderCard(item: order, subCategoryId: state.info?.subcategoryId?.id??'',),
                                   if (state.orders!.data
-                                          .restaurantSubscriptionType !=
+                                      .restaurantSubscriptionType !=
                                       'Not subscribed')
                                     Text(
-                                      'Please Subscribe to contact the client!',
+                                      LocaleKeys.subscribeToContactTheClient.localize,
                                       style: Styles.headerText(
                                           color: AppColors.PRIMARY_COLOR_DARK),
                                     )
@@ -240,14 +221,19 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                             return const SizedBox();
                           },
                           separatorBuilder: (context, index) => const Sizer(
-                                height: 20,
-                              ),
+                            height: 20,
+                          ),
                           itemCount: state.orders?.data.orders.length ?? 0),
                     )
                   ],
                 ),
-              ));
-        });
+              );
+            }else{
+              return const SizedBox.shrink();
+            }
+            }
+          ),
+    );
   }
 }
 
@@ -274,14 +260,14 @@ void showConfirmationDialog(
           TextButton(
             onPressed: onCancel ?? () => Navigator.of(context).pop(),
             child: Text(
-              "No",
+              LocaleKeys.no.localize,
               style: Styles.mediumText(color: Colors.black),
             ),
           ),
           ElevatedButton(
             onPressed: onConfirm,
             child: Text(
-              "Yes",
+              LocaleKeys.yes.localize,
               style: Styles.mediumText(color: Colors.white),
             ),
           ),
@@ -294,6 +280,6 @@ void showConfirmationDialog(
 void deleteItem(BuildContext context) {
   Navigator.of(context).pop();
   ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text("Item deleted successfully")),
+    SnackBar(content: Text(LocaleKeys.deleteSuccessfully.localize)),
   );
 }

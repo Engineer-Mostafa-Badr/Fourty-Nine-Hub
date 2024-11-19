@@ -1,3 +1,4 @@
+
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -11,6 +12,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_cubit.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_state.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -128,7 +130,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                  color: isDarkTheme(context) ? Colors.white : Colors.black87,
+                  color: context.isDarkMode ? Colors.white : Colors.black87,
                   fontSize: 25.sp),
             ),
           ),
@@ -138,7 +140,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
               '${gift.value ?? 0} 💰',
               textScaler: const TextScaler.linear(1.0),
               style: TextStyle(
-                  color: isDarkTheme(context) ? Colors.white : Colors.black87,
+                  color: context.isDarkMode ? Colors.white : Colors.black87,
                   fontSize: 20.sp),
             ),
           ),
@@ -385,7 +387,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                  color: isDarkTheme(context) ? Colors.white : Colors.black87,
+                  color: context.isDarkMode ? Colors.white : Colors.black87,
                   fontSize: 25.sp),
             ),
           ),
@@ -395,7 +397,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
               '${gift.value ?? 0} 💰',
               textScaler: const TextScaler.linear(1.0),
               style: TextStyle(
-                  color: isDarkTheme(context) ? Colors.white : Colors.black87,
+                  color: context.isDarkMode ? Colors.white : Colors.black87,
                   fontSize: 20.sp),
             ),
           ),
@@ -427,7 +429,7 @@ Future<void> showGiftBottomSheet(BuildContext context,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
             decoration: BoxDecoration(
-              color: isDarkTheme(context)
+              color: context.isDarkMode
                   ? Colors.black.withOpacity(0.8)
                   : Colors.white.withOpacity(0.9),
               borderRadius: const BorderRadius.only(
@@ -441,7 +443,7 @@ Future<void> showGiftBottomSheet(BuildContext context,
                   width: double.infinity,
                   height: kToolbarHeight * 0.80,
                   decoration: BoxDecoration(
-                    color: isDarkTheme(context)
+                    color: context.isDarkMode
                         ? Colors.black.withOpacity(0.4)
                         : Colors.grey.withOpacity(0.9),
                     borderRadius:
@@ -455,7 +457,7 @@ Future<void> showGiftBottomSheet(BuildContext context,
                           : LocaleKeys.gift_body_send_a_gift.tr(),
                       textScaler: const TextScaler.linear(1.0),
                       style: TextStyle(
-                          color: isDarkTheme(context)
+                          color: context.isDarkMode
                               ? AppColors.ACCENT_COLOR
                               : AppColors.PRIMARY_COLOR,
                           fontSize: 40.sp,
@@ -479,13 +481,13 @@ Future<void> showGiftBottomSheet(BuildContext context,
                           padding: const EdgeInsets.all(4.0),
                           child: OutlinedButton(
                             style: ButtonStyle(
-                              side: const WidgetStatePropertyAll(BorderSide(
+                              side: const MaterialStatePropertyAll(BorderSide(
                                   width: 1, color: AppColors.ACCENT_COLOR)),
                               iconColor:
-                                  const WidgetStatePropertyAll(Colors.white),
-                              backgroundColor: isDarkTheme(context)
-                                  ? const WidgetStatePropertyAll(Colors.black)
-                                  : WidgetStatePropertyAll(
+                                  const MaterialStatePropertyAll(Colors.white),
+                              backgroundColor: context.isDarkMode
+                                  ? const MaterialStatePropertyAll(Colors.black)
+                                  : MaterialStatePropertyAll(
                                       Colors.grey.withOpacity(0.9)),
                             ),
                             onPressed: () {
@@ -499,7 +501,7 @@ Future<void> showGiftBottomSheet(BuildContext context,
                               style: TextStyle(
                                   fontSize: 25.sp,
                                   fontWeight: FontWeight.bold,
-                                  color: isDarkTheme(context)
+                                  color: context.isDarkMode
                                       ? AppColors.YELLOW_COLOR
                                       : Colors.black),
                             ),
@@ -570,8 +572,8 @@ pleaseLoginWidget(context) {
         child: OutlinedButton(
           onPressed: () => context.push(Routes.LOGIN),
           style: ButtonStyle(
-              foregroundColor: WidgetStatePropertyAll(
-                  isDarkTheme(context) ? Colors.white70 : Colors.black87)),
+              foregroundColor: MaterialStatePropertyAll(
+                  context.isDarkMode ? Colors.white70 : Colors.black87)),
           child: FittedBox(
             child: Text(
               LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.tr(),

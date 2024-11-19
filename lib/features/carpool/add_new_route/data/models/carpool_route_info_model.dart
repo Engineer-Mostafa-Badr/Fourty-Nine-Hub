@@ -1,8 +1,8 @@
 class CarpoolRouteInfoModel {
-  num? priceForEveryUser; // Matches "priceForEveryUser" in JSON
-  num? driverPriceComfort; // Matches "PriceComfort" in JSON
-  num? priceDriverWomen; // Matches "priceDriverWomen" in JSON
-  num? priceForWomenOnly; // Matches "PriceWomenOnly" in JSON
+  num? priceForEveryUser;
+  num? driverPriceComfort;
+  num? priceDriverWomen;
+  num? priceForWomenOnly;
   num? duration;
   num? distance;
   String? destinationAddress;
@@ -11,11 +11,13 @@ class CarpoolRouteInfoModel {
   String? locationForSecondMidpoint;
   List<double>? startLocation;
   List<double>? targetLocation;
-  List<double>? firstMidpoint;
-  List<double>? secondMidpoint;
+  Map<String, double?>? firstMidpoint;
+  Map<String, double?>?
+      secondMidpoint; // Changed to Map<String, double?> to allow nullable values
   bool? womenDriverOnly;
   bool? womenOnly;
   bool? comfort;
+  String? polyline;
 
   CarpoolRouteInfoModel({
     this.priceForEveryUser,
@@ -35,11 +37,12 @@ class CarpoolRouteInfoModel {
     this.womenDriverOnly,
     this.womenOnly,
     this.comfort,
+    this.polyline,
   });
 
   @override
   String toString() {
-    return 'CarpoolRouteInfoModel(priceForEveryUser: $priceForEveryUser, driverPriceComfort: $driverPriceComfort, priceDriverWomen: $priceDriverWomen, priceForWomenOnly: $priceForWomenOnly, duration: $duration, distance: $distance, destinationAddress: $destinationAddress, originAddress: $originAddress, locationForFirstMidpoint: $locationForFirstMidpoint, locationForSecondMidpoint: $locationForSecondMidpoint, startLocation: $startLocation, targetLocation: $targetLocation, firstMidpoint: $firstMidpoint, secondMidpoint: $secondMidpoint, womenDriverOnly: $womenDriverOnly, womenOnly: $womenOnly, comfort: $comfort)';
+    return 'CarpoolRouteInfoModel(priceForEveryUser: $priceForEveryUser, driverPriceComfort: $driverPriceComfort, priceDriverWomen: $priceDriverWomen, priceForWomenOnly: $priceForWomenOnly, duration: $duration, distance: $distance, destinationAddress: $destinationAddress, originAddress: $originAddress, locationForFirstMidpoint: $locationForFirstMidpoint, locationForSecondMidpoint: $locationForSecondMidpoint, startLocation: $startLocation, targetLocation: $targetLocation, firstMidpoint: $firstMidpoint, secondMidpoint: $secondMidpoint, womenDriverOnly: $womenDriverOnly, womenOnly: $womenOnly, comfort: $comfort, polyline: $polyline)';
   }
 
   factory CarpoolRouteInfoModel.fromJson(Map<String, dynamic> json) {
@@ -60,15 +63,18 @@ class CarpoolRouteInfoModel {
       targetLocation: (json['targetLocation'] as List<dynamic>)
           .map<double>((e) => e.toDouble())
           .toList(),
-      firstMidpoint: (json['firstMidpoint'] as List<dynamic>)
-          .map<double>((e) => e.toDouble())
-          .toList(),
-      secondMidpoint: (json['secondMidpoint'] as List<dynamic>)
-          .map<double>((e) => e.toDouble())
-          .toList(),
+      firstMidpoint: {
+        'lat': (json['firstMidpoint']['lat'] as num?)?.toDouble(),
+        'lng': (json['firstMidpoint']['lng'] as num?)?.toDouble(),
+      },
+      secondMidpoint: {
+        'lat': (json['secondMidpoint']['lat'] as num?)?.toDouble(),
+        'lng': (json['secondMidpoint']['lng'] as num?)?.toDouble(),
+      },
       womenDriverOnly: json['womenDriverOnly'] as bool?,
       womenOnly: json['womenOnly'] as bool?,
       comfort: json['comfort'] as bool?,
+      polyline: json['polyline'] as String?,
     );
   }
 
@@ -90,5 +96,6 @@ class CarpoolRouteInfoModel {
         'womenDriverOnly': womenDriverOnly,
         'womenOnly': womenOnly,
         'comfort': comfort,
+        'polyline': polyline,
       };
 }

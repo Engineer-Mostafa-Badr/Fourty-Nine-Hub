@@ -10,6 +10,12 @@ final class DoctorDashboardSupscriptionRemainingDays
   DoctorDashboardSupscriptionRemainingDays(this.days);
 }
 
+final class DoctorInfoSuccessState
+    extends DoctorDashboardState {
+  final DoctorInfoEntity info;
+  DoctorInfoSuccessState(this.info);
+}
+
 final class DoctorDashboardIDRemainingDays extends DoctorDashboardState {
   final int days;
   DoctorDashboardIDRemainingDays(this.days);

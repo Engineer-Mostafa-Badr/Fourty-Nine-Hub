@@ -4,7 +4,10 @@ abstract class Routes {
   Routes._();
 
   static const HOME = '/';
+  static const CUSTOMPAGE = '/CustomPage';
+  static const PAGEPREVIEW = '/CustomPage/PagePreview';
   static const MAINCATEGORIESCARDS = '/MainCategoriesCards';
+  static const SEARCH = '/Search';
   static const RESTAURANTORDERS = '/RestaurantOrders';
   static const EditFoodView = '/EditFoodView';
   static const MAINCATEGORIESTREE = '/MainCategoriesTree';
@@ -23,6 +26,8 @@ abstract class Routes {
   static const COMPETITIONS = '/Competitions';
   static const WINNERS = '/Winners';
   static const WALLET = '/Wallet';
+  static const BALANCE = '/Balance';
+  static const GIFT = '/Gift';
   static const WALLETHISTORY = '/Wallet/WalletHistory';
   static const TRANSFERMONEY = '/Wallet/TransferMoney';
   static const SOCIAL = '/Social';
@@ -48,6 +53,9 @@ abstract class Routes {
   static const ARCHIVEDCHATS = '/ArchivedChatsView';
   static const CHATROOMCAMERAPICKER = '/ChatRoom/CameraPicker';
   static const MEDIASLIDER = '/ChatRoom/MediaSlider';
+  static const ONETIMEVOICEMESSAGE = '/OneTimeVoiceMessageView';
+  static const ONETIMEDOCUMENTMESSAGE = '/OneTimeDocumentMessageView';
+  static const FORWARDMESSAGES = '/ForwardMessagesView';
   static const VIEWCONTACT = '/ChatRoom/ViewContact';
   static const IMAGESPAGEVIEW = '/ImagesPageView';
   static const SHOWIMAGEVIEW = '/ShowImagesView';
@@ -77,6 +85,7 @@ abstract class Routes {
   static const DOCTORDASHBOARD = '/Visita/DoctorDashboard';
   static const EDITDOCTORPERSONALINFO = '/Visita/EditDoctorPersonalInfo';
   static const DOCTORSTATISTICS = '/Visita/DoctorStatistics';
+  static const DOCTORREVIEWS = '/Visita/DoctorReviews';
   static const DOCTORTODAYAPPOINTMENTS = '/Visita/DoctorTodayAppointments';
   static const DOCTORUNHANDLEDAPPOINTMENTS =
       '/Visita/DoctorUnhandledAppointments';
@@ -87,6 +96,7 @@ abstract class Routes {
   static const CusineRestaurants = '/Food/Cusine-Restaurants';
   static const SEARCHMEALS = '/Food/SearchMeals';
   static const RestaurantDashboard = '/RestaurantDashboard';
+  static const RestaurantOrders = '/RestaurantDashboard/RestaurantOrders';
   static const CREATERESTURANT = '/Food/CreateResturant';
 
   static const FOODCART = '/Food/RetaurantDetails/FoodCart';
@@ -103,6 +113,7 @@ abstract class Routes {
   static const YOUTUBE = '/Youtube';
   static const QURAAN = '/Quraan';
   static const AZKAAR = '/Azkaar';
+  static const AZKAARDETAILS = '/Azkaar/AZKAARDETAILS';
   static const PLAYVIDEO = '/Youtube/PlayVideo';
 
   static const MAZADDETAILS = '/Mazadat/MazadDetails';
@@ -150,9 +161,12 @@ abstract class Routes {
 
   static const TRIP_JOIN = '/TripJoin';
   static const BE_STAR = '/BeAStar';
+  static const BE_STAR_DETAILS = '/BeAStar/BeAStarDetails';
   static const AVAILABLE_TRIPS = '/AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = '/TripJoinRequestNotification';
   static const TRIP_JOIN_REQUEST_HISTORY = '/TripJoinRequestHistory';
+  static const TRIP_JOIN_REQUEST_HISTORY_Pick_Me =
+      '/TripJoinRequestHistoryPickMe';
 
   static const CAR_POOL = '/CarPool';
   static const ADD_NEW_ROUTE = '/AddNewRoute';
@@ -161,6 +175,7 @@ abstract class Routes {
   static const SNAP = '/Snap';
   static const SEEALLBROADCASTS = '/SeeAllBroadcasts';
   static const BROADCAST = '/Broadcast';
+  static const AddNewPickMe = "/AddNeWPickMe";
   static const TRIPINFOBYRIDERSCREEN = '/Ride/TripInfoByRiderScreen';
   static const TRIPINFOBYDRIVERSCREEN = '/Ride/TripInfoByDriverScreen';
 }
@@ -169,7 +184,10 @@ abstract class Paths {
   Paths._();
 
   static const HOME = '/';
+  static const CUSTOMPAGE = 'CustomPage';
+  static const PAGEPREVIEW = 'PagePreview';
   static const MAINCATEGORIESCARDS = 'MainCategoriesCards';
+  static const SEARCH = 'Search';
   static const RESTAURANTORDERS = 'RestaurantOrders';
   static const EditFoodView = 'EditFoodView';
   static const MAINCATEGORIESTREE = 'MainCategoriesTree';
@@ -186,6 +204,8 @@ abstract class Paths {
   static const COMPETITIONS = 'Competitions';
   static const WINNERS = 'Winners';
   static const WALLET = 'Wallet';
+  static const BALANCE = 'Balance';
+  static const GIFT = 'Gift';
   static const WALLETHISTORY = 'WalletHistory';
   static const TRANSFERMONEY = 'TransferMoney';
   static const INSTAGRAM = 'Instagram';
@@ -202,6 +222,9 @@ abstract class Paths {
   static const VIEWCONTACT = 'ViewContact';
   static const ATTACHMENTSVIEW = 'AttachmentsView';
   static const CHATPROFILEVIEW = 'ChatProfileView';
+  static const ONETIMEVOICEMESSAGEVIEW = 'OneTimeVoiceMessageView';
+  static const ONETIMEDOCUMENTMESSAGEVIEW = 'OneTimeDocumentMessageView';
+  static const FORWARDMESSAGESVIEW = 'ForwardMessagesView';
   static const CHATROOMCAMERAPICKER = 'CameraPicker';
   static const MEDIASLIDER = 'MediaSlider';
   static const REELS = 'Reels';
@@ -230,6 +253,7 @@ abstract class Paths {
   static const FILTERDOCTORCITY = 'FilterDoctorCity';
   static const FILTERDOCTORAREA = 'FilterDoctorArea';
   static const DOCTORDASHBOARD = 'DoctorDashboard';
+  static const DOCTORREVIEWS = 'DoctorReviews';
   static const EDITDOCTORPERSONALINFO = 'EditDoctorPersonalInfo';
   static const DOCTORSTATISTICS = 'DoctorStatistics';
   static const DOCTORTODAYAPPOINTMENTS = 'DoctorTodayAppointments';
@@ -239,6 +263,7 @@ abstract class Paths {
   static const CREATERESTURANT = 'CreateResturant';
   static const CusineRestaurants = 'Cusine-Restaurants';
   static const RestaurantDashboard = 'RestaurantDashboard';
+  static const RestaurantOrders = 'RestaurantOrders';
   static const SearchMeals = 'SearchMeals';
   static const SHIPPING = 'Shipping';
   static const SHIPPING_REGISTER = 'shippingRegister';
@@ -288,14 +313,19 @@ abstract class Paths {
   static const SETTINGS = 'Settings';
   static const QURAAN = 'Quraan';
   static const AZKAAR = 'Azkaar';
+  static const AZKAARDETAILS = 'AZKAARDETAILS';
   static const PAYMENT = 'Payment';
   static const SUBSCRIPTIONPLANS = 'SubscriptionPlans';
 
   static const TRIP_JOIN = 'TripJoin';
   static const BE_STAR = 'BeAStar';
+  static const BE_STAR_DETAILS = 'BeAStarDetails';
   static const AVAILABLE_TRIPS = 'AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = 'TripJoinRequestNotification';
   static const TRIP_JOIN_REQUEST_HISTORY = 'TripJoinRequestHistory';
+  static const TRIP_JOIN_REQUEST_HISTORY_Pick_Me =
+      'TripJoinRequestHistoryPickMe';
+
   static const CAR_POOL = 'CarPool';
   static const ADD_NEW_ROUTE = 'AddNewRoute';
 
@@ -313,6 +343,7 @@ abstract class Paths {
   static const MyRating = 'MyRating';
   static const TripRating = 'TripRating';
   static const EDITDRIVERSCREEN = 'EditDriver';
+  static const AddNewPickMe = "AddNeWPickMe";
   static const TRIPINFOBYRIDERSCREEN = 'TRIPINFOBYRIDERSCREEN';
   static const TRIPINFOBYDRIVERSCREEN = 'TRIPINFOBYDRIVERSCREEN';
 }
