@@ -356,6 +356,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 label: LocaleKeys.google.localize,
                 backColor: AppColors.LIGHT_GRAY_COLOR,
                 textColor: Colors.black,
+                color: AppColors.PRIMARY_COLOR,
                 icon: FontAwesomeIcons.google,
                 onPressed: () async {
                   // await  loginCubit.handleGoogleSignIn();
@@ -389,8 +390,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                 backColor: AppColors.LIGHT_GRAY_COLOR,
                 textColor: Colors.black,
                 icon: FontAwesomeIcons.facebook,
+                color: AppColors.PRIMARY_COLOR,
                 onPressed: () async {
-                  // await loginCubit.signInWithFacebook();
+                   await loginCubit.signInWithFacebook();
                 },
               ),
             ),

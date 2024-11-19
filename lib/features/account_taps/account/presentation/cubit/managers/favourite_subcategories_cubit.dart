@@ -24,7 +24,13 @@ class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {
           const FavouriteSubCategoryState(),
         );
 
-  void loadData() async {
+  Future<void> load()async{
+    emit(state.copyWith(status: StateStatus.loading));
+    await loadData();
+    await loadDataMain();
+  }
+
+   loadData() async {
     emit(state.copyWith(status: StateStatus.loading));
     final result =
         await _getFavouriteSubCategoriesUseCase.call(const NoParams());
@@ -34,30 +40,32 @@ class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {
           failure: failure,
           status: StateStatus.error,
         ),
-        (data) => state.copyWith(
+        (data) {
+          return state.copyWith(
           status: StateStatus.success,
           // data: data,
-        ),
+        );
+        },
       ),
     );
   }
-
-  Future<List<SubCategoryEntity>> getSubcategories(
-      {required PaginationParams paginationParams}) async {
-    List<SubCategoryEntity> data = [];
-    emit(state.copyWith(status: StateStatus.loading));
-    // await UserCubit.to.getUser();
-    final user = UserCubit.to.state.data?.id;
-    print('useeeerId===>$user}');
-    final response = await _getFavouriteSubCategoriesUseCase(const NoParams());
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: StateStatus.error)),
-        (r) => data = r);
-
-    return data;
-  }
-  void loadDataMain() async {
+  //
+  // Future<List<SubCategoryEntity>> getSubcategories(
+  //     {required PaginationParams paginationParams}) async {
+  //   List<SubCategoryEntity> data = [];
+  //   emit(state.copyWith(status: StateStatus.loading));
+  //   // await UserCubit.to.getUser();
+  //   final user = UserCubit.to.state.data?.id;
+  //   print('useeeerId===>$user}');
+  //   final response = await _getFavouriteSubCategoriesUseCase(const NoParams());
+  //   response.fold(
+  //       (failure) =>
+  //           emit(state.copyWith(failure: failure, status: StateStatus.error)),
+  //       (r) => data = r);
+  //
+  //   return data;
+  // }
+   loadDataMain() async {
     print("=====================object");
     emit(state.copyWith(status: StateStatus.loading));
     final result = await _getMainCategoriesUseCase.call(const NoParams());

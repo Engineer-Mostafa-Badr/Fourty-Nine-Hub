@@ -401,6 +401,7 @@ abstract class  LocaleKeys {
   static const checkRequest = 'checkRequest';
   static const whatDoYouThink = 'whatDoYouThink';
   static const peopleYouMayKnow = 'peopleYouMayKnow';
+  static const peopleMayKnow = 'peopleMayKnow';
   static const noFriendsSuggested = 'noFriendsSuggested';
   static const messageSentSuccessfully = 'messageSentSuccessfully';
   static const days = 'days';
