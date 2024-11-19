@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
@@ -192,5 +193,42 @@ https://example.com/download
       ),
     );
   }
+
+
+  // void initDynamicLinks() async {
+  //   FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
+  //     final Uri deepLink = dynamicLinkData.link;
+  //     final referralId = deepLink.queryParameters['referralId'];
+  //     if (referralId != null) {
+  //       // Save the referral ID for later use
+  //       await saveReferralId(referralId);
+  //     }
+  //   }).onError((error) {
+  //     print('Error handling dynamic link: $error');
+  //   });
+  //
+  //   // Handle deep link when app is launched from a terminated state
+  //   final PendingDynamicLinkData? initialLink =
+  //   await FirebaseDynamicLinks.instance.getInitialLink();
+  //   if (initialLink != null) {
+  //     final Uri deepLink = initialLink.link;
+  //     final referralId = deepLink.queryParameters['referralId'];
+  //     if (referralId != null) {
+  //       await saveReferralId(referralId);
+  //     }
+  //   }
+  // }
+  //
+  // Future<void> saveReferralId(String referralId) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('referralId', referralId);
+  // }
+  //
+  // Future<String?> getReferralId() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   return prefs.getString('referralId');
+  // }
+
+
 
 }
