@@ -3,10 +3,12 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/shared/tiktok_option_sheet.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -46,7 +48,20 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               alignment: Alignment.centerLeft,
               // color: Colors.red,
               child: IconButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    if (context
+                        .read<PreloadBloc>()
+                        .state
+                        .controllers[context.read<PreloadBloc>().state.focusedIndex] !=
+                        null) {
+                      context
+                          .read<PreloadBloc>()
+                          .state
+                          .controllers[context.read<PreloadBloc>().state.focusedIndex]
+                          ?.pause();
+                    }
+                    Navigator.pop(context);
+                  },
                   icon: Icon(
                     Icons.arrow_back_ios,
                     size: 0.08.sw,
@@ -65,6 +80,16 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               // LIVE Icon with Glow Effect
               const Sizer(),
               _buildLiveIcon(onTap: () {
+                if (context
+                    .read<PreloadBloc>()
+                    .state
+                    .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+                  context
+                      .read<PreloadBloc>()
+                      .state
+                      .controllers[context.read<PreloadBloc>().state.focusedIndex]
+                      ?.pause();
+                }
                 if(context.isUserLoggedIn) {
                 showTiktokOption(context, generateRandom9DigitNumber);
                 }
@@ -74,6 +99,16 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               }),
               const Spacer(), // Explore Tab
               _buildTab("Spotlight", 0, onTap: () {
+                if (context
+                    .read<PreloadBloc>()
+                    .state
+                    .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+                  context
+                      .read<PreloadBloc>()
+                      .state
+                      .controllers[context.read<PreloadBloc>().state.focusedIndex]
+                      ?.pause();
+                }
                 setState(() {
                   _selectedIndex = 0;
                 });
@@ -81,6 +116,16 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               }),
               // Following Tab
               _buildTab("Snap", 1, onTap: () {
+                if (context
+                    .read<PreloadBloc>()
+                    .state
+                    .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+                  context
+                      .read<PreloadBloc>()
+                      .state
+                      .controllers[context.read<PreloadBloc>().state.focusedIndex]
+                      ?.pause();
+                }
                 setState(() {
                   _selectedIndex = 1;
                 });
@@ -89,6 +134,17 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
 
               // For You Tab with rounded underline
               _buildTab("Reels", 2, onTap: () {
+
+                if (context
+                    .read<PreloadBloc>()
+                    .state
+                    .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+                  context
+                      .read<PreloadBloc>()
+                      .state
+                      .controllers[context.read<PreloadBloc>().state.focusedIndex]
+                      ?.pause();
+                }
                 setState(() {
                   _selectedIndex = 2;
                 });
@@ -102,6 +158,16 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               const Spacer(),
               // Search Icon with custom SVG
               _buildSearchIcon(onTap: () {
+                if (context
+                    .read<PreloadBloc>()
+                    .state
+                    .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+                  context
+                      .read<PreloadBloc>()
+                      .state
+                      .controllers[context.read<PreloadBloc>().state.focusedIndex]
+                      ?.pause();
+                }
                 context.push(Routes.Tinder);
               }),
               const Sizer(),

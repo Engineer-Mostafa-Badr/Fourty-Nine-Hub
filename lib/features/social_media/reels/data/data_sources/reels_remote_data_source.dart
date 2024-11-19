@@ -57,7 +57,7 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
   Future<Either<Failure, ReelsResponse>> getExploreReels(PaginationParams params) async {
     final response = await _apiConsumer.get(
       EndPoints.getExploreReels,
-      // queryParameters: params.toJson(),
+      queryParameters: params.toJson(),
     );
     return response.fold(
       (failure) => Left(failure),

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_state.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/reels_widget.dart';
@@ -15,9 +16,24 @@ class ReelView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: ReelsScreen(),
+    return WillPopScope(
+      onWillPop: () {
+        if (context
+            .read<PreloadBloc>()
+            .state
+            .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+          context
+              .read<PreloadBloc>()
+              .state
+              .controllers[context.read<PreloadBloc>().state.focusedIndex]
+              ?.pause();
+        }
+        return Future.value(true);
+      },
+      child: const Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: ReelsScreen(),
+      ),
     );
   }
 }
@@ -51,7 +67,6 @@ class ReelsScreenState extends State<ReelsScreen> {
                     scrollDirection: Axis.vertical,
                     itemCount: state.urls.length,
                     onPageChanged: (index) async {
-
                       context.read<PreloadBloc>().onVideoIndexChanged(index);
                     },
                     itemBuilder: (context, index) {
@@ -61,7 +76,10 @@ class ReelsScreenState extends State<ReelsScreen> {
                       final controller = state.controllers[index];
 
                       if (controller == null) {
-                        return const Center(child:CircularProgressIndicator(color: AppColors.SECONDARY_COLOR,));
+                        return const Center(
+                            child: CircularProgressIndicator(
+                          color: AppColors.SECONDARY_COLOR,
+                        ));
                       }
                       return state.focusedIndex == index
                           ? ReelsWidget(

@@ -942,7 +942,7 @@ class AppPages {
                     path: Paths.REELS,
                     name: Routes.REELS,
                     builder: (context, state) {
-                      context.read<ReelsCubit>().fetchReels();
+                      // context.read<ReelsCubit>().fetchReels();
                       return const ReelView();
                     },
                     routes: [
