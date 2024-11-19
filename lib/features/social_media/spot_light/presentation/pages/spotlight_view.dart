@@ -262,7 +262,7 @@ class _FollowingSectionState extends State<FollowingSection> {
           width: double.infinity,
           child: BlocConsumer<ReelsCubit, ReelsState>(
             builder: (context, state) {
-              if (state.reelsForFollower?.isEmpty??false) {
+              if (state.reelsForFollower?.isEmpty ?? false) {
                 return const Center(child: CupertinoActivityIndicator());
               }
               return Stack(
@@ -279,7 +279,7 @@ class _FollowingSectionState extends State<FollowingSection> {
                       controller: _scrollController,
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      itemCount: (state.reelsForFollower?.length??0),
+                      itemCount: (state.reelsForFollower?.length ?? 0),
                       itemBuilder: (context, index) {
                         final reel = state.reelsForFollower![index];
                         return SizedBox(
@@ -445,7 +445,8 @@ class DiscoverSectionState extends State<DiscoverSection> {
         Flexible(
           child: BlocBuilder<ReelsCubit, ReelsState>(
             builder: (context, state) {
-              if ((state.globalReels?.isEmpty??false) && !(state.globalReelsIsLoading??false)) {
+              if ((state.globalReels?.isEmpty ?? false) &&
+                  !(state.globalReelsIsLoading ?? false)) {
                 return const Center(child: CupertinoActivityIndicator());
               }
 
@@ -459,10 +460,10 @@ class DiscoverSectionState extends State<DiscoverSection> {
                   crossAxisSpacing: 8,
                   childAspectRatio: 0.7,
                 ),
-                itemCount:
-                    (state.globalReels?.length??0) + (widget.isFetchingMore ? 1 : 0),
+                itemCount: (state.globalReels?.length ?? 0) +
+                    (widget.isFetchingMore ? 1 : 0),
                 itemBuilder: (context, index) {
-                  if (index == (state.globalReels?.length??0) &&
+                  if (index == (state.globalReels?.length ?? 0) &&
                       widget.isFetchingMore) {
                     return const Padding(
                       padding: EdgeInsets.all(8.0),
@@ -569,9 +570,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
                     color: Colors.white,
                     size: 16,
                   ),
-                  const SizedBox(
-                      width: 4
-                  ),
+                  const SizedBox(width: 4),
                   Text(
                     reel.viewCount.toString(),
                     textScaler: TextScaler.noScaling,

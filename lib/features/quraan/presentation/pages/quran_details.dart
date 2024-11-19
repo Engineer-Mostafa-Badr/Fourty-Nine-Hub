@@ -3,7 +3,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/quraan/presentation/pages/widget/basmallah.dart';
 import 'package:fourtyninehub/features/quraan/presentation/pages/widget/header_widget.dart';
@@ -16,12 +15,12 @@ class QuranViewPage extends StatefulWidget {
   var highlightVerse;
 
   QuranViewPage({
-    Key? key,
+    super.key,
     required this.pageNumber,
     required this.jsonData,
     required this.shouldHighlightText,
     required this.highlightVerse,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranViewPage> createState() => _QuranViewPageState();

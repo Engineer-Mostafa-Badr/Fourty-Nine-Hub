@@ -10,7 +10,7 @@ class MainCategoriesState {
   MainCategoriesState({
     this.status = StateStatus.initial,
     this.failure,
-    this.currency='EGP',
+    this.currency = 'EGP',
     this.selectedIndex = 0,
     this.data,
     this.wallet,

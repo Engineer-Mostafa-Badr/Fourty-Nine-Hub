@@ -611,7 +611,8 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
             child: ReadMoreLabel(
               text: content,
               style: Styles.headerText(
-              color: Theme.of(context).primaryColor,                  fontSize: 24,
+                  color: Theme.of(context).primaryColor,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold),
             ),
           )
@@ -622,7 +623,11 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ReadMoreLabel(text: content, style: Styles.headerText(color: Theme.of(context).primaryColor),),
+                ReadMoreLabel(
+                  text: content,
+                  style:
+                      Styles.headerText(color: Theme.of(context).primaryColor),
+                ),
                 SizedBox(
                   height: 10.h,
                 ),

@@ -109,7 +109,7 @@ class PostModel extends PostEntity {
         createdAt: json['createdAt'] != null
             ? DateTime.parse(json['createdAt'])
             : null,
-        createAt: json['createAt']??'',
+        createAt: json['createAt'] ?? '',
         shares: json['shares'] != null ? List<String>.from(json['shares']) : [],
         commentsCount: json['commentsCount'] ?? 0,
         comments: json['comments'] == null

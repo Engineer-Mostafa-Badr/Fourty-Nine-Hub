@@ -115,10 +115,11 @@ class AccountServiceLocator {
           serviceLocator(),
           serviceLocator(),
         ));
-    serviceLocator.registerFactory<FavouriteDrawerCubit>(() => FavouriteDrawerCubit(
-          serviceLocator(),
-          serviceLocator(),
-        ));
+    serviceLocator
+        .registerFactory<FavouriteDrawerCubit>(() => FavouriteDrawerCubit(
+              serviceLocator(),
+              serviceLocator(),
+            ));
     serviceLocator.registerFactory<WalletCubit>(() => WalletCubit(
           serviceLocator(),
           serviceLocator(),

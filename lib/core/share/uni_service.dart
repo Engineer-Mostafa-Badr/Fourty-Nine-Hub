@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:fourtyninehub/core/share/context_utilty.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:uni_links/uni_links.dart';
+// import 'package:uni_links/uni_links.dart';
 
 class UniService {
   static String _code = '';
@@ -26,7 +26,7 @@ class UniService {
   // static String package = "$baseUrl/package";
   static init() async {
     try {
-      final Uri? url = await getInitialUri();
+      final Uri? url = 'await getInitialUri()';
       // log(hurl.toString());
       // log(url!.path.toString());
       uniHandler(url);
@@ -35,15 +35,15 @@ class UniService {
     } on FormatException catch (e) {
       log(e.toString());
     }
-    uriLinkStream.listen(
-      (event) {
-        log(event.toString());
-        uniHandler(event);
-      },
-      onError: (error) {
-        log(error.toString());
-      },
-    );
+    // uriLinkStream.listen(
+    //   (event) {
+    //     log(event.toString());
+    //     uniHandler(event);
+    //   },
+    //   onError: (error) {
+    //     log(error.toString());
+    //   },
+    // );
   }
 
   static uniHandler(Uri? uri) {

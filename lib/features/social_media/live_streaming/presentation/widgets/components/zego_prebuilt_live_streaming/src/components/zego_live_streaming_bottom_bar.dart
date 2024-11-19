@@ -200,7 +200,6 @@ class FakeTextFieldBuilder extends StatelessWidget {
       padding: const EdgeInsets.only(left: 15),
       child: Row(
         children: [
-
           ZoomChatBuilder(
             widget: widget,
             child: ZegoLiveStreamingInRoomMessageInputBoardButton(
@@ -229,10 +228,16 @@ class FakeTextFieldBuilder extends StatelessWidget {
                   ),
                 ))),
           ),
-          IconButton(onPressed: (){
-            var cubit = context.read<StreamCubit>();
-            cubit.requestBattle('6706b17a84a6fa95c2c0621b','66cc7223f3e66376f188c48b');
-          }, icon: const Icon(Icons.person_2,color: Colors.white,))
+          IconButton(
+              onPressed: () {
+                var cubit = context.read<StreamCubit>();
+                cubit.requestBattle(
+                    '6706b17a84a6fa95c2c0621b', '66cc7223f3e66376f188c48b');
+              },
+              icon: const Icon(
+                Icons.person_2,
+                color: Colors.white,
+              ))
         ],
       ),
     );
@@ -447,7 +452,8 @@ class ZoomChatBuilder extends StatelessWidget {
     return Center(
       child: child ??
           Padding(
-              padding: const EdgeInsets.all(3.0).add(EdgeInsets.only(left: 5.zW)),
+              padding:
+                  const EdgeInsets.all(3.0).add(EdgeInsets.only(left: 5.zW)),
               child: Stack(
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -460,14 +466,14 @@ class ZoomChatBuilder extends StatelessWidget {
                     onSheetPop: (int key) {
                       widget.popUpManager.removeAPopUpSheet(key);
                     },
-                    buttonSize:  Size(50.zW, 35.zH),
-                    iconSize:  Size(50.zW, 35.zH),
+                    buttonSize: Size(50.zW, 35.zH),
+                    iconSize: Size(50.zW, 35.zH),
                     enabledIcon: ButtonIcon(
                         icon: Image.asset(
                       'assets/49-New-icons/chat.png',
-                          height: 35.zH,
-                          width: 50.zW,
-                          fit: BoxFit.cover,
+                      height: 35.zH,
+                      width: 50.zW,
+                      fit: BoxFit.cover,
                     )),
                   ),
                   // Positioned(
@@ -510,7 +516,7 @@ class ZoomSharescreenBuilder extends StatelessWidget {
               }
               return ZegoScreenSharingToggleButton(
                 buttonSize: Size(50.zW, 35.zH),
-                iconSize:  Size(50.zW, 35.zH),
+                iconSize: Size(50.zW, 35.zH),
                 iconStartSharing: ButtonIcon(
                   icon: Image.asset(
                     'assets/49-New-icons/sharescreen.png',

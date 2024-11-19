@@ -39,12 +39,13 @@ class CreateAdRemoteDatasourceImpl implements CreateAdRemoteDatasource {
   }
 
   @override
-  Future<Either<Failure, List<AdModel>>> filterAd({required FilterModel ad}) async {
+  Future<Either<Failure, List<AdModel>>> filterAd(
+      {required FilterModel ad}) async {
     final response =
         await _apiConsumer.post(EndPoints.filterAd(ad), data: ad.toJson());
     return response.fold(
-            (failure) => Left(failure),
-            (response) => Right((response['data']['allAds']['ads'] as List)
+        (failure) => Left(failure),
+        (response) => Right((response['data']['allAds']['ads'] as List)
             .map((e) => AdModel.fromJson(e))
             .toList()));
   }

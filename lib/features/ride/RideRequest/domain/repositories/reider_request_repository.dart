@@ -5,11 +5,14 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/notifications/helpers/web_socket_helper.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/datasources/rider_data_source.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/all_trip_for_driver_mode/all_trip_for_driver_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_by_rider_model/check_accept_by_rider_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_trip_from_driver_model/check_accept_trip_from_driver_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/create_trip_ride_request_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_info_request_model.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/data/models/offer_data_model/offer_data_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rider_register_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_model.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_response_model/trip_response_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_offer_model/trip_request_offer_model.dart';
 // import 'package:mapbox_gl/mapbox_gl.dart';
 
 class ReiderRequestRepository {
@@ -42,29 +45,32 @@ class ReiderRequestRepository {
 
   Future<Either<Failure, Map<String, dynamic>>> request(
       {required TripRequestModel model}) async {
-    // await socket.socket.connect();
-    // tripSoketOn();
+    socket.socket.emit("Ride:getAllTrip");
     return dataSource.requestTrip(model: model);
   }
 
-  setSubCateogryId({required String subCategoryId}) {
-    var data = jsonEncode({
-      "subcategoryId": subCategoryId,
-      "address":
-          "٧٣ شارع أحمد عيسى من، شجرة مريم، قسم المطرية، محافظة  4532331، مصر"
-    });
-    socket.socket.io.emit("subcategory:driver", [data]);
+  setSubCateogryId({required String subCategoryId, required String address}) {
+    log(address, name: "sldkjflskdjflskdjflskdjflskdjf");
+
+    var data = jsonEncode({"subcategoryId": subCategoryId, "address": address});
+    log(data.toString());
+    socket.socket.emit("subcategory:driver", data);
+    updateDriverLocationOn();
+    log(subCategoryId, name: "sldkjflskdjflskdjflskdjflskdjf");
   }
 
-  updateDriverLocationEmit() {
+  updateDriverLocationEmit(
+      {required String driverId, required String subCategoryId}) {
+    log("-----------------------------------------------------",
+        name: "نننننننننننننننننننننننننننننننننننننن");
     var data = jsonEncode({
-      "location": [12, 21],
-      "driverId": "string",
-      "subcategoryId": "string",
+      "location": [30.0444196, 31.2357116],
+      "driverId": driverId,
+      "subcategoryId": subCategoryId,
     });
 
-    socket.socket.io.emit("driver:location", [data]);
-    socket.socket.io.on(
+    socket.socket.emit("driver:location", data);
+    socket.socket.on(
       "driver:location",
       (data) {
         log("-----------------------------------------------------",
@@ -77,11 +83,21 @@ class ReiderRequestRepository {
   }
 
   updateDriverLocationOn() {
-    socket.socket.io.on(
+    log("lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll123123");
+    // socket.socket.emit("driver:location");
+    socket.socket.on(
       "driver:location",
       (data) {
         log(data.toString());
-        updateDriverLocationEmit();
+        var extractTextAfter = extractTextAfterSymbol(data, "{");
+        var json = jsonDecode(extractTextAfter);
+        socket.socket.off("driver:location");
+        log(json.toString(), name: "driver:location");
+        updateDriverLocationEmit(
+            driverId: json['driverId'],
+            subCategoryId: json['subcategoryId'].toString());
+
+        // socket.socket.close();
       },
     );
   }
@@ -161,8 +177,12 @@ class ReiderRequestRepository {
 //   }
 
   riseFare({required String offer, required String tripId}) {
-    socket.socket
-        .emit("trip:updatePrice", jsonEncode({"offer": offer, tripId: tripId}));
+    var json = jsonEncode({"offer": offer, "tripId": tripId});
+    log(json.toString(), name: "riseFare");
+    socket.socket.emit(
+      "trip:updatePrice",
+      json,
+    );
   }
 
   Future<Either<Failure, Map<String, dynamic>>> acceptOfferRide(
@@ -175,36 +195,50 @@ class ReiderRequestRepository {
     return dataSource.declineOfferRide(tripId: tripId);
   }
 
-  void tripSoketOn(Function(OfferDataModel data) onData) {
-    log("llllllllllllllllllllllllllllllllllllllllllllllllllll");
+  void tripSoketOn(Function(TripRequestOfferModel data) onData) {
+    log("llllllllllllllllllllllllllllllllllllllllllllllllllll kkkkkkk");
     socket.socket.on(
       "Ride:sendOffer",
       (data) {
-        OfferDataModel model = OfferDataModel.fromJson(jsonDecode(data));
-
+        log("llllllllllllllllllllllllllllllllllllllllllllllllllll");
+        TripRequestOfferModel model =
+            TripRequestOfferModel.fromJson(jsonDecode(data));
         onData(model);
         log("llllllllllllllllllllllllllllllllllllllllllllllllllll");
         log(jsonDecode(data).toString(),
-            name: "llllllllllllllllllllllllllllllllllllllllllllllllllll");
+            name:
+                "llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll");
       },
     );
     // return data;
   }
 
-  List<TripResponseModel> getAllTripRider() {
-    List<TripResponseModel> list = [];
+  void getAllTripSocket(Function(List<AllTripForDriverModel> data) onData) {
+    log("llllllllllllllllllllllllllllllllllllllllllllllllllll getAllTrip");
+    socket.socket.connect();
     socket.socket.emit("Ride:getAllTrip");
     socket.socket.on(
       "Ride:getAllTrip",
       (data) {
-        log(data.toString(), name: "lksdjfkdjjdjdjdjdjdjdjdjdjjddddd");
-        List response = jsonDecode(extractTextAfterSymbol(data, '[')) ?? [];
-        for (var element in response) {
-          list.add(TripResponseModel.fromJson(element));
-        }
+        // log("llllllllllllllllllllllllllllllllllllllllllllllllllll");
+        log(jsonDecode(extractTextAfterSymbol(data, '[')).toString(),
+            name:
+                "llllllllllllllllllllllllllllllllllllllllllllllllllll getAllTripSocket");
+        List<AllTripForDriverModel> model =
+            (jsonDecode(extractTextAfterSymbol(data, '[')) as List)
+                .map(
+                  (e) => AllTripForDriverModel.fromJson(e),
+                )
+                .toList();
+        // AllTripForDriverModel.fromJson(jsonDecode(data));
+        log(model.toString(), name: "AllTripAllTrip");
+        onData(model);
+        // log("llllllllllllllllllllllllllllllllllllllllllllllllllll");
+        // log(jsonDecode(data).toString(),
+        //     name: "llllllllllllllllllllllllllllllllllllllllllllllllllll");
       },
     );
-    return list;
+    // return data;
   }
 
   String extractTextAfterSymbol(String text, String symbol) {
@@ -219,12 +253,109 @@ class ReiderRequestRepository {
   Future<Either<Failure, Map<String, dynamic>>> expiredTrip() {
     return dataSource.getExpairedTrip();
   }
+
   Future<Either<Failure, Map<String, dynamic>>> checkDriverType() {
     return dataSource.checkDriverType();
   }
-  // Future<List<LatLng>> getRoute({required LatLng start, required LatLng end}) {
-  //   return dataSource.getRoute(start: start, end: end);
-  // }
-}
 
-// Future<Either<Failure, Map<String, dynamic>>>
+  Future<Either<Failure, Map<String, dynamic>>> createRequest(
+      {required CreateTripRideRequestModel model}) {
+    return dataSource.createRequest(model: model);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> createRequestPremium(
+      {required CreateTripRideRequestModel model}) {
+    return dataSource.createRequestPremium(model: model);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getAddressFromLatAndLong(
+      {required String address}) {
+    return dataSource.getAddressFromLatAndLong(address: address);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> acceptTripByDriver(
+      {required String id}) {
+    return dataSource.acceptTripByDriver(id: id);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> createOfferByDriver(
+      {required String id, required double price}) {
+    return dataSource.createOfferByDriver(id: id, price: price);
+  }
+
+  checkAcceptByDriver(
+      {required Function(CheckAcceptTripFromDriverModel model) onData}) {
+    log("triiiiiiiiiiiiiiiiiiiiiiiiiiiiip Driver");
+    socket.socket.on(
+      "Ride:acceptTripFromDriver",
+      (data) {
+        var json = jsonDecode(data);
+        log(data.toString(), name: "Ride:acceptTripFromDriver");
+        var model = CheckAcceptTripFromDriverModel.fromJson(json['acceptedTrip']);
+        model.otp = json['OTP'];
+        onData(model);
+        log(data.toString(), name: "Ride:acceptTripFromDriver");
+      },
+    );
+  }
+
+
+  checkAcceptByRider(
+      {required Function(CheckAcceptByRiderModel model) onData}) {
+    log("triiiiiiiiiiiiiiiiiiiiiiiiiiiiip Rider");
+    socket.socket.on(
+      "Ride:acceptTripOfferFromClient",
+      (data) {
+        var json = jsonDecode(data);
+        log(data.toString(), name: "Ride:acceptTripOfferFromClient");
+        CheckAcceptByRiderModel model = CheckAcceptByRiderModel.fromJson(json);
+        log(data.toString(), name: "Ride:acceptTripOfferFromClient");
+        onData(model);
+      },
+    );
+  }
+
+  //
+  Future<Either<Failure, Map<String, dynamic>>> riderInStartLocation(
+      {required String id}) {
+    return dataSource.riderInStartLocation(id: id);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> startTripRider(
+      {required String id, required int otp}) {
+    return dataSource.startTripRider(id: id, otp: otp);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> partialPayment({
+    required String id,
+    required double amount,
+    required String paymentMethod,
+  }) {
+    return dataSource.partialPayment(
+        id: id, amount: amount, paymentMethod: paymentMethod);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> completedTripRider(
+      {required String id}) {
+    return dataSource.completedTripRider(id: id);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> cancelTripClient(
+      {required String id, required String reasonId, required String note}) {
+    return dataSource.cancelTripClient(id: id, note: note, reasonId: reasonId);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> cancelTripRider(
+      {required String reasonId, required String note, required String id}) {
+    return dataSource.cancelTripRider(id: id, note: note, reasonId: reasonId);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> reasons() {
+    return dataSource.reasons();
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> checkPayment(
+      {required String amount}) {
+    return dataSource.checkPayment(amount: amount);
+  }
+}

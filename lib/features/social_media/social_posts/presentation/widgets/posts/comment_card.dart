@@ -34,7 +34,7 @@ class CommentCard extends StatefulWidget {
 
   const CommentCard(
       {super.key,
-      this.textColor =Colors.black,
+      this.textColor = Colors.black,
       required this.comment,
       required this.onAddReply,
       required this.onDeleteComment,
@@ -74,10 +74,14 @@ class _CommentCardState extends State<CommentCard> {
                 Label(
                     text: widget.comment.user.firstName,
                     style: Styles.mediumText(
-                        fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor,)),
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColor,
+                    )),
                 Label(
                     text: widget.comment.sinceTime,
-                    style: Styles.mediumText(color: Theme.of(context).primaryColor,)),
+                    style: Styles.mediumText(
+                      color: Theme.of(context).primaryColor,
+                    )),
               ],
             )),
             // if (widget.comment.user.id != user?.id)
@@ -107,7 +111,7 @@ class _CommentCardState extends State<CommentCard> {
               },
               child: Icon(
                 Icons.more_horiz_outlined,
-                color:  Theme.of(context).primaryColor,
+                color: Theme.of(context).primaryColor,
                 size: 50.sp,
               ),
             ),
@@ -116,7 +120,9 @@ class _CommentCardState extends State<CommentCard> {
         const Sizer(),
         Text(
           widget.comment.content,
-          style: Styles.mediumText(color: Theme.of(context).primaryColor,),
+          style: Styles.mediumText(
+            color: Theme.of(context).primaryColor,
+          ),
         ),
         if (widget.comment.edit == true)
           SizedBox(
@@ -258,7 +264,7 @@ class _CommentCardState extends State<CommentCard> {
       },
       leading: Icon(
         icon,
-        color: iconColor ??  Theme.of(context).primaryColor,
+        color: iconColor ?? Theme.of(context).primaryColor,
       ),
       subtitle: Label(
         text: subTitle,

@@ -23,7 +23,7 @@ class StarCubit extends Cubit<StarState> {
 
   void onRefresh() async {
     starPagingController.refresh();
-   // StarPagingUserController.refresh();
+    // StarPagingUserController.refresh();
   }
 
   void loadData() async {
@@ -44,7 +44,6 @@ class StarCubit extends Cubit<StarState> {
     //   getPaginatedUserStar(params, pageKey);
     // });
   }
-
 
   final PagingController<int, StarEntity> starPagingController =
       PagingController(firstPageKey: 1);
@@ -79,7 +78,6 @@ class StarCubit extends Cubit<StarState> {
     return main;
   }
 
-
   Future<List<StarEntity>> getPaginatedMyStar(int page) async {
     emit(state.copyWith(status: StarStates.loading));
     List<StarEntity> main = [];
@@ -109,7 +107,6 @@ class StarCubit extends Cubit<StarState> {
     return main;
   }
 
-
   Future<void> uploadStar({
     required StarParams params,
   }) async {
@@ -118,16 +115,17 @@ class StarCubit extends Cubit<StarState> {
     final response = await _uploadMyStarUseCase(params);
 
     response.fold(
-          (failure) {
+      (failure) {
         emit(state.copyWith(failure: failure, status: StarStates.error));
       },
-          (data) {
+      (data) {
         emit(state.copyWith(
           status: StarStates.success,
         ));
       },
     );
   }
+
   Future<void> deleteMyStar({
     required String id,
   }) async {
@@ -136,10 +134,10 @@ class StarCubit extends Cubit<StarState> {
     final response = await _deleteMyStarUseCase(id);
 
     response.fold(
-          (failure) {
+      (failure) {
         emit(state.copyWith(failure: failure, status: StarStates.error));
       },
-          (data) {
+      (data) {
         emit(state.copyWith(
           status: StarStates.success,
         ));

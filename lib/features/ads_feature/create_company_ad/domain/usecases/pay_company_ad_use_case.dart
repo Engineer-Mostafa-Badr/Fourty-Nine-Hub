@@ -21,7 +21,7 @@ class PayCompanyAdParams {
     required this.amount,
   });
 
-  Map<String,dynamic> toJson()=>{
-    'amount':amount,
-  };
+  Map<String, dynamic> toJson() => {
+        'amount': amount,
+      };
 }

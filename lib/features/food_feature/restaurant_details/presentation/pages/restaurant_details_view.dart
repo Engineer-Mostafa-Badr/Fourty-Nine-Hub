@@ -42,7 +42,8 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
       extendBodyBehindAppBar: true,
       bottomNavigationBar: _viewCartButton(),
       body: BlocProvider.value(
-        value: serviceLocator<RestaurantDetailsCubit>()..loadData(id: widget.id),
+        value: serviceLocator<RestaurantDetailsCubit>()
+          ..loadData(id: widget.id),
         child: BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
           builder: (context, state) {
             return ListView(
@@ -68,7 +69,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
           width: double.infinity,
           child: Padding(
             padding:
-            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: ElevatedButton(
               onPressed: () {
                 context.push(Routes.FOODCART);
@@ -105,7 +106,6 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
     );
   }
 }
-
 
 // import 'package:easy_localization/easy_localization.dart';
 // import 'package:flutter/cupertino.dart';

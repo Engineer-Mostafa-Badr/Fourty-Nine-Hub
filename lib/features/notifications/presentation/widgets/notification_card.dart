@@ -119,12 +119,15 @@ class _NotificationCardState extends State<NotificationCard> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if(widget.notificationEntity.title?.isNotEmpty??false)...[Text(
-                            _capitalizeTitle(
-                                widget.notificationEntity.title ?? ''),
-                            style: Styles.headerText(),
-                          ),
-                          Sizer(height: 5.h),],
+                          if (widget.notificationEntity.title?.isNotEmpty ??
+                              false) ...[
+                            Text(
+                              _capitalizeTitle(
+                                  widget.notificationEntity.title ?? ''),
+                              style: Styles.headerText(),
+                            ),
+                            Sizer(height: 5.h),
+                          ],
                           Text(
                             widget.notificationEntity.body ?? '',
                             style: Styles.mediumText(),

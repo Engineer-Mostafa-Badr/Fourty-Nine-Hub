@@ -1,6 +1,6 @@
 part of 'my_adds_cubit.dart';
 
-enum MyAddsStates { loading, error, initState ,success,imageUploading}
+enum MyAddsStates { loading, error, initState, success, imageUploading }
 
 class MyAddsState {
   final MyAddsStates? status;
@@ -11,7 +11,7 @@ class MyAddsState {
   final List<MyAuctionAdsEntity>? myAuctions;
   final List<MyAuctionAdsEntity>? myInstallments;
   final List<MyAuctionAdsEntity>? myOtherAds;
-  final  List<GetAllCountsTripJoinEntity>? allCounts;
+  final List<GetAllCountsTripJoinEntity>? allCounts;
   final MyAdsTripJoinEntity? tripJoin;
   final List<GetAllCountAdsEntity>? countAds;
   final List<UploadFileEntity>? images;
@@ -46,8 +46,8 @@ class MyAddsState {
     List<GetAllCountsTripJoinEntity>? allCounts,
     MyAdsTripJoinEntity? tripJoin,
     List<GetAllCountAdsEntity>? countAds,
-     List<UploadFileEntity>? images,
-     ClickEntity? click,
+    List<UploadFileEntity>? images,
+    ClickEntity? click,
     EditMyAdsEntity? adsById,
   }) {
     return MyAddsState(

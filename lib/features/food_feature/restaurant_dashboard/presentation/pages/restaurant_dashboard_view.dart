@@ -122,7 +122,7 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                                       activeTrackColor: Colors.grey,
                                       activeColor: AppColors.SECONDARY_COLOR,
                                       trackOutlineColor:
-                                          WidgetStatePropertyAll(
+                                          const WidgetStatePropertyAll(
                                               Colors.white),
                                       onChanged: (v) async {
                                         await context

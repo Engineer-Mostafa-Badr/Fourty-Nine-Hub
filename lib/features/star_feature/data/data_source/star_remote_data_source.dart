@@ -63,12 +63,13 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
 
   @override
   Future<Either<Failure, bool>> deleteMyStar({required String id}) async {
-    final response =
-    await _apiConsumer.delete(EndPoints.deleteMyStar(id: id),);
+    final response = await _apiConsumer.delete(
+      EndPoints.deleteMyStar(id: id),
+    );
 
     return response.fold(
-          (failure) => Left(failure),
-          (response) {
+      (failure) => Left(failure),
+      (response) {
         return Right((response['status']));
       },
     );

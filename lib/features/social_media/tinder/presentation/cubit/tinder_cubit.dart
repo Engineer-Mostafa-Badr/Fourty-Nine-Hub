@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import '../../../../chance_feature/domain/entity/main_categry_entity.dart';
 import '../../../../fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import '../../data/models/near_by_model.dart';
 import '../../data/models/tinder_person_model.dart';
@@ -79,15 +78,14 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     final mainCategoryResponse = await getMainCategoryDetailsUseCase(id);
     // log('main categoty response ${mainCategoryResponse?.data.mainCategory.nameEn}');
 
-    mainCategoryResponse.fold(
-        (l) {
-          log('there is a failure ${getFailureMessage(l, context)}');
+    mainCategoryResponse.fold((l) {
+      log('there is a failure ${getFailureMessage(l, context)}');
 
-          emit(state.copyWith(
-              mainCategoryResponseState: TinderStates.failure,
-              status: TinderStates.failure,
-            ));
-        }, (r) {
+      emit(state.copyWith(
+        mainCategoryResponseState: TinderStates.failure,
+        status: TinderStates.failure,
+      ));
+    }, (r) {
       emit(state.copyWith(
         mainCategoryResponseState: TinderStates.success,
         mainCategoryEntity: r,

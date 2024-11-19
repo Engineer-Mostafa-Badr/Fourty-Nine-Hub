@@ -124,8 +124,9 @@ class MessagesRemoteDataSourceImplementation
             "groupId": null,
             "replyMessageId": params.replyMessageId,
             "oneTimeView": params.oneTimeView,
-            "sharedContacts":
-              params.sharedContacts.map((contact) => contact.toJson()).toList(),
+            "sharedContacts": params.sharedContacts
+                .map((contact) => contact.toJson())
+                .toList(),
           }));
       return const Right(true);
     } catch (e) {
@@ -162,8 +163,8 @@ class MessagesRemoteDataSourceImplementation
   //         "groupId": null,
   //         "replyMessageId": params.replyMessageId,
   //         "oneTimeView": params.oneTimeView,
-          // "sharedContacts":
-          //     params.sharedContacts.map((contact) => contact.toJson()).toList(),
+  // "sharedContacts":
+  //     params.sharedContacts.map((contact) => contact.toJson()).toList(),
   //       }),
   //     );
   //     return const Right(true);

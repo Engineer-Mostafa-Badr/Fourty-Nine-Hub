@@ -149,8 +149,8 @@ class LiveDataSourceImpl extends LiveDataSource {
   }
 
   @override
-  Future< void> listenToRequestBattle(NoParams noParams) async{
-  _socket.on(SocketIOListeners.requestBattle, (data) => print(data));
+  Future<void> listenToRequestBattle(NoParams noParams) async {
+    _socket.on(SocketIOListeners.requestBattle, (data) => print(data));
   }
 
   @override

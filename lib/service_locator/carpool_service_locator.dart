@@ -12,7 +12,8 @@ class CarpoolServiceLocator {
     );
 
     serviceLocator.registerLazySingleton<AddNewRouteCarpoolRepo>(
-      () => AddNewRouteCarpoolRepoImp(addNewRouteRemoteDataSource: serviceLocator()),
+      () => AddNewRouteCarpoolRepoImp(
+          addNewRouteRemoteDataSource: serviceLocator()),
     );
 
     serviceLocator.registerLazySingleton<GetPriceCarpoolUsecase>(

@@ -22,6 +22,8 @@ class RiderRegisterModel {
   File? licenseImageInFront;
   File? licenseImgeBehind;
   String? idNumber;
+  List<String>? subcategoryIds;
+  String? workingType;
   String? plateInfo;
   String? idExpiryDate;
   String? drvingExpiryDate;
@@ -29,10 +31,12 @@ class RiderRegisterModel {
   RiderRegisterModel({
     this.driverFirstName,
     this.driverLastName,
+    this.workingType,
     this.vehicleModel,
     this.vehicleBrand,
     this.vehicleColor,
     this.vehicleType,
+    this.subcategoryIds,
     this.vehicleYear,
     this.subcategoryId,
     this.yourFavoriteCity,
@@ -62,7 +66,8 @@ class RiderRegisterModel {
       "vehicleColor": "vehicleColor",
       "vehicleType": "vehicleType",
       "vehicleYear": vehicleYear,
-      "subcategoryId": subcategoryId,
+      "subcategoryIds": ['62c8baa28e28a58a3edf57f1',
+    '62c8baa38e28a58a3edf57f3'],
       "pricingPerKm": pricingPerKm,
       "phone": phone,
       "smoker": smoker,

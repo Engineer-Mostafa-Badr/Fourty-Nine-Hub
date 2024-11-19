@@ -1,4 +1,3 @@
-
 class Cart {
   final bool status;
   final String id;
@@ -58,8 +57,9 @@ class CartItem {
           : null, // Handle null
       restaurantItems: json['restaurantItems'] != null
           ? List<RestaurantItem>.from(
-        json['restaurantItems'].map((item) => RestaurantItem.fromJson(item)),
-      )
+              json['restaurantItems']
+                  .map((item) => RestaurantItem.fromJson(item)),
+            )
           : [],
       total: (json['total'] as num).toDouble(),
     );
@@ -83,8 +83,8 @@ class CartRestaurant {
       name: json['name'],
       restaurantMedia: json['restaurantMedia'] != null
           ? List<Media>.from(
-        json['restaurantMedia'].map((item) => Media.fromJson(item)),
-      )
+              json['restaurantMedia'].map((item) => Media.fromJson(item)),
+            )
           : [],
     );
   }

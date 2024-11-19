@@ -29,13 +29,14 @@ class ChanceViewBody extends StatelessWidget {
                   child: Image.asset(
                     'assets/images/chance.png',
                     fit: BoxFit.fill,
-
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 20,),
-           const ListViewCard(),
+            const SizedBox(
+              height: 20,
+            ),
+            const ListViewCard(),
           ],
         ),
       ),

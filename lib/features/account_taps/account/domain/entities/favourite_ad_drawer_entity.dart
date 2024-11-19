@@ -33,7 +33,7 @@ class FavouriteAdDrawerEntity {
       required this.createdAt});
 }
 
-class FavouriteAdDrawerImages{
+class FavouriteAdDrawerImages {
   final String id;
   final String mediaKey;
 

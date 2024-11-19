@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -480,13 +479,13 @@ Future<void> showGiftBottomSheet(BuildContext context,
                           padding: const EdgeInsets.all(4.0),
                           child: OutlinedButton(
                             style: ButtonStyle(
-                              side: const MaterialStatePropertyAll(BorderSide(
+                              side: const WidgetStatePropertyAll(BorderSide(
                                   width: 1, color: AppColors.ACCENT_COLOR)),
                               iconColor:
-                                  const MaterialStatePropertyAll(Colors.white),
+                                  const WidgetStatePropertyAll(Colors.white),
                               backgroundColor: isDarkTheme(context)
-                                  ? const MaterialStatePropertyAll(Colors.black)
-                                  : MaterialStatePropertyAll(
+                                  ? const WidgetStatePropertyAll(Colors.black)
+                                  : WidgetStatePropertyAll(
                                       Colors.grey.withOpacity(0.9)),
                             ),
                             onPressed: () {
@@ -571,7 +570,7 @@ pleaseLoginWidget(context) {
         child: OutlinedButton(
           onPressed: () => context.push(Routes.LOGIN),
           style: ButtonStyle(
-              foregroundColor: MaterialStatePropertyAll(
+              foregroundColor: WidgetStatePropertyAll(
                   isDarkTheme(context) ? Colors.white70 : Colors.black87)),
           child: FittedBox(
             child: Text(

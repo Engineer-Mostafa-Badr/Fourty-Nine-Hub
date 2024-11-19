@@ -20,7 +20,8 @@ class MyAddsView extends StatefulWidget {
   State<MyAddsView> createState() => _MyAddsViewState();
 }
 
-class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateMixin {
+class _MyAddsViewState extends State<MyAddsView>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late ScrollController _scrollController;
 
@@ -96,9 +97,13 @@ class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateM
                             : i == 1
                                 ? context.read<MyAddsCubit>().getMyInstallment()
                                 : i == 2
-                                    ? context.read<MyAddsCubit>().getMyTripJoin()
+                                    ? context
+                                        .read<MyAddsCubit>()
+                                        .getMyTripJoin()
                                     : i == 3
-                                        ? context.read<MyAddsCubit>().getMyOtherAds()
+                                        ? context
+                                            .read<MyAddsCubit>()
+                                            .getMyOtherAds()
                                         : null;
                       },
                       isScrollable: true,
@@ -107,7 +112,7 @@ class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateM
                         Tab(text: LocaleKeys.auction.localize),
                         Tab(text: LocaleKeys.installments.localize),
                         Tab(text: LocaleKeys.tripJoin.localize),
-                        Tab(text:  LocaleKeys.Other.localize),
+                        Tab(text: LocaleKeys.Other.localize),
                       ],
                     ),
                   ),
@@ -134,7 +139,8 @@ class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateM
   }
 
   Widget _buildMyInstallmentsWidget() {
-    return BlocConsumer<MyAddsCubit, MyAddsState>(listener: (BuildContext context, MyAddsState state) {
+    return BlocConsumer<MyAddsCubit, MyAddsState>(
+        listener: (BuildContext context, MyAddsState state) {
       if (state.status == MyAddsStates.success) {
         showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
       }
@@ -146,7 +152,7 @@ class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateM
         return RefreshIndicator(
           onRefresh: () async => context.read<MyAddsCubit>().getMyInstallment(),
           child: ListView.separated(
-            physics: const AlwaysScrollableScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(),
               itemCount: state.myInstallments?.length ?? 0,
               separatorBuilder: (context, index) => const Sizer(),
               itemBuilder: (context, index) {
@@ -163,7 +169,8 @@ class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateM
   }
 
   Widget _buildMyAuctionsWidget() {
-    return BlocConsumer<MyAddsCubit, MyAddsState>(listener: (BuildContext context, MyAddsState state) {
+    return BlocConsumer<MyAddsCubit, MyAddsState>(
+        listener: (BuildContext context, MyAddsState state) {
       if (state.status == MyAddsStates.success) {
         showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
       }
@@ -175,7 +182,7 @@ class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateM
         return RefreshIndicator(
           onRefresh: () async => context.read<MyAddsCubit>().getMyAuctions(),
           child: ListView.separated(
-            physics: const AlwaysScrollableScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(),
               itemCount: state.myAuctions?.length ?? 0,
               separatorBuilder: (context, index) => const Sizer(),
               itemBuilder: (context, index) {
@@ -192,7 +199,8 @@ class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateM
   }
 
   Widget _buildMyAdsWidget() {
-    return BlocConsumer<MyAddsCubit, MyAddsState>(listener: (BuildContext context, MyAddsState state) {
+    return BlocConsumer<MyAddsCubit, MyAddsState>(
+        listener: (BuildContext context, MyAddsState state) {
       if (state.status == MyAddsStates.success) {
         showSuccessMessage(context, LocaleKeys.deleteSuccessfully.localize);
       }
@@ -204,7 +212,7 @@ class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateM
         return RefreshIndicator(
           onRefresh: () async => context.read<MyAddsCubit>().getMyOtherAds(),
           child: ListView.separated(
-            physics: const AlwaysScrollableScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(),
               itemCount: state.myOtherAds?.length ?? 0,
               separatorBuilder: (context, index) => const Sizer(),
               itemBuilder: (context, index) {
@@ -235,7 +243,7 @@ class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateM
           return RefreshIndicator(
             onRefresh: () async => context.read<MyAddsCubit>().getMyTripJoin(),
             child: ListView.separated(
-              physics: const AlwaysScrollableScrollPhysics(),
+                physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: state.tripJoin?.docs.length ?? 0,
                 separatorBuilder: (context, index) => const Sizer(),
                 itemBuilder: (context, index) {

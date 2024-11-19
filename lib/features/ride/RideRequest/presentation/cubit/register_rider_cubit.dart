@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rider_register_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/repositories/reider_request_repository.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/sub_category.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/car_images_s3_model/car_image.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/car_images_s3_model/car_images_s3_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/car_license_s3_model/car_license_behind.dart';
@@ -32,6 +34,23 @@ class RegisterRiderCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repo;
   final ShippingRepository repository;
   RiderRegisterModel model = RiderRegisterModel();
+  MultiSelectController<SubCategory> multiSelectController =
+      MultiSelectController<SubCategory>([]);
+  List RICH_VALID_SUBCATEGORY_IDS = [
+    '62c8ba9f8e28a58a3edf57eb',
+    '62c8baa08e28a58a3edf57ed',
+    '62c8baa18e28a58a3edf57ef',
+    '62c8baa28e28a58a3edf57f1',
+    '62c8baa38e28a58a3edf57f3'
+  ];
+  List<SubCategory> SELECTED_RICH_VALID_SUBCATEGORY_IDS = [];
+  List WOMEN_SUBCATEGORY_IDS = [
+    '62ea012a69ea29c91dfc3917',
+    '62c8baa08e28a58a3edf57ed',
+    '62c8baa38e28a58a3edf57f3'
+  ];
+  List<SubCategory> SELECTED_WOMEN_SUBCATEGORY_IDS = [];
+
   RegisterRiderCubit({required this.repo, required this.repository})
       : super(RiderInitial());
 
@@ -39,6 +58,46 @@ class RegisterRiderCubit extends Cubit<RiderState> {
     model.subcategoryId = id;
   }
 
+  selectSubCategory({required List<SubCategory> subCategory}) {
+    for (var item in subCategory) {
+      if (RICH_VALID_SUBCATEGORY_IDS.contains(item.subCategoryId)) {
+        SELECTED_WOMEN_SUBCATEGORY_IDS.clear();
+        if (!SELECTED_RICH_VALID_SUBCATEGORY_IDS.contains(item)) {
+          SELECTED_RICH_VALID_SUBCATEGORY_IDS.add(item);
+        }
+      } else if (WOMEN_SUBCATEGORY_IDS.contains(item.subCategoryId)) {
+        if (!SELECTED_WOMEN_SUBCATEGORY_IDS.contains(item)) {
+          SELECTED_WOMEN_SUBCATEGORY_IDS.add(item);
+        }
+        SELECTED_RICH_VALID_SUBCATEGORY_IDS.clear();
+      } else {
+        log("noooooooooooooooooooooooooooooo");
+      }
+    }
+    
+    // multiSelectController
+    log(SELECTED_RICH_VALID_SUBCATEGORY_IDS.toString(),
+        name: "SELECTED_RICH_VALID_SUBCATEGORY_IDS");
+    log(SELECTED_WOMEN_SUBCATEGORY_IDS.toString(),
+        name: "SELECTED_WOMEN_SUBCATEGORY_IDS");
+  }
+
+// const RICH_VALID_SUBCATEGORY_IDS = [
+//   CAPTAIN_CATEGORY_ID,
+//   PREMIUM_CATEGORY_ID,
+//   PICKUP_CATEGORY_ID,
+//   SUV_CATEGORY_ID,
+//   INTERCITY_CATEGORY_ID,
+// ];
+
+// const WOMEN_SUBCATEGORY_IDS = [WOMEN_CATEGORY_ID, INTERCITY_CATEGORY_ID, PREMIUM_CATEGORY_ID];
+// const CAPTAIN_CATEGORY_ID = '62c8ba9f8e28a58a3edf57eb';
+// const SCOOTER_CATEGORY_ID = '6698736fdaa111da2d775627';
+// const WOMEN_CATEGORY_ID = '62ea012a69ea29c91dfc3917';
+// const INTERCITY_CATEGORY_ID = '62c8baa08e28a58a3edf57ed';
+// const PICKUP_CATEGORY_ID = '62c8baa18e28a58a3edf57ef';
+// const SUV_CATEGORY_ID = '62c8baa28e28a58a3edf57f1';
+// const PREMIUM_CATEGORY_ID = '62c8baa38e28a58a3edf57f3';
   String? validation({required String message, required bool condition}) {
     if (condition) {
       return message;
@@ -103,6 +162,7 @@ class RegisterRiderCubit extends Cubit<RiderState> {
   }
 
   pickYear(String year) {
+    log(year);
     model.vehicleYear = year;
   }
 

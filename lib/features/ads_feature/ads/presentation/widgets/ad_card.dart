@@ -67,7 +67,8 @@ class _AdCardState extends State<AdCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if(context.read<UserCubit>().isLoggedIn) _buildTag(status: widget.item.subscriptionStatus ?? ''),
+            if (context.read<UserCubit>().isLoggedIn)
+              _buildTag(status: widget.item.subscriptionStatus ?? ''),
             Expanded(
               child: Stack(
                 alignment: AlignmentDirectional.topStart,

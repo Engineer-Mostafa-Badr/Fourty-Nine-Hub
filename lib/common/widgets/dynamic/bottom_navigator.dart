@@ -55,7 +55,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         label: 'ride',
         index: 3,
         image: Assets.ride,
-        route:context.isUserLoggedIn? Routes.RIDE:Routes.LOGIN,
+        route: Routes.RIDE,
       ),
     ];
 

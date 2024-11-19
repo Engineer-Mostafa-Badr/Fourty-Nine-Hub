@@ -62,7 +62,8 @@ class ShippingRequestCard extends StatelessWidget {
             if (trip.offers.isNotEmpty)
               Row(
                 children: [
-                  TextAppButton(label: LocaleKeys.offers.localize, onPressed: () {}),
+                  TextAppButton(
+                      label: LocaleKeys.offers.localize, onPressed: () {}),
                   const Sizer(),
                   Expanded(
                     child: SizedBox(

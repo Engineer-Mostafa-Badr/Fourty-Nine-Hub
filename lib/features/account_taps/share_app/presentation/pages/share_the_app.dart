@@ -23,10 +23,7 @@ class ShareTheApp extends StatelessWidget {
           label: 'Share App',
         ),
         body: Padding(
-          padding:  EdgeInsets.symmetric(
-            vertical: 20.h,
-            horizontal: 30.w
-          ),
+          padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 30.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -34,10 +31,14 @@ class ShareTheApp extends StatelessWidget {
               const Sizer(),
               Expanded(child: Image.asset(Assets.share)),
               const Sizer(),
-               Label(text: 'Recommend Us',style: Styles.headerText(),),
+              Label(
+                text: 'Recommend Us',
+                style: Styles.headerText(),
+              ),
               const Sizer(),
               const Label(
-                  text: 'Share code with your friends and get 50 EGP for every one',
+                text:
+                    'Share code with your friends and get 50 EGP for every one',
                 maxLines: 5,
               ),
               const Sizer(),

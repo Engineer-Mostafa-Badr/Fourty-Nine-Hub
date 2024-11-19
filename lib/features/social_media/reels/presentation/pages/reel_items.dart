@@ -31,7 +31,8 @@ class ReelInfo extends StatefulWidget {
   final ReelItemType itemType;
   final AnimationController rotationController;
 
-  const ReelInfo({super.key, 
+  const ReelInfo({
+    super.key,
     required this.reel,
     required this.itemType,
     required this.rotationController,

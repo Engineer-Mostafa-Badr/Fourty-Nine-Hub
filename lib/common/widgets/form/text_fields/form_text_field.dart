@@ -73,118 +73,112 @@ class FormTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: height ?? 70,
-          child: TextFormField(
-            // style:
-            //     textStyle ?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
-            textAlignVertical: textAlignVertical,
-            maxLines: maxLines ?? 1,
-            maxLength: maxLength,
-            onFieldSubmitted: (v) {
-              if (onConfirm != null) {
-                onConfirm!(v);
-              }
-            },
-            validator: validator ??
-                (value) {
-                  validate = true;
-                  final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+    return Column(children: [
+      SizedBox(
+        height: height ?? 70,
+        child: TextFormField(
+          // style:
+          //     textStyle ?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
+          textAlignVertical: textAlignVertical,
+          maxLines: maxLines ?? 1,
+          maxLength: maxLength,
+          onFieldSubmitted: (v) {
+            if (onConfirm != null) {
+              onConfirm!(v);
+            }
+          },
+          validator: validator ??
+              (value) {
+                validate = true;
+                final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
 
-                  //   setState(() {});
-                  if ((value == null || value.isEmpty) && (required ?? true)) {
-                    return LocaleKeys.required.localize;
-                  } else if (extraValidation ?? false) {
-                    return extraValidationMessage ?? '';
-                  } else if (!emailRegExp.hasMatch(value!.trim()) &&
-                      (isEmail ?? false)) {
-                    return LocaleKeys.emailFormat.localize;
-                  } else {
-                    validate = false;
-                    // setState(() {});
-                    return null;
-                  }
-                },
-            onTap: () {
-              if (onTap != null) {
-                onTap!();
-              }
-            },
-            enabled: enabled ?? true,
-            controller: controller,
-            autofillHints: autofill,
-            keyboardType: type,
-            initialValue: initialValue,
-            obscureText: obsecure ?? false,
-            onChanged: action,
-            decoration: InputDecoration(
-              constraints: constraints,
-              hintText: hint,
-              filled: true,
-              fillColor:context.theme.inputDecorationTheme.fillColor,
-              labelText: label,
-              // hintStyle: style ??
-              //     TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
-              // labelStyle: style ??
-              //     TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
-              prefixIcon: prefix,
-              suffixIcon: suffix,
-              enabledBorder: noBorder
-                  ? InputBorder.none
-                  : OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: AppColors.LIGHT_GRAY_COLOR,
-                      ),
-                      borderRadius: borderRadius ?? BorderRadius.circular(10),
+                //   setState(() {});
+                if ((value == null || value.isEmpty) && (required ?? true)) {
+                  return LocaleKeys.required.localize;
+                } else if (extraValidation ?? false) {
+                  return extraValidationMessage ?? '';
+                } else if (!emailRegExp.hasMatch(value!.trim()) &&
+                    (isEmail ?? false)) {
+                  return LocaleKeys.emailFormat.localize;
+                } else {
+                  validate = false;
+                  // setState(() {});
+                  return null;
+                }
+              },
+          onTap: () {
+            if (onTap != null) {
+              onTap!();
+            }
+          },
+          enabled: enabled ?? true,
+          controller: controller,
+          autofillHints: autofill,
+          keyboardType: type,
+          initialValue: initialValue,
+          obscureText: obsecure ?? false,
+          onChanged: action,
+          decoration: InputDecoration(
+            constraints: constraints,
+            hintText: hint,
+            filled: true,
+            fillColor: context.theme.inputDecorationTheme.fillColor,
+            labelText: label,
+            // hintStyle: style ??
+            //     TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
+            // labelStyle: style ??
+            //     TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
+            prefixIcon: prefix,
+            suffixIcon: suffix,
+            enabledBorder: noBorder
+                ? InputBorder.none
+                : OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: AppColors.LIGHT_GRAY_COLOR,
                     ),
-              focusedBorder: noBorder
-                  ? InputBorder.none
-                  : OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: AppColors.PRIMARY_COLOR,
-                      ),
-                      borderRadius: borderRadius ?? BorderRadius.circular(10),
+                    borderRadius: borderRadius ?? BorderRadius.circular(10),
+                  ),
+            focusedBorder: noBorder
+                ? InputBorder.none
+                : OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: AppColors.PRIMARY_COLOR,
                     ),
-              errorBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.red,
-                ),
-                borderRadius: borderRadius ?? BorderRadius.circular(10),
+                    borderRadius: borderRadius ?? BorderRadius.circular(10),
+                  ),
+            errorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Colors.red,
               ),
-              focusedErrorBorder: noBorder
-                  ? InputBorder.none
-                  : OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.red,
-                      ),
-                      borderRadius: borderRadius ?? BorderRadius.circular(10),
-                    ),
+              borderRadius: borderRadius ?? BorderRadius.circular(10),
             ),
+            focusedErrorBorder: noBorder
+                ? InputBorder.none
+                : OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.red,
+                    ),
+                    borderRadius: borderRadius ?? BorderRadius.circular(10),
+                  ),
           ),
         ),
-        if (info != null)
-          Container(
+      ),
+      if (info != null)
+        Container(
             margin: const EdgeInsets.only(top: 5),
-            child: Row(
-              children: [
-                const Sizer(),
-                const Icon(
-                  Icons.info_outline,
-                  color: Colors.grey,
-                  size: 14,
-                ),
-                const Sizer(),
-                Expanded(
-                    child: Label(
-                  text: info ?? '',
-                  style: Styles.smallText(color: Colors.grey)
-                ))
-              ]
-            )
-          )
-      ]
-    );
+            child: Row(children: [
+              const Sizer(),
+              const Icon(
+                Icons.info_outline,
+                color: Colors.grey,
+                size: 14,
+              ),
+              const Sizer(),
+              Expanded(
+                  child: Label(
+                      text: info ?? '',
+                      style: Styles.smallText(color: Colors.grey)))
+            ]))
+    ]);
   }
 }

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/get_price_carpool/get_price_carpool_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -42,7 +40,7 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         mainAxisSize:
-        MainAxisSize.min, // Ensure the column takes up minimal space
+            MainAxisSize.min, // Ensure the column takes up minimal space
         children: [
           Text('LocaleKeys.bookSeat.localize', style: Styles.headerText()),
           const Sizer(),
@@ -84,7 +82,7 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
                     });
                   },
                   activeColor: AppColors.PRIMARY_COLOR,
-                  trackOutlineColor: MaterialStatePropertyAll(Colors.grey),
+                  trackOutlineColor: const WidgetStatePropertyAll(Colors.grey),
                   activeTrackColor: Colors.grey,
                   inactiveTrackColor: Colors.white,
                   inactiveThumbColor: Colors.grey,

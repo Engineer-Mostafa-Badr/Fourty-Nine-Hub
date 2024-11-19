@@ -117,7 +117,8 @@ class MyAdsRepoImpl implements MyAdsRepo {
   }
 
   @override
-  Future<Either<Failure, List<GetAllCountAdsEntity>>> getAllCountsAds(CountAdsParams params) {
+  Future<Either<Failure, List<GetAllCountAdsEntity>>> getAllCountsAds(
+      CountAdsParams params) {
     return _remoteDatasource.getAllCountsAds(params);
   }
 
@@ -137,7 +138,8 @@ class MyAdsRepoImpl implements MyAdsRepo {
   }
 
   @override
-  Future<Either<Failure, EditMyAdsEntity>> fetchMyAdsById({required String id}) {
-   return _remoteDatasource.fetchMyAdsById(id: id);
+  Future<Either<Failure, EditMyAdsEntity>> fetchMyAdsById(
+      {required String id}) {
+    return _remoteDatasource.fetchMyAdsById(id: id);
   }
 }

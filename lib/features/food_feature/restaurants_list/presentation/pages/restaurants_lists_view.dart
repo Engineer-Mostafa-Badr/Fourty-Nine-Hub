@@ -47,7 +47,6 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
     context.read<RestaurantsCubit>().loadData();
   }
 
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -194,7 +193,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               const Sizer(),
               _buildSearchAndExpiredRequests(),
               const Sizer(),
-              if ((state.mealCategories?.isNotEmpty ?? false)) const MealCategories(),
+              if ((state.mealCategories?.isNotEmpty ?? false))
+                const MealCategories(),
               if (state.loadingSubCategories)
                 _buildLoadingSubCategoriesPlaceholder(),
               const Sizer(),
@@ -254,20 +254,21 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
         Expanded(
           child: InkWell(
             onTap: () => context.read<UserCubit>().isLoggedIn
-                ?Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BlocProvider(
-                  create: (context) => SearchRestaurantsCubit(
-                    serviceLocator(),
-                    serviceLocator(),
-                    serviceLocator(),
-                    serviceLocator(),
-                  )..loadData(),
-                  child: const SearchRestaurantView(),
-                ),
-              ),
-            ):context.push(Routes.LOGIN),
+                ? Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BlocProvider(
+                        create: (context) => SearchRestaurantsCubit(
+                          serviceLocator(),
+                          serviceLocator(),
+                          serviceLocator(),
+                          serviceLocator(),
+                        )..loadData(),
+                        child: const SearchRestaurantView(),
+                      ),
+                    ),
+                  )
+                : context.push(Routes.LOGIN),
             child: Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -292,15 +293,16 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
             onTap: () {
               context.read<UserCubit>().isLoggedIn
                   ? Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BlocProvider.value(
-                    value: serviceLocator<RestaurantsCubit>()
-                      ..getExpiredOrders(),
-                    child: const RestaurantExpiredRequestsScreen(),
-                  ),
-                ),
-              ):context.push(Routes.LOGIN);
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BlocProvider.value(
+                          value: serviceLocator<RestaurantsCubit>()
+                            ..getExpiredOrders(),
+                          child: const RestaurantExpiredRequestsScreen(),
+                        ),
+                      ),
+                    )
+                  : context.push(Routes.LOGIN);
             },
             child: Container(
               alignment: Alignment.centerLeft,

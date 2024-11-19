@@ -43,7 +43,7 @@ class UploadFile {
           await sendBinaryFileData(
                   file: file, signedUrl: data['data']['signedUrl'])
               .then((value) async {
-                print("amdl;maldmaslkd");
+            print("amdl;maldmaslkd");
             final mediaId = data['data']['mediaId'];
             final confirmUploadResponse = await serviceLocator<ApiConsumer>()
                 .put(EndPoints.confirmUpload(mediaId));
@@ -118,9 +118,8 @@ class UploadFile {
     }
   }
 
-Future<void> sendBinaryFileData(
-      {required XFile file, required String signedUrl}) async
-  {
+  Future<void> sendBinaryFileData(
+      {required XFile file, required String signedUrl}) async {
     print("signedUrl$signedUrl");
     Uint8List image = await file.readAsBytes();
     print("object${image.length}");
@@ -136,8 +135,7 @@ Future<void> sendBinaryFileData(
       // 'File-Name': fileName,
     });
 
-    await Dio().put(signedUrl,
-        data: image, options: options);
+    await Dio().put(signedUrl, data: image, options: options);
     print("aasl;das;ld,");
   }
 }

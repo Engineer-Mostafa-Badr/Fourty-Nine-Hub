@@ -17,11 +17,12 @@ class SearchCubit extends Cubit<SearchState> {
   final FetchUserSearchUseCase _fetchUserSearchUseCase;
 
   SearchCubit(
-      this._fetchSearchUseCase, this._toggleFavoriteCategoryUseCase, this._fetchUserSearchUseCase,
-    )
-      : super( SearchState());
+    this._fetchSearchUseCase,
+    this._toggleFavoriteCategoryUseCase,
+    this._fetchUserSearchUseCase,
+  ) : super(SearchState());
 
-   TextEditingController searchController=TextEditingController();
+  TextEditingController searchController = TextEditingController();
 
   void onRefresh() async {
     searchPagingController.refresh();
@@ -32,17 +33,18 @@ class SearchCubit extends Cubit<SearchState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('filter', 'totalUsers');
   }
+
   void loadData(SearchParams params) async {
     //   await getFeed(1);
-    getPaginatedSearch(params,1);
-    getPaginatedUserSearch(params,1);
+    getPaginatedSearch(params, 1);
+    getPaginatedUserSearch(params, 1);
     searchPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getPaginatedSearch(params,pageKey);
+      getPaginatedSearch(params, pageKey);
     });
     searchPagingUserController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getPaginatedUserSearch(params,pageKey);
+      getPaginatedUserSearch(params, pageKey);
     });
   }
   // Future<List<MainSubCategorySearchEntity>> getSearch(SearchParams params) async {
@@ -62,14 +64,15 @@ class SearchCubit extends Cubit<SearchState> {
   //   return main;
   // }
 
-  final PagingController<int, MainSubCategorySearchEntity> searchPagingController =
-  PagingController(firstPageKey: 1);
+  final PagingController<int, MainSubCategorySearchEntity>
+      searchPagingController = PagingController(firstPageKey: 1);
   final PagingController<int, UserSearchEntity> searchPagingUserController =
-  PagingController(firstPageKey: 1);
+      PagingController(firstPageKey: 1);
   final int pageSize = 10;
 
-  Future<List<MainSubCategorySearchEntity>> getPaginatedSearch(SearchParams params,int page) async {
-    emit(state.copyWith( status: SearchStates.loading));
+  Future<List<MainSubCategorySearchEntity>> getPaginatedSearch(
+      SearchParams params, int page) async {
+    emit(state.copyWith(status: SearchStates.loading));
     List<MainSubCategorySearchEntity> main = [];
     final response = await _fetchSearchUseCase.call(params);
 
@@ -92,13 +95,14 @@ class SearchCubit extends Cubit<SearchState> {
       }
       print('Sussecc :$data');
       main = data;
-      emit(state.copyWith(search: data,status: SearchStates.success));
-
+      emit(state.copyWith(search: data, status: SearchStates.success));
     });
     return main;
   }
-  Future<List<UserSearchEntity>> getPaginatedUserSearch(SearchParams params,int page) async {
-    emit(state.copyWith( status: SearchStates.loading));
+
+  Future<List<UserSearchEntity>> getPaginatedUserSearch(
+      SearchParams params, int page) async {
+    emit(state.copyWith(status: SearchStates.loading));
     List<UserSearchEntity> user = [];
     final response = await _fetchUserSearchUseCase.call(params);
 
@@ -121,23 +125,21 @@ class SearchCubit extends Cubit<SearchState> {
       }
       print('Sussecc :$data');
       user = data;
-      emit(state.copyWith(userSearch: data,status: SearchStates.success));
-
+      emit(state.copyWith(userSearch: data, status: SearchStates.success));
     });
     return user;
   }
-
 
   Future<bool> toggleFavoriteMedicalService(String subcategoryId) async {
     final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
     bool result = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: SearchStates.error)),
-            (data) {
-          result = data;
-          emit(state.copyWith(status: SearchStates.success));
-        });
+        (data) {
+      result = data;
+      emit(state.copyWith(status: SearchStates.success));
+    });
     return result;
   }
 
@@ -145,14 +147,12 @@ class SearchCubit extends Cubit<SearchState> {
     final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
     bool result = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: SearchStates.error)),
-            (data) {
-          result = data;
-          emit(state.copyWith(status: SearchStates.success));
-        });
+        (data) {
+      result = data;
+      emit(state.copyWith(status: SearchStates.success));
+    });
     return result;
   }
-
-
 }

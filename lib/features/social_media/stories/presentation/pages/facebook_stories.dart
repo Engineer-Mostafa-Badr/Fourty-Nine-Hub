@@ -59,7 +59,7 @@ class Stories extends StatelessWidget {
             height: kToolbarHeight * 2.5,
             child: BlocBuilder<StoryCubit, StoryState>(
               builder: (context, state) {
-                return (state.users.isNotEmpty??false)
+                return (state.users.isNotEmpty ?? false)
                     ? ListView.separated(
                         physics: const NeverScrollableScrollPhysics(),
                         scrollDirection: Axis.horizontal,
@@ -69,7 +69,7 @@ class Stories extends StatelessWidget {
                         separatorBuilder: (context, index) => const Sizer(
                               width: 8,
                             ),
-                        itemCount: state.users.length??0)
+                        itemCount: state.users.length ?? 0)
                     : Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 2.0),
                         child: Shimmer.fromColors(
@@ -103,7 +103,7 @@ class Stories extends StatelessWidget {
               builder: (context) => BlocProvider.value(
                 value: serviceLocator<StoryCubit>(),
                 child: StoryViewScreen(
-                  stories: state.users??[],
+                  stories: state.users ?? [],
                   initialUserIndex: index,
                 ),
               ),
@@ -119,9 +119,9 @@ class Stories extends StatelessWidget {
           decoration: const BoxDecoration(
             color: Colors.white,
           ),
-          child: (state.users.isNotEmpty??false) &&
+          child: (state.users.isNotEmpty ?? false) &&
                   state.users[index].stories != null &&
-                  (state.users[index].stories?.isNotEmpty??false)
+                  (state.users[index].stories?.isNotEmpty ?? false)
               ? Stack(
                   children: [
                     Positioned.fill(
@@ -139,8 +139,9 @@ class Stories extends StatelessWidget {
                                         const CupertinoActivityIndicator(
                                       color: Colors.white,
                                     ),
-                                    url: state
-                                        .users[index].user?.profilePictureUrl??'',
+                                    url: state.users[index].user
+                                            ?.profilePictureUrl ??
+                                        '',
                                     errorWidget: Image.network(
                                       UIConst.profilePlaceHolder,
                                       fit: BoxFit.fitHeight,
@@ -171,7 +172,9 @@ class Stories extends StatelessWidget {
                               backgroundImage: NetworkImage(state.users[index]
                                               .user!.profilePictureUrl !=
                                           null &&
-                                      (state.users[index].user?.profilePictureUrl?.isNotEmpty??false)
+                                      (state.users[index].user
+                                              ?.profilePictureUrl?.isNotEmpty ??
+                                          false)
                                   ? state.users[index].user!.profilePictureUrl!
                                   : UIConst.profilePlaceHolder),
                               onBackgroundImageError: (exception, stackTrace) =>
@@ -234,7 +237,7 @@ class Stories extends StatelessWidget {
         child: Container(
           height: kToolbarHeight * 2,
           width: kToolbarHeight * 1.5,
-          decoration:  BoxDecoration(
+          decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
           ),
           child: Stack(
@@ -270,7 +273,8 @@ class Stories extends StatelessWidget {
                         maxLines: 1,
 
                         style: Styles.mediumText(
-                            color:Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.bold),
                       )
                     ],
                   ))
@@ -337,8 +341,7 @@ class Stories extends StatelessWidget {
                 // right: 2,
                 child: Text(
                   'Muted',
-                  style: Styles.headerText(
-                      fontWeight: FontWeight.bold),
+                  style: Styles.headerText(fontWeight: FontWeight.bold),
                 ),
               )
             ],

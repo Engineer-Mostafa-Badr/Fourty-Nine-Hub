@@ -39,7 +39,7 @@ class MyAuctionAdsEntity {
       required this.adminIgnore,
       required this.isFavourite,
       required this.subCategory,
-        this.mainCategory,
+      this.mainCategory,
       required this.isApproved,
       required this.isActive,
       required this.isPremium,

@@ -97,7 +97,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                           ),
                           child: Center(
                             child: Text(
-                              category.name,
+                              category.name ?? "",
                               style: Styles.mediumText(
                                   color: index == state.selectedIndex
                                       ? Colors.white

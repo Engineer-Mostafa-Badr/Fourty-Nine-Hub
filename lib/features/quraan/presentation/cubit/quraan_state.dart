@@ -19,9 +19,9 @@ class QuranState {
   });
   QuranState copyWith(
       {QuranStates? status,
-        Failure? failure,
-        List<QuranSurahEntity>? quranSurah,
-         List<SurahEntity>? surah}) {
+      Failure? failure,
+      List<QuranSurahEntity>? quranSurah,
+      List<SurahEntity>? surah}) {
     return QuranState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

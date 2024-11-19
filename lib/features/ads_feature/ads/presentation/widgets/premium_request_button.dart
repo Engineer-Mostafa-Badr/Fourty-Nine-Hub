@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -19,7 +18,12 @@ import 'package:go_router/go_router.dart';
 import '../../../../../routes/routes.dart';
 
 class PremiumRequestButton extends StatelessWidget {
-  const PremiumRequestButton({super.key, required this.subscriptionStatus, required this.subCategoryId, required this.adId, });
+  const PremiumRequestButton({
+    super.key,
+    required this.subscriptionStatus,
+    required this.subCategoryId,
+    required this.adId,
+  });
   final String subscriptionStatus;
   final String subCategoryId;
   final String adId;
@@ -30,15 +34,14 @@ class PremiumRequestButton extends StatelessWidget {
       final controller = context.read<AdvertisementCubit>();
       return AvaialbleTripsButton(
         title: LocaleKeys.premiumRequest.localize,
-        color:AppColors.SECONDARY_COLOR,
-        onTap:() {
-          if(context.read<UserCubit>().isLoggedIn){
-            if(subscriptionStatus!='premium') {
+        color: AppColors.SECONDARY_COLOR,
+        onTap: () {
+          if (context.read<UserCubit>().isLoggedIn) {
+            if (subscriptionStatus != 'premium') {
               SubscriptionMethod().subscribe(
-                  subscribeId: subCategoryId ,
+                  subscribeId: subCategoryId,
                   title: LocaleKeys.premiumRequest.localize);
-            }else
-            {
+            } else {
               showModalBottomSheet(
                 backgroundColor: Colors.white,
                 context: context,
@@ -131,12 +134,13 @@ class PremiumRequestButton extends StatelessWidget {
                                       padding: const EdgeInsets.all(5),
                                       decoration: BoxDecoration(
                                           color: AppColors.PRIMARY_COLOR,
-                                          borderRadius: BorderRadius.circular(15)),
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
                                       alignment: Alignment.center,
                                       child: Label(
                                         text: LocaleKeys.send.localize,
-                                        style:
-                                        Styles.headerText(color: Colors.white),
+                                        style: Styles.headerText(
+                                            color: Colors.white),
                                       ),
                                     ),
                                   ),
@@ -144,8 +148,7 @@ class PremiumRequestButton extends StatelessWidget {
                                 Expanded(
                                   child: TextButton(
                                     onPressed: () {
-                                      Navigator.of(context)
-                                          .pop();
+                                      Navigator.of(context).pop();
                                     },
                                     child: Label(
                                       text: LocaleKeys.cancel.localize,
@@ -160,12 +163,12 @@ class PremiumRequestButton extends StatelessWidget {
                       ),
                     ),
                   );
-                },);
+                },
+              );
             }
-          }else{
+          } else {
             context.push(Routes.LOGIN);
           }
-
         },
       );
     });

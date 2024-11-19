@@ -128,19 +128,20 @@ class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
     var response = await _apiConsumer.get(EndPoints.activate);
 
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(ActivateModel.fromJson(response['data'])),
+      (failure) => Left(failure),
+      (response) => Right(ActivateModel.fromJson(response['data'])),
     );
   }
 
   @override
-  Future<Either<Failure, bool>> updateActivate({required bool customPage}) async {
-    var response =
-    await _apiConsumer.put(EndPoints.activate, data: {"customPage":customPage});
+  Future<Either<Failure, bool>> updateActivate(
+      {required bool customPage}) async {
+    var response = await _apiConsumer
+        .put(EndPoints.activate, data: {"customPage": customPage});
 
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(response['status']),
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
     );
-}
+  }
 }

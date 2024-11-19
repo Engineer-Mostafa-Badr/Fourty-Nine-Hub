@@ -1,6 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_by_rider_model/check_accept_by_rider_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_trip_from_driver_model/check_accept_trip_from_driver_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class CacheService {
@@ -8,7 +12,13 @@ abstract class CacheService {
   Future<bool> saveUserData(String userData);
   Future<String?> getUserData();
   bool? isLogin();
-
+  Future<void> saveRiderTripInfo(
+      {required CheckAcceptTripFromDriverModel model});
+  Future<void> saveDriverTripInfo({required CheckAcceptByRiderModel model});
+  Future<CheckAcceptTripFromDriverModel?> getRiderTripInfo();
+  Future<void> removeRiderTripInfo();
+  Future<CheckAcceptByRiderModel?> getDriverTripInfo();
+  Future<void> removeDriverTripInfo();
   Future<bool> saveUserIsLoggedIn(bool isLoggedIn);
   Future<bool?> getUserIsLoggedIn();
   Future<void> setLogin(bool value);
@@ -71,6 +81,8 @@ class CacheServiceImpl implements CacheService {
   static const _SubCateogryDriver = "SubCateogryDriver";
   static const _DriverId = "DriverId";
   static const _USER_ID = "USER_ID";
+  static const _TRIP_INFO_RIDER = "_TRIP_INFO_RIDER";
+  static const _TRIP_INFO_DRIVER = "_TRIP_INFO_DRIVER";
   static late SharedPreferences preferences;
   @override
   Future<bool> saveUserData(String userData) async {
@@ -131,7 +143,7 @@ class CacheServiceImpl implements CacheService {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_TOKEN);
   }
-  
+
   @override
   Future<bool> saveUserTokenExpirationDate(String userTokenExpireDate) async {
     final prefs = await SharedPreferences.getInstance();
@@ -256,28 +268,79 @@ class CacheServiceImpl implements CacheService {
   Future<void> setDriverId({required String id}) async {
     await preferences.setString(_DriverId, id);
   }
-  
+
   @override
   Future<String?> getUserId() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_USER_ID);
   }
-  
+
   @override
   Future<bool> setUserId(String userId) async {
     final prefs = await SharedPreferences.getInstance();
     return await prefs.setString(_USER_ID, userId);
   }
+
+  @override
+  Future<CheckAcceptByRiderModel?> getDriverTripInfo() async {
+    String? json = preferences.getString(CacheServiceImpl._TRIP_INFO_DRIVER);
+    if (json != null) {
+      return CheckAcceptByRiderModel.fromJson(jsonDecode(json));
+    }
+    return null;
+  }
+
+  @override
+  Future<CheckAcceptTripFromDriverModel?> getRiderTripInfo() async {
+    String? json = preferences.getString(CacheServiceImpl._TRIP_INFO_RIDER);
+    if (json != null) {
+      return CheckAcceptTripFromDriverModel.fromJson(jsonDecode(json));
+    }
+    return null;
+  }
+
+  @override
+  Future<void> saveDriverTripInfo(
+      {required CheckAcceptByRiderModel model}) async {
+    var json = jsonEncode(model.toJson());
+    preferences.setString(CacheServiceImpl._TRIP_INFO_DRIVER, json);
+  }
+
+  @override
+  Future<void> saveRiderTripInfo(
+      {required CheckAcceptTripFromDriverModel model}) async {
+    var json = jsonEncode(model.toJson());
+    preferences.setString(CacheServiceImpl._TRIP_INFO_RIDER, json);
+  }
+
+  @override
+  Future<void> removeDriverTripInfo() async {
+    bool result = await preferences.remove(CacheServiceImpl._TRIP_INFO_DRIVER);
+    log(result.toString(), name: "removeRiderTripInfo");
+  }
+
+  @override
+  Future<void> removeRiderTripInfo() async {
+    bool result =
+        await preferences.setString(CacheServiceImpl._TRIP_INFO_RIDER, "");
+    String? json = preferences.getString(CacheServiceImpl._TRIP_INFO_RIDER);
+    if (json != null) {
+      var model = CheckAcceptTripFromDriverModel.fromJson(jsonDecode(json));
+      log(model.toString());
+      log(model.toString(), name: "removeRiderTripInfo");
+    }
+    
+  }
   //   @override
   // Future<bool> saveUserToken(String userToken) async {
-    // final prefs = await SharedPreferences.getInstance();
-    // return await prefs.setString(_TOKEN, userToken);
+  // final prefs = await SharedPreferences.getInstance();
+  // return await prefs.setString(_TOKEN, userToken);
   // }
 
   // @override
   // Future<String?> getUserToken() async {
-    // final prefs = await SharedPreferences.getInstance();
-    // return prefs.getString(_TOKEN);
+  // final prefs = await SharedPreferences.getInstance();
+  // return prefs.getString(_TOKEN);
   // }
 }
 
@@ -511,16 +574,53 @@ class CacheServiceImplV2 implements CacheService {
     // TODO: implement setDriverId
     throw UnimplementedError();
   }
-  
+
   @override
   Future<String?> getUserId() {
     // TODO: implement getUserId
     throw UnimplementedError();
   }
-  
+
   @override
   Future<bool> setUserId(String userId) {
     // TODO: implement setUserId
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<CheckAcceptByRiderModel> getDriverTripInfo() {
+    // TODO: implement getDriverTripInfo
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<CheckAcceptTripFromDriverModel> getRiderTripInfo() {
+    // TODO: implement getRiderTripInfo
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> saveDriverTripInfo({required CheckAcceptByRiderModel model}) {
+    // TODO: implement saveDriverTripInfo
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> saveRiderTripInfo(
+      {required CheckAcceptTripFromDriverModel model}) {
+    // TODO: implement saveRiderTripInfo
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> removeDriverTripInfo() {
+    // TODO: implement removeDriverTripInfo
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> removeRiderTripInfo() {
+    // TODO: implement removeRiderTripInfo
     throw UnimplementedError();
   }
 }

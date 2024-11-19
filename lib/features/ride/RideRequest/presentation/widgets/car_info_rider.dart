@@ -1,11 +1,18 @@
+import 'dart:developer';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_brands/fetch_car_brands_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_models/fetch_car_models_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_year_type/fetch_car_year_type_cubit.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class CarInfoRider extends StatefulWidget {
   const CarInfoRider({super.key});
@@ -46,30 +53,42 @@ class _CarInfoRiderState extends State<CarInfoRider> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15)),
                   fillColor: Colors.transparent,
-                  label: const Text('Brand'),
+                  label: Text(LocaleKeys.brand.tr()),
                   isDense: true,
                   // Added this
                   contentPadding: const EdgeInsets.all(14),
                 ),
                 onChanged: (value) {
-                  riderCubit.pickBrand(value);
-                  fetchCarModelsCubit.fetchCarModel(brand: value);
-                  fetchCarBrandsCubit.fetchCarBrand(search: value);
+                  if (context.isUserLoggedIn) {
+                    riderCubit.pickBrand(value);
+                    fetchCarModelsCubit.fetchCarModel(brand: value);
+                    fetchCarBrandsCubit.fetchCarBrand(search: value);
+                  } else {
+                    context.push(Routes.LOGIN);
+                  }
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Car Brand Required';
+                    return LocaleKeys.carBrandRequired.tr();
                   }
                   return null;
                 },
               );
             },
             itemBuilder: (context, value) {
-              return ListTile(title: Text(value));
+              return ListTile(
+                  title: Text(
+                value,
+                style: const TextStyle(color: Colors.black),
+              ));
             },
             onSelected: (value) {
-              fetchCarBrandsCubit.brand = value;
-              setState(() {});
+              if (context.isUserLoggedIn) {
+                fetchCarBrandsCubit.brand = value;
+                setState(() {});
+              } else {
+                context.push(Routes.LOGIN);
+              }
             },
             suggestionsCallback: (search) async {
               // fetchCarBrandsCubit.brand = search;
@@ -93,33 +112,45 @@ class _CarInfoRiderState extends State<CarInfoRider> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15)),
                   fillColor: Colors.transparent,
-                  label: const Text('Model'),
+                  label: Text(LocaleKeys.model.tr()),
                   isDense: true,
                   // Added this
                   contentPadding: const EdgeInsets.all(14),
                 ),
                 onChanged: (value) {
-                  riderCubit.pickModel(value);
-                  if (value.length == 1) {
-                    fetchCarModelsCubit.fetchCarModel(
-                        brand: fetchCarBrandsCubit.brand ?? '');
+                  if (context.isUserLoggedIn) {
+                    riderCubit.pickModel(value);
+                    if (value.length == 1) {
+                      fetchCarModelsCubit.fetchCarModel(
+                          brand: fetchCarBrandsCubit.brand ?? '');
+                    }
+                  } else {
+                    context.push(Routes.LOGIN);
                   }
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Car Model Required';
+                    return LocaleKeys.carModelRequired.tr();
                   }
                   return null;
                 },
               );
             },
             itemBuilder: (context, value) {
-              return ListTile(title: Text(value));
+              return ListTile(
+                  title: Text(
+                value,
+                style: const TextStyle(color: Colors.black),
+              ));
             },
             onSelected: (value) {
               // print(' ============== $value');
-              fetchCarModelsCubit.model = value;
-              setState(() {});
+              if (context.isUserLoggedIn) {
+                fetchCarModelsCubit.model = value;
+                setState(() {});
+              } else {
+                context.push(Routes.LOGIN);
+              }
             },
             suggestionsCallback: (search) async {
               return fetchCarModelsCubit.carModels
@@ -136,7 +167,7 @@ class _CarInfoRiderState extends State<CarInfoRider> {
           // width: 150,
           child: TypeAheadField<String>(
             builder: (context, controller, focusNode) {
-              controller.text = fetchCarYearTypeCubit.year ?? '';
+              controller.text = fetchCarYearTypeCubit.year??"";
               return TextField(
                 controller: controller,
                 focusNode: focusNode,
@@ -145,20 +176,33 @@ class _CarInfoRiderState extends State<CarInfoRider> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15)),
                   fillColor: Colors.transparent,
-                  hintText: 'Year',
+                  hintText: LocaleKeys.Year.tr(),
                 ),
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
-                  fetchCarYearTypeCubit.year = value;
+                  if (context.isUserLoggedIn) {
+                    fetchCarYearTypeCubit.year = value;
+                  } else {
+                    context.push(Routes.LOGIN);
+                  }
                 },
               );
             },
             itemBuilder: (context, value) {
-              return ListTile(title: Text(value));
+              return ListTile(
+                  title: Text(
+                value,
+                style: const TextStyle(color: Colors.black),
+              ));
             },
             onSelected: (value) {
-              riderCubit.pickYear(value);
-              setState(() {});
+              if (context.isUserLoggedIn) {
+                log(value.toString());
+                riderCubit.pickYear(value);
+                setState(() {});
+              } else {
+                context.push(Routes.LOGIN);
+              }
             },
             suggestionsCallback: (search) {
               fetchCarYearTypeCubit.getCarYears(

@@ -98,7 +98,8 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
         } else {
           return const SizedBox.shrink();
         }
-      }, listener: (BuildContext context, CreateRestaurantState state) {  },
+      },
+      listener: (BuildContext context, CreateRestaurantState state) {},
     );
   }
 }

@@ -56,8 +56,8 @@ class _PhotoAndTextPostContentState extends State<PhotoAndTextPostContent> {
                       separatorBuilder: (context, index) => Divider(
                         color: AppColors.GREY_LIGHT_COLOR,
                         height: 30.h,
-                        endIndent:20.w ,
-                        indent:20.w,
+                        endIndent: 20.w,
+                        indent: 20.w,
                       ),
                       itemCount: data.length,
                     )

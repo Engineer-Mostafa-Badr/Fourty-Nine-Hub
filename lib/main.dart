@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,9 +18,20 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/get_ser
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/cancel_trip_client_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/cancel_trip_rider_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/start_trip_rider_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/accept_offer_by_driver_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_accept_by_driver_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_accept_by_rider_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_all_trip_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_reasons_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/offer_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/send_offer_by_driver_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
@@ -82,6 +92,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _startWebSocketService();
+
   }
 
   @override
@@ -106,6 +117,10 @@ class _MyAppState extends State<MyApp> {
               serviceLocator<MainCategoriesCubit>()..loadData(),
         ),
         BlocProvider(
+          create: (context) =>
+              LocationSocketCubit(repository: serviceLocator()),
+        ),
+        BlocProvider(
           create: (context) => serviceLocator<ShowOffersCubit>(),
         ),
         BlocProvider(
@@ -116,6 +131,14 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(
           create: (context) => serviceLocator<RequestRiderTripCubit>(),
+        ),
+        BlocProvider(
+          create: (context) =>
+              SendOfferByDriverCubit(repository: serviceLocator()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              AcceptOfferByDriverCubit(repository: serviceLocator()),
         ),
         // BlocProvider(
         //   create: (context) => serviceLocator<CreateShippingRequestCubit>(),
@@ -173,6 +196,39 @@ class _MyAppState extends State<MyApp> {
             repository: serviceLocator(),
           ),
         ),
+        BlocProvider(
+          create: (context) => CheckAcceptByDriverCubit(
+            repository: serviceLocator(),
+          )..check(),
+        ),
+        BlocProvider(
+          create: (context) => CheckAcceptByRiderCubit(
+            repository: serviceLocator(),
+          )..check(),
+        ),
+        BlocProvider(
+          create: (context) =>
+              GetAllTripRiderCubit(repository: serviceLocator())..getAllTrip(),
+        ),
+        BlocProvider(
+          create: (context) => OfferCubit(repository: serviceLocator()),
+        ),
+        BlocProvider(
+          create: (context) => GetReasonsCubit(repository: serviceLocator()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              StartTripRiderCubit(repository: serviceLocator()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              CancelTripClientCubit(repository: serviceLocator()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              CancelTripRiderCubit(repository: serviceLocator()),
+        ),
+        // context.read<LocationSocketCubit>().updateDriverLocationOn();
       ],
       child: ScreenUtilInit(
         designSize: const Size(750, 1334),
@@ -183,31 +239,32 @@ class _MyAppState extends State<MyApp> {
           return BlocBuilder<ThemeCubit, ThemeStates>(
             builder: (BuildContext context, state) {
               return FutureBuilder<bool>(
-                  future: CacheManager.getMode(),
-                  builder: (context, snapshot) {
-                    return MaterialApp.router(
-                      builder: (context, child) {
-                        return MediaQuery(
-                          data: MediaQuery.of(context)
-                              .copyWith(textScaler: TextScaler.noScaling),
-                          child: child!,
-                        );
-                      },
-                      themeMode: (snapshot.data ?? false)
-                          ? ThemeMode.dark
-                          : ThemeMode.light,
-                      theme: lightTheme,
-                      darkTheme: darkTheme,
-                      title: '49',
-                      debugShowCheckedModeBanner: false,
-                      routerConfig: AppPages.router,
-                      localizationsDelegates: context.localizationDelegates,
-                      supportedLocales: context.supportedLocales,
-                      locale: context.locale,
-                      // for device preview package
-                      // builder: DevicePreview.appBuilder,
-                    );
-                  });
+                future: CacheManager.getMode(),
+                builder: (context, snapshot) {
+                  return MaterialApp.router(
+                    builder: (context, child) {
+                      return MediaQuery(
+                        data: MediaQuery.of(context)
+                            .copyWith(textScaler: TextScaler.noScaling),
+                        child: child!,
+                      );
+                    },
+                    themeMode: (snapshot.data ?? false)
+                        ? ThemeMode.dark
+                        : ThemeMode.light,
+                    theme: lightTheme,
+                    darkTheme: darkTheme,
+                    title: '49',
+                    debugShowCheckedModeBanner: false,
+                    routerConfig: AppPages.router,
+                    localizationsDelegates: context.localizationDelegates,
+                    supportedLocales: context.supportedLocales,
+                    locale: context.locale,
+                    // for device preview package
+                    // builder: DevicePreview.appBuilder,
+                  );
+                },
+              );
             },
           );
         },

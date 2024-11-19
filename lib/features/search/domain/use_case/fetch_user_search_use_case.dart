@@ -5,7 +5,6 @@ import 'package:fourtyninehub/features/search/domain/entity/user_search_entity.d
 import 'package:fourtyninehub/features/search/domain/repository/search_repository.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 
-
 class FetchUserSearchUseCase
     extends UseCase<List<UserSearchEntity>, SearchParams> {
   final SearchRepository _searchRepository;
@@ -13,7 +12,8 @@ class FetchUserSearchUseCase
   FetchUserSearchUseCase(this._searchRepository);
 
   @override
-  Future<Either<Failure, List<UserSearchEntity>>> call(SearchParams params)async {
+  Future<Either<Failure, List<UserSearchEntity>>> call(
+      SearchParams params) async {
     return await _searchRepository.fetchUserSearch(params);
   }
 }

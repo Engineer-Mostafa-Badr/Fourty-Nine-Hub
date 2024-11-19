@@ -140,19 +140,17 @@ class _CarPoolGoogleMapState extends State<CarPoolGoogleMap> {
     }
     await polylinePoints
         .getRouteBetweenCoordinates(
-      googleApiKey:  UIConst.googleGeocodingApiKey,
-      request: PolylineRequest(
-        origin: PointLatLng(
-        markers[0].position.latitude,
-        markers[0].position.longitude,
-      ), //Starting LATLANG
-      destination: PointLatLng(
-        markers[1].position.latitude,
-        markers[1].position.longitude,
-      ), //End LATLANG
-      mode: TravelMode.driving
-      )
-    )
+            googleApiKey: UIConst.googleGeocodingApiKey,
+            request: PolylineRequest(
+                origin: PointLatLng(
+                  markers[0].position.latitude,
+                  markers[0].position.longitude,
+                ), //Starting LATLANG
+                destination: PointLatLng(
+                  markers[1].position.latitude,
+                  markers[1].position.longitude,
+                ), //End LATLANG
+                mode: TravelMode.driving))
         .then((value) {
       for (var point in value.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));

@@ -18,24 +18,26 @@ class InstapayCacheOutUseCase
 }
 
 class InstapayParams {
-   String? instaPay;
-   String? accountNumber;
-   String? accountName;
-   String? iban;
-   String? bankId;
+  String? instaPay;
+  String? accountNumber;
+  String? accountName;
+  String? iban;
+  String? bankId;
 
   InstapayParams(
-  {this.instaPay, this.accountNumber, this.accountName, this.iban,
+      {this.instaPay,
+      this.accountNumber,
+      this.accountName,
+      this.iban,
       this.bankId});
 
-   Map<String, dynamic> toJson() => {
-     'instaPay': instaPay,
-     'bankAccount': {
-       'accountNumber': accountNumber,
-       'accountName': accountName,
-       'iban': iban,
-       'bankId': bankId,
-     },
-   };
-
+  Map<String, dynamic> toJson() => {
+        'instaPay': instaPay,
+        'bankAccount': {
+          'accountNumber': accountNumber,
+          'accountName': accountName,
+          'iban': iban,
+          'bankId': bankId,
+        },
+      };
 }

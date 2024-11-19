@@ -11,15 +11,14 @@ class QuranCubit extends Cubit<QuranState> {
   final FetchSurahUseCase _surahUseCase;
 
   QuranCubit(
-      this._quranSurahUseCase,
-      this._surahUseCase,
-      ) : super(const QuranState());
-
-
+    this._quranSurahUseCase,
+    this._surahUseCase,
+  ) : super(const QuranState());
 
   void onRefresh() async {
     quranSurahPagingController.refresh();
   }
+
   void loadData() async {
     //   await getFeed(1);
     fetchQuranSurah(1);
@@ -30,13 +29,14 @@ class QuranCubit extends Cubit<QuranState> {
   }
 
   final PagingController<int, QuranSurahEntity> quranSurahPagingController =
-  PagingController(firstPageKey: 1);
+      PagingController(firstPageKey: 1);
   final int pageSize = 10;
 
   Future<List<QuranSurahEntity>> fetchQuranSurah(int page) async {
-    emit(state.copyWith( status: QuranStates.loading));
+    emit(state.copyWith(status: QuranStates.loading));
     List<QuranSurahEntity> main = [];
-    final response = await _quranSurahUseCase.call(QuranParams(params: PaginationParams(page: page,limit: pageSize)));
+    final response = await _quranSurahUseCase.call(
+        QuranParams(params: PaginationParams(page: page, limit: pageSize)));
 
     response.fold((l) {
       print('Errrrrrrror :$l');
@@ -57,14 +57,13 @@ class QuranCubit extends Cubit<QuranState> {
       }
       print('Sussecc :$data');
       main = data;
-      emit(state.copyWith(quranSurah: data,status: QuranStates.success));
-
+      emit(state.copyWith(quranSurah: data, status: QuranStates.success));
     });
     return main;
   }
 
   Future<void> fetchSurah({required int id}) async {
-    emit(state.copyWith( status: QuranStates.loading));
+    emit(state.copyWith(status: QuranStates.loading));
     final response = await _surahUseCase.call(id);
     response.fold((l) {
       emit(state.copyWith(failure: l, status: QuranStates.error));

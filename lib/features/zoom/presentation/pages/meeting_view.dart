@@ -338,8 +338,7 @@ class MeetingView extends StatelessWidget {
 
   void _scheduleAMeeting(BuildContext context) {
     Navigator.of(context).push(createCustomTransitionRoute(
-        const ScheduleMeetingScreen(),
-        TransitionType.bottomToTop));
+        const ScheduleMeetingScreen(), TransitionType.bottomToTop));
   }
 
   Widget _buildMeetingItem({

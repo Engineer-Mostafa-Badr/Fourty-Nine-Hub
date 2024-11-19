@@ -15,19 +15,19 @@ class WebSocketHelper {
   WebSocketHelper({required this.socket});
 
   bool isCalled = true;
-  // Future<void> connect() async {
-  //   socket.connect();
-  //   socket.onConnectError(
-  //     (data) {
-  //       pr("Socket Error is ${data}");
-  //     },
-  //   );
-  //   socket.onError(
-  //     (data) {
-  //       pr("Socket Error is ${data}");
-  //     },
-  //   );
-  // }
+  Future<void> connect() async {
+    socket.connect();
+    socket.onConnectError(
+      (data) {
+        pr("Socket Error is $data");
+      },
+    );
+    socket.onError(
+      (data) {
+        pr("Socket Error is $data");
+      },
+    );
+  }
 
   Future<void> notificationListener(
       Function(Map<String, dynamic> data) notificationCallback) async {

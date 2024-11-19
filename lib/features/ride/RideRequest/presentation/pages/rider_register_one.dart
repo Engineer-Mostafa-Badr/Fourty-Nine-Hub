@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -8,6 +9,8 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_for
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/pickers/date/id_expiry_date_picker.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/picture_optional_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
@@ -21,6 +24,8 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class RiderRegisterOne extends StatefulWidget {
   const RiderRegisterOne({
@@ -67,6 +72,8 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
   late FetchCarYearTypeCubit fetchCarYearTypeCubit;
   late RegisterRiderCubit riderCubit;
 
+  String workingType = 'percentage';
+  // "workingType" : "percentage" //percentage or subscribePackage
   @override
   void initState() {
     fetchCarBrandsCubit = context.read<FetchCarBrandsCubit>();
@@ -103,9 +110,10 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                 children: [
                   Expanded(
                     child: FirstNameTextFormField(
+                      isAuthentcation: true,
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return "First name is required!";
+                          return LocaleKeys.firstNameIsRequired.tr();
                         }
                         return null;
                       },
@@ -119,9 +127,10 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                   const Sizer(),
                   Expanded(
                     child: LastNameTextFormField(
+                      isAuthentcation: true,
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return "Last name is required!";
+                          return LocaleKeys.lastNameIsRequired.tr();
                         }
                         return null;
                       },
@@ -141,6 +150,7 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                 children: [
                   Flexible(
                     child: DefaultTextFormField(
+                      isAuthentcation: true,
                       currentFocusNode: phoneFocusNode,
                       nextFocusNode: vehicleModelFocusNode,
                       hint: Labels.phone,
@@ -148,7 +158,7 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                       currentController: phoneController,
                       validator: (p0) {
                         if (p0 == null || p0.isEmpty) {
-                          return "Phone is required!";
+                          return LocaleKeys.phoneIsRequired.tr();
                         }
                         return null;
                       },
@@ -159,14 +169,15 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                   ),
                   Flexible(
                     child: DefaultTextFormField(
+                      isAuthentcation: true,
                       currentFocusNode: pricingPerKmFocusNode,
                       nextFocusNode: model,
-                      hint: "Pricing Per Km",
+                      hint: LocaleKeys.pricingPerKm.tr(),
                       hintColor: AppColors.PRIMARY_COLOR,
                       currentController: pricingPerKmController,
                       validator: (p0) {
                         if (p0 == null || p0.isEmpty) {
-                          return "Pricing Per Km is required!";
+                          return LocaleKeys.pricingPerKmIsRequired.tr();
                         }
                         return null;
                       },
@@ -174,247 +185,50 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                   )
                 ],
               ),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // Row(
-              //   children: [
-              //     Flexible(
-              //       child: DefaultTextFormField(
-              //         currentFocusNode: vehicleModelFocusNode,
-              //         nextFocusNode: vehicleBrandFocusNode,
-              //         hint: "Vehicle Model",
-              //         hintColor: AppColors.PRIMARY_COLOR,
-              //         currentController: vehicleModelController,
-              //         validator: (p0) {
-              //           if (p0 == null || p0.isEmpty) {
-              //             return "Vehicle Model is required!";
-              //           }
-              //           return null;
-              //         },
-              //       ),
-              //     ),
-              //     const SizedBox(
-              //       width: 10,
-              //     ),
-              //     Flexible(
-              //       child: DefaultTextFormField(
-              //         currentFocusNode: vehicleBrandFocusNode,
-              //         nextFocusNode: vehicleColorFocusNode,
-              //         hint: "Vehicle Brand",
-              //         hintColor: AppColors.PRIMARY_COLOR,
-              //         currentController: vehicleBrandController,
-              //         validator: (p0) {
-              //           if (p0 == null || p0.isEmpty) {
-              //             return "Vehicle Brand is required!";
-              //           }
-              //           return null;
-              //         },
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // Row(
-              //   children: [
-              //     Flexible(
-              //       child: DefaultTextFormField(
-              //         currentFocusNode: vehicleYearFocusNode,
-              //         nextFocusNode: pricingPerKmFocusNode,
-              //         hint: "Vehicle Year",
-              //         hintColor: AppColors.PRIMARY_COLOR,
-              //         currentController: vehicleYearController,
-              //         validator: (p0) {
-              //           if (p0 == null || p0.isEmpty) {
-              //             return "Vehicle Year is required!";
-              //           }
-              //           return null;
-              //         },
-              //       ),
-              //     ),
-              //     const SizedBox(
-              //       width: 10,
-              //     ),
-              //     Flexible(
-              //       child: DefaultTextFormField(
-              //         currentFocusNode: yourFavoriteCiryFocusNode,
-              //         hint: "Your Favorite City",
-              //         hintColor: AppColors.PRIMARY_COLOR,
-              //         currentController: yourFavoriteCiryController,
-              //         validator: (p0) {
-              //           if (p0 == null || p0.isEmpty) {
-              //             return "Vehicle Year is required!";
-              //           }
-              //           return null;
-              //         },
-              //       ),
-              //     )
-              //   ],
-              // ),
               const SizedBox(
                 height: 10,
               ),
               const CarInfoRider(),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       flex: 1,
-              //       child: TypeAheadField<String>(
-              //         builder: (context, controller, focusNode) {
-              //           // controller.text = fetchCarBrandsCubit.brand ?? '';
-              //           return TextField(
-              //             controller: controller,
-              //             focusNode: focusNode,
-
-              //             // autofocus: true,
-              //             decoration: InputDecoration(
-              //               border: OutlineInputBorder(
-              //                   borderRadius: BorderRadius.circular(15)),
-              //               fillColor: Colors.transparent,
-              //               label: const Text('Brand'),
-              //               isDense: true,
-              //               // Added this
-              //               contentPadding: const EdgeInsets.all(14),
-              //             ),
-              //             onChanged: (value) {
-              //               riderCubit.pickBrand(value);
-              //               fetchCarModelsCubit.fetchCarModel(brand: value);
-              //               fetchCarBrandsCubit.fetchCarBrand(search: value);
-              //             },
-              //             // validator: (value) {
-              //             //   if (value == null || value.isEmpty) {
-              //             //     return 'Car Brand Required';
-              //             //   }
-              //             //   return null;
-              //             // },
-              //           );
-              //         },
-              //         itemBuilder: (context, value) {
-              //           return ListTile(title: Text(value));
-              //         },
-              //         onSelected: (value) {
-              //           fetchCarBrandsCubit.brand = value;
-              //           setState(() {});
-              //         },
-              //         suggestionsCallback: (search) async {
-              //           // fetchCarBrandsCubit.brand = search;
-              //           return fetchCarBrandsCubit.carBrandsList
-              //               .map((e) => e?.brand ?? '')
-              //               .toList();
-              //         },
-              //       ),
-              //     ),
-              //     const Sizer(),
-              //     Expanded(
-              //       flex: 1,
-              //       child: TypeAheadField<String>(
-              //         builder: (context, controller, focusNode) {
-              //           log(controller.text,
-              //               name: "lkkkkkkkkkkkkkkkkkdddddddddddddd");
-              //           // controller.text = fetchCarModelsCubit.model ?? '';
-              //           return TextField(
-              //             controller: controller,
-              //             focusNode: focusNode,
-              //             // autofocus: true,
-              //             decoration: InputDecoration(
-              //               border: OutlineInputBorder(
-              //                   borderRadius: BorderRadius.circular(15)),
-              //               fillColor: Colors.transparent,
-              //               label: const Text('Model'),
-              //               isDense: true,
-              //               // Added this
-              //               contentPadding: const EdgeInsets.all(14),
-              //             ),
-              //             onChanged: (value) {
-              //               riderCubit.pickModel(value);
-              //               if (value.length == 1) {
-              //                 fetchCarModelsCubit.fetchCarModel(
-              //                     brand: fetchCarBrandsCubit.brand ?? '');
-              //               }
-              //             },
-              //             // validator: (value) {
-              //             //   if (value == null || value.isEmpty) {
-              //             //     return 'Car Model Required';
-              //             //   }
-              //             //   return null;
-              //             // },
-              //           );
-              //         },
-              //         itemBuilder: (context, value) {
-              //           return ListTile(title: Text(value));
-              //         },
-              //         onSelected: (value) {
-              //           // print(' ============== $value');
-              //           // fetchCarModelsCubit.model = value;
-              //           setState(() {});
-              //         },
-              //         suggestionsCallback: (search) async {
-              //           return fetchCarModelsCubit.carModels
-              //               .map((e) => e?.model ?? '')
-              //               .where((element) => element
-              //                   .toLowerCase()
-              //                   .contains(search.toLowerCase()))
-              //               .toList();
-              //         },
-              //       ),
-              //     ),
               const Sizer(),
-              // Expanded(
-              //   // height: 50,
-              //   // width: 150,
-              //   child: TypeAheadField<String>(
-              //     builder: (context, controller, focusNode) {
-              //       controller.text = fetchCarYearTypeCubit.year ?? '';
-              //       return TextField(
-              //         controller: controller,
-              //         focusNode: focusNode,
-              //         // autofocus: true,
-              //         decoration: InputDecoration(
-              //           border: OutlineInputBorder(
-              //               borderRadius: BorderRadius.circular(15)),
-              //           fillColor: Colors.transparent,
-              //           hintText: 'Year',
-              //         ),
-              //         keyboardType: TextInputType.number,
-              //         onChanged: (value) {
-              //           fetchCarYearTypeCubit.year = value;
-              //         },
-              //       );
-              //     },
-              //     itemBuilder: (context, value) {
-              //       return ListTile(title: Text(value));
-              //     },
-              //     onSelected: (value) {
-              //       riderCubit.pickYear(value);
-              //       setState(() {});
-              //     },
-              //     suggestionsCallback: (search) {
-              //       fetchCarYearTypeCubit.getCarYears(
-              //         brand: fetchCarBrandsCubit.brand ?? '',
-              //         model: fetchCarModelsCubit.model ?? '',
-              //       );
-              //       // log(
-              //       //     fetchCarYearTypeCubit.carYears
-              //       //         .map((e) => e?.year ?? '')
-              //       //         .where((element) =>
-              //       //             element.toLowerCase().contains(search.toLowerCase()))
-              //       //         .toList()
-              //       //         .toString(),
-              //       //     name: "lskjdflskdjflskjdf");
-              //       // return fetchCarYearTypeCubit.carYears.map((e) => e?.year ?? '2000').toList();
-              //       return fetchCarYearTypeCubit.carYears
-              //           .map((e) => e?.year ?? '')
-              //           .where((element) =>
-              //               element.toLowerCase().contains(search.toLowerCase()))
-              //           .toList();
-              //     },
-              //   ),
-              // ),
-              //   ],
-              // ),
-              // CarInfoV2(),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 17),
+                width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(
+                  border: Border.all()
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    DropdownButton(
+                    icon: Container(),
+                    value: workingType,
+                    dropdownColor: Colors.white,
+                    style: const TextStyle(color: Colors.black),
+                    onChanged: (value) {
+                      setState(() {
+                        workingType = value??"";
+                      });
+                    },
+                    items: const [
+                      DropdownMenuItem(
+                        value: "percentage",
+                        child: Text("Percentage"),
+                      ),
+                      DropdownMenuItem(
+                        value: "subscribePackage",
+                        child: Text("SubscribePackage"),
+                      ),
+                    ],
+                    underline: Container(),
+                              ),
+                    const Icon(Icons.arrow_drop_down)
+                  ],
+                ),
+              ),
               const SizedBox(
                 height: 10,
               ),
@@ -427,14 +241,21 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                         Switch(
                           onChanged: (value) {
                             setState(() {
-                              registerRider.model.airCondition = value;
+                              if (context.isUserLoggedIn) {
+                                registerRider.model.airCondition = value;
+                              } else {
+                                context.push(Routes.LOGIN);
+                              }
                             });
                           },
                           value: registerRider.model.airCondition ?? false,
                         ),
-                        const Text(
-                          "Air condition ac",
-                          style: TextStyle(fontSize: 16),
+                        Flexible(
+                          flex: 3,
+                          child: Text(
+                            LocaleKeys.airConditionAc.tr(),
+                            style: const TextStyle(fontSize: 16),
+                          ),
                         ),
                       ],
                     ),
@@ -449,14 +270,18 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                         Switch(
                           onChanged: (value) {
                             setState(() {
-                              registerRider.model.smoker = value;
+                              if (context.isUserLoggedIn) {
+                                registerRider.model.smoker = value;
+                              } else {
+                                context.push(Routes.LOGIN);
+                              }
                             });
                           },
                           value: registerRider.model.smoker ?? false,
                         ),
-                        const Text(
-                          "Smoker",
-                          style: TextStyle(fontSize: 16),
+                        Text(
+                          LocaleKeys.Smoker.tr(),
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ],
                     ),
@@ -466,7 +291,7 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
               FormField(
                 validator: (value) {
                   if (registerRider.model.carImage == null) {
-                    return "This field is required!";
+                    return LocaleKeys.thisFieldIsRequired.tr();
                   }
                   return null;
                 },
@@ -481,9 +306,9 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  "Car Picture",
-                                  style: TextStyle(
+                                Text(
+                                  LocaleKeys.carPicture.tr(),
+                                  style: const TextStyle(
                                       fontSize: 17,
                                       color: AppColors.PRIMARY_COLOR,
                                       fontWeight: FontWeight.w600),
@@ -495,9 +320,12 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     ImageValidation(
+                                      isAuthentcation: true,
                                       validator: (value) {
                                         return registerRider.validation(
-                                            message: "This field is required.",
+                                            message: LocaleKeys
+                                                .thisFieldIsRequired
+                                                .tr(),
                                             condition:
                                                 registerRider.model.carImage ==
                                                     null);
@@ -533,9 +361,9 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Label(
-                                  text: "ID",
-                                  style: TextStyle(
+                                Label(
+                                  text: LocaleKeys.id.tr(),
+                                  style: const TextStyle(
                                       fontSize: 17,
                                       color: AppColors.PRIMARY_COLOR,
                                       fontWeight: FontWeight.w600),
@@ -551,10 +379,12 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
                                         ImageValidation(
+                                          isAuthentcation: true,
                                           validator: (value) {
                                             return registerRider.validation(
-                                                message:
-                                                    "This field is required.",
+                                                message: LocaleKeys
+                                                    .thisFieldIsRequired
+                                                    .tr(),
                                                 condition: registerRider
                                                         .model.idImageInFront ==
                                                     null);
@@ -569,14 +399,16 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                                         ),
                                         const Sizer(),
                                         ImageValidation(
+                                          isAuthentcation: true,
                                           onTap: (image) {
                                             registerRider
                                                 .pickIdBehindImage(image);
                                           },
                                           validator: (value) {
                                             return registerRider.validation(
-                                                message:
-                                                    "This field is required.",
+                                                message: LocaleKeys
+                                                    .thisFieldIsRequired
+                                                    .tr(),
                                                 condition: registerRider.model
                                                         .idImageInBehind ==
                                                     null);
@@ -646,7 +478,9 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                                     },
                                     validator: (value) {
                                       return registerRider.validation(
-                                          message: "This field is required.",
+                                          message: LocaleKeys
+                                              .thisFieldIsRequired
+                                              .tr(),
                                           condition: registerRider
                                                   .model.drivingImageInFront ==
                                               null);
@@ -662,7 +496,9 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                                     },
                                     validator: (value) {
                                       return registerRider.validation(
-                                          message: "This field is required.",
+                                          message: LocaleKeys
+                                              .thisFieldIsRequired
+                                              .tr(),
                                           condition: registerRider
                                                   .model.drivingImageBehind ==
                                               null);
@@ -718,7 +554,9 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                                     },
                                     validator: (value) {
                                       return registerRider.validation(
-                                          message: "This field is required.",
+                                          message: LocaleKeys
+                                              .thisFieldIsRequired
+                                              .tr(),
                                           condition: registerRider
                                                   .model.licenseImageInFront ==
                                               null);
@@ -734,7 +572,9 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                                     },
                                     validator: (value) {
                                       return registerRider.validation(
-                                          message: "This field is required.",
+                                          message: LocaleKeys
+                                              .thisFieldIsRequired
+                                              .tr(),
                                           condition: registerRider
                                                   .model.licenseImgeBehind ==
                                               null);
@@ -774,13 +614,13 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                     child: DefaultTextFormField(
                       validator: (p0) {
                         if (p0 == null || p0.isEmpty) {
-                          return "This field is required!";
+                          return LocaleKeys.thisFieldIsRequired.tr();
                         }
                         return null;
                       },
                       currentController: idNumberController,
                       currentFocusNode: idNumberFocusNode,
-                      hint: "ID Number",
+                      hint: LocaleKeys.idNumber.tr(),
                     ),
                   ),
                   const SizedBox(
@@ -790,13 +630,13 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                     child: DefaultTextFormField(
                       validator: (p0) {
                         if (p0 == null || p0.isEmpty) {
-                          return "This field is required!";
+                          return LocaleKeys.thisFieldIsRequired.tr();
                         }
                         return null;
                       },
                       currentController: plateNumberController,
                       currentFocusNode: plateNumberFocusNode,
-                      hint: "Plate information",
+                      hint: LocaleKeys.plateInformation.tr(),
                     ),
                   ),
                 ],
@@ -812,7 +652,7 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                 },
                 validator: (value) {
                   if (registerRider.model.idExpiryDate == null) {
-                    return "This Faild is required!";
+                    return LocaleKeys.thisFieldIsRequired.tr();
                   }
                   return null;
                 },
@@ -829,11 +669,11 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
               CreateDoctorIDExpiryDatePicker(
                 validator: (value) {
                   if (registerRider.model.drvingExpiryDate == null) {
-                    return "This Faild is required!";
+                    return LocaleKeys.thisFieldIsRequired.tr();
                   }
                   return null;
                 },
-                title: "Driving License Expiry Date",
+                title: LocaleKeys.drivingLicenseExpiryDate.tr(),
                 textStyle: const TextStyle(
                     fontSize: 17,
                     color: AppColors.PRIMARY_COLOR,
@@ -851,12 +691,12 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
               CreateDoctorIDExpiryDatePicker(
                 validator: (value) {
                   if (registerRider.model.licenseExpiryDate == null) {
-                    return "This Faild is required!";
+                    return LocaleKeys.thisFieldIsRequired.tr();
                   }
                   return null;
                 },
                 borderWidth: 1,
-                title: "License Expiry Date",
+                title: LocaleKeys.licenseExpiryDate.tr(),
                 textStyle: const TextStyle(
                     fontSize: 17,
                     color: AppColors.PRIMARY_COLOR,
@@ -906,9 +746,9 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Label(
-                                  text: "Drag analysis",
-                                  style: TextStyle(
+                                Label(
+                                  text: LocaleKeys.dragAnalysis.tr(),
+                                  style: const TextStyle(
                                       fontSize: 17,
                                       color: AppColors.PRIMARY_COLOR,
                                       fontWeight: FontWeight.w600),
@@ -921,7 +761,8 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                                   },
                                   validator: (value) {
                                     return registerRider.validation(
-                                        message: "This field is required.",
+                                        message:
+                                            LocaleKeys.thisFieldIsRequired.tr(),
                                         condition: registerRider
                                                 .model.drivingImageInFront ==
                                             null);
@@ -964,9 +805,9 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Label(
-                                  text: "Drag analysis",
-                                  style: TextStyle(
+                                Label(
+                                  text: LocaleKeys.dragAnalysis.tr(),
+                                  style: const TextStyle(
                                       fontSize: 17,
                                       color: AppColors.PRIMARY_COLOR,
                                       fontWeight: FontWeight.w600),
@@ -979,7 +820,8 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                                   },
                                   validator: (value) {
                                     return registerRider.validation(
-                                        message: "This field is required.",
+                                        message:
+                                            LocaleKeys.thisFieldIsRequired.tr(),
                                         condition: registerRider
                                                 .model.drivingImageInFront ==
                                             null);
@@ -996,9 +838,9 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Label(
-                                  text: "Drag analysis",
-                                  style: TextStyle(
+                                Label(
+                                  text: LocaleKeys.dragAnalysis.tr(),
+                                  style: const TextStyle(
                                       fontSize: 17,
                                       color: AppColors.PRIMARY_COLOR,
                                       fontWeight: FontWeight.w600),
@@ -1011,7 +853,8 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                                   },
                                   validator: (value) {
                                     return registerRider.validation(
-                                        message: "This field is required.",
+                                        message:
+                                            LocaleKeys.thisFieldIsRequired.tr(),
                                         condition: registerRider
                                                 .model.drivingImageInFront ==
                                             null);

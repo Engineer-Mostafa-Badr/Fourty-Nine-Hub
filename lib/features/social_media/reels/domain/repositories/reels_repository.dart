@@ -16,16 +16,20 @@ import '../../../../../core/error/failure.dart';
 
 abstract class ReelsRepository {
   Future<Either<Failure, ReelsResponse>> getExploreReels(int page);
-  Future<Either<Failure, AddCommentResponse>> addComment(AddReelCommentParams params);
+  Future<Either<Failure, AddCommentResponse>> addComment(
+      AddReelCommentParams params);
   Future<Either<Failure, GetCommentsResponse>> getComments(String reelId);
   Future<Either<Failure, String>> toggleCommentLike(String commentId);
-  Future<Either<Failure, ReelsForAudioResponse>> getReelsWithSameAudio(ReelsWithSameAudioParams params);
-  Future<Either<Failure, AddCommentResponse>> addReply(AddReelReplyParams params);
+  Future<Either<Failure, ReelsForAudioResponse>> getReelsWithSameAudio(
+      ReelsWithSameAudioParams params);
+  Future<Either<Failure, AddCommentResponse>> addReply(
+      AddReelReplyParams params);
   Future<Either<Failure, ReelsResponse>> getFollowersReels(int page);
   Future<Either<Failure, ReelSaveResponse>> saveReel(String reelId);
   Future<Either<Failure, ReelShareResponse>> shareReel(String reelId);
   Future<Either<Failure, ReelLikeResponse>> likeReel(String reelId);
   // Future<Either<Failure, List<ReelEntity>>> fetchReels(int page);
   Future<Either<Failure, bool>> createReel(CreateReelParams params);
-  Future<Either<Failure, bool>> createAdvertisement(CreateAdvertisementParams params);
+  Future<Either<Failure, bool>> createAdvertisement(
+      CreateAdvertisementParams params);
 }

@@ -22,8 +22,8 @@ class SearchServiceLocator {
         .registerLazySingleton<FetchSearchUseCase>(() => FetchSearchUseCase(
               serviceLocator(),
             ));
-    serviceLocator
-        .registerLazySingleton<FetchUserSearchUseCase>(() => FetchUserSearchUseCase(
+    serviceLocator.registerLazySingleton<FetchUserSearchUseCase>(
+        () => FetchUserSearchUseCase(
               serviceLocator(),
             ));
 

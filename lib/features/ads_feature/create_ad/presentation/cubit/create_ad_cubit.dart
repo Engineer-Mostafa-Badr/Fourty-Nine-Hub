@@ -40,9 +40,9 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   List<SelectionEntity> values = [];
 
   String? title, description, price, priceFrom, priceTo, phone;
-  TextEditingController titleController=TextEditingController();
-  TextEditingController descController=TextEditingController();
-  TextEditingController phoneController=TextEditingController();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
   final formState = GlobalKey<FormState>();
   final formStatic = GlobalKey<FormState>();
 
@@ -119,19 +119,19 @@ class CreateAdCubit extends Cubit<CreateAdState> {
 
   void uploadImage({required String subCategoryId}) async {
     emit(state.copyWith(status: CreateAdStates.imageUploading));
-    final mediaResponse = await UploadFile().uploadImage(
-        subCategoryId: subCategoryId,
-        onUploaded: (UploadFileEntity media) {
-          final images = state.images ?? [];
-          images.add(media);
-          emit(
-              state.copyWith(images: images, status: CreateAdStates.initState));
-        }).then((value) {
-          if(value==null){
-            emit(
-                state.copyWith( status: CreateAdStates.initState));
-
-          }
+    final mediaResponse = await UploadFile()
+        .uploadImage(
+            subCategoryId: subCategoryId,
+            onUploaded: (UploadFileEntity media) {
+              final images = state.images ?? [];
+              images.add(media);
+              emit(state.copyWith(
+                  images: images, status: CreateAdStates.initState));
+            })
+        .then((value) {
+      if (value == null) {
+        emit(state.copyWith(status: CreateAdStates.initState));
+      }
     });
     mediaResponse?.fold(
         (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
@@ -162,11 +162,13 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     print(categorize.subCategory.hasAuction);
 
     String type = '';
-    if(categorize.mainCategory.nameEn=='Dating'&& state.isMale == true){
-      type='male';
-    }else if(categorize.mainCategory.nameEn=='Dating'&& state.isMale == false){
-      type='female';
-    }else if (categorize.subCategory.hasAuction == false && state.isUser == false) {
+    if (categorize.mainCategory.nameEn == 'Dating' && state.isMale == true) {
+      type = 'male';
+    } else if (categorize.mainCategory.nameEn == 'Dating' &&
+        state.isMale == false) {
+      type = 'female';
+    } else if (categorize.subCategory.hasAuction == false &&
+        state.isUser == false) {
       type = "provider";
     } else if (categorize.subCategory.hasAuction == false &&
         state.isUser == true) {
@@ -233,7 +235,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   void filterAds(
       {required CategorizationEntity categorize,
       required BuildContext context}) async {
-    if ((formState.currentState?.validate() ?? false) ) {
+    if ((formState.currentState?.validate() ?? false)) {
       print("ss");
       List<CreateAdEntity> details = [];
       for (int i = 0; i < (state.filterAdProperties?.length ?? 0); i++) {
@@ -244,17 +246,23 @@ class CreateAdCubit extends Cubit<CreateAdState> {
                 nameEn: state.selections![i].nameEn,
                 type: state.filterAdProperties![i].type)));
       }
-      String priceId = (state.filterAdProperties!=null&&state.filterAdProperties!.isNotEmpty)?state.filterAdProperties
-              ?.firstWhere((element) =>
-                  element.nameAr == 'السعر' || element.nameAr == 'الراتب')
-              .id ??
-          '':'';
-      List<CreateAdEntity> selectedDetails =details.isNotEmpty? details
-          .where((element) =>
-              element.value.nameAr.isNotEmpty && element.propId != priceId)
-          .toList():[];
-      CreateAdEntity? price =details.isNotEmpty?
-          details.firstWhere((element) => element.propId == priceId):null;
+      String priceId = (state.filterAdProperties != null &&
+              state.filterAdProperties!.isNotEmpty)
+          ? state.filterAdProperties
+                  ?.firstWhere((element) =>
+                      element.nameAr == 'السعر' || element.nameAr == 'الراتب')
+                  .id ??
+              ''
+          : '';
+      List<CreateAdEntity> selectedDetails = details.isNotEmpty
+          ? details
+              .where((element) =>
+                  element.value.nameAr.isNotEmpty && element.propId != priceId)
+              .toList()
+          : [];
+      CreateAdEntity? price = details.isNotEmpty
+          ? details.firstWhere((element) => element.propId == priceId)
+          : null;
       for (var item in selectedDetails) {
         print(item.toJson());
       }
@@ -280,9 +288,10 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     }
   }
 
-  void filterGovernorateAds({required CategorizationEntity categorize,
-    required BuildContext context})async{
-    if(state.governorate !=''&&state.city != ''){
+  void filterGovernorateAds(
+      {required CategorizationEntity categorize,
+      required BuildContext context}) async {
+    if (state.governorate != '' && state.city != '') {
       FilterModel model = FilterModel(
           cityId: state.city ?? '',
           governorateId: state.governorate ?? '',
@@ -291,11 +300,11 @@ class CreateAdCubit extends Cubit<CreateAdState> {
           subCategoryId: categorize.subCategory.id);
       final response = await _filterAdUseCase(model);
       response.fold(
-              (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
-              (r) {
-            context.pop(model);
-          });
-    }else if (state.governorate == '') {
+          (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
+          (r) {
+        context.pop(model);
+      });
+    } else if (state.governorate == '') {
       showErrorMessage(context, LocaleKeys.selectGovernorate.localize);
     } else if (state.city == '') {
       showErrorMessage(context, LocaleKeys.selectCity.localize);

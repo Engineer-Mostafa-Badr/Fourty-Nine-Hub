@@ -130,7 +130,7 @@ class ReelsState {
         reelViewSuccess: reelViewSuccess ?? this.reelViewSuccess,
         isLikingComment: isLikingComment ?? this.isLikingComment,
         likeReelCommentErrorMessage:
-        likeReelCommentErrorMessage ?? this.likeReelCommentErrorMessage,
+            likeReelCommentErrorMessage ?? this.likeReelCommentErrorMessage,
         likeReelCommentResponseMessage: likeReelCommentResponseMessage ??
             this.likeReelCommentResponseMessage,
         globalReels: reels ?? globalReels,
@@ -146,25 +146,25 @@ class ReelsState {
         commentResponse: commentResponse ?? this.commentResponse,
         isFetchingComments: isFetchingComments ?? this.isFetchingComments,
         fetchCommentsErrorMessage:
-        fetchCommentsErrorMessage ?? this.fetchCommentsErrorMessage,
+            fetchCommentsErrorMessage ?? this.fetchCommentsErrorMessage,
         fetchedComments: fetchedComments ?? this.fetchedComments,
         isReplyingComment: isReplyingComment ?? this.isReplyingComment,
         replyCommentErrorMessage:
-        replyCommentErrorMessage ?? this.replyCommentErrorMessage,
+            replyCommentErrorMessage ?? this.replyCommentErrorMessage,
         replyCommentResponse: replyCommentResponse ?? this.replyCommentResponse,
         isUploadingReel: isUploadingReel ?? this.isUploadingReel,
         uploadReelErrorMessage:
-        uploadReelErrorMessage ?? this.uploadReelErrorMessage,
+            uploadReelErrorMessage ?? this.uploadReelErrorMessage,
         uploadReelSuccess: uploadReelSuccess ?? this.uploadReelSuccess,
         reelSaveResponse: reelSaveResponse ?? this.reelSaveResponse,
         reelShareResponse: reelShareResponse ?? this.reelShareResponse,
         playingIndex: playingIndex ?? this.playingIndex,
         reelsForFollower: reelsForFollower ?? this.reelsForFollower,
         reelsForFollowerCurrentPage:
-        reelsForFollowerCurrentPage ?? this.reelsForFollowerCurrentPage,
+            reelsForFollowerCurrentPage ?? this.reelsForFollowerCurrentPage,
         reelsForFollowerHasReachedMax:
-        reelsForFollowerHasReachedMax ?? this.reelsForFollowerHasReachedMax,
+            reelsForFollowerHasReachedMax ?? this.reelsForFollowerHasReachedMax,
         reelsForFollowerIsLoading:
-        reelsForFollowerIsLoading ?? this.reelsForFollowerIsLoading);
+            reelsForFollowerIsLoading ?? this.reelsForFollowerIsLoading);
   }
 }

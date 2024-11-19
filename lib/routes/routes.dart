@@ -161,6 +161,8 @@ abstract class Routes {
   static const SNAP = '/Snap';
   static const SEEALLBROADCASTS = '/SeeAllBroadcasts';
   static const BROADCAST = '/Broadcast';
+  static const TRIPINFOBYRIDERSCREEN = '/Ride/TripInfoByRiderScreen';
+  static const TRIPINFOBYDRIVERSCREEN = '/Ride/TripInfoByDriverScreen';
 }
 
 abstract class Paths {
@@ -311,4 +313,6 @@ abstract class Paths {
   static const MyRating = 'MyRating';
   static const TripRating = 'TripRating';
   static const EDITDRIVERSCREEN = 'EditDriver';
+  static const TRIPINFOBYRIDERSCREEN = 'TRIPINFOBYRIDERSCREEN';
+  static const TRIPINFOBYDRIVERSCREEN = 'TRIPINFOBYDRIVERSCREEN';
 }

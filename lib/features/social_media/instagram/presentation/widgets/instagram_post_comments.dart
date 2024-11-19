@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -35,7 +34,7 @@ class InstagramPostComments extends StatefulWidget {
   const InstagramPostComments({
     super.key,
     required this.postId,
-    this.isShown=false,
+    this.isShown = false,
     required this.onAddComment,
     required this.onEditComment,
     required this.onDeleteComment,
@@ -121,81 +120,83 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                         const CupertinoActivityIndicator()),
               ),
             ),
-            if(widget.isShown==false)Container(
-                height: kToolbarHeight,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Row(
-                  children: [
-                    const ProfileImage(
-                      accountId: 0,
-                      userId: '',
-                    ),
-                    const Sizer(),
-                    Expanded(
-                        child: TextFormField(
-                      maxLines: null,
-                      controller: commentTextController,
-                      onChanged: (v) {
-                        setState(() {});
-                      },
-                      style: Styles.headerText(fontSize: 26),
-                      decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        contentPadding: const EdgeInsets.all(5),
-                        hintText: '${LocaleKeys.typeYourComment.localize} ....',
-                        hintStyle: Styles.mediumText(),
+            if (widget.isShown == false)
+              Container(
+                  height: kToolbarHeight,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  child: Row(
+                    children: [
+                      const ProfileImage(
+                        accountId: 0,
+                        userId: '',
                       ),
-                    )),
-                    const Sizer(),
-                    if (commentTextController.text.isNotEmpty)
-                      IconAppButton(
-                          icon: Icons.send,
-                          size: 20,
-                          isCircle: true,
-                          onPressed: () async {
-                            CommentEntity data = await widget.onAddComment(
-                              PostCommentParams(
-                                  postId: widget.postId,
-                                  content: commentTextController.text),
-                            );
-                            controller.commentsPagingController.itemList
-                                ?.insert(
-                              0,
-                              CommentModel(
-                                id: data.id,
-                                content: commentTextController.text,
-                                post: widget.postId,
-                                createdAt: DateTime.now(),
-                                loveCount: data.loveCount,
-                                angryCount: data.angryCount,
-                                likesCount: data.likesCount,
-                                repliesCount: data.repliesCount,
-                                sadCount: data.sadCount,
-                                wowCount: data.wowCount,
-                                isAngry: false,
-                                isLikes: false,
-                                isLove: false,
-                                isSad: false,
-                                isWow: false,
-                                user: TwitterUserEntity(
-                                  id: user!.id,
-                                  firstName: user.firstName,
-                                  lastName: user.lastName,
+                      const Sizer(),
+                      Expanded(
+                          child: TextFormField(
+                        maxLines: null,
+                        controller: commentTextController,
+                        onChanged: (v) {
+                          setState(() {});
+                        },
+                        style: Styles.headerText(fontSize: 26),
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          contentPadding: const EdgeInsets.all(5),
+                          hintText:
+                              '${LocaleKeys.typeYourComment.localize} ....',
+                          hintStyle: Styles.mediumText(),
+                        ),
+                      )),
+                      const Sizer(),
+                      if (commentTextController.text.isNotEmpty)
+                        IconAppButton(
+                            icon: Icons.send,
+                            size: 20,
+                            isCircle: true,
+                            onPressed: () async {
+                              CommentEntity data = await widget.onAddComment(
+                                PostCommentParams(
+                                    postId: widget.postId,
+                                    content: commentTextController.text),
+                              );
+                              controller.commentsPagingController.itemList
+                                  ?.insert(
+                                0,
+                                CommentModel(
+                                  id: data.id,
+                                  content: commentTextController.text,
+                                  post: widget.postId,
                                   createdAt: DateTime.now(),
-                                  image: user.profilePicture ?? '',
-                                  email: user.email ?? '',
-                                  isDocumented: false,
+                                  loveCount: data.loveCount,
+                                  angryCount: data.angryCount,
+                                  likesCount: data.likesCount,
+                                  repliesCount: data.repliesCount,
+                                  sadCount: data.sadCount,
+                                  wowCount: data.wowCount,
+                                  isAngry: false,
+                                  isLikes: false,
+                                  isLove: false,
+                                  isSad: false,
+                                  isWow: false,
+                                  user: TwitterUserEntity(
+                                    id: user!.id,
+                                    firstName: user.firstName,
+                                    lastName: user.lastName,
+                                    createdAt: DateTime.now(),
+                                    image: user.profilePicture ?? '',
+                                    email: user.email ?? '',
+                                    isDocumented: false,
+                                  ),
                                 ),
-                              ),
-                            );
-                            commentTextController.clear();
-                            FocusScope.of(context).unfocus();
-                            setState(() {});
-                          })
-                  ],
-                )),
+                              );
+                              commentTextController.clear();
+                              FocusScope.of(context).unfocus();
+                              setState(() {});
+                            })
+                    ],
+                  )),
           ],
         ),
       );

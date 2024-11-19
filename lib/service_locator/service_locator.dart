@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -5,8 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/data/datasources/local/database/local_database_data_source.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_client_helper.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_client_helper_imp.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/subscription_interceptor.dart';
@@ -19,7 +19,6 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_t
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/repositories/StoriesRpo.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/repo/tinder_repo.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
@@ -40,7 +39,6 @@ import 'package:fourtyninehub/service_locator/setting_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
 import 'package:fourtyninehub/service_locator/star_service_locator.dart';
 import 'package:fourtyninehub/service_locator/stories_service_locator.dart';
-import 'package:fourtyninehub/service_locator/star_service_locator.dart';
 import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
 import 'package:fourtyninehub/service_locator/transfer_money_service_locator.dart';
 import 'package:fourtyninehub/service_locator/trip_join_service_locator.dart';
@@ -95,6 +93,7 @@ class DI {
     await SQFLiteDataSource.instance.initDatabase();
     final token = await CacheManager.getAccessToken();
     // socket
+    log(token ?? "", name: "Socket Token");
     serviceLocator.registerLazySingleton<Socket>(() => io(
         'https://49dev.com',
         OptionBuilder()
@@ -146,7 +145,6 @@ class DI {
       () => StoryRepository(),
     );
 
-
     // serviceLocator
     //     .registerFactory<SliderCubit>(() => SliderCubit(serviceLocator()));
     //
@@ -188,9 +186,7 @@ class DI {
         serviceLocator(),
       ),
     );
-    serviceLocator.registerLazySingleton<ApiClientHelper>(
-      () => ApiClientHelperImp(),
-    );
+
     //cacheService
     serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     // base repo

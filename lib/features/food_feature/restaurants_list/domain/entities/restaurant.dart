@@ -277,7 +277,7 @@ class Restaurant extends Equatable {
 
   @JsonKey(name: "enableOrDisableChat")
   final String?
-  enableOrDisableChat; // Adjust based on the actual data type you want to support.
+      enableOrDisableChat; // Adjust based on the actual data type you want to support.
 
   @JsonKey(name: "description")
   final String? description;
@@ -302,28 +302,26 @@ class Restaurant extends Equatable {
     this.description,
   });
 
-
-
   @override
   List<Object?> get props => [
-    id,
-    name,
-    number,
-    userIdModel,
-    restaurantMedia,
-    government,
-    city,
-    isActive,
-    subscriptionType,
-    totalRating,
-    numberOfReviews,
-    menu,
-    subcategoryId,
-    mainCategoryId,
-    isFavorite,
-    enableOrDisableChat,
-    description,
-  ];
+        id,
+        name,
+        number,
+        userIdModel,
+        restaurantMedia,
+        government,
+        city,
+        isActive,
+        subscriptionType,
+        totalRating,
+        numberOfReviews,
+        menu,
+        subcategoryId,
+        mainCategoryId,
+        isFavorite,
+        enableOrDisableChat,
+        description,
+      ];
 }
 
 class UserIdModel {
@@ -337,6 +335,4 @@ class UserIdModel {
     this.id,
     this.twitterDocumentation,
   });
-
-
 }

@@ -48,29 +48,29 @@ part 'restaurant_2_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Restaurant2Model extends Restaurant {
-    const Restaurant2Model({
-        super.id,
-        super.name,
-        super.number,  // Corresponds to "phone" in the JSON
-        super.subscriptionType,  // Added subscriptionType from JSON
-        super.city,  // City object
-        super.mainCategoryId,  // MainCategory object
-        super.subcategoryId,  // SubCategory object
-        super.government,  // Government object
-        super.isActive,  // IsActive status
-        super.menu,  // Menu List
-        super.numberOfReviews,
-        super.restaurantMedia,  // List of Restaurant Media
-        super.totalRating,
-        super.description,  // Description is not in your JSON, so this may not be used
-        super.isFavorite,
-        super.enableOrDisableChat,  // Chat enabled/disabled status
-    });
+  const Restaurant2Model({
+    super.id,
+    super.name,
+    super.number, // Corresponds to "phone" in the JSON
+    super.subscriptionType, // Added subscriptionType from JSON
+    super.city, // City object
+    super.mainCategoryId, // MainCategory object
+    super.subcategoryId, // SubCategory object
+    super.government, // Government object
+    super.isActive, // IsActive status
+    super.menu, // Menu List
+    super.numberOfReviews,
+    super.restaurantMedia, // List of Restaurant Media
+    super.totalRating,
+    super.description, // Description is not in your JSON, so this may not be used
+    super.isFavorite,
+    super.enableOrDisableChat, // Chat enabled/disabled status
+  });
 
-    // Factory method for creating an instance from a JSON map
-    factory Restaurant2Model.fromJson(Map<String, dynamic> json) =>
-        _$Restaurant2ModelFromJson(json);
+  // Factory method for creating an instance from a JSON map
+  factory Restaurant2Model.fromJson(Map<String, dynamic> json) =>
+      _$Restaurant2ModelFromJson(json);
 
-    // Method to convert the instance to JSON
-    Map<String, dynamic> toJson() => _$Restaurant2ModelToJson(this);
+  // Method to convert the instance to JSON
+  Map<String, dynamic> toJson() => _$Restaurant2ModelToJson(this);
 }

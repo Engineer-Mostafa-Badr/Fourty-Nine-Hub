@@ -35,7 +35,9 @@ class CreateGroupWithContactCart extends StatelessWidget {
               '${LocaleKeys.createGroupWith.tr()} Ahmed Nasr',
               style: Styles.mediumText(
                 fontWeight: FontWeight.w600,
-                color:context.isDarkMode ? AppColors.BACKGROUND_COLOR: AppColors.PRIMARY_COLOR,
+                color: context.isDarkMode
+                    ? AppColors.BACKGROUND_COLOR
+                    : AppColors.PRIMARY_COLOR,
               ),
             ),
           ),

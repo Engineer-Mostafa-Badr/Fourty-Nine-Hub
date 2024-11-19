@@ -17,7 +17,8 @@ import '../models/restaurant_model.dart';
 abstract class RestaurantsRemoteDataSource {
   Future<Either<Failure, bool>> createRestaurant(CreateRestaurantParams params);
   Future<Either<Failure, bool>> changeConnectivity();
-  Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(PaginationParams params);
+  Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(
+      PaginationParams params);
   Future<Either<Failure, List<FoodCategoryModel>>> getFoodCategories();
   Future<Either<Failure, List<FoodCategoryModel>>>
       getMealCategoriesWithCountRestaurants(
@@ -195,25 +196,24 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
 
   @override
   Future<Either<Failure, bool>> changeConnectivity() async {
-    final response =
-        await _apiConsumer.patch(EndPoints.changeConnectivity);
+    final response = await _apiConsumer.patch(EndPoints.changeConnectivity);
 
     return response.fold(
-          (Failure failure) {
+      (Failure failure) {
         return Left(failure);
       },
-          (data) {
+      (data) {
         return Right(data['status']);
       },
     );
   }
 
   @override
-  Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(PaginationParams params) async {
+  Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(
+      PaginationParams params) async {
     final response =
         await _apiConsumer.get(EndPoints.foodExpiredOrders(params));
-    return response.fold(
-            (failure) => Left(failure),
-            (data) => Right(ExpiredRequestsResponse.fromJson(data)));
+    return response.fold((failure) => Left(failure),
+        (data) => Right(ExpiredRequestsResponse.fromJson(data)));
   }
 }

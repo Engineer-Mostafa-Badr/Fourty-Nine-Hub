@@ -63,7 +63,9 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     this._toggleFavoriteCategoryUseCase,
     this._isResturantUseCase,
     this._getMealCategoriesWithCountRestaurantsUseCase,
-    this.apiConsumer, this._changeConnectivityUseCase, this._getExpiredOrdersUseCase,
+    this.apiConsumer,
+    this._changeConnectivityUseCase,
+    this._getExpiredOrdersUseCase,
   ) : super(const RestaurantsListState());
 
   final service = MainServicesEnum.food;
@@ -80,19 +82,19 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   Future<void> loadData() async {
     await _getUser();
     // if (serviceLocator<UserCubit>().isLoggedIn) {
-      // await _getMainCategoryDetails();
-      // await isRestaurant();
-      // await _getMealCategoriesWithCountRestaurants();
-      // // await _getNumOfRestaurants();
-      // await getAllRestaurant();
+    // await _getMainCategoryDetails();
+    // await isRestaurant();
+    // await _getMealCategoriesWithCountRestaurants();
+    // // await _getNumOfRestaurants();
+    // await getAllRestaurant();
     emit(state.copyWith(status: RestaurantsListStates.loading));
-      Future.wait([
-        _getMainCategoryDetails(),
-        isRestaurant(),
-        _getMealCategoriesWithCountRestaurants(),
-        getAllRestaurant(),
-        // _getNumOfRestaurants(),
-      ]);
+    Future.wait([
+      _getMainCategoryDetails(),
+      isRestaurant(),
+      _getMealCategoriesWithCountRestaurants(),
+      getAllRestaurant(),
+      // _getNumOfRestaurants(),
+    ]);
     emit(state.copyWith(status: RestaurantsListStates.success));
     // }
   }
@@ -120,8 +122,8 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     response.fold(
         (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
         (data) async {
-          await _getMainCategoryDetails();
-        });
+      await _getMainCategoryDetails();
+    });
   }
 
   // Future<void> toggleFavoriteCategory(String categoryId) async {
@@ -167,12 +169,12 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   }
 
   Future<void> changeConnectivityStatus(isActive) async {
-    final response = await _changeConnectivityUseCase(params:const NoParams());
+    final response = await _changeConnectivityUseCase(params: const NoParams());
     response.fold(
-            (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
-            (data) async {
-              await isRestaurant();
-            });
+        (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
+        (data) async {
+      await isRestaurant();
+    });
 
     // const url = 'https://49dev.com/api/v1/restaurants/modify-active';
     //
@@ -264,12 +266,12 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
 
   Future<void> _getMainCategoryDetails() async {
     // if (user != null) {
-      final response = await _getMainCategoryDetailsUseCase(service.id);
-      response.fold(
-          (failure) =>
-              emit(state.copyWith(status: RestaurantsListStates.error)),
-          (data) => emit(state.copyWith(
-              mainCategory: data, )));
+    final response = await _getMainCategoryDetailsUseCase(service.id);
+    response.fold(
+        (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
+        (data) => emit(state.copyWith(
+              mainCategory: data,
+            )));
     // }
   }
 
@@ -279,17 +281,18 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
 
   Future<void> getExpiredOrders({int page = 1}) async {
     emit(state.copyWith(status: RestaurantsListStates.loading));
-    final response = await _getExpiredOrdersUseCase(params:PaginationParams(page: page, limit: 50));
+    final response = await _getExpiredOrdersUseCase(
+        params: PaginationParams(page: page, limit: 50));
     response.fold(
-            (failure) =>
-                emit(state.copyWith(
-                  status: RestaurantsListStates.error,
-                  failure: failure,
-                )),
-            (data) =>  emit(state.copyWith(
-              status: RestaurantsListStates.success,
-              expiredRequestsResponse: data,
-            )),);
+      (failure) => emit(state.copyWith(
+        status: RestaurantsListStates.error,
+        failure: failure,
+      )),
+      (data) => emit(state.copyWith(
+        status: RestaurantsListStates.success,
+        expiredRequestsResponse: data,
+      )),
+    );
   }
 }
 

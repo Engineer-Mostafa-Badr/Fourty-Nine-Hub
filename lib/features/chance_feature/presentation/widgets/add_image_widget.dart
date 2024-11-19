@@ -6,20 +6,18 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
-
 class AddImageWidget extends StatelessWidget {
   const AddImageWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){},
+      onTap: () {},
       child: Container(
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
-          boxShadow: AppColors.SHADOW_LIGHT,
-          color: Theme.of(context).scaffoldBackgroundColor
-        ),
+            boxShadow: AppColors.SHADOW_LIGHT,
+            color: Theme.of(context).scaffoldBackgroundColor),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -34,11 +32,11 @@ class AddImageWidget extends StatelessWidget {
                 color: AppColors.SECONDARY_COLOR,
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: Text(LocaleKeys.addImages.localize, textAlign: TextAlign.center,
-                  style: Styles.smallText(
-                      color: Colors.white,
-                    fontSize: 50.sp
-                  ) ,),
+              child: Text(
+                LocaleKeys.addImages.localize,
+                textAlign: TextAlign.center,
+                style: Styles.smallText(color: Colors.white, fontSize: 50.sp),
+              ),
             ),
             const SizedBox(height: 20),
           ],

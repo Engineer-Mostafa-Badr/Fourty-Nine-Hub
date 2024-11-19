@@ -1,13 +1,12 @@
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 
-enum StarStates { loading, initial, success,error }
+enum StarStates { loading, initial, success, error }
 
 class StarState {
   final StarStates status;
   final Failure? failure;
   final List<StarEntity>? star;
-
 
   StarState({
     this.status = StarStates.loading,
@@ -25,7 +24,6 @@ class StarState {
       status: status ?? this.status,
       failure: failure ?? this.failure,
       star: star ?? this.star,
-
     );
   }
 }

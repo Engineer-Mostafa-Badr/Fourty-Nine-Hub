@@ -21,10 +21,9 @@ class ProfileSearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 30.w),
-      child: BlocBuilder<SearchCubit,SearchState>(
+      child: BlocBuilder<SearchCubit, SearchState>(
         builder: (BuildContext context, state) {
           final controller = context.read<SearchCubit>();
           if (controller.searchController.text.isNotEmpty) {
@@ -44,16 +43,16 @@ class ProfileSearchView extends StatelessWidget {
                 },
                 itemBuilder: (context, item, index) {
                   return InkWell(
-                    onTap: (){
-                      context.push(Routes.OTHERSACCOUNT,extra: item.id);
-                    },
+                      onTap: () {
+                        context.push(Routes.OTHERSACCOUNT, extra: item.id);
+                      },
                       child: buildItem(item));
                 },
                 noMoreItemsIndicatorBuilder: (context) => Container(),
                 firstPageProgressIndicatorBuilder: (context) =>
-                const CupertinoActivityIndicator(),
+                    const CupertinoActivityIndicator(),
                 newPageProgressIndicatorBuilder: (context) =>
-                const CupertinoActivityIndicator(),
+                    const CupertinoActivityIndicator(),
               ),
             );
           }
@@ -67,19 +66,19 @@ class ProfileSearchView extends StatelessWidget {
   }
 
   Widget buildItem(UserSearchEntity model) => Padding(
-    padding:  EdgeInsets.only(
-      bottom: 15.h,
-    ),
-    child: Row(
+        padding: EdgeInsets.only(
+          bottom: 15.h,
+        ),
+        child: Row(
           children: [
             Container(
               height: 65.h,
               width: 65.w,
-              decoration:  BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: NetworkImage(model.image ??Assets.logo),
+                  image: NetworkImage(model.image ?? Assets.logo),
                 ),
               ),
             ),
@@ -87,7 +86,7 @@ class ProfileSearchView extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                 Label(text: '${model.firstName} ${model.lastName}'),
+                Label(text: '${model.firstName} ${model.lastName}'),
                 Label(
                   text: 'Friend',
                   style: Styles.smallText(
@@ -103,5 +102,5 @@ class ProfileSearchView extends StatelessWidget {
             )
           ],
         ),
-  );
+      );
 }

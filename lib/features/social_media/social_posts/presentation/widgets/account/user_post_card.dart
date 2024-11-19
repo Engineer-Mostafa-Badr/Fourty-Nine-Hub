@@ -600,7 +600,7 @@ class _UserPostCardState extends State<UserPostCard> {
               text: content,
               textAlign: _isArabic(content) ? TextAlign.right : TextAlign.left,
               style: Styles.headerText(
-                //  color: Colors.black,
+                  //  color: Colors.black,
                   fontSize: 30,
                   fontWeight: FontWeight.bold),
             ),

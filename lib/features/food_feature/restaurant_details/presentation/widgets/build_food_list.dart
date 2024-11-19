@@ -12,7 +12,6 @@ class BuildFoodList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
       builder: (context, state) {
-
         final meals = state.meals;
         if (meals == null || meals.isEmpty) {
           return const SizedBox(); // Return an empty widget if meals are null or empty
@@ -22,17 +21,14 @@ class BuildFoodList extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: ListView.builder(
             shrinkWrap: true,
-
             itemCount: meals.length,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-
               final meal = meals[index];
 
               return ItemCard(
                 meal: meal,
                 restaurantId: restaurantId,
-
               );
             },
           ),

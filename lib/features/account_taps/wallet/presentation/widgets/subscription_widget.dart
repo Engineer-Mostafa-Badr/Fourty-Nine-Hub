@@ -37,7 +37,9 @@ class SubscriptionWidget extends StatelessWidget {
     }
 
     // Default to current time if date parsing fails
-    final DateTime egyptTime = createdAt?.toUtc().add(const Duration(hours: 3)) ?? DateTime.now().toUtc().add(const Duration(hours: 3));
+    final DateTime egyptTime =
+        createdAt?.toUtc().add(const Duration(hours: 3)) ??
+            DateTime.now().toUtc().add(const Duration(hours: 3));
     final String formattedDateTime = DateFormat('dd/MM/yyyy').format(egyptTime);
     return Column(
       children: [

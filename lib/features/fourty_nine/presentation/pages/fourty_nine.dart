@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/firebas
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -32,7 +33,6 @@ import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../chance_feature/presentation/pages/chance_view.dart';
 import '../widgets/announce_widget.dart';
 
 class FourtyNineView extends StatefulWidget {
@@ -56,6 +56,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     context
         .read<NotificationSocketIoCubit>()
         .notificationListener(languageCode: 'en');
+    context.read<LocationSocketCubit>().updateDriverLocationOn();
   }
 
   void _setupScrollController() {
@@ -122,7 +123,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             ? null
             : const FloatingButton(
                 changeView: 1,
-          icon: Icons.person,
+                icon: Icons.person,
               ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         drawer: const DrawerWidget(),

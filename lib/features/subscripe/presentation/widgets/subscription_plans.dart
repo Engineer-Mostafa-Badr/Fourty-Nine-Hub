@@ -72,26 +72,26 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               SizedBox(height: 20.h),
               DropdownButtonHideUnderline(
                 child: DropdownMenu<WalletTypes>(
-                  inputDecorationTheme: InputDecorationTheme(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
+                    inputDecorationTheme: InputDecorationTheme(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
                     ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
                     hintText: "Select Wallet",
                     expandedInsets: const EdgeInsets.only(),
                     dropdownMenuEntries: widget.paymentMenthods!
@@ -193,7 +193,8 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                             ? state.wallet?.balance ?? 0
                             : state.wallet?.giftWallet ?? 0;
                     print(walletPrice);
-                    print("state.wallet?.giftWallet${state.wallet?.giftWallet}");
+                    print(
+                        "state.wallet?.giftWallet${state.wallet?.giftWallet}");
                     print(state.wallet?.realAmount);
                     print(state.wallet?.balance);
                     // print(walletPrice);

@@ -51,7 +51,6 @@ class _SubCateogryRideWidgetState extends State<SubCateogryRideWidget> {
                       category: MainCategoryEntity(
                           nameEn: state.model.mainCategory?.nameEn,
                           id: state.model.mainCategory?.mainCategoryId ?? "",
-                          name: "Choose your favorite sub category!",
                           image: state.model.mainCategory?.cover ?? "",
                           isFavorite: true,
                           total: state.model.mainCategory?.driverLength ?? 0,
@@ -86,11 +85,7 @@ class _SubCateogryRideWidgetState extends State<SubCateogryRideWidget> {
                   ],
                 );
               } else {
-                return Container(
-                  width: 12,
-                  height: 12,
-                  color: Colors.red,
-                );
+                return Container();
               }
             },
           );
@@ -109,10 +104,11 @@ class _SubCateogryRideWidgetState extends State<SubCateogryRideWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Label(
-          text: category.name,
-          style: Styles.headerText(fontWeight: FontWeight.w400),
-        ),
+        if (category.name != null)
+          Label(
+            text: category.name ?? "",
+            style: Styles.headerText(fontWeight: FontWeight.w400),
+          ),
         if (category.subcategories?.isNotEmpty ?? false)
           SizedBox(
             height: 80,

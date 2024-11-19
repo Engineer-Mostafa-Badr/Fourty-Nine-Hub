@@ -295,52 +295,53 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
           return Row(
             children: List.generate(
                 2,
-                    (index) => Expanded(
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.grey[100]!,
-                    highlightColor: Colors.white24,
-                    child: Container(
-                      width: 100.h,
-                      height: kToolbarHeight * 2.h,
-                      margin: const EdgeInsets.symmetric(horizontal: 5),
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      decoration: BoxDecoration(
-                        color: AppColors.AUTH_CONTAINER_COLOR,
-                        borderRadius: BorderRadius.circular(20.r),
-                        border: Border.all(color: Colors.grey),
+                (index) => Expanded(
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey[100]!,
+                        highlightColor: Colors.white24,
+                        child: Container(
+                          width: 100.h,
+                          height: kToolbarHeight * 2.h,
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          decoration: BoxDecoration(
+                            color: AppColors.AUTH_CONTAINER_COLOR,
+                            borderRadius: BorderRadius.circular(20.r),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                )),
+                    )),
           );
         } else if (state.status == StateStatus.success) {
           return Row(
             children: [
               subTab.subTab?.carpool == true
                   ? Expanded(
-                child: _buildRideSubCategoryItem(
-                  service: state.data?[0].service ?? RideServicesEnum.pickMe,
-                  title: LocaleKeys.carpool.localize,
-                  image: state.data?[0].image ?? '',
-                  // isFavorite: state.data![0].is,
-                  // numberOfAds: state.data![0].numberOfAds?.toInt(),
-                  route: Routes.CAR_POOL,
-                ),
-              )
+                      child: _buildRideSubCategoryItem(
+                        service:
+                            state.data?[0].service ?? RideServicesEnum.pickMe,
+                        title: LocaleKeys.carpool.localize,
+                        image: state.data?[0].image ?? '',
+                        // isFavorite: state.data![0].is,
+                        // numberOfAds: state.data![0].numberOfAds?.toInt(),
+                        route: Routes.CAR_POOL,
+                      ),
+                    )
                   : const SizedBox.shrink(),
               const Sizer(),
               subTab.subTab?.tripJoin == true
                   ? Expanded(
-                child: _buildRideSubCategoryItem(
-                  service:
-                  state.data?[1].service ?? RideServicesEnum.comeWithYou,
-                  title: LocaleKeys.tripJoin.localize,
-                  image: state.data?[1].image ?? '',
-                  route: Routes.AVAILABLE_TRIPS,
-                  // isFavorite: state.data![1].isFavorite,
-                  // numberOfAds: state.data![1].numberOfAds?.toInt(),
-                ),
-              )
+                      child: _buildRideSubCategoryItem(
+                        service: state.data?[1].service ??
+                            RideServicesEnum.comeWithYou,
+                        title: LocaleKeys.tripJoin.localize,
+                        image: state.data?[1].image ?? '',
+                        route: Routes.AVAILABLE_TRIPS,
+                        // isFavorite: state.data![1].isFavorite,
+                        // numberOfAds: state.data![1].numberOfAds?.toInt(),
+                      ),
+                    )
                   : const SizedBox.shrink(),
             ],
           );
@@ -363,8 +364,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
     return Row(
       children: [
         subTab.subTab?.auction == true
-            ?  itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
-            () => context.push(Routes.MAZADAT), Icons.group)
+            ? itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
+                () => context.push(Routes.MAZADAT), Icons.group)
             : const SizedBox.shrink(),
         const Sizer(),
         subTab.subTab?.installment == true
@@ -520,6 +521,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
       ),
     );
   }
+
   Widget _buildStarWidget() {
     return SizedBox(
       height: kToolbarHeight * .9.h,

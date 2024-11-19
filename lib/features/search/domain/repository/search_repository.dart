@@ -4,7 +4,9 @@ import 'package:fourtyninehub/features/search/domain/entity/main_category_search
 import 'package:fourtyninehub/features/search/domain/entity/user_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 
-abstract class SearchRepository{
-  Future<Either<Failure,List<MainSubCategorySearchEntity>>> fetchSearch(SearchParams params);
-  Future<Either<Failure,List<UserSearchEntity>>> fetchUserSearch(SearchParams params);
+abstract class SearchRepository {
+  Future<Either<Failure, List<MainSubCategorySearchEntity>>> fetchSearch(
+      SearchParams params);
+  Future<Either<Failure, List<UserSearchEntity>>> fetchUserSearch(
+      SearchParams params);
 }

@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -22,7 +21,6 @@ import '../../data/models/new_reels_model.dart';
 import '../controllers/explore_reels_cubit/explore_reels_cubit.dart';
 import 'audio_reel_view.dart';
 import 'package:easy_localization/easy_localization.dart';
-
 
 class InstagramAudioScreen extends StatefulWidget {
   final Audio audio;
@@ -150,7 +148,8 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                 () async {
                   try {
                     context.read<ReelsCubit>().saveReel(widget.reel.id).then(
-                        (val) => showSnackBarAfterBuild(context: context,
+                        (val) => showSnackBarAfterBuild(
+                            context: context,
                             message: val == 'unsaved successfully'
                                 ? LocaleKeys.reel_unsaved.tr()
                                 : LocaleKeys.reel_saved.tr(),
@@ -171,20 +170,19 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
             iconColor: AppColors.PRIMARY_COLOR_DARK,
             () async {
               await showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              backgroundColor: Colors.white,
-              builder: (context) {
-                return SizedBox(
-                  height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
-                  child: ReportView(
-                    id: widget.reel.id,
-                    categoryId: '66684135dbb427ee42aa0141',
-                  ),
-                );
-              },
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.white,
+                builder: (context) {
+                  return SizedBox(
+                    height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+                    child: ReportView(
+                      id: widget.reel.id,
+                      categoryId: '66684135dbb427ee42aa0141',
+                    ),
+                  );
+                },
               );
-
             },
           ),
           const SizedBox(width: 8),
@@ -269,7 +267,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                   child: ElevatedButton(
                     style: const ButtonStyle(
                         backgroundColor:
-                        MaterialStatePropertyAll(AppColors.PRIMARY_COLOR)),
+                            WidgetStatePropertyAll(AppColors.PRIMARY_COLOR)),
                     onPressed: () {
                       _player.dispose();
                       Navigator.push(

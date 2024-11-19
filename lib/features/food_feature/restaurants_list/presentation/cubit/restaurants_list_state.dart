@@ -39,13 +39,14 @@ class RestaurantsListState {
   final MainCategoryEntity? mainCategory;
   final IsRestaurantModel? isResturant;
   final List<Restaurant2Model>?
-  allRestaurant; // Using Restaurant2Model for consistency
+      allRestaurant; // Using Restaurant2Model for consistency
   final List<RestaurantEntity>? trendingRestaurants;
   final List<Restaurant2Model>? subCategories;
   final List<FoodCategoryEntity>? mealCategories;
   final List<SubCategoryEntity>? categories;
 
-  const RestaurantsListState({this.expiredRequestsResponse,
+  const RestaurantsListState({
+    this.expiredRequestsResponse,
     this.status = RestaurantsListStates.loading,
     this.mealCategories,
     this.failure,
@@ -67,7 +68,7 @@ class RestaurantsListState {
     List<RestaurantEntity>? nearByRestaurants,
     List<Restaurant2Model>? subCategories,
     List<Restaurant2Model>?
-    allRestaurant, // Using Restaurant2Model for consistency
+        allRestaurant, // Using Restaurant2Model for consistency
     int? numOfRestaurants,
     Banner? banner,
     MainCategoryEntity? mainCategory,
@@ -79,7 +80,7 @@ class RestaurantsListState {
     return RestaurantsListState(
       status: status ?? this.status,
       expiredRequestsResponse:
-      expiredRequestsResponse ?? this.expiredRequestsResponse,
+          expiredRequestsResponse ?? this.expiredRequestsResponse,
       mealCategories: mealCategories ?? this.mealCategories,
       numOfRestaurants: numOfRestaurants ?? this.numOfRestaurants,
       allRestaurant: allRestaurant ?? this.allRestaurant,

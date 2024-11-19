@@ -61,8 +61,7 @@ class PostEntity {
   String? createAt;
   Duration get publishedDuration => DateTime.now().difference(createdAt!);
 
-  String get sinceTime =>
-      DurationHelper().getTimeDifference( createdAt!);
+  String get sinceTime => DurationHelper().getTimeDifference(createdAt!);
 
   PostEntity({
     required this.id,

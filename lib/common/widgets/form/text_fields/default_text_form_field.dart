@@ -20,6 +20,7 @@ class DefaultTextFormField extends MainTextFormField {
     // super.contentPadding,
     super.style,
     super.onTap,
+    super.isAuthentcation,
     super.labelWidget,
     super.label,
     super.prefix,

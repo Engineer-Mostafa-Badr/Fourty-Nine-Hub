@@ -410,7 +410,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-         FaIcon(
+        FaIcon(
           Icons.thumb_up_alt_outlined,
           color: Colors.grey,
           size: 32.sp,

@@ -102,11 +102,15 @@ class HealthMedicalServiceCard extends StatelessWidget {
                     color: Theme.of(context).scaffoldBackgroundColor,
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
-                      if (context.read<HealthCubit>().state.mainCategory != null) {
+                      if (context.read<HealthCubit>().state.mainCategory !=
+                          null) {
                         context.push(
                           Routes.CREATEAD,
                           extra: CategorizationEntity(
-                              mainCategory: context.read<HealthCubit>().state.mainCategory!,
+                              mainCategory: context
+                                  .read<HealthCubit>()
+                                  .state
+                                  .mainCategory!,
                               subCategory: subCategory),
                         );
                       }

@@ -48,12 +48,12 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
       child: BlocConsumer<PaymentCacheOutCubit, PaymentCacheOutState>(
         listener: (BuildContext context, PaymentCacheOutState state) {
           if (state.status == StateStatus.success) {
-            if(hasYellowCard)
-              {showSuccessMessage(context, LocaleKeys.yellowCardSuccess.localize);
-              }else{
+            if (hasYellowCard) {
+              showSuccessMessage(
+                  context, LocaleKeys.yellowCardSuccess.localize);
+            } else {
               showSuccessMessage(context, LocaleKeys.receiveFawry.localize);
             }
-
           }
           if (state.status == StateStatus.error) {
             showErrorMessage(

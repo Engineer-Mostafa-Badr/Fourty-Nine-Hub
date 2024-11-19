@@ -40,7 +40,19 @@ class ReelsCubit extends Cubit<ReelsState> {
   final GetCommentsUseCase _getCommentsUseCase;
   final ToggleCommentLikeUseCase _toggleCommentLikeUseCase;
   final ReelsWithSameAudioUseCase _reelsWithSameAudioUseCase;
-  ReelsCubit( this._createReelUseCase, this._advertisementUseCase, this._getExploreReelsUseCase, this._getFollowersReelsUseCase, this._saveReelUseCase, this._shareReelUseCase, this._likeReelUseCase, this._addCommentUseCase, this._addReplyUseCase, this._getCommentsUseCase, this._toggleCommentLikeUseCase, this._reelsWithSameAudioUseCase)
+  ReelsCubit(
+      this._createReelUseCase,
+      this._advertisementUseCase,
+      this._getExploreReelsUseCase,
+      this._getFollowersReelsUseCase,
+      this._saveReelUseCase,
+      this._shareReelUseCase,
+      this._likeReelUseCase,
+      this._addCommentUseCase,
+      this._addReplyUseCase,
+      this._getCommentsUseCase,
+      this._toggleCommentLikeUseCase,
+      this._reelsWithSameAudioUseCase)
       : super(ReelsState());
 
 //---------------------------------------------------------------------------------------
@@ -141,18 +153,18 @@ class ReelsCubit extends Cubit<ReelsState> {
 //---------------------------------------------------------------------------------------
   Future<void> createAdvertisement(
       List<String> mediaIds, String type, double totalPrice) async {
-
     final result = await _advertisementUseCase(
-      CreateAdvertisementParams(type: type,mediaIds: mediaIds,totalPrice: totalPrice),
+      CreateAdvertisementParams(
+          type: type, mediaIds: mediaIds, totalPrice: totalPrice),
     );
 
     result.fold(
-          (failure) =>
+      (failure) =>
           emit(state.copyWith(reelViewErrorMessage: failure.toString())),
-          (data) {
-            print(
-                'Advertisement created successfully!  $data ****************************************************');
-          },
+      (data) {
+        print(
+            'Advertisement created successfully!  $data ****************************************************');
+      },
     );
     // final token = await CacheManager.getAccessToken();
     //
@@ -195,23 +207,24 @@ class ReelsCubit extends Cubit<ReelsState> {
 
 //---------------------------------------------------------------------------------------
   Future<void> fetchReels() async {
-    if ((state.globalReelsIsLoading??false) || (state.globalReelsHasReachedMax??false)) return;
+    if ((state.globalReelsIsLoading ?? false) ||
+        (state.globalReelsHasReachedMax ?? false)) return;
 
     emit(state.copyWith(isLoading: true));
     final result = await _getExploreReelsUseCase(1);
 
     result.fold(
-          (failure) =>
+      (failure) =>
           emit(state.copyWith(reelViewErrorMessage: failure.toString())),
-          (data) {
-            print("${data.data.reels.length}asfadjcbalc");
-            emit(state.copyWith(
-              reels: [...state.globalReels??[], ...data.data.reels],
-              isLoading: false,
-              hasReachedMax: data.data.pagination.currentPage >=
-                  data.data.pagination.pageCount,
-              currentPage: data.data.pagination.currentPage,
-            ));
+      (data) {
+        print("${data.data.reels.length}asfadjcbalc");
+        emit(state.copyWith(
+          reels: [...state.globalReels ?? [], ...data.data.reels],
+          isLoading: false,
+          hasReachedMax: data.data.pagination.currentPage >=
+              data.data.pagination.pageCount,
+          currentPage: data.data.pagination.currentPage,
+        ));
       },
     );
     //
@@ -246,12 +259,15 @@ class ReelsCubit extends Cubit<ReelsState> {
     final result = await _getFollowersReelsUseCase(1);
 
     result.fold(
-          (failure) =>
+      (failure) =>
           emit(state.copyWith(reelViewErrorMessage: failure.toString())),
-          (data) {
+      (data) {
         print("${data.data.reels.length}asfadjcbalc");
         emit(state.copyWith(
-          reelsForFollower: [...state.reelsForFollower??[], ...data.data.reels],
+          reelsForFollower: [
+            ...state.reelsForFollower ?? [],
+            ...data.data.reels
+          ],
           reelsForFollowerIsLoading: false,
           reelsForFollowerHasReachedMax: data.data.pagination.currentPage >=
               data.data.pagination.pageCount,
@@ -285,13 +301,13 @@ class ReelsCubit extends Cubit<ReelsState> {
     final result = await _saveReelUseCase(reelId);
     String message = '';
     result.fold(
-          (failure) =>
+      (failure) =>
           emit(state.copyWith(reelViewErrorMessage: failure.toString())),
-          (data) {
-            emit(state.copyWith(reelSaveResponse: data
-              // Add any state update logic here if necessary
+      (data) {
+        emit(state.copyWith(reelSaveResponse: data
+            // Add any state update logic here if necessary
             ));
-            message = data.message??'';
+        message = data.message ?? '';
       },
     );
     return message;
@@ -320,11 +336,11 @@ class ReelsCubit extends Cubit<ReelsState> {
   Future<void> shareReel(String reelId) async {
     final result = await _shareReelUseCase(reelId);
     result.fold(
-          (failure) =>
+      (failure) =>
           emit(state.copyWith(reelViewErrorMessage: failure.toString())),
-          (data) {
-            emit(state.copyWith(reelShareResponse: data
-              // Add any state update logic here if necessary
+      (data) {
+        emit(state.copyWith(reelShareResponse: data
+            // Add any state update logic here if necessary
             ));
       },
     );
@@ -348,20 +364,16 @@ class ReelsCubit extends Cubit<ReelsState> {
     emit(state.copyWith(
         isLikingReel: false, likeReelErrorMessage: 'loadingLike'));
     final result = await _likeReelUseCase(reelId);
-    String message  = '';
+    String message = '';
     result.fold(
-            (failure) =>
-            emit(state.copyWith(
-                isLikingReel: false,
-                likeReelErrorMessage:
-                'errorLike')),
-            (data) {
-          message=data.message;
-          emit(state.copyWith(
-              likeReelResponse: data,
-              isLikingReel:
-              data.message == "Reel liked successfully" ? true : false));}
-    );
+        (failure) => emit(state.copyWith(
+            isLikingReel: false, likeReelErrorMessage: 'errorLike')), (data) {
+      message = data.message;
+      emit(state.copyWith(
+          likeReelResponse: data,
+          isLikingReel:
+              data.message == "Reel liked successfully" ? true : false));
+    });
     return message;
     // try {
     //   emit(state.copyWith(
@@ -396,21 +408,19 @@ class ReelsCubit extends Cubit<ReelsState> {
   Future<void> addComment(String reelId, String comment,
       {String? receiverComment, String? parentCommentId}) async {
     emit(state.copyWith(isCommenting: false));
-    final result = await _addCommentUseCase(AddReelCommentParams(comment: comment,reelId: reelId));
+    final result = await _addCommentUseCase(
+        AddReelCommentParams(comment: comment, reelId: reelId));
     result.fold(
-            (failure) =>
-                emit(state.copyWith(
-                  isCommenting: false,
-                  commentErrorMessage: "An error occurred while adding the comment",
-                )),
-            (data) {
-              emit(state.copyWith(
-                isCommenting: true,
-                commentResponse: data,
-                commentErrorMessage: data.status ? null : "Failed to add comment",
-              ));
-            }
-    );
+        (failure) => emit(state.copyWith(
+              isCommenting: false,
+              commentErrorMessage: "An error occurred while adding the comment",
+            )), (data) {
+      emit(state.copyWith(
+        isCommenting: true,
+        commentResponse: data,
+        commentErrorMessage: data.status ? null : "Failed to add comment",
+      ));
+    });
     // try {
     //   // Indicate that a comment is being added
     //   emit(state.copyWith(isCommenting: false));
@@ -440,21 +450,22 @@ class ReelsCubit extends Cubit<ReelsState> {
   Future<void> addReplayComment(String reelId, String comment,
       {String? receiverComment, String? parentCommentId}) async {
     emit(state.copyWith(isCommenting: false));
-    final result = await _addReplyUseCase(AddReelReplyParams(comment: comment,reelId: reelId,parentCommentId: parentCommentId,receiverComment: receiverComment));
+    final result = await _addReplyUseCase(AddReelReplyParams(
+        comment: comment,
+        reelId: reelId,
+        parentCommentId: parentCommentId,
+        receiverComment: receiverComment));
     result.fold(
-            (failure) =>
-                emit(state.copyWith(
-                  isCommenting: false,
-                  commentErrorMessage: "An error occurred while adding the comment",
-                )),
-            (data) {
-              emit(state.copyWith(
-                isCommenting: true,
-                commentResponse: data,
-                commentErrorMessage: data.status ? null : "Failed to add comment",
-              ));
-        }
-    );
+        (failure) => emit(state.copyWith(
+              isCommenting: false,
+              commentErrorMessage: "An error occurred while adding the comment",
+            )), (data) {
+      emit(state.copyWith(
+        isCommenting: true,
+        commentResponse: data,
+        commentErrorMessage: data.status ? null : "Failed to add comment",
+      ));
+    });
     // try {
     //   // Indicate that a comment is being added
     //   emit(state.copyWith(isCommenting: false));
@@ -486,15 +497,11 @@ class ReelsCubit extends Cubit<ReelsState> {
   Future<void> getComments(String reelId) async {
     final result = await _getCommentsUseCase(reelId);
     result.fold(
-            (failure) =>
-                emit(state.copyWith(
-                    isFetchingComments: false,
-                    fetchCommentsErrorMessage: 'fetchCommentsError')),
-            (data) {
-              emit(state.copyWith(
-                  isFetchingComments: true, fetchedComments: data));
-        }
-    );
+        (failure) => emit(state.copyWith(
+            isFetchingComments: false,
+            fetchCommentsErrorMessage: 'fetchCommentsError')), (data) {
+      emit(state.copyWith(isFetchingComments: true, fetchedComments: data));
+    });
     // try {
     //   emit(state.copyWith(isFetchingComments: false));
     //   final commentsResponse = await repository.fetchComments(reelId);
@@ -511,17 +518,15 @@ class ReelsCubit extends Cubit<ReelsState> {
   Future<void> toggleCommentLike(String commentId) async {
     final result = await _toggleCommentLikeUseCase(commentId);
     result.fold(
-            (failure) =>
-                emit(state.copyWith(
-                    isLikingComment: false,
-                    likeReelErrorMessage:
-                    'An error occurred while liking/unliking the comment')),
-            (data) {
-              emit(state.copyWith(
-                likeReelCommentResponseMessage: data,
-              )); // Save the message ("like" or "unlike")
-            }
-    );
+        (failure) => emit(state.copyWith(
+            isLikingComment: false,
+            likeReelErrorMessage:
+                'An error occurred while liking/unliking the comment')),
+        (data) {
+      emit(state.copyWith(
+        likeReelCommentResponseMessage: data,
+      )); // Save the message ("like" or "unlike")
+    });
     // try {
     //   emit(state.copyWith(isLikingComment: true));
     //
@@ -543,30 +548,28 @@ class ReelsCubit extends Cubit<ReelsState> {
 
   Future<void> fetchReelsWithSameAudio(String audioId,
       {bool isInitialLoad = false}) async {
-    if ((state.globalReelsIsLoading??false) || (state.globalReelsHasReachedMax??false)) return;
+    if ((state.globalReelsIsLoading ?? false) ||
+        (state.globalReelsHasReachedMax ?? false)) return;
 
     emit(state.copyWith(isLoading: true));
     final int pageToFetch =
-    isInitialLoad ? 1 : (state.globalReelsCurrentPage??0) + 1;
-    final result = await _reelsWithSameAudioUseCase(ReelsWithSameAudioParams(audioId: audioId));
-    result.fold(
-            (failure) =>
-                emit(state.copyWith(isLoading: false)),
-            (data) {
-              final bool hasReachedMax =
-                  pageToFetch >= data.data!.pagination!.pageCount!;
-              final List<Reel> newReels = data.data?.reels ?? [];
-              log("${newReels.first.user.firstName}----------------------------------------------------------------------------------------------");
+        isInitialLoad ? 1 : (state.globalReelsCurrentPage ?? 0) + 1;
+    final result = await _reelsWithSameAudioUseCase(
+        ReelsWithSameAudioParams(audioId: audioId));
+    result.fold((failure) => emit(state.copyWith(isLoading: false)), (data) {
+      final bool hasReachedMax =
+          pageToFetch >= data.data!.pagination!.pageCount!;
+      final List<Reel> newReels = data.data?.reels ?? [];
+      log("${newReels.first.user.firstName}----------------------------------------------------------------------------------------------");
 
-              emit(state.copyWith(
-                reelsForAudio:
-                isInitialLoad ? newReels : [...?state.reelsForAudio, ...newReels],
-                isLoading: false,
-                hasReachedMax: hasReachedMax,
-                currentPage: pageToFetch,
-              ));
-        }
-    );
+      emit(state.copyWith(
+        reelsForAudio:
+            isInitialLoad ? newReels : [...?state.reelsForAudio, ...newReels],
+        isLoading: false,
+        hasReachedMax: hasReachedMax,
+        currentPage: pageToFetch,
+      ));
+    });
 
     // try {
     //   // If it's an initial load, start from the first page

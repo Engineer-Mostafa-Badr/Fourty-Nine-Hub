@@ -10,7 +10,8 @@ class AddNewRouteCarpoolRepoImp extends AddNewRouteCarpoolRepo {
 
   AddNewRouteCarpoolRepoImp({required this.addNewRouteRemoteDataSource});
   @override
-  Future<Either<Failure, CarpoolRouteInfoModel>> getPriceCarpool({required GetPriceCarpoolParam getPriceCarpoolParam}) {
+  Future<Either<Failure, CarpoolRouteInfoModel>> getPriceCarpool(
+      {required GetPriceCarpoolParam getPriceCarpoolParam}) {
     return addNewRouteRemoteDataSource.getPriceCarpool(
       getPriceCarpoolParam: getPriceCarpoolParam,
     );

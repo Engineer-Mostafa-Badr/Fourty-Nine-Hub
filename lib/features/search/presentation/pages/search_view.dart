@@ -50,7 +50,7 @@ class _SearchViewState extends State<SearchView>
             Navigator.pop(context);
           },
         ),
-        title: BlocBuilder<SearchCubit,SearchState>(
+        title: BlocBuilder<SearchCubit, SearchState>(
           builder: (BuildContext context, state) {
             return Card(
               color: Colors.white,
@@ -65,18 +65,19 @@ class _SearchViewState extends State<SearchView>
                 ),
                 child: FormTextField(
                   controller: context.read<SearchCubit>().searchController,
-                  action: (v) async{
+                  action: (v) async {
                     if (v.isNotEmpty) {
                       final prefs = await SharedPreferences.getInstance();
-                      String? filter =  prefs.getString('filter');
-                      print('context.read<SearchCubit>().state.filter??''${filter??''}');
+                      String? filter = prefs.getString('filter');
+                      print('context.read<SearchCubit>().state.filter??'
+                          '${filter ?? ''}');
                       context.read<SearchCubit>().loadData(
-                        SearchParams(
-                          search: v,
-                          filter: filter??'',
-                          params: PaginationParams(page: 1),
-                        ),
-                      );
+                            SearchParams(
+                              search: v,
+                              filter: filter ?? '',
+                              params: PaginationParams(page: 1),
+                            ),
+                          );
                     }
                   },
                   height: 70.h,
@@ -98,33 +99,35 @@ class _SearchViewState extends State<SearchView>
           tabAlignment: TabAlignment.start,
           isScrollable: true,
           // Enable scrolling for the TabBar
-          onTap: (i)async{
+          onTap: (i) async {
             final prefs = await SharedPreferences.getInstance();
 
-            if(i==0){
+            if (i == 0) {
               await prefs.setString('filter', 'totalUsers');
-            }else if(i==1){
+            } else if (i == 1) {
               await prefs.setString('filter', 'reels');
-            }else if(i==2){
+            } else if (i == 2) {
               await prefs.setString('filter', 'posts');
-            }else if(i==3){
+            } else if (i == 3) {
               await prefs.setString('filter', 'mainCategories');
-            }else if(i==4){
+            } else if (i == 4) {
               await prefs.setString('filter', 'subCategories');
-            }else if(i==5){
+            } else if (i == 5) {
               await prefs.setString('filter', 'ads');
-            }else if(i==6){
+            } else if (i == 6) {
               await prefs.setString('filter', 'trip');
             }
-            String? filter =  prefs.getString('filter');
+            String? filter = prefs.getString('filter');
 
-            print('context.read<SearchCubit>().state.filter??''${filter??''}');
-              context.read<SearchCubit>().loadData(SearchParams(
-                search: context.read<SearchCubit>().searchController.text,
-                filter: filter??'',
-                params: PaginationParams(page: 1),
-              ));
-            print('context.read<SearchCubit>().state.filter1??''${filter??''}');
+            print(
+                'context.read<SearchCubit>().state.filter??' '${filter ?? ''}');
+            context.read<SearchCubit>().loadData(SearchParams(
+                  search: context.read<SearchCubit>().searchController.text,
+                  filter: filter ?? '',
+                  params: PaginationParams(page: 1),
+                ));
+            print('context.read<SearchCubit>().state.filter1??'
+                '${filter ?? ''}');
           },
           controller: _tabController,
           labelColor: Theme.of(context).primaryColor,
@@ -132,7 +135,7 @@ class _SearchViewState extends State<SearchView>
           indicatorColor: AppColors.SECONDARY_COLOR,
           dividerColor: AppColors.GREY_LIGHT_COLOR,
           padding: EdgeInsets.only(right: 40.w),
-          labelPadding:  EdgeInsets.only(left: 20.w),
+          labelPadding: EdgeInsets.only(left: 20.w),
           labelStyle: Styles.mediumText(fontSize: 32),
           tabs: const [
             Tab(text: 'Profile'),

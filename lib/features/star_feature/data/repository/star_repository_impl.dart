@@ -5,7 +5,7 @@ import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.da
 import 'package:fourtyninehub/features/star_feature/domain/repository/star_repository.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
 
-class StarRepositoryImpl extends StarRepository{
+class StarRepositoryImpl extends StarRepository {
   final StarRemoteDataSource _remoteDataSource;
 
   StarRepositoryImpl(this._remoteDataSource);
@@ -28,5 +28,4 @@ class StarRepositoryImpl extends StarRepository{
   Future<Either<Failure, bool>> deleteMyStar({required String id}) {
     return _remoteDataSource.deleteMyStar(id: id);
   }
-
 }

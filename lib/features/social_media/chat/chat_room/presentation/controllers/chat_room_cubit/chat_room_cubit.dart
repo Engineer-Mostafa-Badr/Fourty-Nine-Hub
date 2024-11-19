@@ -125,11 +125,11 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       selectedContactsToShare.clear();
       sharedContacts.clear();
 // Play notification sound
-          log("before playing");
-          final player = AudioPlayer(); // Initialize the player
-          await player.play(AssetSource('49 Notification 01.mp3')); // Play the asset
-          log("playing");
-
+      log("before playing");
+      final player = AudioPlayer(); // Initialize the player
+      await player
+          .play(AssetSource('49 Notification 01.mp3')); // Play the asset
+      log("playing");
     });
   }
 

@@ -735,7 +735,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:gallery_saver/gallery_saver.dart';
+// import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -918,16 +918,16 @@ class MyVoiceVideoRecordingScreenState
 
       if (ReturnCode.isSuccess(returnCode)) {
         log("FFmpeg process succeeded");
-        final savedSuccessfully =
-            await GallerySaver.saveVideo(filteredVideoPath!);
-        if (savedSuccessfully ?? false) {
-          setState(() {
-            showGalleryBtn = true;
-          });
-        } else {
-          throw Exception('error_dialog_save_video_fail');
-        }
-        return savedSuccessfully;
+        // final savedSuccessfully =
+        //     await GallerySaver.saveVideo(filteredVideoPath!);
+        // if (savedSuccessfully ?? false) {
+        //   setState(() {
+        //     showGalleryBtn = true;
+        //   });
+        // } else {
+        //   throw Exception('error_dialog_save_video_fail');
+        // }
+        // return savedSuccessfully;
       } else {
         final failStackTrace = await session.getFailStackTrace();
         throw Exception(

@@ -20,8 +20,8 @@ class GiftModelModel extends GiftEntity {
       amount: json['wheelWallet']['amount'] ?? 0,
       wheelWinner: json['wheelWinner'] ?? false,
       competitionsWallet: (json['competitionWallets'] as List)
-        .map((e) => CompetitionsWalletModel.fromJson(e))
-        .toList(),
+          .map((e) => CompetitionsWalletModel.fromJson(e))
+          .toList(),
     );
   }
 }

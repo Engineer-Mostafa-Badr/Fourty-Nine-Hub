@@ -72,17 +72,17 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
       ),
       body: context.read<UserCubit>().isLoggedIn
           ? BlocConsumer<CreateCompanyAdCubit, CreateCompanyAdState>(
-        listener: (BuildContext context, CreateCompanyAdState state) {
-          if(state.status ==StateStatus.error){
-            showErrorMessage(
-              context,
-              getFailureMessage(
-                state.failure!,
-                context,
-              ),
-            );
-          }
-        },
+              listener: (BuildContext context, CreateCompanyAdState state) {
+                if (state.status == StateStatus.error) {
+                  showErrorMessage(
+                    context,
+                    getFailureMessage(
+                      state.failure!,
+                      context,
+                    ),
+                  );
+                }
+              },
               builder: (context, state) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -222,7 +222,8 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                                       context
                                           .read<CreateCompanyAdCubit>()
                                           .payCompanyAd(
-                                            PayCompanyAdParams(amount: totalPrice),
+                                            PayCompanyAdParams(
+                                                amount: totalPrice),
                                           );
                                       // Navigator.push(
                                       //   context,

@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
@@ -23,6 +24,8 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card_selected.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../../common/widgets/stateful/maps/map_picker.dart';
@@ -112,8 +115,6 @@ class _CreateTripFormState extends State<CreateTripForm> {
                               nameEn: state.model.mainCategory?.nameEn,
                               id: state.model.mainCategory?.mainCategoryId ??
                                   "",
-                              name:
-                                  LocaleKeys.chooseYourFavoriteSubCategory.tr(),
                               image: state.model.mainCategory?.cover ?? "",
                               isFavorite: true,
                               total:
@@ -172,6 +173,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                           children: [
                             Expanded(
                               child: DefaultTextFormField(
+                                isAuthentcation: true,
                                 margin: EdgeInsets.zero,
                                 validator: (value) {
                                   return shippingcubit.validation(
@@ -190,6 +192,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                             ),
                             Expanded(
                               child: DefaultTextFormField(
+                                isAuthentcation: true,
                                 margin: EdgeInsets.zero,
                                 constraints: const BoxConstraints(
                                     maxWidth: double.infinity),
@@ -225,13 +228,18 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                         condition: time == null);
                                   },
                                   onTap: () async {
-                                    TimeOfDay? pickedTime =
-                                        await showTimePicker(
-                                            context: context,
-                                            initialTime: TimeOfDay.now());
-                                    if (pickedTime != null) {
-                                      time = pickedTime;
+                                    if (context.isUserLoggedIn) {
+                                      TimeOfDay? pickedTime =
+                                          await showTimePicker(
+                                              context: context,
+                                              initialTime: TimeOfDay.now());
+                                      if (pickedTime != null) {
+                                        time = pickedTime;
+                                      }
+                                    } else {
+                                      context.push(Routes.LOGIN);
                                     }
+
                                     setState(() {});
                                   },
                                   readOnly: true,
@@ -247,6 +255,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                             ),
                             Flexible(
                               child: DefaultTextFormField(
+                                isAuthentcation: true,
                                 margin: EdgeInsets.zero,
                                 validator: (value) {
                                   return shippingcubit.validation(
@@ -255,13 +264,18 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                       condition: date == null);
                                 },
                                 onTap: () async {
-                                  DateTime? pickedDate = await showDatePicker(
-                                    context: context,
-                                    firstDate: DateTime.now(),
-                                    lastDate:
-                                        DateTime(DateTime.now().year + 150),
-                                  );
-                                  date = pickedDate;
+                                  if (context.isUserLoggedIn) {
+                                    DateTime? pickedDate = await showDatePicker(
+                                      context: context,
+                                      firstDate: DateTime.now(),
+                                      lastDate:
+                                          DateTime(DateTime.now().year + 150),
+                                    );
+                                    date = pickedDate;
+                                  } else {
+                                    context.push(Routes.LOGIN);
+                                  }
+
                                   setState(() {});
                                 },
                                 readOnly: true,
@@ -294,16 +308,17 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                     .tr();
                               }
                             }
-
-                            // return shippingcubit.validation(
-                            //     message: LocaleKeys.youHaveToFillYourDescription
-                            //         .tr(),
-                            //     condition: decoration.text.isEmpty);
                           },
                           controller: decoration,
                           minLines: 3,
                           maxLines: 3,
                           maxLength: 100,
+                          onChanged: (value) {
+                            log(value.toString());
+                            if (!context.isUserLoggedIn) {
+                              context.push(Routes.LOGIN);
+                            }
+                          },
                           focusNode: decorationFocusNode,
                           style:
                               const TextStyle(color: AppColors.QUANTITY_COLOR),
@@ -357,6 +372,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                           children: [
                             Expanded(
                               child: DefaultTextFormField(
+                                isAuthentcation: true,
                                 margin: EdgeInsets.zero,
                                 keyboardType: TextInputType.number,
                                 validator: (value) {
@@ -378,6 +394,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                             ),
                             Expanded(
                               child: DefaultTextFormField(
+                                isAuthentcation: true,
                                 style: Styles.smallText(),
                                 margin: EdgeInsets.zero,
                                 validator: (value) {
@@ -438,22 +455,29 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                 label: LocaleKeys.request.tr(),
                                 style: Styles.headerText(color: Colors.white),
                                 onPressed: () async {
-                                  if (widget.formKey.currentState!.validate()) {
-                                    context.read<CreateTripCubit>().createTrip(
-                                          model: RequestModel(
-                                            date:
-                                                "${date!.year}/${date!.month}/${date!.day}",
-                                            deliveryPoint: deliveryPoint.text,
-                                            description: decoration.text,
-                                            offerPrice: offerPrice.text,
-                                            // tripImages: tripImages,
-                                            phone: phone.text,
-                                            subcategoryEntity: select,
-                                            receiptPoint: receiptPoint.text,
-                                            time:
-                                                "${time!.hour}:${time!.minute}",
-                                          ),
-                                        );
+                                  if (context.isUserLoggedIn) {
+                                    if (widget.formKey.currentState!
+                                        .validate()) {
+                                      context
+                                          .read<CreateTripCubit>()
+                                          .createTrip(
+                                            model: RequestModel(
+                                              date:
+                                                  "${date!.year}/${date!.month}/${date!.day}",
+                                              deliveryPoint: deliveryPoint.text,
+                                              description: decoration.text,
+                                              offerPrice: offerPrice.text,
+                                              // tripImages: tripImages,
+                                              phone: phone.text,
+                                              subcategoryEntity: select,
+                                              receiptPoint: receiptPoint.text,
+                                              time:
+                                                  "${time!.hour}:${time!.minute}",
+                                            ),
+                                          );
+                                    }
+                                  } else {
+                                    context.push(Routes.LOGIN);
                                   }
                                 },
                               ),
@@ -500,10 +524,11 @@ class _CreateTripFormState extends State<CreateTripForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Label(
-          text: category.name,
-          style: Styles.headerText(fontWeight: FontWeight.w400),
-        ),
+        if (category.name != null)
+          Label(
+            text: category.name ?? "",
+            style: Styles.headerText(fontWeight: FontWeight.w400),
+          ),
         if (category.subcategories?.isNotEmpty ?? false)
           SizedBox(
             height: 80,

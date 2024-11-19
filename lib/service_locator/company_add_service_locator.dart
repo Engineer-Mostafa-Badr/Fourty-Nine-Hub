@@ -36,8 +36,8 @@ class CompanyAddServiceLocator {
         () => GetPostsCompanyAdUseCase(
               serviceLocator(),
             ));
-    serviceLocator.registerLazySingleton<PayCompanyAdUseCase>(
-        () => PayCompanyAdUseCase(
+    serviceLocator
+        .registerLazySingleton<PayCompanyAdUseCase>(() => PayCompanyAdUseCase(
               serviceLocator(),
             ));
 

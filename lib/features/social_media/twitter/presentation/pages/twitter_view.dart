@@ -136,18 +136,18 @@ class _TwitterViewState extends State<TwitterView> {
                   itemBuilder: (context, item, index) {
                     final user = context.read<UserCubit>().state.data;
                     return Padding(
-                      padding:  EdgeInsets.only(bottom: 30.h),
+                      padding: EdgeInsets.only(bottom: 30.h),
                       child: TwitterPostCard(
                         post: controller.postsPagingController.itemList![index],
                         onReact: () async {
                           var result = await controller.onReact(
                               params: TwitterPostReactParams(
-                                  postId: controller
-                                      .postsPagingController.itemList![index].id,
+                                  postId: controller.postsPagingController
+                                      .itemList![index].id,
                                   react: 'love'));
                           if (result == true) {
-                            if (controller.postsPagingController.itemList?[index]
-                                    .isReact ==
+                            if (controller.postsPagingController
+                                    .itemList?[index].isReact ==
                                 true) {
                               controller.postsPagingController.itemList?[index]
                                   .isReact = false;
@@ -199,8 +199,10 @@ class _TwitterViewState extends State<TwitterView> {
                                 postId: controller
                                     .postsPagingController.itemList![index].id,
                                 user: user,
-                                onAddComment: (TwitterPostCommentParams params) =>
-                                    controller.onPostComment(params: params),
+                                onAddComment:
+                                    (TwitterPostCommentParams params) =>
+                                        controller.onPostComment(
+                                            params: params),
                                 onAddReply:
                                     (TwitterCommentReplyParams params) async {
                                   return await controller.onCommentReply(

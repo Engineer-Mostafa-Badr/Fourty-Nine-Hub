@@ -22,9 +22,9 @@ class StarParams {
   StarParams(
       {required this.title, required this.videoUrl, required this.description});
 
-  Map<String,dynamic>toJson()=>{
-    'title':title,
-    'videoUrl':videoUrl,
-    'description':description,
-  };
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'videoUrl': videoUrl,
+        'description': description,
+      };
 }

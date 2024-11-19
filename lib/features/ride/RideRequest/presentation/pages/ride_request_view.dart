@@ -1,19 +1,24 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateful/maps/map_picker.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/data/models/offer_data_model/offer_data_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/success_request_trip_model/success_request_trip_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_offer_model/trip_request_offer_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/address_search_params_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/offer_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/raise_fare_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
@@ -47,40 +52,37 @@ class _RideRequestViewState extends State<RideRequestView> {
     // context.read<>()
   }
 
+  // OverlayEntry? overlayEntry;
   @override
   Widget build(BuildContext context) {
     // context.read<GetAllTripRiderCubit>().getAllTrip();
     var getTripInfoCubit = context.read<GetTripInfoCubit>();
-    log(GoRouter.of(context).routerDelegate.currentConfiguration.toString(),
-        name: "llllllllllllllllllllll");
     return SingleChildScrollView(
       child: BlocListener<ShowOffersCubit, RiderState>(
         listener: (context, state) {
           if (state is SuccessGetOfferDataState) {
             if (state.data != null) {
-              final overlay = Overlay.of(context);
-              final overlayEntry = OverlayEntry(
+            var overlay = Overlay.of(context);
+              var overlayEntry = OverlayEntry(
                 builder: (context) => Positioned(
                   top: 30,
                   left: 10,
                   right: 10,
                   child: Material(
                       child: AcceptOrDeclineTrip(
+                    tripId: state.data!.id ?? "",
                     model: state.data!,
+                    // overlayEntry: overlayEntry,
                   )),
                 ),
               );
-
+              context.read<ShowOffersCubit>().overlayEntry = overlayEntry;
               overlay.insert(overlayEntry);
-
-              // Remove the overlay after some time or on user action
               Future.delayed(const Duration(seconds: 15), () {
                 overlayEntry.remove();
               });
             }
           }
-          log(state.toString(),
-              name: "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -88,6 +90,11 @@ class _RideRequestViewState extends State<RideRequestView> {
             BlocBuilder<GetCateogryRiderCubit, RiderState>(
               builder: (context, state) {
                 if (state is SuccessGetCateogyRider) {
+                  log(
+                      (state.model.mainCategory?.isDriverApproved ?? false)
+                          .toString(),
+                      name:
+                          "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
                   return Column(
                     children: [
                       Padding(
@@ -96,18 +103,44 @@ class _RideRequestViewState extends State<RideRequestView> {
                             model: state.model,
                             favoriteName: "Driver",
                           )),
-                      // SizedBox(height: 10,),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: DashboardBanner(
-                          onTap: () => context
-                              .push(Routes.ALLTRIPRIDER),
-                          title: Labels.driverDashboard,
-                          subTitle: Labels
-                              .driverDashboardBannerDiscription,
-                          route: Routes.DOCTORDASHBOARD,
-                        ),
-                      ),
+                      (state.model.mainCategory?.isDriverApproved ?? false)
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: DashboardBanner(
+                                onTap: () => context.push(Routes.ALLTRIPRIDER),
+                                // onTap: () {
+                                  
+                                // },
+                                title: LocaleKeys.rideDashboard.tr(),
+                                subTitle:
+                                    Labels.driverDashboardBannerDiscription,
+                                route: Routes.DOCTORDASHBOARD,
+                              ),
+                            )
+                          : ((state.model.mainCategory?.isDriver ?? true) ==
+                                      true &&
+                                  (state.model.mainCategory?.isDriverApproved ??
+                                          false) ==
+                                      false)
+                              ? Container()
+                              : GestureDetector(
+                                  // onTap: () => context
+                                  //     .push(Routes.SHIPPING_REGISTER),
+                                  onTap: () {
+                                    context.push(Routes.SHIPPING_REGISTER);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                    ),
+                                    child: Text(
+                                      LocaleKeys.serveClientsByClickRegister.tr(),
+                                      style: const TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                       //-------------------------------------------------------------
                       // GestureDetector(
                       //   // onTap: () => context
@@ -132,7 +165,7 @@ class _RideRequestViewState extends State<RideRequestView> {
                       //     ),
                       //   ),
                       // ),
-                     // -------------------------------------------
+                      // -------------------------------------------
                       // SizedBox(
                       //   height: 10,
                       // ),
@@ -170,8 +203,7 @@ class _RideRequestViewState extends State<RideRequestView> {
                                             id: state.model.mainCategory
                                                     ?.mainCategoryId ??
                                                 "",
-                                            name:
-                                                "Choose your favorite sub category!",
+                                            name: LocaleKeys.chooseYourFavoriteSubCategory.tr(),
                                             image: state.model.mainCategory
                                                     ?.cover ??
                                                 "",
@@ -247,9 +279,9 @@ class _RideRequestViewState extends State<RideRequestView> {
                                       // SizedBox(
                                       //   width: 5,
                                       // ),
-                                      const Text(
-                                        "Comfort",
-                                        style: TextStyle(fontSize: 17),
+                                      Text(
+                                        LocaleKeys.comfort.tr(),
+                                        style: const TextStyle(fontSize: 17),
                                       ),
                                       const SizedBox(
                                         width: 5,
@@ -290,7 +322,7 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                 children: [
                                                   const Icon(Icons.flash_on),
                                                   Text(
-                                                    "Auto Accept",
+                                                    LocaleKeys.autoAccept.tr(),
                                                     style: Styles.mediumText(
                                                         fontWeight:
                                                             FontWeight.w500),
@@ -315,7 +347,7 @@ class _RideRequestViewState extends State<RideRequestView> {
                                             DefaultTextFormField(
                                               currentController:
                                                   TextEditingController(),
-                                              hint: "Offer your fare",
+                                              hint: LocaleKeys.offerYourFare.tr(),
                                               readOnly: (getTripInfoCubit
                                                       .model.autoAccept ??
                                                   false),
@@ -327,31 +359,23 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                         0) >
                                                     (state.model.lowestFare ??
                                                         0)) {
-                                                  return "Minimum fare is ${state.model.lowestFare}";
+                                                  return "${LocaleKeys.MinimumFareIs.tr()} ${state.model.lowestFare}";
                                                 }
                                                 return null;
                                               },
                                               hintColor: Colors.grey,
-                                              suffixIcon: GestureDetector(
-                                                  onTap: () {
-                                                    showModalBottomSheet(
-                                                      context: context,
-                                                      builder: (context) =>
-                                                          const OfferYourFareWidet(),
-                                                    );
-                                                  },
-                                                  child: const Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Icon(Icons.credit_card),
-                                                      Sizer(
-                                                        width: 6,
-                                                      ),
-                                                      Text("Cash"),
-                                                      Sizer()
-                                                    ],
-                                                  )),
+                                              suffixIcon: const Row(
+                                                mainAxisSize:
+                                                    MainAxisSize.min,
+                                                children: [
+                                                  Icon(Icons.credit_card),
+                                                  Sizer(
+                                                    width: 6,
+                                                  ),
+                                                  
+                                                  Sizer()
+                                                ],
+                                              ),
                                               prefixIcon: Container(
                                                 alignment: (getTripInfoCubit
                                                             .model.autoAccept ??
@@ -397,7 +421,7 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                   const Sizer(),
                                                   Flexible(
                                                     child: Text(
-                                                      "Travel time: ~${formatDuration(state.model.duration!.toInt())} , Distance: ${formatDistance(state.model.distance!.toInt())}",
+                                                      "${LocaleKeys.travelTime.tr()}: ~${formatDuration(state.model.duration!.toInt())} , ${LocaleKeys.Distance.tr()}: ${formatDistance(state.model.distance!.toInt())}",
                                                       style: Styles.mediumText(
                                                           fontWeight:
                                                               FontWeight.w500,
@@ -421,7 +445,7 @@ class _RideRequestViewState extends State<RideRequestView> {
                                       Flexible(
                                         child: AppButton(
                                           height: 40,
-                                          label: Labels.premiumRequest,
+                                          label: LocaleKeys.premiumRequest.tr(),
                                           style: Styles.headerText(
                                               color: Colors.white),
                                           onPressed: () {},
@@ -436,9 +460,9 @@ class _RideRequestViewState extends State<RideRequestView> {
                                               name: "ldsjflskdjflskdfjlskjf");
                                           if (state
                                               is SuccessRequestTripState) {
-                                            context
-                                                .read<ShowOffersCubit>()
-                                                .showOffers();
+                                            // context
+                                            //     .read<ShowOffersCubit>()
+                                            //     .showOffers();
                                             context
                                                 .read<LocationSocketCubit>()
                                                 .nearbyDriversEmit(
@@ -487,7 +511,7 @@ class _RideRequestViewState extends State<RideRequestView> {
                                               height: 40,
                                               backColor:
                                                   const Color(0xFF0B1135),
-                                              label: Labels.request,
+                                              label: LocaleKeys.request.tr(),
                                               style: Styles.headerText(
                                                   color: Colors.white),
                                               onPressed: () async {
@@ -531,9 +555,9 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                 //             ?.id ??
                                                 //         "");
 
-                                                context
-                                                    .read<GetTripInfoCubit>()
-                                                    .getTripInfoRequest();
+                                                // context
+                                                //     .read<GetTripInfoCubit>()
+                                                //     .getTripInfoRequest();
                                                 // context
                                                 //     .read<RequestRiderTripCubit>()
                                                 //     .request(
@@ -629,19 +653,17 @@ class _RideRequestViewState extends State<RideRequestView> {
                     ),
                   ),
                 ),
-                const Positioned(
-                bottom: 10,
-                right: 10,
-                left: 10,
-                child: DashboardBanner(
-                  title: 'Driver Dashboard\n',
-                  subTitle:
-                      'New trips are waiting you, go to driver dashboard and explore more!',
-                  route: Routes.RIDERDASHBOARD,
-                )),
+                 Positioned(
+                    bottom: 10,
+                    right: 10,
+                    left: 10,
+                    child: DashboardBanner(
+                      title: LocaleKeys.driverDashboard.tr(),
+                      subTitle: LocaleKeys.newTripsAreWaitingYouGoToDriverDashboardAndExploreMore.tr(),
+                      route: Routes.RIDERDASHBOARD,
+                    )),
               ],
-            )
-            ),
+            )),
             // BlocProvider.value(
             //   value: serviceLocator<RiderequestCubit>(),
             //   child: const RideOptionsBottomSheet(),
@@ -690,10 +712,11 @@ class _RideRequestViewState extends State<RideRequestView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Label(
-          text: category.name,
-          style: Styles.headerText(fontWeight: FontWeight.w400),
-        ),
+        if (category.name != null)
+          Label(
+            text: category.name ?? "",
+            style: Styles.headerText(fontWeight: FontWeight.w400),
+          ),
         if (category.subcategories?.isNotEmpty ?? false)
           SizedBox(
             height: 80,
@@ -809,40 +832,40 @@ class _RideRequestViewState extends State<RideRequestView> {
   // }
 }
 
-class OfferYourFareWidet extends StatelessWidget {
-  const OfferYourFareWidet({super.key});
+// class OfferYourFareWidet extends StatelessWidget {
+//   const OfferYourFareWidet({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-      width: double.infinity,
-      decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-      child: const Column(
-        children: [
-          // TextFormField(
-          //   textAlign: TextAlign.center,
-          //   decoration: InputDecoration(
-          //       fillColor: Colors.white,
-          //       filled: true,
-          //       hintStyle: Styles.headerText(fontSize: 40),
-          //       hintText: "EGP 300",
-          //       border: const UnderlineInputBorder()),
-          // ),
-          // const Spacer(),
-          // DefaultButton(
-          //   width: double.infinity,
-          //   label: "Done",
-          //   onPressed: () {},
-          // )
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+//       width: double.infinity,
+//       decoration: const BoxDecoration(
+//           color: Colors.white,
+//           borderRadius: BorderRadius.only(
+//               topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+//       child: const Column(
+//         children: [
+//           // TextFormField(
+//           //   textAlign: TextAlign.center,
+//           //   decoration: InputDecoration(
+//           //       fillColor: Colors.white,
+//           //       filled: true,
+//           //       hintStyle: Styles.headerText(fontSize: 40),
+//           //       hintText: "EGP 300",
+//           //       border: const UnderlineInputBorder()),
+//           // ),
+//           // const Spacer(),
+//           // DefaultButton(
+//           //   width: double.infinity,
+//           //   label: "Done",
+//           //   onPressed: () {},
+//           // )
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class RequestButtonSheetWidget extends StatefulWidget {
   const RequestButtonSheetWidget({super.key, required this.model});
@@ -861,10 +884,10 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
     var raiseFareCubit = context.read<RaiseFareCubit>();
     return Container(
       width: double.infinity,
-      //
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
+      
+      decoration: BoxDecoration(
+        color: context.isDarkMode?AppColors.QUANTITY_COLOR:Colors.white,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30),
           topRight: Radius.circular(30),
         ),
@@ -877,8 +900,8 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "${widget.model.closerDrivers?.length ?? 0} drivers are viewing your request",
-                  style: Styles.mediumText(color: Colors.black),
+                  "${widget.model.closerDrivers?.length ?? 0} ${LocaleKeys.driversAreViewingYourRequest.tr()}",
+                  style: Styles.mediumText(color: context.isDarkMode?Colors.white:Colors.black,),
                 ),
                 const Spacer(),
                 SizedBox(
@@ -887,94 +910,6 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                   child: Expanded(
                     child: Stack(
                       children: [
-                        // Positioned(
-                        //   child: Container(
-                        //     width: 25,
-                        //     height: 25,
-                        //     decoration: const BoxDecoration(
-                        //       shape: BoxShape.circle,
-                        //       color: Colors.red,
-                        //     ),
-                        //   ),
-                        // ),
-                        // Positioned(
-                        //   left: 10,
-                        //   child: Container(
-                        //     width: 25,
-                        //     height: 25,
-                        //     decoration: const BoxDecoration(
-                        //       shape: BoxShape.circle,
-                        //       color: Colors.orange,
-                        //     ),
-                        //   ),
-                        // // ),
-                        // Positioned(
-                        //   left: 20,
-                        //   child: Container(
-                        //     width: 25,
-                        //     height: 25,
-                        //     decoration: const BoxDecoration(
-                        //       shape: BoxShape.circle,
-                        //       color: Colors.blue,
-                        //     ),
-                        //   ),
-                        // ),
-                        // Positioned(
-                        //   left: 30,
-                        //   child: Container(
-                        //     width: 25,
-                        //     height: 25,
-                        //     decoration: const BoxDecoration(
-                        //       shape: BoxShape.circle,
-                        //       color: Colors.green,
-                        //     ),
-                        //   ),
-                        // ),
-                        // Positioned(
-                        //   left: 40,
-                        //   child: Container(
-                        //     width: 25,
-                        //     height: 25,
-                        //     decoration: const BoxDecoration(
-                        //       shape: BoxShape.circle,
-                        //       color: Colors.green,
-                        //     ),
-                        //   ),
-                        // ),
-                        // Positioned(
-                        //   left: 50,
-                        //   child: Container(
-                        //     width: 25,
-                        //     height: 25,
-                        //     decoration: const BoxDecoration(
-                        //       shape: BoxShape.circle,
-                        //       color: Colors.green,
-                        //     ),
-                        //   ),
-                        // ),
-                        // Positioned(
-                        //   left: 60,
-                        //   child: Container(
-                        //     width: 25,
-                        //     height: 25,
-                        //     decoration: const BoxDecoration(
-                        //       shape: BoxShape.circle,
-                        //       color: Colors.green,
-                        //     ),
-                        //   ),
-                        // ),
-                        // Positioned(
-                        //   left: 70,
-                        //   child: Container(
-                        //     width: 25,
-                        //     height: 25,
-                        //     decoration: const BoxDecoration(
-                        //       shape: BoxShape.circle,
-                        //       color: Colors.red,
-                        //     ),
-                        //   ),
-                        // )
-
                         ...List.generate(
                           widget.model.closerDrivers?.take(5).length ?? 0,
                           (index) {
@@ -1014,9 +949,9 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
           Expanded(
             child: Container(
               padding: const EdgeInsets.all(20),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: context.isDarkMode?AppColors.QUANTITY_COLOR:Colors.white,
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(30),
                   topRight: Radius.circular(30),
                 ),
@@ -1024,9 +959,9 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
               child: Column(
                 children: [
                   Text(
-                    "Finding drivers...",
+                    LocaleKeys.findingDrivers.tr(),
                     style: Styles.headerText(
-                      color: Colors.black,
+                      color: context.isDarkMode?Colors.white:Colors.black,
                     ),
                   ),
                   const Sizer(),
@@ -1042,13 +977,13 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                             height: 60,
                             width: double.infinity,
                             decoration: BoxDecoration(
-                                color: const Color(0xFF495563),
+                                color: raiseFareCubit.price != null? AppColors.PRIMARY_COLOR: const Color(0xFF495563),
                                 borderRadius: BorderRadius.circular(10)),
                             child: Center(
                               child: Text(
                                 "-3",
                                 style: Styles.mediumText(
-                                  color: const Color(0xFF5E6A78),
+                                  color: raiseFareCubit.price != null?Colors.white: const Color(0xFF5E6A78),
                                   fontSize: 38,
                                 ),
                               ),
@@ -1061,15 +996,15 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                       Column(
                         children: [
                           Text(
-                            "Your offer",
+                            LocaleKeys.yourOffer.tr(),
                             style: Styles.mediumText(color: Colors.grey),
                           ),
                           const Sizer(
                             height: 5,
                           ),
                           Text(
-                            "EGP ${(widget.model.trip?.price ?? 0) + (raiseFareCubit.price ?? 0)}",
-                            style: Styles.headerText(color: Colors.black),
+                            "EGP ${(widget.model.trip?.price ?? 0) + (raiseFareCubit.currentPrice ?? 0)}",
+                            style: Styles.headerText(color: context.isDarkMode?Colors.white:Colors.black),
                           ),
                         ],
                       ),
@@ -1117,7 +1052,7 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                         const Sizer(),
                         Flexible(
                           child: Text(
-                            "Travel time: ~${formatDuration(widget.model.trip?.duration ?? 0)} , Distance: ${formatDistance(widget.model.trip?.distance ?? 0)}",
+                            "${LocaleKeys.travelTime.tr()}: ~${formatDuration(widget.model.trip?.duration ?? 0)} , ${LocaleKeys.Distance.tr()}: ${formatDistance(widget.model.trip?.distance ?? 0)}",
                             style: Styles.mediumText(
                                 fontWeight: FontWeight.w500,
                                 color: Colors.white),
@@ -1131,19 +1066,22 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                   GestureDetector(
                     onTap: () {
                       raiseFareCubit.update(
-                          tripId: widget.model.trip?.id ?? "");
+                          tripId: widget.model.trip?.id ?? "", tripPrice: widget.model.trip?.price??0);
+                      setState(() {
+                        
+                      });
                     },
                     child: Container(
                       height: 60,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                          color: const Color(0xFF495563),
+                          color: raiseFareCubit.price != null? AppColors.PRIMARY_COLOR: const Color(0xFF495563),
                           borderRadius: BorderRadius.circular(10)),
                       child: Center(
                         child: Text(
-                          "Raise fare",
+                            LocaleKeys.raiseFare.tr(),
                           style: Styles.mediumText(
-                            color: const Color(0xFF5E6A78),
+                            color: raiseFareCubit.price != null? Colors.white: const Color(0xFF5E6A78),
                             fontSize: 38,
                           ),
                         ),
@@ -1158,7 +1096,7 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Payment",
+                            LocaleKeys.Payment.tr(),
                             style: Styles.mediumText(
                                 color: const Color(0xFFA1A4AF)),
                           ),
@@ -1169,8 +1107,8 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                                 color: Colors.black,
                               ),
                               Text(
-                                "EGP ${widget.model.trip?.price} ${widget.model.trip?.paymentMethod}",
-                                style: Styles.mediumText(color: Colors.black),
+                                "EGP ${(widget.model.trip?.price ?? 0) + (raiseFareCubit.currentPrice ?? 0)} ${widget.model.trip?.paymentMethod}",
+                                style: Styles.mediumText(color: context.isDarkMode?Colors.white:Colors.black),
                               ),
                             ],
                           )
@@ -1218,150 +1156,175 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
 }
 
 class AcceptOrDeclineTrip extends StatelessWidget {
-  const AcceptOrDeclineTrip({super.key, required this.model});
-  final OfferDataModel model;
+  const AcceptOrDeclineTrip({
+    super.key,
+    required this.model,
+    required this.tripId,
+  });
+  final TripRequestOfferModel model;
+  final String tripId;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black38,
-            blurRadius: 30,
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: (model.data?.offerObject?.comfort ?? false)
-                  ? Colors.green
-                  : Colors.red,
+    return BlocListener<OfferCubit, RiderState>(
+      listener: (context, state) {
+        log(state.toString(), name: "SuccessAcceptOfferRideState");
+        if (state is SuccessAcceptOfferRideState) {
+          context.pushAndRemoveUntil(Routes.TRIPINFOBYRIDERSCREEN, extra: state.model, (route) => false,);
+        }
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+        decoration: BoxDecoration(
+          color: context.isDarkMode?AppColors.QUANTITY_COLOR:Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black38,
+              blurRadius: 30,
             ),
-            child: Text(
-              (model.data?.offerObject?.comfort ?? false)
-                  ? "Comfort"
-                  : "Not Comfort",
-              style: Styles.mediumText(),
-            ),
-          ),
-          const Sizer(),
-          Row(
-            children: [
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if ((model.comfort ?? false))
               Container(
-                width: 40,
-                height: 40,
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: NetworkImage(
-                          model.data?.offerObject?.profilePicture ?? ""),
-                      fit: BoxFit.cover,
-                    )),
+                  borderRadius: BorderRadius.circular(10),
+                  color: (model.comfort ?? false) ? Colors.green : Colors.red,
+                ),
+                child: Text(
+                  LocaleKeys.comfort.tr(),
+                  style: Styles.mediumText(),
+                ),
               ),
-              const Sizer(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        model.data?.offerObject?.firstName ?? "",
-                        style: Styles.mediumText(color: Colors.black),
-                      ),
-                      const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                      ),
-                      Text(
-                        "${model.data?.offerObject?.averageRating ?? ""} ",
-                        style: Styles.mediumText(color: Colors.black),
-                      ),
-                      Text(
-                        "(${model.data?.offerObject?.allCountTrip} rides)",
-                        style:
-                            Styles.mediumText(color: Colors.grey, fontSize: 26),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    model.data?.offerObject?.model ?? "",
-                    style: Styles.mediumText(color: Colors.black),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              Column(
-                children: [
-                  Text(
-                    formatDuration(
-                        model.data?.offerObject?.arrivalTimeToClient ?? 0),
-                    style: Styles.headerText(color: Colors.black, fontSize: 30),
-                  ),
-                  Text(
-                    formatDistance(model.data?.offerObject?.distance ?? 0),
-                    style: Styles.headerText(color: Colors.black, fontSize: 30),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Text(
-            "EGP ${model.data?.offerObject?.priceOffer ?? 0}",
-            style: Styles.headerText(color: Colors.black, fontSize: 50),
-          ),
-          const Sizer(),
-          Row(
-            children: [
-              Flexible(
-                child: Container(
-                  width: double.infinity,
-                  height: 50,
+            const Sizer(),
+            Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Center(
-                    child: Text(
-                      "Decline",
-                      style: Styles.mediumText(color: Colors.white),
-                    ),
-                  ),
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: NetworkImage(model.profilePicture ?? ""),
+                        fit: BoxFit.cover,
+                      )),
                 ),
-              ),
-              const Sizer(),
-              Flexible(
-                child: GestureDetector(
-                  onTap: () {
-                    // context.read<OfferCubit>().acceptOffer(
-                    //   subCategory: model.data.offerObject.
-                    // );
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        color: AppColors.PRIMARY_COLOR,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Center(
-                      child: Text(
-                        "Accept",
-                        style: Styles.mediumText(color: Colors.white),
+                const Sizer(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          model.firstName ?? "",
+                          style: Styles.mediumText(color: Colors.black),
+                        ),
+                        const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        Text(
+                          "${model.averageRating ?? ""} ",
+                          style: Styles.mediumText(color: Colors.black),
+                        ),
+                        Text(
+                          "(${model.allCountTrip} ${LocaleKeys.rider.tr()})",
+                          style: Styles.mediumText(
+                              color: Colors.grey, fontSize: 26),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      model.model ?? "",
+                      style: Styles.mediumText(color: Colors.black),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Column(
+                  children: [
+                    Text(
+                      formatDuration(model.arrivalTimeToClient ?? 0),
+                      style:
+                          Styles.headerText(color: Colors.black, fontSize: 30),
+                    ),
+                    Text(
+                      formatDistance(model.distance ?? 0),
+                      style:
+                          Styles.headerText(color: Colors.black, fontSize: 30),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Text(
+              "EGP ${model.priceOffer ?? 0}",
+              style: Styles.headerText(color: Colors.black, fontSize: 50),
+            ),
+            const Sizer(),
+            Row(
+              children: [
+                Flexible(
+                  child: GestureDetector(
+                    onTap: () {
+                      if (context.read<ShowOffersCubit>().overlayEntry !=
+                          null) {
+                        context.read<OfferCubit>().declineOffer(
+                              tripId: tripId,
+                            );
+                        context.read<ShowOffersCubit>().overlayEntry!.remove();
+                      }
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Center(
+                        child: Text(
+                          LocaleKeys.decline.tr(),
+                          style: Styles.mediumText(color: Colors.white),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              )
-            ],
-          )
-        ],
+                const Sizer(),
+                Flexible(
+                  child: GestureDetector(
+                    onTap: () {
+                      context.read<OfferCubit>().acceptOffer(
+                          tripId: tripId,
+                          subCategory: model.subcategoryId ?? "");
+                      if (context.read<ShowOffersCubit>().overlayEntry !=
+                          null) {
+                        context.read<ShowOffersCubit>().overlayEntry!.remove();
+                      }
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          color: AppColors.PRIMARY_COLOR,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Center(
+                        child: Text(
+                          LocaleKeys.Accept.tr(),
+                          style: Styles.mediumText(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -1396,11 +1359,10 @@ class AcceptOrDeclineTrip extends StatelessWidget {
   }
 }
 
-
-// [lklkkkkkkkkkkkkkkkkkkkkkkjjjjjjjjjjjjj] {
-//   status: true, 
-//   data: {
-//     price: 235.75, 
-//     lowestFare: null, 
-//     from: شارع القنال 92، حي المعادي 11728، 
-//     مصر, to: شارع العيسي ، حي مصر الجديدة 11، مصر, calculate_b: 0, polyline: {coordinates: , type: LineString}}}
+// // [lklkkkkkkkkkkkkkkkkkkkkkkjjjjjjjjjjjjj] {
+// //   status: true,
+// //   data: {
+// //     price: 235.75,
+// //     lowestFare: null,
+// //     from: شارع القنال 92، حي المعادي 11728،
+// //     مصر, to: شارع العيسي ، حي مصر الجديدة 11، مصر, calculate_b: 0, polyline: {coordinates: , type: LineString}}}

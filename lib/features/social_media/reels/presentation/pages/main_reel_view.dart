@@ -25,7 +25,6 @@ import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../zoom/presentation/controller/stream_cubit.dart';
 import '../../../../zoom/presentation/widgets/join_meeting_screen.dart';
 
@@ -141,7 +140,7 @@ class ReelsScreenState extends State<ReelsScreen>
       _currentPage = index;
     });
     final reelsCubit = context.read<ReelsCubit>();
-    if (index == (reelsCubit.state.globalReels?.length??0) - 1 && mounted) {
+    if (index == (reelsCubit.state.globalReels?.length ?? 0) - 1 && mounted) {
       reelsCubit.fetchReels();
     }
   }
@@ -159,11 +158,11 @@ class ReelsScreenState extends State<ReelsScreen>
                 physics: const BouncingScrollPhysics(),
                 controller: _pageController,
                 scrollDirection: Axis.vertical,
-                itemCount: (state.globalReels?.length??0) +
-                    ((state.globalReelsHasReachedMax??false) ? 0 : 1),
+                itemCount: (state.globalReels?.length ?? 0) +
+                    ((state.globalReelsHasReachedMax ?? false) ? 0 : 1),
                 onPageChanged: _handlePageChange,
                 itemBuilder: (context, index) {
-                  if (index >= (state.globalReels?.length??0)) {
+                  if (index >= (state.globalReels?.length ?? 0)) {
                     return const Center(
                       child: CupertinoActivityIndicator(
                         radius: 25,
@@ -179,13 +178,11 @@ class ReelsScreenState extends State<ReelsScreen>
                 },
               ),
             ),
-            Positioned(
+            const Positioned(
                 top: kToolbarHeight * 0.5,
                 right: 4,
                 left: 4,
-                child: AdvancedTikTokTabBar()
-
-                ),
+                child: AdvancedTikTokTabBar()),
           ],
         );
       },
@@ -309,7 +306,6 @@ class _UnifiedReelItemState extends State<UnifiedReelItem>
     }
   }
 
-
   Future<void> _initializePlayer() async {
     _videoPlayerController =
         VideoPlayerController.networkUrl(Uri.parse(widget.reel.videoMedia));
@@ -335,7 +331,6 @@ class _UnifiedReelItemState extends State<UnifiedReelItem>
       }
     }
   }
-
 
   /// Displays an error message using a SnackBar.
   void _showError(String message) {
@@ -403,11 +398,9 @@ class _UnifiedReelItemState extends State<UnifiedReelItem>
               color: Colors.blue,
             ),
           ),
-
       ],
     );
   }
-
 
   /// Handles vertical drag events for the spotlight item type.
   void _handleVerticalDrag(DragEndDetails details) async {
@@ -834,7 +827,6 @@ class _VideoWidgetState extends State<VideoWidget> {
                       ),
                     ),
                   ),
-
                 ],
               ),
             );
@@ -869,11 +861,13 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
   }
+
   int get generateRandom9DigitNumber {
     Random random = Random();
     // Generate a number between 100000000 and 999999999
     return 100000000 + random.nextInt(900000000);
   }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -903,13 +897,16 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               // LIVE Icon with Glow Effect
               const Sizer(),
               _buildLiveIcon(onTap: () {
-                if(context.isUserLoggedIn) {
+                if (context.isUserLoggedIn) {
                   showModalBottomSheet(
                     context: context,
-                    backgroundColor: Colors.transparent, // Make background transparent for rounded effect
-                    isScrollControlled: true, // Allows the sheet to take more space
+                    backgroundColor: Colors
+                        .transparent, // Make background transparent for rounded effect
+                    isScrollControlled:
+                        true, // Allows the sheet to take more space
                     shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(20)),
                     ),
                     builder: (context) {
                       return DraggableScrollableSheet(
@@ -921,7 +918,8 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                           return Container(
                             decoration: BoxDecoration(
                               color: Colors.white, // Set background color
-                              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                              borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(20)),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.1),
@@ -930,7 +928,8 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                                 ),
                               ],
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 16),
                             child: ListView(
                               controller: controller,
                               shrinkWrap: true,
@@ -958,23 +957,33 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                                 const SizedBox(height: 16),
                                 // Option 1: Create Live
                                 ListTile(
-                                  leading: const Icon(Icons.videocam, color: Colors.blue),
+                                  leading: const Icon(Icons.videocam,
+                                      color: Colors.blue),
                                   title: const Text('Create Live'),
                                   onTap: () async {
                                     var result = await context
                                         .read<StreamCubit>()
                                         .createLive(
-                                      title: 'create live',
-                                      roomId: generateRandom9DigitNumber.toString(),
-                                      context: context,
-                                    );
+                                          title: 'create live',
+                                          roomId: generateRandom9DigitNumber
+                                              .toString(),
+                                          context: context,
+                                        );
                                     if (result == true) {
                                       context.push(
                                         Routes.LIVEView,
                                         extra: ZegoArgs(
-                                          context.read<StreamCubit>().state.liveCreateResponseEntity!.id,
+                                          context
+                                              .read<StreamCubit>()
+                                              .state
+                                              .liveCreateResponseEntity!
+                                              .id,
                                           true,
-                                          context.read<UserCubit>().state.data!.fullName,
+                                          context
+                                              .read<UserCubit>()
+                                              .state
+                                              .data!
+                                              .fullName,
                                         ),
                                       );
                                     } else {
@@ -985,7 +994,8 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                                 const Divider(),
                                 // Option 2: Watch Live
                                 ListTile(
-                                  leading: const Icon(Icons.tv, color: Colors.green),
+                                  leading:
+                                      const Icon(Icons.tv, color: Colors.green),
                                   title: const Text('Watch'),
                                   onTap: () {
                                     context.pop();
@@ -1002,7 +1012,8 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                   ),
-                                  child: const Text('Cancel', style: TextStyle(color: Colors.white)),
+                                  child: const Text('Cancel',
+                                      style: TextStyle(color: Colors.white)),
                                 ),
                               ],
                             ),
@@ -1011,8 +1022,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                       );
                     },
                   );
-                }
-                else {
+                } else {
                   context.go(Routes.LOGIN);
                 }
               }),
@@ -1452,5 +1462,4 @@ class _CustomProgressBarState extends State<CustomProgressBar> {
       },
     );
   }
-
 }

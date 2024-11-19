@@ -85,7 +85,8 @@ class RestaurantListRepoImpl implements RestaurantListRepo {
   }
 
   @override
-  Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(PaginationParams params) {
+  Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(
+      PaginationParams params) {
     return _remoteDataSource.getExpiredOrders(params);
   }
 }

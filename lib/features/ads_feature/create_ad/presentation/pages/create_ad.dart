@@ -94,9 +94,12 @@ class _CreateAdViewState extends State<CreateAdView> {
                                 style: Styles.mediumText(
                                     fontWeight: FontWeight.bold),
                               ),
-                              Label(
-                                  text:
-                                      widget.categorization.mainCategory.name),
+                              if (widget.categorization.mainCategory.name !=
+                                  null)
+                                Label(
+                                    text: widget
+                                            .categorization.mainCategory.name ??
+                                        ""),
                             ],
                           )),
                         ],
@@ -339,7 +342,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                       ),
                       const Sizer(),
                       state.status == CreateAdStates.loadCities
-                          ? Center(child: const CircularProgressIndicator())
+                          ? const Center(child: CircularProgressIndicator())
                           : state.status == CreateAdStates.loadCitiesSuccess
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -75,16 +75,15 @@ class SocialServiceLocator {
         () => ChangeChatMuteStateUseCase(
               serviceLocator(),
             ));
-    serviceLocator.registerLazySingleton<DeleteChatUseCase>(
-        () => DeleteChatUseCase(
+    serviceLocator
+        .registerLazySingleton<DeleteChatUseCase>(() => DeleteChatUseCase(
               serviceLocator(),
             ));
-            serviceLocator.registerLazySingleton<PinChatUseCase>(
-        () => PinChatUseCase(
-              serviceLocator(),
-            ));
-            serviceLocator.registerLazySingleton<UnPinChatUseCase>(
-        () => UnPinChatUseCase(
+    serviceLocator.registerLazySingleton<PinChatUseCase>(() => PinChatUseCase(
+          serviceLocator(),
+        ));
+    serviceLocator
+        .registerLazySingleton<UnPinChatUseCase>(() => UnPinChatUseCase(
               serviceLocator(),
             ));
     serviceLocator.registerLazySingleton<ChangeChatToArchiveOrNormalUseCase>(
@@ -106,7 +105,7 @@ class SocialServiceLocator {
               serviceLocator(),
             ));
 
-serviceLocator.registerLazySingleton<ListenToNewChatUseCase>(
+    serviceLocator.registerLazySingleton<ListenToNewChatUseCase>(
         () => ListenToNewChatUseCase(
               serviceLocator(),
             ));

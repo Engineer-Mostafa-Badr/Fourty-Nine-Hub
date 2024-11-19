@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -151,23 +150,23 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   // Future<UserCredential> signInWithFacebook() async {
-    // Trigger the sign-in flow
-    // final LoginResult loginResult = await FacebookAuth.instance.login();
+  // Trigger the sign-in flow
+  // final LoginResult loginResult = await FacebookAuth.instance.login();
 
-    // log(loginResult.accessToken!.tokenString.toString());
-    // log(loginResult.message.toString());
+  // log(loginResult.accessToken!.tokenString.toString());
+  // log(loginResult.message.toString());
 
-    // Create a credential from the access token
-    // final OAuthCredential facebookAuthCredential =
-    //     FacebookAuthProvider.credential(loginResult.accessToken!.token);
+  // Create a credential from the access token
+  // final OAuthCredential facebookAuthCredential =
+  //     FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
-    // Once signed in, return the UserCredential
-    // UserCredential userCredential = await FirebaseAuth.instance
-    //     .signInWithCredential();
-    // log(userCredential.additionalUserInfo!.username.toString());
-    // log(userCredential.user!.email.toString());
-    // log(userCredential.user!.photoURL.toString());
-    // return UserCredential();
+  // Once signed in, return the UserCredential
+  // UserCredential userCredential = await FirebaseAuth.instance
+  //     .signInWithCredential();
+  // log(userCredential.additionalUserInfo!.username.toString());
+  // log(userCredential.user!.email.toString());
+  // log(userCredential.user!.photoURL.toString());
+  // return UserCredential();
   // }
 
   @override

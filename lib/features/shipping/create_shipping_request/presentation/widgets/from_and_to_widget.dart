@@ -39,7 +39,7 @@ class FromAndToWidget extends StatelessWidget {
           _buildToWidget(context: context),
           const Sizer(),
           AppButton(
-              label:LocaleKeys.continueKey.tr(),
+              label: LocaleKeys.continueKey.tr(),
               onPressed: () {
                 bottomSheet(
                     isScrollControlled: true,
@@ -78,8 +78,8 @@ class FromAndToWidget extends StatelessWidget {
               const Sizer(),
               Expanded(
                   child: Label(
-                text:
-                    state.toAddress?.address ?? LocaleKeys.selectDropOffLocation.tr(),
+                text: state.toAddress?.address ??
+                    LocaleKeys.selectDropOffLocation.tr(),
                 style: Styles.mediumText(),
                 maxLines: 1,
               )),
@@ -116,7 +116,8 @@ class FromAndToWidget extends StatelessWidget {
                     const Sizer(),
                     Expanded(
                         child: Text(
-                      state.fromAddress?.address ?? LocaleKeys.selectPickupLocation.tr(),
+                      state.fromAddress?.address ??
+                          LocaleKeys.selectPickupLocation.tr(),
                       maxLines: 1,
                     )),
                   ],

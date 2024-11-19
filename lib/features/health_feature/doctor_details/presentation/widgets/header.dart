@@ -125,12 +125,7 @@ class DoctorDetailsAccountHeader extends StatelessWidget {
                             flex: 4,
                             child: AppButton(
                               label: Labels.onlineSession,
-                              onPressed: () {
-
-
-
-
-                              },
+                              onPressed: () {},
                             ),
                           )
                         : const Spacer(flex: 4),

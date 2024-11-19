@@ -27,17 +27,18 @@ class LiveStreamHomeScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 30,
-automaticallyImplyLeading: false,
+          automaticallyImplyLeading: false,
           bottom: PreferredSize(
             preferredSize: const Size(double.infinity, 30),
             child: Stack(
               children: [
                 TabBar(
-                  indicatorColor:
-                      context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-                  labelColor:
-                      context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-
+                  indicatorColor: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR,
+                  labelColor: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR,
                   tabs: [
                     Tab(text: LocaleKeys.live.localize),
                     Tab(text: LocaleKeys.clubVoice.localize),

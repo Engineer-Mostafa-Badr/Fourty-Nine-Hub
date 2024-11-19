@@ -5,7 +5,7 @@ class CreateAdEntity {
   final String propId;
   final String? type;
 
-  CreateAdEntity({required this.value, required this.propId,this.type});
+  CreateAdEntity({required this.value, required this.propId, this.type});
 
   Map<String, dynamic> toJson() {
     return {

@@ -29,13 +29,14 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 20.h),
-      child: BlocBuilder<SearchCubit,SearchState>(
+      child: BlocBuilder<SearchCubit, SearchState>(
         builder: (BuildContext context, state) {
           final controller = context.read<SearchCubit>();
           if (controller.searchController.text.isNotEmpty) {
             return PagedGridView<int, MainSubCategorySearchEntity>(
               pagingController: controller.searchPagingController,
-              builderDelegate: PagedChildBuilderDelegate<MainSubCategorySearchEntity>(
+              builderDelegate:
+                  PagedChildBuilderDelegate<MainSubCategorySearchEntity>(
                 noItemsFoundIndicatorBuilder: (context) {
                   return Center(
                     child: Text(
@@ -50,30 +51,29 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                 itemBuilder: (context, item, index) {
                   return InkWell(
                     onTap: () {
-                     // context.push(Routes.SUBCATEGORIES, extra: state.search![index]);
+                      // context.push(Routes.SUBCATEGORIES, extra: state.search![index]);
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
-                      child:  buildItem(item,
-                          () async{
-                            var result = await controller
-                                .toggleSubCategoryToFavorites(item.id);
-                            return result;
-                          },
+                      child: buildItem(item, () async {
+                        var result = await controller
+                            .toggleSubCategoryToFavorites(item.id);
+                        return result;
+                      },
                           item.isFavorite == true
                               ? Icons.favorite
-                              : Icons.favorite_border
-                      ),
+                              : Icons.favorite_border),
                     ),
                   );
                 },
                 noMoreItemsIndicatorBuilder: (context) => Container(),
                 firstPageProgressIndicatorBuilder: (context) =>
-                const CupertinoActivityIndicator(),
+                    const CupertinoActivityIndicator(),
                 newPageProgressIndicatorBuilder: (context) =>
-                const CupertinoActivityIndicator(),
-              ), gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, childAspectRatio: 1),
+                    const CupertinoActivityIndicator(),
+              ),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, childAspectRatio: 1),
             );
           }
 
@@ -105,7 +105,9 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
     );
   }
 
-  Widget buildItem(MainSubCategorySearchEntity model,Function() fav,IconData icon) => InkWell(
+  Widget buildItem(
+          MainSubCategorySearchEntity model, Function() fav, IconData icon) =>
+      InkWell(
         onTap: () {},
         child: Container(
           margin: EdgeInsets.all(10.w),
@@ -125,7 +127,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
               Expanded(
                 child: Stack(
                   children: [
-                     Positioned.fill(
+                    Positioned.fill(
                       child: SquareImage(
                         fit: BoxFit.cover,
                         radius: 5,
@@ -165,7 +167,9 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Label(
-                            text:context.locale == Locales.english? model.nameEn :model.nameAr,
+                            text: context.locale == Locales.english
+                                ? model.nameEn
+                                : model.nameAr,
                             style:
                                 Styles.mediumText(fontWeight: FontWeight.bold),
                           ),

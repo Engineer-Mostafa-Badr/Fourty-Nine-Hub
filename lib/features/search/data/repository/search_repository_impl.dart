@@ -7,17 +7,19 @@ import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_c
 
 import '../../domain/repository/search_repository.dart';
 
-class SearchRepositoryImpl extends SearchRepository{
+class SearchRepositoryImpl extends SearchRepository {
   final SearchRemoteDataSource _searchRemoteDataSource;
 
   SearchRepositoryImpl(this._searchRemoteDataSource);
   @override
-  Future<Either<Failure, List<MainSubCategorySearchEntity>>> fetchSearch(SearchParams params) {
-   return _searchRemoteDataSource.fetchSearch(params);
+  Future<Either<Failure, List<MainSubCategorySearchEntity>>> fetchSearch(
+      SearchParams params) {
+    return _searchRemoteDataSource.fetchSearch(params);
   }
 
   @override
-  Future<Either<Failure, List<UserSearchEntity>>> fetchUserSearch(SearchParams params) {
-   return _searchRemoteDataSource.fetchUserSearch(params);
+  Future<Either<Failure, List<UserSearchEntity>>> fetchUserSearch(
+      SearchParams params) {
+    return _searchRemoteDataSource.fetchUserSearch(params);
   }
 }

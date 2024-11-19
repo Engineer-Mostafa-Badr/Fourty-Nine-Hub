@@ -43,7 +43,7 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
       decoration: BoxDecoration(
           border: Border.all(
               color: widget.selected ? Colors.red : Colors.transparent,
-              width: 1),
+              width: 4),
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(5),
           boxShadow: const [

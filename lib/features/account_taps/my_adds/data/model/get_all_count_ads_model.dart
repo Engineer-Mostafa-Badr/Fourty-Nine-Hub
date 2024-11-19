@@ -11,14 +11,14 @@ class GetAllCountAdsModel extends GetAllCountAdsEntity {
       required super.twitter_documentation});
 
   factory GetAllCountAdsModel.fromJson(Map<String, dynamic> json) {
-      return GetAllCountAdsModel(
-          id: json['_id'] ??'',
-          firstName: json['firstName'] ??'',
-          lastName: json['lastName'] ??'',
-          gender: json['gender'] ??'',
-          email: json['email'] ??'',
-          phone: json['phone'] ??'',
-          twitter_documentation: json['twitter_documentation'] ??false,
-      );
+    return GetAllCountAdsModel(
+      id: json['_id'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      gender: json['gender'] ?? '',
+      email: json['email'] ?? '',
+      phone: json['phone'] ?? '',
+      twitter_documentation: json['twitter_documentation'] ?? false,
+    );
   }
 }

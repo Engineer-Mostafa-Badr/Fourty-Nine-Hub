@@ -10,13 +10,13 @@ class UserStarModel extends UserStarEntity {
       required super.image});
 
   factory UserStarModel.fromJson(Map<String, dynamic> json) {
-      return UserStarModel(
-          id: json['_id'] ??'',
-          firstName: json['firstName'] ??'',
-          lastName: json['lastName'] ??'',
-          email: json['email'] ??'',
-          twitterDocumentation: json['twitter_documentation'] ??false,
-          image: json['image'] ??'',
-      );
+    return UserStarModel(
+      id: json['_id'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      email: json['email'] ?? '',
+      twitterDocumentation: json['twitter_documentation'] ?? false,
+      image: json['image'] ?? '',
+    );
   }
 }

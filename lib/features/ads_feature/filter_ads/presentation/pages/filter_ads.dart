@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -27,13 +26,16 @@ class FilterAdsView extends StatefulWidget {
 class _FilterAdsViewState extends State<FilterAdsView> {
   @override
   void initState() {
-    context.read<CreateAdCubit>().loadData(subCategoryId: widget.categorization.mainCategory.id);
+    context
+        .read<CreateAdCubit>()
+        .loadData(subCategoryId: widget.categorization.mainCategory.id);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CreateAdCubit, CreateAdState>(listener: (context, state) {
+    return BlocConsumer<CreateAdCubit, CreateAdState>(
+        listener: (context, state) {
       if (state.isError) {
         showErrorMessage(
           context,
@@ -51,65 +53,75 @@ class _FilterAdsViewState extends State<FilterAdsView> {
           key: controller.formState,
           child: BlocBuilder<CreateAdCubit, CreateAdState>(
               builder: (context, state) {
-                if(state.isLoading){
-                  return const Center(child: CircularProgressIndicator(),);
-                }
-              return ListView(
-                shrinkWrap: true,
-                padding: const EdgeInsets.all(8.0),
-                children: [
-                  Row(
-                    children: [
-                      SquareImage(
-                        width: kToolbarHeight * .8,
-                        height: kToolbarHeight * .8,
-                        radius: 10,
-                        url: widget.categorization.subCategory.image,
-                      ),
-                      const Sizer(),
-                      Expanded(
-                          child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Label(
-                            text: widget.categorization.subCategory.name,
-                            style: Styles.mediumText(fontWeight: FontWeight.bold),
-                          ),
-                          Label(text: widget.categorization.mainCategory.name),
-                        ],
-                      )),
-                    ],
-                  ),
-                  const Divider(),
-                  const Sizer(),
-                  ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final property = state.filterAdProperties![index];
-                      return FilterAdDynamicInputWidget(
-                        property: property,
-                        onChanged: (SelectionEntity v) => controller.onChanged(v: v, index: index),
-                        onTextChanged: (String v,bool from,String type) => controller.onTextChanged(v: v, index: index,isNumber: property.type=='number',from: from,type: type),
-                      );
-                    },
-                    separatorBuilder: (context, index) => const Sizer(),
-                    shrinkWrap: true,
-                    itemCount: state.filterAdProperties?.length??0,
-                  ),
-                  const Sizer(),
-                  DefaultButton(
-                      label: LocaleKeys.filter.localize,
-                      onPressed: () {
-                        controller.filterAds(categorize: widget.categorization, context: context);
-                      }),
-                ],
+            if (state.isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
               );
-              }
-
-          ),
+            }
+            return ListView(
+              shrinkWrap: true,
+              padding: const EdgeInsets.all(8.0),
+              children: [
+                Row(
+                  children: [
+                    SquareImage(
+                      width: kToolbarHeight * .8,
+                      height: kToolbarHeight * .8,
+                      radius: 10,
+                      url: widget.categorization.subCategory.image,
+                    ),
+                    const Sizer(),
+                    Expanded(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Label(
+                          text: widget.categorization.subCategory.name,
+                          style: Styles.mediumText(fontWeight: FontWeight.bold),
+                        ),
+                        if (widget.categorization.mainCategory.name != null)
+                          Label(
+                              text: widget.categorization.mainCategory.name ??
+                                  ""),
+                      ],
+                    )),
+                  ],
+                ),
+                const Divider(),
+                const Sizer(),
+                ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final property = state.filterAdProperties![index];
+                    return FilterAdDynamicInputWidget(
+                      property: property,
+                      onChanged: (SelectionEntity v) =>
+                          controller.onChanged(v: v, index: index),
+                      onTextChanged: (String v, bool from, String type) =>
+                          controller.onTextChanged(
+                              v: v,
+                              index: index,
+                              isNumber: property.type == 'number',
+                              from: from,
+                              type: type),
+                    );
+                  },
+                  separatorBuilder: (context, index) => const Sizer(),
+                  shrinkWrap: true,
+                  itemCount: state.filterAdProperties?.length ?? 0,
+                ),
+                const Sizer(),
+                DefaultButton(
+                    label: LocaleKeys.filter.localize,
+                    onPressed: () {
+                      controller.filterAds(
+                          categorize: widget.categorization, context: context);
+                    }),
+              ],
+            );
+          }),
         ),
       );
     });
   }
-
 }

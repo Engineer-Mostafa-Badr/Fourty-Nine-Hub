@@ -16,9 +16,9 @@ abstract class PaymentCacheOutRepository {
   Future<Either<Failure, bool>> requestYellowCard(
       RequestYellowCardParams params);
 
-  Future<Either<Failure,List<ListBankEntity>>>fetchAllBank();
-  Future<Either<Failure,bool>>payoutRequest(PayoutRequestParams params);
-  Future<Either<Failure,bool>> requestInstapay(RequestInstapayParams params);
-  Future<Either<Failure,PriceYellowCardEntity>>fetchPrice();
-  Future<Either<Failure,PayoutMethodEntity>>payoutMethod();
+  Future<Either<Failure, List<ListBankEntity>>> fetchAllBank();
+  Future<Either<Failure, bool>> payoutRequest(PayoutRequestParams params);
+  Future<Either<Failure, bool>> requestInstapay(RequestInstapayParams params);
+  Future<Either<Failure, PriceYellowCardEntity>> fetchPrice();
+  Future<Either<Failure, PayoutMethodEntity>> payoutMethod();
 }

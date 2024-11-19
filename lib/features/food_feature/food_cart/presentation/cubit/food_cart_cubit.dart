@@ -25,8 +25,6 @@ class FoodCartCubit extends Cubit<BasicState<CartEntity>> {
         (data) => emit(state.copyWith(data: data)));
   }
 
-
-
   void placeOrder(BuildContext context) async {
     if (state.data != null) {
       final response = await _placeOrderUseCase(state.data!.id);

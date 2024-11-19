@@ -48,7 +48,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   loadJsonAsset() async {
     final String jsonString =
-    await rootBundle.loadString('assets/json/surahs.json');
+        await rootBundle.loadString('assets/json/surahs.json');
     var data = jsonDecode(jsonString);
     setState(() {
       widgejsonData = data;
@@ -62,6 +62,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -98,9 +99,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               context,
                               MaterialPageRoute(
                                   builder: (builder) => QuranPage(
-                                    suraJsonData: widgejsonData,
-                                  )));
-                        //  return context.push(Routes.QURAAN);
+                                        suraJsonData: widgejsonData,
+                                      )));
+                          //  return context.push(Routes.QURAAN);
                         }),
                     drawerListTile(
                         image: Assets.azkar,

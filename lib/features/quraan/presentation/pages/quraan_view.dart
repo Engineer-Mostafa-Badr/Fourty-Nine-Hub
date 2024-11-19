@@ -2,12 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/quraan/domain/entity/quran_surah_entity.dart';
-import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_use_case.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_state.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -28,35 +26,34 @@ class QuraanView extends StatelessWidget {
           create: (BuildContext context) => serviceLocator()..loadData(),
           child: BlocBuilder<QuranCubit, QuranState>(
             builder: (BuildContext context, state) {
-              var controller=context.read<QuranCubit>();
+              var controller = context.read<QuranCubit>();
               return Padding(
-                  padding: EdgeInsets.all(12.w),
-                  child: PagedListView<int, QuranSurahEntity>(
-                    pagingController: controller.quranSurahPagingController,
-                    builderDelegate: PagedChildBuilderDelegate<
-                        QuranSurahEntity>(
-                      itemBuilder: (context, item, index) {
-                        return InkWell(
-                          onTap: () {
-                            // context.push(Routes.SUBCATEGORIES,
-                            //     extra: state.search![index]);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: buildItem(
-                              context,
-                               item,
-                            ),
+                padding: EdgeInsets.all(12.w),
+                child: PagedListView<int, QuranSurahEntity>(
+                  pagingController: controller.quranSurahPagingController,
+                  builderDelegate: PagedChildBuilderDelegate<QuranSurahEntity>(
+                    itemBuilder: (context, item, index) {
+                      return InkWell(
+                        onTap: () {
+                          // context.push(Routes.SUBCATEGORIES,
+                          //     extra: state.search![index]);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: buildItem(
+                            context,
+                            item,
                           ),
-                        );
-                      },
-                      noMoreItemsIndicatorBuilder: (context) => Container(),
-                      firstPageProgressIndicatorBuilder: (context) =>
-                      const CupertinoActivityIndicator(),
-                      newPageProgressIndicatorBuilder: (context) =>
-                      const CupertinoActivityIndicator(),
-                    ),
+                        ),
+                      );
+                    },
+                    noMoreItemsIndicatorBuilder: (context) => Container(),
+                    firstPageProgressIndicatorBuilder: (context) =>
+                        const CupertinoActivityIndicator(),
+                    newPageProgressIndicatorBuilder: (context) =>
+                        const CupertinoActivityIndicator(),
                   ),
+                ),
                 // child: ListView.separated(
                 //   itemBuilder: (context,index)=>buildItem(context),
                 //   separatorBuilder: (context,index)=>const Divider(color: AppColors.GREY_NORMAL_COLOR,),
@@ -70,33 +67,26 @@ class QuraanView extends StatelessWidget {
     );
   }
 
-  Widget buildItem(context,QuranSurahEntity model) =>
-      Row(
+  Widget buildItem(context, QuranSurahEntity model) => Row(
         children: [
           Container(
-            width: 100.w,
-             height: 100.h,
-             // padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 30.w),
+              width: 100.w,
+              height: 100.h,
+              // padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 30.w),
               decoration: BoxDecoration(
-                color: Theme
-                    .of(context)
-                    .primaryColor,
+                color: Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Label(
                 text: '${model.surahNo}',
                 style: Styles.headerText(
-                    color: Theme
-                        .of(context)
-                        .scaffoldBackgroundColor),
+                    color: Theme.of(context).scaffoldBackgroundColor),
               )),
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 30.w),
               decoration: BoxDecoration(
-                color: Theme
-                    .of(context)
-                    .scaffoldBackgroundColor,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Row(
@@ -104,9 +94,7 @@ class QuraanView extends StatelessWidget {
                   Text(
                     model.surahNameAr,
                     style: Styles.headerText(
-                        color: Theme
-                            .of(context)
-                            .primaryColor),
+                        color: Theme.of(context).primaryColor),
                     textAlign: TextAlign.right,
                   ),
                   const Spacer(),
@@ -115,17 +103,13 @@ class QuraanView extends StatelessWidget {
                       Text(
                         'اياتها',
                         style: Styles.headerText(
-                            color: Theme
-                                .of(context)
-                                .primaryColor),
+                            color: Theme.of(context).primaryColor),
                         textAlign: TextAlign.right,
                       ),
                       Text(
                         '7',
                         style: Styles.headerText(
-                            color: Theme
-                                .of(context)
-                                .primaryColor),
+                            color: Theme.of(context).primaryColor),
                         textAlign: TextAlign.right,
                       ),
                     ],

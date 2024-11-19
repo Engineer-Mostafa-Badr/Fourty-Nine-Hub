@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
 
-
 import 'package:fourtyninehub/features/social_media/edit_profile/domain/entities/edit_profile_entity.dart';
 
 import '../../domain/repositories/edit_profile_repo.dart';

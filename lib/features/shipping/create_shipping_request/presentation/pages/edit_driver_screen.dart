@@ -131,9 +131,6 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                           child: BlocBuilder<ShippingCubit, ShippingState>(
                             builder: (context, state) {
                               if (state is SuccessGetBannerState) {
-                                log(state.toString(),
-                                    name: "llllllllllllllllllllll");
-
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -213,7 +210,8 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                                       .size
                                                       .width *
                                                   0.95,
-                                              hintText: LocaleKeys.subCategory.tr(),
+                                              hintText:
+                                                  LocaleKeys.subCategory.tr(),
                                               dropdownMenuEntries: state
                                                   .model.subCategories!
                                                   .map((e) => SubCategoryEntity(
@@ -432,7 +430,8 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                                         .driverInformation
                                                         ?.driverInfoId
                                                         ?.idFrontKey,
-                                                    hint: LocaleKeys.inFront.tr(),
+                                                    hint:
+                                                        LocaleKeys.inFront.tr(),
                                                     // validator: (value) {
                                                     //   return shippingcubit.validation(
                                                     //       message:
@@ -457,7 +456,8 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                                         .driverInformation
                                                         ?.driverInfoId
                                                         ?.idBehindKey,
-                                                    hint: LocaleKeys.behind.tr(),
+                                                    hint:
+                                                        LocaleKeys.behind.tr(),
                                                     // validator: (value) {
                                                     //   return shippingcubit.validation(
                                                     //       message:
@@ -877,7 +877,9 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                           height: 10,
                         ),
                         AppInfoText(
-                          text: LocaleKeys.theApplicationDoesNotDeductAnyPercentage.tr(),
+                          text: LocaleKeys
+                              .theApplicationDoesNotDeductAnyPercentage
+                              .tr(),
                         ),
                         const SizedBox(
                           height: 10,

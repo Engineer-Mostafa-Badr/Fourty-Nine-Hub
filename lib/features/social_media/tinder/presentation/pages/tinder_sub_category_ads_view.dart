@@ -32,7 +32,8 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
   void initState() {
     super.initState();
 
-    context.read<TinderViewCubit>().fetchMainCategoryById(context,
+    context.read<TinderViewCubit>().fetchMainCategoryById(
+          context,
           '6718f27eacb309f8b1f94d0c',
         );
 
@@ -107,8 +108,8 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                           Expanded(
                             child: FittedBox(
                               child: Text(
-                                tinderCubit.state.mainCategoryResponse!
-                                        .name,
+                                tinderCubit.state.mainCategoryResponse!.name ??
+                                    "",
                                 textScaler: TextScaler.noScaling,
                                 style: TextStyle(
                                     // color: AppColors.PRIMARY_COLOR,

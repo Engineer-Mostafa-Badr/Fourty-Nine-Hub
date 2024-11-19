@@ -132,47 +132,47 @@ class _StartTextFieldAndFindButonState
     return null;
   }
 }
-    // return Form(
-    //   key: formKey,
-    //   child: Container(
-    //     height: 75.h,
-    //     margin: EdgeInsets.only(top: 10.h),
-    //     child: Row(
-    //       crossAxisAlignment: CrossAxisAlignment.start,
-    //       children: [
-    //         Expanded(
-    //           child: BlocBuilder<StartingLocationCubit, StartingLocationState>(
-    //             builder: (context, state) {
-    //               return TextFormField(
-    //                 decoration: InputDecoration(
-    //                   border: OutlineInputBorder(
-    //                       borderRadius: BorderRadius.circular(20)),
-    //                   fillColor: Colors.transparent,
-    //                   isDense: true, // Added this
-    //                   contentPadding: const EdgeInsets.all(14),
-    //                   suffixIcon: _getIcon(state),
-    //                   labelText: LocaleKeys.startingPoint.localize,
-    //                 ),
-    //                 controller: startingController,
-    //                 // labelStyle: const TextStyle(color: Colors.black),
-    //                 // hint: 'Find your starting Point..!',
-    //                 validator: _validator,
-    //               );
-    //             },
-    //           ),
-    //         ),
-    //         const Sizer(width: 5),
-    //         CustomButton(
-    //           title: LocaleKeys.searchFind.localize,
-    //           onTap: () {
-    //             if (formKey.currentState!.validate()) {
-    //               startingLocationCubit.getStartingLocation(
-    //                   address: startingController.text);
-    //             }
-    //           },
-    //           height: double.infinity,
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // );
+// return Form(
+//   key: formKey,
+//   child: Container(
+//     height: 75.h,
+//     margin: EdgeInsets.only(top: 10.h),
+//     child: Row(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         Expanded(
+//           child: BlocBuilder<StartingLocationCubit, StartingLocationState>(
+//             builder: (context, state) {
+//               return TextFormField(
+//                 decoration: InputDecoration(
+//                   border: OutlineInputBorder(
+//                       borderRadius: BorderRadius.circular(20)),
+//                   fillColor: Colors.transparent,
+//                   isDense: true, // Added this
+//                   contentPadding: const EdgeInsets.all(14),
+//                   suffixIcon: _getIcon(state),
+//                   labelText: LocaleKeys.startingPoint.localize,
+//                 ),
+//                 controller: startingController,
+//                 // labelStyle: const TextStyle(color: Colors.black),
+//                 // hint: 'Find your starting Point..!',
+//                 validator: _validator,
+//               );
+//             },
+//           ),
+//         ),
+//         const Sizer(width: 5),
+//         CustomButton(
+//           title: LocaleKeys.searchFind.localize,
+//           onTap: () {
+//             if (formKey.currentState!.validate()) {
+//               startingLocationCubit.getStartingLocation(
+//                   address: startingController.text);
+//             }
+//           },
+//           height: double.infinity,
+//         ),
+//       ],
+//     ),
+//   ),
+// );

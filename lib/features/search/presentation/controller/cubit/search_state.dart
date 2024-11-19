@@ -1,6 +1,6 @@
 part of 'search_cubit.dart';
 
-enum SearchStates { loading, initial, success,error }
+enum SearchStates { loading, initial, success, error }
 
 class SearchState {
   final SearchStates status;
@@ -9,13 +9,12 @@ class SearchState {
   final List<MainSubCategorySearchEntity>? search;
   final List<UserSearchEntity>? userSearch;
 
-
   SearchState({
     this.status = SearchStates.loading,
     this.failure,
     this.search,
     this.userSearch,
-    this.filter='totalUsers',
+    this.filter = 'totalUsers',
   });
 
   SearchState copyWith({

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../restaurants_list/domain/entities/restaurant_mneu.dart';
 
@@ -39,11 +37,11 @@ class _ItemCardState extends State<ItemCard> {
       qty++;
     });
     context.read<RestaurantDetailsCubit>().addToCart(
-      context,
-      restaurantId: widget.restaurantId, // restaurantId is non-null
-      foodId: widget.meal.id ?? "", // Handle possible null id
-      quantity: qty.toString(),
-    );
+          context,
+          restaurantId: widget.restaurantId, // restaurantId is non-null
+          foodId: widget.meal.id ?? "", // Handle possible null id
+          quantity: qty.toString(),
+        );
     // Update quantity in controller if needed
   }
 
@@ -53,11 +51,11 @@ class _ItemCardState extends State<ItemCard> {
         qty--;
       });
       context.read<RestaurantDetailsCubit>().addToCart(
-        context,
-        restaurantId: widget.restaurantId, // restaurantId is non-null
-        foodId: widget.meal.id ?? "", // Handle possible null id
-        quantity: qty.toString(),
-      );
+            context,
+            restaurantId: widget.restaurantId, // restaurantId is non-null
+            foodId: widget.meal.id ?? "", // Handle possible null id
+            quantity: qty.toString(),
+          );
       // Update quantity in controller if needed
     }
   }
@@ -96,7 +94,8 @@ class _ItemCardState extends State<ItemCard> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(12.0),
                 child: SquareImage(
-                  url: widget.meal.picture?.mediaKey ?? "", // Handle null mediaKey
+                  url: widget.meal.picture?.mediaKey ??
+                      "", // Handle null mediaKey
                   width: 80.0,
                   height: 80.0,
                 ),
@@ -189,7 +188,6 @@ class _ItemCardState extends State<ItemCard> {
     );
   }
 }
-
 
 // // import 'package:flutter/material.dart';
 // // import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,11 +1,19 @@
 import 'package:fourtyninehub/features/ads_feature/filter_ads/domain/entities/filter_entity.dart';
 
 class FilterModel extends FilterEntity {
-  FilterModel({super.price,  super.props, super.cityId, super.governorateId, super.limit, super.page, super.subCategoryId,super.filter});
+  FilterModel(
+      {super.price,
+      super.props,
+      super.cityId,
+      super.governorateId,
+      super.limit,
+      super.page,
+      super.subCategoryId,
+      super.filter});
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> filterCriteria = {};
-    for (var e in props??[]) {
+    for (var e in props ?? []) {
       if (e.value.nameEn.isNotEmpty) {
         if (e.value.type == 'number') {
           filterCriteria[e.propId] = {
@@ -21,10 +29,12 @@ class FilterModel extends FilterEntity {
       }
     }
     return {
-       if(filterCriteria.isNotEmpty) "filterCriteria": filterCriteria
-      ,
-      if(price!=null)"price":{"min": int.parse(price?.value.nameAr??'0'), "max": int.parse(price?.value.nameEn??'0')},
-
-      };
+      if (filterCriteria.isNotEmpty) "filterCriteria": filterCriteria,
+      if (price != null)
+        "price": {
+          "min": int.parse(price?.value.nameAr ?? '0'),
+          "max": int.parse(price?.value.nameEn ?? '0')
+        },
+    };
   }
 }

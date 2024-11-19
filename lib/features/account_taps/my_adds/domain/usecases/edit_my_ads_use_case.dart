@@ -11,19 +11,17 @@ import '../../../../requests_history/domain/entities/address_entity.dart';
 import '../entity/my_auction_image_entity.dart';
 import '../repositories/my_ads_repo.dart';
 
-class EditMyAdsUseCase extends UseCase<bool,EditParams>{
+class EditMyAdsUseCase extends UseCase<bool, EditParams> {
   final MyAdsRepo _adsRepo;
 
   EditMyAdsUseCase(this._adsRepo);
   @override
-  Future<Either<Failure, bool>> call(EditParams params) async{
-   return await _adsRepo.editMyAds(params);
+  Future<Either<Failure, bool>> call(EditParams params) async {
+    return await _adsRepo.editMyAds(params);
   }
 }
 
-
-
-class EditParams{
+class EditParams {
   final String id;
   final String? title;
   String? type;
@@ -51,44 +49,44 @@ class EditParams{
 
   EditParams(
       {required this.id,
-         this.title,
-         this.description,
-         this.images,
-        this.price,
-        this.type,
-        this.isFavourite = false,
-        this.hasAuction = false,
-         this.address,
-        this.phone,
-        this.statistics,
-         this.user,
-        this.subCategoryId,
-        this.mainCategoryId,
-        this.userId,
-         this.active,
-         this.approved,
-         this.details,
-         this.createdAt});
+      this.title,
+      this.description,
+      this.images,
+      this.price,
+      this.type,
+      this.isFavourite = false,
+      this.hasAuction = false,
+      this.address,
+      this.phone,
+      this.statistics,
+      this.user,
+      this.subCategoryId,
+      this.mainCategoryId,
+      this.userId,
+      this.active,
+      this.approved,
+      this.details,
+      this.createdAt});
 
   Map<String, dynamic> toJson() => {
-    "desc": description,
-    "phone": phone,
-    "title": title,
-    "type": type,
-    // "type": (hasAuction==false&&isUser==false)?"provider":(hasAuction==false&&isUser==true)?"user":(hasAuction==true&&isUser==false)?'rent':'sale',
-    "subCategoryId": subCategoryId,
-    "mainCategoryId": mainCategoryId,
-    if (price != null) "price": price,
-    // "userId": userId,
-    "searchText": "testPropsAndAds",
-    "images": images,
-    "props": details?.map((e) {
-      if (e.value.nameEn.isNotEmpty) {
-        return {
-          "value": {"ar": e.value.nameAr, "en": e.value.nameEn},
-          "propertyId": e.propId
-        };
-      }
-    }).toList()
-  };
+        "desc": description,
+        "phone": phone,
+        "title": title,
+        "type": type,
+        // "type": (hasAuction==false&&isUser==false)?"provider":(hasAuction==false&&isUser==true)?"user":(hasAuction==true&&isUser==false)?'rent':'sale',
+        "subCategoryId": subCategoryId,
+        "mainCategoryId": mainCategoryId,
+        if (price != null) "price": price,
+        // "userId": userId,
+        "searchText": "testPropsAndAds",
+        "images": images,
+        "props": details?.map((e) {
+          if (e.value.nameEn.isNotEmpty) {
+            return {
+              "value": {"ar": e.value.nameAr, "en": e.value.nameEn},
+              "propertyId": e.propId
+            };
+          }
+        }).toList()
+      };
 }

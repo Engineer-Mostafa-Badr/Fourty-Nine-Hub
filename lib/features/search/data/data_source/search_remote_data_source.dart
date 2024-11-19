@@ -10,8 +10,10 @@ import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_c
 import '../../../../core/error/failure.dart';
 
 abstract class SearchRemoteDataSource {
-  Future<Either<Failure, List<MainSubCategorySearchEntity>>> fetchSearch(SearchParams params);
-  Future<Either<Failure,List<UserSearchEntity>>> fetchUserSearch(SearchParams params);
+  Future<Either<Failure, List<MainSubCategorySearchEntity>>> fetchSearch(
+      SearchParams params);
+  Future<Either<Failure, List<UserSearchEntity>>> fetchUserSearch(
+      SearchParams params);
 }
 
 class SearchRemoteDataSourceImpl extends SearchRemoteDataSource {
@@ -20,28 +22,26 @@ class SearchRemoteDataSourceImpl extends SearchRemoteDataSource {
   SearchRemoteDataSourceImpl(this._apiConsumer);
 
   @override
-  Future<Either<Failure, List<MainSubCategorySearchEntity>>> fetchSearch(SearchParams params) async {
-    final response = await _apiConsumer.get(
-        EndPoints.search(params),
-            data: params.toJson()
-    );
+  Future<Either<Failure, List<MainSubCategorySearchEntity>>> fetchSearch(
+      SearchParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.search(params), data: params.toJson());
     return response.fold(
-      (failure)=>Left(failure),
-      (response)=>Right((response['data'] as List)
+      (failure) => Left(failure),
+      (response) => Right((response['data'] as List)
           .map((e) => MainSubCategorySearchModel.fromJson(e))
           .toList()),
     );
   }
 
   @override
-  Future<Either<Failure, List<UserSearchEntity>>> fetchUserSearch(SearchParams params) async {
-    final response = await _apiConsumer.get(
-        EndPoints.search(params),
-        data: params.toJson()
-    );
+  Future<Either<Failure, List<UserSearchEntity>>> fetchUserSearch(
+      SearchParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.search(params), data: params.toJson());
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right((response['data'] as List)
+      (failure) => Left(failure),
+      (response) => Right((response['data'] as List)
           .map((e) => UserSearchModel.fromJson(e))
           .toList()),
     );

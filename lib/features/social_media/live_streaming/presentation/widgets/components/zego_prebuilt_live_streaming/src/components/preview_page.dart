@@ -538,73 +538,73 @@ class _ZegoLiveStreamingPreviewPageState
             children: [
               widget.config.preview.bottomBar.showBeautyEffectButton
                   ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ZegoToggleMicrophoneButton(
-                    buttonSize: buttonSize,
-                    iconSize: iconSize,
-                    normalIcon: ButtonIcon(
-                      icon: const Icon(
-                        Icons.mic,
-                        // size: 20,
-                      ),
-                      backgroundColor: Colors.transparent,
-                    ),
-                    offIcon: ButtonIcon(
-                      icon: const Icon(
-                        Icons.mic_off_outlined,
-                        // size: 20,
-                      ),
-                      backgroundColor: Colors.transparent,
-                    ),
-                  ),
-                  ZegoToggleCameraButton(
-                    buttonSize: buttonSize,
-                    iconSize: iconSize,
-                    normalIcon: ButtonIcon(
-                        icon: const Icon(
-                          Icons.videocam_outlined,
-                          // size: 20,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ZegoToggleMicrophoneButton(
+                          buttonSize: buttonSize,
+                          iconSize: iconSize,
+                          normalIcon: ButtonIcon(
+                            icon: const Icon(
+                              Icons.mic,
+                              // size: 20,
+                            ),
+                            backgroundColor: Colors.transparent,
+                          ),
+                          offIcon: ButtonIcon(
+                            icon: const Icon(
+                              Icons.mic_off_outlined,
+                              // size: 20,
+                            ),
+                            backgroundColor: Colors.transparent,
+                          ),
                         ),
-                        backgroundColor: Colors.transparent),
-                    offIcon: ButtonIcon(
-                      icon: const Icon(
-                        Icons.videocam_off_outlined,
-                        // size: 20,
-                      ),
-                      backgroundColor: Colors.transparent,
-                    ),
-                  ),
-                  ZegoScreenSharingToggleButton(
-                    buttonSize: buttonSize,
-                    iconSize: iconSize,
-                    iconStartSharing: ButtonIcon(
-                      icon: const Icon(
-                        Icons.screen_share_rounded,
-                        // size: 20,
-                      ),
-                      backgroundColor: Colors.transparent,
-                    ),
-                    iconStopSharing: ButtonIcon(
-                      icon: const Icon(
-                        Icons.stop_screen_share_outlined,
-                        // size: 20,
-                      ),
-                      backgroundColor: Colors.transparent,
-                    ),
-                  ),
-                  ZegoLiveStreamingBeautyEffectButton(
-                    translationText: widget.config.innerText,
-                    rootNavigator: widget.config.rootNavigator,
-                    effectConfig: widget.config.effect,
-                    buttonSize: buttonSize,
-                    iconSize: iconSize,
-                    icon: ButtonIcon(
-                      icon: const Icon(Icons.edit),
-                    ),
-                  )
-                ],
-              )
+                        ZegoToggleCameraButton(
+                          buttonSize: buttonSize,
+                          iconSize: iconSize,
+                          normalIcon: ButtonIcon(
+                              icon: const Icon(
+                                Icons.videocam_outlined,
+                                // size: 20,
+                              ),
+                              backgroundColor: Colors.transparent),
+                          offIcon: ButtonIcon(
+                            icon: const Icon(
+                              Icons.videocam_off_outlined,
+                              // size: 20,
+                            ),
+                            backgroundColor: Colors.transparent,
+                          ),
+                        ),
+                        ZegoScreenSharingToggleButton(
+                          buttonSize: buttonSize,
+                          iconSize: iconSize,
+                          iconStartSharing: ButtonIcon(
+                            icon: const Icon(
+                              Icons.screen_share_rounded,
+                              // size: 20,
+                            ),
+                            backgroundColor: Colors.transparent,
+                          ),
+                          iconStopSharing: ButtonIcon(
+                            icon: const Icon(
+                              Icons.stop_screen_share_outlined,
+                              // size: 20,
+                            ),
+                            backgroundColor: Colors.transparent,
+                          ),
+                        ),
+                        ZegoLiveStreamingBeautyEffectButton(
+                          translationText: widget.config.innerText,
+                          rootNavigator: widget.config.rootNavigator,
+                          effectConfig: widget.config.effect,
+                          buttonSize: buttonSize,
+                          iconSize: iconSize,
+                          icon: ButtonIcon(
+                            icon: const Icon(Icons.edit),
+                          ),
+                        )
+                      ],
+                    )
                   : beautyButtonPlaceHolder,
               SizedBox(width: 48.zR),
               startButton(),

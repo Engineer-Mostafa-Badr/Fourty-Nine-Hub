@@ -14,6 +14,7 @@ abstract class AccountRepo {
       getFavouriteSubcategories();
 
   Future<Either<Failure, List<FavouriteAdEntity>>> getFavouriteAds();
-  Future<Either<Failure, List<FavouriteAdDrawerEntity>>> getDrawerFavouriteAds();
+  Future<Either<Failure, List<FavouriteAdDrawerEntity>>>
+      getDrawerFavouriteAds();
   Future<Either<Failure, bool>> deleteFavouriteAds({required String id});
 }

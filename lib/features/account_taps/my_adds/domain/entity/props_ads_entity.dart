@@ -13,7 +13,6 @@ class PropsAdsEntity {
       required this.value,
       required this.createdAt,
       required this.updatedAt});
-
 }
 
 class PropertyDetailsEntity {

@@ -1,4 +1,3 @@
-
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/main_services_enum.dart';
@@ -181,16 +180,17 @@ class HealthCubit extends Cubit<HealthState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: HealthStates.error)),
         (data) {
-          MainCategoryEntity mainCategoryEntity;
-            mainCategoryEntity = state.mainCategory!;
-            mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
-          emit(state.copyWith(mainCategory: mainCategoryEntity));
-          result = state.mainCategory!.isFavorite!;
-          print("Salama $data");
-          return getServices();
-        });
+      MainCategoryEntity mainCategoryEntity;
+      mainCategoryEntity = state.mainCategory!;
+      mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
+      emit(state.copyWith(mainCategory: mainCategoryEntity));
+      result = state.mainCategory!.isFavorite!;
+      print("Salama $data");
+      return getServices();
+    });
     return result;
   }
+
   Future<bool> toggleFavoriteCategory(String subcategoryId) async {
     final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
     bool result = false;
@@ -198,16 +198,16 @@ class HealthCubit extends Cubit<HealthState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: HealthStates.error)),
         (data) {
-          // MainCategoryEntity mainCategoryEntity;
-          //   mainCategoryEntity = state.mainCategory!;
-          //   mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
-          // emit(state.copyWith(mainCategory: mainCategoryEntity));
-          // result = state.mainCategory!.isFavorite!;
-          // print("Salama ${data}");
-          _getMainCategoryDetails();
+      // MainCategoryEntity mainCategoryEntity;
+      //   mainCategoryEntity = state.mainCategory!;
+      //   mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
+      // emit(state.copyWith(mainCategory: mainCategoryEntity));
+      // result = state.mainCategory!.isFavorite!;
+      // print("Salama ${data}");
+      _getMainCategoryDetails();
 
-          return getServices();
-        });
+      return getServices();
+    });
     return result;
   }
 
@@ -216,7 +216,6 @@ class HealthCubit extends Cubit<HealthState> {
   Future<void> _ensureTokenInitialized() async {
     token ??= await CacheManager.getAccessToken();
   }
-
 
   Future<bool> deleteMedicalService(String subcategoryId) async {
     final response = await _deleteFavoriteCategoryUseCase(subcategoryId);

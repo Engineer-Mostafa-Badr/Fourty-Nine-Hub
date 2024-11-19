@@ -98,7 +98,7 @@ class WalletWidget extends StatelessWidget {
                 context.push(Routes.WALLET, extra: WalletTypes.mainWallet);
               },
                   LocaleKeys.wallet.tr(),
-                  '${state.wallet?.realAmount.floor() ??''} ',
+                  '${state.wallet?.realAmount.floor() ?? ''} ',
                   state.wallet?.currency ?? ''),
             ],
           ),

@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -54,9 +53,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
     super.initState();
     context.read<GetMyTripCubit>().getMyTrip();
     WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) {
-        
-      },
+      (timeStamp) {},
     );
   }
 
@@ -252,7 +249,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       const SizedBox(
                         height: 10,
                       ),
-                     ],
+                    ],
                   ),
                 ),
               ),

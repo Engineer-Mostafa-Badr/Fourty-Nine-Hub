@@ -9,7 +9,7 @@ import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:gallery_saver/gallery_saver.dart';
+// import 'package:gallery_saver/gallery_saver.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -271,16 +271,16 @@ class OtherVoiceVideoRecordingScreenState
 
       if (ReturnCode.isSuccess(returnCode)) {
         log("FFmpeg process succeeded");
-        final savedSuccessfully =
-            await GallerySaver.saveVideo(mergedVideoPath!);
-        if (savedSuccessfully ?? false) {
-          setState(() {
-            showGalleryBtn = true;
-          });
-        } else {
-          throw Exception('error_dialog_save_video_fail');
-        }
-        return savedSuccessfully;
+        // final savedSuccessfully =
+            // await GallerySaver.saveVideo(mergedVideoPath!);
+        // if (savedSuccessfully ?? false) {
+        //   setState(() {
+        //     showGalleryBtn = true;
+        //   });
+        // } else {
+        //   throw Exception('error_dialog_save_video_fail');
+        // }
+        // return savedSuccessfully;
       } else {
         final failStackTrace = await session.getFailStackTrace();
         throw Exception(

@@ -54,14 +54,14 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
           children: [
             widget.comment.user.image == ''
                 ? UserProfileImage(
-              size: 40.sp,
+                    size: 40.sp,
                     accountId: 0,
                     withBorder: false,
                     fromProfile: widget.fromProfile,
                     userId: widget.comment.user.id,
                   )
                 : UserProfileImage(
-              size: 40.sp,
+                    size: 40.sp,
                     accountId: 0,
                     imageURL: widget.comment.user.image,
                     fromProfile: widget.fromProfile,
@@ -72,8 +72,11 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Label(text: widget.comment.user.firstName, style: Styles.mediumText(fontWeight: FontWeight.bold)),
-                Label(text: widget.comment.sinceTime, style: Styles.mediumText()),
+                Label(
+                    text: widget.comment.user.firstName,
+                    style: Styles.mediumText(fontWeight: FontWeight.bold)),
+                Label(
+                    text: widget.comment.sinceTime, style: Styles.mediumText()),
               ],
             )),
             GestureDetector(
@@ -127,7 +130,9 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                       size: 20,
                       onPressed: () async {
                         var result = await widget.onEditComment(
-                            TwitterPostCommentParams(postId: widget.comment.id, content: editTextController.text));
+                            TwitterPostCommentParams(
+                                postId: widget.comment.id,
+                                content: editTextController.text));
                         if (result == true) {
                           widget.comment.content = editTextController.text;
                           widget.comment.edit = false;
@@ -156,14 +161,21 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
                 }
               },
               child: Icon(
-                widget.comment.isReact == false ? Icons.favorite_border : Icons.favorite,
-                color: widget.comment.isReact == false ? Colors.grey : Colors.red,
+                widget.comment.isReact == false
+                    ? Icons.favorite_border
+                    : Icons.favorite,
+                color:
+                    widget.comment.isReact == false ? Colors.grey : Colors.red,
               ),
             ),
-            Label(text: widget.comment.loveCount.toString(), style: Styles.mediumText()),
+            Label(
+                text: widget.comment.loveCount.toString(),
+                style: Styles.mediumText()),
             const Sizer(),
             TextAppButton(
-                style: Styles.mediumText(), label: LocaleKeys.reply.localize, onPressed: widget.onCommentReply)
+                style: Styles.mediumText(),
+                label: LocaleKeys.reply.localize,
+                onPressed: widget.onCommentReply)
           ],
         ),
         Sizer(
@@ -173,7 +185,8 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
     );
   }
 
-  Widget _buildPostOptions({required bool isMyComment, required TwitterPostCommentEntity post}) {
+  Widget _buildPostOptions(
+      {required bool isMyComment, required TwitterPostCommentEntity post}) {
     return SizedBox(
       height: isMyComment ? 150 : 80,
       child: Column(

@@ -63,22 +63,23 @@ class MealCategoryCard extends StatelessWidget {
                       ),
                     ),
                     // Favorite Icon (Heart)
-                   if(context.read<UserCubit>().isLoggedIn) Positioned(
-                      top: 5,
-                      right: 5,
-                      child: IconAppButton(
-                          size: 25,
-                          icon: subCategory?.isFavorite ?? false
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: AppColors.PRIMARY_COLOR_DARK,
-                          onPressed: () {
-                            context
-                                .read<RestaurantsCubit>()
-                                .toggleFavoriteSubcategory(
-                                    subCategory?.id ?? "");
-                          }),
-                    ),
+                    if (context.read<UserCubit>().isLoggedIn)
+                      Positioned(
+                        top: 5,
+                        right: 5,
+                        child: IconAppButton(
+                            size: 25,
+                            icon: subCategory?.isFavorite ?? false
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: AppColors.PRIMARY_COLOR_DARK,
+                            onPressed: () {
+                              context
+                                  .read<RestaurantsCubit>()
+                                  .toggleFavoriteSubcategory(
+                                      subCategory?.id ?? "");
+                            }),
+                      ),
                   ],
                 ),
                 const SizedBox(height: 10),

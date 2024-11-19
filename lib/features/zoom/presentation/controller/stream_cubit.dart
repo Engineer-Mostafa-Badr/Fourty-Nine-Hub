@@ -37,9 +37,11 @@ final class StreamCubit extends Cubit<StreamState> {
     this.getAllLivesUseCase,
     this.endLiveUseCase,
     this.sendPointsUseCase,
-    this.listenToSendPointsUseCase, this.listenBattleRequestUseCase, this.requestBattleUseCase,
-  ) : super(const StreamState()){
-   initSocketListeners();
+    this.listenToSendPointsUseCase,
+    this.listenBattleRequestUseCase,
+    this.requestBattleUseCase,
+  ) : super(const StreamState()) {
+    initSocketListeners();
   }
   final AddRoomUseCase addRoomUseCase;
   final JoinRoomUseCase joinRoomUseCase;
@@ -97,9 +99,10 @@ final class StreamCubit extends Cubit<StreamState> {
   }
 
   bool isHost = false;
-  void reInititiateState(){
+  void reInititiateState() {
     emit(state.copyWith(status: StreamsStates.initial));
   }
+
   Future<bool> joinNewMeeting(String roomId) async {
     emit(state.copyWith(status: StreamsStates.loading));
     final response = await joinRoomUseCase(MeetingParams(id: roomId));

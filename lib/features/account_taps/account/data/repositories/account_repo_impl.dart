@@ -33,7 +33,8 @@ class AccountRepoImpl implements AccountRepo {
   }
 
   @override
-  Future<Either<Failure, List<FavouriteAdDrawerEntity>>> getDrawerFavouriteAds() {
+  Future<Either<Failure, List<FavouriteAdDrawerEntity>>>
+      getDrawerFavouriteAds() {
     return _remoteDataSource.getDrawerFavouriteAds();
   }
 

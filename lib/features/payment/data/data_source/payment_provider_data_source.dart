@@ -247,14 +247,15 @@ class PaymentProviderRemoteDataSourceImpl
   }
 
   @override
-  Future<Either<Failure, InstapayCacheOutEntity>> instapayCacheOut(InstapayParams params) async {
+  Future<Either<Failure, InstapayCacheOutEntity>> instapayCacheOut(
+      InstapayParams params) async {
     final response = await _apiConsumer.put(
       EndPoints.instaPay,
       data: params.toJson(),
     );
     return response.fold(
-          (failure) => Left(failure),
-          (data) {
+      (failure) => Left(failure),
+      (data) {
         return Right(InstapayCacheOutModel.fromJson(data));
       },
     );

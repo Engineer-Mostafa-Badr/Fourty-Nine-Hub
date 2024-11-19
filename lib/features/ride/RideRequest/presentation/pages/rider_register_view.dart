@@ -1,19 +1,23 @@
 import 'dart:developer';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/rider_register_one.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/rider_register_scand_screen.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/sub_category.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:multi_dropdown/multi_dropdown.dart';
 
 class RiderRegisterView extends StatefulWidget {
   const RiderRegisterView({super.key});
@@ -50,7 +54,6 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
   TextEditingController vehicleYearController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey();
   bool smoker = false;
-
   @override
   Widget build(BuildContext context) {
     final registerRider = context.read<RegisterRiderCubit>();
@@ -107,9 +110,6 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
                       child: BlocBuilder<GetCateogryRiderCubit, RiderState>(
                         builder: (context, state) {
                           if (state is SuccessGetCateogyRider) {
-                            log(state.toString(),
-                                name: "llllllllllllllllllllll");
-
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -121,8 +121,9 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
                                   validator: (value) {
                                     log(value.toString());
                                     return registerRider.validation(
-                                      message:
-                                          "Choose your favorite Sub Category!",
+                                      message: LocaleKeys
+                                          .chooseYourFavoriteSubCategory
+                                          .tr(),
                                       condition:
                                           registerRider.model.subcategoryId ==
                                               null,
@@ -137,6 +138,7 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
+                                        
                                         DropdownMenu<SubCategoryEntity>(
                                           inputDecorationTheme:
                                               InputDecorationTheme(
@@ -183,7 +185,7 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
                                                   .size
                                                   .width *
                                               0.95,
-                                          hintText: "Sub Category",
+                                          hintText:  LocaleKeys.subCategory.tr(),
                                           dropdownMenuEntries: state
                                               .model.subCategories!
                                               .map(
@@ -205,14 +207,20 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
                                               .toList(),
                                           onSelected: (value) {
                                             setState(() {
-                                              if (value != null) {
-                                                registerRider.model
-                                                    .subcategoryId = value.id;
-                                                // shippingcubit.selectSubCategory(
-                                                //     subCategory: value);
-                                                // field.didChange(
-                                                //     value); // تحديث حالة الفاليديشن
-                                              }
+                                              registerRider.model
+                                                  .subcategoryId = value!.id;
+                                              // if (context.isUserLoggedIn) {
+                                              //   if (value != null) {
+                                              // registerRider.model
+                                              //     .subcategoryId = value.id;
+                                              //     // shippingcubit.selectSubCategory(
+                                              //     //     subCategory: value);
+                                              //     // field.didChange(
+                                              //     //     value); // تحديث حالة الفاليديشن
+                                              //   }
+                                              // } else {
+                                              //   context.push(Routes.LOGIN);
+                                              // }
                                             });
                                           },
                                         ),
@@ -264,7 +272,7 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
   }
 
   selectRegisterType(RegisterRiderCubit registerCubit) {
-    log(registerCubit.model.subcategoryId.toString(), name: "lllddkkdkdkdkdkd");
+    // log(registerCubit.model.subcategoryId.toString(), name: "lllddkkdkdkdkdkd");
     if (registerCubit.model.subcategoryId == "62c8ba9f8e28a58a3edf57eb" ||
         registerCubit.model.subcategoryId == "62ea012a69ea29c91dfc3917" ||
         registerCubit.model.subcategoryId == "6698736fdaa111da2d775627" ||

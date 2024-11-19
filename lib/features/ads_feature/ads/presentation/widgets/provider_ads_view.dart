@@ -14,7 +14,10 @@ import 'package:go_router/go_router.dart';
 
 class ProviderAdsView extends StatelessWidget {
   const ProviderAdsView(
-      {super.key, required this.params, required this.userType, required this.controller});
+      {super.key,
+      required this.params,
+      required this.userType,
+      required this.controller});
 
   final AdsViewParams params;
   final String userType;
@@ -22,75 +25,85 @@ class ProviderAdsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return controller.state.status == AdsStates.loading ?  Center(
-        child: Padding(
-          padding: EdgeInsets.only(top: 30.h),
-          child: const CircularProgressIndicator(),
-        )
-    ) : Column(
-        children: [
-          const Sizer(),
-          Align(
-              alignment: AlignmentDirectional.topStart,
-              child: Container(
-                  margin: EdgeInsetsDirectional.all(10.w),
-                  child: Row(
-                    children: [
-                      BadgedLabel(label: LocaleKeys.filter.localize,
-                          width: 170.h,
-                          icon: Icons.filter_alt_rounded,
-                          iconLeading: Icons.arrow_drop_down,
-                          onTap: () async {
-                            dynamic data = await context.push(Routes.FILTERADS,
-                                extra: CategorizationEntity(
-                                    mainCategory: params.mainCategory,
-                                    subCategory: params.subCategory));
-                            if (data != null) {
-                              print("objectsdaa");
-                              // Future.delayed(const Duration(seconds: 1), () =>
-                              //     controller.changeState(data, data != null));
-                              // context.read<AdvertisementCubit>().loadFilterData(
-                              //     model: data,
-                              //     filter: userType);
-                              controller.loadFilterData(model: data, filter: userType);
-                            }
-                          }
-                      ),
-                      const Sizer(width: 5,),
-                      BadgedLabel(label: LocaleKeys.city.localize,
-                          width: 170.h,
-                          icon: Icons.filter_alt_rounded,
-                          iconLeading: Icons.arrow_drop_down,
-                          onTap: () async {
-                            dynamic data = await context.push(Routes.GOVERNORATEFILTERADS,
-                                extra: CategorizationEntity(
-                                    mainCategory: params.mainCategory,
-                                    subCategory: params.subCategory));
-                            if (data != null) {
-                              print("objectsdaa");
-                              controller.state.city=data.cityId;
-                              controller.state.governorate=data.governorateId;
-                              // Future.delayed(const Duration(seconds: 1), () =>
-                              //     controller.changeState(data, data != null));
-                              // context.read<AdvertisementCubit>().loadFilterData(
-                              //     model: data,
-                              //     filter: userType);
-                              controller.loadFilterData(model: data, filter: userType);
-                            }
-                          }
-                      ),
-                    ],
-                  ))),
-          Expanded(
-              child: controller.state.hasFilter == false ? ProviderAds(
-                params: params, userType: userType, controller: controller,) :
-              ProviderFilterAds(
-                userType: userType,
-                params: params,
-                model: controller.state.filterModel!,
-                controller: controller,)
-          )
-        ]
-    );
+    return controller.state.status == AdsStates.loading
+        ? Center(
+            child: Padding(
+            padding: EdgeInsets.only(top: 30.h),
+            child: const CircularProgressIndicator(),
+          ))
+        : Column(children: [
+            const Sizer(),
+            Align(
+                alignment: AlignmentDirectional.topStart,
+                child: Container(
+                    margin: EdgeInsetsDirectional.all(10.w),
+                    child: Row(
+                      children: [
+                        BadgedLabel(
+                            label: LocaleKeys.filter.localize,
+                            width: 170.h,
+                            icon: Icons.filter_alt_rounded,
+                            iconLeading: Icons.arrow_drop_down,
+                            onTap: () async {
+                              dynamic data = await context.push(
+                                  Routes.FILTERADS,
+                                  extra: CategorizationEntity(
+                                      mainCategory: params.mainCategory,
+                                      subCategory: params.subCategory));
+                              if (data != null) {
+                                print("objectsdaa");
+                                // Future.delayed(const Duration(seconds: 1), () =>
+                                //     controller.changeState(data, data != null));
+                                // context.read<AdvertisementCubit>().loadFilterData(
+                                //     model: data,
+                                //     filter: userType);
+                                controller.loadFilterData(
+                                    model: data, filter: userType);
+                              }
+                            }),
+                        const Sizer(
+                          width: 5,
+                        ),
+                        BadgedLabel(
+                            label: LocaleKeys.city.localize,
+                            width: 170.h,
+                            icon: Icons.filter_alt_rounded,
+                            iconLeading: Icons.arrow_drop_down,
+                            onTap: () async {
+                              dynamic data = await context.push(
+                                  Routes.GOVERNORATEFILTERADS,
+                                  extra: CategorizationEntity(
+                                      mainCategory: params.mainCategory,
+                                      subCategory: params.subCategory));
+                              if (data != null) {
+                                print("objectsdaa");
+                                controller.state.city = data.cityId;
+                                controller.state.governorate =
+                                    data.governorateId;
+                                // Future.delayed(const Duration(seconds: 1), () =>
+                                //     controller.changeState(data, data != null));
+                                // context.read<AdvertisementCubit>().loadFilterData(
+                                //     model: data,
+                                //     filter: userType);
+                                controller.loadFilterData(
+                                    model: data, filter: userType);
+                              }
+                            }),
+                      ],
+                    ))),
+            Expanded(
+                child: controller.state.hasFilter == false
+                    ? ProviderAds(
+                        params: params,
+                        userType: userType,
+                        controller: controller,
+                      )
+                    : ProviderFilterAds(
+                        userType: userType,
+                        params: params,
+                        model: controller.state.filterModel!,
+                        controller: controller,
+                      ))
+          ]);
   }
 }

@@ -16,15 +16,14 @@ class QuranServiceLocator {
               serviceLocator(),
             ));
 
-    serviceLocator
-        .registerLazySingleton<FetchQuranSurahUseCase>(() => FetchQuranSurahUseCase(
+    serviceLocator.registerLazySingleton<FetchQuranSurahUseCase>(
+        () => FetchQuranSurahUseCase(
               serviceLocator(),
             ));
     serviceLocator
         .registerLazySingleton<FetchSurahUseCase>(() => FetchSurahUseCase(
               serviceLocator(),
             ));
-
 
     serviceLocator.registerFactory<QuranCubit>(() => QuranCubit(
           serviceLocator(),

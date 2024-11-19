@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageValidation extends StatefulWidget {
@@ -17,6 +20,7 @@ class ImageValidation extends StatefulWidget {
       this.hint,
       this.networkImage,
       this.title,
+      this.isAuthentcation = false,
       this.iconColor,
       this.height,
       this.noTextError = false,
@@ -30,6 +34,7 @@ class ImageValidation extends StatefulWidget {
   final double? height;
   final TextStyle? textStyle;
   final double? width;
+  final bool isAuthentcation;
   final bool noTextError;
   final String? networkImage;
   final String? title;
@@ -59,14 +64,30 @@ class _ImageValidationState extends State<ImageValidation> {
               ),
             GestureDetector(
               onTap: () async {
-                var pickedFlie =
-                    await ImagePicker().pickImage(source: ImageSource.gallery);
-                if (pickedFlie != null) {
-                  image = pickedFlie;
-                  if (widget.onTap != null) {
-                    widget.onTap!(File(pickedFlie.path));
+                if (widget.isAuthentcation) {
+                  if (context.isUserLoggedIn) {
+                    var pickedFlie = await ImagePicker()
+                        .pickImage(source: ImageSource.gallery);
+                    if (pickedFlie != null) {
+                      image = pickedFlie;
+                      if (widget.onTap != null) {
+                        widget.onTap!(File(pickedFlie.path));
+                      }
+                    }
+                  } else {
+                    context.push(Routes.LOGIN);
+                  }
+                } else {
+                  var pickedFlie = await ImagePicker()
+                      .pickImage(source: ImageSource.gallery);
+                  if (pickedFlie != null) {
+                    image = pickedFlie;
+                    if (widget.onTap != null) {
+                      widget.onTap!(File(pickedFlie.path));
+                    }
                   }
                 }
+
                 setState(() {});
               },
               child: ImagePickerPlaceholder(

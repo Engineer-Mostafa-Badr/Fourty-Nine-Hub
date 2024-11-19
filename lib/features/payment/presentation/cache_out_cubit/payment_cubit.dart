@@ -26,7 +26,9 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
     this._getWalletHomeUseCase,
     this._allBankUseCase,
     this._payOutRequestUseCase,
-    this._requestInstapayUseCase, this._priceYellowUseCase, this._methodBankUseCase,
+    this._requestInstapayUseCase,
+    this._priceYellowUseCase,
+    this._methodBankUseCase,
   ) : super(PaymentCacheOutState());
 
   final InstapayCacheOutUseCase _instapayCacheOutUseCase;
@@ -40,7 +42,7 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
 
   List<String>? selectedImages;
 
-  Future<void> loadData()async{
+  Future<void> loadData() async {
     await getWallet();
     await fetchPrice();
   }
@@ -169,10 +171,10 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
 
     final response = await _requestInstapayUseCase(params);
     response.fold(
-          (failure) {
+      (failure) {
         emit(state.copyWith(failure: failure, status: StateStatus.error));
       },
-          (data) {
+      (data) {
         emit(state.copyWith(
           status: StateStatus.success,
         ));
@@ -185,16 +187,13 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
 
     final response = await _priceYellowUseCase(const NoParams());
     response.fold(
-          (failure) {
-            print('failure');
+      (failure) {
+        print('failure');
         emit(state.copyWith(failure: failure, status: StateStatus.error));
       },
-          (data) {
-            print('data');
-        emit(state.copyWith(
-          price: data,
-          status: StateStatus.updated
-        ));
+      (data) {
+        print('data');
+        emit(state.copyWith(price: data, status: StateStatus.updated));
       },
     );
   }
@@ -204,17 +203,16 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
 
     final response = await _methodBankUseCase(const NoParams());
     response.fold(
-          (failure) {
+      (failure) {
         print('failure');
         emit(state.copyWith(failure: failure, status: StateStatus.error));
       },
-          (data) {
+      (data) {
         print('data');
         emit(state.copyWith(
-            method: data,
+          method: data,
         ));
       },
     );
   }
 }
-
