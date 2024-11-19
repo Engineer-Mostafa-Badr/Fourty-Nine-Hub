@@ -38,10 +38,7 @@ class PostsSearchView extends StatelessWidget {
                 return Center(
                   child: Text(
                     LocaleKeys.noPosts.localize,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18.sp,
-                    ),
+                    style: Styles.mediumText(),
                   ),
                 );
               },

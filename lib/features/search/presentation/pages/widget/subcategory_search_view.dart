@@ -1,11 +1,16 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/search/domain/entity/main_category_search_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -13,7 +18,6 @@ import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/localization/locales.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
@@ -25,6 +29,7 @@ class SubCategorySearchView extends StatefulWidget {
 }
 
 class _SubCategorySearchViewState extends State<SubCategorySearchView> {
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -33,28 +38,26 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
         builder: (BuildContext context, state) {
           final controller = context.read<SearchCubit>();
           if (controller.searchController.text.isNotEmpty) {
-            return PagedGridView<int, MainSubCategorySearchEntity>(
-              pagingController: controller.searchPagingController,
-              builderDelegate: PagedChildBuilderDelegate<MainSubCategorySearchEntity>(
+            return PagedGridView<int, SubCategoryEntity>(
+              pagingController: controller.searchPagingSubCategoryController,
+              builderDelegate: PagedChildBuilderDelegate<SubCategoryEntity>(
                 noItemsFoundIndicatorBuilder: (context) {
                   return Center(
                     child: Text(
                       LocaleKeys.noData.localize,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                      ),
+                      style:Styles.mediumText(),
                     ),
                   );
                 },
                 itemBuilder: (context, item, index) {
                   return InkWell(
                     onTap: () {
-                     // context.push(Routes.SUBCATEGORIES, extra: state.search![index]);
+                      context.push(Routes.SUBCATEGORIES, extra: state.search![index]);
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
-                      child:  buildItem(item,
+                      child:  buildItem(
+                          item,
                           () async{
                             var result = await controller
                                 .toggleSubCategoryToFavorites(item.id);
@@ -62,7 +65,8 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                           },
                           item.isFavorite == true
                               ? Icons.favorite
-                              : Icons.favorite_border
+                              : Icons.favorite_border,
+                          state.search![index]
                       ),
                     ),
                   );
@@ -81,32 +85,15 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
           return const Center(
             child: Text('No results found.'),
           );
-          // return GridView.builder(
-          //   itemCount: 10,
-          //   //      controller: controller.scrollController,
-          //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          //       crossAxisCount: 2, childAspectRatio: 1),
-          //   itemBuilder: (context, index) {
-          //     return buildItem(context);
-          //     // final subCategory = state.subCategories![index];
-          //     // return SubCategoryCard(
-          //     //   mainCategory: controller.selectedCategory,
-          //     //   item: subCategory,
-          //     //   onFav: () {
-          //     //     print("object");
-          //     //     return controller.toggleSubCategoryToFavorites(
-          //     //         state.subCategories![index].id);
-          //     //   },
-          //     // );
-          //   },
-          // );
         },
       ),
     );
   }
 
-  Widget buildItem(MainSubCategorySearchEntity model,Function() fav,IconData icon) => InkWell(
-        onTap: () {},
+  Widget buildItem(SubCategoryEntity model,Function() fav,IconData icon,MainCategoryEntity item) => InkWell(
+    onTap: () => context.push(Routes.ADS,
+        extra: AdsViewParams(
+            mainCategory: item, subCategory: model)),
         child: Container(
           margin: EdgeInsets.all(10.w),
           decoration: BoxDecoration(
@@ -129,7 +116,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                       child: SquareImage(
                         fit: BoxFit.cover,
                         radius: 5,
-                        url: model.banner,
+                        url: model.image,
                       ),
                     ),
                     Positioned(
@@ -165,7 +152,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Label(
-                            text:context.locale == Locales.english? model.nameEn :model.nameAr,
+                            text:model.nameEn,
                             style:
                                 Styles.mediumText(fontWeight: FontWeight.bold),
                           ),
@@ -176,14 +163,15 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                         icon: Icons.add_box_rounded,
                         size: 40.h,
                         onPressed: () {
-                          // if (AuthHelper().isLoggedIn()) {
-                          //   context.push(Routes.CREATEAD,
-                          //       extra: CategorizationEntity(
-                          //           mainCategory: widget.mainCategory,
-                          //           subCategory: widget.item));
-                          // } else {
-                          //   context.push(Routes.LOGIN);
-                          // }
+                          if (AuthHelper().isLoggedIn()) {
+                            context.push(Routes.CREATEAD,
+                                extra: CategorizationEntity(
+                                    mainCategory: item,
+                                    subCategory: model));
+                            print('item.id: ${item.id}');
+                          } else {
+                            context.push(Routes.LOGIN);
+                          }
                         })
                   ],
                 ),

@@ -8,15 +8,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/search/domain/entity/main_category_search_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../../../../core/localization/locales.dart';
 
 class BuildItemSearchMainCategory extends StatefulWidget {
-  final MainSubCategorySearchEntity category;
+  final MainCategoryEntity category;
   final bool canRegister;
   final Function()? onRegister;
   final Function() onFavorite;
@@ -73,7 +72,8 @@ class _MainCategoryBannerState extends State<BuildItemSearchMainCategory> {
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text:context.locale == Locales.english? widget.category.nameEn :widget.category.nameAr,
+              text: widget.category.name,
+              // text:context.locale == Locales.english? widget.category.nameEn :widget.category.nameAr,
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -144,7 +144,8 @@ class _MainCategoryBannerState extends State<BuildItemSearchMainCategory> {
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: context.locale == Locales.english? widget.category.nameEn :widget.category.nameAr,
+              text: widget.category.name,
+              // text: context.locale == Locales.english? widget.category.nameEn :widget.category.nameAr,
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

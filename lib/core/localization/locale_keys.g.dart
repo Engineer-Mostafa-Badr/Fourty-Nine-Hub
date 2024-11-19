@@ -401,6 +401,7 @@ abstract class  LocaleKeys {
   static const checkRequest = 'checkRequest';
   static const whatDoYouThink = 'whatDoYouThink';
   static const peopleYouMayKnow = 'peopleYouMayKnow';
+  static const peopleMayKnow = 'peopleMayKnow';
   static const noFriendsSuggested = 'noFriendsSuggested';
   static const messageSentSuccessfully = 'messageSentSuccessfully';
   static const days = 'days';
@@ -1055,5 +1056,8 @@ abstract class  LocaleKeys {
   static const forwardMessage = 'forwardMessage';
   static const forwarded = 'forwarded';
   static const continueUsingChatServices = 'continueUsingChatServices';
+  static const mainCategory = 'mainCategory';
+  static const comeWithMe = 'comeWithMe';
+  static const publishSubmitted = 'publishSubmitted';
 
 }

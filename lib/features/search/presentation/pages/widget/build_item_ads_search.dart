@@ -291,7 +291,7 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                           ),
                           const Sizer(),
                           CallMessageButtons(
-                            otherUserId: widget.item.userId,
+                            otherUserId: widget.item.userId ??'',
                             subcategoryId: widget.item.subCategoryId,
                             phone: widget.item.phone,
                             id: widget.item.id,

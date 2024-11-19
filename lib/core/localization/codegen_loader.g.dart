@@ -421,6 +421,7 @@ class CodegenLoader extends AssetLoader{
   "checkRequest": "يرجى الانتظار للتحقق من الطلب",
   "whatDoYouThink": "بم تفكر؟",
   "peopleYouMayKnow": "أشخاص قد تعرفهم",
+  "peopleMayKnow": "أشخاص قد تعرفهم",
   "noFriendsSuggested": "لا يوجد اصدقاء مقترحين",
   "messageSentSuccessfully": "تم إرسال الرسالة بنجاح",
   "days": "يوم",
@@ -1080,7 +1081,10 @@ class CodegenLoader extends AssetLoader{
   "opened": "تمت مشاهدته",
   "forwardMessage": "تحويل الرسائل",
   "forwarded": "تمت اعادة توجيهه",
-  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة"
+  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة",
+  "mainCategory": "الفئة الرئيسية",
+  "comeWithMe": "تعال معي",
+  "publishSubmitted": "تم إرسال موهبتك بنجاح، انتظر موافقة الإدارة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1491,6 +1495,7 @@ static const Map<String,dynamic> en = {
   "reportSentSuccess": "Report sent successfully",
   "whatDoYouThink": "What do you think about?",
   "peopleYouMayKnow": "People you may know",
+  "peopleMayKnow": "People you may know",
   "noFriendsSuggested": "No Friends Suggested",
   "days": "d",
   "comments": "Comments",
@@ -2165,7 +2170,10 @@ static const Map<String,dynamic> en = {
   "opened": "Opened",
   "forwardMessage": "Forward Message",
   "forwarded": "Forwarded",
-  "continueUsingChatServices": " , To continue using chat services"
+  "continueUsingChatServices": " , To continue using chat services",
+  "mainCategory": "Main Category",
+  "comeWithMe": "Come With Me",
+  "publishSubmitted": "Your talent submitted successfully wait for administration approved"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

@@ -405,6 +405,7 @@
   "checkRequest": "يرجى الانتظار للتحقق من الطلب",
   "whatDoYouThink": "بم تفكر؟",
   "peopleYouMayKnow": "أشخاص قد تعرفهم",
+  "peopleMayKnow": "أشخاص قد تعرفهم",
   "noFriendsSuggested": "لا يوجد اصدقاء مقترحين",
   "messageSentSuccessfully": "تم إرسال الرسالة بنجاح",
   "days": "يوم",
@@ -1066,5 +1067,9 @@
   "opened": "تمت مشاهدته",
   "forwardMessage": "تحويل الرسائل",
   "forwarded": "تمت اعادة توجيهه",
-  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة"
+  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة",
+  "mainCategory" : "الفئة الرئيسية",
+  "comeWithMe" : "تعال معي",
+  "publishSubmitted": "تم إرسال موهبتك بنجاح، انتظر موافقة الإدارة"
+
 }

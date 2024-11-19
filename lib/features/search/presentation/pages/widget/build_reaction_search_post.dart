@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -41,9 +42,9 @@ class _BuildReactionsButtonsState extends State<BuildReactionSearchPost>
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SocialPostsCubit, SocialPostsState>(
+    return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
-        final controller = context.read<SocialPostsCubit>();
+        final controller = context.read<SearchCubit>();
         return ReactionButton<String>(
           boxColor: Colors.white,
           boxRadius: 10,
@@ -77,7 +78,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionSearchPost>
   }
 
   Future<void> _handleReactionChange(
-      Reaction<String> reaction, SocialPostsCubit controller) async {
+      Reaction<String> reaction, SearchCubit controller) async {
     print("reaction.${reaction.value}");
     if ((reaction.value == 'like' || reaction.value == 'likes') &&
         widget.post.isLikes == false) {

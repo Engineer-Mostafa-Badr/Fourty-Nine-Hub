@@ -37,6 +37,8 @@ import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cub
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/views/carpool_view.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/page/custom_page.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page_preview.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/carpool/create_carpool/presentation/cubits/cubit/create_car_pool_cubit.dart';
@@ -104,6 +106,8 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/selec
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/all_rider_trip_screen.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/rider_register_view.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/shipping_rider_tab_screen.dart';
+import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
+import 'package:fourtyninehub/features/search/presentation/pages/search_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/driverStatistics_cubit.dart';
@@ -299,6 +303,27 @@ class AppPages {
         ),
         routes: <RouteBase>[
           GoRoute(
+            path: Routes.CUSTOMPAGE,
+            name: Routes.CUSTOMPAGE,
+            builder: (context, state) => const CustomPage(),
+              routes: [
+                GoRoute(
+                    path: Paths.PAGEPREVIEW,
+                    name: Routes.PAGEPREVIEW,
+                    builder: (context, state) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          create: (context) => serviceLocator<SliderCubit>(),
+                        ),
+                        BlocProvider(
+                          create: (context) => serviceLocator<ThumbnailsCubit>(),
+                        ),
+                      ],
+                      child: const PagePreview(),
+                    ),),
+              ]
+          ),
+          GoRoute(
             path: Paths.RestaurantDashboard,
             name: Routes.RestaurantDashboard,
             builder: (context, state) => MultiBlocProvider(
@@ -339,6 +364,13 @@ class AppPages {
             ),
           ),
           // FLIP CARDS
+          GoRoute(
+            path: Paths.SEARCH,
+            name: Routes.SEARCH,
+            builder: (context, state) => BlocProvider(
+                create: (context) =>serviceLocator<SearchCubit>(),
+                child: const SearchView()),
+          ),
           GoRoute(
             path: Paths.MAINCATEGORIESCARDS,
             name: Routes.MAINCATEGORIESCARDS,

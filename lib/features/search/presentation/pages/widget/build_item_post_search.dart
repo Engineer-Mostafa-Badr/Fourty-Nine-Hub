@@ -8,11 +8,11 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
+import 'package:fourtyninehub/features/search/presentation/pages/widget/build_reaction_search_post.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_google_maps.dart';
@@ -22,7 +22,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_tweet_card.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -228,12 +227,9 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                   child: Row(
                     children: [
                       Expanded(
-                          child: BlocProvider<SocialPostsCubit>(
-                            create: (BuildContext context) =>serviceLocator(),
-                            child: BuildReactionsButtons(
-                              post: myPost,
-                              from: widget.from,
-                            ),
+                          child: BuildReactionSearchPost(
+                            post: myPost,
+                            from: widget.from,
                           )),
                       if (widget.from == 'posts')
                         Expanded(
@@ -618,7 +614,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                   }
                 },
                 child: ImageFromInternet(
-                  image: post.user.image ?? '',
+                  image: post.user?.image ?? '',
                   isCircle: true,
                   width: 60.w,
                   height: 60.h,
@@ -641,7 +637,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                         children: [
                           TextAppButton(
                               label:
-                              "${post.user.firstName} ${post.user.lastName}",
+                              "${post.user?.firstName ??''} ${post.user?.lastName  ??''}",
                               style: Styles.headerText(fontSize: 32),
                               onPressed: () {
                                 if (widget.fromProfile == false) {
