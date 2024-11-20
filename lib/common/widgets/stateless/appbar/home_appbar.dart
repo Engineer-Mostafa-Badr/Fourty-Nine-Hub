@@ -15,7 +15,6 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/notific
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../features/search/presentation/pages/search_view.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -135,12 +134,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               child: InkWell(
                 borderRadius: BorderRadius.circular(40.r),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SearchView(),
-                    ),
-                  );
+                  context.push(Routes.SEARCH);
                 },
                 child: Row(
                   children: [

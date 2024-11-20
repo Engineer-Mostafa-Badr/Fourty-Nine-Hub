@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cu
 import 'package:fourtyninehub/features/search/domain/entity/ads_search_entity.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/build_item_ads_search.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -42,10 +43,7 @@ class _AdsSearchViewState extends State<AdsSearchView> {
                         return Center(
                           child: Text(
                             LocaleKeys.noData.localize,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                            ),
+                            style: Styles.mediumText(),
                           ),
                         );
                       },

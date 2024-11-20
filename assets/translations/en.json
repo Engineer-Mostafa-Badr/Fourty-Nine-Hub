@@ -407,6 +407,7 @@
   "reportSentSuccess": "Report sent successfully",
   "whatDoYouThink": "What do you think about?",
   "peopleYouMayKnow": "People you may know",
+  "peopleMayKnow": "People you may know",
   "noFriendsSuggested": "No Friends Suggested",
   "days": "d",
   "comments": "Comments",
@@ -1084,5 +1085,8 @@
   "opened": "Opened",
   "forwardMessage": "Forward Message",
   "forwarded": "Forwarded",
-  "continueUsingChatServices": " , To continue using chat services"
+  "continueUsingChatServices": " , To continue using chat services",
+  "mainCategory" : "Main Category",
+  "comeWithMe" : "Come With Me",
+  "publishSubmitted": "Your talent submitted successfully wait for administration approved"
 }

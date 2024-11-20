@@ -5,7 +5,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/navigate_bar.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/social_page.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/page/widget/sub_tab.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
@@ -63,21 +62,21 @@ class EditPage extends StatelessWidget {
             },
             trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
           ),
-          ListTile(
-            title: Label(
-                text: LocaleKeys.subTab.localize,
-                style: Styles.mediumText(
-                    fontSize: 65.sp, fontWeight: FontWeight.w400)),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SubTab(),
-                ),
-              );
-            },
-            trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
-          ),
+          // ListTile(
+          //   title: Label(
+          //       text: LocaleKeys.subTab.localize,
+          //       style: Styles.mediumText(
+          //           fontSize: 65.sp, fontWeight: FontWeight.w400)),
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => const SubTab(),
+          //       ),
+          //     );
+          //   },
+          //   trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
+          // ),
         ],
       ),
     );
