@@ -133,11 +133,12 @@ class _ZegoLiveStreamingLivePageSurfaceState
                         state.selectedGifts.isEmpty
                             ? GestureDetector(
                                 onTap: () {
-                                  var cubit = context.read<StreamCubit>();
-                                  CliLogger.info(cubit.state.live.toString());
-                                  context.read<StreamCubit>().sendPoints(
-                                      cubit.state.live!.members[0].id,
-                                      cubit.state.live!.id);
+                                  showUpdateGoalsSheet(context);
+                                  // var cubit = context.read<StreamCubit>();
+                                  // CliLogger.info(cubit.state.live.toString());
+                                  // context.read<StreamCubit>().sendPoints(
+                                  //     cubit.state.live!.members[0].id,
+                                  //     cubit.state.live!.id);
                                 },
                                 child: Container(
                                     width: context.screenWidth * 0.4,

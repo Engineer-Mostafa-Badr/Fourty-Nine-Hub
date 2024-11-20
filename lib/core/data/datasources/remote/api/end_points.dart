@@ -476,7 +476,7 @@ class EndPoints {
   }
 
   static String favouriteAd(String id) {
-    return '/ads-favourites/adToFavourites/$id';
+    return '/ads-favorites/adToFavorites/$id';
   }
 
   static String removeFavouriteAd(String id) {
