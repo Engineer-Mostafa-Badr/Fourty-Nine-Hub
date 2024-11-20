@@ -66,7 +66,7 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
                     );
                   case 2:
                     return MixVoiceVideoRecordingScreen(
-                      voiceUrl: widget.voiceUrl ?? '',
+                      voiceUrl: widget.voiceUrl ?? 'https://d3j5umpuujp1ej.cloudfront.net/services/technology/reels-output/22732a5b-0b5f-4655-8dc3-5ed2aeef3eb7/22732a5b-0b5f-4655-8dc3-5ed2aeef3eb7.mp3',
                       advertisementType: widget.advertisementType,
                       comeFrom: widget.comeFromCompany,
                       totalPrice: widget.totalPrice,

@@ -45,7 +45,7 @@ class MixVoiceVideoRecordingScreenState
   CameraController? _controller;
   late List<CameraDescription> cameras;
   String? videoPath;
-  String? filteredVideoPath;
+  String? mergedVideoPath;
   bool isFrontCamera = true;
   bool isRecording = false;
   late AnimationController _animationController;
@@ -172,7 +172,7 @@ class MixVoiceVideoRecordingScreenState
       });
 
       _resetRecordingState();
-      showUploadReelButton = await _mergeVideoWithFilter();
+      showUploadReelButton = await _mergeVideoWithAudio();
     } catch (e) {
       log("Error stopping recording: $e");
       _showErrorDialog(LocaleKeys.error_dialog_stop_recording_fail.tr());
@@ -187,60 +187,57 @@ class MixVoiceVideoRecordingScreenState
     _audioPlayer.stop();
   }
 
-  Future<bool?> _mergeVideoWithFilter() async {
+  Future<bool?> _mergeVideoWithAudio() async {
     final directory = await getTemporaryDirectory();
-    filteredVideoPath =
-        '${directory.path}/filtered_${DateTime.now().millisecondsSinceEpoch}.mp4';
+    mergedVideoPath =
+    '${directory.path}/merged_${DateTime.now().millisecondsSinceEpoch}.mp4';
 
+    // Combine the selected filter with the horizontal flip (if any filter exists)
     final filterCommand = _selectedFilter?.ffmpegFilter != null
-        ? '${_selectedFilter!.ffmpegFilter},hflip' // Add hflip to the existing filter
-        : 'hflip'; // Just use hflip if no other filter is selected
-
+        ? '${_selectedFilter!.ffmpegFilter},hflip' // Apply horizontal flip after the selected filter
+        : 'hflip'; // Apply horizontal flip if no filter is selected
+    // log('audio path ${await getAssetAudioPath('assets/lembi.mp3')}');
+    // FFmpeg command arguments
     final commandArgs = [
-      '-i', videoPath!,
-      '-vf', filterCommand, // Apply the filter and horizontal flip
-      '-c:v', 'mpeg4', // Use `mpeg4` for faster encoding
+      '-i', videoPath!, // Input video path
+      '-i', widget.voiceUrl, // Input audio path
+      if (filterCommand.isNotEmpty) ...['-vf', filterCommand], // Apply filters
+      '-map', '0:v:0', // Use video stream from the first input
+      '-map', '1:a:0', // Use audio stream from the second input
+      '-c:v', 'mpeg4', // Use MPEG-4 codec for video
       '-q:v', '5', // Lower quality for faster processing
-      '-b:v', '1M', // Lower bitrate
-      filteredVideoPath!,
+      '-b:v', '1M', // Set bitrate to 1 Mbps
+      '-c:a', 'aac', // Use AAC codec for audio
+      '-shortest', // Trim the output to the shortest stream
+      mergedVideoPath!, // Output file path
     ];
 
     log("Executing FFmpeg command: ${commandArgs.join(' ')}");
 
-    try {
-      final session = await FFmpegKit.executeWithArguments(commandArgs);
-      final returnCode = await session.getReturnCode();
-      final output = await session.getOutput();
-      log("FFmpeg output: $output");
-
-      if (ReturnCode.isSuccess(returnCode)) {
-        log("FFmpeg process succeeded");
-        final savedSuccessfully =
-            await GallerySaver.saveVideo(filteredVideoPath!);
-        if (savedSuccessfully ?? false) {
-          setState(() {
-            showGalleryBtn = true;
-          });
-        } else {
-          throw Exception('error_dialog_save_video_fail');
-        }
-        return savedSuccessfully;
-      } else {
-        final failStackTrace = await session.getFailStackTrace();
-        throw Exception(
-            "FFmpeg process failed with return code $returnCode\n$failStackTrace");
-      }
-    } catch (e) {
-      log("Error in _mergeVideoWithFilter: $e");
-      _showErrorDialog(
-          LocaleKeys.error_dialog_video_process_fail.tr(args: [e.toString()]));
-      filteredVideoPath = null;
+    final session = await FFmpegKit.executeWithArguments(commandArgs);
+    var returned = await session.getReturnCode();
+    var logs = await session.getAllLogs();
+    var stats = await session.getAllStatistics();
+    log('stats length ${stats.length.toString()}');
+    log('logs ${logs.toString()}');
+    log('returned ${returned?.getValue().toString()}');
+    final savedSuccessfully = await GallerySaver.saveVideo(mergedVideoPath!);
+    if (savedSuccessfully ?? false) {
+      print('saved');
+      setState(() {
+        showGalleryBtn = true; // Show the gallery button if save is successful
+      });
     }
+    final output = await session.getOutput();
+    log("alibaba output: $output");
+    log('final merged file path ${mergedVideoPath.toString()}');
+    final file = File(mergedVideoPath!);
+    log("Merged video file size: ${file.lengthSync()} bytes");
     return false;
   }
 
   Future uploadReel() async {
-    await serviceLocator<ReelsCubit>().uploadReel(File(filteredVideoPath!),"",
+    await serviceLocator<ReelsCubit>().uploadReel(File(mergedVideoPath!),"",
         advertisementType: widget.advertisementType,
         comeFrom: widget.comeFrom,
         totalPrice: widget.totalPrice);
@@ -601,7 +598,7 @@ class MixVoiceVideoRecordingScreenState
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => VideoPlaybackScreen(filteredVideoPath!),
+        builder: (context) => VideoPlaybackScreen(mergedVideoPath!),
       ),
     );
   }
