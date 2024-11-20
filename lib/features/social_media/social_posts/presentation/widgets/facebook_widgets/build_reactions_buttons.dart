@@ -411,9 +411,9 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
          FaIcon(
-          Icons.thumb_up_alt_outlined,
+          FontAwesomeIcons.thumbsUp,
           color: Colors.grey,
-          size: 32.sp,
+          size: 40.sp,
         ),
         if (widget.from == 'posts') ...[
           Label(

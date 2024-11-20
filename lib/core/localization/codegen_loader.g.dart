@@ -1085,7 +1085,23 @@ class CodegenLoader extends AssetLoader{
   "mainCategory": "الفئة الرئيسية",
   "comeWithMe": "تعال معي",
   "publishSubmitted": "تم إرسال موهبتك بنجاح، انتظر موافقة الإدارة",
-  "noFavouriteAds": "لا توجد إعلانات مفضلة"
+  "noFavouriteAds": "لا توجد إعلانات مفضلة",
+  "d": "ي",
+  "m": "د",
+  "h": "س",
+  "s": "ث",
+  "January": "يناير",
+  "February": "فبراير",
+  "March": "مارس",
+  "April": "مايو",
+  "May": "مايو",
+  "June": "يونيو",
+  "July": "يوليو",
+  "August": "أغسطس",
+  "September": "سبتمبر",
+  "October": "أكتوبر",
+  "November": "نوفمبر",
+  "December": "ديسمبر"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2175,7 +2191,23 @@ static const Map<String,dynamic> en = {
   "mainCategory": "Main Category",
   "comeWithMe": "Come With Me",
   "publishSubmitted": "Your talent submitted successfully wait for administration approved",
-  "noFavouriteAds": "There is no favourite ads"
+  "noFavouriteAds": "There is no favourite ads",
+  "d": "d",
+  "m": "m",
+  "h": "h",
+  "s": "s",
+  "January": "January",
+  "February": "February",
+  "March": "March",
+  "April": "April",
+  "May": "May",
+  "June": "June",
+  "July": "July",
+  "August": "August",
+  "September": "September",
+  "October": "October",
+  "November": "November",
+  "December": "December"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

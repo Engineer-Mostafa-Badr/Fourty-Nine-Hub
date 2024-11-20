@@ -1071,6 +1071,22 @@
   "mainCategory" : "الفئة الرئيسية",
   "comeWithMe" : "تعال معي",
   "publishSubmitted": "تم إرسال موهبتك بنجاح، انتظر موافقة الإدارة",
-  "noFavouriteAds": "لا توجد إعلانات مفضلة"
+  "noFavouriteAds": "لا توجد إعلانات مفضلة",
+  "d": "ي",
+  "m": "د",
+  "h": "س",
+  "s": "ث",
+  "January": "يناير",
+  "February": "فبراير",
+  "March": "مارس",
+  "April": "مايو",
+  "May": "مايو",
+  "June": "يونيو",
+  "July": "يوليو",
+  "August": "أغسطس",
+  "September": "سبتمبر",
+  "October": "أكتوبر",
+  "November": "نوفمبر",
+  "December": "ديسمبر"
 
 }

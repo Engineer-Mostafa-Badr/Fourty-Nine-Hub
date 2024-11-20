@@ -1060,5 +1060,21 @@ abstract class  LocaleKeys {
   static const comeWithMe = 'comeWithMe';
   static const publishSubmitted = 'publishSubmitted';
   static const noFavouriteAds = 'noFavouriteAds';
+  static const d = 'd';
+  static const m = 'm';
+  static const h = 'h';
+  static const s = 's';
+  static const January = 'January';
+  static const February = 'February';
+  static const March = 'March';
+  static const April = 'April';
+  static const May = 'May';
+  static const June = 'June';
+  static const July = 'July';
+  static const August = 'August';
+  static const September = 'September';
+  static const October = 'October';
+  static const November = 'November';
+  static const December = 'December';
 
 }

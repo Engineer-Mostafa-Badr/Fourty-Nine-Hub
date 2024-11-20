@@ -1,10 +1,10 @@
+import 'package:fourtyninehub/core/utils/time_utils.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/location_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
-import '../../../../../core/utils/duration_helper.dart';
 import '../../../../../res/assets/assets.dart';
 
 class PostEntity {
@@ -16,53 +16,52 @@ class PostEntity {
   final List<String>? images;
   final List<TwitterUserModel>? users;
   final bool isShared;
-  bool? isDocumentation;
-  bool? isLove;
-  bool? isLikes;
-  bool? isWow;
-  bool? isSad;
-  bool? isAngry;
-  bool? isHaha;
+  bool isDocumentation;
+  bool isLove;
+  bool isLikes;
+  bool isWow;
+  bool isSad;
+  bool isAngry;
+  bool isHaha;
   final dynamic user;
   FeelingEntity? feeling;
   ActivityEntity? activity;
   final int privacy;
   final int commentPrivacy;
-  num? commentsCount;
+  num commentsCount;
   final num sharesCount;
-  num? likesCount;
-  num? loveCount;
-  num? hahaCount;
-  num? wowCount;
-  num? sadCount;
-  num? angryCount;
-  num? totalCount;
+  num likesCount;
+  num loveCount;
+  num hahaCount;
+  num wowCount;
+  num sadCount;
+  num angryCount;
+  num totalCount;
   String? backgroundColor;
   String? name;
   String? videoMedia;
   String? audioMedia;
 
-  //==>twitter
+  // Twitter-specific
   List<String>? shares;
   List<TwitterUserModel>? love;
   MainPostEntity? mainPost;
   List<dynamic>? comments;
   InstagramPostEntity? firstComment;
-  bool? isReact;
+  bool isReact;
 
-  //==>Advertisement
+  // Advertisement-specific
   String? advertisementType;
   String? post;
   String? description;
-  // num? totalPrice;
-  bool? isApproved;
+  bool isApproved;
 
   DateTime? createdAt;
-  String? createAt;
-  Duration get publishedDuration => DateTime.now().difference(createdAt!);
+  DateTime? createAt;
 
-  String get sinceTime =>
-      DurationHelper().getTimeDifference( createdAt!);
+  Duration get publishedDuration => TimeUtils.calculateDuration(createdAt);
+
+  String get sinceTime => TimeUtils.getSinceTime(createdAt);
 
   PostEntity({
     required this.id,
@@ -93,7 +92,6 @@ class PostEntity {
     this.hahaCount = 0,
     this.totalCount = 0,
     this.createdAt,
-    this.createAt,
     this.feeling,
     this.activity,
     this.backgroundColor,
@@ -108,10 +106,12 @@ class PostEntity {
     this.name,
     this.videoMedia,
     this.audioMedia,
+    this.createAt,
     this.isApproved = false,
     required this.photo,
   });
 }
+
 
 enum Reactions { like, haha, love, wow, sad, angry }
 

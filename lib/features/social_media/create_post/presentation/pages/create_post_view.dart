@@ -144,13 +144,12 @@ class _CreatePostViewState extends State<CreatePostView> {
                                                     .localize
                                                 : LocaleKeys.public.localize,
                                 style: Styles.mediumText(
-                                    color: AppColors.PRIMARY_COLOR,
-                                    fontSize: 24),
+                                    color: AppColors.AUTH_CONTAINER_COLOR,),
                               ),
                               const Sizer(),
-                              const Icon(
+                               Icon(
                                 Icons.keyboard_arrow_down_outlined,
-                                size: 16,
+                                size: 30.sp,
                               ),
                             ],
                           ),
@@ -194,21 +193,19 @@ class _CreatePostViewState extends State<CreatePostView> {
                                       alignment:
                                           AlignmentDirectional.bottomStart,
                                       child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 6),
+                                        padding:  EdgeInsets.symmetric(
+                                            horizontal: 6.w),
                                         child: Row(
                                           children: [
                                             Text(
                                               '${LocaleKeys.feeling.localize} ',
-                                              style: Styles.headerText(
-                                                  fontSize: 24),
+                                                style: Styles.mediumText(
+                                                  color: AppColors.AUTH_CONTAINER_COLOR,)
                                             ),
                                             Text(
                                               state.selectedFeeling!.name,
-                                              style: Styles.mediumText(
-                                                  color:
-                                                      AppColors.PRIMARY_COLOR,
-                                                  fontSize: 24),
+                                                style: Styles.mediumText(
+                                                  color: AppColors.AUTH_CONTAINER_COLOR,)
                                             ),
                                           ],
                                         ),
@@ -216,7 +213,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                                 ],
                               ),
                             ),
-                          const Sizer(),
+                           //Sizer(width: 10.w,),
                           if (state.selectedActivity != null &&
                               state.selectedActivity!.name.isNotEmpty)
                             Container(
@@ -252,9 +249,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                                             horizontal: 10),
                                         child: Text(
                                           state.selectedActivity!.name,
-                                          style: Styles.mediumText(
-                                              color: AppColors.PRIMARY_COLOR,
-                                              fontSize: 24),
+                                          style: Styles.mediumText(),
                                         ),
                                       )),
                                 ],
@@ -273,27 +268,33 @@ class _CreatePostViewState extends State<CreatePostView> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        runSpacing: 10,
-                        spacing: 10,
-                        children: List.generate(
-                          state.selectedUsers!.length,
-                          (index) => GestureDetector(
-                              onTap: () {},
-                              child: BadgedLabel(
-                                label:
-                                    state.selectedUsers?[index].fullName ?? '',
-                                width: 100,
-                                onRemove: () {
-                                  controller.onRemoveUser(
-                                      state.selectedUsers![index]);
-                                },
-                              )),
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                        child: Row(
+                          children: [
+                            Wrap(
+                              direction: Axis.horizontal,
+                              runSpacing: 10,
+                              spacing: 10,
+                              children: List.generate(
+                                state.selectedUsers!.length,
+                                    (index) => GestureDetector(
+                                  onTap: () {},
+                                  child: BadgedLabel(
+                                    label: state.selectedUsers?[index].fullName ?? '',
+                                    onRemove: () {
+                                      controller.onRemoveUser(state.selectedUsers![index]);
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
+
                   ],
                   const Sizer(),
                   _buildCreatePost(onChange: (c) {
@@ -627,7 +628,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                       Text(
                         LocaleKeys.feeling.localize,
                         style: Styles.mediumText(
-                            fontSize: 34, fontWeight: FontWeight.w500),
+                            fontSize: 65.sp, fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),

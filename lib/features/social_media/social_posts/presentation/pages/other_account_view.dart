@@ -82,18 +82,23 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                     top: 80.h, end: 20.w, start: 20.w),
                                 child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.start,
                                     children: [
                                       IconButton(
                                           onPressed: () => context.pop(),
                                           icon: const Icon(
                                             Icons.arrow_back,
                                           )),
+                                      Text('${state.profileData?.firstName} ${state.profileData?.lastName}',
+                                      style: Styles.headerText(fontSize: 70.sp),
+                                      ),
+                                      const Spacer(),
                                       if (context
                                               .read<UserCubit>()
                                               .isLoggedIn &&
                                           loginUser?.id != widget.userId)
                                         PopupMenuButton(
+                                          color: Theme.of(context).scaffoldBackgroundColor,
                                             icon: const Icon(
                                               Icons.more_vert,
                                             ),
@@ -560,6 +565,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         ],
                       ),
                     ),
+                    Sizer(),
                     Expanded(
                         child: Padding(
                       padding:
@@ -571,7 +577,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                  width: 210.w,
+                                  width: 180.w,
                                   child: AppButton(
                                       // height: 120.h,
                                       width: kToolbarHeight * 1.5,
@@ -638,7 +644,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                                   color: Colors.white),
                                             )))
                                     : SizedBox(
-                                        width: 210.w,
+                                        width: 180.w,
                                         child: AppButton(
                                             // height: 80.h,
                                             padding: 5,
@@ -672,7 +678,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   ],
                 )),
                 PositionedDirectional(
-                    bottom: 20.h,
+                    bottom: 1.h,
                     start: 10,
                     child: Stack(
                       alignment: AlignmentDirectional.bottomEnd,
@@ -703,7 +709,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   ),
                                 ),
                               )
-                            : InkWell(
+                            : GestureDetector(
                                 onTap: () {
                                   showDialog(
                                       context: context,
@@ -718,20 +724,21 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           ));
                                 },
                                 child: CircleAvatar(
-                                  radius: 110.w,
+                                  radius: 160.w,
                                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                                   child: ImageFromInternet(
                                     image: user.profilePicture ??
                                         UIConst.profilePlaceHolder,
-                                    height: 180.h,
-                                    width: 250.w,
+                                    height: 250.h,
+                                    width: 300.w,
                                     isCircle: true,
                                   ),
                                 ),
                               ),
                         if (loginUser?.id == user.id)
                           PositionedDirectional(
-                            // end: 5.w,
+                            end: 30.w,
+                            bottom: 10.h,
                             child: InkWell(
                               onTap: () {
                                 selectImageGallary();
@@ -876,6 +883,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   ],
                 ),
                 Sizer(height: 5.h),
+                if (user.bio.isNotEmpty && user.bio !='Hidden')
                 Label(
                     text: user.bio,
                     style: Styles.mediumText(),

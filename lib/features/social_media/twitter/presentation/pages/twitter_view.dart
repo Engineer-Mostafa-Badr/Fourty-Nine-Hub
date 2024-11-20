@@ -126,10 +126,7 @@ class _TwitterViewState extends State<TwitterView> {
                     return Center(
                       child: Text(
                         LocaleKeys.noPosts.localize,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                        ),
+                        style: Styles.mediumText(),
                       ),
                     );
                   },
@@ -302,10 +299,7 @@ class _TwitterViewState extends State<TwitterView> {
                     return Center(
                       child: Text(
                         LocaleKeys.noPosts.localize,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                        ),
+                        style: Styles.mediumText(),
                       ),
                     );
                   },
