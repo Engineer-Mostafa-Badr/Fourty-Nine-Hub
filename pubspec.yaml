@@ -30,6 +30,7 @@ dependencies:
   firebase_auth: ^4.19.6
   firebase_core: ^2.31.0
   firebase_messaging: ^14.9.2
+  win32: ^5.8.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.5
@@ -164,6 +165,7 @@ flutter:
     - assets/filters/
     - assets/audio/
     - assets/49 Notification 01.mp3
+    - assets/lembi.mp3
     - assets/ChatSounds/
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see

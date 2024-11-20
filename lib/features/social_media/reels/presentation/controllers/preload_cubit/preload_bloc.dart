@@ -14,6 +14,9 @@ class PreloadBloc extends Cubit<PreloadState> {
   void setLoading(bool isLoading) {
     emit(state.copyWith(isLoading: isLoading));
   }
+  void resetFocusedIndex() {
+    emit(state.copyWith(focusedIndex: 0));
+  }
 
   // Fetch videos from the API and initialize controllers for the first videos
   Future<void> getVideosFromApi() async {

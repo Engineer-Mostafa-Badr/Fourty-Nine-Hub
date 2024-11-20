@@ -25,7 +25,6 @@ import '../widgets/components/snackbars.dart';
 import 'audio_reel_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-
 class InstagramAudioScreen extends StatefulWidget {
   final Audio audio;
   final Reel reel;
@@ -358,77 +357,74 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                     ],
                   ),
                 ),
-          reelCubit.state.reelsForAudio != null
-              ? Expanded(
-                  child: BlocConsumer<ReelsCubit, ReelsState>(
-                    listener: (context, state) {},
-                    builder: (context, state) {
-                      return GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          childAspectRatio: 0.6,
-                          mainAxisSpacing: 4,
-                          crossAxisSpacing: 4,
-                        ),
-                        itemCount: state.reelsForAudio!.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => BlocProvider.value(
-                                      value: serviceLocator<ReelsCubit>(),
-                                      child: ReelsScreenForAudio(
-                                        navigateTo: index,
-                                        reels: state.reelsForAudio!,
-                                      ),
-                                    ),
-                                  ));
-                            },
-                            child: Stack(
-                              children: [
-                                Image.network(
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  state
-                                      .reelsForAudio![index].thumbnailSignedUrl,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      const Center(
-                                    child: CupertinoActivityIndicator(),
-                                  ),
-                                  fit: BoxFit.cover,
+          Expanded(
+            child: BlocConsumer<ReelsCubit, ReelsState>(
+              listener: (context, state) {},
+              builder: (context, state) {
+                if (state.globalReelsIsLoading) {
+                  return const Center(child: CupertinoActivityIndicator());
+                }
+                return GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 0.6,
+                    mainAxisSpacing: 4,
+                    crossAxisSpacing: 4,
+                  ),
+                  itemCount: state.reelsForAudio!.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BlocProvider.value(
+                                value: serviceLocator<ReelsCubit>(),
+                                child: ReelsScreenForAudio(
+                                  navigateTo: index,
+                                  reels: state.reelsForAudio!,
                                 ),
-                                Positioned(
-                                  bottom: 8,
-                                  left: 2,
-                                  child: Row(
-                                    children: [
-                                      const Icon(Icons.play_arrow, size: 16),
-                                      const SizedBox(width: 4),
-                                      Text(
-                                        state.reelsForAudio![index].viewCount
-                                            .toString(),
-                                        style: TextStyle(
-                                          fontSize: 25.sp,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      ),
-                                    ],
+                              ),
+                            ));
+                      },
+                      child: Stack(
+                        children: [
+                          Image.network(
+                            width: double.infinity,
+                            height: double.infinity,
+                            state.reelsForAudio![index].thumbnailSignedUrl,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Center(
+                              child: CupertinoActivityIndicator(),
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                          Positioned(
+                            bottom: 8,
+                            left: 2,
+                            child: Row(
+                              children: [
+                                const Icon(Icons.play_arrow, size: 16),
+                                const SizedBox(width: 4),
+                                Text(
+                                  state.reelsForAudio![index].viewCount
+                                      .toString(),
+                                  style: TextStyle(
+                                    fontSize: 25.sp,
+                                    fontWeight: FontWeight.normal,
                                   ),
                                 ),
                               ],
                             ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                )
-              : const Center(
-                  child: CupertinoActivityIndicator(),
-                ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          )
         ],
       ),
     );

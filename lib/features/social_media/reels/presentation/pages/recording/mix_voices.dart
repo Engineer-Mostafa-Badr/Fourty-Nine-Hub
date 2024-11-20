@@ -240,7 +240,7 @@ class MixVoiceVideoRecordingScreenState
   }
 
   Future uploadReel() async {
-    await serviceLocator<ReelsCubit>().uploadReel(File(filteredVideoPath!),
+    await serviceLocator<ReelsCubit>().uploadReel(File(filteredVideoPath!),"",
         advertisementType: widget.advertisementType,
         comeFrom: widget.comeFrom,
         totalPrice: widget.totalPrice);
@@ -261,14 +261,14 @@ class MixVoiceVideoRecordingScreenState
           padding: const EdgeInsets.all(16.0),
           child: Text(
             LocaleKeys.error_dialog_title.tr(),
-            textScaleFactor: 1.0,
+
           ),
         ),
         content: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
             message,
-            textScaleFactor: 1.0,
+
           ),
         ),
         actions: [
@@ -276,7 +276,7 @@ class MixVoiceVideoRecordingScreenState
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
               LocaleKeys.error_dialog_ok_button.tr(),
-              textScaleFactor: 1.0,
+
               style: const TextStyle(color: AppColors.SECONDARY_COLOR),
             ),
           ),
@@ -320,7 +320,7 @@ class MixVoiceVideoRecordingScreenState
                           context.isArabic
                               ? filters[index].arName
                               : filters[index].enName,
-                          textScaleFactor: 1.0,
+
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           style: TextStyle(
@@ -397,7 +397,7 @@ class MixVoiceVideoRecordingScreenState
                                       LocaleKeys
                                           .reel_upload_success_upload_success
                                           .tr(),
-                                      textScaleFactor: 1.0,
+
                                       style: TextStyle(
                                           fontSize: 40.sp,
                                           fontWeight: FontWeight.normal),
@@ -409,7 +409,7 @@ class MixVoiceVideoRecordingScreenState
                                   TextButton(
                                     child: Text(
                                         LocaleKeys.error_dialog_ok_button.tr(),
-                                        textScaleFactor: 1.0),
+                                        ),
                                     onPressed: () {
                                       Navigator.of(context)
                                           .pop(); // Close the dialog
@@ -441,7 +441,7 @@ class MixVoiceVideoRecordingScreenState
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   LocaleKeys.error_dialog_upload_fail.tr(),
-                                  textScaleFactor: 1.0,
+
                                   style: TextStyle(
                                       fontSize: 40.sp,
                                       fontWeight: FontWeight.normal),
@@ -452,7 +452,7 @@ class MixVoiceVideoRecordingScreenState
                                 TextButton(
                                   child: Text(
                                       LocaleKeys.error_dialog_ok_button.tr(),
-                                      textScaleFactor: 1.0),
+                                      ),
                                   onPressed: () {
                                     Navigator.of(context)
                                         .pop(); // Close the dialog
@@ -514,7 +514,7 @@ class MixVoiceVideoRecordingScreenState
             LocaleKeys.timer_recording_stops_in.tr() +
                 _secondsRemaining.toString() +
                 LocaleKeys.timer_seconds.tr(),
-            textScaleFactor: 1.0,
+
             style: TextStyle(color: Colors.white, fontSize: 30.sp),
           ),
         ),

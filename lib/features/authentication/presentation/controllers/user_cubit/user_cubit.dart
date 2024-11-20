@@ -131,8 +131,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
               followersCount: null,
               followingCount: null,
               wallet: null)));
-      await DI.reset();
-      await DI.execute();
+      // await DI.reset();
+      // await DI.execute();
     });
     // if(result == true){
     //   emit(state.copyWith(status: StateStatus.success,data: null,token: null));

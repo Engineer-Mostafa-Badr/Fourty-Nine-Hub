@@ -103,7 +103,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
         } else if (state is GiftsError) {
           return Center(
               child: Text(state.message,
-                  textScaleFactor: 1.0,
+
                   style: const TextStyle(color: Colors.white)));
         } else {
           return Container();
@@ -333,7 +333,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         ),
         child: Text(LocaleKeys.ok.tr(),
-            textScaleFactor: 1.0,
+
             style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.normal)),
       ),
       if (isError)
@@ -350,7 +350,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
           ),
           child: Text(
             LocaleKeys.gift_body_charge_wallet.tr(),
-            textScaleFactor: 1.0,
+
             style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.normal),
           ),
         ),
