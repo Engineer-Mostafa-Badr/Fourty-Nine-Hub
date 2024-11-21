@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -71,30 +70,22 @@ class MixVoiceVideoRecordingScreenState
   }
 
   Future<void> _loadAndPlayAudio() async {
-    try {
+
       await _audioPlayer.setUrl(widget.voiceUrl);
       _audioPlayer.setLoopMode(LoopMode.one);
-    } catch (e) {
-      log("Audio playback error: $e");
-      _showErrorDialog(
-          LocaleKeys.error_dialog_audio_playback_fail.tr(args: [e.toString()]));
-    }
+
   }
 
   Future<void> _initCamera() async {
-    try {
       cameras = await availableCameras();
       await _initializeCameraController(cameras[isFrontCamera ? 1 : 0]);
-    } catch (e) {
-      log("Camera initialization error: $e");
-      _showErrorDialog(LocaleKeys.error_dialog_camera_init_fail.tr());
-    }
+
   }
 
   void _initializeAnimationController() {
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 30),
+      duration: const Duration(seconds: 15),
     )..addListener(() {
         setState(() {});
       });
@@ -127,8 +118,7 @@ class MixVoiceVideoRecordingScreenState
   void _startRecording() async {
     if (_controller!.value.isRecordingVideo) return;
 
-    try {
-      final directory = await getTemporaryDirectory();
+       final directory = await getTemporaryDirectory();
       videoPath =
           '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
       await _controller!.startVideoRecording();
@@ -144,14 +134,11 @@ class MixVoiceVideoRecordingScreenState
       _startTimers();
       _audioPlayer.setVolume(0.5);
       _audioPlayer.play(); // Start the audio playback
-    } catch (e) {
-      log("Error starting recording: $e");
-      _showErrorDialog(LocaleKeys.error_dialog_start_recording_fail.tr());
-    }
+
   }
 
   void _startTimers() {
-    _secondsRemaining = 30;
+    _secondsRemaining = 15;
     _notifyTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         _secondsRemaining--;
@@ -199,18 +186,14 @@ class MixVoiceVideoRecordingScreenState
     // log('audio path ${await getAssetAudioPath('assets/lembi.mp3')}');
     // FFmpeg command arguments
     final commandArgs = [
-      '-i', videoPath!, // Input video path
-      '-i', widget.voiceUrl, // Input audio path
-      if (filterCommand.isNotEmpty) ...['-vf', filterCommand], // Apply filters
-      '-map', '0:v:0', // Use video stream from the first input
-      '-map', '1:a:0', // Use audio stream from the second input
-      '-c:v', 'mpeg4', // Use MPEG-4 codec for video
+      '-i', videoPath!,
+      '-vf', filterCommand, // Apply the filter and horizontal flip
+      '-c:v', 'mpeg4', // Use `mpeg4` for faster encoding
       '-q:v', '5', // Lower quality for faster processing
-      '-b:v', '1M', // Set bitrate to 1 Mbps
-      '-c:a', 'aac', // Use AAC codec for audio
-      '-shortest', // Trim the output to the shortest stream
-      mergedVideoPath!, // Output file path
+      '-b:v', '1M', // Lower bitrate
+      mergedVideoPath!,
     ];
+
 
     log("Executing FFmpeg command: ${commandArgs.join(' ')}");
 

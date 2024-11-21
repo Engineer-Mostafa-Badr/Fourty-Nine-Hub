@@ -5,7 +5,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:flutter/services.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -147,10 +146,7 @@ class OtherVoiceVideoRecordingScreenState
         setState(() {});
       });
   }
-Future<void> playOtherAudio() async {
-    // final audio = await rootBundle.load('assets/lembi.mp3');
-    _audioPlayer.setUrl('assets/lembi.mp3');
-}
+
   Future<void> _initializeCameraController(
       CameraDescription cameraDescription) async {
     _controller = CameraController(
@@ -232,12 +228,6 @@ Future<void> playOtherAudio() async {
     _notifyTimer?.cancel();
   }
 
-  Future<String> getAssetAudioPath(String assetPath) async {
-    final byteData = await rootBundle.load(assetPath);
-    final tempFile = File('${(await getTemporaryDirectory()).path}/lembi.mp3');
-    await tempFile.writeAsBytes(byteData.buffer.asUint8List());
-    return tempFile.path;
-  }
 
   Future<bool?> _mergeVideoWithAudio() async {
     final directory = await getTemporaryDirectory();
@@ -248,7 +238,6 @@ Future<void> playOtherAudio() async {
     final filterCommand = _selectedFilter?.ffmpegFilter != null
         ? '${_selectedFilter!.ffmpegFilter},hflip' // Apply horizontal flip after the selected filter
         : 'hflip'; // Apply horizontal flip if no filter is selected
-    log('audio path ${await getAssetAudioPath('assets/lembi.mp3')}');
     // FFmpeg command arguments
     final commandArgs = [
       '-i', videoPath!, // Input video path
