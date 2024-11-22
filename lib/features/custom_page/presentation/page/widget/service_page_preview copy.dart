@@ -3,37 +3,34 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/wallet_widget.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/core/utils/handle_cashback.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/page/widget/custom_page_botton_nav_bar.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
+import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
-
-import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/dynamic/wallet_widget.dart';
-import '../../../../../common/widgets/stateless/buttons/app_button.dart';
-import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/enums/ride_services_enum.dart';
-import '../../../../../core/loading/custom_loading.dart';
-import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../res/style/app_colors.dart';
-import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
-import '../../../../../service_locator/service_locator.dart';
-import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../../fourty_nine/domain/entities/slider_item_entity.dart';
-import '../../cubit/custom_page_cubit.dart';
-import '../../cubit/custom_page_states.dart';
-import 'custom_page_botton_nav_bar.dart';
 
 class ServicePagePreview extends StatefulWidget {
   const ServicePagePreview({super.key});
@@ -46,8 +43,17 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
+  checkLogin() {
+    try {
+      if(!context.isUserLoggedIn) context.read<UserCubit>().getUser();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   void initState() {
+    checkLogin();
     super.initState();
     _setupScrollController();
     context
@@ -76,6 +82,13 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
         }
       }
     });
+    context
+        .read<FirebaseNotficationsCubit>()
+        .setupInterceptedMessage(context: context);
+    context
+        .read<NotificationSocketIoCubit>()
+        .notificationListener(languageCode: 'en');
+    super.initState();
   }
 
   @override
@@ -83,153 +96,120 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
     scrollController.dispose();
     super.dispose();
   }
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (BuildContext context) => serviceLocator<SliderCubit>(),
-        ),
-        BlocProvider(
-          create: (BuildContext context) => serviceLocator<ThumbnailsCubit>(),
-        ),
-        BlocProvider(
-          create: (BuildContext context) =>
-              serviceLocator<CustomPageCubit>()..fetchSubTab(),
-        )
-      ],
-      child: BlocBuilder<SliderCubit, BasicState<List<SliderItemEntity>>>(
-        builder: (BuildContext context, state) {
-          return BlocBuilder<ThumbnailsCubit,
-              BasicState<List<RideThumbnailEntity>>>(
-            builder: (BuildContext context,
-                BasicState<List<RideThumbnailEntity>> state) {
-              return Scaffold(
-                bottomNavigationBar: CustomPageBottonNavBar(
-                  scrollController: scrollController, currentIndex: 2,
-                  isScrollingDown: _isScrollingDown,
-                  // mainCategory: 1,
-                  // index: 2,
-                ),
-                body: BlocBuilder<CustomPageCubit, CustomPageState>(
-                  builder: (BuildContext context, subTab) {
-                    if (subTab.status == CustomPageStates.success) {
-                      return ListView(
-                        controller: scrollController,
-                        padding: EdgeInsets.symmetric(horizontal: 20.w),
-                        children: [
-                          const Sizer(),
-                          //carousel slider
-                          !context.read<UserCubit>().isLoggedIn
-                              ? const Sizer()
-                              : const SizedBox.shrink(),
-                          //wallet
-                          context.read<UserCubit>().isLoggedIn
-                              ? const WalletWidget()
-                              : const SizedBox.shrink(),
-                          //    Sizer(),
-                          //admob
-                          //   const GoogleAddsBanner(),
-                          //  Sizer(),
-                          //pick me and come with U
-                          _buildStarWidget(),
-                          const Sizer(),
-                          _pickMeAndComeWithUWidget(subTab),
-                          if (subTab.subTab?.carpool == true ||
-                              subTab.subTab?.tripJoin == true)
-                            const Sizer(),
-                          //auction
-                          _auctionAndInstallmentWidget(subTab),
-                          if (subTab.subTab?.auction == true ||
-                              subTab.subTab?.installment == true)
-                            const Sizer(),
-                          //cats layout
-                          _buildMainCategoriesViews(),
-                          const Sizer(),
-                          //main cats
-                          BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
-                            builder: (context, state) {
-                              final controller =
-                                  context.read<MainCategoriesCubit>();
-                              if (state.status == StateStatus.loading) {
-                                return Shimmer.fromColors(
-                                  baseColor: Colors.grey[100]!,
-                                  highlightColor: Colors.white24,
-                                  child: Column(
-                                    children: List.generate(
-                                        6,
-                                        (index) => Padding(
-                                              padding:
-                                                  EdgeInsets.only(bottom: 15.h),
-                                              child: Container(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    .15.h,
-                                                width: double.infinity,
-                                                margin: EdgeInsets.symmetric(
-                                                    horizontal: 10.w),
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10.w),
-                                                decoration: BoxDecoration(
-                                                  color: AppColors
-                                                      .AUTH_CONTAINER_COLOR,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20.r),
-                                                  border: Border.all(
-                                                      color: Colors.grey),
-                                                ),
-                                              ),
-                                            )),
-                                  ),
-                                );
-                              }
-                              if (state.status == StateStatus.success &&
-                                  state.data != null) {
-                                return ListView.separated(
-                                  itemCount: state.data?.length ?? 0,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        context.push(Routes.SUBCATEGORIES,
-                                            extra: state.data![index]);
-                                      },
-                                      child: MainCategoryBanner(
-                                        category: state.data![index],
-                                        onFavorite: () async {
-                                          var result = await controller
-                                              .toggleFavoriteMedicalService(
-                                                  state.data![index].id);
-                                          print("result$result");
-                                          return result;
-                                        },
-                                      ),
-                                    );
-                                  },
-                                  separatorBuilder:
-                                      (BuildContext context, int index) =>
-                                          const Sizer(),
-                                );
-                              } else {
-                                return const SizedBox.shrink();
-                              }
-                            },
-                          ),
-                        ],
+    return BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
+      listener: (context, state) {
+        if (state is NotificationSocketIoNewNotification) {
+          // pr('new notfication is recieved by the bloc listner');
+          // pr(state.notificationEntity);
+          notificationSnackBar(
+              context: context,
+              notificationEntity: state.notificationEntity,
+              isAppNotification: state.notificationEntity.filterType == 'app');
+        } else if (state is NotificationSocketIoFailed) {
+          // pr('Failed to recieve the new notfication ');
+          // pr(state.message);
+        }
+      },
+      child: Scaffold(
+         bottomNavigationBar: CustomPageBottonNavBar(
+        scrollController: scrollController, currentIndex: 2,
+        isScrollingDown: _isScrollingDown,
+        // mainCategory: 1,
+        // index: 2,
+      ),
+        body: ListView(
+          controller: scrollController,
+          shrinkWrap: true,
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          children: [
+            context.read<UserCubit>().isLoggedIn
+                ? const WalletWidget()
+                : const SizedBox.shrink(),
+            //    Sizer(),
+            //admob
+            //   const GoogleAddsBanner(),
+            _buildStarWidget(),
+            const Sizer(),
+            //pick me and come with U
+            _pickMeAndComeWithUWidget(),
+            // const Sizer(),
+            // _buildChanceWidget(),
+            // const Sizer(),
+            // _auctionAndInstallmentWidget(),
+            // const Sizer(),
+            // _buildBookingWidget(),
+            const Sizer(),
+            //cats layout
+            _buildMainCategoriesViews(),
+            const Sizer(),
+            //main cats
+            BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+              builder: (context, state) {
+                final controller = context.read<MainCategoriesCubit>();
+                if (state.status == StateStatus.loading) {
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey[100]!,
+                    highlightColor: Colors.white24,
+                    child: Column(
+                      children: List.generate(
+                          6,
+                              (index) => Padding(
+                            padding: EdgeInsets.only(bottom: 15.h),
+                            child: Container(
+                              height: MediaQuery.of(context).size.height *
+                                  .15.h,
+                              width: double.infinity,
+                              margin:
+                              EdgeInsets.symmetric(horizontal: 10.w),
+                              padding:
+                              EdgeInsets.symmetric(horizontal: 10.w),
+                              decoration: BoxDecoration(
+                                color: AppColors.AUTH_CONTAINER_COLOR,
+                                borderRadius: BorderRadius.circular(20.r),
+                                border: Border.all(color: Colors.grey),
+                              ),
+                            ),
+                          )),
+                    ),
+                  );
+                }
+                if (state.data != null) {
+                  return ListView.separated(
+                    itemCount: state.data?.length ?? 0,
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          HandleCashback.setCount('mainCategoriesCount',context);
+                          context.push(Routes.SUBCATEGORIES,
+                              extra: state.data![index]);
+                        },
+                        child: MainCategoryBanner(
+                          category: state.data![index],
+                          onFavorite: () async {
+                            var result =
+                            await controller.toggleFavoriteMedicalService(
+                                state.data![index].id);
+                            print("result$result");
+                            return result;
+                          },
+                        ),
                       );
-                    } else {
-                      return const CustomLoading();
-                    }
-                  },
-                ),
-              );
-            },
-          );
-        },
+                    },
+                    separatorBuilder: (BuildContext context, int index) =>
+                    const Sizer(),
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -258,14 +238,18 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                 width: 34.h,
               ),
               Routes.MAINCATEGORIESTREE,
+                  () => HandleCashback.setCount('threeDotsCount',context),
             ),
             _buildItemTabBar(
-              SvgPicture.asset(
-                Assets.mobile,
-                height: 34.h,
-                width: 34.h,
-              ),
-              Routes.MAINCATEGORIESCARDS,
+                SvgPicture.asset(
+                  Assets.mobile,
+                  height: 34.h,
+                  width: 34.h,
+                ),
+                Routes.MAINCATEGORIESCARDS,
+                    (){
+                  HandleCashback.setCount('mainCategoriesSliderCount',context);
+                }
             ),
           ],
         ),
@@ -274,11 +258,15 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
   }
 
   Widget _buildItemTabBar(
-    Widget icon,
-    String routeName,
-  ) {
+      Widget icon,
+      String routeName,
+      Function() onTab,
+      ) {
     return InkWell(
-      onTap: () => context.push(routeName),
+      onTap: () {
+        onTab();
+        context.push(routeName);
+      },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 6.h.w, horizontal: 10.h),
         decoration: const BoxDecoration(),
@@ -288,7 +276,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
   }
 
   BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-      _pickMeAndComeWithUWidget(subTab) {
+  _pickMeAndComeWithUWidget() {
     return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
       builder: (context, state) {
         if (state.status == StateStatus.loading) {
@@ -316,39 +304,40 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
         } else if (state.status == StateStatus.success) {
           return Row(
             children: [
-              subTab.subTab?.carpool == true
-                  ? Expanded(
+              Expanded(
                 child: _buildRideSubCategoryItem(
                   service: state.data?[0].service ?? RideServicesEnum.pickMe,
                   title: LocaleKeys.carpool.localize,
                   image: state.data?[0].image ?? '',
+                  onTab: ()=> HandleCashback.setCount('carPoolCount',context),
+                  // image: Assets.carpool,
                   // isFavorite: state.data![0].is,
                   // numberOfAds: state.data![0].numberOfAds?.toInt(),
                   route: Routes.CAR_POOL,
                 ),
-              )
-                  : const SizedBox.shrink(),
+              ),
               const Sizer(),
-              subTab.subTab?.tripJoin == true
-                  ? Expanded(
+              Expanded(
                 child: _buildRideSubCategoryItem(
                   service:
                   state.data?[1].service ?? RideServicesEnum.comeWithYou,
                   title: LocaleKeys.tripJoin.localize,
                   image: state.data?[1].image ?? '',
+                  // image: Assets.tripJoin,
+
                   route: Routes.AVAILABLE_TRIPS,
+                  onTab: () => HandleCashback.setCount('tripJoinCount',context),
                   // isFavorite: state.data![1].isFavorite,
                   // numberOfAds: state.data![1].numberOfAds?.toInt(),
                 ),
               )
-                  : const SizedBox.shrink(),
             ],
           );
         } else {
           return Container(
             padding:
-                //EdgeInsets.all
-                const EdgeInsets.symmetric(horizontal: 10),
+            //EdgeInsets.all
+            const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               LocaleKeys.noRideSubcategories.localize,
               style: TextStyle(fontSize: 32.sp.w, fontWeight: FontWeight.w500),
@@ -359,19 +348,122 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
     );
   }
 
-  Row _auctionAndInstallmentWidget(subTab) {
+  Row _auctionAndInstallmentWidget() {
     return Row(
       children: [
-        subTab.subTab?.auction == true
-            ?  itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
-            () => context.push(Routes.MAZADAT), Icons.group)
-            : const SizedBox.shrink(),
+        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
+                () {
+              HandleCashback.setCount('mazadat',context);
+              context.push(Routes.MAZADAT);
+            }, Icons.group),
         const Sizer(),
-        subTab.subTab?.installment == true
-            ? itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize,
-                () => context.push(Routes.INSTALLMENT), Icons.list)
-            : const SizedBox.shrink(),
+        itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize,
+                () {
+              HandleCashback.setCount('installments',context);
+              context.push(Routes.INSTALLMENT);
+            }, Icons.list),
       ],
+    );
+  }
+
+  Widget _buildBookingWidget() {
+    return SizedBox(
+      height: kToolbarHeight * .9.h,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: AppButton(
+                color: AppColors.AUTH_CONTAINER_COLOR,
+                label: LocaleKeys.booking.localize,
+                style: Styles.mediumText(
+                  color: AppColors.AUTH_CONTAINER_COLOR,
+                  fontWeight: FontWeight.bold,
+                ),
+                icon: Icons.auto_awesome,
+                iconSize: 50.h,
+                onPressed: () async {
+                  HandleCashback.setCount('booking',context);
+                  int? num = await CacheManager.getInt('booking');
+                  print(num);
+                }),
+          ),
+          Positioned(
+              bottom: 5,
+              left: 5,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 0,
+              left: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 15,
+              right: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              ))
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStarWidget() {
+    return SizedBox(
+      height: kToolbarHeight * .9.h,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: AppButton(
+                color: AppColors.AUTH_CONTAINER_COLOR,
+                label: LocaleKeys.beAStar.localize,
+                style: Styles.mediumText(
+                  color: AppColors.AUTH_CONTAINER_COLOR,
+                  fontWeight: FontWeight.bold,
+                ),
+                icon: Icons.star,
+                iconSize: 50.h,
+                onPressed: () {
+                  HandleCashback.setCount('beAStarCount',context);
+                  context.push(Routes.BE_STAR);
+                }),
+          ),
+          Positioned(
+              bottom: 5,
+              left: 5,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 0,
+              left: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 15,
+              right: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              ))
+        ],
+      ),
     );
   }
 
@@ -434,10 +526,14 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
     required String image,
     String? route,
     bool? isFavorite,
+    required Function() onTab
   }) {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: service.value()),
-      onTap: () => route != null ? context.push(route) : null,
+      onTap: () {
+        onTab();
+        route != null ? context.push(route) : null;
+      },
       child: Container(
         height: kToolbarHeight * 2.h,
         padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
@@ -463,7 +559,9 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                   fit: StackFit.expand,
                   children: [
                     SquareImage(
-                      fit: BoxFit.contain,
+                      fit: BoxFit.cover,
+                      width: 150,
+                      // source: AssetImage(image),
                       url: image,
                     ),
                     Container(
@@ -517,52 +615,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
             ),
           ],
         ),
-      ),
-    );
-  }
-  Widget _buildStarWidget() {
-    return SizedBox(
-      height: kToolbarHeight * .9.h,
-      width: double.infinity,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: AppButton(
-                color: AppColors.AUTH_CONTAINER_COLOR,
-                label: LocaleKeys.beAStar.localize,
-                style: Styles.mediumText(
-                  color: AppColors.AUTH_CONTAINER_COLOR,
-                  fontWeight: FontWeight.bold,
-                ),
-                icon: Icons.star,
-                iconSize: 50.h,
-                onPressed: () {}),
-          ),
-          Positioned(
-              bottom: 5,
-              left: 5,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              )),
-          Positioned(
-              top: 0,
-              left: 10,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              )),
-          Positioned(
-              top: 15,
-              right: 10,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              ))
-        ],
       ),
     );
   }

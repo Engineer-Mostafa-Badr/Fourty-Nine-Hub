@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,7 +65,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                           Icon(Icons.group_rounded,size: 40.sp,),
                           const Sizer(),
                           Label(
-                            text: LocaleKeys.peopleYouMayKnow.localize,
+                            text: LocaleKeys.peopleMayKnow.tr(),
                             style: Styles.mediumText(fontSize: 60.sp),
                           ),
                         ],

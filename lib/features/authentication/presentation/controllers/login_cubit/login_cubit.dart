@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
@@ -58,8 +59,8 @@ class LoginCubit extends Cubit<LoginState> {
           log("Token logout ${await CacheManager.getAccessToken()}");
           CacheManager.saveAccessToken(userToken.accessToken);
           CacheManager.saveRefreshToken(userToken.refreshToken);
-          await DI.reset();
-          await DI.execute(token: await CacheManager.getAccessToken());
+          // await DI.reset();
+          // await DI.execute(token: await CacheManager.getAccessToken());
           emit(LoginSuccess(userTokensEntity: userToken));
         },
       );
@@ -107,6 +108,40 @@ class LoginCubit extends Cubit<LoginState> {
         emit(LoginSuccess(userTokensEntity: userToken));
       },
     );
+  }
+
+  Future<UserCredential> signInWithFacebook() async {
+    try {
+      // Trigger the sign-in flow
+      final LoginResult loginResult = await FacebookAuth.instance.login();
+
+      if (loginResult.status == LoginStatus.success) {
+        // Log access token for debugging
+        log('Access Token: ${loginResult.accessToken!.token}');
+        log('Message: ${loginResult.message}');
+
+        // Create a credential from the access token
+        final OAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+        // Sign in with Firebase using the credential
+        UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithCredential(facebookAuthCredential);
+
+        // Log user details for debugging
+        log('Username: ${userCredential.additionalUserInfo?.username}');
+        log('Email: ${userCredential.user?.email}');
+        log('Photo URL: ${userCredential.user?.photoURL}');
+
+        // Return the signed-in user credential
+        return userCredential;
+      } else {
+        throw Exception('Facebook login failed: ${loginResult.message}');
+      }
+    } catch (e) {
+      log('Error during Facebook sign-in: $e');
+      rethrow;
+    }
   }
 
 

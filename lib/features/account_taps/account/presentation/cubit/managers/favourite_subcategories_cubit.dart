@@ -3,27 +3,34 @@ import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_category_entity.dart';
+import 'package:fourtyninehub/features/account_taps/account/domain/usecases/get_favourite_categories_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/usecases/get_favourite_subcategories_usecase.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
-
-import '../../../domain/entities/favourite_subcategory_entity.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 part 'favourite_sub_categories_state.dart';
 
 class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {
   final GetFavouriteSubCategoriesUseCase _getFavouriteSubCategoriesUseCase;
+  final GetFavouriteCategoriesUseCase _getMainCategoriesUseCase;
   final ToggleSubCategoryToFavoritesUseCase
       _toggleSubCategoryToFavoritesUseCase;
 
   FavouriteSubCategoryCubit(this._getFavouriteSubCategoriesUseCase,
-      this._toggleSubCategoryToFavoritesUseCase)
+      this._toggleSubCategoryToFavoritesUseCase, this._getMainCategoriesUseCase)
       : super(
           const FavouriteSubCategoryState(),
         );
 
-  void loadData() async {
+  Future<void> load()async{
+    emit(state.copyWith(status: StateStatus.loading));
+    await loadData();
+    await loadDataMain();
+  }
+
+   loadData() async {
     emit(state.copyWith(status: StateStatus.loading));
     final result =
         await _getFavouriteSubCategoriesUseCase.call(const NoParams());
@@ -33,28 +40,48 @@ class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {
           failure: failure,
           status: StateStatus.error,
         ),
-        (data) => state.copyWith(
+        (data) {
+          return state.copyWith(
           status: StateStatus.success,
           // data: data,
-        ),
+        );
+        },
       ),
     );
   }
-
-  Future<List<FavouriteSubcategoryEntity>> getSubcategories(
-      {required PaginationParams paginationParams}) async {
-    List<FavouriteSubcategoryEntity> data = [];
+  //
+  // Future<List<SubCategoryEntity>> getSubcategories(
+  //     {required PaginationParams paginationParams}) async {
+  //   List<SubCategoryEntity> data = [];
+  //   emit(state.copyWith(status: StateStatus.loading));
+  //   // await UserCubit.to.getUser();
+  //   final user = UserCubit.to.state.data?.id;
+  //   print('useeeerId===>$user}');
+  //   final response = await _getFavouriteSubCategoriesUseCase(const NoParams());
+  //   response.fold(
+  //       (failure) =>
+  //           emit(state.copyWith(failure: failure, status: StateStatus.error)),
+  //       (r) => data = r);
+  //
+  //   return data;
+  // }
+   loadDataMain() async {
+    print("=====================object");
     emit(state.copyWith(status: StateStatus.loading));
-    // await UserCubit.to.getUser();
-    final user = UserCubit.to.state.data?.id;
-    print('useeeerId===>$user}');
-    final response = await _getFavouriteSubCategoriesUseCase(const NoParams());
-    response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: StateStatus.error)),
-        (r) => data = r);
-
-    return data;
+    final result = await _getMainCategoriesUseCase.call(const NoParams());
+    //log(result.toString(), name: "kljjjjjjjjjjjjjjjjjjjjjjjjj");
+    emit(
+      result.fold(
+            (failure) => state.copyWith(
+          failure: failure,
+          status: StateStatus.error,
+        ),
+            (data) => state.copyWith(
+          status: StateStatus.success,
+          mainCategory: data,
+        ),
+      ),
+    );
   }
 
   Future<bool> toggleSubCategoryToFavorites(String subcategoryId) async {

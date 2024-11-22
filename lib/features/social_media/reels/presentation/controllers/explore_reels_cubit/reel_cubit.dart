@@ -85,16 +85,19 @@ class ReelsCubit extends Cubit<ReelsState> {
     );
   }
 
-  Future<void> uploadReel(
-    File videoFile, {
+  Future<void> uploadReel(  
+    File videoFile,
+    String thumbnailUrl, {
     String? comeFrom,
     String? totalPrice,
     String? advertisementType,
   }) async {
-    print('video size is  ${videoFile.lengthSync()} MB');
+
 
     // Step 1: Generate Signed URL
     final token = await CacheManager.getAccessToken();
+
+
     final response = await http.post(
       Uri.parse(
           'https://49dev.com/api/v1/reels?subCategory=66684135dbb427ee42aa0141'),
@@ -108,7 +111,8 @@ class ReelsCubit extends Cubit<ReelsState> {
         "isAudioOriginal": true,
         "metadata": {
           //name is bio
-          "name": videoFile.path.split('/').last,
+          "thumbnailMediaId": thumbnailUrl,
+          "name": videoFile.path.split('/').first,
           "size": videoFile.lengthSync(),
           "type": "video/mp4",
           "videoWidth": 640,
@@ -118,10 +122,10 @@ class ReelsCubit extends Cubit<ReelsState> {
         }
       }),
     );
-
+    log('response is ${json.decode(response.body)}');
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
-      log("${responseData['data']['signedUrl']}1111111111111111111111111111111111111111111111111111111111111111111111");
+      log("response upload reel  ${responseData['data']['signedUrl']}1111111111111111111111111111111111111111111111111111111111111111111111");
       final signedUrl = responseData['data']['signedUrl'];
 
       // Step 2: Upload Video using the Signed URL
@@ -135,13 +139,17 @@ class ReelsCubit extends Cubit<ReelsState> {
 
       if (uploadResponse.statusCode == 200) {
         log('Video uploaded successfully!>>>>${responseData['data']['mediaId']}/////////1111111111111111111111111111111111111111111111111111111111111111111111');
-        log('video id is ${responseData['data']}');
+        log('video id is from PUT ${responseData['data']}');
         if (comeFrom == 'company') {
           createAdvertisement([responseData['data']['mediaId']],
               advertisementType!, double.parse(totalPrice!));
         }
-      } else {}
-    } else {}
+      } else {
+        print('error uploading video ${uploadResponse.body}');
+      }
+    } else {
+      print('error generating signed url ${response.body}');
+    }
   }
 
   Future<void> createAdvertisement(
@@ -158,7 +166,6 @@ class ReelsCubit extends Cubit<ReelsState> {
     );
   }
 
-
   bool isLoadingReelsMore = false;
   bool hasMoreReelsData = true;
   int currentReelPage = 1;
@@ -169,7 +176,8 @@ class ReelsCubit extends Cubit<ReelsState> {
         (state.globalReelsHasReachedMax ?? false)) return;
 
     emit(state.copyWith(isLoading: true));
-    final result = await _getExploreReelsUseCase(PaginationParams(page: currentReelPage,limit: reelPageSize));
+    final result = await _getExploreReelsUseCase(
+        PaginationParams(page: currentReelPage, limit: reelPageSize));
 
     result.fold(
       (failure) =>
@@ -221,9 +229,7 @@ class ReelsCubit extends Cubit<ReelsState> {
       (failure) =>
           emit(state.copyWith(reelViewErrorMessage: failure.toString())),
       (data) {
-        emit(state.copyWith(reelSaveResponse: data
-            // Add any state update logic here if necessary
-            ));
+        emit(state.copyWith(reelSaveResponse: data));
         message = data.message ?? '';
       },
     );
@@ -343,10 +349,8 @@ class ReelsCubit extends Cubit<ReelsState> {
         comments[parentCommentIndex].replies.insert(0, newReply);
       }
       if (comments[parentCommentIndex].replies.length == 1) {
-        print('first reply');
         _scrollToFirstReply();
       } else {
-        print('latest reply');
         _scrollToLatestReply();
       }
       emit(state.copyWith(
@@ -426,32 +430,31 @@ class ReelsCubit extends Cubit<ReelsState> {
     });
   }
 
-  Future<void> toggleCommentLike(String commentId, bool isReply,{String? replyId}) async {
+  Future<void> toggleCommentLike(String commentId, bool isReply,
+      {String? replyId}) async {
     emit(state.copyWith(isLikingComment: true));
-    final result = await _toggleCommentLikeUseCase(isReply==true?replyId??'':commentId);
+    final result = await _toggleCommentLikeUseCase(
+        isReply == true ? replyId ?? '' : commentId);
     result.fold((failure) {
-      print('failure message');
       emit(state.copyWith(
           isLikingComment: false,
           likeReelErrorMessage:
               'An error occurred while liking/unliking the comment'));
     }, (data) {
-      print("Toggle Like Result: $data"); // Debugging output
+      // Debugging output
 
       final updatedComments = comments.map((comment) {
         if (isReply) {
           // Debug: Check if we are updating a reply
-          print("Updating a reply with commentId: $commentId");
 
           final updatedReplies = comment.replies.map((reply) {
             if (reply.id == replyId) {
               // print("Found matching reply with id: ${reply.id}"); // Debugging output
 
               final isLiked = data == "like";
-            print('Updated replies: $isLiked');
-            print('Updated replies: ${reply.id}');
-            reply.isLiked = isLiked;
-            reply.likeCount = isLiked ? reply.likeCount + 1 : reply.likeCount - 1;
+              reply.isLiked = isLiked;
+              reply.likeCount =
+                  isLiked ? reply.likeCount + 1 : reply.likeCount - 1;
               return reply;
             }
             return reply;
@@ -462,21 +465,20 @@ class ReelsCubit extends Cubit<ReelsState> {
           return comment;
         } else {
           // Debug: Check if we are updating a main comment
-          print("Updating a main comment with commentId: $commentId");
 
           // If it's a main comment, update the main comment like data
           if (comment.id == commentId) {
-            print("Found matching main comment with id: ${comment.id}"); // Debugging output
+            // Debugging output
 
             final isLiked = data == "like";
-        print('Normal like $isLiked');
             // return comment.copyWith(
             //   isLiked: isLiked,
             //   likeCount:
             //       isLiked ? comment.likeCount + 1 : comment.likeCount - 1,
             // );
             comment.isLiked = isLiked;
-            comment.likeCount = isLiked ? comment.likeCount + 1 : comment.likeCount - 1;
+            comment.likeCount =
+                isLiked ? comment.likeCount + 1 : comment.likeCount - 1;
             return comment;
           }
         }
@@ -496,26 +498,20 @@ class ReelsCubit extends Cubit<ReelsState> {
 
   Future<void> fetchReelsWithSameAudio(String audioId,
       {bool isInitialLoad = false}) async {
-    if ((state.globalReelsIsLoading ?? false) ||
-        (state.globalReelsHasReachedMax ?? false)) return;
-
     emit(state.copyWith(isLoading: true));
-    final int pageToFetch =
-        isInitialLoad ? 1 : (state.globalReelsCurrentPage) + 1;
+
     final result = await _reelsWithSameAudioUseCase(
         ReelsWithSameAudioParams(audioId: audioId));
-    result.fold((failure) => emit(state.copyWith(isLoading: false)), (data) {
-      final bool hasReachedMax =
-          pageToFetch >= data.data!.pagination!.pageCount!;
+    result.fold((failure) {
+      emit(state.copyWith(isLoading: false));
+    }, (data) {
       final List<Reel> newReels = data.data?.reels ?? [];
       log("${newReels.first.user.firstName}----------------------------------------------------------------------------------------------");
 
       emit(state.copyWith(
         reelsForAudio:
-            isInitialLoad ? newReels : [...?state.reelsForAudio, ...newReels],
+             [...state.reelsForAudio??[], ...newReels],
         isLoading: false,
-        hasReachedMax: hasReachedMax,
-        currentPage: pageToFetch,
       ));
     });
   }

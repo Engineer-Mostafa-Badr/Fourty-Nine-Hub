@@ -4,7 +4,7 @@ import 'package:fourtyninehub/features/search/domain/entity/ads_search_entity.da
 class AdsSearchModel extends AdsSearchEntity {
   AdsSearchModel({
     required super.id,
-    required super.userId,
+     super.userId,
     required super.subCategoryId,
     required super.mainCategoryId,
     required super.title,
@@ -59,7 +59,7 @@ class AdsSearchModel extends AdsSearchEntity {
         isApproved: json['isApproved'] ?? false,
         isPremium: json['isPremium'] ?? false,
         countryCode: json['countryCode'] ?? '',
-        price: json['price'].toDouble() ?? 0,
+        price: json['price'] ?? 0,
         status: json['status'] ?? '',
         searchText: json['searchText'] ?? '',
         subscriptionType: json['subscriptionType'] ?? '',

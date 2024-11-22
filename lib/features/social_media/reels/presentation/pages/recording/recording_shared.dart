@@ -59,14 +59,14 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
                     );
                   case 1:
                     return OtherVoiceVideoRecordingScreen(
-                      voiceUrl: widget.voiceUrl ?? '',
+                      voiceUrl: widget.voiceUrl ?? 'https://d3j5umpuujp1ej.cloudfront.net/services/technology/reels-output/22732a5b-0b5f-4655-8dc3-5ed2aeef3eb7/22732a5b-0b5f-4655-8dc3-5ed2aeef3eb7.mp3',
                       advertisementType: widget.advertisementType,
                       comeFrom: widget.comeFromCompany,
                       totalPrice: widget.totalPrice,
                     );
                   case 2:
                     return MixVoiceVideoRecordingScreen(
-                      voiceUrl: widget.voiceUrl ?? '',
+                      voiceUrl: widget.voiceUrl ?? 'https://d3j5umpuujp1ej.cloudfront.net/services/technology/reels-output/22732a5b-0b5f-4655-8dc3-5ed2aeef3eb7/22732a5b-0b5f-4655-8dc3-5ed2aeef3eb7.mp3',
                       advertisementType: widget.advertisementType,
                       comeFrom: widget.comeFromCompany,
                       totalPrice: widget.totalPrice,
@@ -102,7 +102,7 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
               child: Center(
                 child: Text(
                   options[index],
-                  textScaleFactor: 1.0,
+
                   style: TextStyle(
                     // color: isSelected? Colors.black:Colors.black,
                     fontSize: isSelected ? 35.sp : 30.sp,
@@ -174,7 +174,7 @@ class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
       appBar: AppBar(
           title: Text(
         'Video Playback',
-        textScaleFactor: 1.0,
+
         style: TextStyle(fontSize: 45.sp),
       )),
       body: Center(

@@ -62,7 +62,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               SizedBox(height: 20.h),
               Text(
                 widget.title ?? "",
-                textScaleFactor: 1.0,
+
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 55.sp,

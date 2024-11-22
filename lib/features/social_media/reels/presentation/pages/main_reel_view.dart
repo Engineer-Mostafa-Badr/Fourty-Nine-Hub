@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_state.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/reels_widget.dart';
 
@@ -27,6 +25,7 @@ class ReelView extends StatelessWidget {
               .state
               .controllers[context.read<PreloadBloc>().state.focusedIndex]
               ?.pause();
+          context.read<PreloadBloc>().resetFocusedIndex();
         }
         return Future.value(true);
       },
