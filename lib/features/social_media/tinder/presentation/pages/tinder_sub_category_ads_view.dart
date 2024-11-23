@@ -126,7 +126,9 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                     ),
                     const Sizer(),
                     Text(
-                      context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn,
+                      context.isArabic
+                          ? widget.params.subCategory.nameAr
+                          : widget.params.subCategory.nameEn,
                       textScaler: TextScaler.noScaling,
                       style: TextStyle(
                           fontSize: 40.sp,
@@ -135,9 +137,12 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                     ),
                     const Sizer(),
                     Builder(builder: (context) {
-                      String provider =
-                          getServiceName(context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn);
-                      String user = getUserName(context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn);
+                      String provider = getServiceName(context.isArabic
+                          ? widget.params.subCategory.nameAr
+                          : widget.params.subCategory.nameEn);
+                      String user = getUserName(context.isArabic
+                          ? widget.params.subCategory.nameAr
+                          : widget.params.subCategory.nameEn);
                       return TabBar(
                         controller: _tabController,
                         labelColor: AppColors.SECONDARY_COLOR,
@@ -158,12 +163,12 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                         children: [
                           Center(
                               child: Text(
-                            'Provider: ${getServiceName(context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn)}',
+                            'Provider: ${getServiceName(context.isArabic ? widget.params.subCategory.nameAr : widget.params.subCategory.nameEn)}',
                             textScaler: TextScaler.noScaling,
                           )),
                           Center(
                               child: Text(
-                            'User: ${getUserName(context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn)}',
+                            'User: ${getUserName(context.isArabic ? widget.params.subCategory.nameAr : widget.params.subCategory.nameEn)}',
                             textScaler: TextScaler.noScaling,
                           )),
                         ],

@@ -65,7 +65,6 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
             if (state is SuccessRegisterState) {
               // context.pushReplacementNamed(Routes.HOME);
               showSuccessMessage(context, state.message);
-              
             }
             if (state is FailureShippingState) {
               showErrorMessage(
@@ -185,14 +184,19 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                                     id: e.subCategoryId!,
                                                     image: e.picture ?? "",
                                                     isFavorite: false,
-                                                    nameAr: e.subCategoryNameAr ??
-                                                        "",
-                                            nameEn: e.subCategoryNameEn ??
-                                                        "",
+                                                    nameAr:
+                                                        e.subCategoryNameAr ??
+                                                            "",
+                                                    nameEn:
+                                                        e.subCategoryNameEn ??
+                                                            "",
                                                   ))
                                               .map((e) => DropdownMenuEntry<
                                                       SubCategoryEntity>(
-                                                  value: e, label: context.isArabic?e.nameAr:e.nameEn))
+                                                  value: e,
+                                                  label: context.isArabic
+                                                      ? e.nameAr
+                                                      : e.nameEn))
                                               .toList(),
                                           onSelected: (value) {
                                             setState(() {

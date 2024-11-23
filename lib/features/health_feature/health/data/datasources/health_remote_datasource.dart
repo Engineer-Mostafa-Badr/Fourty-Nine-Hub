@@ -14,10 +14,12 @@ import 'package:fourtyninehub/features/health_feature/health/domain/entities/hea
 
 abstract class HealthRemoteDataSource {
   Future<Either<Failure, List<BookedAppointmentEntity>>> getMyBookingsHistory();
-  Future<Either<Failure, List<BookedAppointmentEntity>>> getUpcomingBookings(String userId);
-  Future<Either<Failure, List<HealthSubcategoryEntity>>>
-      getHealthSubcategories(String id);
-  Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices(String userId);
+  Future<Either<Failure, List<BookedAppointmentEntity>>> getUpcomingBookings(
+      String userId);
+  Future<Either<Failure, List<HealthSubcategoryEntity>>> getHealthSubcategories(
+      String id);
+  Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices(
+      String userId);
   Future<Either<Failure, List<FavoriteCategoryBannersEntity>>>
       getFavoriteCategory();
 
@@ -41,8 +43,8 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<BookedAppointmentEntity>>>
-      getUpcomingBookings(String userId) async {
+  Future<Either<Failure, List<BookedAppointmentEntity>>> getUpcomingBookings(
+      String userId) async {
     final response =
         await _apiConsumer.get(EndPoints.getUpcomingUserAppointments(userId));
     return response.fold(
@@ -53,9 +55,10 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<HealthSubcategoryEntity>>>
-      getHealthSubcategories(String id) async {
-    final response = await _apiConsumer.get(EndPoints.getHealthSubcategories(id));
+  Future<Either<Failure, List<HealthSubcategoryEntity>>> getHealthSubcategories(
+      String id) async {
+    final response =
+        await _apiConsumer.get(EndPoints.getHealthSubcategories(id));
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data']['subcategories'] as List)
@@ -64,9 +67,10 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<HealthSubcategoryEntity>>>
-      getMedicalServices(String userId) async {
-    final response = await _apiConsumer.get(EndPoints.getMedicalServices(userId));
+  Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices(
+      String userId) async {
+    final response =
+        await _apiConsumer.get(EndPoints.getMedicalServices(userId));
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data']['subcategories'] as List)
@@ -102,8 +106,7 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
   @override
   Future<Either<Failure, DoctorInfoEntity>> getDoctorInfo() async {
     final response = await _apiConsumer.get(EndPoints.getDoctorInfo);
-    return response.fold(
-            (failure) => Left(failure),
-            (data) => Right((DoctorInfoModel.fromJson(data['data']))));
+    return response.fold((failure) => Left(failure),
+        (data) => Right((DoctorInfoModel.fromJson(data['data']))));
   }
 }

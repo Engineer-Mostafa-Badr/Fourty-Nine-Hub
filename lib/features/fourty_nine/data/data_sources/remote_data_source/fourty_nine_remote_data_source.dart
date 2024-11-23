@@ -161,12 +161,12 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
   Future<Either<Failure, bool>> anyCashBack() async {
     final result = await _apiConsumer.post(EndPoints.anyCashBack);
     return result.fold(
-          (failure) {
-            return Left(failure);
-          },
-          (data) {
-            return Right(data['status']);
-          },
+      (failure) {
+        return Left(failure);
+      },
+      (data) {
+        return Right(data['status']);
+      },
     );
   }
 }

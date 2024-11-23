@@ -222,13 +222,16 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                                         nameEn:
                                                             e.subCategoryNameEn ??
                                                                 "",
-                                                nameAr:
+                                                        nameAr:
                                                             e.subCategoryNameAr ??
                                                                 "",
                                                       ))
                                                   .map((e) => DropdownMenuEntry<
                                                           SubCategoryEntity>(
-                                                      value: e, label: context.isArabic?e.nameAr:e.nameEn))
+                                                      value: e,
+                                                      label: context.isArabic
+                                                          ? e.nameAr
+                                                          : e.nameEn))
                                                   .toList(),
                                               onSelected: (value) {
                                                 setState(() {

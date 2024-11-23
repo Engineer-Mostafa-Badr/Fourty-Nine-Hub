@@ -6,7 +6,6 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/presentatio
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/rate_card.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorDetailsReviewsWidget extends StatelessWidget {
   const DoctorDetailsReviewsWidget({super.key});

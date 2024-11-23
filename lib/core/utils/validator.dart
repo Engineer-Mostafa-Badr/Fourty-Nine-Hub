@@ -43,6 +43,7 @@ class Validator {
     }
     return null;
   }
+
   String? emptyValidation(String? text) {
     if (text == null || text.isEmpty) {
       return "Empty Field Not Valid";

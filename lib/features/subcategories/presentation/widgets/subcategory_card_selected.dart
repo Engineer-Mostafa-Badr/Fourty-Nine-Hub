@@ -89,7 +89,6 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
               ],
             ),
           ),
-
           if (!widget.isSmallCard) const Sizer(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -100,7 +99,9 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Label(
-                        text: context.isArabic?widget.item.nameAr:widget.item.nameEn,
+                        text: context.isArabic
+                            ? widget.item.nameAr
+                            : widget.item.nameEn,
                         style: Styles.mediumText(fontWeight: FontWeight.bold),
                       ),
                       // if (!widget.isSmallCard)

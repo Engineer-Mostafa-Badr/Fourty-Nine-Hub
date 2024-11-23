@@ -22,7 +22,6 @@ import '../../../features/competition/data/repository/competition_repo_impl.dart
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_cubit.dart';
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_state.dart';
 import '../../../features/competition/presentation/view/special_ads_view.dart';
-import '../../../features/custom_page/presentation/page/custom_page.dart';
 import '../../../features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
@@ -43,12 +42,12 @@ class DrawerWidget extends StatefulWidget {
 class _DrawerWidgetState extends State<DrawerWidget> {
   var widgejsonData;
 
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

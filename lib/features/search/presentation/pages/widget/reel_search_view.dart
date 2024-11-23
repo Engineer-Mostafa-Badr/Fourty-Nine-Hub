@@ -23,7 +23,7 @@ class _ReelSearchViewState extends State<ReelSearchView> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
-      child: BlocBuilder<SearchCubit,SearchState>(
+      child: BlocBuilder<SearchCubit, SearchState>(
         builder: (BuildContext context, state) {
           final controller = context.read<SearchCubit>();
           if (controller.searchController.text.isNotEmpty) {
@@ -45,16 +45,18 @@ class _ReelSearchViewState extends State<ReelSearchView> {
                 },
                 itemBuilder: (context, item, index) {
                   return InkWell(
-                      onTap: (){
-                      //  context.push(Routes.OTHERSACCOUNT,extra: item.id);
+                      onTap: () {
+                        //  context.push(Routes.OTHERSACCOUNT,extra: item.id);
                       },
-                      child: VideoGridItem(videoUrl: state.reels![index],));
+                      child: VideoGridItem(
+                        videoUrl: state.reels![index],
+                      ));
                 },
                 noMoreItemsIndicatorBuilder: (context) => Container(),
                 firstPageProgressIndicatorBuilder: (context) =>
-                const CupertinoActivityIndicator(),
+                    const CupertinoActivityIndicator(),
                 newPageProgressIndicatorBuilder: (context) =>
-                const CupertinoActivityIndicator(),
+                    const CupertinoActivityIndicator(),
               ),
             );
           }
@@ -83,10 +85,11 @@ class _VideoGridItemState extends State<VideoGridItem> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(widget.videoUrl.videoMedia.mediaKey)
-      ..initialize().then((_) {
-        setState(() {});
-      });
+    _controller =
+        VideoPlayerController.network(widget.videoUrl.videoMedia.mediaKey)
+          ..initialize().then((_) {
+            setState(() {});
+          });
   }
 
   @override

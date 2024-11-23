@@ -59,10 +59,10 @@ class RestaurantsListState {
     this.numOfRestaurants,
     this.mainCategory,
     this.allRestaurant,
-    this.isLoadingMore=false,
-    this.isLoadingExpiredOrdersMore=false,
+    this.isLoadingMore = false,
+    this.isLoadingExpiredOrdersMore = false,
     this.selectedCategory,
-    this.selectedSubCategoryId='',
+    this.selectedSubCategoryId = '',
     this.isLoadingRestaurantsMore,
     this.isResturant,
     this.nearByRestaurants,
@@ -99,8 +99,10 @@ class RestaurantsListState {
       mealCategories: mealCategories ?? this.mealCategories,
       numOfRestaurants: numOfRestaurants ?? this.numOfRestaurants,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
-      isLoadingExpiredOrdersMore: isLoadingExpiredOrdersMore ?? this.isLoadingExpiredOrdersMore,
-      isLoadingRestaurantsMore: isLoadingRestaurantsMore ?? this.isLoadingRestaurantsMore,
+      isLoadingExpiredOrdersMore:
+          isLoadingExpiredOrdersMore ?? this.isLoadingExpiredOrdersMore,
+      isLoadingRestaurantsMore:
+          isLoadingRestaurantsMore ?? this.isLoadingRestaurantsMore,
       allRestaurant: allRestaurant ?? this.allRestaurant,
       failure: failure ?? this.failure,
       mainCategory: mainCategory ?? this.mainCategory,
@@ -110,7 +112,8 @@ class RestaurantsListState {
       banner: banner ?? this.banner,
       trendingRestaurants: trendingRestaurants ?? this.trendingRestaurants,
       categories: categories ?? this.categories,
-      selectedSubCategoryId: selectedSubCategoryId ?? this.selectedSubCategoryId,
+      selectedSubCategoryId:
+          selectedSubCategoryId ?? this.selectedSubCategoryId,
       selectedCategory: selectedCategory ?? this.selectedCategory,
     );
   }

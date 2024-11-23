@@ -61,7 +61,7 @@ class CreateRestaurantCitiesDropdowns extends StatelessWidget {
                   items: state.cities.map((e) {
                     return DropdownMenuItem<CityEntity>(
                       value: e,
-                      child: Text(context.isArabic?e.nameAr:e.nameEn),
+                      child: Text(context.isArabic ? e.nameAr : e.nameEn),
                     );
                   }).toList(),
                   onChanged: (value) {
@@ -69,9 +69,9 @@ class CreateRestaurantCitiesDropdowns extends StatelessWidget {
                       createRestaurantCubit.selectCity(value);
                     }
                   },
-                  isExpanded: true,  // Ensures the dropdown takes up the available width
-                )
-                ;
+                  isExpanded:
+                      true, // Ensures the dropdown takes up the available width
+                );
               }),
               BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                   builder: (context, st) {

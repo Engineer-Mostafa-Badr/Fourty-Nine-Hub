@@ -11,7 +11,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/update_goals_sheet.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_state.dart';
 
@@ -32,12 +31,10 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/config.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.defines.dart';
-import 'package:fourtyninehub/res/style/const.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../../../res/style/styles.dart';
-import '../../../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 
 /// @nodoc
 class ZegoLiveStreamingLivePageSurface extends StatefulWidget {
@@ -177,7 +174,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
                               )
                             : GestureDetector(
                                 onTap: () {
-                                 showUpdateGoalsSheet(context);
+                                  showUpdateGoalsSheet(context);
 
                                   // onTap: () {
                                   //   context.read<StreamCubit>().requestBattle(

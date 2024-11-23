@@ -116,7 +116,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     log("Token logout ${await CacheManager.getAccessToken()}");
     emit(state.copyWith(status: StateStatus.loading));
     final result = await _signOutUseCase(const NoParams());
-    result.fold((l) => emit(state.copyWith(status: StateStatus.error)), (r) async {
+    result.fold((l) => emit(state.copyWith(status: StateStatus.error)),
+        (r) async {
       emit(state.copyWith(
           status: StateStatus.success,
           token: null,

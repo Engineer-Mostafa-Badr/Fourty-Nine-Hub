@@ -96,7 +96,8 @@ class _AdDetailsViewState extends State<AdDetailsView> {
           Expanded(
             child: ListView(
               children: [
-                if(context.read<UserCubit>().isLoggedIn)_buildTag(status: state.ad?.subscriptionStatus ?? ''),
+                if (context.read<UserCubit>().isLoggedIn)
+                  _buildTag(status: state.ad?.subscriptionStatus ?? ''),
                 _buildAdInfoWidget(ad: state.ad!),
                 const Sizer(),
                 const Sizer(),
@@ -152,7 +153,8 @@ class _AdDetailsViewState extends State<AdDetailsView> {
         title: LocaleKeys.showAdRequests.localize,
         color: AppColors.SECONDARY_COLOR,
         onTap: () async {
-          context.push(Routes.ADRequests,extra:AdRequestParams(id: widget.id,userName: '') );
+          context.push(Routes.ADRequests,
+              extra: AdRequestParams(id: widget.id, userName: ''));
         },
       ),
     );
@@ -209,20 +211,34 @@ class _AdDetailsViewState extends State<AdDetailsView> {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(10.w),
-      color: status=='premium'?Colors.amber:status=='regular'?Colors.grey:Colors.grey,
+      color: status == 'premium'
+          ? Colors.amber
+          : status == 'regular'
+              ? Colors.grey
+              : Colors.grey,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if(status=='premium'||status=='regular')...[
-            Icon(Icons.workspace_premium_outlined,
+          if (status == 'premium' || status == 'regular') ...[
+            Icon(
+              Icons.workspace_premium_outlined,
               size: 55.w,
-              color: status=='premium'?AppColors.SECONDARY_COLOR:status=='regular'?AppColors.PRIMARY_COLOR:null,
+              color: status == 'premium'
+                  ? AppColors.SECONDARY_COLOR
+                  : status == 'regular'
+                      ? AppColors.PRIMARY_COLOR
+                      : null,
             ),
             const Sizer(width: 5)
           ],
           Label(
-            text: status=='premium'?LocaleKeys.premiumSubscription.localize:status=='regular'?LocaleKeys.regularRequest.localize:LocaleKeys.notSubscribed.localize,
-            style: Styles.mediumText(color: Colors.white,fontSize: 35,fontWeight: FontWeight.bold),
+            text: status == 'premium'
+                ? LocaleKeys.premiumSubscription.localize
+                : status == 'regular'
+                    ? LocaleKeys.regularRequest.localize
+                    : LocaleKeys.notSubscribed.localize,
+            style: Styles.mediumText(
+                color: Colors.white, fontSize: 35, fontWeight: FontWeight.bold),
             maxLines: 1,
           ),
         ],
@@ -248,7 +264,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                     ? null
                     : const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) => InkWell(
-                  onTap: (){
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(

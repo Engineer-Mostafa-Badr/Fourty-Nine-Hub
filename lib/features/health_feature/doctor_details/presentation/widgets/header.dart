@@ -28,11 +28,12 @@ class DoctorDetailsAccountHeader extends StatefulWidget {
   const DoctorDetailsAccountHeader({super.key});
 
   @override
-  State<DoctorDetailsAccountHeader> createState() => _DoctorDetailsAccountHeaderState();
+  State<DoctorDetailsAccountHeader> createState() =>
+      _DoctorDetailsAccountHeaderState();
 }
 
-class _DoctorDetailsAccountHeaderState extends State<DoctorDetailsAccountHeader> {
-
+class _DoctorDetailsAccountHeaderState
+    extends State<DoctorDetailsAccountHeader> {
   final commentController = TextEditingController();
   final phoneController = TextEditingController();
   int rating = 3;
@@ -67,8 +68,9 @@ class _DoctorDetailsAccountHeaderState extends State<DoctorDetailsAccountHeader>
                         children: [
                           Label(
                             text:
-                            '${toBeginningOfSentenceCase(doctor.firstName)} ${toBeginningOfSentenceCase(doctor.lastName)}',
-                            style: Styles.mediumText(fontWeight: FontWeight.w500),
+                                '${toBeginningOfSentenceCase(doctor.firstName)} ${toBeginningOfSentenceCase(doctor.lastName)}',
+                            style:
+                                Styles.mediumText(fontWeight: FontWeight.w500),
                           ),
                           RatingStars(
                             rating: doctor.rating,
@@ -91,44 +93,27 @@ class _DoctorDetailsAccountHeaderState extends State<DoctorDetailsAccountHeader>
                       backColor: AppColors.SECONDARY_COLOR,
                       onPressed: () {
                         showModalBottomSheet(
-                          backgroundColor:
-                          Colors
-                              .white,
-                          context:
-                          context,
-                          shape:
-                          const RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.only(
-                              topLeft:
-                              Radius.circular(32.0),
-                              topRight:
-                              Radius.circular(32.0),
+                          backgroundColor: Colors.white,
+                          context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(32.0),
+                              topRight: Radius.circular(32.0),
                             ),
                           ),
-                          isDismissible:
-                          true,
-                          isScrollControlled:
-                          true,
-                          builder:
-                              (BuildContext
-                          context) {
+                          isDismissible: true,
+                          isScrollControlled: true,
+                          builder: (BuildContext context) {
                             return AnimatedPadding(
-                              padding:
-                              MediaQuery.of(context).viewInsets,
-                              duration:
-                              const Duration(milliseconds: 50),
-                              child:
-                              Container(
-                                height:
-                                550.h,
-                                padding:
-                                EdgeInsets.symmetric(
+                              padding: MediaQuery.of(context).viewInsets,
+                              duration: const Duration(milliseconds: 50),
+                              child: Container(
+                                height: 550.h,
+                                padding: EdgeInsets.symmetric(
                                   vertical: 10.h,
                                   horizontal: 10,
                                 ),
-                                child:
-                                Column(
+                                child: Column(
                                   children: [
                                     Label(
                                       text: "Rate Doctor",
@@ -137,107 +122,150 @@ class _DoctorDetailsAccountHeaderState extends State<DoctorDetailsAccountHeader>
                                     Sizer(
                                       height: 30.h,
                                     ),
-                                  RatingBar.builder(
-                                    initialRating: 3,
-                                    minRating: 1,
-                                    direction: Axis.horizontal,
-                                    allowHalfRating: false,
-                                    itemCount: 5,
-                                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                                    itemBuilder: (context, _) => const Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
+                                    RatingBar.builder(
+                                      initialRating: 3,
+                                      minRating: 1,
+                                      direction: Axis.horizontal,
+                                      allowHalfRating: false,
+                                      itemCount: 5,
+                                      itemPadding: const EdgeInsets.symmetric(
+                                          horizontal: 4.0),
+                                      itemBuilder: (context, _) => const Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                      ),
+                                      onRatingUpdate: (r) {
+                                        rating = r.toInt();
+                                        setState(() {});
+                                        print(rating);
+                                      },
                                     ),
-                                    onRatingUpdate: (r) {
-                                      rating = r.toInt();
-                                      setState(() {});
-                                      print(rating);
-                                    },
-                                  ),
                                     Sizer(
                                       height: 30.h,
                                     ),
                                     Form(
                                         key: formKey,
-                                        child: Column(children: [
-                                      Container(
-                                        constraints: BoxConstraints(maxHeight: 180.h),
-                                        child: TextFormField(
-                                          // focusNode: focusNode,
-                                          maxLines: null,
-                                          maxLength: 150,
-                                          onChanged: (c) {},
-                                          validator: (c) => Validator().emptyValidation(c),
-                                          controller: commentController,
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              constraints: BoxConstraints(
+                                                  maxHeight: 180.h),
+                                              child: TextFormField(
+                                                // focusNode: focusNode,
+                                                maxLines: null,
+                                                maxLength: 150,
+                                                onChanged: (c) {},
+                                                validator: (c) => Validator()
+                                                    .emptyValidation(c),
+                                                controller: commentController,
 
-                                          decoration: InputDecoration(hintText: LocaleKeys.add_comment_hint.localize,fillColor: Colors.white, hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
-                                        ),
-                                      ),
-                                      Sizer(
-                                        height: 10.h,
-                                      ),
-                                      Container(
-                                        constraints: BoxConstraints(maxHeight: 180.h),
-                                        child: TextFormField(
-                                          validator: (c) => Validator().emptyValidation(c),
-                                          maxLines: 1,
-                                          keyboardType: TextInputType.number,
-                                          onChanged: (c) {},
-                                          controller: phoneController,
-                                          decoration: InputDecoration(hintText: LocaleKeys.phoneNumber.localize, fillColor: Colors.white, hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
-                                        ),
-                                      ),
-                                    ],)),
+                                                decoration: InputDecoration(
+                                                    hintText: LocaleKeys
+                                                        .add_comment_hint
+                                                        .localize,
+                                                    fillColor: Colors.white,
+                                                    hintStyle: Styles.mediumText(
+                                                        color: AppColors
+                                                            .DARK_GRAY_COLOR)),
+                                              ),
+                                            ),
+                                            Sizer(
+                                              height: 10.h,
+                                            ),
+                                            Container(
+                                              constraints: BoxConstraints(
+                                                  maxHeight: 180.h),
+                                              child: TextFormField(
+                                                validator: (c) => Validator()
+                                                    .emptyValidation(c),
+                                                maxLines: 1,
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                onChanged: (c) {},
+                                                controller: phoneController,
+                                                decoration: InputDecoration(
+                                                    hintText: LocaleKeys
+                                                        .phoneNumber.localize,
+                                                    fillColor: Colors.white,
+                                                    hintStyle: Styles.mediumText(
+                                                        color: AppColors
+                                                            .DARK_GRAY_COLOR)),
+                                              ),
+                                            ),
+                                          ],
+                                        )),
                                     Expanded(
                                       child: Row(
                                         children: [
                                           Expanded(
                                             child: InkWell(
                                               onTap: () async {
-                                                if(formKey.currentState!.validate()){
-                                                  bool result = await doctorDetailsCubit.addRating(AddDoctorRatingParams(doctorId: doctor.id, rating: rating, comment: commentController.text, phone: phoneController.text));
-                                                  if(result==true){
+                                                if (formKey.currentState!
+                                                    .validate()) {
+                                                  bool result = await doctorDetailsCubit
+                                                      .addRating(
+                                                          AddDoctorRatingParams(
+                                                              doctorId:
+                                                                  doctor.id,
+                                                              rating: rating,
+                                                              comment:
+                                                                  commentController
+                                                                      .text,
+                                                              phone:
+                                                                  phoneController
+                                                                      .text));
+                                                  if (result == true) {
                                                     commentController.clear();
                                                     phoneController.clear();
-                                                    rating=0;
+                                                    rating = 0;
                                                     setState(() {});
                                                     Navigator.of(context).pop();
-                                                    showSuccessMessage(context, "message");
-
-                                                  }else{
+                                                    showSuccessMessage(
+                                                        context, "message");
+                                                  } else {
                                                     commentController.clear();
                                                     phoneController.clear();
-                                                    rating=0;
+                                                    rating = 0;
                                                     setState(() {});
                                                     Navigator.of(context).pop();
-                                                    showErrorMessage(context, "message");
+                                                    showErrorMessage(
+                                                        context, "message");
                                                   }
                                                 }
                                               },
                                               child: Container(
                                                 width: 100,
                                                 height: 80.h,
-                                                padding: const EdgeInsets.all(5),
-                                                decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(15)),
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                    color:
+                                                        AppColors.PRIMARY_COLOR,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15)),
                                                 alignment: Alignment.center,
                                                 child: Label(
-                                                  text: LocaleKeys.send.localize,
-                                                  style: Styles.headerText(color: Colors.white),
+                                                  text:
+                                                      LocaleKeys.send.localize,
+                                                  style: Styles.headerText(
+                                                      color: Colors.white),
                                                 ),
                                               ),
                                             ),
                                           ),
                                           Expanded(
                                             child: TextButton(
-                                              onPressed: () async{
+                                              onPressed: () async {
                                                 commentController.clear();
                                                 phoneController.clear();
-                                                rating=0;
+                                                rating = 0;
                                                 setState(() {});
                                                 Navigator.of(context).pop();
                                               },
                                               child: Label(
-                                                text: LocaleKeys.cancel.localize,
+                                                text:
+                                                    LocaleKeys.cancel.localize,
                                                 style: Styles.headerText(),
                                               ),
                                             ),

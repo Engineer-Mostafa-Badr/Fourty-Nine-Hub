@@ -275,27 +275,27 @@ class ShippingCubit extends Cubit<ShippingState> {
       },
       (r) async {
         await sendBinaryFileData(
-              file: XFile(listFile[0].path),
-              signedUrl: r['data'][0]['signedUrl']);
-          successSendImage(
-            endpoint: EndPoints.successCarImages,
-            data: {
-              "mediaId": r['data'][0]['mediaId'],
-            },
-          );
+            file: XFile(listFile[0].path),
+            signedUrl: r['data'][0]['signedUrl']);
+        successSendImage(
+          endpoint: EndPoints.successCarImages,
+          data: {
+            "mediaId": r['data'][0]['mediaId'],
+          },
+        );
         // for (var i = 0; i < carImagesList.length; i++) {
         //   log(r.toString(),
         //       name:
         //           "getCarImagesS3");
-          // await sendBinaryFileData(
-          //     file: XFile(listFile[i].path),
-          //     signedUrl: r['data']["$i"]['signedUrl']);
-          // successSendImage(
-          //   endpoint: EndPoints.successCarImages,
-          //   data: {
-          //     "mediaId": r['data']["$i"]['mediaId'],
-          //   },
-          // );
+        // await sendBinaryFileData(
+        //     file: XFile(listFile[i].path),
+        //     signedUrl: r['data']["$i"]['signedUrl']);
+        // successSendImage(
+        //   endpoint: EndPoints.successCarImages,
+        //   data: {
+        //     "mediaId": r['data']["$i"]['mediaId'],
+        //   },
+        // );
         // }
       },
     );

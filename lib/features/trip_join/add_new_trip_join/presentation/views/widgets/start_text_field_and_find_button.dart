@@ -93,7 +93,7 @@ class _StartTextFieldAndFindButonState
       );
     }
     if (state is StartingLocationLoading) {
-      return SizedBox(
+      return const SizedBox(
         width: 30,
         height: 30,
         child: Center(

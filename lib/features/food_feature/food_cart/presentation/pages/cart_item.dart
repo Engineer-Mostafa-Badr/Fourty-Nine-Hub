@@ -12,23 +12,32 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class BuildCartItem extends StatefulWidget {
-  const BuildCartItem({super.key, required this.foodImageUrl, required this.cartItem, required this.foodId, required this.foodName, required this.quantity, required this.totalPrice,required this.restaurantId, required this.currency,required this.removeItem});
+  const BuildCartItem(
+      {super.key,
+      required this.foodImageUrl,
+      required this.cartItem,
+      required this.foodId,
+      required this.foodName,
+      required this.quantity,
+      required this.totalPrice,
+      required this.restaurantId,
+      required this.currency,
+      required this.removeItem});
   final String foodImageUrl;
- final CartItem cartItem;
-     final String foodId;
-     final String restaurantId;
- final String foodName;
-     final int quantity;
+  final CartItem cartItem;
+  final String foodId;
+  final String restaurantId;
+  final String foodName;
+  final int quantity;
   final double totalPrice;
-     final String currency;
-     final Function(String restaurantId, String foodId) removeItem;
+  final String currency;
+  final Function(String restaurantId, String foodId) removeItem;
   @override
   State<BuildCartItem> createState() => _BuildCartItemState();
 }
 
 class _BuildCartItemState extends State<BuildCartItem> {
-
-  int? localQuantity ;
+  int? localQuantity;
   @override
   void initState() {
     localQuantity = widget.quantity;
@@ -47,11 +56,11 @@ class _BuildCartItemState extends State<BuildCartItem> {
     if (newQty < 0) return;
 
     await context.read<RestaurantDetailsCubit>().decrement(
-      context,
-      restaurantId: restaurantId,
-      foodId: mealId,
-      quantity: currentQty,
-    );
+          context,
+          restaurantId: restaurantId,
+          foodId: mealId,
+          quantity: currentQty,
+        );
     await context.read<RestaurantDetailsCubit>().fetchCart();
   }
 
@@ -60,35 +69,47 @@ class _BuildCartItemState extends State<BuildCartItem> {
     required String foodId,
   }) async {
     await context.read<RestaurantDetailsCubit>().deleteFromCart(
-      context,
-      restaurantId: restaurantId,
-      foodId: foodId,
-    );
+          context,
+          restaurantId: restaurantId,
+          foodId: foodId,
+        );
     await context.read<RestaurantDetailsCubit>().fetchCart();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
-      builder: (context,state) {
-        return Column(
-          children: [
-            Card(
-              color: cardDarkColor(context),
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Row(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: widget.foodImageUrl.isNotEmpty
-                          ? Image.network(
-                        widget.foodImageUrl,
-                        width: 80,
-                        height: 80,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
+        builder: (context, state) {
+      return Column(
+        children: [
+          Card(
+            color: cardDarkColor(context),
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: widget.foodImageUrl.isNotEmpty
+                        ? Image.network(
+                            widget.foodImageUrl,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                width: 80,
+                                height: 80,
+                                color: Colors.grey[200],
+                                child: const Icon(
+                                  Icons.broken_image,
+                                  size: 40,
+                                  color: Colors.grey,
+                                ),
+                              );
+                            },
+                          )
+                        : Container(
                             width: 80,
                             height: 80,
                             color: Colors.grey[200],
@@ -97,142 +118,146 @@ class _BuildCartItemState extends State<BuildCartItem> {
                               size: 40,
                               color: Colors.grey,
                             ),
-                          );
-                        },
-                      )
-                          : Container(
-                        width: 80,
-                        height: 80,
-                        color: Colors.grey[200],
-                        child: const Icon(
-                          Icons.broken_image,
-                          size: 40,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    )  ,
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        widget.foodName,
+                          ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      widget.foodName,
+                                      style: Styles.headerText(),
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        widget.totalPrice.toStringAsFixed(2),
                                         style: Styles.headerText(),
                                       ),
-                                    ),
-                                    Row(
+                                      Text(
+                                        ' ${widget.currency}',
+                                        style: Styles.mediumText(
+                                            color: AppColors.SECONDARY_COLOR,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Row(
                                       children: [
+                                        _buildQuantityButton(
+                                          icon: widget.quantity > 1
+                                              ? Icons.remove
+                                              : Icons.delete,
+                                          color: widget.quantity > 1
+                                              ? null
+                                              : AppColors.SECONDARY_COLOR,
+                                          onTap: () {
+                                            setState(() {
+                                              if ((localQuantity ?? 0) > 1) {
+                                                localQuantity =
+                                                    (localQuantity ?? 1) - 1;
+                                              }
+                                              if (widget.quantity == 1) {
+                                                widget.removeItem(
+                                                  widget.cartItem.restaurant
+                                                          ?.id ??
+                                                      '',
+                                                  widget.foodId,
+                                                );
+                                              }
+                                            });
+                                          },
+                                        ),
+                                        const SizedBox(width: 12),
                                         Text(
-                                          widget.totalPrice.toStringAsFixed(2),
+                                          '$localQuantity',
                                           style: Styles.headerText(),
                                         ),
-                                        Text(
-                                          ' ${widget.currency}',
-                                          style: Styles.mediumText(
-                                              color: AppColors.SECONDARY_COLOR,
-                                              fontWeight: FontWeight.bold),
+                                        const SizedBox(width: 12),
+                                        _buildQuantityButton(
+                                          icon: Icons.add,
+                                          onTap: () {
+                                            print("object");
+                                            setState(() {
+                                              localQuantity =
+                                                  (localQuantity ?? 0) + 1;
+                                            });
+                                          },
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Row(
-                                        children: [
-                                          _buildQuantityButton(
-                                            icon: widget.quantity>1?Icons.remove:Icons.delete,
-                                            color: widget.quantity>1?null:AppColors.SECONDARY_COLOR,
-                                            onTap: () {
-                                              setState(() {
-                                                if((localQuantity??0)>1){
-                                                  localQuantity=(localQuantity??1)-1;
-                                                }
-                                                if(widget.quantity==1){
-                                                  widget.removeItem(
-                                                     widget.cartItem.restaurant?.id ?? '',
-                                                     widget.foodId,
-                                                  );
-                                                }
-                                              });
-                                            },
-                                          ),
-                                          const SizedBox(width: 12),
-                                          Text(
-                                            '$localQuantity',
-                                            style: Styles.headerText(),
-                                          ),
-                                          const SizedBox(width: 12),
-                                          _buildQuantityButton(
-                                            icon: Icons.add,
-                                            onTap: () {
-                                              print("object");
-                                              setState(() {
-                                                localQuantity=(localQuantity??0)+1;
-
-                                              });
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    if(localQuantity!=widget.quantity) Row(
+                                  ),
+                                  if (localQuantity != widget.quantity)
+                                    Row(
                                       children: [
-                                        BadgedLabel(onTap: (){
-                                          setState(() {
-                                            _updateQuantity(
-                                              restaurantId: widget.cartItem.restaurant?.id ?? '',
-                                              mealId: widget.foodId,
-                                              qtyChange: 1,
-                                              currentQty: localQuantity!=widget.quantity?localQuantity??0:widget.quantity,
-                                            );
-                                          });
-                                        },color: AppColors.SECONDARY_COLOR,label: LocaleKeys.confirm.localize),
-                                        Sizer(),
-                                        BadgedLabel(onTap: (){
-                                          setState(() {
-                                           localQuantity=widget.quantity;
-                                          });
-                                        },label: LocaleKeys.cancel.localize),
+                                        BadgedLabel(
+                                            onTap: () {
+                                              setState(() {
+                                                _updateQuantity(
+                                                  restaurantId: widget.cartItem
+                                                          .restaurant?.id ??
+                                                      '',
+                                                  mealId: widget.foodId,
+                                                  qtyChange: 1,
+                                                  currentQty: localQuantity !=
+                                                          widget.quantity
+                                                      ? localQuantity ?? 0
+                                                      : widget.quantity,
+                                                );
+                                              });
+                                            },
+                                            color: AppColors.SECONDARY_COLOR,
+                                            label: LocaleKeys.confirm.localize),
+                                        const Sizer(),
+                                        BadgedLabel(
+                                            onTap: () {
+                                              setState(() {
+                                                localQuantity = widget.quantity;
+                                              });
+                                            },
+                                            label: LocaleKeys.cancel.localize),
                                       ],
                                     )
-                                  ],
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
+                            ],
                           ),
-
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
-            if(localQuantity!=widget.quantity)...[
-              const SizedBox(height: 8),
-              Text('Press Confirm button to confirm the new quantity or we will take the old quantity (${widget.quantity}).', style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),),
-            ],
+          ),
+          if (localQuantity != widget.quantity) ...[
+            const SizedBox(height: 8),
+            Text(
+              'Press Confirm button to confirm the new quantity or we will take the old quantity (${widget.quantity}).',
+              style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
+            ),
           ],
-        );
-      }
-    );
+        ],
+      );
+    });
   }
 
-  Widget _buildQuantityButton({
-    required IconData icon,
-    required VoidCallback onTap,
-    Color? color
-  }) {
+  Widget _buildQuantityButton(
+      {required IconData icon, required VoidCallback onTap, Color? color}) {
     return InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,

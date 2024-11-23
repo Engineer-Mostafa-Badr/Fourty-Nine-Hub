@@ -76,7 +76,8 @@ class _ShippingBannerWidgetState extends State<ShippingBannerWidget> {
                     padding: const EdgeInsets.symmetric(
                       horizontal: 10,
                     ),
-                    child: Text( LocaleKeys.serveClientsByClickRegister.tr(),
+                    child: Text(
+                      LocaleKeys.serveClientsByClickRegister.tr(),
                       style: const TextStyle(
                         color: Colors.red,
                       ),

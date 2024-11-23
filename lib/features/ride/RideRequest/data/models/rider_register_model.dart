@@ -66,8 +66,10 @@ class RiderRegisterModel {
       "vehicleColor": "vehicleColor",
       "vehicleType": "vehicleType",
       "vehicleYear": vehicleYear,
-      "subcategoryIds": ['62c8baa28e28a58a3edf57f1',
-    '62c8baa38e28a58a3edf57f3'],
+      "subcategoryIds": [
+        '62c8baa28e28a58a3edf57f1',
+        '62c8baa38e28a58a3edf57f3'
+      ],
       "pricingPerKm": pricingPerKm,
       "phone": phone,
       "smoker": smoker,

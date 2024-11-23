@@ -11,7 +11,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
@@ -57,7 +56,9 @@ class ShareTheApp extends StatelessWidget {
                         maxLines: 5,
                       ),
                       const Sizer(),
-                      _buildLinkWidget(context: context,referralGift:state.shareApp?.referralGift ?? 0),
+                      _buildLinkWidget(
+                          context: context,
+                          referralGift: state.shareApp?.referralGift ?? 0),
                       const Sizer(),
                     ],
                   ),
@@ -69,7 +70,10 @@ class ShareTheApp extends StatelessWidget {
         ));
   }
 
-  Widget _buildLinkWidget({required BuildContext context,required num referralGift,}) {
+  Widget _buildLinkWidget({
+    required BuildContext context,
+    required num referralGift,
+  }) {
     final controller = context.read<ShareAppCubit>();
     final referralId = controller.state.shareApp?.referralId ?? '';
 
@@ -194,7 +198,6 @@ https://example.com/download
     );
   }
 
-
   // void initDynamicLinks() async {
   //   FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
   //     final Uri deepLink = dynamicLinkData.link;
@@ -228,7 +231,4 @@ https://example.com/download
   //   final prefs = await SharedPreferences.getInstance();
   //   return prefs.getString('referralId');
   // }
-
-
-
 }

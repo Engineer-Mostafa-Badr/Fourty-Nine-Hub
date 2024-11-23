@@ -16,7 +16,9 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../res/style/app_colors.dart';
 
 class AllReviews extends StatelessWidget {
-  const AllReviews({super.key, });
+  const AllReviews({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,25 +29,23 @@ class AllReviews extends StatelessWidget {
       ),
       body: BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
           buildWhen: (previous, current) =>
-          current is DoctorDetailsReviewsLoaded ,
-        builder: (context,state) {
-
-          if(state is DoctorDetailsStartLoading){
-            return const Center(child: CircularProgressIndicator());
-          }else if(state is DoctorDetailsReviewsLoaded){
-            return ListView.separated(
-                itemBuilder: (context, index) => DoctorReviewCard(
-                  review: state.rates[index],
-                ),
-                separatorBuilder: (context, index) => const Divider(
-                  color: Colors.grey,
-                ),
-                itemCount: state.rates.length);
-          }else{
-            return Container();
-          }
-        }
-      ),
+              current is DoctorDetailsReviewsLoaded,
+          builder: (context, state) {
+            if (state is DoctorDetailsStartLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is DoctorDetailsReviewsLoaded) {
+              return ListView.separated(
+                  itemBuilder: (context, index) => DoctorReviewCard(
+                        review: state.rates[index],
+                      ),
+                  separatorBuilder: (context, index) => const Divider(
+                        color: Colors.grey,
+                      ),
+                  itemCount: state.rates.length);
+            } else {
+              return Container();
+            }
+          }),
     );
   }
 

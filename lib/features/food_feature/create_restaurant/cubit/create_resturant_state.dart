@@ -3,7 +3,9 @@ part of 'create_resturant_cubit.dart';
 sealed class CreateRestaurantState {}
 
 final class CreateRestaurantInitial extends CreateRestaurantState {}
+
 final class CreateRestaurantLoading extends CreateRestaurantState {}
+
 final class CreateRestaurantFinish extends CreateRestaurantState {}
 
 final class CreateResturantLoading extends CreateRestaurantState {
@@ -28,7 +30,15 @@ final class CreateResturantError extends CreateRestaurantState {
   CreateResturantError(this.message);
 }
 
-enum ValidationStates { loading,filterLoading, initState, error, success,requestSuccess,requestLoading }
+enum ValidationStates {
+  loading,
+  filterLoading,
+  initState,
+  error,
+  success,
+  requestSuccess,
+  requestLoading
+}
 
 extension ValidationStateX on ValidationState {
   bool get isInitial => status == ValidationStates.initState;
@@ -37,7 +47,8 @@ extension ValidationStateX on ValidationState {
   bool get isError => status == ValidationStates.error;
   bool get isSuccess => status == ValidationStates.success;
   bool get isRequestSuccess => status == ValidationStates.requestSuccess;
-  bool get isRequestLoading => status == ValidationStates.requestLoading;}
+  bool get isRequestLoading => status == ValidationStates.requestLoading;
+}
 
 class ValidationState extends CreateRestaurantState {
   final bool? isName;

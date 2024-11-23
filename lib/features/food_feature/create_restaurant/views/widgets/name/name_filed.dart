@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -58,14 +59,12 @@ class CreateRestaurantNameField extends StatelessWidget {
               focusedErrorBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 borderSide: BorderSide(
-                  color:
-                      Colors.red,
+                  color: Colors.red,
                 ),
               ),
               filled: false,
-              contentPadding:
-                  const EdgeInsets.all(10),
-              hintText:context.isArabic?'اسم المطعم':'Restaurant Name' ,
+              contentPadding: const EdgeInsets.all(10),
+              hintText: context.isArabic ? 'اسم المطعم' : 'Restaurant Name',
             ),
           ),
           Visibility(
@@ -150,8 +149,8 @@ class CreateRestaurantNumberField extends StatelessWidget {
               contentPadding:
                   const EdgeInsets.all(10), // Padding inside the text field
               hintText: LocaleKeys.restaurantNumber.tr(), // Hint text
-              contentPadding: const EdgeInsets.all(10), // Padding inside the text field
-              hintText:context.isArabic?'رقم المطعم':'Restaurant Number' ,
+              // contentPadding: const EdgeInsets.all(10), // Padding inside the text field
+              // hintText:context.isArabic?'رقم المطعم':'Restaurant Number' ,
             ),
             keyboardType: TextInputType.phone,
           ),

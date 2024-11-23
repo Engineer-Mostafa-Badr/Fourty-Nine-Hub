@@ -90,8 +90,7 @@ class _OpenRouteTrackingState extends State<OpenRouteTracking> {
           width: 80.0,
           height: 80.0,
           point: point,
-          builder: (_) =>
-              const Icon(Icons.location_on, color: Colors.red, size: 40.0),
+          child: const Icon(Icons.location_on, color: Colors.red, size: 40.0),
         ),
       );
     });

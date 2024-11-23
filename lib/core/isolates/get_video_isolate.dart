@@ -12,7 +12,6 @@ Future preloadVideos(int index) async {
 
   final List<String> allUrls = [];
 
-
   while (true) {
     final urlsBatch = await createIsolate(index);
     if (urlsBatch.isEmpty) {
@@ -47,7 +46,8 @@ Future<List<String>> createIsolate(int index) async {
   isolateSendPort.send([index, isolateResponseReceivePort.sendPort]);
 
   // Wait for the isolate to return the video URLs
-  final isolateResponse = await isolateResponseReceivePort.first as List<String>;
+  final isolateResponse =
+      await isolateResponseReceivePort.first as List<String>;
   return isolateResponse;
 }
 
@@ -83,7 +83,8 @@ Future<List<String>> getReelVideos({int id = 0}) async {
   await Future.delayed(const Duration(milliseconds: kLatency));
 
   // Adjust the end of the sublist based on available videos
-  final int endIndex = (id + kNextLimit) < videos.length ? (id + kNextLimit) : videos.length;
+  final int endIndex =
+      (id + kNextLimit) < videos.length ? (id + kNextLimit) : videos.length;
   log('end index: $endIndex');
   return videos.map((e) => e.videoMedia).toList().sublist(id, endIndex);
 }

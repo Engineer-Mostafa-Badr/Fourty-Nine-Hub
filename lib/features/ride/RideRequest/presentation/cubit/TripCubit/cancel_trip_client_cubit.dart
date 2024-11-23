@@ -12,7 +12,6 @@ class CancelTripClientCubit extends Cubit<RiderState> {
     required String reasonId,
     required String note,
   }) async {
-    
     var response = await repository.cancelTripClient(
         id: id, reasonId: reasonId, note: note);
     response.fold(

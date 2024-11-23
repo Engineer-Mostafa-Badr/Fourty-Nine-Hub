@@ -29,7 +29,7 @@ class _CustomPageState extends State<CustomPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar:  BackAppBar(
+      appBar: BackAppBar(
         label: LocaleKeys.customPage.localize,
         leading: IconButton(
           icon: const Icon(Icons.menu), // The menu icon

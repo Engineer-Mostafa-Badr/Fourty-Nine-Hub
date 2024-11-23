@@ -26,10 +26,10 @@ class UniService {
   // static String package = "$baseUrl/package";
   static init() async {
     try {
-      final Uri? url = 'await getInitialUri()';
+      // final Uri? url = 'await getInitialUri()';
       // log(hurl.toString());
       // log(url!.path.toString());
-      uniHandler(url);
+      // uniHandler(url);
     } on PlatformException catch (e) {
       log(e.toString());
     } on FormatException catch (e) {

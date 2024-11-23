@@ -18,13 +18,14 @@ class SubcategoryListTitle extends StatelessWidget {
       leading: Image.network(
         specialty.image,
       ),
-      title: Text(context.isArabic?specialty.nameAr:specialty.nameEn),
+      title: Text(context.isArabic ? specialty.nameAr : specialty.nameEn),
       onTap: () {
         serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
             specialty;
         if (serviceLocator<HealthSharedData>().doctorSearchParams.bookingType ==
             BookingTypes.call) {
-          context.push(Routes.VISITADOCTORLIST,extra: DoctorsListParams(fromHome: false,subCategoryId: ''));
+          context.push(Routes.VISITADOCTORLIST,
+              extra: DoctorsListParams(fromHome: false, subCategoryId: ''));
         } else {
           context.push(Routes.FILTERDOCTORGOVERNORATE);
         }

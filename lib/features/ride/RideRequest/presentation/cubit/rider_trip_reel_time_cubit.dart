@@ -33,7 +33,7 @@ class RiderTripReelTimeCubit extends Cubit<RiderState> {
     log(subCategory.toString(), name: "lskdfjlskdjflskdjf");
   }
 
-  print(){
+  print() {
     log(subCategory.toString(), name: "lskdfjlskdjflskdjf");
     log(tempCategory.toString(), name: "lskdfjlskdjflskdjf");
   }

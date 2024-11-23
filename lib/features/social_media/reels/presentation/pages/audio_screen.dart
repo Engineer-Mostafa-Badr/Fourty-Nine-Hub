@@ -25,7 +25,6 @@ import '../widgets/components/snackbars.dart';
 import 'audio_reel_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-
 class InstagramAudioScreen extends StatefulWidget {
   final Audio audio;
   final Reel reel;
@@ -258,7 +257,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                   child: ElevatedButton(
                     style: const ButtonStyle(
                         backgroundColor:
-                            MaterialStatePropertyAll(AppColors.PRIMARY_COLOR)),
+                            WidgetStatePropertyAll(AppColors.PRIMARY_COLOR)),
                     onPressed: () {
                       _player.dispose();
                       Navigator.push(

@@ -20,19 +20,17 @@ class AdRequestsView extends StatefulWidget {
   var id;
   String search = '';
 
-  AdRequestsView({super.key, payload}){
+  AdRequestsView({super.key, payload}) {
     print("objectitemId$payload");
-    if(payload is AdRequestParams){
-      id=payload.id;
+    if (payload is AdRequestParams) {
+      id = payload.id;
       search = '';
-
-    }else {
+    } else {
       print("payloadpayloadpayload $payload");
       // print(id);
       // print('itemId${payload['itemId']}');
-      id=payload['itemId'];
+      id = payload['itemId'];
       search = payload['username'];
-
     }
   }
 
@@ -62,7 +60,8 @@ class _AdRequestsViewState extends State<AdRequestsView> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       _cubit.fetchAdRequests(widget.id, _cubit.searchController.text);
     }
   }
@@ -86,13 +85,14 @@ class _AdRequestsViewState extends State<AdRequestsView> {
             child: TextFormField(
               controller: _cubit.searchController,
               decoration: InputDecoration(
-                contentPadding:  EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
                 hintStyle: Styles.mediumText(),
                 hintText: LocaleKeys.searchWithName.localize,
               ),
             ),
           ),
-          Sizer(),
+          const Sizer(),
           Expanded(
             child: BlocBuilder<AdRequestsCubit, AdRequestsState>(
               builder: (context, state) {
@@ -103,7 +103,8 @@ class _AdRequestsViewState extends State<AdRequestsView> {
                 return ListView.builder(
                   controller: _scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: _cubit.adRequests.length + (_cubit.isLoadingMore ? 1 : 0),
+                  itemCount:
+                      _cubit.adRequests.length + (_cubit.isLoadingMore ? 1 : 0),
                   itemBuilder: (context, index) {
                     if (index == _cubit.adRequests.length) {
                       return const Center(child: CircularProgressIndicator());
@@ -112,7 +113,8 @@ class _AdRequestsViewState extends State<AdRequestsView> {
                     final adRequest = _cubit.adRequests[index];
                     return Container(
                       margin: EdgeInsetsDirectional.all(10.w),
-                      padding: EdgeInsetsDirectional.symmetric(horizontal: 15.w, vertical: 10.h),
+                      padding: EdgeInsetsDirectional.symmetric(
+                          horizontal: 15.w, vertical: 10.h),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.r),
                         border: Border.all(
@@ -140,10 +142,13 @@ class _AdRequestsViewState extends State<AdRequestsView> {
                               ),
                               Expanded(
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(adRequest.userName, style: Styles.headerText()),
-                                    Text(adRequest.sinceTime, style: Styles.mediumText()),
+                                    Text(adRequest.userName,
+                                        style: Styles.headerText()),
+                                    Text(adRequest.sinceTime,
+                                        style: Styles.mediumText()),
                                   ],
                                 ),
                               ),
@@ -172,40 +177,38 @@ class _AdRequestsViewState extends State<AdRequestsView> {
   }
 }
 
-  Widget _buildRelevantAdsWidget() {
-    return BlocBuilder<AdDetailsCubit, AdDetailsState>(
-        builder: (context, state) {
-          if (state.relevantAds?.isEmpty ?? true) {
-            return const SizedBox();
-          }
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Label(
-                text: 'Relevant Ads',
-                style: Styles.mediumText(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: kToolbarHeight * 3.5,
-                child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => AdCard(
-                      item: state.relevantAds![index],
-                      onFav: (String) {},
-                      onRemoveFav: (String) {},
-                    ),
-                    separatorBuilder: (context, index) => const Sizer(),
-                    itemCount: state.relevantAds?.length ?? 0),
-              ),
-            ],
-          );
-        });
-  }
+Widget _buildRelevantAdsWidget() {
+  return BlocBuilder<AdDetailsCubit, AdDetailsState>(builder: (context, state) {
+    if (state.relevantAds?.isEmpty ?? true) {
+      return const SizedBox();
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Label(
+          text: 'Relevant Ads',
+          style: Styles.mediumText(fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          height: kToolbarHeight * 3.5,
+          child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) => AdCard(
+                    item: state.relevantAds![index],
+                    onFav: (String) {},
+                    onRemoveFav: (String) {},
+                  ),
+              separatorBuilder: (context, index) => const Sizer(),
+              itemCount: state.relevantAds?.length ?? 0),
+        ),
+      ],
+    );
+  });
+}
 
-
-  class AdRequestParams{
-    final String id;
-    final String userName;
+class AdRequestParams {
+  final String id;
+  final String userName;
 
   AdRequestParams({required this.id, required this.userName});
-  }
+}

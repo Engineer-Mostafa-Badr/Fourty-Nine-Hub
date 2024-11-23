@@ -10,14 +10,15 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../widgets/doctor_card.dart';
 
-class DoctorsListParams{
+class DoctorsListParams {
   final bool fromHome;
   final String subCategoryId;
 
   DoctorsListParams({required this.fromHome, required this.subCategoryId});
 }
+
 class DoctorsListView extends StatefulWidget {
-  const DoctorsListView({super.key,required this.params});
+  const DoctorsListView({super.key, required this.params});
   final DoctorsListParams params;
   @override
   State<DoctorsListView> createState() => _DoctorsListViewState();
@@ -26,7 +27,11 @@ class DoctorsListView extends StatefulWidget {
 class _DoctorsListViewState extends State<DoctorsListView> {
   @override
   void initState() {
-    widget.params.fromHome==true?context.read<DoctorsListCubit>().loadDataFromSubCategory(widget.params.subCategoryId):context.read<DoctorsListCubit>().loadData(widget.params.fromHome);
+    widget.params.fromHome == true
+        ? context
+            .read<DoctorsListCubit>()
+            .loadDataFromSubCategory(widget.params.subCategoryId)
+        : context.read<DoctorsListCubit>().loadData(widget.params.fromHome);
     super.initState();
   }
 

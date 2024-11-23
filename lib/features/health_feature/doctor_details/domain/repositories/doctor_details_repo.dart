@@ -15,6 +15,5 @@ abstract class DoctorDetailsRepo {
   Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorReviews(
       String doctorId);
   Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorRatings();
-  Future<Either<Failure, bool>> addDoctorRating(
-      AddDoctorRatingParams params);
+  Future<Either<Failure, bool>> addDoctorRating(AddDoctorRatingParams params);
 }

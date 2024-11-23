@@ -14,12 +14,12 @@ class CheckAcceptByRiderCubit extends Cubit<RiderState> {
   check() async {
     if (!isCheck) {
       isCheck = true;
-        CheckAcceptByRiderModel? rider = await cacheService.getDriverTripInfo();
+      CheckAcceptByRiderModel? rider = await cacheService.getDriverTripInfo();
       if (rider != null) {
         emit(SuccessCheckAcceptByRiderState(model: rider));
       }
     }
-    
+
     repository.checkAcceptByRider(
       onData: (model) {
         log(model.toString(), name: "checkAcceptByRidercheckAcceptByRider");

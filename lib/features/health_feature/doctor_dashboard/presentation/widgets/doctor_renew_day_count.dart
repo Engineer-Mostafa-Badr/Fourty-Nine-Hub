@@ -37,7 +37,8 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                   builder: (context, state) {
                     String days = '0';
                     if (state is DoctorInfoSuccessState) {
-                      days = state.info.remainingDaysToEndSubscription.toString();
+                      days =
+                          state.info.remainingDaysToEndSubscription.toString();
                     }
                     return _Item(
                       numerOfDays: days,
@@ -75,7 +76,8 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                   builder: (context, state) {
                     String days = '0';
                     if (state is DoctorInfoSuccessState) {
-                      days = state.info.remainingDaysToExpiryPracticingId.toString();
+                      days = state.info.remainingDaysToExpiryPracticingId
+                          .toString();
                     }
                     return _Item(
                       numerOfDays: days,

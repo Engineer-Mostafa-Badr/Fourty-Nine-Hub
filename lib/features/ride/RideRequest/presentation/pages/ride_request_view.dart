@@ -62,7 +62,7 @@ class _RideRequestViewState extends State<RideRequestView> {
         listener: (context, state) {
           if (state is SuccessGetOfferDataState) {
             if (state.data != null) {
-            var overlay = Overlay.of(context);
+              var overlay = Overlay.of(context);
               var overlayEntry = OverlayEntry(
                 builder: (context) => Positioned(
                   top: 30,
@@ -109,7 +109,7 @@ class _RideRequestViewState extends State<RideRequestView> {
                               child: DashboardBanner(
                                 onTap: () => context.push(Routes.ALLTRIPRIDER),
                                 // onTap: () {
-                                  
+
                                 // },
                                 title: LocaleKeys.rideDashboard.tr(),
                                 subTitle:
@@ -134,7 +134,8 @@ class _RideRequestViewState extends State<RideRequestView> {
                                       horizontal: 10,
                                     ),
                                     child: Text(
-                                      LocaleKeys.serveClientsByClickRegister.tr(),
+                                      LocaleKeys.serveClientsByClickRegister
+                                          .tr(),
                                       style: const TextStyle(
                                         color: Colors.red,
                                       ),
@@ -203,7 +204,9 @@ class _RideRequestViewState extends State<RideRequestView> {
                                             id: state.model.mainCategory
                                                     ?.mainCategoryId ??
                                                 "",
-                                            name: LocaleKeys.chooseYourFavoriteSubCategory.tr(),
+                                            name: LocaleKeys
+                                                .chooseYourFavoriteSubCategory
+                                                .tr(),
                                             image: state.model.mainCategory
                                                     ?.cover ??
                                                 "",
@@ -349,7 +352,8 @@ class _RideRequestViewState extends State<RideRequestView> {
                                             DefaultTextFormField(
                                               currentController:
                                                   TextEditingController(),
-                                              hint: LocaleKeys.offerYourFare.tr(),
+                                              hint:
+                                                  LocaleKeys.offerYourFare.tr(),
                                               readOnly: (getTripInfoCubit
                                                       .model.autoAccept ??
                                                   false),
@@ -367,14 +371,12 @@ class _RideRequestViewState extends State<RideRequestView> {
                                               },
                                               hintColor: Colors.grey,
                                               suffixIcon: const Row(
-                                                mainAxisSize:
-                                                    MainAxisSize.min,
+                                                mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   Icon(Icons.credit_card),
                                                   Sizer(
                                                     width: 6,
                                                   ),
-                                                  
                                                   Sizer()
                                                 ],
                                               ),
@@ -655,13 +657,15 @@ class _RideRequestViewState extends State<RideRequestView> {
                     ),
                   ),
                 ),
-                 Positioned(
+                Positioned(
                     bottom: 10,
                     right: 10,
                     left: 10,
                     child: DashboardBanner(
                       title: LocaleKeys.driverDashboard.tr(),
-                      subTitle: LocaleKeys.newTripsAreWaitingYouGoToDriverDashboardAndExploreMore.tr(),
+                      subTitle: LocaleKeys
+                          .newTripsAreWaitingYouGoToDriverDashboardAndExploreMore
+                          .tr(),
                       route: Routes.RIDERDASHBOARD,
                     )),
               ],
@@ -887,9 +891,8 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
     var raiseFareCubit = context.read<RaiseFareCubit>();
     return Container(
       width: double.infinity,
-      
       decoration: BoxDecoration(
-        color: context.isDarkMode?AppColors.QUANTITY_COLOR:Colors.white,
+        color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30),
           topRight: Radius.circular(30),
@@ -904,7 +907,9 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
               children: [
                 Text(
                   "${widget.model.closerDrivers?.length ?? 0} ${LocaleKeys.driversAreViewingYourRequest.tr()}",
-                  style: Styles.mediumText(color: context.isDarkMode?Colors.white:Colors.black,),
+                  style: Styles.mediumText(
+                    color: context.isDarkMode ? Colors.white : Colors.black,
+                  ),
                 ),
                 const Spacer(),
                 SizedBox(
@@ -953,7 +958,9 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
             child: Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: context.isDarkMode?AppColors.QUANTITY_COLOR:Colors.white,
+                color: context.isDarkMode
+                    ? AppColors.QUANTITY_COLOR
+                    : Colors.white,
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(30),
                   topRight: Radius.circular(30),
@@ -964,7 +971,7 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                   Text(
                     LocaleKeys.findingDrivers.tr(),
                     style: Styles.headerText(
-                      color: context.isDarkMode?Colors.white:Colors.black,
+                      color: context.isDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
                   const Sizer(),
@@ -980,13 +987,17 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                             height: 60,
                             width: double.infinity,
                             decoration: BoxDecoration(
-                                color: raiseFareCubit.price != null? AppColors.PRIMARY_COLOR: const Color(0xFF495563),
+                                color: raiseFareCubit.price != null
+                                    ? AppColors.PRIMARY_COLOR
+                                    : const Color(0xFF495563),
                                 borderRadius: BorderRadius.circular(10)),
                             child: Center(
                               child: Text(
                                 "-3",
                                 style: Styles.mediumText(
-                                  color: raiseFareCubit.price != null?Colors.white: const Color(0xFF5E6A78),
+                                  color: raiseFareCubit.price != null
+                                      ? Colors.white
+                                      : const Color(0xFF5E6A78),
                                   fontSize: 38,
                                 ),
                               ),
@@ -1007,7 +1018,10 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                           ),
                           Text(
                             "EGP ${(widget.model.trip?.price ?? 0) + (raiseFareCubit.currentPrice ?? 0)}",
-                            style: Styles.headerText(color: context.isDarkMode?Colors.white:Colors.black),
+                            style: Styles.headerText(
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black),
                           ),
                         ],
                       ),
@@ -1069,22 +1083,25 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                   GestureDetector(
                     onTap: () {
                       raiseFareCubit.update(
-                          tripId: widget.model.trip?.id ?? "", tripPrice: widget.model.trip?.price??0);
-                      setState(() {
-                        
-                      });
+                          tripId: widget.model.trip?.id ?? "",
+                          tripPrice: widget.model.trip?.price ?? 0);
+                      setState(() {});
                     },
                     child: Container(
                       height: 60,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                          color: raiseFareCubit.price != null? AppColors.PRIMARY_COLOR: const Color(0xFF495563),
+                          color: raiseFareCubit.price != null
+                              ? AppColors.PRIMARY_COLOR
+                              : const Color(0xFF495563),
                           borderRadius: BorderRadius.circular(10)),
                       child: Center(
                         child: Text(
-                            LocaleKeys.raiseFare.tr(),
+                          LocaleKeys.raiseFare.tr(),
                           style: Styles.mediumText(
-                            color: raiseFareCubit.price != null? Colors.white: const Color(0xFF5E6A78),
+                            color: raiseFareCubit.price != null
+                                ? Colors.white
+                                : const Color(0xFF5E6A78),
                             fontSize: 38,
                           ),
                         ),
@@ -1111,7 +1128,10 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                               ),
                               Text(
                                 "EGP ${(widget.model.trip?.price ?? 0) + (raiseFareCubit.currentPrice ?? 0)} ${widget.model.trip?.paymentMethod}",
-                                style: Styles.mediumText(color: context.isDarkMode?Colors.white:Colors.black),
+                                style: Styles.mediumText(
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black),
                               ),
                             ],
                           )
@@ -1172,14 +1192,18 @@ class AcceptOrDeclineTrip extends StatelessWidget {
       listener: (context, state) {
         log(state.toString(), name: "SuccessAcceptOfferRideState");
         if (state is SuccessAcceptOfferRideState) {
-          context.pushAndRemoveUntil(Routes.TRIPINFOBYRIDERSCREEN, extra: state.model, (route) => false,);
+          context.pushAndRemoveUntil(
+            Routes.TRIPINFOBYRIDERSCREEN,
+            extra: state.model,
+            (route) => false,
+          );
         }
       },
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
         decoration: BoxDecoration(
-          color: context.isDarkMode?AppColors.QUANTITY_COLOR:Colors.white,
+          color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
           borderRadius: BorderRadius.circular(20),
           boxShadow: const [
             BoxShadow(

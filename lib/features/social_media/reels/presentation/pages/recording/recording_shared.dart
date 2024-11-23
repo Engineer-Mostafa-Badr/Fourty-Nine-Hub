@@ -118,7 +118,6 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
   }
 }
 
-
 class ProgressPainter extends CustomPainter {
   final double progress;
   final Color color;

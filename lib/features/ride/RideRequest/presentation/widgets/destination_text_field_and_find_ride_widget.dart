@@ -76,7 +76,6 @@ class _DestinationTextFieldAndFindRideWidgetState
   }
 
   Widget? _getIcon(RiderState state) {
-
     log(state.toString());
     if (state is SuccessGetDestinationPointState) {
       return const Icon(
@@ -124,4 +123,3 @@ class _DestinationTextFieldAndFindRideWidgetState
     return null;
   }
 }
-

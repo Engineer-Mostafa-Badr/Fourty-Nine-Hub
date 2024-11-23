@@ -22,15 +22,22 @@ class DoctorDetailsCubit extends Cubit<DoctorDetailsState> {
   final GetDoctorDetailsIdUseCase _getDoctorDetailsIdUseCase;
   final AddDoctorRatingUseCase _addDoctorRatingUseCase;
   final GetDoctorReviewsUseCase _getDoctorReviewsUseCase;
-  DoctorDetailsCubit(this._getUserDoctorRatessUseCase, this._healthSharedData,
-      this._getDoctorDetailsUseCase, this._getDoctorDetailsIdUseCase, this._addDoctorRatingUseCase, this._getDoctorReviewsUseCase)
+  DoctorDetailsCubit(
+      this._getUserDoctorRatessUseCase,
+      this._healthSharedData,
+      this._getDoctorDetailsUseCase,
+      this._getDoctorDetailsIdUseCase,
+      this._addDoctorRatingUseCase,
+      this._getDoctorReviewsUseCase)
       : super(DoctorDetailsInitial());
 
   late AppointmentEntity selectedAppointment;
   late DoctorEntity doctor;
 
   Future<void> loadData(DoctorDetailsParams params) async {
-    params.fromSearch==false?await _getDoctorDetailsId(params.doctorId):await _getDoctorDetails(params.doctorId);
+    params.fromSearch == false
+        ? await _getDoctorDetailsId(params.doctorId)
+        : await _getDoctorDetails(params.doctorId);
     await _checkCallAndChatButtons(params.doctorId);
     await _getReviews(params.doctorId);
   }
@@ -49,20 +56,22 @@ class DoctorDetailsCubit extends Cubit<DoctorDetailsState> {
       emit(DoctorDetailsLoaded());
     });
   }
+
   Future<bool> addRating(AddDoctorRatingParams params) async {
     bool result = false;
     final response = await _addDoctorRatingUseCase.call(params);
     response.fold(
         (failure) => emit(DoctorDetailsError(Labels.cantLoadDoctorDetails)),
         (data) {
-          result = data;
+      result = data;
     });
     return result;
   }
 
   Future<void> _getDoctorDetailsId(String doctorId) async {
     emit(DoctorDetailsStartLoading());
-    final response = await _getDoctorDetailsIdUseCase.call(GetDoctorDetailsIdParams(
+    final response =
+        await _getDoctorDetailsIdUseCase.call(GetDoctorDetailsIdParams(
       doctorId: doctorId,
       subCategoryId: _healthSharedData.doctorSearchParams.subCategory.id,
     ));
@@ -82,6 +91,7 @@ class DoctorDetailsCubit extends Cubit<DoctorDetailsState> {
       (data) => emit(DoctorDetailsReviewsLoaded(data)),
     );
   }
+
   Future<void> getDoctorReviews() async {
     emit(DoctorDetailsStartLoading());
     final result = await _getDoctorReviewsUseCase.call(const NoParams());

@@ -1,11 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/usecases/get_favourite_categories_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/account/domain/usecases/get_favourite_subcategories_usecase.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
@@ -24,13 +22,13 @@ class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {
           const FavouriteSubCategoryState(),
         );
 
-  Future<void> load()async{
+  Future<void> load() async {
     emit(state.copyWith(status: StateStatus.loading));
     await loadData();
     await loadDataMain();
   }
 
-   loadData() async {
+  loadData() async {
     emit(state.copyWith(status: StateStatus.loading));
     final result =
         await _getFavouriteSubCategoriesUseCase.call(const NoParams());
@@ -42,13 +40,14 @@ class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {
         ),
         (data) {
           return state.copyWith(
-          status: StateStatus.success,
-          // data: data,
-        );
+            status: StateStatus.success,
+            // data: data,
+          );
         },
       ),
     );
   }
+
   //
   // Future<List<SubCategoryEntity>> getSubcategories(
   //     {required PaginationParams paginationParams}) async {
@@ -65,18 +64,18 @@ class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {
   //
   //   return data;
   // }
-   loadDataMain() async {
+  loadDataMain() async {
     print("=====================object");
     emit(state.copyWith(status: StateStatus.loading));
     final result = await _getMainCategoriesUseCase.call(const NoParams());
     //log(result.toString(), name: "kljjjjjjjjjjjjjjjjjjjjjjjjj");
     emit(
       result.fold(
-            (failure) => state.copyWith(
+        (failure) => state.copyWith(
           failure: failure,
           status: StateStatus.error,
         ),
-            (data) => state.copyWith(
+        (data) => state.copyWith(
           status: StateStatus.success,
           mainCategory: data,
         ),

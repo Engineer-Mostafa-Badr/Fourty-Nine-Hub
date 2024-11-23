@@ -56,7 +56,7 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
   TextEditingController vehicleYearController = TextEditingController();
   // GlobalKey<FormState> formKey = GlobalKey();
   bool smoker = false;
-  
+
   // String? vehicleModel;
   // String? vehicleBrand;
   // String? vehicleColor;

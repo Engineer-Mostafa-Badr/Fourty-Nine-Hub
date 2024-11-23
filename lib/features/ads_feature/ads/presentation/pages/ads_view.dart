@@ -114,7 +114,9 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                       )),
                   const Sizer(),
                   Label(
-                    text: context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn,
+                    text: context.isArabic
+                        ? widget.params.subCategory.nameAr
+                        : widget.params.subCategory.nameEn,
                     style: Styles.headerText(),
                   ),
                   const Sizer(),

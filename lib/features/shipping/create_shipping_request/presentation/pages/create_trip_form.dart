@@ -130,8 +130,8 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                             numberOfContent: e.driverCount,
                                             image: e.picture!,
                                             isFavorite: e.isFavorite ?? false,
-                                            nameEn: e.subCategoryNameEn??'',
-                                            nameAr: e.subCategoryNameAr??''),
+                                            nameEn: e.subCategoryNameEn ?? '',
+                                            nameAr: e.subCategoryNameAr ?? ''),
                                       )
                                       .toList()),
                         ),

@@ -329,7 +329,6 @@ class CacheServiceImpl implements CacheService {
       log(model.toString());
       log(model.toString(), name: "removeRiderTripInfo");
     }
-    
   }
   //   @override
   // Future<bool> saveUserToken(String userToken) async {

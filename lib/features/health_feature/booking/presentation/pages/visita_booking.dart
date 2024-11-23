@@ -93,12 +93,15 @@ class _VisitaBookingState extends State<VisitaBooking> {
                             onPressed: () {
                               serviceLocator<SubscriptionController>()
                                   .checkIfUserSubscribed(
-                                title:context.isArabic? serviceLocator<HealthSharedData>()
-                                    .doctorSearchParams
-                                    .subCategory
-                                    .nameAr: serviceLocator<HealthSharedData>()
-                                    .doctorSearchParams
-                                    .subCategory.nameEn,
+                                title: context.isArabic
+                                    ? serviceLocator<HealthSharedData>()
+                                        .doctorSearchParams
+                                        .subCategory
+                                        .nameAr
+                                    : serviceLocator<HealthSharedData>()
+                                        .doctorSearchParams
+                                        .subCategory
+                                        .nameEn,
                                 onSubscribed: () async {
                                   await controller.premiumBook();
                                 },

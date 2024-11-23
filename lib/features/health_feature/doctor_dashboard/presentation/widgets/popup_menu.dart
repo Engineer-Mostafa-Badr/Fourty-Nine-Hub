@@ -17,16 +17,16 @@ class DoctorDashboardPopupMenuButton extends StatelessWidget {
             child: Text(Labels.editProfile),
           ),
           PopupMenuItem(
-            onTap: (){
+            onTap: () {
               context.push(Routes.DOCTORREVIEWS);
             },
-            child: Text(Labels.reviews),
+            child: const Text(Labels.reviews),
           ),
           PopupMenuItem(
-            onTap: (){
-              context.push(Routes.DOCTORSTATISTICS,extra: earnedMoney);
+            onTap: () {
+              context.push(Routes.DOCTORSTATISTICS, extra: earnedMoney);
             },
-            child: Text(Labels.history),
+            child: const Text(Labels.history),
           ),
         ];
       },

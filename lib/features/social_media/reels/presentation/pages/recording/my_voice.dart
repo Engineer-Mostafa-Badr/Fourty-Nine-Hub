@@ -531,7 +531,7 @@ class MyVoiceVideoRecordingScreenState
                     children: [
                       Container(
                         padding: const EdgeInsets.all(0),
-                        margin: const EdgeInsets.only(bottom:0),
+                        margin: const EdgeInsets.only(bottom: 0),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.transparent,

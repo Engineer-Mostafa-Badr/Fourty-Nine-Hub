@@ -472,7 +472,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                 ? AppColors.PRIMARY_COLOR_DARK
                                 : AppColors.DARK_BLUE_COLOR,
                           )),
-                      if (user.job.isNotEmpty&& user.job !='Hidden')
+                      if (user.job.isNotEmpty && user.job != 'Hidden')
                         TextSpan(
                             text: '\t(${user.job})',
                             style: Styles.headerText(
@@ -512,7 +512,10 @@ class _InstagramProfileState extends State<InstagramProfile> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (user.city.isNotEmpty || user.country.isNotEmpty && user.country !='Hidden' && user.city !='Hidden') ...[
+                      if (user.city.isNotEmpty ||
+                          user.country.isNotEmpty &&
+                              user.country != 'Hidden' &&
+                              user.city != 'Hidden') ...[
                         Row(
                           children: [
                             Expanded(
@@ -533,7 +536,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                           height: 5.h,
                         ),
                       ],
-                      if (user.phone.isNotEmpty && user.phone !='Hidden') ...[
+                      if (user.phone.isNotEmpty && user.phone != 'Hidden') ...[
                         Row(
                           children: [
                             Expanded(
@@ -553,7 +556,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                           height: 5.h,
                         ),
                       ],
-                      if (user.job.isNotEmpty && user.job !='Hidden')
+                      if (user.job.isNotEmpty && user.job != 'Hidden')
                         Row(
                           children: [
                             Expanded(
@@ -574,7 +577,9 @@ class _InstagramProfileState extends State<InstagramProfile> {
               ],
             ),
           ),
-          if (user.followers != null && user.followers!.isNotEmpty && user.followers !='Hidden')
+          if (user.followers != null &&
+              user.followers!.isNotEmpty &&
+              user.followers != 'Hidden')
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.h),
               child: Row(

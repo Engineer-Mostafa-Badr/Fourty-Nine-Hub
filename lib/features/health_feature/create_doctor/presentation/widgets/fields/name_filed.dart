@@ -31,7 +31,8 @@ class CreateDoctorNameField extends StatelessWidget {
                   enabledBorder: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     borderSide: BorderSide(
-                      color: Colors.grey, // Use grey as the default border color
+                      color:
+                          Colors.grey, // Use grey as the default border color
                     ),
                   ),
                   // Border when the field is focused
@@ -59,8 +60,8 @@ class CreateDoctorNameField extends StatelessWidget {
                   focusedErrorBorder: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     borderSide: BorderSide(
-                      color:
-                          Colors.red, // Keep red border when focused with an error
+                      color: Colors
+                          .red, // Keep red border when focused with an error
                     ),
                   ),
                   filled: false,
@@ -86,7 +87,8 @@ class CreateDoctorNameField extends StatelessWidget {
                   enabledBorder: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     borderSide: BorderSide(
-                      color: Colors.grey, // Use grey as the default border color
+                      color:
+                          Colors.grey, // Use grey as the default border color
                     ),
                   ),
                   // Border when the field is focused
@@ -114,8 +116,8 @@ class CreateDoctorNameField extends StatelessWidget {
                   focusedErrorBorder: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     borderSide: BorderSide(
-                      color:
-                          Colors.red, // Keep red border when focused with an error
+                      color: Colors
+                          .red, // Keep red border when focused with an error
                     ),
                   ),
                   filled: false,
@@ -170,13 +172,12 @@ class CreateDoctorNameField extends StatelessWidget {
             focusedErrorBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(8)),
               borderSide: BorderSide(
-                color:
-                Colors.red, // Keep red border when focused with an error
+                color: Colors.red, // Keep red border when focused with an error
               ),
             ),
             filled: false,
             contentPadding:
-            const EdgeInsets.all(10), // Padding inside the text field
+                const EdgeInsets.all(10), // Padding inside the text field
             hintText: LocaleKeys.phone.tr(),
             hintStyle: Styles.mediumText(), // Hint text
           ),

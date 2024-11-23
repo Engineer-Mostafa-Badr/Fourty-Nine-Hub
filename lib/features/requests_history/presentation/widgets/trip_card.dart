@@ -66,7 +66,9 @@ class TripCard extends StatelessWidget {
                     color: AppColors.PRIMARY_COLOR),
                 const Sizer(),
                 Label(
-                  text: context.isArabic?trip.category?.nameAr??'':trip.category?.nameEn ?? '',
+                  text: context.isArabic
+                      ? trip.category?.nameAr ?? ''
+                      : trip.category?.nameEn ?? '',
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),

@@ -61,11 +61,11 @@ class _AvaiableRoutesCardState extends State<BuildItemCarpoolSearch> {
                   // ),
                   widget.entity.comfort
                       ? Text(LocaleKeys.comfort.localize,
-                      style: Styles.mediumText(
-                          color: context.isDarkMode
-                              ? AppColors.PRIMARY_COLOR_DARK
-                              : AppColors.PRIMARY_COLOR_LIGHT,
-                          fontWeight: FontWeight.w600))
+                          style: Styles.mediumText(
+                              color: context.isDarkMode
+                                  ? AppColors.PRIMARY_COLOR_DARK
+                                  : AppColors.PRIMARY_COLOR_LIGHT,
+                              fontWeight: FontWeight.w600))
                       : const SizedBox(),
                   const Spacer(),
                   Column(
@@ -97,9 +97,9 @@ class _AvaiableRoutesCardState extends State<BuildItemCarpoolSearch> {
                               return Text(
                                 context.isArabic
                                     ? BlocProvider.of<GetCurrencyCubit>(context)
-                                    .currnecyAr
+                                        .currnecyAr
                                     : BlocProvider.of<GetCurrencyCubit>(context)
-                                    .currnecyEn,
+                                        .currnecyEn,
                                 style: Styles.mediumText(
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.SECONDARY_COLOR),
@@ -126,25 +126,25 @@ class _AvaiableRoutesCardState extends State<BuildItemCarpoolSearch> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   DateTime.now()
-                      .difference(DateTime.parse(
-                      widget.entity.createdAt.toString()))
-                      .inMinutes <
-                      60
+                              .difference(DateTime.parse(
+                                  widget.entity.createdAt.toString()))
+                              .inMinutes <
+                          60
                       ? Text(
-                      "  ${DateTime.now().difference(DateTime.parse(widget.entity.createdAt.toString())).inMinutes} ${LocaleKeys.minutesAgo.localize}",
-                      style: Styles.headerText(fontSize: 24))
+                          "  ${DateTime.now().difference(DateTime.parse(widget.entity.createdAt.toString())).inMinutes} ${LocaleKeys.minutesAgo.localize}",
+                          style: Styles.headerText(fontSize: 24))
                       : DateTime.now()
-                      .difference(DateTime.parse(
-                      widget.entity.createdAt.toString()))
-                      .inMinutes <
-                      1440
-                  //1440=60*24
-                      ? Text(
-                      "  ${DateTime.now().difference(DateTime.parse(widget.entity.createdAt.toString())).inHours} ${LocaleKeys.hoursAgo.localize}",
-                      style: Styles.headerText(fontSize: 24))
-                      : Text(
-                      "  ${DateTime.now().difference(DateTime.parse(widget.entity.createdAt.toString())).inDays} ${LocaleKeys.daysAgo.localize}",
-                      style: Styles.headerText(fontSize: 24)),
+                                  .difference(DateTime.parse(
+                                      widget.entity.createdAt.toString()))
+                                  .inMinutes <
+                              1440
+                          //1440=60*24
+                          ? Text(
+                              "  ${DateTime.now().difference(DateTime.parse(widget.entity.createdAt.toString())).inHours} ${LocaleKeys.hoursAgo.localize}",
+                              style: Styles.headerText(fontSize: 24))
+                          : Text(
+                              "  ${DateTime.now().difference(DateTime.parse(widget.entity.createdAt.toString())).inDays} ${LocaleKeys.daysAgo.localize}",
+                              style: Styles.headerText(fontSize: 24)),
                   const Spacer(),
                   Text(
                       widget.entity.womenOnly == true

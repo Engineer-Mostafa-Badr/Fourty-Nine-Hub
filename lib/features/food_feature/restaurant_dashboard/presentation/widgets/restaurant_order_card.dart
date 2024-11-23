@@ -1,8 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -23,7 +21,8 @@ class RestaurantOrderCard extends StatelessWidget {
   final RestaurantOrder item;
   final String subCategoryId;
 
-  const RestaurantOrderCard({super.key, required this.item, required this.subCategoryId});
+  const RestaurantOrderCard(
+      {super.key, required this.item, required this.subCategoryId});
 
   @override
   Widget build(BuildContext context) {
@@ -133,8 +132,7 @@ class RestaurantOrderCard extends StatelessWidget {
                                     ),
                                     const Spacer(),
                                     Text(
-                                      order.orders[index].quantity
-                                          .toString(),
+                                      order.orders[index].quantity.toString(),
                                       style: TextStyle(
                                         fontSize: 15,
                                         color: Colors.grey[700],
@@ -166,7 +164,10 @@ class RestaurantOrderCard extends StatelessWidget {
 
                   const SizedBox(height: 8),
 
-                  CallMessageReportButtons(item: item, subcategoryId: subCategoryId,),
+                  CallMessageReportButtons(
+                    item: item,
+                    subcategoryId: subCategoryId,
+                  ),
                   const SizedBox(height: 8),
 
                   Row(
@@ -184,14 +185,14 @@ class RestaurantOrderCard extends StatelessWidget {
       },
     );
   }
-
 }
 
 class CallMessageReportButtons extends StatelessWidget {
   final RestaurantOrder item;
   final String subcategoryId;
 
-  const CallMessageReportButtons({super.key, required this.item,required this.subcategoryId});
+  const CallMessageReportButtons(
+      {super.key, required this.item, required this.subcategoryId});
 
   @override
   Widget build(BuildContext context) {
@@ -204,18 +205,24 @@ class CallMessageReportButtons extends StatelessWidget {
           _buildButtonWithIcon(
             label: LocaleKeys.call.localize,
             icon: Icons.call,
-            color: item.openCallAndChat != 'disable'?AppColors.PRIMARY_COLOR:AppColors.GREY_DARK_COLOR,
+            color: item.openCallAndChat != 'disable'
+                ? AppColors.PRIMARY_COLOR
+                : AppColors.GREY_DARK_COLOR,
             onPressed: item.openCallAndChat != 'disable'
                 ? () => launchUrlString("tel://${item.phone}")
                 : () {
-              SubscriptionMethod().subscribe(subscribeId: subcategoryId, title: LocaleKeys.restaurantDashboard.localize);
+                    SubscriptionMethod().subscribe(
+                        subscribeId: subcategoryId,
+                        title: LocaleKeys.restaurantDashboard.localize);
                   },
           ),
           const SizedBox(width: 4),
           _buildButtonWithIcon(
             label: LocaleKeys.message.localize,
             icon: Icons.message,
-            color: item.openCallAndChat != 'disable'?AppColors.PRIMARY_COLOR:AppColors.GREY_DARK_COLOR,
+            color: item.openCallAndChat != 'disable'
+                ? AppColors.PRIMARY_COLOR
+                : AppColors.GREY_DARK_COLOR,
             onPressed: item.openCallAndChat != 'disable'
                 ? () {
                     // BlocProvider.of<RestaurantsCubit>(context)
@@ -223,7 +230,9 @@ class CallMessageReportButtons extends StatelessWidget {
                     // Implement message functionality here
                   }
                 : () {
-              SubscriptionMethod().subscribe(subscribeId: subcategoryId, title: LocaleKeys.restaurantDashboard.localize);
+                    SubscriptionMethod().subscribe(
+                        subscribeId: subcategoryId,
+                        title: LocaleKeys.restaurantDashboard.localize);
                   },
           ),
           const SizedBox(width: 4),

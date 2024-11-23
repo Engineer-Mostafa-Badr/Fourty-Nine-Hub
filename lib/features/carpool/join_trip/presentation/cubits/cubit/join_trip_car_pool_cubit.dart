@@ -3,7 +3,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/data/models/join_trip_carpool_model.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/domain/entities/join_trip_entity.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/domain/usecases/join_trip_carpool_usecase.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 
 part 'join_trip_car_pool_state.dart';
 

@@ -32,8 +32,8 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: cardDarkColor(context),
+              borderRadius: BorderRadius.circular(10),
+              color: cardDarkColor(context),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
@@ -41,8 +41,7 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
                   blurRadius: 2,
                   offset: const Offset(0, 3),
                 ),
-              ]
-          ),
+              ]),
           child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
             builder: (context, state) {
               if (state is DoctorDashboardUnhandledAppointments &&

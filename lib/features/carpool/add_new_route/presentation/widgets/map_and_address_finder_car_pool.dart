@@ -12,8 +12,8 @@ import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/wid
 
 class MapAndAddressFinderCarPool extends StatelessWidget {
   const MapAndAddressFinderCarPool({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

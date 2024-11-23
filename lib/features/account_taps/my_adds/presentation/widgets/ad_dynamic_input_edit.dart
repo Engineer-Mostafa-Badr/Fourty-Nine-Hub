@@ -24,9 +24,10 @@ class AdDynamicInputEdit extends StatefulWidget {
   final PropertyValueEntity val;
   const AdDynamicInputEdit(
       {super.key,
-        required this.property,
-        required this.onChanged,
-        required this.onTextChanged,required this.val});
+      required this.property,
+      required this.onChanged,
+      required this.onTextChanged,
+      required this.val});
 
   @override
   State<AdDynamicInputEdit> createState() => _AdDynamicInputWidgetState();
@@ -42,17 +43,18 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputEdit> {
     // Check if the selected value exists in the property values list
     if (widget.property.values.isNotEmpty) {
       value = widget.property.values.firstWhere(
-            (element) => element.nameAr == widget.val.ar || element.nameEn == widget.val.en,
-        orElse: () => SelectionModel.fromJson(widget.property.values.first as Map<String, dynamic>),
+        (element) =>
+            element.nameAr == widget.val.ar || element.nameEn == widget.val.en,
+        orElse: () => SelectionModel.fromJson(
+            widget.property.values.first as Map<String, dynamic>),
       );
     } else {
       value = null;
     }
   }
 
-
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
   }
 
@@ -109,7 +111,9 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputEdit> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Label(
-          text: getLang() == 'ar' ? widget.property.nameAr : widget.property.nameEn,
+          text: getLang() == 'ar'
+              ? widget.property.nameAr
+              : widget.property.nameEn,
         ),
         InkWell(
           onTap: () {
@@ -139,7 +143,9 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputEdit> {
               children: [
                 Expanded(
                   child: Label(
-                    text: getLang() == 'ar' ? value?.nameAr ?? widget.val.ar ?? '' : value?.nameEn ?? widget.val.en ?? '',
+                    text: getLang() == 'ar'
+                        ? value?.nameAr ?? widget.val.ar ?? ''
+                        : value?.nameEn ?? widget.val.en ?? '',
                   ),
                 ),
                 const Icon(Icons.arrow_drop_down),
@@ -209,28 +215,28 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputEdit> {
         RichText(
             text: TextSpan(
                 children: widget.property.values.map((e) {
-                  return WidgetSpan(
-                      child: InkWell(
-                        onTap: () {
-                          widget.onChanged(e);
-                          value = e;
-                          setState(() {});
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(5),
-                          margin: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color:
-                                value == e ? AppColors.SECONDARY_COLOR : Colors.grey),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Label(
-                            text: getLang() == 'ar' ? e.nameAr : e.nameEn,
-                          ),
-                        ),
-                      ));
-                }).toList())),
+          return WidgetSpan(
+              child: InkWell(
+            onTap: () {
+              widget.onChanged(e);
+              value = e;
+              setState(() {});
+            },
+            child: Container(
+              padding: const EdgeInsets.all(5),
+              margin: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                border: Border.all(
+                    color:
+                        value == e ? AppColors.SECONDARY_COLOR : Colors.grey),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Label(
+                text: getLang() == 'ar' ? e.nameAr : e.nameEn,
+              ),
+            ),
+          ));
+        }).toList())),
       ],
     );
   }

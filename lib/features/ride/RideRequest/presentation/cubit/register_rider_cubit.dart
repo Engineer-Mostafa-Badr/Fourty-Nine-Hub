@@ -74,7 +74,7 @@ class RegisterRiderCubit extends Cubit<RiderState> {
         log("noooooooooooooooooooooooooooooo");
       }
     }
-    
+
     // multiSelectController
     log(SELECTED_RICH_VALID_SUBCATEGORY_IDS.toString(),
         name: "SELECTED_RICH_VALID_SUBCATEGORY_IDS");

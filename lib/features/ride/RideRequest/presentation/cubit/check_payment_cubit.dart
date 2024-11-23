@@ -14,8 +14,7 @@ class CheckPaymentCubit extends Cubit<RiderState> {
       (r) {
         if (r['data'] ?? false) {
           emit(WalletPayemntState());
-        }
-        else{
+        } else {
           emit(CashPaymentState());
         }
       },

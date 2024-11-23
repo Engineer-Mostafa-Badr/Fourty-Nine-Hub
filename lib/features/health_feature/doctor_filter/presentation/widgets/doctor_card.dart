@@ -27,9 +27,11 @@ class DoctorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if(UserCubit.to.isLoggedIn){
-          context.push(Routes.VISITADOCTORDETAILS, extra:DoctorDetailsParams(doctorId: doctor.id,fromSearch: false));
-        }else{
+        if (UserCubit.to.isLoggedIn) {
+          context.push(Routes.VISITADOCTORDETAILS,
+              extra:
+                  DoctorDetailsParams(doctorId: doctor.id, fromSearch: false));
+        } else {
           context.push(Routes.LOGIN);
         }
       },
@@ -75,39 +77,42 @@ class DoctorCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                if(doctor.classification!='NotSubscribed')Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.h),
-                  decoration: BoxDecoration(
-                    color: doctor.isPremium ? Colors.black : Colors.white,
-                    borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(
-                      color: doctor.isPremium ? Colors.amber : Colors.grey,
-                      width: 2.0,
+                if (doctor.classification != 'NotSubscribed')
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.h),
+                    decoration: BoxDecoration(
+                      color: doctor.isPremium ? Colors.black : Colors.white,
+                      borderRadius: BorderRadius.circular(20.0),
+                      border: Border.all(
+                        color: doctor.isPremium ? Colors.amber : Colors.grey,
+                        width: 2.0,
+                      ),
+                      boxShadow: doctor.isPremium
+                          ? [
+                              BoxShadow(
+                                color: Colors.amber.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 8,
+                                offset: const Offset(
+                                    0, 3), // changes position of shadow
+                              ),
+                            ]
+                          : null,
                     ),
-                    boxShadow: doctor.isPremium
-                        ? [
-                            BoxShadow(
-                              color: Colors.amber.withOpacity(0.5),
-                              spreadRadius: 2,
-                              blurRadius: 8,
-                              offset: const Offset(
-                                  0, 3), // changes position of shadow
-                            ),
-                          ]
-                        : null,
-                  ),
-                  child: Text(
-                    doctor.classification=='Premium' ? "Premium" : "Regular",
-                    style: TextStyle(
-                      color: doctor.isPremium ? Colors.amber : Colors.grey,
-                      fontWeight: doctor.isPremium
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      fontSize: 16.sp,
+                    child: Text(
+                      doctor.classification == 'Premium'
+                          ? "Premium"
+                          : "Regular",
+                      style: TextStyle(
+                        color: doctor.isPremium ? Colors.amber : Colors.grey,
+                        fontWeight: doctor.isPremium
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                        fontSize: 16.sp,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
             Row(

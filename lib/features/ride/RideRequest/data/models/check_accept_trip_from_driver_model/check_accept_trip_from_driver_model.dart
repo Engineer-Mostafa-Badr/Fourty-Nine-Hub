@@ -131,4 +131,3 @@ class CheckAcceptTripFromDriverModel {
         'updatedAt': updatedAt?.toIso8601String(),
       };
 }
-

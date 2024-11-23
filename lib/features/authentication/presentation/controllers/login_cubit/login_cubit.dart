@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -52,7 +51,7 @@ class LoginCubit extends Cubit<LoginState> {
 
       result.fold(
         (failure) => emit(LoginError(failure)),
-        (userToken)async {
+        (userToken) async {
           //_attachToken(userToken); // Attach to dio
           // _saveTokens(userToken); // Ensure tokens are saved before proceeding
           // pr('state token is  ${userToken}');
@@ -117,12 +116,13 @@ class LoginCubit extends Cubit<LoginState> {
 
       if (loginResult.status == LoginStatus.success) {
         // Log access token for debugging
-        log('Access Token: ${loginResult.accessToken!.token}');
+        // log('Access Token: ${loginResult.accessToken!.token}');
         log('Message: ${loginResult.message}');
 
         // Create a credential from the access token
         final OAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(loginResult.accessToken!.token);
+            FacebookAuthProvider.credential(
+                loginResult.accessToken!.tokenString);
 
         // Sign in with Firebase using the credential
         UserCredential userCredential = await FirebaseAuth.instance
@@ -144,7 +144,6 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-
   @override
   Future<void> close() {
     emailTextController.dispose();
@@ -152,4 +151,3 @@ class LoginCubit extends Cubit<LoginState> {
     return super.close();
   }
 }
-

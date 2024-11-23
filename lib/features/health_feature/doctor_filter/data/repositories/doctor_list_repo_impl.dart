@@ -19,7 +19,8 @@ class DoctorListRepoImpl implements DoctorListRepo {
   }
 
   @override
-  Future<Either<Failure, List<DoctorEntity>>> getSubCategoryDoctorsList({required String params}) async {
+  Future<Either<Failure, List<DoctorEntity>>> getSubCategoryDoctorsList(
+      {required String params}) async {
     return await _remoteDataSource.getSubCategoryDoctorsList(params: params);
   }
 }

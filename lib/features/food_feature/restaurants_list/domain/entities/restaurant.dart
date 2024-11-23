@@ -297,7 +297,7 @@ class Restaurant extends Equatable {
     this.menu,
     this.subcategoryId,
     this.mainCategoryId,
-    this.isFavorite=false,
+    this.isFavorite = false,
     this.enableOrDisableChat,
     this.description,
   });

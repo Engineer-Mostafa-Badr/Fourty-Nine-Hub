@@ -30,6 +30,7 @@ class _ReelsWidgetState extends State<BuildItemReelDetails>
   bool _showPlayPauseIcon = false;
   late final AnimationController _rotationController;
 
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance

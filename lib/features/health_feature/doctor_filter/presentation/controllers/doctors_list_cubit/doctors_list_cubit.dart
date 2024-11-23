@@ -16,7 +16,8 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
 
   DoctorsListCubit(
     this._getDoctorListUseCase,
-    this._healthSharedData, this._getSubCategoryDoctorsListUseCase,
+    this._healthSharedData,
+    this._getSubCategoryDoctorsListUseCase,
   ) : super(DoctorsListInitial());
 
   void loadData(bool fromHome) async {
@@ -30,18 +31,17 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
   Future<void> _getDoctors(bool fromHome) async {
     CliLogger.info('${_healthSharedData.doctorSearchParams.toJson()}');
     DoctorSearchParams params = DoctorSearchParams();
-    params.subCategory=_healthSharedData.doctorSearchParams.subCategory;
-    final response =
-        await _getDoctorListUseCase.call(fromHome==true?params:_healthSharedData.doctorSearchParams);
+    params.subCategory = _healthSharedData.doctorSearchParams.subCategory;
+    final response = await _getDoctorListUseCase
+        .call(fromHome == true ? params : _healthSharedData.doctorSearchParams);
     response.fold((failure) => emit(DoctorsListError(Labels.errorHappened)),
         (data) => emit(DoctorsListLoaded(data)));
   }
 
   Future<void> _getDoctorsFromSubCategory(String subCategory) async {
     CliLogger.info(subCategory);
-    final response =
-    await _getSubCategoryDoctorsListUseCase.call(subCategory);
+    final response = await _getSubCategoryDoctorsListUseCase.call(subCategory);
     response.fold((failure) => emit(DoctorsListError(Labels.errorHappened)),
-            (data) => emit(DoctorsListLoaded(data)));
+        (data) => emit(DoctorsListLoaded(data)));
   }
 }

@@ -168,7 +168,9 @@ class FromAndToWidget extends StatelessWidget {
                                     source: NetworkImage(subCategory.image),
                                   )),
                                   Label(
-                                      text: context.isArabic?subCategory.nameAr:subCategory.nameEn,
+                                      text: context.isArabic
+                                          ? subCategory.nameAr
+                                          : subCategory.nameEn,
                                       style: Styles.mediumText()),
                                 ],
                               ),

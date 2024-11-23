@@ -10,8 +10,7 @@ final class DoctorDashboardSupscriptionRemainingDays
   DoctorDashboardSupscriptionRemainingDays(this.days);
 }
 
-final class DoctorInfoSuccessState
-    extends DoctorDashboardState {
+final class DoctorInfoSuccessState extends DoctorDashboardState {
   final DoctorInfoEntity info;
   DoctorInfoSuccessState(this.info);
 }

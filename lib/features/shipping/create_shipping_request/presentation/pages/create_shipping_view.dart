@@ -201,8 +201,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                         horizontal: 10,
                                       ),
                                       child: Text(
-                                        LocaleKeys
-                                            .serveClientsByClickRegister
+                                        LocaleKeys.serveClientsByClickRegister
                                             .tr(),
                                         style: const TextStyle(
                                           color: Colors.red,

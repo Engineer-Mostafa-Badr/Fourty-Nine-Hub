@@ -41,7 +41,10 @@ class DoctorDashboardView extends StatelessWidget {
         appBar: BackAppBar(
           label: Labels.doctorDashboard,
           actions: [
-            DoctorDashboardPopupMenuButton(earnedMoney: context.read<DoctorDashboardCubit>().totalEarnedMoney,),
+            DoctorDashboardPopupMenuButton(
+              earnedMoney:
+                  context.read<DoctorDashboardCubit>().totalEarnedMoney,
+            ),
           ],
         ),
         body: ListView(

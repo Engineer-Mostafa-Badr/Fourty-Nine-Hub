@@ -289,7 +289,7 @@ class _FollowingSectionState extends State<FollowingSection> {
                           child: Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 4.0, vertical: 12.h),
-                            child: _buildReelCard(context, reel,index),
+                            child: _buildReelCard(context, reel, index),
                           ),
                         );
                       },
@@ -312,7 +312,7 @@ class _FollowingSectionState extends State<FollowingSection> {
     );
   }
 
-  Widget _buildReelCard(BuildContext context, Reel reel,int index) {
+  Widget _buildReelCard(BuildContext context, Reel reel, int index) {
     return GestureDetector(
       onTap: () async {
         await Navigator.push(
@@ -364,7 +364,7 @@ class _FollowingSectionState extends State<FollowingSection> {
                   body: UnifiedReelItem(
                     reel: reel,
                     isVisible: true,
-                    index:index,
+                    index: index,
                     itemType: ReelItemType.spotlight,
                   ),
                   // MainReelItem(
@@ -448,7 +448,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
         Flexible(
           child: BlocBuilder<ReelsCubit, ReelsState>(
             builder: (context, state) {
-              if ((state.globalReels?.isEmpty ?? false) &&
+              if ((state.globalReels.isEmpty ?? false) &&
                   !(state.globalReelsIsLoading ?? false)) {
                 return const Center(child: CupertinoActivityIndicator());
               }
@@ -463,10 +463,10 @@ class DiscoverSectionState extends State<DiscoverSection> {
                   crossAxisSpacing: 8,
                   childAspectRatio: 0.7,
                 ),
-                itemCount: (state.globalReels?.length ?? 0) +
+                itemCount: (state.globalReels.length ?? 0) +
                     (widget.isFetchingMore ? 1 : 0),
                 itemBuilder: (context, index) {
-                  if (index == (state.globalReels?.length ?? 0) &&
+                  if (index == (state.globalReels.length ?? 0) &&
                       widget.isFetchingMore) {
                     return const Padding(
                       padding: EdgeInsets.all(8.0),
@@ -475,8 +475,8 @@ class DiscoverSectionState extends State<DiscoverSection> {
                       ),
                     );
                   }
-                  final reel = state.globalReels![index];
-                  return _buildReelCard(context, reel,index);
+                  final reel = state.globalReels[index];
+                  return _buildReelCard(context, reel, index);
                 },
               );
             },
@@ -486,7 +486,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
     );
   }
 
-  Widget _buildReelCard(BuildContext context, Reel reel,int index) {
+  Widget _buildReelCard(BuildContext context, Reel reel, int index) {
     return GestureDetector(
       onTap: () async {
         await Navigator.push(
@@ -537,7 +537,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
                 ),
                 body: UnifiedReelItem(
                   reel: reel,
-                  index:index,
+                  index: index,
                   isVisible: true,
                   itemType: ReelItemType.spotlight,
                 ),

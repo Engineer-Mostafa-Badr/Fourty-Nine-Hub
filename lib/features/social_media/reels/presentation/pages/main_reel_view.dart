@@ -21,7 +21,9 @@ class ReelView extends StatelessWidget {
         if (context
             .read<PreloadBloc>()
             .state
-            .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+            .controllers[context.read<PreloadBloc>().state.focusedIndex]!
+            .value
+            .isPlaying) {
           context
               .read<PreloadBloc>()
               .state
@@ -71,7 +73,7 @@ class ReelsScreenState extends State<ReelsScreen> {
                     },
                     itemBuilder: (context, index) {
                       // Is at end and isLoading
-                      final bool _isLoading =
+                      final bool isLoading =
                           (state.isLoading && index == state.urls.length - 1);
                       final controller = state.controllers[index];
 
@@ -84,7 +86,7 @@ class ReelsScreenState extends State<ReelsScreen> {
                       return state.focusedIndex == index
                           ? ReelsWidget(
                               index: index,
-                              isLoading: _isLoading,
+                              isLoading: isLoading,
                               controller: controller,
                             )
                           : const SizedBox();

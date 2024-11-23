@@ -83,7 +83,8 @@ class _WeekWidgetState extends State<_WeekWidget> {
                 Expanded(
                   child: Text(
                     time.day.name,
-                    style: Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
+                    style:
+                        Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -122,7 +123,7 @@ class _WeekWidgetState extends State<_WeekWidget> {
               ),
             ),
           ),
-          Sizer(),
+          const Sizer(),
           InkWell(
             onTap: () {
               showTimePicker(

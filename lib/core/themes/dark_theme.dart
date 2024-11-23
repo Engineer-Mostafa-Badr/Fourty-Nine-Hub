@@ -8,7 +8,7 @@ ThemeData get darkTheme => ThemeData(
       brightness: Brightness.dark,
       primaryColor: AppColors.AUTH_CONTAINER_COLOR,
       scaffoldBackgroundColor: AppColors.QUANTITY_COLOR,
-      
+
       appBarTheme: const AppBarTheme(
         color: AppColors.QUANTITY_COLOR,
         iconTheme: IconThemeData(

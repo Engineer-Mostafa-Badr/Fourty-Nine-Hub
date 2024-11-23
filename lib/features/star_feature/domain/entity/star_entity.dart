@@ -15,25 +15,23 @@ class StarEntity {
   String? createAt;
   Duration get publishedDuration => DateTime.now().difference(createdAt!);
 
-  String get sinceTime =>
-      DurationHelper().getTimeDifference( createdAt!);
+  String get sinceTime => DurationHelper().getTimeDifference(createdAt!);
 
-  StarEntity(
-      {required this.id,
-      required this.user,
-      required this.mediaUrl,
-      required this.title,
-      required this.description,
-      required this.isApproved,
-      required this.totalViews,
-      required this.averageRating,
-        this.createdAt,
-        this.createAt,
-      });
+  StarEntity({
+    required this.id,
+    required this.user,
+    required this.mediaUrl,
+    required this.title,
+    required this.description,
+    required this.isApproved,
+    required this.totalViews,
+    required this.averageRating,
+    this.createdAt,
+    this.createAt,
+  });
 }
 
-
-class MediaUrlEntity{
+class MediaUrlEntity {
   final String id;
   final String mediaKey;
 

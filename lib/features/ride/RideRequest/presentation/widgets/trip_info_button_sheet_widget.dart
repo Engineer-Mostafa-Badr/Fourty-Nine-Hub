@@ -48,7 +48,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
   Widget build(BuildContext context) {
     var getTripInfoCubit = context.read<GetTripInfoCubit>();
     return Container(
-      color: context.isDarkMode?AppColors.QUANTITY_COLOR:Colors.white,
+      color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -195,7 +195,10 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                   log(state.toString(), name: "Payment");
                                   if (state is CashPaymentState) {
                                     setState(() {
-                                      showErrorMessage(context, LocaleKeys.yourBalanceIsInsufficient.tr());
+                                      showErrorMessage(
+                                          context,
+                                          LocaleKeys.yourBalanceIsInsufficient
+                                              .tr());
                                       paymentMethod = "cash";
                                     });
                                   }
@@ -213,7 +216,9 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                 },
                                 child: DropdownButton(
                                   value: paymentMethod,
-                                  dropdownColor: context.isDarkMode? AppColors.QUANTITY_COLOR: Colors.white,
+                                  dropdownColor: context.isDarkMode
+                                      ? AppColors.QUANTITY_COLOR
+                                      : Colors.white,
                                   icon: Container(),
                                   underline: Container(),
                                   onChanged: (value) {
@@ -270,7 +275,10 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                               log(state.toString(), name: "Payment");
                               if (state is CashPaymentState) {
                                 setState(() {
-                                  showErrorMessage(context, LocaleKeys.yourBalanceIsInsufficient.tr());
+                                  showErrorMessage(
+                                      context,
+                                      LocaleKeys.yourBalanceIsInsufficient
+                                          .tr());
                                   paymentMethod = "cash";
                                 });
                               }
@@ -280,15 +288,15 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                 });
                               }
                               if (state is FailureRiderState) {
-                                showErrorMessage(
-                                    context,
-                                    getFailureMessage(
-                                        state.failure, context));
+                                showErrorMessage(context,
+                                    getFailureMessage(state.failure, context));
                               }
                             },
                             child: DropdownButton(
                               value: paymentMethod,
-                              dropdownColor: context.isDarkMode? AppColors.QUANTITY_COLOR: Colors.white,
+                              dropdownColor: context.isDarkMode
+                                  ? AppColors.QUANTITY_COLOR
+                                  : Colors.white,
                               icon: Container(),
                               underline: Container(),
                               onChanged: (value) {
@@ -351,14 +359,17 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                   children: [
                     Icon(
                       Icons.info_outline,
-                      color: context.isDarkMode?Colors.white: Colors.black,
+                      color: context.isDarkMode ? Colors.white : Colors.black,
                     ),
                     const Sizer(),
                     Flexible(
                       child: Text(
                         "${LocaleKeys.travelTime.tr()}: ~${formatDuration(widget.model.duration!.toInt())} , ${LocaleKeys.Distance.tr()}: ${formatDistance(widget.model.distance!.toInt())}",
                         style: Styles.mediumText(
-                            fontWeight: FontWeight.w500, color: context.isDarkMode?Colors.white: Colors.black,),
+                          fontWeight: FontWeight.w500,
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
+                        ),
                       ),
                     ),
                     const Sizer(),

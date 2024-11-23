@@ -32,10 +32,10 @@ class _GoogleMapViewAddresState extends State<GoogleMapViewAddres> {
           listener: (context, state) {
             if (state is SuccessGetStartingPointState) {
               context.read<LocationSocketCubit>().sendSubCategoryId(
-              subCategoryId:
-                  context.read<RiderTripReelTimeCubit>().tempCategory!.id,
-              address: state.address,
-            );
+                    subCategoryId:
+                        context.read<RiderTripReelTimeCubit>().tempCategory!.id,
+                    address: state.address,
+                  );
               Marker? mark = markets
                   .where((element) => element.markerId.value == "Start")
                   .firstOrNull;

@@ -58,7 +58,11 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
     return BlocListener<OfferCubit, RiderState>(
       listener: (context, state) {
         if (state is SuccessAcceptOfferRideState) {
-          context.pushAndRemoveUntil(Routes.TRIPINFOBYRIDERSCREEN, extra: state.model, (route) => false,);
+          context.pushAndRemoveUntil(
+            Routes.TRIPINFOBYRIDERSCREEN,
+            extra: state.model,
+            (route) => false,
+          );
         }
       },
       child: BlocBuilder<OfferCubit, RiderState>(builder: (context, state) {
@@ -130,16 +134,26 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
                                 isBottomSheetShown = true;
                                 WidgetsBinding.instance.addPostFrameCallback(
                                   (timeStamp) {
-                                    context.read<RiderTripReelTimeCubit>().print();
-        
+                                    context
+                                        .read<RiderTripReelTimeCubit>()
+                                        .print();
+
                                     showModalBottomSheet(
                                       isScrollControlled: true,
                                       backgroundColor: Colors.white,
                                       context: context,
                                       builder: (context) => MultiBlocProvider(
                                         providers: [
-                                          BlocProvider(create: (context) => GetTripInfoCubit(repository: serviceLocator())),
-                                          BlocProvider(create: (context) => CheckPaymentCubit(repository: serviceLocator())),
+                                          BlocProvider(
+                                              create: (context) =>
+                                                  GetTripInfoCubit(
+                                                      repository:
+                                                          serviceLocator())),
+                                          BlocProvider(
+                                              create: (context) =>
+                                                  CheckPaymentCubit(
+                                                      repository:
+                                                          serviceLocator())),
                                         ],
                                         child: TripInfoButtonSheetWidget(
                                           model: state.model,

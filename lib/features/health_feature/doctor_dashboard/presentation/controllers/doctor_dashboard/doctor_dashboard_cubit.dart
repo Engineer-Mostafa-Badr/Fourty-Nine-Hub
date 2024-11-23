@@ -37,7 +37,8 @@ class DoctorDashboardCubit extends Cubit<DoctorDashboardState> {
     this._getDoctorAppointmentsByDayUseCase,
     this._getDoctorUnhandledAppointmentsUseCase,
     this._doctorAcceptAppointmentUseCase,
-    this._doctorRejectAppointmentUsecase, this._doctorInfoUseCase,
+    this._doctorRejectAppointmentUsecase,
+    this._doctorInfoUseCase,
   ) : super(DoctorDashboardInitial());
 
   Future<void> loadData() async {
@@ -49,10 +50,9 @@ class DoctorDashboardCubit extends Cubit<DoctorDashboardState> {
     await _getUnhandledAppointments();
   }
 
-  List<EarnedMoneyEntity> totalEarnedMoney =[];
+  List<EarnedMoneyEntity> totalEarnedMoney = [];
   Future<void> _getDoctorInfo() async {
-    final response =
-        await _doctorInfoUseCase.call(const NoParams());
+    final response = await _doctorInfoUseCase.call(const NoParams());
     response.fold((l) {
       if (l is ServerFailure) {
         emit(DoctorDashboardError(l.message));
@@ -68,7 +68,6 @@ class DoctorDashboardCubit extends Cubit<DoctorDashboardState> {
       print("A7eeee Gemmy ${totalEarnedMoney.toString()}");
     });
   }
-
 
   Future<void> _getAppointmentsByDay() async {
     final response = await _getDoctorAppointmentsByDayUseCase.call(

@@ -74,16 +74,16 @@ class MainCategorySearchView extends StatelessWidget {
                 itemBuilder: (context, item, index) {
                   return InkWell(
                     onTap: () {
-                      context.push(Routes.SUBCATEGORIES, extra: state.search![index]);
+                      context.push(Routes.SUBCATEGORIES,
+                          extra: state.search![index]);
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: BuildItemSearchMainCategory(
                         category: item,
                         onFavorite: () async {
-                          var result =
-                          await controller.toggleFavoriteMedicalService(
-                              item.id);
+                          var result = await controller
+                              .toggleFavoriteMedicalService(item.id);
                           print("result$result");
                           return result;
                         },
@@ -93,9 +93,9 @@ class MainCategorySearchView extends StatelessWidget {
                 },
                 noMoreItemsIndicatorBuilder: (context) => Container(),
                 firstPageProgressIndicatorBuilder: (context) =>
-                const CupertinoActivityIndicator(),
+                    const CupertinoActivityIndicator(),
                 newPageProgressIndicatorBuilder: (context) =>
-                const CupertinoActivityIndicator(),
+                    const CupertinoActivityIndicator(),
               ),
             );
             // return ListView.separated(
@@ -133,4 +133,3 @@ class MainCategorySearchView extends StatelessWidget {
     );
   }
 }
-

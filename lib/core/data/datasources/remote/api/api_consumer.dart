@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
@@ -72,11 +71,12 @@ class BaseApiConsumer extends ApiConsumer {
   );
 
   @override
-  void attachToken(UserTokensEntity? token) async{
+  void attachToken(UserTokensEntity? token) async {
     log(token?.accessToken.toString() ?? "Token", name: "Token");
     _token = token;
-    log(_token?.accessToken.toString()??"Okkkk", name: "lskdjflskdjflskdjflskjdf");
-        // CacheServiceImpl().saveUserToken(_token?.accessToken??"Token");
+    log(_token?.accessToken.toString() ?? "Okkkk",
+        name: "lskdjflskdjflskdjflskjdf");
+    // CacheServiceImpl().saveUserToken(_token?.accessToken??"Token");
     log("${await CacheManager.getAccessToken()} attached", name: "Token");
     if (token != null) {
       log(token.accessToken.toString(), name: "Token");
@@ -292,7 +292,9 @@ class BaseApiConsumer extends ApiConsumer {
         );
       } else if (e.response?.statusCode == 401) {
         final error = e.response?.data['error'] as Map;
-        return  UnauthorizedFailure(error['message'] as String,);
+        return UnauthorizedFailure(
+          error['message'] as String,
+        );
       } else if (e.response?.data is Map &&
           e.response?.data['message'] is String) {
         return ServerFailure(
@@ -345,7 +347,6 @@ class BaseApiConsumer extends ApiConsumer {
 
         attachToken(newToken);
         _authLocalDataSource.saveUserTokens(newToken.toModel());
-        
       },
     );
   }

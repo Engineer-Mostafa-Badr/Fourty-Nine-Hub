@@ -64,7 +64,11 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
           BlocConsumer<CreateTripRequestRideCubit, RiderState>(
             listener: (context, state) {
               if (state is SuccessCreateRequestTripRideState) {
-                showSuccessDialog(context, LocaleKeys.yourRequestHasBeenSentSuccessfullyWaitingForTheDriverResponse.tr());
+                showSuccessDialog(
+                    context,
+                    LocaleKeys
+                        .yourRequestHasBeenSentSuccessfullyWaitingForTheDriverResponse
+                        .tr());
               }
               if (state is FailureRiderState) {
                 showErrorMessage(
@@ -207,7 +211,9 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                     FormField(
                       validator: (value) {
                         return createRequestCubit.validation(
-                            message: LocaleKeys.youHaveToFillYourNumberOfPassenger.tr(),
+                            message: LocaleKeys
+                                .youHaveToFillYourNumberOfPassenger
+                                .tr(),
                             condition: numberOfPassenger == null);
                       },
                       builder: (field) {

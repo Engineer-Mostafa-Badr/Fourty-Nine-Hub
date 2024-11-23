@@ -10,10 +10,10 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/presentatio
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/waiting.dart';
 import '../../../../../res/strings/labels.dart';
 
-class DoctorDetailsParams{
+class DoctorDetailsParams {
   final String doctorId;
   final bool fromSearch;
-  DoctorDetailsParams({required this.doctorId,required this.fromSearch});
+  DoctorDetailsParams({required this.doctorId, required this.fromSearch});
 }
 
 class DoctorDetailsView extends StatefulWidget {

@@ -63,8 +63,8 @@ class _SubCateogryRideWidgetState extends State<SubCateogryRideWidget> {
                                     numberOfContent: e.driverCount,
                                     image: e.picture!,
                                     isFavorite: e.isFavorite ?? false,
-                                    nameAr: e.subCategoryNameAr??'',
-                                nameEn: e.subCategoryNameEn??''),
+                                    nameAr: e.subCategoryNameAr ?? '',
+                                    nameEn: e.subCategoryNameEn ?? ''),
                               )
                               .toList()),
                     ),

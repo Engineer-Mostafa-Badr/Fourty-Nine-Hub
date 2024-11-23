@@ -20,10 +20,10 @@ class PreloadBloc extends Cubit<PreloadState> {
     setLoading(true);
     try {
       log('Fetching videos from API');
-      final List<String> _urls = await getReelVideos();
-      log('Fetched URLs: $_urls');
+      final List<String> urls = await getReelVideos();
+      log('Fetched URLs: $urls');
 
-      final updatedUrls = List<String>.from(state.urls)..addAll(_urls);
+      final updatedUrls = List<String>.from(state.urls)..addAll(urls);
       log('message urls: ${updatedUrls.length}');
       emit(state.copyWith(
         urls: updatedUrls,
@@ -92,7 +92,7 @@ class PreloadBloc extends Cubit<PreloadState> {
 
   Future<void> _initializeControllerAtIndex(int index) async {
     final controller =
-    VideoPlayerController.networkUrl(state.urls[index].toUri);
+        VideoPlayerController.networkUrl(state.urls[index].toUri);
     state.controllers[index] = controller;
 
     await controller.initialize();

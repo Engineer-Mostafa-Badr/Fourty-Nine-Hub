@@ -167,7 +167,7 @@ class _CarInfoRiderState extends State<CarInfoRider> {
           // width: 150,
           child: TypeAheadField<String>(
             builder: (context, controller, focusNode) {
-              controller.text = fetchCarYearTypeCubit.year??"";
+              controller.text = fetchCarYearTypeCubit.year ?? "";
               return TextField(
                 controller: controller,
                 focusNode: focusNode,

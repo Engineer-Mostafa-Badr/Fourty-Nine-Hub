@@ -91,8 +91,11 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                 children: [
                   Expanded(
                     child: Label(
-                      text: context.isArabic?widget.item.nameAr:widget.item.nameEn,
-                      style: Styles.smallText(fontWeight: FontWeight.bold,fontSize: 24),
+                      text: context.isArabic
+                          ? widget.item.nameAr
+                          : widget.item.nameEn,
+                      style: Styles.smallText(
+                          fontWeight: FontWeight.bold, fontSize: 24),
                     ),
                   ),
                   IconAppButton(

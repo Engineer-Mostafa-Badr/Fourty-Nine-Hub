@@ -1,12 +1,8 @@
-import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/delete_restaurant_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_statistics_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_usecase.dart';
@@ -16,10 +12,8 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/change_connectivity_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/is_resturant_usecase.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
 
 import '../../../../../core/error/failure.dart';
-import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../data/models/restaurant_orders_model.dart';
 import '../../domain/usecases/get_restaurant_orders_usecase.dart';
@@ -34,14 +28,18 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
   final GetRestaurantOrdersUseCase _getRestaurantOrdersUseCase;
   final ChangeConnectivityUseCase _changeConnectivityUseCase;
 
-  RestaurantDashboardCubit(this._getRestaurantStatisticUseCase, this._getRestaurantOrdersUseCase, this._getRestaurantInfoUseCase, this._isRestaurantUsecase, this._changeConnectivityUseCase, this._deleteRestaurantUseCase)
-      : super( RestaurantDashboardState());
+  RestaurantDashboardCubit(
+      this._getRestaurantStatisticUseCase,
+      this._getRestaurantOrdersUseCase,
+      this._getRestaurantInfoUseCase,
+      this._isRestaurantUsecase,
+      this._changeConnectivityUseCase,
+      this._deleteRestaurantUseCase)
+      : super(RestaurantDashboardState());
 
-  void initialize(){
+  void initialize() {
     getRestaurantInfo();
   }
-
-
 
   // Future<void> getRestaurantOrders () async{
   //   emit(state.copyWith(status: RestaurantDashboardStates.loading));
@@ -69,19 +67,20 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
   bool hasMoreData = true;
   int currentPage = 1;
   int pageSize = 3;
-  List<RestaurantOrder> orders=[];
+  List<RestaurantOrder> orders = [];
 
   Future<void> getOrders() async {
-
     if (!hasMoreData || isLoadingMore) return;
 
     isLoadingMore = true;
 
-    final response = await _getRestaurantOrdersUseCase(PaginationParams( page: currentPage, limit: pageSize));
+    final response = await _getRestaurantOrdersUseCase(
+        PaginationParams(page: currentPage, limit: pageSize));
 
     response.fold(
-          (failure) => emit(state.copyWith(failure: failure, status: RestaurantDashboardStates.error)),
-          (data) {
+      (failure) => emit(state.copyWith(
+          failure: failure, status: RestaurantDashboardStates.error)),
+      (data) {
         orders.addAll(data.data.orders);
 
         if (data.data.orders.length < pageSize) {
@@ -91,38 +90,41 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
         }
 
         isLoadingMore = false;
-        emit(state.copyWith(status: RestaurantDashboardStates.initState,orders: data));
+        emit(state.copyWith(
+            status: RestaurantDashboardStates.initState, orders: data));
       },
     );
   }
 
-  Future<void> getRestaurantInfo () async{
+  Future<void> getRestaurantInfo() async {
     emit(state.copyWith(status: RestaurantDashboardStates.loading));
 
     final response = await _getRestaurantInfoUseCase(const NoParams());
     response.fold(
-          (failure) {
+      (failure) {
         emit(state.copyWith(status: RestaurantDashboardStates.error));
       },
-          (data) async{
-            await isRestaurant();
-            await getRestaurantStatistics();
-            // await getRestaurantOrders();
-            emit(state.copyWith(info: data,status: RestaurantDashboardStates.success));
+      (data) async {
+        await isRestaurant();
+        await getRestaurantStatistics();
+        // await getRestaurantOrders();
+        emit(state.copyWith(
+            info: data, status: RestaurantDashboardStates.success));
       },
     );
   }
 
-  Future<void> getRestaurantStatistics () async{
+  Future<void> getRestaurantStatistics() async {
     emit(state.copyWith(status: RestaurantDashboardStates.loading));
 
     final response = await _getRestaurantStatisticUseCase(const NoParams());
     response.fold(
-          (failure) {
+      (failure) {
         emit(state.copyWith(status: RestaurantDashboardStates.error));
       },
-          (data) async{
-            emit(state.copyWith(statistics: data,status: RestaurantDashboardStates.success));
+      (data) async {
+        emit(state.copyWith(
+            statistics: data, status: RestaurantDashboardStates.success));
       },
     );
   }
@@ -130,26 +132,30 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
   Future<void> isRestaurant() async {
     final response = await _isRestaurantUsecase(const NoParams());
     response.fold((failure) => {}, (data) {
-      emit(state.copyWith( isRestaurant: data));});
+      emit(state.copyWith(isRestaurant: data));
+    });
   }
 
   Future<void> changeConnectivityStatus(isActive) async {
     print("objectssssss$isActive");
-    final response = await _changeConnectivityUseCase(params:isActive);
+    final response = await _changeConnectivityUseCase(params: isActive);
     response.fold(
-            (failure) => emit(state.copyWith(status: RestaurantDashboardStates.error)),
-            (data) async {
-          await isRestaurant();
-        });
+        (failure) =>
+            emit(state.copyWith(status: RestaurantDashboardStates.error)),
+        (data) async {
+      await isRestaurant();
+    });
   }
 
-  Future<void> deleteRestaurantById(BuildContext context, {required String id}) async {
+  Future<void> deleteRestaurantById(BuildContext context,
+      {required String id}) async {
     final response = await _deleteRestaurantUseCase(id);
     response.fold(
-            (failure) => emit(state.copyWith(status: RestaurantDashboardStates.error)),
-            (data) async {
-              context.pop(true);
-        });
+        (failure) =>
+            emit(state.copyWith(status: RestaurantDashboardStates.error)),
+        (data) async {
+      context.pop(true);
+    });
   }
 
   Future<void> approveRequest({required int id}) async {

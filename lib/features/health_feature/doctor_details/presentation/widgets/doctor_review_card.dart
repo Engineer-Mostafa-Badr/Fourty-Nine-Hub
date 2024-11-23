@@ -22,7 +22,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-
 class DoctorReviewCard extends StatelessWidget {
   final UserDoctorRateEntity review;
   const DoctorReviewCard({super.key, required this.review});
@@ -42,51 +41,71 @@ class DoctorReviewCard extends StatelessWidget {
                     const ProfileImage(
                       userId: '',
                       accountId: 0,
-                      imageURL:  UIConst.profilePlaceHolder,
+                      imageURL: UIConst.profilePlaceHolder,
                     ),
                     const Sizer(),
                     Expanded(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Label(text: review.userName, style: Styles.mediumText()),
-                            RatingStars(
-                              rating: review.rate,
-                              color: AppColors.ACCENT_COLOR,
-                            ),
-                          ],
-                        )),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Label(
+                            text: review.userName, style: Styles.mediumText()),
+                        RatingStars(
+                          rating: review.rate,
+                          color: AppColors.ACCENT_COLOR,
+                        ),
+                      ],
+                    )),
                   ],
                 ),
               ),
               ClickableWidget(
-                  onTap: !context.read<UserCubit>().isLoggedIn?()=>context.push(Routes.LOGIN):() {
-              bottomSheet(
-              context: context,
-              widget: ReportView(
-              id:review.userId??'',
-              categoryId: '62c8b57c9332225799fe3306',
-              ));
-              },
-                  child: Icon(Icons.report,color: AppColors.SECONDARY_COLOR,size: 60.w,))
+                  onTap: !context.read<UserCubit>().isLoggedIn
+                      ? () => context.push(Routes.LOGIN)
+                      : () {
+                          bottomSheet(
+                              context: context,
+                              widget: ReportView(
+                                id: review.userId ?? '',
+                                categoryId: '62c8b57c9332225799fe3306',
+                              ));
+                        },
+                  child: Icon(
+                    Icons.report,
+                    color: AppColors.SECONDARY_COLOR,
+                    size: 60.w,
+                  ))
             ],
           ),
-          Sizer(),
-          ReadMoreLabel(text: review.comment,style: Styles.mediumText(fontWeight: FontWeight.w400,color: Colors.black),),
-          Sizer(),
+          const Sizer(),
+          ReadMoreLabel(
+            text: review.comment,
+            style: Styles.mediumText(
+                fontWeight: FontWeight.w400, color: Colors.black),
+          ),
+          const Sizer(),
           Row(
             children: [
               Expanded(
                 flex: 3,
                 child: AvaialbleTripsButton(
                   title: LocaleKeys.call.localize,
-                  color: (review.openCall == true &&context.read<UserCubit>().isLoggedIn)? AppColors.PRIMARY_COLOR : AppColors.DARK_GRAY_COLOR,
+                  color: (review.openCall == true &&
+                          context.read<UserCubit>().isLoggedIn)
+                      ? AppColors.PRIMARY_COLOR
+                      : AppColors.DARK_GRAY_COLOR,
                   icon: Icons.call,
-                  onTap: !context.read<UserCubit>().isLoggedIn?()=>context.push(Routes.LOGIN):review.openCall == true ? () {
-                    LaunchURLHelper().call( phone: review.phone??'');
-                  } : () async{
-                    SubscriptionMethod().subscribe(subscribeId: '62c8b57c9332225799fe3306', title: LocaleKeys.health.localize);
-                  },
+                  onTap: !context.read<UserCubit>().isLoggedIn
+                      ? () => context.push(Routes.LOGIN)
+                      : review.openCall == true
+                          ? () {
+                              LaunchURLHelper().call(phone: review.phone ?? '');
+                            }
+                          : () async {
+                              SubscriptionMethod().subscribe(
+                                  subscribeId: '62c8b57c9332225799fe3306',
+                                  title: LocaleKeys.health.localize);
+                            },
                 ),
               ),
               const Sizer(width: 5),
@@ -94,11 +113,20 @@ class DoctorReviewCard extends StatelessWidget {
                 flex: 3,
                 child: AvaialbleTripsButton(
                   title: LocaleKeys.message.localize,
-                  color: (review.openCall == true&&context.read<UserCubit>().isLoggedIn) ? AppColors.PRIMARY_COLOR : AppColors.DARK_GRAY_COLOR,
+                  color: (review.openCall == true &&
+                          context.read<UserCubit>().isLoggedIn)
+                      ? AppColors.PRIMARY_COLOR
+                      : AppColors.DARK_GRAY_COLOR,
                   icon: Icons.email,
-                  onTap:!context.read<UserCubit>().isLoggedIn?()=>context.push(Routes.LOGIN): review.openCall == true ? () {} : () {
-                    SubscriptionMethod().subscribe(subscribeId: '62c8b57c9332225799fe3306', title: LocaleKeys.health.localize);
-                  },
+                  onTap: !context.read<UserCubit>().isLoggedIn
+                      ? () => context.push(Routes.LOGIN)
+                      : review.openCall == true
+                          ? () {}
+                          : () {
+                              SubscriptionMethod().subscribe(
+                                  subscribeId: '62c8b57c9332225799fe3306',
+                                  title: LocaleKeys.health.localize);
+                            },
                 ),
               ),
             ],

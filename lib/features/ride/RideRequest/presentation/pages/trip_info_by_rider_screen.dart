@@ -93,7 +93,8 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
                           log(state.toString(), name: "lkdjslkdfjslkdjflskdjf");
                           if (state is SuccessCancelTripClientState) {
                             removeData();
-                            showSuccessMessage(context, LocaleKeys.successCancelTrip.tr());
+                            showSuccessMessage(
+                                context, LocaleKeys.successCancelTrip.tr());
                             context.pop();
                             context.pushReplacement(
                               Routes.RIDE,

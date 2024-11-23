@@ -197,34 +197,32 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                 padding: const EdgeInsets.symmetric(horizontal: 17),
                 width: double.infinity,
                 height: 50,
-                decoration: BoxDecoration(
-                  border: Border.all()
-                ),
+                decoration: BoxDecoration(border: Border.all()),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     DropdownButton(
-                    icon: Container(),
-                    value: workingType,
-                    dropdownColor: Colors.white,
-                    style: const TextStyle(color: Colors.black),
-                    onChanged: (value) {
-                      setState(() {
-                        workingType = value??"";
-                      });
-                    },
-                    items: const [
-                      DropdownMenuItem(
-                        value: "percentage",
-                        child: Text("Percentage"),
-                      ),
-                      DropdownMenuItem(
-                        value: "subscribePackage",
-                        child: Text("SubscribePackage"),
-                      ),
-                    ],
-                    underline: Container(),
-                              ),
+                      icon: Container(),
+                      value: workingType,
+                      dropdownColor: Colors.white,
+                      style: const TextStyle(color: Colors.black),
+                      onChanged: (value) {
+                        setState(() {
+                          workingType = value ?? "";
+                        });
+                      },
+                      items: const [
+                        DropdownMenuItem(
+                          value: "percentage",
+                          child: Text("Percentage"),
+                        ),
+                        DropdownMenuItem(
+                          value: "subscribePackage",
+                          child: Text("SubscribePackage"),
+                        ),
+                      ],
+                      underline: Container(),
+                    ),
                     const Icon(Icons.arrow_drop_down)
                   ],
                 ),

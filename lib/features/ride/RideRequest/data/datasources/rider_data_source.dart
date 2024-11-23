@@ -3,6 +3,8 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/create_offer_no_socket_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/create_trip_no_socket_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/create_trip_ride_request_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_info_request_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rider_register_model.dart';
@@ -184,7 +186,58 @@ class RiderDataSource {
     });
   }
 
-  Future<Either<Failure, Map<String, dynamic>>> checkPayment({required String amount}) {
-    return api.post(EndPoints.checkWalletEnough, data: {"amount": double.parse(amount)});
+  Future<Either<Failure, Map<String, dynamic>>> checkPayment(
+      {required String amount}) {
+    return api.post(EndPoints.checkWalletEnough,
+        data: {"amount": double.parse(amount)});
+  }
+
+  //No Socket
+  Future<Either<Failure, Map<String, dynamic>>> createTripNoSocket(
+      {required CreateTripNoSocketModel model}) {
+    return api.post(EndPoints.createTripNoSocket, data: model.toJson());
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> createPremiumTripNoSocket(
+      {required CreateTripNoSocketModel model}) {
+    return api.post(EndPoints.createPremiumTripNoSocket, data: model.toJson());
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> createOfferNoSocket(
+      {required CreateOfferNoSocketModel model}) {
+    return api.post(EndPoints.createOfferNoSocket,
+        data: model.toJson());
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> offerAcceptNoSocket(
+      {required String id}) {
+    return api.put("${EndPoints.offerAcceptNoSocket}/$id");
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> offerRejectNoSocket(
+      {required String id}) {
+    return api.put("${EndPoints.offerRejectNoSocket}/$id");
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getAllTripNoSocket(
+      {required String id}) {
+    return api.get("${EndPoints.getAllTripNoSocket}/$id");
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getTripOffersNoSocket(
+      {required String id}) {
+    return api.post("${EndPoints.getTripOffersNoSocket}/$id");
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getUserLoginTripNoSocket(
+      {required String amount}) {
+    return api.post(EndPoints.getUserLoginTripNoSocket,
+        data: {"amount": double.parse(amount)});
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> deleteTripNoSocket(
+      {required String amount}) {
+    return api.post(EndPoints.deleteTripNoSocket,
+        data: {"amount": double.parse(amount)});
   }
 }

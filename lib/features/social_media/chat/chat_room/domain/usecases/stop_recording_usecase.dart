@@ -9,7 +9,7 @@ class StopRecordingMessageUseCase extends UseCase<bool, String> {
   StopRecordingMessageUseCase(this._chatRoomRepository);
 
   @override
-  Future<Either<Failure, bool>> call(String params) async{
+  Future<Either<Failure, bool>> call(String params) async {
     return _chatRoomRepository.stopRecording(chatId: params);
   }
 }

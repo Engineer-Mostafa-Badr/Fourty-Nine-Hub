@@ -1,10 +1,9 @@
 part of 'reel_cubit.dart';
 
 class ReelsState {
-
   final bool isCreatingReply;
 
-   List<Reel> globalReels;
+  List<Reel> globalReels;
   final List<Reel>? reelsForFollower;
 
   final List<Reel>? reelsForAudio;

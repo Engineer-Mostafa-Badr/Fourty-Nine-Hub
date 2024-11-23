@@ -51,7 +51,8 @@ class RiderBannerWidget extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 4),
-                            child: Text( LocaleKeys.serveClientsByClickRegister.tr(),
+                            child: Text(
+                              LocaleKeys.serveClientsByClickRegister.tr(),
                               style: const TextStyle(
                                 color: Colors.red,
                               ),

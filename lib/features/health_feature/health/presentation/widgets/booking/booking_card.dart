@@ -29,7 +29,9 @@ class HealthBookingCard extends StatelessWidget {
             appointment.bookingType;
         serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
             appointment.doctor.subCategory;
-        context.push(Routes.VISITADOCTORDETAILS, extra: DoctorDetailsParams(fromSearch: true, doctorId: appointment.doctor.id));
+        context.push(Routes.VISITADOCTORDETAILS,
+            extra: DoctorDetailsParams(
+                fromSearch: true, doctorId: appointment.doctor.id));
       },
       child: Container(
         margin: const EdgeInsets.all(10),

@@ -11,13 +11,11 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/regis
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/rider_register_one.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/rider_register_scand_screen.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/sub_category.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:multi_dropdown/multi_dropdown.dart';
 
 class RiderRegisterView extends StatefulWidget {
   const RiderRegisterView({super.key});
@@ -138,7 +136,6 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        
                                         DropdownMenu<SubCategoryEntity>(
                                           inputDecorationTheme:
                                               InputDecorationTheme(
@@ -185,26 +182,29 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
                                                   .size
                                                   .width *
                                               0.95,
-                                          hintText:  LocaleKeys.subCategory.tr(),
-                                          dropdownMenuEntries: state
-                                              .model.subCategories!
-                                              .map(
-                                                (e) => SubCategoryEntity(
-                                                  id: e.subCategoryId!,
-                                                  image: e.picture ?? "",
-                                                  isFavorite: false,
-                                                  name:
-                                                      e.subCategoryNameEn ?? "",
-                                                ),
-                                              )
-                                              .map(
-                                                (e) => DropdownMenuEntry<
-                                                    SubCategoryEntity>(
-                                                  value: e,
-                                                  label: e.name,
-                                                ),
-                                              )
-                                              .toList(),
+                                          hintText: LocaleKeys.subCategory.tr(),
+                                          dropdownMenuEntries:
+                                              state.model.subCategories!
+                                                  .map(
+                                                    (e) => SubCategoryEntity(
+                                                        id: e.subCategoryId!,
+                                                        image: e.picture ?? "",
+                                                        isFavorite: false,
+                                                        nameEn:
+                                                            e.subCategoryNameEn ??
+                                                                "",
+                                                        nameAr:
+                                                            e.subCategoryNameAr ??
+                                                                ""),
+                                                  )
+                                                  .map(
+                                                    (e) => DropdownMenuEntry<
+                                                        SubCategoryEntity>(
+                                                      value: e,
+                                                      label: e.nameEn,
+                                                    ),
+                                                  )
+                                                  .toList(),
                                           onSelected: (value) {
                                             setState(() {
                                               registerRider.model

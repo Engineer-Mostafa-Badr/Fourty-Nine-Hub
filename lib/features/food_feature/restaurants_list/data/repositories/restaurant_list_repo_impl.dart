@@ -92,7 +92,8 @@ class RestaurantListRepoImpl implements RestaurantListRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> toggleRestaurantFavourite({required String params}) {
-    return _remoteDataSource.toggleRestaurantFavourite(params:params);
+  Future<Either<Failure, bool>> toggleRestaurantFavourite(
+      {required String params}) {
+    return _remoteDataSource.toggleRestaurantFavourite(params: params);
   }
 }

@@ -39,7 +39,6 @@ class ShippingDataSource {
         data: data,
         options: Options(headers: {"Authorization": "Bearer $token"}));
     if (resposne.statusCode == 200 || resposne.statusCode == 201) {
-      
       return Right(resposne.data);
     } else {
       log(resposne.data.toString(), name: "S3 Error failure");

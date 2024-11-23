@@ -94,14 +94,16 @@ class RideTripCard extends StatelessWidget {
               children: [
                 Icon(
                   Icons.info_outline,
-                  color: context.isDarkMode?Colors.white: Colors.black,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
                 ),
                 const Sizer(),
                 Flexible(
                   child: Text(
                     "${LocaleKeys.travelTime.tr()}: ~${formatDuration(model.duration ?? 0)} , ${LocaleKeys.Distance.tr()}: ${formatDistance(model.distance ?? 0)}",
                     style: Styles.mediumText(
-                        fontWeight: FontWeight.w500, color: context.isDarkMode?Colors.white: Colors.black),
+                        fontWeight: FontWeight.w500,
+                        color:
+                            context.isDarkMode ? Colors.white : Colors.black),
                   ),
                 ),
                 const Sizer(),
@@ -126,10 +128,12 @@ class RideTripCard extends StatelessWidget {
                     return Container(
                       padding: const EdgeInsets.all(25),
                       decoration: BoxDecoration(
-                        boxShadow: const [
-                          BoxShadow(color: Colors.black, blurRadius: 50)
-                        ],
-                          color: context.isDarkMode?AppColors.QUANTITY_COLOR:Colors.white,
+                          boxShadow: const [
+                            BoxShadow(color: Colors.black, blurRadius: 50)
+                          ],
+                          color: context.isDarkMode
+                              ? AppColors.QUANTITY_COLOR
+                              : Colors.white,
                           borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(20),
                               topRight: Radius.circular(20))),

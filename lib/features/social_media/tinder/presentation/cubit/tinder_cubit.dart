@@ -40,8 +40,19 @@ class TinderViewCubit extends Cubit<TinderViewState> {
   final FetchSubCategoryDataUseCase _fetchSubCategoryDataUseCase;
   final UploadTinderPictureUseCase _uploadTinderPictureUseCase;
 
-  TinderViewCubit(this._getUserDataUseCase, this._getTinderProfileUseCase, this._getTinderFavouritesUseCase, this._getTinderFavouritesCategoryUseCase,
-      this.getMainCategoryDetailsUseCase, this._addTinderFavouriteCategoryUseCase, this._fetchLastSeenUseCase, this._sendGiftUseCase, this._fetchGiftsUseCase, this._checkUserNearbyUseCase, this._fetchSubCategoryDataUseCase, this._uploadTinderPictureUseCase)
+  TinderViewCubit(
+      this._getUserDataUseCase,
+      this._getTinderProfileUseCase,
+      this._getTinderFavouritesUseCase,
+      this._getTinderFavouritesCategoryUseCase,
+      this.getMainCategoryDetailsUseCase,
+      this._addTinderFavouriteCategoryUseCase,
+      this._fetchLastSeenUseCase,
+      this._sendGiftUseCase,
+      this._fetchGiftsUseCase,
+      this._checkUserNearbyUseCase,
+      this._fetchSubCategoryDataUseCase,
+      this._uploadTinderPictureUseCase)
       : super(TinderViewState());
 
   Future<void> fetchUserData({
@@ -63,35 +74,30 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     final page = isLoadMore ? _currentPage + 1 : 1;
     _isLoadingMore = true;
 
-    var response = await _getUserDataUseCase.call(GetUsersParams(gender: gender, page: page, limit: 20,));
-    response.fold(
-            (failure) {
-          throw Exception("Failed to fetch fetchUserData");
-        },
-            (data) async{
-              if (data != null) {
-                if (data.isEmpty) {
-                  // _hasMoreData = false;
-                } else {
-                  _currentPage = page;
-                  final List<UserData> updatedUserData = isLoadMore
-                      ? (List.from(state.userData!)..addAll(data))
-                      : data;
-                  log("$gender/***************************************************************************************************************************************************************");
+    var response = await _getUserDataUseCase.call(GetUsersParams(
+      gender: gender,
+      page: page,
+      limit: 20,
+    ));
+    response.fold((failure) {
+      throw Exception("Failed to fetch fetchUserData");
+    }, (data) async {
+      if (data.isEmpty) {
+        // _hasMoreData = false;
+      } else {
+        _currentPage = page;
+        final List<UserData> updatedUserData =
+            isLoadMore ? (List.from(state.userData!)..addAll(data)) : data;
+        log("$gender/***************************************************************************************************************************************************************");
 
-                  emit(state.copyWith(
-                      userData: updatedUserData,
-                      userDataState: TinderStates.success,
-                      gender: state.gender));
-                }
-              } else {
-                emit(state.copyWith(userDataState: TinderStates.failure));
-              }
+        emit(state.copyWith(
+            userData: updatedUserData,
+            userDataState: TinderStates.success,
+            gender: state.gender));
+      }
 
-              _isLoadingMore = false;
-        });
-
-
+      _isLoadingMore = false;
+    });
   }
 
   Future<void> loadMoreUserData(String gender) async {
@@ -107,15 +113,14 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     final mainCategoryResponse = await getMainCategoryDetailsUseCase(id);
     // log('main categoty response ${mainCategoryResponse?.data.mainCategory.nameEn}');
 
-    mainCategoryResponse.fold(
-        (l) {
-          log('there is a failure ${getFailureMessage(l, context)}');
+    mainCategoryResponse.fold((l) {
+      log('there is a failure ${getFailureMessage(l, context)}');
 
-          emit(state.copyWith(
-              mainCategoryResponseState: TinderStates.failure,
-              status: TinderStates.failure,
-            ));
-        }, (r) {
+      emit(state.copyWith(
+        mainCategoryResponseState: TinderStates.failure,
+        status: TinderStates.failure,
+      ));
+    }, (r) {
       emit(state.copyWith(
         mainCategoryResponseState: TinderStates.success,
         mainCategoryEntity: r,
@@ -175,23 +180,20 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     final response = await _getTinderProfileUseCase(userId);
     // log('main categoty response ${response?.data.mainCategory.nameEn}');
 
-    response.fold(
-            (l) {
-              emit(state.copyWith(profileUserState: TinderStates.failure));
-            }, (r) {
+    response.fold((l) {
+      emit(state.copyWith(profileUserState: TinderStates.failure));
+    }, (r) {
       emit(state.copyWith(
-          profileUserState: TinderStates.success,
-          profileUserData:r.data));
+          profileUserState: TinderStates.success, profileUserData: r.data));
     });
   }
 
   Future<void> fetchFavorites() async {
     emit(state.copyWith(getFavCategoryListState: TinderStates.initial));
     final response = await _getTinderFavouritesUseCase(const NoParams());
-    response.fold(
-            (l) {
-              emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
-        }, (r) {
+    response.fold((l) {
+      emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
+    }, (r) {
       emit(state.copyWith(
           getFavCategoryListState: TinderStates.success,
           getFavCategoryList: r));
@@ -200,14 +202,15 @@ class TinderViewCubit extends Cubit<TinderViewState> {
 
   Future<void> fetchFavoritesCategory() async {
     emit(state.copyWith(getFavCategoryListState: TinderStates.initial));
-    final response = await _getTinderFavouritesCategoryUseCase(const NoParams());
-    response.fold(
-            (l) {
-          emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
-        }, (r) {
+    final response =
+        await _getTinderFavouritesCategoryUseCase(const NoParams());
+    response.fold((l) {
+      emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
+    }, (r) {
       emit(state.copyWith(
           getFavCategoryListState: TinderStates.success,
-          FavoriteCategoryList: r));});
+          FavoriteCategoryList: r));
+    });
     // emit(state.copyWith(getFavCategoryListState: TinderStates.initial));
     // final apiResponse = await tinderRepository.fetchFavoritesCategory();
     // if (apiResponse != null) {
@@ -222,12 +225,11 @@ class TinderViewCubit extends Cubit<TinderViewState> {
   Future<void> addFavoriteCategory({required String categoryId}) async {
     emit(state.copyWith(addCategoryModelState: TinderStates.initial));
     final response = await _addTinderFavouriteCategoryUseCase(categoryId);
-    response.fold(
-            (l) {
-          emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
-        }, (r) {
+    response.fold((l) {
+      emit(state.copyWith(getFavCategoryListState: TinderStates.failure));
+    }, (r) {
       emit(state.copyWith(addCategoryModelState: TinderStates.success));
-            });
+    });
     // final isSuccess = await tinderRepository.addFavoriteCategory(categoryId!);
     // if (isSuccess) {
     //   emit(state.copyWith(addCategoryModelState: TinderStates.success));
@@ -244,14 +246,12 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       lastSeenModelState: TinderStates.initial,
     ));
     final response = await _fetchLastSeenUseCase(userId);
-    response.fold(
-            (l) {
-              emit(state.copyWith(lastSeenModelState: TinderStates.failure));
-        }, (r) {
-      result=true;
+    response.fold((l) {
+      emit(state.copyWith(lastSeenModelState: TinderStates.failure));
+    }, (r) {
+      result = true;
       emit(state.copyWith(
-          lastSeenModel: r,
-          lastSeenModelState: TinderStates.success));
+          lastSeenModel: r, lastSeenModelState: TinderStates.success));
     });
 
     // emit(state.copyWith(
@@ -286,10 +286,9 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       giftId: giftId,
       receiverId: receiverId,
     ));
-    response.fold(
-            (l) {
-              emit(state.copyWith(sendGiftErrorDataState: TinderStates.success));
-        }, (r) {
+    response.fold((l) {
+      emit(state.copyWith(sendGiftErrorDataState: TinderStates.success));
+    }, (r) {
       emit(state.copyWith(sendGiftErrorDataState: TinderStates.success));
     });
     // emit(state.copyWith(sendGiftErrorDataState: TinderStates.initial));
@@ -308,11 +307,11 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       giftsState: TinderStates.initial,
     ));
     final response = await _fetchGiftsUseCase(const NoParams());
-    response.fold(
-            (l) {
-          emit(state.copyWith(giftsState: TinderStates.success));
-        }, (r) {
-      emit(state.copyWith(gifts: r.data?.gifts, giftsState: TinderStates.success));
+    response.fold((l) {
+      emit(state.copyWith(giftsState: TinderStates.success));
+    }, (r) {
+      emit(state.copyWith(
+          gifts: r.data?.gifts, giftsState: TinderStates.success));
     });
     // emit(state.copyWith(giftsState: TinderStates.initial));
     // final giftData = await tinderRepository.fetchGifts();
@@ -330,15 +329,14 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     emit(state.copyWith(isUserNearbyState: TinderStates.initial));
 
     final response = await _checkUserNearbyUseCase(cardUserId);
-    response.fold(
-            (l) {
-              emit(state.copyWith(
-                  isUserNearbyState: TinderStates.failure,
-                  isUserNearby: NearByModel()));
-              }, (r) {
+    response.fold((l) {
+      emit(state.copyWith(
+          isUserNearbyState: TinderStates.failure,
+          isUserNearby: NearByModel()));
+    }, (r) {
       emit(state.copyWith(
           isUserNearby: r, isUserNearbyState: TinderStates.success));
-            });
+    });
     // final nearByModel = await tinderRepository.checkUserNearby(cardUserId);
     // if (nearByModel != null) {
     //   emit(state.copyWith(
@@ -354,13 +352,11 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     emit(state.copyWith(subCategoryDataState: TinderStates.initial));
 
     final response = await _fetchSubCategoryDataUseCase(const NoParams());
-    response.fold(
-            (l) {
-              emit(state.copyWith(subCategoryDataState: TinderStates.failure));
-        }, (r) {
+    response.fold((l) {
+      emit(state.copyWith(subCategoryDataState: TinderStates.failure));
+    }, (r) {
       emit(state.copyWith(
-          subCategoryData: r,
-          subCategoryDataState: TinderStates.success));
+          subCategoryData: r, subCategoryDataState: TinderStates.success));
     });
     // emit(state.copyWith(subCategoryDataState: TinderStates.initial));
     // final subCategoryData = await tinderRepository.fetchSubCategoryData();

@@ -42,7 +42,11 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
           log(state.toString(),
               name: "lskdfjslkdfjslkdfjslkdjfslkdjfslkdjfslkdjfslkdfj");
           if (state is SuccessCheckAcceptByDriverState) {
-            context.pushAndRemoveUntil(Routes.TRIPINFOBYRIDERSCREEN, extra: state.model, (route) => false,);
+            context.pushAndRemoveUntil(
+              Routes.TRIPINFOBYRIDERSCREEN,
+              extra: state.model,
+              (route) => false,
+            );
           }
         },
         child: BlocListener<CheckAcceptByRiderCubit, RiderState>(
@@ -50,7 +54,11 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
             log(state.toString(),
                 name: "lskdfjslkdfjslkdfjslkdjfslkdjfslkdjfslkdjfslkdfj");
             if (state is SuccessCheckAcceptByRiderState) {
-              context.pushAndRemoveUntil(Routes.TRIPINFOBYDRIVERSCREEN, extra: state.model,  (route) => false,);
+              context.pushAndRemoveUntil(
+                Routes.TRIPINFOBYDRIVERSCREEN,
+                extra: state.model,
+                (route) => false,
+              );
             }
           },
           child: BlocConsumer<AcceptOfferByDriverCubit, RiderState>(
@@ -61,7 +69,11 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                     context, getFailureMessage(state.failure, context));
               }
               if (state is SuccessAcceptOfferByDriverState) {
-                context.pushAndRemoveUntil(Routes.TRIPINFOBYDRIVERSCREEN, extra: state.model, (route) => false,);
+                context.pushAndRemoveUntil(
+                  Routes.TRIPINFOBYDRIVERSCREEN,
+                  extra: state.model,
+                  (route) => false,
+                );
               }
             },
             builder: (context, state) {
@@ -80,7 +92,8 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                   }
                   if (state is SuccessSendOfferByDriverState) {
                     context.pop();
-                    showSuccessMessage(context, LocaleKeys.yourOfferSendSuccess.tr());
+                    showSuccessMessage(
+                        context, LocaleKeys.yourOfferSendSuccess.tr());
                   }
                 },
                 builder: (context, state) {

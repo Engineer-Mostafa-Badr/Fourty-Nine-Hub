@@ -13,14 +13,15 @@ class RaiseFareCubit extends Cubit<RiderState> {
   RaiseFareCubit({required this.repository}) : super(InitalRiderState());
   update({required String tripId, required double tripPrice}) {
     if (price != null) {
-      repository.riseFare(offer: (price!+tripPrice).toString(), tripId: tripId);
+      repository.riseFare(
+          offer: (price! + tripPrice).toString(), tripId: tripId);
       canChangePrice = false;
       price = null;
     }
   }
 
   increasePrice({required int newPrice}) {
-    currentPrice  = (currentPrice ?? 0) + newPrice;
+    currentPrice = (currentPrice ?? 0) + newPrice;
     price = (price ?? 0) + newPrice;
   }
 
@@ -28,7 +29,7 @@ class RaiseFareCubit extends Cubit<RiderState> {
     if (currentPrice != null) {
       if ((price ?? 0) > 0) {
         price = (price ?? 0) - newPrice;
-        currentPrice  = (currentPrice ?? 0) - newPrice;
+        currentPrice = (currentPrice ?? 0) - newPrice;
       } else {
         log(price.toString(), name: "Price");
         price = null;

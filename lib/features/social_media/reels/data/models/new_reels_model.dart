@@ -162,7 +162,7 @@ class UserReel {
       privacy: json['privacy'] ?? 'public',
       story: json['story'] ?? false,
       verified: json['verified'] ?? false,
-      profilePictureSignedUrl: json['profilePictureSignedUrl']??"",
+      profilePictureSignedUrl: json['profilePictureSignedUrl'] ?? "",
       coverPictureSignedUrl: json['coverPictureSignedUrl'],
       bio: json['bio'],
       birthday: json['birthday'],

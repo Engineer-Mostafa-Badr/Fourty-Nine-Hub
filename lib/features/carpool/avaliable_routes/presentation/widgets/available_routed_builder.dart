@@ -91,7 +91,7 @@ class _AvailableRoutesBuilderState extends State<AvailableRoutesBuilder> {
             ),
           );
         } else if (state is GetAllTripsFailure) {
-          return Center(child: Text("there is no trips. try again !"));
+          return const Center(child: Text("there is no trips. try again !"));
         } else {
           return const SizedBox();
         }

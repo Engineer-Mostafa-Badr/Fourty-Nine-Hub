@@ -8,7 +8,7 @@ class ListenToPinMessageUseCase
   ListenToPinMessageUseCase(this._chatRoomRepository);
 
   @override
-  void call( Function(ListenToPinMessageParams params) params) {
+  void call(Function(ListenToPinMessageParams params) params) {
     return _chatRoomRepository.listenToPinMessage(params);
   }
 }

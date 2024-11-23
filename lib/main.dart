@@ -1,4 +1,3 @@
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +93,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _startWebSocketService();
-
   }
 
   @override
@@ -119,7 +117,8 @@ class _MyAppState extends State<MyApp> {
           create: (BuildContext context) => serviceLocator<SearchCubit>(),
         ),
         BlocProvider(
-            create: (context) => serviceLocator<PreloadBloc>()..getVideosFromApi()),
+            create: (context) =>
+                serviceLocator<PreloadBloc>()..getVideosFromApi()),
         BlocProvider(
           create: (BuildContext context) =>
               serviceLocator<MainCategoriesCubit>()..loadData(),

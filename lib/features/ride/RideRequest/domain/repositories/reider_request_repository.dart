@@ -291,14 +291,14 @@ class ReiderRequestRepository {
       (data) {
         var json = jsonDecode(data);
         log(data.toString(), name: "Ride:acceptTripFromDriver");
-        var model = CheckAcceptTripFromDriverModel.fromJson(json['acceptedTrip']);
+        var model =
+            CheckAcceptTripFromDriverModel.fromJson(json['acceptedTrip']);
         model.otp = json['OTP'];
         onData(model);
         log(data.toString(), name: "Ride:acceptTripFromDriver");
       },
     );
   }
-
 
   checkAcceptByRider(
       {required Function(CheckAcceptByRiderModel model) onData}) {

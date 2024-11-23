@@ -143,6 +143,4 @@ class CommentInputFieldState extends State<CommentInputField> {
           ]),
         ));
   }
-
-
 }

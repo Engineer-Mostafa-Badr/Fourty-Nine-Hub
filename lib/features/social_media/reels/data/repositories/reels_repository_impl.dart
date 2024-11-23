@@ -23,7 +23,8 @@ class ReelsRepositoryImpl extends ReelsRepository {
   ReelsRepositoryImpl(this._reelsRemoteDataSource);
 
   @override
-  Future<Either<Failure, ReelsResponse>> getExploreReels(PaginationParams params) {
+  Future<Either<Failure, ReelsResponse>> getExploreReels(
+      PaginationParams params) {
     return _reelsRemoteDataSource.getExploreReels(params);
   }
 
@@ -71,7 +72,8 @@ class ReelsRepositoryImpl extends ReelsRepository {
   }
 
   @override
-  Future<Either<Failure, GetCommentsResponse>> getComments(CommentParams params) {
+  Future<Either<Failure, GetCommentsResponse>> getComments(
+      CommentParams params) {
     return _reelsRemoteDataSource.getComments(params);
   }
 

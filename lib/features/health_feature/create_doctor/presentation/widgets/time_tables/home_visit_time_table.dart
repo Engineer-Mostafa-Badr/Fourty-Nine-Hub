@@ -38,9 +38,9 @@ class CreateDoctorHomeVisitTimeTable extends StatelessWidget {
                     isRequired: true,
                     nextFocusNode: createDoctorCubit.waitingTimeFocusNode,
                     currentFocusNode:
-                    createDoctorCubit.homeVisitExamineDurationFocusNode,
+                        createDoctorCubit.homeVisitExamineDurationFocusNode,
                     currentController:
-                    createDoctorCubit.homeVisitExamineDurationController,
+                        createDoctorCubit.homeVisitExamineDurationController,
                   ),
                   const Sizer(),
                   DefaultTextFormField(
@@ -49,9 +49,9 @@ class CreateDoctorHomeVisitTimeTable extends StatelessWidget {
                     isRequired: true,
                     nextFocusNode: createDoctorCubit.waitingTimeFocusNode,
                     currentFocusNode:
-                    createDoctorCubit.homeVisitExamineDurationFocusNode,
+                        createDoctorCubit.homeVisitExamineDurationFocusNode,
                     currentController:
-                    createDoctorCubit.homeVisitExamineDurationController,
+                        createDoctorCubit.homeVisitExamineDurationController,
                   ),
                   const Sizer(),
                   DefaultTextFormField(

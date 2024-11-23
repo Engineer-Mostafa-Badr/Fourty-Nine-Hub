@@ -1,6 +1,6 @@
 class PropsAdsEntity {
   final String id;
- // final PropertyDetailsEntity propertyDetails;
+  // final PropertyDetailsEntity propertyDetails;
   final String adsId;
   final PropertyValueEntity value;
   final DateTime createdAt;
@@ -9,7 +9,7 @@ class PropsAdsEntity {
 
   PropsAdsEntity(
       {required this.id,
-   //   required this.propertyDetails,
+      //   required this.propertyDetails,
       required this.adsId,
       required this.value,
       required this.createdAt,

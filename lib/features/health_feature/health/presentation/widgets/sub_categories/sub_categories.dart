@@ -19,54 +19,59 @@ class HealthSubCategories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HealthCubit, HealthState>(builder: (context, state) {
-        return SizedBox(
-          height: 250,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              state.subCategories==null?
-              Shimmer.fromColors(
-                baseColor: Colors.grey.shade300,
-                highlightColor: Colors.grey.shade100,
-                child: Label(
-                  text: LocaleKeys.specialities.localize,
-                  style: Styles.headerText(),
-                ),
-              ) :state.subCategories==[]?
-              const SizedBox.shrink():Label(
-                text: LocaleKeys.specialities.localize,
-                style: Styles.headerText(),
-              ),
-              const Sizer(),
-              Expanded(
-                child: (state.subCategories!=null&&state.subCategories!=[])?ListView.separated(
-                  separatorBuilder: (context, index) => const Sizer(),
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) => HealthSubCategoryCard(
-                      subCategory: state.subCategories![index]),
-                  itemCount: state.subCategories?.length??0,
-                ):state.subCategories==null?Shimmer.fromColors(
-                  baseColor: Colors.grey.shade300,
-                  highlightColor: Colors.grey.shade100,
-                  child: ListView.separated(
-                    separatorBuilder: (context, index) => const Sizer(),
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => Container(
-                      width: 200,
-                      decoration: BoxDecoration(
-                        color: AppColors.AUTH_CONTAINER_COLOR,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Colors.grey),
-                      ),
+      return SizedBox(
+        height: 250,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            state.subCategories == null
+                ? Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
+                    child: Label(
+                      text: LocaleKeys.specialities.localize,
+                      style: Styles.headerText(),
                     ),
-                    itemCount: 3,
-                  ),
-                ):const SizedBox.shrink(),
-              ),
-            ],
-          ),
-        );
-
+                  )
+                : state.subCategories == []
+                    ? const SizedBox.shrink()
+                    : Label(
+                        text: LocaleKeys.specialities.localize,
+                        style: Styles.headerText(),
+                      ),
+            const Sizer(),
+            Expanded(
+              child: (state.subCategories != null && state.subCategories != [])
+                  ? ListView.separated(
+                      separatorBuilder: (context, index) => const Sizer(),
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) => HealthSubCategoryCard(
+                          subCategory: state.subCategories![index]),
+                      itemCount: state.subCategories?.length ?? 0,
+                    )
+                  : state.subCategories == null
+                      ? Shimmer.fromColors(
+                          baseColor: Colors.grey.shade300,
+                          highlightColor: Colors.grey.shade100,
+                          child: ListView.separated(
+                            separatorBuilder: (context, index) => const Sizer(),
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) => Container(
+                              width: 200,
+                              decoration: BoxDecoration(
+                                color: AppColors.AUTH_CONTAINER_COLOR,
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.grey),
+                              ),
+                            ),
+                            itemCount: 3,
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+            ),
+          ],
+        ),
+      );
     });
   }
 }
