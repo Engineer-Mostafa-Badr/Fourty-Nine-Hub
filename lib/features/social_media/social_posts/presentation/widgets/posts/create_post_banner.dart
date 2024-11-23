@@ -56,7 +56,7 @@ class CreatePostBanner extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: Label(
-                text:context.locale == Locales.english?'What do you think?': '؟بم تفكر',
+                text:context.locale == Locales.english?'What do you think?': 'بم تفكر؟',
                 style: Styles.mediumText(color: Colors.grey),
               ),
             ),

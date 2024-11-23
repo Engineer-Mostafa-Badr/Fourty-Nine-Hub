@@ -96,7 +96,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                               ),
                               Label(
                                   text:
-                                      widget.categorization.mainCategory.name),
+                                  context.isArabic?widget.categorization.mainCategory.name :widget.categorization.mainCategory.nameEn!),
                             ],
                           )),
                         ],
