@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/social_media/create_post/presentation/wid
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
@@ -29,6 +30,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TwitterPostCard extends StatefulWidget {
   bool isLiked;
   bool? fromProfile;
+  final TwitterMainPostEntity postShare;
   final TwitterPostEntity post;
   final Function onReact;
   final Function getPost;
@@ -54,7 +56,7 @@ class TwitterPostCard extends StatefulWidget {
     required this.deletePost,
     required this.hidePost,
     required this.onDeleteComment,
-    required this.onEditComment,
+    required this.onEditComment, required this.postShare,
   });
 
   @override
@@ -121,7 +123,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                                       ? widget.post.mainPost.id
                                       : widget.post.id,
                                   showPostComments: (id) {},
-                                  onReport: (TwitterReportParams params) {},
+                                  onReport: (TwitterReportParams params) {}, post: widget.post,
                                 ));
                           }
                         : null,
@@ -131,7 +133,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                         _buildMainAccountRow(
                             context: context,
                             showOptions: false,
-                            post: widget.post,
+                            post: widget.postShare,
                             date: widget.post.isShared == true
                                 ? widget.post.mainPost?.sinceTime ?? ''
                                 : widget.post.sinceTime),
@@ -469,7 +471,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
     required BuildContext context,
     bool showOptions = true,
     required String date,
-    required TwitterPostEntity post,
+    required TwitterMainPostEntity post,
   }) {
     final user = context.read<UserCubit>().state.data;
     return Row(
@@ -477,17 +479,17 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
         Expanded(
           child: Row(
             children: [
-              post.user.image != ''
+              post.user?.image != ''
                   ? UserProfileImage(
                       accountId: 0,
-                      imageURL: post.user.image,
+                      imageURL: post.user?.image,
                       fromProfile: widget.fromProfile,
-                      userId: post.user.id,
+                      userId: post.user!.id,
                     )
                   : UserProfileImage(
                       accountId: 0,
                       fromProfile: widget.fromProfile,
-                      userId: post.user.id,
+                      userId: post.user!.id,
                     ),
               const Sizer(),
               Expanded(
@@ -496,12 +498,12 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                   children: [
                     Label(
                         text: post.isShared == true
-                            ? "${post.mainPost?.user.firstName} ${post.mainPost?.user.lastName}"
-                            : "${post.user.firstName} ${post.user.lastName}",
+                            ? "${post.user!.firstName} ${post.user!.lastName}"
+                            : "${post.user!.firstName} ${post.user!.lastName}",
                         style: Styles.mediumText(fontWeight: FontWeight.w500)),
                     Label(
                         text:
-                            '@${(post.isShared == true && post.mainPost != null ? post.mainPost.user.email ?? '' : post.user.email).split('@')[0]}',
+                            '@${(post.isShared == true && post != null ? post.user?.email ?? '' : post.user?.email)!.split('@')[0]}',
                         maxLines: 1,
                         style: Styles.mediumText(color: Colors.grey)),
                   ],
@@ -511,8 +513,8 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                   text: date,
                   maxLines: 1,
                   style: Styles.mediumText()),
-              if (post.user.isDocumented == true && post.isShared == false ||
-                  (post.mainPost?.user.isDocumented == true &&
+              if (post.user?.isDocumented == true && post.isShared == false ||
+                  (post.user?.isDocumented == true &&
                       post.isShared == true))
                 Icon(
                   Icons.verified,
@@ -523,7 +525,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
           ),
         ),
         if (post.isShared == false &&
-            (post.user.id == user?.id) &&
+            (post.user!.id == user?.id) &&
             context.read<UserCubit>().isLoggedIn) ...[
           // IconButton(
           //   onPressed: () {
@@ -550,7 +552,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 bottomSheet(
                     context: context,
                     widget: _buildPostOptions(
-                        isMyPost: (post.user.id == user!.id)));
+                        isMyPost: (post.user!.id == user!.id)));
               },
             ),
         ]

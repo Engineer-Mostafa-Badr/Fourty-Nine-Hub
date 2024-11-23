@@ -136,6 +136,7 @@ class _TwitterViewState extends State<TwitterView> {
                       padding:  EdgeInsets.only(bottom: 30.h),
                       child: TwitterPostCard(
                         post: controller.postsPagingController.itemList![index],
+                        postShare: controller.postsPagingController.itemList![index].postShare!,
                         onReact: () async {
                           var result = await controller.onReact(
                               params: TwitterPostReactParams(
@@ -308,6 +309,8 @@ class _TwitterViewState extends State<TwitterView> {
                     return TwitterPostCard(
                       post: controller
                           .globalPostsPagingController.itemList![index],
+                      postShare: controller
+                          .globalPostsPagingController.itemList![index].postShare!,
                       onReact: () async {
                         var result = await controller.onReact(
                             params: TwitterPostReactParams(

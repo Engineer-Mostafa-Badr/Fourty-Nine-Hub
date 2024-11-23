@@ -10,7 +10,7 @@ class TwitterMainPostEntity {
   final List<String>? shares;
   final List<String>? love;
   final bool isShared;
-  final TwitterUserEntity user;
+  final TwitterUserEntity? user;
   final List<String> comments;
   final int commentPrivacy;
   final num commentsCount;
@@ -28,7 +28,7 @@ class TwitterMainPostEntity {
       this.images,
       this.shares,
       this.love,
-      required this.user,
+       this.user,
       this.commentPrivacy = 1,
       this.isShared = false,
       this.commentsCount = 0,

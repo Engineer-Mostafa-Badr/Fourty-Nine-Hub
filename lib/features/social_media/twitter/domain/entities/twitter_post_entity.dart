@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_main_post_entity.dart';
 import '../../../../../core/utils/duration_helper.dart';
 import '../../../../../res/assets/assets.dart';
 
@@ -8,6 +9,7 @@ class TwitterPostEntity {
   final List<String>? images;
   final List<String>? shares;
   final List<TwitterUserModel>? love;
+  final TwitterMainPostEntity? postShare;
   final dynamic mainPost;
   bool? isShared;
   final dynamic user;
@@ -27,6 +29,7 @@ class TwitterPostEntity {
   TwitterPostEntity(
       {required this.id,
       required this.content,
+       this.postShare,
       this.images,
       this.shares,
       this.love,
