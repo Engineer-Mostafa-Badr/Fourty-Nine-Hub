@@ -81,8 +81,9 @@ class EndPoints {
   static const getWalletHome = '/main-wallet/user-wallets-amount';
   static const getCurrency = '/main-wallet/app-currency';
   static const anyCashBack = '/cashback/any';
-  static String loggedUserId = UserCubit.to.state.data?.id??'';
-  static String getMainCategoryDetails(String id) => '/categories/main/$id${loggedUserId.isNotEmpty?'?userId=$loggedUserId':''}';
+  static String loggedUserId = UserCubit.to.state.data?.id ?? '';
+  static String getMainCategoryDetails(String id) =>
+      '/categories/main/$id${loggedUserId.isNotEmpty ? '?userId=$loggedUserId' : ''}';
   static const getCurrencyCarPool = '/main-wallet/app-currency';
 
   static String addMainCategoryToFavorite(String id) =>
@@ -209,8 +210,7 @@ class EndPoints {
   // Quran
   static String quranSurah(QuranParams params) =>
       '/quran/surahs?page=${params.page}&limit=${params.limit}';
-  static String quran(int id) =>
-      '/quran/surah/$id';
+  static String quran(int id) => '/quran/surah/$id';
   static String azkar(AzkarParams params) =>
       '/azkar/categories?page=${params.page}&limit=${params.limit}';
   static String azkarDetails(AzkarDetailsParams params) =>
@@ -265,7 +265,8 @@ class EndPoints {
       '/health/cities/$governorateId';
   static const getGovernorates = '/health/governorate';
   static const createDoctor = '/health/doctor';
-  static String doctorSearch = '/health/doctor-search${loggedUserId.isNotEmpty?"?userId=$loggedUserId":""}';
+  static String doctorSearch =
+      '/health/doctor-search${loggedUserId.isNotEmpty ? "?userId=$loggedUserId" : ""}';
   static const bookEmergency = '/health/book-emergency';
 
   static String bookRegularAppointment(String appointmentId) =>
@@ -279,22 +280,23 @@ class EndPoints {
 
   static String getDoctorReviewsForUsers(String doctorId) =>
       '/health/doctor/rate/$doctorId';
-  static const String getDoctorReviews =
-      '/health/doctor/rate';
+  static const String getDoctorReviews = '/health/doctor/rate';
   static String getDoctorDetailsId(GetDoctorDetailsIdParams params) =>
-      '/health/doctor-details/${params.doctorId}${loggedUserId.isNotEmpty?"?userId=$loggedUserId":""}';
+      '/health/doctor-details/${params.doctorId}${loggedUserId.isNotEmpty ? "?userId=$loggedUserId" : ""}';
 
   static String getDoctorDetails(String doctorId) =>
       '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
 
   static String toggleFavoriteCategory(String subCategoryId) =>
       '/favorite-category/$subCategoryId';
-  static getHealthSubcategories(String userId) => '/health/subCategories-health-with-ads${userId.isNotEmpty?"?userId=$userId":""}';
-  static  getMedicalServices(String userId) =>
-      '/health/subCategories-medicalServices-with-ads${userId.isNotEmpty?"?userId=$userId":""}';
+  static getHealthSubcategories(String userId) =>
+      '/health/subCategories-health-with-ads${userId.isNotEmpty ? "?userId=$userId" : ""}';
+  static getMedicalServices(String userId) =>
+      '/health/subCategories-medicalServices-with-ads${userId.isNotEmpty ? "?userId=$userId" : ""}';
   static const getFavoriteCategory = '/favorite-category';
   static const getDoctorInfo = '/health/dashboard/doctor-infos';
-  static String getUpcomingUserAppointments(String userId ) => '/health/book-appointment${userId.isNotEmpty?"?userId=$userId":""}';
+  static String getUpcomingUserAppointments(String userId) =>
+      '/health/book-appointment${userId.isNotEmpty ? "?userId=$userId" : ""}';
   static const String getHealthRequestsHistory =
       '/health/history-patient-booking';
   static const remainingDaysOfDoctorPracticing =
@@ -358,7 +360,8 @@ class EndPoints {
   static const getAllTripBySubCategory =
       '$developmentBaseUrl/loading/trip/driver/subcategory';
   static const carPlate = '/loading/driver/info/car-plate';
-  static getRestaurantOrders(PaginationParams params) => '/food/get-restaurant-orders?page=${params.page}&limit=${params.limit}';
+  static getRestaurantOrders(PaginationParams params) =>
+      '/food/get-restaurant-orders?page=${params.page}&limit=${params.limit}';
   static const makeRatingDriver = '/loading/rating-driver/makeRating';
   static const getDriverData = '$developmentBaseUrl/loading/driver/info';
   static const updateDriver = '$developmentBaseUrl/loading/driver';
@@ -373,7 +376,7 @@ class EndPoints {
   static const getRestaurantInfo = '/restaurants/info-restaurant';
   static const getRestaurantStatistics = '/restaurants/statistics';
   static deleteRestaurant(String id) => '/restaurants/delete-restaurant/$id';
-  static const updateRestaurant= '/restaurants/update-restaurant-info';
+  static const updateRestaurant = '/restaurants/update-restaurant-info';
   static const favoriteCategory = '$developmentBaseUrl/favorite-category';
   static const sendOfferPremium =
       '$developmentBaseUrl/loading/trip/sendOffer-premium';
@@ -395,30 +398,38 @@ class EndPoints {
 
   // reels
   static const getExploreReels = '/reels/explore';
-  static const fetchReelsForFollowers = '/reels/followers?subCategory=66684135dbb427ee42aa0141';
-  static saveReel(String id)=> '/reels/saved/$id';
-  static shareReel(String id)=> '/reels/share/$id';
-  static likeReel(String id)=> '/reels/likes/$id';
-  static getComments(String id)=> '/reels/comments/$id';
-  static getReelsWithSameAudio(ReelsWithSameAudioParams params)=> '/reels/audio/${params.audioId}';
-  static toggleCommentLike(String id)=> '/reels/comments/like/$id';
-  static makeViews(String id)=> '/stories/view/$id';
-  static getGifts(PaginationParams params)=> '/dashboard-gifts?limit=${params.limit}&page=${params.page}';
-  static getTinderUserProfile(String params)=> '/tinder/get-profile/$params?subCategory=66b2683f3a360fbdbf110767';
-  static const getUsers= '/tinder/';
-  static const fetchSubCategoryData= '/tinder/subCategories';
-  static const fetchFavourites= '/favorite-sub-category';
-  static const fetchFavouritesCategory= '/favorite-category';
-  static deleteStory(String id)=> '/stories/$id';
-  static addFavouriteCategories(String id)=> '/favorite-sub-category/$id';
-  static fetchLastSeen(String id)=> '/users/last-seen/$id';
-  static const sendGift= '/tinder/sendGifts?subCategory=6718f27eacb309f8b1f94d0c';
-  static const fetchGifts= '/dashboard-gifts?limit=10';
-  static const tinderUploadPicture= '/tinder/uploadPictures?subCategory=66af974f8bf69f9469944746';
-  static const createStory= '/stories/text';
-  static getStoryViewers(String id)=> '/Stories/view/$id';
-  static getMutedStories(PaginationParams params)=> '/stories/mutedStories?limit=${params.limit}&page=${params.page}';
-  static fetchStories(PaginationParams params)=> '/stories/explore?limit=${params.limit}&page=${params.page}';
+  static const fetchReelsForFollowers =
+      '/reels/followers?subCategory=66684135dbb427ee42aa0141';
+  static saveReel(String id) => '/reels/saved/$id';
+  static shareReel(String id) => '/reels/share/$id';
+  static likeReel(String id) => '/reels/likes/$id';
+  static getComments(String id) => '/reels/comments/$id';
+  static getReelsWithSameAudio(ReelsWithSameAudioParams params) =>
+      '/reels/audio/${params.audioId}';
+  static toggleCommentLike(String id) => '/reels/comments/like/$id';
+  static makeViews(String id) => '/stories/view/$id';
+  static getGifts(PaginationParams params) =>
+      '/dashboard-gifts?limit=${params.limit}&page=${params.page}';
+  static getTinderUserProfile(String params) =>
+      '/tinder/get-profile/$params?subCategory=66b2683f3a360fbdbf110767';
+  static const getUsers = '/tinder/';
+  static const fetchSubCategoryData = '/tinder/subCategories';
+  static const fetchFavourites = '/favorite-sub-category';
+  static const fetchFavouritesCategory = '/favorite-category';
+  static deleteStory(String id) => '/stories/$id';
+  static addFavouriteCategories(String id) => '/favorite-sub-category/$id';
+  static fetchLastSeen(String id) => '/users/last-seen/$id';
+  static const sendGift =
+      '/tinder/sendGifts?subCategory=6718f27eacb309f8b1f94d0c';
+  static const fetchGifts = '/dashboard-gifts?limit=10';
+  static const tinderUploadPicture =
+      '/tinder/uploadPictures?subCategory=66af974f8bf69f9469944746';
+  static const createStory = '/stories/text';
+  static getStoryViewers(String id) => '/Stories/view/$id';
+  static getMutedStories(PaginationParams params) =>
+      '/stories/mutedStories?limit=${params.limit}&page=${params.page}';
+  static fetchStories(PaginationParams params) =>
+      '/stories/explore?limit=${params.limit}&page=${params.page}';
   static const muteUserStories = '/stories/muteUserStory';
   static const updatePrivacy = '/stories/privacy';
   static const getFollowers =
@@ -738,12 +749,14 @@ class EndPoints {
 
   // food
   static String subCategoryRestaurants(GetSubCategoryRestaurants params) {
-    return '/restaurants/subcategory?${params.id!=''?'subCategoryId=${params.id}&':''}page=${params.page}&limit=${params.limit}${params.userId != '' ? "&userId=${params.userId}" : ""}';
+    return '/restaurants/subcategory?${params.id != '' ? 'subCategoryId=${params.id}&' : ''}page=${params.page}&limit=${params.limit}${params.userId != '' ? "&userId=${params.userId}" : ""}';
   }
 
   static String getNumOfResturants = '/restaurants/num-of-restaurants';
-  static String foodExpiredOrders(PaginationParams params) => '/food/expired-orders?page=${params.page}&limit=${params.limit}';
-  static String toggleRestaurantFavourite(String id) => '/food/favorite-restaurant/$id';
+  static String foodExpiredOrders(PaginationParams params) =>
+      '/food/expired-orders?page=${params.page}&limit=${params.limit}';
+  static String toggleRestaurantFavourite(String id) =>
+      '/food/favorite-restaurant/$id';
 
   static String isResturant = '/restaurants/check-user-have-restaurant';
   static String createRestaurant = '/restaurants/create-restaurant';
@@ -1014,6 +1027,8 @@ class EndPoints {
   static String getRequest(String id) =>
       '/ride/come-with-you/trip/requests//$id';
   static String carpoolRoutePrice = '/carpool/price';
+  static String getAcceptedTrips = '/carpool/driver/trip';
+
   static String verifyUserOtp(String tripId) =>
       '/carpool/verifyPassengersOtp/$tripId';
 

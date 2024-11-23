@@ -1,7 +1,7 @@
 class VerifyOtpParam {
   final String otp;
   final String userId;
-  final List<double> driverLocation;
+  List<double> driverLocation;
 
   VerifyOtpParam({
     required this.otp,

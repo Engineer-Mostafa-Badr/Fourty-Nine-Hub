@@ -25,3 +25,17 @@ final class CompleteSeatFailure extends VerifyCompleteDriverState {
 }
 
 final class CompleteSeatSuccess extends VerifyCompleteDriverState {}
+
+final class GetAcceptedTripFailure extends VerifyCompleteDriverState {
+  final String errorMessage;
+
+  GetAcceptedTripFailure({required this.errorMessage});
+}
+
+final class GetAcceptedTripLoading extends VerifyCompleteDriverState {}
+
+final class GetAcceptedTripSuccess extends VerifyCompleteDriverState {
+  final CarpoolTripParam carpoolTripParam;
+
+  GetAcceptedTripSuccess({required this.carpoolTripParam});
+}

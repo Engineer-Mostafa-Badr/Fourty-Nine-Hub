@@ -1046,7 +1046,6 @@ class CodegenLoader extends AssetLoader{
   "removeVideo": "هل أنت متأكد أنك تريد إزالة هذا الفيديو؟",
   "enterImageOrVideo": "الرجاء إدخال الصور أو الفيديو",
   "noResultsFound": "لم يتم العثور على نتائج.",
-  "mutualFriend": "صديق مشترك",
   "serveClientsByClickRegister": "اخدم عملاءك بالنقر على زر التسجيل.",
   "totalOrder": "إجمالي الطلبات",
   "totalRevenue": "إجمالي الإيرادات",
@@ -1071,8 +1070,25 @@ class CodegenLoader extends AssetLoader{
   "reviews": "مراجعة",
   "addToCart": "إضافة الي السلة",
   "showAllOrders": "عرض كل الطلبات",
+  "viewRoute": "عرض المسار",
+  "rating": "تقييم",
+  "rateDoctor": "تقييم الطبيب",
   "restaurantOrders": "طلبات المطعم",
-  "viewRoute": "عرض المسار"
+  "mutualFriend": "صديق مشترك",
+  "clearForEveryone": "مسح لدي الجميع",
+  "clearForMe": "مسح لدي",
+  "clearThisChat": "مسح هذه الدردشة؟",
+  "opened": "تمت مشاهدته",
+  "forwardMessage": "تحويل الرسائل",
+  "forwarded": "تمت اعادة توجيهه",
+  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة",
+  "enterUserOtp": "ادخل الرمز الخاص بالراكب",
+  "invalidOtp": "هذا الرمز غير صحيح",
+  "otpVerifiedSuccessfully": "تم التحقق من الرمز بنجاج",
+  "ifUserReachedClick": "إذا وصل الراكب إلى وجهته، اضغط على الزر",
+  "reached": "وصل",
+  "running": "جارية",
+  "failedTryAgain": "فشل. من فضلك حاول مجددا"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2148,8 +2164,24 @@ static const Map<String,dynamic> en = {
   "reviews": "Reviews",
   "addToCart": "Add To Cart",
   "showAllOrders": "Show All Orders",
+  "rating": "Rating",
+  "rateDoctor": "Rate Doctor",
   "restaurantOrders": "Restaurant Orders",
-  "viewRoute": "View Route"
+  "clearForEveryone": "Clear for Everyone",
+  "clearForMe": "Clear for Me",
+  "clearThisChat": "Clear this Chat?",
+  "opened": "Opened",
+  "forwardMessage": "Forward Message",
+  "forwarded": "Forwarded",
+  "continueUsingChatServices": " , To continue using chat services",
+  "viewRoute": "View Route",
+  "enterUserOtp": "Enter user OTP",
+  "invalidOtp": "Invalid OTP",
+  "otpVerifiedSuccessfully": "Otp verified successfully",
+  "ifUserReachedClick": "If the passenger has reached their destination, press the button",
+  "reached": "Reached",
+  "running": "Running",
+  "failedTryAgain": "Failed. please try again"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

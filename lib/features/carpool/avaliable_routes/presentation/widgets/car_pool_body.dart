@@ -5,18 +5,18 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/get_all_trips_entity.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/verify_complet_driver/cubit/verify_complete_driver_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/accept_trip/cubit/accept_trip_for_driver_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_state.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_available_trips_for_drivers/cubit/get_available_trips_for_drivers_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/accepted_card_for_driver.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/available_routed_builder.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/car_pool_floating_action_button.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/get_current_location_driver.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/test_card_dashboard.dart';
-import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -49,8 +49,8 @@ class _CarPoolBodyState extends State<CarPoolBody>
     BlocProvider.of<GetCurrencyCubit>(context).getCurrencyData();
     BlocProvider.of<GetAllTripsCubit>(context).fetchAllCarpoolTrips();
     BlocProvider.of<GetAvailableTripsForDriversCubit>(context)
-        .fetchAllCarpoolTrips();
-
+        .fetchAllCarpoolTripsForDriver();
+    BlocProvider.of<VerifyCompleteDriverCubit>(context).getAcceptedTrips();
     super.initState();
   }
 
@@ -60,7 +60,7 @@ class _CarPoolBodyState extends State<CarPoolBody>
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 15.h),
       child: DefaultTabController(
-        length: 5,
+        length: 4,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -124,18 +124,30 @@ class _CarPoolBodyState extends State<CarPoolBody>
                     ),
                   ),
                 ),
-                Tab(
-                  child: Container(
-                    height: 80.h,
-                    alignment: Alignment.center,
-                    child: Text(
-                      "DashBoard",
-                      textAlign: TextAlign.center,
-                      softWrap: true, // Allow text wrapping
-                      style: TextStyle(fontSize: 22.sp), // Adjust font size
-                    ),
-                  ),
-                ),
+                // Tab(
+                //   child: Container(
+                //     height: 80.h,
+                //     alignment: Alignment.center,
+                //     child: Text(
+                //       "Dash",
+                //       textAlign: TextAlign.center,
+                //       softWrap: true, // Allow text wrapping
+                //       style: TextStyle(fontSize: 22.sp), // Adjust font size
+                //     ),
+                //   ),
+                // ),
+                // Tab(
+                //   child: Container(
+                //     height: 80.h,
+                //     alignment: Alignment.center,
+                //     child: Text(
+                //       "Accepted",
+                //       textAlign: TextAlign.center,
+                //       softWrap: true, // Allow text wrapping
+                //       style: TextStyle(fontSize: 22.sp), // Adjust font size
+                //     ),
+                //   ),
+                // ),
               ],
             ),
             // Expanded to fit the available height
@@ -147,57 +159,148 @@ class _CarPoolBodyState extends State<CarPoolBody>
                   _buildTabContent(context, "myBookings"),
                   _buildTabContent(context, "running"),
                   _buildTabContent(context, "expired"),
-                  BlocBuilder<GetAvailableTripsForDriversCubit,
-                      GetAvailableTripsForDriversState>(
-                    builder: (context, state) {
-                      if (state is GetAvailableTripsForDriversLoading) {
-                        return const Center(
-                            child: CircularProgressIndicator(
-                          color: AppColors.PRIMARY_COLOR,
-                        ));
-                      } else if (state is GetAvailableTripsForDriversSuccess) {
-                        return ListView.builder(
-                          itemCount: state.trips.length,
-                          itemBuilder: (context, index) {
-                            final trip = state.trips[index];
-                            return BlocProvider(
-                              create: (context) =>
-                                  AcceptTripForDriverCubit(serviceLocator()),
-                              child: TestCardDashboard(entity: trip),
-                            );
-                          },
-                        );
-                      } else if (state is GetAvailableTripsForDriversFailure) {
-                        // Show an error message and retry option on failure
-                        return Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('Error loading trips. Please try again.'),
-                              SizedBox(height: 16),
-                              ElevatedButton(
-                                style: const ButtonStyle(
-                                    backgroundColor: WidgetStatePropertyAll(
-                                        AppColors.PRIMARY_COLOR)),
-                                onPressed: () {
-                                  context
-                                      .read<GetAvailableTripsForDriversCubit>()
-                                      .fetchAllCarpoolTrips();
-                                },
-                                child: const Text(
-                                  'Retry',
-                                  style: TextStyle(
-                                      color: AppColors.AUTH_CONTAINER_COLOR),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                      // Initial or unexpected state
-                      return const Center(child: Text('No data available.'));
-                    },
-                  ),
+                  // BlocProvider(
+                  //   create: (context) =>
+                  //       GetAvailableTripsForDriversCubit(serviceLocator())
+                  //         ..fetchAllCarpoolTripsForDriver(),
+                  //   child: BlocBuilder<GetAvailableTripsForDriversCubit,
+                  //       GetAvailableTripsForDriversState>(
+                  //     builder: (context, state) {
+                  //       if (state is GetAvailableTripsForDriversLoading) {
+                  //         return const Center(
+                  //             child: CircularProgressIndicator(
+                  //           color: AppColors.PRIMARY_COLOR,
+                  //         ));
+                  //       } else if (state
+                  //           is GetAvailableTripsForDriversSuccess) {
+                  //         return ListView.builder(
+                  //           itemCount: state.trips.length,
+                  //           itemBuilder: (context, index) {
+                  //             final trip = state.trips[index];
+                  //             return BlocProvider(
+                  //               create: (context) =>
+                  //                   AcceptTripForDriverCubit(serviceLocator()),
+                  //               child: BlocListener<AcceptTripForDriverCubit,
+                  //                   AcceptTripForDriverState>(
+                  //                 listener: (context, state) {
+                  //                   if (state is AcceptTripForDriverSuccess) {
+                  //                     BlocProvider.of<
+                  //                                 GetAvailableTripsForDriversCubit>(
+                  //                             context)
+                  //                         .fetchAllCarpoolTripsForDriver();
+                  //                     showSuccessMessage(
+                  //                         context,
+                  //                         LocaleKeys
+                  //                             .theRequestHasBeenSuccessfullyApproved
+                  //                             .localize);
+                  //                   } else if (state
+                  //                       is AcceptTripForDriverFailure) {
+                  //                     showErrorMessage(
+                  //                         context,
+                  //                         LocaleKeys
+                  //                             .theRequestWasSuccessfullyRejected
+                  //                             .localize);
+                  //                   }
+                  //                 },
+                  //                 child: TestCardDashboard(entity: trip),
+                  //               ),
+                  //             );
+                  //           },
+                  //         );
+                  //       } else if (state
+                  //           is GetAvailableTripsForDriversFailure) {
+                  //         // Show an error message and retry option on failure
+                  //         return Center(
+                  //           child: Column(
+                  //             mainAxisAlignment: MainAxisAlignment.center,
+                  //             children: [
+                  //               Text('Error loading trips. Please try again.'),
+                  //               SizedBox(height: 16),
+                  //               ElevatedButton(
+                  //                 style: const ButtonStyle(
+                  //                     backgroundColor: WidgetStatePropertyAll(
+                  //                         AppColors.PRIMARY_COLOR)),
+                  //                 onPressed: () {
+                  //                   context
+                  //                       .read<
+                  //                           GetAvailableTripsForDriversCubit>()
+                  //                       .fetchAllCarpoolTripsForDriver();
+                  //                 },
+                  //                 child: const Text(
+                  //                   'Retry',
+                  //                   style: TextStyle(
+                  //                       color: AppColors.AUTH_CONTAINER_COLOR),
+                  //                 ),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         );
+                  //       }
+                  //       return const Center(child: Text('No data available.'));
+                  //     },
+                  //   ),
+                  // ),
+                  // BlocProvider(
+                  //     create: (context) => VerifyCompleteDriverCubit(
+                  //         verifyOtpCompleteSeatDriverRemoteDataSource:
+                  //             serviceLocator())
+                  //       ..getAcceptedTrips(),
+                  //     child: BlocBuilder<VerifyCompleteDriverCubit,
+                  //         VerifyCompleteDriverState>(
+                  //       builder: (context, state) {
+                  //         if (state is GetAcceptedTripLoading) {
+                  //           return const Center(
+                  //               child: CircularProgressIndicator(
+                  //                   color: AppColors.PRIMARY_COLOR));
+                  //         } else if (state is GetAcceptedTripSuccess) {
+                  //           final tripParam = state.carpoolTripParam;
+
+                  //           // Use ListView or Column to dynamically update the UI
+                  //           return ListView.builder(
+                  //             itemCount: 1,
+                  //             itemBuilder: (context, index) {
+                  //               final trip = tripParam;
+                  //               return BlocProvider.value(
+                  //                 value:
+                  //                     context.read<VerifyCompleteDriverCubit>(),
+                  //                 child: AcceptedCardForDriver(entity: trip),
+                  //               );
+                  //             },
+                  //           );
+                  //         } else if (state is GetAcceptedTripFailure) {
+                  //           return Center(
+                  //             child: Column(
+                  //               mainAxisAlignment: MainAxisAlignment.center,
+                  //               children: [
+                  //                 const Text(
+                  //                     'No Accepted trips. Please try again.'),
+                  //                 const SizedBox(height: 16),
+                  //                 ElevatedButton(
+                  //                   style: ButtonStyle(
+                  //                     backgroundColor:
+                  //                         MaterialStateProperty.all(
+                  //                             AppColors.PRIMARY_COLOR),
+                  //                   ),
+                  //                   onPressed: () {
+                  //                     context
+                  //                         .read<VerifyCompleteDriverCubit>()
+                  //                         .getAcceptedTrips();
+                  //                   },
+                  //                   child: const Text(
+                  //                     'Retry',
+                  //                     style: TextStyle(
+                  //                         color:
+                  //                             AppColors.AUTH_CONTAINER_COLOR),
+                  //                   ),
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //           );
+                  //         }
+                  //         return const Center(
+                  //             child: Text('No accepted trips available.'));
+                  //       },
+                  //     ))
                 ],
               ),
             ),
@@ -228,5 +331,5 @@ class _CarPoolBodyState extends State<CarPoolBody>
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 }

@@ -1066,5 +1066,13 @@
   "opened": "تمت مشاهدته",
   "forwardMessage": "تحويل الرسائل",
   "forwarded": "تمت اعادة توجيهه",
-  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة"
+  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة",
+  "enterUserOtp":"ادخل الرمز الخاص بالراكب",
+  "invalidOtp":"هذا الرمز غير صحيح",
+  "otpVerifiedSuccessfully":"تم التحقق من الرمز بنجاج",
+  "ifUserReachedClick":"إذا وصل الراكب إلى وجهته، اضغط على الزر",
+  "reached":"وصل",
+  "running":"جارية",
+
+  "failedTryAgain":"فشل. من فضلك حاول مجددا"
 }

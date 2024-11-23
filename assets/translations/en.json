@@ -1083,6 +1083,13 @@
   "opened": "Opened",
   "forwardMessage": "Forward Message",
   "forwarded": "Forwarded",
-  "continueUsingChatServices": " , To continue using chat services"
-  "viewRoute":"View Route"
+  "continueUsingChatServices": " , To continue using chat services",
+  "viewRoute":"View Route",
+  "enterUserOtp":"Enter user OTP",
+  "invalidOtp":"Invalid OTP",
+  "otpVerifiedSuccessfully":"Otp verified successfully",
+  "ifUserReachedClick":"If the passenger has reached their destination, press the button",
+  "reached":"Reached",
+  "running":"Running",
+  "failedTryAgain":"Failed. please try again"
 }
