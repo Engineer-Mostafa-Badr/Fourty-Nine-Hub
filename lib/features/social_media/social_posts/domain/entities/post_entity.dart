@@ -15,6 +15,12 @@ class PostEntity {
   final String type;
   final List<String>? images;
   final List<TwitterUserModel>? users;
+  final List<TwitterUserModel>? likedUsers;
+  final List<TwitterUserModel>? sadUsers;
+  final List<TwitterUserModel>? wowUsers;
+  final List<TwitterUserModel>? hahaUsers;
+  final List<TwitterUserModel>? angryUsers;
+  final List<TwitterUserModel>? loveUsers;
   final bool isShared;
   bool isDocumentation;
   bool isLove;
@@ -44,7 +50,7 @@ class PostEntity {
 
   // Twitter-specific
   List<String>? shares;
-  List<TwitterUserModel>? love;
+  List<String>? love;
   MainPostEntity? mainPost;
   List<dynamic>? comments;
   InstagramPostEntity? firstComment;
@@ -109,60 +115,66 @@ class PostEntity {
     this.createAt,
     this.isApproved = false,
     required this.photo,
+    required this.angryUsers,
+    required this.hahaUsers,
+    required this.likedUsers,
+    required this.loveUsers,
+    required this.sadUsers,
+    required this.wowUsers,
   });
 }
 
 
-enum Reactions { like, haha, love, wow, sad, angry }
+enum Reaction { like, haha, love, wow, sad, angry }
 
-extension ReactionX on Reactions {
+extension ReactionX on Reaction {
   String value() {
     switch (this) {
-      case Reactions.like:
+      case Reaction.like:
         return 'like';
-      case Reactions.haha:
+      case Reaction.haha:
         return 'haha';
-      case Reactions.love:
+      case Reaction.love:
         return 'love';
-      case Reactions.wow:
+      case Reaction.wow:
         return 'wow';
-      case Reactions.sad:
+      case Reaction.sad:
         return 'sad';
-      case Reactions.angry:
+      case Reaction.angry:
         return 'angry';
     }
   }
 
   String label() {
     switch (this) {
-      case Reactions.like:
+      case Reaction.like:
         return 'Like';
-      case Reactions.haha:
+      case Reaction.haha:
         return 'Haha';
-      case Reactions.love:
+      case Reaction.love:
         return 'Love';
-      case Reactions.wow:
+      case Reaction.wow:
         return 'Wow';
-      case Reactions.sad:
+      case Reaction.sad:
         return 'Sad';
-      case Reactions.angry:
+      case Reaction.angry:
         return 'Angry';
     }
   }
 
   String image() {
     switch (this) {
-      case Reactions.like:
+      case Reaction.like:
         return Assets.like;
-      case Reactions.haha:
+      case Reaction.haha:
         return Assets.hand;
-      case Reactions.love:
+      case Reaction.love:
         return Assets.heart;
-      case Reactions.wow:
+      case Reaction.wow:
         return Assets.wow;
-      case Reactions.sad:
+      case Reaction.sad:
         return Assets.sad;
-      case Reactions.angry:
+      case Reaction.angry:
         return Assets.angry;
     }
   }

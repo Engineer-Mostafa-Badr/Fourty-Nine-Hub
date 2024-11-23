@@ -52,7 +52,14 @@ class PostModel extends PostEntity {
             super.name,
             super.videoMedia,
             super.audioMedia,
-            required super.photo});
+            required super.photo,
+                required super.angryUsers,
+                required super.hahaUsers,
+                required super.likedUsers,
+                required super.loveUsers,
+                required super.sadUsers,
+                required super.wowUsers,
+        });
     factory PostModel.fromJson(Map<String, dynamic> json) {
         return PostModel(
             id: json['_id'],
@@ -125,14 +132,45 @@ class PostModel extends PostEntity {
             firstComment: json['firstComment'] != null
                 ? InstagramPostModel.fromJson(json['firstComment'])
                 : null,
-            love: json['love'] == null
-                ? null
-                : (json['love'] as List)
-                .map((e) => TwitterUserModel.fromJson(e))
-                .toList(),
+            love: json['love'] != null ? List<String>.from(json['love']) : [],
+            // love: json['love'] == null
+            //     ? null
+            //     : (json['love'] as List)
+            //     .map((e) => TwitterUserModel.fromJson(e))
+            //     .toList(),
             users: json['with'] == null
                 ? null
                 : (json['with'] as List)
+                .map((e) => TwitterUserModel.fromJson(e))
+                .toList(),
+            likedUsers: json['likedUsers'] == null
+                ? null
+                : (json['likedUsers'] as List)
+                .map((e) => TwitterUserModel.fromJson(e))
+                .toList(),
+            sadUsers: json['sadUsers'] == null
+                ? null
+                : (json['sadUsers'] as List)
+                .map((e) => TwitterUserModel.fromJson(e))
+                .toList(),
+            wowUsers: json['wowUsers'] == null
+                ? null
+                : (json['wowUsers'] as List)
+                .map((e) => TwitterUserModel.fromJson(e))
+                .toList(),
+            hahaUsers: json['hahaUsers'] == null
+                ? null
+                : (json['hahaUsers'] as List)
+                .map((e) => TwitterUserModel.fromJson(e))
+                .toList(),
+            angryUsers: json['angryUsers'] == null
+                ? null
+                : (json['angryUsers'] as List)
+                .map((e) => TwitterUserModel.fromJson(e))
+                .toList(),
+            loveUsers: json['loveUsers'] == null
+                ? null
+                : (json['loveUsers'] as List)
                 .map((e) => TwitterUserModel.fromJson(e))
                 .toList(),
             photo: json['photo'] ?? '',

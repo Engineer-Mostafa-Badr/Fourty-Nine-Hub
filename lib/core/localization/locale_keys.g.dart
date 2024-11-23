@@ -1076,5 +1076,6 @@ abstract class  LocaleKeys {
   static const October = 'October';
   static const November = 'November';
   static const December = 'December';
+  static const nameRequired = 'nameRequired';
 
 }

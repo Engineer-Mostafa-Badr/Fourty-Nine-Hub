@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
@@ -65,7 +66,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                           Icon(Icons.group_rounded,size: 40.sp,),
                           const Sizer(),
                           Label(
-                            text: LocaleKeys.peopleMayKnow.tr(),
+                            text:context.locale == Locales.english? 'People you may know':'أشخاص قد تعرفهم',
                             style: Styles.mediumText(fontSize: 60.sp),
                           ),
                         ],

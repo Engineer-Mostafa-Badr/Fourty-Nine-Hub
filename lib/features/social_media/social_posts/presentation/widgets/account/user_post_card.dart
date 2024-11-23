@@ -488,17 +488,20 @@ class _UserPostCardState extends State<UserPostCard> {
               ),
               if (post.user.id != user?.id &&
                   context.read<UserCubit>().isLoggedIn)
-                IconAppButton(
-                  onPressed: () {
-                    bottomSheet(
-                        context: context,
-                        widget: ReportView(
-                          id: widget.post.id,
-                          categoryId: '66a3583454e6e337915514db',
-                        ));
-                  },
-                  icon: Icons.report,
-                  color: AppColors.SECONDARY_COLOR,
+                Padding(
+                  padding:  EdgeInsets.all(16.w),
+                  child: IconAppButton(
+                    onPressed: () {
+                      bottomSheet(
+                          context: context,
+                          widget: ReportView(
+                            id: widget.post.id,
+                            categoryId: '66a3583454e6e337915514db',
+                          ));
+                    },
+                    icon: Icons.report,
+                    color: AppColors.SECONDARY_COLOR,
+                  ),
                 ),
               const Sizer(),
               if (post.user.id == user?.id)...[

@@ -478,7 +478,7 @@
   "noReels": "No Reels",
   "noTweets": "No Tweets",
   "documentation": "Documentation",
-  "userName": "User Name",
+  "userName": "Username",
   "typeYourName": "Type Your Name",
   "personalPhoto": "Personal Photo",
   "id": "ID",
@@ -1105,5 +1105,6 @@
   "September": "September",
   "October": "October",
   "November": "November",
-  "December": "December"
+  "December": "December",
+  "nameRequired":"Name is required"
 }

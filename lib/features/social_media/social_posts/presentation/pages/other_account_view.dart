@@ -488,7 +488,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 350.h,
+            height: 380.h,
             child: Stack(
               children: [
                 Positioned.fill(
@@ -644,7 +644,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                                   color: Colors.white),
                                             )))
                                     : SizedBox(
-                                        width: 180.w,
+                                        width: user.sentFriendRequest ==
+                                            true
+                                            ?  230.w:180.w,
                                         child: AppButton(
                                             // height: 80.h,
                                             padding: 5,

@@ -1101,7 +1101,8 @@ class CodegenLoader extends AssetLoader{
   "September": "سبتمبر",
   "October": "أكتوبر",
   "November": "نوفمبر",
-  "December": "ديسمبر"
+  "December": "ديسمبر",
+  "nameRequired": "الاسم مطلوب"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1583,7 +1584,7 @@ static const Map<String,dynamic> en = {
   "noReels": "No Reels",
   "noTweets": "No Tweets",
   "documentation": "Documentation",
-  "userName": "User Name",
+  "userName": "Username",
   "typeYourName": "Type Your Name",
   "personalPhoto": "Personal Photo",
   "id": "ID",
@@ -2207,7 +2208,8 @@ static const Map<String,dynamic> en = {
   "September": "September",
   "October": "October",
   "November": "November",
-  "December": "December"
+  "December": "December",
+  "nameRequired": "Name is required"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
