@@ -7,12 +7,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter/return_code.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:video_thumbnail/video_thumbnail.dart' as thumb;
 
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../res/style/app_colors.dart';
@@ -165,11 +167,28 @@ class MyVoiceVideoRecordingScreenState
     _notifyTimer?.cancel();
   }
 
+  String? _thumbnailPath;
+
+  Future<void> _generateThumbnail(String videoThumbnail) async {
+    final directory = await getTemporaryDirectory();
+    final thumbnail = await thumb.VideoThumbnail.thumbnailFile(
+      video: videoThumbnail,
+      // Replace with your video URL or file path
+      thumbnailPath: directory.path,
+      imageFormat: thumb.ImageFormat.JPEG,
+      maxWidth: 128,
+      quality: 75,
+    );
+
+    setState(() {
+      _thumbnailPath = thumbnail;
+    });
+  }
+
   Future<bool?> _mergeVideoWithFilter() async {
     final directory = await getTemporaryDirectory();
     filteredVideoPath =
         '${directory.path}/filtered_${DateTime.now().millisecondsSinceEpoch}.mp4';
-
     // Construct the FFmpeg command with the selected filter and horizontal flip
     final filterCommand = _selectedFilter?.ffmpegFilter != null
         ? '${_selectedFilter!.ffmpegFilter},hflip' // Add hflip to the existing filter
@@ -218,8 +237,12 @@ class MyVoiceVideoRecordingScreenState
     return false;
   }
 
+
+
   Future uploadReel() async {
-    await serviceLocator<ReelsCubit>().uploadReel(File(filteredVideoPath!),
+    await _generateThumbnail(filteredVideoPath!);
+    await context.read<ReelsCubit>().uploadReel(
+        File(filteredVideoPath!), _thumbnailPath!,
         advertisementType: widget.advertisementType,
         comeFrom: widget.comeFrom,
         totalPrice: widget.totalPrice);
@@ -240,14 +263,12 @@ class MyVoiceVideoRecordingScreenState
           padding: const EdgeInsets.all(16.0),
           child: Text(
             LocaleKeys.error_dialog_title.tr(),
-            textScaleFactor: 1.0,
           ),
         ),
         content: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
             message,
-            textScaleFactor: 1.0,
           ),
         ),
         actions: [
@@ -255,7 +276,6 @@ class MyVoiceVideoRecordingScreenState
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
               LocaleKeys.error_dialog_ok_button.tr(),
-              textScaleFactor: 1.0,
               style: const TextStyle(color: AppColors.SECONDARY_COLOR),
             ),
           ),
@@ -299,7 +319,6 @@ class MyVoiceVideoRecordingScreenState
                           context.isArabic
                               ? filters[index].arName
                               : filters[index].enName,
-                          textScaleFactor: 1.0,
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           style: TextStyle(
@@ -376,7 +395,6 @@ class MyVoiceVideoRecordingScreenState
                                       LocaleKeys
                                           .reel_upload_success_upload_success
                                           .tr(),
-                                      textScaleFactor: 1.0,
                                       style: TextStyle(
                                           fontSize: 40.sp,
                                           fontWeight: FontWeight.normal),
@@ -387,8 +405,8 @@ class MyVoiceVideoRecordingScreenState
                                 actions: <Widget>[
                                   TextButton(
                                     child: Text(
-                                        LocaleKeys.error_dialog_ok_button.tr(),
-                                        textScaleFactor: 1.0),
+                                      LocaleKeys.error_dialog_ok_button.tr(),
+                                    ),
                                     onPressed: () {
                                       Navigator.of(context)
                                           .pop(); // Close the dialog
@@ -420,7 +438,6 @@ class MyVoiceVideoRecordingScreenState
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   LocaleKeys.error_dialog_upload_fail.tr(),
-                                  textScaleFactor: 1.0,
                                   style: TextStyle(
                                       fontSize: 40.sp,
                                       fontWeight: FontWeight.normal),
@@ -430,8 +447,8 @@ class MyVoiceVideoRecordingScreenState
                               actions: <Widget>[
                                 TextButton(
                                   child: Text(
-                                      LocaleKeys.error_dialog_ok_button.tr(),
-                                      textScaleFactor: 1.0),
+                                    LocaleKeys.error_dialog_ok_button.tr(),
+                                  ),
                                   onPressed: () {
                                     Navigator.of(context)
                                         .pop(); // Close the dialog
@@ -493,7 +510,6 @@ class MyVoiceVideoRecordingScreenState
             LocaleKeys.timer_recording_stops_in.tr() +
                 _secondsRemaining.toString() +
                 LocaleKeys.timer_seconds.tr(),
-            textScaleFactor: 1.0,
             style: TextStyle(color: Colors.white, fontSize: 30.sp),
           ),
         ),
@@ -531,7 +547,7 @@ class MyVoiceVideoRecordingScreenState
                     children: [
                       Container(
                         padding: const EdgeInsets.all(0),
-                        margin: const EdgeInsets.only(bottom:0),
+                        margin: const EdgeInsets.only(bottom: 0),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.transparent,

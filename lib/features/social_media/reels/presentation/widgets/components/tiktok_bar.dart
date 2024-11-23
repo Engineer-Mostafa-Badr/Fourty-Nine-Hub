@@ -59,6 +59,8 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                           .state
                           .controllers[context.read<PreloadBloc>().state.focusedIndex]
                           ?.pause();
+                      context.read<PreloadBloc>().resetFocusedIndex();
+
                     }
                     Navigator.pop(context);
                   },
