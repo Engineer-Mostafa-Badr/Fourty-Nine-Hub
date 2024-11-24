@@ -50,7 +50,6 @@ class PostEntity {
 
   // Twitter-specific
   List<String>? shares;
-  List<String>? love;
   MainPostEntity? mainPost;
   List<dynamic>? comments;
   InstagramPostEntity? firstComment;
@@ -102,7 +101,6 @@ class PostEntity {
     this.activity,
     this.backgroundColor,
     this.shares,
-    this.love,
     this.mainPost,
     this.comments,
     this.isReact = false,

@@ -1110,7 +1110,10 @@ class CodegenLoader extends AssetLoader{
   "referralClipboard": "تم نسخ معرف الإحالة إلى الحافظة!",
   "recommendUs": "أوصي بن",
   "shareFodeFriends": "شارك الكود مع أصدقائك واحصل على 50 جنيه مصري لكل واحد",
-  "referralSuccessful": "تمت الإحالة بنجاح! تم تحديث الإحصائيات."
+  "referralSuccessful": "تمت الإحالة بنجاح! تم تحديث الإحصائيات.",
+  "Spotlight": "اضواء كاشفه",
+  "Snap": "لقطه",
+  "Reels": "بكر"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2225,7 +2228,10 @@ static const Map<String,dynamic> en = {
   "referralClipboard": "Referral ID copied to clipboard!",
   "recommendUs": "Recommend Us",
   "shareFodeFriends": "Share code with your friends and get 50 EGP for every one",
-  "referralSuccessful": "Referral was successful! Statistics updated."
+  "referralSuccessful": "Referral was successful! Statistics updated.",
+  "Spotlight": "Spotlight",
+  "Snap": "Snap",
+  "Reels": "Reels"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

@@ -1085,5 +1085,8 @@ abstract class  LocaleKeys {
   static const recommendUs = 'recommendUs';
   static const shareFodeFriends = 'shareFodeFriends';
   static const referralSuccessful = 'referralSuccessful';
+  static const Spotlight = 'Spotlight';
+  static const Snap = 'Snap';
+  static const Reels = 'Reels';
 
 }

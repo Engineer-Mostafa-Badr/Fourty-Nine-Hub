@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -11,7 +10,6 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
@@ -185,32 +183,32 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     children: [
                       if (myPost.likesCount != 0)
                         _buildCounterWidget(
-                            value: myPost.likesCount!,
+                            value: myPost.likesCount,
                             image: Assets.like,
                             ),
                       if (myPost.hahaCount != 0)
                         _buildCounterWidget(
-                            value: myPost.hahaCount!,
+                            value: myPost.hahaCount,
                             image: Assets.haha,
                             ),
                       if (myPost.loveCount != 0)
                         _buildCounterWidget(
-                            value: myPost.loveCount!,
+                            value: myPost.loveCount,
                             image: Assets.heart,
                             ),
                       if (myPost.wowCount != 0)
                         _buildCounterWidget(
-                            value: myPost.wowCount!,
+                            value: myPost.wowCount,
                             image: Assets.wow,
                             ),
                       if (myPost.sadCount != 0)
                         _buildCounterWidget(
-                            value: myPost.sadCount!,
+                            value: myPost.sadCount,
                             image: Assets.sad,
                             ),
                       if (myPost.angryCount != 0)
                         _buildCounterWidget(
-                            value: myPost.angryCount!,
+                            value: myPost.angryCount,
                             image: Assets.angry,
                             ),
                       const Spacer(),
@@ -435,32 +433,32 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   children: [
                     if (myPost.likesCount != 0)
                       _buildCounterWidget(
-                          value: myPost.likesCount!,
+                          value: myPost.likesCount,
                           image: Assets.like,
                           ),
                     if (myPost.hahaCount != 0)
                       _buildCounterWidget(
-                          value: myPost.hahaCount!,
+                          value: myPost.hahaCount,
                           image: Assets.haha,
                           ),
                     if (myPost.loveCount != 0)
                       _buildCounterWidget(
-                          value: myPost.loveCount!,
+                          value: myPost.loveCount,
                           image: Assets.heart,
                           ),
                     if (myPost.wowCount != 0)
                       _buildCounterWidget(
-                          value: myPost.wowCount!,
+                          value: myPost.wowCount,
                           image: Assets.wow,
                           ),
                     if (myPost.sadCount != 0)
                       _buildCounterWidget(
-                          value: myPost.sadCount!,
+                          value: myPost.sadCount,
                           image: Assets.sad,
                           ),
                     if (myPost.angryCount != 0)
                       _buildCounterWidget(
-                          value: myPost.angryCount!,
+                          value: myPost.angryCount,
                           image: Assets.angry,
                           ),
                     const Spacer(),
@@ -802,7 +800,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               InkWell(
                 onTap: () {
@@ -813,8 +811,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 child: ImageFromInternet(
                   image: post.user.image ?? '',
                   isCircle: true,
-                  width: 60.w,
-                  height: 60.h,
+                  width: 80.w,
+                  height: 80.h,
                 ),
               ),
               const Sizer(),
@@ -892,14 +890,14 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 },
                 child: Row(
                   children: [
-                    const Icon(
+                     Icon(
                       Icons.location_on,
-                      size: 20,
+                      size: 40.sp,
                     ),
                     Expanded(
                         child: Label(
                       text: post.location?.place ?? '',
-                      style: Styles.mediumText(fontSize: 14),
+                      style: Styles.mediumText(),
                     ))
                   ],
                 ),
@@ -928,8 +926,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               image: post.user.image,
               isCircle: true,
               defaultLogo: false,
-              width: 40,
-              height: 40.h,
+              width: 80.w,
+              height: 80.h,
             ),
           ),
           const Sizer(),
@@ -1232,14 +1230,14 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
             child: BlocBuilder<SocialPostsCubit, SocialPostsState>(
               builder: (BuildContext context, state) {
                 // Reaction mapping with icons and labels
-                final reactionsMap = {
-                  Reaction.like: {'asset': Assets.like, 'label': 'Likes'},
-                  Reaction.love: {'asset': Assets.heart, 'label': 'Hearts'},
-                  Reaction.haha: {'asset': Assets.haha, 'label': 'Hahas'},
-                  Reaction.sad: {'asset': Assets.sad, 'label': 'Sads'},
-                  Reaction.angry: {'asset': Assets.angry, 'label': 'Angries'},
-                  Reaction.wow: {'asset': Assets.wow, 'label': 'Wows'},
-                };
+                // final reactionsMap = {
+                //   Reaction.like: {'asset': Assets.like, 'label': 'Likes'},
+                //   Reaction.love: {'asset': Assets.heart, 'label': 'Hearts'},
+                //   Reaction.haha: {'asset': Assets.haha, 'label': 'Hahas'},
+                //   Reaction.sad: {'asset': Assets.sad, 'label': 'Sads'},
+                //   Reaction.angry: {'asset': Assets.angry, 'label': 'Angries'},
+                //   Reaction.wow: {'asset': Assets.wow, 'label': 'Wows'},
+                // };
 
                 return Column(
                   mainAxisSize: MainAxisSize.min,

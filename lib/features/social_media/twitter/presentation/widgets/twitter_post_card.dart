@@ -30,7 +30,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TwitterPostCard extends StatefulWidget {
   bool isLiked;
   bool? fromProfile;
-  final TwitterMainPostEntity postShare;
+  TwitterMainPostEntity? postShare;
   final TwitterPostEntity post;
   final Function onReact;
   final Function getPost;
@@ -42,6 +42,7 @@ class TwitterPostCard extends StatefulWidget {
   final Function(TwitterPostCommentParams) onEditComment;
   final Function(TwitterReportParams) onReport;
   bool? shareSuccess;
+
   TwitterPostCard({
     super.key,
     this.isLiked = false,
@@ -56,7 +57,8 @@ class TwitterPostCard extends StatefulWidget {
     required this.deletePost,
     required this.hidePost,
     required this.onDeleteComment,
-    required this.onEditComment, required this.postShare,
+    required this.onEditComment,
+    required this.postShare,
   });
 
   @override
@@ -90,7 +92,8 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
           BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
       child: Container(
         padding: EdgeInsets.all(isShared == true ? 10 : 0),
-        decoration:  BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
+        decoration:
+            BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -123,7 +126,8 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                                       ? widget.post.mainPost.id
                                       : widget.post.id,
                                   showPostComments: (id) {},
-                                  onReport: (TwitterReportParams params) {}, post: widget.post,
+                                  onReport: (TwitterReportParams params) {},
+                                  post: widget.post,
                                 ));
                           }
                         : null,
@@ -133,7 +137,8 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                         _buildMainAccountRow(
                             context: context,
                             showOptions: false,
-                            post: widget.postShare,
+                            post: widget.post,
+                            // postMain: widget.postShare!,
                             date: widget.post.isShared == true
                                 ? widget.post.mainPost?.sinceTime ?? ''
                                 : widget.post.sinceTime),
@@ -316,8 +321,8 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                         Container(
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            // borderRadius: BorderRadius.circular(15),
-                          ),
+                              // borderRadius: BorderRadius.circular(15),
+                              ),
                           child: Center(
                             child: Label(
                               text: "+${myImages!.length - 4}",
@@ -471,7 +476,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
     required BuildContext context,
     bool showOptions = true,
     required String date,
-    required TwitterMainPostEntity post,
+    required TwitterPostEntity post,
   }) {
     final user = context.read<UserCubit>().state.data;
     return Row(
@@ -479,7 +484,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
         Expanded(
           child: Row(
             children: [
-              post.user?.image != ''
+              post.user?.image != '' && post.postShare == null
                   ? UserProfileImage(
                       accountId: 0,
                       imageURL: post.user?.image,
@@ -488,8 +493,9 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                     )
                   : UserProfileImage(
                       accountId: 0,
+                      imageURL: post.postShare!.user?.image,
                       fromProfile: widget.fromProfile,
-                      userId: post.user!.id,
+                      userId: post.postShare!.user!.id,
                     ),
               const Sizer(),
               Expanded(
@@ -497,25 +503,24 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Label(
-                        text: post.isShared == true
+                        text: post.postShare == null
                             ? "${post.user!.firstName} ${post.user!.lastName}"
-                            : "${post.user!.firstName} ${post.user!.lastName}",
+                            : "${post.postShare!.user!.firstName} ${post.postShare!.user!.lastName}",
+                        // text: post.isShared == true
+                        //     ? "${postMain.user!.firstName} ${postMain.user!.lastName}"
+                        //     : "${post.user!.firstName} ${post.user!.lastName}",
                         style: Styles.mediumText(fontWeight: FontWeight.w500)),
                     Label(
                         text:
-                            '@${(post.isShared == true && post != null ? post.user?.email ?? '' : post.user?.email)!.split('@')[0]}',
+                            '@${(post.postShare == null ? post.user?.email ?? '' : post.postShare!.user?.email)!.split('@')[0]}',
                         maxLines: 1,
                         style: Styles.mediumText(color: Colors.grey)),
                   ],
                 ),
               ),
-              Label(
-                  text: date,
-                  maxLines: 1,
-                  style: Styles.mediumText()),
+              Label(text: date, maxLines: 1, style: Styles.mediumText()),
               if (post.user?.isDocumented == true && post.isShared == false ||
-                  (post.user?.isDocumented == true &&
-                      post.isShared == true))
+                  (post.user?.isDocumented == true && post.isShared == true))
                 Icon(
                   Icons.verified,
                   color: Theme.of(context).primaryColor,

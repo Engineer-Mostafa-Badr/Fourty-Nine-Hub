@@ -1,6 +1,5 @@
+import 'package:fourtyninehub/core/utils/time_utils.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
-
-import '../../../../../core/utils/duration_helper.dart';
 import '../../../../../res/assets/assets.dart';
 
 class TwitterMainPostEntity {
@@ -17,10 +16,9 @@ class TwitterMainPostEntity {
   final num sharesCount;
   final num loveCount;
   final DateTime createdAt;
-  Duration get publishedDuration => DateTime.now().difference(createdAt);
+  Duration get publishedDuration => TimeUtils.calculateDuration(createdAt);
 
-  String get sinceTime =>
-      DurationHelper().sinceTime(duration: publishedDuration);
+  String get sinceTime => TimeUtils.getSinceTime(createdAt);
 
   TwitterMainPostEntity(
       {required this.id,

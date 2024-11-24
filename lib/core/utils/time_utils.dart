@@ -14,14 +14,14 @@ class TimeUtils {
     final now = DateTime.now();
     final difference = now.difference(createdAt);
 
-    if (difference.inDays >= 30) {
-      return "${createdAt.day}${_getMonthName(createdAt.month)} ${createdAt.year}";
+    if (difference.inDays >= 10) {
+      return "${createdAt.day} ${_getMonthName(createdAt.month)} ${createdAt.year}";
     } else if (difference.inDays >= 1) {
-      return "${difference.inDays}${LocaleKeys.d.localize}${difference.inDays > 1 ? '' : ''}";
+      return "${difference.inDays} ${LocaleKeys.d.localize}${difference.inDays > 1 ? '' : ''}";
     } else if (difference.inHours >= 1) {
-      return "${difference.inHours}${LocaleKeys.h.localize}";
+      return "${difference.inHours} ${LocaleKeys.h.localize}";
     } else if (difference.inMinutes >= 1) {
-      return "${difference.inMinutes}${LocaleKeys.m.localize}";
+      return "${difference.inMinutes} ${LocaleKeys.m.localize}";
     } else {
       return "just now";
     }
