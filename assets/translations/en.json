@@ -1106,5 +1106,13 @@
   "October": "October",
   "November": "November",
   "December": "December",
-  "nameRequired":"Name is required"
+  "nameRequired":"Name is required",
+  "userShare":"User",
+  "users":"Users",
+  "shareTheApp":"Share The App",
+  "yourReferralID":"Your Referral ID:",
+  "referralClipboard":"Referral ID copied to clipboard!",
+  "recommendUs":"Recommend Us",
+  "shareFodeFriends":"Share code with your friends and get 50 EGP for every one",
+  "referralSuccessful": "Referral was successful! Statistics updated."
 }

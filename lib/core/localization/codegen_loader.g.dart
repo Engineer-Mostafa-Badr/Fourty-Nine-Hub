@@ -1083,7 +1083,7 @@ class CodegenLoader extends AssetLoader{
   "forwarded": "تمت اعادة توجيهه",
   "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة",
   "mainCategory": "الفئة الرئيسية",
-  "comeWithMe": "تعال معي",
+  "comeWithMe": "جاي معاك",
   "publishSubmitted": "تم إرسال موهبتك بنجاح، انتظر موافقة الإدارة",
   "noFavouriteAds": "لا توجد إعلانات مفضلة",
   "d": "ي",
@@ -1102,7 +1102,15 @@ class CodegenLoader extends AssetLoader{
   "October": "أكتوبر",
   "November": "نوفمبر",
   "December": "ديسمبر",
-  "nameRequired": "الاسم مطلوب"
+  "nameRequired": "الاسم مطلوب",
+  "userShare": "مستخدم",
+  "users": "مستخدمون",
+  "shareTheApp": "شارك التطبيق",
+  "yourReferralID": "معرف الإحالة الخاص بك:",
+  "referralClipboard": "تم نسخ معرف الإحالة إلى الحافظة!",
+  "recommendUs": "أوصي بن",
+  "shareFodeFriends": "شارك الكود مع أصدقائك واحصل على 50 جنيه مصري لكل واحد",
+  "referralSuccessful": "تمت الإحالة بنجاح! تم تحديث الإحصائيات."
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2209,7 +2217,15 @@ static const Map<String,dynamic> en = {
   "October": "October",
   "November": "November",
   "December": "December",
-  "nameRequired": "Name is required"
+  "nameRequired": "Name is required",
+  "userShare": "User",
+  "users": "Users",
+  "shareTheApp": "Share The App",
+  "yourReferralID": "Your Referral ID:",
+  "referralClipboard": "Referral ID copied to clipboard!",
+  "recommendUs": "Recommend Us",
+  "shareFodeFriends": "Share code with your friends and get 50 EGP for every one",
+  "referralSuccessful": "Referral was successful! Statistics updated."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
@@ -82,8 +84,8 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
           }
 
           // If no search results or initial state
-          return const Center(
-            child: Text('No results found.'),
+          return Center(
+            child: Text(LocaleKeys.noResultsFound.localize),
           );
         },
       ),
@@ -152,7 +154,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Label(
-                            text:model.nameEn,
+                            text:context.locale == Locales.english? model.nameEn : model.nameAr,
                             style:
                                 Styles.mediumText(fontWeight: FontWeight.bold),
                           ),

@@ -1077,5 +1077,13 @@ abstract class  LocaleKeys {
   static const November = 'November';
   static const December = 'December';
   static const nameRequired = 'nameRequired';
+  static const userShare = 'userShare';
+  static const users = 'users';
+  static const shareTheApp = 'shareTheApp';
+  static const yourReferralID = 'yourReferralID';
+  static const referralClipboard = 'referralClipboard';
+  static const recommendUs = 'recommendUs';
+  static const shareFodeFriends = 'shareFodeFriends';
+  static const referralSuccessful = 'referralSuccessful';
 
 }

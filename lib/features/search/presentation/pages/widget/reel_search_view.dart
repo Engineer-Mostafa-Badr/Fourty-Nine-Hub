@@ -58,9 +58,8 @@ class _ReelSearchViewState extends State<ReelSearchView> {
               ),
             );
           }
-
-          return const Center(
-            child: Text('No results found.'),
+          return Center(
+            child: Text(LocaleKeys.noResultsFound.localize),
           );
         },
       ),

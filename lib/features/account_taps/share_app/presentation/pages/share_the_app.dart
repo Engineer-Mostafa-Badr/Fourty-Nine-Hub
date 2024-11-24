@@ -6,12 +6,13 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/share_app/presentation/cubit/share_app_state.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
@@ -24,8 +25,8 @@ class ShareTheApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BackAppBar(
-          label: 'Share App',
+        appBar: BackAppBar(
+          label: LocaleKeys.shareApp.localize,
         ),
         body: BlocProvider<ShareAppCubit>(
           create: (BuildContext context) => serviceLocator()..shareApp(),
@@ -47,13 +48,13 @@ class ShareTheApp extends StatelessWidget {
                       Expanded(child: Image.asset(Assets.share)),
                       const Sizer(),
                       Label(
-                        text: 'Recommend Us',
+                        text: LocaleKeys.recommendUs.localize,
                         style: Styles.headerText(),
                       ),
                       const Sizer(),
-                      const Label(
+                       Label(
                         text:
-                            'Share code with your friends and get 50 EGP for every one',
+                        LocaleKeys.shareFodeFriends.localize,
                         maxLines: 5,
                       ),
                       const Sizer(),
@@ -79,8 +80,8 @@ class ShareTheApp extends StatelessWidget {
           onLongPress: () {
             Clipboard.setData(ClipboardData(text: referralId)).then((_) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                    content: Text('Referral ID copied to clipboard!')),
+                 SnackBar(
+                    content: Text(LocaleKeys.referralClipboard.localize)),
               );
             });
           },
@@ -89,15 +90,13 @@ class ShareTheApp extends StatelessWidget {
             width: double.infinity,
             color: AppColors.PRIMARY_COLOR,
             style: Styles.mediumText(),
-            label: referralId.isNotEmpty
-                ? 'Your Referral ID: $referralId'
-                : 'Fetching Referral ID...',
+            label:  '${LocaleKeys.yourReferralID.localize} $referralId'
           ),
         ),
         const Sizer(),
         AppButton(
           color: AppColors.AUTH_CONTAINER_COLOR,
-          label: 'Share The App',
+          label: LocaleKeys.shareTheApp.localize,
           onPressed: () async {
             if (referralId.isNotEmpty) {
               await Share.share("""
@@ -121,9 +120,9 @@ https://example.com/download
               if (isReferredUserDownloaded) {
                 // controller.updateShareStatistics(); // Call your cubit method to update statistics
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                   SnackBar(
                       content:
-                          Text('Referral was successful! Statistics updated.')),
+                          Text(LocaleKeys.referralSuccessful.localize)),
                 );
               }
             } else {
@@ -155,14 +154,14 @@ https://example.com/download
           Expanded(
             child: _buildStatisticsItem(
                 color: AppColors.PRIMARY_COLOR,
-                title: 'Users',
-                subTitle: '$user user'),
+                title: LocaleKeys.userShare.localize,
+                subTitle: '$user ${LocaleKeys.users.localize}'),
           ),
           const Sizer(),
           Expanded(
             child: _buildStatisticsItem(
                 color: AppColors.PRIMARY_COLOR,
-                title: 'Balance',
+                title: LocaleKeys.balance.localize,
                 subTitle: '$balance'),
           ),
         ],

@@ -1069,7 +1069,7 @@
   "forwarded": "تمت اعادة توجيهه",
   "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة",
   "mainCategory" : "الفئة الرئيسية",
-  "comeWithMe" : "تعال معي",
+  "comeWithMe" : "جاي معاك",
   "publishSubmitted": "تم إرسال موهبتك بنجاح، انتظر موافقة الإدارة",
   "noFavouriteAds": "لا توجد إعلانات مفضلة",
   "d": "ي",
@@ -1088,6 +1088,15 @@
   "October": "أكتوبر",
   "November": "نوفمبر",
   "December": "ديسمبر",
-  "nameRequired":"الاسم مطلوب"
+  "nameRequired":"الاسم مطلوب",
+  "userShare":"مستخدم",
+  "users":"مستخدمون",
+  "shareTheApp":"شارك التطبيق",
+  "yourReferralID":"معرف الإحالة الخاص بك:",
+  "referralClipboard":"تم نسخ معرف الإحالة إلى الحافظة!",
+  "recommendUs":"أوصي بن",
+  "shareFodeFriends":"شارك الكود مع أصدقائك واحصل على 50 جنيه مصري لكل واحد",
+  "referralSuccessful": "تمت الإحالة بنجاح! تم تحديث الإحصائيات."
+
 
 }
