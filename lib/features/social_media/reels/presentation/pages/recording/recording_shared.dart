@@ -1,6 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
@@ -11,14 +15,16 @@ import 'other_voice.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class ReelsRecordingScreen extends StatefulWidget {
-  final String? voiceUrl;
+  final String? voiceMediaId;
+  final String? voiceSignedUrl;
   final String? comeFromCompany;
   final String? totalPrice;
   final String? advertisementType;
 
   const ReelsRecordingScreen(
       {super.key,
-      this.voiceUrl,
+      this.voiceMediaId,
+        this.voiceSignedUrl,
       this.comeFromCompany,
       this.totalPrice,
       this.advertisementType});
@@ -53,20 +59,24 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
                 switch (selectedIndex) {
                   case 0:
                     return MyVoiceVideoRecordingScreen(
+                      // audioMediaId: widget.voiceMediaId!,
+                      // audioSignedUrl: widget.voiceSignedUrl!,
                       advertisementType: widget.advertisementType,
                       comeFrom: widget.comeFromCompany,
                       totalPrice: widget.totalPrice,
                     );
                   case 1:
                     return OtherVoiceVideoRecordingScreen(
-                      voiceUrl: widget.voiceUrl ?? 'https://d3j5umpuujp1ej.cloudfront.net/services/technology/reels-output/22732a5b-0b5f-4655-8dc3-5ed2aeef3eb7/22732a5b-0b5f-4655-8dc3-5ed2aeef3eb7.mp3',
+                      voiceMediaId: widget.voiceMediaId!,
+                      voiceUrl: widget.voiceSignedUrl!,
                       advertisementType: widget.advertisementType,
                       comeFrom: widget.comeFromCompany,
                       totalPrice: widget.totalPrice,
                     );
                   case 2:
                     return MixVoiceVideoRecordingScreen(
-                      voiceUrl: widget.voiceUrl ?? 'https://d3j5umpuujp1ej.cloudfront.net/services/technology/reels-output/22732a5b-0b5f-4655-8dc3-5ed2aeef3eb7/22732a5b-0b5f-4655-8dc3-5ed2aeef3eb7.mp3',
+                      voiceMediaId: widget.voiceMediaId!,
+                      voiceUrl: widget.voiceMediaId!,
                       advertisementType: widget.advertisementType,
                       comeFrom: widget.comeFromCompany,
                       totalPrice: widget.totalPrice,
@@ -76,6 +86,8 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
                   advertisementType: widget.advertisementType,
                   comeFrom: widget.comeFromCompany,
                   totalPrice: widget.totalPrice,
+                  // audioMediaId: widget.voiceMediaId!,
+                  // audioSignedUrl: widget.voiceSignedUrl!,
                 );
               },
             ),
@@ -102,7 +114,6 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
               child: Center(
                 child: Text(
                   options[index],
-
                   style: TextStyle(
                     // color: isSelected? Colors.black:Colors.black,
                     fontSize: isSelected ? 35.sp : 30.sp,
@@ -117,7 +128,6 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
     );
   }
 }
-
 
 class ProgressPainter extends CustomPainter {
   final double progress;
@@ -149,7 +159,10 @@ class ProgressPainter extends CustomPainter {
 class VideoPlaybackScreen extends StatefulWidget {
   final String videoPath;
 
-  const VideoPlaybackScreen(this.videoPath, {super.key});
+  final String thumbPath;
+  final bool isAudioOriginal;
+  final String? audioMediaId;
+  const VideoPlaybackScreen(this.videoPath, this.thumbPath,this.isAudioOriginal, {super.key,this.audioMediaId});
 
   @override
   VideoPlaybackScreenState createState() => VideoPlaybackScreenState();
@@ -157,6 +170,7 @@ class VideoPlaybackScreen extends StatefulWidget {
 
 class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
   late VideoPlayerController _controller;
+  bool _showPlayPauseIcon = false;
 
   @override
   void initState() {
@@ -165,25 +179,110 @@ class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
       ..initialize().then((_) {
         setState(() {});
         _controller.play();
-      });
+      })
+      ..setLooping(true);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-        'Video Playback',
-
-        style: TextStyle(fontSize: 45.sp),
-      )),
+        backgroundColor: Colors.transparent,
+      ),
       body: Center(
         child: _controller.value.isInitialized
-            ? AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
+            ? Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        _togglePlayPause();
+                      },
+                      child: VideoPlayer(_controller)),
+                  buildPlayPauseIcon(),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 40.w, vertical: 40.h),
+                    child: BlocBuilder<ReelsCubit, ReelsState>(
+                      builder: (context, state) {
+                        return ElevatedButton(
+                            onPressed: () async {
+                              print('audioMedia ${widget.audioMediaId}');
+                              // print('audioPath ${widget.videoPath}');
+                             // await context.read<ReelsCubit>().uploadReel(
+                             //      File(widget.videoPath),
+                             //      File(widget.thumbPath),widget.isAudioOriginal,audioMediaId: widget.audioMediaId);
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.PRIMARY_COLOR,
+                                textStyle:
+                                    Styles.mediumText(color: Colors.white),
+                                minimumSize: Size(double.infinity, 60.h),
+                                padding: EdgeInsets.symmetric(vertical: 30.h)),
+                            child: Text(
+                              'Share',
+                              style: Styles.mediumText(color: Colors.white),
+                            ));
+                      },
+                    ),
+                  ),
+                ],
               )
             : const CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  void _pauseVideo() {
+    if (_controller.value.isPlaying) {
+      _controller.pause();
+
+      // _chewieController?.pause();
+      setState(() {
+        // _controller.value.isPlaying = false;
+        _showPlayPauseIcon = true;
+      });
+      _hidePlayPauseIconAfterDelay();
+    }
+  }
+
+  /// Toggles between play and pause states.
+  void _togglePlayPause() {
+    _controller.value.isPlaying ? _pauseVideo() : _playVideo();
+  }
+
+  void _playVideo() {
+    if (!_controller.value.isPlaying) {
+      _controller.play();
+      // _chewieController?.play();
+      setState(() {
+        // _controller.value.isPlaying = true;
+        _showPlayPauseIcon = true;
+      });
+      _hidePlayPauseIconAfterDelay();
+    }
+  }
+
+  void _hidePlayPauseIconAfterDelay() {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        setState(() {
+          _showPlayPauseIcon = false;
+        });
+      }
+    });
+  }
+
+  Widget buildPlayPauseIcon() {
+    return AnimatedOpacity(
+      opacity: _showPlayPauseIcon ? 1.0 : 0.0,
+      duration: const Duration(milliseconds: 300),
+      child: Center(
+        child: Icon(
+          _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+          color: Colors.white,
+          size: 100,
+        ),
       ),
     );
   }

@@ -1,28 +1,25 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:video_thumbnail/video_thumbnail.dart' as thumb;
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
-
-import '../../../../../../service_locator/service_locator.dart';
-import '../../controllers/explore_reels_cubit/reel_cubit.dart';
 import '../../shared/filter_utiles.dart';
 import 'recording_shared.dart';
 
 class MixVoiceVideoRecordingScreen extends StatefulWidget {
   final String voiceUrl;
+  final String voiceMediaId;
   final String? comeFrom;
   final String? totalPrice;
   final String? advertisementType;
@@ -30,6 +27,7 @@ class MixVoiceVideoRecordingScreen extends StatefulWidget {
   const MixVoiceVideoRecordingScreen(
       {super.key,
       required this.voiceUrl,
+      required this.voiceMediaId,
       this.comeFrom,
       this.totalPrice,
       this.advertisementType});
@@ -61,6 +59,24 @@ class MixVoiceVideoRecordingScreenState
 
   bool? showUploadReelButton;
 
+  String? _thumbnailPath;
+
+  Future<void> _generateThumbnail(String videoThumbnail) async {
+    final directory = await getTemporaryDirectory();
+    final thumbnail = await thumb.VideoThumbnail.thumbnailFile(
+      video: videoThumbnail,
+      // Replace with your video URL or file path
+      thumbnailPath: directory.path,
+      imageFormat: thumb.ImageFormat.JPEG,
+      maxWidth: 128,
+      quality: 75,
+    );
+
+    setState(() {
+      _thumbnailPath = thumbnail;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -72,6 +88,7 @@ class MixVoiceVideoRecordingScreenState
   Future<void> _loadAndPlayAudio() async {
 
       await _audioPlayer.setUrl(widget.voiceUrl);
+      log('loaded ${widget.voiceUrl}');
       _audioPlayer.setLoopMode(LoopMode.one);
 
   }
@@ -205,6 +222,8 @@ class MixVoiceVideoRecordingScreenState
     log('logs ${logs.toString()}');
     log('returned ${returned?.getValue().toString()}');
     final savedSuccessfully = await GallerySaver.saveVideo(mergedVideoPath!);
+    await _generateThumbnail(mergedVideoPath!);
+    _navigateToPlaybackScreen();
     if (savedSuccessfully ?? false) {
       print('saved');
       setState(() {
@@ -219,12 +238,6 @@ class MixVoiceVideoRecordingScreenState
     return false;
   }
 
-  Future uploadReel() async {
-    await serviceLocator<ReelsCubit>().uploadReel(File(mergedVideoPath!),"",
-        advertisementType: widget.advertisementType,
-        comeFrom: widget.comeFrom,
-        totalPrice: widget.totalPrice);
-  }
 
   void _switchCamera() {
     setState(() {
@@ -333,122 +346,6 @@ class MixVoiceVideoRecordingScreenState
 
     return Scaffold(
       backgroundColor: Colors.black,
-      floatingActionButton: (showUploadReelButton != null &&
-              showUploadReelButton == true)
-          ? Padding(
-              padding: const EdgeInsets.symmetric(vertical: kToolbarHeight),
-              child: Align(
-                // Check the current text direction to determine alignment
-                alignment:
-                    context.isArabic ? Alignment.topLeft : Alignment.topRight,
-                child: FloatingActionButton.small(
-                  tooltip: LocaleKeys.controls_upload_reel.tr(),
-                  shape: const CircleBorder(),
-                  backgroundColor: Colors.white,
-                  foregroundColor: AppColors.SECONDARY_COLOR,
-                  elevation: 0,
-                  child: const Icon(Icons.upload),
-                  onPressed: () async {
-                    setState(() {
-                      showUploadReelButton = false;
-                    });
-
-                    try {
-                      uploadReel().then((value) {
-                        if (mounted) {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                icon: Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        Icons.check_circle_outline,
-                                        size: 60.h,
-                                        color: AppColors.CHECK_MARK_COLOR,
-                                      ),
-                                    )),
-                                content: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: FittedBox(
-                                    child: Text(
-                                      LocaleKeys
-                                          .reel_upload_success_upload_success
-                                          .tr(),
-
-                                      style: TextStyle(
-                                          fontSize: 40.sp,
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                  ),
-                                ),
-                                actionsPadding: EdgeInsets.zero,
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text(
-                                        LocaleKeys.error_dialog_ok_button.tr(),
-                                        ),
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(); // Close the dialog
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        }
-                      });
-                    } catch (e) {
-                      if (mounted) {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              icon: Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Icon(
-                                      Icons.error,
-                                      size: 60.h,
-                                      color: AppColors.SECONDARY_COLOR,
-                                    ),
-                                  )),
-                              content: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  LocaleKeys.error_dialog_upload_fail.tr(),
-
-                                  style: TextStyle(
-                                      fontSize: 40.sp,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                              ),
-                              actionsPadding: EdgeInsets.zero,
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text(
-                                      LocaleKeys.error_dialog_ok_button.tr(),
-                                      ),
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pop(); // Close the dialog
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
-                    }
-                  },
-                ),
-              ),
-            )
-          : const Sizer(),
       body: SafeArea(
         child: Stack(
           children: [
@@ -511,18 +408,7 @@ class MixVoiceVideoRecordingScreenState
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              showGalleryBtn
-                  ? Expanded(
-                      child: IconButton(
-                        onPressed: _navigateToPlaybackScreen,
-                        icon: Icon(
-                          Icons.video_collection,
-                          color: Colors.white,
-                          size: 60.h,
-                        ),
-                      ),
-                    )
-                  : const Spacer(),
+             const Spacer(),
               Expanded(
                 child: GestureDetector(
                   onLongPress: () => _startRecording(),
@@ -581,7 +467,7 @@ class MixVoiceVideoRecordingScreenState
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => VideoPlaybackScreen(mergedVideoPath!),
+        builder: (context) => VideoPlaybackScreen(mergedVideoPath!,_thumbnailPath!,false,audioMediaId: widget.voiceMediaId,),
       ),
     );
   }
