@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
@@ -47,7 +45,9 @@ class InstagramPosts extends StatefulWidget {
     super.key,
     required this.scrollController,
   });
+
   final ScrollController scrollController;
+
   @override
   State<InstagramPosts> createState() => _InstagramPostsState();
 }
@@ -185,7 +185,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                       controller.feedPagingController
                                               .itemList?[index].isLove =
                                           !controller.feedPagingController
-                                              .itemList![index].isLove!;
+                                              .itemList![index].isLove;
                                       setState(() {});
                                     },
                                   );
@@ -254,7 +254,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                             controller.feedPagingController
                                                     .itemList?[index].isLove =
                                                 !controller.feedPagingController
-                                                    .itemList![index].isLove!;
+                                                    .itemList![index].isLove;
                                             if (controller.feedPagingController
                                                     .itemList?[index].isLove ==
                                                 false) {
@@ -264,7 +264,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                                   .loveCount = (controller
                                                       .feedPagingController
                                                       .itemList![index]
-                                                      .loveCount! -
+                                                      .loveCount -
                                                   1);
                                             } else {
                                               controller
@@ -273,7 +273,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                                   .loveCount = (controller
                                                       .feedPagingController
                                                       .itemList![index]
-                                                      .loveCount! +
+                                                      .loveCount +
                                                   1);
                                             }
                                           }
@@ -301,98 +301,128 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                       IconAppButton(
                                         icon: Icons.chat_bubble_outline_rounded,
                                         onPressed: () {
-                                          bottomSheet(
+                                          // if (!serviceLocator<UserCubit>()
+                                          //     .isLoggedIn) {
+                                          //   context.push(Routes.LOGIN);
+                                          // } else {
+                                          //   showCommentsBottomSheetInstagram(
+                                          //       context,
+                                          //       commentCount: controller.feedPagingController
+                                          //           .itemList?[index].commentsCount
+                                          //           .toString() ??
+                                          //           '',
+                                          //       comment: state.postComments![index],
+                                          //       );
+                                          // }
+                                          showModalBottomSheet(
                                               context: context,
                                               isScrollControlled: true,
-                                              widget: BlocProvider.value(
-                                                value: serviceLocator<
-                                                    InstagramCubit>()
-                                                  ..loadComments(
-                                                      context,
-                                                      controller
+                                              isDismissible: true,
+                                              backgroundColor: Colors.transparent,
+                                              builder: (context){
+                                                return BlocProvider.value(
+                                                  value: serviceLocator<
+                                                      InstagramCubit>()
+                                                    ..loadComments(
+                                                        context,
+                                                        controller
+                                                            .feedPagingController
+                                                            .itemList![
+                                                        index]
+                                                            .id),
+                                                  child: GestureDetector(
+                                                    behavior: HitTestBehavior.opaque,
+                                                    onTap: () {
+                                                      FocusScope.of(context).unfocus();
+                                                    },
+                                                    child: InstagramPostComments(
+                                                      postId: controller
                                                           .feedPagingController
                                                           .itemList![index]
-                                                          .id),
-                                                child: InstagramPostComments(
-                                                  postId: controller
-                                                      .feedPagingController
-                                                      .itemList![index]
-                                                      .id,
-                                                  onCommentReply:
-                                                      (ReplyOnCommentParams
-                                                          params) async {
-                                                    var result =
+                                                          .id,
+
+                                                      commentCount: controller.feedPagingController
+                                                          .itemList?[index].commentsCount
+                                                          .toString() ??
+                                                          '',
+                                                      onCommentReply:
+                                                          (ReplyOnCommentParams
+                                                      params) async {
+                                                        var result =
                                                         await controller
                                                             .replyOnComment(
-                                                      params:
+                                                          params:
                                                           ReplyOnCommentParams(
                                                               postId:
-                                                                  params.postId,
+                                                              params.postId,
                                                               content: params
                                                                   .content,
                                                               commentId: params
                                                                   .commentId),
-                                                    );
-                                                    var currentPost = controller
-                                                        .feedPagingController
-                                                        .itemList
-                                                        ?.firstWhere(
-                                                            (element) =>
-                                                                element.id ==
+                                                        );
+                                                        var currentPost = controller
+                                                            .feedPagingController
+                                                            .itemList
+                                                            ?.firstWhere(
+                                                                (element) =>
+                                                            element.id ==
                                                                 params.postId);
-                                                    currentPost?.commentsCount =
+                                                        currentPost?.commentsCount =
                                                         (currentPost
-                                                                .commentsCount! +
+                                                            .commentsCount +
                                                             1);
-                                                    return result;
-                                                  },
-                                                  onAddComment:
-                                                      (PostCommentParams
-                                                          params) async {
-                                                    var result =
+                                                        return result;
+                                                      },
+                                                      onAddComment:
+                                                          (PostCommentParams
+                                                      params) async {
+                                                        var result =
                                                         await controller
                                                             .onPostComment(
-                                                                params: params);
-                                                    return result;
-                                                  },
-                                                  onDeleteComment:
-                                                      (String id) async {
-                                                    return await controller
-                                                        .deleteComment(
+                                                            params: params);
+                                                        return result;
+                                                      },
+                                                      onDeleteComment:
+                                                          (String id) async {
+                                                        return await controller
+                                                            .deleteComment(
                                                             context: context,
                                                             commentId: id,
                                                             postId: controller
                                                                 .feedPagingController
                                                                 .itemList![
-                                                                    index]
+                                                            index]
                                                                 .id,
                                                             from: 'feed');
-                                                    // print(result);
-                                                  },
-                                                  onDeleteReply:
-                                                      (String id) async {
-                                                    return await controller
-                                                        .deleteComment(
+                                                        // print(result);
+                                                      },
+                                                      onDeleteReply:
+                                                          (String id) async {
+                                                        return await controller
+                                                            .deleteComment(
                                                             context: context,
                                                             commentId: id,
                                                             postId: controller
                                                                 .feedPagingController
                                                                 .itemList![
-                                                                    index]
+                                                            index]
                                                                 .id,
                                                             from: 'feed');
-                                                  },
-                                                  onEditComment:
-                                                      (PostCommentParams
-                                                          params) async {
-                                                    var result =
+                                                      },
+                                                      onEditComment:
+                                                          (PostCommentParams
+                                                      params) async {
+                                                        var result =
                                                         await controller
                                                             .editComment(
-                                                                params: params);
-                                                    return result;
-                                                  },
-                                                ),
-                                              ));
+                                                            params: params);
+                                                        return result;
+                                                      },
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              );
                                         },
                                         color: Colors.grey,
                                         size: 25,
@@ -432,218 +462,280 @@ class _InstagramPostsState extends State<InstagramPosts> {
                           if (controller.feedPagingController.itemList![index]
                               .content!.isEmpty) ...[
                             InkWell(
-                              onTap: () {
-                                showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    backgroundColor: Colors.transparent,
-                                    builder: (context){
-                                  return Stack(
-                                    alignment: AlignmentDirectional.bottomCenter,
-                                    children: [
-                                      Container(color: Colors.transparent),
-                                      DraggableScrollableSheet(
-                                        initialChildSize: isKeyboardVisible(context) ? 0.9 : 0.6,
-                                        minChildSize: 0.4,
-                                        maxChildSize: 0.9,
-                                        expand: false,
-                                        builder: (context, scrollController) {
-                                          return Container(
-                                            decoration: BoxDecoration(
-                                              color: context.isDarkMode ? Colors.grey[900] : Colors.white,
-                                              borderRadius: const BorderRadius.only(
-                                                topLeft: Radius.circular(20),
-                                                topRight: Radius.circular(20),
-                                              ),
-                                            ),
-                                            child: Column(
-                                              children: <Widget>[
-                                                Expanded(
-                                                  child: BlocProvider.value(
-                                                    value: serviceLocator<InstagramCubit>()
-                                                      ..loadComments(
-                                                          context,
-                                                          controller.feedPagingController
-                                                              .itemList![index].id),
-                                                    child: InstagramPostComments(
-                                                      isShown:true,
-                                                      postId: controller
-                                                          .feedPagingController
-                                                          .itemList![index]
-                                                          .id,
-                                                      onCommentReply:
-                                                          (ReplyOnCommentParams
-                                                      params) async {
-                                                        var result = await controller
-                                                            .replyOnComment(
-                                                          params: ReplyOnCommentParams(
-                                                              postId: params.postId,
-                                                              content: params.content,
-                                                              commentId:
-                                                              params.commentId),
-                                                        );
-                                                        var currentPost = controller
-                                                            .feedPagingController.itemList
-                                                            ?.firstWhere((element) =>
-                                                        element.id ==
-                                                            params.postId);
-                                                        currentPost?.commentsCount =
-                                                        (currentPost.commentsCount! +
-                                                            1);
-                                                        return result;
-                                                      },
-                                                      onAddComment: (PostCommentParams
-                                                      params) async {
-                                                        var result = await controller
-                                                            .onPostComment(
-                                                            params: params);
-                                                        return result;
-                                                      },
-                                                      onDeleteComment: (String id) async {
-                                                        return await controller
-                                                            .deleteComment(
-                                                            context: context,
-                                                            commentId: id,
-                                                            postId: controller
-                                                                .feedPagingController
-                                                                .itemList![index]
-                                                                .id,
-                                                            from: 'feed');
-                                                      },
-                                                      onDeleteReply: (String id) async {
-                                                        return await controller
-                                                            .deleteComment(
-                                                            context: context,
-                                                            commentId: id,
-                                                            postId: controller
-                                                                .feedPagingController
-                                                                .itemList![index]
-                                                                .id,
-                                                            from: 'feed');
-                                                      },
-                                                      onEditComment: (PostCommentParams
-                                                      params) async {
-                                                        var result = await controller
-                                                            .editComment(params: params);
-                                                        return result;
-                                                      },
+                                onTap: () {
+                                  showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      backgroundColor: Colors.transparent,
+                                      builder: (context) {
+                                        return Stack(
+                                          alignment:
+                                              AlignmentDirectional.bottomCenter,
+                                          children: [
+                                            Container(
+                                                color: Colors.transparent),
+                                            DraggableScrollableSheet(
+                                              initialChildSize:
+                                                  isKeyboardVisible(context)
+                                                      ? 0.9
+                                                      : 0.6,
+                                              minChildSize: 0.4,
+                                              maxChildSize: 0.9,
+                                              expand: false,
+                                              builder:
+                                                  (context, scrollController) {
+                                                return Container(
+                                                  decoration: BoxDecoration(
+                                                    color: context.isDarkMode
+                                                        ? Colors.grey[900]
+                                                        : Colors.white,
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(20),
+                                                      topRight:
+                                                          Radius.circular(20),
                                                     ),
                                                   ),
-                                                ),
-                                                Divider(color: Colors.grey[800]),
-                                                Row(
-                                                  children: [
-                                                    const ProfileImage(
-                                                      accountId: 0,
-                                                      userId: '',
-                                                    ),
-                                                    const Sizer(),
-                                                    Expanded(
-                                                        child: TextFormField(
-                                                          maxLines: null,
-                                                          controller:
-                                                          commentTextController,
-                                                          onChanged: (v) {
-                                                            setState(() {});
-                                                          },
-                                                          style: Styles.headerText(
-                                                              fontSize: 26),
-                                                          decoration: InputDecoration(
-                                                            fillColor: Colors.white,
-                                                            contentPadding:
-                                                            const EdgeInsets.all(5),
-                                                            hintText:
-                                                            '${LocaleKeys.typeYourComment.localize} ....',
-                                                            hintStyle:
-                                                            Styles.mediumText(),
-                                                          ),
-                                                        )),
-                                                    const Sizer(),
-                                                    IconAppButton(
-                                                        icon: Icons.send,
-                                                        size: 20,
-                                                        isCircle: true,
-                                                        onPressed: () async {
-                                                          CommentEntity data = await controller.onPostComment(
-                                                              params: PostCommentParams(
-                                                                  content:
-                                                                  commentTextController
-                                                                      .text,
+                                                  child: Column(
+                                                    children: <Widget>[
+                                                      Expanded(
+                                                        child:
+                                                            BlocProvider.value(
+                                                          value: serviceLocator<
+                                                              InstagramCubit>()
+                                                            ..loadComments(
+                                                                context,
+                                                                controller
+                                                                    .feedPagingController
+                                                                    .itemList![
+                                                                        index]
+                                                                    .id),
+                                                          child:
+                                                              InstagramPostComments(
+                                                                commentCount: controller.feedPagingController
+                                                                    .itemList?[index].commentsCount
+                                                                    .toString() ??
+                                                                    '',
+                                                            isShown: true,
+                                                            postId: controller
+                                                                .feedPagingController
+                                                                .itemList![
+                                                                    index]
+                                                                .id,
+                                                            onCommentReply:
+                                                                (ReplyOnCommentParams
+                                                                    params) async {
+                                                              var result =
+                                                                  await controller
+                                                                      .replyOnComment(
+                                                                params: ReplyOnCommentParams(
+                                                                    postId: params
+                                                                        .postId,
+                                                                    content: params
+                                                                        .content,
+                                                                    commentId:
+                                                                        params
+                                                                            .commentId),
+                                                              );
+                                                              var currentPost = controller
+                                                                  .feedPagingController
+                                                                  .itemList
+                                                                  ?.firstWhere((element) =>
+                                                                      element
+                                                                          .id ==
+                                                                      params
+                                                                          .postId);
+                                                              currentPost
+                                                                      ?.commentsCount =
+                                                                  (currentPost
+                                                                          .commentsCount +
+                                                                      1);
+                                                              return result;
+                                                            },
+                                                            onAddComment:
+                                                                (PostCommentParams
+                                                                    params) async {
+                                                              var result = await controller
+                                                                  .onPostComment(
+                                                                      params:
+                                                                          params);
+                                                              return result;
+                                                            },
+                                                            onDeleteComment:
+                                                                (String
+                                                                    id) async {
+                                                              return await controller.deleteComment(
+                                                                  context:
+                                                                      context,
+                                                                  commentId: id,
                                                                   postId: controller
                                                                       .feedPagingController
                                                                       .itemList![
-                                                                  index]
-                                                                      .id));
-
-                                                          controller
-                                                              .commentsPagingController
-                                                              .itemList
-                                                              ?.insert(
-                                                            0,
-                                                            CommentModel(
-                                                              id: data.id,
-                                                              content:
-                                                              commentTextController
-                                                                  .text,
-                                                              post: controller
-                                                                  .feedPagingController
-                                                                  .itemList![index]
-                                                                  .id,
-                                                              createdAt:
-                                                              DateTime.now(),
-                                                              loveCount:
-                                                              data.loveCount,
-                                                              angryCount:
-                                                              data.angryCount,
-                                                              likesCount:
-                                                              data.likesCount,
-                                                              repliesCount:
-                                                              data.repliesCount,
-                                                              sadCount:
-                                                              data.sadCount,
-                                                              wowCount:
-                                                              data.wowCount,
-                                                              isAngry: false,
-                                                              isLikes: false,
-                                                              isLove: false,
-                                                              isSad: false,
-                                                              isWow: false,
-                                                              user:
-                                                              TwitterUserEntity(
-                                                                id: user!.id,
-                                                                firstName:
-                                                                user.firstName,
-                                                                lastName:
-                                                                user.lastName,
-                                                                createdAt:
-                                                                DateTime.now(),
-                                                                image:
-                                                                user.profilePicture ??
-                                                                    '',
-                                                                email: user.email ??
-                                                                    '',
-                                                                isDocumented: false,
-                                                              ),
+                                                                          index]
+                                                                      .id,
+                                                                  from: 'feed');
+                                                            },
+                                                            onDeleteReply:
+                                                                (String
+                                                                    id) async {
+                                                              return await controller.deleteComment(
+                                                                  context:
+                                                                      context,
+                                                                  commentId: id,
+                                                                  postId: controller
+                                                                      .feedPagingController
+                                                                      .itemList![
+                                                                          index]
+                                                                      .id,
+                                                                  from: 'feed');
+                                                            },
+                                                            onEditComment:
+                                                                (PostCommentParams
+                                                                    params) async {
+                                                              var result =
+                                                                  await controller
+                                                                      .editComment(
+                                                                          params:
+                                                                              params);
+                                                              return result;
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Divider(
+                                                          color:
+                                                              Colors.grey[800]),
+                                                      Row(
+                                                        children: [
+                                                          const ProfileImage(
+                                                            accountId: 0,
+                                                            userId: '',
+                                                          ),
+                                                          const Sizer(),
+                                                          Expanded(
+                                                              child:
+                                                                  TextFormField(
+                                                            maxLines: null,
+                                                            controller:
+                                                                commentTextController,
+                                                            onChanged: (v) {
+                                                              setState(() {});
+                                                            },
+                                                            style: Styles
+                                                                .headerText(
+                                                                    fontSize:
+                                                                        26),
+                                                            decoration:
+                                                                InputDecoration(
+                                                              fillColor:
+                                                                  Colors.white,
+                                                              contentPadding:
+                                                                  const EdgeInsets
+                                                                      .all(5),
+                                                              hintText:
+                                                                  '${LocaleKeys.typeYourComment.localize} ....',
+                                                              hintStyle: Styles
+                                                                  .mediumText(),
                                                             ),
-                                                          );
-                                                          commentTextController
-                                                              .clear();
-                                                          FocusScope.of(context)
-                                                              .unfocus();
-                                                          setState(() {});
-                                                        })
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                });
+                                                          )),
+                                                          const Sizer(),
+                                                          IconAppButton(
+                                                              icon: Icons.send,
+                                                              size: 20,
+                                                              isCircle: true,
+                                                              onPressed:
+                                                                  () async {
+                                                                CommentEntity data = await controller.onPostComment(
+                                                                    params: PostCommentParams(
+                                                                        content:
+                                                                            commentTextController
+                                                                                .text,
+                                                                        postId: controller
+                                                                            .feedPagingController
+                                                                            .itemList![index]
+                                                                            .id));
 
-                              },
+                                                                controller
+                                                                    .commentsPagingController
+                                                                    .itemList
+                                                                    ?.insert(
+                                                                  0,
+                                                                  CommentModel(
+                                                                    id: data.id,
+                                                                    content:
+                                                                        commentTextController
+                                                                            .text,
+                                                                    post: controller
+                                                                        .feedPagingController
+                                                                        .itemList![
+                                                                            index]
+                                                                        .id,
+                                                                    createdAt:
+                                                                        DateTime
+                                                                            .now(),
+                                                                    loveCount: data
+                                                                        .loveCount,
+                                                                    angryCount:
+                                                                        data.angryCount,
+                                                                    likesCount:
+                                                                        data.likesCount,
+                                                                    repliesCount:
+                                                                        data.repliesCount,
+                                                                    sadCount: data
+                                                                        .sadCount,
+                                                                    wowCount: data
+                                                                        .wowCount,
+                                                                    isAngry:
+                                                                        false,
+                                                                    isLikes:
+                                                                        false,
+                                                                    isLove:
+                                                                        false,
+                                                                    isSad:
+                                                                        false,
+                                                                    isWow:
+                                                                        false,
+                                                                    user:
+                                                                        TwitterUserEntity(
+                                                                      id: user!
+                                                                          .id,
+                                                                      firstName:
+                                                                          user.firstName,
+                                                                      lastName:
+                                                                          user.lastName,
+                                                                      createdAt:
+                                                                          DateTime
+                                                                              .now(),
+                                                                      image:
+                                                                          user.profilePicture ??
+                                                                              '',
+                                                                      email:
+                                                                          user.email ??
+                                                                              '',
+                                                                      isDocumented:
+                                                                          false,
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                                commentTextController
+                                                                    .clear();
+                                                                FocusScope.of(
+                                                                        context)
+                                                                    .unfocus();
+                                                                setState(() {});
+                                                              })
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      });
+                                },
                                 child: Label(
                                     text: LocaleKeys.showComments.localize))
                           ],
