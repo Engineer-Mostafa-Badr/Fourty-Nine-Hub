@@ -44,7 +44,7 @@ class MyVoiceVideoRecordingScreenState
   late AnimationController _animationController;
   Timer? _stopTimer;
   Timer? _notifyTimer;
-  int _secondsRemaining = 30;
+  int _secondsRemaining = 15;
   int currentIndex = 0;
   bool? showUploadReelButton;
 
@@ -73,7 +73,7 @@ class MyVoiceVideoRecordingScreenState
   void _initializeAnimationController() {
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 30),
+      duration: const Duration(seconds: 15),
     )..addListener(() {
         setState(() {});
       });
@@ -127,14 +127,14 @@ class MyVoiceVideoRecordingScreenState
   }
 
   void _startTimers() {
-    _secondsRemaining = 30;
+    _secondsRemaining = 15;
     _notifyTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         _secondsRemaining--;
       });
     });
 
-    _stopTimer = Timer(const Duration(seconds: 30), _stopRecording);
+    _stopTimer = Timer(const Duration(seconds: 15), _stopRecording);
   }
 
   void _stopRecording() async {
@@ -150,6 +150,7 @@ class MyVoiceVideoRecordingScreenState
       _resetRecordingState();
 
       showUploadReelButton = await _mergeVideoWithFilter();
+
     } catch (e) {
       log("Error stopping recording: $e");
       _showErrorDialog(LocaleKeys.error_dialog_stop_recording_fail.tr());
@@ -211,14 +212,14 @@ class MyVoiceVideoRecordingScreenState
         final savedSuccessfully =
             await GallerySaver.saveVideo(filteredVideoPath!);
         await _generateThumbnail(filteredVideoPath!);
+        _navigateToPlaybackScreen();
         if (savedSuccessfully ?? false) {
-          setState(() {
-            showGalleryBtn = true;
-          });
+          log('Saved');
         } else {
           throw Exception('error_dialog_save_video_fail');
         }
         return savedSuccessfully;
+
       } else {
         final failStackTrace = await session.getFailStackTrace();
         throw Exception(
@@ -232,6 +233,15 @@ class MyVoiceVideoRecordingScreenState
     }
     return false;
   }
+  void _navigateToPlaybackScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoPlaybackScreen(filteredVideoPath!,_thumbnailPath!,true),
+      ),
+    );
+  }
+
 
   void _switchCamera() {
     setState(() {
@@ -397,18 +407,7 @@ class MyVoiceVideoRecordingScreenState
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              showGalleryBtn
-                  ? Expanded(
-                      child: IconButton(
-                        onPressed: _navigateToPlaybackScreen,
-                        icon: Icon(
-                          Icons.video_collection,
-                          color: Colors.white,
-                          size: 60.h,
-                        ),
-                      ),
-                    )
-                  : const Spacer(),
+              Expanded(child: Container()),
               Expanded(
                 child: GestureDetector(
                   onLongPress: () => _startRecording(),
@@ -463,15 +462,6 @@ class MyVoiceVideoRecordingScreenState
     );
   }
 
-  void _navigateToPlaybackScreen() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            VideoPlaybackScreen(filteredVideoPath!, _thumbnailPath!, true),
-      ),
-    );
-  }
 
   @override
   void dispose() {
