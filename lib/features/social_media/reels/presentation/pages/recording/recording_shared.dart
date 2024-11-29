@@ -101,7 +101,7 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
         height: kToolbarHeight,
         child: PageView.builder(
           controller: _controller,
-          itemCount: options.length,
+          itemCount: widget.voiceSignedUrl == null ? 1 : options.length,
           onPageChanged: (int index) {
             setState(() {
               selectedIndex = index;
@@ -113,7 +113,7 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
               scale: isSelected ? 1.2 : 1.0,
               child: Center(
                 child: Text(
-                  options[index],
+                 widget.voiceSignedUrl == null ? options[0] : options[index],
                   style: TextStyle(
                     // color: isSelected? Colors.black:Colors.black,
                     fontSize: isSelected ? 35.sp : 30.sp,
