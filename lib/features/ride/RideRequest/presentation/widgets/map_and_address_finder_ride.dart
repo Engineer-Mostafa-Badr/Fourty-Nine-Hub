@@ -10,7 +10,6 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/destination_text_field_and_find_ride_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/google_map_view_addres.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/start_text_field_and_find_widget.dart';
-import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapAndAddressFinderRide extends StatelessWidget {
@@ -224,20 +223,15 @@ class MapAndAddressFinderRide extends StatelessWidget {
         : BlocProvider.of<GetDestinationPointRideCubit>(context).type;
     switch (type) {
       case "google":
-        return context.read<SecretsCubit>().state.secrets?.googleApiKey ?? "";
+        return "AIzaSyBBHEFa7D7qMSL4ivZhCqRQ4ok4sQN-Egc";
       case "HEREPlatform":
-        return context.read<SecretsCubit>().state.secrets?.hereMapKey ?? "";
+        return "jdgJA3hOg-0P67s5Xu86joSAajr8W1OX1nC2sL9g-hA";
       case "mapBox":
-        return context.read<SecretsCubit>().state.secrets?.mapBoxKey ?? "";
+        return "sk.eyJ1IjoiNDlhcHAiLCJhIjoiY20xem83MGQ5MDg3aDJqczhhYnlmMGI1ZSJ9.8sYHBUyxYXncueYcckCBMg";
       case "TomTom":
-        return context.read<SecretsCubit>().state.secrets?.tomtomMapKey ?? "";
+        return "GR8JEzJYyIFNKqD7WJJ1pfNRpf3Ckiyw";
       default:
-        return context
-                .read<SecretsCubit>()
-                .state
-                .secrets
-                ?.openRouteServiceKey ??
-            "";
+        return "5b3ce3597851110001cf6248d06d230ff17942299e5608fa3709ced9";
     }
   }
 

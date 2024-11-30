@@ -12,7 +12,6 @@ import 'package:fourtyninehub/features/trip_join/add_new_pick_me/presentation/wi
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/destination_location/destination_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_price_distance/fetch_price_distance_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
-import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 
 class AddNewPickMeBody extends StatefulWidget {
   const AddNewPickMeBody({super.key});
@@ -225,20 +224,15 @@ class _AddNewPickMeBodyState extends State<AddNewPickMeBody> {
         : BlocProvider.of<DestGetLatAndLongCubit>(context).type;
     switch (type) {
       case "google":
-        return context.read<SecretsCubit>().state.secrets?.googleApiKey ?? "";
+        return "AIzaSyBBHEFa7D7qMSL4ivZhCqRQ4ok4sQN-Egc";
       case "HEREPlatform":
-        return context.read<SecretsCubit>().state.secrets?.hereMapKey ?? "";
+        return "jdgJA3hOg-0P67s5Xu86joSAajr8W1OX1nC2sL9g-hA";
       case "mapBox":
-        return context.read<SecretsCubit>().state.secrets?.mapBoxKey ?? "";
+        return "sk.eyJ1IjoiNDlhcHAiLCJhIjoiY20xem83MGQ5MDg3aDJqczhhYnlmMGI1ZSJ9.8sYHBUyxYXncueYcckCBMg";
       case "TomTom":
-        return context.read<SecretsCubit>().state.secrets?.tomtomMapKey ?? "";
+        return "GR8JEzJYyIFNKqD7WJJ1pfNRpf3Ckiyw";
       default:
-        return context
-                .read<SecretsCubit>()
-                .state
-                .secrets
-                ?.openRouteServiceKey ??
-            "";
+        return "5b3ce3597851110001cf6248d06d230ff17942299e5608fa3709ced9";
     }
   }
 
