@@ -237,6 +237,7 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Switch(
+                          inactiveTrackColor: AppColors.GREY_LIGHT_COLOR,
                           onChanged: (value) {
                             setState(() {
                               if (context.isUserLoggedIn) {
@@ -266,6 +267,7 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Switch(
+                          inactiveTrackColor: AppColors.GREY_LIGHT_COLOR,
                           onChanged: (value) {
                             setState(() {
                               if (context.isUserLoggedIn) {
