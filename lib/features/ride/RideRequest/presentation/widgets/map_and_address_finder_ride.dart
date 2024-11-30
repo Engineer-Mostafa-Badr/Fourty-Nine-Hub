@@ -1,19 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widgets/dynamic_map_test.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/get_current_location_driver.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_destination_point_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_starting_point_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/destination_text_field_and_find_ride_widget.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/google_map_view_addres.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/start_text_field_and_find_widget.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class MapAndAddressFinderRide extends StatelessWidget {
+class MapAndAddressFinderRide extends StatefulWidget {
   const MapAndAddressFinderRide({super.key});
+
+  @override
+  State<MapAndAddressFinderRide> createState() =>
+      _MapAndAddressFinderRideState();
+}
+
+class _MapAndAddressFinderRideState extends State<MapAndAddressFinderRide> {
+  @override
+  void initState() {
+    super.initState();
+    _setUserCurrentLocation();
+  }
+
+  void _setUserCurrentLocation() async {
+    try {
+      Position position = await GetCurrentLocationDriver.getCurrentPosition();
+      print('Latitude: ${position.latitude}, Longitude: ${position.longitude}');
+      StartTextFieldAndFindWidget.startingPoint.text = "Home";
+      await context.read<GetStartingPointRideCubit>().getStartingPoint(
+            address: "",
+            isFirstTime: true,
+            lat: position.latitude,
+            long: position.longitude,
+            platformType: "google",
+          );
+    } catch (e) {
+      print('Error fetching current location: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

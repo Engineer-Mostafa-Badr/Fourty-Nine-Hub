@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class StartTextFieldAndFindWidget extends StatefulWidget {
   const StartTextFieldAndFindWidget({super.key});
+  static TextEditingController startingPoint = TextEditingController();
 
   @override
   State<StartTextFieldAndFindWidget> createState() =>
@@ -20,7 +21,6 @@ class StartTextFieldAndFindWidget extends StatefulWidget {
 class _StartTextFieldAndFindWidgetState
     extends State<StartTextFieldAndFindWidget> {
   GlobalKey<FormState> formKey = GlobalKey();
-  TextEditingController startingPoint = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -45,7 +45,7 @@ class _StartTextFieldAndFindWidgetState
                       suffixIcon: _getIcon(state),
                       labelText: LocaleKeys.startingPoint.localize,
                     ),
-                    controller: startingPoint,
+                    controller: StartTextFieldAndFindWidget.startingPoint,
                     // labelStyle: const TextStyle(color: Colors.black),
                     // hint: 'Find your starting Point..!',
                     validator: _validator,
@@ -60,9 +60,9 @@ class _StartTextFieldAndFindWidgetState
                 title: LocaleKeys.searchFind.localize,
                 onTap: () {
                   if (formKey.currentState!.validate()) {
-                    context
-                        .read<GetStartingPointRideCubit>()
-                        .getStartingPoint(address: startingPoint.text);
+                    context.read<GetStartingPointRideCubit>().getStartingPoint(
+                        address:
+                            StartTextFieldAndFindWidget.startingPoint.text);
                   }
                 },
                 height: double.infinity,
