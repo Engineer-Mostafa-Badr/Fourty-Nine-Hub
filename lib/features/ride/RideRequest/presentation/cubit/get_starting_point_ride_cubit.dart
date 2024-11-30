@@ -4,6 +4,9 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 
 class GetStartingPointRideCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repository;
+  double? startLat;
+  double? startLong;
+  String type = '';
   GetStartingPointRideCubit({required this.repository}) : super(RiderInitial());
   getStartingPoint({required String address}) async {
     emit(StartingLocationLoading());
@@ -13,6 +16,9 @@ class GetStartingPointRideCubit extends Cubit<RiderState> {
         emit(StartingLocationFailed());
       },
       (r) {
+        type = r['data']['type'];
+        startLat = r['data']['lat'];
+        startLong = r['data']['lng'];
         emit(SuccessGetStartingPointState(
           address: r['data']['address'],
           lat: r['data']['lat'],

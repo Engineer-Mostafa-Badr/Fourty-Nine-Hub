@@ -138,11 +138,12 @@ class _GoogleMapViewAddresState extends State<GoogleMapViewAddres> {
                 log("okokok");
                 if (start != null && end != null) {
                   context.read<GetTripInfoCubit>().getTripInfoRequest(
-                      subCateogryId: context
-                              .read<RiderTripReelTimeCubit>()
-                              .subCategory
-                              ?.id ??
-                          "",
+                      subCateogryId: "62c8ba9f8e28a58a3edf57eb",
+                      // context
+                      //         .read<RiderTripReelTimeCubit>()
+                      //         .subCategory
+                      //         ?.id ??
+                      //     "",
                       startLatLng: start!,
                       destinationLatLng: end!);
                 }

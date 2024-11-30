@@ -413,16 +413,12 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                   log(state.toString(), name: "ldsjflskdjflskdfjlskjf");
                   if (state is SuccessRequestTripState) {
                     context.read<ShowOffersCubit>().showOffers();
-                    context.read<LocationSocketCubit>().nearbyDriversEmit(
-                        tripId: state.model.trip?.id ?? "",
-                        location:
-                            state.model.trip?.riderLocation?.coordinates ?? [],
-                        subcategoryId: state.model.trip?.subCategoryId ?? "");
+                    // context.read<LocationSocketCubit>().nearbyDriversEmit(
+                    //     tripId: state.model.trip?.id ?? "",
+                    //     location:صw
+                    //         state.model.trip?.riderLocation?.coordinates ?? [],
+                    //     subcategoryId: state.model.trip?.subCategoryId ?? "");
 
-                    //                                   BlocProvider(
-                    //   create: (context) =>
-                    //       RaiseFareCubit(repository: serviceLocator()),
-                    // ),
                     showModalBottomSheet(
                       context: context,
                       builder: (context) {

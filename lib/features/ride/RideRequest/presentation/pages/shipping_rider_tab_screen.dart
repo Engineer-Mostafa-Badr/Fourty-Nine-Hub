@@ -19,6 +19,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/sub
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/sub_cateogry_shipping_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/trip_info_request_widget.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 
 class ShippingRiderTabScreen extends StatefulWidget {
   const ShippingRiderTabScreen({super.key});
@@ -34,6 +35,7 @@ class _ShippingRiderTabScreenState extends State<ShippingRiderTabScreen> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<SecretsCubit>(context).getAllSecrets();
     // context.read<CheckDriverTypeCubit>().checkDriverType();
     if (!isCheck) {
       context.read<CheckAcceptByDriverCubit>().check();
@@ -106,6 +108,7 @@ class _ShippingRiderTabScreenState extends State<ShippingRiderTabScreen> {
                                 BlocBuilder<RiderTripReelTimeCubit, RiderState>(
                                   builder: (context, state) {
                                     if (state is ViewPickTripDataState) {
+                                      print("hello from ride ==== \n");
                                       return Column(
                                         children: [
                                           const MapAndAddressFinderRide(),

@@ -464,9 +464,9 @@ class _RideRequestViewState extends State<RideRequestView> {
                                               name: "ldsjflskdjflskdfjlskjf");
                                           if (state
                                               is SuccessRequestTripState) {
-                                            // context
-                                            //     .read<ShowOffersCubit>()
-                                            //     .showOffers();
+                                            context
+                                                .read<ShowOffersCubit>()
+                                                .showOffers();
                                             context
                                                 .read<LocationSocketCubit>()
                                                 .nearbyDriversEmit(
