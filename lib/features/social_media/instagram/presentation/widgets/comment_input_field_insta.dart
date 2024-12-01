@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -15,12 +13,13 @@ class CommentInputFieldInsta extends StatefulWidget {
   final String postId;
   final Function() onAddComment;
   final controller;
+  final FocusNode focusNode;
   const CommentInputFieldInsta({
     super.key,
     required this.commentController,
     required this.isReplying,
     required this.controller,
-    required this.onAddComment, required this.postId,
+    required this.onAddComment, required this.postId, required this.focusNode,
   });
 
   @override
@@ -29,9 +28,10 @@ class CommentInputFieldInsta extends StatefulWidget {
 
 class CommentInputFieldState extends State<CommentInputFieldInsta> {
 
+  String? replyTo;
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return  Padding(
         padding: MediaQuery.of(context).viewInsets,
         child: Padding(
           padding: const EdgeInsets.all(8.0)
@@ -46,7 +46,7 @@ class CommentInputFieldState extends State<CommentInputFieldInsta> {
             SizedBox(width: 10.w),
             Expanded(
               child: TextField(
-               // focusNode: widget.focusNode,
+                focusNode: widget.focusNode,
                 controller: widget.commentController,
                 style: TextStyle(
                   color: context.isDarkMode ? Colors.white : Colors.black87,
@@ -81,7 +81,9 @@ class CommentInputFieldState extends State<CommentInputFieldInsta> {
                       : null,
                   fillColor:
                   context.isDarkMode ? Colors.grey[800] : Colors.black12,
-                  hintText: LocaleKeys.add_comment_hint.localize,
+                  hintText: replyTo != null
+                      ? "Replying to @$replyTo"
+                      : "Add a comment...",
                   hintStyle: TextStyle(
                     color: context.isDarkMode ? Colors.grey : Colors.black54,
                   ),

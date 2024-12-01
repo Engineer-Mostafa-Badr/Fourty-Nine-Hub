@@ -42,6 +42,7 @@ import 'package:fourtyninehub/service_locator/carpool_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
 import 'package:fourtyninehub/service_locator/edit_food_service_locator.dart';
 import 'package:fourtyninehub/service_locator/face_book_service_locator.dart';
+import 'package:fourtyninehub/service_locator/follow_service_locator.dart';
 import 'package:fourtyninehub/service_locator/instagram_service_locator.dart';
 import 'package:fourtyninehub/service_locator/join_trip_carpool_service_locator.dart';
 import 'package:fourtyninehub/service_locator/notification_service_locator.dart';
@@ -365,6 +366,7 @@ class DI {
     QuranServiceLocator.execute(serviceLocator: serviceLocator);
     StoriesServiceLocator.execute(serviceLocator: serviceLocator);
     ShareAppServiceLocator.execute(serviceLocator: serviceLocator);
+    FollowServiceLocator.execute(serviceLocator: serviceLocator);
   }
   static Future<void> reset() async {
     await serviceLocator.reset();

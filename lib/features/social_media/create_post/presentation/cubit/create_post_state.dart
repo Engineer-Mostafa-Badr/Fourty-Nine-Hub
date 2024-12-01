@@ -19,6 +19,7 @@ class CreatePostState {
   final bool isBiggerThan80;
   final bool isBiggerThen150;
   final bool isBiggerThen120;
+  final String? music;
   CreatePostState(
       {this.status = CreatePostStates.error,
       this.failure,
@@ -32,6 +33,7 @@ class CreatePostState {
       this.isBiggerThen120 = false,
       this.selectedActivity,
       this.selectedFeeling,
+      this.music,
       this.users,
       this.place,
       this.selectedUsers,
@@ -53,6 +55,7 @@ class CreatePostState {
     bool? isBiggerThan80,
     bool? isBiggerThen150,
     bool? isBiggerThen120,
+     String? music,
   }) {
     return CreatePostState(
       status: status ?? this.status,
@@ -71,6 +74,7 @@ class CreatePostState {
       isBiggerThan80: isBiggerThan80 ?? this.isBiggerThan80,
       isBiggerThen150: isBiggerThen150 ?? this.isBiggerThen150,
       isBiggerThen120: isBiggerThen120 ?? this.isBiggerThen120,
+      music: music ?? this.music,
     );
   }
 }

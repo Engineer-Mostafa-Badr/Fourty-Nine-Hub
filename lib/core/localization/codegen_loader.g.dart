@@ -1113,7 +1113,12 @@ class CodegenLoader extends AssetLoader{
   "referralSuccessful": "تمت الإحالة بنجاح! تم تحديث الإحصائيات.",
   "Spotlight": "اضواء كاشفه",
   "Snap": "لقطه",
-  "Reels": "بكر"
+  "Reels": "بكر",
+  "Followers": "متابعين",
+  "Following": "متابعة",
+  "Posts": "منشورات",
+  "noCommentsYet": "لا توجد تعليقات حتى الآن",
+  "startConversation": "ابدأ المحادثة."
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2231,7 +2236,12 @@ static const Map<String,dynamic> en = {
   "referralSuccessful": "Referral was successful! Statistics updated.",
   "Spotlight": "Spotlight",
   "Snap": "Snap",
-  "Reels": "Reels"
+  "Reels": "Reels",
+  "Followers": "Followers",
+  "Following": "Following",
+  "Posts": "Posts",
+  "noCommentsYet": "No comments yet",
+  "startConversation": "Start the conversation."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

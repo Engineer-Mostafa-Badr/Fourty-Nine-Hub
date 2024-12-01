@@ -19,6 +19,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/view_followers_and_following.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/media_view.dart';
@@ -71,8 +72,8 @@ class _InstagramProfileState extends State<InstagramProfile> {
                     SliverToBoxAdapter(
                         child: Container(
                             width: double.infinity,
-                            padding: const EdgeInsetsDirectional.only(
-                                top: 35, end: 10, start: 10),
+                            padding:  EdgeInsetsDirectional.only(
+                                top: 70.h, end: 20.w, start: 20.w),
                             child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -86,12 +87,13 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                             color: context.isDarkMode
                                                 ? AppColors.LIGHT_COLOR
                                                 : AppColors.DARK_BLUE_COLOR,
-                                            size: 45.w,
+                                            size: 55.w,
                                           )),
+                                      if ( state.profileData!.email.isNotEmpty &&  state.profileData!.email !='Hidden')
                                       Label(
                                           text:
                                               '${state.profileData?.email.split('@')[0]}',
-                                          style: Styles.mediumText(
+                                          style: Styles.headerText(
                                             color: context.isDarkMode
                                                 ? AppColors.LIGHT_COLOR
                                                 : AppColors.DARK_GRAY_COLOR,
@@ -426,17 +428,27 @@ class _InstagramProfileState extends State<InstagramProfile> {
                     children: [
                       _buildCounter(
                         value: '${user.instagramPosts ?? 0} ',
-                        label: LocaleKeys.post.localize,
+                        label: LocaleKeys.Posts.localize,
                       ),
                       const Sizer(),
-                      _buildCounter(
-                        value: '${user.friendsCount} ',
-                        label: LocaleKeys.friend.localize,
+                      InkWell(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewFollowersAndFollowing()));
+                        },
+                        child: _buildCounter(
+                          value: '${user.followersCount} ',
+                          label: LocaleKeys.Followers.localize,
+                        ),
                       ),
                       const Sizer(),
-                      _buildCounter(
-                        value: '${user.followersCount} ',
-                        label: LocaleKeys.follower.localize,
+                      InkWell(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewFollowersAndFollowing()));
+                        },
+                        child: _buildCounter(
+                          value: '${user.followingCount} ',
+                          label: LocaleKeys.Following.localize,
+                        ),
                       ),
                       Sizer(
                         width: 8.w,
@@ -468,22 +480,20 @@ class _InstagramProfileState extends State<InstagramProfile> {
                           text: "${user.firstName} ${user.lastName}",
                           style: Styles.headerText(
                             fontWeight: FontWeight.w600,
-                            color: context.isDarkMode
-                                ? AppColors.PRIMARY_COLOR_DARK
-                                : AppColors.DARK_BLUE_COLOR,
                           )),
-                      if (user.job.isNotEmpty&& user.job !='Hidden')
-                        TextSpan(
-                            text: '\t(${user.job})',
-                            style: Styles.headerText(
-                                color: context.isDarkMode
-                                    ? AppColors.LIGHT_COLOR
-                                    : AppColors.DARK_BLUE_COLOR,
-                                fontSize: 26)),
+                      // if (user.job.isNotEmpty&& user.job !='Hidden')
+                      //   TextSpan(
+                      //       text: '\t(${user.job})',
+                      //       style: Styles.headerText(
+                      //           color: context.isDarkMode
+                      //               ? AppColors.LIGHT_COLOR
+                      //               : AppColors.DARK_BLUE_COLOR,
+                      //           fontSize: 26)),
                     ])),
                 Sizer(
                   height: 4.h,
                 ),
+                if (user.email.isNotEmpty && user.email !='Hidden')
                 Label(
                     text: '@ ${user.email.split('@')[0]}',
                     style: Styles.mediumText(
@@ -494,7 +504,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                 Sizer(
                   height: 4.h,
                 ),
-                if (user.bio.isNotEmpty)
+                if (user.bio.isNotEmpty && user.bio !='Hidden')
                   Label(
                       text: user.bio,
                       style: Styles.mediumText(

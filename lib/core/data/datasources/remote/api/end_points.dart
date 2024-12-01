@@ -559,6 +559,15 @@ class EndPoints {
     return '/reels/saved?limit=${params.limit}&page=${params.page}&subCategory=${Constants.reelsSubCategory}';
   }
 
+  static String followers(TwitterFeedParams params) {
+    return '/follow/followers?search=${params.search}&limit=${params.limit}&page=${params.page}';
+  }
+
+  static String following(TwitterFeedParams params) {
+    return '/follow/allFollowing?search=${params.search}&limit=${params.limit}&page=${params.page}';
+  }
+
+
   static String createReel(CreateReelParams params) {
     return '/reels/views/${params.reelId}';
   }

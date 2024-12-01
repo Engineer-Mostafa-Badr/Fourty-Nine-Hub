@@ -1088,5 +1088,10 @@ abstract class  LocaleKeys {
   static const Spotlight = 'Spotlight';
   static const Snap = 'Snap';
   static const Reels = 'Reels';
+  static const Followers = 'Followers';
+  static const Following = 'Following';
+  static const Posts = 'Posts';
+  static const noCommentsYet = 'noCommentsYet';
+  static const startConversation = 'startConversation';
 
 }

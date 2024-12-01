@@ -7,6 +7,8 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/search/domain/entity/reels_search_entity.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
@@ -97,37 +99,47 @@ class _VideoGridItemState extends State<VideoGridItem> {
   @override
   Widget build(BuildContext context) {
     return _controller.value.isInitialized
-        ? AspectRatio(
-            aspectRatio: _controller.value.aspectRatio,
-            child: Stack(
-              children: [
-                VideoPlayer(_controller),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child:
-                      VideoProgressIndicator(_controller, allowScrubbing: true),
-                ),
-                Center(
-                  child: IconButton(
-                    icon: Icon(
-                      _controller.value.isPlaying
-                          ? Icons.pause
-                          : Icons.play_arrow,
-                      color: Colors.white,
-                      size: 30.0,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _controller.value.isPlaying
-                            ? _controller.pause()
-                            : _controller.play();
-                      });
-                    },
+        ? GestureDetector(
+      onTap: (){
+        if (_controller.value.isPlaying) {
+          _controller.pause();
+        } else {
+          context.push(Routes.REELS);
+          // controller.play();
+        }
+      },
+          child: AspectRatio(
+              aspectRatio: _controller.value.aspectRatio,
+              child: Stack(
+                children: [
+                  VideoPlayer(_controller),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child:
+                        VideoProgressIndicator(_controller, allowScrubbing: true),
                   ),
-                ),
-              ],
+                  Center(
+                    child: IconButton(
+                      icon: Icon(
+                        _controller.value.isPlaying
+                            ? Icons.pause
+                            : Icons.play_arrow,
+                        color: Colors.white,
+                        size: 30.0,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _controller.value.isPlaying
+                              ? _controller.pause()
+                              : _controller.play();
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
-          )
+        )
         : Shimmer.fromColors(
             baseColor: Colors.grey[300]!,
             highlightColor: Colors.grey[100]!,

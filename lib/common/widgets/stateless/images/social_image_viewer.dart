@@ -53,14 +53,15 @@ class SocialImageViewer extends StatelessWidget {
               ImageFromInternet(image: image),
               if (length > 1)
                 Positioned(
-                    top: 10,
-                    right: 10,
+                    top: 20.h,
+                    right: 20.w,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w.w),
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
                       // height: kToolbarHeight * .5,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          color: Colors.grey),
+                          color: Colors.black54,
+                      ),
                       child: Label(
                           text: '$index/$length',
                           style: Styles.mediumText(color: Colors.white)),

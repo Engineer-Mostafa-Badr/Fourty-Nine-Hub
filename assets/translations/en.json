@@ -1117,5 +1117,10 @@
   "referralSuccessful": "Referral was successful! Statistics updated.",
   "Spotlight":"Spotlight",
   "Snap":"Snap",
-  "Reels":"Reels"
+  "Reels":"Reels",
+  "Followers": "Followers",
+  "Following": "Following",
+  "Posts": "Posts",
+  "noCommentsYet": "No comments yet",
+  "startConversation": "Start the conversation."
 }

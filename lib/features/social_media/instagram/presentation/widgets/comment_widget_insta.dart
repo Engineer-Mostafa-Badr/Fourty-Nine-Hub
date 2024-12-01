@@ -41,6 +41,7 @@ class CommentWidgetInsta extends StatefulWidget {
   final Function(String) onDeleteReply;
   final Function(String) onDeleteComment;
   final Function() function;
+  final Function() onReplyPressed;
 
   CommentWidgetInsta({
     super.key,
@@ -53,7 +54,7 @@ class CommentWidgetInsta extends StatefulWidget {
     required this.onDeleteReply,
     required this.onAddReply,
     required this.onDeleteComment,
-    required this.function,
+    required this.function, required this.onReplyPressed,
   });
 
   @override
@@ -64,6 +65,7 @@ class _CommentWidgetState extends State<CommentWidgetInsta> {
   bool _isRepliesVisible = false;
   int _displayedRepliesCount = 3;
   final editTextController = TextEditingController();
+  String? replyTo;
 
   @override
   Widget build(BuildContext context) {
@@ -131,20 +133,7 @@ class _CommentWidgetState extends State<CommentWidgetInsta> {
                                   noItemsFoundIndicatorBuilder: (context) {
                                     print(controller.repliesPagingController
                                         .itemList?.length);
-                                    return Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 200),
-                                        child: Center(
-                                          child: Text(
-                                            LocaleKeys.noReplied.localize,
-                                            style: TextStyle(
-                                              color: context.isDarkMode
-                                                  ? AppColors.LIGHT_GRAY_COLOR
-                                                  : Colors.black,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                        ));
+                                    return SizedBox.shrink();
                                   },
                                   itemBuilder: (context, item, index) {
                                     return _buildRepliesList(
@@ -199,8 +188,8 @@ class _CommentWidgetState extends State<CommentWidgetInsta> {
     );
   }
 
-  Widget _buildCommentRow(
-      String comment, DateTime createdAt, bool reply, Function() function, user) {
+  Widget _buildCommentRow(String comment, DateTime createdAt, bool reply,
+      Function() function, user) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -407,89 +396,30 @@ class _CommentWidgetState extends State<CommentWidgetInsta> {
       ),
     );
   }
-
-  // Widget _buildReplyRow(String comment, DateTime createdAt, bool reply,
-  //     {String? replyId, bool? isLike, int? replyCount}) {
-  //   return Row(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       ImageFromInternet(
-  //         width: 50,
-  //         height: 50,
-  //         isCircle: true,
-  //         image: widget.commentData.user.image.isEmpty
-  //             ? UIConst.profilePlaceHolder
-  //             : widget.commentData.user.image,
-  //       ),
-  //       const SizedBox(width: 10),
-  //       Expanded(
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             NoScaleText(
-  //               capitalizeAndSplit(
-  //                   '${widget.commentData.user.firstName} ${widget.commentData.user.lastName}'),
-  //               style: TextStyle(
-  //                 color: context.isDarkMode ? Colors.white70 : Colors.grey,
-  //                 fontSize: 25.sp,
-  //                 fontWeight: FontWeight.bold,
-  //               ),
-  //             ),
-  //             // SizedBox(height: 5.h),
-  //             NoScaleText(
-  //               comment,
-  //               style: TextStyle(
-  //                 color: context.isDarkMode ? Colors.white70 : Colors.black87,
-  //                 fontSize: 25.sp,
-  //               ),
-  //             ),
-  //             Row(
-  //               children: [
-  //                 NoScaleText(
-  //                   formatDateTime(createdAt),
-  //                   style: TextStyle(
-  //                     color: Colors.grey[500],
-  //                     fontWeight: FontWeight.w400,
-  //                   ),
-  //                 ),
-  //                 SizedBox(width: 30.w),
-  //                 _buildReplyButton(),
-  //                 const Spacer(),
-  //                 _buildReplyLikeButton(reply,
-  //                     replyId: replyId, isLike: isLike, likeCount: replyCount),
-  //               ],
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ],
-  //   );
+  // void _toggleReplyMode(String? userName) {
+  //   setState(() {
+  //     context.read<ReelsCubit>().updateParentCommentIdAndReceiverComment(
+  //         parentCommentId: widget.commentData.id,
+  //         receiverComment: widget.commentData.user.id);
+  //     widget.replyingTo = userName;
+  //     if (userName != null) {
+  //       widget.commentController.text = '@$userName ';
+  //       widget.commentController.selection = TextSelection.fromPosition(
+  //         TextPosition(offset: widget.commentController.text.length),
+  //       );
+  //       widget.focusNode.requestFocus();
+  //     } else {
+  //       widget.commentController.clear();
+  //       widget.focusNode.unfocus();
+  //     }
+  //   });
   // }
-
-  void _toggleReplyMode(String? userName) {
-    setState(() {
-      context.read<ReelsCubit>().updateParentCommentIdAndReceiverComment(
-          parentCommentId: widget.commentData.id,
-          receiverComment: widget.commentData.user.id);
-      widget.replyingTo = userName;
-      if (userName != null) {
-        widget.commentController.text = '@$userName ';
-        widget.commentController.selection = TextSelection.fromPosition(
-          TextPosition(offset: widget.commentController.text.length),
-        );
-        widget.focusNode.requestFocus();
-      } else {
-        widget.commentController.clear();
-        widget.focusNode.unfocus();
-      }
-    });
-  }
 
   Widget _buildReplyButton() {
     return InkWell(
       onTap: () {
-        _toggleReplyMode(
-            '${widget.commentData.user.firstName} ${widget.commentData.user.lastName}');
+        widget.onReplyPressed();
+
       },
       child: NoScaleText(
         LocaleKeys.reply.localize,
@@ -569,25 +499,25 @@ class _CommentWidgetState extends State<CommentWidgetInsta> {
   //   );
   // }
 
-  void _handleLikeComment(String commentId, bool isReply, {String? replyId}) {
-    print('isReply : $isReply');
-    context
-        .read<InstagramCubit>()
-        .onReact(
-          params: PostReactParams(
-            postId: commentId,
-            react: 'love',
-          ),
-          // commentId,
-          // isReply,
-          // replyId: replyId
-        )
-        .then((_) {
-      FocusScope.of(context).unfocus();
-    }).catchError((error) {
-      _showErrorSnackBar('Failed to send like. Please try again.');
-    });
-  }
+  // void _handleLikeComment(String commentId, bool isReply, {String? replyId}) {
+  //   print('isReply : $isReply');
+  //   context
+  //       .read<InstagramCubit>()
+  //       .onReact(
+  //         params: PostReactParams(
+  //           postId: commentId,
+  //           react: 'love',
+  //         ),
+  //         // commentId,
+  //         // isReply,
+  //         // replyId: replyId
+  //       )
+  //       .then((_) {
+  //     FocusScope.of(context).unfocus();
+  //   }).catchError((error) {
+  //     _showErrorSnackBar('Failed to send like. Please try again.');
+  //   });
+  // }
 
   Widget _buildToggleRepliesButton(int length) {
     final remainingReplies = length - _displayedRepliesCount;

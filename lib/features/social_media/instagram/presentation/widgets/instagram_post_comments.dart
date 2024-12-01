@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -51,6 +52,7 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
   final commentTextController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   final FocusNode focusNode = FocusNode();
+   bool isReplying = false;
 
   @override
   void initState() {
@@ -64,6 +66,7 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
     commentTextController.dispose();
     super.dispose();
   }
+  String? replyTo;
 
   @override
   Widget build(BuildContext context) {
@@ -108,18 +111,25 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                               print(controller
                                   .commentsPagingController.itemList?.length);
                               return Padding(
-                                  padding: const EdgeInsets.only(top: 200),
-                                  child: Center(
-                                    child: Text(
-                                      LocaleKeys.noComments.localize,
-                                      style: TextStyle(
-                                        color: context.isDarkMode
-                                            ? AppColors.LIGHT_GRAY_COLOR
-                                            : Colors.black,
-                                        fontSize: 18,
-                                      ),
+                                padding:  EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height *.35),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                     LocaleKeys.noCommentsYet.localize,
+                                      style: Styles.headerText(fontSize: 100.sp)
                                     ),
-                                  ));
+                                    const Sizer(),
+                                    Text(
+                                        LocaleKeys.startConversation.localize,
+                                      style: Styles.mediumText(
+                                        fontSize: 70.sp,
+                                        color: AppColors.GREY_NORMAL_COLOR
+                                      )
+                                    ),
+                                  ],
+                                ),
+                              );
                             },
                             itemBuilder: (context, item, index) {
                               return _buildCommentCard(
@@ -156,108 +166,191 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                                 const CupertinoActivityIndicator()),
                       ),
                     ),
+                    // Padding(
+                    //     padding: MediaQuery.of(context).viewInsets,
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.all(8.0)
+                    //           .add(EdgeInsetsDirectional.only(end: 20.w, bottom: 10.h)),
+                    //       child: Row(children: [
+                    //         ImageFromInternet(
+                    //           width: 50,
+                    //           height: 50,
+                    //           isCircle: true,
+                    //           image: context.read<UserCubit>().state.data!.profilePicture??UIConst.profilePlaceHolder,
+                    //         ),
+                    //         SizedBox(width: 10.w),
+                    //         Expanded(
+                    //           child: TextField(
+                    //             focusNode: focusNode,
+                    //             controller: commentTextController,
+                    //             style: TextStyle(
+                    //               color: context.isDarkMode ? Colors.white : Colors.black87,
+                    //             ),
+                    //             maxLines: null,
+                    //             onChanged: (value) {
+                    //               setState(() {});
+                    //             },
+                    //             decoration: InputDecoration(
+                    //               filled: true,
+                    //               suffixIcon: commentTextController.text.isNotEmpty
+                    //                   ? Container(
+                    //                 margin: EdgeInsetsDirectional.only(
+                    //                     end: 10.w, top: 10, bottom: 10),
+                    //                 padding: const EdgeInsets.all(3)
+                    //                     .add(EdgeInsets.symmetric(horizontal: 10.w)),
+                    //                 decoration: BoxDecoration(
+                    //                   color: AppColors.SECONDARY_COLOR,
+                    //                   borderRadius: BorderRadius.circular(20),
+                    //                 ),
+                    //                 child: InkWell(
+                    //                   onTap: ()async{
+                    //                     final content = commentTextController.text.trim();
+                    //                     if (content.isEmpty) return;
+                    //                  //   widget.onAddComment();
+                    //                     if (replyTo != null){
+                    //                       widget.onCommentReply(ReplyOnCommentParams(
+                    //                           postId: widget.postId,
+                    //                           commentId: '674a0a806ad30ae85dc39119',
+                    //                           content: commentTextController.text));
+                    //                     }else{
+                    //                       CommentEntity data = await widget.onAddComment(
+                    //                         PostCommentParams(
+                    //                           postId: widget.postId,
+                    //                           content: commentTextController.text,
+                    //                         ),
+                    //                       );
+                    //                       controller.commentsPagingController.itemList?.insert(
+                    //                         0,
+                    //                         CommentModel(
+                    //                           id: data.id,
+                    //                           content: commentTextController.text,
+                    //                           post: widget.postId,
+                    //                           createdAt: DateTime.now(),
+                    //                           loveCount: data.loveCount,
+                    //                           angryCount: data.angryCount,
+                    //                           likesCount: data.likesCount,
+                    //                           repliesCount: data.repliesCount,
+                    //                           sadCount: data.sadCount,
+                    //                           wowCount: data.wowCount,
+                    //                           isAngry: false,
+                    //                           isLikes: false,
+                    //                           isLove: false,
+                    //                           isSad: false,
+                    //                           isWow: false,
+                    //                           user: TwitterUserEntity(
+                    //                             id: user!.id,
+                    //                             firstName: user.firstName,
+                    //                             lastName: user.lastName,
+                    //                             createdAt: DateTime.now(),
+                    //                             image: user.profilePicture ?? '',
+                    //                             email: user.email ?? '',
+                    //                             isDocumented: false,
+                    //                           ),
+                    //                         ),
+                    //                       );
+                    //                     }
+                    //
+                    //                     setState(() {
+                    //                       commentTextController.clear();
+                    //                       replyTo = null;
+                    //                     });
+                    //                   },
+                    //                   child: Icon(
+                    //                     Icons.arrow_upward,
+                    //                     color: Colors.white,
+                    //                     size: 30.h,
+                    //                   ),
+                    //                 ),
+                    //               )
+                    //                   : null,
+                    //               fillColor:
+                    //               context.isDarkMode ? Colors.grey[800] : Colors.black12,
+                    //               hintText: replyTo != null
+                    //                   ? "Replying to @$replyTo"
+                    //                   : "Add a comment...",
+                    //               hintStyle: TextStyle(
+                    //                 color: context.isDarkMode ? Colors.grey : Colors.black54,
+                    //               ),
+                    //               border: OutlineInputBorder(
+                    //                 borderRadius: BorderRadius.circular(20),
+                    //                 borderSide: BorderSide.none,
+                    //               ),
+                    //               focusedBorder: OutlineInputBorder(
+                    //                 borderRadius: BorderRadius.circular(20),
+                    //                 borderSide: BorderSide.none,
+                    //               ),
+                    //               enabledBorder: OutlineInputBorder(
+                    //                 borderRadius: BorderRadius.circular(20),
+                    //                 borderSide: BorderSide.none,
+                    //               ),
+                    //               contentPadding: const EdgeInsets.all(16),
+                    //             ),
+                    //             minLines: 1,
+                    //             keyboardType: TextInputType.multiline,
+                    //           ),
+                    //         )
+                    //       ]),
+                    //     )),
                     CommentInputFieldInsta(
                       commentController: commentTextController,
-                      isReplying: false,
+                      isReplying: isReplying,
+                      focusNode: focusNode,
                       controller: controller,
                       onAddComment: () async {
-                        CommentEntity data = await widget.onAddComment(
-                          PostCommentParams(
+                        final content = commentTextController.text.trim();
+                        if (content.isEmpty) return;
+                        //   widget.onAddComment();
+                        if (replyTo != null){
+                          widget.onCommentReply(ReplyOnCommentParams(
                               postId: widget.postId,
-                              content: commentTextController.text),
-                        );
-                        controller.commentsPagingController.itemList?.insert(
-                          0,
-                          CommentModel(
-                            id: data.id,
-                            content: commentTextController.text,
-                            post: widget.postId,
-                            createdAt: DateTime.now(),
-                            loveCount: data.loveCount,
-                            angryCount: data.angryCount,
-                            likesCount: data.likesCount,
-                            repliesCount: data.repliesCount,
-                            sadCount: data.sadCount,
-                            wowCount: data.wowCount,
-                            isAngry: false,
-                            isLikes: false,
-                            isLove: false,
-                            isSad: false,
-                            isWow: false,
-                            user: TwitterUserEntity(
-                              id: user!.id,
-                              firstName: user.firstName,
-                              lastName: user.lastName,
-                              createdAt: DateTime.now(),
-                              image: user.profilePicture ?? '',
-                              email: user.email ?? '',
-                              isDocumented: false,
+                              commentId: '674a0a806ad30ae85dc39119',
+                              content: commentTextController.text));
+                        }else{
+                          CommentEntity data = await widget.onAddComment(
+                            PostCommentParams(
+                              postId: widget.postId,
+                              content: commentTextController.text,
                             ),
-                          ),
-                        );
-                        commentTextController.clear();
-                        FocusScope.of(context).unfocus();
-                        setState(() {});
-                        // final reelsCubit = context.read<InstagramCubit>();
-                        //   await reelsCubit.onPostComment(
-                        //     params: PostCommentParams(
-                        //       postId: controller
-                        //           .feedPagingController
-                        //           .itemList![index]
-                        //           .id,
-                        //       content: widget.commentController.text,),
-                        //      // context,
-                        //       // widget.comment.id,
-                        //       // widget.commentController.text
-                        //   );
-                        //   if (widget.scrollController.hasClients &&
-                        //       widget.scrollController.position
-                        //           .maxScrollExtent >
-                        //           0) {
-                        //     widget.scrollController.animateTo(
-                        //       widget.scrollController.position
-                        //           .minScrollExtent,
-                        //       duration: const Duration(milliseconds: 500),
-                        //       curve: Curves.easeOut,
-                        //     );
-                        //   }
-                        // // if (reelsCubit.receiverComment != null &&
-                        // //     reelsCubit.parentCommentId != null) {
-                        // //   await reelsCubit.addReplayComment(
-                        // //     context,
-                        // //     widget.comment.id,
-                        // //     widget.commentController.text.trim(),
-                        // //     parentCommentId: reelsCubit.parentCommentId,
-                        // //     receiverComment: reelsCubit.receiverComment,
-                        // //   );
-                        // // } else {
-                        // //   await reelsCubit.addComment(
-                        // //       context,
-                        // //       widget.comment.id,
-                        // //       widget.commentController.text);
-                        // //   if (widget.scrollController.hasClients &&
-                        // //       widget.scrollController.position
-                        // //           .maxScrollExtent >
-                        // //           0) {
-                        // //     widget.scrollController.animateTo(
-                        // //       widget.scrollController.position
-                        // //           .minScrollExtent,
-                        // //       duration: const Duration(milliseconds: 500),
-                        // //       curve: Curves.easeOut,
-                        // //     );
-                        // //   }
-                        // // }
-                        // widget.commentController.clear();
-                        // widget.focusNode.unfocus();
-                        // reelsCubit
-                        //     .updateParentCommentIdAndReceiverComment(
-                        //     receiverComment: null,
-                        //     parentCommentId: null);
-                        //
-                        // // setState(() {});
+                          );
+                          controller.commentsPagingController.itemList?.insert(
+                            0,
+                            CommentModel(
+                              id: data.id,
+                              content: commentTextController.text,
+                              post: widget.postId,
+                              createdAt: DateTime.now(),
+                              loveCount: data.loveCount,
+                              angryCount: data.angryCount,
+                              likesCount: data.likesCount,
+                              repliesCount: data.repliesCount,
+                              sadCount: data.sadCount,
+                              wowCount: data.wowCount,
+                              isAngry: false,
+                              isLikes: false,
+                              isLove: false,
+                              isSad: false,
+                              isWow: false,
+                              user: TwitterUserEntity(
+                                id: user!.id,
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                createdAt: DateTime.now(),
+                                image: user.profilePicture ?? '',
+                                email: user.email ?? '',
+                                isDocumented: false,
+                              ),
+                            ),
+                          );
+                        }
+
+                        setState(() {
+                          commentTextController.clear();
+                          replyTo = null;
+                        });
                       },
                       postId: widget.postId,
                     ),
+
                     // if(widget.isShown==false)Container(
                     //     height: kToolbarHeight,
                     //     decoration: const BoxDecoration(
@@ -366,6 +459,15 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
           onDeleteComment: (String id) => onDeleteComment(id),
           onDeleteReply: (String id) => onDeleteReply(id),
           function: function,
+          onReplyPressed: (){
+            setState(() {
+              replyTo = comment.user.firstName; // Or user.username
+              commentTextController.text = '@${replyTo!} ';
+              commentTextController.selection = TextSelection.fromPosition(
+                TextPosition(offset: commentTextController.text.length),
+              );
+            });
+          },
         ),
         // InstagramCommentCard(
         //   comment: comment,
