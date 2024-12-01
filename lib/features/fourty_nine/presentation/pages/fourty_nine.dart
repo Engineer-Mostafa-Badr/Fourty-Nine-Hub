@@ -3,6 +3,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/ads/app_open_model.dart';
+import 'package:fourtyninehub/ads/banner_ad_model.dart';
+import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -44,7 +47,7 @@ class FourtyNineView extends StatefulWidget {
   State<FourtyNineView> createState() => _FourtyNineViewState();
 }
 
-class _FourtyNineViewState extends State<FourtyNineView> {
+class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObserver {
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
@@ -55,9 +58,29 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       print(e.toString());
     }
   }
+  AppOpenAdManager appOpenAdManager = AppOpenAdManager();
+  bool isPaused = false;
+
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // TODO: implement didChangeAppLifecycleState
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused) {
+      print("xd==========================");
+      isPaused = true;
+    }
+    if (state == AppLifecycleState.resumed && isPaused) {
+      print("Resumed==========================");
+      appOpenAdManager.showAdIfAvailable();
+      isPaused = false;
+    }
+  }
 
   @override
   void initState() {
+    appOpenAdManager.loadAd();
+    WidgetsBinding.instance.addObserver(this);
     checkLogin();
     super.initState();
     _setupScrollController();
@@ -99,6 +122,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   @override
   void dispose() {
     scrollController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+
     super.dispose();
   }
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -150,6 +175,11 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           shrinkWrap: true,
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           children: [
+            AddBanner(),
+            ElevatedButton(onPressed: (){
+              AdInterstitialTop.loadIntersitialAd();
+              AdInterstitialTop.showInterstitialAd();
+            }, child: Text("Video")),
             //carousel slider
             const AnnounceWidget(),
             !context.read<UserCubit>().isLoggedIn
