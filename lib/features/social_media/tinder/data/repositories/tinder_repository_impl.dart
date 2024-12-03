@@ -1,5 +1,3 @@
-
-
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -7,9 +5,9 @@ import 'package:fourtyninehub/features/social_media/tinder/data/data_sources/tin
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/last_seen_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/near_by_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/domain/last_seen_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/domain/user_data_tinder_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_user_data_use_case.dart';
@@ -53,7 +51,7 @@ class TinderRepositoryImpl extends TinderRepository {
   }
 
   @override
-  Future<Either<Failure, LastSeenModel>> fetchLastSeen(String id) {
+  Future<Either<Failure, LastSeenEntity>> fetchLastSeen(String id) {
     return _storiesRemoteDataSource.fetchLastSeen(id);
   }
 

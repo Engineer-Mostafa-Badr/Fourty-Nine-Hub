@@ -1,10 +1,10 @@
 class LastSeenEntity {
-  String? id;
-  String? user;
-  String? lastSeen;
-  String? status;
-  String? createdAt;
-  String? updatedAt;
+ final String? id;
+ final String? user;
+ final String? lastSeen;
+ final String? status;
+ final String? createdAt;
+ final String? updatedAt;
 
   LastSeenEntity({
   required  this.id,

@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/tinder/data/models/last_seen
 import 'package:fourtyninehub/features/social_media/tinder/data/models/near_by_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/user_data_tinder_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/domain/last_seen_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/domain/user_data_tinder_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_user_data_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/send_geft_use_case.dart';
@@ -24,7 +25,7 @@ abstract class TinderRemoteDataSource {
   Future<Either<Failure, SubFavoritesResponse>> fetchFavourites();
   Future<Either<Failure, CategoryFavoritesResponse>> fetchFavouritesCategories();
   Future<Either<Failure, bool>> addFavouriteCategories(String id);
-  Future<Either<Failure, LastSeenModel>> fetchLastSeen(String id);
+  Future<Either<Failure, LastSeenEntity>> fetchLastSeen(String id);
   Future<Either<Failure, dynamic>> sendGift(SendGiftParams params);
   Future<Either<Failure, GiftApi>> fetchGifts();
   Future<Either<Failure, NearByModel>> checkUserNearby(String id);
@@ -120,13 +121,13 @@ class TinderRemoteDataSourceImpl implements TinderRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, LastSeenModel>> fetchLastSeen(String id) async {
+  Future<Either<Failure, LastSeenEntity>> fetchLastSeen(String id) async {
     final response = await _apiConsumer.get(
       EndPoints.fetchLastSeen(id),
     );
     return response.fold(
           (failure) => Left(failure),
-          (response) => Right(LastSeenModel.fromJson(response)),
+          (response) => Right(LastSeenModel.fromJson(response['data'])),
     );
   }
 
@@ -138,7 +139,7 @@ class TinderRemoteDataSourceImpl implements TinderRemoteDataSource {
     );
     return response.fold(
           (failure) => Left(failure),
-          (response) => Right(LastSeenModel.fromJson(response)),
+          (response) => Right(LastSeenModel.fromJson(response['data'])),
     );
   }
 

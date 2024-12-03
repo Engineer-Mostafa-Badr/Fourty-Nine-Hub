@@ -4,10 +4,10 @@ import 'package:fourtyninehub/features/social_media/tinder/data/models/add_categ
 import 'package:fourtyninehub/features/social_media/tinder/data/models/anonymous_chat_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/last_seen_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/near_by_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/normal_chat_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/domain/last_seen_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/domain/user_data_tinder_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
@@ -86,7 +86,7 @@ class TinderViewState {
   final NearByModel? isUserNearby;
   final TinderStates? isUserNearbyState;
 
-  final LastSeenModel? lastSeenModel;
+  final LastSeenEntity? lastSeenModel;
   final TinderStates? lastSeenModelState;
 
   TinderViewState({
@@ -162,7 +162,7 @@ class TinderViewState {
     TinderStates? currentStoryIndexState,
     NearByModel? isUserNearby,
     TinderStates? isUserNearbyState,
-    LastSeenModel? lastSeenModel,
+    LastSeenEntity? lastSeenModel,
     TinderStates? lastSeenModelState,
     MainCategoryEntity? mainCategoryEntity,
     TinderStates? mainCategoryResponseState,

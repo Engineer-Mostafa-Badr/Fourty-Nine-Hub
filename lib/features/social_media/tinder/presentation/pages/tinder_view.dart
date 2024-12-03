@@ -333,13 +333,16 @@ class _TinderScreenState extends State<TinderScreen> {
           //   return _buildPleaseLoginWidget(context);
           // }
 
-          if (state.userData0 == null || state.userData0!.isEmpty) {
-            return Center(
-              child: Text('No data found'),
-            );
-          }
 
-          return _buildLoggedInContent(context, state);
+          if(state.status ==TinderStates.success) {
+            if (state.userData0 == null || state.userData0!.isEmpty) {
+              return Center(
+                child: Text('No data found'),
+              );
+            }
+            return _buildLoggedInContent(context, state);
+          }
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );
@@ -352,8 +355,6 @@ class _TinderScreenState extends State<TinderScreen> {
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            Text(state.userData0![0].firstName!),
-            // _buildHeader(),
             state.userData0!.isNotEmpty
                 ? const TinderCardStack()
                 : SizedBox(

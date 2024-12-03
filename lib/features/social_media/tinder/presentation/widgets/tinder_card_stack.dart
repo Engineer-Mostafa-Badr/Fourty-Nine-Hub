@@ -616,7 +616,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:developer';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
@@ -874,12 +873,12 @@ class _TinderCardStackState extends State<TinderCardStack> {
   getStatus(BuildContext context) {
     final lastSeenModel = context.read<TinderViewCubit>().state.lastSeenModel;
 
-    if (lastSeenModel!.data?.status == 'offline') {
+    if (lastSeenModel?.status == 'offline') {
       return context.isArabic ? 'غير متصل' : 'offline';
     }
-    if (lastSeenModel.data?.status == 'online') {
-      if (lastSeenModel.data?.lastSeen != null ||
-          lastSeenModel.data?.lastSeen != '') return '';
+    if (lastSeenModel?.status == 'online') {
+      if (lastSeenModel?.lastSeen != null ||
+          lastSeenModel?.lastSeen != '') return '';
 
       return context.isArabic ? 'متصل' : 'online';
     }
@@ -963,8 +962,8 @@ class _TinderCardStackState extends State<TinderCardStack> {
           return const Text('');
         } else {
           return Text(
-            state.lastSeenModel!.data!.lastSeen!.isNotEmpty
-                ? "${context.isArabic ? " آخر ظهور منذ" : 'Last seen'} ${getTimeAgo(context, state.lastSeenModel?.data?.lastSeen ?? '')}"
+            state.lastSeenModel?.lastSeen !=null
+                ? "${context.isArabic ? " آخر ظهور منذ" : 'Last seen'} ${getTimeAgo(context, state.lastSeenModel?.lastSeen ?? '')}"
                 : "",
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
