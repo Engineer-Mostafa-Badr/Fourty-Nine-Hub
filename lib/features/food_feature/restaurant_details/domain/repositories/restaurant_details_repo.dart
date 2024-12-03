@@ -20,7 +20,7 @@ abstract class RestaurantDetailsRepo {
   Future<Either<Failure, bool>> deleteFoodFromCart(
       {required DeleteFoodFromCartParams params});
   Future<Either<Failure, bool>> deleteCart();
-  Future<Either<Failure, bool>> addFood(
+  Future<Either<Failure, RestaurantMenu>> addFood(
       {required AddFoodParams params});
   Future<Either<Failure, bool>> addToCart({
     required String restaurantId,

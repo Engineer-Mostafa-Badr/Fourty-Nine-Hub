@@ -646,7 +646,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   String _getFirstTwoWords(String fullName) {
     List<String> words = fullName.split(" ");
-    if (words.length > 1) {
+    print(fullName);
+    if (words.isNotEmpty) {
       // Capitalize the first letter of each word
       words = words.map((word) {
         return word[0].toUpperCase() + word.substring(1).toLowerCase();

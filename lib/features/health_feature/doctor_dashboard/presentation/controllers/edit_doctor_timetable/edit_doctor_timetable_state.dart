@@ -5,6 +5,8 @@ enum EditDoctorTimetableStateStatus {
   initial,
   startLoading,
   endLoading,
+  editLoading,
+  editSuccess,
   getDoctor,
   error,
   doctorDeleted,

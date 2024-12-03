@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/phone_number_text_field.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/edit_doctor_personal_info/edit_doctor_personal_info_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
@@ -12,8 +14,8 @@ class EditDoctorPhoneField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle =
-        Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.black) ??
-            const TextStyle(color: Colors.black);
+        Theme.of(context).textTheme.bodyMedium?.copyWith(color: context.isDarkMode?Colors.white:Colors.black) ??
+            TextStyle(color:context.isDarkMode?Colors.white: Colors.black);
     return TextFormField(
       focusNode: FocusNode(),
       controller: context.read<EditDoctorPersonalInfoCubit>().phoneController,
@@ -21,11 +23,11 @@ class EditDoctorPhoneField extends StatelessWidget {
       cursorColor: Colors.blue,
       style: textStyle,
       decoration: InputDecoration(
-        fillColor: Colors.white ,
+        fillColor: cardDarkColor(context) ,
         filled: true,
         contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
         hintText:  LocaleKeys.phoneNumber.localize,
-        hintStyle: textStyle.copyWith(color: AppColors.QUANTITY_COLOR),
+        hintStyle: textStyle.copyWith(color: context.isDarkMode?Colors.white:AppColors.QUANTITY_COLOR),
         counterText: '',
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),

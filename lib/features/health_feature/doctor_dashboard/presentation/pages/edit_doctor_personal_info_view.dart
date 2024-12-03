@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/edit_doctor_personal_info/edit_doctor_personal_info_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
@@ -34,8 +36,8 @@ class _EditDoctorPersonalInfoViewState extends State<EditDoctorPersonalInfoView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(
-        label: Labels.edit,
+      appBar: BackAppBar(
+        label: LocaleKeys.edit.localize,
       ),
       body: BlocBuilder<EditDoctorPersonalInfoCubit,EditDoctorPersonalInfoState>(
         builder: (context,state) {
@@ -51,7 +53,9 @@ class _EditDoctorPersonalInfoViewState extends State<EditDoctorPersonalInfoView>
               Sizer(
                 height: 30.h,
               ),
-              const EditDoctorPhoneField(),
+              const EditDoctorPhoneField(
+
+              ),
               Sizer(
                 height: 30.h,
               ),
@@ -60,10 +64,10 @@ class _EditDoctorPersonalInfoViewState extends State<EditDoctorPersonalInfoView>
                 height: 60.h,
               ),
               AppButton(
-                label: Labels.update,
+                label: LocaleKeys.update.localize,
                 // height: 50.h,
                 onPressed: () {
-                  context.read<EditDoctorPersonalInfoCubit>().updateDoctorPersonalInfo();
+                  context.read<EditDoctorPersonalInfoCubit>().updateDoctorPersonalInfo(context);
                 },
               )
             ],

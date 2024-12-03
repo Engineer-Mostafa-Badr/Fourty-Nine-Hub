@@ -22,7 +22,7 @@ class HealthEmergencySubCategoriesDropdown extends StatelessWidget {
       builder: (context, state) {
         if (state is HealthEmergencySubCategoriesLoaded) {
           return DropdownMenu<SubCategoryEntity>(
-              width: MediaQuery.of(context).size.width * 0.9,
+              width: MediaQuery.of(context).size.width * 0.92,
               hintText: LocaleKeys.speciality.localize,
               dropdownMenuEntries: state.subCategories
                   .map((e) => DropdownMenuEntry<SubCategoryEntity>(

@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/time_tables/time_table.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/edit_doctor_timetable/edit_doctor_timetable_cubit.dart';
@@ -11,17 +13,17 @@ class EditDoctorClinicTimeTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final createDoctorCubit = context.read<EditDoctorTimetableCubit>();
+    final doctorLoginCubit = context.read<EditDoctorTimetableCubit>();
     return BlocBuilder<EditDoctorTimetableCubit, EditDoctorTimetableState>(
       builder: (context, state) {
           return Timetable(
-              title: 'Clinic',
+              title: LocaleKeys.clinicVisit.localize,
               timetale: state.clinicTimetable??[],
               child: Column(
                 children: [
                   DefaultTextFormField(
                     currentFocusNode: FocusNode(),
-                    currentController: TextEditingController(),
+                    currentController: doctorLoginCubit.clinicPriceController,
                     nextFocusNode: FocusNode(),
                     keyboardType: TextInputType.number,
                     isRequired: true,
@@ -36,16 +38,9 @@ class EditDoctorClinicTimeTable extends StatelessWidget {
                     currentFocusNode:
                     FocusNode(),
                     currentController:
-                    TextEditingController(),
+                    doctorLoginCubit.clinicDurationController,
                   ),
                   const Sizer(),
-                  DefaultTextFormField(
-                    hint: 'Clinic Waiting time (in minutes)',
-                    keyboardType: TextInputType.number,
-                    isRequired: true,
-                    currentFocusNode: FocusNode(),
-                    currentController: TextEditingController(),
-                  ),
                 ],
               ));
       },

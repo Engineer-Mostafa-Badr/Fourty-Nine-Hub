@@ -61,7 +61,7 @@ class MeetingDataSourceImpl extends MeetingDataSource {
       // throw MeetingErrorMessageModel.fromJson(l);
       return Left(l);
     }, (r) {
-      final List<ScheduledMeeting> rooms = List.from(r['data']['docs'])
+      final List<ScheduledMeeting> rooms = List.from(r['data'])
           .map((e) => ScheduledMeetingModel.fromJson(e))
           .toList();
       return Right(rooms);

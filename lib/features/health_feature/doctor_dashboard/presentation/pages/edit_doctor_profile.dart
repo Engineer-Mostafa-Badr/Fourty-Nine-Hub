@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/edit_time_table/time_table_options_checkbox.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -46,8 +49,8 @@ class EditDoctorProfileView extends StatelessWidget {
         }
       },
       builder: (context, state)=>Scaffold(
-        appBar: const BackAppBar(
-          label: Labels.editProfile,
+        appBar: BackAppBar(
+          label: LocaleKeys.editProfile.localize,
         ),
         body: state.status==EditDoctorProfileStateStatus.initial?const Center(child: CircularProgressIndicator()):ListView(
           padding: const EdgeInsets.all(18),
@@ -58,7 +61,7 @@ class EditDoctorProfileView extends StatelessWidget {
             const Sizer(),
             UpdateDoctorPracticingCirtificateCard(subCategoryId: state.doctor?.subCategory.id??'',),
             const Sizer(),
-            const UpdateDoctorTimetableCard(),
+            UpdateDoctorTimetableCard(params: CheckBoxParams(showCall: state.doctor?.calls??false,showHomeVisit: state.doctor?.visitHome??false,showClinic: state.doctor?.clinic??false),),
             const Sizer(),
             UpdateDoctorPersonalInfo(doctor: state.doctor!,),
             const Sizer(),

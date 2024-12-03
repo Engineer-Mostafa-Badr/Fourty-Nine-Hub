@@ -421,6 +421,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                         builder: (context) => ImageDetailsScreen(
                               image: state.images![index].file.path,
                               isFile: true,
+                              fromPost: true,
                               onRemoveImage: () {
                                 controller.removePhoto(state.images![index]);
                                 context.pop();

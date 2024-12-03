@@ -65,6 +65,8 @@ abstract class Routes {
   static const CONTACTSVIEW = '/ContactsView';
   static const MAZADAT = '/Mazadat';
   static const VISITA = '/Visita';
+  static const EMERGENCYREQUESTS= '/Visita/EmergencyRequests';
+  static const ALLAPPOINTMENTS= '/Visita/AllAppointments';
   static const VISITAEMERGENCY = '/Visita/VisitaEmergency';
   static const CREATEDOCTOR = '/Visita/CreateDoctor';
   static const FILTERDOCTORSUBCATEGORY = '/Visita/FilterDoctorSubcategory';
@@ -87,9 +89,9 @@ abstract class Routes {
   static const EDITDOCTORTIMETABLE = '/Visita/EditDoctorTimeTable';
   static const DOCTORSTATISTICS = '/Visita/DoctorStatistics';
   static const DOCTORREVIEWS = '/Visita/DoctorReviews';
+  static const AllDOCTORREVIEWS = '/Visita/AllDoctorReviews';
   static const DOCTORTODAYAPPOINTMENTS = '/Visita/DoctorTodayAppointments';
-  static const DOCTORUNHANDLEDAPPOINTMENTS =
-      '/Visita/DoctorUnhandledAppointments';
+  static const DOCTORUNHANDLEDAPPOINTMENTS = '/Visita/DoctorUnhandledAppointments';
   static const ALLDOCTORRESERVATIONS = '/Visita/AllDoctorReservations';
   static const FOOD = '/Food';
 
@@ -241,6 +243,8 @@ abstract class Paths {
   static const CLUBHOUSECHAT = 'ClubHouseChat';
   static const CLUBHOUSEROOM = 'ClubHouseRoom';
   static const VISITA = 'Visita';
+  static const EMERGENCYREQUESTS = 'EmergencyRequests';
+  static const ALLAPPOINTMENTS = 'AllAppointments';
   static const VISITADOCTORLIST = 'VisitaDoctorsList';
   static const VISITAEMERGENCY = 'VisitaEmergency';
   static const VISITADOCTORDETAILS = 'DoctorDetails';
@@ -253,6 +257,7 @@ abstract class Paths {
   static const FILTERDOCTORAREA = 'FilterDoctorArea';
   static const DOCTORDASHBOARD = 'DoctorDashboard';
   static const DOCTORREVIEWS = 'DoctorReviews';
+  static const AllDOCTORREVIEWS = 'AllDoctorReviews';
   static const EDITDOCTORPERSONALINFO = 'EditDoctorPersonalInfo';
   static const EDITDOCTORTIMETABLE = 'EditDoctorTimeTable';
   static const DOCTORSTATISTICS = 'DoctorStatistics';

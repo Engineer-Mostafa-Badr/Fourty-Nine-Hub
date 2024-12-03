@@ -4,11 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/edit_doctor_personal_info/edit_doctor_personal_info_cubit.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../../core/localization/locale_keys.g.dart';
 
@@ -43,13 +46,13 @@ class EditDoctorAddressField extends StatelessWidget {
                   ),
                 ),
                 hint: Text(LocaleKeys.selectGovernorate.localize),
-                value: state.selectedGovernorateId!=null?state.governorates?.firstWhereOrNull((element) => element.nameEn==state.selectedGovernorateId):null,
+                value: state.selectedGovernorateId!=null?state.governorates?.firstWhereOrNull((element) => element.id==state.selectedGovernorateId):null,
                 onChanged: (GovernorateEntity? newValue) {
                   context.read<EditDoctorPersonalInfoCubit>().onSelectGovernorate(newValue?.id??'');
                   print("state.governorate${state.selectedGovernorateId}");
                   print("state.city${state.selectedCityId}");
                 },
-                dropdownColor: Colors.white,
+                dropdownColor: context.isDarkMode?AppColors.DARK_GRAY_COLOR:Colors.white,
                 items: state.governorates?.map<DropdownMenuItem<GovernorateEntity>>((GovernorateEntity government) {
                   return DropdownMenuItem<GovernorateEntity>(
                     value: government,
@@ -75,14 +78,14 @@ class EditDoctorAddressField extends StatelessWidget {
                   ),
                 ),
                 hint: Text(LocaleKeys.selectCity.localize),
-                value: state.selectedCityId!=null?state.cities?.firstWhereOrNull((element) => element.nameEn==state.selectedCityId):null,
+                value: state.selectedCityId!=null?state.cities?.firstWhereOrNull((element) => element.id==state.selectedCityId):null,
                 onChanged: (CityEntity? newValue) {
                   print(newValue?.id);
                   context.read<EditDoctorPersonalInfoCubit>().onSelectCity(newValue?.id??'');
                   print("state.governorate1${state.selectedGovernorateId}");
                   print("state.city${state.selectedCityId}");
                 },
-                dropdownColor: Colors.white,
+                dropdownColor: context.isDarkMode?AppColors.DARK_GRAY_COLOR:Colors.white,
                 items: state.cities?.map<DropdownMenuItem<CityEntity>>((CityEntity city) {
                   return DropdownMenuItem<CityEntity>(
                     value: city,

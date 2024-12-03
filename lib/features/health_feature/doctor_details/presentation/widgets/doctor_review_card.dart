@@ -25,8 +25,8 @@ import 'package:go_router/go_router.dart';
 
 class DoctorReviewCard extends StatelessWidget {
   final UserDoctorRateEntity review;
-  const DoctorReviewCard({super.key, required this.review});
-
+  const DoctorReviewCard({super.key, required this.review, required this.fromDashboard});
+  final bool fromDashboard;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -59,7 +59,7 @@ class DoctorReviewCard extends StatelessWidget {
                   ],
                 ),
               ),
-              ClickableWidget(
+              if(fromDashboard==true)ClickableWidget(
                   onTap: !context.read<UserCubit>().isLoggedIn?()=>context.push(Routes.LOGIN):() {
               bottomSheet(
               context: context,
@@ -72,9 +72,9 @@ class DoctorReviewCard extends StatelessWidget {
             ],
           ),
           Sizer(),
-          ReadMoreLabel(text: review.comment,style: Styles.mediumText(fontWeight: FontWeight.w400,color: Colors.black),),
-          Sizer(),
-          Row(
+          ReadMoreLabel(text: review.comment,style: Styles.mediumText(),),
+          if(fromDashboard==true)Sizer(),
+          if(fromDashboard==true)Row(
             children: [
               Expanded(
                 flex: 3,

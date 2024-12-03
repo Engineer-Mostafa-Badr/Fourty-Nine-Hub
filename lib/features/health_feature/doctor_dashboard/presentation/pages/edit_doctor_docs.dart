@@ -4,6 +4,8 @@ import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_uploader_widget.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_id_usecase.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -15,9 +17,11 @@ class EditDoctorDocsView extends StatefulWidget {
   final Function(DoctorDocsParams doctorDocsParams) onSubmit;
   final String subCategoryId;
   final String from;
+  final String? frontTitle;
+  final String? backTitle;
   EditDoctorDocsView({
     super.key,
-    required this.onSubmit, required this.subCategoryId, required this.from,
+    required this.onSubmit, required this.subCategoryId, required this.from, this.frontTitle, this.backTitle,
   });
 
   @override
@@ -32,20 +36,20 @@ class _EditDoctorDocsViewState extends State<EditDoctorDocsView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Label(text: Labels.uploadPhotos, style: Styles.headerText()),
+          Label(text: LocaleKeys.uploadPhotos.localize, style: Styles.headerText()),
           const Sizer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ImageUploaderWidget(
                 subCategoryId: widget.subCategoryId,
-                tilte: Labels.front,
+                tilte: LocaleKeys.front.localize,
                 onUploaded: (data) {
                   _frontId = data.mediaId;
                 },
               ),
               ImageUploaderWidget(
-                tilte: Labels.back,
+                tilte: LocaleKeys.back.localize,
                 subCategoryId: widget.subCategoryId,
                 onUploaded: (data) {
                   _backId = data.mediaId;
@@ -56,10 +60,10 @@ class _EditDoctorDocsViewState extends State<EditDoctorDocsView> {
           Sizer(
             height: 20.h,
           ),
-          Label(text: Labels.expireDate, style: Styles.headerText()),
+          Label(text: LocaleKeys.expireDate.localize, style: Styles.headerText()),
           const Sizer(),
           DatePickerField(
-            title: Labels.expireDate,
+            title: LocaleKeys.expireDate.localize,
             initialDate: now,
             minDate: now,
             maxDate: DateTime(now.year + 5, now.month, now.day),
@@ -74,7 +78,7 @@ class _EditDoctorDocsViewState extends State<EditDoctorDocsView> {
           ),
           AppButton(
             height: 50.h,
-            label: Labels.update,
+            label: LocaleKeys.update.localize,
             onPressed: () {
               print(_frontId);
               print(_backId);

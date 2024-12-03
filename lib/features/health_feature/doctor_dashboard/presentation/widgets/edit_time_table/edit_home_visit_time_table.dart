@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/time_tables/time_table.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/edit_doctor_timetable/edit_doctor_timetable_cubit.dart';
@@ -15,7 +17,7 @@ class EditDoctorHomeVisitTimeTable extends StatelessWidget {
     return BlocBuilder<EditDoctorTimetableCubit, EditDoctorTimetableState>(
       builder: (context, state) {
           return Timetable(
-              title: 'Home Visit',
+              title: LocaleKeys.homeVisit.localize,
               timetale: state.homeVisitTimetable??[],
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,7 +25,7 @@ class EditDoctorHomeVisitTimeTable extends StatelessWidget {
                   DefaultTextFormField(
                     currentFocusNode: FocusNode(),
                     currentController:
-                        TextEditingController(),
+                    cubit.homeVisitPriceController,
                     nextFocusNode:
                         FocusNode(),
                     keyboardType: TextInputType.number,
@@ -35,21 +37,10 @@ class EditDoctorHomeVisitTimeTable extends StatelessWidget {
                     hint: 'Home Visit Examine Duration (in minutes)',
                     keyboardType: TextInputType.number,
                     isRequired: true,
-                    nextFocusNode: FocusNode(),
                     currentFocusNode:
                     FocusNode(),
                     currentController:
-                    TextEditingController(),
-                  ),
-                  const Sizer(),
-                  DefaultTextFormField(
-                    hint: 'Home Visit Examine Duration (in minutes)',
-                    keyboardType: TextInputType.number,
-                    isRequired: true,
-                    currentFocusNode:
-                    FocusNode(),
-                    currentController:
-                    TextEditingController(),
+                    cubit.homeVisitDurationController,
                   ),
                 ],
               ));

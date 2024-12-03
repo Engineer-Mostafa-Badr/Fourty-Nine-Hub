@@ -13,4 +13,12 @@ class DoctorDayEntity {
     this.to = const TimeOfDay(hour: 11, minute: 0),
     this.isAvailable = false,
   });
+
+  //toJson
+  Map<String, dynamic> toJson() => {
+    'day': day.name.toLowerCase(),
+    'workFrom': from,
+    'workTo': to,
+    'isAvailable': isAvailable
+  };
 }

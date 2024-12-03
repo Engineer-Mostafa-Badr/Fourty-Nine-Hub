@@ -38,7 +38,7 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
   @override
   void initState() {
     super.initState();
-    // context.read<RestaurantDashboardCubit>().initialize();
+    context.read<RestaurantDashboardCubit>().initialize();
   }
 
 

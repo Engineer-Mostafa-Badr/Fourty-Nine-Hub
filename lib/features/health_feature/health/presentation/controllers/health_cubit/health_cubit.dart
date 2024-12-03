@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/models/filter_option_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/cancel_appointment_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_health_subcategories.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_medical_services.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_user_upcoming_appointments.dart';
@@ -31,6 +32,7 @@ part 'health_state.dart';
 class HealthCubit extends Cubit<HealthState> {
   final HealthSharedData _healthShare;
   final GetUserUpcomingAppointmentsUseCase _getUserUpcomingAppointmentsUseCase;
+  final CancelAppointmentUseCase _cancelAppointmentUseCase;
   final GetHealthSubcategoriesUseCase _getHealthSubcategoriesUseCase;
   final GetMedicalServicesUseCase _getMedicalServicesUseCase;
   final ToggleFavoriteSubcategoryUseCase _toggleFavoriteSubcategoryUseCase;
@@ -52,7 +54,7 @@ class HealthCubit extends Cubit<HealthState> {
       this._getGovernoratesUseCase,
       this._isDoctorApprovalUsecase,
       this._toggleFavoriteCategoryUseCase,
-      this._deleteFavoriteCategoryUseCase)
+      this._deleteFavoriteCategoryUseCase, this._cancelAppointmentUseCase)
       : super(const HealthState());
 
   final List<HealthBookingFilterModel> services = [
@@ -102,6 +104,22 @@ class HealthCubit extends Cubit<HealthState> {
             emit(state.copyWith(failure: failure, status: HealthStates.error)),
         (data) => emit(
             state.copyWith(status: HealthStates.initState, myBookings: data)));
+  }
+
+  Future<bool> cancelAppointment(String id) async {
+    bool result = false;
+    final response =
+        await _cancelAppointmentUseCase.call(id);
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: HealthStates.error)),
+        (data) {
+          List<BookedAppointmentEntity>? newBookings = state.myBookings;
+          newBookings?.removeWhere((element) => element.id == id);
+          result = data;
+          emit(state.copyWith(myBookings: newBookings));
+        });
+    return result;
   }
 
   Future<void> _isDoctor() async {

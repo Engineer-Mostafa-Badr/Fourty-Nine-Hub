@@ -4,6 +4,8 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
@@ -25,7 +27,7 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Label(
-          text: Labels.unhandledAppointments,
+          text: LocaleKeys.unhandledAppointments.localize,
           style: Styles.headerText(),
         ),
         const Sizer(),
@@ -45,41 +47,43 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
           ),
           child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
             builder: (context, state) {
-              if (state is DoctorDashboardUnhandledAppointments &&
-                  state.appointments.isNotEmpty) {
+              if (state.unhandledAppointments!=null&&state.unhandledAppointments!.isNotEmpty) {
+                print("state.unhandledAppointments!.isNotEmpty${state.unhandledAppointments!.isNotEmpty}");
                 return Column(
                   children: [
                     ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: state.appointments.length,
+                        itemCount: state.unhandledAppointments!.length>2?2:state.unhandledAppointments!.length,
                         separatorBuilder: (context, index) => const Divider(),
                         itemBuilder: (context, index) {
-                          final appointment = state.appointments[index];
+                          final appointment = state.unhandledAppointments![index];
                           return DoctorUnhandledAppointmentCard(
                             appointment: appointment,
                             onAccept: () => context
                                 .read<DoctorDashboardCubit>()
-                                .acceptAppointment(appointment.id),
+                                .acceptAppointment(appointment.id,context),
                             onReject: () => context
                                 .read<DoctorDashboardCubit>()
-                                .rejectAppointment(appointment.id),
+                                .rejectAppointment(appointment.id,context),
                           );
                         }),
                     const Sizer(),
-                    AppButton(
-                        label: Labels.viewMore,
+                    if(state.unhandledAppointments!.length>2)AppButton(
+                        label: LocaleKeys.showMore.localize,
+                        style: Styles.mediumText(color: Colors.white),
                         onPressed: () {
                           context.push(Routes.DOCTORUNHANDLEDAPPOINTMENTS);
                         })
                   ],
                 );
-              } else {
+              }else{
                 return Center(
                     child: Text(
-                  'No Appointments',
-                  style: Styles.headerText(
-                      color: Theme.of(context).scaffoldBackgroundColor),
-                ));
+                      LocaleKeys.noAppointments.localize,
+                      style: Styles.headerText(
+                          color: Theme.of(context).textTheme.bodyMedium?.color),
+                    ));
               }
             },
           ),
@@ -117,7 +121,7 @@ class DoctorUnhandledAppointmentCard extends StatelessWidget {
               ),
               Label(
                 text:
-                    '${appointment.type.translatedName} - ${appointment.day.name}\n${appointment.time}',
+                    '${appointment.type.translatedName} - ${appointment.day.name}\n${appointment.startTime}',
                 style: Styles.mediumText(),
               ),
             ],

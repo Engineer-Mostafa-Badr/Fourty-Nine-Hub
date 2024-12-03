@@ -65,7 +65,8 @@ class RestaurantOrder {
   final String phone;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final String currency;
+  final String currencyAr;
+  final String currencyEn;
   final String openCallAndChat;
 
   RestaurantOrder({
@@ -79,7 +80,8 @@ class RestaurantOrder {
     required this.phone,
     required this.createdAt,
     required this.updatedAt,
-    required this.currency,
+    required this.currencyAr,
+    required this.currencyEn,
     required this.openCallAndChat,
   });
 
@@ -95,7 +97,8 @@ class RestaurantOrder {
       phone: json['phone'],
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
-      currency: json['currency'],
+      currencyAr: json['currencyAr'],
+      currencyEn: json['currencyEn'],
       openCallAndChat: json['OpenCallAndChat'] ?? 'disable', // Default to 'disable' if not present
     );
   }
@@ -111,7 +114,8 @@ class RestaurantOrder {
     'phone': phone,
     'createdAt': createdAt.toIso8601String(),
     'updatedAt': updatedAt.toIso8601String(),
-    'currency': currency,
+    'currencyAr': currencyAr,
+    'currencyEn': currencyEn,
     'OpenCallAndChat': openCallAndChat,
   };
 }

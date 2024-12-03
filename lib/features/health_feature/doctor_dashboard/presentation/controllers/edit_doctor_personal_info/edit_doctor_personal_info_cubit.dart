@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
@@ -13,6 +16,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/domain/enti
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_health_subcategories.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:go_router/go_router.dart';
 
 part 'edit_doctor_personal_info_state.dart';
 
@@ -44,6 +48,7 @@ class EditDoctorPersonalInfoCubit extends Cubit<EditDoctorPersonalInfoState> {
     lastNameController.text=data.lastName;
     addressController.text=data.address.address;
     phoneController.text=data.phone;
+    print("data.address.cityId${data.address.cityId}");
     emit(state.copyWith(selectedSpeciality: data.subCategory.id,selectedGovernorateId: data.address.governorateId,selectedCityId: data.address.cityId));
   }
 
@@ -51,8 +56,7 @@ class EditDoctorPersonalInfoCubit extends Cubit<EditDoctorPersonalInfoState> {
     final response = await _getGovernoratesUseCase.call(const NoParams());
     response.fold((failure) => emit(state.copyWith(failure: failure, status: EditDoctorPersonalInfoStates.error)), (governorates) {
       if(id!=null&&governorates.isNotEmpty){
-        String selectedGovernorateId=governorates.firstWhereOrNull((element) => element.nameEn==id)?.id??'';
-        getCities(selectedGovernorateId);
+        getCities(id);
       }
       emit(state.copyWith(governorates: governorates));
     });
@@ -95,7 +99,7 @@ class EditDoctorPersonalInfoCubit extends Cubit<EditDoctorPersonalInfoState> {
     getCities(selectedId);
   }
 
-  updateDoctorPersonalInfo()async{
+  updateDoctorPersonalInfo(BuildContext context)async{
     final response =
         await _updateDoctorPersonalInfoUsecase.call(DoctorPersonalInfoParams(
           firstName: firstNameController.text,
@@ -106,6 +110,16 @@ class EditDoctorPersonalInfoCubit extends Cubit<EditDoctorPersonalInfoState> {
           cityId: state.selectedCityId??'',
           subCategoryId: state.selectedSpeciality??'',
         ));
+
+    response
+        .fold((failure) {
+          showErrorMessage(context, getFailureMessage(failure, context));
+          emit(state.copyWith(status: EditDoctorPersonalInfoStates.error, failure: failure));
+        },
+            (data) {
+          showSuccessMessage(context, LocaleKeys.updateSuccessfully.localize);
+          context.pop(true);
+        });
 
   }
 

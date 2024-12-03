@@ -1,21 +1,36 @@
 part of 'doctor_today_appointments_cubit.dart';
 
-sealed class DoctorTodayAppointmentsState {
-  const DoctorTodayAppointmentsState();
+enum DoctorTodayAppointmentsStates { loading,startCancelLoading,endCancelLoading, initState, error, success }
+
+extension DoctorTodayAppointmentsStateX on DoctorTodayAppointmentsState {
+  bool get isInitial => status == DoctorTodayAppointmentsStates.initState;
+  bool get isLoading => status == DoctorTodayAppointmentsStates.loading;
+  bool get isError => status == DoctorTodayAppointmentsStates.error;
+  bool get isSuccess => status == DoctorTodayAppointmentsStates.success;
 }
 
-final class DoctorTodayAppointmentsInitial
-    extends DoctorTodayAppointmentsState {}
-
-final class DoctorTodayAppointmentsLoading
-    extends DoctorTodayAppointmentsState {}
-
-final class DoctorTodayAppointmentsLoaded extends DoctorTodayAppointmentsState {
-  final List<DoctorAppointmentEntity> appointments;
-  const DoctorTodayAppointmentsLoaded(this.appointments);
-}
-
-final class DoctorTodayAppointmentsError extends DoctorTodayAppointmentsState {
-  final String message;
-  const DoctorTodayAppointmentsError(this.message);
+class DoctorTodayAppointmentsState {
+  final DoctorTodayAppointmentsStates? status;
+  final Failure? failure;
+  final bool? isLast;
+  final List<DoctorAppointmentEntity>? appointments;
+  const DoctorTodayAppointmentsState({
+    this.status,
+    this.failure,
+    this.appointments,
+    this.isLast,
+  });
+  DoctorTodayAppointmentsState copyWith({
+    DoctorTodayAppointmentsStates? status,
+    Failure? failure,
+    bool? isLast,
+    List<DoctorAppointmentEntity>? appointments,
+  }) {
+    return DoctorTodayAppointmentsState(
+      status: status ?? this.status,
+      failure: failure ?? this.failure,
+      appointments: appointments ?? this.appointments,
+      isLast: isLast ?? this.isLast,
+    );
+  }
 }

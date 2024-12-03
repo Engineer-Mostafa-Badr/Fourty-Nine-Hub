@@ -50,7 +50,7 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
       (failure) => emit(state.copyWith(
           status: EditDoctorProfileStateStatus.error, failure: failure)),
       (data) =>
-          emit(state.copyWith(status: EditDoctorProfileStateStatus.updated)),
+          emit(state.copyWith(status: EditDoctorProfileStateStatus.updated,update: true)),
     );
   }
 
@@ -66,7 +66,7 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
             status: EditDoctorProfileStateStatus.error, failure: failure)),
         (data) {
           result = true;
-          emit(state.copyWith(status: EditDoctorProfileStateStatus.updated));
+          emit(state.copyWith(status: EditDoctorProfileStateStatus.updated,update: true));
         });
     return result;
   }
@@ -83,7 +83,7 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
             status: EditDoctorProfileStateStatus.error, failure: failure)),
         (data) {
           result = true;
-          emit(state.copyWith(status: EditDoctorProfileStateStatus.updated));
+          emit(state.copyWith(status: EditDoctorProfileStateStatus.updated,update: true));
         });
 
     return result;

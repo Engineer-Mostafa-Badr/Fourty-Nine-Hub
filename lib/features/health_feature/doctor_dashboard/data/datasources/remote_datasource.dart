@@ -208,9 +208,11 @@ class DoctorDashboardRemoteDataSourceImpl
   }
 
   @override
-  Future<Either<Failure, bool>> updateTimetable(DoctorTimetableParams params) {
-    // TODO: implement updateTimetable
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> updateTimetable(DoctorTimetableParams params) async {
+    final response = await _apiConsumer
+        .post(EndPoints.updateDoctorTimeTable, data: params.toJson());
+
+    return response.fold((l) => Left(l), (r) => Right(r['status'] as bool));
   }
 
   @override

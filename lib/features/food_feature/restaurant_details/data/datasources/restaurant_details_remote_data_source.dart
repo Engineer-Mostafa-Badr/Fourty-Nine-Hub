@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/us
 import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/get_meals_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 
 abstract class RestaurantRemoteDataSource {
   Future<Either<Failure, List<RestaurantMneuModel>>> getMeals(
@@ -17,7 +18,7 @@ abstract class RestaurantRemoteDataSource {
       {required String restaurantId});
   Future<Either<Failure, bool>> deleteFood(
       {required String id});
-  Future<Either<Failure, bool>> addFood(
+  Future<Either<Failure, RestaurantMenu>> addFood(
       {required AddFoodParams params});
   Future<Either<Failure, bool>> addCart();
   Future<Either<Failure, bool>> deleteFoodFromCart({required DeleteFoodFromCartParams params});
@@ -78,11 +79,11 @@ class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> addFood({required AddFoodParams params}) async {
+  Future<Either<Failure, RestaurantMenu>> addFood({required AddFoodParams params}) async {
     final response =
         await _apiConsumer.post(EndPoints.addFood,data: params.toJson());
     return response.fold((failure) => Left(failure),
-            (data) => Right(data['status']));
+            (data) => Right(RestaurantMneuModel.fromJson(data['data'])));
   }
 
   @override

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/common/dashboard_banner.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
@@ -13,8 +16,8 @@ class DoctorDashboardBanner extends StatelessWidget {
     return BlocBuilder<HealthCubit, HealthState>(
       builder: (context, state) {
         if (state.isDoctor == true) {
-          return const DashboardBanner(
-            title: Labels.doctorDashboard,
+          return DashboardBanner(
+            title: context.isArabic?'لوحة التحكم':'Doctor Dashboard',
             subTitle: Labels.doctorDashboardBannerDiscription,
             route: Routes.DOCTORDASHBOARD,
           );
