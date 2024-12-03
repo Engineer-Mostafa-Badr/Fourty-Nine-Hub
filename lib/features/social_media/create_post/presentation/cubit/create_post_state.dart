@@ -11,6 +11,7 @@ class CreatePostState {
   final FeelingEntity? selectedFeeling;
   final PlaceEntity? place;
   final List<UploadFileEntity>? images;
+  final UploadFileEntity? audio;
   final List<PostUserEntity>? users;
   final List<PostUserEntity>? selectedUsers;
   final String? selectedPrivacy;
@@ -24,6 +25,7 @@ class CreatePostState {
       {this.status = CreatePostStates.error,
       this.failure,
       this.images,
+      this.audio,
       this.activities,
       this.feelings,
       this.backColor = "#FFFFFFFF",
@@ -41,6 +43,7 @@ class CreatePostState {
   CreatePostState copyWith({
     CreatePostStates? status,
     List<UploadFileEntity>? images,
+    UploadFileEntity? audio,
     Failure? failure,
     List<ActivityEntity>? activities,
     List<FeelingEntity>? feelings,
@@ -61,6 +64,7 @@ class CreatePostState {
       status: status ?? this.status,
       failure: failure ?? this.failure,
       images: images ?? this.images,
+      audio: audio ?? this.audio,
       activities: activities ?? this.activities,
       feelings: feelings ?? this.feelings,
       selectedActivity: selectedActivity ?? this.selectedActivity,

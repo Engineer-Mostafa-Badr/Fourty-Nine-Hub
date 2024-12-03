@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:snapping_bottom_sheet/snapping_bottom_sheet.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class InstagramPosts extends StatefulWidget {
   const InstagramPosts({
@@ -80,7 +82,51 @@ class _InstagramPostsState extends State<InstagramPosts> {
   @override
   void dispose() {
     widget.scrollController.dispose();
+    _audioPlayer.dispose();
     super.dispose();
+  }
+
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  String? _currentAudioUrl;
+  bool _isMuted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _audioPlayer.onPlayerComplete.listen((event) {
+      // Restart audio when it finishes
+      if (_currentAudioUrl != null && !_isMuted) {
+        _audioPlayer.play(UrlSource(_currentAudioUrl!));
+      }
+    });
+  }
+
+  void _playAudio(String audioUrl) async {
+    if (_currentAudioUrl != audioUrl && !_isMuted) {
+      await _audioPlayer.stop(); // Stop previous audio
+      _currentAudioUrl = audioUrl;
+      await _audioPlayer.play(UrlSource(audioUrl)); // Play new audio
+    }
+  }
+
+  void _stopAudio() async {
+    try {
+      await _audioPlayer.stop(); // Stops current audio playback
+    } catch (e) {
+      debugPrint('Error stopping audio: $e');
+    }
+  }
+
+  void _toggleMute() {
+    setState(() {
+      _isMuted = !_isMuted;
+    });
+
+    if (_isMuted) {
+      _audioPlayer.pause(); // Pause audio when muted
+    } else if (_currentAudioUrl != null) {
+      _audioPlayer.resume(); // Resume audio when unmuted
+    }
   }
 
   @override
@@ -159,30 +205,78 @@ class _InstagramPostsState extends State<InstagramPosts> {
                         const Sizer(),
                         SizedBox(
                           height: kToolbarHeight * 7,
-                          child: PageView.builder(
-                              controller: pageController,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: controller.feedPagingController
-                                  .itemList![index].images!.length,
-                              onPageChanged: (i) {
-                                controller.changeIndex(i);
-                              },
-                              itemBuilder: (context, i) {
-                                return SocialImageViewer(
-                                  image: controller.feedPagingController
-                                      .itemList![index].images![i],
-                                  index: i + 1,
-                                  length: controller.feedPagingController
-                                      .itemList![index].images!.length,
-                                  onDoubleTap: () {
-                                    controller.feedPagingController
-                                            .itemList?[index].isLove =
-                                        !controller.feedPagingController
-                                            .itemList![index].isLove;
-                                    setState(() {});
+                          child: Stack(
+                            children: [
+                              PageView.builder(
+                                  controller: pageController,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: controller.feedPagingController
+                                      .itemList?[index].images?.length,
+                                  onPageChanged: (i) {
+                                    controller.changeIndex(i);
+                                    final audio = controller.feedPagingController.itemList?[index].audio;
+                                    if (audio != null && audio.isNotEmpty && !_isMuted) {
+                                      _playAudio(audio[0].sound);
+                                    }else{
+                                      _stopAudio();
+                                    }
                                   },
-                                );
-                              }),
+                                  itemBuilder: (context, i) {
+                                    return VisibilityDetector(
+                                      key: Key(index.toString()),
+                                      onVisibilityChanged: (visibilityInfo) {
+                                        if (visibilityInfo.visibleFraction > 0.5 && !_isMuted) {
+                                          final audio = controller.feedPagingController.itemList?[index].audio;
+                                          if (audio!.isNotEmpty) {
+                                            _playAudio(audio[0].sound);
+                                          }else{
+                                            _stopAudio();
+                                          }
+                                        }
+                                      },
+                                      child: SocialImageViewer(
+                                        image: controller.feedPagingController
+                                            .itemList![index].images![i],
+                                        index: i + 1,
+                                        length: controller.feedPagingController
+                                            .itemList![index].images!.length,
+                                        onDoubleTap: () {
+                                          controller.feedPagingController
+                                                  .itemList?[index].isLove =
+                                              !controller.feedPagingController
+                                                  .itemList![index].isLove;
+                                          setState(() {});
+                                        },
+                                      ),
+                                    );
+                                  }),
+                              if(controller.feedPagingController
+                                  .itemList![index].audio!.isNotEmpty)
+                              Positioned(
+                                bottom: 20.h,
+                                left: 20.w,
+                                right: 20.w,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const SizedBox.shrink(),
+                                    GestureDetector(
+                                      onTap: _toggleMute,
+                                      child: CircleAvatar(
+                                        radius: 30.r,
+                                        backgroundColor: Colors.black.withOpacity(0.7),
+                                        child: Icon(
+                                          _isMuted ? Icons.volume_off : Icons.volume_up,
+                                          size: 33.sp,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(
                           height: 10.h,
@@ -1194,5 +1288,65 @@ class _InstagramPostsState extends State<InstagramPosts> {
   bool _isArabic(String text) {
     final arabicRegex = RegExp(r'[\u0600-\u06FF]');
     return arabicRegex.hasMatch(text);
+  }
+}
+
+
+class AudioPlayerWidget extends StatefulWidget {
+  final String audioUrl;
+
+  const AudioPlayerWidget({Key? key, required this.audioUrl}) : super(key: key);
+
+  @override
+  _AudioPlayerWidgetState createState() => _AudioPlayerWidgetState();
+}
+
+class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  bool isPlaying = false;
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+  void toggleAudio() async {
+    if (isPlaying) {
+      await _audioPlayer.pause();
+    } else {
+      await _audioPlayer.play(UrlSource(widget.audioUrl));
+    }
+    setState(() {
+      isPlaying = !isPlaying;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: toggleAudio,
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Colors.black54,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              isPlaying ? Icons.pause : Icons.play_arrow,
+              color: Colors.white,
+            ),
+            const SizedBox(width: 8),
+            const Text(
+              "Play Audio",
+              style: TextStyle(color: Colors.white),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

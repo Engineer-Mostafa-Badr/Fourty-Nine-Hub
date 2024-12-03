@@ -1,6 +1,7 @@
 import 'package:fourtyninehub/features/social_media/create_post/data/models/activity_model.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/models/feeling_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/instagram_post_model.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/data/models/audio_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/location_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/main_post_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
@@ -14,6 +15,7 @@ class PostModel extends PostEntity {
             super.createdAt,
             super.createAt,
             required super.type,
+            required super.audio,
             super.angryCount,
             super.commentsCount,
             super.images,
@@ -141,6 +143,11 @@ class PostModel extends PostEntity {
                 ? null
                 : (json['with'] as List)
                 .map((e) => TwitterUserModel.fromJson(e))
+                .toList(),
+            audio: json['audios'] == null
+                ? null
+                : (json['audios'] as List)
+                .map((e) => AudioModel.fromJson(e))
                 .toList(),
             likedUsers: json['likedUsers'] == null
                 ? null

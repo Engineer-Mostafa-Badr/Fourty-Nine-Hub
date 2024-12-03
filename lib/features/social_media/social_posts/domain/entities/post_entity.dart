@@ -3,6 +3,7 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/entities/
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/location_model.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/audio_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
 import '../../../../../res/assets/assets.dart';
@@ -21,6 +22,7 @@ class PostEntity {
   final List<TwitterUserModel>? hahaUsers;
   final List<TwitterUserModel>? angryUsers;
   final List<TwitterUserModel>? loveUsers;
+  List<AudioEntity>? audio;
   final bool isShared;
   bool isDocumentation;
   bool isLove;
@@ -119,6 +121,7 @@ class PostEntity {
     required this.loveUsers,
     required this.sadUsers,
     required this.wowUsers,
+    required this.audio,
   });
 }
 

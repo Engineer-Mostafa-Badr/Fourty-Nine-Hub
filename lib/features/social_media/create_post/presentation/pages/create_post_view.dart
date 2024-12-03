@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,11 +14,9 @@ import 'package:fourtyninehub/features/social_media/create_post/presentation/pag
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_friends.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/show_all_images.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
-import 'package:just_audio/just_audio.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
@@ -28,6 +25,7 @@ import '../../../../../common/widgets/stateless/custom_sheet/sheet_vertical_item
 import '../../../../account_taps/privacy/domain/entities/privacy_status_enum.dart';
 import '../cubit/create_post_cubit.dart';
 import 'select_feeling_view.dart';
+
 
 class CreatePostView extends StatefulWidget {
   const CreatePostView({super.key, required this.social});
@@ -39,83 +37,100 @@ class CreatePostView extends StatefulWidget {
 
 class _CreatePostViewState extends State<CreatePostView> {
   FocusNode focusNode = FocusNode();
-  late AudioPlayer _audioPlayer;
-  bool _isPlaying = false;
-  String? _filePath;
 
   @override
   void initState() {
     focusNode.requestFocus();
-    //_pickAudioFile();
-    _audioPlayer = AudioPlayer();
-    _audioPlayer.playerStateStream.listen((state) {
-      setState(() {
-       // _isPlaying = state == PlayerState.PLAYING;
-      });
-    });
     super.initState();
   }
 
   @override
   void dispose() {
     focusNode.dispose();
-    _audioPlayer.dispose();
     super.dispose();
   }
 
-  //final AudioPlayer _audioPlayer = AudioPlayer();
-  // bool _isPlaying = false;
-  // bool _isPaused = false;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _initializeAudio();
+  // String? _filePath;
+  // TextEditingController _startController = TextEditingController();
+  // TextEditingController _endController = TextEditingController();
+  //
+  // Future<void> pickAudioFile() async {
+  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
+  //     type: FileType.audio,
+  //   );
+  //
+  //   if (result != null && result.files.isNotEmpty) {
+  //     setState(() {
+  //       _filePath = result.files.single.path;
+  //     });
+  //   } else {
+  //     // Handle case when the user cancels file picking.
+  //     print("No file selected.");
+  //   }
   // }
 
-  // Future<void> _initializeAudio() async {
+  // Future<void> extractAudioSegment(String inputFilePath, String outputFilePath, int startSecond, int endSecond) async {
+  //   final FlutterFFmpeg _flutterFFmpeg = FlutterFFmpeg();
+  //
+  //   // Construct the FFmpeg command to extract the audio segment.
+  //   String command = '-i $inputFilePath -ss $startSecond -to $endSecond -c copy $outputFilePath';
+  //
+  //   // Execute the command.
+  //   await _flutterFFmpeg.execute(command);
+  // }
+
+  // Future<void> uploadAudio(String filePath, String uploadUrl) async {
+  //   FormData formData = FormData.fromMap({
+  //     'file': await MultipartFile.fromFile(filePath, filename: 'audio_segment.mp3'),
+  //   });
+  //
+  //
   //   try {
-  //     await _audioPlayer.setAudioSource(AudioSource.uri(Uri.file(widget.musicPath)));
+  //     Response response = await Dio().post(uploadUrl, data: formData);
+  //     print('Upload response: ${response.data}');
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Upload successful!')),
+  //     );
   //   } catch (e) {
-  //     print("Error setting audio source: $e");
+  //     print('Upload failed: $e');
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Upload failed!')),
+  //     );
+  //   }
+  // }
+  //
+  // void _handleUpload() async {
+  //   if (_filePath == null) {
+  //     print("No file selected.");
+  //     return;
+  //   }
+  //
+  //   try {
+  //     int startSecond = int.parse(_startController.text);
+  //     int endSecond = int.parse(_endController.text);
+  //
+  //     if (startSecond < 0 || endSecond <= startSecond) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(content: Text('Invalid start or end time!')),
+  //       );
+  //       return;
+  //     }
+  //
+  //     String outputFilePath = '/path/to/output/audio_segment.mp3';
+  //  //   await extractAudioSegment(_filePath!, outputFilePath, startSecond, endSecond);
+  //
+  //     // Replace with your upload URL
+  //     await uploadAudio(outputFilePath, 'https://your-api-endpoint.com/upload');
+  //   } catch (e) {
+  //     print('Error: $e');
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Error processing audio!')),
+  //     );
   //   }
   // }
 
 
-//  @override
-  // void initState() {
-  //   super.initState();
-  //   _audioPlayer = AudioPlayer();
-  //   _audioPlayer.onPlayerStateChanged.listen((state) {
-  //     setState(() {
-  //       _isPlaying = state == PlayerState.PLAYING;
-  //     });
-  //   });
-  // }
 
-  // @override
-  // void dispose() {
-  //   _audioPlayer.dispose();
-  //   super.dispose();
-  // }
-
-  Future<void> _pickAudioFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.audio,
-    );
-
-    if (result != null) {
-      setState(() {
-        _filePath = result.files.single.path;
-      });
-      if (_filePath != null) {
-        // Play the selected audio using AudioSource.file
-        await _audioPlayer.play();
-      }
-    } else {
-      print('No file selected');
-    }
-  }
   @override
   Widget build(BuildContext context) {
     final controller = context.read<CreatePostCubit>();
@@ -569,71 +584,89 @@ class _CreatePostViewState extends State<CreatePostView> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
-            // Music Selection UI
-            Container(
-              height: 150,
-              width: 150,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: AssetImage(Assets.image), // Replace with your image
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            // Audio title
-            Text(
-              '(feat. Onuy) - KEBDA',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 10),
-            // Artist name
-            Text(
-              'Afroto',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-            SizedBox(height: 20),
-            // Audio progress bar
-            Slider(
-              value: _audioPlayer.position.inSeconds.toDouble(),
-              max: _audioPlayer.duration?.inSeconds.toDouble() ?? 1,
-              onChanged: (value) {
-                _audioPlayer.seek(Duration(seconds: value.toInt()));
-              },
-            ),
-            // Play/Pause button
-            IconButton(
-              icon: Icon(
-                _isPlaying ? Icons.pause : Icons.play_arrow,
-                size: 40,
-              ),
-              onPressed: () async {
-                if (_isPlaying) {
-                  await _audioPlayer.pause();
-                } else {
-                  await _audioPlayer.play();
-                }
-                setState(() {
-                  _isPlaying = !_isPlaying;
-                });
-                _pickAudioFile();
-              },
-            ),
-            SizedBox(height: 20),
-            // Placeholder for waveform (to be implemented)
-            Container(
-              height: 50,
-              color: Colors.grey[300],
-              child: Center(
-                child: Text(
-                  'Waveform placeholder',
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-            ),
+            // const SizedBox(height: 16),
+            // ElevatedButton(
+            //   onPressed: pickAudioFile,
+            //   child: Text('Pick Audio File'),
+            // ),
+            // SizedBox(height: 10),
+            // ElevatedButton(
+            //   onPressed: _handleUpload,
+            //   child: Text('Upload Audio Segment'),
+            // ),
+            // ElevatedButton(
+            //   onPressed: _pickAudioFile,
+            //   child: Text('Pick Audio File'),
+            // ),
+            // // Music Selection UI
+            // if (_audioFile != null)
+            //   Padding(
+            //     padding: const EdgeInsets.all(8.0),
+            //     child: Text('Audio File Picked: ${_audioFile!.path}'),
+            //   ),
+            // Container(
+            //   height: 150,
+            //   width: 150,
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(10),
+            //     image: DecorationImage(
+            //       image: AssetImage(Assets.image), // Replace with your image
+            //       fit: BoxFit.cover,
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(height: 20),
+            // // Audio title
+            // Text(
+            //   '(feat. Onuy) - KEBDA',
+            //   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            //   textAlign: TextAlign.center,
+            // ),
+            // SizedBox(height: 10),
+            // // Artist name
+            // Text(
+            //   'Afroto',
+            //   style: TextStyle(fontSize: 16, color: Colors.grey),
+            // ),
+            // SizedBox(height: 20),
+            // // Audio progress bar
+            // Slider(
+            //   value: _audioPlayer.position.inSeconds.toDouble(),
+            //   max: _audioPlayer.duration?.inSeconds.toDouble() ?? 1,
+            //   onChanged: (value) {
+            //     _audioPlayer.seek(Duration(seconds: value.toInt()));
+            //   },
+            // ),
+            // // Play/Pause button
+            // IconButton(
+            //   icon: Icon(
+            //     _isPlaying ? Icons.pause : Icons.play_arrow,
+            //     size: 40,
+            //   ),
+            //   onPressed: () async {
+            //     if (_isPlaying) {
+            //       await _audioPlayer.pause();
+            //     } else {
+            //       await _audioPlayer.play();
+            //     }
+            //     setState(() {
+            //       _isPlaying = !_isPlaying;
+            //     });
+            //     _pickAudioFile();
+            //   },
+            // ),
+            // SizedBox(height: 20),
+            // // Placeholder for waveform (to be implemented)
+            // Container(
+            //   height: 50,
+            //   color: Colors.grey[300],
+            //   child: Center(
+            //     child: Text(
+            //       'Waveform placeholder',
+            //       style: TextStyle(color: Colors.grey),
+            //     ),
+            //   ),
+            // ),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.start,
             //   children: [

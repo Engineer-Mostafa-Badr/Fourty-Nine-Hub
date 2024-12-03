@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../res/style/styles.dart';
@@ -27,17 +25,17 @@ class SocialImageViewer extends StatelessWidget {
       highlightColor: Colors.transparent,
       hoverColor: Colors.transparent,
       splashColor: Colors.transparent,
-      onTap: () => showDialog(
-        context: context,
-        builder: (context) => ImageDetailsScreen(
-          image: image,
-          fromPost: true,
-          isFile: false,
-          onRemoveImage: () {
-            context.pop();
-          },
-        ),
-      ),
+      // onTap: () => showDialog(
+      //   context: context,
+      //   builder: (context) => ImageDetailsScreen(
+      //     image: image,
+      //     fromPost: true,
+      //     isFile: false,
+      //     onRemoveImage: () {
+      //       context.pop();
+      //     },
+      //   ),
+      // ),
       onDoubleTap: () => onDoubleTap != null ? onDoubleTap!() : null,
       child: SizedBox(
           height: height ?? kToolbarHeight * 3,

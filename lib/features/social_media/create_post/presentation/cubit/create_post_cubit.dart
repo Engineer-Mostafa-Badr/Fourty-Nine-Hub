@@ -38,6 +38,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       : super(CreatePostState());
 
   List<String>? selectedImages;
+  String? selectedAudio;
 
   // void addMusic(String musicPath) {
   //   emit(state.copyWith(music: musicPath));
@@ -214,6 +215,30 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
     await upload.uploadImage(
+        isGallery: isGallery,
+        subCategoryId: '66a3583454e6e337915514db',
+        onUploaded: (UploadFileEntity data) {
+          print("file name ${data.file}");
+          print("mediaId: ${data.mediaId}");
+          selectedImages?.add(data.mediaId);
+          final images = state.images ?? [];
+
+          images.add(data);
+          selectedImages = images.map((e) => e.mediaId).toList();
+          print("selectedImages${selectedImages?.length}");
+          print(images.length);
+          emit(state.copyWith(
+              images: images,
+              backColor: '#FFFFFFFF',
+              status: CreatePostStates.success));
+        });
+    print("length${state.images?.length}");
+  }
+
+  uploadAudio({bool isGallery = true}) async {
+    final UploadFile upload = UploadFile();
+    print("objectssssssssss");
+    await upload.uploadAudio(
         isGallery: isGallery,
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) {
