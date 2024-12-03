@@ -21,6 +21,7 @@ class RiderDataSource {
     String? token = await cacheService.getUserToken() ?? "";
     String? userId = extractUserId(token);
     // extractUserId(token ?? "");
+    print("USERID============ $userId \n");
     if (userId == null) {
       return api.get(EndPoints.bannerDataRider);
     } else {
@@ -205,8 +206,7 @@ class RiderDataSource {
 
   Future<Either<Failure, Map<String, dynamic>>> createOfferNoSocket(
       {required CreateOfferNoSocketModel model}) {
-    return api.post(EndPoints.createOfferNoSocket,
-        data: model.toJson());
+    return api.post(EndPoints.createOfferNoSocket, data: model.toJson());
   }
 
   Future<Either<Failure, Map<String, dynamic>>> offerAcceptNoSocket(

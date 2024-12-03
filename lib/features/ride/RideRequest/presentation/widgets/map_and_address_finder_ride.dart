@@ -33,7 +33,7 @@ class _MapAndAddressFinderRideState extends State<MapAndAddressFinderRide> {
     try {
       Position position = await GetCurrentLocationDriver.getCurrentPosition();
       print('Latitude: ${position.latitude}, Longitude: ${position.longitude}');
-      StartTextFieldAndFindWidget.startingPoint.text = "Home";
+      StartTextFieldAndFindWidget.startingPoint.text = "Your location";
       await context.read<GetStartingPointRideCubit>().getStartingPoint(
             address: "",
             isFirstTime: true,

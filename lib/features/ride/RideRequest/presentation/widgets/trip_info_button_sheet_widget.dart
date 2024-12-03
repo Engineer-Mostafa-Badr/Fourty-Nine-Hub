@@ -10,6 +10,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_info_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_payment_cubit.dart';
@@ -37,6 +38,8 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
   TextEditingController price = TextEditingController();
   @override
   void initState() {
+    BlocProvider.of<GetCurrencyCubit>(context).getCurrencyData();
+
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {},
@@ -175,12 +178,22 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                         : 13,
                                 left: 8,
                                 right: 8),
-                            child: Text(
-                              "EGP ${widget.model.price}",
-                              style: const TextStyle(
-                                  color: AppColors.QUANTITY_COLOR,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
+                            child:
+                                BlocBuilder<GetCurrencyCubit, GetCurrencyState>(
+                              builder: (context, state) {
+                                return BlocBuilder<GetCurrencyCubit,
+                                    GetCurrencyState>(
+                                  builder: (context, state) {
+                                    return Text(
+                                      "${context.isArabic ? BlocProvider.of<GetCurrencyCubit>(context).currnecyAr : BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}${widget.model.price}",
+                                      style: const TextStyle(
+                                          color: AppColors.QUANTITY_COLOR,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  },
+                                );
+                              },
                             ),
                           ),
                           Row(
@@ -335,12 +348,17 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                         : 13,
                                 left: 8,
                                 right: 8),
-                            child: Text(
-                              "EGP ${widget.model.price}",
-                              style: const TextStyle(
-                                  color: AppColors.QUANTITY_COLOR,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
+                            child:
+                                BlocBuilder<GetCurrencyCubit, GetCurrencyState>(
+                              builder: (context, state) {
+                                return Text(
+                                  "${context.isArabic ? BlocProvider.of<GetCurrencyCubit>(context).currnecyAr : BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}${widget.model.price}",
+                                  style: const TextStyle(
+                                      color: AppColors.QUANTITY_COLOR,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                );
+                              },
                             ),
                           ),
                         ],
@@ -409,7 +427,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
               // const Gap(6),
               const SizedBox(width: 6),
               BlocConsumer<RequestRiderTripCubit, RiderState>(
-                listener: (context, state) {
+                listener: (context, state) async {
                   log(state.toString(), name: "ldsjflskdjflskdfjlskjf");
                   if (state is SuccessRequestTripState) {
                     context.read<ShowOffersCubit>().showOffers();
@@ -418,15 +436,37 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                     //     location:صw
                     //         state.model.trip?.riderLocation?.coordinates ?? [],
                     //     subcategoryId: state.model.trip?.subCategoryId ?? "");
+                    await BlocProvider.of<GetCurrencyCubit>(context)
+                        .getCurrencyData();
 
                     showModalBottomSheet(
                       context: context,
+                      isDismissible:
+                          false, // Prevent dismissing by tapping outside
+                      enableDrag: false, // Prevent drag to dismiss
+                      isScrollControlled:
+                          true, // Allow full-screen height if needed
                       builder: (context) {
-                        return BlocProvider(
-                          create: (context) =>
-                              RaiseFareCubit(repository: serviceLocator()),
-                          child: RequestButtonSheetWidget(
-                            model: state.model,
+                        return GestureDetector(
+                          onVerticalDragStart:
+                              (_) {}, // Disable manual drag gestures
+                          child: BlocProvider(
+                            create: (context) => RaiseFareCubit(
+                              repository: serviceLocator(),
+                            ),
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxHeight: MediaQuery.of(context).size.height *
+                                    0.7, // Adjust height
+                              ),
+                              child: BlocProvider(
+                                create: (context) =>
+                                    GetCurrencyCubit(serviceLocator()),
+                                child: RequestButtonSheetWidget(
+                                  model: state.model,
+                                ),
+                              ),
+                            ),
                           ),
                         );
                       },

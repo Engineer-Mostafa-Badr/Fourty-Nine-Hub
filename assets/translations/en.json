@@ -1139,5 +1139,7 @@
   "yourBalanceIsInsufficient": "Your balance is insufficient",
   "Cash": "Cash",
   "Wallet": "Wallet",
-  "youHaveToFillYourNumberOfPassenger": "You have to fill your Number of Passenger"
+  "youHaveToFillYourNumberOfPassenger": "You have to fill your Number of Passenger",
+  "waitingForReplies":"Waiting for replies..."
+
 }

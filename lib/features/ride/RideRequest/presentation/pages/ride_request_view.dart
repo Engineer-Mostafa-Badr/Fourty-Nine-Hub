@@ -10,7 +10,9 @@ import 'package:fourtyninehub/common/widgets/stateful/maps/map_picker.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/success_request_trip_model/success_request_trip_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_offer_model/trip_request_offer_model.dart';
@@ -25,6 +27,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/animated_accept_button.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/common/dashboard_banner.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/rider_banner.dart';
 import 'package:fourtyninehub/features/ride/rider_shipping/presentation/pages/create_trip_rider.dart';
@@ -49,6 +52,8 @@ class _RideRequestViewState extends State<RideRequestView> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<GetCurrencyCubit>(context).getCurrencyData();
+
     // context.read<>()
   }
 
@@ -69,10 +74,12 @@ class _RideRequestViewState extends State<RideRequestView> {
                   left: 10,
                   right: 10,
                   child: Material(
-                      child: AcceptOrDeclineTrip(
-                    tripId: state.data!.id ?? "",
-                    model: state.data!,
-                    // overlayEntry: overlayEntry,
+                      child: BlocProvider(
+                    create: (context) => GetCurrencyCubit(serviceLocator()),
+                    child: AcceptOrDeclineTrip(
+                      tripId: state.data!.id ?? "",
+                      model: state.data!,
+                    ),
                   )),
                 ),
               );
@@ -323,7 +330,6 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 4),
                                               child: Row(
-                                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
                                                   const Icon(Icons.flash_on),
                                                   Text(
@@ -394,14 +400,35 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                         : 13,
                                                     left: 8,
                                                     right: 8),
-                                                child: Text(
-                                                  "EGP ${state.model.price}",
-                                                  style: const TextStyle(
-                                                      color: AppColors
-                                                          .QUANTITY_COLOR,
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                child: Row(
+                                                  children: [
+                                                    BlocBuilder<
+                                                        GetCurrencyCubit,
+                                                        GetCurrencyState>(
+                                                      builder:
+                                                          (context, state) {
+                                                        return Text(
+                                                          "${context.isArabic ? BlocProvider.of<GetCurrencyCubit>(context).currnecyAr : BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}",
+                                                          style: const TextStyle(
+                                                              color: AppColors
+                                                                  .QUANTITY_COLOR,
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        );
+                                                      },
+                                                    ),
+                                                    Text(
+                                                      "${state.model.price}",
+                                                      style: const TextStyle(
+                                                          color: AppColors
+                                                              .QUANTITY_COLOR,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    )
+                                                  ],
                                                 ),
                                               ),
                                             ),
@@ -484,26 +511,44 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                             .trip
                                                             ?.subCategoryId ??
                                                         "");
-
-                                            //                                   BlocProvider(
-                                            //   create: (context) =>
-                                            //       RaiseFareCubit(repository: serviceLocator()),
-                                            // ),
-                                            showModalBottomSheet(
-                                              context: context,
-                                              builder: (context) {
-                                                return BlocProvider(
-                                                  create: (context) =>
-                                                      RaiseFareCubit(
-                                                          repository:
-                                                              serviceLocator()),
-                                                  child:
-                                                      RequestButtonSheetWidget(
-                                                    model: state.model,
-                                                  ),
-                                                );
-                                              },
-                                            );
+                                            Navigator.pop(context);
+                                            print("Poped");
+                                            // showModalBottomSheet(
+                                            //   context: context,
+                                            //   isDismissible:
+                                            //       false, // Prevent tapping outside to dismiss
+                                            //   enableDrag:
+                                            //       false, // Prevent drag to dismiss
+                                            //   isScrollControlled:
+                                            //       true, // Control scroll behavior
+                                            //   builder: (context) {
+                                            //     return WillPopScope(
+                                            //       onWillPop: () async =>
+                                            //           false, // Prevent back button dismiss
+                                            //       child: BlocProvider(
+                                            //         create: (context) =>
+                                            //             RaiseFareCubit(
+                                            //           repository:
+                                            //               serviceLocator(),
+                                            //         ),
+                                            //         child: ConstrainedBox(
+                                            //           constraints:
+                                            //               BoxConstraints(
+                                            //             maxHeight: MediaQuery
+                                            //                         .of(context)
+                                            //                     .size
+                                            //                     .height *
+                                            //                 0.9, // Adjust height to fit screen
+                                            //           ),
+                                            //           child:
+                                            //               RequestButtonSheetWidget(
+                                            //             model: state.model,
+                                            //           ),
+                                            //         ),
+                                            //       ),
+                                            //     );
+                                            //   },
+                                            // );
                                           }
                                         },
                                         builder: (context, state) {
@@ -885,15 +930,24 @@ class RequestButtonSheetWidget extends StatefulWidget {
 
 class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
   int spase = 10;
+  @override
+  void initState() {
+    getCurrency();
+    super.initState();
+  }
+
+  void getCurrency() async {
+    await BlocProvider.of<GetCurrencyCubit>(context).getCurrencyData();
+  }
 
   @override
   Widget build(BuildContext context) {
     var raiseFareCubit = context.read<RaiseFareCubit>();
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(
-        color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
-        borderRadius: const BorderRadius.only(
+      decoration: const BoxDecoration(
+        color: AppColors.LIGHT_GRAY_COLOR,
+        borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30),
           topRight: Radius.circular(30),
         ),
@@ -908,7 +962,7 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                 Text(
                   "${widget.model.closerDrivers?.length ?? 0} ${LocaleKeys.driversAreViewingYourRequest.tr()}",
                   style: Styles.mediumText(
-                    color: context.isDarkMode ? Colors.white : Colors.black,
+                    color: Colors.black,
                   ),
                 ),
                 const Spacer(),
@@ -956,95 +1010,131 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
           // Sizer(h),
           Expanded(
             child: Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
                 color: context.isDarkMode
                     ? AppColors.QUANTITY_COLOR
                     : Colors.white,
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
                 ),
               ),
               child: Column(
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8, bottom: 20),
+                    child: Container(
+                      width: 36,
+                      height: 5,
+                      decoration: BoxDecoration(
+                          color: AppColors.LIGHT_GRAY_COLOR,
+                          borderRadius: BorderRadius.circular(8)),
+                    ),
+                  ),
                   Text(
-                    LocaleKeys.findingDrivers.tr(),
+                    LocaleKeys.waitingForReplies.localize,
                     style: Styles.headerText(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
                       color: context.isDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
-                  const Sizer(),
+                  const Sizer(
+                    height: 36,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 5,
+                    child: const LinearProgressIndicator(
+                      backgroundColor: Colors.grey,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.PRIMARY_COLOR),
+                    ),
+                  ),
+                  const Sizer(
+                    height: 36,
+                  ),
                   Row(
                     children: [
-                      Flexible(
-                        child: GestureDetector(
-                          onTap: () {
-                            raiseFareCubit.decreasePrice(newPrice: 3);
-                            setState(() {});
-                          },
-                          child: Container(
-                            height: 60,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                color: raiseFareCubit.price != null
-                                    ? AppColors.PRIMARY_COLOR
-                                    : const Color(0xFF495563),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Center(
-                              child: Text(
-                                "-3",
-                                style: Styles.mediumText(
-                                  color: raiseFareCubit.price != null
-                                      ? Colors.white
-                                      : const Color(0xFF5E6A78),
-                                  fontSize: 38,
-                                ),
-                              ),
+                      GestureDetector(
+                        onTap: () {
+                          raiseFareCubit.decreasePrice(newPrice: 3);
+                          setState(() {});
+                        },
+                        child: Container(
+                          height: 60,
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          decoration: BoxDecoration(
+                              color: raiseFareCubit.price != null
+                                  ? AppColors.PRIMARY_COLOR
+                                  : AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Center(
+                            child: Text(
+                              "-3",
+                              style: raiseFareCubit.price != null
+                                  ? Styles.mediumText(
+                                      color: Colors.white,
+                                      fontSize: 38,
+                                    )
+                                  : TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      foreground: Paint()
+                                        ..style = PaintingStyle.stroke
+                                        ..strokeWidth = 1.5
+                                        ..color = Colors.black,
+                                    ),
                             ),
                           ),
                         ),
                       ),
-                      const Sizer(),
-                      const Sizer(),
+                      const Spacer(),
                       Column(
                         children: [
                           Text(
                             LocaleKeys.yourOffer.tr(),
-                            style: Styles.mediumText(color: Colors.grey),
-                          ),
-                          const Sizer(
-                            height: 5,
-                          ),
-                          Text(
-                            "EGP ${(widget.model.trip?.price ?? 0) + (raiseFareCubit.currentPrice ?? 0)}",
-                            style: Styles.headerText(
+                            style: Styles.mediumText(
+                                fontWeight: FontWeight.w600,
                                 color: context.isDarkMode
                                     ? Colors.white
                                     : Colors.black),
                           ),
+                          const Sizer(
+                            height: 5,
+                          ),
+                          BlocBuilder<GetCurrencyCubit, GetCurrencyState>(
+                            builder: (context, state) {
+                              return Text(
+                                "${context.isArabic ? BlocProvider.of<GetCurrencyCubit>(context).currnecyAr : BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}${(widget.model.trip?.price?.toInt() ?? 0) + (raiseFareCubit.currentPrice?.toInt() ?? 0)}",
+                                style: Styles.headerText(
+                                    fontSize: 56,
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black),
+                              );
+                            },
+                          ),
                         ],
                       ),
-                      const Sizer(),
-                      const Sizer(),
-                      Flexible(
-                        child: GestureDetector(
-                          onTap: () {
-                            raiseFareCubit.increasePrice(newPrice: 3);
-                            setState(() {});
-                          },
-                          child: Container(
-                            height: 60,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                color: AppColors.PRIMARY_COLOR,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Center(
-                              child: Text(
-                                "+3",
-                                style: Styles.mediumText(
-                                    color: Colors.white, fontSize: 38),
-                              ),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          raiseFareCubit.increasePrice(newPrice: 3);
+                          setState(() {});
+                        },
+                        child: Container(
+                          height: 60,
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          decoration: BoxDecoration(
+                              color: AppColors.PRIMARY_COLOR,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Center(
+                            child: Text(
+                              "+3",
+                              style: Styles.mediumText(
+                                  color: Colors.white, fontSize: 38),
                             ),
                           ),
                         ),
@@ -1058,28 +1148,30 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                     width: double.infinity,
                     height: 46,
                     decoration: BoxDecoration(
-                        color: const Color(0xFF0E4669),
+                        color: const Color.fromRGBO(226, 244, 255, 1),
                         borderRadius: BorderRadius.circular(13)),
                     child: Row(
                       children: [
                         const Icon(
                           Icons.info_outline,
-                          color: Colors.white,
+                          color: const Color(0xFF0E4669),
                         ),
                         const Sizer(),
                         Flexible(
                           child: Text(
                             "${LocaleKeys.travelTime.tr()}: ~${formatDuration(widget.model.trip?.duration ?? 0)} , ${LocaleKeys.Distance.tr()}: ${formatDistance(widget.model.trip?.distance ?? 0)}",
                             style: Styles.mediumText(
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white),
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
                           ),
                         ),
                         const Sizer(),
                       ],
                     ),
                   ),
-                  const Sizer(),
+                  const Sizer(
+                    height: 36,
+                  ),
                   GestureDetector(
                     onTap: () {
                       raiseFareCubit.update(
@@ -1093,19 +1185,43 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                       decoration: BoxDecoration(
                           color: raiseFareCubit.price != null
                               ? AppColors.PRIMARY_COLOR
-                              : const Color(0xFF495563),
+                              : AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(10)),
                       child: Center(
-                        child: Text(
-                          LocaleKeys.raiseFare.tr(),
-                          style: Styles.mediumText(
-                            color: raiseFareCubit.price != null
-                                ? Colors.white
-                                : const Color(0xFF5E6A78),
-                            fontSize: 38,
-                          ),
-                        ),
-                      ),
+                          child: raiseFareCubit.price != null
+                              ? Text(
+                                  LocaleKeys.raiseFare.tr(),
+                                  style: Styles.mediumText(
+                                    color: Colors.white,
+                                    fontSize: 38,
+                                  ),
+                                )
+                              : Stack(
+                                  children: [
+                                    // Black stroke
+                                    Text(
+                                      LocaleKeys.raiseFare.localize,
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w500,
+                                        foreground: Paint()
+                                          ..style = PaintingStyle.stroke
+                                          ..strokeWidth = 2.9
+                                          ..color =
+                                              Colors.black, // Stroke color
+                                      ),
+                                    ),
+                                    // White fill
+                                    Text(
+                                      LocaleKeys.raiseFare.localize,
+                                      style: const TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white, // Fill color
+                                      ),
+                                    ),
+                                  ],
+                                )),
                     ),
                   ),
                   const Sizer(),
@@ -1126,12 +1242,16 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                                 Icons.credit_card,
                                 color: Colors.black,
                               ),
-                              Text(
-                                "EGP ${(widget.model.trip?.price ?? 0) + (raiseFareCubit.currentPrice ?? 0)} ${widget.model.trip?.paymentMethod}",
-                                style: Styles.mediumText(
-                                    color: context.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black),
+                              BlocBuilder<GetCurrencyCubit, GetCurrencyState>(
+                                builder: (context, state) {
+                                  return Text(
+                                    "${context.isArabic ? BlocProvider.of<GetCurrencyCubit>(context).currnecyAr : BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}${(widget.model.trip?.price ?? 0) + (raiseFareCubit.currentPrice ?? 0)} ${widget.model.trip?.paymentMethod}",
+                                    style: Styles.mediumText(
+                                        color: context.isDarkMode
+                                            ? Colors.white
+                                            : Colors.black),
+                                  );
+                                },
                               ),
                             ],
                           )
@@ -1178,7 +1298,7 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
   }
 }
 
-class AcceptOrDeclineTrip extends StatelessWidget {
+class AcceptOrDeclineTrip extends StatefulWidget {
   const AcceptOrDeclineTrip({
     super.key,
     required this.model,
@@ -1186,6 +1306,19 @@ class AcceptOrDeclineTrip extends StatelessWidget {
   });
   final TripRequestOfferModel model;
   final String tripId;
+
+  @override
+  State<AcceptOrDeclineTrip> createState() => _AcceptOrDeclineTripState();
+}
+
+class _AcceptOrDeclineTripState extends State<AcceptOrDeclineTrip> {
+  @override
+  void initState() {
+    BlocProvider.of<GetCurrencyCubit>(context).getCurrencyData();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<OfferCubit, RiderState>(
@@ -1215,12 +1348,14 @@ class AcceptOrDeclineTrip extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if ((model.comfort ?? false))
+            if ((widget.model.comfort ?? false))
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: (model.comfort ?? false) ? Colors.green : Colors.red,
+                  color: (widget.model.comfort ?? false)
+                      ? Colors.green
+                      : Colors.red,
                 ),
                 child: Text(
                   LocaleKeys.comfort.tr(),
@@ -1230,15 +1365,25 @@ class AcceptOrDeclineTrip extends StatelessWidget {
             const Sizer(),
             Row(
               children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: NetworkImage(model.profilePicture ?? ""),
-                        fit: BoxFit.cover,
-                      )),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 8, right: 16, top: 16),
+                      child: Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  widget.model.profilePicture ?? ""),
+                              fit: BoxFit.cover,
+                            )),
+                      ),
+                    ),
+                  ],
                 ),
                 const Sizer(),
                 Column(
@@ -1247,27 +1392,32 @@ class AcceptOrDeclineTrip extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          model.firstName ?? "",
-                          style: Styles.mediumText(color: Colors.black),
+                          widget.model.firstName ?? "",
+                          style: Styles.mediumText(
+                              fontWeight: FontWeight.w600, color: Colors.black),
                         ),
                         const Icon(
                           Icons.star,
                           color: Colors.amber,
                         ),
                         Text(
-                          "${model.averageRating ?? ""} ",
-                          style: Styles.mediumText(color: Colors.black),
+                          "${widget.model.averageRating ?? ""} ",
+                          style: Styles.mediumText(
+                              fontWeight: FontWeight.w600, color: Colors.black),
                         ),
                         Text(
-                          "(${model.allCountTrip} ${LocaleKeys.rider.tr()})",
+                          "(${widget.model.allCountTrip} ${LocaleKeys.rides.tr()})",
                           style: Styles.mediumText(
-                              color: Colors.grey, fontSize: 26),
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black,
+                              fontSize: 26),
                         ),
                       ],
                     ),
                     Text(
-                      model.model ?? "",
-                      style: Styles.mediumText(color: Colors.black),
+                      widget.model.model ?? "",
+                      style: Styles.mediumText(
+                          fontWeight: FontWeight.w600, color: Colors.black),
                     ),
                   ],
                 ),
@@ -1275,22 +1425,33 @@ class AcceptOrDeclineTrip extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      formatDuration(model.arrivalTimeToClient ?? 0),
-                      style:
-                          Styles.headerText(color: Colors.black, fontSize: 30),
+                      formatDuration(widget.model.arrivalTimeToClient ?? 0),
+                      style: Styles.headerText(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 30),
                     ),
                     Text(
-                      formatDistance(model.distance ?? 0),
-                      style:
-                          Styles.headerText(color: Colors.black, fontSize: 30),
+                      formatDistance(widget.model.distance ?? 0),
+                      style: Styles.headerText(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 30),
                     ),
                   ],
                 ),
               ],
             ),
-            Text(
-              "EGP ${model.priceOffer ?? 0}",
-              style: Styles.headerText(color: Colors.black, fontSize: 50),
+            const Sizer(
+              height: 48,
+            ),
+            BlocBuilder<GetCurrencyCubit, GetCurrencyState>(
+              builder: (context, state) {
+                return Text(
+                  "${context.isArabic ? BlocProvider.of<GetCurrencyCubit>(context).currnecyAr : BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}${widget.model.priceOffer?.toInt() ?? 0}",
+                  style: Styles.headerText(color: Colors.black, fontSize: 56),
+                );
+              },
             ),
             const Sizer(),
             Row(
@@ -1301,7 +1462,7 @@ class AcceptOrDeclineTrip extends StatelessWidget {
                       if (context.read<ShowOffersCubit>().overlayEntry !=
                           null) {
                         context.read<OfferCubit>().declineOffer(
-                              tripId: tripId,
+                              tripId: widget.tripId,
                             );
                         context.read<ShowOffersCubit>().overlayEntry!.remove();
                       }
@@ -1310,12 +1471,15 @@ class AcceptOrDeclineTrip extends StatelessWidget {
                       width: double.infinity,
                       height: 50,
                       decoration: BoxDecoration(
-                          color: Colors.red,
+                          color: AppColors.LIGHT_GRAY_COLOR.withOpacity(0.4),
                           borderRadius: BorderRadius.circular(15)),
                       child: Center(
                         child: Text(
                           LocaleKeys.decline.tr(),
-                          style: Styles.mediumText(color: Colors.white),
+                          style: Styles.mediumText(
+                              fontSize: 32,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black),
                         ),
                       ),
                     ),
@@ -1324,29 +1488,19 @@ class AcceptOrDeclineTrip extends StatelessWidget {
                 const Sizer(),
                 Flexible(
                   child: GestureDetector(
-                    onTap: () {
-                      context.read<OfferCubit>().acceptOffer(
-                          tripId: tripId,
-                          subCategory: model.subcategoryId ?? "");
-                      if (context.read<ShowOffersCubit>().overlayEntry !=
-                          null) {
-                        context.read<ShowOffersCubit>().overlayEntry!.remove();
-                      }
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          color: AppColors.PRIMARY_COLOR,
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Center(
-                        child: Text(
-                          LocaleKeys.Accept.tr(),
-                          style: Styles.mediumText(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
+                      onTap: () {
+                        context.read<OfferCubit>().acceptOffer(
+                            tripId: widget.tripId,
+                            subCategory: widget.model.subcategoryId ?? "");
+                        if (context.read<ShowOffersCubit>().overlayEntry !=
+                            null) {
+                          context
+                              .read<ShowOffersCubit>()
+                              .overlayEntry!
+                              .remove();
+                        }
+                      },
+                      child: AnimatedAcceptButton()),
                 )
               ],
             )

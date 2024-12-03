@@ -1109,5 +1109,6 @@ abstract class  LocaleKeys {
   static const Cash = 'Cash';
   static const Wallet = 'Wallet';
   static const youHaveToFillYourNumberOfPassenger = 'youHaveToFillYourNumberOfPassenger';
+  static const waitingForReplies = 'waitingForReplies';
 
 }

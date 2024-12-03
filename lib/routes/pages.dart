@@ -1502,8 +1502,14 @@ class AppPages {
                           GetTripInfoCubit(repository: serviceLocator()),
                     ),
                     BlocProvider(
+                      create: (context) => GetCurrencyCubit(serviceLocator()),
+                    ),
+                    BlocProvider(
                       create: (context) =>
                           CheckPaymentCubit(repository: serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) => GetCurrencyCubit(serviceLocator()),
                     ),
                   ],
                   child: const ShippingRiderTabScreen(),

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_accept_by_driver_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_accept_by_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
@@ -20,6 +21,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/sub
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/trip_info_request_widget.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class ShippingRiderTabScreen extends StatefulWidget {
   const ShippingRiderTabScreen({super.key});
@@ -34,6 +36,8 @@ class _ShippingRiderTabScreenState extends State<ShippingRiderTabScreen> {
   bool isCheck = false;
   @override
   void initState() {
+    BlocProvider.of<GetCurrencyCubit>(context).getCurrencyData();
+
     super.initState();
     BlocProvider.of<SecretsCubit>(context).getAllSecrets();
     // context.read<CheckDriverTypeCubit>().checkDriverType();
@@ -109,6 +113,7 @@ class _ShippingRiderTabScreenState extends State<ShippingRiderTabScreen> {
                                   builder: (context, state) {
                                     if (state is ViewPickTripDataState) {
                                       print("hello from ride ==== \n");
+
                                       return Column(
                                         children: [
                                           const MapAndAddressFinderRide(),
@@ -117,8 +122,13 @@ class _ShippingRiderTabScreenState extends State<ShippingRiderTabScreen> {
                                             builder: (context, state) {
                                               if (state
                                                   is SuccessGetTripInfoState) {
-                                                return TripInfoRequestWidget(
-                                                  model: state.model,
+                                                return BlocProvider(
+                                                  create: (context) =>
+                                                      GetCurrencyCubit(
+                                                          serviceLocator()),
+                                                  child: TripInfoRequestWidget(
+                                                    model: state.model,
+                                                  ),
                                                 );
                                               } else {
                                                 return Container();
