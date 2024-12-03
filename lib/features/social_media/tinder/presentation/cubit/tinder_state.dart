@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/add_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/anonymous_chat_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/last_seen_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/main_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/near_by_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/normal_chat_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/domain/user_data_tinder_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 import '../../../../fourty_nine/domain/entities/main_category_entity.dart';
@@ -28,13 +28,14 @@ extension DataStateExtension on TinderViewState {
 
 class TinderViewState {
   final TinderStates status;
-  final List<UserData>? userData0;
+  final Failure? failure;
+  final List<UserDataTinderEntity>? userData0;
   final TinderStates? userDataState0;
   final int? currentPage;
 
   final String? gender; // Made nullable
 
-  final List<UserData>? userData;
+  final List<UserDataTinderEntity>? userData;
   final TinderStates? userDataState;
 
   final ProfileUserData? profileUserData;
@@ -90,6 +91,7 @@ class TinderViewState {
 
   TinderViewState({
     this.status = TinderStates.initial,
+    this.failure,
     this.gender = 'female',
     this.mainCategoryResponse,
     this.mainCategoryResponseState = TinderStates.initial,
@@ -97,7 +99,7 @@ class TinderViewState {
     this.anonymousChatResponseState = TinderStates.initial,
     this.normalChatResponse,
     this.normalChatResponseState = TinderStates.initial,
-    this.userData0 = const [],
+    this.userData0,
     this.userDataState0 = TinderStates.initial,
     this.currentPage = 0,
     this.uploadImageState = TinderStates.initial,
@@ -135,11 +137,12 @@ class TinderViewState {
   // Method to update the state
   TinderViewState copyWith({
     TinderStates? status,
+    Failure? failure,
     String? gender,
-    List<UserData>? userData0,
+    List<UserDataTinderEntity>? userData0,
     TinderStates? userDataState0,
     int? currentPage,
-    List<UserData>? userData,
+    List<UserDataTinderEntity>? userData,
     TinderStates? userDataState,
     List<SubCategoryEntity>? subCategoryData,
     TinderStates? subCategoryDataState,
@@ -178,6 +181,7 @@ class TinderViewState {
   }) {
     return TinderViewState(
       status: status ?? this.status,
+      failure: failure ?? this.failure,
       gender: gender ?? this.gender,
       userData0: userData0 ?? this.userData0,
       userDataState0: userDataState0 ?? this.userDataState0,

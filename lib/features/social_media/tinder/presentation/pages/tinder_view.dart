@@ -242,16 +242,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_card_stack.dart';
@@ -307,7 +303,7 @@ class _TinderScreenState extends State<TinderScreen> {
   void _initializeTinderData() {
     final tinderCubit = context.read<TinderViewCubit>();
     tinderCubit
-      ..fetchUserData(gender: 'female')
+      ..fetchUserData('female')
       ..fetchSubCategoryData()
       ..fetchFavorites()
       ..fetchMainCategoryById(context,'62c8b5b09332225799fe335e');
@@ -337,21 +333,28 @@ class _TinderScreenState extends State<TinderScreen> {
           //   return _buildPleaseLoginWidget(context);
           // }
 
+          if (state.userData0 == null || state.userData0!.isEmpty) {
+            return Center(
+              child: Text('No data found'),
+            );
+          }
+
           return _buildLoggedInContent(context, state);
         },
       ),
     );
   }
 
-  Widget _buildLoggedInContent(BuildContext context, TinderViewState state) {
+  Widget _buildLoggedInContent(BuildContext context,  state) {
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
+            Text(state.userData0![0].firstName!),
             // _buildHeader(),
-            state.userData!.isNotEmpty
+            state.userData0!.isNotEmpty
                 ? const TinderCardStack()
                 : SizedBox(
                     height: 0.55.sh,
@@ -368,7 +371,7 @@ class _TinderScreenState extends State<TinderScreen> {
                       ),
                     ),
                   ),
-            if (state.userData!.isNotEmpty)
+            if (state.userData0!.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 2),
                 child: Divider(

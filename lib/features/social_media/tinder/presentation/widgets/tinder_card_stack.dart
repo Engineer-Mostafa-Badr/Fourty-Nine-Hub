@@ -629,7 +629,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/domain/user_data_tinder_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
@@ -654,21 +654,17 @@ class TinderCardStack extends StatefulWidget {
 class _TinderCardStackState extends State<TinderCardStack> {
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
 
     return SizedBox(
       height: 0.55.sh,
-      child: BlocConsumer<TinderViewCubit, TinderViewState>(
-        listener: (context, state) {
-          // Handle any errors in a centralized place
-          log("Error: $state");
-        },
+
+      child: BlocBuilder<TinderViewCubit, TinderViewState>(
         builder: (context, state) {
-          if (state.userData!.isEmpty) {
-            return const Center(
-              child: CupertinoActivityIndicator(radius: 25),
-            );
-          }
+          // if (state.userData!.isEmpty) {
+          //   return const Center(
+          //     child: CupertinoActivityIndicator(radius: 25),
+          //   );
+          // }
           return _buildCardSwiper(context, state);
         },
       ),
@@ -677,33 +673,33 @@ class _TinderCardStackState extends State<TinderCardStack> {
 
   Widget _buildCardSwiper(BuildContext context, TinderViewState state) {
     return CardSwiper(
-      cardsCount: state.userData!.length,
+      cardsCount: state.userData0!.length,
       numberOfCardsDisplayed:
-          state.userData!.length < 3 ? state.userData!.length : 2,
+          state.userData0!.length < 3 ? state.userData0!.length : 2,
       scale: 0.9,
       isLoop: true,
       padding: const EdgeInsets.only(right: 4.0, left: 4.0, bottom: 16),
       onSwipe: (previousIndex, currentIndex, direction) {
         // Disable swapping if there's only one card
-        if (state.userData!.length == 1) {
+        if (state.userData0!.length == 1) {
           return false; // Prevent swipe
         }
         setState(() {
           // Update the UI based on new card index
-          _buildCardWidget(context, state.userData![currentIndex!]);
+          _buildCardWidget(context, state.userData0![currentIndex!]);
         });
         if (currentIndex != null) {
-          _fetchUserDataOnSwipe(context, state.userData![currentIndex].id);
+          _fetchUserDataOnSwipe(context, state.userData0![currentIndex].id);
 
-          if (currentIndex >= state.userData!.length - 3) {
-            context.read<TinderViewCubit>().loadMoreUserData(state.gender!);
+          if (currentIndex >= state.userData0!.length - 3) {
+            context.read<TinderViewCubit>().fetchUserData(state.gender!);
           }
         }
         return true;
       },
       cardBuilder: (context, index, horizontalOffsetPercentage,
           verticalOffsetPercentage) {
-        return _buildCardWidget(context, state.userData![index]);
+        return _buildCardWidget(context, state.userData0![index]);
       },
       duration: const Duration(milliseconds: 100),
     );
@@ -716,7 +712,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
     }
   }
 
-  Widget _buildCardWidget(BuildContext context, UserData cardUser) {
+  Widget _buildCardWidget(BuildContext context, UserDataTinderEntity cardUser) {
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: Card(
@@ -736,7 +732,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
     );
   }
 
-  Widget _buildGenderSwitch(BuildContext context, UserData user) {
+  Widget _buildGenderSwitch(BuildContext context, UserDataTinderEntity user) {
     return Positioned(
       right: 8,
       top: 25,
@@ -763,7 +759,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
     );
   }
 
-  Widget _buildMapSwitch(BuildContext context, UserData user) {
+  Widget _buildMapSwitch(BuildContext context, UserDataTinderEntity user) {
     return Positioned(
       left: 8,
       top: 25,
@@ -798,16 +794,16 @@ class _TinderCardStackState extends State<TinderCardStack> {
     );
   }
 
-  Future<void> _switchDisplayGender(BuildContext context, UserData user) async {
+  Future<void> _switchDisplayGender(BuildContext context, UserDataTinderEntity user) async {
     final currentGender = context.read<TinderViewCubit>().state.gender;
     final newGender = currentGender == 'female' ? 'male' : 'female';
-    await context.read<TinderViewCubit>().fetchUserData(gender: newGender);
+    await context.read<TinderViewCubit>().fetchUserData( newGender);
     setState(() {
       print('sssssssssssssssssssssssssssss');
     });
   }
 
-  Widget _buildStoryBar(BuildContext context, UserData user) {
+  Widget _buildStoryBar(BuildContext context, UserDataTinderEntity user) {
     return Positioned(
       top: 10,
       left: 10,
@@ -834,7 +830,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
     );
   }
 
-  Widget _buildPersonInfo(BuildContext context, UserData cardUser) {
+  Widget _buildPersonInfo(BuildContext context, UserDataTinderEntity cardUser) {
     return Positioned(
       bottom: kToolbarHeight,
       right: 8,
@@ -955,8 +951,8 @@ class _TinderCardStackState extends State<TinderCardStack> {
   }
 
   Widget _buildLastSeen(BuildContext context) {
-    final lastSeen =
-        context.read<TinderViewCubit>().state.lastSeenModel?.data?.lastSeen;
+    // final lastSeen =
+    //     context.read<TinderViewCubit>().state.lastSeenModel?.data?.lastSeen;
     return BlocConsumer<TinderViewCubit, TinderViewState>(
       listener: (context, state) {
         // TODO: implement listener
@@ -990,7 +986,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
     );
   }
 
-  Widget _buildActions(BuildContext context, UserData cardUser) {
+  Widget _buildActions(BuildContext context, UserDataTinderEntity cardUser) {
     return Positioned(
       bottom: 4,
       right: 8,
@@ -1049,7 +1045,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
     );
   }
 
-  void _navigateToUserProfile(BuildContext context, UserData cardUser) {
+  void _navigateToUserProfile(BuildContext context, UserDataTinderEntity cardUser) {
     if (serviceLocator<UserCubit>().state.data != null) {
       Navigator.push(
         context,
@@ -1070,7 +1066,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
   }
 
   Future<void> _showReportBottomSheet(
-      BuildContext context, UserData user) async {
+      BuildContext context, UserDataTinderEntity user) async {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -1233,16 +1229,16 @@ class _TinderCardStackState extends State<TinderCardStack> {
 // }
 
 class ChatBottomSheet extends StatelessWidget {
-  final UserData cardUser;
+  final UserDataTinderEntity cardUser;
 
   const ChatBottomSheet({super.key, required this.cardUser});
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
-    final bottomSheetHeight = screenHeight / 2;
-    final titleFontSize = screenHeight * 0.05;
+    // final screenWidth = MediaQuery.of(context).size.width;
+    // final bottomSheetHeight = screenHeight / 2;
+    // final titleFontSize = screenHeight * 0.05;
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -1318,11 +1314,11 @@ class ChatBottomSheet extends StatelessWidget {
   Widget _buildChatOptionCard(BuildContext context,
       {required IconData icon,
       required String label,
-      required UserData cardUser}) {
+      required UserDataTinderEntity cardUser}) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final iconSize = screenWidth * 0.1;
-    final fontSize = screenHeight * 0.04;
+    //final fontSize = screenHeight * 0.04;
     final padding = screenHeight * 0.01;
 
     return IconButton(
@@ -1362,10 +1358,10 @@ class ChatBottomSheet extends StatelessWidget {
     );
   }
 
-  void _startChat(BuildContext context, String label, UserData cardUser) {
-    final tinderCubit = context.read<TinderViewCubit>();
-    final chatRoomCubit = serviceLocator<ChatRoomCubit>();
-    final chatsCubit = serviceLocator<ChatsCubit>();
+  void _startChat(BuildContext context, String label, UserDataTinderEntity cardUser) {
+    // final tinderCubit = context.read<TinderViewCubit>();
+    // final chatRoomCubit = serviceLocator<ChatRoomCubit>();
+   // final chatsCubit = serviceLocator<ChatsCubit>();
 
     if (label == "Anonymous") {
       // tinderCubit.startAnonymousChat(receiverId: cardUser.id ?? '').then((_) {
@@ -1417,7 +1413,7 @@ class ChatBottomSheet extends StatelessWidget {
   }
 }
 
-void showChatBottomSheet(BuildContext context, UserData cardUser) {
+void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
   showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
@@ -1432,7 +1428,7 @@ void showChatBottomSheet(BuildContext context, UserData cardUser) {
   );
 }
 
-Widget swipeCardDemo2(BuildContext context, UserData cardUser) {
+Widget swipeCardDemo2(BuildContext context, UserDataTinderEntity cardUser) {
   int currentStoryIndex = 0;
 
   void nextStory() {
@@ -1522,7 +1518,7 @@ Widget swipeCardDemo2(BuildContext context, UserData cardUser) {
 //last ya ali
 
 class SwipeCardDemo2 extends StatefulWidget {
-  final UserData cardUser;
+  final UserDataTinderEntity cardUser;
 
   const SwipeCardDemo2({super.key, required this.cardUser});
 

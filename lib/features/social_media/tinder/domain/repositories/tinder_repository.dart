@@ -7,16 +7,16 @@ import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_mode
 import 'package:fourtyninehub/features/social_media/tinder/data/models/last_seen_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/near_by_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/domain/user_data_tinder_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_user_data_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/send_geft_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 import '../../../../../core/error/failure.dart';
-import '../../data/models/tinder_person_model.dart';
 
 abstract class TinderRepository {
   Future<Either<Failure, GiftApi>> getGifts(PaginationParams params);
-  Future<Either<Failure, List<UserData>>> getUsers(GetUsersParams params);
+  Future<Either<Failure, List<UserDataTinderEntity>>> getUsers(GetUsersParams params);
   Future<Either<Failure, ProfileUserModel>> getUserProfile(String params);
   Future<Either<Failure, SubFavoritesResponse>> fetchFavourites();
   Future<Either<Failure, CategoryFavoritesResponse>> fetchFavouritesCategories();
