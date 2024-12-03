@@ -49,7 +49,6 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
             ),
-            color: Theme.of(context).dialogBackgroundColor,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -59,7 +58,6 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15)),
-                  fillColor: Colors.transparent,
                   label: Text(LocaleKeys.phone.localize),
                   isDense: true,
                   contentPadding: const EdgeInsets.all(14),
@@ -71,7 +69,7 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                   return _validateMobile(value);
                 },
               ),
-              const Sizer(),
+               Sizer(height: 40.h,),
               InkWell(
                 onTap: () {
                   if (formKey.currentState!.validate()) {

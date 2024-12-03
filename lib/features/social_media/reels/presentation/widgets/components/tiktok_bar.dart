@@ -7,7 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/shared/tiktok_option_sheet.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -59,9 +62,9 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                           .state
                           .controllers[context.read<PreloadBloc>().state.focusedIndex]
                           ?.pause();
-                      context.read<PreloadBloc>().resetFocusedIndex();
 
                     }
+                      context.read<PreloadBloc>().resetFocusedIndex(context.read<PreloadBloc>().state.focusedIndex);
                     Navigator.pop(context);
                   },
                   icon: Icon(
@@ -100,7 +103,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 }
               }),
               const Spacer(), // Explore Tab
-              _buildTab("Spotlight", 0, onTap: () {
+              _buildTab(LocaleKeys.Spotlight.localize, 0, onTap: () {
                 if (context
                     .read<PreloadBloc>()
                     .state
@@ -117,7 +120,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 context.push(Routes.SPOTLIGHT);
               }),
               // Following Tab
-              _buildTab("Snap", 1, onTap: () {
+              _buildTab(LocaleKeys.Snap.localize, 1, onTap: () {
                 if (context
                     .read<PreloadBloc>()
                     .state
@@ -135,7 +138,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               }),
 
               // For You Tab with rounded underline
-              _buildTab("Reels", 2, onTap: () {
+              _buildTab(LocaleKeys.Reels.localize, 2, onTap: () {
 
                 if (context
                     .read<PreloadBloc>()

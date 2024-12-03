@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/followers_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/following_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_global_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_reels_usecase.dart';
@@ -239,10 +241,12 @@ class InstagramCubit extends Cubit<InstagramState> {
   }
 
   void loadReplies(BuildContext context, String commentId) async {
+    emit(state.copyWith(status: StateStatus.loading));
     await getCommentReplies(context: context, commentId: commentId, page: 1);
     commentsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
       getCommentReplies(context: context, commentId: commentId, page: pageKey);
+      emit(state.copyWith(status: StateStatus.success));
     });
   }
 
@@ -576,7 +580,7 @@ class InstagramCubit extends Cubit<InstagramState> {
           ?.firstWhere((element) => element.id == params.postId)
           .commentsCount = (feedPagingController.itemList!
               .firstWhere((element) => element.id == params.postId)
-              .commentsCount! +
+              .commentsCount +
           1);
       print(
           "CommentsCount ${feedPagingController.itemList?.firstWhere((element) => element.id == params.postId).commentsCount}");
@@ -628,7 +632,7 @@ class InstagramCubit extends Cubit<InstagramState> {
         var currentPost = feedPagingController.itemList
             ?.firstWhere((element) => element.id == postId);
         print("comment count${currentPost?.commentsCount}");
-        currentPost?.commentsCount = (currentPost.commentsCount! - 1);
+        currentPost?.commentsCount = (currentPost.commentsCount - 1);
       }
       emit(state.copyWith(status: StateStatus.success));
       showSuccessMessage(context, "Comment delete successfully");

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/cubit/favourite_drawer_state.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/ad_card_drawer_favourite.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../cubit/cubit/favourite_drawer_cubit.dart';
 
@@ -33,7 +35,7 @@ class _FavouriteViewState extends State<FavouriteView> {
           }
           return Padding(
             padding: EdgeInsets.all(10.0.w),
-            child: ListView.builder(
+            child:state.favourite!.isNotEmpty && state.favourite !=null? ListView.builder(
                 itemBuilder: (context, index) => AdCardDrawerFavourite(
                       item: state.favourite![index],
                       onFav: (String) {},
@@ -46,7 +48,13 @@ class _FavouriteViewState extends State<FavouriteView> {
                 //     mainAxisSpacing: 10,
                 //     crossAxisSpacing: 10,
                 //     crossAxisCount: 2),
-                itemCount: state.favourite?.length ?? 0),
+                itemCount: state.favourite?.length ?? 0)
+            :Center(
+                child: Label(
+                    style: Styles.mediumText(fontSize: 60.sp),
+                    maxLines: 3,
+                    textAlign: TextAlign.center,
+                    text: LocaleKeys.noFavouriteAds.localize)),
           );
         }, listener: (BuildContext context, FavouriteDrawerState state) {
               if(state.status ==FavouriteDrawerStates.successDelete){

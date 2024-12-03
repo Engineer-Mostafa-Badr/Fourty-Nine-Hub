@@ -27,7 +27,7 @@ class _ReadMoreLabelState extends State<ReadMoreLabel> {
   String? secondHalf;
 
   bool flag = true;
-  final int characterLimit = 300;
+  final int characterLimit = 100;
 
   // Variable to store if the link is being pressed
   bool isLinkPressed = false;

@@ -55,8 +55,8 @@ class _CommentRepliesState extends State<CommentReplies> {
       final user = context.read<UserCubit>().state.data;
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
           elevation: 0,
+          toolbarHeight: 200.h,
           iconTheme: const IconThemeData(color: Colors.grey),
           title: Label(
               text:
@@ -84,10 +84,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                           child: Center(
                             child: Text(
                               LocaleKeys.noReplied.localize,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
+                              style: Styles.mediumText(),
                             ),
                           ));
                     },
@@ -114,9 +111,7 @@ class _CommentRepliesState extends State<CommentReplies> {
             ),
             Container(
                 height: kToolbarHeight,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
+                decoration: const BoxDecoration(),
                 child: Row(
                   children: [
                     ProfileImage(
@@ -135,7 +130,6 @@ class _CommentRepliesState extends State<CommentReplies> {
                       },
                       style: Styles.headerText(fontSize: 26),
                       decoration: InputDecoration(
-                        fillColor: Colors.white,
                         contentPadding: const EdgeInsets.all(5),
                         hintText: '${LocaleKeys.typeYourReply.localize} ....',
                         hintStyle: Styles.mediumText(),

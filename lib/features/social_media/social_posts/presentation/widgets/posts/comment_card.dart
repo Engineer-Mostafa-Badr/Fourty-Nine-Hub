@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/comment_replies.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -56,6 +57,8 @@ class _CommentCardState extends State<CommentCard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             UserProfileImage(
               size: 40.sp,
@@ -69,31 +72,28 @@ class _CommentCardState extends State<CommentCard> {
             const Sizer(),
             Expanded(
                 child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Label(
-                    text: widget.comment.user.firstName,
-                    style: Styles.mediumText(
-                        fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor,)),
-                Label(
-                    text: widget.comment.sinceTime,
-                    style: Styles.mediumText(color: Theme.of(context).primaryColor,)),
-              ],
-            )),
-            // if (widget.comment.user.id != user?.id)
-            //   GestureDetector(
-            //       onTap: () {
-            //         bottomSheet(
-            //             context: context,
-            //             widget: ReportView(
-            //               id: widget.comment.id,
-            //               categoryId: '66a3583454e6e337915514db',
-            //             ));
-            //       },
-            //       child: Icon(
-            //         Icons.more_vert,
-            //         color: widget.textColor,
-            //       )),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Label(
+                            text: widget.comment.user.firstName,
+                            style: Styles.mediumText(fontWeight: FontWeight.bold)),
+                        const Sizer(),
+                        Label(
+                            text: widget.comment.sinceTime,
+                            style: Styles.mediumText(
+                                color: AppColors.GREY_NORMAL_COLOR)),
+                      ],
+                    ),
+                    Text(
+                      widget.comment.content ?? '',
+                      textAlign: TextAlign.start,
+                      style: Styles.mediumText(fontSize: 65.sp),
+                    ),
+                  ],
+                )),
             const Sizer(),
             GestureDetector(
               onTap: () {
@@ -113,11 +113,11 @@ class _CommentCardState extends State<CommentCard> {
             ),
           ],
         ),
-        const Sizer(),
-        Text(
-          widget.comment.content,
-          style: Styles.mediumText(color: Theme.of(context).primaryColor,),
-        ),
+        // const Sizer(),
+        // Text(
+        //   widget.comment.content,
+        //   style: Styles.mediumText(color: Theme.of(context).primaryColor,),
+        // ),
         if (widget.comment.edit == true)
           SizedBox(
             height: kToolbarHeight,
@@ -158,6 +158,7 @@ class _CommentCardState extends State<CommentCard> {
               ],
             ),
           ),
+        const Sizer(),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

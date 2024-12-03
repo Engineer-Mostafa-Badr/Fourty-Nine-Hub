@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -71,7 +72,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: widget.category.name,
+              text: context.locale == Locales.english?widget.category.nameEn!:widget.category.name,
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

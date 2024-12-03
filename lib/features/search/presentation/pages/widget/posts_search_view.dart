@@ -220,9 +220,7 @@ class PostsSearchView extends StatelessWidget {
           );
           }
           return Center(
-            child: Text(LocaleKeys.noResultFound.localize,
-            style: Styles.mediumText(),
-            ),
+            child: Text(LocaleKeys.noResultsFound.localize),
           );
         },
       ),

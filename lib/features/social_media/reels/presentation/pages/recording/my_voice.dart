@@ -1,24 +1,19 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter/return_code.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart' as thumb;
 
-import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../res/style/app_colors.dart';
-import '../../controllers/explore_reels_cubit/reel_cubit.dart';
 import 'recording_shared.dart';
 import '../../shared/filter_utiles.dart';
 
@@ -28,7 +23,8 @@ class MyVoiceVideoRecordingScreen extends StatefulWidget {
   final String? comeFrom;
   final String? totalPrice;
   final String? advertisementType;
-
+  // final String audioSignedUrl;
+  // final String audioMediaId;
   const MyVoiceVideoRecordingScreen(
       {super.key, this.comeFrom, this.totalPrice, this.advertisementType});
 
@@ -48,7 +44,7 @@ class MyVoiceVideoRecordingScreenState
   late AnimationController _animationController;
   Timer? _stopTimer;
   Timer? _notifyTimer;
-  int _secondsRemaining = 30;
+  int _secondsRemaining = 15;
   int currentIndex = 0;
   bool? showUploadReelButton;
 
@@ -77,7 +73,7 @@ class MyVoiceVideoRecordingScreenState
   void _initializeAnimationController() {
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 30),
+      duration: const Duration(seconds: 15),
     )..addListener(() {
         setState(() {});
       });
@@ -131,14 +127,14 @@ class MyVoiceVideoRecordingScreenState
   }
 
   void _startTimers() {
-    _secondsRemaining = 30;
+    _secondsRemaining = 15;
     _notifyTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         _secondsRemaining--;
       });
     });
 
-    _stopTimer = Timer(const Duration(seconds: 30), _stopRecording);
+    _stopTimer = Timer(const Duration(seconds: 15), _stopRecording);
   }
 
   void _stopRecording() async {
@@ -154,6 +150,7 @@ class MyVoiceVideoRecordingScreenState
       _resetRecordingState();
 
       showUploadReelButton = await _mergeVideoWithFilter();
+
     } catch (e) {
       log("Error stopping recording: $e");
       _showErrorDialog(LocaleKeys.error_dialog_stop_recording_fail.tr());
@@ -210,19 +207,19 @@ class MyVoiceVideoRecordingScreenState
       final returnCode = await session.getReturnCode();
       final output = await session.getOutput();
       log("FFmpeg output: $output");
-
       if (ReturnCode.isSuccess(returnCode)) {
         log("FFmpeg process succeeded");
         final savedSuccessfully =
             await GallerySaver.saveVideo(filteredVideoPath!);
+        await _generateThumbnail(filteredVideoPath!);
+        _navigateToPlaybackScreen();
         if (savedSuccessfully ?? false) {
-          setState(() {
-            showGalleryBtn = true;
-          });
+          log('Saved');
         } else {
           throw Exception('error_dialog_save_video_fail');
         }
         return savedSuccessfully;
+
       } else {
         final failStackTrace = await session.getFailStackTrace();
         throw Exception(
@@ -236,17 +233,15 @@ class MyVoiceVideoRecordingScreenState
     }
     return false;
   }
-
-
-
-  Future uploadReel() async {
-    await _generateThumbnail(filteredVideoPath!);
-    await context.read<ReelsCubit>().uploadReel(
-        File(filteredVideoPath!), _thumbnailPath!,
-        advertisementType: widget.advertisementType,
-        comeFrom: widget.comeFrom,
-        totalPrice: widget.totalPrice);
+  void _navigateToPlaybackScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoPlaybackScreen(filteredVideoPath!,_thumbnailPath!,true),
+      ),
+    );
   }
+
 
   void _switchCamera() {
     setState(() {
@@ -351,120 +346,6 @@ class MyVoiceVideoRecordingScreenState
 
     return Scaffold(
       backgroundColor: Colors.black,
-      floatingActionButton: (showUploadReelButton != null &&
-              showUploadReelButton == true)
-          ? Padding(
-              padding: const EdgeInsets.symmetric(vertical: kToolbarHeight),
-              child: Align(
-// Check the current text direction to determine alignment
-                alignment:
-                    context.isArabic ? Alignment.topLeft : Alignment.topRight,
-                child: FloatingActionButton(
-                  tooltip: LocaleKeys.controls_upload_reel.tr(),
-                  shape: const CircleBorder(),
-                  backgroundColor: Colors.white,
-                  foregroundColor: AppColors.SECONDARY_COLOR,
-                  elevation: 0,
-                  child: const Icon(Icons.upload),
-                  onPressed: () async {
-                    setState(() {
-                      showUploadReelButton = false;
-                    });
-
-                    try {
-                      uploadReel().then((value) {
-                        if (mounted) {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                icon: Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        Icons.check_circle_outline,
-                                        size: 60.h,
-                                        color: AppColors.CHECK_MARK_COLOR,
-                                      ),
-                                    )),
-                                content: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: FittedBox(
-                                    child: Text(
-                                      LocaleKeys
-                                          .reel_upload_success_upload_success
-                                          .tr(),
-                                      style: TextStyle(
-                                          fontSize: 40.sp,
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                  ),
-                                ),
-                                actionsPadding: EdgeInsets.zero,
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text(
-                                      LocaleKeys.error_dialog_ok_button.tr(),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(); // Close the dialog
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        }
-                      });
-                    } catch (e) {
-                      if (mounted) {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              icon: Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Icon(
-                                      Icons.error,
-                                      size: 60.h,
-                                      color: AppColors.SECONDARY_COLOR,
-                                    ),
-                                  )),
-                              content: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  LocaleKeys.error_dialog_upload_fail.tr(),
-                                  style: TextStyle(
-                                      fontSize: 40.sp,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                              ),
-                              actionsPadding: EdgeInsets.zero,
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text(
-                                    LocaleKeys.error_dialog_ok_button.tr(),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pop(); // Close the dialog
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
-                    }
-                  },
-                ),
-              ),
-            )
-          : const Sizer(),
       body: SafeArea(
         child: Stack(
           children: [
@@ -526,18 +407,7 @@ class MyVoiceVideoRecordingScreenState
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              showGalleryBtn
-                  ? Expanded(
-                      child: IconButton(
-                        onPressed: _navigateToPlaybackScreen,
-                        icon: Icon(
-                          Icons.video_collection,
-                          color: Colors.white,
-                          size: 60.h,
-                        ),
-                      ),
-                    )
-                  : const Spacer(),
+              Expanded(child: Container()),
               Expanded(
                 child: GestureDetector(
                   onLongPress: () => _startRecording(),
@@ -592,14 +462,6 @@ class MyVoiceVideoRecordingScreenState
     );
   }
 
-  void _navigateToPlaybackScreen() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => VideoPlaybackScreen(filteredVideoPath!),
-      ),
-    );
-  }
 
   @override
   void dispose() {

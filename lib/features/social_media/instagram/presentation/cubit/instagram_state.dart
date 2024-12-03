@@ -12,6 +12,8 @@ class InstagramState {
   final List<SuggestUserEntity>? suggestedFriends;
   CommentEntity? newComment;
   final List<CommentEntity>? postComments;
+  final List<FollowersEntity>? followers;
+  final List<FollowingEntity>? following;
 
   InstagramState(
       {this.advertisementsPage = 0,
@@ -23,8 +25,11 @@ class InstagramState {
       this.newComment,
       this.postComments,
       this.suggestedFriends,
+      this.followers,
+      this.following,
       this.media,
-      this.count = 0});
+      this.count = 0,
+      });
   InstagramState copyWith({
     StateStatus? status,
     Failure? failure,
@@ -37,6 +42,8 @@ class InstagramState {
     List<SuggestUserEntity>? suggestedFriends,
     CommentEntity? newComment,
     List<CommentEntity>? postComments,
+    List<FollowersEntity>? followers,
+     List<FollowingEntity>? following,
   }) {
     return InstagramState(
       status: status ?? this.status,
@@ -50,6 +57,8 @@ class InstagramState {
       postComments: postComments ?? this.postComments,
       media: media ?? this.media,
       suggestedFriends: suggestedFriends ?? this.suggestedFriends,
+      followers: followers ?? this.followers,
+      following: following ?? this.following,
     );
   }
 }

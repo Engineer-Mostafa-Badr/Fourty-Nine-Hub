@@ -483,7 +483,7 @@ class EndPoints {
   }
 
   static String favouriteAd(String id) {
-    return '/ads-favourites/adToFavourites/$id';
+    return '/ads-favorites/adToFavorites/$id';
   }
 
   static String removeFavouriteAd(String id) {
@@ -565,6 +565,15 @@ class EndPoints {
   static String getSavedReels(TwitterFeedParams params) {
     return '/reels/saved?limit=${params.limit}&page=${params.page}&subCategory=${Constants.reelsSubCategory}';
   }
+
+  static String followers(TwitterFeedParams params) {
+    return '/follow/followers?search=${params.search}&limit=${params.limit}&page=${params.page}';
+  }
+
+  static String following(TwitterFeedParams params) {
+    return '/follow/allFollowing?search=${params.search}&limit=${params.limit}&page=${params.page}';
+  }
+
 
   static String createReel(CreateReelParams params) {
     return '/reels/views/${params.reelId}';
@@ -790,7 +799,7 @@ class EndPoints {
   static const myAds = '/ads/allMyAds?limit=100';
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const makePremiumRequest = '/ads-requests/makeAdRequest-Premium';
-  static const favouriteAds = '/ads-favourites/allFavouriteAds';
+  static const favouriteAds = '/ads-favorites/allFavoriteAds';
   static const favouriteSubCategories = '/favorite-sub-category';
 
   static String deleteFavouriteAds(String id) {
