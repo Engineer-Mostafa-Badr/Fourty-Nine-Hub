@@ -106,7 +106,8 @@ class _MyAppState extends State<MyApp> {
           create: (BuildContext context) => serviceLocator<SearchCubit>(),
         ),
         BlocProvider(
-            create: (context) => serviceLocator<PreloadBloc>()..getVideosFromApi()),
+            create: (context) =>
+                serviceLocator<PreloadBloc>()..getVideosFromApi()),
         BlocProvider(
           create: (BuildContext context) =>
               serviceLocator<MainCategoriesCubit>()..loadData(),
@@ -186,7 +187,9 @@ class _MyAppState extends State<MyApp> {
         splitScreenMode: true,
         builder: (context, child) {
           context.read<SecretsCubit>().state.secrets?.zegoAppId;
-          if(context.read<ReelsCubit>().state.globalReels.isEmpty)context.read<ReelsCubit>().fetchReels();
+          if (context.read<ReelsCubit>().state.globalReels.isEmpty) {
+            context.read<ReelsCubit>().fetchReels();
+          }
           return BlocBuilder<ThemeCubit, ThemeStates>(
             builder: (BuildContext context, state) {
               return FutureBuilder<bool>(

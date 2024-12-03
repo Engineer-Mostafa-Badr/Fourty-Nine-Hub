@@ -5,7 +5,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
@@ -85,70 +87,98 @@ class ReelsCubit extends Cubit<ReelsState> {
     );
   }
 
-  Future<void> uploadReel(  
+  Future<void> uploadReel(
     File videoFile,
-    String thumbnailUrl, {
+    File thumbnailUrl,
+    bool isAudioOriginal, {
     String? comeFrom,
+        String? audioMediaId,
     String? totalPrice,
     String? advertisementType,
   }) async {
-
-
     // Step 1: Generate Signed URL
     final token = await CacheManager.getAccessToken();
+    log('token $token');
+    emit(state.copyWith(isUploadingReel: true));
 
-
-    final response = await http.post(
-      Uri.parse(
-          'https://49dev.com/api/v1/reels?subCategory=66684135dbb427ee42aa0141'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({
-        "subcategoryId": "66684135dbb427ee42aa0141",
-        //if it's true inputAudioId is null
-        "isAudioOriginal": true,
-        "metadata": {
-          //name is bio
-          "thumbnailMediaId": thumbnailUrl,
-          "name": videoFile.path.split('/').first,
-          "size": videoFile.lengthSync(),
-          "type": "video/mp4",
-          "videoWidth": 640,
-          // Adjust these values according to your video metadata
-          "videoHeight": 360,
-          // "inputAudioId": "66ba3fb7baf9033183036cd0"
-        }
-      }),
-    );
-    log('response is ${json.decode(response.body)}');
-    if (response.statusCode == 200) {
-      final responseData = json.decode(response.body);
-      log("response upload reel  ${responseData['data']['signedUrl']}1111111111111111111111111111111111111111111111111111111111111111111111");
-      final signedUrl = responseData['data']['signedUrl'];
-
-      // Step 2: Upload Video using the Signed URL
-      final uploadResponse = await http.put(
-        Uri.parse(signedUrl),
+    final thumbResponse = await http.post(
+        'https://49dev.com/api/v1/media/signed-url'.toUri,
         headers: {
-          'Content-Type': 'video/mp4',
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
         },
-        body: videoFile.readAsBytesSync(),
-      );
+        body: jsonEncode({
+          "type": "image/JPEG",
+          "size": thumbnailUrl.lengthSync(),
+          "subcategoryId": "66684135dbb427ee42aa0141",
+        }));
+    log(thumbResponse.statusCode.toString());
+    if (thumbResponse.statusCode == 200) {
+      final String thumbnailSign =
+          json.decode(thumbResponse.body)['data']['signedUrl'];
+      final thumbMediaId = json.decode(thumbResponse.body)['data']['mediaId'];
 
-      if (uploadResponse.statusCode == 200) {
-        log('Video uploaded successfully!>>>>${responseData['data']['mediaId']}/////////1111111111111111111111111111111111111111111111111111111111111111111111');
-        log('video id is from PUT ${responseData['data']}');
-        if (comeFrom == 'company') {
-          createAdvertisement([responseData['data']['mediaId']],
-              advertisementType!, double.parse(totalPrice!));
+      //put to confirm upload
+      http.put(thumbnailSign.toUri,
+          headers: {}, body: thumbnailUrl.readAsBytesSync());
+
+
+      http.put('https://49dev.com/api/v1/media/confirm/6736b1bfd72bd0e7c5e1eb9c'.toUri);
+
+      final response = await http.post(
+        Uri.parse(
+            'https://49dev.com/api/v1/reels?subCategory=66684135dbb427ee42aa0141'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "subcategoryId": "66684135dbb427ee42aa0141",
+          //if it's true inputAudioId is null
+          "isAudioOriginal": isAudioOriginal,
+          "metadata": {
+            //name is bio
+            "thumbnailMediaId": thumbMediaId,
+            "name": videoFile.path.split('/').first,
+            "size": videoFile.lengthSync(),
+            "type": "video/mp4",
+            "videoWidth": 640,
+            // Adjust these values according to your video metadata
+            "videoHeight": 360,
+            if(!isAudioOriginal)
+            "inputAudioId": audioMediaId
+          }
+        }),
+      );
+      log('response is ${json.decode(response.body)}');
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        log("response upload reel  ${responseData['data']['signedUrl']}1111111111111111111111111111111111111111111111111111111111111111111111");
+        final signedUrl = responseData['data']['signedUrl'];
+
+        // Step 2: Upload Video using the Signed URL
+        final uploadResponse = await http.put(
+          Uri.parse(signedUrl),
+          headers: {
+            'Content-Type': 'video/mp4',
+          },
+          body: videoFile.readAsBytesSync(),
+        );
+
+        if (uploadResponse.statusCode == 200) {
+          log('Video uploaded successfully!>>>>${responseData['data']['mediaId']}/////////1111111111111111111111111111111111111111111111111111111111111111111111');
+          log('video id is from PUT ${responseData['data']}');
+          if (comeFrom == 'company') {
+            createAdvertisement([responseData['data']['mediaId']],
+                advertisementType!, double.parse(totalPrice!));
+          }
+        } else {
+          print('error uploading video ${uploadResponse.body}');
         }
       } else {
-        print('error uploading video ${uploadResponse.body}');
+        print('error generating signed url ${response.body}');
       }
-    } else {
-      print('error generating signed url ${response.body}');
+      emit(state.copyWith(isUploadingReel: false));
     }
   }
 
@@ -509,8 +539,7 @@ class ReelsCubit extends Cubit<ReelsState> {
       log("${newReels.first.user.firstName}----------------------------------------------------------------------------------------------");
 
       emit(state.copyWith(
-        reelsForAudio:
-             [...state.reelsForAudio??[], ...newReels],
+        reelsForAudio: [...state.reelsForAudio ?? [], ...newReels],
         isLoading: false,
       ));
     });
