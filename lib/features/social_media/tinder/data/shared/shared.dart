@@ -9,7 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_state.dart';
@@ -544,7 +543,7 @@ String getTimeAgo(BuildContext context, String lastSeen) {
   Duration difference = now.difference(lastSeenTime);
 
   if (difference.inDays > 7) {
-    DateFormat dateFormat = DateFormat('E, d/M/yyyy ');
+    DateFormat dateFormat =context.isArabic? DateFormat('E, yyyy/MM/dd ','ar'):DateFormat('E, dd/MM/yyyy ','en');
     DateFormat timeFormat = DateFormat('h:mm a');
     String formattedDate = dateFormat.format(lastSeenTime);
     String formattedTime = timeFormat.format(lastSeenTime);

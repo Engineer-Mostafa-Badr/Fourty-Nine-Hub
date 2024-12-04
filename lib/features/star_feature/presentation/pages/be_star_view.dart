@@ -5,7 +5,9 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
+import 'package:fourtyninehub/core/widget/custom_text_no_login.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/widgets/image_details.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
@@ -88,6 +90,7 @@ class _BeStarViewState extends State<BeStarView> {
       appBar: BackAppBar(
         label: LocaleKeys.beAStar.localize,
         actions: [
+          if(context.read<UserCubit>().isLoggedIn)
           TextButton(
             onPressed: () {
               context.push(Routes.BE_STAR_DETAILS);
@@ -101,9 +104,12 @@ class _BeStarViewState extends State<BeStarView> {
           ),
         ],
       ),
-      floatingActionButton: const FloatingActionButtonStar(),
+      floatingActionButton:context.read<UserCubit>().isLoggedIn? const FloatingActionButtonStar():null,
       body: BlocBuilder<StarCubit, StarState>(
         builder: (BuildContext context, state) {
+          if (!context.read<UserCubit>().isLoggedIn) {
+            return const CustomTextNoLogin();
+          }
           if (state.status == StarStates.loading) {
             return const CustomLoading();
           }
@@ -176,7 +182,7 @@ class _BeStarViewState extends State<BeStarView> {
                               child: CircularProgressIndicator());
                         }
                         final videoController = _videoControllers[index];
-                        final star = sortedStars[index];
+                        //final star = sortedStars[index];
                         // final videoController = _videoControllers[index];
 
 

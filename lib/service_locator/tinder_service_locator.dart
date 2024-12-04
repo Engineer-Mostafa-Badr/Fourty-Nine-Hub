@@ -93,6 +93,7 @@ class TinderServiceLocator {
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
+      serviceLocator(),
     ));
   }
   }
