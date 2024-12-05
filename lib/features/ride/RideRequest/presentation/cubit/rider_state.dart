@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/success_requ
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_offer_model/trip_request_offer_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_response_model/trip_response_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 class RiderState {}
 
@@ -16,8 +17,8 @@ class InitalRiderState extends RiderState {}
 
 class SuccessGetCateogyRider extends RiderState {
   final BannerModel model;
-
-  SuccessGetCateogyRider({required this.model});
+  List<SubCategoryEntity>? editedCategoryList;
+  SuccessGetCateogyRider({required this.model, this.editedCategoryList});
 }
 
 class FailureRiderState extends RiderState {
