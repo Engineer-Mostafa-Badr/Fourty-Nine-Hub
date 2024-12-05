@@ -61,9 +61,7 @@ class PagePreview extends StatelessWidget {
                               const EdgeInsets.only(right: 8, left: 8, top: 8),
                           child: social.social?.face == true
                               ? SocialHomeView(
-                                  userId: social.social!.userId,
-                                  hideAppBar: true,
-                                )
+                            params: SocialParams(userId: social.social?.userId??'',hideAppBar: true),                           )
                               : const InstagramView(
                                   hideAppBar: true,
                                 ),

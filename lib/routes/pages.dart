@@ -162,9 +162,11 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/pages/mai
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/instagram_profile.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/face_book_post_details.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details_notify.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/be_star_view.dart';
@@ -236,7 +238,6 @@ import '../features/competition/presentation/pages/competition_view.dart';
 import '../features/competition/presentation/pages/winners.dart';
 import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_restaurants_view.dart';
 import '../features/food_feature/food_cart/presentation/pages/cart_view.dart';
-import '../features/food_feature/food_cart/presentation/pages/restaurant_orders.dart';
 import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
@@ -892,13 +893,26 @@ class AppPages {
           ),
           //social home
           GoRoute(
+            path: Paths.POSTDETAILS,
+            name: Routes.POSTDETAILS,
+            builder: (context, state) {
+              return BlocProvider<SocialPostsCubit>(
+                create: (_) {
+                  return serviceLocator();
+                },
+                child: FaceBookPostDetails(payload: state.extra as dynamic,
+                ),
+              );
+            },
+          ),
+          GoRoute(
               path: Paths.SOCIAL,
               name: Routes.SOCIAL,
               builder: (context, state) {
-                final userId = state.extra as String?;
+                final params = state.extra as SocialParams?;
 
                 return SocialHomeView(
-                  userId: userId ?? '',
+                  params: params ?? SocialParams(userId: '',index:0,hideAppBar:false),
                 );
               },
               routes: [
@@ -928,13 +942,16 @@ class AppPages {
                     builder: (context, state) => const TwitterView(),
                     routes: const []),
                 GoRoute(
+                    path: Paths.TWITTERPOSTDETAILS,
+                    name: Routes.TWITTERPOSTDETAILS,
+                    builder: (context, state) => TwitterPostDetailsNotify(payload: state.extra as dynamic),
+                    ),
+                GoRoute(
                     path: Paths.OTHERSACCOUNT,
                     name: Routes.OTHERSACCOUNT,
                     builder: (context, state) {
-                      final id = state.extra as String?;
                       return BlocProvider<SocialPostsCubit>(
-                          create: (_) =>
-                              serviceLocator()..getUserProfile(id: id ?? ''),
+                          create: (_) => serviceLocator(),
                           child: OtherAccountView(
                             payload: state.extra,
                           ));

@@ -37,8 +37,9 @@ abstract class Routes {
   static const REELS = '/Social/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
   static const TWITTER = '/Social/Twitter';
-  static const TWITTERPOSTDETAILS = '/Social/Twitter/TwitterPostDetails';
+  static const TWITTERPOSTDETAILS = '/Social/TwitterPostDetails';
   static const CREATEPOST = '/Social/CreatePost';
+  static const POSTDETAILS = '/PostDetails';
   static const SEARCHFRIENDS = '/Social/CreatePost/SearchFriend';
   static const SEARCHPLACES = '/Social/CreatePost/SearchPlaces';
 
@@ -233,6 +234,7 @@ abstract class Paths {
   static const TWITTER = 'Twitter';
   static const TWITTERPOSTDETAILS = 'TwitterPostDetails';
   static const CREATEPOST = 'CreatePost';
+  static const POSTDETAILS = 'PostDetails';
   static const EDITPROFILE = 'EditProfile';
   static const SEARCHFRIENDS = 'SearchFriend';
   static const SEARCHPLACES = 'SearchPlaces';

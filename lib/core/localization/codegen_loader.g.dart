@@ -1119,8 +1119,7 @@ class CodegenLoader extends AssetLoader{
   "Following": "متابعة",
   "Posts": "منشورات",
   "noCommentsYet": "لا توجد تعليقات حتى الآن",
-  "startConversation": "ابدأ المحادثة."
-  "publishSubmitted": "تم إرسال موهبتك بنجاح، انتظر موافقة الإدارة",
+  "startConversation": "ابدأ المحادثة.",
   "todayAppointments": "مواعيد اليوم",
   "noAppointments": "لا توجد مواعيد",
   "unhandledAppointments": "المواعيد غير المنجزة",

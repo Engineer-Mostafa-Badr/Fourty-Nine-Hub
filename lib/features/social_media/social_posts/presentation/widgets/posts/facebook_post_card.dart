@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
@@ -113,7 +114,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           var myPost = widget.from == 'details'
               ? widget.post
               : controller.feedPagingController.itemList![widget.index];
-          return InkWell(
+          return ClickableWidget(
             onTap: (widget.from == 'posts' && widget.post.isShared == true)
                 ? () => widget.showPostDetails(
                     controller.feedPagingController.itemList![widget.index])
@@ -212,7 +213,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                             image: Assets.angry,
                             ),
                       const Spacer(),
-                      InkWell(
+                      ClickableWidget(
                         onTap: () => widget.showPostComments(myPost.id),
                         child: Row(
                           children: [
@@ -325,7 +326,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                             child: Row(
                                               children: [
                                                 Expanded(
-                                                  child: InkWell(
+                                                  child: ClickableWidget(
                                                     onTap: () async {
                                                       if (controller
                                                           .shareFormKey
@@ -413,7 +414,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         var myPost = widget.from == 'details'
             ? widget.post
             : controller.feedPagingController.itemList![widget.index];
-        return InkWell(
+        return ClickableWidget(
           onTap: (widget.from == 'posts' && widget.post.isShared == true)
               ? () => widget.showPostDetails(
                   controller.feedPagingController.itemList![widget.index])
@@ -462,7 +463,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                           image: Assets.angry,
                           ),
                     const Spacer(),
-                    InkWell(
+                    ClickableWidget(
                       onTap: () => widget.showPostComments(myPost.id),
                       child: Row(
                         children: [
@@ -534,7 +535,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
     required num value,
     required String image,
   }) {
-    return InkWell(
+    return ClickableWidget(
       onTap: () {
         showCustomBottomSheet(context);
         // bottomSheet(
@@ -578,7 +579,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         //         Row(
         //           crossAxisAlignment: CrossAxisAlignment.center,
         //           children: [
-        //             InkWell(
+        //             ClickableWidget(
         //               onTap: () {
         //                 if (widget.fromProfile == false) {
         //                   context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
@@ -605,7 +606,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         //               ),
         //             ),
         //             const Sizer(),
-        //             InkWell(
+        //             ClickableWidget(
         //               onTap: () {
         //                 if (widget.fromProfile == false) {
         //                   context.push(Routes.OTHERSACCOUNT,
@@ -802,7 +803,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              InkWell(
+              ClickableWidget(
                 onTap: () {
                   if (widget.fromProfile == false) {
                     context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
@@ -820,7 +821,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    InkWell(
+                    ClickableWidget(
                       onTap: () {
                         if (widget.fromProfile == false) {
                           context.push(Routes.OTHERSACCOUNT,
@@ -878,7 +879,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           if (post.location != null)
             Padding(
               padding: const EdgeInsetsDirectional.only(start: 40.0),
-              child: InkWell(
+              child: ClickableWidget(
                 onTap: () {
                   showDialog(
                       context: context,
@@ -916,7 +917,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
         children: [
-          InkWell(
+          ClickableWidget(
             onTap: () {
               if (widget.fromProfile == false) {
                 context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
@@ -934,7 +935,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           Expanded(
               child: Row(
             children: [
-              InkWell(
+              ClickableWidget(
                 onTap: () {
                   if (widget.fromProfile == false) {
                     context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
@@ -1035,10 +1036,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: images!.length == 1 ? 1 : 2),
                         itemCount: images.length < 4 ? images.length : 4,
-                        itemBuilder: (context, index) => InkWell(
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
+                        itemBuilder: (context, index) => ClickableWidget(
                               onTap: () {
                                 if (index != 3 ||
                                     (index == 3 && images.length == 4)) {
@@ -1130,7 +1128,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         ],
       );
     } else {
-      return InkWell(
+      return ClickableWidget(
         onTap: () => onTap(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1306,7 +1304,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                             itemBuilder: (context, userIndex) => Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                InkWell(
+                                ClickableWidget(
                                   onTap: () {
                                     if (widget.fromProfile == false) {
                                       context.push(
@@ -1338,7 +1336,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                   ),
                                 ),
                                 const Sizer(),
-                                InkWell(
+                                ClickableWidget(
                                   onTap: () {
                                     if (widget.fromProfile == false) {
                                       context.push(
@@ -1550,7 +1548,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   //                           itemBuilder: (context,index)=>Row(
   //                             crossAxisAlignment: CrossAxisAlignment.center,
   //                             children: [
-  //                               InkWell(
+  //                               ClickableWidget(
   //                                 onTap: () {
   //                                   if (widget.fromProfile == false) {
   //                                     context.push(Routes.OTHERSACCOUNT,
@@ -1580,7 +1578,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   //                                 ),
   //                               ),
   //                               const Sizer(),
-  //                               InkWell(
+  //                               ClickableWidget(
   //                                 onTap: () {
   //                                   if (widget.fromProfile == false) {
   //                                     context.push(Routes.OTHERSACCOUNT,

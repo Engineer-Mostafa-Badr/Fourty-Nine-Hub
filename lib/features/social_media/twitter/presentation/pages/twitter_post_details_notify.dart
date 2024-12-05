@@ -9,7 +9,6 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
@@ -22,28 +21,24 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
-class TwitterPostDetails extends StatefulWidget {
-  const TwitterPostDetails({
+class TwitterPostDetailsNotify extends StatefulWidget {
+  TwitterPostDetailsNotify({
     super.key,
-    this.post,
-    this.onReact,
-    this.onShare,
-    this.showPostComments,
-    this.onReport,
-    required this.postId,
-  });
-  final TwitterPostEntity? post;
-  final Function? onReact;
-  final String postId;
-  final Function? onShare;
-  final Function(String)? showPostComments;
-  final Function(TwitterReportParams)? onReport;
+    payload,
+  }){
+    if(payload is String){
+      postId = payload;
+    }else{
+      postId = payload['postId'];
+    }
+  }
+  String? postId;
 
   @override
-  State<TwitterPostDetails> createState() => _TwitterPostDetailsState();
+  State<TwitterPostDetailsNotify> createState() => _TwitterPostDetailsNotifyState();
 }
 
-class _TwitterPostDetailsState extends State<TwitterPostDetails> {
+class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +51,7 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
           return serviceLocator()
             ..getTwitterPost(
               context,
-              widget.postId,
+              widget.postId??'',
               '',
             );
         },
@@ -118,8 +113,8 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
                                   (TwitterPostCommentParams params) async {
                                 var result = await controller.onPostComment(
                                     params: params);
-                                state.postDetails?.commentsCount =
-                                    (state.postDetails!.commentsCount! + 1);
+                                // state.postDetails?.commentsCount =
+                                //     (state.postDetails!.commentsCount! + 1);
                                 setState(() {});
                                 return result;
                               },
@@ -189,12 +184,12 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
                     },
                     deletePost: (String id) {
                       controller.deletePost(
-                          context: context, postId: widget.postId);
+                          context: context, postId: widget.postId??'');
                       context.pop();
                     },
                     hidePost: (String id) {
                       controller.deletePost(
-                          context: context, postId: widget.postId);
+                          context: context, postId: widget.postId??'');
                       context.pop();
                     },
                     onDeleteComment: (String id) async {

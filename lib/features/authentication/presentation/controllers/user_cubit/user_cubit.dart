@@ -24,9 +24,7 @@ import '../../../domain/use_cases/get_user_use_case.dart';
 import '../../../domain/use_cases/sign_out_usecase.dart';
 
 class UserCubit extends Cubit<BasicState<UserEntity>> {
-  static UserCubit to = AppPages
-      .router.routerDelegate.navigatorKey.currentContext!
-      .read<UserCubit>();
+  static UserCubit to = AppPages.router.routerDelegate.navigatorKey.currentContext!.read<UserCubit>();
   final GetUserUseCase _getUserUseCase;
   final GetTokensUseCase _getTokensUseCase;
   final SaveTokensUseCase _saveTokensUseCase;

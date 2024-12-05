@@ -31,7 +31,6 @@ class MessageButton extends StatelessWidget {
       child: AppButton(
           // height: 120.h,
           width: kToolbarHeight * 1.5,
-          backColor: user.isFollowed == true ? AppColors.PRIMARY_COLOR : null,
           label: LocaleKeys.message.localize,
           style: Styles.mediumText(color: Colors.white, fontSize: 24),
           onPressed: () {
