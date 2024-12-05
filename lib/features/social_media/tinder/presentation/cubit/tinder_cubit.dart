@@ -15,11 +15,9 @@ import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_t
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_user_data_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/send_geft_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/upload_tinder_picture_use_case.dart';
-import '../../../../chance_feature/domain/entity/main_categry_entity.dart';
 import '../../../../fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import '../../data/models/near_by_model.dart';
 import '../../data/models/tinder_person_model.dart';
-import '../../data/repo/tinder_repo.dart';
 import 'tinder_state.dart';
 
 class TinderViewCubit extends Cubit<TinderViewState> {

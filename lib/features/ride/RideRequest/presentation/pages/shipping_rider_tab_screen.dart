@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/get_user_login_trip_no_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_accept_by_driver_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_accept_by_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
@@ -13,6 +14,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/select_cateogry_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/create_trip_rider_form.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/map_and_address_finder_ride.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/my_trip_info_ride_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/rider_banner_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/shipping_banner_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/sub_cateogry_ride_widget.dart';
@@ -38,6 +40,7 @@ class _ShippingRiderTabScreenState extends State<ShippingRiderTabScreen> {
     if (!isCheck) {
       context.read<CheckAcceptByDriverCubit>().check();
       context.read<CheckAcceptByRiderCubit>().check();
+      context.read<GetUserLoginTripNoSocketCubit>().get();
     }
   }
 
@@ -126,7 +129,20 @@ class _ShippingRiderTabScreenState extends State<ShippingRiderTabScreen> {
                                       );
                                     } else if (state
                                         is NotViewPickTripDataState) {
-                                      return const CreateTripRiderForm();
+                                      return BlocBuilder<
+                                          GetUserLoginTripNoSocketCubit,
+                                          RiderState>(
+                                        builder: (context, state) {
+                                          if (state
+                                              is SuccessGetUserLoginTripNoSocketState) {
+                                            return MyTripInfoRideWidget(
+                                              model: state.model,
+                                            );
+                                          } else {
+                                            return const CreateTripRiderForm();
+                                          }
+                                        },
+                                      );
                                     } else {
                                       return Container();
                                     }

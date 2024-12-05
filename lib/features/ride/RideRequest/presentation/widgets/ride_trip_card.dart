@@ -150,7 +150,9 @@ class RideTripCard extends StatelessWidget {
                             onPressed: () {
                               if (model.price != null && model.id != null) {
                                 context.read<SendOfferByDriverCubit>().send(
-                                    id: model.id ?? "", price: model.price!);
+                                    id: model.id ?? "",
+                                    price:
+                                        double.parse(sendOfferController.text));
                               }
                             },
                             label: LocaleKeys.sendYourOffer.tr(),

@@ -46,7 +46,6 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
   FocusNode vehicleModelFocusNode = FocusNode();
   FocusNode vehicleBrandFocusNode = FocusNode();
   FocusNode vehicleColorFocusNode = FocusNode();
-
   FocusNode pricingPerKmFocusNode = FocusNode();
   FocusNode vehicleTypeFocusNode = FocusNode();
   FocusNode vehicleYearFocusNode = FocusNode();
@@ -209,6 +208,7 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                       onChanged: (value) {
                         setState(() {
                           workingType = value ?? "";
+                          registerRider.model.workingType = workingType;
                         });
                       },
                       items: const [
@@ -218,7 +218,7 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                         ),
                         DropdownMenuItem(
                           value: "subscribePackage",
-                          child: Text("SubscribePackage"),
+                          child: Text("Subscribe Package"),
                         ),
                       ],
                       underline: Container(),
@@ -804,7 +804,7 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Label(
-                                  text: LocaleKeys.dragAnalysis.tr(),
+                                  text: LocaleKeys.criminalRecord.tr(),
                                   style: const TextStyle(
                                       fontSize: 17,
                                       color: AppColors.PRIMARY_COLOR,
@@ -837,7 +837,7 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Label(
-                                  text: LocaleKeys.dragAnalysis.tr(),
+                                  text: LocaleKeys.technicalExamination.tr(),
                                   style: const TextStyle(
                                       fontSize: 17,
                                       color: AppColors.PRIMARY_COLOR,

@@ -14,7 +14,6 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_inf
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_payment_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/raise_fare_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
@@ -23,6 +22,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/ride_
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 
 class TripInfoButtonSheetWidget extends StatefulWidget {
   const TripInfoButtonSheetWidget({super.key, required this.model});
@@ -128,7 +128,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
           Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 0),
                 child: Row(
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -164,10 +164,6 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                           Container(),
                           Container(),
                           Container(
-                            // height: 150,
-                            // alignment: (getTripInfoCubit.model.autoAccept ?? false)
-                            //     ? Alignment.center
-                            //     : null,
                             margin: EdgeInsets.only(
                                 top:
                                     (getTripInfoCubit.model.autoAccept ?? false)
@@ -176,7 +172,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                 left: 8,
                                 right: 8),
                             child: Text(
-                              "EGP ${widget.model.price}",
+                              "EGP ${(getTripInfoCubit.model.comfort ?? false) ? widget.model.comfort : widget.model.price}",
                               style: const TextStyle(
                                   color: AppColors.QUANTITY_COLOR,
                                   fontSize: 16,
@@ -195,7 +191,8 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                   log(state.toString(), name: "Payment");
                                   if (state is CashPaymentState) {
                                     setState(() {
-                                      showErrorMessage(
+                                      context.pop();
+                                      showSuccessDialog(
                                           context,
                                           LocaleKeys.yourBalanceIsInsufficient
                                               .tr());
@@ -208,6 +205,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                     });
                                   }
                                   if (state is FailureRiderState) {
+                                    context.pop();
                                     showErrorMessage(
                                         context,
                                         getFailureMessage(
@@ -275,6 +273,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                               log(state.toString(), name: "Payment");
                               if (state is CashPaymentState) {
                                 setState(() {
+                                  context.pop();
                                   showErrorMessage(
                                       context,
                                       LocaleKeys.yourBalanceIsInsufficient
@@ -410,14 +409,21 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
               const SizedBox(width: 6),
               BlocConsumer<RequestRiderTripCubit, RiderState>(
                 listener: (context, state) {
+                  if (state is FailureRiderState) {
+                    context.pop();
+                    showErrorMessage(
+                        context, getFailureMessage(state.failure, context));
+                  }
                   log(state.toString(), name: "ldsjflskdjflskdfjlskjf");
                   if (state is SuccessRequestTripState) {
+                    context.pop();
+                    // contex
                     context.read<ShowOffersCubit>().showOffers();
-                    context.read<LocationSocketCubit>().nearbyDriversEmit(
-                        tripId: state.model.trip?.id ?? "",
-                        location:
-                            state.model.trip?.riderLocation?.coordinates ?? [],
-                        subcategoryId: state.model.trip?.subCategoryId ?? "");
+                    // context.read<LocationSocketCubit>().nearbyDriversEmit(
+                    //     tripId: state.model.trip?.id ?? "",
+                    //     location:
+                    //         state.model.trip?.riderLocation?.coordinates ?? [],
+                    //     subcategoryId: state.model.trip?.subCategoryId ?? "");
 
                     //                                   BlocProvider(
                     //   create: (context) =>

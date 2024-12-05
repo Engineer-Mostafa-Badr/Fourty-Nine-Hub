@@ -1086,59 +1086,64 @@ abstract class LocaleKeys {
   static const Wallet = 'Wallet';
   static const youHaveToFillYourNumberOfPassenger =
       'youHaveToFillYourNumberOfPassenger';
-  static const removeImage = 'removeImage';
-  static const youHaveToSelectYourCity = 'youHaveToSelectYourCity';
-  static const updateYourRestaurant = 'updateYourRestaurant';
-  static const editFood = 'editFood';
-  static const youHaveToSelectYourGovernorate =
-      'youHaveToSelectYourGovernorate';
-  static const youHaveToChooseFavoriteSubcategory =
-      'youHaveToChooseFavoriteSubcategory';
-  static const addPhoto = 'addPhoto';
-  static const continueUsingChatServices = 'continueUsingChatServices';
-  static const yes = 'yes';
-  static const restaurantOrders = 'restaurantOrders';
-  static const totalOrder = 'totalOrder';
-  static const totalRevenue = 'totalRevenue';
-  static const avgRating = 'avgRating';
-  static const review = 'review';
-  static const subscriptionDeadline = 'subscriptionDeadline';
-  static const showAllOrders = 'showAllOrders';
-  static const noResultsFound = 'noResultsFound';
+  static const technicalExamination = 'technicalExamination';
+  static const criminalRecord = 'criminalRecord';
   static const mainCategory = 'mainCategory';
   static const comeWithMe = 'comeWithMe';
-  static const forwardMessage = 'forwardMessage';
-  static const clearThisChat = 'clearThisChat';
-  static const clearForMe = 'clearForMe';
-  static const clearForEveryone = 'clearForEveryone';
-  static const opened = 'opened';
-  static const forwarded = 'forwarded';
-  static const yourPersonalMessages = 'yourPersonalMessages';
-  static const endToEndEncryption = 'endToEndEncryption';
-  static const liveStreamOptions = 'liveStreamOptions';
-  static const createLive = 'createLive';
-  static const watch = 'watch';
-  static const youHaveToUploadThe3PagesOfCommercialRegistration =
-      'youHaveToUploadThe3PagesOfCommercialRegistration';
-  static const youHaveToUploadAtLeastOnePhoto =
-      'youHaveToUploadAtLeastOnePhoto';
-  static const notAvailable = 'notAvailable';
+  static const showAllOrders = 'showAllOrders';
   static const available = 'available';
-  static const editRegistration = 'editRegistration';
-  static const sureRemoveRestaurant = 'sureRemoveRestaurant';
-  static const reviews = 'reviews';
-  static const youHaveToFillRestaurantPhoneNumber =
-      'youHaveToFillRestaurantPhoneNumber';
+  static const notAvailable = 'notAvailable';
+  static const removeImage = 'removeImage';
+  static const editFood = 'editFood';
+  static const updateYourRestaurant = 'updateYourRestaurant';
+  static const youHaveToSelectYourCity = 'youHaveToSelectYourCity';
+  static const youHaveToSelectYourGovernorate =
+      'youHaveToSelectYourGovernorate';
   static const youHaveToFillRestaurantName = 'youHaveToFillRestaurantName';
-  static const dontOwnCar = 'dontOwnCar';
-  static const addStar = 'addStar';
-  static const publishSubmitted = 'publishSubmitted';
-  static const removeVideo = 'removeVideo';
-  static const enterImageOrVideo = 'enterImageOrVideo';
-  static const day = 'day';
-  static const month = 'month';
-  static const numOfWins = 'numOfWins';
-  static const peopleMayKnow = 'peopleMayKnow';
-  static const Face = 'Face';
-  static const Insta = 'Insta';
+
+
+  
+  static const day = 'youHaveToFillRestaurantName';
+  static const numOfWins = 'youHaveToFillRestaurantName';
+  static const month = 'youHaveToFillRestaurantName';
+  static const dontOwnCar = 'youHaveToFillRestaurantName';
+  static const removeVideo = 'youHaveToFillRestaurantName';
+  static const addPhoto = 'youHaveToFillRestaurantName';
+  static const youHaveToFillRestaurantPhoneNumber =
+      'youHaveToFillRestaurantName';
+  static const youHaveToUploadThe3PagesOfCommercialRegistration =
+      'youHaveToFillRestaurantName';
+  static const youHaveToUploadAtLeastOnePhoto = 'youHaveToFillRestaurantName';
+  static const youHaveToChooseFavoriteSubcategory =
+      'youHaveToFillRestaurantName';
+  static const editRegistration = 'youHaveToFillRestaurantName';
+  static const forwarded = 'youHaveToFillRestaurantName';
+
+  static const yes = 'youHaveToFillRestaurantName';
+  static const sureRemoveRestaurant = 'youHaveToFillRestaurantName';
+  static const restaurantOrders = 'youHaveToFillRestaurantName';
+  static const totalOrder = 'youHaveToFillRestaurantName';
+  static const avgRating = 'youHaveToFillRestaurantName';
+  static const totalRevenue = 'youHaveToFillRestaurantName';
+  static const review = 'review';
+  static const subscriptionDeadline = 'youHaveToFillRestaurantName';
+  static const reviews = 'youHaveToFillRestaurantName';
+  static const noResultsFound = 'youHaveToFillRestaurantName';
+  static const forwardMessage = 'youHaveToFillRestaurantName';
+  static const clearThisChat = 'youHaveToFillRestaurantName';
+  static const clearForMe = 'youHaveToFillRestaurantName';
+  static const clearForEveryone = 'youHaveToFillRestaurantName';
+  static const opened = 'youHaveToFillRestaurantName';
+  static const continueUsingChatServices = 'youHaveToFillRestaurantName';
+  static const endToEndEncryption = 'youHaveToFillRestaurantName';
+  static const yourPersonalMessages = 'youHaveToFillRestaurantName';
+  static const createLive = 'youHaveToFillRestaurantName';
+  static const liveStreamOptions = 'youHaveToFillRestaurantName';
+  static const watch = 'youHaveToFillRestaurantName';
+  static const Face = 'youHaveToFillRestaurantName';
+  static const Insta = 'youHaveToFillRestaurantName';
+  static const peopleMayKnow = 'youHaveToFillRestaurantName';
+  static const addStar = 'youHaveToFillRestaurantName';
+  static const enterImageOrVideo = 'youHaveToFillRestaurantName';
+  static const publishSubmitted = 'youHaveToFillRestaurantName';
 }

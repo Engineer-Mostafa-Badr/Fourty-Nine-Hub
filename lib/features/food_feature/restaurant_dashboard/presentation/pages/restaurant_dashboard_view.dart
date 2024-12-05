@@ -15,7 +15,6 @@ import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../cubit/restaurant_dashboard_cubit.dart';

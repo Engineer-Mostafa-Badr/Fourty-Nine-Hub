@@ -35,7 +35,7 @@ class GetLatAndLongCubit extends Cubit<GetLatAndLongState> {
 
     response.fold(
       (Failure failure) => emit(
-        GetLatAndLongFailure(errorMessage: Labels.errorHappened),
+        const GetLatAndLongFailure(errorMessage: Labels.errorHappened),
       ),
       (data) async {
         type = data.type;

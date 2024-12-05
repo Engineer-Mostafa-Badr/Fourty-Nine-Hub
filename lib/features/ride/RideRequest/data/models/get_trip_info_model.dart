@@ -10,7 +10,7 @@ class GetTripInfoModel {
   int? calculateB;
   String? polyline;
   String? type;
-
+  double? comfort;
   GetTripInfoModel({
     this.price,
     this.lowestFare,
@@ -19,6 +19,7 @@ class GetTripInfoModel {
     this.startLocation,
     this.targetLocation,
     this.distance,
+    this.comfort,
     this.duration,
     this.calculateB,
     this.polyline,
@@ -30,6 +31,7 @@ class GetTripInfoModel {
       price: (json['price'] as num?)?.toDouble(),
       lowestFare: json['lowestFare'] as dynamic,
       from: json['from'] as String?,
+      comfort: double.parse(json['comfort'].toString()),
       to: json['to'] as String?,
       startLocation: json['startLocation'] as List<dynamic>?,
       targetLocation: json['targetLocation'] as List<dynamic>?,

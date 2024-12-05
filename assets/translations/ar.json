@@ -1069,6 +1069,7 @@
     "yourBalanceIsInsufficient": "رصيدك غير كافٍ",
     "Cash": "نقدًا",
     "Wallet": "محفظة",
-    "youHaveToFillYourNumberOfPassenger": "يجب عليك ملء عدد الركاب"
-    
+    "youHaveToFillYourNumberOfPassenger": "يجب عليك ملء عدد الركاب",
+    "technicalExamination": "الفحص الفني",
+    "criminalRecord": "السجل الجنائي"
 }

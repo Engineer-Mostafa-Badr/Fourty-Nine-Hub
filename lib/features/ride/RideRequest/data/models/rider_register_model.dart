@@ -66,14 +66,15 @@ class RiderRegisterModel {
       "vehicleColor": "vehicleColor",
       "vehicleType": "vehicleType",
       "vehicleYear": vehicleYear,
+      "workingType": workingType,
       "subcategoryIds": [
         '62c8baa28e28a58a3edf57f1',
         '62c8baa38e28a58a3edf57f3'
       ],
       "pricingPerKm": pricingPerKm,
       "phone": phone,
-      "smoker": smoker,
-      "airConditioner": airCondition,
+      "smoker": smoker ?? false,
+      "airConditioner": airCondition ?? false,
       "city": "cairo",
       "plateInfo": plateInfo,
       "idNumber": idNumber,

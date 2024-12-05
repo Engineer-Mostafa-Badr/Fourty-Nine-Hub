@@ -147,7 +147,7 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
                                     Border.all(color: Colors.blue, width: 3)),
                           ),
                           const Sizer(),
-                          Flexible(child: Text("${widget.model.toTitle}"))
+                          Flexible(child: Text("${widget.model.fromTitle}"))
                         ],
                       ),
                       const Sizer(
@@ -164,7 +164,7 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
                                     Border.all(color: Colors.green, width: 3)),
                           ),
                           const Sizer(),
-                          Flexible(child: Text("${widget.model.fromTitle}")),
+                          Flexible(child: Text("${widget.model.toTitle}")),
                         ],
                       ),
                       const Sizer(

@@ -17,6 +17,7 @@ class CheckAcceptByDriverCubit extends Cubit<RiderState> {
       CheckAcceptTripFromDriverModel? driver =
           await cacheService.getRiderTripInfo();
       if (driver != null) {
+        log(driver.toString(), name: "lsdkjflksjdflksjdlfkjslkdjflskdjflskdjf");
         emit(SuccessCheckAcceptByDriverState(model: driver));
       }
     }

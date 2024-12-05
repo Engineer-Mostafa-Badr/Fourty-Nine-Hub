@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -42,6 +43,23 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
     // TODO: implement initState
     super.initState();
     saveData();
+    getState();
+  }
+
+  getState() async {
+    String state = await CacheServiceImpl().getTripState();
+    log(state, name: "018233333333333333");
+    if (state == "InLocation") {
+      inLocation = true;
+    } else if (state == "start") {
+      inLocation = false;
+      start = true;
+    } else if (state == "complete") {
+      complete = true;
+      inLocation = false;
+      start = false;
+    }
+    setState(() {});
   }
 
   saveData() {
@@ -51,10 +69,34 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
 
   removeData() {
     CacheService cacheService = CacheServiceImpl();
-    cacheService.removeRiderTripInfo();
+    cacheService.removeDriverTripInfo();
+    cacheService.removeTripState();
   }
 
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+
+  Timer? _timer;
+  int _countdown = 10;
+  void startCountdown(int seconds) {
+    setState(() {
+      _countdown = seconds;
+    });
+
+    _timer?.cancel();
+
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        if (_countdown > 0) {
+          setState(() {
+            _countdown--;
+          });
+        } else {
+          timer.cancel(); // إنهاء العداد عندما يصل إلى الصفر
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +129,7 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
                     context, getFailureMessage(state.failure, context));
               }
               if (state is SuccessStartTripRiderState) {
+                CacheServiceImpl().saveTripState("complete");
                 setState(() {
                   start = false;
                   complete = true;
@@ -116,6 +159,7 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
                 listener: (context, state) {
                   if (state is SuccessRiderInStartLocationState) {
                     setState(() {
+                      CacheServiceImpl().saveTripState("start");
                       inLocation = false;
                       start = true;
                     });
@@ -173,53 +217,6 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
                           context, getFailureMessage(state.failure, context));
                     }
                   },
-                  // listener: (context, state) {
-                  //   if (state is SuccessGetResonsState) {
-                  //     showDialog(
-                  //       context: context,
-                  //       builder: (context) {
-                  //         return AlertDialog(
-                  //             content: BlocListener<CancelTripRiderCubit,
-                  //                 RiderState>(
-                  //           listener: (context, state) {
-                  //             log(state.toString(),
-                  //                 name:
-                  //                     "CancelTripRiderCubitCancelTripRiderCubit");
-                  //             if (state is FailureRiderState) {
-                  //               showErrorMessage(context,
-                  //                   getFailureMessage(state.failure, context));
-                  //             }
-                  //             if (state is ) {
-
-                  //               showSuccessMessage(
-                  //                   context, "Success Cancel Trip ii");
-                  //               context.pushReplacement(
-                  //                 Routes.RIDE,
-                  //               );
-                  //               removeData();
-                  //             }
-                  //           },
-                  //           child: ReasonsDilogWidget(
-                  //             onTap: (reasonsId) {
-                  //               context
-                  //                   .read<CancelTripRiderCubit>()
-                  //                   .cancelTripRider(
-                  //                       id: widget.model.id ?? "",
-                  //                       reasonId: reasonsId,
-                  //                       note: "");
-                  //               context.pop();
-                  //             },
-                  //             list: state.list,
-                  //           ),
-                  //         ));
-                  //       },
-                  //     );
-                  //   }
-                  //   if (state is FailureRiderState) {
-                  //     showErrorMessage(
-                  //         context, getFailureMessage(state.failure, context));
-                  //   }
-                  // },
                   child: Padding(
                     padding: const EdgeInsets.all(15),
                     child: Column(
@@ -395,6 +392,7 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
                                 width: double.infinity,
                                 label: LocaleKeys.cancel.tr(),
                                 onPressed: () {
+                                  // removeData();
                                   context.read<GetReasonsCubit>().get();
                                 },
                               ),

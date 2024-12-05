@@ -24,6 +24,11 @@ abstract class CacheService {
   Future<void> setLogin(bool value);
 
   Future<bool> saveUserToken(String userToken);
+
+  Future<bool> saveTripState(String value);
+  Future<String> getTripState();
+  Future<void> removeTripState();
+
   Future<String?> getUserToken();
   Future<String?> getUserId();
   Future<bool> setUserId(String userId);
@@ -83,6 +88,7 @@ class CacheServiceImpl implements CacheService {
   static const _USER_ID = "USER_ID";
   static const _TRIP_INFO_RIDER = "_TRIP_INFO_RIDER";
   static const _TRIP_INFO_DRIVER = "_TRIP_INFO_DRIVER";
+  static const _TRIP_STATE = "_TRIP_STATE";
   static late SharedPreferences preferences;
   @override
   Future<bool> saveUserData(String userData) async {
@@ -294,7 +300,11 @@ class CacheServiceImpl implements CacheService {
   Future<CheckAcceptTripFromDriverModel?> getRiderTripInfo() async {
     String? json = preferences.getString(CacheServiceImpl._TRIP_INFO_RIDER);
     if (json != null) {
-      return CheckAcceptTripFromDriverModel.fromJson(jsonDecode(json));
+      if (json.isNotEmpty) {
+        return CheckAcceptTripFromDriverModel.fromJson(jsonDecode(json));
+      } else {
+        return null;
+      }
     }
     return null;
   }
@@ -321,14 +331,26 @@ class CacheServiceImpl implements CacheService {
 
   @override
   Future<void> removeRiderTripInfo() async {
-    bool result =
-        await preferences.setString(CacheServiceImpl._TRIP_INFO_RIDER, "");
+    bool result = await preferences.remove(CacheServiceImpl._TRIP_INFO_RIDER);
     String? json = preferences.getString(CacheServiceImpl._TRIP_INFO_RIDER);
-    if (json != null) {
-      var model = CheckAcceptTripFromDriverModel.fromJson(jsonDecode(json));
-      log(model.toString());
-      log(model.toString(), name: "removeRiderTripInfo");
-    }
+    log(result.toString(), name: "removeRiderTripInfo");
+    log(json.toString(), name: "removeRiderTripInfo");
+  }
+
+  @override
+  Future<String> getTripState() async {
+    String state = preferences.getString(_TRIP_STATE) ?? "InLocation";
+    return state;
+  }
+
+  @override
+  Future<bool> saveTripState(String value) {
+    return preferences.setString(_TRIP_STATE, value);
+  }
+
+  @override
+  Future<void> removeTripState() async {
+    preferences.remove(_TRIP_STATE);
   }
   //   @override
   // Future<bool> saveUserToken(String userToken) async {
@@ -620,6 +642,24 @@ class CacheServiceImplV2 implements CacheService {
   @override
   Future<void> removeRiderTripInfo() {
     // TODO: implement removeRiderTripInfo
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String> getTripState() {
+    // TODO: implement getTripState
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> saveTripState(String value) {
+    // TODO: implement saveTripState
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> removeTripState() {
+    // TODO: implement removeTripState
     throw UnimplementedError();
   }
 }

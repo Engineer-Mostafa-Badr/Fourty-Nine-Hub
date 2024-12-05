@@ -158,6 +158,7 @@ class RegisterRiderCubit extends Cubit<RiderState> {
   }
 
   pickModel(String carModel) {
+    log(carModel);
     model.vehicleModel = carModel;
   }
 

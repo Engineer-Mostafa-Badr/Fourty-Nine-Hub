@@ -31,7 +31,7 @@ class RiderBannerWidget extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 0, vertical: 5),
                       child: DashboardBanner(
-                        onTap: () => context.push(Routes.ALLTRIPRIDER),
+                        onTap: () => context.push(Routes.ALLTRIPNOSOCKETSCREEN),
                         title: LocaleKeys.rideDashboard.tr(),
                         subTitle: "",
                         route: Routes.DOCTORDASHBOARD,

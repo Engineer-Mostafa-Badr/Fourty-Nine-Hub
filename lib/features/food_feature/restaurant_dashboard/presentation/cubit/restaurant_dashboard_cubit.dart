@@ -35,7 +35,7 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
       this._isRestaurantUsecase,
       this._changeConnectivityUseCase,
       this._deleteRestaurantUseCase)
-      : super(RestaurantDashboardState());
+      : super(const RestaurantDashboardState());
 
   void initialize() {
     getRestaurantInfo();

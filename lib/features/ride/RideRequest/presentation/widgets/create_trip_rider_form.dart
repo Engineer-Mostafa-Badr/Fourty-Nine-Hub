@@ -12,6 +12,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/create_trip_ride_request_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/get_user_login_trip_no_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/create_trip_request_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
@@ -64,11 +65,12 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
           BlocConsumer<CreateTripRequestRideCubit, RiderState>(
             listener: (context, state) {
               if (state is SuccessCreateRequestTripRideState) {
-                showSuccessDialog(
+                showSuccessMessage(
                     context,
                     LocaleKeys
                         .yourRequestHasBeenSentSuccessfullyWaitingForTheDriverResponse
                         .tr());
+                context.read<GetUserLoginTripNoSocketCubit>().get();
               }
               if (state is FailureRiderState) {
                 showErrorMessage(

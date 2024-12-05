@@ -263,10 +263,11 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     hasMoreRestaurantsData = true;
     await fetchRestaurants();
     subCategories.map((e) => e.isSelected = false).toList();
-    if (subCategories.isNotEmpty)
+    if (subCategories.isNotEmpty) {
       subCategories
           .firstWhere((element) => element.id == state.selectedSubCategoryId)
           .isSelected = true;
+    }
   }
 
   bool isLoadingMore = false;
@@ -323,8 +324,9 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   }
 
   Future<void> fetchRestaurants() async {
-    if (hasMoreRestaurantsData == false || isLoadingRestaurantMore == true)
+    if (hasMoreRestaurantsData == false || isLoadingRestaurantMore == true) {
       return;
+    }
     print("OpenFuncOOO");
 
     isLoadingRestaurantMore = true;

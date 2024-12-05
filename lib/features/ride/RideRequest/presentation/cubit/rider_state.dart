@@ -1,8 +1,11 @@
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/all_trip_for_driver_mode/all_trip_for_driver_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/all_trip_no_socket_model/all_trip_no_socket_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_by_rider_model/check_accept_by_rider_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_trip_from_driver_model/check_accept_trip_from_driver_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_info_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/my_trip_offer_ride_model/my_trip_offer_ride_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/my_trip_ride_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/picture_optional_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/reasons_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/success_request_trip_model/success_request_trip_model.dart';
@@ -173,3 +176,32 @@ class SuccessGetResonsState extends RiderState {
 class CashPaymentState extends RiderState {}
 
 class WalletPayemntState extends RiderState {}
+
+class SuccessGetAllTripNoSocketState extends RiderState {
+  final List<AllTripNoSocketModel> list;
+
+  SuccessGetAllTripNoSocketState({required this.list});
+}
+
+class SuccessSendOfferNoSocketState extends RiderState {}
+
+class SuccessAcceptOfferNoSocketState extends RiderState {}
+
+class SuccessRejectOfferNoSocketState extends RiderState {}
+class SuccessCompleteOfferNoSocketState extends RiderState {}
+
+class SuccessDeleteTripNoSocketState extends RiderState {}
+
+class SuccessGetUserLoginTripNoSocketState extends RiderState {
+  final MyTripRideModel model;
+
+  SuccessGetUserLoginTripNoSocketState({required this.model});
+}
+
+class SuccessGetAllOfferNoSocketState extends RiderState {
+  final List<MyTripOfferRideModel> list;
+
+  SuccessGetAllOfferNoSocketState({required this.list});
+}
+
+class SuccessRateDvierState extends RiderState{}

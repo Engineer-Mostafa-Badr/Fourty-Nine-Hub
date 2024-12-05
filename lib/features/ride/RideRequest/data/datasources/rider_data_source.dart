@@ -7,8 +7,10 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/create_offer
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/create_trip_no_socket_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/create_trip_ride_request_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_info_request_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/rating_driver_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rider_register_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_model.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 // import 'package:mapbox_gl/mapbox_gl.dart';
 
@@ -111,10 +113,11 @@ class RiderDataSource {
   }
 
   Future<Either<Failure, Map<String, dynamic>>> createOfferByDriver(
-      {required String id, required double price}) {
+      {required String id, required double price}) async {
+    Position location = await Geolocator.getCurrentPosition();
     return api.post(EndPoints.createOffer(id), data: {
       "priceOffer": price,
-      "location": ["51.507351", "-0.127758"]
+      "location": [location.latitude.toString(), location.longitude.toString()]
     });
   }
 
@@ -136,17 +139,21 @@ class RiderDataSource {
   Future<Either<Failure, Map<String, dynamic>>> riderInStartLocation({
     required String id,
   }) async {
+    Position location = await Geolocator.getCurrentPosition();
     return await api.put(
       EndPoints.riderInStartLocation(id),
       data: {
-        "location": [2, 1],
+        "location": [
+          location.latitude,
+          location.longitude,
+        ],
       },
     );
   }
 
   Future<Either<Failure, Map<String, dynamic>>> startTripRider(
       {required String id, required int otp}) {
-    return api.put(EndPoints.startTripRider(id), data: {"OTP": otp});
+    return api.put(EndPoints.startTripRider(id), data: {"OTP": otp.toString()});
   }
 
   Future<Either<Failure, Map<String, dynamic>>> reasons() {
@@ -163,9 +170,10 @@ class RiderDataSource {
 
   Future<Either<Failure, Map<String, dynamic>>> completedTripRider(
       {required String id}) async {
+    Position location = await Geolocator.getCurrentPosition();
     return api.put(EndPoints.completedTripRider(id), data: {
       "location": "",
-      "startLocation": [3, 3]
+      "startLocation": [location.latitude, location.longitude]
     });
   }
 
@@ -204,8 +212,8 @@ class RiderDataSource {
   }
 
   Future<Either<Failure, Map<String, dynamic>>> createOfferNoSocket(
-      {required CreateOfferNoSocketModel model}) {
-    return api.post(EndPoints.createOfferNoSocket,
+      {required CreateOfferNoSocketModel model, required String tripId}) {
+    return api.post("${EndPoints.createOfferNoSocket}/$tripId",
         data: model.toJson());
   }
 
@@ -226,18 +234,25 @@ class RiderDataSource {
 
   Future<Either<Failure, Map<String, dynamic>>> getTripOffersNoSocket(
       {required String id}) {
-    return api.post("${EndPoints.getTripOffersNoSocket}/$id");
+    return api.get("${EndPoints.getTripOffersNoSocket}/$id");
   }
 
-  Future<Either<Failure, Map<String, dynamic>>> getUserLoginTripNoSocket(
-      {required String amount}) {
-    return api.post(EndPoints.getUserLoginTripNoSocket,
-        data: {"amount": double.parse(amount)});
+  Future<Either<Failure, Map<String, dynamic>>> getUserLoginTripNoSocket() {
+    return api.get(EndPoints.getUserLoginTripNoSocket);
   }
+
 
   Future<Either<Failure, Map<String, dynamic>>> deleteTripNoSocket(
-      {required String amount}) {
-    return api.post(EndPoints.deleteTripNoSocket,
-        data: {"amount": double.parse(amount)});
+      {required String id}) {
+    return api.delete("${EndPoints.deleteTripNoSocket}/$id");
+  }
+  Future<Either<Failure, Map<String, dynamic>>> completeTripNoSocket(
+      {required String id}) {
+    return api.put("/ride/trip/offer/complete/$id");
+  }
+  Future<Either<Failure, Map<String, dynamic>>> rating(
+      {required RattingDriverModel model}) {
+    return api.post("/driver/rating", data: model.toJson());
   }
 }
+

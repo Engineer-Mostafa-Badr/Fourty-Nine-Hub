@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
@@ -19,6 +18,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/tri
 import 'package:fourtyninehub/features/ride/rider_shipping/presentation/pages/create_trip_rider.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 
 class TripInfoRequestWidget extends StatefulWidget {
   const TripInfoRequestWidget({super.key, required this.model});
@@ -71,6 +71,7 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
           listener: (context, state) {
             log(state.toString(), name: "klsjdlkjfslkdjflskdjf");
             if (state is SuccessRequestTripState) {
+              context.pop();
               context.read<ShowOffersCubit>().showOffers();
               context.read<LocationSocketCubit>().nearbyDriversEmit(
                   tripId: state.model.trip?.id ?? "",
@@ -134,10 +135,6 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
                                 isBottomSheetShown = true;
                                 WidgetsBinding.instance.addPostFrameCallback(
                                   (timeStamp) {
-                                    context
-                                        .read<RiderTripReelTimeCubit>()
-                                        .print();
-
                                     showModalBottomSheet(
                                       isScrollControlled: true,
                                       backgroundColor: Colors.white,

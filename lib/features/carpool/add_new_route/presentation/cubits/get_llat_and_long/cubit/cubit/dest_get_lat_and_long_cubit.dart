@@ -35,7 +35,7 @@ class DestGetLatAndLongCubit extends Cubit<DestGetLatAndLongState> {
 
     response.fold(
       (Failure failure) => emit(
-        DestGetLatAndLongFailure(errorMessage: Labels.errorHappened),
+        const DestGetLatAndLongFailure(errorMessage: Labels.errorHappened),
       ),
       (data) async {
         type = data.type;

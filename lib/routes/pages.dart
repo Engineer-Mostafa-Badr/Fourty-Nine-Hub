@@ -91,6 +91,17 @@ import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.da
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_by_rider_model/check_accept_by_rider_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_trip_from_driver_model/check_accept_trip_from_driver_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/review_ride_trip_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/accept_offer_no_socket_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/complete_no_socket_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/decline_offer_no_socket_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/delete_offer_ride_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/get_all_trip_no_socket_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/get_trip_offers_no_socket_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/get_user_login_trip_no_socket_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/offer_no_socket_actions_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/rating_driver_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/send_offer_no_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/cancel_trip_client_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/cancel_trip_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/completed_trip_rider_cubit.dart';
@@ -112,10 +123,12 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/reque
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/select_cateogry_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/all_rider_trip_screen.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/all_trip_no_socket_screen.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/rider_register_view.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/shipping_rider_tab_screen.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/trip_info_by_driver_screen.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/trip_info_by_rider_screen.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/trip_rating_ride_screen.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/search_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
@@ -1505,11 +1518,46 @@ class AppPages {
                       create: (context) =>
                           CheckPaymentCubit(repository: serviceLocator()),
                     ),
+                    BlocProvider(
+                      create: (context) => GetUserLoginTripNoSocketCubit(
+                          repository: serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) => GetTripOffersNoSocketCubit(
+                          repository: serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) => AcceptOfferNoSocketCubit(
+                          repository: serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) => DeclineOfferNoSocketCubit(
+                          repository: serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) => CompleteNoSocketCubit(
+                          repository: serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) => DeleteOfferRideCubit(
+                          repository: serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) => RatingDriverCubit(
+                          repository: serviceLocator()),
+                    ),
+                    
                   ],
                   child: const ShippingRiderTabScreen(),
                 );
               },
               routes: [
+                GoRoute(
+              path: Paths.TripRideRating,
+              name: Routes.TripRideRating,
+              builder: (context, state) => TripRatingRideScreen(
+                  model: state.extra as ReviewRideTripModel)
+                  ),
                 GoRoute(
                     path: Paths.TRIPINFOBYDRIVERSCREEN,
                     name: Routes.TRIPINFOBYDRIVERSCREEN,
@@ -1587,6 +1635,46 @@ class AppPages {
                                 repository: serviceLocator()),
                           ),
                         ], child: const AllRiderTripScreen())
+                    // BlocProvider(
+                    //   create: (_) => GetAllTripRiderCubit(repository: serviceLocator())..getAllTrip(),
+                    //   child: const AllRiderTripScreen(),
+                    // )
+                    ),
+                GoRoute(
+                    path: Paths.ALLTRIPNOSOCKETSCREEN,
+                    name: Routes.ALLTRIPNOSOCKETSCREEN,
+                    builder: (context, state) => MultiBlocProvider(providers: [
+                          BlocProvider(
+                            create: (context) => SendOfferNoSocketCubit(
+                                repository: serviceLocator()),
+                          ),
+                          BlocProvider(
+                            create: (context) => GetUserLoginTripNoSocketCubit(
+                                repository: serviceLocator())
+                              ..get(),
+                          ),
+                          BlocProvider(
+                            create: (context) => GetTripOffersNoSocketCubit(
+                                repository: serviceLocator()),
+                          ),
+                          BlocProvider(
+                            create: (context) => RatingDriverCubit(
+                                repository: serviceLocator()),
+                          ),
+                          BlocProvider(
+                            create: (context) => OfferNoSocketActionsCubit(
+                                repository: serviceLocator()),
+                          ),
+                          BlocProvider(
+                            create: (context) => GetAllTripNoSocketCubit(
+                                repository: serviceLocator())
+                              ..get(),
+                          ),
+                          BlocProvider(
+                            create: (context) => DeclineOfferNoSocketCubit(
+                                repository: serviceLocator()),
+                          ),
+                        ], child: AllTripNoSocketScreen())
                     // BlocProvider(
                     //   create: (_) => GetAllTripRiderCubit(repository: serviceLocator())..getAllTrip(),
                     //   child: const AllRiderTripScreen(),
@@ -1800,7 +1888,9 @@ class AppPages {
                     ],
                     child: TripRatingScreen(
                         model: state.extra as GetRequestsForLoadingModel),
-                  )),
+                  )
+                  ),
+            
           // Be a Star
           GoRoute(
             path: Paths.BE_STAR,

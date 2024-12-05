@@ -182,8 +182,9 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
   }
 
   Future<void> fetchCart({bool? first = false}) async {
-    if (first == true)
+    if (first == true) {
       emit(state.copyWith(status: RestaurantDetailsStates.loading, cart: null));
+    }
 
     const url = 'https://49dev.com/api/v1/food/getCart';
 

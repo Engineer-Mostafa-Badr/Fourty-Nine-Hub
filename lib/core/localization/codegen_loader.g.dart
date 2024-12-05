@@ -1119,7 +1119,9 @@ class CodegenLoader extends AssetLoader {
     "yourBalanceIsInsufficient": "رصيدك غير كافٍ",
     "Cash": "نقدًا",
     "Wallet": "محفظة",
-    "youHaveToFillYourNumberOfPassenger": "يجب عليك ملء عدد الركاب"
+    "youHaveToFillYourNumberOfPassenger": "يجب عليك ملء عدد الركاب",
+    "technicalExamination": "الفحص الفني",
+    "criminalRecord": "السجل الجنائي"
   };
   static const Map<String, dynamic> en = {
     "nnew": "New",
@@ -2321,7 +2323,9 @@ class CodegenLoader extends AssetLoader {
     "Cash": "Cash",
     "Wallet": "Wallet",
     "youHaveToFillYourNumberOfPassenger":
-        "You have to fill your Number of Passenger"
+        "You have to fill your Number of Passenger",
+    "technicalExamination": "Technical Examination",
+    "criminalRecord": "Criminal Record"
   };
   static const Map<String, Map<String, dynamic>> mapLocales = {
     "ar": ar,

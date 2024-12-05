@@ -1,5 +1,5 @@
 class CreateOfferNoSocketModel {
-  int? price;
+  double? price;
   String? subcategoryId;
   bool? isPremium;
 
@@ -11,7 +11,7 @@ class CreateOfferNoSocketModel {
 
   factory CreateOfferNoSocketModel.fromJson(Map<String, dynamic> json) {
     return CreateOfferNoSocketModel(
-      price: json['price'] as int?,
+      price: json['price'] as double?,
       subcategoryId: json['subcategoryId'] as String?,
       isPremium: json['isPremium'] as bool?,
     );

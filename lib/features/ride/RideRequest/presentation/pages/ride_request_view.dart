@@ -142,57 +142,15 @@ class _RideRequestViewState extends State<RideRequestView> {
                                     ),
                                   ),
                                 ),
-                      //-------------------------------------------------------------
-                      // GestureDetector(
-                      //   // onTap: () => context
-                      //   //     .push(Routes.SHIPPING_REGISTER),
-                      //   onTap: () {
-                      //     if (context.read<UserCubit>().isLoggedIn) {
-                      //       context.push(Routes.SHIPPING_REGISTER);
-                      //     } else {
-                      //       // context.push(Routes.SHIPPING_REGISTER);
-                      //       context.push(Routes.LOGIN);
-                      //     }
-                      //   },
-                      //   child: const Padding(
-                      //     padding: EdgeInsets.symmetric(
-                      //       horizontal: 10,
-                      //     ),
-                      //     child: Text(
-                      //       "You can enjoy serving your clients using your car by clicking the register button above.",
-                      //       style: TextStyle(
-                      //         color: Colors.red,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                      // -------------------------------------------
-                      // SizedBox(
-                      //   height: 10,
-                      // ),
                       Padding(
                         padding: const EdgeInsets.all(8),
                         child: FormField(
-                          // validator: (value) {
-                          //   return shippingcubit.validation(
-                          //       message: "You have to select one sub category!",
-                          //       condition:
-                          //           shippingcubit.requestModel.subcategoryEntity == null);
-                          // },
                           builder: (field) {
-                            // log(select.toString());
                             return BlocBuilder<GetCateogryRiderCubit,
                                 RiderState>(
                               builder: (context, state) {
                                 log(state.toString(), name: "lssss");
                                 if (state is SuccessGetCateogyRider) {
-                                  // log(isSelect.toString(), name: "lkjdslkjsdlkfjsdf");
-                                  // if (!isSelect) {
-                                  //   if (widget.selectedId != null) {
-                                  //     select = getSelectedSubCategory(
-                                  //         categoryes: state.model.subCategories);
-                                  //   }
-                                  // }
                                   return Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -305,13 +263,8 @@ class _RideRequestViewState extends State<RideRequestView> {
                                     height: 10,
                                   ),
                                   const Sizer(),
-                                  // const TripJoinGoogleMap(),
                                   const Sizer(height: 20),
-                                  // Text('Starting Point', style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
-                                  // const StartTextFieldAndFindButon(),
                                   const Sizer(height: 20),
-                                  // Text('Destination Point', style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
-                                  // const DestinationTextFieldAndFindButon(),
                                   const Sizer(height: 20),
                                   BlocBuilder<GetTripInfoCubit, RiderState>(
                                     builder: (context, state) {
@@ -323,7 +276,6 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 4),
                                               child: Row(
-                                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
                                                   const Icon(Icons.flash_on),
                                                   Text(
@@ -518,87 +470,13 @@ class _RideRequestViewState extends State<RideRequestView> {
                                               label: LocaleKeys.request.tr(),
                                               style: Styles.headerText(
                                                   color: Colors.white),
-                                              onPressed: () async {
-                                                // final overlay =
-                                                //     Overlay.of(context);
-                                                // final overlayEntry =
-                                                //     OverlayEntry(
-                                                //   builder: (context) =>
-                                                //       Positioned(
-                                                //     top: 30,
-                                                //     left: 10,
-                                                //     right: 10,
-                                                //     child: Material(
-                                                //       child: AcceptOrDeclineTrip()
-                                                //     ),
-                                                //   ),
-                                                // );
-
-                                                // overlay?.insert(overlayEntry);
-
-                                                // // Remove the overlay after some time or on user action
-                                                // Future.delayed(
-                                                //     const Duration(seconds: 5),
-                                                //     () {
-                                                //   overlayEntry.remove();
-                                                // });
-
-                                                // context
-                                                //     .read<
-                                                //         RequestRiderTripCubit>()
-                                                //     .request(
-                                                //         model:
-                                                //             TripRequestModel());
-
-                                                // context
-                                                //     .read<LocationSocketCubit>()
-                                                //     .sendSubCategoryId(context
-                                                //             .read<
-                                                //                 RiderTripReelTimeCubit>()
-                                                //             .subCategory
-                                                //             ?.id ??
-                                                //         "");
-
-                                                // context
-                                                //     .read<GetTripInfoCubit>()
-                                                //     .getTripInfoRequest();
-                                                // context
-                                                //     .read<RequestRiderTripCubit>()
-                                                //     .request(
-                                                //         model: TripRequestModel());
-                                                // if (widget.formKey.currentState!.validate()) {
-                                                //   context.read<CreateTripCubit>().createTrip(
-                                                //         model: RequestModel(
-                                                //           date:
-                                                //               "${date!.year}/${date!.month}/${date!.day}",
-                                                //           deliveryPoint: deliveryPoint.text,
-                                                //           description: decoration.text,
-                                                //           offerPrice: offerPrice.text,
-                                                //           // tripImages: tripImages,
-                                                //           phone: phone.text,
-                                                //           subcategoryEntity: select,
-                                                //           receiptPoint: receiptPoint.text,
-                                                //           time: "${time!.hour}:${time!.minute}",
-                                                //         ),
-                                                //       );
-                                                // }
-                                              },
+                                              onPressed: () async {},
                                             ),
                                           );
                                         },
                                       ),
                                     ],
                                   ),
-                                  // Builder(builder: (context) {
-                                  //   context.watch<StartingLocationCubit>();
-                                  //   context.watch<DestinationLocationCubit>();
-                                  //   return Visibility(
-                                  //     visible: startingCubit.startingLocation != null &&
-                                  //         destinationCubit.destinationLocation != null,
-                                  //     // visible: true,
-                                  //     child: const TripAndCarInformationV2(),
-                                  //   );
-                                  // })
                                 ],
                               ),
                             );
@@ -606,15 +484,6 @@ class _RideRequestViewState extends State<RideRequestView> {
                           return CreateTripRider();
                         },
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.all(8.0),
-                      //   child: DashboardBanner(
-                      //   title: 'Driver Dashboard\n',
-                      //   subTitle:
-                      //       'New trips are waiting you, go to driver dashboard and explore more!',
-                      //   route: Routes.RIDERDASHBOARD,
-                      //                     ),
-                      // )
                     ],
                   );
                 } else {
@@ -647,12 +516,6 @@ class _RideRequestViewState extends State<RideRequestView> {
                           onAddressPicked: (AddressSearchParamsEntity v) =>
                               rideCubit.selectPickUpLocation(item: v),
                         );
-                        // return Container(
-                        //   decoration: const BoxDecoration(
-                        //     color: Colors.red,
-                        //     image: DecorationImage(image: AssetImage("assets/images/map_image.png"), fit: BoxFit.cover)
-                        //   ),
-                        // );
                       },
                     ),
                   ),
@@ -670,10 +533,6 @@ class _RideRequestViewState extends State<RideRequestView> {
                     )),
               ],
             )),
-            // BlocProvider.value(
-            //   value: serviceLocator<RiderequestCubit>(),
-            //   child: const RideOptionsBottomSheet(),
-            // ),
           ],
         ),
       ),
@@ -915,45 +774,39 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                 SizedBox(
                   height: 30,
                   width: 100,
-                  child: Expanded(
-                    child: Stack(
-                      children: [
-                        ...List.generate(
-                          widget.model.closerDrivers?.take(5).length ?? 0,
-                          (index) {
-                            // log(model.closerDrivers?.take(5).length.toString()??"99999",
-                            //     name: "lskdfjlskf");
-                            log((10 + (index + 10)).toString(),
-                                name: "lkdjflsdkjfldkjf");
-                            spase = spase + 10;
-                            return Positioned(
-                              right: spase.toDouble(),
-                              child: Container(
-                                width: 25,
-                                height: 25,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  // color: Colors.green,
-                                  image: DecorationImage(
-                                    image: NetworkImage(
-                                      widget.model.closerDrivers?[index]
-                                              .userData?.userPicture ??
-                                          "",
-                                    ),
+                  child: Stack(
+                    children: [
+                      ...List.generate(
+                        widget.model.closerDrivers?.take(5).length ?? 0,
+                        (index) {
+                          log((10 + (index + 10)).toString(),
+                              name: "lkdjflsdkjfldkjf");
+                          spase = spase + 10;
+                          return Positioned(
+                            right: spase.toDouble(),
+                            child: Container(
+                              width: 25,
+                              height: 25,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    widget.model.closerDrivers?[index].userData
+                                            ?.userPicture ??
+                                        "",
                                   ),
                                 ),
                               ),
-                            );
-                          },
-                        )
-                      ],
-                    ),
+                            ),
+                          );
+                        },
+                      )
+                    ],
                   ),
                 )
               ],
             ),
           ),
-          // Sizer(h),
           Expanded(
             child: Container(
               padding: const EdgeInsets.all(20),
@@ -1150,29 +1003,22 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
 
   String formatDuration(int totalSeconds) {
     if (totalSeconds >= 3600) {
-      // إذا كان العدد يساوي أو أكبر من ساعة (3600 ثانية)
       int hours = totalSeconds ~/ 3600;
       int minutes = (totalSeconds % 3600) ~/ 60;
       return '$hours h, $minutes min';
     } else if (totalSeconds >= 60) {
-      // إذا كان العدد يساوي أو أكبر من دقيقة (60 ثانية)
       int minutes = totalSeconds ~/ 60;
-      // int seconds = totalSeconds % 60;
       return '$minutes min';
     } else {
-      // إذا كان العدد أقل من دقيقة
       return '$totalSeconds s';
     }
   }
 
-// , $seconds s
   String formatDistance(int meters) {
     if (meters >= 1000) {
-      // تحويل الأمتار إلى كيلومترات
       double kilometers = meters / 1000;
       return '${kilometers.toStringAsFixed(2)} km';
     } else {
-      // إذا كان العدد أقل من 1000 متر
       return '$meters m';
     }
   }

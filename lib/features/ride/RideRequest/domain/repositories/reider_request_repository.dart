@@ -8,18 +8,20 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/datasources/rider_d
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/all_trip_for_driver_mode/all_trip_for_driver_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_by_rider_model/check_accept_by_rider_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_trip_from_driver_model/check_accept_trip_from_driver_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/create_offer_no_socket_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/create_trip_ride_request_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_info_request_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/rating_driver_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rider_register_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_offer_model/trip_request_offer_model.dart';
 // import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:geolocator/geolocator.dart';
 
 class ReiderRequestRepository {
   final RiderDataSource dataSource;
   final WebSocketHelper socket;
   ReiderRequestRepository({required this.dataSource, required this.socket});
-
   Future<Either<Failure, Map<String, dynamic>>> getCateogry() {
     return dataSource.getCateogryData();
   }
@@ -51,7 +53,6 @@ class ReiderRequestRepository {
 
   setSubCateogryId({required String subCategoryId, required String address}) {
     log(address, name: "sldkjflskdjflskdjflskdjflskdjf");
-
     var data = jsonEncode({"subcategoryId": subCategoryId, "address": address});
     log(data.toString());
     socket.socket.emit("subcategory:driver", data);
@@ -60,15 +61,14 @@ class ReiderRequestRepository {
   }
 
   updateDriverLocationEmit(
-      {required String driverId, required String subCategoryId}) {
-    log("-----------------------------------------------------",
-        name: "نننننننننننننننننننننننننننننننننننننن");
+      {required String driverId, required String subCategoryId}) async {
+    Position location = await Geolocator.getCurrentPosition();
     var data = jsonEncode({
-      "location": [30.0444196, 31.2357116],
+      "location": [location.latitude, location.longitude],
       "driverId": driverId,
       "subcategoryId": subCategoryId,
     });
-
+    log(data.toString(), name: "ldksjflskdjflksjdfkdkdkdkdk");
     socket.socket.emit("driver:location", data);
     socket.socket.on(
       "driver:location",
@@ -88,7 +88,9 @@ class ReiderRequestRepository {
     socket.socket.on(
       "driver:location",
       (data) {
-        log(data.toString());
+        log(data.toString(),
+            name:
+                "lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll123123");
         var extractTextAfter = extractTextAfterSymbol(data, "{");
         var json = jsonDecode(extractTextAfter);
         socket.socket.off("driver:location");
@@ -96,8 +98,6 @@ class ReiderRequestRepository {
         updateDriverLocationEmit(
             driverId: json['driverId'],
             subCategoryId: json['subcategoryId'].toString());
-
-        // socket.socket.close();
       },
     );
   }
@@ -113,7 +113,6 @@ class ReiderRequestRepository {
     });
     socket.socket.emit("drivers:nearBy", [data]);
   }
-
 //   RequestSocketResponse nearbyDriversOn() {
 //     Map<String, dynamic> response = {};
 //     socket.socket.on(
@@ -315,7 +314,6 @@ class ReiderRequestRepository {
     );
   }
 
-  //
   Future<Either<Failure, Map<String, dynamic>>> riderInStartLocation(
       {required String id}) {
     return dataSource.riderInStartLocation(id: id);
@@ -357,5 +355,47 @@ class ReiderRequestRepository {
   Future<Either<Failure, Map<String, dynamic>>> checkPayment(
       {required String amount}) {
     return dataSource.checkPayment(amount: amount);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getAllTripNoSocket(
+      {required String id}) {
+    return dataSource.getAllTripNoSocket(id: id);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> createOfferNoSocket(
+      {required CreateOfferNoSocketModel model, required String tripId}) {
+    return dataSource.createOfferNoSocket(model: model, tripId: tripId);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> offerAcceptNoSocket(
+      {required String id}) {
+    return dataSource.offerAcceptNoSocket(id: id);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> offerRejectNoSocket(
+      {required String id}) {
+    return dataSource.offerRejectNoSocket(id: id);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getTripOffersNoSocket(
+      {required String id}) {
+    return dataSource.getTripOffersNoSocket(id: id);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getUserLoginTripNoSocket() {
+    return dataSource.getUserLoginTripNoSocket();
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> deleteTripNoSocket(
+      {required String id}) {
+    return dataSource.deleteTripNoSocket(id: id);
+  }
+  Future<Either<Failure, Map<String, dynamic>>> completeTripNoSocket(
+      {required String id}) {
+    return dataSource.completeTripNoSocket(id: id);
+  }
+  Future<Either<Failure, Map<String, dynamic>>> rating(
+      {required RattingDriverModel model}) {
+    return dataSource.rating(model: model);
   }
 }

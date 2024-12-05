@@ -39,6 +39,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/controlle
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:geolocator/geolocator.dart';
 import 'core/service/background_service.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
@@ -55,7 +56,13 @@ void main() async {
   );
   await CacheServiceImpl.init();
   await DI.execute();
-
+  await Geolocator.checkPermission().then(
+    (value) {
+      if (value == LocationPermission.denied) {
+        Geolocator.requestPermission();
+      }
+    },
+  );
   // ZegoGiftManager().cache.cache(giftItemList);
 
   //Admob.initialize();l
