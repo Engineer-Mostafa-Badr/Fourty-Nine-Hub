@@ -415,6 +415,8 @@ class EndPoints {
   static const sendGift= '/tinder/sendGifts?subCategory=6718f27eacb309f8b1f94d0c';
   static const fetchGifts= '/dashboard-gifts?limit=10';
   static const tinderUploadPicture= '/tinder/uploadPictures?subCategory=66af974f8bf69f9469944746';
+  static tinderDeletePicture(String id)=> '/tinder/removePicture/$id?subCategory=6718f27eacb309f8b1f94d0c&';
+
   static const createStory= '/stories/text';
   static getStoryViewers(String id)=> '/Stories/view/$id';
   static getMutedStories(PaginationParams params)=> '/stories/mutedStories?limit=${params.limit}&page=${params.page}';

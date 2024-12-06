@@ -17,20 +17,35 @@ import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/send_
 import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
+import '../../domain/use_case/upload_tinder_picture_use_case.dart';
 
 abstract class TinderRemoteDataSource {
   Future<Either<Failure, GiftApi>> getGifts(PaginationParams params);
-  Future<Either<Failure, List<UserDataTinderEntity>>> getUsers(GetUsersParams params);
+
+  Future<Either<Failure, List<UserDataTinderEntity>>> getUsers(
+      GetUsersParams params);
+
   Future<Either<Failure, ProfileUserModel>> getUserProfile(String params);
+
   Future<Either<Failure, SubFavoritesResponse>> fetchFavourites();
-  Future<Either<Failure, CategoryFavoritesResponse>> fetchFavouritesCategories();
+
+  Future<Either<Failure, CategoryFavoritesResponse>>
+      fetchFavouritesCategories();
+
   Future<Either<Failure, bool>> addFavouriteCategories(String id);
+
   Future<Either<Failure, LastSeenEntity>> fetchLastSeen(String id);
+
   Future<Either<Failure, dynamic>> sendGift(SendGiftParams params);
+
   Future<Either<Failure, GiftApi>> fetchGifts();
+
   Future<Either<Failure, NearByModel>> checkUserNearby(String id);
+
   Future<Either<Failure, List<SubCategoryEntity>>> fetchSubCategoryData();
-  Future<Either<Failure, bool>> uploadPictures(List<String> params);
+
+  Future<Either<Failure, bool>> uploadPictures(AddImagesParams params);
+  Future<Either<Failure, bool>> deletePictures(String id);
 }
 
 class TinderRemoteDataSourceImpl implements TinderRemoteDataSource {
@@ -44,41 +59,41 @@ class TinderRemoteDataSourceImpl implements TinderRemoteDataSource {
       EndPoints.getGifts(params),
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            GiftApi.fromJson(response),
+      (failure) => Left(failure),
+      (response) => Right(
+        GiftApi.fromJson(response),
       ),
     );
   }
 
   @override
-  Future<Either<Failure, List<UserDataTinderEntity>>> getUsers(GetUsersParams params) async {
+  Future<Either<Failure, List<UserDataTinderEntity>>> getUsers(
+      GetUsersParams params) async {
     final response = await _apiConsumer.get(
       EndPoints.getUsers,
       queryParameters: params.toJson(),
     );
-    return response.fold(
-          (failure) {
-          //  print('object :$failure');
-            return Left(failure);
-          },
-          (response) {
-           // print(')))))))))))))))))))))))))))))))))))))))))))))');
-            return Right((response['data'] as List)
-              .map((e) => UserDataTinderModel.fromJson(e))
-              .toList());
-          });
+    return response.fold((failure) {
+      //  print('object :$failure');
+      return Left(failure);
+    }, (response) {
+      // print(')))))))))))))))))))))))))))))))))))))))))))))');
+      return Right((response['data'] as List)
+          .map((e) => UserDataTinderModel.fromJson(e))
+          .toList());
+    });
   }
 
   @override
-  Future<Either<Failure, ProfileUserModel>> getUserProfile(String params) async {
+  Future<Either<Failure, ProfileUserModel>> getUserProfile(
+      String params) async {
     final response = await _apiConsumer.get(
       EndPoints.getTinderUserProfile(params),
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            ProfileUserModel.fromJson(response),
+      (failure) => Left(failure),
+      (response) => Right(
+        ProfileUserModel.fromJson(response),
       ),
     );
   }
@@ -89,34 +104,35 @@ class TinderRemoteDataSourceImpl implements TinderRemoteDataSource {
       EndPoints.fetchFavourites,
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            SubFavoritesResponse.fromJson(response),
+      (failure) => Left(failure),
+      (response) => Right(
+        SubFavoritesResponse.fromJson(response),
       ),
     );
   }
 
   @override
-  Future<Either<Failure, CategoryFavoritesResponse>> fetchFavouritesCategories() async {
+  Future<Either<Failure, CategoryFavoritesResponse>>
+      fetchFavouritesCategories() async {
     final response = await _apiConsumer.get(
       EndPoints.fetchFavouritesCategory,
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            CategoryFavoritesResponse.fromJson(response),
+      (failure) => Left(failure),
+      (response) => Right(
+        CategoryFavoritesResponse.fromJson(response),
       ),
     );
   }
 
   @override
-  Future<Either<Failure, bool>> addFavouriteCategories(String id) async{
+  Future<Either<Failure, bool>> addFavouriteCategories(String id) async {
     final response = await _apiConsumer.get(
       EndPoints.addFavouriteCategories(id),
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(response['status']),
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
     );
   }
 
@@ -126,31 +142,31 @@ class TinderRemoteDataSourceImpl implements TinderRemoteDataSource {
       EndPoints.fetchLastSeen(id),
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(LastSeenModel.fromJson(response['data'])),
+      (failure) => Left(failure),
+      (response) => Right(LastSeenModel.fromJson(response['data'])),
     );
   }
 
   @override
   Future<Either<Failure, dynamic>> sendGift(SendGiftParams params) async {
-    final response = await _apiConsumer.post(
-      EndPoints.sendGift,
-      data: params.toJson()
-    );
+    final response =
+        await _apiConsumer.post(EndPoints.sendGift, data: params.toJson());
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(LastSeenModel.fromJson(response['data'])),
+      (failure) => Left(failure),
+      (response) => Right(LastSeenModel.fromJson(response['data'])),
     );
   }
 
   @override
   Future<Either<Failure, GiftApi>> fetchGifts() async {
     final response = await _apiConsumer.get(
-        EndPoints.fetchGifts,);
+      EndPoints.fetchGifts,
+    );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(GiftApi.fromJson(response)),
-    );  }
+      (failure) => Left(failure),
+      (response) => Right(GiftApi.fromJson(response)),
+    );
+  }
 
   @override
   Future<Either<Failure, NearByModel>> checkUserNearby(String id) {
@@ -159,32 +175,41 @@ class TinderRemoteDataSourceImpl implements TinderRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<SubCategoryEntity>>> fetchSubCategoryData() async {
+  Future<Either<Failure, List<SubCategoryEntity>>>
+      fetchSubCategoryData() async {
     final response = await _apiConsumer.get(
       EndPoints.fetchSubCategoryData,
     );
     return response.fold(
-            (failure) => Left(failure),
-            (response) => Right((response['data'] as List)
+        (failure) => Left(failure),
+        (response) => Right((response['data'] as List)
             .map((e) => SubCategoryModel.fromJson(e))
             .toList()));
   }
 
   @override
-  Future<Either<Failure, bool>> uploadPictures(List<String> params) async {
-    final response = await _apiConsumer.post(
-      EndPoints.tinderUploadPicture,data: {'pictures': params});
+  Future<Either<Failure, bool>> uploadPictures(AddImagesParams params) async {
+    final response = await _apiConsumer.post(EndPoints.tinderUploadPicture,
+        data: params.toJson());
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> deletePictures(String id)async {
+    final response = await _apiConsumer.delete(EndPoints.tinderDeletePicture(id),
+       );
     return response.fold(
           (failure) => Left(failure),
           (response) => Right(response['status']),
     );
   }
 
-  //
-  // @override
-  // Future<Either<Failure, bool>> makeViews(String id) async {
+//
+// @override
+// Future<Either<Failure, bool>> makeViews(String id) async {
 
-  // }
-
-
+// }
 }

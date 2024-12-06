@@ -3,6 +3,7 @@ import 'package:fourtyninehub/features/social_media/tinder/data/repositories/tin
 import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/add_favourite_category_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/chech_user_nearby_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/delete_tinder_picture_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_favourites_category_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_favourites_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_gifts_use_case.dart';
@@ -79,8 +80,13 @@ class TinderServiceLocator {
         () => AddTinderFavouriteCategoryUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<DeleteTinderPictureUseCase>(
+        () => DeleteTinderPictureUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerFactory<TinderViewCubit>(() => TinderViewCubit(
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),

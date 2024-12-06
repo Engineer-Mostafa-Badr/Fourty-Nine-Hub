@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/add_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/anonymous_chat_model.dart';
@@ -54,6 +55,7 @@ class TinderViewState {
   final TinderStates? subCategoryDataState;
 
   final TinderStates? uploadImageState;
+  final UploadFileEntity? newImage;
 
   final SubFavoritesResponse? getFavCategoryModel;
   final CategoryFavoritesResponse? getFavoriteCategoryModel;
@@ -88,6 +90,7 @@ class TinderViewState {
 
   final LastSeenEntity? lastSeenModel;
   final TinderStates? lastSeenModelState;
+  final bool? isUploading;
 
   TinderViewState({
     this.status = TinderStates.initial,
@@ -132,6 +135,8 @@ class TinderViewState {
     this.getFavCategoryModel,
     this.getFavoriteCategoryModel,
     this.getFavCategoryModelState,
+    this.newImage,
+    this.isUploading,
   });
 
   // Method to update the state
@@ -178,6 +183,8 @@ class TinderViewState {
     CategoryFavoritesResponse? FavoriteCategoryList,
     TinderStates? getFavCategoryListState,
     TinderStates? uploadImageState,
+     UploadFileEntity? newImage,
+    bool? isUploading,
   }) {
     return TinderViewState(
       status: status ?? this.status,
@@ -231,6 +238,10 @@ class TinderViewState {
       mainCategoryResponse: mainCategoryEntity ?? this.mainCategoryResponse,
       mainCategoryResponseState:
           mainCategoryResponseState ?? this.mainCategoryResponseState,
+      newImage:
+      newImage ?? this.newImage,
+      isUploading:
+      isUploading ?? this.isUploading,
     );
   }
 }

@@ -14,10 +14,7 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/ti
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/subcategory_card_tinder.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_card_stack.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 class TinderView extends StatelessWidget {
@@ -124,7 +121,7 @@ class _TinderScreenState extends State<TinderScreen> {
             BlocBuilder<TinderViewCubit, TinderViewState>(
               builder: (context, state) {
                 final controller = context.read<TinderViewCubit>();
-                if(state.subCategoryData !=null) {
+                if(state.subCategoryData !=null && state.mainCategoryResponse !=null) {
                   return Padding(
                   padding: EdgeInsets.all(8.0.w),
                   child: GridView.builder(

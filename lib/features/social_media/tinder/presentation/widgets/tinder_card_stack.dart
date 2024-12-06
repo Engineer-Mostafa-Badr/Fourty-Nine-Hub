@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_text_no_login.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/domain/user_data_tinder_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
@@ -107,7 +108,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
             SwipeCardDemo2(cardUser: cardUser),
             _buildGenderSwitch(context, cardUser),
             // _buildMapSwitch(context, cardUser),
-            _buildStoryBar(context, cardUser),
+            //_buildStoryBar(context, cardUser),
             _buildPersonInfo(context, cardUser),
             _buildActions(context, cardUser),
           ],
@@ -187,32 +188,32 @@ class _TinderCardStackState extends State<TinderCardStack> {
     });
   }
 
-  Widget _buildStoryBar(BuildContext context, UserDataTinderEntity user) {
-    return Positioned(
-      top: 10,
-      left: 10,
-      right: 10,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(
-          user.pictures.length,
-          (dotIndex) => Expanded(
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 2.0),
-              height: 4,
-              decoration: BoxDecoration(
-                color: dotIndex ==
-                        context.read<TinderViewCubit>().state.currentStoryIndex
-                    ? Colors.red
-                    : Colors.grey.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _buildStoryBar(BuildContext context, UserDataTinderEntity user) {
+  //   return Positioned(
+  //     top: 10,
+  //     left: 10,
+  //     right: 10,
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: List.generate(
+  //         user.pictures.length,
+  //         (dotIndex) => Expanded(
+  //           child: Container(
+  //             margin: const EdgeInsets.symmetric(horizontal: 2.0),
+  //             height: 4,
+  //             decoration: BoxDecoration(
+  //               color: dotIndex ==
+  //                       context.read<TinderViewCubit>().state.currentStoryIndex
+  //                   ? Colors.red
+  //                   : Colors.grey.withOpacity(0.5),
+  //               borderRadius: BorderRadius.circular(2),
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildPersonInfo(BuildContext context, UserDataTinderEntity cardUser) {
     return Positioned(
@@ -401,8 +402,15 @@ class _TinderCardStackState extends State<TinderCardStack> {
             _buildActionButton(
               context,
               Icons.report,
-              () => _showReportBottomSheet(context, cardUser),
-              color: Colors.red,
+                !context.read<UserCubit>().isLoggedIn?()=>context.push(Routes.LOGIN):() {
+                  bottomSheet(
+                      context: context,
+                      widget: ReportView(
+                        id: cardUser.id!,
+                        categoryId: '66af974f8bf69f9469944746',
+                      ));},
+              // () => _showReportBottomSheet(context, cardUser),
+               color: Colors.red,
             ),
           ],
         ),
@@ -426,7 +434,10 @@ class _TinderCardStackState extends State<TinderCardStack> {
     );
   }
 
-  void _navigateToUserProfile(BuildContext context, UserDataTinderEntity cardUser) {
+   _navigateToUserProfile(BuildContext context, UserDataTinderEntity cardUser) {
+    if (!context.read<UserCubit>().isLoggedIn) {
+      return const CustomTextNoLogin();
+    }
     if (serviceLocator<UserCubit>().state.data != null) {
       Navigator.push(
         context,
@@ -444,24 +455,6 @@ class _TinderCardStackState extends State<TinderCardStack> {
         ),
       );
     }
-  }
-
-  Future<void> _showReportBottomSheet(
-      BuildContext context, UserDataTinderEntity user) async {
-    await showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      builder: (context) {
-        return SizedBox(
-          height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
-          child: ReportView(
-            id: user.id!,
-            categoryId: '66af974f8bf69f9469944746',
-          ),
-        );
-      },
-    );
   }
 }
 
@@ -931,9 +924,9 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
   void _nextStory() {
     setState(() {
       if (_currentStoryIndex < widget.cardUser.pictures.length - 1) {
-        _currentStoryIndex++; // Move to the next story
+        _currentStoryIndex = _currentStoryIndex + 1;
       } else {
-        _currentStoryIndex = 0; // Reset to the first story after the last
+        _currentStoryIndex =  widget.cardUser.pictures.length -1; // Reset to the first story after the last
       }
     });
   }
@@ -941,10 +934,9 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
   void _previousStory() {
     setState(() {
       if (_currentStoryIndex > 0) {
-        _currentStoryIndex--; // Move to the previous story
+        _currentStoryIndex = _currentStoryIndex - 1;
       } else {
-        _currentStoryIndex =
-            widget.cardUser.pictures.length - 1; // Go to the last story
+        _currentStoryIndex = 0; // Go to the last story
       }
     });
   }

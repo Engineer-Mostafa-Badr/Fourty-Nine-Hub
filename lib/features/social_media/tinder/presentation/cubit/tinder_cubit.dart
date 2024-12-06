@@ -1,12 +1,17 @@
 import 'dart:developer';
 
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/add_favourite_category_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/chech_user_nearby_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/delete_tinder_picture_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_favourites_category_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_favourites_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_gifts_use_case.dart';
@@ -16,6 +21,7 @@ import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_t
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_user_data_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/send_geft_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/upload_tinder_picture_use_case.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import '../../data/models/near_by_model.dart';
 import 'tinder_state.dart';
@@ -35,6 +41,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
   final UploadTinderPictureUseCase _uploadTinderPictureUseCase;
   final ToggleSubCategoryToFavoritesUseCase
       _toggleSubCategoryToFavoritesUseCase;
+  final DeleteTinderPictureUseCase _deleteTinderPictureUseCase;
 
   TinderViewCubit(
       this._getUserDataUseCase,
@@ -49,7 +56,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       this._checkUserNearbyUseCase,
       this._fetchSubCategoryDataUseCase,
       this._uploadTinderPictureUseCase,
-      this._toggleSubCategoryToFavoritesUseCase)
+      this._toggleSubCategoryToFavoritesUseCase, this._deleteTinderPictureUseCase)
       : super(TinderViewState());
 
   // Future<void> fetchUserData() async{
@@ -159,7 +166,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       emit(state.copyWith(profileUserState: TinderStates.failure));
     }, (r) {
       emit(state.copyWith(
-          profileUserState: TinderStates.success, profileUserData: r.data));
+          status: TinderStates.success, profileUserData: r.data));
     });
   }
 
@@ -367,13 +374,68 @@ class TinderViewCubit extends Cubit<TinderViewState> {
   //   }
   // }
 
-  Future<void> uploadPictures({
-    required List<String> pictures,
-  }) async {
-    emit(state.copyWith(uploadImageState: TinderStates.initial));
-    await _uploadTinderPictureUseCase(pictures);
-    emit(state.copyWith(uploadImageState: TinderStates.success));
+  uploadPhoto({bool isGallery = true}) async {
+    final UploadFile upload = UploadFile();
+    print('=======>data Hiii');
+    UploadFileEntity? image;
+    await upload.uploadImage(
+        isGallery: isGallery,
+        subCategoryId: '66a3583454e6e337915514db',
+        onUploaded: (UploadFileEntity data) async {
+          image = data;
+          final response = await serviceLocator<ApiConsumer>().put(
+            '/users/profile-picture',
+            data: {'profilePictureId': data.mediaId},
+          );
+          return response.fold(
+                (failure) {
+              print('=======>data Fal}');
+
+              return Left(failure);
+            },
+                (data) {
+              emit(state.copyWith(newImage: image));
+              UserCubit.to.getUser();
+              uploadPictures(pictures: AddImagesParams(media: [state.newImage!.mediaId]));
+              print("newImage====>${state.newImage?.mediaId}");
+              return const Right(true);
+            },
+          );
+        });
   }
+
+
+  Future<void> uploadPictures({
+  required AddImagesParams pictures,
+}) async {
+    final response = await _uploadTinderPictureUseCase(pictures);
+    if (isClosed) return;
+    response.fold(
+          (failure) {
+        print('Failure : $failure');
+        if (!isClosed) {
+          emit(state.copyWith(failure: failure, status: TinderStates.failure));
+        }
+      },
+          (data) {
+        if (!isClosed) {
+          emit(state.copyWith(status: TinderStates.success));
+        }
+        print('object_________________________________');
+        print('data $data');
+      },
+    );
+  }
+  void setUploading(bool isUploading) {
+    emit(TinderViewState(isUploading: isUploading, profileUserData: state.profileUserData));
+  }
+  // Future<void> uploadPictures({
+  //   required AddImagesParams pictures,
+  // }) async {
+  //   emit(state.copyWith(uploadImageState: TinderStates.initial));
+  //   await _uploadTinderPictureUseCase(pictures);
+  //   emit(state.copyWith(uploadImageState: TinderStates.success));
+  // }
 
   // Pan and Story handling methods
   void updatePanStart(Offset startDragOffset) {
@@ -434,5 +496,22 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       emit(state.copyWith(status: TinderStates.success));
     });
     return result;
+  }
+
+  Future<void> deletePicture(String id) async {
+    final response = await _deleteTinderPictureUseCase(id);
+    if (isClosed) return;
+    response.fold(
+          (failure) {
+        if (!isClosed) {
+          emit(state.copyWith(failure: failure, status: TinderStates.failure));
+        }
+      },
+          (data) {
+        if (!isClosed) {
+          emit(state.copyWith(status: TinderStates.success));
+        }
+      },
+    );
   }
 }

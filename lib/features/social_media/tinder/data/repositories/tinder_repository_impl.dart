@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/social_media/tinder/domain/domain/user_da
 import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_user_data_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/send_geft_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/upload_tinder_picture_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 
@@ -76,8 +77,13 @@ class TinderRepositoryImpl extends TinderRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> uploadPictures(List<String> params) {
+  Future<Either<Failure, bool>> uploadPictures(AddImagesParams params) {
     return _storiesRemoteDataSource.uploadPictures(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> deletePictures(String id) {
+    return _storiesRemoteDataSource.deletePictures(id);
   }
 
 // @override

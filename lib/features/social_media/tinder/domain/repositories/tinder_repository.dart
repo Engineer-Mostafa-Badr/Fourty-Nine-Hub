@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/tinder/domain/domain/last_se
 import 'package:fourtyninehub/features/social_media/tinder/domain/domain/user_data_tinder_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_user_data_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/send_geft_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/upload_tinder_picture_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 import '../../../../../core/error/failure.dart';
@@ -21,7 +22,8 @@ abstract class TinderRepository {
   Future<Either<Failure, SubFavoritesResponse>> fetchFavourites();
   Future<Either<Failure, CategoryFavoritesResponse>> fetchFavouritesCategories();
   Future<Either<Failure, bool>> addFavouriteCategories(String id);
-  Future<Either<Failure, bool>> uploadPictures(List<String> params);
+  Future<Either<Failure, bool>> uploadPictures(AddImagesParams params);
+  Future<Either<Failure, bool>> deletePictures(String id);
   Future<Either<Failure, NearByModel>> checkUserNearby(String id);
   Future<Either<Failure, LastSeenEntity>> fetchLastSeen(String id);
   Future<Either<Failure, dynamic>> sendGift(SendGiftParams params);
