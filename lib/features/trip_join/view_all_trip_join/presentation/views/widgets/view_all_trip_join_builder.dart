@@ -63,7 +63,7 @@ class _ViewAllTripJoinCardBuilderState
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) {
-            if (index > nativeAdStart && index % nativeAdEnd == nativeAdStart) {
+            if (index > nativeAdStart && index % adFrequency == adFrequency - 1) {
               return getAdIfNeeded(index, _adsManager);
             }
             if (index < viewAllTripJoinCubit.tripJoinCards.length) {

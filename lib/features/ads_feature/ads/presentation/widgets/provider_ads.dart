@@ -66,35 +66,22 @@ class _ProviderAdsState extends State<ProviderAds> {
             );
           },
           itemBuilder: (context, item, index) {
+    // if (index > 0 && index % 3 == 0) {
 
+            if (index > 0 && index % 2 == 0) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.3, // Reduced height
+                    child: AdsManagerWidget(),
+                  ),
+                  _buildAdContent(item), // Your content for the ad
+                ],
+              );
+            }
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-
-              SizedBox(
-                height: 200,
-                child:   AdsManagerWidget(),
-              ),
-
-                getAdIfNeeded(index, _adsManager),
-                if (index % 1 == 0)
-             getAdIfNeeded(index, _adsManager),
-                CategoriesExtension.fromNameEn(
-                        widget.params.mainCategory.nameEn ?? '')
-                    .view(
-                  item: item,
-                  onFav: (String id) async {
-                    var result = await widget.controller.favouriteAd(id);
-                    return result;
-                  },
-                  onRemoveFav: (String id) async {
-                    var result = await widget.controller.unFavouriteAd(id);
-                    return result;
-                  },
-                ),
-              ],
-            );
+            return _buildAdContent(item); // Regular content without ad
           },
           noMoreItemsIndicatorBuilder: (context) => Container(),
           firstPageProgressIndicatorBuilder: (context) => Container(
@@ -102,6 +89,20 @@ class _ProviderAdsState extends State<ProviderAds> {
               child: const Center(child: CircularProgressIndicator())),
           newPageProgressIndicatorBuilder: (context) =>
               const Center(child: CircularProgressIndicator())),
+    );
+  }
+  Widget _buildAdContent(AdModel item) {
+    return CategoriesExtension.fromNameEn(widget.params.mainCategory.nameEn ?? '')
+        .view(
+      item: item,
+      onFav: (String id) async {
+        var result = await widget.controller.favouriteAd(id);
+        return result;
+      },
+      onRemoveFav: (String id) async {
+        var result = await widget.controller.unFavouriteAd(id);
+        return result;
+      },
     );
   }
 }

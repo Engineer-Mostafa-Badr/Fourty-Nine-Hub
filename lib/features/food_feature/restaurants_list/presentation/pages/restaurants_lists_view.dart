@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/ads/native_ad_card.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -38,15 +39,17 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   late ScrollController _scrollController;
   bool isFirstSearchListenerCall = true;
 
-
+  final AdsManager _adsManager = AdsManager();
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
+    _adsManager.preloadAds();
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
     context.read<RestaurantsCubit>().loadData();
+
   }
 
   void _onScroll() {
@@ -118,15 +121,31 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                  physics: const NeverScrollableScrollPhysics(),
                  itemCount: context.read<RestaurantsCubit>().restaurants.length,
                  separatorBuilder: (context, index) => const Sizer(),
-                 itemBuilder: (context,i)=>SubCategoriesRestaurantCard(
-                   item: context.read<RestaurantsCubit>().restaurants[i],
-                   mealId: '', favouriteRestaurant: (String id) async {
-                   var result = await context.read<RestaurantsCubit>().toggleFavoriteRestaurant(id);
-                   if(result==true){
-                     context.read<RestaurantsCubit>().restaurants[i].isFavorite= !context.read<RestaurantsCubit>().restaurants[i].isFavorite!;
-                   }
+                 itemBuilder: (context,i) {
+                   // if (i > nativeAdStart && i % adFrequency == adFrequency - 1) {
+                   //   return getAdIfNeeded(i, _adsManager);
+                   // }
+                   // if (i > context.read<RestaurantsCubit>().restaurants.length && i % adFrequency == adFrequency - 1) {
+                   //   print("the index ${context.read<RestaurantsCubit>().restaurants.length}");
+                   //   return getAdIfNeeded(i, _adsManager);
+                   // }
+
+                   return Column(
+                     children: [
+                       if (i % adFrequency == adFrequency - 1)
+                         getAdIfNeeded(i, _adsManager), // Only show ad
+                       SubCategoriesRestaurantCard(
+                       item: context.read<RestaurantsCubit>().restaurants[i],
+                       mealId: '', favouriteRestaurant: (String id) async {
+                       var result = await context.read<RestaurantsCubit>().toggleFavoriteRestaurant(id);
+                       if(result==true){
+                         context.read<RestaurantsCubit>().restaurants[i].isFavorite= !context.read<RestaurantsCubit>().restaurants[i].isFavorite!;
+                       }
+                                        },
+                                        ),
+                     ],
+                   );
                  },
-                 ),
                ):Center(
                  child: Padding(
                    padding: EdgeInsets.only(top: 40.h),
