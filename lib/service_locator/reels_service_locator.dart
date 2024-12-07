@@ -50,8 +50,8 @@ class ReelsServiceLocator {
       ),
     );
 
-    serviceLocator.registerLazySingleton<GetFollowersReelsUseCase>(
-      () => GetFollowersReelsUseCase(
+    serviceLocator.registerLazySingleton<GetFollowingReelsUseCase>(
+      () => GetFollowingReelsUseCase(
         serviceLocator(),
       ),
     );

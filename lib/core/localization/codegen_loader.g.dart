@@ -1118,7 +1118,8 @@ class CodegenLoader extends AssetLoader{
   "Following": "متابعة",
   "Posts": "منشورات",
   "noCommentsYet": "لا توجد تعليقات حتى الآن",
-  "startConversation": "ابدأ المحادثة."
+  "startConversation": "ابدأ المحادثة.",
+  "yesterday": "الامس"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2241,7 +2242,8 @@ static const Map<String,dynamic> en = {
   "Following": "Following",
   "Posts": "Posts",
   "noCommentsYet": "No comments yet",
-  "startConversation": "Start the conversation."
+  "startConversation": "Start the conversation.",
+  "yesterday": "Yesterday"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

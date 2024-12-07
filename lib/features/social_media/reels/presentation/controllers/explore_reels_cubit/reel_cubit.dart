@@ -40,7 +40,7 @@ class ReelsCubit extends Cubit<ReelsState> {
   final CreateReelUseCase _createReelUseCase;
   final CreateAdvertisementUseCase _advertisementUseCase;
   final GetExploreReelsUseCase _getExploreReelsUseCase;
-  final GetFollowersReelsUseCase _getFollowersReelsUseCase;
+  final GetFollowingReelsUseCase _getFollowingReelsUseCase;
   final SaveReelUseCase _saveReelUseCase;
   final ShareReelUseCase _shareReelUseCase;
   final LikeReelUseCase _likeReelUseCase;
@@ -54,7 +54,7 @@ class ReelsCubit extends Cubit<ReelsState> {
       this._createReelUseCase,
       this._advertisementUseCase,
       this._getExploreReelsUseCase,
-      this._getFollowersReelsUseCase,
+      this._getFollowingReelsUseCase,
       this._saveReelUseCase,
       this._shareReelUseCase,
       this._likeReelUseCase,
@@ -232,15 +232,15 @@ class ReelsCubit extends Cubit<ReelsState> {
 
     emit(state.copyWith(reelsForFollowerIsLoading: true));
 
-    final result = await _getFollowersReelsUseCase(1);
+    final result = await _getFollowingReelsUseCase(1);
 
     result.fold(
       (failure) =>
           emit(state.copyWith(reelViewErrorMessage: failure.toString())),
       (data) {
         emit(state.copyWith(
-          reelsForFollower: [
-            ...state.reelsForFollower ?? [],
+          reelsForFollowing: [
+            ...state.reelsForFollowing ?? [],
             ...data.data.reels
           ],
           reelsForFollowerIsLoading: false,

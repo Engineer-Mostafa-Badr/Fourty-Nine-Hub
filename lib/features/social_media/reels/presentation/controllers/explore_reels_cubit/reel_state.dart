@@ -5,7 +5,7 @@ class ReelsState {
   final bool isCreatingReply;
 
    List<Reel> globalReels;
-  final List<Reel>? reelsForFollower;
+  final List<Reel>? reelsForFollowing;
 
   final List<Reel>? reelsForAudio;
   final int? playingIndex;
@@ -64,7 +64,7 @@ class ReelsState {
     this.reelViewErrorMessage,
     this.comments = const [],
     this.reelViewSuccess,
-    this.reelsForFollower,
+    this.reelsForFollowing,
     this.isInitialized = false,
     this.isPlaying = false,
     this.showPlayPauseIcon = true,
@@ -104,7 +104,7 @@ class ReelsState {
     bool? isCreatingReelView,
     String? reelViewErrorMessage,
     bool? reelViewSuccess,
-    List<Reel>? reelsForFollower,
+    List<Reel>? reelsForFollowing,
     bool? reelsForFollowerIsLoading,
     bool? reelsForFollowerHasReachedMax,
     int? reelsForFollowerCurrentPage,
@@ -177,7 +177,7 @@ class ReelsState {
       reelSaveResponse: reelSaveResponse ?? this.reelSaveResponse,
       reelShareResponse: reelShareResponse ?? this.reelShareResponse,
       playingIndex: playingIndex ?? this.playingIndex,
-      reelsForFollower: reelsForFollower ?? this.reelsForFollower,
+      reelsForFollowing: reelsForFollowing ?? this.reelsForFollowing,
       reelsForFollowerCurrentPage:
           reelsForFollowerCurrentPage ?? this.reelsForFollowerCurrentPage,
       reelsForFollowerHasReachedMax:

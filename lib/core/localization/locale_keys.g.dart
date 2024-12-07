@@ -1093,5 +1093,6 @@ abstract class  LocaleKeys {
   static const Posts = 'Posts';
   static const noCommentsYet = 'noCommentsYet';
   static const startConversation = 'startConversation';
+  static const yesterday = 'yesterday';
 
 }

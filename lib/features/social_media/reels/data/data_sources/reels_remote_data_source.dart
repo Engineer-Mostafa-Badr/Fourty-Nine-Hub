@@ -20,7 +20,7 @@ import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_
 abstract class ReelsRemoteDataSource {
   Future<Either<Failure, ReelsResponse>> getExploreReels(PaginationParams params);
 
-  Future<Either<Failure, ReelsResponse>> getFollowersReels(int page);
+  Future<Either<Failure, ReelsResponse>> getFollowingReels(int page);
 
   Future<Either<Failure, ReelSaveResponse>> saveReel(String reelId);
 
@@ -98,9 +98,9 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, ReelsResponse>> getFollowersReels(int page) async {
+  Future<Either<Failure, ReelsResponse>> getFollowingReels(int page) async {
     final response = await _apiConsumer.get(
-      EndPoints.fetchReelsForFollowers,
+      EndPoints.fetchReelsForFollowing,
       queryParameters: {
         'page': page,
         'limit': EndPoints.pageSize,

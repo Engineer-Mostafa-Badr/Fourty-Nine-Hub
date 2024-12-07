@@ -38,8 +38,8 @@ class ReelsRepositoryImpl extends ReelsRepository {
   }
 
   @override
-  Future<Either<Failure, ReelsResponse>> getFollowersReels(int page) {
-    return _reelsRemoteDataSource.getFollowersReels(page);
+  Future<Either<Failure, ReelsResponse>> getFollowingReels(int page) {
+    return _reelsRemoteDataSource.getFollowingReels(page);
   }
 
   @override

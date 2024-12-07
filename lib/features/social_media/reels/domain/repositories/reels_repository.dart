@@ -23,7 +23,7 @@ abstract class ReelsRepository {
   Future<Either<Failure, String>> toggleCommentLike(String commentId);
   Future<Either<Failure, ReelsForAudioResponse>> getReelsWithSameAudio(ReelsWithSameAudioParams params);
   Future<Either<Failure, AddCommentResponse>> addReply(AddReelReplyParams params);
-  Future<Either<Failure, ReelsResponse>> getFollowersReels(int page);
+  Future<Either<Failure, ReelsResponse>> getFollowingReels(int page);
   Future<Either<Failure, ReelSaveResponse>> saveReel(String reelId);
   Future<Either<Failure, ReelShareResponse>> shareReel(String reelId);
   Future<Either<Failure, ReelLikeResponse>> likeReel(String reelId);

@@ -396,6 +396,7 @@ class EndPoints {
   // reels
   static const getExploreReels = '/reels/explore';
   static const fetchReelsForFollowers = '/reels/followers?subCategory=66684135dbb427ee42aa0141';
+  static const fetchReelsForFollowing = '/reels/followings';
   static saveReel(String id)=> '/reels/saved/$id';
   static shareReel(String id)=> '/reels/share/$id';
   static likeReel(String id)=> '/reels/likes/$id';
