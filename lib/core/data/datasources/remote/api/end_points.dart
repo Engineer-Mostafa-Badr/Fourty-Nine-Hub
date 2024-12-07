@@ -563,11 +563,11 @@ class EndPoints {
   }
 
   static String followers(TwitterFeedParams params) {
-    return '/follow/followers?search=${params.search}&limit=${params.limit}&page=${params.page}';
+    return '/follow/followers?search=${params.search}&limit=${params.limit}&page=${params.page}&otherId=${params.otherId}';
   }
 
   static String following(TwitterFeedParams params) {
-    return '/follow/allFollowing?search=${params.search}&limit=${params.limit}&page=${params.page}';
+    return '/follow/allFollowing?search=${params.search}&limit=${params.limit}&page=${params.page}&otherId=${params.otherId}';
   }
 
 
