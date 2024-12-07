@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/ads/banner_ad_model.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -8,6 +9,8 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cu
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+
+import '../../../../../ads/native_ad_card.dart';
 
 class ProviderAds extends StatefulWidget {
   const ProviderAds(
@@ -34,6 +37,14 @@ class _ProviderAdsState extends State<ProviderAds> {
   //
   //   // super.initState();
   // }
+  final AdsManager _adsManager = AdsManager();
+
+  @override
+  void initState() {
+
+    super.initState();
+    _adsManager.preloadAds();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,18 +66,34 @@ class _ProviderAdsState extends State<ProviderAds> {
             );
           },
           itemBuilder: (context, item, index) {
-            return CategoriesExtension.fromNameEn(
-                    widget.params.mainCategory.nameEn ?? '')
-                .view(
-              item: item,
-              onFav: (String id) async {
-                var result = await widget.controller.favouriteAd(id);
-                return result;
-              },
-              onRemoveFav: (String id) async {
-                var result = await widget.controller.unFavouriteAd(id);
-                return result;
-              },
+
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+
+              SizedBox(
+                height: 200,
+                child:   AdsManagerWidget(),
+              ),
+
+                getAdIfNeeded(index, _adsManager),
+                if (index % 1 == 0)
+             getAdIfNeeded(index, _adsManager),
+                CategoriesExtension.fromNameEn(
+                        widget.params.mainCategory.nameEn ?? '')
+                    .view(
+                  item: item,
+                  onFav: (String id) async {
+                    var result = await widget.controller.favouriteAd(id);
+                    return result;
+                  },
+                  onRemoveFav: (String id) async {
+                    var result = await widget.controller.unFavouriteAd(id);
+                    return result;
+                  },
+                ),
+              ],
             );
           },
           noMoreItemsIndicatorBuilder: (context) => Container(),

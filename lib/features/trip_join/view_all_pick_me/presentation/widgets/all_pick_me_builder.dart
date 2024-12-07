@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/ads/native_ad_card.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -35,11 +36,13 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
   late double scrollPosition;
   late double scrollMaxExtent;
   bool isLoading = false;
+  final AdsManager _adsManager = AdsManager();
   @override
   void initState() {
     viewAllPickMeCubit = context.read<ViewAllPickMeCubit>();
     _fetchCardsIfEmpty();
     _scrollListener();
+    _adsManager.preloadAds();
     super.initState();
   }
 
@@ -56,6 +59,9 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
           controller: scrollController,
           itemCount: viewAllPickMeCubit.cards.length + 2,
           itemBuilder: (context, index) {
+            if (index > nativeAdStart && index % nativeAdEnd == nativeAdStart) {
+              return getAdIfNeeded(index, _adsManager);
+            }
             if (index == 0) {
               return Align(
                 alignment: Alignment.centerLeft,

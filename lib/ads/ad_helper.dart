@@ -15,4 +15,8 @@ class AdHelper{
   static String get OpenAppAd{
     return "ca-app-pub-3940256099942544/9257395921";
   }
+  static String get nativeAdUnitId {
+    return "ca-app-pub-3940256099942544/2247696110"; // Test Native Ad ID
+  }
+
 }

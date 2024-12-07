@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/ads/native_ad_card.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -32,11 +33,13 @@ class ViewAllTripJoinCardBuilder extends StatefulWidget {
 class _ViewAllTripJoinCardBuilderState
     extends State<ViewAllTripJoinCardBuilder> {
   late final ViewAllTripJoinCubit viewAllTripJoinCubit;
+  final AdsManager _adsManager = AdsManager();
 
   @override
   void initState() {
     viewAllTripJoinCubit = context.read<ViewAllTripJoinCubit>();
     super.initState();
+    _adsManager.preloadAds();
   }
 
   @override
@@ -55,10 +58,14 @@ class _ViewAllTripJoinCardBuilderState
           );
         }
         return ListView.builder(
-          itemCount: viewAllTripJoinCubit.tripJoinCards.length + 1,
+          itemCount: viewAllTripJoinCubit.tripJoinCards.length +
+           1,
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) {
+            if (index > nativeAdStart && index % nativeAdEnd == nativeAdStart) {
+              return getAdIfNeeded(index, _adsManager);
+            }
             if (index < viewAllTripJoinCubit.tripJoinCards.length) {
               TripJoinCardEntity tripJoinCardEntity =
                   viewAllTripJoinCubit.tripJoinCards[index];
