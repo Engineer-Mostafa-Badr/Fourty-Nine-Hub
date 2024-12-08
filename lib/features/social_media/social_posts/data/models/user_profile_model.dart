@@ -50,7 +50,7 @@ class UserProfileModel extends UserProfileEntity {
       totalView: json['usersView'] ?? 0,
       posts: json['posts'] ?? 0,
       instagramPosts: json['instagramPosts'] ?? 0,
-      profilePicture: json['profilePictureKey']['mediaKey'] ??'',
+      profilePicture: json['profilePictureKey']?['mediaKey'] ??'',
       profileCover: json['coverPictureKey']?['mediaKey']??'',
       friendsCount: json['friendsCount'] ?? 0,
       followersCount: json['followersCount'] ?? 0,

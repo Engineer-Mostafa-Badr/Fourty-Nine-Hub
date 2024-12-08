@@ -421,12 +421,12 @@ class _FollowingSectionState extends State<FollowingSection> {
             //   ),
             // ),
             Image.network(
-              'https://next-images.123rf.com/index/_next/image/?url=https://assets-cdn.123rf.com/index/static/assets/top-section-bg.jpeg&w=3840&q=75',
+             reel.thumbnailSignedUrl,
               width: double.infinity,
               height: double.infinity,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) =>
-              const Center(child: CupertinoActivityIndicator()),
+              const SizedBox.shrink(),
             ),
             Padding(
               padding:  EdgeInsets.all(12.w),
@@ -646,12 +646,12 @@ class DiscoverSectionState extends State<DiscoverSection> {
             //   ),
             // ),
             Image.network(
-              'https://next-images.123rf.com/index/_next/image/?url=https://assets-cdn.123rf.com/index/static/assets/top-section-bg.jpeg&w=3840&q=75',
+              reel.thumbnailSignedUrl,
               width: double.infinity,
               height: double.infinity,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) =>
-              const Center(child: CupertinoActivityIndicator()),
+              const SizedBox.shrink(),
             ),
             Padding(
               padding:  EdgeInsets.all(12.w),
