@@ -40,6 +40,8 @@ class StreamState extends Equatable {
   final LiveEntity? live;
   final List<GiftData> selectedGifts;
   final String? errorMessage;
+  final bool? hideComments;
+  final int? count;
   final String topic;
   final String topicId;
   final String? goalDescription;
@@ -49,6 +51,8 @@ class StreamState extends Equatable {
     this.status = StreamsStates.initial,
     this.errorMessage,
     this.failure,
+    this.count=0,
+    this.hideComments=false,
     this.topic = '',
     this.topicId = '',
     this.scheduledMeeting,
@@ -66,6 +70,8 @@ class StreamState extends Equatable {
     String? topicId,
     List<ScheduledMeeting>? scheduledMeetings,
     String? goalDescription,
+    int? count,
+    bool? hideComments,
     Failure? failure,
     LiveEntity? live,
     LiveCreateResponseEntity? liveCreateResponseEntity,
@@ -75,8 +81,10 @@ class StreamState extends Equatable {
       StreamState(
         status: status,
         errorMessage: errorMessage ?? this.errorMessage,
+        hideComments: hideComments ?? this.hideComments,
         failure: failure ?? this.failure,
         topic: topic ?? this.topic,
+        count: count ?? this.count,
         topicId: topicId ?? this.topicId,
         scheduledMeeting: scheduledMeetings ?? scheduledMeeting,
         allLives: lives ?? allLives,
@@ -91,6 +99,8 @@ class StreamState extends Equatable {
   List<Object?> get props => [
         status,
         errorMessage,
+    hideComments,
+    count,
         liveCreateResponseEntity,
         failure,
         topic,

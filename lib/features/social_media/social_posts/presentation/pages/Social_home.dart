@@ -34,9 +34,19 @@ class SocialParams{
   SocialParams({required this.userId, this.hideAppBar=false, this.index=0});
 }
 class SocialHomeView extends StatefulWidget {
-  final SocialParams params;
+  SocialParams? params;
 
-  const SocialHomeView({super.key, required this.params});
+  SocialHomeView({super.key, payload}){
+   if(payload is SocialParams){
+     params = payload;
+   }else{
+     params = SocialParams(
+       userId: '',
+       index: payload['index'],
+       hideAppBar: false
+     );
+   }
+  }
 
   @override
   State<SocialHomeView> createState() => _SocialHomeViewState();
@@ -75,9 +85,9 @@ class _SocialHomeViewState extends State<SocialHomeView>
     super.build(context);
     return DefaultTabController(
       length: 3,
-      initialIndex: widget.params.index??0,
+      initialIndex: widget.params?.index??0,
       child: Scaffold(
-          appBar: widget.params.hideAppBar==true
+          appBar: widget.params?.hideAppBar==true
               ? null
               : HomeAppbar(
                   isWithBackArrow: true,
@@ -103,19 +113,19 @@ class _SocialHomeViewState extends State<SocialHomeView>
                     ],
                   ),
                 ),
-          drawer: widget.params.hideAppBar==true ? null : const DrawerWidget(),
+          drawer: widget.params?.hideAppBar==true ? null : const DrawerWidget(),
           bottomNavigationBar: BottomNavigator(
             scrollController: scrollController,
             isScrollingDown: _isScrollingDown,
             mainCategory: 2,
             index: 2,
           ),
-          floatingActionButton: _isScrollingDown || widget.params.hideAppBar==true
+          floatingActionButton: _isScrollingDown || widget.params?.hideAppBar==true
               ? null
               : const FloatingButton(
                   changeView: 2,
                 ),
-          floatingActionButtonLocation: _isScrollingDown || widget.params.hideAppBar==true
+          floatingActionButtonLocation: _isScrollingDown || widget.params?.hideAppBar==true
               ? null
               : FloatingActionButtonLocation.centerDocked,
           body: TabBarView(

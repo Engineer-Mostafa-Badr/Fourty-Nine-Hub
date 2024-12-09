@@ -369,10 +369,10 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
         const Sizer(
           width: 4,
         ),
-        if (post.user.isDocumented == true)
-          const Icon(
+        if (post.user?.isDocumented)
+          Icon(
             Icons.verified,
-            color: AppColors.PRIMARY_COLOR,
+            color: Theme.of(context).primaryColor,
           ),
         const Sizer(),
         Expanded(
@@ -500,14 +500,25 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Label(
-                        text: post.postShare == null
-                            ? "${post.user?.firstName??''} ${post.user?.lastName??''}"
-                            : "${post.postShare?.user?.firstName??''} ${post.postShare?.user?.lastName??''}",
-                        // text: post.isShared == true
-                        //     ? "${postMain.user!.firstName} ${postMain.user!.lastName}"
-                        //     : "${post.user!.firstName} ${post.user!.lastName}",
-                        style: Styles.mediumText(fontWeight: FontWeight.w500)),
+                    Row(
+                      children: [
+                        Label(
+                            text: post.postShare == null
+                                ? "${post.user?.firstName??''} ${post.user?.lastName??''}"
+                                : "${post.postShare?.user?.firstName??''} ${post.postShare?.user?.lastName??''}",
+
+                            // text: post.isShared == true
+                            //     ? "${postMain.user!.firstName} ${postMain.user!.lastName}"
+                            //     : "${post.user!.firstName} ${post.user!.lastName}",
+                            style: Styles.mediumText(fontWeight: FontWeight.w500)),
+                        if (post.user?.isDocumented == true && post.isShared == false ||
+                            (post.user?.isDocumented == true && post.isShared == true))
+                          Icon(
+                            Icons.verified,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                      ],
+                    ),
                     Label(
                         text:
                             '@${(post.postShare == null ? post.user?.email ?? '' : post.postShare?.user?.email??'')?.split('@')[0]}',
@@ -517,12 +528,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                 ),
               ),
               Label(text: date, maxLines: 1, style: Styles.mediumText()),
-              if (post.user?.isDocumented == true && post.isShared == false ||
-                  (post.user?.isDocumented == true && post.isShared == true))
-                Icon(
-                  Icons.verified,
-                  color: Theme.of(context).primaryColor,
-                ),
+
               // Sizer(),
             ],
           ),

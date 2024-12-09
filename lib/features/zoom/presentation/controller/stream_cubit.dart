@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/send_points_use_case.dart';
@@ -25,7 +26,7 @@ import '../../../social_media/live_streaming/domain/usecases/listen_batttle_requ
 import '../../../social_media/live_streaming/domain/usecases/listen_to_send_points_use_case.dart';
 import '../../../social_media/live_streaming/domain/usecases/request_battle_use_case.dart';
 import 'stream_state.dart';
-
+import 'package:fourtyninehub/features/zoom/domain/usecases/send_points_use_case.dart' as points;
 final class StreamCubit extends Cubit<StreamState> {
   StreamCubit(
     this.addRoomUseCase,
@@ -34,10 +35,13 @@ final class StreamCubit extends Cubit<StreamState> {
     this.getScheduledRoomsUseCase,
     this.getAllTopicsUseCase,
     this.createLiveUseCase,
+    this.sendLivePointsUseCase,
     this.getAllLivesUseCase,
     this.endLiveUseCase,
     this.sendPointsUseCase,
-    this.listenToSendPointsUseCase, this.listenBattleRequestUseCase, this.requestBattleUseCase,
+    this.listenToSendPointsUseCase,
+    this.listenBattleRequestUseCase,
+    this.requestBattleUseCase,
   ) : super(const StreamState()){
    initSocketListeners();
   }
@@ -52,6 +56,7 @@ final class StreamCubit extends Cubit<StreamState> {
   final GetAllLivesUseCase getAllLivesUseCase;
   final EndLiveUseCase endLiveUseCase;
   final SendPointsUseCase sendPointsUseCase;
+  final points.SendPointsUseCase sendLivePointsUseCase;
   final ListenToSendPointsUseCase listenToSendPointsUseCase;
   final ListenBattleRequestUseCase listenBattleRequestUseCase;
   final RequestBattleUseCase requestBattleUseCase;
@@ -66,7 +71,27 @@ final class StreamCubit extends Cubit<StreamState> {
     return liveId;
   }
 
-//callable class
+  toggleComments(){
+    bool hideComments = state.hideComments??false;
+    emit(state.copyWith(hideComments: !hideComments));
+    print(state.hideComments);
+    print(hideComments);
+  }
+
+  onDoublePress() async {
+    int count = state.count??0;
+    if(count>=49){
+      await onSendPoint();
+      emit(state.copyWith(count: 0));
+      print("Count = $count");
+    }else{
+      count = (state.count??0)+1;
+      emit(state.copyWith(count: count));
+      print("Count+ = $count");
+    }
+  }
+
+  //callable class
   Future<bool> createNewMeeting({
     DateTime? startTime,
     DateTime? endTime,
@@ -144,6 +169,19 @@ final class StreamCubit extends Cubit<StreamState> {
     });
   }
 
+  Future<void> onSendPoint() async {
+    emit(state.copyWith(status: StreamsStates.loading));
+    var result = await sendLivePointsUseCase(points.SendPointsParams(streamId: ZegoUIKit.instance.getRoom().id, memberId: UserCubit.to.state.data?.id??''
+    ));
+    result.fold((l) {
+      emit(state.copyWith(status: StreamsStates.failure, failure: l));
+    }, (r) {
+      emit(state.copyWith(
+        status: StreamsStates.success,
+      ));
+    });
+  }
+
   Future<void> getScheduledMeetings() async {
     emit(state.copyWith(status: StreamsStates.loading));
     var result = await getScheduledRoomsUseCase(MeetingParams(
@@ -198,4 +236,44 @@ final class StreamCubit extends Cubit<StreamState> {
   int pageSize = 10;
   int roomsLength = 0;
   List<LiveEntity> rooms = [];
+  bool isLoadingMore = false;
+  bool hasMoreData = true;
+  int currentPage = 1;
+
+  void loadRoomsData() async {
+    emit(state.copyWith(status: StreamsStates.loading));
+    rooms.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await getRooms();
+    emit(state.copyWith(status: StreamsStates.success));
+  }
+
+  getRooms() async {
+    if (!hasMoreData || isLoadingMore) return;
+
+    isLoadingMore = true;
+
+    final response = await getAllLivesUseCase(
+      PaginationParams(page: currentPage,limit: pageSize),
+    );
+
+    response.fold(
+          (failure) => emit(state.copyWith(status: StreamsStates.failure, failure: failure)),
+          (data) {
+        rooms.addAll(data);
+
+        if (data.length < pageSize) {
+          hasMoreData = false;
+        } else {
+          currentPage++;
+        }
+
+        isLoadingMore = false;
+        emit(state.copyWith(status: StreamsStates.success));
+
+      },
+    );
+  }
+
 }

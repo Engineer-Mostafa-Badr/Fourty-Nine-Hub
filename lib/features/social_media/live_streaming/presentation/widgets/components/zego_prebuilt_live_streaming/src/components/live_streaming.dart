@@ -4,7 +4,13 @@ import 'dart:core';
 import 'dart:io' show Platform;
 
 // Flutter imports:
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/animated_heart_wiidget.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 // Package imports:
 import 'package:permission_handler/permission_handler.dart';
@@ -294,7 +300,7 @@ class _ZegoUIKitPrebuiltLiveStreamingState extends State<ZegoLiveStreamingPage>
 
   @override
   Widget build(BuildContext context) {
-    return ZegoLiveStreamingManagers().hostManager!.isLocalHost
+    return ZegoLiveStreamingManagers().hostManager?.isLocalHost??false
         ? ValueListenableBuilder<ZegoUIKitUser?>(
             valueListenable: ZegoLiveStreamingManagers().hostManager!.notifier,
             builder: (context, host, _) {
@@ -459,9 +465,9 @@ class _ZegoUIKitPrebuiltLiveStreamingState extends State<ZegoLiveStreamingPage>
       );
     }
 
-    await ZegoLiveStreamingManagers().hostManager!.init();
-    await ZegoLiveStreamingManagers().liveStatusManager!.init();
-    await ZegoLiveStreamingManagers().liveDurationManager!.init();
+    await ZegoLiveStreamingManagers().hostManager?.init();
+    await ZegoLiveStreamingManagers().liveStatusManager?.init();
+    await ZegoLiveStreamingManagers().liveDurationManager?.init();
 
     readyNotifier.value = true;
 
@@ -646,22 +652,31 @@ class _ZegoUIKitPrebuiltLiveStreamingState extends State<ZegoLiveStreamingPage>
   }
 
   Widget livePage() {
-    return ZegoLiveStreamingLivePage(
-      appID: widget.appID,
-      appSign: widget.appSign,
-      userID: widget.userID,
-      userName: widget.userName,
-      liveID: widget.liveID,
-      config: widget.config,
-      events: events,
-      defaultEndAction: defaultEndAction,
-      defaultLeaveConfirmationAction: defaultLeaveConfirmationAction,
-      hostManager: ZegoLiveStreamingManagers().hostManager!,
-      liveStatusManager: ZegoLiveStreamingManagers().liveStatusManager!,
-      liveDurationManager: ZegoLiveStreamingManagers().liveDurationManager!,
-      popUpManager: popUpManager,
-      plugins: ZegoLiveStreamingManagers().plugins,
-      isLiveStream: widget.isLiveStream,
+    return DoubleTapHeart(
+      iconSize: 30,
+      animationDuration: const Duration(seconds: 1),
+      heartIcon: Icons.favorite,
+      iconColor: AppColors.SECONDARY_COLOR,
+      onDoubleTap: (){
+        context.read<StreamCubit>().onDoublePress();
+      },
+      child: ZegoLiveStreamingLivePage(
+        appID: widget.appID,
+        appSign: widget.appSign,
+        userID: widget.userID,
+        userName: widget.userName,
+        liveID: widget.liveID,
+        config: widget.config,
+        events: events,
+        defaultEndAction: defaultEndAction,
+        defaultLeaveConfirmationAction: defaultLeaveConfirmationAction,
+        hostManager: ZegoLiveStreamingManagers().hostManager!,
+        liveStatusManager: ZegoLiveStreamingManagers().liveStatusManager!,
+        liveDurationManager: ZegoLiveStreamingManagers().liveDurationManager!,
+        popUpManager: popUpManager,
+        plugins: ZegoLiveStreamingManagers().plugins,
+        isLiveStream: widget.isLiveStream,
+      ),
     );
   }
 

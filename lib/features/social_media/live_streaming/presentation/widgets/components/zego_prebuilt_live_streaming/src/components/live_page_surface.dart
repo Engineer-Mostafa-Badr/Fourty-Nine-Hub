@@ -8,10 +8,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/update_goals_sheet.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_state.dart';
 
@@ -32,12 +30,9 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/config.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.defines.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../../../res/style/styles.dart';
-import '../../../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 
 /// @nodoc
 class ZegoLiveStreamingLivePageSurface extends StatefulWidget {
@@ -103,6 +98,8 @@ class _ZegoLiveStreamingLivePageSurfaceState
 
     super.dispose();
   }
+
+  bool showComments = false;
 
   @override
   Widget build(BuildContext context) {
@@ -241,8 +238,16 @@ class _ZegoLiveStreamingLivePageSurfaceState
                     ],
                   ),
                 ),
-              bottomBar(),
-              if (!state.isOpenWhiteBoard) messageList(),
+              bottomBar(
+                  (){
+                    setState(() {
+                      showComments==true;
+                    });
+                    print(showComments);
+                  },
+                showComments
+              ),
+              if (!state.isOpenWhiteBoard&&state.hideComments==false) messageList(),
               foreground(
                 constraints.maxWidth,
                 constraints.maxHeight,
@@ -285,7 +290,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
     );
   }
 
-  Widget bottomBar() {
+  Widget bottomBar(Function showComments,bool isHide) {
     final isCoHostEnabled = (widget.plugins?.isEnabled ?? false) &&
         widget.config.bottomMenuBar.audienceButtons
             .contains(ZegoLiveStreamingMenuBarButtonName.coHostControlButton);
@@ -306,7 +311,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
         popUpManager: widget.popUpManager,
         isLiveStream: widget.isLiveStream,
         isCoHostEnabled: isCoHostEnabled,
-        translationText: widget.config.innerText,
+        translationText: widget.config.innerText, showComments: showComments, isHide: isHide,
       ),
     );
   }

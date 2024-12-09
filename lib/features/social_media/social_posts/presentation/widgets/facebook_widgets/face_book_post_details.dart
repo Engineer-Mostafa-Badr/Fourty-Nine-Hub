@@ -66,7 +66,7 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
     context.read<SocialPostsCubit>().loadPostDetails(context, widget.postId??'',comment: widget.comment);
     if(widget.isReply == true){
       print("adnaslkdasldma");
-      Future.delayed(const Duration(seconds: 1),()=>showReplies());
+      Future.delayed(const Duration(milliseconds: 500),()=>showReplies());
     }
     super.initState();
   }

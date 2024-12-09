@@ -909,10 +909,10 @@ class AppPages {
               path: Paths.SOCIAL,
               name: Routes.SOCIAL,
               builder: (context, state) {
-                final params = state.extra as SocialParams?;
+                final params = state.extra as dynamic;
 
                 return SocialHomeView(
-                  params: params ?? SocialParams(userId: '',index:0,hideAppBar:false),
+                  payload: params ?? SocialParams(userId: '',index:0,hideAppBar:false),
                 );
               },
               routes: [
@@ -944,7 +944,11 @@ class AppPages {
                 GoRoute(
                     path: Paths.TWITTERPOSTDETAILS,
                     name: Routes.TWITTERPOSTDETAILS,
-                    builder: (context, state) => TwitterPostDetailsNotify(payload: state.extra as dynamic),
+                    builder: (context, state) => BlocProvider<TwitterCubit>(
+                        create: (_) {
+                          return serviceLocator();
+                        },
+                        child: TwitterPostDetailsNotify(payload: state.extra as dynamic)),
                     ),
                 GoRoute(
                     path: Paths.OTHERSACCOUNT,

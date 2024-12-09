@@ -5,8 +5,10 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/video_stream_tab_bar.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -60,7 +62,9 @@ automaticallyImplyLeading: false,
         ),
         body: TabBarView(
           children: [
-            _videoStreamTabBar(context),
+            BlocProvider(
+                create: (context)=>serviceLocator<StreamCubit>(),
+                child: const VideoStreamTabBar()),
             const ClubHouseHome(),
           ],
         ),
@@ -85,7 +89,7 @@ automaticallyImplyLeading: false,
           shrinkWrap: true,
           pagingController: cubit.roomsPagingController,
           scrollDirection: Axis.vertical,
-          physics: const BouncingScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           builderDelegate: PagedChildBuilderDelegate<LiveEntity>(
               itemBuilder: (context, item, index) {
                 if (state.live == null && item != state.live) {

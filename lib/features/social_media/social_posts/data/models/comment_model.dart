@@ -30,7 +30,7 @@ class CommentModel extends CommentEntity {
       id: json['_id'],
       content: json['content'],
       reply: json['reply']??'',
-      post: json['post'],
+      post: json['post']!=null?json['post'] is String?json['post']:'':'',
       isLove: json['isLove'] ?? false,
       isLikes: json['isLikes'] ?? false,
       user: json['user'] is String
@@ -53,6 +53,7 @@ class CommentModel extends CommentEntity {
   }
 
   //toJson
+  @override
   Map<String, dynamic> toJson() {
     return {
       '_id': id,
