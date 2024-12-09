@@ -457,7 +457,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                             child: ConstrainedBox(
                               constraints: BoxConstraints(
                                 maxHeight: MediaQuery.of(context).size.height *
-                                    0.7, // Adjust height
+                                    0.95, // Adjust height
                               ),
                               child: BlocProvider(
                                 create: (context) =>

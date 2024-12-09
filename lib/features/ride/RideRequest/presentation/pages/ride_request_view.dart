@@ -3,20 +3,24 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateful/maps/map_picker.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/success_request_trip_model/success_request_trip_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_offer_model/trip_request_offer_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/address_search_params_entity.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/cancel_trip_client_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
@@ -943,327 +947,504 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
   @override
   Widget build(BuildContext context) {
     var raiseFareCubit = context.read<RaiseFareCubit>();
-    return Container(
-      width: double.infinity,
-      decoration: const BoxDecoration(
-        color: AppColors.LIGHT_GRAY_COLOR,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
+    return BlocListener<CancelTripClientCubit, RiderState>(
+      listener: (context, state) {
+        log(state.toString(), name: "lkdjslkdfjslkdjflskdjf");
+        if (state is SuccessCancelTripClientState) {
+          context.pop();
+        }
+        if (state is FailureRiderState) {
+          showErrorMessage(context, getFailureMessage(state.failure, context));
+        }
+      },
+      child: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          color: AppColors.LIGHT_GRAY_COLOR,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
         ),
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "${widget.model.closerDrivers?.length ?? 0} ${LocaleKeys.driversAreViewingYourRequest.tr()}",
-                  style: Styles.mediumText(
-                    color: Colors.black,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "${widget.model.closerDrivers?.length ?? 0} ${LocaleKeys.driversAreViewingYourRequest.tr()}",
+                    style: Styles.mediumText(
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                const Spacer(),
-                SizedBox(
-                  height: 30,
-                  width: 100,
-                  child: Expanded(
-                    child: Stack(
-                      children: [
-                        ...List.generate(
-                          widget.model.closerDrivers?.take(5).length ?? 0,
-                          (index) {
-                            // log(model.closerDrivers?.take(5).length.toString()??"99999",
-                            //     name: "lskdfjlskf");
-                            log((10 + (index + 10)).toString(),
-                                name: "lkdjflsdkjfldkjf");
-                            spase = spase + 10;
-                            return Positioned(
-                              right: spase.toDouble(),
-                              child: Container(
-                                width: 25,
-                                height: 25,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  // color: Colors.green,
-                                  image: DecorationImage(
-                                    image: NetworkImage(
-                                      widget.model.closerDrivers?[index]
-                                              .userData?.userPicture ??
-                                          "",
+                  const Spacer(),
+                  SizedBox(
+                    height: 30,
+                    width: 100,
+                    child: Expanded(
+                      child: Stack(
+                        children: [
+                          ...List.generate(
+                            widget.model.closerDrivers?.take(5).length ?? 0,
+                            (index) {
+                              // log(model.closerDrivers?.take(5).length.toString()??"99999",
+                              //     name: "lskdfjlskf");
+                              log((10 + (index + 10)).toString(),
+                                  name: "lkdjflsdkjfldkjf");
+                              spase = spase + 10;
+                              return Positioned(
+                                right: spase.toDouble(),
+                                child: Container(
+                                  width: 25,
+                                  height: 25,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    // color: Colors.green,
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                        widget.model.closerDrivers?[index]
+                                                .userData?.userPicture ??
+                                            "",
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          // Sizer(h),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                color: context.isDarkMode
-                    ? AppColors.QUANTITY_COLOR
-                    : Colors.white,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                ),
-              ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8, bottom: 20),
-                    child: Container(
-                      width: 36,
-                      height: 5,
-                      decoration: BoxDecoration(
-                          color: AppColors.LIGHT_GRAY_COLOR,
-                          borderRadius: BorderRadius.circular(8)),
-                    ),
-                  ),
-                  Text(
-                    LocaleKeys.waitingForReplies.localize,
-                    style: Styles.headerText(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: context.isDarkMode ? Colors.white : Colors.black,
-                    ),
-                  ),
-                  const Sizer(
-                    height: 36,
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: 5,
-                    child: const LinearProgressIndicator(
-                      backgroundColor: Colors.grey,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                          AppColors.PRIMARY_COLOR),
-                    ),
-                  ),
-                  const Sizer(
-                    height: 36,
-                  ),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          raiseFareCubit.decreasePrice(newPrice: 3);
-                          setState(() {});
-                        },
-                        child: Container(
-                          height: 60,
-                          width: MediaQuery.of(context).size.width * 0.25,
-                          decoration: BoxDecoration(
-                              color: raiseFareCubit.price != null
-                                  ? AppColors.PRIMARY_COLOR
-                                  : AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Center(
-                            child: Text(
-                              "-3",
-                              style: raiseFareCubit.price != null
-                                  ? Styles.mediumText(
-                                      color: Colors.white,
-                                      fontSize: 38,
-                                    )
-                                  : TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      foreground: Paint()
-                                        ..style = PaintingStyle.stroke
-                                        ..strokeWidth = 1.5
-                                        ..color = Colors.black,
-                                    ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const Spacer(),
-                      Column(
-                        children: [
-                          Text(
-                            LocaleKeys.yourOffer.tr(),
-                            style: Styles.mediumText(
-                                fontWeight: FontWeight.w600,
-                                color: context.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black),
-                          ),
-                          const Sizer(
-                            height: 5,
-                          ),
-                          BlocBuilder<GetCurrencyCubit, GetCurrencyState>(
-                            builder: (context, state) {
-                              return Text(
-                                "${context.isArabic ? BlocProvider.of<GetCurrencyCubit>(context).currnecyAr : BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}${(widget.model.trip?.price?.toInt() ?? 0) + (raiseFareCubit.currentPrice?.toInt() ?? 0)}",
-                                style: Styles.headerText(
-                                    fontSize: 56,
-                                    color: context.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black),
                               );
                             },
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          raiseFareCubit.increasePrice(newPrice: 3);
-                          setState(() {});
-                        },
-                        child: Container(
-                          height: 60,
-                          width: MediaQuery.of(context).size.width * 0.25,
-                          decoration: BoxDecoration(
-                              color: AppColors.PRIMARY_COLOR,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Center(
-                            child: Text(
-                              "+3",
-                              style: Styles.mediumText(
-                                  color: Colors.white, fontSize: 38),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  const Sizer(),
-                  const Sizer(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    width: double.infinity,
-                    height: 46,
-                    decoration: BoxDecoration(
-                        color: const Color.fromRGBO(226, 244, 255, 1),
-                        borderRadius: BorderRadius.circular(13)),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.info_outline,
-                          color: const Color(0xFF0E4669),
-                        ),
-                        const Sizer(),
-                        Flexible(
-                          child: Text(
-                            "${LocaleKeys.travelTime.tr()}: ~${formatDuration(widget.model.trip?.duration ?? 0)} , ${LocaleKeys.Distance.tr()}: ${formatDistance(widget.model.trip?.distance ?? 0)}",
-                            style: Styles.mediumText(
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black),
-                          ),
-                        ),
-                        const Sizer(),
-                      ],
-                    ),
-                  ),
-                  const Sizer(
-                    height: 36,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      raiseFareCubit.update(
-                          tripId: widget.model.trip?.id ?? "",
-                          tripPrice: widget.model.trip?.price ?? 0);
-                      setState(() {});
-                    },
-                    child: Container(
-                      height: 60,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: raiseFareCubit.price != null
-                              ? AppColors.PRIMARY_COLOR
-                              : AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
-                          child: raiseFareCubit.price != null
-                              ? Text(
-                                  LocaleKeys.raiseFare.tr(),
-                                  style: Styles.mediumText(
-                                    color: Colors.white,
-                                    fontSize: 38,
-                                  ),
-                                )
-                              : Stack(
-                                  children: [
-                                    // Black stroke
-                                    Text(
-                                      LocaleKeys.raiseFare.localize,
-                                      style: TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w500,
-                                        foreground: Paint()
-                                          ..style = PaintingStyle.stroke
-                                          ..strokeWidth = 2.9
-                                          ..color =
-                                              Colors.black, // Stroke color
-                                      ),
-                                    ),
-                                    // White fill
-                                    Text(
-                                      LocaleKeys.raiseFare.localize,
-                                      style: const TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white, // Fill color
-                                      ),
-                                    ),
-                                  ],
-                                )),
-                    ),
-                  ),
-                  const Sizer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            LocaleKeys.Payment.tr(),
-                            style: Styles.mediumText(
-                                color: const Color(0xFFA1A4AF)),
-                          ),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.credit_card,
-                                color: Colors.black,
-                              ),
-                              BlocBuilder<GetCurrencyCubit, GetCurrencyState>(
-                                builder: (context, state) {
-                                  return Text(
-                                    "${context.isArabic ? BlocProvider.of<GetCurrencyCubit>(context).currnecyAr : BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}${(widget.model.trip?.price ?? 0) + (raiseFareCubit.currentPrice ?? 0)} ${widget.model.trip?.paymentMethod}",
-                                    style: Styles.mediumText(
-                                        color: context.isDarkMode
-                                            ? Colors.white
-                                            : Colors.black),
-                                  );
-                                },
-                              ),
-                            ],
                           )
                         ],
                       ),
-                    ],
+                    ),
                   )
                 ],
               ),
             ),
-          )
-        ],
+            // Sizer(h),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color: context.isDarkMode
+                      ? AppColors.QUANTITY_COLOR
+                      : Colors.white,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8, bottom: 20),
+                      child: Container(
+                        width: 36,
+                        height: 5,
+                        decoration: BoxDecoration(
+                            color: AppColors.LIGHT_GRAY_COLOR,
+                            borderRadius: BorderRadius.circular(8)),
+                      ),
+                    ),
+                    Text(
+                      LocaleKeys.waitingForReplies.localize,
+                      style: Styles.headerText(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        color: context.isDarkMode ? Colors.white : Colors.black,
+                      ),
+                    ),
+                    const Sizer(
+                      height: 36,
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 5,
+                      child: const LinearProgressIndicator(
+                        backgroundColor: Colors.grey,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            AppColors.PRIMARY_COLOR),
+                      ),
+                    ),
+                    const Sizer(
+                      height: 36,
+                    ),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            raiseFareCubit.decreasePrice(newPrice: 3);
+                            setState(() {});
+                          },
+                          child: Container(
+                            height: 60,
+                            width: MediaQuery.of(context).size.width * 0.25,
+                            decoration: BoxDecoration(
+                                color: raiseFareCubit.price != null
+                                    ? AppColors.PRIMARY_COLOR
+                                    : AppColors.LIGHT_GRAY_COLOR
+                                        .withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Center(
+                              child: Text(
+                                "-3",
+                                style: raiseFareCubit.price != null
+                                    ? Styles.mediumText(
+                                        color: Colors.white,
+                                        fontSize: 38,
+                                      )
+                                    : TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        foreground: Paint()
+                                          ..style = PaintingStyle.stroke
+                                          ..strokeWidth = 1.5
+                                          ..color = Colors.black,
+                                      ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Column(
+                          children: [
+                            Text(
+                              LocaleKeys.yourOffer.tr(),
+                              style: Styles.mediumText(
+                                  fontWeight: FontWeight.w600,
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black),
+                            ),
+                            const Sizer(
+                              height: 5,
+                            ),
+                            BlocBuilder<GetCurrencyCubit, GetCurrencyState>(
+                              builder: (context, state) {
+                                return Text(
+                                  "${context.isArabic ? BlocProvider.of<GetCurrencyCubit>(context).currnecyAr : BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}${(widget.model.trip?.price?.toInt() ?? 0) + (raiseFareCubit.currentPrice?.toInt() ?? 0)}",
+                                  style: Styles.headerText(
+                                      fontSize: 56,
+                                      color: context.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            raiseFareCubit.increasePrice(newPrice: 3);
+                            setState(() {});
+                          },
+                          child: Container(
+                            height: 60,
+                            width: MediaQuery.of(context).size.width * 0.25,
+                            decoration: BoxDecoration(
+                                color: AppColors.PRIMARY_COLOR,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Center(
+                              child: Text(
+                                "+3",
+                                style: Styles.mediumText(
+                                    color: Colors.white, fontSize: 38),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    const Sizer(),
+                    const Sizer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      width: double.infinity,
+                      height: 46,
+                      decoration: BoxDecoration(
+                          color: const Color.fromRGBO(226, 244, 255, 1),
+                          borderRadius: BorderRadius.circular(13)),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.info_outline,
+                            color: const Color(0xFF0E4669),
+                          ),
+                          const Sizer(),
+                          Flexible(
+                            child: Text(
+                              "${LocaleKeys.travelTime.tr()}: ~${formatDuration(widget.model.trip?.duration ?? 0)} , ${LocaleKeys.Distance.tr()}: ${formatDistance(widget.model.trip?.distance ?? 0)}",
+                              style: Styles.mediumText(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black),
+                            ),
+                          ),
+                          const Sizer(),
+                        ],
+                      ),
+                    ),
+                    const Sizer(
+                      height: 36,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        raiseFareCubit.update(
+                            tripId: widget.model.trip?.id ?? "",
+                            tripPrice: widget.model.trip?.price ?? 0);
+                        setState(() {});
+                      },
+                      child: Container(
+                        height: 60,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: raiseFareCubit.price != null
+                                ? AppColors.PRIMARY_COLOR
+                                : AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                            child: raiseFareCubit.price != null
+                                ? Text(
+                                    LocaleKeys.raiseFare.tr(),
+                                    style: Styles.mediumText(
+                                      color: Colors.white,
+                                      fontSize: 38,
+                                    ),
+                                  )
+                                : Stack(
+                                    children: [
+                                      // Black stroke
+                                      Text(
+                                        LocaleKeys.raiseFare.localize,
+                                        style: TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w500,
+                                          foreground: Paint()
+                                            ..style = PaintingStyle.stroke
+                                            ..strokeWidth = 2.9
+                                            ..color =
+                                                Colors.black, // Stroke color
+                                        ),
+                                      ),
+                                      // White fill
+                                      Text(
+                                        LocaleKeys.raiseFare.localize,
+                                        style: const TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white, // Fill color
+                                        ),
+                                      ),
+                                    ],
+                                  )),
+                      ),
+                    ),
+                    const Sizer(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              LocaleKeys.Payment.tr(),
+                              style: Styles.mediumText(
+                                color: Colors.black,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.credit_card,
+                                  color: Colors.black,
+                                ),
+                                Sizer(),
+                                BlocBuilder<GetCurrencyCubit, GetCurrencyState>(
+                                  builder: (context, state) {
+                                    return Text(
+                                      "${context.isArabic ? BlocProvider.of<GetCurrencyCubit>(context).currnecyAr : BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}${(widget.model.trip?.price?.toInt() ?? 0) + (raiseFareCubit.currentPrice?.toInt() ?? 0)} ${widget.model.trip?.paymentMethod}",
+                                      style: Styles.mediumText(
+                                          color: context.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Sizer(
+                      height: 24.h,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 15,
+                          height: 15,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border:
+                                  Border.all(color: Colors.green, width: 3.5)),
+                        ),
+                        const Sizer(),
+                        Flexible(
+                            child: Text(
+                          widget.model.trip?.fromTitle.toString() ?? "",
+                        ))
+                      ],
+                    ),
+                    const Sizer(),
+                    Row(
+                      children: [
+                        Container(
+                          width: 15,
+                          height: 15,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border:
+                                  Border.all(color: Colors.blue, width: 3.5)),
+                        ),
+                        const Sizer(),
+                        Flexible(
+                            child: Text(
+                          widget.model.trip?.toTitle.toString() ?? "",
+                        ))
+                      ],
+                    ),
+                    const Sizer(),
+                    Spacer(),
+                    GestureDetector(
+                      onTap: () async {
+                        print(widget.model.trip?.id);
+
+                        showModalBottomSheet(
+                          backgroundColor: Colors.white,
+                          context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(16.0),
+                            ),
+                          ),
+                          builder: (BuildContext context) {
+                            return Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      context.isArabic
+                                          ? "هل تريد إلغاء الطلب ؟"
+                                          : "Do you want to cancel the request?",
+                                      textAlign: TextAlign.center,
+                                      style: Styles.headerText(
+                                          fontSize: 50,
+                                          textAlign: TextAlign.center,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(height: 16.0),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        const Sizer(),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Container(
+                                            height: 60,
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                                color: AppColors
+                                                    .PRIMARY_COLOR_DARK,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: Center(
+                                                child: Text(
+                                              context.isArabic
+                                                  ? "استمر في البحث"
+                                                  : "Keep searching",
+                                              style: Styles.mediumText(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 38,
+                                              ),
+                                            )),
+                                          ),
+                                        ),
+                                        const Sizer(
+                                          height: 24,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            await context
+                                                .read<CancelTripClientCubit>()
+                                                .cancelTripClient(
+                                                  id: widget.model.trip?.id ??
+                                                      "",
+                                                );
+                                            Navigator.pop(context);
+                                          },
+                                          child: Container(
+                                            height: 60,
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                                color: AppColors
+                                                    .LIGHT_GRAY_COLOR
+                                                    .withOpacity(0.4),
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: Center(
+                                                child: Text(
+                                              LocaleKeys.cancelRequest.tr(),
+                                              style: Styles.mediumText(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 38,
+                                              ),
+                                            )),
+                                          ),
+                                        ),
+                                        const Sizer(),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        height: 60,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: AppColors.LIGHT_GRAY_COLOR.withOpacity(0.4),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                            child: Text(
+                          LocaleKeys.cancelRequest.tr(),
+                          style: Styles.mediumText(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 38,
+                          ),
+                        )),
+                      ),
+                    ),
+                    Spacer(),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -341,7 +341,7 @@ class ReiderRequestRepository {
   }
 
   Future<Either<Failure, Map<String, dynamic>>> cancelTripClient(
-      {required String id, required String reasonId, required String note}) {
+      {required String id, String? reasonId, String? note}) {
     return dataSource.cancelTripClient(id: id, note: note, reasonId: reasonId);
   }
 
