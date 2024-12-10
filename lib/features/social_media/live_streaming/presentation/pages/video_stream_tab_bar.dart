@@ -29,7 +29,10 @@ class _VideoStreamTabBarState extends State<VideoStreamTabBar> {
 
   void _onPageScroll() {
     final cubit = context.read<StreamCubit>();
-    if (_pageController.page! >= (cubit.rooms.length - 1).toDouble() &&
+
+    // Trigger pagination when reaching the last loaded page
+    if (_pageController.position.pixels >=
+        _pageController.position.maxScrollExtent - 100 &&
         !cubit.isLoadingMore &&
         cubit.hasMoreData) {
       cubit.getRooms();
@@ -38,29 +41,28 @@ class _VideoStreamTabBarState extends State<VideoStreamTabBar> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async => context.read<StreamCubit>().loadRoomsData(),
-      child: Scaffold(
-        body: BlocBuilder<StreamCubit, StreamState>(
-          builder: (context, state) {
-            final cubit = context.read<StreamCubit>();
-            if (cubit.state.isLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
+    return Scaffold(
+      body: BlocBuilder<StreamCubit, StreamState>(
+        builder: (context, state) {
+          final cubit = context.read<StreamCubit>();
+          if (cubit.state.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-            return PageView.builder(
-              controller: _pageController,
-              itemCount: cubit.rooms.length + (cubit.hasMoreData ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index < cubit.rooms.length) {
-                  return LiveCard(live: cubit.rooms[index]);
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            );
-          },
-        ),
+          return PageView.builder(
+            controller: _pageController,
+            // scrollDirection: Axis.vertical, // Vertical scrolling
+            itemCount: cubit.rooms.length + (cubit.hasMoreData ? 1 : 0),
+            itemBuilder: (context, index) {
+              if (index < cubit.rooms.length) {
+                return LiveCard(live: cubit.rooms[index]);
+              } else {
+                // Show loading indicator on the last extra page
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          );
+        },
       ),
     );
   }

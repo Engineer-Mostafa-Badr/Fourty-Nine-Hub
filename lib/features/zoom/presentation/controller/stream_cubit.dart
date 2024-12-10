@@ -63,6 +63,7 @@ final class StreamCubit extends Cubit<StreamState> {
   String meetingId = '';
   List<TopicEntity> topics = [];
   String liveId = '';
+  String streamId = '';
 
   String get genRandNo {
     int min = 10000000;
@@ -171,7 +172,7 @@ final class StreamCubit extends Cubit<StreamState> {
 
   Future<void> onSendPoint() async {
     emit(state.copyWith(status: StreamsStates.loading));
-    var result = await sendLivePointsUseCase(points.SendPointsParams(streamId: ZegoUIKit.instance.getRoom().id, memberId: UserCubit.to.state.data?.id??''
+    var result = await sendLivePointsUseCase(points.SendPointsParams(streamId: rooms.isNotEmpty?rooms[0].id:ZegoUIKit.instance.getRoom().id, memberId: UserCubit.to.state.data?.id??''
     ));
     result.fold((l) {
       emit(state.copyWith(status: StreamsStates.failure, failure: l));
