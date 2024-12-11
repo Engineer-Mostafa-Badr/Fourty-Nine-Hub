@@ -221,36 +221,36 @@ class _CreateTripFormState extends State<CreateTripForm> {
                           children: [
                             Flexible(
                               child: DefaultTextFormField(
-                                  margin: EdgeInsets.zero,
-                                  validator: (value) {
-                                    return shippingcubit.validation(
-                                        message: LocaleKeys
-                                            .youHaveToFillYourTime
-                                            .tr(),
-                                        condition: time == null);
-                                  },
-                                  onTap: () async {
-                                    if (context.isUserLoggedIn) {
-                                      TimeOfDay? pickedTime =
-                                          await showTimePicker(
-                                              context: context,
-                                              initialTime: TimeOfDay.now());
-                                      if (pickedTime != null) {
-                                        time = pickedTime;
-                                      }
-                                    } else {
-                                      context.push(Routes.LOGIN);
+                                margin: EdgeInsets.zero,
+                                validator: (value) {
+                                  return shippingcubit.validation(
+                                      message:
+                                          LocaleKeys.youHaveToFillYourTime.tr(),
+                                      condition: time == null);
+                                },
+                                onTap: () async {
+                                  if (context.isUserLoggedIn) {
+                                    TimeOfDay? pickedTime =
+                                        await showTimePicker(
+                                            context: context,
+                                            initialTime: TimeOfDay.now());
+                                    if (pickedTime != null) {
+                                      time = pickedTime;
                                     }
+                                  } else {
+                                    context.push(Routes.LOGIN);
+                                  }
 
-                                    setState(() {});
-                                  },
-                                  readOnly: true,
-                                  currentController: TextEditingController(),
-                                  currentFocusNode: FocusNode(),
-                                  // hint: "نقطة الاستلام",
-                                  hint: time != null
-                                      ? "${time!.hour}:${time!.minute}"
-                                      : LocaleKeys.pickupTime.tr()),
+                                  setState(() {});
+                                },
+                                readOnly: true,
+                                currentController: TextEditingController(),
+                                currentFocusNode: FocusNode(),
+                                // hint: "نقطة الاستلام",
+                                hint: time != null
+                                    ? "${time!.hour.toString().padLeft(2, '0')}:${time!.minute.toString().padLeft(2, '0')}"
+                                    : LocaleKeys.pickupTime.tr(),
+                              ),
                             ),
                             const SizedBox(
                               width: 5,

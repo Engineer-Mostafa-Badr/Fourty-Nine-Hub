@@ -23,6 +23,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripC
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/accept_offer_by_driver_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_accept_by_driver_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_accept_by_rider_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_payment_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_all_trip_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_reasons_cubit.dart';
@@ -230,6 +231,9 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           create: (context) =>
               CancelTripClientCubit(repository: serviceLocator()),
+        ),
+        BlocProvider(
+          create: (context) => CheckPaymentCubit(repository: serviceLocator()),
         ),
         BlocProvider(
           create: (context) =>

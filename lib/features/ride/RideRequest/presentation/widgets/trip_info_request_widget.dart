@@ -185,11 +185,6 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
                                                   GetTripInfoCubit(
                                                       repository:
                                                           serviceLocator())),
-                                          BlocProvider(
-                                              create: (context) =>
-                                                  CheckPaymentCubit(
-                                                      repository:
-                                                          serviceLocator())),
                                         ],
                                         child: BlocProvider(
                                           create: (context) => GetCurrencyCubit(
