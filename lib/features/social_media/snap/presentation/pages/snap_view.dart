@@ -5,15 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/snap/presentation/widget/filter.dart';
 import 'package:fourtyninehub/features/social_media/snap/presentation/widget/media_preview_screen.dart';
 import 'package:fourtyninehub/features/social_media/snap/utils/filters.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:async';
@@ -450,6 +451,29 @@ class _AdvancedSnapchatCameraScreenState
                         ),
                       ),
                     ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        child: Center(
+                          child: IconButton(
+                            color: Colors.white,
+                            icon: Stack(
+                              children: [
+                                Icon(
+                                  size: 60.sp,
+                                  Icons.emoji_emotions_outlined,
+                                ),
+                              ],
+                            ),
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                             // Navigator.push(context, MaterialPageRoute(builder: (context)=>FaceDetectionCamera()));
+                            }, // Pick an image from gallery
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Sizer(),
                   ],
                 ),
               ),
@@ -534,34 +558,3 @@ class _AdvancedSnapchatCameraScreenState
     );
   }
 }
-
-Future<void> saveMedia(
-    {required BuildContext context, filePath, mediaType}) async {
-  if (filePath.isEmpty) return;
-
-  if (mediaType == MediaType.image) {
-    await GallerySaver.saveImage(filePath);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Image saved to gallery!')),
-    );
-  } else if (mediaType == MediaType.video) {
-    if (filePath.endsWith('.mp4') ||
-        filePath.endsWith('.avi') ||
-        filePath.endsWith('.mov')) {
-      GallerySaver.saveVideo(filePath).then((bool? success) {
-        log(filePath.toString());
-        if (success!) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Video saved to gallery!')),
-          );
-        }
-        log('Video saved: $success');
-      });
-    } else {
-      log(filePath.toString());
-      log('Error: The file is not a video.');
-    }
-  }
-}
-
-

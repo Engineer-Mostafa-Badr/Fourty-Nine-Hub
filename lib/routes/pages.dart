@@ -1084,10 +1084,10 @@ class AppPages {
           GoRoute(
               path: Paths.SNAP,
               name: Routes.SNAP,
-              builder: (context, state) => const SnapView()),
+              builder: (context, state) =>  SnapView()),
           // Spotlight
           GoRoute(
-              path: Paths.SPOTLIGHT,
+                   path: Paths.SPOTLIGHT,
               name: Routes.SPOTLIGHT,
               builder: (context, state) => MultiBlocProvider(
                     providers: [

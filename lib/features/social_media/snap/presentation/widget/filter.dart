@@ -1,0 +1,454 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
+import 'package:deepar_flutter/deepar_flutter.dart';
+import 'package:flutter/rendering.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/snap/data/model/filter_data.dart';
+import 'package:fourtyninehub/features/social_media/snap/presentation/widget/media_preview_screen.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late DeepArController deepArController;
+  final GlobalKey _key = GlobalKey(); // GlobalKey to capture widget
+  File? _selectedImage;
+
+  int selectedFilterIndex = 0; // Tracks which filter is applied
+  late PageController _pageController; // PageController for filters
+  bool isSelected = false;
+  late CameraController _cameraController;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize PageController
+    _pageController = PageController(
+      viewportFraction: 0.3,
+      initialPage: selectedFilterIndex,
+    );
+
+    // Initialize DeepArController
+    deepArController = DeepArController();
+    initializeController();
+  }
+
+  @override
+  void dispose() {
+    // Dispose of controllers
+    _pageController.dispose();
+    _cameraController.dispose();
+    deepArController = DeepArController();
+   // deepArController.stopVideoRecording(); // Ensure proper cleanup
+    super.dispose();
+  }
+
+  Future<void> initializeController() async {
+    await deepArController.initialize(
+      androidLicenseKey: '930f25b8068f75e888da6f36ca5e7743d7922d9e9b33f36390e980176eaf4e84a2a048142d9b1310',
+      iosLicenseKey: '111a528fa021dbf6a64decfb751ca354e59793f11926845436472e094038cd491de29c031f9ead7f',
+    );
+  }
+
+
+  Future<void> _captureAndSaveImage() async {
+    try {
+      // Find the RenderRepaintBoundary using the GlobalKey
+      RenderRepaintBoundary? boundary = _key.currentContext!.findRenderObject() as RenderRepaintBoundary?;
+
+      if (boundary != null) {
+        // Capture the image from the RenderRepaintBoundary
+        ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+        ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+
+        if (byteData != null) {
+          Uint8List pngBytes = byteData.buffer.asUint8List();
+
+          // Get the directory to save the image
+          final directory = await getApplicationDocumentsDirectory();
+          String path = '${directory.path}/captured_image_${DateTime.now().millisecondsSinceEpoch}.png';
+
+          // Write the image to a file
+          File imgFile = File(path);
+          File savedImage = await imgFile.writeAsBytes(pngBytes);
+
+
+
+          if (savedImage.existsSync()) {
+            setState(() {
+              _selectedImage = savedImage;
+              print('Image captured and saved at ${_selectedImage!.path}');
+            });
+          } else {
+            print('Error: Saved image does not exist');
+          }
+        } else {
+          print('Error: ByteData is null');
+        }
+      } else {
+        print('Error: RenderRepaintBoundary is null');
+      }
+    } catch (e) {
+      print('Error capturing and saving image: $e');
+    }
+  }
+
+  Widget buildCameraPreview() => RepaintBoundary(
+    key: _key,
+    child: SizedBox(
+      height: MediaQuery.of(context).size.height * 0.78,
+      child: Transform.scale(
+        scale: 1.6,
+        child: DeepArPreview(deepArController),
+      ),
+    ),
+  );
+
+  Widget buildFilters() => Expanded(
+    child: GestureDetector(
+      onTap: () async {
+        await _captureAndSaveImage().then((value) {
+          setState(() {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MediaPreview(
+                  mediaPath: _selectedImage!.path,
+                  mediaType: MediaType.image,
+                ),
+              ),
+            );
+          });
+        });
+      },
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Center(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 5.w),
+              height: MediaQuery.of(context).size.height *
+                  0.13, // Responsive circle height
+              width: MediaQuery.of(context).size.height *
+                  0.13, // Responsive circle width
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border:
+                Border.all(color: Colors.white, width: 8.w),
+              ),
+            ),
+          ),
+          PageView.builder(
+            controller: _pageController,
+            itemCount: filters.length,
+            onPageChanged: (index) {
+                setState(() {
+                  selectedFilterIndex = index;
+                });
+
+                // Automatically apply the filter when scrolled
+                final filter = filters[index];
+                final effectFile = File('assets/filters/${filter.filterPath}').path;
+                deepArController.switchEffect(effectFile);
+            },
+            itemBuilder: (context, index) {
+              final filter = filters[index];
+              return Padding(
+                padding:  EdgeInsets.all(40.w),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  width: selectedFilterIndex == index ? 90.w : 70.w,
+                  height: selectedFilterIndex == index ? 90.h : 70.h,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    // border: Border.all(
+                    //   color:  Colors.transparent,
+                    //   width: 2,
+                    // ),
+                    image: DecorationImage(
+                      image: AssetImage('assets/previews/${filter.imagePath}'),
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    ),
+  );
+
+  Widget buildButtons() => Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      IconButton(
+        onPressed: deepArController.flipCamera,
+        icon: const Icon(
+          Icons.flip_camera_ios_outlined,
+          size: 34,
+          color: Colors.white,
+        ),
+      ),
+      FilledButton(
+        onPressed: () async {
+          await _captureAndSaveImage().then((value) {
+            setState(() {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MediaPreview(
+                    mediaPath: _selectedImage!.path,
+                    mediaType: MediaType.image,
+                  ),
+                ),
+              );
+            });
+          });
+        },
+        child: const Icon(Icons.camera),
+      ),
+      IconButton(
+        onPressed: deepArController.toggleFlash,
+        icon: const Icon(
+          Icons.flash_on,
+          size: 34,
+          color: Colors.white,
+        ),
+      ),
+    ],
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: FutureBuilder(
+        future: initializeController(),
+        builder: (context, snapshot) {
+          return Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  buildCameraPreview(),
+                  //buildButtons(),
+                  buildFilters(),
+                 // Sizer(height: 100.h,),
+                ],
+              ),
+              _buildTopIcons(),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildTopIcons() {
+    return Positioned(
+      top: 40,
+      left: 8,
+      right: 8,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  if(context.isUserLoggedIn){
+
+                    context.push(Routes.OTHERSACCOUNT,
+                        extra: serviceLocator<UserCubit>().state.data!.id);
+                  }else{
+                    context.go(Routes.LOGIN);
+                  }
+                },
+                child: CircleAvatar(
+                  radius: 47.w,
+                  backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
+                  child: ImageFromInternet(
+                    image: serviceLocator<UserCubit>().state.data!.profilePicture ??
+                        UIConst.profilePlaceHolder,
+                    height: 90.h,
+                    width: 90.w,
+                    isCircle: true,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(width: 10.w,),
+          IconButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (_) =>
+                    const SearchAppUsers());
+              },
+              icon:  Icon(
+                FontAwesomeIcons.magnifyingGlass,
+                size: 50.sp,
+              )),
+          const Spacer(),
+          Column(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.loop, color: Colors.white, size: 30),
+                onPressed: deepArController.flipCamera,
+              ),
+              IconButton(
+                icon: Icon(
+                  size: 50.sp,
+                  deepArController.toggleFlash() ==false
+                      ? FontAwesomeIcons.bolt
+                      : FontAwesomeIcons.bolt,
+                  color: deepArController.toggleFlash() ==false
+                      ? Colors.grey
+                      : Colors.yellow,
+                ),
+                onPressed: deepArController.toggleFlash,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+
+// import 'dart:io';
+//
+// import 'package:deepar_flutter/deepar_flutter.dart';
+// import 'package:flutter/material.dart';
+// import 'package:fourtyninehub/features/social_media/snap/data/model/filter_data.dart';
+//
+// class HomePage extends StatefulWidget {
+//   const HomePage({super.key});
+//
+//   @override
+//   State<HomePage> createState() => _HomePageState();
+// }
+//
+// class _HomePageState extends State<HomePage> {
+//   final deepArController = DeepArController();
+//
+//   Future<void> initializeController() async {
+//     await deepArController.initialize(
+//       androidLicenseKey: '930f25b8068f75e888da6f36ca5e7743d7922d9e9b33f36390e980176eaf4e84a2a048142d9b1310',
+//       iosLicenseKey: '111a528fa021dbf6a64decfb751ca354e59793f11926845436472e094038cd491de29c031f9ead7f',
+//       //resolution: ,
+//     );
+//   }
+//
+//   Widget buildButtons() => Row(
+//     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//     crossAxisAlignment: CrossAxisAlignment.start,
+//     children: [
+//       IconButton(
+//         onPressed: deepArController.flipCamera,
+//         icon: const Icon(
+//           Icons.flip_camera_ios_outlined,
+//           size: 34,
+//           color: Colors.white,
+//         ),
+//       ),
+//       FilledButton(
+//         onPressed: deepArController.takeScreenshot,
+//         child: const Icon(Icons.camera),
+//       ),
+//       IconButton(
+//         onPressed: deepArController.toggleFlash,
+//         icon: const Icon(
+//           Icons.flash_on,
+//           size: 34,
+//           color: Colors.white,
+//         ),
+//       ),
+//     ],
+//   );
+//
+//   Widget buildCameraPreview() => SizedBox(
+//     height: MediaQuery.of(context).size.height * 0.82,
+//     child: Transform.scale(
+//       scale: 1.5,
+//       child: DeepArPreview(deepArController),
+//     ),
+//   );
+//
+//   Widget buildFilters() => SizedBox(
+//     height: MediaQuery.of(context).size.height * 0.1,
+//     child: ListView.builder(
+//         shrinkWrap: true,
+//         scrollDirection: Axis.horizontal,
+//         itemCount: filters.length,
+//         itemBuilder: (context, index) {
+//           final filter = filters[index];
+//           final effectFile =
+//               File('assets/filters/${filter.filterPath}').path;
+//           return InkWell(
+//             onTap: () => deepArController.switchEffect(effectFile),
+//             child: Padding(
+//               padding: const EdgeInsets.all(8.0),
+//               child: Container(
+//                 width: 40,
+//                 decoration: BoxDecoration(
+//                   shape: BoxShape.circle,
+//                   color: Colors.white,
+//                   image: DecorationImage(
+//                     image:
+//                     AssetImage('assets/previews/${filter.imagePath}'),
+//                     fit: BoxFit.contain,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           );
+//         }),
+//   );
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: FutureBuilder(
+//         future: initializeController(),
+//         builder: (context, snapshot) {
+//           if (snapshot.connectionState == ConnectionState.done) {
+//             return Column(
+//               mainAxisAlignment: MainAxisAlignment.start,
+//               children: [
+//                 buildCameraPreview(),
+//                 buildButtons(),
+//                 buildFilters(),
+//               ],
+//             );
+//           } else {
+//             return const Center(
+//               child: CircularProgressIndicator(),
+//             );
+//           }
+//         },
+//       ),
+//     );
+//   }
+// }
