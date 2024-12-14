@@ -57,7 +57,7 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
       builder: (context, state) {
         return ListView.builder(
           controller: scrollController,
-          itemCount: viewAllPickMeCubit.cards.length + 2,
+          itemCount: viewAllPickMeCubit.cards.length ,
           itemBuilder: (context, index) {
             if (index > nativeAdStart && index % adFrequency == adFrequency - 1) {
               return getAdIfNeeded(index, _adsManager);

@@ -3,26 +3,9 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 // Assuming you have a class like this
 // Define constants for ad frequency and card intervals
-const int adFrequency = 5; // Show ad after every 3rd item (i.e., after 2 cards)
+const int adFrequency = 3; // Show ad after every 3rd item (i.e., after 2 cards)
 const int nativeAdStart = 0; // Start inserting ads from the beginning
 const int nativeAdEnd = 5; // Adjust this if needed, for now it's unused
-/*
-Widget getAdIfNeeded1(int index, AdsManager adsManager) {
-  // Show ad after every 2 cards (i.e., index 2, 5, 8, ...)
-  if (index % adFrequency == adFrequency - 1) {  // Every adFrequency-th index (e.g., 2, 5, 8, ...)
-    return adsManager.getAdWidget(index ~/ adFrequency);  // Provide unique ad per 3 cards
-  }
-  return  Text("No Ads now");  // No ad for other indices
-}
-
-
-Widget getAdIfNeededwork(int index, AdsManager adsManager) {
-  if (index % adFrequency == adFrequency - 1) {
-    return adsManager.getAdWidget(index ~/ adFrequency); // Provide unique ad per frequency
-  }
-  return Text("No Ads now"); // Placeholder text
-}
-*/
 class AdsManager {
   static final AdsManager _instance = AdsManager._internal();
   factory AdsManager() => _instance;
@@ -93,6 +76,23 @@ class AdsManager {
     nativeAds.clear();
   }
 }
+/*
+Widget getAdIfNeeded1(int index, AdsManager adsManager) {
+  // Show ad after every 2 cards (i.e., index 2, 5, 8, ...)
+  if (index % adFrequency == adFrequency - 1) {  // Every adFrequency-th index (e.g., 2, 5, 8, ...)
+    return adsManager.getAdWidget(index ~/ adFrequency);  // Provide unique ad per 3 cards
+  }
+  return  Text("No Ads now");  // No ad for other indices
+}
+
+
+Widget getAdIfNeededwork(int index, AdsManager adsManager) {
+  if (index % adFrequency == adFrequency - 1) {
+    return adsManager.getAdWidget(index ~/ adFrequency); // Provide unique ad per frequency
+  }
+  return Text("No Ads now"); // Placeholder text
+}
+*/
 
 Widget getAdIfNeeded(int index, AdsManager adsManager) {
   // Check if an ad is already placed in the widget tree
@@ -275,6 +275,7 @@ class _AdsManagerWidgetState extends State<AdsManagerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print("Hi");
     return ListView.builder(
       itemCount: 1, // For example, show 20 items
       itemBuilder: (context, index) {

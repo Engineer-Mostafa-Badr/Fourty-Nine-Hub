@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/ads/native_ad_card.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -28,6 +29,14 @@ class _UserAdsState extends State<UserAds> {
   //
   //   // super.initState();
   // }
+  final AdsManager _adsManager = AdsManager();
+  @override
+  void initState() {
+
+    _adsManager.preloadAds();
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -50,21 +59,64 @@ class _UserAdsState extends State<UserAds> {
             );
           },
           itemBuilder: (context, item, index) {
-            return CategoriesExtension.fromNameEn(
-                    widget.params.mainCategory.nameEn ?? '')
-                .view(
-              item: item,
-              onFav: (String id) async {
-                var result =
-                    await context.read<AdvertisementCubit>().favouriteAd(id);
-                return result;
-              },
-              onRemoveFav: (String id) async {
-                var result =
-                    await context.read<AdvertisementCubit>().unFavouriteAd(id);
-                return result;
-              },
+            print("item ${index}");
+
+            // Calculate the actual item index in the data list
+            // int actualItemIndex = index - ((index - nativeAdStart) ~/ adFrequency);
+            //
+            // // Insert ads at the specified frequency
+            // if (index > nativeAdStart && index % adFrequency == adFrequency - 1) {
+            //   return getAdIfNeeded(index, _adsManager);
+            // }
+            //
+            // // Retrieve the item using the corrected index
+            // final correctedItem =
+            // context.read<AdvertisementCubit>().adsPagingController.itemList?[
+            // actualItemIndex];
+            //
+            // // Render the item widget
+            // return CategoriesExtension.fromNameEn(
+            //     widget.params.mainCategory.nameEn ?? '')
+            //     .view(
+            //   item: correctedItem ?? item,
+            //   onFav: (String id) async {
+            //     var result =
+            //     await context.read<AdvertisementCubit>().favouriteAd(id);
+            //     return result;
+            //   },
+            //   onRemoveFav: (String id) async {
+            //     var result =
+            //     await context.read<AdvertisementCubit>().unFavouriteAd(id);
+            //     return result;
+            //   },
+            // );
+            // if (index > nativeAdStart && index % adFrequency == adFrequency - 1) {
+            //   return  SizedBox(height: 50,child: getAdIfNeeded(index, _adsManager),);
+            // }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+            if (index > nativeAdStart && index % adFrequency == adFrequency - 1)
+              SizedBox(height: 50,child: getAdIfNeeded(index, _adsManager),),
+
+                CategoriesExtension.fromNameEn(
+                        widget.params.mainCategory.nameEn ?? '')
+                    .view(
+                  item: item,
+                  onFav: (String id) async {
+                    var result =
+                        await context.read<AdvertisementCubit>().favouriteAd(id);
+                    return result;
+                  },
+                  onRemoveFav: (String id) async {
+                    var result =
+                        await context.read<AdvertisementCubit>().unFavouriteAd(id);
+                    return result;
+                  },
+                ),
+              ],
             );
+
           },
           noMoreItemsIndicatorBuilder: (context) => Container(),
           firstPageProgressIndicatorBuilder: (context) => Container(

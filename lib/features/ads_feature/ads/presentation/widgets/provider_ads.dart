@@ -67,13 +67,17 @@ class _ProviderAdsState extends State<ProviderAds> {
           },
           itemBuilder: (context, item, index) {
     // if (index > 0 && index % 3 == 0) {
-
+/*
+   if (index > nativeAdStart && index % adFrequency == adFrequency - 1) {
+              return getAdIfNeeded(index, _adsManager);
+            }
+ */
             if (index > 0 && index % 2 == 0) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.3, // Reduced height
+                    height: MediaQuery.of(context).size.height * 0.5, // Reduced height
                     child: AdsManagerWidget(),
                   ),
                   _buildAdContent(item), // Your content for the ad
