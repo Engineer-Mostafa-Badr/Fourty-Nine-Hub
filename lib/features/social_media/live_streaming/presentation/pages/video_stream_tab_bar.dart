@@ -52,6 +52,7 @@ class _VideoStreamTabBarState extends State<VideoStreamTabBar> {
           return PageView.builder(
             controller: _pageController,
             // scrollDirection: Axis.vertical, // Vertical scrolling
+            onPageChanged: (i){},
             itemCount: cubit.rooms.length + (cubit.hasMoreData ? 1 : 0),
             itemBuilder: (context, index) {
               if (index < cubit.rooms.length) {

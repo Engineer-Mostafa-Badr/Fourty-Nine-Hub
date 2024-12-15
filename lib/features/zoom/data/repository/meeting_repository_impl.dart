@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/zoom/data/data_source/meeting_data_source
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
 
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
+import 'package:fourtyninehub/features/zoom/domain/usecases/send_gift_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/send_points_use_case.dart';
 
 import '../../domain/repositories/meeting_repository.dart';
@@ -37,5 +38,10 @@ class MeetingRepositoryImpl extends MeetingRepository {
   @override
   Future<Either<Failure, bool>> sendPoints(SendPointsParams params) {
     return meetingDataSource.sendPoints(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> sendGift(SendLiveGiftParams params) {
+    return meetingDataSource.sendGift(params);
   }
 }

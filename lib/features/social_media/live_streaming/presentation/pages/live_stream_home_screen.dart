@@ -18,7 +18,6 @@ class LiveStreamHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 30,
@@ -28,17 +27,17 @@ class LiveStreamHomeScreen extends StatelessWidget {
             child: Stack(
               children: [
                 TabBar(
-                  isScrollable: false,
-                  indicatorColor:
-                      context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-                  labelColor:
-                      context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-
-                  tabs: [
-                    Tab(text: LocaleKeys.live.localize),
-                    Tab(text: LocaleKeys.clubVoice.localize),
-                  ],
-                ),
+                    isScrollable: false,
+                    indicatorColor: context.isDarkMode
+                        ? Colors.white
+                        : AppColors.PRIMARY_COLOR,
+                    labelColor: context.isDarkMode
+                        ? Colors.white
+                        : AppColors.PRIMARY_COLOR,
+                    tabs: [
+                      Tab(text: LocaleKeys.live.localize),
+                      Tab(text: LocaleKeys.clubVoice.localize)
+                    ]),
                 Positioned.directional(
                   top: 0,
                   textDirection: context.textDirection,
@@ -55,7 +54,7 @@ class LiveStreamHomeScreen extends StatelessWidget {
         body: TabBarView(
           children: [
             BlocProvider(
-                create: (context)=>serviceLocator<StreamCubit>(),
+                create: (context) => serviceLocator<StreamCubit>(),
                 child: const VideoStreamTabBar()),
             const ClubHouseHome(),
           ],

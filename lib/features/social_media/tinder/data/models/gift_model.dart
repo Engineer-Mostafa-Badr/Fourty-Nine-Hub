@@ -53,13 +53,17 @@ class GiftData {
   String? picture;
   int? currentValue;
   int? maximumGoal;
+  bool? showEdit;
+  String? editValue;
 
   GiftData({
     this.sId,
     this.nameAr,
     this.nameEn,
-    this.value,
+    this.value = 1,
     this.picture,
+    this.editValue='',
+    this.showEdit=false,
     this.currentValue = 1,
     this.maximumGoal = 100,
   });
@@ -70,6 +74,8 @@ class GiftData {
     nameEn = json['nameEn'];
     value = json['value'];
     picture = json['picture'];
+    showEdit = false;
+    editValue = '';
   }
 
   Map<String, dynamic> toJson() {
@@ -88,6 +94,8 @@ class GiftData {
     String? nameEn,
     int? value,
     String? picture,
+    bool? showEdit,
+    String? editValue,
     int? currentValue,
     int? maximumGoal,
   }) {
@@ -96,7 +104,9 @@ class GiftData {
       nameAr: nameAr ?? this.nameAr,
       nameEn: nameEn ?? this.nameEn,
       value: value ?? this.value,
+      showEdit: showEdit ?? this.showEdit,
       picture: picture ?? this.picture,
+      editValue: editValue ?? this.editValue,
       currentValue: currentValue ?? this.currentValue,
       maximumGoal: maximumGoal ?? this.maximumGoal,
     );

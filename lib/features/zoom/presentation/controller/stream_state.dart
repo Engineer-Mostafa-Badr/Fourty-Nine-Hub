@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity/goal_entity.dart';
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
 
 import '../../../social_media/live_streaming/domain/entity/live_create_response_entity.dart';
@@ -42,21 +43,25 @@ class StreamState extends Equatable {
   final String? errorMessage;
   final bool? hideComments;
   final int? count;
+  final int? pageIndex;
   final String topic;
   final String topicId;
   final String? goalDescription;
   final Failure? failure;
+  final List<GoalEntity> goals;
   final LiveCreateResponseEntity? liveCreateResponseEntity;
   const StreamState({
     this.status = StreamsStates.initial,
     this.errorMessage,
     this.failure,
     this.count=0,
+    this.pageIndex=0,
     this.hideComments=false,
     this.topic = '',
     this.topicId = '',
     this.scheduledMeeting,
     this.live,
+    this.goals = const [],
     this.liveCreateResponseEntity,
     this.selectedGifts = const [],
     this.allLives = const [],
@@ -68,9 +73,11 @@ class StreamState extends Equatable {
     String? errorMessage,
     String? topic,
     String? topicId,
+    List<GoalEntity>? goals,
     List<ScheduledMeeting>? scheduledMeetings,
     String? goalDescription,
     int? count,
+    int? pageIndex,
     bool? hideComments,
     Failure? failure,
     LiveEntity? live,
@@ -81,11 +88,13 @@ class StreamState extends Equatable {
       StreamState(
         status: status,
         errorMessage: errorMessage ?? this.errorMessage,
+        goals: goals ?? this.goals,
         hideComments: hideComments ?? this.hideComments,
         failure: failure ?? this.failure,
         topic: topic ?? this.topic,
         count: count ?? this.count,
         topicId: topicId ?? this.topicId,
+        pageIndex: pageIndex ?? this.pageIndex,
         scheduledMeeting: scheduledMeetings ?? scheduledMeeting,
         allLives: lives ?? allLives,
         live: live ?? this.live,

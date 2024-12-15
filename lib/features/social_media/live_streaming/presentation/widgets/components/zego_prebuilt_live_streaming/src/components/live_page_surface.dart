@@ -2,14 +2,23 @@
 import 'dart:core';
 
 // Flutter imports:
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/components/update_goals_sheet.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_cubit.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
+import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_state.dart';
 
@@ -30,6 +39,8 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/config.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/events.defines.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../../../res/style/styles.dart';
@@ -121,7 +132,9 @@ class _ZegoLiveStreamingLivePageSurfaceState
                 Positioned.directional(
                   textDirection: context.textDirection,
                   end: 20,
-                  start: context.screenWidth / 4,
+                  start: widget.config.role != ZegoLiveStreamingRole.host
+                      ? null
+                      : context.screenWidth / 4,
                   top: 180.h,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -130,7 +143,8 @@ class _ZegoLiveStreamingLivePageSurfaceState
                         state.selectedGifts.isEmpty
                             ? GestureDetector(
                                 onTap: () {
-                                  showUpdateGoalsSheet(context);
+                                  showUpdateGoalsSheet(context,
+                                      onEdit: (String id) {});
                                   // var cubit = context.read<StreamCubit>();
                                   // CliLogger.info(cubit.state.live.toString());
                                   // context.read<StreamCubit>().sendPoints(
@@ -175,7 +189,17 @@ class _ZegoLiveStreamingLivePageSurfaceState
                               )
                             : GestureDetector(
                                 onTap: () {
-                                 showUpdateGoalsSheet(context);
+                                  showUpdateGoalsSheet(context, onEdit: (id) {
+                                    state.selectedGifts
+                                        .firstWhere(
+                                            (element) => element.sId == id)
+                                        .showEdit = true;
+                                    print(state.selectedGifts
+                                        .firstWhere(
+                                            (element) => element.sId == id)
+                                        .showEdit);
+                                    setState(() {});
+                                  });
 
                                   // onTap: () {
                                   //   context.read<StreamCubit>().requestBattle(
@@ -234,20 +258,56 @@ class _ZegoLiveStreamingLivePageSurfaceState
                         participants()
                       ],
                       if (widget.config.role != ZegoLiveStreamingRole.host)
-                        participants(),
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: (){
+                                showUserGiftBottomSheet(context,
+                                    receiverId:
+                                    context.read<UserCubit>().state.data!.id,
+                                    forSelect: true, selectGift: (gift) {
+                                      // context.read<StreamCubit>().selectGift(gift);
+                                    });
+                              },
+                              child: SvgPicture.asset(
+                                'context.read<StreamCubit>().state.goals.first',
+                                width: 70.w,
+                              ),
+                            ),
+                            Sizer(
+                              width: 50.w,
+                            ),
+                            GestureDetector(
+                              onTap: (){
+                                showUserGiftBottomSheet(context,
+                                    receiverId:
+                                    context.read<UserCubit>().state.data!.id,
+                                    forSelect: true, selectGift: (gift) {
+                                      context.read<StreamCubit>().onSendGift(gift.sId??'');
+                                    });
+                              },
+                              child: Image.asset(
+                                'assets/49-New-icons/goal.png',
+                                width: 70.w,
+                              ),
+                            ),
+                            Sizer(
+                              width: 50.w,
+                            ),
+                            participants(),
+                          ],
+                        ),
                     ],
                   ),
                 ),
-              bottomBar(
-                  (){
-                    setState(() {
-                      showComments==true;
-                    });
-                    print(showComments);
-                  },
-                showComments
-              ),
-              if (!state.isOpenWhiteBoard&&state.hideComments==false) messageList(),
+              bottomBar(() {
+                setState(() {
+                  showComments == true;
+                });
+                print(showComments);
+              }, showComments),
+              if (!state.isOpenWhiteBoard && state.hideComments == false)
+                messageList(),
               foreground(
                 constraints.maxWidth,
                 constraints.maxHeight,
@@ -256,6 +316,124 @@ class _ZegoLiveStreamingLivePageSurfaceState
           );
         });
       },
+    );
+  }
+
+  Future<void> showUserGiftBottomSheet(BuildContext context,
+      {required String? receiverId,
+        bool forSelect = false,
+        void Function(GiftData)? selectGift}) async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: serviceLocator<GiftsCubit>()),
+          BlocProvider.value(value: serviceLocator<TinderViewCubit>()),
+          // BlocProvider.value(value: serviceLocator<StreamCubit>()),
+        ],
+        child: DraggableScrollableSheet(
+          initialChildSize: 0.6,
+          minChildSize: 0.4,
+          maxChildSize: 0.9,
+          expand: false,
+          builder: (BuildContext context, ScrollController scrollController) {
+            List<GiftData> goals = [];
+            for(var item in context.read<GiftsCubit>().state.gifts){
+              if(context.read<StreamCubit>().rooms[context.read<StreamCubit>().state.pageIndex??0].gift.any((element) => element.giftId==item.sId)){
+                goals.add(item);
+              }
+            }
+            return Container(
+              decoration: BoxDecoration(
+                color: context.isDarkMode
+                    ? Colors.black.withOpacity(0.8)
+                    : Colors.white.withOpacity(0.9),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: kToolbarHeight * 0.80,
+                    decoration: BoxDecoration(
+                      color: context.isDarkMode
+                          ? Colors.black.withOpacity(0.4)
+                          : Colors.grey.withOpacity(0.9),
+                      borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(20)),
+                    ),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                       LocaleKeys.gift_body_send_a_gift.tr(),
+                        textScaler: const TextScaler.linear(1.0),
+                        style: TextStyle(
+                            color: context.isDarkMode
+                                ? AppColors.ACCENT_COLOR
+                                : AppColors.PRIMARY_COLOR,
+                            fontSize: 40.sp,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        BottomSheetContent(
+                          receiverId: receiverId,
+                          forSelect: forSelect,
+                          selectGift: selectGift,
+                          goals: goals,
+                        ),
+                        Positioned(
+                          bottom: 5,
+                          right: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: OutlinedButton(
+                              style: ButtonStyle(
+                                side: const MaterialStatePropertyAll(BorderSide(
+                                    width: 1, color: AppColors.ACCENT_COLOR)),
+                                iconColor:
+                                const MaterialStatePropertyAll(Colors.white),
+                                backgroundColor: context.isDarkMode
+                                    ? const MaterialStatePropertyAll(Colors.black)
+                                    : MaterialStatePropertyAll(
+                                    Colors.grey.withOpacity(0.9)),
+                              ),
+                              onPressed: () {
+                                serviceLocator<SubscriptionController>()
+                                    .showActiveSubscriptionAmounts(
+                                    walletType: WalletTypes.balance);
+                              },
+                              child: Text(
+                                "${LocaleKeys.gift_body_recharge.tr()} 💳",
+                                textScaler: const TextScaler.linear(1.0),
+                                style: TextStyle(
+                                    fontSize: 25.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: context.isDarkMode
+                                        ? AppColors.YELLOW_COLOR
+                                        : Colors.black),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 
@@ -290,7 +468,7 @@ class _ZegoLiveStreamingLivePageSurfaceState
     );
   }
 
-  Widget bottomBar(Function showComments,bool isHide) {
+  Widget bottomBar(Function showComments, bool isHide) {
     final isCoHostEnabled = (widget.plugins?.isEnabled ?? false) &&
         widget.config.bottomMenuBar.audienceButtons
             .contains(ZegoLiveStreamingMenuBarButtonName.coHostControlButton);
@@ -311,7 +489,9 @@ class _ZegoLiveStreamingLivePageSurfaceState
         popUpManager: widget.popUpManager,
         isLiveStream: widget.isLiveStream,
         isCoHostEnabled: isCoHostEnabled,
-        translationText: widget.config.innerText, showComments: showComments, isHide: isHide,
+        translationText: widget.config.innerText,
+        showComments: showComments,
+        isHide: isHide,
       ),
     );
   }

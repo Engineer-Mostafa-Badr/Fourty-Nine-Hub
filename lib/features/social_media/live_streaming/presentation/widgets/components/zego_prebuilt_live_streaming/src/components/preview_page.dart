@@ -682,10 +682,25 @@ class _ZegoLiveStreamingPreviewPageState
             );
             return;
           }
-          if (title != null && title.isNotEmpty) {
-            widget.startedNotifier.value = true;
-          } else {
-            showErrorMessage(context, 'Please enter simple title');
+          if (title != null &&title.isNotEmpty&&context.read<StreamCubit>().state.selectedGifts.isNotEmpty&&context.read<StreamCubit>().state.topic.isNotEmpty) {
+            var result = await context.read<StreamCubit>().createLive(
+              title: title,
+              roomId: widget.liveID,
+              context: context,
+            );
+            if (result == true && context.mounted) {
+              widget.startedNotifier.value = true;
+            }
+          }else{
+            if(title == null && (title?.isEmpty??false)){
+              showErrorMessage(context, 'Please enter simple title');
+
+            }else if(context.read<StreamCubit>().state.selectedGifts.isEmpty){
+              showErrorMessage(context, 'Please select gifts');
+            }else if(context.read<StreamCubit>().state.topic.isEmpty){
+              showErrorMessage(context, 'Please select topic');
+            }
+
           }
           // context.read<StreamCubit>().createLive(title: title)
         },

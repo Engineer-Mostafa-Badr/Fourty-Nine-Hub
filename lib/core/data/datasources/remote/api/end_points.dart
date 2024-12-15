@@ -184,6 +184,7 @@ class EndPoints {
   static const getWallet = '/main-wallet/user-wallet';
   static const transferMoney = '/main-wallet/send-money';
   static const sendPoints = '/stream/fan/send-points';
+  static sendLiveGift(String id) => '/stream/fan/send-gift/$id';
   static const fetchUsers = '/users/all-usernames';
   static const getPrice = '/advertisementCompany/price';
   static const getSubscription = '/subscription';
@@ -928,6 +929,7 @@ class EndPoints {
   //lives
   static String allLiveTopics = '/stream-topic';
   static String createLive = '/stream';
+  static String editGoal(String id) => '/stream/goal/$id';
 
   static String endStream(String id) => '/stream/$id';
   static String allLives = '/stream/explore';
