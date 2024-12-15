@@ -28,7 +28,7 @@ class CartItemCard extends StatelessWidget {
             height: kToolbarHeight,
             width: kToolbarHeight,
             radius: 10,
-            source: NetworkImage(meal.meal.picture?.mediaKey ?? "")),
+            source: NetworkImage(meal.meal.picture ?? "")),
         const Sizer(),
         Expanded(
           child: Column(

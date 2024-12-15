@@ -1,10 +1,11 @@
+import 'package:fourtyninehub/core/utils/time_utils.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/location_model.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/audio_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
-import '../../../../../core/utils/duration_helper.dart';
 import '../../../../../res/assets/assets.dart';
 
 class PostEntity {
@@ -15,54 +16,59 @@ class PostEntity {
   final String type;
   final List<String>? images;
   final List<TwitterUserModel>? users;
+  final List<TwitterUserModel>? likedUsers;
+  final List<TwitterUserModel>? sadUsers;
+  final List<TwitterUserModel>? wowUsers;
+  final List<TwitterUserModel>? hahaUsers;
+  final List<TwitterUserModel>? angryUsers;
+  final List<TwitterUserModel>? loveUsers;
+  List<AudioEntity>? audio;
   final bool isShared;
-  bool? isDocumentation;
-  bool? isLove;
-  bool? isLikes;
-  bool? isWow;
-  bool? isSad;
-  bool? isAngry;
-  bool? isHaha;
+  bool isDocumentation;
+  bool isLove;
+  bool isLikes;
+  bool isWow;
+  bool isSad;
+  bool isAngry;
+  bool isHaha;
   final dynamic user;
   FeelingEntity? feeling;
   ActivityEntity? activity;
   final int privacy;
   final int commentPrivacy;
-  num? commentsCount;
+  num commentsCount;
   final num sharesCount;
-  num? likesCount;
-  num? loveCount;
-  num? hahaCount;
-  num? wowCount;
-  num? sadCount;
-  num? angryCount;
-  num? totalCount;
+  num likesCount;
+  num loveCount;
+  num hahaCount;
+  num wowCount;
+  num sadCount;
+  num angryCount;
+  num totalCount;
   String? backgroundColor;
   String? name;
   String? videoMedia;
   String? audioMedia;
 
-  //==>twitter
+  // Twitter-specific
   List<String>? shares;
-  List<TwitterUserModel>? love;
   MainPostEntity? mainPost;
   List<dynamic>? comments;
   InstagramPostEntity? firstComment;
-  bool? isReact;
+  bool isReact;
 
-  //==>Advertisement
+  // Advertisement-specific
   String? advertisementType;
   String? post;
   String? description;
-  // num? totalPrice;
-  bool? isApproved;
+  bool isApproved;
 
   DateTime? createdAt;
-  String? createAt;
-  Duration get publishedDuration => DateTime.now().difference(createdAt!);
+  DateTime? createAt;
 
-  String get sinceTime =>
-      DurationHelper().getTimeDifference( createdAt!);
+  Duration get publishedDuration => TimeUtils.calculateDuration(createdAt);
+
+  String get sinceTime => TimeUtils.getSinceTime(createdAt);
 
   PostEntity({
     required this.id,
@@ -93,12 +99,10 @@ class PostEntity {
     this.hahaCount = 0,
     this.totalCount = 0,
     this.createdAt,
-    this.createAt,
     this.feeling,
     this.activity,
     this.backgroundColor,
     this.shares,
-    this.love,
     this.mainPost,
     this.comments,
     this.isReact = false,
@@ -108,61 +112,70 @@ class PostEntity {
     this.name,
     this.videoMedia,
     this.audioMedia,
+    this.createAt,
     this.isApproved = false,
     required this.photo,
+    required this.angryUsers,
+    required this.hahaUsers,
+    required this.likedUsers,
+    required this.loveUsers,
+    required this.sadUsers,
+    required this.wowUsers,
+    required this.audio,
   });
 }
 
-enum Reactions { like, haha, love, wow, sad, angry }
 
-extension ReactionX on Reactions {
+enum Reaction { like, haha, love, wow, sad, angry }
+
+extension ReactionX on Reaction {
   String value() {
     switch (this) {
-      case Reactions.like:
+      case Reaction.like:
         return 'like';
-      case Reactions.haha:
+      case Reaction.haha:
         return 'haha';
-      case Reactions.love:
+      case Reaction.love:
         return 'love';
-      case Reactions.wow:
+      case Reaction.wow:
         return 'wow';
-      case Reactions.sad:
+      case Reaction.sad:
         return 'sad';
-      case Reactions.angry:
+      case Reaction.angry:
         return 'angry';
     }
   }
 
   String label() {
     switch (this) {
-      case Reactions.like:
+      case Reaction.like:
         return 'Like';
-      case Reactions.haha:
+      case Reaction.haha:
         return 'Haha';
-      case Reactions.love:
+      case Reaction.love:
         return 'Love';
-      case Reactions.wow:
+      case Reaction.wow:
         return 'Wow';
-      case Reactions.sad:
+      case Reaction.sad:
         return 'Sad';
-      case Reactions.angry:
+      case Reaction.angry:
         return 'Angry';
     }
   }
 
   String image() {
     switch (this) {
-      case Reactions.like:
+      case Reaction.like:
         return Assets.like;
-      case Reactions.haha:
+      case Reaction.haha:
         return Assets.hand;
-      case Reactions.love:
+      case Reaction.love:
         return Assets.heart;
-      case Reactions.wow:
+      case Reaction.wow:
         return Assets.wow;
-      case Reactions.sad:
+      case Reaction.sad:
         return Assets.sad;
-      case Reactions.angry:
+      case Reaction.angry:
         return Assets.angry;
     }
   }

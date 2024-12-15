@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_address.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_day_entity.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_meeting_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
@@ -28,11 +29,17 @@ class DoctorEntity {
   final String _waitingTime;
   final bool isActive;
   final bool isPremium;
+  final DoctorMeetingEntity? meetingData;
   final String description;
   final String classification;
+  final String timeToStart;
   final num rating;
+  final String currencyEn;
+  final String currencyAr;
   final String createdAt;
   final String updatedAt;
+  final bool isAfterEnd;
+  bool? isBetweenStartAndEnd;
   final List<AppointmentEntity> appointments;
   final List<DoctorDayEntity> clinicDays;
   final List<DoctorDayEntity> callDays;
@@ -44,6 +51,8 @@ class DoctorEntity {
     required this.firstName,
     required this.subCategory,
     required this.image,
+    required this.isAfterEnd,
+    this.isBetweenStartAndEnd,
     required this.phone,
     required this.email,
     required this.address,
@@ -56,7 +65,9 @@ class DoctorEntity {
     required this.detectionPeriodvisitHome,
     required this.callsPrice,
     required this.visitHomePrice,
+    required this.meetingData,
     required String waitingTime,
+    required this. timeToStart,
     required this.isActive,
     required this.isPremium,
     required this.description,
@@ -67,6 +78,8 @@ class DoctorEntity {
     required this.appointments,
     required this.clinicDays,
     required this.callDays,
+    required this.currencyEn,
+    required this.currencyAr,
     required this.homeVisitDays,
   }) : _waitingTime = waitingTime;
 

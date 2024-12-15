@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usec
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_Id_usecase.dart';
 import 'package:fourtyninehub/features/azkaar/domain/use_case/fetch_azkar_use_case.dart';
 import 'package:fourtyninehub/features/azkaar/domain/use_case/fetch_details_azkar_use_case.dart';
+import 'package:fourtyninehub/features/health_feature/emergency/domain/usecases/get_emergency_requests_use_case.dart';
 import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
@@ -182,6 +183,8 @@ class EndPoints {
 
   static const getWallet = '/main-wallet/user-wallet';
   static const transferMoney = '/main-wallet/send-money';
+  static const sendPoints = '/stream/fan/send-points';
+  static sendLiveGift(String id) => '/stream/fan/send-gift/$id';
   static const fetchUsers = '/users/all-usernames';
   static const getPrice = '/advertisementCompany/price';
   static const getSubscription = '/subscription';
@@ -267,6 +270,10 @@ class EndPoints {
   static const createDoctor = '/health/doctor';
   static String doctorSearch = '/health/doctor-search${loggedUserId.isNotEmpty?"?userId=$loggedUserId":""}';
   static const bookEmergency = '/health/book-emergency';
+  static cancelAppointment(String id) => '/health/book-appointment-cancel/$id';
+  static doctorCancelAppointment(String id) => '/health/book-appointment-doctor-cancel/$id';
+  static emergencyRequests(GetEmergencyRequestsParams params) => '/health/show-emergency?limit=${params.limit}&page=${params.page}&subCategory=${params.subCategoryId}';
+  static allAppointments(PaginationParams params) => '/health/doctor/all-doctor-requests?limit=${params.limit}&page=${params.page}';
 
   static String bookRegularAppointment(String appointmentId) =>
       '/health/book-appointment/$appointmentId';
@@ -339,7 +346,9 @@ class EndPoints {
 
   static const isDoctorApproval = '/health/check-doctor-approval';
   static const getDoctorProfile = '/health/doctor-profile';
+  static const getDoctorWorkDays = '/health/doctor-work-days';
   static const updateDoctorProfilePhoto = '/health/doctor/picture';
+  static const updateDoctorTimeTable = '/health/doctor/add-appointments';
   static const updateDoctorPractcing =
       '/health/doctor-upload-license-practicing';
   static const updateDoctorID = '/health/doctor-upload-license-id';
@@ -476,7 +485,7 @@ class EndPoints {
   }
 
   static String favouriteAd(String id) {
-    return '/ads-favourites/adToFavourites/$id';
+    return '/ads-favorites/adToFavorites/$id';
   }
 
   static String removeFavouriteAd(String id) {
@@ -558,6 +567,15 @@ class EndPoints {
   static String getSavedReels(TwitterFeedParams params) {
     return '/reels/saved?limit=${params.limit}&page=${params.page}&subCategory=${Constants.reelsSubCategory}';
   }
+
+  static String followers(TwitterFeedParams params) {
+    return '/follow/followers?search=${params.search}&limit=${params.limit}&page=${params.page}';
+  }
+
+  static String following(TwitterFeedParams params) {
+    return '/follow/allFollowing?search=${params.search}&limit=${params.limit}&page=${params.page}';
+  }
+
 
   static String createReel(CreateReelParams params) {
     return '/reels/views/${params.reelId}';
@@ -783,7 +801,7 @@ class EndPoints {
   static const myAds = '/ads/allMyAds?limit=100';
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const makePremiumRequest = '/ads-requests/makeAdRequest-Premium';
-  static const favouriteAds = '/ads-favourites/allFavouriteAds';
+  static const favouriteAds = '/ads-favorites/allFavoriteAds';
   static const favouriteSubCategories = '/favorite-sub-category';
 
   static String deleteFavouriteAds(String id) {
@@ -911,6 +929,7 @@ class EndPoints {
   //lives
   static String allLiveTopics = '/stream-topic';
   static String createLive = '/stream';
+  static String editGoal(String id) => '/stream/goal/$id';
 
   static String endStream(String id) => '/stream/$id';
   static String allLives = '/stream/explore';

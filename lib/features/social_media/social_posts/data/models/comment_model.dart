@@ -8,6 +8,7 @@ class CommentModel extends CommentEntity {
       required super.content,
       required super.post,
       required super.createdAt,
+        super.reply,
       super.angryCount,
       super.likesCount,
       super.loveCount,
@@ -28,7 +29,8 @@ class CommentModel extends CommentEntity {
     return CommentModel(
       id: json['_id'],
       content: json['content'],
-      post: json['post'],
+      reply: json['reply']??'',
+      post: json['post']!=null?json['post'] is String?json['post']:'':'',
       isLove: json['isLove'] ?? false,
       isLikes: json['isLikes'] ?? false,
       user: json['user'] is String
@@ -48,5 +50,31 @@ class CommentModel extends CommentEntity {
       totalCount: json['totalCount'] ?? 0,
       createdAt: DateTime.parse(json['createdAt']),
     );
+  }
+
+  //toJson
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'content': content,
+      'post': post,
+      'isLove': isLove,
+      'isLikes': isLikes,
+      'user': user,
+      'isWow': isWow,
+      'isSad': isSad,
+      'isHaha': isHaha,
+      'isAngry': isAngry,
+      'likesCount': likesCount,
+      'loveCount': loveCount,
+      'wowCount': wowCount,
+      'hahaCount': hahaCount,
+      'sadCount': sadCount,
+      'angryCount': angryCount,
+      'repliesCount': repliesCount,
+      'totalCount': totalCount,
+      'createdAt': createdAt,
+    };
   }
 }

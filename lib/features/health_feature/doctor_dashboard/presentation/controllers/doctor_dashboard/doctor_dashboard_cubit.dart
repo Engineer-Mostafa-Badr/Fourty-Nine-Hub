@@ -1,8 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/week_days.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/doctor_accept_appointment_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/doctor_reject_appointment.dart';
@@ -15,14 +19,14 @@ import 'package:fourtyninehub/features/health_feature/health/domain/entities/doc
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/earned_mony_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/doctor_info_usecase.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/features/health_feature/booking/domain/usecases/doctor_cancel_appointment_use_case.dart';
 
 part 'doctor_dashboard_state.dart';
 
 class DoctorDashboardCubit extends Cubit<DoctorDashboardState> {
   final GetDoctorSubscriptionRemainingDaysUseCase
       _getDoctorSubscriptionRemainingDaysUseCase;
-  final GetDoctorPracticingRemainingDaysUseCase
-      _getDoctorPracticingRemainingDaysUseCase;
+  final DoctorCancelAppointmentUseCase _doctorCancelAppointmentUseCase;
   final GetDoctorIDRemainingDaysUseCase _getDoctorIDRemainingDaysUseCase;
   final DoctorInfoUseCase _doctorInfoUseCase;
   final GetDoctorAppointmentsByDayUseCase _getDoctorAppointmentsByDayUseCase;
@@ -32,21 +36,20 @@ class DoctorDashboardCubit extends Cubit<DoctorDashboardState> {
   final DoctorRejectAppointmentUsecase _doctorRejectAppointmentUsecase;
   DoctorDashboardCubit(
     this._getDoctorSubscriptionRemainingDaysUseCase,
-    this._getDoctorPracticingRemainingDaysUseCase,
+    this._doctorCancelAppointmentUseCase,
     this._getDoctorIDRemainingDaysUseCase,
     this._getDoctorAppointmentsByDayUseCase,
     this._getDoctorUnhandledAppointmentsUseCase,
     this._doctorAcceptAppointmentUseCase,
     this._doctorRejectAppointmentUsecase, this._doctorInfoUseCase,
-  ) : super(DoctorDashboardInitial());
+  ) : super(DoctorDashboardState());
 
   Future<void> loadData() async {
-    // await _getSubscriptionRemainingDays();
-    // await _getPracticingRemainingDays();
-    // await _getIDRemainingDays();
+    emit(state.copyWith(status: DoctorDashboardStateStatus.startLoading));
     await _getDoctorInfo();
     await _getAppointmentsByDay();
     await _getUnhandledAppointments();
+    emit(state.copyWith(status: DoctorDashboardStateStatus.updated));
   }
 
   List<EarnedMoneyEntity> totalEarnedMoney =[];
@@ -55,17 +58,13 @@ class DoctorDashboardCubit extends Cubit<DoctorDashboardState> {
         await _doctorInfoUseCase.call(const NoParams());
     response.fold((l) {
       if (l is ServerFailure) {
-        emit(DoctorDashboardError(l.message));
+        emit(state.copyWith(failure: l,status: DoctorDashboardStateStatus.error));
       } else {
-        emit(DoctorDashboardError(Labels.errorHappened));
+        emit(state.copyWith(status: DoctorDashboardStateStatus.error));
       }
     }, (r) {
-      print("A7oooo ${r.totalEarnedMoney.toString()}");
-      print("A7oooo ${r.remainingDaysToEndSubscription}");
       totalEarnedMoney.addAll(r.totalEarnedMoney);
-      print("A7a Gemmy ${totalEarnedMoney.toString()}");
-      emit(DoctorInfoSuccessState(r));
-      print("A7eeee Gemmy ${totalEarnedMoney.toString()}");
+      emit(state.copyWith(info: r));
     });
   }
 
@@ -74,43 +73,73 @@ class DoctorDashboardCubit extends Cubit<DoctorDashboardState> {
     final response = await _getDoctorAppointmentsByDayUseCase.call(
         GetDoctorAppointmentsByDayParams(
             day: DateTime.now().weekday.toWeekDay,
-            paginationParams: PaginationParams(page: 1, limit: 2)));
-    response.fold((l) => emit(DoctorDashboardError(Labels.errorHappened)),
-        (r) => emit(DoctorDashboardTodayAppointments(r)));
+            paginationParams: PaginationParams(page: 1, limit: 3)));
+    response.fold((l) =>emit(state.copyWith(status: DoctorDashboardStateStatus.error)),
+        (r) => emit(state.copyWith(todayAppointments: r)));
   }
 
   Future<void> _getUnhandledAppointments() async {
     final response = await _getDoctorUnhandledAppointmentsUseCase
-        .call(PaginationParams(page: 1, limit: 2));
-    response.fold((l) => emit(DoctorDashboardError(Labels.errorHappened)),
-        (r) => emit(DoctorDashboardUnhandledAppointments(r)));
+        .call(PaginationParams(page: 1, limit: 3));
+    response.fold((l) => emit(state.copyWith(status: DoctorDashboardStateStatus.error)),
+        (r) => emit(state.copyWith(unhandledAppointments: r)));
   }
 
-  Future<void> acceptAppointment(String appointmentId) async {
-    emit(DoctorDashboardStartLoading());
+  Future<void> acceptAppointment(String appointmentId,BuildContext context) async {
+    emit(state.copyWith(status: DoctorDashboardStateStatus.startAcceptLoading));
     final response = await _doctorAcceptAppointmentUseCase.call(appointmentId);
-    emit(DoctorDashboardStopLoading());
+    emit(state.copyWith(status: DoctorDashboardStateStatus.endAcceptLoading));
     response.fold(
-      (l) => emit(DoctorDashboardError(Labels.errorHappened)),
+      (l) => emit(state.copyWith(status: DoctorDashboardStateStatus.error)),
       (r) {
-        emit(DoctorDashboardShowSuccessfulMessage(
-            'appointmentAcceptedSuccessfully'));
-        _getUnhandledAppointments();
+        List<DoctorAppointmentEntity> newUnhandledAppointments=[];
+        List<DoctorAppointmentEntity> newTodayAppointments=[];
+        newTodayAppointments.addAll(state.todayAppointments??[]);
+        newUnhandledAppointments.addAll(state.unhandledAppointments??[]);
+        if(newUnhandledAppointments.isNotEmpty){
+          DoctorAppointmentEntity appointment = newUnhandledAppointments.firstWhere((element) => element.id==appointmentId);
+          newTodayAppointments.add(appointment);
+        }
+        newUnhandledAppointments.removeWhere((element) => element.id==appointmentId);
+        emit(state.copyWith(unhandledAppointments: newUnhandledAppointments,todayAppointments: newTodayAppointments));
+        showSuccessMessage(context, context.isArabic?'تم قبول الحجز بنجاح':'Appointment Accepted Successfully');
+
+        // _getUnhandledAppointments();
       },
     );
   }
 
-  Future<void> rejectAppointment(String appointmentId) async {
-    emit(DoctorDashboardStartLoading());
+  Future<void> rejectAppointment(String appointmentId,BuildContext context) async {
+    emit(state.copyWith(status: DoctorDashboardStateStatus.startAcceptLoading));
     final response = await _doctorRejectAppointmentUsecase.call(appointmentId);
-    emit(DoctorDashboardStopLoading());
+    emit(state.copyWith(status: DoctorDashboardStateStatus.endAcceptLoading));
     response.fold(
-      (l) => emit(DoctorDashboardError(Labels.errorHappened)),
+      (l) => emit(state.copyWith(status: DoctorDashboardStateStatus.error)),
       (r) {
-        emit(DoctorDashboardShowSuccessfulMessage(
-            'appointmentRejectedSuccessfully'));
-        _getUnhandledAppointments();
+        List<DoctorAppointmentEntity> newUnhandledAppointments=[];
+        newUnhandledAppointments.addAll(state.unhandledAppointments??[]);
+        newUnhandledAppointments.removeWhere((element) => element.id==appointmentId);
+        emit(state.copyWith(unhandledAppointments: newUnhandledAppointments,));
+        showSuccessMessage(context, context.isArabic?'تم رفض الحجز بنجاح':'Appointment Rejected Successfully');
+        // _getUnhandledAppointments();
       },
     );
   }
+
+
+  Future<void> cancelAppointment(String appointmentId,BuildContext context) async {
+    emit(state.copyWith(status: DoctorDashboardStateStatus.startCancelLoading));
+    final response = await _doctorCancelAppointmentUseCase.call(appointmentId);
+    emit(state.copyWith(status: DoctorDashboardStateStatus.endCancelLoading));
+    response.fold(
+          (l) => emit(state.copyWith(status: DoctorDashboardStateStatus.error)),
+          (r) {
+        state.todayAppointments?.removeWhere((element)=>element.id==appointmentId);
+        showSuccessMessage(context, context.isArabic?'تم إلغاء الحجز بنجاح':'Appointment Cancelled Successfully');
+        emit(state.copyWith(status: DoctorDashboardStateStatus.updated));
+      },
+    );
+  }
+
+
 }

@@ -9,6 +9,8 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/zoom/data/model/schedule_meeting_model.dart';
 import 'package:fourtyninehub/features/zoom/domain/entities/scheduled_meeting.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
+import 'package:fourtyninehub/features/zoom/domain/usecases/send_gift_use_case.dart';
+import 'package:fourtyninehub/features/zoom/domain/usecases/send_points_use_case.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 
 import '../../../../core/error/failure.dart';
@@ -17,6 +19,8 @@ abstract class MeetingDataSource {
   Future<Either<Failure, bool>> addRoom(MeetingParams params);
 
   Future<Either<Failure, bool>> joinRoom(MeetingParams params);
+  Future<Either<Failure, bool>> sendPoints(SendPointsParams params);
+  Future<Either<Failure, bool>> sendGift(SendLiveGiftParams params);
 
   Future<Either<Failure, void>> endRoom(MeetingParams params);
 
@@ -61,7 +65,7 @@ class MeetingDataSourceImpl extends MeetingDataSource {
       // throw MeetingErrorMessageModel.fromJson(l);
       return Left(l);
     }, (r) {
-      final List<ScheduledMeeting> rooms = List.from(r['data']['docs'])
+      final List<ScheduledMeeting> rooms = List.from(r['data'])
           .map((e) => ScheduledMeetingModel.fromJson(e))
           .toList();
       return Right(rooms);
@@ -86,6 +90,18 @@ class MeetingDataSourceImpl extends MeetingDataSource {
 
   bool _idEquality(Map<String, dynamic> r) =>
       r['data']['userId'] == UserCubit.to.state.data!.id;
+
+  @override
+  Future<Either<Failure, bool>> sendPoints(SendPointsParams params) async {
+    final result = await apiConsumer.post(EndPoints.sendPoints,data: params.toJson());
+    return result.fold((l) => Left(l), (r) => Right(r['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> sendGift(SendLiveGiftParams params) async {
+    final result = await apiConsumer.post(EndPoints.sendLiveGift(params.streamId),data: params.toJson());
+    return result.fold((l) => Left(l), (r) => Right(r['status']));
+  }
 }
 //
 // Either<String, int> checkType(dynamic r) {

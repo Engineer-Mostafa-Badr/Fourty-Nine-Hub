@@ -23,6 +23,7 @@ class EditFoodCubit extends Cubit<EditFoodState> {
       : super( EditFoodState());
 
   loadData({required String id,required bool first}) async {
+    // menu.clear();
     await getMeals(id: id,first: first);
 
   }
@@ -127,7 +128,7 @@ class EditFoodCubit extends Cubit<EditFoodState> {
         });
   }
 
-  updateMenuItem(context,RestaurantMneuModel menuItem) async {
+  updateMenuItem(context,RestaurantMneuModel menuItem,{required String id}) async {
     AddFoodParams params = AddFoodParams(
       foodName: menuItem.foodName??'',
       price: menuItem.price??0.0,
@@ -137,7 +138,8 @@ class EditFoodCubit extends Cubit<EditFoodState> {
     return response.fold(
           (failure) {},
           (data) {
-        print("${data}v");
+            menu.insert(0, data);
+            emit(state.copyWith(status: EditFoodStates.success,meals: menu,imagePath: ''));
       },
     );
   }

@@ -9,7 +9,8 @@ class BookedAppointmentEntity {
   final String userId;
   final BookingTypes bookingType;
   final String day;
-  final String time;
+  final String startTime;
+  final String endTime;
   final String bookingId;
   final bool expired;
 
@@ -20,7 +21,8 @@ class BookedAppointmentEntity {
       required this.userId,
       required this.bookingType,
       required this.day,
-      required this.time,
+      required this.startTime,
+      required this.endTime,
       required this.bookingId,
       required this.expired});
 }

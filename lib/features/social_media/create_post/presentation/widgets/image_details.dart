@@ -32,23 +32,23 @@ class _ImageDetailsScreenState extends State<ImageDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.BACKGROUND_COLOR,
-        leading: IconButton(
-          onPressed: () {
-            widget.onRemoveImage();
-          },
-          icon: widget.fromPost == true
-              ? const Icon(
-                  Icons.arrow_back,
-                  color: Colors.black,
-                )
-              : const Icon(
-                  Icons.close,
-                  color: Colors.black,
-                ),
-        ),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: AppColors.BACKGROUND_COLOR,
+      //   leading: IconButton(
+      //     onPressed: () {
+      //       widget.onRemoveImage();
+      //     },
+      //     icon: widget.fromPost == true
+      //         ? const Icon(
+      //             Icons.arrow_back,
+      //             color: Colors.black,
+      //           )
+      //         : const Icon(
+      //             Icons.close,
+      //             color: Colors.black,
+      //           ),
+      //   ),
+      // ),
       body: GestureDetector(
         onScaleStart: (ScaleStartDetails details) {
           _previousScale = _scale;

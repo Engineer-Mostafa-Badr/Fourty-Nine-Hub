@@ -9,7 +9,8 @@ class BookedUserAppointmentModel extends BookedAppointmentEntity {
       required super.userId,
       required super.bookingType,
       required super.day,
-      required super.time,
+      required super.startTime,
+      required super.endTime,
       required super.bookingId,
       required super.expired});
 
@@ -21,7 +22,8 @@ class BookedUserAppointmentModel extends BookedAppointmentEntity {
       userId: json['userId'],
       bookingType: (json['appointmentType'] as String).toBookingType,
       day: json['day'],
-      time: json['time'],
+      startTime: json['startTime'],
+      endTime: json['endTime'],
       bookingId: json['bookingId'],
       expired: json['expired'],
     );

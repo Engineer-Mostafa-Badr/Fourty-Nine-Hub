@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/time_of_day_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/enums/week_days.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_day_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -30,7 +31,7 @@ class Timetable extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: Styles.headerText(color: AppColors.BARRIER_COLOR)),
+          Text(title, style: Styles.headerText(color: context.isDarkMode?Colors.white:AppColors.BARRIER_COLOR)),
           const Sizer(),
           _WeekWidget(
             timetale: timetale,
@@ -74,15 +75,18 @@ class _WeekWidgetState extends State<_WeekWidget> {
               children: [
                 Checkbox(
                     value: time.isAvailable,
+                    activeColor: AppColors.PRIMARY_COLOR,
+                    checkColor: Colors.white,
                     onChanged: (v) {
                       setState(() {
                         time.isAvailable = v!;
                         print(v);
+                        print(time.isAvailable);
                       });
                     }),
                 Expanded(
                   child: Text(
-                    time.day.name,
+                    time.day.toLocalizedString(context),
                     style: Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -98,31 +102,61 @@ class _WeekWidgetState extends State<_WeekWidget> {
                 initialTime: const TimeOfDay(hour: 10, minute: 0),
               ).then((value) {
                 if (value != null) {
+                  int totalMinutes = 645; // Example: 645 minutes
+
+                  // Calculate hours and minutes
+                  int hours = totalMinutes ~/ 60; // Integer division
+                  int minutes = totalMinutes % 60; // Remainder
+
+                  // Print the time in HH:MM format
+                  print("Time: ${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}");
+
+                  if (value.period == DayPeriod.am) {
+                    print("The value is AM.");
+                  } else if (value.period == DayPeriod.pm) {
+                    print("The time is PM.");
+                  }
+                  print("value.formattedIn12Hour${value.formattedIn12Hour}");
                   if (value.isBefore(time.to)) {
                     setState(() {
                       time.from = value;
                     });
                   } else {
                     showErrorMessage(
-                        context, "Start Time Cannot be after the End Time");
+                        context, context.isArabic?'بداية الوقت يجب الا تكون بعد الانتهاء':'Start Time Cannot be after the End Time');
                   }
                 }
               });
             },
-            child: RichText(
+            child:context.isArabic? RichText(
               text: TextSpan(
-                text: "from   ",
-                style: Styles.mediumText(),
+                text:'من   ',
+                style: Styles.mediumText(
+                  color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR,
+                ),
                 children: [
                   TextSpan(
-                    text: time.from.formattedIn12Hour,
-                    style: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR),
+                    text: formatTimeOfDayLocalized(time.from,context),
+                    style: Styles.mediumText(color:context.isDarkMode?Colors.white: AppColors.DARK_GRAY_COLOR),
+                  ),
+                ],
+              ),
+            ):RichText(
+              text: TextSpan(
+                text: "from   ",
+                style: Styles.mediumText(
+                  color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR,
+                ),
+                children: [
+                  TextSpan(
+                    text:formatTimeOfDayLocalized(time.from,context),
+                    style: Styles.mediumText(color: context.isDarkMode?Colors.white:AppColors.DARK_GRAY_COLOR),
                   ),
                 ],
               ),
             ),
           ),
-          Sizer(),
+          Sizer(width: 50.w,),
           InkWell(
             onTap: () {
               showTimePicker(
@@ -130,25 +164,42 @@ class _WeekWidgetState extends State<_WeekWidget> {
                 initialTime: const TimeOfDay(hour: 11, minute: 0),
               ).then((value) {
                 if (value != null) {
+                  print(value);
                   if (value.isAfter(time.from)) {
                     setState(() {
                       time.to = value;
+                      print(time.to);
                     });
                   } else {
                     showErrorMessage(
-                        context, "End Time Cannot be before the Start Time");
+                        context, context.isArabic?'انتهاء الوقت يجب ان لا يكون قبل البدايه':'End Time Cannot be before the Start Time');
                   }
                 }
               });
             },
-            child: RichText(
+            child:context.isArabic?RichText(
               text: TextSpan(
-                text: "to   ",
-                style: Styles.mediumText(),
+                text:'إلي   ',
+                style: Styles.mediumText(
+                  color:context.isDarkMode?Colors.white: AppColors.PRIMARY_COLOR,
+                ),
                 children: [
                   TextSpan(
-                    text: time.to.formattedIn12Hour,
-                    style: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR),
+                    text: formatTimeOfDayLocalized(time.to,context),
+                    style: Styles.mediumText(color:context.isDarkMode?Colors.white: AppColors.DARK_GRAY_COLOR),
+                  ),
+                ],
+              ),
+            ):RichText(
+              text: TextSpan(
+                text: "to   ",
+                style: Styles.mediumText(
+                  color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR,
+                ),
+                children: [
+                  TextSpan(
+                    text:formatTimeOfDayLocalized(time.to,context),
+                    style: Styles.mediumText(color:context.isDarkMode?Colors.white: AppColors.DARK_GRAY_COLOR),
                   ),
                 ],
               ),
@@ -157,5 +208,25 @@ class _WeekWidgetState extends State<_WeekWidget> {
         ],
       ),
     );
+  }
+
+  String formatTimeOfDayLocalized(TimeOfDay time, BuildContext context) {
+    // Get the current locale (language code)
+    String languageCode = context.isArabic?'ar':'en';
+
+    // Format the time in 12-hour format
+    String period = time.period == DayPeriod.am ? 'AM' : 'PM';
+    String hourFormatted = time.hourOfPeriod.toString().padLeft(2, '0');
+    String minuteFormatted = time.minute.toString().padLeft(2, '0');
+
+    // Return the localized time format based on language
+    if (languageCode == 'ar') {
+      print("objectHii");
+      // For Arabic locale, append "صباحا" for AM and "مساءا" for PM
+      return '$hourFormatted:$minuteFormatted ${period == 'AM' ? 'صباحا' : 'مساءا'}';
+    } else {
+      // For English locale, append "AM" or "PM"
+      return '$hourFormatted:$minuteFormatted $period';
+    }
   }
 }

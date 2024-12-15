@@ -10,14 +10,22 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import '../../../../../../core/abstract/use_case.dart';
 
 class GetSubCategoryDoctorsListUseCase
-    extends UseCase<List<DoctorEntity>, String> {
+    extends UseCase<List<DoctorEntity>, GetSubCategoryDoctorsParams> {
   final DoctorListRepo _repo;
   GetSubCategoryDoctorsListUseCase(this._repo);
 
   @override
-  Future<Either<Failure, List<DoctorEntity>>> call(String params) {
+  Future<Either<Failure, List<DoctorEntity>>> call(GetSubCategoryDoctorsParams params) {
     return _repo.getSubCategoryDoctorsList(params: params);
   }
 }
 
+class GetSubCategoryDoctorsParams extends PaginationParams {
+  final String subCategoryId;
+  GetSubCategoryDoctorsParams({required this.subCategoryId, required super.page, required super.limit});
 
+  @override
+  Map<String, dynamic> toJson() => {
+    'page': page,
+    'limit': limit};
+}

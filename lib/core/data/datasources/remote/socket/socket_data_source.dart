@@ -73,6 +73,7 @@ abstract class SocketIOEvents {
   static const String startRecordingMessage = 'Message:Recording';
   static const String stopRecordingMessage = 'Message:StopRecording';
   static const String setRecordAsListened = 'Message:Listen';
+  static const String sendPoint = 'Stream:SendPoint';
 }
 
 //

@@ -118,8 +118,9 @@ extension TiktokControllerExtension on StreamCubit {
           print("objectakldnlka");
       CliLogger.info(r.id);
       liveId = r.id;
+      streamId = r.streamId;
       emit(state.copyWith(
-          status: StreamsStates.success, liveCreateResponseEntity: r));
+          status: StreamsStates.success, liveCreateResponseEntity: r,goals: r.goals));
     });
     return success;
   }
@@ -169,7 +170,7 @@ extension TiktokControllerExtension on StreamCubit {
 
   Future<void> endLive() async {
     emit(state.copyWith(status: StreamsStates.loading));
-    var result = await endLiveUseCase(MeetingParams(id: liveId));
+    var result = await endLiveUseCase(MeetingParams(id: streamId));
     result.fold(
         (l) => emit(state.copyWith(status: StreamsStates.failure, failure: l)),
         (r) {

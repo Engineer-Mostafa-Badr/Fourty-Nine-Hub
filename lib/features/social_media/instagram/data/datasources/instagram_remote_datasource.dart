@@ -1,4 +1,8 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/social_media/instagram/data/models/followers_model.dart';
+import 'package:fourtyninehub/features/social_media/instagram/data/models/following_model.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/followers_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/following_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
@@ -21,6 +25,10 @@ abstract class InstagramRemoteDataSource {
       {required UserReelsParams params});
   Future<Either<Failure, List<PostEntity>>> getSavedReels(
       {required TwitterFeedParams params});
+
+  Future<Either<Failure, List<FollowersEntity>>> getAllFollowers(TwitterFeedParams params);
+
+  Future<Either<Failure, List<FollowingEntity>>> getAllFollowing(TwitterFeedParams params);
 }
 
 class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
@@ -113,6 +121,34 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
     }, (data) {
       final list = (data['data']['reels'] as List)
           .map((e) => PostModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<FollowersEntity>>> getAllFollowers(TwitterFeedParams params) async {
+    final response = await _apiConsumer.get(EndPoints.followers(params));
+
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data']['followers'] as List)
+          .map((e) => FollowersModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<FollowingEntity>>> getAllFollowing(TwitterFeedParams params) async {
+    final response = await _apiConsumer.get(EndPoints.following(params));
+
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data'] as List)
+          .map((e) => FollowingModel.fromJson(e))
           .toList();
       return Right(list);
     });

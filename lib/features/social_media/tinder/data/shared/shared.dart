@@ -9,13 +9,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_state.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,6 +24,7 @@ import '../../../../../routes/routes.dart';
 
 class BottomSheetContent extends StatefulWidget {
   final String? receiverId;
+  final List<GiftData>? goals;
   final bool forSelect;
   final void Function(GiftData)? selectGift;
 
@@ -31,6 +32,7 @@ class BottomSheetContent extends StatefulWidget {
     super.key,
     required this.receiverId,
     this.forSelect = false,
+    this.goals = const [],
     this.selectGift,
   });
 
@@ -74,31 +76,61 @@ class BottomSheetContentState extends State<BottomSheetContent> {
           log("${state.length}  "
               "555555555555");
 
-          return GridView.builder(
-            controller: _scrollController,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: crossAxisCount,
-              childAspectRatio: 1 / 0.95, // Adjust aspect ratio
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if(widget.goals?.isNotEmpty??false)...[Text("Live Goals:",style: Styles.headerText(),),
+                  SizedBox(
+                    height: 180.h,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.zero,
+                      itemCount: (widget.goals?.length??0),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return _buildGiftItemForSelect(
+                          context,
+                          widget.goals![index],
+                          receiverId: widget.receiverId,
+                          selectGift: widget.selectGift!,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+                Text("Live Gifts:",style: Styles.headerText(),),
+                Expanded(
+                  child: GridView.builder(
+                    controller: _scrollController,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      childAspectRatio: 1 / 0.95, // Adjust aspect ratio
+                    ),
+                    itemCount: state.gifts.length + 1,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      if (index < state.gifts.length) {
+                        if (widget.forSelect) {
+                          return _buildGiftItemForSelect(
+                            context,
+                            state.gifts[index],
+                            receiverId: widget.receiverId,
+                            selectGift: widget.selectGift!,
+                          );
+                        } else {
+                          return _buildGiftItem(context, state.gifts[index],
+                              receiverId: widget.receiverId);
+                        }
+                      } else {
+                        return const Center(child: CupertinoActivityIndicator());
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
-            itemCount: state.gifts.length + 1,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              if (index < state.gifts.length) {
-                if (widget.forSelect) {
-                  return _buildGiftItemForSelect(
-                    context,
-                    state.gifts[index],
-                    receiverId: widget.receiverId,
-                    selectGift: widget.selectGift!,
-                  );
-                } else {
-                  return _buildGiftItem(context, state.gifts[index],
-                      receiverId: widget.receiverId);
-                }
-              } else {
-                return const Center(child: CupertinoActivityIndicator());
-              }
-            },
           );
         } else if (state is GiftsError) {
           return Center(

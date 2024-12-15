@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/info.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -16,11 +17,11 @@ class BookDoctorAppointmentTimeCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            appointment.day,
+            appointment.day.localize,
             style: Styles.headerText(),
           ),
           Text(
-            appointment.time,
+            appointment.startTime,
             style: Styles.mediumText(),
           ),
         ],

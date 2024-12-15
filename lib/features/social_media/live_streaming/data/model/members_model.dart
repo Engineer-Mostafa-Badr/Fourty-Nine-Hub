@@ -7,7 +7,7 @@ class MembersModel extends MembersEntity {
 
   factory MembersModel.fromJson(Map<String, dynamic> json) {
     return MembersModel(
-      json['userDetails']['_id'],
+      json['_id'],
       '${json['userDetails']['firstName']} ${json['userDetails']['lastName']}',
       json['points'],
     );

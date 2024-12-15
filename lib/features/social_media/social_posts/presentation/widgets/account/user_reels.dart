@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -51,14 +52,12 @@ class _UserReelsState extends State<UserReels> {
           builderDelegate: PagedChildBuilderDelegate<PostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.userReelsPagingController.itemList?.length);
-                return Center(
-                  child: Text(
-                    LocaleKeys.noReels.localize,
-                    style: TextStyle(
-                      color: context.isDarkMode
-                          ? AppColors.LIGHT_COLOR
-                          : AppColors.DARK_BLUE_COLOR,
-                      fontSize: 18,
+                return Padding(
+                  padding: EdgeInsets.only(top: 100.h),
+                  child: Center(
+                    child: Text(
+                      LocaleKeys.noReels.localize,
+                      style: Styles.headerText(),
                     ),
                   ),
                 );

@@ -614,7 +614,6 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
       builder: (context) {
         return SizedBox(
           height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,

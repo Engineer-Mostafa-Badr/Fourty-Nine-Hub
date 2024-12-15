@@ -6,11 +6,11 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_profile_posts_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -31,25 +31,28 @@ class _MediaViewState extends State<MediaView> {
     return BlocProvider<InstagramCubit>(
       create: (_) => serviceLocator()..loadMedia(widget.userId),
       child: BlocConsumer<InstagramCubit, InstagramState>(
-          listener: (context, state) {
-        if (state.status == StateStatus.error) {
-          showErrorMessage(
-            context,
-            getFailureMessage(
-              state.failure ?? UnknownFailure(''),
+        listener: (context, state) {
+          if (state.status == StateStatus.error) {
+            showErrorMessage(
               context,
+              getFailureMessage(
+                state.failure ?? UnknownFailure(''),
+                context,
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          final controller = context.read<InstagramCubit>();
+          return PagedSliverGrid<int, PostEntity>(
+            pagingController: controller.mediaPagingController,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 1,
+              mainAxisSpacing: 1,
             ),
-          );
-        }
-      }, builder: (context, state) {
-        final controller = context.read<InstagramCubit>();
-        return PagedSliverGrid<int, PostEntity>(
-          pagingController: controller.mediaPagingController,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3, crossAxisSpacing: 1, mainAxisSpacing: 1),
-          builderDelegate: PagedChildBuilderDelegate<PostEntity>(
+            builderDelegate: PagedChildBuilderDelegate<PostEntity>(
               noItemsFoundIndicatorBuilder: (context) {
-                print(controller.mediaPagingController.itemList?.length);
                 return Center(
                   child: Text(
                     LocaleKeys.noMedia.localize,
@@ -63,39 +66,62 @@ class _MediaViewState extends State<MediaView> {
                 );
               },
               itemBuilder: (context, item, index) {
+                final sortedPosts = controller.mediaPagingController.itemList?..sort(
+                      (a, b) => b.createdAt!.compareTo(a.createdAt!),
+                );
+
+                final sortedItem = sortedPosts![index];
+
                 return state.status == StateStatus.success
                     ? Container(
-                        padding: const EdgeInsets.only(top: 2),
-                        child: ClipRRect(
-                          // borderRadius: BorderRadius.circular(15),
-                          child: CachedNetworkImage(
-                            height: 300.h,
-                            imageUrl: item.images?[0] ?? '',
-                            fit: BoxFit.fill,
-                            placeholder: (context, url) => const Center(
-                              child: CupertinoActivityIndicator(radius: 25),
-                            ),
-                            errorWidget: (context, url, error) =>
-                                const Center(child: Icon(Icons.error)),
+                  padding: EdgeInsets.only(top: 5.h, left: 5.w),
+                  child: GestureDetector(
+                    onTap: () {
+                      // Pass the selected image and the sorted list to the next screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => InstagramProfilePostsView(
+                            initialImage: sortedItem,
+                            posts: sortedPosts,
                           ),
                         ),
-                      )
-                    : Center(
-                        child: Label(
-                            text: getFailureMessage(
-                          state.failure ?? UnknownFailure(''),
-                          context,
-                        )),
                       );
+                    },
+                    child: ClipRRect(
+                      child: CachedNetworkImage(
+                        height: 300.h,
+                        imageUrl: sortedItem.images?[0] ?? '',
+                        fit: BoxFit.fill,
+                        placeholder: (context, url) => const Center(
+                          child: CupertinoActivityIndicator(radius: 25),
+                        ),
+                        errorWidget: (context, url, error) => const Center(
+                          child: Icon(Icons.error),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+                    : Center(
+                  child: Label(
+                    text: getFailureMessage(
+                      state.failure ?? UnknownFailure(''),
+                      context,
+                    ),
+                  ),
+                );
               },
               noMoreItemsIndicatorBuilder: (context) => Container(),
               firstPageProgressIndicatorBuilder: (context) => Container(
-                  margin: const EdgeInsets.only(top: 150),
-                  child: const CupertinoActivityIndicator()),
-              newPageProgressIndicatorBuilder: (context) =>
-                  const CupertinoActivityIndicator()),
-        );
-      }),
+                margin: const EdgeInsets.only(top: 150),
+                child: const CupertinoActivityIndicator(),
+              ),
+              newPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator(),
+            ),
+          );
+        },
+      ),
     );
   }
 }

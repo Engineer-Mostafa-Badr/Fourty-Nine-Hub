@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/pages/meeting_room.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
@@ -178,10 +179,10 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                   CliLogger.success('Success');
                   context.pushReplacement(
                     Routes.MEETINGROOM,
-                    extra: ZegoArgs(
-                      meetingId,
-                      context.read<StreamCubit>().isHost,
-                      _userNameController.text.trim().isNotEmpty
+                    extra: MeetingRoomArguments(
+                      liveID:meetingId,
+                      isHost:context.read<StreamCubit>().isHost,
+                      userName:_userNameController.text.trim().isNotEmpty
                           ? _userNameController.text.trim()
                           : context.read<UserCubit>().state.data!.fullName,
                       shareScreen: widget.shareScreen,

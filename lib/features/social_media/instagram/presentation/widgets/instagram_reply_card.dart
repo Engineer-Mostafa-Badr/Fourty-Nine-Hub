@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -8,18 +9,20 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/no_scale_text.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 
@@ -30,6 +33,7 @@ class InstagramReplyCard extends StatefulWidget {
   final Function(String) onDeleteReply;
   final Function(PostCommentParams) onEditComment;
   final Function(TwitterReportParams) onReport;
+  final Function() function;
   const InstagramReplyCard({
     super.key,
     this.textColor = Colors.black,
@@ -38,6 +42,7 @@ class InstagramReplyCard extends StatefulWidget {
     required this.onReport,
     required this.onDeleteReply,
     required this.onEditComment,
+    required this.function,
   });
 
   @override
@@ -58,76 +63,189 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
-              height: 32,
-            ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ProfileImage(
-                  accountId: 0,
-                  withBorder: false,
-                  userId: '',
-                  imageURL: widget.reply.user.image.isNotEmpty
-                      ? widget.reply.user.image
-                      : null,
+                ImageFromInternet(
+                  width: 80.w,
+                  height: 80.h,
+                  isCircle: true,
+                  image: widget.reply.user.image.isEmpty
+                      ? UIConst.profilePlaceHolder
+                      : widget.reply.user.image,
                 ),
+                // ProfileImage(
+                //   accountId: 0,
+                //   withBorder: false,
+                //   userId: '',
+                //   imageURL: widget.reply.user.image.isNotEmpty
+                //       ? widget.reply.user.image
+                //       : null,
+                // ),
                 const Sizer(),
                 Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Label(
-                        text: widget.reply.user.firstName,
-                        style: Styles.mediumText(
-                            fontWeight: FontWeight.bold,
-                            color: context.isDarkMode
-                                ? AppColors.SECONDARY_COLOR
-                                : Colors.black)),
-                    Label(
-                        text: widget.reply.sinceTime,
-                        style: Styles.smallText(
-                            color: context.isDarkMode
-                                ? AppColors.LIGHT_COLOR
-                                : Colors.black)),
-                  ],
-                )),
-                GestureDetector(
-                  onTap: () {
-                    bottomSheet(
-                      context: context,
-                      widget: _buildPostOptions(
-                        isMyComment: widget.reply.user.id == user?.id,
-                        post: widget.reply,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          NoScaleText(
+                            capitalizeAndSplit(
+                                '${widget.reply.user.firstName} ${widget.reply.user.lastName}'),
+                            style: TextStyle(
+                              color: context.isDarkMode ? Colors.white70 : Colors.grey,
+                              fontSize: 25.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(width: 10.w,),
+                          NoScaleText(
+                            formatDateTime(widget.reply.createdAt),
+                            style: TextStyle(
+                              color: Colors.grey[500],
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                  child: Icon(
-                    Icons.more_horiz_outlined,
-                    color: context.isDarkMode
-                        ? AppColors.LIGHT_COLOR
-                        : Colors.black,
-                    size: 20,
+                      // SizedBox(height: 5.h),
+                      NoScaleText(
+                        widget.reply.content,
+                        style: TextStyle(
+                          color: context.isDarkMode ? Colors.white70 : Colors.black87,
+                          fontSize: 25.sp,
+                        ),
+                      ),
+                      Sizer(),
+                      Row(
+                        children: [
+                          _buildReplyButton(),
+                          const Spacer(),
+                      // _buildReplyLikeButton(reply,replyId: replyId,isLike: isLike,likeCount: replyCount),
+                        ],
+                      ),
+                    ],
                   ),
+                ),
+                // Expanded(
+                //     child: Column(
+                //   crossAxisAlignment: CrossAxisAlignment.start,
+                //   children: [
+                //     Label(
+                //         text: widget.reply.user.firstName,
+                //         style: Styles.mediumText(
+                //             fontWeight: FontWeight.bold,
+                //             color: context.isDarkMode
+                //                 ? AppColors.SECONDARY_COLOR
+                //                 : Colors.black)),
+                //     Label(
+                //         text: widget.reply.sinceTime,
+                //         style: Styles.smallText(
+                //             color: context.isDarkMode
+                //                 ? AppColors.LIGHT_COLOR
+                //                 : Colors.black)),
+                //   ],
+                // )),
+                Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        bottomSheet(
+                          context: context,
+                          widget: _buildPostOptions(
+                            isMyComment: widget.reply.user.id == user?.id,
+                            post: widget.reply,
+                          ),
+                        );
+                      },
+                      child: Icon(
+                        Icons.more_horiz_outlined,
+                        color: context.isDarkMode
+                            ? AppColors.LIGHT_COLOR
+                            : Colors.black,
+                        size: 20,
+                      ),
+                    ),
+                    Sizer(),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          width: 32,
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            if (widget.reply.isLove == true) {
+                              var result = await controller.onCommentReact(
+                                  params: PostReactParams(
+                                      postId: widget.reply.id, react: 'love'));
+                              if (result == true) {
+                                widget.reply.isLove = false;
+                                widget.reply.loveCount = (widget.reply.loveCount! - 1);
+                                setState(() {});
+                              } else {
+                                showErrorMessage(
+                                  context,
+                                  getFailureMessage(
+                                    state.failure!,
+                                    context,
+                                  ),
+                                );
+                              }
+                            } else {
+                              var result = await controller.onCommentReact(
+                                  params: PostReactParams(
+                                      postId: widget.reply.id, react: 'love'));
+                              if (result == true) {
+                                widget.reply.isLove = true;
+                                widget.reply.loveCount = (widget.reply.loveCount! + 1);
+                                setState(() {});
+                              } else {
+                                showErrorMessage(
+                                  context,
+                                  getFailureMessage(
+                                    state.failure!,
+                                    context,
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          child: Icon(
+                            widget.reply.isLove == false
+                                ? Icons.favorite_border
+                                : Icons.favorite,
+                            color:
+                            widget.reply.isLove == false ? Colors.grey : Colors.red,
+                          ),
+                        ),
+                         SizedBox(
+                          height: 10.h,
+                        ),
+                        Label(text: '${widget.reply.loveCount}'),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             ),
             const Sizer(),
-            Row(
-              children: [
-                const SizedBox(
-                  width: 32,
-                ),
-                Label(
-                  textAlign: TextAlign.start,
-                  text: widget.reply.content,
-                  style: Styles.mediumText(
-                    color: context.isDarkMode
-                        ? AppColors.LIGHT_COLOR
-                        : Colors.black,
-                  ),
-                ),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     const SizedBox(
+            //       width: 32,
+            //     ),
+            //     Label(
+            //       textAlign: TextAlign.start,
+            //       text: widget.reply.content,
+            //       style: Styles.mediumText(
+            //         color: context.isDarkMode
+            //             ? AppColors.LIGHT_COLOR
+            //             : Colors.black,
+            //       ),
+            //     ),
+            //   ],
+            // ),
             if (widget.reply.edit == true)
               Row(
                 children: [
@@ -140,9 +258,6 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                     },
                     style: Styles.headerText(fontSize: 26),
                     decoration: InputDecoration(
-                      fillColor: context.isDarkMode
-                          ? Colors.transparent
-                          : Colors.white,
                       contentPadding: const EdgeInsets.all(5),
                       hintText: '${LocaleKeys.typeYourReply.localize} ....',
                       hintStyle: Styles.mediumText(),
@@ -167,71 +282,23 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                         })
                 ],
               ),
-            const Sizer(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  width: 32,
-                ),
-                InkWell(
-                  onTap: () async {
-                    if (widget.reply.isLove == true) {
-                      var result = await controller.onCommentReact(
-                          params: PostReactParams(
-                              postId: widget.reply.id, react: 'love'));
-                      if (result == true) {
-                        widget.reply.isLove = false;
-                        widget.reply.loveCount = (widget.reply.loveCount! - 1);
-                        setState(() {});
-                      } else {
-                        showErrorMessage(
-                          context,
-                          getFailureMessage(
-                            state.failure!,
-                            context,
-                          ),
-                        );
-                      }
-                    } else {
-                      var result = await controller.onCommentReact(
-                          params: PostReactParams(
-                              postId: widget.reply.id, react: 'love'));
-                      if (result == true) {
-                        widget.reply.isLove = true;
-                        widget.reply.loveCount = (widget.reply.loveCount! + 1);
-                        setState(() {});
-                      } else {
-                        showErrorMessage(
-                          context,
-                          getFailureMessage(
-                            state.failure!,
-                            context,
-                          ),
-                        );
-                      }
-                    }
-                  },
-                  child: Icon(
-                    widget.reply.isLove == false
-                        ? Icons.favorite_border
-                        : Icons.favorite,
-                    color:
-                        widget.reply.isLove == false ? Colors.grey : Colors.red,
-                  ),
-                ),
-                const SizedBox(
-                  width: 4,
-                ),
-                Label(text: '${widget.reply.loveCount}'),
-              ],
-            ),
-            const Sizer(),
+            // const Sizer(
+            //   height: 16,
+            // ),
+            // const Sizer(),
           ],
         );
       }),
+    );
+  }
+
+  Widget _buildReplyButton() {
+    return InkWell(
+      onTap: widget.function,
+      child: NoScaleText(
+        LocaleKeys.reply.localize,
+        style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+      ),
     );
   }
 
@@ -305,5 +372,20 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
         style: Styles.mediumText(color: Colors.grey),
       ),
     );
+  }
+
+  String formatDateTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inSeconds < 60) {
+      return '${difference.inSeconds}s ago';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes}m ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours}h ago';
+    } else {
+      return '${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+    }
   }
 }

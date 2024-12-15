@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -16,7 +16,6 @@ import 'package:fourtyninehub/features/social_media/create_post/presentation/wid
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/api_error_page.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/message_button.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/saved_reels_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
@@ -44,7 +43,7 @@ class OtherAccountView extends StatefulWidget {
       print("payloadpayloadpayload $payload");
       // print(id);
       // print('itemId${payload['itemId']}');
-      userId=payload['itemId'];
+      userId=payload['userId'];
     }
   }
   var userId;
@@ -54,6 +53,13 @@ class OtherAccountView extends StatefulWidget {
 }
 
 class _OtherAccountViewState extends State<OtherAccountView> {
+
+  @override
+  void initState() {
+    context.read<SocialPostsCubit>().getUserProfile(id:widget.userId??'');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final loginUser = context.read<UserCubit>().state.data;
@@ -66,13 +72,6 @@ class _OtherAccountViewState extends State<OtherAccountView> {
           final controller = context.read<SocialPostsCubit>();
           return state.status == StateStatus.loading
               ? const Center(child: CircularProgressIndicator())
-              : state.status == StateStatus.error
-                  ? ApiErrorPage(
-                      message: getFailureMessage(
-                        state.failure ?? UnknownFailure(''),
-                        context,
-                      ),
-                    )
                   : CustomScrollView(
                       slivers: [
                         SliverToBoxAdapter(
@@ -82,18 +81,23 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                     top: 80.h, end: 20.w, start: 20.w),
                                 child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.start,
                                     children: [
                                       IconButton(
                                           onPressed: () => context.pop(),
                                           icon: const Icon(
                                             Icons.arrow_back,
                                           )),
+                                      Text('${state.profileData?.firstName} ${state.profileData?.lastName}',
+                                      style: Styles.headerText(fontSize: 70.sp),
+                                      ),
+                                      const Spacer(),
                                       if (context
                                               .read<UserCubit>()
                                               .isLoggedIn &&
                                           loginUser?.id != widget.userId)
                                         PopupMenuButton(
+                                          color: Theme.of(context).scaffoldBackgroundColor,
                                             icon: const Icon(
                                               Icons.more_vert,
                                             ),
@@ -392,7 +396,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           ),
                         ),
                         SliverToBoxAdapter(
-                          child: state.profileData?.isBlock == false
+                          child: state.profileData?.isBlock == false&&state.profileData?.blockMe==false
                               ? Column(
                                   children: [
                                     TabBar(
@@ -426,33 +430,41 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                     // _buildAccountPages(state.profileData!),
                                   ],
                                 )
-                              : Center(
+                              : state.profileData?.blockMe == true?Center(
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 25.0),
                                     child: Label(
-                                      text: LocaleKeys
-                                          .youHaveBlockedThisUser.localize,
+                                      text: context.isArabic?'انت محظور من هذا المستخدم':'You are blocked by this user',
                                     ),
                                   ),
-                                ),
+                                ):Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 25.0),
+                              child: Label(
+                                text: LocaleKeys
+                                    .youHaveBlockedThisUser.localize,
+
+                              ),
+                            ),
+                          ),
                         ),
                         state.profilePage == 0 &&
-                                state.profileData?.isBlock == false
+                                state.profileData?.isBlock == false&&state.profileData?.blockMe==false
                             ? UserPosts(
                                 userData: state.profileData!,
                               )
                             : state.profilePage == 1 &&
-                                    state.profileData?.isBlock == false
+                                    state.profileData?.isBlock == false&&state.profileData?.blockMe==false
                                 ? UserTweets(
                                     userData: state.profileData!,
                                   )
                                 : state.profilePage == 2 &&
-                                        state.profileData?.isBlock == false
+                                        state.profileData?.isBlock == false&&state.profileData?.blockMe==false
                                     ? UserReels(
                                         userData: state.profileData!,
                                       )
                                     : state.profilePage == 2 &&
-                                            state.profileData?.isBlock == false
+                                            state.profileData?.isBlock == false&&state.profileData?.blockMe==false
                                         ? SavedReelsView(
                                             userData: state.profileData!)
                                         : const SliverToBoxAdapter(
@@ -483,7 +495,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 350.h,
+            height: 380.h,
             child: Stack(
               children: [
                 Positioned.fill(
@@ -560,6 +572,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         ],
                       ),
                     ),
+                    Sizer(),
                     Expanded(
                         child: Padding(
                       padding:
@@ -571,7 +584,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                  width: 210.w,
+                                  width: 180.w,
                                   child: AppButton(
                                       // height: 120.h,
                                       width: kToolbarHeight * 1.5,
@@ -638,7 +651,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                                   color: Colors.white),
                                             )))
                                     : SizedBox(
-                                        width: 210.w,
+                                        width: user.sentFriendRequest ==
+                                            true
+                                            ?  230.w:180.w,
                                         child: AppButton(
                                             // height: 80.h,
                                             padding: 5,
@@ -672,7 +687,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   ],
                 )),
                 PositionedDirectional(
-                    bottom: 20.h,
+                    bottom: 1.h,
                     start: 10,
                     child: Stack(
                       alignment: AlignmentDirectional.bottomEnd,
@@ -703,7 +718,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   ),
                                 ),
                               )
-                            : InkWell(
+                            : GestureDetector(
                                 onTap: () {
                                   showDialog(
                                       context: context,
@@ -718,20 +733,21 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           ));
                                 },
                                 child: CircleAvatar(
-                                  radius: 110.w,
+                                  radius: 160.w,
                                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                                   child: ImageFromInternet(
                                     image: user.profilePicture ??
                                         UIConst.profilePlaceHolder,
-                                    height: 180.h,
-                                    width: 250.w,
+                                    height: 250.h,
+                                    width: 300.w,
                                     isCircle: true,
                                   ),
                                 ),
                               ),
                         if (loginUser?.id == user.id)
                           PositionedDirectional(
-                            // end: 5.w,
+                            end: 30.w,
+                            bottom: 10.h,
                             child: InkWell(
                               onTap: () {
                                 selectImageGallary();
@@ -876,6 +892,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   ],
                 ),
                 Sizer(height: 5.h),
+                if (user.bio.isNotEmpty && user.bio !='Hidden')
                 Label(
                     text: user.bio,
                     style: Styles.mediumText(),

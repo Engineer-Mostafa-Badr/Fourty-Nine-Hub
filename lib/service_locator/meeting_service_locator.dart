@@ -1,4 +1,7 @@
+import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/edit_goal_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/get_scheuled_rooms_use_case.dart';
+import 'package:fourtyninehub/features/zoom/domain/usecases/send_gift_use_case.dart';
+import 'package:fourtyninehub/features/zoom/domain/usecases/send_points_use_case.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/zoom/data/data_source/meeting_data_source.dart';
@@ -26,11 +29,17 @@ class StreamServiceLocator {
     //usecases
     serviceLocator.registerFactory(() => AddRoomUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => JoinRoomUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => SendPointsUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => EditGoalUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => EndRoomUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => SendLiveGiftUseCase(serviceLocator()));
     serviceLocator
         .registerFactory(() => GetScheduledRoomsUseCase(serviceLocator()));
     //lazy singleton to use it in several places
     serviceLocator.registerFactory(() => StreamCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

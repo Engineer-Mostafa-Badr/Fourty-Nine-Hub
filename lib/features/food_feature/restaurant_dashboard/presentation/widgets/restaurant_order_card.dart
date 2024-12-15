@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
@@ -92,7 +93,7 @@ class RestaurantOrderCard extends StatelessWidget {
                           Text('${order.total.ceil()} ',
                               style: Styles.headerText(
                                   color: AppColors.WHATS_APP_COLOR)),
-                          Text(order.currency,
+                          Text(context.isArabic?order.currencyAr:order.currencyEn,
                               style: Styles.mediumText(
                                   color: AppColors.PRIMARY_COLOR_DARK,
                                   fontWeight: FontWeight.bold)),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -19,7 +20,7 @@ class BookDoctorAppointmentCardInfo extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 5.h),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: cardDarkColor(context),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(

@@ -29,6 +29,7 @@ class WebSocketHelper {
   //   );
   // }
 
+  int index = 0;
   Future<void> notificationListener(
       Function(Map<String, dynamic> data) notificationCallback) async {
     try {
@@ -52,7 +53,8 @@ class WebSocketHelper {
       socket.on('getRooms', (data) => pr('get rooms : $data'));
 
       socket.on('NotificationCreated', (data) {
-        pr('NotificationCreated Event is recieved and the data is: ');
+        index++;
+        pr('NotificationCreated Event is recieved and the data is $index}: ');
         pr(data);
         notificationCallback(jsonDecode(data));
       });
@@ -72,8 +74,8 @@ class WebSocketHelper {
   Future<String?> getUserToken() async {
     return serviceLocator<GetTokensUseCase>()
         . //
-        call(const NoParams())
+    call(const NoParams())
         . //
-        then((value) => value.fold((l) => null, (r) => r?.accessToken));
+    then((value) => value.fold((l) => null, (r) => r?.accessToken));
   }
 }

@@ -30,159 +30,178 @@ class BuildMetaVerified extends StatefulWidget {
 class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
   TextEditingController nameTextController = TextEditingController();
   var formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Label(
-          text: LocaleKeys.documentation.localize,
-          style: Styles.headerText(fontSize: 34, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: AppColors.BACKGROUND_COLOR,
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            context.pop();
-          },
-          icon: const Icon(Icons.close),
-        ),
-      ),
       body: BlocProvider<TwitterCubit>(
         create: (_) => serviceLocator(),
         child: BlocConsumer<TwitterCubit, TwitterState>(
             listener: (context, state) {},
             builder: (context, state) {
               final controller = context.read<TwitterCubit>();
-              return Padding(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: ListView(
-                  shrinkWrap: true,
-                  // crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Label(
-                      text: LocaleKeys.userName.localize,
-                      style: Styles.headerText(
-                          fontSize: 28, color: AppColors.GREY_DARK_COLOR),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Form(
-                        key: formKey,
-                        child: TextFormField(
-                          maxLines: null,
-                          controller: nameTextController,
-                          onChanged: (v) {
-                            setState(() {});
-                          },
-                          style: Styles.headerText(fontSize: 26),
-                          decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            contentPadding: const EdgeInsets.all(5),
-                            hintText:
-                                '${LocaleKeys.typeYourName.localize} ....',
-                            hintStyle: Styles.mediumText(),
+              return SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 80.h),
+                  child: ListView(
+                    shrinkWrap: true,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Icon(Icons.arrow_back)),
+                          SizedBox(
+                            width: 40.w,
                           ),
-                        )),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Label(
-                          text: LocaleKeys.personalPhoto.localize,
-                          style: Styles.headerText(
-                              fontSize: 28, color: AppColors.GREY_DARK_COLOR),
-                        ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
-                        _buildImageCard(
-                          label: '',
-                          onTap: () {
-                            controller.uploadPersonalPhoto();
-                          },
-                          onRemove: () {
-                            controller.removePersonalPhoto();
-                          },
-                          fileData: state.personalPhoto,
-                        ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
-                        Label(
-                          text: LocaleKeys.id.localize,
-                          style: Styles.headerText(
-                              fontSize: 28, color: AppColors.GREY_DARK_COLOR),
-                        ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildImageCard(
-                                  label: '',
-                                  text: LocaleKeys.front.localize,
-                                  onTap: () {
-                                    controller.uploadFrontId();
-                                  },
-                                  onRemove: () {
-                                    controller.removeFrontId();
-                                  },
-                                  fileData: state.frontId),
+                          Label(
+                            text: LocaleKeys.documentation.localize,
+                            style: Styles.mediumText(
+                              fontSize: 70.sp,
                             ),
-                            const SizedBox(
-                              width: 10,
+                          ),
+                        ],
+                      ),
+                      Sizer(
+                        height: 70.sp,
+                      ),
+                      Label(
+                        text: LocaleKeys.userName.localize,
+                        style: Styles.mediumText(fontSize: 65.sp),
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      Form(
+                          key: formKey,
+                          child: TextFormField(
+                            maxLines: null,
+                            controller: nameTextController,
+                            onChanged: (v) {
+                              setState(() {});
+                            },
+                            validator: (v) {
+                              if (v!.isEmpty) {
+                                return LocaleKeys.nameRequired.localize;
+                              }
+                            },
+                            style: Styles.mediumText(),
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10.w),
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).primaryColor)),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).primaryColor)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).primaryColor)),
+                              hintText:
+                                  '${LocaleKeys.typeYourName.localize} ....',
+                              hintStyle: Styles.mediumText(),
                             ),
-                            Expanded(
-                              child: _buildImageCard(
-                                  label: '',
-                                  text: LocaleKeys.back.localize,
-                                  onTap: () {
-                                    controller.uploadBackId();
-                                  },
-                                  onRemove: () {
-                                    print('back');
-                                    controller.removeBackId();
-                                  },
-                                  fileData: state.backId),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    _buildButton(onTap: () async {
-                      if (formKey.currentState!.validate()) {
-                        if (state.personalPhoto == null) {
-                          showErrorMessage(context, "Select Personal Photo");
-                        } else if (state.frontId == null) {
-                          showErrorMessage(context, "Select Front ID");
-                        } else if (state.backId == null) {
-                          showErrorMessage(context, "Select Back ID");
-                        } else {
-                          List<String> mediaIds = [];
-                          mediaIds.add(state.personalPhoto!.mediaId);
-                          mediaIds.add(state.frontId!.mediaId);
-                          mediaIds.add(state.backId!.mediaId);
+                          )),
+                      Sizer(
+                        height: 50.h,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Label(
+                              text: LocaleKeys.personalPhoto.localize,
+                              style: Styles.mediumText(fontSize: 65.sp)),
+                          SizedBox(
+                            height: 5.h,
+                          ),
+                          _buildImageCard(
+                            label: '',
+                            onTap: () {
+                              controller.uploadPersonalPhoto();
+                            },
+                            onRemove: () {
+                              controller.removePersonalPhoto();
+                            },
+                            fileData: state.personalPhoto,
+                          ),
+                          Sizer(
+                            height: 50.h,
+                          ),
+                          Label(
+                            text: LocaleKeys.id.localize,
+                            style: Styles.mediumText(fontSize: 65.sp),
+                          ),
+                          SizedBox(
+                            height: 5.h,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildImageCard(
+                                    label: '',
+                                    text: LocaleKeys.front.localize,
+                                    onTap: () {
+                                      controller.uploadFrontId();
+                                    },
+                                    onRemove: () {
+                                      controller.removeFrontId();
+                                    },
+                                    fileData: state.frontId),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: _buildImageCard(
+                                    label: '',
+                                    text: LocaleKeys.back.localize,
+                                    onTap: () {
+                                      controller.uploadBackId();
+                                    },
+                                    onRemove: () {
+                                      print('back');
+                                      controller.removeBackId();
+                                    },
+                                    fileData: state.backId),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 40.h,
+                      ),
+                      _buildButton(onTap: () async {
+                        if (formKey.currentState!.validate()) {
+                          if (state.personalPhoto == null) {
+                            showErrorMessage(context, "Select Personal Photo");
+                          } else if (state.frontId == null) {
+                            showErrorMessage(context, "Select Front ID");
+                          } else if (state.backId == null) {
+                            showErrorMessage(context, "Select Back ID");
+                          } else {
+                            List<String> mediaIds = [];
+                            mediaIds.add(state.personalPhoto!.mediaId);
+                            mediaIds.add(state.frontId!.mediaId);
+                            mediaIds.add(state.backId!.mediaId);
 
-                          await controller.onRequestVerification(
-                              params: TwitterDocumentationParams(
-                                  mediaIds: mediaIds,
-                                  name: nameTextController.text));
+                            await controller.onRequestVerification(
+                                params: TwitterDocumentationParams(
+                                    mediaIds: mediaIds,
+                                    name: nameTextController.text));
 
-                          showSuccessMessage(context,
-                              LocaleKeys.documentSuccessfully.localize);
-                          context.pop();
+                            showSuccessMessage(context,
+                                LocaleKeys.documentSuccessfully.localize);
+                            context.pop();
+                          }
                         }
-                      }
-                      // onSendRequest();
-                    }),
-                  ],
+                        // onSendRequest();
+                      }),
+                    ],
+                  ),
                 ),
               );
             }),
@@ -194,9 +213,9 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Icon(
+         Icon(
           Icons.camera_alt,
-          size: 50,
+          size: 90.sp,
           color: AppColors.LIGHT_GRAY_COLOR,
         ),
         if (text.isNotEmpty) _buildTitle(text),
@@ -207,13 +226,12 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
   Widget _buildButton({required Function onTap}) {
     return SizedBox(
       width: double.infinity,
-      height: 50.h,
+      height: 70.h,
       child: ElevatedAppButton(
         label: LocaleKeys.requestVerification.localize,
         backColor: AppColors.Arrow_Icon_color,
         onPressed: onTap,
-        textStyle: Styles.headerText(
-            fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
+        textStyle: Styles.mediumText(fontSize: 65.sp,color: AppColors.AUTH_CONTAINER_COLOR),
       ),
     );
   }
@@ -240,7 +258,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
               width: double.infinity,
               height: 200.h,
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
+                border: Border.all(color: Theme.of(context).primaryColor),
                 borderRadius: BorderRadius.circular(UIConst.radius),
               ),
               child: _buildImage(text ?? ''),

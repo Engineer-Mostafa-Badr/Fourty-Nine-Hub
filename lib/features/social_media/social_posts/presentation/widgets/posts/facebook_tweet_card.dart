@@ -88,7 +88,7 @@ class FacebookTweetCard extends StatelessWidget {
                         _buildAccountHeader(
                             context: context,
                             user: isShared == true && post.mainPost != null
-                                ? post.mainPost?.user
+                                ? post.user
                                 : post.user),
                         isShared == true
                             ? _buildMainContent(
