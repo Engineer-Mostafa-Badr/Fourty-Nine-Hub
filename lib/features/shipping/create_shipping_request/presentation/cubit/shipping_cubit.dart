@@ -59,16 +59,41 @@ class ShippingCubit extends Cubit<ShippingState> {
     );
   }
 
-  sortData(String subCateogryId) {
-    var item = bannerModel.subCategories?.indexWhere(
-      (element) => element.subCategoryId == subCateogryId,
+  // sortData(String subCateogryId) {
+  //   var item = bannerModel.subCategories?.indexWhere(
+  //     (element) => element.subCategoryId == subCateogryId,
+  //   );
+  //   if (item == -1) {
+  //     return;
+  //   }
+  //   var removedItem = bannerModel.subCategories?.removeAt(item!);
+  //   bannerModel.subCategories?.insert(0, removedItem!);
+  //   emit(SuccessGetBannerState(model: bannerModel));
+  // }
+
+  void sortData(
+    String subCateogryId, {
+    List<SubCategoryEntity>? originalList,
+  }) {
+    if (originalList == null || originalList.isEmpty) return;
+
+    int itemIndex = originalList.indexWhere(
+      (element) => element.id == subCateogryId,
     );
-    if (item == -1) {
+
+    if (itemIndex == -1) {
       return;
     }
-    var removedItem = bannerModel.subCategories?.removeAt(item!);
-    bannerModel.subCategories?.insert(0, removedItem!);
-    emit(SuccessGetBannerState(model: bannerModel));
+
+    List<SubCategoryEntity> workingList = List.from(originalList);
+
+    SubCategoryEntity removedItem = workingList.removeAt(itemIndex);
+    workingList.insert(0, removedItem);
+
+    emit(SuccessGetBannerState(
+      model: bannerModel,
+      editedCategoryList: workingList,
+    ));
   }
 
   selectSubCategory({required SubCategoryEntity subCategory}) {

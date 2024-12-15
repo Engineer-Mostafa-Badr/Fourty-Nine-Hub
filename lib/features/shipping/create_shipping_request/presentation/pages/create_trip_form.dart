@@ -122,7 +122,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                   state.model.mainCategory?.driverLength ?? 0,
                               cover: state.model.mainCategory?.cover ?? "",
                               banner: state.model.mainCategory?.banner ?? "",
-                              subcategories:
+                              subcategories: state.editedCategoryList ??
                                   sortList(state.model.subCategories)!
                                       .map(
                                         (e) => SubCategoryEntity(
@@ -246,7 +246,6 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                 readOnly: true,
                                 currentController: TextEditingController(),
                                 currentFocusNode: FocusNode(),
-                                // hint: "نقطة الاستلام",
                                 hint: time != null
                                     ? "${time!.hour.toString().padLeft(2, '0')}:${time!.minute.toString().padLeft(2, '0')}"
                                     : LocaleKeys.pickupTime.tr(),
@@ -538,23 +537,80 @@ class _CreateTripFormState extends State<CreateTripForm> {
               controller: scrollController,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                return GestureDetector(onTap: () {
+                return GestureDetector(
+
+                    //   onTap: () {
+                    //   setState(() {
+                    //     shippingCubit.sortData(category.subcategories![index].id);
+                    //     scrollController.jumpTo(0);
+                    //     if (select != null) {
+                    //       if (select!.id == category.subcategories![index].id) {
+                    //         select = null;
+                    //       } else {
+                    //         select = category.subcategories![index];
+                    //       }
+                    //     } else {
+                    //       select = category.subcategories![index];
+                    //     }
+                    //     if (select != null) {
+                    //       shippingCubit.seSubCategoryRequest(subCategory: select!);
+                    //       context.read<SelectCateogryCubit>().select(
+                    //           id: category.subcategories![index].id, type: 1);
+                    //     }
+                    //   });
+                    // },
+                    onTap: () {
                   setState(() {
-                    shippingCubit.sortData(category.subcategories![index].id);
+                    List<SubCategoryEntity> workingList =
+                        category.subcategories!.map((e) {
+                      return SubCategoryEntity(
+                        id: e.id,
+                        nameAr: e.nameAr,
+                        nameEn: e.nameEn,
+                        image: e.image,
+                        hasAuction: e.hasAuction ?? false,
+                        isFavorite: e.isFavorite ?? false,
+                        numberOfContent: e.numberOfContent ?? 0,
+                      );
+                    }).toList();
+
+                    final selectedSubCategory = workingList[index];
+                    // workingList.removeAt(index);
+                    // workingList.insert(0, selectedSubCategory);
+
+                    List<SubCategoryEntity> originalList =
+                        BlocProvider.of<ShippingCubit>(context)
+                            .bannerModel
+                            .subCategories!
+                            .map((e) => SubCategoryEntity(
+                                  id: e.subCategoryId ?? "",
+                                  nameAr: e.subCategoryNameAr ?? "",
+                                  nameEn: e.subCategoryNameEn ?? "",
+                                  image: e.picture ?? "",
+                                  hasAuction: false,
+                                  isFavorite: e.isFavorite ?? false,
+                                  numberOfContent: e.driverCount ?? 0,
+                                ))
+                            .toList();
+                    shippingCubit.sortData(
+                      selectedSubCategory.id,
+                      originalList: originalList,
+                    );
+
                     scrollController.jumpTo(0);
-                    if (select != null) {
-                      if (select!.id == category.subcategories![index].id) {
-                        select = null;
-                      } else {
-                        select = category.subcategories![index];
-                      }
+
+                    if (select != null &&
+                        select!.id == selectedSubCategory.id) {
+                      select = null;
                     } else {
-                      select = category.subcategories![index];
+                      select = selectedSubCategory;
                     }
+
                     if (select != null) {
                       shippingCubit.seSubCategoryRequest(subCategory: select!);
-                      context.read<SelectCateogryCubit>().select(
-                          id: category.subcategories![index].id, type: 1);
+                      context
+                          .read<SelectCateogryCubit>()
+                          .select(id: workingList[0].id, type: 1);
                     }
                   });
                 }, child: BlocBuilder<SelectCateogryCubit, RiderState>(
