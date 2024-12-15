@@ -47,15 +47,11 @@ class _ShippingBannerWidgetState extends State<ShippingBannerWidget> {
               if ((state.model.mainCategory?.isDriver ?? false) &&
                   (state.model.mainCategory?.isDriverApproved ?? false))
                 // if(!(state.model.mainCategory?.haveTrip??false))
-                Column(
-                  children: [
-                    DashboardBanner(
-                      onTap: () => context.push(Routes.DASHBOARDDRIVERSCREEN),
-                      title: Labels.loadingDashboard,
-                      subTitle: "",
-                      route: Routes.DOCTORDASHBOARD,
-                    ),
-                  ],
+                DashboardBanner(
+                  onTap: () => context.push(Routes.DASHBOARDDRIVERSCREEN),
+                  title: Labels.loadingDashboard,
+                  subTitle: "",
+                  route: Routes.DOCTORDASHBOARD,
                 ),
               // لو هو مش مسجل
               // if ((state.model.mainCategory?.isDriver ??

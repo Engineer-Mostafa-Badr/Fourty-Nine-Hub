@@ -251,6 +251,7 @@ class CacheServiceImpl implements CacheService {
   }
 
   @override
+
   Future<void> setLogin(bool value) async {
     await preferences.setBool(_ISLOGIN, value);
   }

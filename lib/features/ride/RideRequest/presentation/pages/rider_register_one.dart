@@ -72,6 +72,7 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
   late RegisterRiderCubit riderCubit;
 
   String workingType = 'percentage';
+  String vehicleType = 'car';
   // "workingType" : "percentage" //percentage or subscribePackage
   @override
   void initState() {
@@ -230,6 +231,44 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
               const SizedBox(
                 height: 10,
               ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 17),
+                width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(border: Border.all()),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    DropdownButton(
+                      icon: Container(),
+                      value: vehicleType,
+                      dropdownColor: Colors.white,
+                      style: const TextStyle(color: Colors.black),
+                      onChanged: (value) {
+                        setState(() {
+                          vehicleType = value ?? "";
+                          registerRider.model.vehicleType = vehicleType;
+                        });
+                      },
+                      items: const [
+                        DropdownMenuItem(
+                          value: "car",
+                          child: Text("Car"),
+                        ),
+                        DropdownMenuItem(
+                          value: "scooter",
+                          child: Text("Scooter"),
+                        ),
+                      ],
+                      underline: Container(),
+                    ),
+                    const Icon(Icons.arrow_drop_down)
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               Row(
                 children: [
                   Expanded(
@@ -237,6 +276,7 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Switch(
+                          inactiveTrackColor: AppColors.GREY_LIGHT_COLOR,
                           onChanged: (value) {
                             setState(() {
                               if (context.isUserLoggedIn) {
@@ -266,6 +306,7 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Switch(
+                          inactiveTrackColor: AppColors.GREY_LIGHT_COLOR,
                           onChanged: (value) {
                             setState(() {
                               if (context.isUserLoggedIn) {
@@ -934,12 +975,12 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                   ),
                   label: Labels.submit,
                   onPressed: () {
-                    log(widget.formKey.currentState!.validate().toString(),
-                        name: "lksdjflksjf");
+                    // log(widget.formKey.currentState!.validate().toString(),
+                    //     name: "lksdjflksjf");
                     // log("lksjdflksdjflskdjf", name: lastNameController.text);
                     // log(formKey.currentState!.validate().toString(),
                     // name: "laksjdf");
-                    if (widget.formKey.currentState?.validate() ?? false) {
+                    // if (widget.formKey.currentState?.validate() ?? false) {
                       registerRider.model.driverFirstName =
                           firstNameController.text;
                       registerRider.model.driverLastName =
@@ -959,7 +1000,7 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                       registerRider.model.plateInfo =
                           plateNumberController.text;
                       registerRider.registerOne();
-                    }
+                    // }
                     // registerRider.register();
                     // log("${registerRider.model.registerOne()}",
                     //       name: "lksjdflskjdflskdjf");

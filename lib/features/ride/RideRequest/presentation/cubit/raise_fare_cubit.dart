@@ -7,32 +7,37 @@ import '../../domain/repositories/reider_request_repository.dart';
 
 class RaiseFareCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repository;
-  int? price;
-  int? currentPrice;
-  bool canChangePrice = false;
+  double? price;
+  double? currentPrice;
+  bool active = false;
   RaiseFareCubit({required this.repository}) : super(InitalRiderState());
-  update({required String tripId, required double tripPrice}) {
+  update({required String tripId}) {
+    log(price.toString());
     if (price != null) {
-      repository.riseFare(
-          offer: (price! + tripPrice).toString(), tripId: tripId);
-      canChangePrice = false;
-      price = null;
+      repository.riseFare(offer: price.toString(), tripId: tripId);
+      active = false;
+      currentPrice = price;
     }
   }
 
-  increasePrice({required int newPrice}) {
-    currentPrice = (currentPrice ?? 0) + newPrice;
-    price = (price ?? 0) + newPrice;
+  increasePrice({required double tripPrice}) {
+    currentPrice ??= tripPrice;
+    price = (price ?? tripPrice) + 3;
+    active = true;
+    log(price.toString(), name: "Price");
   }
 
-  decreasePrice({required int newPrice}) {
-    if (currentPrice != null) {
-      if ((price ?? 0) > 0) {
-        price = (price ?? 0) - newPrice;
-        currentPrice = (currentPrice ?? 0) - newPrice;
+  decreasePrice() {
+    if (active) {
+      if (price == currentPrice) {
+        active = false;
       } else {
-        log(price.toString(), name: "Price");
-        price = null;
+        if (price != null) {
+          price = price! - 3;
+        }
+        if (price == currentPrice) {
+          active = false;
+        }
       }
     }
   }

@@ -302,7 +302,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                               return LocaleKeys.youHaveToFillYourDescription
                                   .tr();
                             } else {
-                              if (regex.hasMatch(value ?? "")) {
+                              if (!regex.hasMatch(value ?? "")) {
                                 return null;
                               } else {
                                 return LocaleKeys
@@ -445,7 +445,9 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                 height: 40,
                                 label: LocaleKeys.premiumRequest.tr(),
                                 style: Styles.headerText(color: Colors.white),
-                                onPressed: () {},
+                                onPressed: () {
+
+                                },
                               ),
                             ),
                             // const Gap(6),

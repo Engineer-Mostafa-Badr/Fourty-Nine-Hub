@@ -494,7 +494,7 @@ class EndPoints {
   static const sendRideRequest = '/ride/trips/new';
   static const checkDriverType = '/ride/riders/checkDriver/type';
   static const createRideTripRequest = '/ride/trip';
-  static const createRideTripRequestPremium = 'ride/trip/premium';
+  static const createRideTripRequestPremium = '/ride/trip/premium';
   static const getAddressFromLatAndLong = '/ride/trips/address/latAndLong';
 
   static const getMyPickMeTrips = '/ride/pick-me/trip/requests';

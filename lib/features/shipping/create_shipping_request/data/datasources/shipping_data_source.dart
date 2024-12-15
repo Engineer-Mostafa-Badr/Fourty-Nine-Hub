@@ -125,9 +125,12 @@ class ShippingDataSource {
   }
 
   Future<Either<Failure, Map<String, dynamic>>> callMessage(
-      {required String ownerId, required String subcategoryId}) {
+      {required String ownerId, required String subcategoryId}) async {
+    String? token = await cacheService.getUserToken() ?? "";
+    log(token, name: "lllllllllllllllllllllllllddddddddddddddddd");
+    String? userId = extractUserId(token);
     return api.post(EndPoints.click, data: {
-      "clientId": "66b4659d1c9c4b1cb35bfee4",
+      "clientId": userId,
       "ownerId": ownerId,
       "subcategoryId": subcategoryId
     });

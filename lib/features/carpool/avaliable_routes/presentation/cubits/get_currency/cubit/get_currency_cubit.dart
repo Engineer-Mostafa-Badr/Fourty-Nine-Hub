@@ -20,7 +20,6 @@ class GetCurrencyCubit extends Cubit<GetCurrencyState> {
       final Either<Failure, Map<String, dynamic>> response =
           await apiConsumer.get(EndPoints.getCurrencyCarPool);
 
-      // Handle the Either response
       response.fold(
         (failure) => emit(GetCurrencyFailure(_mapFailureToMessage(failure))),
         (data) {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_info_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_payment_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
@@ -54,6 +55,13 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
   }
 
   @override
+  void initState() {
+    BlocProvider.of<GetCurrencyCubit>(context).getCurrencyData();
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<OfferCubit, RiderState>(
       listener: (context, state) {
@@ -68,9 +76,12 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
       child: BlocBuilder<OfferCubit, RiderState>(builder: (context, state) {
         log(state.toString(), name: "SuccessAcceptOfferRideState");
         return BlocListener<RequestRiderTripCubit, RiderState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             log(state.toString(), name: "klsjdlkjfslkdjflskdjf");
             if (state is SuccessRequestTripState) {
+              await BlocProvider.of<GetCurrencyCubit>(context)
+                  .getCurrencyData();
+
               context.pop();
               context.read<ShowOffersCubit>().showOffers();
               context.read<LocationSocketCubit>().nearbyDriversEmit(
@@ -79,12 +90,29 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
                   subcategoryId: state.model.trip?.subCategoryId ?? "");
               showModalBottomSheet(
                 context: context,
+                isDismissible: false, // Prevent dismissing by tapping outside
+                enableDrag: false, // Prevent drag to dismiss
+                isScrollControlled: true, // Allow full-screen height if needed
                 builder: (context) {
-                  return BlocProvider(
-                    create: (context) =>
-                        RaiseFareCubit(repository: serviceLocator()),
-                    child: RequestButtonSheetWidget(
-                      model: state.model,
+                  return GestureDetector(
+                    onVerticalDragStart: (_) {}, // Disable manual drag gestures
+                    child: BlocProvider(
+                      create: (context) => RaiseFareCubit(
+                        repository: serviceLocator(),
+                      ),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.of(context).size.height *
+                              0.7, // Adjust height
+                        ),
+                        child: BlocProvider(
+                          create: (context) =>
+                              GetCurrencyCubit(serviceLocator()),
+                          child: RequestButtonSheetWidget(
+                            model: state.model,
+                          ),
+                        ),
+                      ),
                     ),
                   );
                 },
@@ -92,10 +120,13 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
             }
           },
           child: BlocListener<ShowOffersCubit, RiderState>(
-            listener: (context, state) {
+            listener: (context, state) async {
               if (state is SuccessGetOfferDataState) {
                 log(state.toString(), name: "SuccessGetOfferDataState");
                 if (state.data != null) {
+                  await BlocProvider.of<GetCurrencyCubit>(context)
+                      .getCurrencyData();
+
                   log(state.data?.firstName.toString() ?? "null",
                       name: "slkfjslkdjf");
                   final overlay = Overlay.of(context);
@@ -105,9 +136,12 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
                       left: 10,
                       right: 10,
                       child: Material(
-                          child: AcceptOrDeclineTrip(
-                        tripId: state.data?.id ?? "",
-                        model: state.data!,
+                          child: BlocProvider(
+                        create: (context) => GetCurrencyCubit(serviceLocator()),
+                        child: AcceptOrDeclineTrip(
+                          tripId: state.data?.id ?? "",
+                          model: state.data!,
+                        ),
                       )),
                     ),
                   );
@@ -128,13 +162,19 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
                     padding: const EdgeInsets.symmetric(horizontal: 17),
                     child: Column(
                       children: [
-                        BlocBuilder<GetTripInfoCubit, RiderState>(
-                          builder: (context, state) {
+                        BlocListener<GetTripInfoCubit, RiderState>(
+                          listener: (context, state) {
                             if (state is SuccessGetTripInfoState) {
                               if (!isBottomSheetShown) {
                                 isBottomSheetShown = true;
                                 WidgetsBinding.instance.addPostFrameCallback(
                                   (timeStamp) {
+                                    context
+                                        .read<RiderTripReelTimeCubit>()
+                                        .print();
+                                    BlocProvider.of<GetCurrencyCubit>(context)
+                                        .getCurrencyData();
+
                                     showModalBottomSheet(
                                       isScrollControlled: true,
                                       backgroundColor: Colors.white,
@@ -152,8 +192,12 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
                                                       repository:
                                                           serviceLocator())),
                                         ],
-                                        child: TripInfoButtonSheetWidget(
-                                          model: state.model,
+                                        child: BlocProvider(
+                                          create: (context) => GetCurrencyCubit(
+                                              serviceLocator()),
+                                          child: TripInfoButtonSheetWidget(
+                                            model: state.model,
+                                          ),
                                         ),
                                       ),
                                     ).whenComplete(
@@ -164,13 +208,9 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
                                   },
                                 );
                               }
-                              return const Column(
-                                children: [],
-                              );
-                            } else {
-                              return Container();
                             }
                           },
+                          child: Container(),
                         ),
                         const Sizer(),
                       ],

@@ -1,10 +1,10 @@
 class ReviewRideTripModel {
   final List comments;
-  final int driver;
-  final int trip;
-  final int service;
+  final double driver;
+  final double trip;
+  final double service;
   final String fullName;
-  final int averageRating;
+  final double averageRating;
   final int numberOfReviewers;
   ReviewRideTripModel(
       {required this.comments,

@@ -28,6 +28,7 @@ class RiderRegisterModel {
   String? idExpiryDate;
   String? drvingExpiryDate;
   String? licenseExpiryDate;
+  String? carModel;
   RiderRegisterModel({
     this.driverFirstName,
     this.driverLastName,
@@ -40,6 +41,7 @@ class RiderRegisterModel {
     this.vehicleYear,
     this.subcategoryId,
     this.yourFavoriteCity,
+    this.carModel,
     this.pricingPerKm,
     this.phone,
     this.smoker,
@@ -64,13 +66,10 @@ class RiderRegisterModel {
       "vehicleModel": vehicleModel,
       "vehicleBrand": vehicleBrand,
       "vehicleColor": "vehicleColor",
-      "vehicleType": "vehicleType",
+      "vehicleType": vehicleType??'car',
       "vehicleYear": vehicleYear,
-      "workingType": workingType,
-      "subcategoryIds": [
-        '62c8baa28e28a58a3edf57f1',
-        '62c8baa38e28a58a3edf57f3'
-      ],
+      "workingType": workingType??"percentage",
+      "subcategoryIds": subcategoryIds,
       "pricingPerKm": pricingPerKm,
       "phone": phone,
       "smoker": smoker ?? false,
@@ -87,6 +86,7 @@ class RiderRegisterModel {
       "driverLastName": driverLastName,
       "subcategoryId": subcategoryId,
       "phone": phone,
+      "carModel" : carModel,
       "plateInfo": plateInfo,
       "idNumber": idNumber
     };

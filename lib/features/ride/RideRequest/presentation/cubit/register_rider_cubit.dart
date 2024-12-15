@@ -43,13 +43,30 @@ class RegisterRiderCubit extends Cubit<RiderState> {
     '62c8baa28e28a58a3edf57f1',
     '62c8baa38e28a58a3edf57f3'
   ];
-  List<SubCategory> SELECTED_RICH_VALID_SUBCATEGORY_IDS = [];
+
   List WOMEN_SUBCATEGORY_IDS = [
     '62ea012a69ea29c91dfc3917',
     '62c8baa08e28a58a3edf57ed',
     '62c8baa38e28a58a3edf57f3'
   ];
+  List<String> NO_SOCKET_SUBCATEGORY_IDS = [
+    "62c8baa48e28a58a3edf57f5",
+    "62c8baa78e28a58a3edf57f9",
+    "62c8baa88e28a58a3edf57fd",
+    "62c8baaa8e28a58a3edf57ff",
+    "62c8baab8e28a58a3edf5801",
+    "62c8baa68e28a58a3edf57f7",
+  ];
+  List<String> SOCKET_CATEGORY_IDS = [
+    "62c8ba9e8e28a58a3edf57e9",
+    "6698736fdaa111da2d775627"
+  ];
+  List<SubCategory> SELECTED_RICH_VALID_SUBCATEGORY_IDS = [];
   List<SubCategory> SELECTED_WOMEN_SUBCATEGORY_IDS = [];
+  List<SubCategory> SELECTED_NO_SOCKET_SUBCATEGORY_IDS = [];
+  List<SubCategory> SELECTED_SOCKET_CATEGORY_IDS = [];
+  List<SubCategory> selectedSubCategoryList = [];
+  SubCategory? selectedSubCategoryNoSocket;
 
   RegisterRiderCubit({required this.repo, required this.repository})
       : super(RiderInitial());
@@ -58,46 +75,84 @@ class RegisterRiderCubit extends Cubit<RiderState> {
     model.subcategoryId = id;
   }
 
-  selectSubCategory({required List<SubCategory> subCategory}) {
-    for (var item in subCategory) {
-      if (RICH_VALID_SUBCATEGORY_IDS.contains(item.subCategoryId)) {
-        SELECTED_WOMEN_SUBCATEGORY_IDS.clear();
-        if (!SELECTED_RICH_VALID_SUBCATEGORY_IDS.contains(item)) {
-          SELECTED_RICH_VALID_SUBCATEGORY_IDS.add(item);
+  selectSubCategory({required SubCategory subCategory}) {
+    if (subCategory.subCategoryId == "62c8baa08e28a58a3edf57ed" ||
+        subCategory.subCategoryId == "62c8baa38e28a58a3edf57f3") {
+      if (SELECTED_WOMEN_SUBCATEGORY_IDS.isNotEmpty) {
+        if (SELECTED_WOMEN_SUBCATEGORY_IDS.contains(subCategory)) {
+          SELECTED_WOMEN_SUBCATEGORY_IDS.remove(subCategory);
+        } else {
+          SELECTED_WOMEN_SUBCATEGORY_IDS.add(subCategory);
         }
-      } else if (WOMEN_SUBCATEGORY_IDS.contains(item.subCategoryId)) {
-        if (!SELECTED_WOMEN_SUBCATEGORY_IDS.contains(item)) {
-          SELECTED_WOMEN_SUBCATEGORY_IDS.add(item);
-        }
-        SELECTED_RICH_VALID_SUBCATEGORY_IDS.clear();
       } else {
-        log("noooooooooooooooooooooooooooooo");
+        if (SELECTED_RICH_VALID_SUBCATEGORY_IDS.contains(subCategory)) {
+          SELECTED_RICH_VALID_SUBCATEGORY_IDS.remove(subCategory);
+        } else {
+          SELECTED_RICH_VALID_SUBCATEGORY_IDS.add(subCategory);
+        }
+      }
+    } else {
+      if (RICH_VALID_SUBCATEGORY_IDS.contains(subCategory.subCategoryId)) {
+        log("RICH_VALID_SUBCATEGORY_IDS");
+        SELECTED_WOMEN_SUBCATEGORY_IDS.clear();
+        SELECTED_NO_SOCKET_SUBCATEGORY_IDS.clear();
+        SELECTED_SOCKET_CATEGORY_IDS.clear();
+        if (SELECTED_RICH_VALID_SUBCATEGORY_IDS.contains(subCategory)) {
+          log("remove");
+          SELECTED_RICH_VALID_SUBCATEGORY_IDS.remove(subCategory);
+        } else {
+          log("add");
+          SELECTED_RICH_VALID_SUBCATEGORY_IDS.add(subCategory);
+        }
+      } else if (WOMEN_SUBCATEGORY_IDS.contains(subCategory.subCategoryId)) {
+        log("WOMEN_SUBCATEGORY_IDS");
+        SELECTED_NO_SOCKET_SUBCATEGORY_IDS.clear();
+        SELECTED_RICH_VALID_SUBCATEGORY_IDS.clear();
+        SELECTED_SOCKET_CATEGORY_IDS.clear();
+        if (SELECTED_WOMEN_SUBCATEGORY_IDS.contains(subCategory)) {
+          SELECTED_WOMEN_SUBCATEGORY_IDS.remove(subCategory);
+        } else {
+          SELECTED_WOMEN_SUBCATEGORY_IDS.add(subCategory);
+        }
+      } else if (SOCKET_CATEGORY_IDS.contains(subCategory.subCategoryId)) {
+        log("SOCKET_CATEGORY_IDS");
+        SELECTED_NO_SOCKET_SUBCATEGORY_IDS.clear();
+        SELECTED_RICH_VALID_SUBCATEGORY_IDS.clear();
+        SELECTED_SOCKET_CATEGORY_IDS.clear();
+        if (SELECTED_SOCKET_CATEGORY_IDS.contains(subCategory)) {
+          SELECTED_SOCKET_CATEGORY_IDS.clear();
+        } else {
+          SELECTED_SOCKET_CATEGORY_IDS = [subCategory];
+        }
+      } else {
+        log("SELECTED_NO_SOCKET_SUBCATEGORY_IDS",
+            name: subCategory.subCategoryId.toString());
+        SELECTED_RICH_VALID_SUBCATEGORY_IDS.clear();
+        SELECTED_WOMEN_SUBCATEGORY_IDS.clear();
+        SELECTED_SOCKET_CATEGORY_IDS.clear();
+        if (SELECTED_NO_SOCKET_SUBCATEGORY_IDS.contains(subCategory)) {
+          SELECTED_NO_SOCKET_SUBCATEGORY_IDS.remove(subCategory);
+        } else {
+          SELECTED_NO_SOCKET_SUBCATEGORY_IDS = [subCategory];
+        }
       }
     }
-
-    // multiSelectController
-    log(SELECTED_RICH_VALID_SUBCATEGORY_IDS.toString(),
+    if (SELECTED_WOMEN_SUBCATEGORY_IDS.isNotEmpty) {
+      selectedSubCategoryList = SELECTED_WOMEN_SUBCATEGORY_IDS;
+    }
+    if (SELECTED_RICH_VALID_SUBCATEGORY_IDS.isNotEmpty) {
+      selectedSubCategoryList = SELECTED_RICH_VALID_SUBCATEGORY_IDS;
+    }
+    if (SELECTED_NO_SOCKET_SUBCATEGORY_IDS.isNotEmpty) {
+      selectedSubCategoryList = SELECTED_NO_SOCKET_SUBCATEGORY_IDS;
+    }
+    if (SELECTED_SOCKET_CATEGORY_IDS.isNotEmpty) {
+      selectedSubCategoryList = SELECTED_SOCKET_CATEGORY_IDS;
+    }
+    log(selectedSubCategoryList.toString(),
         name: "SELECTED_RICH_VALID_SUBCATEGORY_IDS");
-    log(SELECTED_WOMEN_SUBCATEGORY_IDS.toString(),
-        name: "SELECTED_WOMEN_SUBCATEGORY_IDS");
   }
 
-// const RICH_VALID_SUBCATEGORY_IDS = [
-//   CAPTAIN_CATEGORY_ID,
-//   PREMIUM_CATEGORY_ID,
-//   PICKUP_CATEGORY_ID,
-//   SUV_CATEGORY_ID,
-//   INTERCITY_CATEGORY_ID,
-// ];
-
-// const WOMEN_SUBCATEGORY_IDS = [WOMEN_CATEGORY_ID, INTERCITY_CATEGORY_ID, PREMIUM_CATEGORY_ID];
-// const CAPTAIN_CATEGORY_ID = '62c8ba9f8e28a58a3edf57eb';
-// const SCOOTER_CATEGORY_ID = '6698736fdaa111da2d775627';
-// const WOMEN_CATEGORY_ID = '62ea012a69ea29c91dfc3917';
-// const INTERCITY_CATEGORY_ID = '62c8baa08e28a58a3edf57ed';
-// const PICKUP_CATEGORY_ID = '62c8baa18e28a58a3edf57ef';
-// const SUV_CATEGORY_ID = '62c8baa28e28a58a3edf57f1';
-// const PREMIUM_CATEGORY_ID = '62c8baa38e28a58a3edf57f3';
   String? validation({required String message, required bool condition}) {
     if (condition) {
       return message;
@@ -154,6 +209,7 @@ class RegisterRiderCubit extends Cubit<RiderState> {
   }
 
   pickBrand(String brand) {
+    log(brand);
     model.vehicleBrand = brand;
   }
 
@@ -168,6 +224,8 @@ class RegisterRiderCubit extends Cubit<RiderState> {
   }
 
   registerOne() async {
+    model.subcategoryIds =
+        selectedSubCategoryList.map((e) => e.subCategoryId ?? '').toList();
     var response = await repo.registerDriver(model: model);
     response.fold(
       (l) {
@@ -184,6 +242,8 @@ class RegisterRiderCubit extends Cubit<RiderState> {
   }
 
   registerTow(BuildContext context) async {
+    log("message");
+    model.subcategoryId = selectedSubCategoryList.first.subCategoryId ?? "";
     var response = await repo.riderRegister(model: model);
     response.fold(
       (l) {

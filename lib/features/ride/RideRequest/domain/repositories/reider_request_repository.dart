@@ -212,6 +212,12 @@ class ReiderRequestRepository {
     // return data;
   }
 
+  void updatePriceOn() {
+    socket.socket.on("trip:updatePrice", (data) {
+      getAllTripSocket((data) {});
+    });
+  }
+
   void getAllTripSocket(Function(List<AllTripForDriverModel> data) onData) {
     log("llllllllllllllllllllllllllllllllllllllllllllllllllll getAllTrip");
     socket.socket.connect();
@@ -219,10 +225,8 @@ class ReiderRequestRepository {
     socket.socket.on(
       "Ride:getAllTrip",
       (data) {
-        // log("llllllllllllllllllllllllllllllllllllllllllllllllllll");
-        log(jsonDecode(extractTextAfterSymbol(data, '[')).toString(),
-            name:
-                "llllllllllllllllllllllllllllllllllllllllllllllllllll getAllTripSocket");
+        updatePriceOn();
+        log(data.toString(), name: "jdflksjdflksjdlfkjdkjfjfjfjfjfkdkdkkd");
         List<AllTripForDriverModel> model =
             (jsonDecode(extractTextAfterSymbol(data, '[')) as List)
                 .map(
@@ -314,6 +318,16 @@ class ReiderRequestRepository {
     );
   }
 
+  checkTripEnd({required Function() check}) {
+    socket.socket.on(
+      "Ride:endTrip",
+      (data) {
+        log(data.toString());
+        check();
+      },
+    );
+  }
+
   Future<Either<Failure, Map<String, dynamic>>> riderInStartLocation(
       {required String id}) {
     return dataSource.riderInStartLocation(id: id);
@@ -390,10 +404,12 @@ class ReiderRequestRepository {
       {required String id}) {
     return dataSource.deleteTripNoSocket(id: id);
   }
+
   Future<Either<Failure, Map<String, dynamic>>> completeTripNoSocket(
       {required String id}) {
     return dataSource.completeTripNoSocket(id: id);
   }
+
   Future<Either<Failure, Map<String, dynamic>>> rating(
       {required RattingDriverModel model}) {
     return dataSource.rating(model: model);

@@ -131,11 +131,9 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                         )
                       ],
                     ),
-
                     const SizedBox(
                       height: 4,
                     ),
-
                     Row(
                       children: [
                         Flexible(
@@ -394,7 +392,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                                         passangers: numberOfPassenger,
                                         phone: phone.text,
                                         price: double.parse(offerPrice.text),
-                                        time: time.toString(),
+                                        time: "${DateFormat(DateFormat.YEAR_MONTH_DAY).format(date!)}:${time?.hour}:${time?.minute}",
                                         toTitle: destinationController.text,
                                         desc: ""),
                                   );
@@ -418,6 +416,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                                 if (formKey.currentState!.validate()) {
                                   createRequestCubit.request(
                                     model: CreateTripRideRequestModel(
+                                      
                                         categoryId: context
                                             .read<RiderTripReelTimeCubit>()
                                             .subCategory
@@ -426,7 +425,7 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                                         passangers: numberOfPassenger,
                                         phone: phone.text,
                                         price: double.parse(offerPrice.text),
-                                        time: time.toString(),
+                                        time: "${DateFormat(DateFormat.YEAR_MONTH_DAY).format(date!)}:${time?.hour}:${time?.minute}",
                                         toTitle: destinationController.text,
                                         desc: ""),
                                   );

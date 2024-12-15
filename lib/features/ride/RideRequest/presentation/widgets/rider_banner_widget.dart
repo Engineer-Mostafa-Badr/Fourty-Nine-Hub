@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +19,7 @@ class RiderBannerWidget extends StatelessWidget {
     return BlocBuilder<GetCateogryRiderCubit, RiderState>(
       builder: (context, state) {
         if (state is SuccessGetCateogyRider) {
+          log((state.model.mainCategory?.isSocketCategory).toString());
           return Column(
             children: [
               Padding(
@@ -31,7 +34,20 @@ class RiderBannerWidget extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 0, vertical: 5),
                       child: DashboardBanner(
-                        onTap: () => context.push(Routes.ALLTRIPNOSOCKETSCREEN),
+                        onTap: () {
+                          if (state.model.mainCategory?.isSocketCategory ??
+                              false) {
+                            log("Socket Screen");
+                            context.push(Routes.ALLTRIPRIDER);
+                          } else {
+                            log("No Socket Screen");
+                            context.push(Routes.ALLTRIPNOSOCKETSCREEN);
+                          }
+                          // (state.model.mainCategory?.isSocketCategory ??
+                          //           false)
+                          //       ? context.push(Routes.ALLTRIPRIDER)
+                          //       : context.push(Routes.ALLTRIPNOSOCKETSCREEN),
+                        },
                         title: LocaleKeys.rideDashboard.tr(),
                         subTitle: "",
                         route: Routes.DOCTORDASHBOARD,

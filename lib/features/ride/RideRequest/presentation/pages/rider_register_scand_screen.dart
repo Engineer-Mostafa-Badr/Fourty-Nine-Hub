@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,6 +43,7 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
   FocusNode pricingPerKmFocusNode = FocusNode();
   FocusNode vehicleTypeFocusNode = FocusNode();
   FocusNode vehicleYearFocusNode = FocusNode();
+  FocusNode carModelFocusNode = FocusNode();
   FocusNode model = FocusNode();
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
@@ -54,21 +57,8 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
   TextEditingController pricingPerKmController = TextEditingController();
   TextEditingController vehicleTypeController = TextEditingController();
   TextEditingController vehicleYearController = TextEditingController();
-  // GlobalKey<FormState> formKey = GlobalKey();
+  TextEditingController carModelController = TextEditingController();
   bool smoker = false;
-
-  // String? vehicleModel;
-  // String? vehicleBrand;
-  // String? vehicleColor;
-  // "vehicleType" : "car",
-  //   "vehicleYear" : "1975",
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // context.read<ShippingCubit>().getBannerData();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +130,7 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                       child: DefaultTextFormField(
                         isAuthentcation: true,
                         currentFocusNode: phoneFocusNode,
-                        nextFocusNode: vehicleModelFocusNode,
+                        // nextFocusNode: carModelFocusNode,
                         hint: Labels.phone,
                         hintColor: AppColors.PRIMARY_COLOR,
                         currentController: phoneController,
@@ -615,6 +605,20 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                     );
                   },
                 ),
+                const Sizer(),
+                DefaultTextFormField(
+                  isAuthentcation: true,
+                  currentFocusNode: carModelFocusNode,
+                  hint: Labels.model,
+                  hintColor: AppColors.PRIMARY_COLOR,
+                  currentController: phoneController,
+                  validator: (p0) {
+                    if (p0 == null || p0.isEmpty) {
+                      return LocaleKeys.phoneIsRequired.tr();
+                    }
+                    return null;
+                  },
+                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -641,19 +645,21 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                     ),
                     label: Labels.submit,
                     onPressed: () {
+                      log("message");
                       if (context.isUserLoggedIn) {
-                        if (widget.formKey.currentState!.validate()) {
-                          registerRider.model.driverFirstName =
-                              firstNameController.text;
-                          registerRider.model.driverLastName =
-                              lastNameController.text;
-                          registerRider.model.phone = phoneController.text;
-                          registerRider.model.idNumber =
-                              idNumberController.text;
-                          registerRider.model.plateInfo =
-                              plateNumberController.text;
-                          registerRider.registerTow(context);
-                        }
+                        // if (widget.formKey.currentState!.validate()) {
+                        log(firstNameController.text);
+                        registerRider.model.driverFirstName =
+                            firstNameController.text;
+                        registerRider.model.driverLastName =
+                            lastNameController.text;
+                        registerRider.model.phone = phoneController.text;
+                        registerRider.model.idNumber = idNumberController.text;
+                        registerRider.model.carModel = carModelController.text;
+                        registerRider.model.plateInfo =
+                            plateNumberController.text;
+                        registerRider.registerTow(context);
+                        // }
                       } else {
                         context.push(Routes.LOGIN);
                       }

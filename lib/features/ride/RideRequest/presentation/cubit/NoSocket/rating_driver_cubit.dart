@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rating_driver_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/repositories/reider_request_repository.dart';
@@ -13,6 +15,7 @@ class RatingDriverCubit extends Cubit<RiderState> {
         emit(FailureRiderState(failure: l));
       },
       (r) {
+        log("lskdjflskjflksjdkdkdkdksldkjflskdjflskdjf");
         emit(SuccessRateDvierState());
       },
     );

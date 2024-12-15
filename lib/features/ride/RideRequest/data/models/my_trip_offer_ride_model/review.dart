@@ -1,9 +1,9 @@
 class Review {
-  int? averageRating;
+  double? averageRating;
   int? numberOfReviewers;
-  int? ratingDriver;
-  int? ratingTrip;
-  int? ratingService;
+  double? ratingDriver;
+  double? ratingTrip;
+  double? ratingService;
   List<dynamic>? comments;
 
   Review({
@@ -16,11 +16,11 @@ class Review {
   });
 
   factory Review.fromJson(Map<String, dynamic> json) => Review(
-        averageRating: json['averageRating'] as int?,
+        averageRating: double.parse(json['averageRating'].toString()),
         numberOfReviewers: json['numberOfReviewers'] as int?,
-        ratingDriver: json['ratingDriver'] as int?,
-        ratingTrip: json['ratingTrip'] as int?,
-        ratingService: json['ratingService'] as int?,
+        ratingDriver: double.parse(json['ratingDriver'].toString()),
+        ratingTrip: double.parse(json['ratingTrip'].toString()),
+        ratingService:  double.parse(json['ratingService'].toString()),
         comments: json['comments'] as List<dynamic>?,
       );
 

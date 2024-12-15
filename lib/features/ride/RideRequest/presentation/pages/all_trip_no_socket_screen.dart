@@ -1,7 +1,7 @@
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
@@ -12,9 +12,14 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/create_offer
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/get_all_trip_no_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/send_offer_no_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
+// ignore: must_be_immutable
 class AllTripNoSocketScreen extends StatelessWidget {
   AllTripNoSocketScreen({super.key});
   TextEditingController price = TextEditingController();
@@ -46,6 +51,9 @@ class AllTripNoSocketScreen extends StatelessWidget {
                   child: Column(
                 children: state.list.map(
                   (e) {
+                    context.read<CallMessageCubit>().getCallMessage(
+                        ownerId: e.userId?.id ?? "",
+                        subcategoryId: e.categoryId ?? "");
                     return GestureDetector(
                       onTap: () {},
                       child: Container(
@@ -104,17 +112,17 @@ class AllTripNoSocketScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            const Row(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
                                   child: Row(
                                     children: [
-                                      Icon(Icons.calendar_month),
+                                      const Icon(Icons.calendar_month),
                                       Flexible(
                                         child: Text(
-                                          "25 August, 09:47",
-                                          style: TextStyle(fontSize: 13),
+                                          e.time ?? "",
+                                          style: const TextStyle(fontSize: 13),
                                         ),
                                       ),
                                     ],
@@ -124,16 +132,16 @@ class AllTripNoSocketScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 5),
                             const SizedBox(height: 5),
-                            const Row(
+                            Row(
                               children: [
-                                Icon(Icons.people),
-                                SizedBox(
+                                const Icon(Icons.people),
+                                const SizedBox(
                                   width: 5,
                                 ),
                                 Flexible(
                                   child: Text(
-                                    "1",
-                                    style: TextStyle(fontSize: 12),
+                                    e.passengers.toString(),
+                                    style: const TextStyle(fontSize: 12),
                                   ),
                                 ),
                               ],
@@ -241,139 +249,131 @@ class AllTripNoSocketScreen extends StatelessWidget {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                // BlocBuilder<CallMessageCubit, ShippingState>(
-                                //   builder: (context, state) {
-                                //     if (state is FailureShippingState) {
-                                //       log(
-                                //           getFailureMessage(
-                                //               state.failure, context),
-                                //           name: "lskdjflskdjfslkdjfslkdjfslkdjf");
-                                //     }
-                                //     log(state.toString(),
-                                //         name: "lskdjflskdjfslkdjfslkdjfslkdjf");
-                                //     if (state is SuccessGetCallMessageState) {
-                                //       log(state.data.toString(),
-                                //           name: "lskdjflskdjfslkdjfslkdjfslkdjf");
-                                //       return Row(
-                                //         children: [
-                                //           Expanded(
-                                //             child: AppButton(
-                                //               label: LocaleKeys.call.tr(),
-                                //               color: Colors.white,
-                                //               icon: Icons.call,
-                                //               backColor: state.data &&
-                                //                       (widget.model.acceptedReq ??
-                                //                           false)
-                                //                   ? AppColors.PRIMARY_COLOR
-                                //                   : AppColors.DARK_GRAY_COLOR,
-                                //               onPressed: () {},
-                                //               style: Styles.mediumText(
-                                //                   fontSize: 18,
-                                //                   color: Colors.white),
-                                //             ),
-                                //           ),
-                                //           const Sizer(),
-                                //           Expanded(
-                                //             child: AppButton(
-                                //               label: LocaleKeys.message.tr(),
-                                //               icon: Icons.message,
-                                //               backColor:   AppColors.DARK_GRAY_COLOR,
-                                //               style: Styles.mediumText(
-                                //                   fontSize: 15,
-                                //                   color: Colors.white),
-                                //               onPressed: () {},
-                                //             ),
-                                //           ),
-                                //           const Sizer(),
-                                //           Expanded(
-                                //             child: AppButton(
-                                //               label: LocaleKeys.report.tr(),
-                                //               icon: Icons.report,
-                                //               backColor: Colors.red,
-                                //               style: Styles.mediumText(
-                                //                   fontSize: 18,
-                                //                   color: Colors.white),
-                                //               onPressed: () {
-                                //                 // tripCubit.report(
-                                //                 //     loadingTripId: widget.model.id ?? "");
-                                //                 showBottomSheet(
-                                //                   context: context,
-                                //                   builder: (context) => Padding(
-                                //                     padding:
-                                //                         const EdgeInsets.all(10),
-                                //                     child: ReportView(
-                                //                       categoryId:
-                                //                               e.categoryId ??
-                                //                           "",
-                                //                       id: e.id ?? "",
-                                //                       loadingTripId:
-                                //                           e.id ?? "",
-                                //                     ),
-                                //                   ),
-                                //                 );
-                                //               },
-                                //             ),
-                                //           ),
-                                //         ],
-                                //       );
-                                //     } else {
-                                //       return Row(
-                                //         children: [
-                                //           Expanded(
-                                //             child: AppButton(
-                                //               label: LocaleKeys.call.tr(),
-                                //               color: Colors.white,
-                                //               icon: Icons.call,
-                                //               backColor:
-                                //                   AppColors.DARK_GRAY_COLOR,
-                                //               onPressed: () {
-                                //                 launchUrlString(
-                                //                     "tel://21213123123");
-                                //               },
-                                //               style: Styles.mediumText(
-                                //                   fontSize: 18,
-                                //                   color: Colors.white),
-                                //             ),
-                                //           ),
-                                //           const Sizer(),
-                                //           Expanded(
-                                //             child: AppButton(
-                                //               label: LocaleKeys.message.tr(),
-                                //               icon: Icons.message,
-                                //               backColor:
-                                //                   AppColors.DARK_GRAY_COLOR,
-                                //               style: Styles.mediumText(
-                                //                   fontSize: 18,
-                                //                   color: Colors.white),
-                                //               onPressed: () {},
-                                //             ),
-                                //           ),
-                                //           const Sizer(),
-                                //           Expanded(
-                                //             child: AppButton(
-                                //               label: LocaleKeys.report.tr(),
-                                //               icon: Icons.report,
-                                //               backColor: Colors.red,
-                                //               style: Styles.mediumText(
-                                //                   fontSize: 15,
-                                //                   color: Colors.white),
-                                //               onPressed: () {
-                                //                 showBottomSheet(
-                                //                   context: context,
-                                //                   builder: (context) =>
-                                //                       const ReportView(
-                                //                     categoryId: "",
-                                //                     id: "",
-                                //                   ),
-                                //                 );
-                                //               },
-                                //             ),
-                                //           ),
-                                //         ],
-                                //       );
-                                //     }
-                                //   },
-                                // ),
+                                BlocBuilder<CallMessageCubit, ShippingState>(
+                                  builder: (context, state) {
+                                    if (state is FailureShippingState) {}
+                                    if (state is SuccessGetCallMessageState) {
+                                      return Row(
+                                        children: [
+                                          Expanded(
+                                            child: AppButton(
+                                              label: LocaleKeys.call.tr(),
+                                              color: Colors.white,
+                                              icon: Icons.call,
+                                              backColor: state.data &&
+                                                      (e.acceptedReq ?? false)
+                                                  ? AppColors.PRIMARY_COLOR
+                                                  : AppColors.DARK_GRAY_COLOR,
+                                              onPressed: () {},
+                                              style: Styles.mediumText(
+                                                  fontSize: 18,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                          const Sizer(),
+                                          Expanded(
+                                            child: AppButton(
+                                              label: LocaleKeys.message.tr(),
+                                              icon: Icons.message,
+                                              backColor: state.data &&
+                                                      (e.acceptedReq ?? false)
+                                                  ? AppColors.PRIMARY_COLOR
+                                                  : AppColors.DARK_GRAY_COLOR,
+                                              style: Styles.mediumText(
+                                                  fontSize: 15,
+                                                  color: Colors.white),
+                                              onPressed: () {},
+                                            ),
+                                          ),
+                                          const Sizer(),
+                                          Expanded(
+                                            child: AppButton(
+                                              label: LocaleKeys.report.tr(),
+                                              icon: Icons.report,
+                                              backColor: Colors.red,
+                                              style: Styles.mediumText(
+                                                  fontSize: 18,
+                                                  color: Colors.white),
+                                              onPressed: () {
+                                                // tripCubit.report(
+                                                //     loadingTripId: widget.model.id ?? "");
+                                                showBottomSheet(
+                                                  context: context,
+                                                  builder: (context) => Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    child: ReportView(
+                                                      categoryId:
+                                                          e.categoryId ?? "",
+                                                      id: e.id ?? "",
+                                                      loadingTripId: e.id ?? "",
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    } else {
+                                      return Row(
+                                        children: [
+                                          Expanded(
+                                            child: AppButton(
+                                              label: LocaleKeys.call.tr(),
+                                              color: Colors.white,
+                                              icon: Icons.call,
+                                              backColor:
+                                                  AppColors.DARK_GRAY_COLOR,
+                                              onPressed: () {
+                                                launchUrlString(
+                                                    "tel://${e.userId?.phone}");
+                                              },
+                                              style: Styles.mediumText(
+                                                  fontSize: 18,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                          const Sizer(),
+                                          Expanded(
+                                            child: AppButton(
+                                              label: LocaleKeys.message.tr(),
+                                              icon: Icons.message,
+                                              backColor:
+                                                  AppColors.DARK_GRAY_COLOR,
+                                              style: Styles.mediumText(
+                                                  fontSize: 18,
+                                                  color: Colors.white),
+                                              onPressed: () {},
+                                            ),
+                                          ),
+                                          const Sizer(),
+                                          Expanded(
+                                            child: AppButton(
+                                              label: LocaleKeys.report.tr(),
+                                              icon: Icons.report,
+                                              backColor: Colors.red,
+                                              style: Styles.mediumText(
+                                                  fontSize: 15,
+                                                  color: Colors.white),
+                                              onPressed: () {
+                                                showBottomSheet(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      const ReportView(
+                                                    categoryId: "",
+                                                    id: "",
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                  },
+                                ),
                               ],
                             ),
                           ],

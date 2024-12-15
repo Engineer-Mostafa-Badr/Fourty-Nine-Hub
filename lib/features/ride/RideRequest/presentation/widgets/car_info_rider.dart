@@ -59,6 +59,7 @@ class _CarInfoRiderState extends State<CarInfoRider> {
                   contentPadding: const EdgeInsets.all(14),
                 ),
                 onChanged: (value) {
+                  riderCubit.pickBrand(value);
                   if (context.isUserLoggedIn) {
                     riderCubit.pickBrand(value);
                     fetchCarModelsCubit.fetchCarModel(brand: value);
@@ -83,8 +84,10 @@ class _CarInfoRiderState extends State<CarInfoRider> {
               ));
             },
             onSelected: (value) {
+              log(value);
               if (context.isUserLoggedIn) {
                 fetchCarBrandsCubit.brand = value;
+                riderCubit.pickBrand(value);
                 setState(() {});
               } else {
                 context.push(Routes.LOGIN);
@@ -118,6 +121,7 @@ class _CarInfoRiderState extends State<CarInfoRider> {
                   contentPadding: const EdgeInsets.all(14),
                 ),
                 onChanged: (value) {
+                  riderCubit.pickModel(value);
                   if (context.isUserLoggedIn) {
                     riderCubit.pickModel(value);
                     if (value.length == 1) {
@@ -125,6 +129,7 @@ class _CarInfoRiderState extends State<CarInfoRider> {
                           brand: fetchCarBrandsCubit.brand ?? '');
                     }
                   } else {
+                    riderCubit.pickModel(value);
                     context.push(Routes.LOGIN);
                   }
                 },
@@ -144,6 +149,7 @@ class _CarInfoRiderState extends State<CarInfoRider> {
               ));
             },
             onSelected: (value) {
+              riderCubit.pickModel(value);
               // print(' ============== $value');
               if (context.isUserLoggedIn) {
                 fetchCarModelsCubit.model = value;
@@ -180,6 +186,7 @@ class _CarInfoRiderState extends State<CarInfoRider> {
                 ),
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
+                  riderCubit.pickYear(value);
                   if (context.isUserLoggedIn) {
                     fetchCarYearTypeCubit.year = value;
                   } else {
@@ -196,6 +203,7 @@ class _CarInfoRiderState extends State<CarInfoRider> {
               ));
             },
             onSelected: (value) {
+              riderCubit.pickYear(value);
               if (context.isUserLoggedIn) {
                 log(value.toString());
                 riderCubit.pickYear(value);

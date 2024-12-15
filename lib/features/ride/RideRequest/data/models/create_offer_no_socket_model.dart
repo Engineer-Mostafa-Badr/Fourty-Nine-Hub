@@ -20,6 +20,6 @@ class CreateOfferNoSocketModel {
   Map<String, dynamic> toJson() => {
         'price': price,
         'subcategoryId': subcategoryId,
-        'isPremium': isPremium,
+        'isPremium': false,
       };
 }

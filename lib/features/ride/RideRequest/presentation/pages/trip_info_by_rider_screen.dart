@@ -12,6 +12,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_trip_from_driver_model/check_accept_trip_from_driver_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/check_trip_end_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/cancel_trip_client_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/partial_payment_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_reasons_cubit.dart';
@@ -33,10 +34,10 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
   TextEditingController amount = TextEditingController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     amount.text = widget.model.price.toString();
     saveData();
+    context.read<CheckTripEndCubit>().check();
   }
 
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
@@ -55,73 +56,36 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      body: BlocListener<PartialPaymentRiderCubit, RiderState>(
+      body: BlocListener<CheckTripEndCubit, RiderState>(
         listener: (context, state) {
-          if (state is SuccessPartialPaymentState) {
-            showSuccessMessage(context, LocaleKeys.successSubmit.tr());
-          }
-          if (state is FailureRiderState) {
-            showErrorMessage(
-                context, getFailureMessage(state.failure, context));
+          if (state is SuccessCheckTripEndState) {
+            removeData();
+            // showErrorMessage(context, "Trip is Canceled");
+            context.pushAndRemoveUntil(
+              Routes.HOME,
+              (route) => false,
+            );
           }
         },
-        child: BlocListener<CancelTripClientCubit, RiderState>(
+        child: BlocListener<PartialPaymentRiderCubit, RiderState>(
           listener: (context, state) {
-            log(state.toString(), name: "lkdjslkdfjslkdjflskdjf");
-            if (state is SuccessCancelTripClientState) {
-              removeData();
-              showSuccessDialog(context, LocaleKeys.successCancelTrip.tr());
-              context.pushAndRemoveUntil(
-                Routes.HOME,
-                (route) => false,
-              );
+            if (state is SuccessPartialPaymentState) {
+              showSuccessMessage(context, LocaleKeys.successSubmit.tr());
             }
             if (state is FailureRiderState) {
               showErrorMessage(
                   context, getFailureMessage(state.failure, context));
             }
           },
-          child: BlocListener<GetReasonsCubit, RiderState>(
+          child: BlocListener<CancelTripClientCubit, RiderState>(
             listener: (context, state) {
-              if (state is SuccessGetResonsState) {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      content: BlocListener<CancelTripClientCubit, RiderState>(
-                        listener: (context, state) {
-                          log(state.toString(), name: "lkdjslkdfjslkdjflskdjf");
-                          if (state is SuccessCancelTripClientState) {
-                            removeData();
-                            showSuccessMessage(
-                                context, LocaleKeys.successCancelTrip.tr());
-                            context.pop();
-                            context.pushReplacement(
-                              Routes.RIDE,
-                            );
-                          }
-                          if (state is FailureRiderState) {
-                            showErrorMessage(context,
-                                getFailureMessage(state.failure, context));
-                          }
-                        },
-                        child: ReasonsDilogWidget(
-                          list: state.list,
-                          onTap: (reasonsId) {
-                            log("slkdjflskdjlsdkjf",
-                                name: reasonsId.toString());
-                            context
-                                .read<CancelTripClientCubit>()
-                                .cancelTripClient(
-                                  id: widget.model.id ?? "",
-                                  reasonId: reasonsId,
-                                  note: '',
-                                );
-                          },
-                        ),
-                      ),
-                    );
-                  },
+              log(state.toString(), name: "lkdjslkdfjslkdjflskdjf");
+              if (state is SuccessCancelTripClientState) {
+                removeData();
+                showSuccessDialog(context, LocaleKeys.successCancelTrip.tr());
+                context.pushAndRemoveUntil(
+                  Routes.HOME,
+                  (route) => false,
                 );
               }
               if (state is FailureRiderState) {
@@ -129,166 +93,222 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
                     context, getFailureMessage(state.failure, context));
               }
             },
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                children: [
-                  const Spacer(),
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 15,
-                            height: 15,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border:
-                                    Border.all(color: Colors.blue, width: 3)),
-                          ),
-                          const Sizer(),
-                          Flexible(child: Text("${widget.model.fromTitle}"))
-                        ],
-                      ),
-                      const Sizer(
-                        height: 30,
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            width: 15,
-                            height: 15,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border:
-                                    Border.all(color: Colors.green, width: 3)),
-                          ),
-                          const Sizer(),
-                          Flexible(child: Text("${widget.model.toTitle}")),
-                        ],
-                      ),
-                      const Sizer(
-                        height: 30,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                              "${LocaleKeys.travelTime.tr()}: ${formatDuration(widget.model.duration ?? 0)}"),
-                        ],
-                      ),
-                      const Sizer(
-                        height: 30,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                              "${LocaleKeys.destination.tr()}: ${formatDistance(widget.model.distance ?? 0)}"),
-                        ],
-                      ),
-                      const Sizer(
-                        height: 30,
-                      ),
-                      Row(
-                        children: [
-                          Text("OTP: ${widget.model.otp}"),
-                        ],
-                      )
-                    ],
-                  ),
-                  // Spacer(),
-                  const Sizer(
-                    height: 40,
-                  ),
-                  Row(
-                    children: [
-                      Flexible(
-                        child: DefaultButton(
-                          padding: EdgeInsets.zero,
-                          width: double.infinity,
-                          label: LocaleKeys.openGoogleMap.tr(),
-                          onPressed: () {
-                            openGoogleMaps(
-                                lat: widget
-                                    .model.targetLocation!.coordinates![0],
-                                lng: widget
-                                    .model.targetLocation!.coordinates![1]);
+            child: BlocListener<GetReasonsCubit, RiderState>(
+              listener: (context, state) {
+                if (state is SuccessGetResonsState) {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        content:
+                            BlocListener<CancelTripClientCubit, RiderState>(
+                          listener: (context, state) {
+                            log(state.toString(),
+                                name: "lkdjslkdfjslkdjflskdjf");
+                            if (state is SuccessCancelTripClientState) {
+                              removeData();
+                              showSuccessMessage(
+                                  context, LocaleKeys.successCancelTrip.tr());
+                              context.pop();
+                              context.pushReplacement(
+                                Routes.RIDE,
+                              );
+                            }
+                            if (state is FailureRiderState) {
+                              showErrorMessage(context,
+                                  getFailureMessage(state.failure, context));
+                            }
                           },
+                          child: ReasonsDilogWidget(
+                            list: state.list,
+                            onTap: (reasonsId) {
+                              log("slkdjflskdjlsdkjf",
+                                  name: reasonsId.toString());
+                              context
+                                  .read<CancelTripClientCubit>()
+                                  .cancelTripClient(
+                                    id: widget.model.id ?? "",
+                                    reasonId: reasonsId,
+                                    note: '',
+                                  );
+                            },
+                          ),
                         ),
-                      ),
-                      const Sizer(),
-                      Flexible(
-                        child: DefaultButton(
-                          padding: EdgeInsets.zero,
-                          width: double.infinity,
-                          label: LocaleKeys.partialPayment.tr(),
-                          onPressed: () {
-                            scaffoldKey.currentState?.showBottomSheet(
-                              (context) {
-                                return Container(
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.all(20),
-                                  decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Colors.black,
-                                            blurRadius: 80),
+                      );
+                    },
+                  );
+                }
+                if (state is FailureRiderState) {
+                  showErrorMessage(
+                      context, getFailureMessage(state.failure, context));
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Column(
+                  children: [
+                    const Spacer(),
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 15,
+                              height: 15,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border:
+                                      Border.all(color: Colors.blue, width: 3)),
+                            ),
+                            const Sizer(),
+                            Flexible(child: Text("${widget.model.fromTitle}"))
+                          ],
+                        ),
+                        const Sizer(
+                          height: 30,
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              width: 15,
+                              height: 15,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      color: Colors.green, width: 3)),
+                            ),
+                            const Sizer(),
+                            Flexible(child: Text("${widget.model.toTitle}")),
+                          ],
+                        ),
+                        const Sizer(
+                          height: 30,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                                "${LocaleKeys.travelTime.tr()}: ${formatDuration(widget.model.duration ?? 0)}"),
+                          ],
+                        ),
+                        const Sizer(
+                          height: 30,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                                "${LocaleKeys.destination.tr()}: ${formatDistance(widget.model.distance ?? 0)}"),
+                          ],
+                        ),
+                        const Sizer(
+                          height: 30,
+                        ),
+                        Row(
+                          children: [
+                            Text("OTP: ${widget.model.otp}"),
+                          ],
+                        )
+                      ],
+                    ),
+                    // Spacer(),
+                    const Sizer(
+                      height: 40,
+                    ),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: DefaultButton(
+                            padding: EdgeInsets.zero,
+                            width: double.infinity,
+                            label: LocaleKeys.openGoogleMap.tr(),
+                            onPressed: () {
+                              openGoogleMaps(
+                                  lat: widget
+                                      .model.targetLocation!.coordinates![0],
+                                  lng: widget
+                                      .model.targetLocation!.coordinates![1]);
+                            },
+                          ),
+                        ),
+                        const Sizer(),
+                        Flexible(
+                          child: DefaultButton(
+                            padding: EdgeInsets.zero,
+                            width: double.infinity,
+                            label: LocaleKeys.partialPayment.tr(),
+                            onPressed: () {
+                              scaffoldKey.currentState?.showBottomSheet(
+                                (context) {
+                                  return Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(20),
+                                    decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.black,
+                                              blurRadius: 80),
+                                        ],
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(30),
+                                            topRight: Radius.circular(30))),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        DefaultTextFormField(
+                                          currentController: amount,
+                                          hint: "",
+                                        ),
+                                        const Sizer(
+                                          height: 40,
+                                        ),
+                                        DefaultButton(
+                                          padding: EdgeInsets.zero,
+                                          width: double.infinity,
+                                          onPressed: () {
+                                            context
+                                                .read<
+                                                    PartialPaymentRiderCubit>()
+                                                .partialPayment(
+                                                    id: widget.model.id ?? "",
+                                                    amount: double.parse(
+                                                        amount.text),
+                                                    paymentMethod: widget.model
+                                                                .paymentMethod ==
+                                                            "cash"
+                                                        ? "wallet"
+                                                        : "cash");
+                                          },
+                                          label: LocaleKeys.submit.tr(),
+                                        )
                                       ],
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(30),
-                                          topRight: Radius.circular(30))),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      DefaultTextFormField(
-                                        currentController: amount,
-                                        hint: "",
-                                      ),
-                                      const Sizer(
-                                        height: 40,
-                                      ),
-                                      DefaultButton(
-                                        padding: EdgeInsets.zero,
-                                        width: double.infinity,
-                                        onPressed: () {
-                                          context
-                                              .read<PartialPaymentRiderCubit>()
-                                              .partialPayment(
-                                                  id: widget.model.id ?? "",
-                                                  amount:
-                                                      double.parse(amount.text),
-                                                  paymentMethod: 'cash');
-                                        },
-                                        label: LocaleKeys.submit.tr(),
-                                      )
-                                    ],
-                                  ),
-                                );
-                              },
-                            );
-                          },
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    const Sizer(),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: DefaultButton(
+                            backgroundColor: Colors.red,
+                            padding: EdgeInsets.zero,
+                            width: double.infinity,
+                            label: LocaleKeys.cancel.tr(),
+                            onPressed: () {
+                              context.read<GetReasonsCubit>().get();
+                            },
+                          ),
                         ),
-                      )
-                    ],
-                  ),
-                  const Sizer(),
-                  Row(
-                    children: [
-                      Flexible(
-                        child: DefaultButton(
-                          backgroundColor: Colors.red,
-                          padding: EdgeInsets.zero,
-                          width: double.infinity,
-                          label: LocaleKeys.cancel.tr(),
-                          onPressed: () {
-                            context.read<GetReasonsCubit>().get();
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Sizer()
-                ],
+                      ],
+                    ),
+                    const Sizer()
+                  ],
+                ),
               ),
             ),
           ),

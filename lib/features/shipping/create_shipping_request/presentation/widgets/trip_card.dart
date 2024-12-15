@@ -144,22 +144,22 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                             fontSize: widget.priceFontSize,
                           ),
                         ),
-                        if (!widget.noBracts) Text(LocaleKeys.premium.tr())
+                        if (!widget.noBracts) (widget.model.isPremium??false)? Text(LocaleKeys.premium.tr()):Container()
                       ],
                     ),
                   ],
                 ),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
                       child: Row(
                         children: [
-                          Icon(Icons.calendar_month),
+                          const Icon(Icons.calendar_month),
                           Flexible(
                             child: Text(
-                              "25 August, 09:47",
-                              style: TextStyle(fontSize: 13),
+                              widget.model.time??"",
+                              style: const TextStyle(fontSize: 13),
                             ),
                           ),
                         ],
@@ -253,6 +253,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                               const SizedBox(
                                 height: 10,
                               ),
+                              if(!(widget.model.acceptedReq??false))
                               Row(
                                 children: [
                                   Expanded(
@@ -263,7 +264,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                       onPressed: () {
                                         tripCubit.newOffer(
                                             id: widget.model.id ?? "",
-                                            price: widget.model.price ?? 0,
+                                            price: double.tryParse(price.text)?? widget.model.price??0,
                                             message: LocaleKeys
                                                 .theRequestHasBeenSuccessfullyApproved
                                                 .tr());

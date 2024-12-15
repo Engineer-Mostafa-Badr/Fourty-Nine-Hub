@@ -148,3 +148,4 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
     );
   }
 }
+

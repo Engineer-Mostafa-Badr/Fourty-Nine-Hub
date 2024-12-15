@@ -13,7 +13,8 @@ class GetTripInfoCubit extends Cubit<RiderState> {
   bool isBottomSheetShown = false;
   bool record = false;
   GetTripInfoCubit({required this.repository}) : super(RiderInitial());
-  getTripInfoRequest(
+
+  Future<void> getTripInfoRequest(
       {required LatLng startLatLng,
       required LatLng destinationLatLng,
       required String subCateogryId}) async {

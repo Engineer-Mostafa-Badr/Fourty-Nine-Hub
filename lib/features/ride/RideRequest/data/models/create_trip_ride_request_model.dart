@@ -37,7 +37,7 @@ class CreateTripRideRequestModel {
         'fromTitle': fromTitle,
         'toTitle': toTitle,
         'price': price,
-        'passangers': passangers,
+        'passengers': passangers,
         'phone': phone,
         'time': time,
         'desc': desc,

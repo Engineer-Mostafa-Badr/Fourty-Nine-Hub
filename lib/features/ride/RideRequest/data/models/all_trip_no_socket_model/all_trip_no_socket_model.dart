@@ -10,6 +10,7 @@ class AllTripNoSocketModel {
   String? toTitle;
   int? profit;
   bool? isPremium;
+  int? passengers;
   double? price;
   String? status;
   int? penalty;
@@ -18,7 +19,8 @@ class AllTripNoSocketModel {
   bool? isRiderGetCashback;
   DateTime? createdAt;
   DateTime? updatedAt;
-
+  String? time;
+  bool? acceptedReq;
   AllTripNoSocketModel({
     this.driverId,
     this.id,
@@ -26,7 +28,9 @@ class AllTripNoSocketModel {
     this.riderId,
     this.categoryId,
     this.fromTitle,
+    this.acceptedReq,
     this.toTitle,
+    this.time,
     this.profit,
     this.isPremium,
     this.price,
@@ -35,6 +39,7 @@ class AllTripNoSocketModel {
     this.payedPenalty,
     this.isUserGetCashback,
     this.isRiderGetCashback,
+    this.passengers,
     this.createdAt,
     this.updatedAt,
   });
@@ -48,13 +53,16 @@ class AllTripNoSocketModel {
           : UserId.fromJson(json['userId'] as Map<String, dynamic>),
       riderId: json['riderId'] as dynamic,
       categoryId: json['categoryId'] as String?,
+      time: json['time'] as String?,
       fromTitle: json['fromTitle'] as String?,
       toTitle: json['toTitle'] as String?,
+      acceptedReq: json['acceptedReq'] as bool?,
       profit: json['profit'] as int?,
       isPremium: json['isPremium'] as bool?,
       price: double.parse(json['price'].toString()),
       status: json['status'] as String?,
       penalty: json['penalty'] as int?,
+      passengers: json['passengers'] as int?,
       payedPenalty: json['payed_penalty'] as bool?,
       isUserGetCashback: json['isUserGetCashback'] as bool?,
       isRiderGetCashback: json['isRiderGetCashback'] as bool?,

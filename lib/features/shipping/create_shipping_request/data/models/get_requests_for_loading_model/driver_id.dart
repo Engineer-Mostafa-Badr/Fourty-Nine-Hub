@@ -11,7 +11,8 @@ class DriverId {
   String? phone;
   double? rating;
   Review? review;
-
+  String? carModel;
+  String? categoryId;
   DriverId({
     this.id,
     this.userId,
@@ -19,6 +20,8 @@ class DriverId {
     this.trips,
     this.location,
     this.phone,
+    this.carModel,
+    this.categoryId,
     this.rating,
     this.review,
   });
@@ -34,6 +37,8 @@ class DriverId {
         trips: json['trips'] as int?,
         location: json['location'] as String?,
         phone: json['phone'] as String?,
+        categoryId: json['categoryId'] as String?,
+        carModel: json['carModel'] as String?,
         rating: (json['rating'] as num?)?.toDouble(),
         id: json['id'] as String?,
         review: json['review'] == null

@@ -7,15 +7,26 @@ class DriverId {
   String? id;
   UserId? userId;
   String? phone;
+  String? carModel;
   Review? review;
+  int? trips;
 
-  DriverId({this.location, this.id, this.userId, this.phone, this.review});
+  DriverId(
+      {this.location,
+      this.id,
+      this.userId,
+      this.phone,
+      this.trips,
+      this.review,
+      this.carModel});
 
   factory DriverId.fromJson(Map<String, dynamic> json) => DriverId(
         location: json['location'] == null
             ? null
             : Location.fromJson(json['location'] as Map<String, dynamic>),
         id: json['_id'] as String?,
+        trips: json['trips'] as int?,
+        carModel: json['carModel'] as String?,
         userId: json['userId'] == null
             ? null
             : UserId.fromJson(json['userId'] as Map<String, dynamic>),

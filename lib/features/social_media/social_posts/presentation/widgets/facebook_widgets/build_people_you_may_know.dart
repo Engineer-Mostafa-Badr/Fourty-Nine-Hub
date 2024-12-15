@@ -68,7 +68,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                           ),
                           const Sizer(),
                           Label(
-                            text: LocaleKeys.peopleMayKnow.tr(),
+                            text: LocaleKeys.peopleYouMayKnow.tr(),
                             style: Styles.mediumText(fontSize: 60.sp),
                           ),
                         ],

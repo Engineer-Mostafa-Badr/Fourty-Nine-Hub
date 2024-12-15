@@ -17,6 +17,9 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/get_ser
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/check_trip_end_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/complete_no_socket_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/rating_driver_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/cancel_trip_client_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/cancel_trip_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/start_trip_rider_cubit.dart';
@@ -104,9 +107,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    // CacheServiceImpl().removeDriverTripInfo();
+    // CacheServiceImpl().removeRiderTripInfo();
+    // CacheServiceImpl().removeTripState();
     // log(CacheServiceImpl().isLogin().toString()??"null", name: "userId");
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context) => CheckTripEndCubit(repository: serviceLocator())),
         BlocProvider(
           create: (context) => serviceLocator<UserCubit>()..getUser(),
         ),
@@ -242,6 +249,15 @@ class _MyAppState extends State<MyApp> {
           create: (context) =>
               CancelTripRiderCubit(repository: serviceLocator()),
         ),
+        BlocProvider(
+          create: (context) => RatingDriverCubit(
+                                    repository: serviceLocator()),
+        ),
+        BlocProvider(
+          create: (context) => CompleteNoSocketCubit(
+                                    repository: serviceLocator()),
+        ),
+        
         // context.read<LocationSocketCubit>().updateDriverLocationOn();
       ],
       child: ScreenUtilInit(

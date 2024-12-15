@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
@@ -10,7 +12,6 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_inf
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rating_driver_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rider_register_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_model.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 // import 'package:mapbox_gl/mapbox_gl.dart';
 
@@ -23,6 +24,7 @@ class RiderDataSource {
     String? token = await cacheService.getUserToken() ?? "";
     String? userId = extractUserId(token);
     // extractUserId(token ?? "");
+    print("USERID============ $userId \n");
     if (userId == null) {
       return api.get(EndPoints.bannerDataRider);
     } else {
@@ -39,6 +41,7 @@ class RiderDataSource {
 
   Future<Either<Failure, Map<String, dynamic>>> riderRegister(
       {required RiderRegisterModel model}) {
+    log(model.registerTow().toString(), name: "ldjfksldjflskdjf");
     return api.post(EndPoints.riderRegister, data: model.registerTow());
   }
 
@@ -114,10 +117,10 @@ class RiderDataSource {
 
   Future<Either<Failure, Map<String, dynamic>>> createOfferByDriver(
       {required String id, required double price}) async {
-    Position location = await Geolocator.getCurrentPosition();
+    // Position location = await Geolocator.getCurrentPosition();
     return api.post(EndPoints.createOffer(id), data: {
       "priceOffer": price,
-      "location": [location.latitude.toString(), location.longitude.toString()]
+      "location": [31.261392, 29.962565]
     });
   }
 
@@ -139,13 +142,13 @@ class RiderDataSource {
   Future<Either<Failure, Map<String, dynamic>>> riderInStartLocation({
     required String id,
   }) async {
-    Position location = await Geolocator.getCurrentPosition();
+    // Position location = await Geolocator.getCurrentPosition();
     return await api.put(
       EndPoints.riderInStartLocation(id),
       data: {
         "location": [
-          location.latitude,
-          location.longitude,
+          20,
+          30,
         ],
       },
     );
@@ -165,15 +168,15 @@ class RiderDataSource {
       required double amount,
       required String paymentMethod}) {
     return api.put(EndPoints.partialPayment(id),
-        data: {"amount": amount, "paymentMethod": "cash"});
+        data: {"amount": amount, "paymentMethod": paymentMethod});
   }
 
   Future<Either<Failure, Map<String, dynamic>>> completedTripRider(
       {required String id}) async {
-    Position location = await Geolocator.getCurrentPosition();
+    // Position location = await Geolocator.getCurrentPosition();
     return api.put(EndPoints.completedTripRider(id), data: {
       "location": "",
-      "startLocation": [location.latitude, location.longitude]
+      "startLocation": [2, 2]
     });
   }
 
@@ -241,18 +244,18 @@ class RiderDataSource {
     return api.get(EndPoints.getUserLoginTripNoSocket);
   }
 
-
   Future<Either<Failure, Map<String, dynamic>>> deleteTripNoSocket(
       {required String id}) {
     return api.delete("${EndPoints.deleteTripNoSocket}/$id");
   }
+
   Future<Either<Failure, Map<String, dynamic>>> completeTripNoSocket(
       {required String id}) {
     return api.put("/ride/trip/offer/complete/$id");
   }
+
   Future<Either<Failure, Map<String, dynamic>>> rating(
       {required RattingDriverModel model}) {
     return api.post("/driver/rating", data: model.toJson());
   }
 }
-

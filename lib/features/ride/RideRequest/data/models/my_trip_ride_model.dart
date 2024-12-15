@@ -7,8 +7,10 @@ class MyTripRideModel {
   String? toTitle;
   int? profit;
   bool? isPremium;
-  int? price;
+  double? price;
+  int? passengers;
   String? status;
+  String? time;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -22,6 +24,8 @@ class MyTripRideModel {
     this.profit,
     this.isPremium,
     this.price,
+    this.time,
+    this.passengers,
     this.status,
     this.createdAt,
     this.updatedAt,
@@ -37,7 +41,9 @@ class MyTripRideModel {
       toTitle: json['toTitle'] as String?,
       profit: json['profit'] as int?,
       isPremium: json['isPremium'] as bool?,
-      price: json['price'] as int?,
+      price: double.parse(json['price'].toString()),
+      passengers: json['passengers'] as int?,
+      time: json['time'] as String?,
       status: json['status'] as String?,
       createdAt: json['createdAt'] == null
           ? null

@@ -4,6 +4,9 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 
 class GetDestinationPointRideCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repository;
+  String type = '';
+  double? endLat;
+  double? endLong;
   GetDestinationPointRideCubit({required this.repository})
       : super(RiderInitial());
   getDestinationPoint({required String address}) async {
@@ -14,6 +17,9 @@ class GetDestinationPointRideCubit extends Cubit<RiderState> {
         emit(DestinationLocationFailed());
       },
       (r) {
+        type = r['data']['type'];
+        endLat = r['data']['lat'];
+        endLong = r['data']['lng'];
         emit(SuccessGetDestinationPointState(
             address: r['data']['address'],
             lat: r['data']['lat'],

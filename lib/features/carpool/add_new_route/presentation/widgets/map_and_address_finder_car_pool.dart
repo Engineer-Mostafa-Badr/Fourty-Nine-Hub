@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widget
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widgets/dynamic_map_test.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widgets/starting_text_field_googlemap.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/welcome_text_car_pool.dart';
+import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 
 class MapAndAddressFinderCarPool extends StatelessWidget {
   const MapAndAddressFinderCarPool({
@@ -160,15 +161,20 @@ class MapAndAddressFinderCarPool extends StatelessWidget {
         : BlocProvider.of<DestGetLatAndLongCubit>(context).type;
     switch (type) {
       case "google":
-        return "AIzaSyBBHEFa7D7qMSL4ivZhCqRQ4ok4sQN-Egc";
+        return context.read<SecretsCubit>().state.secrets?.googleApiKey ?? "";
       case "HEREPlatform":
-        return "jdgJA3hOg-0P67s5Xu86joSAajr8W1OX1nC2sL9g-hA";
+        return context.read<SecretsCubit>().state.secrets?.hereMapKey ?? "";
       case "mapBox":
-        return "sk.eyJ1IjoiNDlhcHAiLCJhIjoiY20xem83MGQ5MDg3aDJqczhhYnlmMGI1ZSJ9.8sYHBUyxYXncueYcckCBMg";
+        return context.read<SecretsCubit>().state.secrets?.mapBoxKey ?? "";
       case "TomTom":
-        return "GR8JEzJYyIFNKqD7WJJ1pfNRpf3Ckiyw";
+        return context.read<SecretsCubit>().state.secrets?.tomtomMapKey ?? "";
       default:
-        return "5b3ce3597851110001cf6248d06d230ff17942299e5608fa3709ced9";
+        return context
+                .read<SecretsCubit>()
+                .state
+                .secrets
+                ?.openRouteServiceKey ??
+            "";
     }
   }
 
