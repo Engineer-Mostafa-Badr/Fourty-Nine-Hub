@@ -205,7 +205,8 @@ extension TiktokControllerExtension on StreamCubit {
   }
 
   void initSocketListeners() {
-    listenForBattleRequest();
-    listenToSendPoints();
+    // listenForBattleRequest();
+    // listenToSendPoints();
+    onSendPointListener();
   }
 }

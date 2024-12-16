@@ -3,10 +3,13 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/edit_goal_use_case.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/send_point_listener_usecase.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/send_point_socket_usecase.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/send_points_use_case.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
@@ -46,9 +49,10 @@ final class StreamCubit extends Cubit<StreamState> {
     this.sendPointsUseCase,
     this.listenToSendPointsUseCase,
     this.listenBattleRequestUseCase,
-    this.requestBattleUseCase, this.editGoalUseCase, this.sendGiftUseCase,
+    this.requestBattleUseCase, this.editGoalUseCase, this.sendGiftUseCase, this.sendPointSocketUseCase, this.sendPointListenerUseCase,
   ) : super(const StreamState()){
    initSocketListeners();
+
   }
   final AddRoomUseCase addRoomUseCase;
   final EditGoalUseCase editGoalUseCase;
@@ -63,6 +67,8 @@ final class StreamCubit extends Cubit<StreamState> {
   final GetAllLivesUseCase getAllLivesUseCase;
   final EndLiveUseCase endLiveUseCase;
   final SendPointsUseCase sendPointsUseCase;
+  final SendPointSocketUseCase sendPointSocketUseCase;
+  final SendPointListenerUseCase sendPointListenerUseCase;
   final points.SendPointsUseCase sendLivePointsUseCase;
   final ListenToSendPointsUseCase listenToSendPointsUseCase;
   final ListenBattleRequestUseCase listenBattleRequestUseCase;
@@ -94,8 +100,8 @@ final class StreamCubit extends Cubit<StreamState> {
 
   onDoublePress() async {
     int count = state.count??0;
-    if(count>=49){
-      await onSendPoint();
+    if(count>=5){
+      await onSendPointSocket();
       emit(state.copyWith(count: 0));
       print("Count = $count");
     }else{
@@ -228,6 +234,27 @@ final class StreamCubit extends Cubit<StreamState> {
         status: StreamsStates.success,
       ));
     });
+  }
+
+  Future<void> onSendPointSocket() async {
+    emit(state.copyWith(status: StreamsStates.loading));
+    var result = await sendPointSocketUseCase(PointsParams(streamId: rooms.isNotEmpty?rooms[state.pageIndex??0].id:'', memberId: rooms.isNotEmpty?rooms[state.pageIndex??0].members[0].id:''));
+    result.fold((l) {
+      emit(state.copyWith(status: StreamsStates.failure, failure: l));
+    }, (r) {
+      emit(state.copyWith(
+        status: StreamsStates.success,
+      ));
+    });
+  }
+
+  Future<void> onSendPointListener() async {
+    emit(state.copyWith(status: StreamsStates.loading));
+    sendPointListenerUseCase(const NoParams());
+    print("Socket is listening");
+    emit(state.copyWith(
+      status: StreamsStates.success,
+    ));
   }
 
   Future<void> onSendGift(String giftId) async {

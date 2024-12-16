@@ -5,13 +5,13 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/reposi
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/repository/live_repository.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/create_live_use_case.dart';
 
-class SendPointListenerUseCase extends UseCase<bool, PointsParams> {
+class SendPointListenerUseCase extends NormalUseCase<void, NoParams> {
   final LiveRepository _liveRepository;
 
   SendPointListenerUseCase(this._liveRepository);
 
   @override
-  Future<Either<Failure, bool>> call(PointsParams params) async{
-    return _liveRepository.sendPointListener(params);
+  void call(NoParams params) async{
+    return _liveRepository.sendPointListener();
   }
 }

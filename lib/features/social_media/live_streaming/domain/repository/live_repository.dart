@@ -20,7 +20,8 @@ abstract class LiveRepository {
   Future<Either<Failure, void>> endLive(MeetingParams params);
   Future<void> sendPoints(PointsParams params);
   Future<void> listenToSendPoints(NoParams params);
-  Future<Either<Failure, bool>> sendPointListener(PointsParams params);
+  Future<Either<Failure, bool>> sendPointSocket(PointsParams params);
+  void sendPointListener();
   Future<void> requestBattle(RequestBattleParams params);
   Future<void> listenToRequestBattle(NoParams noParams);
 }
