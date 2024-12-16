@@ -79,7 +79,6 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
             return state.status == StateStatus.success
                 ? TwitterPostCard(
                     post: state.postDetails!,
-                    postShare: widget.post!.postShare!,
                     onReact: () async {
                       if (context.read<UserCubit>().isLoggedIn) {
                         var result = await controller.onReact(

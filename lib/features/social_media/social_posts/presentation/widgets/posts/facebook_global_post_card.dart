@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
@@ -110,7 +111,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
           var myPost = widget.from == 'details'
               ? widget.post
               : controller.globalFeedPagingController.itemList![widget.index];
-          return InkWell(
+          return ClickableWidget(
             onTap: (widget.from == 'posts' && widget.post.isShared == true)
                 ? () => widget.showPostDetails(controller
                     .globalFeedPagingController.itemList![widget.index])
@@ -180,24 +181,24 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                   children: [
                     if (myPost.likesCount != 0)
                       _buildCounterWidget(
-                          value: myPost.likesCount!, image: Assets.like),
+                          value: myPost.likesCount, image: Assets.like),
                     if (myPost.hahaCount != 0)
                       _buildCounterWidget(
-                          value: myPost.hahaCount!, image: Assets.haha),
+                          value: myPost.hahaCount, image: Assets.haha),
                     if (myPost.loveCount != 0)
                       _buildCounterWidget(
-                          value: myPost.loveCount!, image: Assets.heart),
+                          value: myPost.loveCount, image: Assets.heart),
                     if (myPost.wowCount != 0)
                       _buildCounterWidget(
-                          value: myPost.wowCount!, image: Assets.wow),
+                          value: myPost.wowCount, image: Assets.wow),
                     if (myPost.sadCount != 0)
                       _buildCounterWidget(
-                          value: myPost.sadCount!, image: Assets.sad),
+                          value: myPost.sadCount, image: Assets.sad),
                     if (myPost.angryCount != 0)
                       _buildCounterWidget(
-                          value: myPost.angryCount!, image: Assets.angry),
+                          value: myPost.angryCount, image: Assets.angry),
                     const Spacer(),
-                    InkWell(
+                    ClickableWidget(
                       onTap: () {
                         context.push(Routes.LOGIN);
                       },
@@ -227,7 +228,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: InkWell(
+                        child: ClickableWidget(
                           onTap: () {
                             context.push(Routes.LOGIN);
                           },
@@ -276,7 +277,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
         var myPost = widget.from == 'details'
             ? widget.post
             : controller.globalFeedPagingController.itemList![widget.index];
-        return InkWell(
+        return ClickableWidget(
           onTap: (widget.from == 'posts' && widget.post.isShared == true)
               ? () => widget.showPostDetails(
                   controller.globalFeedPagingController.itemList![widget.index])
@@ -294,24 +295,24 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                 children: [
                   if (myPost.likesCount != 0)
                     _buildCounterWidget(
-                        value: myPost.likesCount!, image: Assets.like),
+                        value: myPost.likesCount, image: Assets.like),
                   if (myPost.hahaCount != 0)
                     _buildCounterWidget(
-                        value: myPost.hahaCount!, image: Assets.haha),
+                        value: myPost.hahaCount, image: Assets.haha),
                   if (myPost.loveCount != 0)
                     _buildCounterWidget(
-                        value: myPost.loveCount!, image: Assets.heart),
+                        value: myPost.loveCount, image: Assets.heart),
                   if (myPost.wowCount != 0)
                     _buildCounterWidget(
-                        value: myPost.wowCount!, image: Assets.wow),
+                        value: myPost.wowCount, image: Assets.wow),
                   if (myPost.sadCount != 0)
                     _buildCounterWidget(
-                        value: myPost.sadCount!, image: Assets.sad),
+                        value: myPost.sadCount, image: Assets.sad),
                   if (myPost.angryCount != 0)
                     _buildCounterWidget(
-                        value: myPost.angryCount!, image: Assets.angry),
+                        value: myPost.angryCount, image: Assets.angry),
                   const Spacer(),
-                  InkWell(
+                  ClickableWidget(
                     onTap: () {
                       context.push(Routes.LOGIN);
                     },
@@ -426,7 +427,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            InkWell(
+            ClickableWidget(
                 onTap: () {
                   if (widget.fromProfile == false &&
                       context.read<UserCubit>().isLoggedIn) {
@@ -454,7 +455,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  InkWell(
+                  ClickableWidget(
                     onTap: () {
                       if (widget.fromProfile == false &&
                           context.read<UserCubit>().isLoggedIn) {
@@ -501,7 +502,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
         if (post.location != null)
           Padding(
             padding: const EdgeInsetsDirectional.only(start: 40.0),
-            child: InkWell(
+            child: ClickableWidget(
               onTap: () {
                 showDialog(
                     context: context,
@@ -536,7 +537,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
   }) {
     return Row(
       children: [
-        InkWell(
+        ClickableWidget(
           onTap: () {
             if (widget.fromProfile == false) {
               context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
@@ -553,7 +554,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
         Expanded(
             child: Row(
           children: [
-            InkWell(
+            ClickableWidget(
               onTap: () {
                 if (widget.fromProfile == false) {
                   context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
@@ -635,10 +636,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: images!.length == 1 ? 1 : 2),
                         itemCount: images.length < 4 ? images.length : 4,
-                        itemBuilder: (context, index) => InkWell(
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
+                        itemBuilder: (context, index) => ClickableWidget(
                               onTap: () {
                                 if (index != 3 ||
                                     (index == 3 && images.length == 4)) {
@@ -720,7 +718,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
         ],
       );
     } else {
-      return InkWell(
+      return ClickableWidget(
         onTap: () => onTap(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

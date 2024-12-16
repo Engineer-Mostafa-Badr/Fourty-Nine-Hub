@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -11,7 +12,6 @@ import 'package:fourtyninehub/features/social_media/create_post/presentation/wid
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
@@ -30,7 +30,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TwitterPostCard extends StatefulWidget {
   bool isLiked;
   bool? fromProfile;
-  TwitterMainPostEntity? postShare;
   final TwitterPostEntity post;
   final Function onReact;
   final Function getPost;
@@ -58,7 +57,6 @@ class TwitterPostCard extends StatefulWidget {
     required this.hidePost,
     required this.onDeleteComment,
     required this.onEditComment,
-    required this.postShare,
   });
 
   @override
@@ -270,7 +268,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
         if (label != null || label != '') ...[
           ReadMoreLabel(
             text: label ?? '',
-            style: Styles.headerText(fontSize: 30),
+            style: Styles.headerText(fontSize: 30,color: context.isDarkMode?Colors.white:Colors.black),
           ),
           const Sizer(),
         ],
@@ -366,15 +364,15 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               ),
         const Sizer(),
         Label(
-            text: "${post.user.firstName} ${post.user.lastName}",
+            text: "${post.user.firstName??''} ${post.user.lastName??''}",
             style: Styles.mediumText(fontWeight: FontWeight.w500)),
         const Sizer(
           width: 4,
         ),
-        if (post.user.isDocumented == true)
-          const Icon(
+        if (post.user?.isDocumented)
+          Icon(
             Icons.verified,
-            color: AppColors.PRIMARY_COLOR,
+            color: Theme.of(context).primaryColor,
           ),
         const Sizer(),
         Expanded(
@@ -493,38 +491,44 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                     )
                   : UserProfileImage(
                       accountId: 0,
-                      imageURL: post.postShare!.user?.image,
+                      imageURL: post.postShare?.user?.image,
                       fromProfile: widget.fromProfile,
-                      userId: post.postShare!.user!.id,
+                      userId: post.postShare?.user?.id??'',
                     ),
               const Sizer(),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Label(
-                        text: post.postShare == null
-                            ? "${post.user!.firstName} ${post.user!.lastName}"
-                            : "${post.postShare!.user!.firstName} ${post.postShare!.user!.lastName}",
-                        // text: post.isShared == true
-                        //     ? "${postMain.user!.firstName} ${postMain.user!.lastName}"
-                        //     : "${post.user!.firstName} ${post.user!.lastName}",
-                        style: Styles.mediumText(fontWeight: FontWeight.w500)),
+                    Row(
+                      children: [
+                        Label(
+                            text: post.postShare == null
+                                ? "${post.user?.firstName??''} ${post.user?.lastName??''}"
+                                : "${post.postShare?.user?.firstName??''} ${post.postShare?.user?.lastName??''}",
+
+                            // text: post.isShared == true
+                            //     ? "${postMain.user!.firstName} ${postMain.user!.lastName}"
+                            //     : "${post.user!.firstName} ${post.user!.lastName}",
+                            style: Styles.mediumText(fontWeight: FontWeight.w500)),
+                        if (post.user?.isDocumented == true && post.isShared == false ||
+                            (post.user?.isDocumented == true && post.isShared == true))
+                          Icon(
+                            Icons.verified,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                      ],
+                    ),
                     Label(
                         text:
-                            '@${(post.postShare == null ? post.user?.email ?? '' : post.postShare!.user?.email)!.split('@')[0]}',
+                            '@${(post.postShare == null ? post.user?.email ?? '' : post.postShare?.user?.email??'')?.split('@')[0]}',
                         maxLines: 1,
                         style: Styles.mediumText(color: Colors.grey)),
                   ],
                 ),
               ),
               Label(text: date, maxLines: 1, style: Styles.mediumText()),
-              if (post.user?.isDocumented == true && post.isShared == false ||
-                  (post.user?.isDocumented == true && post.isShared == true))
-                Icon(
-                  Icons.verified,
-                  color: Theme.of(context).primaryColor,
-                ),
+
               // Sizer(),
             ],
           ),

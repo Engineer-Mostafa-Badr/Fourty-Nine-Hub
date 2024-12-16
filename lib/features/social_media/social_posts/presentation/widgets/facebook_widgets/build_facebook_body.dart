@@ -171,7 +171,8 @@ class FacebookBody extends StatelessWidget {
                                       ),
                                     ));
                               },
-                              showPostDetails: (PostEntity post) => bottomSheet(
+                              showPostDetails: (PostEntity post) {
+                                return bottomSheet(
                                   context: context,
                                   isScrollControlled: true,
                                   widget: BlocProvider.value(
@@ -207,9 +208,7 @@ class FacebookBody extends StatelessWidget {
                                       showPostComments: (postId) {},
                                       showPostDetails: (PostEntity post) {},
                                       // post: controller.feedPagingController.itemList![index],
-
-                                      onCommentReply:
-                                          (ReplyOnCommentParams params) {
+                                      onCommentReply: (ReplyOnCommentParams params) {
                                         return controller.replyOnComment(
                                           params: ReplyOnCommentParams(
                                               postId: params.postId,
@@ -246,7 +245,8 @@ class FacebookBody extends StatelessWidget {
                                         return result;
                                       },
                                     ),
-                                  )),
+                                  ));
+                              },
                               isMyPost: controller.feedPagingController
                                           .itemList?[index].user !=
                                       null

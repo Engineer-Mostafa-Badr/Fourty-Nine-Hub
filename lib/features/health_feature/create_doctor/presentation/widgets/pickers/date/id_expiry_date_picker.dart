@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,7 +33,7 @@ class CreateDoctorIDExpiryDatePicker extends StatelessWidget {
             DatePickerField(
               borderWidth: borderWidth,
               borderColor: field.hasError ? Colors.red : borderColor,
-              title: title ?? LocaleKeys.idExpiryDate.tr(),
+              title: title ?? (context.isArabic?'تاريخ انتهاء الهوية':'ID Expiry Date'),
               initialDate: now,
               textStyle: textStyle ?? Styles.mediumText(),
               minDate: now,

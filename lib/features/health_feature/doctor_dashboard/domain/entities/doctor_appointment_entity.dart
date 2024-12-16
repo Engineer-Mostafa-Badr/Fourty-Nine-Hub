@@ -8,7 +8,8 @@ class DoctorAppointmentEntity {
   final String lastName;
   final String? image;
   final WeekDays day;
-  final String time;
+  final String startTime;
+  final String endTime;
   final BookingTypes type;
   final String additionalNotes;
   final GenderType gender;
@@ -21,7 +22,8 @@ class DoctorAppointmentEntity {
     required this.additionalNotes,
     this.image,
     required this.day,
-    required this.time,
+    required this.startTime,
+    required this.endTime,
     required this.type,
   });
 

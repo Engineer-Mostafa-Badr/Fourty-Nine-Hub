@@ -25,6 +25,7 @@ class UserProfileEntity {
   bool? sentFriendRequest;
   bool? isDocument;
   bool? isBlock;
+  bool? blockMe;
   List<UserProfileFollowersEntity>? followers;
 
   String get fullName => '$firstName $lastName';
@@ -52,6 +53,7 @@ class UserProfileEntity {
     this.isSenTRequest = false,
     this.sentFriendRequest = false,
     this.isBlock = false,
+    this.blockMe = false,
     required this.bio,
     required this.city,
     required this.country,

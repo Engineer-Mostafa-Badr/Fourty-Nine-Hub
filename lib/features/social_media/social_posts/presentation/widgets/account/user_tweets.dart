@@ -71,8 +71,6 @@ class _UserTweetsState extends State<UserTweets> {
                 return state.status == StateStatus.success
                     ? TwitterPostCard(
                         fromProfile: user?.id == widget.userData.id,
-                        postShare: controller
-                            .userTweetsPagingController.itemList![index].postShare!,
                         post: controller
                             .userTweetsPagingController.itemList![index],
                         onReact: () async {

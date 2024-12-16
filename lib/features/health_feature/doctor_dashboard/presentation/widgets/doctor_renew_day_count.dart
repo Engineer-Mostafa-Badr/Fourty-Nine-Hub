@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_dashboard/doctor_dashboard_cubit.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -17,7 +20,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Label(
-          text: Labels.deadline,
+          text: LocaleKeys.deadlineSubscription.localize,
           style: Styles.headerText(),
         ),
         const Sizer(),
@@ -25,23 +28,26 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Theme.of(context).primaryColor,
+            color: cardDarkColor(context),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 2,
+                  offset: const Offset(0, 3),
+                ),
+              ]
           ),
           child: Row(
             children: [
               Expanded(
                 child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
-                  buildWhen: (previous, current) =>
-                      current is DoctorDashboardInitial ||
-                      current is DoctorInfoSuccessState,
                   builder: (context, state) {
                     String days = '0';
-                    if (state is DoctorInfoSuccessState) {
-                      days = state.info.remainingDaysToEndSubscription.toString();
-                    }
+                      days = state.info?.remainingDaysToEndSubscription.toString()??'';
                     return _Item(
                       numerOfDays: days,
-                      label: Labels.subscription,
+                      label: LocaleKeys.subscription.localize,
                       onTap: () {},
                     );
                   },
@@ -50,17 +56,12 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
               const Sizer(),
               Expanded(
                 child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
-                  buildWhen: (previous, current) =>
-                      current is DoctorDashboardInitial ||
-                      current is DoctorInfoSuccessState,
                   builder: (context, state) {
                     String days = '0';
-                    if (state is DoctorInfoSuccessState) {
-                      days = state.info.remainingDaysToExpiryId.toString();
-                    }
+                      days = state.info?.remainingDaysToExpiryId.toString()??'';
                     return _Item(
                       numerOfDays: days,
-                      label: Labels.id, onTap: () {},
+                      label: LocaleKeys.id.localize, onTap: () {},
                       // onTap: () => context.push(Routes.EDITDOCTORDOCS),
                     );
                   },
@@ -69,17 +70,12 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
               const Sizer(),
               Expanded(
                 child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
-                  buildWhen: (previous, current) =>
-                      current is DoctorDashboardInitial ||
-                      current is DoctorInfoSuccessState,
                   builder: (context, state) {
                     String days = '0';
-                    if (state is DoctorInfoSuccessState) {
-                      days = state.info.remainingDaysToExpiryPracticingId.toString();
-                    }
+                      days = state.info?.remainingDaysToExpiryPracticingId.toString()??'';
                     return _Item(
                       numerOfDays: days,
-                      label: Labels.practiceCertification, onTap: () {},
+                      label: LocaleKeys.practiceCertification.localize, onTap: () {},
                       // onTap: () => context.push(Routes.EDITDOCTORDOCS),
                     );
                   },
@@ -117,8 +113,7 @@ class _Item extends StatelessWidget {
           ),
           Label(
             text: label,
-            style: Styles.mediumText(
-                color: Theme.of(context).scaffoldBackgroundColor),
+            style: Styles.mediumText(),
           ),
         ],
       ),

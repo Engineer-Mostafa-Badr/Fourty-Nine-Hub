@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -611,6 +612,7 @@ class _UserPostCardState extends State<UserPostCard> {
       {String? backgroundColor,
         required String content,
         List<String>? images}) {
+    print("contentadasd$content");
     return (backgroundColor != null && backgroundColor != '#FFFFFFFF') &&
         images!.isEmpty
         ? Container(
@@ -629,6 +631,7 @@ class _UserPostCardState extends State<UserPostCard> {
         textAlign: _isArabic(content) ? TextAlign.right : TextAlign.left,
         style: Styles.headerText(
           //  color: Colors.black,
+            color:context.isDarkMode?Colors.white:Colors.black,
             fontSize: 60.sp,
             fontWeight: FontWeight.bold),
       ),
@@ -643,7 +646,9 @@ class _UserPostCardState extends State<UserPostCard> {
           if (content.isNotEmpty)
             ReadMoreLabel(
               text: content,
-              style: Styles.mediumText(fontSize: 70.sp),
+              style: Styles.mediumText(fontSize: 70.sp,
+                color:context.isDarkMode?Colors.white:Colors.black,
+              ),
               textAlign:
               _isArabic(content) ? TextAlign.right : TextAlign.left,
             ),

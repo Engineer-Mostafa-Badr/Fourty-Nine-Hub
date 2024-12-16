@@ -6,7 +6,7 @@ class RestaurantMenu extends Equatable {
   final String? restaurantId;
   final String? foodName;
   final double? price;
-  final RestaurantMediaModel? picture;
+  final String? picture;
   final String? photo;
   final String? menuId;
   const RestaurantMenu({

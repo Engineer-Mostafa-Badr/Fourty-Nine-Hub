@@ -66,7 +66,7 @@ class _CommentCardState extends State<CommentCard> {
               withBorder: false,
               imageURL: widget.comment.user.image.isNotEmpty
                   ? widget.comment.user.image
-                  : null,
+                  : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwC-ZR1TdJ7VIAMeqhjm-u29-HB0PyAuSFFQ&s',
               userId: widget.comment.user.id,
             ),
             const Sizer(),

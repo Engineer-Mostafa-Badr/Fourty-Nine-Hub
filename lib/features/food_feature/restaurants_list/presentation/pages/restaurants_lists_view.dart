@@ -66,7 +66,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
     final state = context.watch<RestaurantsCubit>().state;
     return SharedScaffold(
       mainCategoryId: 1,
-      backgroundColor: scaffoldDarkColor(context),
+      // backgroundColor: scaffoldDarkColor(context),
       body: RefreshIndicator(
         onRefresh: () async {
           if (context.read<UserCubit>().isLoggedIn) {
@@ -83,6 +83,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
 
   Widget _buildLoggedInView(RestaurantsListState state) {
     return ListView(
+      padding: EdgeInsets.all(10.w),
       controller: _scrollController,
       shrinkWrap: true,
       children: [
@@ -90,54 +91,51 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
           if (!(state.isResturant?.isRestaurant ?? false))
             _buildRegisterRestaurantPrompt(state),
           const Sizer(),
-         Padding(
-           padding: EdgeInsets.all(10.w),
-           child: Column(
-             children: [
-               if ((state.isResturant?.isRestaurant ?? false) &&
-                   (state.isResturant?.approved ?? false))
-                 const ResturantDashboardButton(),
-               const Sizer(),
-               _buildSearchAndExpiredRequests(),
-               const Sizer(),
-               const MealCategories(),
-               const Sizer(),
-               Label(
-                 text: context.isArabic?"${state.selectedCategory?.id!=''?"مطاعم ":''}${state.selectedCategory?.nameAr}":"${state.selectedCategory?.nameEn}${state.selectedCategory?.id!=''?" Restaurants":''}",
-                 style: Styles.headerText(),
+         Column(
+           children: [
+             if ((state.isResturant?.isRestaurant ?? false) &&
+                 (state.isResturant?.approved ?? false))
+               const ResturantDashboardButton(),
+             const Sizer(),
+             _buildSearchAndExpiredRequests(),
+             const Sizer(),
+             const MealCategories(),
+             const Sizer(),
+             Label(
+               text: context.isArabic?"${state.selectedCategory?.id!=''?"مطاعم ":''}${state.selectedCategory?.nameAr}":"${state.selectedCategory?.nameEn}${state.selectedCategory?.id!=''?" Restaurants":''}",
+               style: Styles.headerText(),
+             ),
+             const Sizer(),
+             (state.isLoadingRestaurantsMore==true&&context.read<RestaurantsCubit>().currentRestaurantsPage==1)?ListView.builder(
+               itemCount: 1,
+               padding: EdgeInsets.zero,
+               shrinkWrap: true,
+               physics: const NeverScrollableScrollPhysics(),
+               itemBuilder: (context,i)=>const PropertyCardShimmer(),
+             ):context.read<RestaurantsCubit>().restaurants.isNotEmpty?ListView.separated(
+               shrinkWrap: true,
+               physics: const NeverScrollableScrollPhysics(),
+               itemCount: context.read<RestaurantsCubit>().restaurants.length,
+               separatorBuilder: (context, index) => const Sizer(),
+               itemBuilder: (context,i)=>SubCategoriesRestaurantCard(
+                 item: context.read<RestaurantsCubit>().restaurants[i],
+                 mealId: '', favouriteRestaurant: (String id) async {
+                 var result = await context.read<RestaurantsCubit>().toggleFavoriteRestaurant(id);
+                 if(result==true){
+                   context.read<RestaurantsCubit>().restaurants[i].isFavorite= !context.read<RestaurantsCubit>().restaurants[i].isFavorite!;
+                 }
+               },
                ),
-               const Sizer(),
-               (state.isLoadingRestaurantsMore==true&&context.read<RestaurantsCubit>().currentRestaurantsPage==1)?ListView.builder(
-                 itemCount: 1,
-                 padding: EdgeInsets.zero,
-                 shrinkWrap: true,
-                 physics: const NeverScrollableScrollPhysics(),
-                 itemBuilder: (context,i)=>const PropertyCardShimmer(),
-               ):context.read<RestaurantsCubit>().restaurants.isNotEmpty?ListView.separated(
-                 shrinkWrap: true,
-                 physics: const NeverScrollableScrollPhysics(),
-                 itemCount: context.read<RestaurantsCubit>().restaurants.length,
-                 separatorBuilder: (context, index) => const Sizer(),
-                 itemBuilder: (context,i)=>SubCategoriesRestaurantCard(
-                   item: context.read<RestaurantsCubit>().restaurants[i],
-                   mealId: '', favouriteRestaurant: (String id) async {
-                   var result = await context.read<RestaurantsCubit>().toggleFavoriteRestaurant(id);
-                   if(result==true){
-                     context.read<RestaurantsCubit>().restaurants[i].isFavorite= !context.read<RestaurantsCubit>().restaurants[i].isFavorite!;
-                   }
-                 },
+             ):Center(
+               child: Padding(
+                 padding: EdgeInsets.only(top: 40.h),
+                 child: Text(
+                   context.isArabic ? "لا توجد مطاعم متوفرة." : "No Restaurants Found.",
+                   style: Styles.mediumText(),
                  ),
-               ):Center(
-                 child: Padding(
-                   padding: EdgeInsets.only(top: 40.h),
-                   child: Text(
-                     context.isArabic ? "لا توجد مطاعم متوفرة." : "No Restaurants Found.",
-                     style: Styles.mediumText(),
-                   ),
-                 ),
-               )
-             ],
-           ),
+               ),
+             )
+           ],
          )
       ],
     );

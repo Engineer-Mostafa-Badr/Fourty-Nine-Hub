@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -16,7 +16,6 @@ import 'package:fourtyninehub/features/social_media/create_post/presentation/wid
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/api_error_page.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/message_button.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/saved_reels_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
@@ -44,7 +43,7 @@ class OtherAccountView extends StatefulWidget {
       print("payloadpayloadpayload $payload");
       // print(id);
       // print('itemId${payload['itemId']}');
-      userId=payload['itemId'];
+      userId=payload['userId'];
     }
   }
   var userId;
@@ -54,6 +53,13 @@ class OtherAccountView extends StatefulWidget {
 }
 
 class _OtherAccountViewState extends State<OtherAccountView> {
+
+  @override
+  void initState() {
+    context.read<SocialPostsCubit>().getUserProfile(id:widget.userId??'');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final loginUser = context.read<UserCubit>().state.data;
@@ -66,13 +72,6 @@ class _OtherAccountViewState extends State<OtherAccountView> {
           final controller = context.read<SocialPostsCubit>();
           return state.status == StateStatus.loading
               ? const Center(child: CircularProgressIndicator())
-              : state.status == StateStatus.error
-                  ? ApiErrorPage(
-                      message: getFailureMessage(
-                        state.failure ?? UnknownFailure(''),
-                        context,
-                      ),
-                    )
                   : CustomScrollView(
                       slivers: [
                         SliverToBoxAdapter(
@@ -397,7 +396,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           ),
                         ),
                         SliverToBoxAdapter(
-                          child: state.profileData?.isBlock == false
+                          child: state.profileData?.isBlock == false&&state.profileData?.blockMe==false
                               ? Column(
                                   children: [
                                     TabBar(
@@ -431,33 +430,41 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                     // _buildAccountPages(state.profileData!),
                                   ],
                                 )
-                              : Center(
+                              : state.profileData?.blockMe == true?Center(
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 25.0),
                                     child: Label(
-                                      text: LocaleKeys
-                                          .youHaveBlockedThisUser.localize,
+                                      text: context.isArabic?'انت محظور من هذا المستخدم':'You are blocked by this user',
                                     ),
                                   ),
-                                ),
+                                ):Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 25.0),
+                              child: Label(
+                                text: LocaleKeys
+                                    .youHaveBlockedThisUser.localize,
+
+                              ),
+                            ),
+                          ),
                         ),
                         state.profilePage == 0 &&
-                                state.profileData?.isBlock == false
+                                state.profileData?.isBlock == false&&state.profileData?.blockMe==false
                             ? UserPosts(
                                 userData: state.profileData!,
                               )
                             : state.profilePage == 1 &&
-                                    state.profileData?.isBlock == false
+                                    state.profileData?.isBlock == false&&state.profileData?.blockMe==false
                                 ? UserTweets(
                                     userData: state.profileData!,
                                   )
                                 : state.profilePage == 2 &&
-                                        state.profileData?.isBlock == false
+                                        state.profileData?.isBlock == false&&state.profileData?.blockMe==false
                                     ? UserReels(
                                         userData: state.profileData!,
                                       )
                                     : state.profilePage == 2 &&
-                                            state.profileData?.isBlock == false
+                                            state.profileData?.isBlock == false&&state.profileData?.blockMe==false
                                         ? SavedReelsView(
                                             userData: state.profileData!)
                                         : const SliverToBoxAdapter(

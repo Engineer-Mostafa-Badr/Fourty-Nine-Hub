@@ -21,4 +21,5 @@ abstract class HealthRepo {
   Future<Either<Failure, bool>> isDoctor();
   Future<Either<Failure, bool>> isDoctorApproval();
   Future<Either<Failure, DoctorInfoEntity>> getDoctorInfo();
+  Future<Either<Failure, bool>> cancelAppointment(String id);
 }
