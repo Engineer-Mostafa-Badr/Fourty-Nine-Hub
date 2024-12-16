@@ -176,10 +176,6 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           children: [
             AddBanner(),
-            ElevatedButton(onPressed: (){
-              AdInterstitialTop.loadIntersitialAd();
-              AdInterstitialTop.showInterstitialAd();
-            }, child: Text("Video")),
             //carousel slider
             const AnnounceWidget(),
             !context.read<UserCubit>().isLoggedIn
@@ -245,6 +241,8 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
                           HandleCashback.setCount('mainCategoriesCount',context);
                           context.push(Routes.SUBCATEGORIES,
                               extra: state.data![index]);
@@ -299,7 +297,11 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
                 width: 34.h,
               ),
               Routes.MAINCATEGORIESTREE,
-              () => HandleCashback.setCount('threeDotsCount',context),
+              () {
+                AdInterstitialTop.loadIntersitialAd();
+                AdInterstitialTop.showInterstitialAd();
+                return HandleCashback.setCount('threeDotsCount',context);
+              },
             ),
             _buildItemTabBar(
               SvgPicture.asset(
@@ -309,6 +311,8 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
               ),
               Routes.MAINCATEGORIESCARDS,
                 (){
+                  AdInterstitialTop.loadIntersitialAd();
+                  AdInterstitialTop.showInterstitialAd();
                   HandleCashback.setCount('mainCategoriesSliderCount',context);
                 }
             ),
@@ -370,7 +374,11 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
                   service: state.data?[0].service ?? RideServicesEnum.pickMe,
                   title: LocaleKeys.carpool.localize,
                   image: state.data?[0].image ?? '',
-                  onTab: ()=> HandleCashback.setCount('carPoolCount',context),
+                  onTab: () {
+                    AdInterstitialTop.loadIntersitialAd();
+                    AdInterstitialTop.showInterstitialAd();
+                    return HandleCashback.setCount('carPoolCount',context);
+                  },
                   // image: Assets.carpool,
                   // isFavorite: state.data![0].is,
                   // numberOfAds: state.data![0].numberOfAds?.toInt(),
@@ -387,7 +395,11 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
                   // image: Assets.tripJoin,
 
                   route: Routes.AVAILABLE_TRIPS,
-                  onTab: () => HandleCashback.setCount('tripJoinCount',context),
+                  onTab: () {
+                    AdInterstitialTop.loadIntersitialAd();
+                    AdInterstitialTop.showInterstitialAd();
+                    return HandleCashback.setCount('tripJoinCount',context);
+                  },
                   // isFavorite: state.data![1].isFavorite,
                   // numberOfAds: state.data![1].numberOfAds?.toInt(),
                 ),
@@ -495,6 +507,8 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
                 icon: Icons.star,
                 iconSize: 50.h,
                 onPressed: () {
+                  AdInterstitialTop.loadIntersitialAd();
+                  AdInterstitialTop.showInterstitialAd();
                   HandleCashback.setCount('beAStarCount',context);
                   context.push(Routes.BE_STAR);
                 }),

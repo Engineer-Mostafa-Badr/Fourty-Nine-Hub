@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -47,6 +48,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   void initState() {
     // TODO: implement initState
+    AdInterstitialTop.loadIntersitialAd();
     super.initState();
   }
   @override
@@ -75,26 +77,33 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         image: Assets.microphone,
                         label: LocaleKeys.advertiseYourCompany.localize,
                         onTap: () {
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
                           return context.push(Routes.CREATECOMPANYAD);
                         }),
                     drawerListTile(
                         image: Assets.quran,
                         label: LocaleKeys.quraan.localize,
                         onTap: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (builder) => QuranPage()));
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
+
                           return context.push(Routes.QURAAN);
                         }),
                     drawerListTile(
                         image: Assets.azkar,
                         label: LocaleKeys.azkar.localize,
-                        onTap: () => context.push(Routes.AZKAAR)),
+                        onTap: () {
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
+                          return context.push(Routes.AZKAAR);
+                        }),
                     drawerListTile(
                         icon: Icons.maps_home_work_rounded,
                         label: LocaleKeys.customPage.localize,
                         onTap: () {
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
                           context.push(Routes.CUSTOMPAGE);
                         }),
                     drawerListTile(
@@ -102,6 +111,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         label: LocaleKeys.favouriteCategories.localize,
                         requireLogin: true,
                         onTap: () async {
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
                           await context.push(Routes.FAVOURITECATEGORIES);
                           context.read<MainCategoriesCubit>().loadData();
                         }),
@@ -148,12 +159,20 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         // icon: Icons.privacy_tip,
                         image: Assets.privacy_icon,
                         label: LocaleKeys.privacy.localize,
-                        onTap: () => context.push(Routes.PRIVACY)),
+                        onTap: () {
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
+                          return context.push(Routes.PRIVACY);
+                        }),
 
                     drawerListTile(
                         image: Assets.policy,
                         label: LocaleKeys.policies.localize,
-                        onTap: () => context.push(Routes.POLICY)),
+                        onTap: () {
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
+                          return context.push(Routes.POLICY);
+                        }),
                     drawerListTile(
                         // icon: Icons.share,
                         image: Assets.share_app_icon,
@@ -399,9 +418,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   Widget competitionSubscription({required BuildContext context}) {
     return InkWell(
-      onTap: () => context.go(
+      onTap: () {
+        AdInterstitialTop.loadIntersitialAd();
+        AdInterstitialTop.showInterstitialAd();
+        context.go(
         context.read<UserCubit>().isLoggedIn ? Routes.LUCKYWHEEL : Routes.LOGIN,
-      ),
+      );
+      },
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.all(20.w),

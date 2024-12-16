@@ -100,7 +100,7 @@ Widget getAdIfNeeded(int index, AdsManager adsManager) {
     // Return ad widget if needed, else show a placeholder Text
     return adsManager.nativeAds.isNotEmpty
         ? adsManager.getAdWidget(index ~/ adFrequency)
-        : Text("No ads now");
+        : SizedBox.shrink();
   }
   return const SizedBox(); // No ad for other indices
 }
