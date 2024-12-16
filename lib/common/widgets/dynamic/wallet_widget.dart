@@ -96,6 +96,7 @@ class WalletWidget extends StatelessWidget {
                   AdInterstitialTop.loadIntersitialAd();
                   AdInterstitialTop.showInterstitialAd();
                   context.push(Routes.WALLET);
+                  //showing
                 },
                     LocaleKeys.wallet.tr(),
                     '${state.wallet?.realAmount.floor() ??''} ',
