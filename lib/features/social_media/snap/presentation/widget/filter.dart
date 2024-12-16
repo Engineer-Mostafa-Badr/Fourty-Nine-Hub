@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:deepar_flutter/deepar_flutter.dart';
 import 'package:flutter/rendering.dart';
@@ -29,44 +28,73 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late DeepArController deepArController;
-  final GlobalKey _key = GlobalKey(); // GlobalKey to capture widget
+  final GlobalKey _key = GlobalKey();
   File? _selectedImage;
 
-  int selectedFilterIndex = 0; // Tracks which filter is applied
-  late PageController _pageController; // PageController for filters
-  bool isSelected = false;
-  late CameraController _cameraController;
+  int selectedFilterIndex = 0;
+  final PageController _pageController =
+  PageController(viewportFraction: 0.3);
 
   @override
   void initState() {
     super.initState();
-    // Initialize PageController
-    _pageController = PageController(
-      viewportFraction: 0.3,
-      initialPage: selectedFilterIndex,
-    );
-
-    // Initialize DeepArController
     deepArController = DeepArController();
-    initializeController();
+    _initializeDeepArController();
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Handle the app lifecycle changes (if needed)
+    if (state == AppLifecycleState.resumed) {
+      print('App resumed');
+    } else if (state == AppLifecycleState.paused) {
+      print('App paused');
+    }
+  }
+
+
+  @override
   void dispose() {
-    // Dispose of controllers
-    _pageController.dispose();
-    _cameraController.dispose();
-    deepArController = DeepArController();
-   // deepArController.stopVideoRecording(); // Ensure proper cleanup
+   // WidgetsBinding.instance.removeObserver(this); // Remove the observer
+    _pageController.dispose(); // Dispose the page controller
+ //   deepArController.stop(); // Replace with the appropriate method if available
     super.dispose();
   }
 
-  Future<void> initializeController() async {
-    await deepArController.initialize(
-      androidLicenseKey: '930f25b8068f75e888da6f36ca5e7743d7922d9e9b33f36390e980176eaf4e84a2a048142d9b1310',
-      iosLicenseKey: '111a528fa021dbf6a64decfb751ca354e59793f11926845436472e094038cd491de29c031f9ead7f',
-    );
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Reinitialize if returning to screen
+    _initializeDeepArController();
   }
+
+  Future<void> _initializeDeepArController() async {
+    if (!deepArController.isInitialized) {
+      await deepArController.initialize(
+        androidLicenseKey: '930f25b8068f75e888da6f36ca5e7743d7922d9e9b33f36390e980176eaf4e84a2a048142d9b1310',
+        iosLicenseKey: '111a528fa021dbf6a64decfb751ca354e59793f11926845436472e094038cd491de29c031f9ead7f',
+      );
+      _applySelectedFilter();
+    }
+  }
+
+  void _applySelectedFilter() {
+    final filter = filters[selectedFilterIndex];
+    final effectFile = File('assets/filters/${filter.filterPath}').path;
+    deepArController.switchEffect(effectFile);
+  }
+
+  Widget buildCameraPreview() => RepaintBoundary(
+    key: _key,
+    child: SizedBox(
+      height: MediaQuery.of(context).size.height * 0.78,
+      child: Transform.scale(
+        scale: 1.6,
+        child: DeepArPreview(deepArController),
+      ),
+    ),
+  );
+
 
 
   Future<void> _captureAndSaveImage() async {
@@ -111,16 +139,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Widget buildCameraPreview() => RepaintBoundary(
-    key: _key,
-    child: SizedBox(
-      height: MediaQuery.of(context).size.height * 0.78,
-      child: Transform.scale(
-        scale: 1.6,
-        child: DeepArPreview(deepArController),
-      ),
-    ),
-  );
 
   Widget buildFilters() => Expanded(
     child: GestureDetector(
@@ -241,7 +259,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: initializeController(),
+        future: _initializeDeepArController(),
         builder: (context, snapshot) {
           return Stack(
             children: [
@@ -249,9 +267,7 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   buildCameraPreview(),
-                  //buildButtons(),
                   buildFilters(),
-                 // Sizer(height: 100.h,),
                 ],
               ),
               _buildTopIcons(),
@@ -334,121 +350,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-
-
-// import 'dart:io';
-//
-// import 'package:deepar_flutter/deepar_flutter.dart';
-// import 'package:flutter/material.dart';
-// import 'package:fourtyninehub/features/social_media/snap/data/model/filter_data.dart';
-//
-// class HomePage extends StatefulWidget {
-//   const HomePage({super.key});
-//
-//   @override
-//   State<HomePage> createState() => _HomePageState();
-// }
-//
-// class _HomePageState extends State<HomePage> {
-//   final deepArController = DeepArController();
-//
-//   Future<void> initializeController() async {
-//     await deepArController.initialize(
-//       androidLicenseKey: '930f25b8068f75e888da6f36ca5e7743d7922d9e9b33f36390e980176eaf4e84a2a048142d9b1310',
-//       iosLicenseKey: '111a528fa021dbf6a64decfb751ca354e59793f11926845436472e094038cd491de29c031f9ead7f',
-//       //resolution: ,
-//     );
-//   }
-//
-//   Widget buildButtons() => Row(
-//     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//     crossAxisAlignment: CrossAxisAlignment.start,
-//     children: [
-//       IconButton(
-//         onPressed: deepArController.flipCamera,
-//         icon: const Icon(
-//           Icons.flip_camera_ios_outlined,
-//           size: 34,
-//           color: Colors.white,
-//         ),
-//       ),
-//       FilledButton(
-//         onPressed: deepArController.takeScreenshot,
-//         child: const Icon(Icons.camera),
-//       ),
-//       IconButton(
-//         onPressed: deepArController.toggleFlash,
-//         icon: const Icon(
-//           Icons.flash_on,
-//           size: 34,
-//           color: Colors.white,
-//         ),
-//       ),
-//     ],
-//   );
-//
-//   Widget buildCameraPreview() => SizedBox(
-//     height: MediaQuery.of(context).size.height * 0.82,
-//     child: Transform.scale(
-//       scale: 1.5,
-//       child: DeepArPreview(deepArController),
-//     ),
-//   );
-//
-//   Widget buildFilters() => SizedBox(
-//     height: MediaQuery.of(context).size.height * 0.1,
-//     child: ListView.builder(
-//         shrinkWrap: true,
-//         scrollDirection: Axis.horizontal,
-//         itemCount: filters.length,
-//         itemBuilder: (context, index) {
-//           final filter = filters[index];
-//           final effectFile =
-//               File('assets/filters/${filter.filterPath}').path;
-//           return InkWell(
-//             onTap: () => deepArController.switchEffect(effectFile),
-//             child: Padding(
-//               padding: const EdgeInsets.all(8.0),
-//               child: Container(
-//                 width: 40,
-//                 decoration: BoxDecoration(
-//                   shape: BoxShape.circle,
-//                   color: Colors.white,
-//                   image: DecorationImage(
-//                     image:
-//                     AssetImage('assets/previews/${filter.imagePath}'),
-//                     fit: BoxFit.contain,
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           );
-//         }),
-//   );
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: FutureBuilder(
-//         future: initializeController(),
-//         builder: (context, snapshot) {
-//           if (snapshot.connectionState == ConnectionState.done) {
-//             return Column(
-//               mainAxisAlignment: MainAxisAlignment.start,
-//               children: [
-//                 buildCameraPreview(),
-//                 buildButtons(),
-//                 buildFilters(),
-//               ],
-//             );
-//           } else {
-//             return const Center(
-//               child: CircularProgressIndicator(),
-//             );
-//           }
-//         },
-//       ),
-//     );
-//   }
-// }

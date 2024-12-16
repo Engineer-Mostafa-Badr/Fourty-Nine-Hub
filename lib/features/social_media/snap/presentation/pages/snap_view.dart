@@ -282,7 +282,6 @@ class _AdvancedSnapchatCameraScreenState
   Widget build(BuildContext context) {
     if (!isReady || !_cameraController.value.isInitialized) {
       return const Scaffold(
-        backgroundColor: Colors.black,
         body: Center(child: CircularProgressIndicator()),
       );
     }
