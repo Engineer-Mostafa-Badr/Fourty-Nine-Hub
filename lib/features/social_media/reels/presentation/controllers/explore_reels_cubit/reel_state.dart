@@ -9,7 +9,7 @@ class ReelsState {
   final List<Reel>? reelsForAudio;
   final int? playingIndex;
 
-  final bool? globalReelsIsLoading;
+  final bool globalReelsIsLoading;
   final bool? globalReelsHasReachedMax;
   final int globalReelsCurrentPage;
 
@@ -77,7 +77,7 @@ class ReelsState {
     this.reelSaveResponse,
     this.reelShareResponse,
     this.globalReels = const [],
-    this.globalReelsIsLoading,
+    this.globalReelsIsLoading = false,
     this.playingIndex,
     this.globalReelsHasReachedMax,
     this.globalReelsCurrentPage = 0,
@@ -152,7 +152,7 @@ class ReelsState {
           likeReelCommentResponseMessage ?? this.likeReelCommentResponseMessage,
       globalReels: reels ?? globalReels,
       reelsForAudio: reelsForAudio ?? this.reelsForAudio,
-      globalReelsIsLoading: isLoading ?? globalReelsIsLoading,
+      globalReelsIsLoading:   isLoading ?? globalReelsIsLoading,
       globalReelsHasReachedMax: hasReachedMax ?? globalReelsHasReachedMax,
       globalReelsCurrentPage: currentPage ?? globalReelsCurrentPage,
       isLikingReel: isLikingReel ?? this.isLikingReel,

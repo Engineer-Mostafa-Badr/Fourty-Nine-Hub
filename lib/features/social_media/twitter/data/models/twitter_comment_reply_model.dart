@@ -6,6 +6,7 @@ class TwitterCommentReplyModel extends TwitterCommentReplyEntity {
     required super.id,
     required super.user,
     required super.content,
+    super.reply,
     required super.post,
     required super.createdAt,
     super.loveCount,
@@ -18,11 +19,12 @@ class TwitterCommentReplyModel extends TwitterCommentReplyEntity {
   factory TwitterCommentReplyModel.fromJson(Map<String, dynamic> json) {
     return TwitterCommentReplyModel(
       id: json['_id'],
+      reply: json['reply']??'',
       user: json['user'] is String
           ? json['user']
           : TwitterUserModel.fromJson(json['user']),
       content: json['content'] ?? '',
-      post: json['post'] ?? '',
+      post: json['post']!=null?json['post'] is String ?json['post']:'': '',
       loveCount: json['loveCount'] ?? 0,
       repliesCount: json['repliesCount'] ?? 0,
       createdAt: DateTime.parse(json['createdAt']),

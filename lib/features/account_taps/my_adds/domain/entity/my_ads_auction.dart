@@ -1,4 +1,3 @@
-import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/subscription_ad_auction_entity.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/user_auction_entity.dart';
 import 'my_auction_image_entity.dart';
 import 'my_auction_main_category.dart';
@@ -20,7 +19,7 @@ class MyAuctionAdsEntity {
   final bool isActive;
   final bool isPremium;
   final UserAuctionEntity user;
-  final List<SubscriptionAdsAuctionEntity> subscriptions;
+  final String subscriptions;
   final List<MyAuctionImageEntity> images;
   final String subscriptionStatus;
   final int phoneCountLength;

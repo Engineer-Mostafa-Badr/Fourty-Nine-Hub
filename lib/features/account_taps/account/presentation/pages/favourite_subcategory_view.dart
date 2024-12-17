@@ -6,10 +6,10 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/favourite_sub_category_card.dart';
-
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../service_locator/service_locator.dart';
 
 class FavSubCategoryView extends StatelessWidget {
   const FavSubCategoryView({
@@ -22,43 +22,41 @@ class FavSubCategoryView extends StatelessWidget {
       appBar: BackAppBar(
         label: LocaleKeys.favouriteSubCategories.localize,
       ),
-      body: BlocBuilder<FavouriteSubCategoryCubit, FavouriteSubCategoryState>(
-          builder: (context, state) {
-        final controller = context.read<FavouriteSubCategoryCubit>();
-        return Padding(
+      body: BlocProvider<FavouriteSubCategoryCubit>(
+        create: (BuildContext context) =>serviceLocator()..load(),
+        child: BlocBuilder<FavouriteSubCategoryCubit, FavouriteSubCategoryState>(
+            builder: (context, state) {
+          final controller = context.read<FavouriteSubCategoryCubit>();
+          return Padding(
             padding: EdgeInsets.all(16.w),
-            child: state.status == StateStatus.loading
+            child:state.status == StateStatus.loading
                 ? const Center(
-                    // ignore: unnecessary_const
-                    child: const CircularProgressIndicator(),
-                  )
+              // ignore: unnecessary_const
+              child: const CircularProgressIndicator(),
+            )
                 : state.data!.isNotEmpty && state.data != null
-                    ? GridView.builder(
-                        itemCount: state.data?.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2, childAspectRatio: 1),
-                        itemBuilder: (context, index) =>
-                            FavouriteSubCategoryCard(
-                          item: state.data![index],
-                          onFav: () async {
-                            var result =
-                                await controller.toggleSubCategoryToFavorites(
-                                    state.data![index].id);
-                            if (result == true) {
-                              state.data!.removeWhere((element) =>
-                                  element.id == state.data![index].id);
-                            }
-                          },
-                          mainCategory: state.mainCategory![index],
-                        ),
-                      )
-                    : Center(
-                        child: Label(
-                            style: Styles.mediumText(fontSize: 60.sp),
-                            maxLines: 3,
-                            textAlign: TextAlign.center,
-                            text: LocaleKeys.noFavouriteSubCategory.localize))
+                ? GridView.builder(
+              itemCount: state.data?.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, childAspectRatio: 1),
+              itemBuilder: (context, index) => FavouriteSubCategoryCard(
+                item: state.data![index],
+                onFav: () async {
+                  var result = await controller
+                      .toggleSubCategoryToFavorites(state.data![index].id);
+                  if (result == true) {
+                    state.data!.removeWhere(
+                            (element) => element.id == state.data![index].id);
+                  }
+                }, mainCategory: state.mainCategory![index],
+              ),
+            )
+            : Center(
+          child: Label(
+          style: Styles.mediumText(fontSize: 60.sp),
+              maxLines: 3,
+              textAlign: TextAlign.center,
+              text: LocaleKeys.noFavouriteSubCategory.localize))
             // child: PaginationView<SubCategoryEntity>(
             //   build: (ScrollController scrollController,
             //       List<SubCategoryEntity> data) {
@@ -93,8 +91,9 @@ class FavSubCategoryView extends StatelessWidget {
             //       .read<FavouriteSubCategoryCubit>()
             //       .getSubcategories(paginationParams: paginationParams),
             // ),
-            );
-      }),
+          );
+        }),
+      ),
     );
   }
 }

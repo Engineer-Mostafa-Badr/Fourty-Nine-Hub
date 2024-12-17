@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -19,6 +20,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twit
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_post_card.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_post_comments.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -56,13 +58,11 @@ class _UserTweetsState extends State<UserTweets> {
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.userTweetsPagingController.itemList?.length);
                 return Padding(
-                    padding: const EdgeInsets.only(top: 200),
+                    padding: EdgeInsets.only(top: 100.h),
                     child: Center(
                       child: Text(
                         LocaleKeys.noTweets.localize,
-                        style: const TextStyle(
-                          fontSize: 18,
-                        ),
+                        style: Styles.headerText(),
                       ),
                     ));
               },

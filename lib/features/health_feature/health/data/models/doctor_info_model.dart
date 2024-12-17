@@ -2,22 +2,18 @@ import 'package:fourtyninehub/features/health_feature/health/data/models/earned_
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/doctor_info_entity.dart';
 
 class DoctorInfoModel extends DoctorInfoEntity {
-  DoctorInfoModel(
-      {required super.remainingDaysToExpiryId,
-      required super.remainingDaysToExpiryPracticingId,
-      required super.remainingDaysToEndSubscription,
-      required super.totalEarnedMoney});
+  DoctorInfoModel({required super.remainingDaysToExpiryId, required super.remainingDaysToExpiryPracticingId, required super.remainingDaysToEndSubscription,required super.totalEarnedMoney,required super.subCategoryId});
 
   factory DoctorInfoModel.fromJson(Map<String, dynamic> json) {
     return DoctorInfoModel(
-      remainingDaysToExpiryId: json['remainingDaysToExpiryId'] ?? 0,
-      remainingDaysToExpiryPracticingId:
-          json['remainingDaysToExpiryPracticingId'] ?? 0,
-      remainingDaysToEndSubscription:
-          json['remainingDaysToEndSubscription'] ?? 0,
+      remainingDaysToExpiryId: json['remainingDaysToExpiryId']??0,
+      remainingDaysToExpiryPracticingId: json['remainingDaysToExpiryPracticingId']??0,
+      remainingDaysToEndSubscription: json['remainingDaysToEndSubscription']??0,
+      subCategoryId: json['subCategoryId']??'',
       totalEarnedMoney: (json['totalEarnedMony'] as List)
           .map((i) => EarnedMoneyModel.fromJson(i))
           .toList(),
     );
   }
+
 }

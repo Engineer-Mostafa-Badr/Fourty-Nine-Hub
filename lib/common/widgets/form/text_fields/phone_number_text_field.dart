@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
@@ -48,69 +50,68 @@ class _CustomPhoneTextFormFieldState extends State<CustomPhoneTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle =
-        Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.black) ??
-            const TextStyle(color: Colors.black);
+    final textStyle = TextStyle(color: context.isDarkMode?Colors.white:AppColors.QUANTITY_COLOR);
 
     return Container(
       margin: widget.margin,
       child: Row(
         children: [
           // Country Code Dropdown
-          Expanded(
-            flex: 2,
-            child: Container(
-              decoration: BoxDecoration(
-                color: widget.fillColor ?? Colors.white,
-                borderRadius: BorderRadius.circular(10.0),
-                border: Border.all(color: widget.codeColor ?? Colors.grey),
-              ),
-              child: DropdownButton<String>(
-                value: _selectedCountryCode,
-                icon: const Icon(
-                  Icons.arrow_drop_down,
-                  color: AppColors.QUANTITY_COLOR,
-                ),
-                isExpanded: true,
-                dropdownColor: Colors.blue.withOpacity(0.5),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedCountryCode = newValue!;
-                  });
-                },
-                style: const TextStyle(color: AppColors.QUANTITY_COLOR),
-                items: <String>[
-                  '+1',
-                  '+44',
-                  '+91'
-                ] // Add more country codes as needed
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
-
-          const SizedBox(width: 8.0),
+          // Expanded(
+          //   flex: 2,
+          //   child: Container(
+          //     decoration: BoxDecoration(
+          //       color: widget.fillColor ?? Colors.white,
+          //       borderRadius: BorderRadius.circular(10.0),
+          //       border: Border.all(color: widget.codeColor ?? Colors.grey),
+          //     ),
+          //     child: DropdownButton<String>(
+          //       value: _selectedCountryCode,
+          //       icon: const Icon(
+          //         Icons.arrow_drop_down,
+          //         color: AppColors.QUANTITY_COLOR,
+          //       ),
+          //       isExpanded: true,
+          //       dropdownColor: Colors.blue.withOpacity(0.5),
+          //       onChanged: (String? newValue) {
+          //         setState(() {
+          //           _selectedCountryCode = newValue!;
+          //         });
+          //       },
+          //       style: const TextStyle(color: AppColors.QUANTITY_COLOR),
+          //       items: <String>[
+          //         '+1',
+          //         '+44',
+          //         '+91'
+          //       ] // Add more country codes as needed
+          //           .map<DropdownMenuItem<String>>((String value) {
+          //         return DropdownMenuItem<String>(
+          //           value: value,
+          //           child: Text(value),
+          //         );
+          //       }).toList(),
+          //     ),
+          //   ),
+          // ),
+          //
+          // const SizedBox(width: 8.0),
           // Phone Number Text Field
           Expanded(
-            flex: 8,
+            // flex: 8,
             child: TextFormField(
               focusNode: widget.currentFocusNode,
               controller: widget.currentController,
               enabled: widget.isEnabled,
               cursorColor: Colors.blue,
               style: textStyle,
+              keyboardType: TextInputType.phone,
               decoration: InputDecoration(
                 fillColor: widget.fillColor ??
-                    (widget.isEnabled ? Colors.white : Colors.grey),
+                    (widget.isEnabled ?cardDarkColor(context) : cardDarkColor(context)),
                 filled: true,
                 contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 hintText: widget.hint ?? LocaleKeys.phoneNumber.localize,
-                hintStyle: textStyle.copyWith(color: AppColors.QUANTITY_COLOR),
+                hintStyle: textStyle.copyWith(color: context.isDarkMode?Colors.white:AppColors.QUANTITY_COLOR),
                 counterText: '',
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),

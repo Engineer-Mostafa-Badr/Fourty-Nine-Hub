@@ -126,7 +126,7 @@ class MainCategorySearchView extends StatelessWidget {
 
           // If no search results or initial state
           return Center(
-            child: Text(LocaleKeys.noResultFound.localize),
+            child: Text(LocaleKeys.noResultsFound.localize),
           );
         },
       ),

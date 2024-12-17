@@ -17,6 +17,8 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
   final ageController = TextEditingController();
   final notesFocusNode = FocusNode();
   final notesController = TextEditingController();
+  final addressFocusNode = FocusNode();
+  final addressController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   final BookRegularAppointmentUseCase _bookRegularAppointmentUseCase;
@@ -47,6 +49,8 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
     ageController.dispose();
     notesFocusNode.dispose();
     notesController.dispose();
+    addressFocusNode.dispose();
+    addressController.dispose();
     return super.close();
   }
 
@@ -83,6 +87,7 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
 
   void _saveText() {
     _params.notes = notesController.text;
+    _params.address = addressController.text;
     _params.phone = phoneNumberTextController.text;
     _params.age = ageController.text;
   }

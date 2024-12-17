@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/enums/week_days.dart';
 
 class DoctorDayEntity {
-  final WeekDays day;
+  WeekDays day;
   bool isAvailable;
   TimeOfDay from;
   TimeOfDay to;
@@ -13,4 +13,12 @@ class DoctorDayEntity {
     this.to = const TimeOfDay(hour: 11, minute: 0),
     this.isAvailable = false,
   });
+
+  //toJson
+  Map<String, dynamic> toJson() => {
+    'day': day.name.toLowerCase(),
+    'workFrom': from,
+    'workTo': to,
+    'isAvailable': isAvailable
+  };
 }

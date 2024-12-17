@@ -3,6 +3,7 @@ import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_statistics_entity.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_work_days_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_appointments_by_day.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_id_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_personal_info_usecase.dart';
@@ -33,6 +34,7 @@ abstract class DoctorDashboardRepo {
   Future<Either<Failure, bool>> updatePracticingCirtificate(
       DoctorDocsParams params);
   Future<Either<Failure, bool>> deleteAccount(String doctorId);
+  Future<Either<Failure, DoctorWorkDaysEntity>> getWorkDays();
   Future<Either<Failure, bool>> updatePersonalInfo(
       DoctorPersonalInfoParams params);
   Future<Either<Failure, bool>> updateTimetable(DoctorTimetableParams params);

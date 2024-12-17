@@ -87,19 +87,19 @@ class TwitterCubit extends Cubit<TwitterState> {
     });
   }
 
-  void loadComments(BuildContext context, String postId) async {
-    await getPostComments(context: context, postId: postId, page: 1);
+  void loadComments(BuildContext context, String postId,{TwitterPostCommentEntity? comment}) async {
+    await getPostComments(context: context, postId: postId, page: 1,comment: comment);
     commentsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getPostComments(context: context, postId: postId, page: pageKey);
+      getPostComments(context: context, postId: postId, page: pageKey,comment: comment);
     });
   }
 
-  void loadReplies(BuildContext context, String commentId) async {
-    await getCommentReplies(context: context, postId: commentId, page: 1);
+  void loadReplies(BuildContext context, String commentId,{TwitterCommentReplyEntity? reply}) async {
+    await getCommentReplies(context: context, postId: commentId, page: 1,reply: reply);
     commentsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getCommentReplies(context: context, postId: commentId, page: pageKey);
+      getCommentReplies(context: context, postId: commentId, page: pageKey,reply: reply);
     });
   }
 
@@ -310,6 +310,7 @@ class TwitterCubit extends Cubit<TwitterState> {
   Future<void> getPostComments(
       {required BuildContext context,
       required String postId,
+        TwitterPostCommentEntity? comment,
       required int page}) async {
     final response = await _getTwitterPostCommentsUseCase(
       PostCommentsParams(
@@ -322,18 +323,25 @@ class TwitterCubit extends Cubit<TwitterState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
         (data) {
+          List<TwitterPostCommentEntity> list = data.where((element) => element.id!=comment?.id).toList();
+
       final isLastPage = data.length < pageSize;
       if (page == 1) {
         print("page == 1 $page");
         commentsPagingController.itemList = [];
+
+        if(comment!=null){
+          print("objectadadsadsa");
+          commentsPagingController.itemList?.insert(0, comment);
+        }
       }
       if (isLastPage) {
         print("isLastPage = $isLastPage");
-        commentsPagingController.appendLastPage(data);
+        commentsPagingController.appendLastPage(list);
       } else {
         print("isNotLastPage = $isLastPage");
         final nextPageKey = page + 1;
-        commentsPagingController.appendPage(data, nextPageKey);
+        commentsPagingController.appendPage(list, nextPageKey);
       }
       emit(
         state.copyWith(
@@ -350,6 +358,7 @@ class TwitterCubit extends Cubit<TwitterState> {
   Future<void> getCommentReplies(
       {required BuildContext context,
       required String postId,
+        TwitterCommentReplyEntity? reply,
       required int page}) async {
     final response = await _twitterCommentRepliesUseCase(
       PostCommentsParams(
@@ -362,10 +371,15 @@ class TwitterCubit extends Cubit<TwitterState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
         (data) {
+          List<TwitterCommentReplyEntity> list = data.where((element) => element.id!=reply?.id).toList();
       final isLastPage = data.length < pageSize;
       if (page == 1) {
         print("page == 1 $page");
         repliesPagingController.itemList = [];
+        if(reply!=null){
+          print("objectadadsadsa");
+          repliesPagingController.itemList?.insert(0, reply);
+        }
       }
       if (isLastPage) {
         print("isLastPage = $isLastPage");

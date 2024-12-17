@@ -7,7 +7,7 @@ class SecretsCubit extends Cubit<SecretsState> {
   SecretsCubit(this._allSecretsUseCase) : super(const SecretsState());
   final GetAllSecretsUseCase _allSecretsUseCase;
 
-  void getAllSecrets() async {
+   getAllSecrets() async {
     emit(state.copyWith(status: SecretsStateStatus.loading));
     print('Loading');
     final response = await _allSecretsUseCase(const NoParams());

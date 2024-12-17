@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/localization/locales.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
@@ -97,7 +99,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                           ),
                           child: Center(
                             child: Text(
-                              category.name ?? "",
+                              context.locale == Locales.english? category.nameEn!:category.name,
                               style: Styles.mediumText(
                                   color: index == state.selectedIndex
                                       ? Colors.white

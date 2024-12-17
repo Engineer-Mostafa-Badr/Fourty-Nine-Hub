@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_state.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/reels_widget.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../res/style/app_colors.dart';
 import '../controllers/preload_cubit/preload_bloc.dart';
@@ -13,8 +14,8 @@ class ReelView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
+    return PopScope(
+      onPopInvoked: (res) {
         if (context
             .read<PreloadBloc>()
             .state
@@ -27,8 +28,11 @@ class ReelView extends StatelessWidget {
               .controllers[context.read<PreloadBloc>().state.focusedIndex]
               ?.pause();
         }
-        return Future.value(true);
+          context.read<PreloadBloc>().resetFocusedIndex(context.read<PreloadBloc>().state.focusedIndex);
+        //   context.pop();
+        // return Future.value(true);
       },
+      canPop: true,
       child: const Scaffold(
         resizeToAvoidBottomInset: false,
         body: ReelsScreen(),
@@ -48,7 +52,6 @@ class ReelsScreenState extends State<ReelsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PreloadBloc, PreloadState>(
-      // bloc: BlocProvider.of<PreloadBloc>(context)..add(GetVideosFromApiEvent()),
       builder: (context, state) {
         return Stack(
           children: [

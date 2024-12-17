@@ -5,7 +5,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
@@ -86,62 +88,98 @@ class ReelsCubit extends Cubit<ReelsState> {
   }
 
   Future<void> uploadReel(
-    File videoFile, {
+    File videoFile,
+    File thumbnailUrl,
+    bool isAudioOriginal, {
     String? comeFrom,
+        String? audioMediaId,
     String? totalPrice,
     String? advertisementType,
   }) async {
-    print('video size is  ${videoFile.lengthSync()} MB');
-
     // Step 1: Generate Signed URL
     final token = await CacheManager.getAccessToken();
-    final response = await http.post(
-      Uri.parse(
-          'https://49dev.com/api/v1/reels?subCategory=66684135dbb427ee42aa0141'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({
-        "subcategoryId": "66684135dbb427ee42aa0141",
-        //if it's true inputAudioId is null
-        "isAudioOriginal": true,
-        "metadata": {
-          //name is bio
-          "name": videoFile.path.split('/').last,
-          "size": videoFile.lengthSync(),
-          "type": "video/mp4",
-          "videoWidth": 640,
-          // Adjust these values according to your video metadata
-          "videoHeight": 360,
-          // "inputAudioId": "66ba3fb7baf9033183036cd0"
-        }
-      }),
-    );
+    log('token $token');
+    emit(state.copyWith(isUploadingReel: true));
 
-    if (response.statusCode == 200) {
-      final responseData = json.decode(response.body);
-      log("${responseData['data']['signedUrl']}1111111111111111111111111111111111111111111111111111111111111111111111");
-      final signedUrl = responseData['data']['signedUrl'];
-
-      // Step 2: Upload Video using the Signed URL
-      final uploadResponse = await http.put(
-        Uri.parse(signedUrl),
+    final thumbResponse = await http.post(
+        'https://49dev.com/api/v1/media/signed-url'.toUri,
         headers: {
-          'Content-Type': 'video/mp4',
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
         },
-        body: videoFile.readAsBytesSync(),
-      );
+        body: jsonEncode({
+          "type": "image/JPEG",
+          "size": thumbnailUrl.lengthSync(),
+          "subcategoryId": "66684135dbb427ee42aa0141",
+        }));
+    log(thumbResponse.statusCode.toString());
+    if (thumbResponse.statusCode == 200) {
+      final String thumbnailSign =
+          json.decode(thumbResponse.body)['data']['signedUrl'];
+      final thumbMediaId = json.decode(thumbResponse.body)['data']['mediaId'];
 
-      if (uploadResponse.statusCode == 200) {
-        log('Video uploaded successfully!>>>>${responseData['data']['mediaId']}/////////1111111111111111111111111111111111111111111111111111111111111111111111');
-        log('video id is ${responseData['data']}');
-        if (comeFrom == 'company') {
-          createAdvertisement([responseData['data']['mediaId']],
-              advertisementType!, double.parse(totalPrice!));
+      //put to confirm upload
+      http.put(thumbnailSign.toUri,
+          headers: {}, body: thumbnailUrl.readAsBytesSync());
+
+
+      http.put('https://49dev.com/api/v1/media/confirm/6736b1bfd72bd0e7c5e1eb9c'.toUri);
+
+      final response = await http.post(
+        Uri.parse(
+            'https://49dev.com/api/v1/reels?subCategory=66684135dbb427ee42aa0141'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "subcategoryId": "66684135dbb427ee42aa0141",
+          //if it's true inputAudioId is null
+          "isAudioOriginal": isAudioOriginal,
+          "metadata": {
+            //name is bio
+            "thumbnailMediaId": thumbMediaId,
+            "name": videoFile.path.split('/').first,
+            "size": videoFile.lengthSync(),
+            "type": "video/mp4",
+            "videoWidth": 640,
+            // Adjust these values according to your video metadata
+            "videoHeight": 360,
+            if(!isAudioOriginal)
+            "inputAudioId": audioMediaId
+          }
+        }),
+      );
+      log('response is ${json.decode(response.body)}');
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        log("response upload reel  ${responseData['data']['signedUrl']}1111111111111111111111111111111111111111111111111111111111111111111111");
+        final signedUrl = responseData['data']['signedUrl'];
+
+        // Step 2: Upload Video using the Signed URL
+        final uploadResponse = await http.put(
+          Uri.parse(signedUrl),
+          headers: {
+            'Content-Type': 'video/mp4',
+          },
+          body: videoFile.readAsBytesSync(),
+        );
+
+        if (uploadResponse.statusCode == 200) {
+          log('Video uploaded successfully!>>>>${responseData['data']['mediaId']}/////////1111111111111111111111111111111111111111111111111111111111111111111111');
+          log('video id is from PUT ${responseData['data']}');
+          if (comeFrom == 'company') {
+            createAdvertisement([responseData['data']['mediaId']],
+                advertisementType!, double.parse(totalPrice!));
+          }
+        } else {
+          print('error uploading video ${uploadResponse.body}');
         }
-      } else {}
-    } else {}
+      } else {
+        print('error generating signed url ${response.body}');
+      }
+      emit(state.copyWith(isUploadingReel: false));
+    }
   }
 
   Future<void> createAdvertisement(
@@ -221,9 +259,7 @@ class ReelsCubit extends Cubit<ReelsState> {
       (failure) =>
           emit(state.copyWith(reelViewErrorMessage: failure.toString())),
       (data) {
-        emit(state.copyWith(reelSaveResponse: data
-            // Add any state update logic here if necessary
-            ));
+        emit(state.copyWith(reelSaveResponse: data));
         message = data.message ?? '';
       },
     );
@@ -343,10 +379,8 @@ class ReelsCubit extends Cubit<ReelsState> {
         comments[parentCommentIndex].replies.insert(0, newReply);
       }
       if (comments[parentCommentIndex].replies.length == 1) {
-        print('first reply');
         _scrollToFirstReply();
       } else {
-        print('latest reply');
         _scrollToLatestReply();
       }
       emit(state.copyWith(
@@ -432,26 +466,22 @@ class ReelsCubit extends Cubit<ReelsState> {
     final result = await _toggleCommentLikeUseCase(
         isReply == true ? replyId ?? '' : commentId);
     result.fold((failure) {
-      print('failure message');
       emit(state.copyWith(
           isLikingComment: false,
           likeReelErrorMessage:
               'An error occurred while liking/unliking the comment'));
     }, (data) {
-      print("Toggle Like Result: $data"); // Debugging output
+      // Debugging output
 
       final updatedComments = comments.map((comment) {
         if (isReply) {
           // Debug: Check if we are updating a reply
-          print("Updating a reply with commentId: $commentId");
 
           final updatedReplies = comment.replies.map((reply) {
             if (reply.id == replyId) {
               // print("Found matching reply with id: ${reply.id}"); // Debugging output
 
               final isLiked = data == "like";
-              print('Updated replies: $isLiked');
-              print('Updated replies: ${reply.id}');
               reply.isLiked = isLiked;
               reply.likeCount =
                   isLiked ? reply.likeCount + 1 : reply.likeCount - 1;
@@ -465,15 +495,12 @@ class ReelsCubit extends Cubit<ReelsState> {
           return comment;
         } else {
           // Debug: Check if we are updating a main comment
-          print("Updating a main comment with commentId: $commentId");
 
           // If it's a main comment, update the main comment like data
           if (comment.id == commentId) {
-            print(
-                "Found matching main comment with id: ${comment.id}"); // Debugging output
+            // Debugging output
 
             final isLiked = data == "like";
-            print('Normal like $isLiked');
             // return comment.copyWith(
             //   isLiked: isLiked,
             //   likeCount:
@@ -501,26 +528,19 @@ class ReelsCubit extends Cubit<ReelsState> {
 
   Future<void> fetchReelsWithSameAudio(String audioId,
       {bool isInitialLoad = false}) async {
-    if ((state.globalReelsIsLoading ?? false) ||
-        (state.globalReelsHasReachedMax ?? false)) return;
-
     emit(state.copyWith(isLoading: true));
-    final int pageToFetch =
-        isInitialLoad ? 1 : (state.globalReelsCurrentPage) + 1;
+
     final result = await _reelsWithSameAudioUseCase(
         ReelsWithSameAudioParams(audioId: audioId));
-    result.fold((failure) => emit(state.copyWith(isLoading: false)), (data) {
-      final bool hasReachedMax =
-          pageToFetch >= data.data!.pagination!.pageCount!;
+    result.fold((failure) {
+      emit(state.copyWith(isLoading: false));
+    }, (data) {
       final List<Reel> newReels = data.data?.reels ?? [];
       log("${newReels.first.user.firstName}----------------------------------------------------------------------------------------------");
 
       emit(state.copyWith(
-        reelsForAudio:
-            isInitialLoad ? newReels : [...?state.reelsForAudio, ...newReels],
+        reelsForAudio: [...state.reelsForAudio ?? [], ...newReels],
         isLoading: false,
-        hasReachedMax: hasReachedMax,
-        currentPage: pageToFetch,
       ));
     });
   }

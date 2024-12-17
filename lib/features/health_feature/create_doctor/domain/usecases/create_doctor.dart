@@ -62,28 +62,28 @@ class CreateDoctorParams {
     if (hasClinic &&
         detectionPeriodClinic != null &&
         detectionPeriodClinic!.isNotEmpty) {
-      data['detectionPeriodClinic'] = '$detectionPeriodClinic min';
+      data['detectionPeriodClinic'] = '$detectionPeriodClinic';
     }
     if (hasCalls &&
         detectionPeriodCalls != null &&
         detectionPeriodCalls!.isNotEmpty) {
-      data['detectionPeriodCalls'] = '$detectionPeriodCalls min';
+      data['detectionPeriodCalls'] = '$detectionPeriodCalls';
     }
     if (hasHomeVisit &&
         detectionPeriodvisitHome != null &&
         detectionPeriodvisitHome!.isNotEmpty) {
-      data['detectionPeriodVisitHome'] = '$detectionPeriodvisitHome min';
+      data['detectionPeriodVisitHome'] = '$detectionPeriodvisitHome';
     }
     if (hasClinic && clinicPrice != null && clinicPrice!.isNotEmpty) {
-      data['clinicPrice'] = '$clinicPrice EGP';
+      data['clinicPrice'] = '$clinicPrice';
     }
     if (hasCalls && callsPrice != null && callsPrice!.isNotEmpty) {
-      data['callsPrice'] = '$callsPrice EGP';
+      data['callsPrice'] = '$callsPrice';
     }
     if (hasHomeVisit && visitHomePrice != null && visitHomePrice!.isNotEmpty) {
-      data['visitHomePrice'] = '$visitHomePrice EGP';
+      data['visitHomePrice'] = '$visitHomePrice';
     }
-    data['waitingTime'] = '$waitingTime min';
+    data['waitingTime'] = waitingTime;
     data['mediaId'] = mediaId;
     data['description'] = description;
     data['idFrontKey'] = idFrontKey;

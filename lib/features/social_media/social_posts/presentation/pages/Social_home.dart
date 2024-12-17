@@ -26,19 +26,34 @@ import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../widgets/posts/create_post_banner.dart';
 
-class SocialHomeView extends StatefulWidget {
+class SocialParams{
   final String userId;
-  final bool hideAppBar;
+  final bool? hideAppBar;
+  final int? index;
 
-  const SocialHomeView(
-      {super.key, required this.userId, this.hideAppBar = false});
+  SocialParams({required this.userId, this.hideAppBar=false, this.index=0});
+}
+class SocialHomeView extends StatefulWidget {
+  SocialParams? params;
+
+  SocialHomeView({super.key, payload}){
+   if(payload is SocialParams){
+     params = payload;
+   }else{
+     params = SocialParams(
+       userId: '',
+       index: payload['index'],
+       hideAppBar: false
+     );
+   }
+  }
 
   @override
   State<SocialHomeView> createState() => _SocialHomeViewState();
 }
 
 class _SocialHomeViewState extends State<SocialHomeView>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin,AutomaticKeepAliveClientMixin {
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
@@ -67,10 +82,12 @@ class _SocialHomeViewState extends State<SocialHomeView>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return DefaultTabController(
       length: 3,
+      initialIndex: widget.params?.index??0,
       child: Scaffold(
-          appBar: widget.hideAppBar
+          appBar: widget.params?.hideAppBar==true
               ? null
               : HomeAppbar(
                   isWithBackArrow: true,
@@ -96,19 +113,19 @@ class _SocialHomeViewState extends State<SocialHomeView>
                     ],
                   ),
                 ),
-          drawer: widget.hideAppBar ? null : const DrawerWidget(),
+          drawer: widget.params?.hideAppBar==true ? null : const DrawerWidget(),
           bottomNavigationBar: BottomNavigator(
             scrollController: scrollController,
             isScrollingDown: _isScrollingDown,
             mainCategory: 2,
             index: 2,
           ),
-          floatingActionButton: _isScrollingDown || widget.hideAppBar
+          floatingActionButton: _isScrollingDown || widget.params?.hideAppBar==true
               ? null
               : const FloatingButton(
                   changeView: 2,
                 ),
-          floatingActionButtonLocation: _isScrollingDown || widget.hideAppBar
+          floatingActionButtonLocation: _isScrollingDown || widget.params?.hideAppBar==true
               ? null
               : FloatingActionButtonLocation.centerDocked,
           body: TabBarView(
@@ -215,4 +232,8 @@ class _SocialHomeViewState extends State<SocialHomeView>
           ),
         ));
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

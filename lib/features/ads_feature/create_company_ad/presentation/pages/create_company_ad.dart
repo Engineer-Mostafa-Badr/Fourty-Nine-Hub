@@ -167,7 +167,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => ReelsRecordingScreen(
-                                      voiceUrl: '',
+                                      voiceMediaId: '',
                                       totalPrice:
                                           '${state.price?.reelPrice ?? 0}',
                                       advertisementType: 'reel',

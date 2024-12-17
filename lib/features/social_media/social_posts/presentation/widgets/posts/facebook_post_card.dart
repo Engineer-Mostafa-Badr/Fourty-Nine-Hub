@@ -7,10 +7,12 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/show_post_images.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_reactions_buttons.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_google_maps.dart';
@@ -19,6 +21,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_tweet_card.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
+import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
@@ -30,6 +33,7 @@ import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
+import '../../../../../../service_locator/service_locator.dart';
 import '../../../domain/usecases/post_react_usecase.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -110,7 +114,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           var myPost = widget.from == 'details'
               ? widget.post
               : controller.feedPagingController.itemList![widget.index];
-          return InkWell(
+          return ClickableWidget(
             onTap: (widget.from == 'posts' && widget.post.isShared == true)
                 ? () => widget.showPostDetails(
                     controller.feedPagingController.itemList![widget.index])
@@ -180,24 +184,36 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     children: [
                       if (myPost.likesCount != 0)
                         _buildCounterWidget(
-                            value: myPost.likesCount!, image: Assets.like),
+                            value: myPost.likesCount,
+                            image: Assets.like,
+                            ),
                       if (myPost.hahaCount != 0)
                         _buildCounterWidget(
-                            value: myPost.hahaCount!, image: Assets.haha),
+                            value: myPost.hahaCount,
+                            image: Assets.haha,
+                            ),
                       if (myPost.loveCount != 0)
                         _buildCounterWidget(
-                            value: myPost.loveCount!, image: Assets.heart),
+                            value: myPost.loveCount,
+                            image: Assets.heart,
+                            ),
                       if (myPost.wowCount != 0)
                         _buildCounterWidget(
-                            value: myPost.wowCount!, image: Assets.wow),
+                            value: myPost.wowCount,
+                            image: Assets.wow,
+                            ),
                       if (myPost.sadCount != 0)
                         _buildCounterWidget(
-                            value: myPost.sadCount!, image: Assets.sad),
+                            value: myPost.sadCount,
+                            image: Assets.sad,
+                            ),
                       if (myPost.angryCount != 0)
                         _buildCounterWidget(
-                            value: myPost.angryCount!, image: Assets.angry),
+                            value: myPost.angryCount,
+                            image: Assets.angry,
+                            ),
                       const Spacer(),
-                      InkWell(
+                      ClickableWidget(
                         onTap: () => widget.showPostComments(myPost.id),
                         child: Row(
                           children: [
@@ -310,7 +326,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                             child: Row(
                                               children: [
                                                 Expanded(
-                                                  child: InkWell(
+                                                  child: ClickableWidget(
                                                     onTap: () async {
                                                       if (controller
                                                           .shareFormKey
@@ -398,7 +414,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         var myPost = widget.from == 'details'
             ? widget.post
             : controller.feedPagingController.itemList![widget.index];
-        return InkWell(
+        return ClickableWidget(
           onTap: (widget.from == 'posts' && widget.post.isShared == true)
               ? () => widget.showPostDetails(
                   controller.feedPagingController.itemList![widget.index])
@@ -418,24 +434,36 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   children: [
                     if (myPost.likesCount != 0)
                       _buildCounterWidget(
-                          value: myPost.likesCount!, image: Assets.like),
+                          value: myPost.likesCount,
+                          image: Assets.like,
+                          ),
                     if (myPost.hahaCount != 0)
                       _buildCounterWidget(
-                          value: myPost.hahaCount!, image: Assets.haha),
+                          value: myPost.hahaCount,
+                          image: Assets.haha,
+                          ),
                     if (myPost.loveCount != 0)
                       _buildCounterWidget(
-                          value: myPost.loveCount!, image: Assets.heart),
+                          value: myPost.loveCount,
+                          image: Assets.heart,
+                          ),
                     if (myPost.wowCount != 0)
                       _buildCounterWidget(
-                          value: myPost.wowCount!, image: Assets.wow),
+                          value: myPost.wowCount,
+                          image: Assets.wow,
+                          ),
                     if (myPost.sadCount != 0)
                       _buildCounterWidget(
-                          value: myPost.sadCount!, image: Assets.sad),
+                          value: myPost.sadCount,
+                          image: Assets.sad,
+                          ),
                     if (myPost.angryCount != 0)
                       _buildCounterWidget(
-                          value: myPost.angryCount!, image: Assets.angry),
+                          value: myPost.angryCount,
+                          image: Assets.angry,
+                          ),
                     const Spacer(),
-                    InkWell(
+                    ClickableWidget(
                       onTap: () => widget.showPostComments(myPost.id),
                       child: Row(
                         children: [
@@ -507,17 +535,186 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
     required num value,
     required String image,
   }) {
-    return Row(
-      children: [
-        Image.asset(
-          image,
-          height: 45.w,
-        ),
-        Label(
-          text: value.toString(),
-          style: Styles.mediumText(),
-        )
-      ],
+    return ClickableWidget(
+      onTap: () {
+        showCustomBottomSheet(context);
+        // bottomSheet(
+        //   context: context,
+        //   isScrollControlled: true,
+        //   widget: SafeArea(
+        //     child: Column(
+        //       children: [
+        //         Sizer(
+        //           height: 80.h,
+        //         ),
+        //         Row(
+        //           children: [
+        //             IconButton(
+        //               onPressed: () {
+        //                 Navigator.pop(context);
+        //               },
+        //               icon: const Icon(Icons.arrow_back),
+        //             ),
+        //             const Sizer(),
+        //             Expanded(
+        //               child: Label(
+        //                 text: 'People who interacted',
+        //                 style: Styles.mediumText(fontSize: 65.sp),
+        //               ),
+        //             ),
+        //            // const Spacer(),
+        //             IconButton(
+        //                 onPressed: () {
+        //                   showDialog(
+        //                       context: context,
+        //                       builder: (_) =>
+        //                       const SearchAppUsers());
+        //                 },
+        //                 icon:  Icon(
+        //                   FontAwesomeIcons.search,
+        //                   size: 35.sp,
+        //                 )),
+        //           ],
+        //         ),
+        //         Row(
+        //           crossAxisAlignment: CrossAxisAlignment.center,
+        //           children: [
+        //             ClickableWidget(
+        //               onTap: () {
+        //                 if (widget.fromProfile == false) {
+        //                   context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+        //                 }
+        //               },
+        //               child: Stack(
+        //                 alignment: AlignmentDirectional.bottomEnd,
+        //                 children: [
+        //                   ImageFromInternet(
+        //                     image: post.user.image ?? '',
+        //                     isCircle: true,
+        //                     width: 90.w,
+        //                     height: 90.h,
+        //                   ),
+        //                   CircleAvatar(
+        //                     radius: 25.r,
+        //                     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        //                     child: Image.asset('assets/images/haha.png',
+        //                     height: 40.h,
+        //                       width: 40.w,
+        //                     ),
+        //                   )
+        //                 ],
+        //               ),
+        //             ),
+        //             const Sizer(),
+        //             ClickableWidget(
+        //               onTap: () {
+        //                 if (widget.fromProfile == false) {
+        //                   context.push(Routes.OTHERSACCOUNT,
+        //                       extra: post.user.id);
+        //                 }
+        //               },
+        //               child: Text('${post.user.firstName} ${post.user.lastName}',
+        //               style: Styles.headerText(fontSize: 65.sp),
+        //               ),
+        //             ),
+        //             const Sizer(),
+        //             // (user.areFriends == true ||
+        //             //     user.isSenTRequest == true)
+        //             //     ? PopupMenuButton(
+        //             //   // iconSize: 210,
+        //             //     itemBuilder: (context) {
+        //             //       return [
+        //             //         if (user.isSenTRequest == true) ...[
+        //             //           PopupMenuItem<int>(
+        //             //             value: 0,
+        //             //             child: Text(
+        //             //                 LocaleKeys.Accept.localize),
+        //             //             onTap: () => onAcceptFriend(),
+        //             //           ),
+        //             //           PopupMenuItem<int>(
+        //             //             value: 1,
+        //             //             child: Text(
+        //             //                 LocaleKeys.reject.localize),
+        //             //             onTap: () => onRejectFriend(),
+        //             //           ),
+        //             //         ],
+        //             //         if (user.areFriends == true)
+        //             //           PopupMenuItem<int>(
+        //             //             value: 0,
+        //             //             child: Text(LocaleKeys
+        //             //                 .deleteFriend.localize),
+        //             //             onTap: () => onDeleteFriend(),
+        //             //           ),
+        //             //       ];
+        //             //     },
+        //             //     child: Container(
+        //             //         alignment: Alignment.center,
+        //             //         padding: const EdgeInsets.symmetric(
+        //             //             horizontal: 10),
+        //             //         decoration: BoxDecoration(
+        //             //           borderRadius:
+        //             //           BorderRadius.circular(5),
+        //             //           color: AppColors.PRIMARY_COLOR,
+        //             //         ),
+        //             //         child: Text(
+        //             //           user.isSenTRequest == true
+        //             //               ? LocaleKeys
+        //             //               .acceptRequest.localize
+        //             //               : user.areFriends == true
+        //             //               ? LocaleKeys
+        //             //               .friends.localize
+        //             //               : '',
+        //             //           style: Styles.mediumText(
+        //             //               color: Colors.white),
+        //             //         )))
+        //             //     : SizedBox(
+        //             //   width: 180.w,
+        //             //   child: AppButton(
+        //             //     // height: 80.h,
+        //             //       padding: 5,
+        //             //       backColor:
+        //             //       user.sentFriendRequest == true
+        //             //           ? AppColors.PRIMARY_COLOR
+        //             //           : null,
+        //             //       style: Styles.mediumText(
+        //             //           color: Colors.white,
+        //             //           fontSize: 24),
+        //             //       label: user.isSenTRequest == true
+        //             //           ? LocaleKeys
+        //             //           .acceptRequest.localize
+        //             //           : user.areFriends == true
+        //             //           ? LocaleKeys
+        //             //           .friends.localize
+        //             //           : user.sentFriendRequest ==
+        //             //           true
+        //             //           ? LocaleKeys
+        //             //           .removeRequest
+        //             //           .localize
+        //             //           : LocaleKeys
+        //             //           .addFriend.localize,
+        //             //       onPressed: () {
+        //             //         onAddFriend();
+        //             //       }),
+        //             // )
+        //           ],
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // );
+      },
+      child: Row(
+        children: [
+          Image.asset(
+            image,
+            height: 45.w,
+          ),
+          Label(
+            text: value.toString(),
+            style: Styles.mediumText(),
+          )
+        ],
+      ),
     );
   }
 
@@ -604,9 +801,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              InkWell(
+              ClickableWidget(
                 onTap: () {
                   if (widget.fromProfile == false) {
                     context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
@@ -615,8 +812,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 child: ImageFromInternet(
                   image: post.user.image ?? '',
                   isCircle: true,
-                  width: 60.w,
-                  height: 60.h,
+                  width: 80.w,
+                  height: 80.h,
                 ),
               ),
               const Sizer(),
@@ -624,7 +821,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    InkWell(
+                    ClickableWidget(
                       onTap: () {
                         if (widget.fromProfile == false) {
                           context.push(Routes.OTHERSACCOUNT,
@@ -682,7 +879,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
           if (post.location != null)
             Padding(
               padding: const EdgeInsetsDirectional.only(start: 40.0),
-              child: InkWell(
+              child: ClickableWidget(
                 onTap: () {
                   showDialog(
                       context: context,
@@ -694,14 +891,14 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 },
                 child: Row(
                   children: [
-                    const Icon(
+                     Icon(
                       Icons.location_on,
-                      size: 20,
+                      size: 40.sp,
                     ),
                     Expanded(
                         child: Label(
                       text: post.location?.place ?? '',
-                      style: Styles.mediumText(fontSize: 14),
+                      style: Styles.mediumText(),
                     ))
                   ],
                 ),
@@ -720,7 +917,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
         children: [
-          InkWell(
+          ClickableWidget(
             onTap: () {
               if (widget.fromProfile == false) {
                 context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
@@ -730,15 +927,15 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               image: post.user.image,
               isCircle: true,
               defaultLogo: false,
-              width: 40,
-              height: 40.h,
+              width: 80.w,
+              height: 80.h,
             ),
           ),
           const Sizer(),
           Expanded(
               child: Row(
             children: [
-              InkWell(
+              ClickableWidget(
                 onTap: () {
                   if (widget.fromProfile == false) {
                     context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
@@ -839,10 +1036,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: images!.length == 1 ? 1 : 2),
                         itemCount: images.length < 4 ? images.length : 4,
-                        itemBuilder: (context, index) => InkWell(
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
+                        itemBuilder: (context, index) => ClickableWidget(
                               onTap: () {
                                 if (index != 3 ||
                                     (index == 3 && images.length == 4)) {
@@ -934,7 +1128,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         ],
       );
     } else {
-      return InkWell(
+      return ClickableWidget(
         onTap: () => onTap(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1020,4 +1214,403 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
     final arabicRegex = RegExp(r'[\u0600-\u06FF]');
     return arabicRegex.hasMatch(text);
   }
+
+  void showCustomBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      builder: (_) => DefaultTabController(
+        length: Reaction.values.length,
+        child: SafeArea(
+          child: BlocProvider<SocialPostsCubit>(
+            create: (BuildContext context) => serviceLocator()..loadData(),
+            child: BlocBuilder<SocialPostsCubit, SocialPostsState>(
+              builder: (BuildContext context, state) {
+                // Reaction mapping with icons and labels
+                // final reactionsMap = {
+                //   Reaction.like: {'asset': Assets.like, 'label': 'Likes'},
+                //   Reaction.love: {'asset': Assets.heart, 'label': 'Hearts'},
+                //   Reaction.haha: {'asset': Assets.haha, 'label': 'Hahas'},
+                //   Reaction.sad: {'asset': Assets.sad, 'label': 'Sads'},
+                //   Reaction.angry: {'asset': Assets.angry, 'label': 'Angries'},
+                //   Reaction.wow: {'asset': Assets.wow, 'label': 'Wows'},
+                // };
+
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Header Section
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.arrow_back),
+                        ),
+                        const Spacer(),
+                        Expanded(
+                          child: Text(
+                            'People who interacted',
+                            style: Styles.mediumText(fontSize: 65.sp),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (_) => const SearchAppUsers(),
+                            );
+                          },
+                          icon: Icon(
+                            FontAwesomeIcons.search,
+                            size: 35.sp,
+                          ),
+                        ),
+                      ],
+                    ),
+                    TabBar(
+                      labelColor: Colors.blue,
+                      unselectedLabelColor: Colors.grey,
+                      indicatorColor: Colors.blue,
+                      isScrollable: true,
+                      tabs: Reaction.values.map((reaction) {
+                        return Tab(
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                reaction.image(),
+                                height: 60.h,
+                                width: 60.w,
+                              ),
+                              Text(
+                                // state.posts![index].getReactionCount(reaction).toString(),
+                                '1',
+                                style: Styles.mediumText(color: AppColors.GREY_NORMAL_COLOR),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+
+                    // Reaction TabBarView
+                    Expanded(
+                      child: TabBarView(
+                        children: Reaction.values.map((reaction) {
+                          final users = getUsersForReaction(reaction, state.posts![0]);
+                          return ListView.separated(
+                            itemBuilder: (context, userIndex) => Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ClickableWidget(
+                                  onTap: () {
+                                    if (widget.fromProfile == false) {
+                                      context.push(
+                                        Routes.OTHERSACCOUNT,
+                                        extra: users[userIndex].id,
+                                      );
+                                    }
+                                  },
+                                  child: Stack(
+                                    alignment: AlignmentDirectional.bottomEnd,
+                                    children: [
+                                      ImageFromInternet(
+                                        image: users[userIndex].image ?? '',
+                                        isCircle: true,
+                                        width: 90.w,
+                                        height: 90.h,
+                                      ),
+                                      CircleAvatar(
+                                        radius: 25.r,
+                                        backgroundColor:
+                                        Theme.of(context).scaffoldBackgroundColor,
+                                        child: Image.asset(
+                                          reaction.image(),
+                                          height: 40.h,
+                                          width: 40.w,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Sizer(),
+                                ClickableWidget(
+                                  onTap: () {
+                                    if (widget.fromProfile == false) {
+                                      context.push(
+                                        Routes.OTHERSACCOUNT,
+                                        extra: users[userIndex].id,
+                                      );
+                                    }
+                                  },
+                                  child: Text(
+                                    '${users[userIndex].firstName} ${users[userIndex].lastName}',
+                                    style: Styles.headerText(fontSize: 65.sp),
+                                  ),
+                                ),
+                                const Sizer(),
+                              ],
+                            ),
+                            separatorBuilder: (context, _) => Sizer(),
+                            itemCount: users.length,
+                          );
+                        }).toList(),
+                      ),
+                    )
+
+                  ],
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+// Helper function to get users for a specific reaction
+  List<TwitterUserModel> getUsersForReaction(Reaction reaction, PostEntity post) {
+    switch (reaction) {
+      case Reaction.like:
+        return post.likedUsers ?? [];
+      case Reaction.haha:
+        return post.hahaUsers ?? [];
+      case Reaction.love:
+        return post.loveUsers ?? [];
+      case Reaction.wow:
+        return post.wowUsers ?? [];
+      case Reaction.sad:
+        return post.sadUsers ?? [];
+      case Reaction.angry:
+        return post.angryUsers ?? [];
+    }
+  }
+
+
+
+// void showCustomBottomSheet(BuildContext context) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+  //     builder: (_) => DefaultTabController(
+  //       length: 6, // Adjust according to the number of tabs
+  //       child: SafeArea(
+  //         child: BlocProvider<SocialPostsCubit>(
+  //           create: (BuildContext context) =>serviceLocator()..loadData(),
+  //           child: BlocBuilder<SocialPostsCubit,SocialPostsState>(
+  //             builder: (BuildContext context, state) {
+  //               return Column(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   Sizer(
+  //                     height: 80.h,
+  //                   ),
+  //                   Row(
+  //                     children: [
+  //                       IconButton(
+  //                         onPressed: () {
+  //                           Navigator.pop(context);
+  //                         },
+  //                         icon: const Icon(Icons.arrow_back),
+  //                       ),
+  //                       const Sizer(),
+  //                       Expanded(
+  //                         child: Label(
+  //                           text: 'People who interacted',
+  //                           style: Styles.mediumText(fontSize: 65.sp),
+  //                         ),
+  //                       ),
+  //                       // const Spacer(),
+  //                       IconButton(
+  //                           onPressed: () {
+  //                             showDialog(
+  //                                 context: context,
+  //                                 builder: (_) => const SearchAppUsers());
+  //                           },
+  //                           icon: Icon(
+  //                             FontAwesomeIcons.search,
+  //                             size: 35.sp,
+  //                           )),
+  //                     ],
+  //                   ),
+  //                   TabBar(
+  //                     labelColor: Colors.blue,
+  //                     unselectedLabelColor: Colors.grey,
+  //                     indicatorColor: Colors.blue,
+  //                     isScrollable: true,
+  //                     tabAlignment: TabAlignment.start,
+  //                     tabs: [
+  //                       Tab(
+  //                         child: Row(
+  //                           children: [
+  //                             Image.asset(
+  //                               Assets.like,
+  //                               height: 60.h,
+  //                               width: 60.w,
+  //                             ),
+  //                             Text(
+  //                               '100',
+  //                               style: Styles.mediumText(
+  //                                   color: AppColors.GREY_NORMAL_COLOR),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                       Tab(
+  //                         child: Row(
+  //                           children: [
+  //                             Image.asset(
+  //                               Assets.heart,
+  //                               height: 60.h,
+  //                               width: 60.w,
+  //                             ),
+  //                             Text(
+  //                               '100',
+  //                               style: Styles.mediumText(
+  //                                   color: AppColors.GREY_NORMAL_COLOR),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                       Tab(
+  //                         child: Row(
+  //                           children: [
+  //                             Image.asset(
+  //                               Assets.haha,
+  //                               height: 60.h,
+  //                               width: 60.w,
+  //                             ),
+  //                             Text(
+  //                               '100',
+  //                               style: Styles.mediumText(
+  //                                   color: AppColors.GREY_NORMAL_COLOR),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                       Tab(
+  //                         child: Row(
+  //                           children: [
+  //                             Image.asset(
+  //                               Assets.sad,
+  //                               height: 60.h,
+  //                               width: 60.w,
+  //                             ),
+  //                             Text(
+  //                               '100',
+  //                               style: Styles.mediumText(
+  //                                   color: AppColors.GREY_NORMAL_COLOR),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                       Tab(
+  //                         child: Row(
+  //                           children: [
+  //                             Image.asset(
+  //                               Assets.angry,
+  //                               height: 60.h,
+  //                               width: 60.w,
+  //                             ),
+  //                             Text(
+  //                               '100',
+  //                               style: Styles.mediumText(
+  //                                   color: AppColors.GREY_NORMAL_COLOR),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                       Tab(
+  //                         child: Row(
+  //                           children: [
+  //                             Image.asset(
+  //                               Assets.wow,
+  //                               height: 60.h,
+  //                               width: 60.w,
+  //                             ),
+  //                             Text(
+  //                               '100',
+  //                               style: Styles.mediumText(
+  //                                   color: AppColors.GREY_NORMAL_COLOR),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                   Expanded(
+  //                     child: TabBarView(
+  //                       children: [
+  //                         ListView.separated(
+  //                           itemBuilder: (context,index)=>Row(
+  //                             crossAxisAlignment: CrossAxisAlignment.center,
+  //                             children: [
+  //                               ClickableWidget(
+  //                                 onTap: () {
+  //                                   if (widget.fromProfile == false) {
+  //                                     context.push(Routes.OTHERSACCOUNT,
+  //                                         extra: state.posts![index].likedUsers![index].id);
+  //                                   }
+  //                                 },
+  //                                 child: Stack(
+  //                                   alignment: AlignmentDirectional.bottomEnd,
+  //                                   children: [
+  //                                     ImageFromInternet(
+  //                                       image: state.posts![index].likedUsers![index].image ?? '',
+  //                                       isCircle: true,
+  //                                       width: 90.w,
+  //                                       height: 90.h,
+  //                                     ),
+  //                                     CircleAvatar(
+  //                                       radius: 25.r,
+  //                                       backgroundColor:
+  //                                       Theme.of(context).scaffoldBackgroundColor,
+  //                                       child: Image.asset(
+  //                                         Assets.like,
+  //                                         height: 40.h,
+  //                                         width: 40.w,
+  //                                       ),
+  //                                     )
+  //                                   ],
+  //                                 ),
+  //                               ),
+  //                               const Sizer(),
+  //                               ClickableWidget(
+  //                                 onTap: () {
+  //                                   if (widget.fromProfile == false) {
+  //                                     context.push(Routes.OTHERSACCOUNT,
+  //                                         extra: state.posts![index].likedUsers![index].id);
+  //                                   }
+  //                                 },
+  //                                 child: Text(
+  //                                   '${state.posts![index].likedUsers![index].firstName} ${state.posts![index].likedUsers![index].lastName}',
+  //                                   style: Styles.headerText(fontSize: 65.sp),
+  //                                 ),
+  //                               ),
+  //                               const Sizer(),
+  //                             ],
+  //                           ),
+  //                           separatorBuilder: (context,index)=>Sizer(),
+  //                           itemCount: 2,
+  //                         ),
+  //                         Center(child: Text('Likes Reactions')),
+  //                         Center(child: Text('Hearts Reactions')),
+  //                         Center(child: Text('Haha Reactions')),
+  //                         Center(child: Text('Haha Reactions')),
+  //                         Center(child: Text('Haha Reactions')),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ],
+  //               );
+  //             },
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

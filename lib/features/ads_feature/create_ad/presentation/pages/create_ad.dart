@@ -90,18 +90,13 @@ class _CreateAdViewState extends State<CreateAdView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Label(
-                                text: context.isArabic
-                                    ? widget.categorization.subCategory.nameAr
-                                    : widget.categorization.subCategory.nameEn,
+                                text: context.isArabic?widget.categorization.subCategory.nameAr:widget.categorization.subCategory.nameEn,
                                 style: Styles.mediumText(
                                     fontWeight: FontWeight.bold),
                               ),
-                              if (widget.categorization.mainCategory.name !=
-                                  null)
-                                Label(
-                                    text: widget
-                                            .categorization.mainCategory.name ??
-                                        ""),
+                              Label(
+                                  text:
+                                  context.isArabic?widget.categorization.mainCategory.name :widget.categorization.mainCategory.nameEn!),
                             ],
                           )),
                         ],
@@ -344,7 +339,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                       ),
                       const Sizer(),
                       state.status == CreateAdStates.loadCities
-                          ? const Center(child: CircularProgressIndicator())
+                          ? Center(child: const CircularProgressIndicator())
                           : state.status == CreateAdStates.loadCitiesSuccess
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

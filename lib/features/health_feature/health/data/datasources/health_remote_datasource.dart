@@ -26,6 +26,7 @@ abstract class HealthRemoteDataSource {
   Future<Either<Failure, bool>> isDoctor();
   Future<Either<Failure, bool>> isDoctorApproval();
   Future<Either<Failure, DoctorInfoEntity>> getDoctorInfo();
+  Future<Either<Failure, bool>> cancelAppointment(String id);
 }
 
 class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
@@ -108,5 +109,13 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
     final response = await _apiConsumer.get(EndPoints.getDoctorInfo);
     return response.fold((failure) => Left(failure),
         (data) => Right((DoctorInfoModel.fromJson(data['data']))));
+  }
+
+  @override
+  Future<Either<Failure, bool>> cancelAppointment(String id) async {
+    final response = await _apiConsumer.delete(EndPoints.cancelAppointment(id));
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right((data['status'])));
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,17 +20,19 @@ class AdRequestsView extends StatefulWidget {
   var id;
   String search = '';
 
-  AdRequestsView({super.key, payload}) {
+  AdRequestsView({super.key, payload}){
     print("objectitemId$payload");
-    if (payload is AdRequestParams) {
-      id = payload.id;
+    if(payload is AdRequestParams){
+      id=payload.id;
       search = '';
-    } else {
+
+    }else {
       print("payloadpayloadpayload $payload");
       // print(id);
       // print('itemId${payload['itemId']}');
-      id = payload['itemId'];
+      id=payload['itemId'];
       search = payload['username'];
+
     }
   }
 
@@ -47,21 +50,20 @@ class _AdRequestsViewState extends State<AdRequestsView> {
     super.initState();
     _cubit = context.read<AdRequestsCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
-    _cubit.loadInitialData(widget.id, widget.search);
+    context.read<AdRequestsCubit>().loadInitialData(widget.id, widget.search);
 
-    _cubit.searchController.addListener(() {
+    context.read<AdRequestsCubit>().searchController.addListener(() {
       if (isFirstSearchListenerCall) {
         isFirstSearchListenerCall = false;
         return;
       }
-      _cubit.loadInitialData(widget.id, _cubit.searchController.text);
+      context.read<AdRequestsCubit>().loadInitialData(widget.id, context.read<AdRequestsCubit>().searchController.text);
     });
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      _cubit.fetchAdRequests(widget.id, _cubit.searchController.text);
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      context.read<AdRequestsCubit>().fetchAdRequests(widget.id, context.read<AdRequestsCubit>().searchController.text);
     }
   }
 
@@ -69,7 +71,6 @@ class _AdRequestsViewState extends State<AdRequestsView> {
   void dispose() {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
-    _cubit.searchController.dispose(); // Don't forget to dispose the controller
     super.dispose();
   }
 
@@ -82,38 +83,35 @@ class _AdRequestsViewState extends State<AdRequestsView> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 15.0.w),
             child: TextFormField(
-              controller: _cubit.searchController,
+              controller: context.read<AdRequestsCubit>().searchController,
               decoration: InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                contentPadding:  EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
                 hintStyle: Styles.mediumText(),
                 hintText: LocaleKeys.searchWithName.localize,
               ),
             ),
           ),
-          const Sizer(),
+          Sizer(),
           Expanded(
             child: BlocBuilder<AdRequestsCubit, AdRequestsState>(
               builder: (context, state) {
-                if (state.isLoading && _cubit.adRequests.isEmpty) {
+                if (state.isLoading && context.read<AdRequestsCubit>().adRequests.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
                 return ListView.builder(
                   controller: _scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount:
-                      _cubit.adRequests.length + (_cubit.isLoadingMore ? 1 : 0),
+                  itemCount: context.read<AdRequestsCubit>().adRequests.length + (context.read<AdRequestsCubit>().isLoadingMore ? 1 : 0),
                   itemBuilder: (context, index) {
-                    if (index == _cubit.adRequests.length) {
+                    if (index == context.read<AdRequestsCubit>().adRequests.length) {
                       return const Center(child: CircularProgressIndicator());
                     }
 
-                    final adRequest = _cubit.adRequests[index];
+                    final adRequest = context.read<AdRequestsCubit>().adRequests[index];
                     return Container(
                       margin: EdgeInsetsDirectional.all(10.w),
-                      padding: EdgeInsetsDirectional.symmetric(
-                          horizontal: 15.w, vertical: 10.h),
+                      padding: EdgeInsetsDirectional.symmetric(horizontal: 15.w, vertical: 10.h),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.r),
                         border: Border.all(
@@ -141,13 +139,10 @@ class _AdRequestsViewState extends State<AdRequestsView> {
                               ),
                               Expanded(
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(adRequest.userName,
-                                        style: Styles.headerText()),
-                                    Text(adRequest.sinceTime,
-                                        style: Styles.mediumText()),
+                                    Text(adRequest.userName, style: Styles.headerText()),
+                                    Text(adRequest.sinceTime, style: Styles.mediumText()),
                                   ],
                                 ),
                               ),
@@ -176,38 +171,11 @@ class _AdRequestsViewState extends State<AdRequestsView> {
   }
 }
 
-Widget _buildRelevantAdsWidget() {
-  return BlocBuilder<AdDetailsCubit, AdDetailsState>(builder: (context, state) {
-    if (state.relevantAds?.isEmpty ?? true) {
-      return const SizedBox();
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(
-          text: 'Relevant Ads',
-          style: Styles.mediumText(fontWeight: FontWeight.bold),
-        ),
-        SizedBox(
-          height: kToolbarHeight * 3.5,
-          child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) => AdCard(
-                    item: state.relevantAds![index],
-                    onFav: (String) {},
-                    onRemoveFav: (String) {},
-                  ),
-              separatorBuilder: (context, index) => const Sizer(),
-              itemCount: state.relevantAds?.length ?? 0),
-        ),
-      ],
-    );
-  });
-}
 
-class AdRequestParams {
-  final String id;
-  final String userName;
+
+  class AdRequestParams{
+    final String id;
+    final String userName;
 
   AdRequestParams({required this.id, required this.userName});
-}
+  }

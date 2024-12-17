@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -19,7 +20,7 @@ class MainCategoryBanner extends StatefulWidget {
   final Function()? onRegister;
   final Function() onFavorite;
   bool? isFavorite;
-  bool removeFavorite;
+
   MainCategoryBanner({
     super.key,
     this.canRegister = false,
@@ -27,7 +28,6 @@ class MainCategoryBanner extends StatefulWidget {
     required this.category,
     required this.onFavorite,
     this.isFavorite,
-    this.removeFavorite = false,
   });
 
   @override
@@ -68,47 +68,42 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
           ),
         ),
         child: Stack(
-          alignment: widget.removeFavorite
-              ? AlignmentDirectional.centerStart
-              : Alignment.center,
+          alignment: Alignment.center,
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
-            if (widget.category.name != null)
-              Label(
-                text: widget.category.name ?? "",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 45.sp),
-              ),
+            Label(
+              text: context.locale == Locales.english?widget.category.nameEn!:widget.category.name,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 45.sp),
+            ),
             PositionedDirectional(
               start: 0,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   context.read<UserCubit>().isLoggedIn
-                      ? !widget.removeFavorite
-                          ? IconButton(
-                              color: AppColors.SECONDARY_COLOR,
-                              onPressed: () async {
-                                final result = await widget.onFavorite();
-                                print("resutlt=$result");
-                                if (result == true) {
-                                  print(result);
-                                  setState(() {
-                                    widget.category.isFavorite =
-                                        !widget.category.isFavorite!;
-                                    print(widget.category.isFavorite);
-                                    widget.isFavorite = result;
-                                    print("===================$result");
-                                  });
-                                }
-                              },
-                              icon: Icon(widget.category.isFavorite == true
-                                  ? Icons.favorite
-                                  : Icons.favorite_border),
-                            )
-                          : const SizedBox.shrink()
+                      ? IconButton(
+                          color: AppColors.SECONDARY_COLOR,
+                          onPressed: () async {
+                            final result = await widget.onFavorite();
+                            print("resutlt=$result");
+                            if (result == true) {
+                              print(result);
+                              setState(() {
+                                widget.category.isFavorite =
+                                    !widget.category.isFavorite!;
+                                print(widget.category.isFavorite);
+                                widget.isFavorite = result;
+                                print("===================$result");
+                              });
+                            }
+                          },
+                          icon: Icon(widget.category.isFavorite == true
+                              ? Icons.favorite
+                              : Icons.favorite_border),
+                        )
                       : const SizedBox.shrink(),
                   // Label(
                   //   text:
@@ -146,39 +141,35 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
           alignment: Alignment.center,
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
-            if (widget.category.name != null)
-              Label(
-                text: widget.category.name ?? "",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 45.sp),
-              ),
+            Label(
+              text: widget.category.name,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 45.sp),
+            ),
             PositionedDirectional(
               start: 0,
               child: Column(
                 children: [
                   context.read<UserCubit>().isLoggedIn
-                      ? !widget.removeFavorite
-                          ? InkWell(
-                              onTap: () async {
-                                final result = await widget.onFavorite();
-                                if (result != null &&
-                                    result != widget.isFavorite) {
-                                  setState(() {
-                                    widget.isFavorite = result;
-                                    print("===================$result");
-                                  });
-                                }
-                              },
-                              child: Icon(
-                                widget.isFavorite == true
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color: AppColors.SECONDARY_COLOR,
-                              ),
-                            )
-                          : Container()
+                      ? InkWell(
+                          onTap: () async {
+                            final result = await widget.onFavorite();
+                            if (result != null && result != widget.isFavorite) {
+                              setState(() {
+                                widget.isFavorite = result;
+                                print("===================$result");
+                              });
+                            }
+                          },
+                          child: Icon(
+                            widget.isFavorite == true
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: AppColors.SECONDARY_COLOR,
+                          ),
+                        )
                       : const SizedBox.shrink(),
                   // Sizer(
                   //   height: 15.h,

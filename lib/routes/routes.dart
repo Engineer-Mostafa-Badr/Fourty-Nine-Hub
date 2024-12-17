@@ -37,8 +37,9 @@ abstract class Routes {
   static const REELS = '/Social/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
   static const TWITTER = '/Social/Twitter';
-  static const TWITTERPOSTDETAILS = '/Social/Twitter/TwitterPostDetails';
+  static const TWITTERPOSTDETAILS = '/Social/TwitterPostDetails';
   static const CREATEPOST = '/Social/CreatePost';
+  static const POSTDETAILS = '/PostDetails';
   static const SEARCHFRIENDS = '/Social/CreatePost/SearchFriend';
   static const SEARCHPLACES = '/Social/CreatePost/SearchPlaces';
 
@@ -65,6 +66,8 @@ abstract class Routes {
   static const CONTACTSVIEW = '/ContactsView';
   static const MAZADAT = '/Mazadat';
   static const VISITA = '/Visita';
+  static const EMERGENCYREQUESTS= '/Visita/EmergencyRequests';
+  static const ALLAPPOINTMENTS= '/Visita/AllAppointments';
   static const VISITAEMERGENCY = '/Visita/VisitaEmergency';
   static const CREATEDOCTOR = '/Visita/CreateDoctor';
   static const FILTERDOCTORSUBCATEGORY = '/Visita/FilterDoctorSubcategory';
@@ -84,11 +87,12 @@ abstract class Routes {
   static const VISITABOOKING = '/Visita/VisitaBooking';
   static const DOCTORDASHBOARD = '/Visita/DoctorDashboard';
   static const EDITDOCTORPERSONALINFO = '/Visita/EditDoctorPersonalInfo';
+  static const EDITDOCTORTIMETABLE = '/Visita/EditDoctorTimeTable';
   static const DOCTORSTATISTICS = '/Visita/DoctorStatistics';
   static const DOCTORREVIEWS = '/Visita/DoctorReviews';
+  static const AllDOCTORREVIEWS = '/Visita/AllDoctorReviews';
   static const DOCTORTODAYAPPOINTMENTS = '/Visita/DoctorTodayAppointments';
-  static const DOCTORUNHANDLEDAPPOINTMENTS =
-      '/Visita/DoctorUnhandledAppointments';
+  static const DOCTORUNHANDLEDAPPOINTMENTS = '/Visita/DoctorUnhandledAppointments';
   static const ALLDOCTORRESERVATIONS = '/Visita/AllDoctorReservations';
   static const FOOD = '/Food';
 
@@ -235,6 +239,7 @@ abstract class Paths {
   static const TWITTER = 'Twitter';
   static const TWITTERPOSTDETAILS = 'TwitterPostDetails';
   static const CREATEPOST = 'CreatePost';
+  static const POSTDETAILS = 'PostDetails';
   static const EDITPROFILE = 'EditProfile';
   static const SEARCHFRIENDS = 'SearchFriend';
   static const SEARCHPLACES = 'SearchPlaces';
@@ -245,6 +250,8 @@ abstract class Paths {
   static const CLUBHOUSECHAT = 'ClubHouseChat';
   static const CLUBHOUSEROOM = 'ClubHouseRoom';
   static const VISITA = 'Visita';
+  static const EMERGENCYREQUESTS = 'EmergencyRequests';
+  static const ALLAPPOINTMENTS = 'AllAppointments';
   static const VISITADOCTORLIST = 'VisitaDoctorsList';
   static const VISITAEMERGENCY = 'VisitaEmergency';
   static const VISITADOCTORDETAILS = 'DoctorDetails';
@@ -257,7 +264,9 @@ abstract class Paths {
   static const FILTERDOCTORAREA = 'FilterDoctorArea';
   static const DOCTORDASHBOARD = 'DoctorDashboard';
   static const DOCTORREVIEWS = 'DoctorReviews';
+  static const AllDOCTORREVIEWS = 'AllDoctorReviews';
   static const EDITDOCTORPERSONALINFO = 'EditDoctorPersonalInfo';
+  static const EDITDOCTORTIMETABLE = 'EditDoctorTimeTable';
   static const DOCTORSTATISTICS = 'DoctorStatistics';
   static const DOCTORTODAYAPPOINTMENTS = 'DoctorTodayAppointments';
   static const DOCTORUNHANDLEDAPPOINTMENTS = 'DoctorUnhandledAppointments';

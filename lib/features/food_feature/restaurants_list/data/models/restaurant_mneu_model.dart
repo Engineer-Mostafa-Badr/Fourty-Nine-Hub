@@ -37,9 +37,7 @@ class RestaurantMneuModel extends RestaurantMenu {
     if (price != null) {
       result.addAll({'price': price});
     }
-    if (picture != null) {
-      result.addAll({'picture': picture!.toJson()});
-    }
+
     if (photo != null) {
       result.addAll({'picture': photo});
     }
@@ -55,7 +53,7 @@ class RestaurantMneuModel extends RestaurantMenu {
       foodName: map['foodName'],
       price: map['price']?.toDouble(),
       picture: map['picture'] != null
-          ? RestaurantMediaModel.fromJson(map['picture'])
+          ? map['picture'] is String? map['picture'] : map['picture']['mediaKey']
           : null,
     );
   }

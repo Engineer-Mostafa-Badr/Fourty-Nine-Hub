@@ -32,7 +32,7 @@ void showTiktokOption(BuildContext context, int randomNumber) =>
           builder: (_, controller) {
             return Container(
               decoration: BoxDecoration(
-                color: Colors.white, // Set background color
+                color: Theme.of(context).scaffoldBackgroundColor, // Set background color
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(20)),
                 boxShadow: [
@@ -72,27 +72,35 @@ void showTiktokOption(BuildContext context, int randomNumber) =>
                       style: Styles.mediumText(),
                     ),
                     onTap: () async {
-                      var result = await context.read<StreamCubit>().createLive(
-                            title: 'create live',
-                            roomId: randomNumber.toString(),
-                            context: context,
-                          );
-                      if (result == true && context.mounted) {
-                        context.push(
-                          Routes.LIVEView,
-                          extra: ZegoArgs(
-                            context
-                                .read<StreamCubit>()
-                                .state
-                                .liveCreateResponseEntity!
-                                .id,
-                            true,
-                            context.read<UserCubit>().state.data!.fullName,
-                          ),
-                        );
-                      } else {
-                        print("Failed to create live stream");
-                      }
+                      context.push(
+                        Routes.LIVEView,
+                        extra: ZegoArgs(
+                          randomNumber.toString(),
+                          true,
+                          context.read<UserCubit>().state.data!.fullName,
+                        ),
+                      );
+                      // var result = await context.read<StreamCubit>().createLive(
+                      //       title: 'create live',
+                      //       roomId: randomNumber.toString(),
+                      //       context: context,
+                      //     );
+                      // if (result == true && context.mounted) {
+                      //   context.push(
+                      //     Routes.LIVEView,
+                      //     extra: ZegoArgs(
+                      //       context
+                      //           .read<StreamCubit>()
+                      //           .state
+                      //           .liveCreateResponseEntity!
+                      //           .id,
+                      //       true,
+                      //       context.read<UserCubit>().state.data!.fullName,
+                      //     ),
+                      //   );
+                      // } else {
+                      //   print("Failed to create live stream");
+                      // }
                     },
                   ),
                   const Divider(),

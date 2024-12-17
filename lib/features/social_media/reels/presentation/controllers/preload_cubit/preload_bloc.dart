@@ -14,6 +14,10 @@ class PreloadBloc extends Cubit<PreloadState> {
   void setLoading(bool isLoading) {
     emit(state.copyWith(isLoading: isLoading));
   }
+  void resetFocusedIndex(int index) {
+    emit(state.copyWith(focusedIndex: 0,reloadCounter: 0));
+    _disposeControllerAtIndex(index);
+  }
 
   // Fetch videos from the API and initialize controllers for the first videos
   Future<void> getVideosFromApi() async {
@@ -116,5 +120,10 @@ class PreloadBloc extends Cubit<PreloadState> {
     final controller = state.controllers.remove(index);
     controller?.dispose();
     log('🚀🚀🚀 DISPOSED $index');
+  }
+  void _disposeAllControllers() {
+    for (var controller in state.controllers.values) {
+      controller.dispose();
+    }
   }
 }

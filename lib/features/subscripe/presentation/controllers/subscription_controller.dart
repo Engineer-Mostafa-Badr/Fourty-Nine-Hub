@@ -3,6 +3,7 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/subscripe/domain/usecases/get_active_subscription_amounts.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/widgets/amounts.dart';
@@ -145,7 +146,7 @@ class SubscriptionController {
         showErrorMessage(context, Labels.errorHappened);
       }
     }, (data) {
-      showSuccessMessage(context, Labels.subscribedSuccessfully);
+      showSuccessMessage(context, context.isArabic? "تم الاشتراك بنجاح":"Subscribed successfully");
     });
   }
 }

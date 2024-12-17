@@ -15,10 +15,35 @@ import '../../../../../res/style/styles.dart';
 
 import '../../../../../res/style/app_colors.dart';
 
-class AllReviews extends StatelessWidget {
-  const AllReviews({
-    super.key,
-  });
+
+class AllReviews extends StatefulWidget {
+  const AllReviews({super.key, this.doctorId='', });
+  final String? doctorId;
+  @override
+  State<AllReviews> createState() => _AllReviewsState();
+}
+
+class _AllReviewsState extends State<AllReviews> {
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    _scrollController = ScrollController()..addListener(_onScroll);
+    widget.doctorId==''?context.read<DoctorDetailsCubit>().loadInitialData():context.read<DoctorDetailsCubit>().loadReviewsData(widget.doctorId??'');
+    super.initState();
+  }
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent -800) {
+      widget.doctorId==''?context.read<DoctorDetailsCubit>().fetchDoctorReviews():context.read<DoctorDetailsCubit>().fetchDoctorSubReviews(doctorId:widget.doctorId??'');
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,24 +53,29 @@ class AllReviews extends StatelessWidget {
         backColor: cardDarkColor(context),
       ),
       body: BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
-          buildWhen: (previous, current) =>
-              current is DoctorDetailsReviewsLoaded,
-          builder: (context, state) {
-            if (state is DoctorDetailsStartLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is DoctorDetailsReviewsLoaded) {
+        builder: (context,state) {
+          var cubit = context.read<DoctorDetailsCubit>();
+
+          if(state.isLoading){
+            return const Center(child: CircularProgressIndicator());
+          }else {
+            if(cubit.rates.isEmpty) {
+              return const Center(child: Text('No reviews yet'));
+            }else{
+              print(cubit.rates);
               return ListView.separated(
+                  controller: _scrollController,
                   itemBuilder: (context, index) => DoctorReviewCard(
-                        review: state.rates[index],
-                      ),
+                    review: cubit.rates[index], fromDashboard: widget.doctorId=='',
+                  ),
                   separatorBuilder: (context, index) => const Divider(
-                        color: Colors.grey,
-                      ),
-                  itemCount: state.rates.length);
-            } else {
-              return Container();
+                    color: Colors.grey,
+                  ),
+                  itemCount: cubit.rates.length);
             }
-          }),
+          }
+        }
+      ),
     );
   }
 

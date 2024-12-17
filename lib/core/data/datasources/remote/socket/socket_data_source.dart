@@ -60,6 +60,7 @@ abstract class SocketIOListeners {
   static const String clearChat = 'clearChat';
   static const String pinMessage = 'pinMessage';
   static const String unPinMessage = 'unPinMessage';
+  static const String sendPoint = 'Stream:SendPoint';
 }
 
 abstract class SocketIOEvents {
@@ -73,6 +74,7 @@ abstract class SocketIOEvents {
   static const String startRecordingMessage = 'Message:Recording';
   static const String stopRecordingMessage = 'Message:StopRecording';
   static const String setRecordAsListened = 'Message:Listen';
+  static const String sendPoint = 'Stream:SendPoint';
 }
 
 //

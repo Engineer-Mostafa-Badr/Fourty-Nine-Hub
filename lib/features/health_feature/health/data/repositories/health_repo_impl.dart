@@ -58,4 +58,9 @@ class HealthRepoImpl implements HealthRepo {
   Future<Either<Failure, DoctorInfoEntity>> getDoctorInfo() {
     return _remoteDataSource.getDoctorInfo();
   }
+
+  @override
+  Future<Either<Failure, bool>> cancelAppointment(String id) {
+    return _remoteDataSource.cancelAppointment(id);
+  }
 }

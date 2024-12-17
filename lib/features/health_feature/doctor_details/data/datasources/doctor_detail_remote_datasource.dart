@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 
@@ -9,6 +10,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/domain/enti
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/add_doctor_rating_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_Id_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_reviews.dart';
 
 import '../../../../../core/error/failure.dart';
 
@@ -19,10 +21,10 @@ abstract class DoctorDetailsRemoteDataSource {
       GetDoctorDetailsIdParams params);
 
   Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorReviews(
-      String doctorId);
-  Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorRatings();
+      GetUserDoctorRatesParams params);
+  Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorRatings(PaginationParams params);
 
-  Future<Either<Failure, bool>> addDoctorRating(AddDoctorRatingParams params);
+  Future<Either<Failure, bool>>addDoctorRating(AddDoctorRatingParams params);
 }
 
 class DoctorDetailsRemoteDataSourceImpl
@@ -43,9 +45,9 @@ class DoctorDetailsRemoteDataSourceImpl
 
   @override
   Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorReviews(
-      String doctorId) async {
+      GetUserDoctorRatesParams params) async {
     final response =
-        await _apiConsumer.get(EndPoints.getDoctorReviewsForUsers(doctorId));
+        await _apiConsumer.get(EndPoints.getDoctorReviewsForUsers(params.doctorId),queryParameters: params.toJson());
     return response.fold(
       (failure) => Left(failure),
       (data) => Right(
@@ -57,8 +59,9 @@ class DoctorDetailsRemoteDataSourceImpl
   }
 
   @override
-  Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorRatings() async {
-    final response = await _apiConsumer.get(EndPoints.getDoctorReviews);
+  Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorRatings(PaginationParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.getDoctorReviews,queryParameters: params.toJson());
     return response.fold(
       (failure) => Left(failure),
       (data) => Right(
@@ -70,25 +73,27 @@ class DoctorDetailsRemoteDataSourceImpl
   }
 
   @override
-  Future<Either<Failure, DoctorEntity>> getDoctorDetailsId(
-      GetDoctorDetailsIdParams params) async {
-    final response = await _apiConsumer
-        .get(EndPoints.getDoctorDetailsId(params), data: params.toJson());
+  Future<Either<Failure, DoctorEntity>> getDoctorDetailsId(GetDoctorDetailsIdParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.getDoctorDetailsId(params),data: params.toJson());
     return response.fold(
-      (failure) => Left(failure),
-      (data) => Right(DoctorModel.fromJson(data['data'])),
+          (failure) => Left(failure),
+          (data) => Right(
+        DoctorModel.fromJson(data['data'])
+      ),
     );
   }
 
   @override
-  Future<Either<Failure, bool>> addDoctorRating(
-      AddDoctorRatingParams params) async {
-    final response = await _apiConsumer.post(
-        EndPoints.getDoctorReviewsForUsers(params.doctorId),
-        data: params.toJson());
+  Future<Either<Failure, bool>> addDoctorRating(AddDoctorRatingParams params) async {
+    final response =
+        await _apiConsumer.post(EndPoints.getDoctorReviewsForUsers(params.doctorId),
+            data: params.toJson());
     return response.fold(
-      (failure) => Left(failure),
-      (data) => Right(data['status'] ?? false),
+          (failure) => Left(failure),
+          (data) => Right(
+          data['status'] ?? false
+      ),
     );
   }
 }

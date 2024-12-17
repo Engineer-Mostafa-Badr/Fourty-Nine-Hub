@@ -107,6 +107,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    print("objectUser${UserCubit.to.state.data?.id}");
     return BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
       listener: (context, state) {
         if (state is NotificationSocketIoNewNotification) {

@@ -288,7 +288,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     var result = await _apiConsumer.post(EndPoints.logout);
     return result.fold((l) => Left(l), (r) async {
       await CacheManager.deleteAllTokens();
-      _apiConsumer.removeTokenFromHeader();
+       _apiConsumer.removeTokenFromHeader();
       // await registerSocket();
 
       return Right(r);

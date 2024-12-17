@@ -287,7 +287,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
         //           Expanded(
         //             child: Text(
         //               data['message'],
-        //               textScaleFactor: 1.0,
+        //               ,
         //               style: const TextStyle(
         //                 fontWeight: FontWeight.w500,
         //                 color: AppColors.QUANTITY_COLOR,
@@ -370,7 +370,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
         //           Expanded(
         //             child: Text(
         //               data['message'],
-        //               textScaleFactor: 1.0,
+        //               ,
         //               style: const TextStyle(
         //                 fontWeight: FontWeight.w500,
         //                 color: AppColors.QUANTITY_COLOR,

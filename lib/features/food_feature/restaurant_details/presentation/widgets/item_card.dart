@@ -87,7 +87,7 @@ class _ItemCardState extends State<ItemCard> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(12.0),
                 child: SquareImage(
-                  url: widget.meal.picture?.mediaKey ?? "",
+                  url: widget.meal.picture ?? "",
                   width: 80.0,
                   height: 80.0,
                 ),

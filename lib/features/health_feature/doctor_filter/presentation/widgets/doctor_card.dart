@@ -1,7 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/pages/DoctorDetails.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
@@ -21,24 +25,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorCard extends StatelessWidget {
   final DoctorEntity doctor;
-  const DoctorCard({super.key, required this.doctor});
+  const DoctorCard({super.key, required this.doctor, required this.type});
+  final String type;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if (UserCubit.to.isLoggedIn) {
-          context.push(Routes.VISITADOCTORDETAILS,
-              extra:
-                  DoctorDetailsParams(doctorId: doctor.id, fromSearch: false));
-        } else {
+        if(UserCubit.to.isLoggedIn){
+          context.push(Routes.VISITADOCTORDETAILS, extra:DoctorDetailsParams(doctorId: doctor.id,fromSearch: false,type: type));
+        }else{
           context.push(Routes.LOGIN);
         }
       },
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-            color: AppColors.LIGHT_COLOR,
+            color: cardDarkColor(context),
             border: Border.all(color: AppColors.LIGHT_GRAY_COLOR),
             borderRadius: BorderRadius.circular(10)),
         child: Column(
@@ -77,46 +80,44 @@ class DoctorCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (doctor.classification != 'NotSubscribed')
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.h),
-                    decoration: BoxDecoration(
-                      color: doctor.isPremium ? Colors.black : Colors.white,
-                      borderRadius: BorderRadius.circular(20.0),
-                      border: Border.all(
-                        color: doctor.isPremium ? Colors.amber : Colors.grey,
-                        width: 2.0,
-                      ),
-                      boxShadow: doctor.isPremium
-                          ? [
-                              BoxShadow(
-                                color: Colors.amber.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 8,
-                                offset: const Offset(
-                                    0, 3), // changes position of shadow
-                              ),
-                            ]
-                          : null,
+                if(doctor.classification!='NotSubscribed')Container(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.h),
+                  decoration: BoxDecoration(
+                    color: doctor.isPremium ? Colors.black : Colors.white,
+                    borderRadius: BorderRadius.circular(20.0),
+                    border: Border.all(
+                      color: doctor.isPremium ? Colors.amber : Colors.grey,
+                      width: 2.0,
                     ),
-                    child: Text(
-                      doctor.classification == 'Premium'
-                          ? "Premium"
-                          : "Regular",
-                      style: TextStyle(
-                        color: doctor.isPremium ? Colors.amber : Colors.grey,
-                        fontWeight: doctor.isPremium
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                        fontSize: 16.sp,
-                      ),
+                    boxShadow: doctor.isPremium
+                        ? [
+                            BoxShadow(
+                              color: Colors.amber.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 8,
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
+                            ),
+                          ]
+                        : null,
+                  ),
+                  child: Text(
+                    doctor.classification== "Regular subscription"? LocaleKeys.regular.localize : LocaleKeys.premium.localize,
+                    style: TextStyle(
+                      color: doctor.isPremium ? Colors.amber : Colors.grey,
+                      fontWeight: doctor.isPremium
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      fontSize: 16.sp,
                     ),
                   ),
+                ),
               ],
             ),
+            Sizer(),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Icon(
                   FontAwesomeIcons.userDoctor,
@@ -126,9 +127,11 @@ class DoctorCard extends StatelessWidget {
                     child: ReadMoreLabel(
                   text: doctor.description,
                   trimLines: 1,
+                      style: Styles.mediumText(color: context.isDarkMode?null:AppColors.PRIMARY_COLOR),
                 ))
               ],
             ),
+            Sizer(),
             Row(
               children: [
                 const Icon(
@@ -136,9 +139,22 @@ class DoctorCard extends StatelessWidget {
                 ),
                 const Sizer(),
                 Expanded(
-                  child: Label(
-                    text: '${Labels.fees}: ${doctor.priceToShow}',
-                    style: Styles.mediumText(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if(doctor.clinicPrice.isNotEmpty)Label(
+                        text: '${LocaleKeys.clinicFees.localize}: ${doctor.clinicPrice} ${context.isArabic?doctor.currencyAr:doctor.currencyEn}',
+                        style: Styles.mediumText(),
+                      ),
+                      if(doctor.callsPrice.isNotEmpty)Label(
+                        text: '${LocaleKeys.callFees.localize}: ${doctor.callsPrice} ${context.isArabic?doctor.currencyAr:doctor.currencyEn}',
+                        style: Styles.mediumText(),
+                      ),
+                      if(doctor.visitHomePrice.isNotEmpty)Label(
+                        text: '${LocaleKeys.homeVisitFees.localize}: ${doctor.visitHomePrice} ${context.isArabic?doctor.currencyAr:doctor.currencyEn}',
+                        style: Styles.mediumText(),
+                      ),
+                    ],
                   ),
                 )
               ],

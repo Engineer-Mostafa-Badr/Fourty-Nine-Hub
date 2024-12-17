@@ -18,11 +18,11 @@ import '../../../../../core/localization/locale_keys.g.dart'; // Ensure correct 
 
 // Helper functions (assuming these are defined elsewhere in your project)
 Color scaffoldDarkColor(BuildContext context) {
-  return context.isArabic ? Colors.white.withOpacity(0.09) : Colors.white;
+  return context.isDarkMode ? Colors.white.withOpacity(0.09) : Colors.white;
 }
 
 Color cardDarkColor(BuildContext context) {
-  return context.isArabic ? Colors.white.withOpacity(0.04) : Colors.white;
+  return context.isDarkMode ? Colors.white.withOpacity(0.04) : Colors.white;
 }
 
 class FoodCartView extends StatefulWidget {
@@ -128,7 +128,7 @@ class _FoodCartViewState extends State<FoodCartView> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      backgroundColor: context.isArabic ? Colors.black : Colors.white,
+      backgroundColor: context.isDarkMode ? Colors.black : Colors.white,
       builder: (context) {
         return BlocProvider.value(
           value: serviceLocator<RestaurantDetailsCubit>(),

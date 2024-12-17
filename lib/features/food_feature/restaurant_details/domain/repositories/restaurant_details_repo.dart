@@ -13,13 +13,15 @@ abstract class RestaurantDetailsRepo {
       {required GetMealsParams params});
   Future<Either<Failure, Restaurant>> getRestaurantDetails(
       {required String restaurantId});
-  Future<Either<Failure, bool>> deleteFood({required String id});
+  Future<Either<Failure, bool>> deleteFood(
+      {required String id});
   Future<Either<Failure, bool>> changeQuantity(
       {required ChangeQuantityParams params});
   Future<Either<Failure, bool>> deleteFoodFromCart(
       {required DeleteFoodFromCartParams params});
   Future<Either<Failure, bool>> deleteCart();
-  Future<Either<Failure, bool>> addFood({required AddFoodParams params});
+  Future<Either<Failure, RestaurantMenu>> addFood(
+      {required AddFoodParams params});
   Future<Either<Failure, bool>> addToCart({
     required String restaurantId,
     required String foodId,

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/meal_category_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../../../../res/style/app_colors.dart';
@@ -64,12 +66,9 @@ class _MealCategoriesState extends State<MealCategories> {
                   child: Row(
                     children: [
                       const Spacer(),
-                      Text(
-                        context.isArabic ? 'تحريك' : 'Move',
-                        style: const TextStyle(
-                            color: AppColors.PRIMARY_COLOR_DARK,
-                            fontWeight: FontWeight.bold),
-                      ),
+                      Label(
+                        text: context.isArabic?'مشاهدة المزيد':'See More',
+                        style: Styles.mediumText(decoration: TextDecoration.underline,color: AppColors.PRIMARY_COLOR_DARK),),
                       Icon(
                         Icons.arrow_forward_ios,
                         color: AppColors.PRIMARY_COLOR_DARK,

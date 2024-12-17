@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/usecases/get_subcategory_doctors_list_usecase.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../doctor_details/domain/entities/doctor_entity.dart';
@@ -8,5 +9,5 @@ abstract class DoctorListRepo {
   Future<Either<Failure, List<DoctorEntity>>> getDoctorsList(
       {required DoctorSearchParams params});
   Future<Either<Failure, List<DoctorEntity>>> getSubCategoryDoctorsList(
-      {required String params});
+      {required GetSubCategoryDoctorsParams params});
 }

@@ -397,7 +397,7 @@ class ZegoLiveStreamingCentralAudioVideoViewState
                 showMicrophoneStateOnView: !isMicrophoneEnabled,
                 showCameraStateOnView: false,
                 showUserNameOnView:
-                    widget.config.audioVideoView.showUserNameOnView,
+                    false,
               );
             }),
       ],

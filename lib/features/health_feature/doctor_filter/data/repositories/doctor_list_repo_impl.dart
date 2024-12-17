@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/usecases/get_subcategory_doctors_list_usecase.dart';
 
 import '../../domain/repositories/doctor_list_repo.dart';
 import '../../domain/usecases/get_doctor_list_usecase.dart';
@@ -19,8 +20,7 @@ class DoctorListRepoImpl implements DoctorListRepo {
   }
 
   @override
-  Future<Either<Failure, List<DoctorEntity>>> getSubCategoryDoctorsList(
-      {required String params}) async {
+  Future<Either<Failure, List<DoctorEntity>>> getSubCategoryDoctorsList({required GetSubCategoryDoctorsParams params}) async {
     return await _remoteDataSource.getSubCategoryDoctorsList(params: params);
   }
 }

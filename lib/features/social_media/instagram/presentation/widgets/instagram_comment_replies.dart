@@ -118,6 +118,17 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
                               setState(() {});
                             }
                           },
+                          function: (){
+                            controller.replyOnComment(
+                              params: ReplyOnCommentParams(
+                                postId: controller.repliesPagingController
+                                    .itemList![index].post,
+                                commentId: controller.repliesPagingController
+                                    .itemList![index].id,
+                                content: replyTextController.text,
+                              ),
+                            );
+                          }
                         );
                       },
                       noMoreItemsIndicatorBuilder: (context) => Container(),
@@ -222,7 +233,9 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
   Widget _buildCommentCard(
       {required CommentEntity reply,
       required Function(String) onDeleteComment,
-      required Function(String) onDeleteReply}) {
+      required Function(String) onDeleteReply,
+      required Function() function,
+      }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -233,6 +246,7 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
           onReport: (TwitterReportParams params) {},
           onEditComment: (PostCommentParams params) =>
               widget.onEditComment(params),
+          function: function,
         ),
       ],
     );

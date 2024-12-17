@@ -40,7 +40,7 @@ class CreateLiveParams {
       "topic": topicId,
       "roomId": roomID,
       "description": description,
-      "goals": goals
+      "goals": goals?.map((goal) => goal.toJson()).toList()
     };
   }
 }

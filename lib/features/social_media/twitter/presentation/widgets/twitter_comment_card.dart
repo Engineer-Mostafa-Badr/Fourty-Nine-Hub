@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -26,6 +27,7 @@ class TwitterCommentCard extends StatefulWidget {
   final Function(String) onDeleteComment;
   final bool? fromProfile;
   final Function(TwitterReportParams) onReport;
+
   const TwitterCommentCard(
       {super.key,
       this.textColor = Colors.black,
@@ -51,6 +53,8 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             widget.comment.user.image == ''
                 ? UserProfileImage(
@@ -70,13 +74,26 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
             const Sizer(),
             Expanded(
                 child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Label(
-                    text: widget.comment.user.firstName,
-                    style: Styles.mediumText(fontWeight: FontWeight.bold)),
-                Label(
-                    text: widget.comment.sinceTime, style: Styles.mediumText()),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Label(
+                        text: widget.comment.user.firstName,
+                        style: Styles.mediumText(fontWeight: FontWeight.bold)),
+                    const Sizer(),
+                    Label(
+                        text: widget.comment.sinceTime,
+                        style: Styles.mediumText(
+                            color: AppColors.GREY_NORMAL_COLOR)),
+                  ],
+                ),
+                Text(
+                  widget.comment.content ?? '',
+                  textAlign: TextAlign.start,
+                  style: Styles.mediumText(fontSize: 65.sp),
+                ),
               ],
             )),
             GestureDetector(
@@ -95,12 +112,6 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
               ),
             ),
           ],
-        ),
-        const Sizer(),
-        Label(
-          textAlign: TextAlign.start,
-          text: widget.comment.content ?? '',
-          style: Styles.mediumText(),
         ),
         if (widget.comment.edit == true)
           SizedBox(
@@ -143,7 +154,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
             ),
           ),
         Sizer(
-          height: 5.h,
+          height: 10.h,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -244,7 +255,6 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
       },
       leading: Icon(
         icon,
-        color: iconColor ?? Colors.black,
       ),
       subtitle: Label(
         text: subTitle,
