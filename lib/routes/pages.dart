@@ -1562,6 +1562,10 @@ class AppPages {
                                 create: (context) => PartialPaymentRiderCubit(
                                     repository: serviceLocator()),
                               ),
+                              BlocProvider(
+                                create: (context) => GetTripInfoCubit(
+                                    repository: serviceLocator()),
+                              ),
                             ],
                             child: TripInfoByRiderScreen(
                                 model: state.extra

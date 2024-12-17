@@ -13,11 +13,13 @@ class AcceptOfferByDriverCubit extends Cubit<RiderState> {
     log("",
         name: "SuccessAcceptOfferByDriverStateSuccessAcceptOfferByDriverState");
     var response = await repository.acceptTripByDriver(id: id);
+
     response.fold(
       (l) {
         emit(FailureRiderState(failure: l));
       },
       (r) {
+        print("response ${response}\n");
         CheckAcceptByRiderModel model =
             CheckAcceptByRiderModel.fromJson(r['data']);
         log(r.toString(),

@@ -37,7 +37,7 @@ class _DynamicMapWithPolyline extends State<DynamicMapWithPolyline> {
   @override
   void initState() {
     super.initState();
-    print("${widget.polylineString} \n");
+    print("polyLine ${widget.polylineString} \n");
 
     if (widget.latitude == null && widget.longitude == null) {
       _center = const LatLng(30.0444, 31.2357); // Default to Cairo

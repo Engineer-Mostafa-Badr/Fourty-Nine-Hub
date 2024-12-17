@@ -3,13 +3,17 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widgets/dynamic_map_test.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_by_rider_model/check_accept_by_rider_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/reasons_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/cancel_trip_rider_cubit.dart';
@@ -18,6 +22,8 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripC
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/start_trip_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_reasons_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
@@ -222,187 +228,265 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
                   // },
                   child: Padding(
                     padding: const EdgeInsets.all(15),
-                    child: Column(
-                      children: [
-                        const Spacer(),
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 15,
-                                  height: 15,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          color: Colors.blue, width: 3)),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Sizer(
+                            height: 48.h,
+                          ),
+                          const SizedBox(
+                            height: 200,
+                            child: DynamicMapWithPolyline(
+                              polylineString: "",
+                              // BlocProvider.of<GetTripInfoCubit>(context).polyLine,
+                              useGoogleMaps: true,
+                              url:
+                                  "https://maps.googleapis.com/maps/api/js?key=AIzaSyBBHEFa7D7qMSL4ivZhCqRQ4ok4sQN-Egc",
+                              apiKey: "AIzaSyBBHEFa7D7qMSL4ivZhCqRQ4ok4sQN-Egc",
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              const Sizer(
+                                height: 36,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    context.isArabic
+                                        ? "رحلتك الحالية"
+                                        : "Your current ride",
+                                    style: Styles.mediumText(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 32,
+                                        color: AppColors.DARK_GRAY_COLOR),
+                                  ),
+                                  const Spacer()
+                                ],
+                              ),
+                              const Sizer(),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: const Color.fromRGBO(
+                                                6, 147, 45, 1),
+                                            width: 5)),
+                                  ),
+                                  const Sizer(
+                                    width: 24,
+                                  ),
+                                  Flexible(
+                                      child: Text(
+                                    "${widget.model.fromTitle}",
+                                    style: Styles.mediumText(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w500),
+                                  )),
+                                ],
+                              ),
+                              const Sizer(),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: const Color.fromRGBO(
+                                                255, 132, 125, 1),
+                                            width: 5)),
+                                  ),
+                                  const Sizer(
+                                    width: 24,
+                                  ),
+                                  Flexible(
+                                      child: Text(
+                                    "${widget.model.toTitle}",
+                                    style: Styles.mediumText(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w500),
+                                  ))
+                                ],
+                              ),
+                              const Sizer(
+                                height: 30,
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                width: double.infinity,
+                                height: 46,
+                                decoration: BoxDecoration(
+                                    color:
+                                        const Color.fromRGBO(226, 244, 255, 1),
+                                    borderRadius: BorderRadius.circular(13)),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.info_outline,
+                                      color: const Color(0xFF0E4669),
+                                    ),
+                                    const Sizer(),
+                                    Flexible(
+                                      child: Text(
+                                        "${LocaleKeys.travelTime.tr()}: ~${formatDuration(widget.model.duration ?? 0)} , ${LocaleKeys.Distance.tr()}: ${formatDistance(widget.model.distance ?? 0)}",
+                                        style: Styles.mediumText(
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    const Sizer(),
+                                  ],
                                 ),
-                                const Sizer(),
-                                Flexible(
-                                    child: Text(widget.model.fromTitle ?? ""))
-                              ],
-                            ),
-                            const Sizer(
-                              height: 20,
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  width: 15,
-                                  height: 15,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          color: Colors.green, width: 3)),
+                              ),
+                              const Sizer(
+                                height: 30,
+                              ),
+                            ],
+                          ),
+                          // Spacer(),
+                          const Sizer(
+                            height: 40,
+                          ),
+                          Row(
+                            children: [
+                              Flexible(
+                                child: AppButton(
+                                  backColor: AppColors.PRIMARY_COLOR,
+                                  height: 80.h,
+                                  style: Styles.mediumText(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
+                                  width: double.infinity,
+                                  label: LocaleKeys.openGoogleMap.tr(),
+                                  onPressed: () {
+                                    log("sldkfjsldkjf");
+                                    if (inLocation) {
+                                      openGoogleMaps(
+                                        lat: widget.model.startLocation!
+                                            .coordinates![0],
+                                        lng: widget.model.startLocation!
+                                            .coordinates![1],
+                                      );
+                                    } else {
+                                      openGoogleMaps(
+                                        lat: widget.model.targetLocation!
+                                            .coordinates![0],
+                                        lng: widget.model.targetLocation!
+                                            .coordinates![1],
+                                      );
+                                    }
+                                  },
                                 ),
-                                const Sizer(),
-                                Flexible(
-                                    child: Text(widget.model.toTitle ?? "")),
-                              ],
-                            ),
-                            const Sizer(
-                              height: 30,
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                    "${LocaleKeys.travelTime.tr()}: ${formatDuration(widget.model.duration ?? 0)}"),
-                              ],
-                            ),
-                            const Sizer(
-                              height: 30,
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                    "${LocaleKeys.destination.tr()} : ${formatDistance(widget.model.distance ?? 0)}"),
-                              ],
-                            ),
-                          ],
-                        ),
-                        // Spacer(),
-                        const Sizer(
-                          height: 40,
-                        ),
-                        Row(
-                          children: [
-                            Flexible(
-                              child: DefaultButton(
-                                padding: EdgeInsets.zero,
-                                width: double.infinity,
-                                label: LocaleKeys.openGoogleMap.tr(),
-                                onPressed: () {
-                                  log("sldkfjsldkjf");
-                                  if (inLocation) {
-                                    openGoogleMaps(
-                                      lat: widget
-                                          .model.startLocation!.coordinates![0],
-                                      lng: widget
-                                          .model.startLocation!.coordinates![1],
-                                    );
-                                  } else {
-                                    openGoogleMaps(
-                                      lat: widget.model.targetLocation!
-                                          .coordinates![0],
-                                      lng: widget.model.targetLocation!
-                                          .coordinates![1],
-                                    );
-                                  }
-                                },
                               ),
-                            ),
-                            const Sizer(),
-                            Flexible(
-                              child: DefaultButton(
-                                padding: EdgeInsets.zero,
-                                width: double.infinity,
-                                label: inLocation
-                                    ? LocaleKeys.inLocation.tr()
-                                    : start
-                                        ? LocaleKeys.start.tr()
-                                        : LocaleKeys.complete.tr(),
-                                onPressed: () {
-                                  if (inLocation) {
-                                    context
-                                        .read<RiderInStartLocationCubit>()
-                                        .riderInStartLocation(
-                                            id: widget.model.id ?? "");
-                                  } else if (start) {
-                                    scaffoldKey.currentState?.showBottomSheet(
-                                      (context) {
-                                        return Container(
-                                          padding: const EdgeInsets.all(20),
-                                          height: 200,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Pinput(
-                                                length: 6,
-                                                onChanged: (value) {
-                                                  otp = int.tryParse(value);
-                                                },
-                                                validator: (value) {
-                                                  if (value!.length < 6) {
-                                                    return LocaleKeys.InvalidOTP
-                                                        .tr();
-                                                  }
-                                                  return null;
-                                                },
-                                              ),
-                                              DefaultButton(
-                                                width: double.infinity,
-                                                padding: EdgeInsets.zero,
-                                                onPressed: () {
-                                                  if (formKey.currentState
-                                                          ?.validate() ==
-                                                      true) {
-                                                    context
-                                                        .read<
-                                                            StartTripRiderCubit>()
-                                                        .startTripRider(
-                                                            id: widget
-                                                                    .model.id ??
-                                                                "",
-                                                            otp: otp!);
-                                                  }
-                                                },
-                                                label: LocaleKeys.confirm.tr(),
-                                              )
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  } else if (complete) {
-                                    context
-                                        .read<CompletedTripRiderCubit>()
-                                        .completedTripRider(
-                                            id: widget.model.id ?? "");
-                                  }
-                                },
+                              const Sizer(),
+                              Flexible(
+                                child: AppButton(
+                                  backColor: AppColors.PRIMARY_COLOR,
+                                  height: 80.h,
+                                  style: Styles.mediumText(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
+                                  width: double.infinity,
+                                  label: inLocation
+                                      ? LocaleKeys.inLocation.tr()
+                                      : start
+                                          ? LocaleKeys.start.tr()
+                                          : LocaleKeys.complete.tr(),
+                                  onPressed: () {
+                                    if (inLocation) {
+                                      context
+                                          .read<RiderInStartLocationCubit>()
+                                          .riderInStartLocation(
+                                              id: widget.model.id ?? "");
+                                    } else if (start) {
+                                      scaffoldKey.currentState?.showBottomSheet(
+                                        (context) {
+                                          return Container(
+                                            padding: const EdgeInsets.all(20),
+                                            height: 200,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Pinput(
+                                                  length: 6,
+                                                  onChanged: (value) {
+                                                    otp = int.tryParse(value);
+                                                  },
+                                                  validator: (value) {
+                                                    if (value!.length < 6) {
+                                                      return LocaleKeys
+                                                          .InvalidOTP.tr();
+                                                    }
+                                                    return null;
+                                                  },
+                                                ),
+                                                DefaultButton(
+                                                  width: double.infinity,
+                                                  padding: EdgeInsets.zero,
+                                                  onPressed: () {
+                                                    if (formKey.currentState
+                                                            ?.validate() ==
+                                                        true) {
+                                                      context
+                                                          .read<
+                                                              StartTripRiderCubit>()
+                                                          .startTripRider(
+                                                              id: widget.model
+                                                                      .id ??
+                                                                  "",
+                                                              otp: otp!);
+                                                    }
+                                                  },
+                                                  label:
+                                                      LocaleKeys.confirm.tr(),
+                                                )
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    } else if (complete) {
+                                      context
+                                          .read<CompletedTripRiderCubit>()
+                                          .completedTripRider(
+                                              id: widget.model.id ?? "");
+                                    }
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                          const Sizer(),
+                          Row(
+                            children: [
+                              Flexible(
+                                child: AppButton(
+                                  backColor: AppColors.PRIMARY_COLOR_DARK,
+                                  height: 80.h,
+                                  style: Styles.headerText(
+                                    color: Colors.white,
+                                  ),
+                                  width: double.infinity,
+                                  label: LocaleKeys.cancel.tr(),
+                                  onPressed: () {
+                                    context.read<GetReasonsCubit>().get();
+                                  },
+                                ),
                               ),
-                            )
-                          ],
-                        ),
-                        const Sizer(),
-                        Row(
-                          children: [
-                            Flexible(
-                              child: DefaultButton(
-                                backgroundColor: Colors.red,
-                                padding: EdgeInsets.zero,
-                                width: double.infinity,
-                                label: LocaleKeys.cancel.tr(),
-                                onPressed: () {
-                                  context.read<GetReasonsCubit>().get();
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Sizer()
-                      ],
+                            ],
+                          ),
+                          const Sizer()
+                        ],
+                      ),
                     ),
                   ),
                 ),

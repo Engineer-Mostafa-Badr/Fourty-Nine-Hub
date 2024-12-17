@@ -10,6 +10,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class GetTripInfoCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repository;
   GetTripInfoRequestModel model = GetTripInfoRequestModel();
+  // dynamic polyLine = "";
   bool isBottomSheetShown = false;
   bool record = false;
   GetTripInfoCubit({required this.repository}) : super(RiderInitial());
@@ -32,6 +33,9 @@ class GetTripInfoCubit extends Cubit<RiderState> {
         emit(FailureRiderState(failure: l));
       },
       (r) {
+        // polyLine = r['data']['polyline'];
+
+        // print("polyLine ${polyLine} \n");
         log(r.toString(), name: "lklkkkkkkkkkkkkkkkkkkkkkkjjjjjjjjjjjjj");
         emit(SuccessGetTripInfoState(
             model: GetTripInfoModel.fromJson(r['data'])));
