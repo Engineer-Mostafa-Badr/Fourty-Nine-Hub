@@ -83,6 +83,9 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
                   .getCurrencyData();
 
               context.pop();
+              await BlocProvider.of<GetCurrencyCubit>(context)
+                  .getCurrencyData();
+
               context.read<ShowOffersCubit>().showOffers();
               context.read<LocationSocketCubit>().nearbyDriversEmit(
                   tripId: state.model.trip?.id ?? "",
@@ -103,7 +106,7 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
                           maxHeight: MediaQuery.of(context).size.height *
-                              0.7, // Adjust height
+                              0.95, // Adjust height
                         ),
                         child: BlocProvider(
                           create: (context) =>
@@ -184,11 +187,6 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
                                           BlocProvider(
                                               create: (context) =>
                                                   GetTripInfoCubit(
-                                                      repository:
-                                                          serviceLocator())),
-                                          BlocProvider(
-                                              create: (context) =>
-                                                  CheckPaymentCubit(
                                                       repository:
                                                           serviceLocator())),
                                         ],

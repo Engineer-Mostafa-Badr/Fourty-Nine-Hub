@@ -1516,8 +1516,7 @@ class AppPages {
                       create: (context) => GetCurrencyCubit(serviceLocator()),
                     ),
                     BlocProvider(
-                      create: (context) =>
-                          CheckPaymentCubit(repository: serviceLocator()),
+                      create: (context) => GetCurrencyCubit(serviceLocator()),
                     ),
                     BlocProvider(
                       create: (context) => GetCurrencyCubit(serviceLocator()),
@@ -1546,7 +1545,7 @@ class AppPages {
                       create: (context) => DeleteOfferRideCubit(
                           repository: serviceLocator()),
                     ),
-                    
+
                   ],
                   child: const ShippingRiderTabScreen(),
                 );
@@ -1609,6 +1608,10 @@ class AppPages {
                                 create: (context) => PartialPaymentRiderCubit(
                                     repository: serviceLocator()),
                               ),
+                              BlocProvider(
+                                create: (context) => GetTripInfoCubit(
+                                    repository: serviceLocator()),
+                              ),
                               // BlocProvider(create: (context) => CheckTripEndCubit(repository: serviceLocator()))
                             ],
                             child: TripInfoByRiderScreen(
@@ -1659,7 +1662,7 @@ class AppPages {
                             create: (context) => GetTripOffersNoSocketCubit(
                                 repository: serviceLocator()),
                           ),
-                          
+
                           BlocProvider(
                             create: (context) => OfferNoSocketActionsCubit(
                                 repository: serviceLocator()),
@@ -1677,7 +1680,7 @@ class AppPages {
                             create: (context) => CallMessageCubit(
                                 repository: serviceLocator()),
                           ),
-                          
+
                         ], child: AllTripNoSocketScreen())
                     // BlocProvider(
                     //   create: (_) => GetAllTripRiderCubit(repository: serviceLocator())..getAllTrip(),

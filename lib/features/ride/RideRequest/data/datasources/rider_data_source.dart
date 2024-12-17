@@ -187,14 +187,16 @@ class RiderDataSource {
   }
 
   Future<Either<Failure, Map<String, dynamic>>> cancelTripClient(
-      {required String id,
-      required String reasonId,
-      required String note}) async {
-    return api.put(EndPoints.cancelTripClient(id), data: {
-      "reasonId": reasonId,
-      "note": note,
-      "riderLocation": [30.098281, 31.329383]
-    });
+      {required String id, String? reasonId, String? note}) async {
+    if (reasonId != null && note != null) {
+      return api.put(EndPoints.cancelTripClient(id), data: {
+        "reasonId": reasonId,
+        "note": note,
+        "riderLocation": [30.098281, 31.329383]
+      });
+    } else {
+      return api.put(EndPoints.cancelTripClient(id), data: {});
+    }
   }
 
   Future<Either<Failure, Map<String, dynamic>>> checkPayment(
@@ -218,6 +220,8 @@ class RiderDataSource {
       {required CreateOfferNoSocketModel model, required String tripId}) {
     return api.post("${EndPoints.createOfferNoSocket}/$tripId",
         data: model.toJson());
+      {required CreateOfferNoSocketModel model}) {
+    return api.post(EndPoints.createOfferNoSocket, data: model.toJson());
   }
 
   Future<Either<Failure, Map<String, dynamic>>> offerAcceptNoSocket(

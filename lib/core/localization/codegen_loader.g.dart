@@ -1135,9 +1135,7 @@ class CodegenLoader extends AssetLoader{
   "Cash": "نقدًا",
   "Wallet": "محفظة",
   "youHaveToFillYourNumberOfPassenger": "يجب عليك ملء عدد الركاب",
-  "waitingForReplies": "...في انتظار الردود",
-  "technicalExamination": "الفحص الفني",
-  "criminalRecord": "السجل الجنائي"
+  "waitingForReplies": "...في انتظار الردود"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2278,9 +2276,7 @@ static const Map<String,dynamic> en = {
   "Cash": "Cash",
   "Wallet": "Wallet",
   "youHaveToFillYourNumberOfPassenger": "You have to fill your Number of Passenger",
-  "waitingForReplies": "Waiting for replies...",
-  "technicalExamination": "Technical Examination",
-  "criminalRecord": "Criminal Record"
+  "waitingForReplies": "Waiting for replies..."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

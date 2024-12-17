@@ -4,8 +4,6 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class AnimatedAcceptButton extends StatefulWidget {
-  const AnimatedAcceptButton({super.key});
-
   @override
   _AnimatedAcceptButtonState createState() => _AnimatedAcceptButtonState();
 }
@@ -18,7 +16,7 @@ class _AnimatedAcceptButtonState extends State<AnimatedAcceptButton>
   void initState() {
     super.initState();
     _animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 15));
+        AnimationController(vsync: this, duration: Duration(seconds: 15));
 
     _animationController.reverse(from: 1.0);
   }

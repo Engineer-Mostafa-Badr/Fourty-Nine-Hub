@@ -49,9 +49,6 @@ class _SubCateogryShippingWidgetState extends State<SubCateogryShippingWidget> {
         if (state is FailureShippingState) {
           showErrorMessage(context, getFailureMessage(state.failure, context));
         }
-        //
-        // } else if (state is OTPSent) {
-        //
       },
       builder: (context, status) {
         if (status is LoadingShippingState) {

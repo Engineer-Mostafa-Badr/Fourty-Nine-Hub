@@ -7,10 +7,11 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 class CancelTripClientCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repository;
   CancelTripClientCubit({required this.repository}) : super(RiderInitial());
+
   cancelTripClient({
     required String id,
-    required String reasonId,
-    required String note,
+    String? reasonId,
+    String? note,
   }) async {
     var response = await repository.cancelTripClient(
         id: id, reasonId: reasonId, note: note);

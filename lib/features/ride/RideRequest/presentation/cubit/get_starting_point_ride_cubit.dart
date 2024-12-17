@@ -23,7 +23,7 @@ class GetStartingPointRideCubit extends Cubit<RiderState> {
         address: "home",
         lat: lat!,
         lng: long!,
-        type: type,
+        type: type!,
       ));
     } else {
       var response =
