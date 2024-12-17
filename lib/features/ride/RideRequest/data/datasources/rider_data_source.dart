@@ -220,8 +220,6 @@ class RiderDataSource {
       {required CreateOfferNoSocketModel model, required String tripId}) {
     return api.post("${EndPoints.createOfferNoSocket}/$tripId",
         data: model.toJson());
-      {required CreateOfferNoSocketModel model}) {
-    return api.post(EndPoints.createOfferNoSocket, data: model.toJson());
   }
 
   Future<Either<Failure, Map<String, dynamic>>> offerAcceptNoSocket(

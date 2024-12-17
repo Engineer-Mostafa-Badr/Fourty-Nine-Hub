@@ -932,7 +932,7 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            raiseFareCubit.decreasePrice(newPrice: 3);
+                            raiseFareCubit.decreasePrice();
                             setState(() {});
                           },
                           child: Container(
@@ -995,7 +995,7 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                         const Spacer(),
                         GestureDetector(
                           onTap: () {
-                            raiseFareCubit.increasePrice(newPrice: 3);
+                            raiseFareCubit.increasePrice(tripPrice: widget.model.trip?.price??0);
                             setState(() {});
                           },
                           child: Container(
@@ -1050,7 +1050,7 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                       onTap: () {
                         raiseFareCubit.update(
                             tripId: widget.model.trip?.id ?? "",
-                            tripPrice: widget.model.trip?.price ?? 0);
+                            );
                         setState(() {});
                       },
                       child: Container(
