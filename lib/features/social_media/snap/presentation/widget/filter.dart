@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:deepar_flutter/deepar_flutter.dart';
@@ -8,7 +9,8 @@ import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/snap/data/model/filter_data.dart';
+import 'package:fourtyninehub/features/social_media/snap/presentation/cubit/snap_cubit.dart';
+import 'package:fourtyninehub/features/social_media/snap/presentation/cubit/snap_states.dart';
 import 'package:fourtyninehub/features/social_media/snap/presentation/widget/media_preview_screen.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
@@ -42,22 +44,12 @@ class _HomePageState extends State<HomePage> {
     _initializeDeepArController();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    // Handle the app lifecycle changes (if needed)
-    if (state == AppLifecycleState.resumed) {
-      print('App resumed');
-    } else if (state == AppLifecycleState.paused) {
-      print('App paused');
-    }
-  }
-
 
   @override
   void dispose() {
-   // WidgetsBinding.instance.removeObserver(this); // Remove the observer
+    // WidgetsBinding.instance.removeObserver(this); // Remove the observer
     _pageController.dispose(); // Dispose the page controller
- //   deepArController.stop(); // Replace with the appropriate method if available
+    //   deepArController.stop(); // Replace with the appropriate method if available
     super.dispose();
   }
 
@@ -74,15 +66,22 @@ class _HomePageState extends State<HomePage> {
         androidLicenseKey: '930f25b8068f75e888da6f36ca5e7743d7922d9e9b33f36390e980176eaf4e84a2a048142d9b1310',
         iosLicenseKey: '111a528fa021dbf6a64decfb751ca354e59793f11926845436472e094038cd491de29c031f9ead7f',
       );
-      _applySelectedFilter();
+
+      // Apply filter from state after initialization
+      final currentState = context.read<SnapCubit>().state;
+      _applySelectedFilter(currentState);
     }
   }
 
-  void _applySelectedFilter() {
-    final filter = filters[selectedFilterIndex];
-    final effectFile = File('assets/filters/${filter.filterPath}').path;
-    deepArController.switchEffect(effectFile);
+
+  void _applySelectedFilter(SnapState state) {
+    if (state.status == SnapStates.success && state.snap != null && state.snap!.isNotEmpty) {
+      final filter = state.snap![selectedFilterIndex]; // Filter from state
+      final effectFile = File(filter.deepar).path; // Use filter path
+      deepArController.switchEffect(effectFile);
+    }
   }
+
 
   Widget buildCameraPreview() => RepaintBoundary(
     key: _key,
@@ -141,76 +140,86 @@ class _HomePageState extends State<HomePage> {
 
 
   Widget buildFilters() => Expanded(
-    child: GestureDetector(
-      onTap: () async {
-        await _captureAndSaveImage().then((value) {
-          setState(() {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MediaPreview(
-                  mediaPath: _selectedImage!.path,
-                  mediaType: MediaType.image,
-                ),
-              ),
-            );
-          });
-        });
-      },
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Center(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 5.w),
-              height: MediaQuery.of(context).size.height *
-                  0.13, // Responsive circle height
-              width: MediaQuery.of(context).size.height *
-                  0.13, // Responsive circle width
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border:
-                Border.all(color: Colors.white, width: 8.w),
-              ),
-            ),
-          ),
-          PageView.builder(
-            controller: _pageController,
-            itemCount: filters.length,
-            onPageChanged: (index) {
-                setState(() {
-                  selectedFilterIndex = index;
+    child: BlocProvider<SnapCubit>(
+      create: (BuildContext context) =>serviceLocator()..fetchFilter(),
+      child: BlocBuilder<SnapCubit,SnapState>(
+        builder: (BuildContext context, state) {
+          if(state.status ==SnapStates.success) {
+            return GestureDetector(
+              onTap: () async {
+                await _captureAndSaveImage().then((value) {
+                  setState(() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MediaPreview(
+                          mediaPath: _selectedImage!.path,
+                          mediaType: MediaType.image,
+                        ),
+                      ),
+                    );
+                  });
                 });
-
-                // Automatically apply the filter when scrolled
-                final filter = filters[index];
-                final effectFile = File('assets/filters/${filter.filterPath}').path;
-                deepArController.switchEffect(effectFile);
-            },
-            itemBuilder: (context, index) {
-              final filter = filters[index];
-              return Padding(
-                padding:  EdgeInsets.all(40.w),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  width: selectedFilterIndex == index ? 90.w : 70.w,
-                  height: selectedFilterIndex == index ? 90.h : 70.h,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    // border: Border.all(
-                    //   color:  Colors.transparent,
-                    //   width: 2,
-                    // ),
-                    image: DecorationImage(
-                      image: AssetImage('assets/previews/${filter.imagePath}'),
-                      fit: BoxFit.contain,
+              },
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Center(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 5.w),
+                      height: MediaQuery.of(context).size.height *
+                          0.13, // Responsive circle height
+                      width: MediaQuery.of(context).size.height *
+                          0.13, // Responsive circle width
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border:
+                        Border.all(color: Colors.white, width: 8.w),
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-        ],
+                  PageView.builder(
+                    controller: _pageController,
+                    itemCount: state.snap?.length,
+                    onPageChanged: (index) {
+                      setState(() {
+                        selectedFilterIndex = index;
+                      });
+
+                      // Automatically apply the filter when scrolled
+                      final filter = state.snap![index];
+                      final effectFile = File(filter.deepar).path;
+                      deepArController.switchEffect(effectFile);
+                    },
+                    itemBuilder: (context, index) {
+                      final filter = state.snap![index];
+                      return Padding(
+                        padding:  EdgeInsets.all(40.w),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          width: selectedFilterIndex == index ? 90.w : 70.w,
+                          height: selectedFilterIndex == index ? 90.h : 70.h,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            // border: Border.all(
+                            //   color:  Colors.transparent,
+                            //   width: 2,
+                            // ),
+                            image: DecorationImage(
+                              image: NetworkImage(filter.image),
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            );
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
       ),
     ),
   );

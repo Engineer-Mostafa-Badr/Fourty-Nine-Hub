@@ -53,6 +53,11 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/remove_main_
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
+import 'package:fourtyninehub/features/social_media/snap/data/data_source/snap_remote_data_source.dart';
+import 'package:fourtyninehub/features/social_media/snap/data/repository/snap_repository_impl.dart';
+import 'package:fourtyninehub/features/social_media/snap/domain/repository/snap_repository.dart';
+import 'package:fourtyninehub/features/social_media/snap/domain/use_case/fetch_filter_snap_use_case.dart';
+import 'package:fourtyninehub/features/social_media/snap/presentation/cubit/snap_cubit.dart';
 import 'package:get_it/get_it.dart';
 import '../features/account_taps/contact_us/domain/repositories/contact_us_repo.dart';
 import '../features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
@@ -122,6 +127,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<SnapRemoteDataSource>(
+      () => SnapRemoteDataSourceImpl(
+        serviceLocator(),
+      ),
+    );
 
     serviceLocator.registerLazySingleton<FourtyNineRepository>(
       () => FourtyNineRepositoryImpl(
@@ -155,6 +165,11 @@ class FourtyNineServiceLocator {
     );
     serviceLocator.registerLazySingleton<MyAdsRepo>(
       () => MyAdsRepoImpl(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<SnapRepository>(
+      () => SnapRepositoryImpl(
         serviceLocator(),
       ),
     );
@@ -400,6 +415,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<FetchFilterSnapUseCase>(
+      () => FetchFilterSnapUseCase(
+        serviceLocator(),
+      ),
+    );
     serviceLocator.registerLazySingleton<GetCurrencyUseCase>(
       () => GetCurrencyUseCase(serviceLocator()),
     );
@@ -502,6 +522,11 @@ class FourtyNineServiceLocator {
     // AdRequestsCubit
     serviceLocator.registerFactory<AdRequestsCubit>(
       () => AdRequestsCubit(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerFactory<SnapCubit>(
+      () => SnapCubit(
         serviceLocator(),
       ),
     );

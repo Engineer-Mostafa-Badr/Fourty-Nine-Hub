@@ -404,6 +404,7 @@ class EndPoints {
 
   // reels
   static const getExploreReels = '/reels/explore';
+  static const snap = '/categories/main/snap-filters';
   static const fetchReelsForFollowers = '/reels/followers?subCategory=66684135dbb427ee42aa0141';
   static const fetchReelsForFollowing = '/reels/followings';
   static saveReel(String id)=> '/reels/saved/$id';
