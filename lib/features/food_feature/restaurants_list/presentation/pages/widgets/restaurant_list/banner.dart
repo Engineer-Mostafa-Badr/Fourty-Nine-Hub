@@ -47,7 +47,7 @@ class MealBanner extends StatelessWidget {
                     cover: state.mainCategory?.cover ?? "",
                     isFavorite: state.mainCategory?.isFavorite ?? false,
                     total: state.mainCategory?.total ?? 0,
-                    nameEn: '',
+                    nameEn: context.isArabic?'أكلة':'Meal',
                   )
                 : MainCategoryEntity(
                     id: state.banner?.id ?? "",
@@ -57,7 +57,7 @@ class MealBanner extends StatelessWidget {
                     cover: state.banner?.cover ?? "",
                     isFavorite: false,
                     total: state.banner?.numberOfAds ?? 0,
-                    nameEn: ''),
+                    nameEn: context.isArabic?'أكلة':'Meal'),
             canRegister: state.isResturant?.isRestaurant == true ? false : true,
             onRegister: () {
               if (context.read<UserCubit>().isLoggedIn) {
