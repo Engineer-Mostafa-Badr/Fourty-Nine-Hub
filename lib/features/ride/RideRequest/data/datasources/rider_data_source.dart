@@ -260,4 +260,17 @@ class RiderDataSource {
       {required RattingDriverModel model}) {
     return api.post("/driver/rating", data: model.toJson());
   }
+  Future<Either<Failure, Map<String, dynamic>>> mediaUrl({required String type, required int size, required String subcategoryId}){
+    return api.post(EndPoints.mediaUrl, data: {
+    "type":"audio/$type",
+    "size": size,
+    "subcategoryId": subcategoryId
+});
+  }
+  Future<Either<Failure, Map<String, dynamic>>> recordVoiceRide({required String tripId, required String mediaId}){
+    return api.put("${EndPoints.recordVoiceRide}/$tripId", data: {"mediaId": mediaId});
+  }
+  Future<Either<Failure, Map<String, dynamic>>> confirmUpload({required String mediaId}){
+    return api.put(EndPoints.confirmUpload(mediaId));
+  }
 }

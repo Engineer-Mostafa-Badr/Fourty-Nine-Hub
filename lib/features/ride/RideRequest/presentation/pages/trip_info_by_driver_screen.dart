@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -17,12 +16,12 @@ import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widgets/dynamic_map_test.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_by_rider_model/check_accept_by_rider_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/reasons_model.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/check_trip_end_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/cancel_trip_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/completed_trip_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/rider_in_start_location_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/start_trip_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_reasons_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/record_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -50,24 +49,6 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
     // TODO: implement initState
     super.initState();
     saveData();
-    getState();
-    context.read<CheckTripEndCubit>().check();
-  }
-
-  getState() async {
-    String state = await CacheServiceImpl().getTripState();
-    log(state, name: "018233333333333333");
-    if (state == "InLocation") {
-      inLocation = true;
-    } else if (state == "start") {
-      inLocation = false;
-      start = true;
-    } else if (state == "complete") {
-      complete = true;
-      inLocation = false;
-      start = false;
-    }
-    setState(() {});
   }
 
   saveData() {
@@ -77,34 +58,10 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
 
   removeData() {
     CacheService cacheService = CacheServiceImpl();
-    cacheService.removeDriverTripInfo();
-    cacheService.removeTripState();
+    cacheService.removeRiderTripInfo();
   }
 
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-
-  Timer? _timer;
-  int _countdown = 10;
-  void startCountdown(int seconds) {
-    setState(() {
-      _countdown = seconds;
-    });
-
-    _timer?.cancel();
-
-    _timer = Timer.periodic(
-      const Duration(seconds: 1),
-      (timer) {
-        if (_countdown > 0) {
-          setState(() {
-            _countdown--;
-          });
-        } else {
-          timer.cancel(); // إنهاء العداد عندما يصل إلى الصفر
-        }
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,171 +86,272 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
               });
             }
           },
-          child: BlocListener<CheckTripEndCubit, RiderState>(
+          child: BlocListener<StartTripRiderCubit, RiderState>(
             listener: (context, state) {
-              if (state is SuccessCheckTripEndState) {
-                removeData();
-                // showErrorMessage(context, "Trip is Canceled");
-                context.pushAndRemoveUntil(
-                  Routes.HOME,
-                  (route) => false,
-                );
+              log(state.toString());
+              if (state is FailureRiderState) {
+                showErrorMessage(
+                    context, getFailureMessage(state.failure, context));
+              }
+              if (state is SuccessStartTripRiderState) {
+                setState(() {
+                  start = false;
+                  complete = true;
+                  inLocation = false;
+                  context.pop();
+                });
               }
             },
-            child: BlocListener<StartTripRiderCubit, RiderState>(
+            child: BlocListener<CancelTripRiderCubit, RiderState>(
               listener: (context, state) {
-                log(state.toString());
+                log(state.toString(),
+                    name: "CancelTripRiderCubitCancelTripRiderCubit");
                 if (state is FailureRiderState) {
                   showErrorMessage(
                       context, getFailureMessage(state.failure, context));
                 }
-                if (state is SuccessStartTripRiderState) {
-                  CacheServiceImpl().saveTripState("complete");
-                  setState(() {
-                    start = false;
-                    complete = true;
-                    inLocation = false;
-                    context.pop();
-                  });
+                if (state is SuccessCancelTripRiderState) {
+                  context.read<RecordRideCubit>().stopRecord(
+                              subcategoryId: widget.model?.subCategoryId??"",
+                              tripId: widget.model?.id??""
+                            );
+                  removeData();
+                  showSuccessDialog(context, LocaleKeys.successCancelTrip.tr());
+                  context.pushAndRemoveUntil(
+                    Routes.HOME,
+                    (route) => false,
+                  );
                 }
               },
-              child: BlocListener<CancelTripRiderCubit, RiderState>(
+              child: BlocListener<RiderInStartLocationCubit, RiderState>(
                 listener: (context, state) {
-                  log(state.toString(),
-                      name: "CancelTripRiderCubitCancelTripRiderCubit");
-                  if (state is FailureRiderState) {
-                    showErrorMessage(
-                        context, getFailureMessage(state.failure, context));
-                  }
-                  if (state is SuccessCancelTripRiderState) {
-                    removeData();
-                    showSuccessDialog(
-                        context, LocaleKeys.successCancelTrip.tr());
-                    context.pushAndRemoveUntil(
-                      Routes.HOME,
-                      (route) => false,
-                    );
+                  if (state is SuccessRiderInStartLocationState) {
+                    setState(() {
+                      inLocation = false;
+                      start = true;
+                    });
                   }
                 },
-                child: BlocListener<RiderInStartLocationCubit, RiderState>(
+                child: BlocListener<GetReasonsCubit, RiderState>(
                   listener: (context, state) {
-                    if (state is SuccessRiderInStartLocationState) {
-                      setState(() {
-                        CacheServiceImpl().saveTripState("start");
-                        inLocation = false;
-                        start = true;
-                      });
+                    if (state is SuccessGetResonsState) {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            content:
+                                BlocListener<CancelTripRiderCubit, RiderState>(
+                              listener: (context, state) {
+                                log(state.toString(),
+                                    name: "lkdjslkdfjslkdjflskdjf");
+                                if (state is SuccessCancelTripRiderState) {
+                                  removeData();
+                                  showSuccessMessage(context,
+                                      LocaleKeys.successCancelTrip.tr());
+                                  context.pop();
+                                  context.pushReplacement(
+                                    Routes.RIDE,
+                                  );
+                                }
+                                if (state is FailureRiderState) {
+                                  showErrorMessage(
+                                      context,
+                                      getFailureMessage(
+                                          state.failure, context));
+                                }
+                              },
+                              child: ReasonsDilogWidget(
+                                list: state.list,
+                                onTap: (reasonsId) {
+                                  log("slkdjflskdjlsdkjf",
+                                      name: reasonsId.toString());
+                                  context
+                                      .read<CancelTripRiderCubit>()
+                                      .cancelTripRider(
+                                        id: widget.model.id ?? "",
+                                        reasonId: reasonsId,
+                                        note: '',
+                                      );
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                    if (state is FailureRiderState) {
+                      showErrorMessage(
+                          context, getFailureMessage(state.failure, context));
                     }
                   },
-                  child: BlocListener<GetReasonsCubit, RiderState>(
-                    listener: (context, state) {
-                      if (state is SuccessGetResonsState) {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              content: BlocListener<CancelTripRiderCubit,
-                                  RiderState>(
-                                listener: (context, state) {
-                                  log(state.toString(),
-                                      name: "lkdjslkdfjslkdjflskdjf");
-                                  if (state is SuccessCancelTripRiderState) {
-                                    removeData();
-                                    showSuccessMessage(context,
-                                        LocaleKeys.successCancelTrip.tr());
-                                    context.pop();
-                                    context.pushReplacement(
-                                      Routes.RIDE,
-                                    );
-                                  }
-                                  if (state is FailureRiderState) {
-                                    showErrorMessage(
-                                        context,
-                                        getFailureMessage(
-                                            state.failure, context));
-                                  }
-                                },
-                                child: ReasonsDilogWidget(
-                                  list: state.list,
-                                  onTap: (reasonsId) {
-                                    log("slkdjflskdjlsdkjf",
-                                        name: reasonsId.toString());
-                                    context
-                                        .read<CancelTripRiderCubit>()
-                                        .cancelTripRider(
-                                          id: widget.model.id ?? "",
-                                          reasonId: reasonsId,
-                                          note: '',
-                                        );
-                                  },
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      }
-                      if (state is FailureRiderState) {
-                        showErrorMessage(
-                            context, getFailureMessage(state.failure, context));
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
+                  // listener: (context, state) {
+                  //   if (state is SuccessGetResonsState) {
+                  //     showDialog(
+                  //       context: context,
+                  //       builder: (context) {
+                  //         return AlertDialog(
+                  //             content: BlocListener<CancelTripRiderCubit,
+                  //                 RiderState>(
+                  //           listener: (context, state) {
+                  //             log(state.toString(),
+                  //                 name:
+                  //                     "CancelTripRiderCubitCancelTripRiderCubit");
+                  //             if (state is FailureRiderState) {
+                  //               showErrorMessage(context,
+                  //                   getFailureMessage(state.failure, context));
+                  //             }
+                  //             if (state is ) {
+
+                  //               showSuccessMessage(
+                  //                   context, "Success Cancel Trip ii");
+                  //               context.pushReplacement(
+                  //                 Routes.RIDE,
+                  //               );
+                  //               removeData();
+                  //             }
+                  //           },
+                  //           child: ReasonsDilogWidget(
+                  //             onTap: (reasonsId) {
+                  //               context
+                  //                   .read<CancelTripRiderCubit>()
+                  //                   .cancelTripRider(
+                  //                       id: widget.model.id ?? "",
+                  //                       reasonId: reasonsId,
+                  //                       note: "");
+                  //               context.pop();
+                  //             },
+                  //             list: state.list,
+                  //           ),
+                  //         ));
+                  //       },
+                  //     );
+                  //   }
+                  //   if (state is FailureRiderState) {
+                  //     showErrorMessage(
+                  //         context, getFailureMessage(state.failure, context));
+                  //   }
+                  // },
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          const Spacer(),
+                          Sizer(
+                            height: 48.h,
+                          ),
+                          const SizedBox(
+                            height: 200,
+                            child: DynamicMapWithPolyline(
+                              polylineString: "",
+                              // BlocProvider.of<GetTripInfoCubit>(context).polyLine,
+                              useGoogleMaps: true,
+                              url:
+                                  "https://maps.googleapis.com/maps/api/js?key=AIzaSyBBHEFa7D7qMSL4ivZhCqRQ4ok4sQN-Egc",
+                              apiKey: "AIzaSyBBHEFa7D7qMSL4ivZhCqRQ4ok4sQN-Egc",
+                            ),
+                          ),
                           Column(
                             children: [
+                              const Sizer(
+                                height: 36,
+                              ),
                               Row(
                                 children: [
-                                  Container(
-                                    width: 15,
-                                    height: 15,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                            color: Colors.blue, width: 3)),
+                                  Text(
+                                    context.isArabic
+                                        ? "رحلتك الحالية"
+                                        : "Your current ride",
+                                    style: Styles.mediumText(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 32,
+                                        color: AppColors.DARK_GRAY_COLOR),
                                   ),
-                                  const Sizer(),
-                                  Flexible(
-                                      child: Text(widget.model.fromTitle ?? ""))
+                                  const Spacer()
                                 ],
                               ),
-                              const Sizer(
-                                height: 20,
-                              ),
+                              const Sizer(),
                               Row(
                                 children: [
                                   Container(
-                                    width: 15,
-                                    height: 15,
+                                    width: 20,
+                                    height: 20,
                                     decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         border: Border.all(
-                                            color: Colors.green, width: 3)),
+                                            color: const Color.fromRGBO(
+                                                6, 147, 45, 1),
+                                            width: 5)),
                                   ),
-                                  const Sizer(),
+                                  const Sizer(
+                                    width: 24,
+                                  ),
                                   Flexible(
-                                      child: Text(widget.model.toTitle ?? "")),
+                                      child: Text(
+                                    "${widget.model.fromTitle}",
+                                    style: Styles.mediumText(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w500),
+                                  )),
+                                ],
+                              ),
+                              const Sizer(),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: const Color.fromRGBO(
+                                                255, 132, 125, 1),
+                                            width: 5)),
+                                  ),
+                                  const Sizer(
+                                    width: 24,
+                                  ),
+                                  Flexible(
+                                      child: Text(
+                                    "${widget.model.toTitle}",
+                                    style: Styles.mediumText(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w500),
+                                  ))
                                 ],
                               ),
                               const Sizer(
                                 height: 30,
                               ),
-                              Row(
-                                children: [
-                                  Text(
-                                      "${LocaleKeys.travelTime.tr()}: ${formatDuration(widget.model.duration ?? 0)}"),
-                                ],
+                              Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                width: double.infinity,
+                                height: 46,
+                                decoration: BoxDecoration(
+                                    color:
+                                        const Color.fromRGBO(226, 244, 255, 1),
+                                    borderRadius: BorderRadius.circular(13)),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.info_outline,
+                                      color: const Color(0xFF0E4669),
+                                    ),
+                                    const Sizer(),
+                                    Flexible(
+                                      child: Text(
+                                        "${LocaleKeys.travelTime.tr()}: ~${formatDuration(widget.model.duration ?? 0)} , ${LocaleKeys.Distance.tr()}: ${formatDistance(widget.model.distance ?? 0)}",
+                                        style: Styles.mediumText(
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    const Sizer(),
+                                  ],
+                                ),
                               ),
                               const Sizer(
                                 height: 30,
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                      "${LocaleKeys.destination.tr()} : ${formatDistance(widget.model.distance ?? 0)}"),
-                                ],
                               ),
                             ],
                           ),
@@ -304,8 +362,12 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
                           Row(
                             children: [
                               Flexible(
-                                child: DefaultButton(
-                                  padding: EdgeInsets.zero,
+                                child: AppButton(
+                                  backColor: AppColors.PRIMARY_COLOR,
+                                  height: 80.h,
+                                  style: Styles.mediumText(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
                                   width: double.infinity,
                                   label: LocaleKeys.openGoogleMap.tr(),
                                   onPressed: () {
@@ -330,8 +392,12 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
                               ),
                               const Sizer(),
                               Flexible(
-                                child: DefaultButton(
-                                  padding: EdgeInsets.zero,
+                                child: AppButton(
+                                  backColor: AppColors.PRIMARY_COLOR,
+                                  height: 80.h,
+                                  style: Styles.mediumText(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
                                   width: double.infinity,
                                   label: inLocation
                                       ? LocaleKeys.inLocation.tr()
@@ -408,13 +474,15 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
                           Row(
                             children: [
                               Flexible(
-                                child: DefaultButton(
-                                  backgroundColor: Colors.red,
-                                  padding: EdgeInsets.zero,
+                                child: AppButton(
+                                  backColor: AppColors.PRIMARY_COLOR_DARK,
+                                  height: 80.h,
+                                  style: Styles.headerText(
+                                    color: Colors.white,
+                                  ),
                                   width: double.infinity,
                                   label: LocaleKeys.cancel.tr(),
                                   onPressed: () {
-                                    // removeData();
                                     context.read<GetReasonsCubit>().get();
                                   },
                                 ),

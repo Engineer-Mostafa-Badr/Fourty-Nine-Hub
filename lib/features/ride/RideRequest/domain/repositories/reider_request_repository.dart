@@ -414,4 +414,21 @@ class ReiderRequestRepository {
       {required RattingDriverModel model}) {
     return dataSource.rating(model: model);
   }
+  Future<Either<Failure, Map<String, dynamic>>> recordVoiceRide({required String tripId, required String mediaId}) {
+    return dataSource.recordVoiceRide(mediaId: mediaId, tripId: tripId);
+  }
+  Future<Either<Failure, Map<String, dynamic>>> confirmUpload({required String mediaId}) {
+    return dataSource.confirmUpload(mediaId: mediaId);
+  }
+  Future<Either<Failure, Map<String, dynamic>>> mediaUrl({
+  required String type,
+  required int size,
+  required String subcategoryId,
+}) {
+    return dataSource.mediaUrl(
+      size: size,
+      subcategoryId: subcategoryId,
+      type: type
+    );
+  }
 }

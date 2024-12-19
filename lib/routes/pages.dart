@@ -754,7 +754,7 @@ class AppPages {
               ],
               builder: (context, state) => BlocProvider<AzkarCubit>(
                     create: (_) => serviceLocator(),
-                    child: AzkarView(),
+                    child: const AzkarView(),
                   )),
 
           // WalletView

@@ -27,6 +27,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_t
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/offer_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/raise_fare_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/record_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
@@ -365,7 +366,15 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                       builder:
                                                           (context, state) {
                                                         return Text(
-                                                          "${context.isArabic ? BlocProvider.of<GetCurrencyCubit>(context).currnecyAr : BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}",
+                                                          context.isArabic
+                                                              ? BlocProvider.of<
+                                                                          GetCurrencyCubit>(
+                                                                      context)
+                                                                  .currnecyAr
+                                                              : BlocProvider.of<
+                                                                          GetCurrencyCubit>(
+                                                                      context)
+                                                                  .currnecyEn,
                                                           style: const TextStyle(
                                                               color: AppColors
                                                                   .QUANTITY_COLOR,
@@ -542,46 +551,46 @@ class _RideRequestViewState extends State<RideRequestView> {
               },
             ),
             Stack(
-                          children: [
-            Positioned.fill(
-              child: BlocProvider(
-                create: (BuildContext context) =>
-                    serviceLocator<RiderequestCubit>(),
-                child: BlocBuilder<RiderequestCubit, RiderequestState>(
-                  builder: (context, state) {
-                    final rideCubit = context.read<RiderequestCubit>();
-                    if (state.fromAddress != null &&
-                        state.toAddress != null) {
-                      return MapPicker(
-                        lat: state.fromAddress?.lat,
-                        lng: state.fromAddress?.lng,
-                        destLat: state.toAddress?.lat,
-                        destLng: state.toAddress?.lng,
-                      );
-                    }
-                    return MapPicker(
-                      lat: state.fromAddress?.lat,
-                      lng: state.fromAddress?.lng,
-                      onAddressPicked: (AddressSearchParamsEntity v) =>
-                          rideCubit.selectPickUpLocation(item: v),
-                    );
-                  },
+              children: [
+                Positioned.fill(
+                  child: BlocProvider(
+                    create: (BuildContext context) =>
+                        serviceLocator<RiderequestCubit>(),
+                    child: BlocBuilder<RiderequestCubit, RiderequestState>(
+                      builder: (context, state) {
+                        final rideCubit = context.read<RiderequestCubit>();
+                        if (state.fromAddress != null &&
+                            state.toAddress != null) {
+                          return MapPicker(
+                            lat: state.fromAddress?.lat,
+                            lng: state.fromAddress?.lng,
+                            destLat: state.toAddress?.lat,
+                            destLng: state.toAddress?.lng,
+                          );
+                        }
+                        return MapPicker(
+                          lat: state.fromAddress?.lat,
+                          lng: state.fromAddress?.lng,
+                          onAddressPicked: (AddressSearchParamsEntity v) =>
+                              rideCubit.selectPickUpLocation(item: v),
+                        );
+                      },
+                    ),
+                  ),
                 ),
-              ),
+                Positioned(
+                    bottom: 10,
+                    right: 10,
+                    left: 10,
+                    child: DashboardBanner(
+                      title: LocaleKeys.driverDashboard.tr(),
+                      subTitle: LocaleKeys
+                          .newTripsAreWaitingYouGoToDriverDashboardAndExploreMore
+                          .tr(),
+                      route: Routes.RIDERDASHBOARD,
+                    )),
+              ],
             ),
-            Positioned(
-                bottom: 10,
-                right: 10,
-                left: 10,
-                child: DashboardBanner(
-                  title: LocaleKeys.driverDashboard.tr(),
-                  subTitle: LocaleKeys
-                      .newTripsAreWaitingYouGoToDriverDashboardAndExploreMore
-                      .tr(),
-                  route: Routes.RIDERDASHBOARD,
-                )),
-                          ],
-                        ),
           ],
         ),
       ),
@@ -808,9 +817,15 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
     var raiseFareCubit = context.read<RaiseFareCubit>();
     return BlocListener<CancelTripClientCubit, RiderState>(
       listener: (context, state) {
+        
         log(state.toString(), name: "lkdjslkdfjslkdjflskdjf");
         if (state is SuccessCancelTripClientState) {
+          
           context.pop();
+          context.read<RecordRideCubit>().stopRecord(
+                              subcategoryId: widget.model.trip?.subCategoryId??"",
+                              tripId: widget.model.trip?.id??""
+                            );
         }
         if (state is FailureRiderState) {
           showErrorMessage(context, getFailureMessage(state.failure, context));
@@ -842,39 +857,31 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                   SizedBox(
                     height: 30,
                     width: 100,
-                    child: Expanded(
-                      child: Stack(
-                        children: [
-                          ...List.generate(
-                            widget.model.closerDrivers?.take(5).length ?? 0,
-                            (index) {
-                              // log(model.closerDrivers?.take(5).length.toString()??"99999",
-                              //     name: "lskdfjlskf");
-                              log((10 + (index + 10)).toString(),
-                                  name: "lkdjflsdkjfldkjf");
-                              spase = spase + 10;
-                              return Positioned(
-                                right: spase.toDouble(),
-                                child: Container(
-                                  width: 25,
-                                  height: 25,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    // color: Colors.green,
-                                    image: DecorationImage(
+                    child: Stack(
+                      children: [
+                        ...List.generate(
+                          widget.model.closerDrivers?.take(5).length ?? 0,
+                          (index) {
+                            return Positioned(
+                              left: index * 15,
+                              child: Container(
+                                width: 25,
+                                height: 25,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
                                       image: NetworkImage(
                                         widget.model.closerDrivers?[index]
                                                 .userData?.userPicture ??
                                             "",
                                       ),
-                                    ),
-                                  ),
+                                      fit: BoxFit.cover),
                                 ),
-                              );
-                            },
-                          )
-                        ],
-                      ),
+                              ),
+                            );
+                          },
+                        )
+                      ],
                     ),
                   )
                 ],
@@ -932,6 +939,7 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                       children: [
                         GestureDetector(
                           onTap: () {
+                            
                             raiseFareCubit.decreasePrice();
                             setState(() {});
                           },
@@ -939,7 +947,7 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                             height: 60,
                             width: MediaQuery.of(context).size.width * 0.25,
                             decoration: BoxDecoration(
-                                color: raiseFareCubit.price != null
+                                color: raiseFareCubit.active
                                     ? AppColors.PRIMARY_COLOR
                                     : AppColors.LIGHT_GRAY_COLOR
                                         .withOpacity(0.2),
@@ -981,7 +989,7 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                             BlocBuilder<GetCurrencyCubit, GetCurrencyState>(
                               builder: (context, state) {
                                 return Text(
-                                  "${context.isArabic ? BlocProvider.of<GetCurrencyCubit>(context).currnecyAr : BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}${(widget.model.trip?.price?.toInt() ?? 0) + (raiseFareCubit.currentPrice?.toInt() ?? 0)}",
+                                  "${context.isArabic ? BlocProvider.of<GetCurrencyCubit>(context).currnecyAr : BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}${(raiseFareCubit.price?.toInt() ?? (widget.model.trip?.price?.toInt() ?? 0))}",
                                   style: Styles.headerText(
                                       fontSize: 56,
                                       color: context.isDarkMode
@@ -995,7 +1003,9 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                         const Spacer(),
                         GestureDetector(
                           onTap: () {
-                            raiseFareCubit.increasePrice(tripPrice: widget.model.trip?.price??0);
+                            
+                            raiseFareCubit.increasePrice(
+                                tripPrice: widget.model.trip?.price ?? 0);
                             setState(() {});
                           },
                           child: Container(
@@ -1028,7 +1038,7 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                         children: [
                           const Icon(
                             Icons.info_outline,
-                            color: const Color(0xFF0E4669),
+                            color: Color(0xFF0E4669),
                           ),
                           const Sizer(),
                           Flexible(
@@ -1049,15 +1059,15 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                     GestureDetector(
                       onTap: () {
                         raiseFareCubit.update(
-                            tripId: widget.model.trip?.id ?? "",
-                            );
+                          tripId: widget.model.trip?.id ?? "",
+                        );
                         setState(() {});
                       },
                       child: Container(
                         height: 60,
                         width: double.infinity,
                         decoration: BoxDecoration(
-                            color: raiseFareCubit.price != null
+                            color: raiseFareCubit.active
                                 ? AppColors.PRIMARY_COLOR
                                 : AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(10)),
@@ -1117,11 +1127,11 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                                   Icons.credit_card,
                                   color: Colors.black,
                                 ),
-                                Sizer(),
+                                const Sizer(),
                                 BlocBuilder<GetCurrencyCubit, GetCurrencyState>(
                                   builder: (context, state) {
                                     return Text(
-                                      "${context.isArabic ? BlocProvider.of<GetCurrencyCubit>(context).currnecyAr : BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}${(widget.model.trip?.price?.toInt() ?? 0) + (raiseFareCubit.currentPrice?.toInt() ?? 0)} ${widget.model.trip?.paymentMethod}",
+                                      "${context.isArabic ? BlocProvider.of<GetCurrencyCubit>(context).currnecyAr : BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}${(raiseFareCubit.price?.toInt() ?? (widget.model.trip?.price?.toInt() ?? 0))} ${widget.model.trip?.paymentMethod}",
                                       style: Styles.mediumText(
                                           color: context.isDarkMode
                                               ? Colors.white
@@ -1174,7 +1184,7 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                       ],
                     ),
                     const Sizer(),
-                    Spacer(),
+                    const Spacer(),
                     GestureDetector(
                       onTap: () async {
                         print(widget.model.trip?.id);
@@ -1242,6 +1252,7 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                                         ),
                                         GestureDetector(
                                           onTap: () async {
+                                            
                                             await context
                                                 .read<CancelTripClientCubit>()
                                                 .cancelTripClient(
@@ -1297,7 +1308,7 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                         )),
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                   ],
                 ),
               ),

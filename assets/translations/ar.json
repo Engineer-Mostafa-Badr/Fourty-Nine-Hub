@@ -1115,8 +1115,8 @@
 
   "failedTryAgain":"فشل. من فضلك حاول مجددا",
   "publishSubmitted": "تم إرسال موهبتك بنجاح، انتظر موافقة الإدارة",
-    "loadingDashboard": "جاري تحميل لوحة التحكم",
-    "rideDashboard": "لوحة تحكم الرحلات",
+    "loadingDashboard": "لوحة تحكم تحميلة",
+    "rideDashboard": "لوحة تحكم توصيلة",
     "sendYourOffer": "أرسل عرضك",
     "Distance": "المسافة",
     "yourOfferSendSuccess": "تم إرسال عرضك بنجاح",
@@ -1158,7 +1158,7 @@
     "Cash": "نقدًا",
     "Wallet": "محفظة",
     "youHaveToFillYourNumberOfPassenger": "يجب عليك ملء عدد الركاب",
-    "waitingForReplies":"...في انتظار الردود"
+    "waitingForReplies":"...في انتظار الردود",
 
   "todayAppointments": "مواعيد اليوم",
   "noAppointments": "لا توجد مواعيد",

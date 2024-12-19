@@ -10,7 +10,6 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/presentatio
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/header.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/reviews.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/waiting.dart';
-import '../../../../../res/strings/labels.dart';
 
 class DoctorDetailsParams{
   final String doctorId;

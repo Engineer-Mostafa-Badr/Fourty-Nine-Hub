@@ -17,7 +17,7 @@ class OfferCubit extends Cubit<RiderState> {
       },
       (r) {
         log(r.toString(), name: "sldkfjsldkjfdkdkdkdkdkdkkkkkk");
-        print("response ${response}\n");
+        print("response $response\n");
         CheckAcceptTripFromDriverModel model =
             CheckAcceptTripFromDriverModel.fromJson(r['data']['isTripExists']);
         model.otp = r['data']['OTP'];

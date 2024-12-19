@@ -78,8 +78,6 @@ class OfferRideCardWidget extends StatelessWidget {
                         children: [
                           Image.asset(
                             width: 60,
-                            // Use the appropriate image based on status and gender
-
                             model.driverId?.userId?.gender?.toLowerCase() ==
                                     'female'
                                 ? Assets.femaleImagePlacehlder

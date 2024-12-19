@@ -1353,7 +1353,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                 const Sizer(),
                               ],
                             ),
-                            separatorBuilder: (context, _) => Sizer(),
+                            separatorBuilder: (context, _) => const Sizer(),
                             itemCount: users.length,
                           );
                         }).toList(),

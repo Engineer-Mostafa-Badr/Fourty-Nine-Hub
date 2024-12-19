@@ -20,12 +20,13 @@ class MainCategoryBanner extends StatefulWidget {
   final Function()? onRegister;
   final Function() onFavorite;
   bool? isFavorite;
-
+  final bool removeFavorite;
   MainCategoryBanner({
     super.key,
     this.canRegister = false,
     this.onRegister,
     required this.category,
+    this.removeFavorite = false,
     required this.onFavorite,
     this.isFavorite,
   });
@@ -72,7 +73,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: context.locale == Locales.english?widget.category.nameEn!:widget.category.name,
+              text: context.locale == Locales.english?widget.category.nameEn!:widget.category.name??"",
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -84,7 +85,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   context.read<UserCubit>().isLoggedIn
-                      ? IconButton(
+                      ? widget.removeFavorite?Container(): IconButton(
                           color: AppColors.SECONDARY_COLOR,
                           onPressed: () async {
                             final result = await widget.onFavorite();
@@ -142,7 +143,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: widget.category.name,
+              text: widget.category.name??"",
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

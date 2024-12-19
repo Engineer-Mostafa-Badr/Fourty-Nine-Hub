@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_payment_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/raise_fare_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/record_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
@@ -126,7 +127,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                           : Colors.black,
                                       errorText: context.isArabic
                                           ? "الأجرة الموصى بها هي ${BlocProvider.of<GetCurrencyCubit>(context).currnecyAr}${widget.model.price?.toInt()}"
-                                          : "Recommended fare is ${BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}${widget.model.price?.toInt()}",
+                                          : "Recommended fare is ${BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}${(getTripInfoCubit.model.comfort??false)?((widget.model.comfort??0)+(widget.model.price??0)): widget.model.price?.toInt()}",
                                       focusedErrorBorder:
                                           const UnderlineInputBorder(
                                         borderSide: BorderSide(
@@ -134,7 +135,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                       ),
                                       contentPadding: const EdgeInsets.only(
                                           top: 4), // Add 4 padding from top
-                                      errorStyle: TextStyle(
+                                      errorStyle: const TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 18,
                                           color: AppColors.PRIMARY_COLOR_DARK),
@@ -747,7 +748,9 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                 //     subcategoryId: state.model.trip?.subCategoryId ?? "");
                                 await BlocProvider.of<GetCurrencyCubit>(context)
                                     .getCurrencyData();
-
+                                if (getTripInfoCubit.record) {
+                                  context.read<RecordRideCubit>().startRecord();
+                                }
                                 showModalBottomSheet(
                                   context: context,
                                   isDismissible:

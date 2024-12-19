@@ -43,8 +43,8 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
           height: 330.h,
           padding: const EdgeInsets.all(30),
           // margin: EdgeInsets.all(kToolbarHeight),
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
             ),

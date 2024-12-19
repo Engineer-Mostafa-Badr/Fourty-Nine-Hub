@@ -75,11 +75,11 @@ class FollowCubit extends Cubit<FollowState> {
   }
 
   Future<void> fetchAllFollowers(String search) async {
-    await _fetchData(search, _allFollowersUseCase, followers);
+    await _fetchData(search, _allFollowersUseCase.call, followers);
   }
 
   Future<void> fetchAllFollowing(String search) async {
-    await _fetchData(search, _allFollowingUseCase, following);
+    await _fetchData(search, _allFollowingUseCase.call, following);
   }
 }
 

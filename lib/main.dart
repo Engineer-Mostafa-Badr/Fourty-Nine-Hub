@@ -32,6 +32,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_c
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_reasons_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/offer_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/record_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/send_offer_by_driver_cubit.dart';
@@ -162,6 +163,11 @@ class _MyAppState extends State<MyApp> {
           create: (context) =>
               AcceptOfferByDriverCubit(repository: serviceLocator()),
         ),
+        BlocProvider(
+          create: (context) =>
+              RecordRideCubit(repository: serviceLocator()),
+        ),
+        // //  tinder to be reviewed
         // BlocProvider(
         //   create: (context) => serviceLocator<CreateShippingRequestCubit>(),
         // ),

@@ -5,11 +5,11 @@ import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_info_model.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_payment_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/offer_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/raise_fare_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/record_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
@@ -91,6 +91,7 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
                   tripId: state.model.trip?.id ?? "",
                   location: state.model.trip?.riderLocation?.coordinates ?? [],
                   subcategoryId: state.model.trip?.subCategoryId ?? "");
+              
               showModalBottomSheet(
                 context: context,
                 isDismissible: false, // Prevent dismissing by tapping outside
@@ -129,7 +130,6 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
                 if (state.data != null) {
                   await BlocProvider.of<GetCurrencyCubit>(context)
                       .getCurrencyData();
-
                   log(state.data?.firstName.toString() ?? "null",
                       name: "slkfjslkdjf");
                   final overlay = Overlay.of(context);

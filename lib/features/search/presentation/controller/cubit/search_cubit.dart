@@ -433,11 +433,11 @@ class SearchCubit extends Cubit<SearchState> {
             ?.firstWhere((element) => element.id == postId);
         print("commmmmment count${currentPost?.commentsCount}");
 
-        currentPost?.commentsCount = (currentPost.commentsCount! - 1);
+        currentPost?.commentsCount = (currentPost.commentsCount - 1);
       } else {
         if (state.postDetails != null) {
           state.postDetails?.commentsCount =
-              (state.postDetails!.commentsCount! - 1);
+              (state.postDetails!.commentsCount - 1);
         }
       }
       emit(state.copyWith(status: SearchStates.success));
@@ -473,7 +473,7 @@ class SearchCubit extends Cubit<SearchState> {
             ?.firstWhere((element) => element.id == params.postId);
         print("comment count${currentPost?.commentsCount}");
 
-        currentPost?.commentsCount = (currentPost.commentsCount! + 1);
+        currentPost?.commentsCount = (currentPost.commentsCount + 1);
       }
       emit(state.copyWith(status: SearchStates.success));
     });
@@ -495,7 +495,7 @@ class SearchCubit extends Cubit<SearchState> {
             ?.firstWhere((element) => element.id == params.postId);
         print("commmmmment count${currentPost?.commentsCount}");
 
-        currentPost?.commentsCount = (currentPost.commentsCount! + 1);
+        currentPost?.commentsCount = (currentPost.commentsCount + 1);
       }
 
       emit(state.copyWith(newComment: data, status: SearchStates.success));

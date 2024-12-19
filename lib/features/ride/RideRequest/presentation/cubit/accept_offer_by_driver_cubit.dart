@@ -19,7 +19,7 @@ class AcceptOfferByDriverCubit extends Cubit<RiderState> {
         emit(FailureRiderState(failure: l));
       },
       (r) {
-        print("response ${response}\n");
+        print("response $response\n");
         CheckAcceptByRiderModel model =
             CheckAcceptByRiderModel.fromJson(r['data']);
         log(r.toString(),

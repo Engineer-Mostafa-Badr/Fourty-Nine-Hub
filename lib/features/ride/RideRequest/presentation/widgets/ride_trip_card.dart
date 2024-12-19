@@ -155,13 +155,14 @@ class RideTripCard extends StatelessWidget {
                                         double.parse(sendOfferController.text));
                               }
                             },
-                            label: LocaleKeys.sendYourOffer.tr(),
+                            label: context.isArabic?"أرسل عرضك": "Send Your Offer",
                             height: 40,
                             color: Colors.white,
                           )
                         ],
                       ),
                     );
+                    
                   },
                 );
               }

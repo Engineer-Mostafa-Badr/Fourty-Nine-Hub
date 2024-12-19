@@ -91,7 +91,7 @@ class _AdRequestsViewState extends State<AdRequestsView> {
               ),
             ),
           ),
-          Sizer(),
+          const Sizer(),
           Expanded(
             child: BlocBuilder<AdRequestsCubit, AdRequestsState>(
               builder: (context, state) {

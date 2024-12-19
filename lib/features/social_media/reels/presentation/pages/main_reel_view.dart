@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_state.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/reels_widget.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../res/style/app_colors.dart';
 import '../controllers/preload_cubit/preload_bloc.dart';

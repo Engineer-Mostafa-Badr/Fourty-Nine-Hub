@@ -262,6 +262,8 @@ class EndPoints {
       "$developmentBaseUrl/ride/trip/user/trip";
   static String deleteTripNoSocket = "$developmentBaseUrl/ride/trip";
 
+  static String recordVoiceRide = "$developmentBaseUrl/ride/trips/record-voice";
+
   //shipping
   static String bannerData = "$developmentBaseUrl/loading/driver/subcategory";
   static const drivingLicenseS3 = '/ride/info/driving-license';

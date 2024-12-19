@@ -433,7 +433,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                       const Sizer(),
                       InkWell(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewFollowersAndFollowing()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>const ViewFollowersAndFollowing()));
                         },
                         child: _buildCounter(
                           value: '${user.followersCount} ',
@@ -443,7 +443,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                       const Sizer(),
                       InkWell(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewFollowersAndFollowing()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>const ViewFollowersAndFollowing()));
                         },
                         child: _buildCounter(
                           value: '${user.followingCount} ',

@@ -26,7 +26,7 @@ class GetDoctorDetailsIdParams {
   });
 
   Map<String, dynamic> toJson() {
-    print("objectLogType${bookingType}");
+    print("objectLogType$bookingType");
     final Map<String, dynamic> data = <String, dynamic>{};
     data['subCategoryId'] = subCategoryId;
     if (bookingType != null&&bookingType!='') {

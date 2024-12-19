@@ -1,6 +1,5 @@
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/models/work_day_model.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_work_days_entity.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/work_day_entity.dart';
 
 class DoctorWorkDaysModel extends DoctorWorkDaysEntity{
   DoctorWorkDaysModel({required super.id, required super.clinic, required super.visitHome, required super.calls, required super.doctorId, required super.clinicPrice, required super.waitingTime, required super.detectionPeriodClinic, required super.visitHomePrice, required super.detectionPeriodVisitHome, required super.callsPrice, required super.detectionPeriodCalls, required super.createdAt, required super.updatedAt});

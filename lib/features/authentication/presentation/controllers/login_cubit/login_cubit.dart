@@ -9,7 +9,6 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../../domain/use_cases/apple_sign_in_usecase.dart';
 import '../../../domain/use_cases/login_use_case.dart';
@@ -122,7 +121,7 @@ class LoginCubit extends Cubit<LoginState> {
         // Create a credential from the access token
         final OAuthCredential facebookAuthCredential =
             FacebookAuthProvider.credential(
-                loginResult.accessToken!.tokenString);
+                loginResult.accessToken!.token);
 
         // Sign in with Firebase using the credential
         UserCredential userCredential = await FirebaseAuth.instance

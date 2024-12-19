@@ -56,8 +56,6 @@ class WebSocketHelper {
       socket.on('NotificationCreated', (data) {
         log(data.toString(), name: "Ljkdlfjsdlfkjsldkfjsldkjflskdjf");
         pr('NotificationCreated Event is recieved and the data is: ');
-        index++;
-        pr('NotificationCreated Event is recieved and the data is $index}: ');
         pr(data);
         Map<String, dynamic> json = jsonDecode(data);
         AudioPlayer player = AudioPlayer();

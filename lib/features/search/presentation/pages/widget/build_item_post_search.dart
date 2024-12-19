@@ -183,22 +183,22 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                     children: [
                       if (myPost.likesCount != 0)
                         _buildCounterWidget(
-                            value: myPost.likesCount!, image: Assets.like),
+                            value: myPost.likesCount, image: Assets.like),
                       if (myPost.hahaCount != 0)
                         _buildCounterWidget(
-                            value: myPost.hahaCount!, image: Assets.haha),
+                            value: myPost.hahaCount, image: Assets.haha),
                       if (myPost.loveCount != 0)
                         _buildCounterWidget(
-                            value: myPost.loveCount!, image: Assets.heart),
+                            value: myPost.loveCount, image: Assets.heart),
                       if (myPost.wowCount != 0)
                         _buildCounterWidget(
-                            value: myPost.wowCount!, image: Assets.wow),
+                            value: myPost.wowCount, image: Assets.wow),
                       if (myPost.sadCount != 0)
                         _buildCounterWidget(
-                            value: myPost.sadCount!, image: Assets.sad),
+                            value: myPost.sadCount, image: Assets.sad),
                       if (myPost.angryCount != 0)
                         _buildCounterWidget(
-                            value: myPost.angryCount!, image: Assets.angry),
+                            value: myPost.angryCount, image: Assets.angry),
                       const Spacer(),
                       InkWell(
                         onTap: () => widget.showPostComments(myPost.id),
@@ -421,22 +421,22 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                   children: [
                     if (myPost.likesCount != 0)
                       _buildCounterWidget(
-                          value: myPost.likesCount!, image: Assets.like),
+                          value: myPost.likesCount, image: Assets.like),
                     if (myPost.hahaCount != 0)
                       _buildCounterWidget(
-                          value: myPost.hahaCount!, image: Assets.haha),
+                          value: myPost.hahaCount, image: Assets.haha),
                     if (myPost.loveCount != 0)
                       _buildCounterWidget(
-                          value: myPost.loveCount!, image: Assets.heart),
+                          value: myPost.loveCount, image: Assets.heart),
                     if (myPost.wowCount != 0)
                       _buildCounterWidget(
-                          value: myPost.wowCount!, image: Assets.wow),
+                          value: myPost.wowCount, image: Assets.wow),
                     if (myPost.sadCount != 0)
                       _buildCounterWidget(
-                          value: myPost.sadCount!, image: Assets.sad),
+                          value: myPost.sadCount, image: Assets.sad),
                     if (myPost.angryCount != 0)
                       _buildCounterWidget(
-                          value: myPost.angryCount!, image: Assets.angry),
+                          value: myPost.angryCount, image: Assets.angry),
                     const Spacer(),
                     InkWell(
                       onTap: () => widget.showPostComments(myPost.id),

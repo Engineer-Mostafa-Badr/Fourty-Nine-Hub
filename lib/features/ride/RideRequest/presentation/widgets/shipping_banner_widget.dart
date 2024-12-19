@@ -49,7 +49,7 @@ class _ShippingBannerWidgetState extends State<ShippingBannerWidget> {
                 // if(!(state.model.mainCategory?.haveTrip??false))
                 DashboardBanner(
                   onTap: () => context.push(Routes.DASHBOARDDRIVERSCREEN),
-                  title: Labels.loadingDashboard,
+                  title: LocaleKeys.loadingDashboard.tr(),
                   subTitle: "",
                   route: Routes.DOCTORDASHBOARD,
                 ),
