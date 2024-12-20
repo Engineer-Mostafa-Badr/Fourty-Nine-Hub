@@ -39,10 +39,10 @@ void showSnackBarAfterBuild({
     duration: duration,
     action: actionLabel != null
         ? SnackBarAction(
-      label: actionLabel,
-      onPressed: onActionPressed ?? () {},
-      textColor: actionTextColor,
-    )
+            label: actionLabel,
+            onPressed: onActionPressed ?? () {},
+            textColor: actionTextColor,
+          )
         : null,
     behavior: SnackBarBehavior.floating,
     shape: RoundedRectangleBorder(

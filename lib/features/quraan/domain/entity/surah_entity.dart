@@ -17,6 +17,4 @@ class SurahEntity {
       required this.hizbQuarter,
       required this.placeOfRevelation,
       required this.sajahAyah});
-
-
 }

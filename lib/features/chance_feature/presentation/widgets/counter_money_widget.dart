@@ -45,7 +45,8 @@ class _CounterMoneyWidgetState extends State<CounterMoneyWidget> {
         Container(
           width: context.screenWidth / 1.7,
           height: 70.h,
-          padding: EdgeInsets.only(top: 3.h, bottom: 3.h, left: 2.w, right: 25.w),
+          padding:
+              EdgeInsets.only(top: 3.h, bottom: 3.h, left: 2.w, right: 25.w),
           decoration: BoxDecoration(
             color: AppColors.PRIMARY_COLOR,
             borderRadius: BorderRadius.circular(10),

@@ -38,7 +38,7 @@ class ChatProfileView extends StatelessWidget {
             // Profile Picture Section
             Stack(
               children: [
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 60,
                   backgroundImage: NetworkImage(
                     UIConst.profilePlaceHolder,

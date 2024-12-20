@@ -34,14 +34,14 @@ class AddChanceParams {
   });
 
   Map<String, dynamic> toJson() => {
-    'title': title,
-    'price': price,
-    'images': images,
-    'description': description,
-    'subCategoryId': subCategoryId,
-    'mainCategoryId': mainCategoryId,
-    "props": props.map((prop) => prop.toMap()).toList(),
-  };
+        'title': title,
+        'price': price,
+        'images': images,
+        'description': description,
+        'subCategoryId': subCategoryId,
+        'mainCategoryId': mainCategoryId,
+        "props": props.map((prop) => prop.toMap()).toList(),
+      };
 }
 
 class Property {

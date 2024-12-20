@@ -17,7 +17,7 @@ class CheckBoxParams{
 }
 // ignore: must_be_immutable
 class EditTimeTableOptionsCheckbox extends StatelessWidget {
-  EditTimeTableOptionsCheckbox({super.key});
+  const EditTimeTableOptionsCheckbox({super.key});
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EditDoctorTimetableCubit, EditDoctorTimetableState>(

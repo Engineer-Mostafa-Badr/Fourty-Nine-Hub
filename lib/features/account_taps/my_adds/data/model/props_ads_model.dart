@@ -1,10 +1,9 @@
-
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/props_ads_entity.dart';
 
 class PropsAdsModel extends PropsAdsEntity {
   PropsAdsModel(
       {required super.id,
-    //  required super.propertyDetails,
+      //  required super.propertyDetails,
       required super.adsId,
       required super.value,
       required super.createdAt,
@@ -13,7 +12,7 @@ class PropsAdsModel extends PropsAdsEntity {
   factory PropsAdsModel.fromJson(Map<String, dynamic> json) {
     return PropsAdsModel(
       id: json['_id'],
-     // propertyDetails: PropertyDetailsModel.fromJson(json['propertyId']),
+      // propertyDetails: PropertyDetailsModel.fromJson(json['propertyId']),
       adsId: json['adsId'],
       value: PropertyValueModel.fromJson(json['value']),
       createdAt: DateTime.parse(json['createdAt']),
@@ -50,11 +49,11 @@ class PropertyDetailsModel extends PropertyDetailsEntity {
 class PropertyValueModel extends PropertyValueEntity {
   PropertyValueModel({required super.ar, required super.en, required super.id});
 
-factory PropertyValueModel.fromJson(Map<String, dynamic> json) {
-  return PropertyValueModel(
-    ar: json['ar'],
-    en: json['en'],
-    id: json['_id'],
-  );
-}
+  factory PropertyValueModel.fromJson(Map<String, dynamic> json) {
+    return PropertyValueModel(
+      ar: json['ar'],
+      en: json['en'],
+      id: json['_id'],
+    );
+  }
 }

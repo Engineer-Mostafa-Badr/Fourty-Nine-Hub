@@ -7,13 +7,12 @@ import '../../../../../core/error/failure.dart';
 import '../entities/favourite_ad_entity.dart';
 
 abstract class AccountRepo {
-  Future<Either<Failure, List<MainCategoryEntity>>>
-      getFavouriteCategories();
+  Future<Either<Failure, List<MainCategoryEntity>>> getFavouriteCategories();
 
-  Future<Either<Failure, List<SubCategoryEntity>>>
-      getFavouriteSubcategories();
+  Future<Either<Failure, List<SubCategoryEntity>>> getFavouriteSubcategories();
 
   Future<Either<Failure, List<FavouriteAdEntity>>> getFavouriteAds();
-  Future<Either<Failure, List<FavouriteAdDrawerEntity>>> getDrawerFavouriteAds();
+  Future<Either<Failure, List<FavouriteAdDrawerEntity>>>
+      getDrawerFavouriteAds();
   Future<Either<Failure, bool>> deleteFavouriteAds({required String id});
 }

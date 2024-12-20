@@ -24,5 +24,4 @@ class DurationHelper {
       return "${difference.inMinutes} ${LocaleKeys.minute.localize}";
     }
   }
-
 }

@@ -11,24 +11,20 @@ class SubscribeButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return    SizedBox(
+    return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {},
         style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8)),
-          padding:
-          EdgeInsets.symmetric(horizontal: 40.w, vertical: 25.h),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 25.h),
           backgroundColor: AppColors.SECONDARY_COLOR,
         ),
-        child: Text(
-            LocaleKeys.subscribe.localize,
+        child: Text(LocaleKeys.subscribe.localize,
             style: Styles.mediumText(
                 color: Colors.white,
                 fontSize: 55.sp,
-                fontWeight: FontWeight.w400
-            )),
+                fontWeight: FontWeight.w400)),
       ),
     );
   }

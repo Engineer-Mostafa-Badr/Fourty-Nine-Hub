@@ -7,36 +7,36 @@ import 'package:fourtyninehub/res/style/styles.dart';
 class MyTextField extends StatelessWidget {
   MyTextField(
       {super.key,
-        this.initialValue,
-        this.hintStyle,
-        this.action,
-        this.maxLength,
-        this.obsecure,
-        this.borderRadius,
-        this.prefix,
-        this.noBorder = false,
-        this.constraints,
-        this.fillColor,
-        this.hint,
-        this.label,
-        this.info,
-        this.autofill,
-        this.suffix,
-        this.type,
-        this.isEmail,
-        this.enabled,
-        this.onConfirm,
-        this.textAlignVertical,
-        this.extraValidationMessage,
-        this.extraValidation,
-        this.onTap,
-        this.height,
-        this.maxLines,
-        this.style,
-        this.validator,
-        this.required,
-        this.controller,
-        this.textStyle});
+      this.initialValue,
+      this.hintStyle,
+      this.action,
+      this.maxLength,
+      this.obsecure,
+      this.borderRadius,
+      this.prefix,
+      this.noBorder = false,
+      this.constraints,
+      this.fillColor,
+      this.hint,
+      this.label,
+      this.info,
+      this.autofill,
+      this.suffix,
+      this.type,
+      this.isEmail,
+      this.enabled,
+      this.onConfirm,
+      this.textAlignVertical,
+      this.extraValidationMessage,
+      this.extraValidation,
+      this.onTap,
+      this.height,
+      this.maxLines,
+      this.style,
+      this.validator,
+      this.required,
+      this.controller,
+      this.textStyle});
 
   bool validate = false;
   final String? initialValue;
@@ -67,7 +67,6 @@ class MyTextField extends StatelessWidget {
   final BoxConstraints? constraints;
   final TextStyle? textStyle;
 
-
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -81,7 +80,7 @@ class MyTextField extends StatelessWidget {
         }
       },
       validator: validator ??
-              (value) {
+          (value) {
             validate = true;
             final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
 
@@ -126,19 +125,19 @@ class MyTextField extends StatelessWidget {
         enabledBorder: noBorder
             ? InputBorder.none
             : OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: AppColors.LIGHT_GRAY_COLOR,
-          ),
-          borderRadius: borderRadius ?? BorderRadius.circular(10),
-        ),
+                borderSide: const BorderSide(
+                  color: AppColors.LIGHT_GRAY_COLOR,
+                ),
+                borderRadius: borderRadius ?? BorderRadius.circular(10),
+              ),
         focusedBorder: noBorder
             ? InputBorder.none
             : OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: AppColors.PRIMARY_COLOR,
-          ),
-          borderRadius: borderRadius ?? BorderRadius.circular(10),
-        ),
+                borderSide: const BorderSide(
+                  color: AppColors.PRIMARY_COLOR,
+                ),
+                borderRadius: borderRadius ?? BorderRadius.circular(10),
+              ),
         errorBorder: OutlineInputBorder(
           borderSide: const BorderSide(
             color: Colors.red,
@@ -148,11 +147,11 @@ class MyTextField extends StatelessWidget {
         focusedErrorBorder: noBorder
             ? InputBorder.none
             : OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: Colors.red,
-          ),
-          borderRadius: borderRadius ?? BorderRadius.circular(10),
-        ),
+                borderSide: const BorderSide(
+                  color: Colors.red,
+                ),
+                borderRadius: borderRadius ?? BorderRadius.circular(10),
+              ),
       ),
     );
   }

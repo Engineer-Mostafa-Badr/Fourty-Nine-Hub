@@ -15,7 +15,8 @@ class TransferMoneyRepositoryImpl extends TransferMoneyRepository {
   TransferMoneyRepositoryImpl(this._transferMoneyRemoteDataSource);
 
   @override
-  Future<Either<Failure, TransferMoneyEntity>> transferMoney(TransferMoneyParams params) {
+  Future<Either<Failure, TransferMoneyEntity>> transferMoney(
+      TransferMoneyParams params) {
     return _transferMoneyRemoteDataSource.transferMoney(params);
   }
 

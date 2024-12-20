@@ -1,12 +1,13 @@
- part of 'payment_cubit.dart';
- enum StateStatus {
-   initial,
-   loading,
-   success,
-   success1,
-   updated,
-   error,
- }
+part of 'payment_cubit.dart';
+
+enum StateStatus {
+  initial,
+  loading,
+  success,
+  success1,
+  updated,
+  error,
+}
 
 class PaymentCacheOutState {
   final StateStatus? status;
@@ -16,7 +17,7 @@ class PaymentCacheOutState {
   final UploadFileEntity? frontImage;
   final UploadFileEntity? backImage;
   final WalletHomeEntity? wallet;
-  final List<ListBankEntity>?banks;
+  final List<ListBankEntity>? banks;
   final PriceYellowCardEntity? price;
   final PayoutMethodEntity? method;
   String? backColor;
@@ -42,8 +43,8 @@ class PaymentCacheOutState {
     List<UploadFileEntity>? images,
     UploadFileEntity? frontImage,
     UploadFileEntity? backImage,
-     WalletHomeEntity? wallet,
-    List<ListBankEntity>?banks,
+    WalletHomeEntity? wallet,
+    List<ListBankEntity>? banks,
     PriceYellowCardEntity? price,
     PayoutMethodEntity? method,
     String? backColor,
@@ -63,5 +64,3 @@ class PaymentCacheOutState {
     );
   }
 }
-
-

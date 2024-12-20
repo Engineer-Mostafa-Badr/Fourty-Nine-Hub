@@ -572,7 +572,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         ],
                       ),
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Expanded(
                         child: Padding(
                       padding:

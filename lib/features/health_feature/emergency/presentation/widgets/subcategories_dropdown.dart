@@ -26,7 +26,7 @@ class HealthEmergencySubCategoriesDropdown extends StatelessWidget {
               hintText: LocaleKeys.speciality.localize,
               dropdownMenuEntries: state.subCategories
                   .map((e) => DropdownMenuEntry<SubCategoryEntity>(
-                      value: e, label: context.isArabic?e.nameAr:e.nameEn))
+                      value: e, label: context.isArabic ? e.nameAr : e.nameEn))
                   .toList(),
               onSelected: (value) {
                 if (value != null) {

@@ -48,9 +48,9 @@ class CompetitionCard extends StatelessWidget {
                       text: context.locale == Locales.english
                           ? competitionsWalletEntity.nameEn
                           : competitionsWalletEntity.nameAr,
-                      style: Styles.mediumText(fontSize: 55.sp,fontWeight: FontWeight.bold),
+                      style: Styles.mediumText(
+                          fontSize: 55.sp, fontWeight: FontWeight.bold),
                     ),
-
                   ],
                 )),
                 Column(

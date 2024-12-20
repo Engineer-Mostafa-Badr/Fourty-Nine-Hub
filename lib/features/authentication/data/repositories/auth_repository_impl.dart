@@ -73,25 +73,25 @@ class AuthRepositoryImpl extends AuthRepository {
   // @override
   // Future<Either<Failure, UserTokensEntity>> signInWithFacebook() async {
   //   try {
-      // final LoginResult loginResult = await FacebookAuth.instance.login();
+  // final LoginResult loginResult = await FacebookAuth.instance.login();
 
-      // final OAuthCredential facebookAuthCredential =
-      //     FacebookAuthProvider.credential(loginResult.accessToken!.token);
+  // final OAuthCredential facebookAuthCredential =
+  //     FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
-      // final result = await FirebaseAuth.instance
-      //     .signInWithCredential(facebookAuthCredential);
-      // final tokenResult = await _remoteDataSource.socialLogin(
-      //   await _loginWithCredentials(
-          // GoogleAuthProvider.credential(
-          //   accessToken: result.credential?.accessToken,
-          //   idToken: await result.user?.getIdToken(),
-          // ),
-        // ),
-      // );
-      // return tokenResult.fold(
-      //   (failure) => Left(failure),
-      //   (token) => Right(token),
-      // );
+  // final result = await FirebaseAuth.instance
+  //     .signInWithCredential(facebookAuthCredential);
+  // final tokenResult = await _remoteDataSource.socialLogin(
+  //   await _loginWithCredentials(
+  // GoogleAuthProvider.credential(
+  //   accessToken: result.credential?.accessToken,
+  //   idToken: await result.user?.getIdToken(),
+  // ),
+  // ),
+  // );
+  // return tokenResult.fold(
+  //   (failure) => Left(failure),
+  //   (token) => Right(token),
+  // );
   //   } catch (e) {
   //     return Left(SocialLoginFailure(e));
   //   }

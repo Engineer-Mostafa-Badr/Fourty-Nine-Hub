@@ -38,8 +38,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
               title: chatRoomCubit.selectedMessages.isEmpty
                   ? GestureDetector(
                       onTap: () => context.push(Routes.VIEWCONTACT,
-                          extra:
-                              context.read<ChatsCubit>().selectedChat.name),
+                          extra: context.read<ChatsCubit>().selectedChat.name),
                       child: Row(
                         children: [
                           const CircleAvatar(
@@ -59,10 +58,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                         MediaQuery.of(context).size.width *
                                             0.4),
                                 child: Text(
-                                  context
-                                      .read<ChatsCubit>()
-                                      .selectedChat
-                                      .name,
+                                  context.read<ChatsCubit>().selectedChat.name,
                                   // 'state.chatData?.chat?.contact?.name',
                                   overflow: TextOverflow.ellipsis,
                                   style: Styles.headerText(
@@ -113,8 +109,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             ? AppColors.PRIMARY_COLOR
                             : AppColors.BACKGROUND_COLOR,
                         shape: const RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(16.0)),
+                          borderRadius: BorderRadius.all(Radius.circular(16.0)),
                         ),
                         offset: const Offset(0, 50),
                         onSelected: (int value) async {
@@ -159,8 +154,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                           ? IconButton(
                               onPressed: () async {
                                 await chatRoomCubit.pinMessage(
-                                  message:
-                                      chatRoomCubit.selectedMessages.first,
+                                  message: chatRoomCubit.selectedMessages.first,
                                 );
                               },
                               icon: const Icon(Icons.push_pin),
@@ -181,12 +175,12 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       IconButton(
                         onPressed: () async {
                           context.push(
-                              Routes.FORWARDMESSAGES,
-                              extra: ForwardMessagesViewParams(
-                                chatRoomCubit: chatRoomCubit,
-                                chatsCubit: context.read<ChatsCubit>(),
-                              ),
-                            );
+                            Routes.FORWARDMESSAGES,
+                            extra: ForwardMessagesViewParams(
+                              chatRoomCubit: chatRoomCubit,
+                              chatsCubit: context.read<ChatsCubit>(),
+                            ),
+                          );
                         },
                         icon: const Icon(
                           Icons.shortcut,
@@ -207,45 +201,47 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget _buildPinnedMessageCard(BuildContext context) {
     return BlocBuilder<ChatRoomCubit, ChatRoomState>(
       builder: (context, state) {
-        return chatRoomCubit.chat.pinnedMessage == null? const SizedBox(): Container(
-          width: double.infinity,
-          // height: 50,
-          color: AppColors.PRIMARY_COLOR,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.push_pin,
-                  size: 20,
-                  color: Colors.white.withOpacity(0.5),
-                ),
-                const SizedBox(width: 8),
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.8),
-                  child: Text(
-                    chatRoomCubit.chat.pinnedMessage!.text,
-                    overflow: TextOverflow.ellipsis,
-                    style: Styles.mediumText(color: Colors.white),
+        return chatRoomCubit.chat.pinnedMessage == null
+            ? const SizedBox()
+            : Container(
+                width: double.infinity,
+                // height: 50,
+                color: AppColors.PRIMARY_COLOR,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.push_pin,
+                        size: 20,
+                        color: Colors.white.withOpacity(0.5),
+                      ),
+                      const SizedBox(width: 8),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.8),
+                        child: Text(
+                          chatRoomCubit.chat.pinnedMessage!.text,
+                          overflow: TextOverflow.ellipsis,
+                          style: Styles.mediumText(color: Colors.white),
+                        ),
+                      ),
+                      const Spacer(),
+                      InkWell(
+                        onTap: () async {
+                          await chatRoomCubit.unpinMessage();
+                        },
+                        child: Icon(
+                          Icons.close,
+                          size: 20,
+                          color: Colors.white.withOpacity(0.5),
+                        ),
+                      )
+                    ],
                   ),
                 ),
-                const Spacer(),
-                InkWell(
-                  onTap: () async {
-                    await chatRoomCubit.unpinMessage();
-                  },
-                  child: Icon(
-                    Icons.close,
-                    size: 20,
-                    color: Colors.white.withOpacity(0.5),
-                  ),
-                )
-              ],
-            ),
-          ),
-        );
+              );
       },
     );
   }

@@ -1,6 +1,5 @@
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/currency_entity.dart';
 
-import '../../domain/entities/slider_item_entity.dart';
 
 class CurrencyModel extends CurrencyEntity {
   CurrencyModel(

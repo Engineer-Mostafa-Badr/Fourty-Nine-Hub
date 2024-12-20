@@ -28,8 +28,9 @@ class BuildItemTextPost extends StatelessWidget {
   Widget build(BuildContext context) {
     final DateTime createdAt = DateTime.parse(advertises.createdAt!);
     final DateTime egyptTime = createdAt.toUtc().add(const Duration(hours: 3));
-    final String formattedDayTime =
-        DateFormat('EEEE, h:mm a',context.locale == Locales.english? 'en':'ar').format(egyptTime);
+    final String formattedDayTime = DateFormat(
+            'EEEE, h:mm a', context.locale == Locales.english ? 'en' : 'ar')
+        .format(egyptTime);
 
     return BlocProvider<CreateCompanyAdCubit>(
       create: (BuildContext context) => serviceLocator(),
@@ -97,7 +98,8 @@ class BuildItemTextPost extends StatelessWidget {
       ),
       child: Text(
         advertises.post!,
-        textAlign: _isArabic(advertises.post!) ? TextAlign.right : TextAlign.left,
+        textAlign:
+            _isArabic(advertises.post!) ? TextAlign.right : TextAlign.left,
         style: Styles.mediumText(
           color: Theme.of(context).scaffoldBackgroundColor,
         ),
@@ -110,5 +112,4 @@ class BuildItemTextPost extends StatelessWidget {
     final RegExp arabicRegex = RegExp(r'^[\u0600-\u06FF\s]+$');
     return arabicRegex.hasMatch(text);
   }
-
 }

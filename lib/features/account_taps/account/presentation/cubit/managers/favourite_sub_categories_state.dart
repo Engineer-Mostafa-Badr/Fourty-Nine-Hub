@@ -6,13 +6,15 @@ class FavouriteSubCategoryState {
   final List<SubCategoryEntity>? data;
   final List<MainCategoryEntity>? mainCategory;
   const FavouriteSubCategoryState(
-      {this.status = StateStatus.loading, this.failure, this.data,this.mainCategory});
+      {this.status = StateStatus.loading,
+      this.failure,
+      this.data,
+      this.mainCategory});
   FavouriteSubCategoryState copyWith(
       {StateStatus? status,
       Failure? failure,
       List<SubCategoryEntity>? data,
-        List<MainCategoryEntity>? mainCategory
-      }) {
+      List<MainCategoryEntity>? mainCategory}) {
     return FavouriteSubCategoryState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

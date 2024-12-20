@@ -7,6 +7,6 @@ class PriceYellowCardModel extends PriceYellowCardEntity {
   factory PriceYellowCardModel.fromJson(Map<String, dynamic> json) {
     return PriceYellowCardModel(
         currency: json['currency'] ?? '',
-        yellowCardCharge: json['yellowCardCharge'] ??0);
+        yellowCardCharge: json['yellowCardCharge'] ?? 0);
   }
 }

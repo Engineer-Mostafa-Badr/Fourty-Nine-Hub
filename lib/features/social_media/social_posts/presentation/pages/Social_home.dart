@@ -100,7 +100,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                     labelColor: context.isDarkMode
                         ? Colors.white
                         : AppColors.PRIMARY_COLOR,
-                    tabs:  [
+                    tabs: [
                       Tab(
                         text: LocaleKeys.Face.localize,
                       ),
@@ -160,7 +160,6 @@ class _SocialHomeViewState extends State<SocialHomeView>
                         scrollController: ScrollController(),
                         appBars: [
                           SliverAppBar(
-
                             backgroundColor:
                                 Theme.of(context).scaffoldBackgroundColor,
                             automaticallyImplyLeading: false,
@@ -217,14 +216,16 @@ class _SocialHomeViewState extends State<SocialHomeView>
               },
               child: Container(
                   decoration: i == 0
-                      ?  BoxDecoration(
+                      ? BoxDecoration(
                           border: Border(
                               bottom: BorderSide(
-                                  color: Theme.of(context).primaryColor, width: 2)))
+                                  color: Theme.of(context).primaryColor,
+                                  width: 2)))
                       : null,
                   child: Icon(
                     i == 0 ? Icons.home : Icons.person,
-                    color: i == 0 ? Theme.of(context).primaryColor : Colors.grey,
+                    color:
+                        i == 0 ? Theme.of(context).primaryColor : Colors.grey,
                     size: 40.w,
                   )),
             ),

@@ -12,11 +12,11 @@ class QuranViewPage extends StatefulWidget {
   final int surahId;
   final int pageNumber;
 
-  QuranViewPage({
-    Key? key,
+  const QuranViewPage({
+    super.key,
     required this.surahId,
     required this.pageNumber,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranViewPage> createState() => _QuranViewPageState();
@@ -26,7 +26,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
   late PageController _pageController;
   late QuranCubit _quranCubit;
   List<List<SurahEntity>> pages = [];
-  int currentSurahId=1;
+  int currentSurahId = 1;
 
   @override
   void initState() {
@@ -57,7 +57,8 @@ class _QuranViewPageState extends State<QuranViewPage> {
           builder: (context, state) {
             if (state.status == QuranStates.loading) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state.status == QuranStates.success && pages.isNotEmpty) {
+            } else if (state.status == QuranStates.success &&
+                pages.isNotEmpty) {
               return PageView.builder(
                 controller: _pageController,
                 itemCount: pages.length + 1, // +1 for loading the next surah
@@ -69,7 +70,9 @@ class _QuranViewPageState extends State<QuranViewPage> {
                 },
                 itemBuilder: (context, index) {
                   if (index == pages.length) {
-                    return const Center(child: CircularProgressIndicator()); // Loading next surah
+                    return const Center(
+                        child:
+                            CircularProgressIndicator()); // Loading next surah
                   }
                   return buildPageContent(index, pages[index]);
                 },
@@ -96,7 +99,8 @@ class _QuranViewPageState extends State<QuranViewPage> {
     super.dispose();
   }
 
-  List<List<SurahEntity>> _paginateAyahs(BuildContext context, List<SurahEntity> ayahs) {
+  List<List<SurahEntity>> _paginateAyahs(
+      BuildContext context, List<SurahEntity> ayahs) {
     List<List<SurahEntity>> pages = [];
     List<SurahEntity> currentPage = [];
     double availableHeight = MediaQuery.of(context).size.height - 200.h;
@@ -159,7 +163,9 @@ class _QuranViewPageState extends State<QuranViewPage> {
                   ),
                 ],
               ),
-            if (pageIndex == 0 && pageAyahs[0].surahNameAr != 'الفاتحة' && pageAyahs[0].surahNameAr != 'التوبة')
+            if (pageIndex == 0 &&
+                pageAyahs[0].surahNameAr != 'الفاتحة' &&
+                pageAyahs[0].surahNameAr != 'التوبة')
               SizedBox(
                 height: 90.h,
                 child: Image.asset(
@@ -176,9 +182,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: pageAyahs.map((ayah) {
                   return Padding(
-                    padding:  EdgeInsets.only(
-                      top: 20.h
-                    ),
+                    padding: EdgeInsets.only(top: 20.h),
                     child: RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
@@ -226,16 +230,6 @@ class _QuranViewPageState extends State<QuranViewPage> {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
 
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';

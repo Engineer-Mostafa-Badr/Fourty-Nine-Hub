@@ -18,7 +18,7 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
   DoctorsListCubit(
     this._getDoctorListUseCase,
     this._healthSharedData, this._getSubCategoryDoctorsListUseCase,
-  ) : super(DoctorsListState());
+  ) : super(const DoctorsListState());
 
   void loadData() async {
     emit(state.copyWith(status: DoctorsListStates.loading));

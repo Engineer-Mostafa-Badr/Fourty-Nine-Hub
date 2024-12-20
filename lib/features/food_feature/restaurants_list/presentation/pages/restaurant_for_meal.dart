@@ -2,10 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../cubit/restaurants_list_cubit.dart';
 import '../widgets/subcatigories_restaurant_card.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -38,7 +36,7 @@ class _RestaurantForSelectedMealState extends State<RestaurantForSelectedMeal> {
       body: SafeArea(
         child: BlocProvider.value(
           value: serviceLocator<RestaurantsCubit>(),
-            // ..getSubCategoryRestaurants(id: widget.mealId),
+          // ..getSubCategoryRestaurants(id: widget.mealId),
           child: BlocBuilder<RestaurantsCubit, RestaurantsListState>(
             builder: (context, state) {
               final subCategories = state.subCategories ?? [];
@@ -61,7 +59,8 @@ class _RestaurantForSelectedMealState extends State<RestaurantForSelectedMeal> {
                   padding: const EdgeInsets.all(8.0),
                   child: SubCategoriesRestaurantCard(
                     item: subCategories[index],
-                    mealId: widget.mealId, favouriteRestaurant: (String id) {  },
+                    mealId: widget.mealId,
+                    favouriteRestaurant: (String id) {},
                   ),
                 ),
               );

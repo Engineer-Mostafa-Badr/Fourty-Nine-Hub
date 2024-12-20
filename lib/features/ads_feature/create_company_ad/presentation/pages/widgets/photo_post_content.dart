@@ -32,7 +32,7 @@ class _PhotoPostContentState extends State<PhotoPostContent> {
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10.h),
         child: PaginationView<CompanyAdEntity>(
-        //  loadingWidget: const SizedBox.shrink(),
+          //  loadingWidget: const SizedBox.shrink(),
           build: (scrollController, data) {
             return data.isNotEmpty
                 ? ListView.separated(
@@ -55,8 +55,8 @@ class _PhotoPostContentState extends State<PhotoPostContent> {
                     separatorBuilder: (context, index) => Divider(
                       color: AppColors.GREY_LIGHT_COLOR,
                       height: 30.h,
-                      endIndent:20.w ,
-                      indent:20.w,
+                      endIndent: 20.w,
+                      indent: 20.w,
                     ),
                     itemCount: data.length,
                   )

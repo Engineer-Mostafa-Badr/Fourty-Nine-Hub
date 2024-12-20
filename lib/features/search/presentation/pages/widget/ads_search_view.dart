@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -12,26 +11,23 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-
 class AdsSearchView extends StatefulWidget {
   const AdsSearchView({super.key});
-
 
   @override
   State<AdsSearchView> createState() => _AdsSearchViewState();
 }
 
 class _AdsSearchViewState extends State<AdsSearchView> {
-
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 10.w),
       child: BlocProvider<AdvertisementCubit>(
-        create: (BuildContext context) =>serviceLocator(),
+        create: (BuildContext context) => serviceLocator(),
         child: BlocBuilder<AdvertisementCubit, AdsState>(
           builder: (BuildContext context, advertise) {
-            var controllerAdvertise=context.read<AdvertisementCubit>();
+            var controllerAdvertise = context.read<AdvertisementCubit>();
             return BlocBuilder<SearchCubit, SearchState>(
               builder: (context, state) {
                 final controller = context.read<SearchCubit>();
@@ -47,25 +43,26 @@ class _AdsSearchViewState extends State<AdsSearchView> {
                           ),
                         );
                       },
-
                       itemBuilder: (context, item, index) {
                         return BuildItemAdsSearch(
                           item: item,
                           onFav: (String id) async {
-                            var result = await controllerAdvertise.favouriteAd(id);
+                            var result =
+                                await controllerAdvertise.favouriteAd(id);
                             return result;
                           },
                           onRemoveFav: (String id) async {
-                            var result = await controllerAdvertise.unFavouriteAd(id);
+                            var result =
+                                await controllerAdvertise.unFavouriteAd(id);
                             return result;
                           },
                         );
                       },
                       noMoreItemsIndicatorBuilder: (context) => Container(),
                       firstPageProgressIndicatorBuilder: (context) =>
-                      const CupertinoActivityIndicator(),
+                          const CupertinoActivityIndicator(),
                       newPageProgressIndicatorBuilder: (context) =>
-                      const CupertinoActivityIndicator(),
+                          const CupertinoActivityIndicator(),
                     ),
                   );
                 }
@@ -80,5 +77,4 @@ class _AdsSearchViewState extends State<AdsSearchView> {
       ),
     );
   }
-
 }

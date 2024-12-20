@@ -29,7 +29,8 @@ class AddNewRouteRemoteDataSourceImp extends AddNewRouteRemoteDataSource {
     return response.fold(
       (failure) => Left(pr(failure, t)),
       (data) {
-        CarpoolRouteInfoModel carpoolRouteInfoModel = CarpoolRouteInfoModel.fromJson(data['data']);
+        CarpoolRouteInfoModel carpoolRouteInfoModel =
+            CarpoolRouteInfoModel.fromJson(data['data']);
         pr(carpoolRouteInfoModel.toString(), t);
         return Right(carpoolRouteInfoModel);
       },

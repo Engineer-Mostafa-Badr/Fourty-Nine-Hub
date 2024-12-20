@@ -159,9 +159,11 @@ class SearchRestaurantView extends StatelessWidget {
                       return RefreshIndicator(
                         onRefresh: () async => searchCubit.refreshState(),
                         child: ListView.separated(
-                          itemCount: state.mealCategories?.length??0,
+                          itemCount: state.mealCategories?.length ?? 0,
                           padding: EdgeInsets.all(10.w),
-                          separatorBuilder: (context, index) => Sizer(height: 0.h,),
+                          separatorBuilder: (context, index) => Sizer(
+                            height: 0.h,
+                          ),
                           itemBuilder: (context, index) {
                             FoodCategoryEntity? category =
                                 state.mealCategories?[index];
@@ -172,7 +174,8 @@ class SearchRestaurantView extends StatelessWidget {
                                 children: [
                                   CachedNetworkImage(
                                     imageUrl: category?.picture ?? "",
-                                    imageBuilder: (context, imageProvider) =>Container(
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
                                       width: 150.w,
                                       height: 150.h,
                                       alignment: Alignment.center,
@@ -188,15 +191,16 @@ class SearchRestaurantView extends StatelessWidget {
                                               offset: const Offset(0, 3),
                                             ),
                                           ],
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.cover,
-                                        )
-                                      ),
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover,
+                                          )),
                                     ),
                                     width: 150.w,
                                   ),
-                                  Sizer(width: 40.w,),
+                                  Sizer(
+                                    width: 40.w,
+                                  ),
                                   Text(getLang() == "ar"
                                       ? (category?.nameAr ?? "")
                                       : (category?.nameEn ?? "")),
@@ -223,7 +227,8 @@ class SearchRestaurantView extends StatelessWidget {
                                 children: [
                                   CachedNetworkImage(
                                     imageUrl: category?.picture ?? "",
-                                    imageBuilder: (context, imageProvider) =>Container(
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
                                       width: 150.w,
                                       height: 150.h,
                                       alignment: Alignment.center,
@@ -242,8 +247,7 @@ class SearchRestaurantView extends StatelessWidget {
                                           image: DecorationImage(
                                             image: imageProvider,
                                             fit: BoxFit.cover,
-                                          )
-                                      ),
+                                          )),
                                     ),
                                     width: 150.w,
                                   ),
@@ -274,10 +278,13 @@ class SearchRestaurantView extends StatelessWidget {
                                   searchCubit.selectGovernorate(governorate),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Text((getLang() == "ar"
-                                        ? governorate?.nameAr
-                                        : governorate?.nameEn) ??
-                                    '',style: Styles.headerText(),),
+                                child: Text(
+                                  (getLang() == "ar"
+                                          ? governorate?.nameAr
+                                          : governorate?.nameEn) ??
+                                      '',
+                                  style: Styles.headerText(),
+                                ),
                               ),
                             );
                           },
@@ -297,9 +304,12 @@ class SearchRestaurantView extends StatelessWidget {
                                   searchCubit.selectGovernorate(governorate),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Text(context.isArabic
-                                    ? (governorate?.nameAr ?? "")
-                                    : (governorate?.nameEn ?? ""),style: Styles.headerText(),),
+                                child: Text(
+                                  context.isArabic
+                                      ? (governorate?.nameAr ?? "")
+                                      : (governorate?.nameEn ?? ""),
+                                  style: Styles.headerText(),
+                                ),
                               ),
                             );
                           },
@@ -320,10 +330,13 @@ class SearchRestaurantView extends StatelessWidget {
                               onTap: () => searchCubit.selectCity(city),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Text((context.isArabic
-                                        ? city?.nameAr
-                                        : city?.nameEn) ??
-                                    '',style: Styles.headerText(),),
+                                child: Text(
+                                  (context.isArabic
+                                          ? city?.nameAr
+                                          : city?.nameEn) ??
+                                      '',
+                                  style: Styles.headerText(),
+                                ),
                               ),
                             );
                           },
@@ -341,9 +354,12 @@ class SearchRestaurantView extends StatelessWidget {
                               onTap: () => searchCubit.selectCity(city),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Text(context.isArabic
-                                    ? (city?.nameAr ?? "")
-                                    : (city?.nameEn ?? ""),style: Styles.headerText(),),
+                                child: Text(
+                                  context.isArabic
+                                      ? (city?.nameAr ?? "")
+                                      : (city?.nameEn ?? ""),
+                                  style: Styles.headerText(),
+                                ),
                               ),
                             );
                           },

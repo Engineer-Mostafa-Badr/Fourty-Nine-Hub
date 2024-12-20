@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -37,35 +36,39 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
                     enabledBorder: OutlineInputBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
                       borderSide: BorderSide(
-                        color: st is ValidationState && (st.isSubCategory ?? true)
-                            ? Colors.red
-                            : Colors.grey,
+                        color:
+                            st is ValidationState && (st.isSubCategory ?? true)
+                                ? Colors.red
+                                : Colors.grey,
                       ),
                     ),
                     border: OutlineInputBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
                       borderSide: BorderSide(
-                        color: st is ValidationState && (st.isSubCategory ?? true)
-                            ? Colors.red
-                            : Colors.grey,
+                        color:
+                            st is ValidationState && (st.isSubCategory ?? true)
+                                ? Colors.red
+                                : Colors.grey,
                       ),
                     ),
                     errorBorder: OutlineInputBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
                       borderSide: BorderSide(
-                        color: st is ValidationState && (st.isSubCategory ?? true)
-                            ? Colors.red
-                            : Colors.grey,
+                        color:
+                            st is ValidationState && (st.isSubCategory ?? true)
+                                ? Colors.red
+                                : Colors.grey,
                       ),
                     ),
                   ),
                   items: state.subCategories
                       .map((e) => DropdownMenuItem<FoodCategoryEntity>(
-                      value: e,
-                      child: Text(
-                        (context.isArabic ? e.nameAr : e.nameEn) ?? "",
-                        style: Styles.mediumText(), // Add your desired text style here
-                      )))
+                          value: e,
+                          child: Text(
+                            (context.isArabic ? e.nameAr : e.nameEn) ?? "",
+                            style: Styles
+                                .mediumText(), // Add your desired text style here
+                          )))
                       .toList(),
                   onChanged: (value) {
                     if (value != null) {
@@ -76,10 +79,10 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
                   isExpanded: true,
                   hint: Text(
                     LocaleKeys.selecteSubcategory.tr(),
-                    style: Styles.mediumText(), // You can adjust this hint style as needed
+                    style: Styles
+                        .mediumText(), // You can adjust this hint style as needed
                   ),
-                )
-                ;
+                );
               }),
               BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                   builder: (context, st) {
@@ -99,7 +102,8 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
         } else {
           return const SizedBox.shrink();
         }
-      }, listener: (BuildContext context, CreateRestaurantState state) {  },
+      },
+      listener: (BuildContext context, CreateRestaurantState state) {},
     );
   }
 }

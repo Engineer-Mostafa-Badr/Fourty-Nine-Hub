@@ -12,7 +12,8 @@ class BalanceDataModel extends BalanceDataEntity {
       required super.fiveYearsLeft,
       required super.tenYearsLeft,
       required super.fiveYearsComplete,
-      required super.tenYearsComplete, required super.currency});
+      required super.tenYearsComplete,
+      required super.currency});
 
   factory BalanceDataModel.fromJson(Map<String, dynamic> json) {
     return BalanceDataModel(

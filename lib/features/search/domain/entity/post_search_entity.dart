@@ -61,8 +61,7 @@ class PostSearchEntity {
   String? createAt;
   Duration get publishedDuration => DateTime.now().difference(createdAt!);
 
-  String get sinceTime =>
-      DurationHelper().getTimeDifference( createdAt!);
+  String get sinceTime => DurationHelper().getTimeDifference(createdAt!);
 
   PostSearchEntity({
     required this.id,

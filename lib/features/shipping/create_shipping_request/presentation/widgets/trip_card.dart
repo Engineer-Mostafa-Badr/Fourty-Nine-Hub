@@ -110,8 +110,11 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                         children: [
                           Text(
                             widget.title ?? LocaleKeys.newRide.tr(),
-                            style:  TextStyle(
-                              color: Theme.of(context).brightness == Brightness.dark? Colors.white:AppColors.PRIMARY_COLOR,
+                            style: TextStyle(
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.white
+                                  : AppColors.PRIMARY_COLOR,
                               fontWeight: FontWeight.bold,
                               fontSize: 22,
                             ),
@@ -122,11 +125,10 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                   ? " ${widget.model.status}"
                                   : " (${widget.model.status})",
                               style: const TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22,
-                                overflow: TextOverflow.ellipsis
-                              ),
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22,
+                                  overflow: TextOverflow.ellipsis),
                             ),
                           ),
                         ],
@@ -142,22 +144,22 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                             fontSize: widget.priceFontSize,
                           ),
                         ),
-                        if (!widget.noBracts) Text( LocaleKeys.premium.tr())
+                        if (!widget.noBracts) (widget.model.isPremium??false)? Text(LocaleKeys.premium.tr()):Container()
                       ],
                     ),
                   ],
                 ),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
                       child: Row(
                         children: [
-                          Icon(Icons.calendar_month),
+                          const Icon(Icons.calendar_month),
                           Flexible(
                             child: Text(
-                              "25 August, 09:47",
-                              style: TextStyle(fontSize: 13),
+                              widget.model.time??"",
+                              style: const TextStyle(fontSize: 13),
                             ),
                           ),
                         ],
@@ -251,6 +253,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                               const SizedBox(
                                 height: 10,
                               ),
+                              if(!(widget.model.acceptedReq??false))
                               Row(
                                 children: [
                                   Expanded(
@@ -261,8 +264,10 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                       onPressed: () {
                                         tripCubit.newOffer(
                                             id: widget.model.id ?? "",
-                                            price: widget.model.price ?? 0,
-                                            message: LocaleKeys.theRequestHasBeenSuccessfullyApproved.tr());
+                                            price: double.tryParse(price.text)?? widget.model.price??0,
+                                            message: LocaleKeys
+                                                .theRequestHasBeenSuccessfullyApproved
+                                                .tr());
                                       },
                                       backColor: AppColors.PRIMARY_COLOR,
                                       color: Colors.white,

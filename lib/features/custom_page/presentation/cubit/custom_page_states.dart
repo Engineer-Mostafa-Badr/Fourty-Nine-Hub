@@ -17,15 +17,15 @@ class CustomPageState {
   final FavouriteCatEntity? favourite;
   final ActivateEntity? activate;
 
-  const CustomPageState(
-      {this.status = CustomPageStates.loading,
-      this.failure,
-      this.social,
-      this.subTab,
-      this.navigateBar,
-      this.favourite,
-      this.activate,
-      });
+  const CustomPageState({
+    this.status = CustomPageStates.loading,
+    this.failure,
+    this.social,
+    this.subTab,
+    this.navigateBar,
+    this.favourite,
+    this.activate,
+  });
   CustomPageState copyWith(
       {CustomPageStates? status,
       Failure? failure,
@@ -33,8 +33,7 @@ class CustomPageState {
       SubTabEntity? subTab,
       NavigateBarEntity? navigateBar,
       FavouriteCatEntity? favourite,
-        ActivateEntity? activate
-      }) {
+      ActivateEntity? activate}) {
     return CustomPageState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

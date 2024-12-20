@@ -8,9 +8,9 @@ class PayoutMethodModel extends PayoutMethodEntity {
 
   factory PayoutMethodModel.fromJson(Map<String, dynamic> json) {
     return PayoutMethodModel(
-      FawryCashOut: json['FawryCashOut'] ??false,
-      PaymobCashOut: json['PaymobCashOut'] ??false,
-      YellowCardCashOut: json['YellowCardCashOut'] ??false,
+      FawryCashOut: json['FawryCashOut'] ?? false,
+      PaymobCashOut: json['PaymobCashOut'] ?? false,
+      YellowCardCashOut: json['YellowCardCashOut'] ?? false,
     );
   }
 }

@@ -9,50 +9,50 @@ import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_
 class PostSearchModel extends PostSearchEntity {
   PostSearchModel(
       {required super.id,
-        super.content,
-        super.location,
-        super.createdAt,
-        super.createAt,
-        required super.type,
-        super.angryCount,
-        super.commentsCount,
-        super.images,
-        super.users,
-        super.isShared,
-        super.likesCount,
-        super.loveCount,
-        super.totalCount,
-        super.hahaCount,
-        super.sadCount,
-        super.commentPrivacy,
-        super.privacy,
-        super.sharesCount,
-        super.isLove,
-        super.isLikes,
-        super.isWow,
-        super.isSad,
-        super.isAngry,
-        super.isHaha,
-        super.activity,
-        super.feeling,
-        super.backgroundColor,
-        super.comments,
-        super.firstComment,
-        super.love,
-        super.isReact,
-        super.shares,
-        super.isDocumentation,
-        super.advertisementType,
-        super.post,
-        super.description,
-        super.mainPost,
-        super.isApproved,
-        required super.user,
-        super.wowCount,
-        super.name,
-        super.videoMedia,
-        super.audioMedia,
-        required super.photo});
+      super.content,
+      super.location,
+      super.createdAt,
+      super.createAt,
+      required super.type,
+      super.angryCount,
+      super.commentsCount,
+      super.images,
+      super.users,
+      super.isShared,
+      super.likesCount,
+      super.loveCount,
+      super.totalCount,
+      super.hahaCount,
+      super.sadCount,
+      super.commentPrivacy,
+      super.privacy,
+      super.sharesCount,
+      super.isLove,
+      super.isLikes,
+      super.isWow,
+      super.isSad,
+      super.isAngry,
+      super.isHaha,
+      super.activity,
+      super.feeling,
+      super.backgroundColor,
+      super.comments,
+      super.firstComment,
+      super.love,
+      super.isReact,
+      super.shares,
+      super.isDocumentation,
+      super.advertisementType,
+      super.post,
+      super.description,
+      super.mainPost,
+      super.isApproved,
+      required super.user,
+      super.wowCount,
+      super.name,
+      super.videoMedia,
+      super.audioMedia,
+      required super.photo});
   factory PostSearchModel.fromJson(Map<String, dynamic> json) {
     return PostSearchModel(
         id: json['_id'],
@@ -63,7 +63,7 @@ class PostSearchModel extends PostSearchEntity {
         type: json['type'] ?? '',
         images: json['media'] != null
             ? List<String>.from(
-            json['media'].map((mediaItem) => mediaItem['mediaKey']))
+                json['media'].map((mediaItem) => mediaItem['mediaKey']))
             : null,
         isShared: json['isShared'] ?? false,
         advertisementType: json['advertisement_type'] ?? '',
@@ -94,8 +94,8 @@ class PostSearchModel extends PostSearchEntity {
         user: json['user'] == null
             ? null
             : json['user'] is String
-            ? json['user']
-            : TwitterUserModel.fromJson(json['user']),
+                ? json['user']
+                : TwitterUserModel.fromJson(json['user']),
         privacy: json['privacy'] ?? 0,
         commentPrivacy: json['commentPrivacy'] ?? 0,
         sharesCount: json['sharesCount'] ?? 0,
@@ -109,30 +109,30 @@ class PostSearchModel extends PostSearchEntity {
         createdAt: json['createdAt'] != null
             ? DateTime.parse(json['createdAt'])
             : null,
-        createAt: json['createAt']??'',
+        createAt: json['createAt'] ?? '',
         shares: json['shares'] != null ? List<String>.from(json['shares']) : [],
         commentsCount: json['commentsCount'] ?? 0,
         comments: json['comments'] == null
             ? null
             : json['comments'] is List<String>
-            ? json['comments'] as List<String>
-            : (json['comments'] as List)
-            .map(
-                (e) => e is String ? e : InstagramPostModel.fromJson(e))
-            .toList(),
+                ? json['comments'] as List<String>
+                : (json['comments'] as List)
+                    .map(
+                        (e) => e is String ? e : InstagramPostModel.fromJson(e))
+                    .toList(),
         firstComment: json['firstComment'] != null
             ? InstagramPostModel.fromJson(json['firstComment'])
             : null,
         love: json['love'] == null
             ? null
             : (json['love'] as List)
-            .map((e) => TwitterUserModel.fromJson(e))
-            .toList(),
+                .map((e) => TwitterUserModel.fromJson(e))
+                .toList(),
         users: json['with'] == null
             ? null
             : (json['with'] as List)
-            .map((e) => TwitterUserModel.fromJson(e))
-            .toList(),
+                .map((e) => TwitterUserModel.fromJson(e))
+                .toList(),
         photo: json['photo'] ?? '',
         backgroundColor: json['background_color']);
   }

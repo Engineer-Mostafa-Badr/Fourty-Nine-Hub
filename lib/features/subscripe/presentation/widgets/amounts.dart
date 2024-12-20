@@ -46,7 +46,10 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
         const Sizer(),
         Expanded(
           child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 0,childAspectRatio: 1/0.4),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 0,
+                childAspectRatio: 1 / 0.4),
             shrinkWrap: true,
             padding: EdgeInsets.zero,
             itemCount: widget.amounts.length,
@@ -66,9 +69,10 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
                       });
                     },
                   ),
-                  Expanded(child: BadgedLabel(
-                      label: widget.amounts[index].amount.toString(),
-                    overFlow:TextOverflow.ellipsis,
+                  Expanded(
+                      child: BadgedLabel(
+                    label: widget.amounts[index].amount.toString(),
+                    overFlow: TextOverflow.ellipsis,
                     max: 1,
                     padding: EdgeInsets.all(20.w),
                   ))
@@ -79,7 +83,7 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
         ),
         const Sizer(),
         ElevatedAppButton(
-          label:LocaleKeys.chargeNow.localize,
+          label: LocaleKeys.chargeNow.localize,
           onPressed: () {
             if (groupValue != null) {
               context.push(Routes.PAYMENT,

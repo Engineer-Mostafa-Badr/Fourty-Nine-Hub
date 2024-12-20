@@ -14,17 +14,16 @@ class ChanceCubit extends Cubit<ChanceState> {
   final FetchChanceUseCase _fetchChanceUseCase;
   final AddChanceUseCase _addChanceUseCase;
   final GetChanceRateUseCase _getChanceRateUseCase;
-  final MainCategoryChanceUseCase _mainCategoryChanceUseCase ;
-  final SubCategoryChanceUseCase _SubCategoryChanceUseCase ;
+  final MainCategoryChanceUseCase _mainCategoryChanceUseCase;
+  final SubCategoryChanceUseCase _SubCategoryChanceUseCase;
 
   ChanceCubit(
-      this._fetchChanceUseCase,
-      this._addChanceUseCase,
-      this._getChanceRateUseCase,
-      this._mainCategoryChanceUseCase,
-      this._SubCategoryChanceUseCase,
-      )
-      : super(const ChanceState());
+    this._fetchChanceUseCase,
+    this._addChanceUseCase,
+    this._getChanceRateUseCase,
+    this._mainCategoryChanceUseCase,
+    this._SubCategoryChanceUseCase,
+  ) : super(const ChanceState());
 
   // Future<void> fetchChance() async {
   //   emit(state.copyWith(status: ChanceStates.loading));
@@ -63,31 +62,30 @@ class ChanceCubit extends Cubit<ChanceState> {
     emit(state.copyWith(status: ChanceStates.loading));
     final response = await _addChanceUseCase(params);
     return response.fold(
-          (failure) {
-            print('Error');
-            print(failure.toString());
-            emit(state.copyWith(failure: failure, status: ChanceStates.error));
-          },
-          (response) {
-            print('Success');
-            print(response);
+      (failure) {
+        print('Error');
+        print(failure.toString());
+        emit(state.copyWith(failure: failure, status: ChanceStates.error));
+      },
+      (response) {
+        print('Success');
+        print(response);
         emit(state.copyWith(status: ChanceStates.success));
         fetchChance();
       },
     );
   }
-  Future<void> getChanceRate({required String id}) async
-  {
+
+  Future<void> getChanceRate({required String id}) async {
     final response = await _getChanceRateUseCase(
       ChanceRateParams(chanceRateParams: id),
     );
     response.fold((l) {
       emit(state.copyWith(failure: l, status: ChanceStates.error));
     }, (data) {
-      emit(state.copyWith(rate: data,status: ChanceStates.success)) ;
+      emit(state.copyWith(rate: data, status: ChanceStates.success));
     });
   }
-
 
   Future<List<MainCategoryDropEntity>> fetchMainCategoryChance(
       {required PaginationParams paginationParams}) async {
@@ -105,7 +103,6 @@ class ChanceCubit extends Cubit<ChanceState> {
     return category;
   }
 
-
   Future<List<SubCategoryDropEntity>> fetchSubCategoryChance(
       {required PaginationParams paginationParams, required String id}) async {
     List<SubCategoryDropEntity> category = [];
@@ -122,5 +119,4 @@ class ChanceCubit extends Cubit<ChanceState> {
     });
     return category;
   }
-
 }

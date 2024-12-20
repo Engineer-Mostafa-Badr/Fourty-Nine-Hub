@@ -4,10 +4,10 @@ class WalletHomeEntity {
   final num giftWallet;
   final String currency;
 
-  WalletHomeEntity(
-      {required this.realAmount,
-      required this.balance,
-      required this.giftWallet,
-      required this.currency,
-      });
+  WalletHomeEntity({
+    required this.realAmount,
+    required this.balance,
+    required this.giftWallet,
+    required this.currency,
+  });
 }

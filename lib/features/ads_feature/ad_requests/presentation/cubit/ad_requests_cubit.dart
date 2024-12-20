@@ -31,12 +31,14 @@ class AdRequestsCubit extends Cubit<AdRequestsState> {
     isLoadingMore = true;
 
     final response = await _getAdRequestsUseCase(
-      GetAdRequestsParams(id: id, page: currentPage, limit: pageSize, username: search),
+      GetAdRequestsParams(
+          id: id, page: currentPage, limit: pageSize, username: search),
     );
 
     response.fold(
-          (failure) => emit(state.copyWith(failure: failure, status: AdRequestsStates.error)),
-          (data) {
+      (failure) => emit(
+          state.copyWith(failure: failure, status: AdRequestsStates.error)),
+      (data) {
         adRequests.addAll(data);
 
         if (data.length < pageSize) {

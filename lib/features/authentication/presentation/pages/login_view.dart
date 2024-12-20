@@ -392,7 +392,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 icon: FontAwesomeIcons.facebook,
                 color: AppColors.PRIMARY_COLOR,
                 onPressed: () async {
-                   await loginCubit.signInWithFacebook();
+                  await loginCubit.signInWithFacebook();
                 },
               ),
             ),

@@ -15,8 +15,7 @@ class LinerProgressIndicator extends StatefulWidget {
 }
 
 class _LinerProgressIndicatorState extends State<LinerProgressIndicator> {
-
-  ChanceRateEntity? _rateEntity ;
+  ChanceRateEntity? _rateEntity;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ChanceCubit, ChanceState>(

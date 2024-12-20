@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/firebas
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -50,7 +51,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
 
   checkLogin() {
     try {
-      if(!context.isUserLoggedIn) context.read<UserCubit>().getUser();
+      if (!context.isUserLoggedIn) context.read<UserCubit>().getUser();
     } catch (e) {
       print(e.toString());
     }
@@ -67,6 +68,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     context
         .read<NotificationSocketIoCubit>()
         .notificationListener(languageCode: 'en');
+    context.read<LocationSocketCubit>().updateDriverLocationOn();
   }
 
   void _setupScrollController() {
@@ -101,6 +103,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     scrollController.dispose();
     super.dispose();
   }
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -121,13 +124,13 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       },
       child: Scaffold(
         key: _scaffoldKey,
-        appBar:  HomeAppbar(
+        appBar: HomeAppbar(
           isWithBackArrow: false,
           language: true,
           leading: IconButton(
-            icon: Icon(Icons.menu), // The menu icon
+            icon: const Icon(Icons.menu), // The menu icon
             onPressed: () {
-              HandleCashback.setCount('drawerCount',context);
+              HandleCashback.setCount('drawerCount', context);
               _scaffoldKey.currentState?.openDrawer(); // Open the drawer
             },
           ),
@@ -216,7 +219,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          HandleCashback.setCount('mainCategoriesCount',context);
+                          HandleCashback.setCount(
+                              'mainCategoriesCount', context);
                           context.push(Routes.SUBCATEGORIES,
                               extra: state.data![index]);
                         },
@@ -270,19 +274,17 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 width: 34.h,
               ),
               Routes.MAINCATEGORIESTREE,
-              () => HandleCashback.setCount('threeDotsCount',context),
+              () => HandleCashback.setCount('threeDotsCount', context),
             ),
             _buildItemTabBar(
-              SvgPicture.asset(
-                Assets.mobile,
-                height: 34.h,
-                width: 34.h,
-              ),
-              Routes.MAINCATEGORIESCARDS,
-                (){
-                  HandleCashback.setCount('mainCategoriesSliderCount',context);
-                }
-            ),
+                SvgPicture.asset(
+                  Assets.mobile,
+                  height: 34.h,
+                  width: 34.h,
+                ),
+                Routes.MAINCATEGORIESCARDS, () {
+              HandleCashback.setCount('mainCategoriesSliderCount', context);
+            }),
           ],
         ),
       ),
@@ -292,7 +294,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   Widget _buildItemTabBar(
     Widget icon,
     String routeName,
-      Function() onTab,
+    Function() onTab,
   ) {
     return InkWell(
       onTap: () {
@@ -341,7 +343,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   service: state.data?[0].service ?? RideServicesEnum.pickMe,
                   title: LocaleKeys.carpool.localize,
                   image: state.data?[0].image ?? '',
-                  onTab: ()=> HandleCashback.setCount('carPoolCount',context),
+                  onTab: () => HandleCashback.setCount('carPoolCount', context),
                   // image: Assets.carpool,
                   // isFavorite: state.data![0].is,
                   // numberOfAds: state.data![0].numberOfAds?.toInt(),
@@ -358,7 +360,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   // image: Assets.tripJoin,
 
                   route: Routes.AVAILABLE_TRIPS,
-                  onTab: () => HandleCashback.setCount('tripJoinCount',context),
+                  onTab: () =>
+                      HandleCashback.setCount('tripJoinCount', context),
                   // isFavorite: state.data![1].isFavorite,
                   // numberOfAds: state.data![1].numberOfAds?.toInt(),
                 ),
@@ -383,17 +386,15 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   Row _auctionAndInstallmentWidget() {
     return Row(
       children: [
-        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
-            () {
-              HandleCashback.setCount('mazadat',context);
+        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize, () {
+          HandleCashback.setCount('mazadat', context);
           context.push(Routes.MAZADAT);
-            }, Icons.group),
+        }, Icons.group),
         const Sizer(),
-        itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize,
-            () {
-              HandleCashback.setCount('installments',context);
+        itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize, () {
+          HandleCashback.setCount('installments', context);
           context.push(Routes.INSTALLMENT);
-            }, Icons.list),
+        }, Icons.list),
       ],
     );
   }
@@ -415,7 +416,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 icon: Icons.auto_awesome,
                 iconSize: 50.h,
                 onPressed: () async {
-                  HandleCashback.setCount('booking',context);
+                  HandleCashback.setCount('booking', context);
                   int? num = await CacheManager.getInt('booking');
                   print(num);
                 }),
@@ -466,7 +467,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 icon: Icons.star,
                 iconSize: 50.h,
                 onPressed: () {
-                  HandleCashback.setCount('beAStarCount',context);
+                  HandleCashback.setCount('beAStarCount', context);
                   context.push(Routes.BE_STAR);
                 }),
           ),
@@ -552,14 +553,13 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     );
   }
 
-  Widget _buildRideSubCategoryItem({
-    required RideServicesEnum service,
-    required String title,
-    required String image,
-    String? route,
-    bool? isFavorite,
-    required Function() onTab
-  }) {
+  Widget _buildRideSubCategoryItem(
+      {required RideServicesEnum service,
+      required String title,
+      required String image,
+      String? route,
+      bool? isFavorite,
+      required Function() onTab}) {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: service.value()),
       onTap: () {

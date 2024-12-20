@@ -11,7 +11,8 @@ import 'package:fourtyninehub/features/azkaar/domain/use_case/fetch_details_azka
 
 abstract class AzkarRemoteDataSource {
   Future<Either<Failure, List<AzkarEntity>>> fetchAzkar(AzkarParams params);
-  Future<Either<Failure,List<AzkarDetailsEntity>>> fetchAzkarDetail(AzkarDetailsParams params);
+  Future<Either<Failure, List<AzkarDetailsEntity>>> fetchAzkarDetail(
+      AzkarDetailsParams params);
 }
 
 class AzkarRemoteDataSourceImpl extends AzkarRemoteDataSource {
@@ -25,7 +26,7 @@ class AzkarRemoteDataSourceImpl extends AzkarRemoteDataSource {
     final response = await _apiConsumer.get(EndPoints.azkar(params));
 
     return response.fold(
-      (failure)=>Left(failure),
+      (failure) => Left(failure),
       (response) {
         final list = (response['data'] as List)
             .map((e) => AzkarModel.fromJson(e))
@@ -36,17 +37,14 @@ class AzkarRemoteDataSourceImpl extends AzkarRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<AzkarDetailsEntity>>> fetchAzkarDetail(AzkarDetailsParams params) async {
-    final response = await _apiConsumer.get(
-        EndPoints.azkarDetails(params),
-      data: {
-          'category':params.category
-      }
-    );
+  Future<Either<Failure, List<AzkarDetailsEntity>>> fetchAzkarDetail(
+      AzkarDetailsParams params) async {
+    final response = await _apiConsumer.get(EndPoints.azkarDetails(params),
+        data: {'category': params.category});
 
     return response.fold(
-          (failure)=>Left(failure),
-          (response) {
+      (failure) => Left(failure),
+      (response) {
         final list = (response['data'] as List)
             .map((e) => AzkarDetailsModel.fromJson(e))
             .toList();

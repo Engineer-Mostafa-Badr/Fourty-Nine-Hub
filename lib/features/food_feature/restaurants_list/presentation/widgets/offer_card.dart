@@ -34,7 +34,7 @@ class FoodOfferCard extends StatelessWidget {
             const Sizer(),
             Label(
                 textAlign: TextAlign.center,
-                text: context.isArabic?item.nameAr:item.nameEn,
+                text: context.isArabic ? item.nameAr : item.nameEn,
                 style: Styles.mediumText()),
             const Sizer(),
           ],

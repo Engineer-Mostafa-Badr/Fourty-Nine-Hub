@@ -115,7 +115,7 @@ class DoctorCard extends StatelessWidget {
                 ),
               ],
             ),
-            Sizer(),
+            const Sizer(),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -131,7 +131,7 @@ class DoctorCard extends StatelessWidget {
                 ))
               ],
             ),
-            Sizer(),
+            const Sizer(),
             Row(
               children: [
                 const Icon(

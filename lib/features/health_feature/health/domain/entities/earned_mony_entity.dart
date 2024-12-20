@@ -3,9 +3,9 @@ class EarnedMoneyEntity {
   final String appointmentType;
   final num totalEarned;
 
-  EarnedMoneyEntity(
-      {required this.count,
-      required this.appointmentType,
-      required this.totalEarned,
-      });
+  EarnedMoneyEntity({
+    required this.count,
+    required this.appointmentType,
+    required this.totalEarned,
+  });
 }

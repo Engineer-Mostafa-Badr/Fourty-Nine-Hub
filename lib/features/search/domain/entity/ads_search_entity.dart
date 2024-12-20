@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 class AdsSearchEntity {
   final String id;
-   String? userId;
+  String? userId;
   final String subCategoryId;
   final String mainCategoryId;
   final String title;
@@ -27,7 +27,7 @@ class AdsSearchEntity {
   final String type;
   final bool isDeleted;
   final DateTime? deletedAt;
-   DateTime createdAt;
+  DateTime createdAt;
   final DateTime updatedAt;
   final List<String> phoneCount;
   final List<String> chatCount;
@@ -36,7 +36,7 @@ class AdsSearchEntity {
   final bool isBanned;
   final bool isBlocked;
   final bool isRejected;
-   bool? isFavorite;
+  bool? isFavorite;
   final List<double> coordinates;
   List<CreateAdEntity> details;
 
@@ -46,48 +46,47 @@ class AdsSearchEntity {
   String get formattedRestTime =>
       DurationHelper().sinceTime(duration: restTimeDuration);
 
-
-  AdsSearchEntity(
-      {required this.id,
-       this.userId,
-      required this.subCategoryId,
-      required this.mainCategoryId,
-      required this.title,
-      required this.description,
-      required this.adminIgnore,
-      required this.images,
-      required this.isActive,
-      required this.isApproved,
-      required this.isPremium,
-      required this.countryCode,
-      required this.price,
-      required this.status,
-      required this.searchText,
-      required this.adminComments,
-      required this.subscriptionType,
-      required this.phone,
-      required this.totalRating,
-      required this.views,
-      required this.requestsCount,
-      required this.type,
-      required this.isDeleted,
-      required this.deletedAt,
-      required this.createdAt,
-      required this.updatedAt,
-      required this.phoneCount,
-      required this.chatCount,
-      required this.loveCount,
-      required this.viewCount,
-      required this.isBanned,
-      required this.isBlocked,
-      required this.isRejected,
-       this.isFavorite=false,
-      required this.coordinates,
-      required this.details,
-      });
+  AdsSearchEntity({
+    required this.id,
+    this.userId,
+    required this.subCategoryId,
+    required this.mainCategoryId,
+    required this.title,
+    required this.description,
+    required this.adminIgnore,
+    required this.images,
+    required this.isActive,
+    required this.isApproved,
+    required this.isPremium,
+    required this.countryCode,
+    required this.price,
+    required this.status,
+    required this.searchText,
+    required this.adminComments,
+    required this.subscriptionType,
+    required this.phone,
+    required this.totalRating,
+    required this.views,
+    required this.requestsCount,
+    required this.type,
+    required this.isDeleted,
+    required this.deletedAt,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.phoneCount,
+    required this.chatCount,
+    required this.loveCount,
+    required this.viewCount,
+    required this.isBanned,
+    required this.isBlocked,
+    required this.isRejected,
+    this.isFavorite = false,
+    required this.coordinates,
+    required this.details,
+  });
 }
 
-class ImageSearchEntity{
+class ImageSearchEntity {
   final String id;
   final String mediaKey;
 

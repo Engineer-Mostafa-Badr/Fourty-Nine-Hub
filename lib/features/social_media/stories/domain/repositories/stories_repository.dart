@@ -15,7 +15,9 @@ abstract class StoriesRepository {
   Future<Either<Failure, bool>> muteUserStories(String id);
   Future<Either<Failure, ViewersResponse>> getStoryViewers(String id);
   Future<Either<Failure, ResponseModel>> getFollowers();
-  Future<Either<Failure, MutedStoriesResponse>> getMutedStories(PaginationParams params);
-  Future<Either<Failure, StoriesResponse>> fetchStories(PaginationParams params);
+  Future<Either<Failure, MutedStoriesResponse>> getMutedStories(
+      PaginationParams params);
+  Future<Either<Failure, StoriesResponse>> fetchStories(
+      PaginationParams params);
   Future<Either<Failure, bool>> updatePrivacy(UpdateStoryPrivacyParams params);
 }

@@ -54,8 +54,7 @@ class CreateRestaurantParams {
 
   CreateRestaurantParams copyWith({
     String? name,
-    String? number ,
-
+    String? number,
     String? subcategoryId,
     List<String>? restaurantMedia,
     List<String>? licenseMedia,
@@ -96,7 +95,8 @@ class CreateRestaurantParams {
 
     if (name != null) {
       result.addAll({'name': name});
-    } if (number != null) {
+    }
+    if (number != null) {
       result.addAll({'phone': number});
     }
     if (subcategoryId != null) {
@@ -205,7 +205,7 @@ class CreateRestaurantParams {
   @override
   int get hashCode {
     return name.hashCode ^
-     number.hashCode ^
+        number.hashCode ^
         subcategoryId.hashCode ^
         restaurantMedia.hashCode ^
         licenseMedia.hashCode ^

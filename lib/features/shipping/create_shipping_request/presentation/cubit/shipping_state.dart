@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/data/mod
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_driver_data_model/get_driver_data_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/trip_by_user_model.dart';
+import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 class ShippingState {}
 
@@ -13,8 +14,9 @@ class ShippingInitial extends ShippingState {}
 
 class SuccessGetBannerState extends ShippingState {
   final BannerModel model;
+  List<SubCategoryEntity>? editedCategoryList;
 
-  SuccessGetBannerState({required this.model});
+  SuccessGetBannerState({required this.model, this.editedCategoryList});
 }
 
 class FailureShippingState extends ShippingState {

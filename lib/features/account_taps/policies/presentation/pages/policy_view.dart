@@ -63,20 +63,20 @@ class _PolicyViewState extends State<PolicyView> {
         child: _isLoading
             ? const CircularProgressIndicator()
             : _filePath != null
-            ? PDFView(
-          filePath: _filePath!,
-          enableSwipe: true,
-          swipeHorizontal: false,
-          autoSpacing: false,
-          pageFling: false,
-          onError: (error) {
-            print(error.toString());
-          },
-          onPageError: (page, error) {
-            print('$page: ${error.toString()}');
-          },
-        )
-            : const Text('Failed to load the PDF.'),
+                ? PDFView(
+                    filePath: _filePath!,
+                    enableSwipe: true,
+                    swipeHorizontal: false,
+                    autoSpacing: false,
+                    pageFling: false,
+                    onError: (error) {
+                      print(error.toString());
+                    },
+                    onPageError: (page, error) {
+                      print('$page: ${error.toString()}');
+                    },
+                  )
+                : const Text('Failed to load the PDF.'),
       ),
     );
   }

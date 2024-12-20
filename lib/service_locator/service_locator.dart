@@ -5,8 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/data/datasources/local/database/local_database_data_source.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_client_helper.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_client_helper_imp.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/subscription_interceptor.dart';
@@ -139,7 +137,7 @@ class DI {
         OptionBuilder()
             .setTransports(['websocket'])
             .disableAutoConnect()
-            .setExtraHeaders({'Authorization': token??cred}) // optional
+            .setExtraHeaders({'Authorization': token ?? cred}) // optional
             .build()));
     // database
     serviceLocator.registerLazySingleton<Database>(
@@ -290,9 +288,6 @@ class DI {
         serviceLocator(),
       ),
     );
-    serviceLocator.registerLazySingleton<ApiClientHelper>(
-      () => ApiClientHelperImp(),
-    );
     //cacheService
     serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     // base repo
@@ -344,7 +339,6 @@ class DI {
     //secrets
     SecretsServiceLocator.execute(serviceLocator: serviceLocator);
     // notifications
-
     await NotificationsServiceLocator.execute(serviceLocator: serviceLocator);
     InstagramServiceLocator.execute(serviceLocator: serviceLocator);
     FaceBookServiceLocator.execute(serviceLocator: serviceLocator);
@@ -368,6 +362,7 @@ class DI {
     ShareAppServiceLocator.execute(serviceLocator: serviceLocator);
     FollowServiceLocator.execute(serviceLocator: serviceLocator);
   }
+
   static Future<void> reset() async {
     await serviceLocator.reset();
   }

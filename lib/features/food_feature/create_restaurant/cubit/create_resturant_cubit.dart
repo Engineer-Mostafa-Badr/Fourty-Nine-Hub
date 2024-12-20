@@ -43,7 +43,8 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
       this._getGovernoratesUseCase,
       this._getCitiesUseCase,
       this._createREstaurant,
-      this.apiConsumer, this._updateRestaurantUseCase)
+      this.apiConsumer,
+      this._updateRestaurantUseCase)
       : super(CreateRestaurantInitial());
 
   Future<void> loadData() async {
@@ -139,14 +140,14 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
     }
 
     final result = await _updateRestaurantUseCase(
-        UpdateRestaurantParams(
-          city: params.city,
-          government: params.government,
-          subcategoryId: params.subcategoryId,
-          name: params.name,
-          number: params.number,
-          restaurantMedia: params.restaurantMedia,
-        ),
+      UpdateRestaurantParams(
+        city: params.city,
+        government: params.government,
+        subcategoryId: params.subcategoryId,
+        name: params.name,
+        number: params.number,
+        restaurantMedia: params.restaurantMedia,
+      ),
     );
     return result.fold(
       (Failure failure) {

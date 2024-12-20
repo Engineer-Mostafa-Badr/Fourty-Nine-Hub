@@ -29,7 +29,7 @@ class GetDoctorAppointmentsByDayParams {
   Map<String, dynamic> toJson() {
     print("day.name.toLowerCase()${day.name.toLowerCase()}");
     return {
-        "day": day.name.toLowerCase(),
-      };
+      "day": day.name.toLowerCase(),
+    };
   }
 }

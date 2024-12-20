@@ -7,7 +7,6 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:lottie/lottie.dart';
@@ -84,12 +83,12 @@ class _BuildReactionsButtonsState extends State<BuildReactionSearchPost>
         widget.post.isLikes == false) {
       var response = widget.from == 'posts' || widget.from == 'userPosts'
           ? await controller.onReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''),
-          from: widget.from)
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
           : await controller.onCommentReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''));
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isLikes: true);
         setState(() {});
@@ -98,12 +97,12 @@ class _BuildReactionsButtonsState extends State<BuildReactionSearchPost>
         widget.post.isLikes == true) {
       var response = widget.from == 'posts' || widget.from == 'userPosts'
           ? await controller.onReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''),
-          from: widget.from)
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
           : await controller.onCommentReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''));
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isLikes: false);
         setState(() {});
@@ -111,12 +110,12 @@ class _BuildReactionsButtonsState extends State<BuildReactionSearchPost>
     } else if (reaction.value == 'love' && widget.post.isLove == false) {
       var response = widget.from == 'posts' || widget.from == 'userPosts'
           ? await controller.onReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''),
-          from: widget.from)
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
           : await controller.onCommentReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''));
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isLove: true);
         setState(() {});
@@ -124,12 +123,12 @@ class _BuildReactionsButtonsState extends State<BuildReactionSearchPost>
     } else if (reaction.value == 'love' && widget.post.isLove == true) {
       var response = widget.from == 'posts' || widget.from == 'userPosts'
           ? await controller.onReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''),
-          from: widget.from)
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
           : await controller.onCommentReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''));
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isLove: false);
         setState(() {});
@@ -137,12 +136,12 @@ class _BuildReactionsButtonsState extends State<BuildReactionSearchPost>
     } else if (reaction.value == 'wow' && widget.post.isWow == false) {
       var response = widget.from == 'posts' || widget.from == 'userPosts'
           ? await controller.onReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''),
-          from: widget.from)
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
           : await controller.onCommentReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''));
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isWow: true);
         setState(() {});
@@ -150,12 +149,12 @@ class _BuildReactionsButtonsState extends State<BuildReactionSearchPost>
     } else if (reaction.value == 'wow' && widget.post.isWow == true) {
       var response = widget.from == 'posts' || widget.from == 'userPosts'
           ? await controller.onReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''),
-          from: widget.from)
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
           : await controller.onCommentReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''));
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isWow: false);
         setState(() {});
@@ -163,12 +162,12 @@ class _BuildReactionsButtonsState extends State<BuildReactionSearchPost>
     } else if (reaction.value == 'sad' && widget.post.isSad == false) {
       var response = widget.from == 'posts' || widget.from == 'userPosts'
           ? await controller.onReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''),
-          from: widget.from)
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
           : await controller.onCommentReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''));
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isSad: true);
         setState(() {});
@@ -176,12 +175,12 @@ class _BuildReactionsButtonsState extends State<BuildReactionSearchPost>
     } else if (reaction.value == 'sad' && widget.post.isSad == true) {
       var response = widget.from == 'posts' || widget.from == 'userPosts'
           ? await controller.onReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''),
-          from: widget.from)
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
           : await controller.onCommentReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''));
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isSad: false);
         setState(() {});
@@ -189,12 +188,12 @@ class _BuildReactionsButtonsState extends State<BuildReactionSearchPost>
     } else if (reaction.value == 'angry' && widget.post.isAngry == false) {
       var response = widget.from == 'posts' || widget.from == 'userPosts'
           ? await controller.onReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''),
-          from: widget.from)
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
           : await controller.onCommentReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''));
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isAngry: true);
         setState(() {});
@@ -202,12 +201,12 @@ class _BuildReactionsButtonsState extends State<BuildReactionSearchPost>
     } else if (reaction.value == 'angry' && widget.post.isAngry == true) {
       var response = widget.from == 'posts' || widget.from == 'userPosts'
           ? await controller.onReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''),
-          from: widget.from)
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
           : await controller.onCommentReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''));
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isAngry: false);
         setState(() {});
@@ -215,12 +214,12 @@ class _BuildReactionsButtonsState extends State<BuildReactionSearchPost>
     } else if (reaction.value == 'haha' && widget.post.isHaha == false) {
       var response = widget.from == 'posts' || widget.from == 'userPosts'
           ? await controller.onReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''),
-          from: widget.from)
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
           : await controller.onCommentReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''));
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isHaha: true);
         setState(() {});
@@ -228,12 +227,12 @@ class _BuildReactionsButtonsState extends State<BuildReactionSearchPost>
     } else if (reaction.value == 'haha' && widget.post.isHaha == true) {
       var response = widget.from == 'posts' || widget.from == 'userPosts'
           ? await controller.onReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''),
-          from: widget.from)
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''),
+              from: widget.from)
           : await controller.onCommentReact(
-          params: PostReactParams(
-              postId: widget.post.id, react: reaction.value ?? ''));
+              params: PostReactParams(
+                  postId: widget.post.id, react: reaction.value ?? ''));
       if (response == true) {
         _updatePostReaction(isHaha: false);
         setState(() {});
@@ -269,11 +268,11 @@ class _BuildReactionsButtonsState extends State<BuildReactionSearchPost>
         widget.post.isAngry = isAngry;
       }
       widget.post.totalCount += (isLikes == true ||
-          isLove == true ||
-          isWow == true ||
-          isSad == true ||
-          isAngry == true ||
-          isHaha == true)
+              isLove == true ||
+              isWow == true ||
+              isSad == true ||
+              isAngry == true ||
+              isHaha == true)
           ? 1
           : -1;
     });
@@ -391,14 +390,14 @@ class _BuildReactionsButtonsState extends State<BuildReactionSearchPost>
           width: from == 'view' ? 28 : 28,
           child: from == 'view'
               ? Image.asset(
-            item.imageAsset(),
-            fit: BoxFit.fill,
-          )
+                  item.imageAsset(),
+                  fit: BoxFit.fill,
+                )
               : Lottie.asset(
-            item.lottieAsset(),
-            fit: BoxFit.fill,
-            onLoaded: (loaded) {},
-          ),
+                  item.lottieAsset(),
+                  fit: BoxFit.fill,
+                  onLoaded: (loaded) {},
+                ),
         ),
         if (widget.from == 'posts' && from == 'view') ...[
           Label(text: name, style: Styles.mediumText(color: Colors.grey)),

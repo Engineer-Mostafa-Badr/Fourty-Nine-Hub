@@ -32,7 +32,8 @@ class AdDetailsRepoImpl implements AdDetailsRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> makeAdPremiumRequest({required AdRequestParams params}) {
+  Future<Either<Failure, bool>> makeAdPremiumRequest(
+      {required AdRequestParams params}) {
     return _remoteDataSource.makeAdPremiumRequest(params: params);
   }
 }

@@ -99,7 +99,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                           ),
                           child: Center(
                             child: Text(
-                              context.locale == Locales.english? category.nameEn!:category.name,
+                              context.locale == Locales.english? category.nameEn!:category.name??"",
                               style: Styles.mediumText(
                                   color: index == state.selectedIndex
                                       ? Colors.white

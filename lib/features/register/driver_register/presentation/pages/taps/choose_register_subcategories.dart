@@ -33,7 +33,7 @@ class ChooseRegisterSubcategories extends StatelessWidget {
                       child: SquareImage(
                     url: item.image,
                   )),
-                  Label(text: context.isArabic?item.nameAr:item.nameEn)
+                  Label(text: context.isArabic ? item.nameAr : item.nameEn)
                 ],
               ),
             );

@@ -33,16 +33,13 @@ class ChanceServiceLocator {
               serviceLocator(),
             ));
     serviceLocator.registerLazySingleton<MainCategoryChanceUseCase>(
-        ()=> MainCategoryChanceUseCase(
-          serviceLocator() ,
-        )
-    );
+        () => MainCategoryChanceUseCase(
+              serviceLocator(),
+            ));
     serviceLocator.registerLazySingleton<SubCategoryChanceUseCase>(
-            ()=> SubCategoryChanceUseCase(
-          serviceLocator() ,
-        )
-    );
-
+        () => SubCategoryChanceUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerFactory<ChanceCubit>(() => ChanceCubit(
           serviceLocator(),

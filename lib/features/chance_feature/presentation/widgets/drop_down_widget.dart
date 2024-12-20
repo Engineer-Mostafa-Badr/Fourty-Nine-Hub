@@ -1,4 +1,3 @@
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +18,6 @@ class DropDownChance extends StatefulWidget {
   State<DropDownChance> createState() => _DropDownChanceState();
 }
 
-
 class _DropDownChanceState extends State<DropDownChance> {
   String? selectedCategory;
   String? selectedSubCategory;
@@ -34,13 +32,15 @@ class _DropDownChanceState extends State<DropDownChance> {
   }
 
   void _fetchCategories() async {
-    final categories = await context.read<WalletCubit>()
+    final categories = await context
+        .read<WalletCubit>()
         .fetchMainCategoryWallet(paginationParams: PaginationParams(page: 1));
     setState(() {
       this.categories = categories;
       isCategoryLoading = false;
     });
   }
+
   void _fetchSubCategories(String categoryId) async {
     setState(() {
       isSubCategoryLoading = true;
@@ -48,7 +48,7 @@ class _DropDownChanceState extends State<DropDownChance> {
     final subCategories = await context
         .read<WalletCubit>()
         .fetchSubCategoryWallet(
-        id: categoryId, paginationParams: PaginationParams(page: 1));
+            id: categoryId, paginationParams: PaginationParams(page: 1));
     setState(() {
       this.subCategories = subCategories;
       isSubCategoryLoading = false;
@@ -92,27 +92,27 @@ class _DropDownChanceState extends State<DropDownChance> {
                 size: 50.sp, color: Theme.of(context).scaffoldBackgroundColor),
             items: isCategoryLoading
                 ? [
-              DropdownMenuItem(
-                  value: null,
-                  child: Label(
-                    text: LocaleKeys.selectCategory.localize,
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ))
-            ]
+                    DropdownMenuItem(
+                        value: null,
+                        child: Label(
+                          text: LocaleKeys.selectCategory.localize,
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                        ))
+                  ]
                 : categories.map((category) {
-              return DropdownMenuItem<String>(
-                value: category.id,
-                child: Text(
-                  context.locale == Locales.english
-                      ? category.nameEn
-                      : category.nameAr,
-                  style: TextStyle(
-                    fontSize: 30.sp,
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ),
-                ),
-              );
-            }).toList(),
+                    return DropdownMenuItem<String>(
+                      value: category.id,
+                      child: Text(
+                        context.locale == Locales.english
+                            ? category.nameEn
+                            : category.nameAr,
+                        style: TextStyle(
+                          fontSize: 30.sp,
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                        ),
+                      ),
+                    );
+                  }).toList(),
             onChanged: (newCategoryId) {
               setState(() {
                 selectedCategory = newCategoryId;
@@ -161,27 +161,27 @@ class _DropDownChanceState extends State<DropDownChance> {
                   color: Theme.of(context).scaffoldBackgroundColor),
               items: isSubCategoryLoading
                   ? [
-                DropdownMenuItem(
-                    value: null,
-                    child: Label(
-                      text: LocaleKeys.selectSubCategory.localize,
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                    ))
-              ]
+                      DropdownMenuItem(
+                          value: null,
+                          child: Label(
+                            text: LocaleKeys.selectSubCategory.localize,
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                          ))
+                    ]
                   : subCategories.map((subCategory) {
-                return DropdownMenuItem<String>(
-                  value: subCategory.id,
-                  child: Text(
-                    context.locale == Locales.english
-                        ? subCategory.nameEn
-                        : subCategory.nameAr,
-                    style: TextStyle(
-                      fontSize: 30.sp,
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                    ),
-                  ),
-                );
-              }).toList(),
+                      return DropdownMenuItem<String>(
+                        value: subCategory.id,
+                        child: Text(
+                          context.locale == Locales.english
+                              ? subCategory.nameEn
+                              : subCategory.nameAr,
+                          style: TextStyle(
+                            fontSize: 30.sp,
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                          ),
+                        ),
+                      );
+                    }).toList(),
               onChanged: (newSubCategoryId) {
                 setState(() {
                   selectedSubCategory = newSubCategoryId;

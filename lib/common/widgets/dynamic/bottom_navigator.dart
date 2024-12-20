@@ -32,7 +32,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         icon: FontAwesomeIcons.list,
         label: 'reels',
         index: 1,
-        cacheKey:'reelsCount',
+        cacheKey: 'reelsCount',
         image: Assets.reels,
         route: Routes.REELS,
       ),
@@ -40,7 +40,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         icon: FontAwesomeIcons.bowlFood,
         label: 'meal',
         index: 0,
-        cacheKey:'mealsCount',
+        cacheKey: 'mealsCount',
         image: Assets.food,
         route: Routes.FOOD,
       ),
@@ -48,7 +48,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         icon: FontAwesomeIcons.plus,
         // Change to a health-related icon
         label: 'health',
-        cacheKey:'healthCount',
+        cacheKey: 'healthCount',
         image: Assets.healthcare,
         index: 2,
         // Ensure this index matches the health item
@@ -57,10 +57,10 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
       BottomItemModel(
         icon: FontAwesomeIcons.car,
         label: 'ride',
-        cacheKey:'rideCount',
+        cacheKey: 'rideCount',
         index: 3,
         image: Assets.ride,
-        route:context.isUserLoggedIn? Routes.RIDE:Routes.LOGIN,
+        route: Routes.RIDE,
       ),
     ];
 
@@ -71,7 +71,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         if (selectedItem.route != ModalRoute.of(context)?.settings.name) {
           selectedItem.action(context);
         }
-        HandleCashback.setCount(pages[index].cacheKey??'',context);
+        HandleCashback.setCount(pages[index].cacheKey ?? '', context);
       },
       items: pages,
       scrollController: scrollController,

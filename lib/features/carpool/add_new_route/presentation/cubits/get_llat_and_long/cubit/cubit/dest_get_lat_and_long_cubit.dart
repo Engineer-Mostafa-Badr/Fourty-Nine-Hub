@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -36,7 +35,7 @@ class DestGetLatAndLongCubit extends Cubit<DestGetLatAndLongState> {
 
     response.fold(
       (Failure failure) => emit(
-        DestGetLatAndLongFailure(errorMessage: Labels.errorHappened),
+        const DestGetLatAndLongFailure(errorMessage: Labels.errorHappened),
       ),
       (data) async {
         type = data.type;

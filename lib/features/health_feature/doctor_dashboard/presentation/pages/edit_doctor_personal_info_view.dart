@@ -11,7 +11,6 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/personal_info/edit_doctor_name_field.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/personal_info/edit_doctor_phone_field.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/personal_info/edit_doctor_speciality_filed.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditDoctorPersonalInfoView extends StatefulWidget {

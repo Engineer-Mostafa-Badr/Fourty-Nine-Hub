@@ -24,7 +24,7 @@ class SubCategoryModel extends SubCategoryEntity {
       nameEn: json['nameEn'] ?? subCategoryData?['nameEn'] ?? '',
       numberOfContent: json['numberOfAdsCount'] ?? 0,
       image: json['picture'] ?? subCategoryData?['picture'] ?? '',
-      isFavorite: json['isFavorite']?? false,
+      isFavorite: json['isFavorite'] ?? false,
       hasAuction: json['has_auction'] ?? false,
     );
   }

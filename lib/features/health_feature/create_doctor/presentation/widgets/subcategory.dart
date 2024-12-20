@@ -20,7 +20,7 @@ class CreateDoctorSubcategoryDropdown extends StatelessWidget {
       builder: (context, state) {
         if (state is CreateDoctorSubCategoriesLoaded) {
           return DropdownMenu<SubCategoryEntity>(
-            expandedInsets: EdgeInsets.zero,
+              expandedInsets: EdgeInsets.zero,
               inputDecorationTheme: InputDecorationTheme(
                 hintStyle: Styles.mediumText(),
                 isDense: true,
@@ -52,7 +52,7 @@ class CreateDoctorSubcategoryDropdown extends StatelessWidget {
               hintText: LocaleKeys.speciality.tr(),
               dropdownMenuEntries: state.subCategories
                   .map((e) => DropdownMenuEntry<SubCategoryEntity>(
-                      value: e, label:context.isArabic? e.nameAr: e.nameEn))
+                      value: e, label: context.isArabic ? e.nameAr : e.nameEn))
                   .toList(),
               onSelected: (value) {
                 if (value != null) {

@@ -29,7 +29,7 @@ class _CustomPageState extends State<CustomPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar:  BackAppBar(
+      appBar: BackAppBar(
         label: LocaleKeys.customPage.localize,
         leading: IconButton(
           icon: const Icon(Icons.menu), // The menu icon
@@ -41,25 +41,25 @@ class _CustomPageState extends State<CustomPage> {
       ),
       drawer: const DrawerWidget(),
       body: BlocProvider<CustomPageCubit>(
-        create: (BuildContext context) =>serviceLocator()..fetchActivate(),
-        child: BlocBuilder<CustomPageCubit,CustomPageState>(
+        create: (BuildContext context) => serviceLocator()..fetchActivate(),
+        child: BlocBuilder<CustomPageCubit, CustomPageState>(
           builder: (BuildContext context, state) {
-            var controller=context.read<CustomPageCubit>();
+            var controller = context.read<CustomPageCubit>();
             return Column(
               children: [
                 Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: 25.w),
+                  padding: EdgeInsets.symmetric(horizontal: 25.w),
                   child: Row(
                     children: [
                       Expanded(
                           child: Label(
-                            text: LocaleKeys.activatePage.localize,
+                              text: LocaleKeys.activatePage.localize,
                               style: Styles.mediumText(
-                                  fontSize: 65.sp, fontWeight: FontWeight.w400)
-                          )),
+                                  fontSize: 65.sp,
+                                  fontWeight: FontWeight.w400))),
                       Switch(
-                        value: state.activate?.customPage ??false,
-                        onChanged: (v){
+                        value: state.activate?.customPage ?? false,
+                        onChanged: (v) {
                           controller.updateActivate(v);
                         },
                         activeColor: Colors.red,

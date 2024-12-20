@@ -31,9 +31,9 @@ class BuildItemAdsSearch extends StatefulWidget {
   final AdsSearchEntity item;
   const BuildItemAdsSearch(
       {super.key,
-        required this.item,
-        required this.onFav,
-        required this.onRemoveFav});
+      required this.item,
+      required this.onFav,
+      required this.onRemoveFav});
   final Function(String) onFav;
   final Function(String) onRemoveFav;
 
@@ -51,10 +51,10 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
         .where((e) => e.value.nameAr != 'السعر' && e.value.nameAr != 'المرتب')
         .toList();
     return BlocProvider<AdvertisementCubit>(
-      create: (BuildContext context) =>serviceLocator(),
+      create: (BuildContext context) => serviceLocator(),
       child: BlocBuilder<AdvertisementCubit, AdsState>(
         builder: (BuildContext context, state) {
-          return  Container(
+          return Container(
             width: kToolbarHeight * 2.5,
             height: 600.h,
             margin: EdgeInsetsDirectional.all(10.w),
@@ -69,7 +69,8 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if(context.read<UserCubit>().isLoggedIn) _buildTag(status: widget.item.subscriptionType),
+                if (context.read<UserCubit>().isLoggedIn)
+                  _buildTag(status: widget.item.subscriptionType),
                 Expanded(
                   child: Stack(
                     alignment: AlignmentDirectional.topStart,
@@ -103,29 +104,31 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                                 if (index == 3)
                                   Positioned.fill(
                                       child: InkWell(
-                                        onTap: () => context.push(Routes.ADdetails,
-                                            extra: widget.item.id),
-                                        child: Container(
-                                          color: Colors.black.withOpacity(0.8),
-                                          alignment: AlignmentDirectional.center,
-                                          child: Label(
-                                            text: LocaleKeys.seeAll.localize,
-                                            style: Styles.headerText(
-                                                color: Colors.white,
-                                                decoration: TextDecoration.underline),
-                                          ),
-                                        ),
-                                      ))
+                                    onTap: () => context.push(Routes.ADdetails,
+                                        extra: widget.item.id),
+                                    child: Container(
+                                      color: Colors.black.withOpacity(0.8),
+                                      alignment: AlignmentDirectional.center,
+                                      child: Label(
+                                        text: LocaleKeys.seeAll.localize,
+                                        style: Styles.headerText(
+                                            color: Colors.white,
+                                            decoration:
+                                                TextDecoration.underline),
+                                      ),
+                                    ),
+                                  ))
                               ],
                             ),
                           ),
                           pagination: SwiperPagination(builder:
-                          SwiperCustomPagination(builder: (context, config) {
+                              SwiperCustomPagination(
+                                  builder: (context, config) {
                             return const DotSwiperPaginationBuilder(
-                                color: AppColors.GREY_DARK_COLOR,
-                                activeColor: AppColors.SECONDARY_COLOR,
-                                size: 10.0,
-                                activeSize: 10.0)
+                                    color: AppColors.GREY_DARK_COLOR,
+                                    activeColor: AppColors.SECONDARY_COLOR,
+                                    size: 10.0,
+                                    activeSize: 10.0)
                                 .build(context, config);
                           })),
                         ),
@@ -143,14 +146,14 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                                 var result = await widget.onFav(widget.item.id);
                                 if (result == true) {
                                   widget.item.isFavorite =
-                                  !widget.item.isFavorite!;
+                                      !widget.item.isFavorite!;
                                 }
                               } else {
                                 var result =
-                                await widget.onRemoveFav(widget.item.id);
+                                    await widget.onRemoveFav(widget.item.id);
                                 if (result == true) {
                                   widget.item.isFavorite =
-                                  !widget.item.isFavorite!;
+                                      !widget.item.isFavorite!;
                                 }
                               }
                             }),
@@ -159,13 +162,14 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 15.w),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 15.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       InkWell(
-                        onTap: () =>
-                            context.push(Routes.ADdetails, extra: widget.item.id),
+                        onTap: () => context.push(Routes.ADdetails,
+                            extra: widget.item.id),
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -175,7 +179,7 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                                   Expanded(
                                     child: Label(
                                       text:
-                                      '${NumbersHelper.formatThousands(number: widget.item.price)} ${LocaleKeys.currency.localize}',
+                                          '${NumbersHelper.formatThousands(number: widget.item.price)} ${LocaleKeys.currency.localize}',
                                       style: Styles.mediumText(
                                           fontWeight: FontWeight.bold,
                                           color: AppColors.SECONDARY_COLOR),
@@ -228,22 +232,22 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                               RichText(
                                   text: TextSpan(
                                       children: details.map((e) {
-                                        return WidgetSpan(
-                                            child: Row(
-                                              children: [
-                                                Label(
-                                                    text:
-                                                    '${getLang() == 'ar' ? e.value.nameAr : e.value.nameEn} : ',
-                                                    style: Styles.mediumText(
-                                                        color: AppColors.SECONDARY_COLOR)),
-                                                Label(
-                                                    text: getLang() == 'ar'
-                                                        ? e.value.nameAr
-                                                        : e.value.nameEn,
-                                                    style: Styles.mediumText()),
-                                              ],
-                                            ));
-                                      }).toList())),
+                                return WidgetSpan(
+                                    child: Row(
+                                  children: [
+                                    Label(
+                                        text:
+                                            '${getLang() == 'ar' ? e.value.nameAr : e.value.nameEn} : ',
+                                        style: Styles.mediumText(
+                                            color: AppColors.SECONDARY_COLOR)),
+                                    Label(
+                                        text: getLang() == 'ar'
+                                            ? e.value.nameAr
+                                            : e.value.nameEn,
+                                        style: Styles.mediumText()),
+                                  ],
+                                ));
+                              }).toList())),
                               Label(
                                 text: widget.item.formattedRestTime,
                                 style: Styles.mediumText(
@@ -263,72 +267,72 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                       const Sizer(),
                       widget.item.userId != userId
                           ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                flex: 3,
-                                child: PremiumRequestButton(
-                                  adId: widget.item.id,
-                                  subCategoryId:
-                                  widget.item.subCategoryId,
-                                  subscriptionStatus:
-                                  widget.item.subscriptionType,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      flex: 3,
+                                      child: PremiumRequestButton(
+                                        adId: widget.item.id,
+                                        subCategoryId:
+                                            widget.item.subCategoryId,
+                                        subscriptionStatus:
+                                            widget.item.subscriptionType,
+                                      ),
+                                    ),
+                                    const Sizer(width: 5),
+                                    Expanded(
+                                      flex: 3,
+                                      child: RequestButton(
+                                        adId: widget.item.id,
+                                        subscriptionStatus:
+                                            widget.item.subscriptionType,
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              ),
-                              const Sizer(width: 5),
-                              Expanded(
-                                flex: 3,
-                                child: RequestButton(
-                                  adId: widget.item.id,
-                                  subscriptionStatus:
-                                  widget.item.subscriptionType,
+                                const Sizer(),
+                                CallMessageButtons(
+                                  otherUserId: widget.item.userId ?? '',
+                                  subcategoryId: widget.item.subCategoryId,
+                                  phone: widget.item.phone,
+                                  id: widget.item.id,
+                                  hasReport: true,
                                 ),
-                              )
-                            ],
-                          ),
-                          const Sizer(),
-                          CallMessageButtons(
-                            otherUserId: widget.item.userId ??'',
-                            subcategoryId: widget.item.subCategoryId,
-                            phone: widget.item.phone,
-                            id: widget.item.id,
-                            hasReport: true,
-                          ),
-                        ],
-                      )
+                              ],
+                            )
                           : Row(
-                        children: [
-                          Expanded(
-                            child: SizedBox(
-                              height: 60.h,
-                              child: AvaialbleTripsButton(
-                                title: LocaleKeys.edit.localize,
-                                color: AppColors.SECONDARY_COLOR,
-                                onTap: () async {},
-                              ),
+                              children: [
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 60.h,
+                                    child: AvaialbleTripsButton(
+                                      title: LocaleKeys.edit.localize,
+                                      color: AppColors.SECONDARY_COLOR,
+                                      onTap: () async {},
+                                    ),
+                                  ),
+                                ),
+                                const Sizer(),
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 60.h,
+                                    child: AvaialbleTripsButton(
+                                      title: LocaleKeys.subscription.localize,
+                                      color: AppColors.SECONDARY_COLOR,
+                                      onTap: () async {
+                                        SubscriptionMethod().subscribe(
+                                            subscribeId:
+                                                widget.item.subCategoryId,
+                                            title: LocaleKeys.ads.localize);
+                                      },
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
-                          ),
-                          const Sizer(),
-                          Expanded(
-                            child: SizedBox(
-                              height: 60.h,
-                              child: AvaialbleTripsButton(
-                                title: LocaleKeys.subscription.localize,
-                                color: AppColors.SECONDARY_COLOR,
-                                onTap: () async {
-                                  SubscriptionMethod().subscribe(
-                                      subscribeId:
-                                      widget.item.subCategoryId,
-                                      title: LocaleKeys.ads.localize);
-                                },
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
                     ],
                   ),
                 ),
@@ -348,8 +352,8 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
       color: status == 'premium'
           ? Colors.amber
           : status == 'Regular'
-          ? Colors.grey
-          : Colors.grey,
+              ? Colors.grey
+              : Colors.grey,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -360,8 +364,8 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
               color: status == 'premium'
                   ? AppColors.SECONDARY_COLOR
                   : status == 'Regular'
-                  ? AppColors.PRIMARY_COLOR
-                  : null,
+                      ? AppColors.PRIMARY_COLOR
+                      : null,
             ),
             const Sizer(width: 5)
           ],
@@ -369,8 +373,8 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
             text: status == 'premium'
                 ? LocaleKeys.premiumSubscription.localize
                 : status == 'Regular'
-                ? LocaleKeys.regularRequest.localize
-                : LocaleKeys.notSubscribed.localize,
+                    ? LocaleKeys.regularRequest.localize
+                    : LocaleKeys.notSubscribed.localize,
             style: Styles.mediumText(
                 color: Colors.white, fontSize: 35, fontWeight: FontWeight.bold),
             maxLines: 1,

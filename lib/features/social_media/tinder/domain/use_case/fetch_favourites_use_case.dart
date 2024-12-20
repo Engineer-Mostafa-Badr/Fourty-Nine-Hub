@@ -4,10 +4,8 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 
-import '../../data/models/tinder_person_model.dart';
-
-
-class GetTinderFavouritesUseCase extends UseCase<SubFavoritesResponse, NoParams> {
+class GetTinderFavouritesUseCase
+    extends UseCase<SubFavoritesResponse, NoParams> {
   final TinderRepository _repository;
 
   GetTinderFavouritesUseCase(this._repository);
@@ -17,4 +15,3 @@ class GetTinderFavouritesUseCase extends UseCase<SubFavoritesResponse, NoParams>
     return _repository.fetchFavourites();
   }
 }
-
