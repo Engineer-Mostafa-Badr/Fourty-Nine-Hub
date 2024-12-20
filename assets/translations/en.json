@@ -1079,8 +1079,9 @@
   "rating": "Rating",
   "rateDoctor": "Rate Doctor",
   "restaurantOrders": "Restaurant Orders",
-  "watch": "Watch",
   "clearForEveryone": "Clear for Everyone",
+  "criminalRecord": "Criminal Record",
+  "technicalExamination": "Technical Examination",
   "clearForMe": "Clear for Me",
   "clearThisChat": "Clear this Chat?",
   "opened": "Opened",
@@ -1170,10 +1171,8 @@
   "emergencyRequests": "Emergency Requests",
   "noEmergencyRequests": "No Emergency Requests",
   "allAppointments": "All Appointments",
-  "rejectedAppointment": "Rejected Appointment"
+  "rejectedAppointment": "Rejected Appointment",
 
-  "mainCategory" : "Main Category",
-  "publishSubmitted": "Your talent submitted successfully wait for administration approved",
   "loadingDashboard": "Loading dashboard",
   "rideDashboard": "Ride dashboard",
   "sendYourOffer": "Send Your Offer",
