@@ -531,7 +531,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     // ),
                     // const Gap(30),
                     const SizedBox(height: 10),
-                    Row(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Column(
@@ -630,7 +630,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Label(
-                              text: LocaleKeys.license.tr(),
+                              text: context.isArabic?'رخصة':'License',
                               style: const TextStyle(
                                   fontSize: 17,
                                   color: AppColors.PRIMARY_COLOR,
