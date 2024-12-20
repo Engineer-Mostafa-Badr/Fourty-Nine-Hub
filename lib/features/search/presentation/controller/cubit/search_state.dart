@@ -1,6 +1,6 @@
 part of 'search_cubit.dart';
 
-enum SearchStates { loading, initial, success,error }
+enum SearchStates { loading, initial, success, error }
 
 class SearchState {
   final SearchStates status;
@@ -16,7 +16,6 @@ class SearchState {
   final PostEntity? postDetails;
   final CommentEntity? newComment;
 
-
   SearchState({
     this.status = SearchStates.loading,
     this.failure,
@@ -29,23 +28,22 @@ class SearchState {
     this.tripCome,
     this.newComment,
     this.reels,
-    this.filter='totalUsers',
+    this.filter = 'totalUsers',
   });
 
-  SearchState copyWith({
-    SearchStates? status,
-    Failure? failure,
-    String? filter,
-    List<MainCategoryEntity>? search,
-    List<SubCategoryEntity>? searchSubCategory,
-    List<UserSearchEntity>? userSearch,
-    List<AdsSearchEntity>? adsSearch,
-    List<PostEntity>? posts,
-    List<TripComeWithYouEntity>? tripCome,
-    PostEntity? postDetails,
-    CommentEntity? newComment,
-    List<ReelsSearchEntity>? reels
-  }) {
+  SearchState copyWith(
+      {SearchStates? status,
+      Failure? failure,
+      String? filter,
+      List<MainCategoryEntity>? search,
+      List<SubCategoryEntity>? searchSubCategory,
+      List<UserSearchEntity>? userSearch,
+      List<AdsSearchEntity>? adsSearch,
+      List<PostEntity>? posts,
+      List<TripComeWithYouEntity>? tripCome,
+      PostEntity? postDetails,
+      CommentEntity? newComment,
+      List<ReelsSearchEntity>? reels}) {
     return SearchState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

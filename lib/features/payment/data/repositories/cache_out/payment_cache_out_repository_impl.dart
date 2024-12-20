@@ -17,15 +17,16 @@ class PaymentCacheOutRepositoryImpl implements PaymentCacheOutRepository {
 
   PaymentCacheOutRepositoryImpl(this._remoteDataSource);
 
-
   @override
-  Future<Either<Failure, InstapayCacheOutEntity>> instapayCacheOut(InstapayParams params) {
+  Future<Either<Failure, InstapayCacheOutEntity>> instapayCacheOut(
+      InstapayParams params) {
     return _remoteDataSource.instapayCacheOut(params);
   }
 
   @override
-  Future<Either<Failure, bool>> requestYellowCard(RequestYellowCardParams params) {
-   return _remoteDataSource.requestYellowCard(params);
+  Future<Either<Failure, bool>> requestYellowCard(
+      RequestYellowCardParams params) {
+    return _remoteDataSource.requestYellowCard(params);
   }
 
   @override

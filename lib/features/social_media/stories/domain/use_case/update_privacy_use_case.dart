@@ -4,7 +4,8 @@ import 'package:fourtyninehub/core/error/failure.dart';
 
 import '../repositories/stories_repository.dart';
 
-class UpdateStoryPrivacyUseCase extends UseCase<bool, UpdateStoryPrivacyParams> {
+class UpdateStoryPrivacyUseCase
+    extends UseCase<bool, UpdateStoryPrivacyParams> {
   final StoriesRepository _repository;
 
   UpdateStoryPrivacyUseCase(this._repository);
@@ -15,7 +16,7 @@ class UpdateStoryPrivacyUseCase extends UseCase<bool, UpdateStoryPrivacyParams> 
   }
 }
 
-class UpdateStoryPrivacyParams{
+class UpdateStoryPrivacyParams {
   final String privacyType;
   final List<String>? users;
 
@@ -23,7 +24,7 @@ class UpdateStoryPrivacyParams{
 
   //toJson
   Map<String, dynamic> toJson() => {
-    'privacyType': privacyType,
-    'users': users,
-  };
+        'privacyType': privacyType,
+        'users': users,
+      };
 }

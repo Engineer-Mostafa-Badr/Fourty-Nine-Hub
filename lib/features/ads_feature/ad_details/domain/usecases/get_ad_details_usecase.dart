@@ -15,7 +15,7 @@ class GetAdDetailsUseCase extends UseCase<AddDetailsModel, GetAdDetailsParams> {
   }
 }
 
-class GetAdDetailsParams{
+class GetAdDetailsParams {
   final String userId;
   final String adId;
 

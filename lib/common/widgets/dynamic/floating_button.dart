@@ -31,7 +31,7 @@ class FloatingButton extends StatelessWidget {
         onPressed: onTap != null
             ? () => onTap!()
             : () {
-          HandleCashback.setCount('socialCount',context);
+                HandleCashback.setCount('socialCount', context);
 
                 if (changeView == 1) {
                   context.push(Routes.SOCIAL,extra: SocialParams(userId: UserCubit.to.state.data?.id??'',index: 0));
@@ -44,7 +44,7 @@ class FloatingButton extends StatelessWidget {
             ? Icon(
                 icon,
                 color: AppColors.PRIMARY_COLOR,
-          size: 50.sp,
+                size: 50.sp,
               )
             : Image.asset(
                 Assets.logo,

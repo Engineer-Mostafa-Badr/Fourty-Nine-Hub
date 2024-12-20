@@ -180,6 +180,11 @@ abstract class Routes {
   static const SEEALLBROADCASTS = '/SeeAllBroadcasts';
   static const BROADCAST = '/Broadcast';
   static const AddNewPickMe = "/AddNeWPickMe";
+  static const TRIPINFOBYRIDERSCREEN = '/Ride/TripInfoByRiderScreen';
+  static const TRIPINFOBYDRIVERSCREEN = '/Ride/TripInfoByDriverScreen';
+  static const ALLTRIPNOSOCKETSCREEN = '/Ride/AllTripNoSocketScreen';
+  static const TripRideRating = '/Ride/TripRideRating';
+
 }
 
 abstract class Paths {
@@ -349,6 +354,10 @@ abstract class Paths {
   static const DRIVERREQUESTSDETIALS = 'DRIVERREQUESTSDETIALS';
   static const MyRating = 'MyRating';
   static const TripRating = 'TripRating';
+  static const TripRideRating = 'TripRideRating';
   static const EDITDRIVERSCREEN = 'EditDriver';
   static const AddNewPickMe = "AddNeWPickMe";
+  static const TRIPINFOBYRIDERSCREEN = 'TRIPINFOBYRIDERSCREEN';
+  static const TRIPINFOBYDRIVERSCREEN = 'TRIPINFOBYDRIVERSCREEN';
+  static const ALLTRIPNOSOCKETSCREEN = 'ALLTRIPNOSOCKETSCREEN';
 }

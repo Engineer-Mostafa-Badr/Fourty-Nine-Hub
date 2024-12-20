@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +10,6 @@ import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_price_distance/fetch_price_distance_cubit.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:latlong2/latlong.dart' as latlong2;
 
 part 'get_lat_and_long_state.dart';
 
@@ -37,7 +35,7 @@ class GetLatAndLongCubit extends Cubit<GetLatAndLongState> {
 
     response.fold(
       (Failure failure) => emit(
-        GetLatAndLongFailure(errorMessage: Labels.errorHappened),
+        const GetLatAndLongFailure(errorMessage: Labels.errorHappened),
       ),
       (data) async {
         type = data.type;

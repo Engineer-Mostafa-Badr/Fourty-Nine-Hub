@@ -4,7 +4,15 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/balan
 import '../../../../../../core/error/failure.dart';
 import '../../../domain/entities/balance/request_withdraw_entity.dart';
 
-enum BalanceStates { loading, initial, error,errorRequest, successFive, successTen ,success}
+enum BalanceStates {
+  loading,
+  initial,
+  error,
+  errorRequest,
+  successFive,
+  successTen,
+  success
+}
 
 extension BalanceStatesX on BalanceState {
   bool get isInitial => status == BalanceStates.initial;

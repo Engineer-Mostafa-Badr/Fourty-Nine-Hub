@@ -39,9 +39,6 @@ class MutedStoriesData {
   }
 }
 
-
-
-
 class Pagination {
   final int countItem;
   final int pageCount;

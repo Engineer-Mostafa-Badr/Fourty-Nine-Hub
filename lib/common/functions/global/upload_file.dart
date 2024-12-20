@@ -43,7 +43,7 @@ class UploadFile {
           await sendBinaryFileData(
                   file: file, signedUrl: data['data']['signedUrl'])
               .then((value) async {
-                print("amdl;maldmaslkd");
+            print("amdl;maldmaslkd");
             final mediaId = data['data']['mediaId'];
             final confirmUploadResponse = await serviceLocator<ApiConsumer>()
                 .put(EndPoints.confirmUpload(mediaId));
@@ -131,14 +131,18 @@ class UploadFile {
     required Function(UploadFileEntity) onUploaded,
   }) async {
     final file = await FilePickerHelper()
-        .pickVideo(isGallery: isGallery) // Assuming you have a method to pick video files
+        .pickVideo(
+            isGallery:
+                isGallery) // Assuming you have a method to pick video files
         .then((file) async {
       if (file != null) {
         final bytes = await file.readAsBytes();
         int size = bytes.length;
         // Get signed URL
-        final signedURLResponse = await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
-          "type": "video/${file.mimeType ?? 'mp4'}", // Change to video MIME type
+        final signedURLResponse =
+            await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
+          "type":
+              "video/${file.mimeType ?? 'mp4'}", // Change to video MIME type
           "size": size,
           "subcategoryId": subCategoryId
         });
@@ -148,7 +152,8 @@ class UploadFile {
           print(l.toString());
         }, (data) async {
           log("responseData: ${jsonEncode(data)}");
-          await sendBinaryFileData(file: file, signedUrl: data['data']['signedUrl'])
+          await sendBinaryFileData(
+                  file: file, signedUrl: data['data']['signedUrl'])
               .then((value) async {
             final mediaId = data['data']['mediaId'];
             final confirmUploadResponse = await serviceLocator<ApiConsumer>()
@@ -166,7 +171,6 @@ class UploadFile {
     });
     return null;
   }
-
 
   static Future<String?> uploadPickedFile({
     required File file,
@@ -224,9 +228,8 @@ class UploadFile {
     }
   }
 
-Future<void> sendBinaryFileData(
-      {required XFile file, required String signedUrl}) async
-  {
+  Future<void> sendBinaryFileData(
+      {required XFile file, required String signedUrl}) async {
     print("signedUrl$signedUrl");
     Uint8List image = await file.readAsBytes();
     print("object${image.length}");
@@ -242,8 +245,7 @@ Future<void> sendBinaryFileData(
       // 'File-Name': fileName,
     });
 
-    await Dio().put(signedUrl,
-        data: image, options: options);
+    await Dio().put(signedUrl, data: image, options: options);
     print("aasl;das;ld,");
   }
 }

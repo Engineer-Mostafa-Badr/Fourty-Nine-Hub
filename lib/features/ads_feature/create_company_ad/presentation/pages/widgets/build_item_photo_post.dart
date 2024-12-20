@@ -33,8 +33,9 @@ class BuildItemPhotoPost extends StatelessWidget {
   Widget build(BuildContext context) {
     final DateTime createdAt = DateTime.parse(advertises.createdAt!);
     final DateTime egyptTime = createdAt.toUtc().add(const Duration(hours: 3));
-    final String formattedDayTime =
-        DateFormat('EEEE, h:mm a',context.locale == Locales.english? 'en':'ar').format(egyptTime);
+    final String formattedDayTime = DateFormat(
+            'EEEE, h:mm a', context.locale == Locales.english ? 'en' : 'ar')
+        .format(egyptTime);
     return BlocConsumer<CreateCompanyAdCubit, CreateCompanyAdState>(
       listener: (BuildContext context, CreateCompanyAdState state) {
         if (state.status == StateStatus.success) {

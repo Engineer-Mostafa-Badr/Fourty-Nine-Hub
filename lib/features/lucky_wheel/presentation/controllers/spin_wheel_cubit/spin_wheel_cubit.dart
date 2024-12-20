@@ -66,7 +66,7 @@ class SpinWheelCubit extends Cubit<BasicState<WheelItemEntity>> {
           child: AlertDialog(
             scrollable: false,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            title:  Center(child: Text(LocaleKeys.youWin.localize)),
+            title: Center(child: Text(LocaleKeys.youWin.localize)),
             content: SingleChildScrollView(
               child: Column(
                 children: [
@@ -78,7 +78,8 @@ class SpinWheelCubit extends Cubit<BasicState<WheelItemEntity>> {
                   ),
                   ElevatedAppButton(
                     label: LocaleKeys.back.localize,
-                    textStyle: Styles.mediumText(color: AppColors.AUTH_CONTAINER_COLOR),
+                    textStyle: Styles.mediumText(
+                        color: AppColors.AUTH_CONTAINER_COLOR),
                     backColor: AppColors.SECONDARY_COLOR,
                     onPressed: () {
                       Navigator.pop(context);

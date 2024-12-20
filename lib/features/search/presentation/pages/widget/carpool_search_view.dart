@@ -34,7 +34,7 @@ class _AvailableRoutesBuilderState extends State<CarpoolSearchView> {
           return const Center(child: CircularProgressIndicator());
         } else if (state is GetAllTripsSuccess) {
           bool hasMatchingTrips =
-          false; // Flag to check if trips match the type
+              false; // Flag to check if trips match the type
 
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 20.h),
@@ -47,22 +47,22 @@ class _AvailableRoutesBuilderState extends State<CarpoolSearchView> {
 
                 if (widget.type == "expired" &&
                     DateTime.now()
-                        .difference(
-                        DateTime.parse(trip.createdAt.toString()))
-                        .inMinutes >
+                            .difference(
+                                DateTime.parse(trip.createdAt.toString()))
+                            .inMinutes >
                         60) {
                   matchesFilter = true;
                 } else if (widget.type == "available" &&
                     DateTime.now()
-                        .difference(
-                        DateTime.parse(trip.createdAt.toString()))
-                        .inMinutes <
+                            .difference(
+                                DateTime.parse(trip.createdAt.toString()))
+                            .inMinutes <
                         60) {
                   matchesFilter = true;
                 } else if (widget.type == "myBookings" &&
                     (trip.ownerId == userId ||
                         trip.locations.any(
-                                (location) => location.bookedUser?.id == userId))) {
+                            (location) => location.bookedUser?.id == userId))) {
                   matchesFilter = true;
                 }
 
@@ -91,7 +91,7 @@ class _AvailableRoutesBuilderState extends State<CarpoolSearchView> {
             ),
           );
         } else if (state is GetAllTripsFailure) {
-          return Center(child: Text("there is no trips. try again !"));
+          return const Center(child: Text("there is no trips. try again !"));
         } else {
           return const SizedBox();
         }
@@ -161,8 +161,8 @@ class _AvailableRoutesBottomSheetState
                       setState(() {});
                     },
                     activeColor: AppColors.PRIMARY_COLOR,
-                    trackColor: const MaterialStatePropertyAll(
-                        AppColors.SECONDARY_COLOR),
+                    trackColor:
+                        const WidgetStatePropertyAll(AppColors.SECONDARY_COLOR),
                     inactiveThumbColor: Colors.grey,
                   ),
                 ),
@@ -186,8 +186,8 @@ class _AvailableRoutesBottomSheetState
                       setState(() {});
                     },
                     activeColor: AppColors.PRIMARY_COLOR,
-                    trackColor: const MaterialStatePropertyAll(
-                        AppColors.SECONDARY_COLOR),
+                    trackColor:
+                        const WidgetStatePropertyAll(AppColors.SECONDARY_COLOR),
                     inactiveThumbColor: Colors.grey,
                   ),
                 ),
@@ -213,7 +213,7 @@ class _AvailableRoutesBottomSheetState
                           setState(() {});
                         },
                         activeColor: AppColors.PRIMARY_COLOR,
-                        trackColor: const MaterialStatePropertyAll(
+                        trackColor: const WidgetStatePropertyAll(
                             AppColors.SECONDARY_COLOR),
                         inactiveThumbColor: Colors.grey,
                       ),
@@ -222,10 +222,10 @@ class _AvailableRoutesBottomSheetState
                 ),
                 isDriverWomanOnly
                     ? Text(
-                  "You will find fewer drivers if you select this option",
-                  style:
-                  Styles.mediumText(color: AppColors.SECONDARY_COLOR),
-                )
+                        "You will find fewer drivers if you select this option",
+                        style:
+                            Styles.mediumText(color: AppColors.SECONDARY_COLOR),
+                      )
                     : SizedBox(height: 70.h),
               ],
             ),

@@ -8,7 +8,7 @@ class ListenToUnPinMessageUseCase
   ListenToUnPinMessageUseCase(this._chatRoomRepository);
 
   @override
-  void call( Function(ListenToUnPinMessageParams params) params) {
+  void call(Function(ListenToUnPinMessageParams params) params) {
     return _chatRoomRepository.listenToUnPinMessage(params);
   }
 }

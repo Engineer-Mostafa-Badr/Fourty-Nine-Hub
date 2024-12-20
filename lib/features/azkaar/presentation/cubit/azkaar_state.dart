@@ -9,21 +9,20 @@ class AzkarState {
   final AzkarStates status;
   final Failure? failure;
   final List<AzkarEntity>? akar;
- final List<AzkarDetailsEntity>? azkarDetail;
+  final List<AzkarDetailsEntity>? azkarDetail;
 
   const AzkarState({
     this.status = AzkarStates.loading,
     this.failure,
     this.akar,
-   this.azkarDetail,
+    this.azkarDetail,
   });
-  AzkarState copyWith(
-      {AzkarStates? status,
-        Failure? failure,
-        List<AzkarEntity>? akar,
-       List<AzkarDetailsEntity>? azkarDetail,
-      }
-      ) {
+  AzkarState copyWith({
+    AzkarStates? status,
+    Failure? failure,
+    List<AzkarEntity>? akar,
+    List<AzkarDetailsEntity>? azkarDetail,
+  }) {
     return AzkarState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

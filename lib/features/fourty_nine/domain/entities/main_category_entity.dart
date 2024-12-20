@@ -5,7 +5,7 @@ import '../../../subcategories/domain/entities/sub_category_entity.dart';
 
 class MainCategoryEntity extends Equatable {
   final String id;
-  final String name;
+  final String? name;
   final String? nameEn;
   final String image;
   final List<SubCategoryEntity>? subcategories;
@@ -17,7 +17,7 @@ class MainCategoryEntity extends Equatable {
 
   MainCategoryEntity(
       {required this.id,
-      required this.name,
+      this.name,
       required this.nameEn,
       required this.image,
       this.subcategories,

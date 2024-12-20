@@ -31,7 +31,7 @@ class StartedTripWidget extends StatelessWidget {
           children: [
             if (trip.driver != null) _buildDriverWidget(driver: trip.driver!),
             const Divider(),
-            _buildTripInfoWidget(trip: trip,context: context),
+            _buildTripInfoWidget(trip: trip, context: context),
           ],
         ),
       ),
@@ -72,7 +72,8 @@ class StartedTripWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildTripInfoWidget({required TripEntity trip,required BuildContext context}) {
+  Widget _buildTripInfoWidget(
+      {required TripEntity trip, required BuildContext context}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -81,7 +82,9 @@ class StartedTripWidget extends StatelessWidget {
             const Icon(FontAwesomeIcons.car, color: AppColors.PRIMARY_COLOR),
             const Sizer(),
             Label(
-              text: context.isArabic?trip.category?.nameAr??'':trip.category?.nameEn ?? "",
+              text: context.isArabic
+                  ? trip.category?.nameAr ?? ''
+                  : trip.category?.nameEn ?? "",
               style: Styles.mediumText(fontWeight: FontWeight.bold),
             ),
           ],

@@ -116,7 +116,7 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                           fontSize: 25.sp,
                         ),
                       ),
-                      Sizer(),
+                      const Sizer(),
                       Row(
                         children: [
                           _buildReplyButton(),
@@ -166,7 +166,7 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                         size: 20,
                       ),
                     ),
-                    Sizer(),
+                    const Sizer(),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [

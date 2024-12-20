@@ -34,7 +34,7 @@ class RegisterParams extends Equatable {
     required this.password,
     required this.confirmPassword,
     required this.token,
-     this.referralId,
+    this.referralId,
     required this.isMale,
   });
 

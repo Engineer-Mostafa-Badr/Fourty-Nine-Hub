@@ -7,8 +7,8 @@ import 'package:fourtyninehub/features/azkaar/domain/repository/azkar_repository
 import 'package:fourtyninehub/features/azkaar/domain/use_case/fetch_azkar_use_case.dart';
 import 'package:fourtyninehub/features/azkaar/domain/use_case/fetch_details_azkar_use_case.dart';
 
- class AzkarRepositoryImpl extends AzkarRepository{
-   final AzkarRemoteDataSource _remoteDataSource;
+class AzkarRepositoryImpl extends AzkarRepository {
+  final AzkarRemoteDataSource _remoteDataSource;
 
   AzkarRepositoryImpl(this._remoteDataSource);
   @override
@@ -17,7 +17,8 @@ import 'package:fourtyninehub/features/azkaar/domain/use_case/fetch_details_azka
   }
 
   @override
-  Future<Either<Failure, List<AzkarDetailsEntity>>> fetchAzkarDetail(AzkarDetailsParams params) {
-   return _remoteDataSource.fetchAzkarDetail(params);
+  Future<Either<Failure, List<AzkarDetailsEntity>>> fetchAzkarDetail(
+      AzkarDetailsParams params) {
+    return _remoteDataSource.fetchAzkarDetail(params);
   }
 }

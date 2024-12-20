@@ -5,8 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/data/datasources/local/database/local_database_data_source.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_client_helper.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_client_helper_imp.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/subscription_interceptor.dart';
@@ -22,8 +20,6 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/controlle
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/repositories/StoriesRpo.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/data_sources/tinder_data_source.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/repositories/tinder_repository_impl.dart';
-import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/add_favourite_category_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/chech_user_nearby_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_favourites_category_use_case.dart';
@@ -139,7 +135,7 @@ class DI {
         OptionBuilder()
             .setTransports(['websocket'])
             .disableAutoConnect()
-            .setExtraHeaders({'Authorization': token??cred}) // optional
+            .setExtraHeaders({'Authorization': token ?? cred}) // optional
             .build()));
     // database
     serviceLocator.registerLazySingleton<Database>(
@@ -224,8 +220,8 @@ class DI {
         () => TinderRemoteDataSourceImpl(
               serviceLocator(),
             ));
-    serviceLocator.registerLazySingleton<TinderRepository>(
-        () => TinderRepositoryImpl(serviceLocator()));
+    // serviceLocator.registerLazySingleton<TinderRepository>(
+    //     () => TinderRepositoryImpl(serviceLocator()));
 
     serviceLocator
         .registerLazySingleton<GetUserDataUseCase>(() => GetUserDataUseCase(
@@ -290,9 +286,6 @@ class DI {
         serviceLocator(),
       ),
     );
-    serviceLocator.registerLazySingleton<ApiClientHelper>(
-      () => ApiClientHelperImp(),
-    );
     //cacheService
     serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     // base repo
@@ -344,7 +337,6 @@ class DI {
     //secrets
     SecretsServiceLocator.execute(serviceLocator: serviceLocator);
     // notifications
-
     await NotificationsServiceLocator.execute(serviceLocator: serviceLocator);
     InstagramServiceLocator.execute(serviceLocator: serviceLocator);
     FaceBookServiceLocator.execute(serviceLocator: serviceLocator);
@@ -368,6 +360,7 @@ class DI {
     ShareAppServiceLocator.execute(serviceLocator: serviceLocator);
     FollowServiceLocator.execute(serviceLocator: serviceLocator);
   }
+
   static Future<void> reset() async {
     await serviceLocator.reset();
   }

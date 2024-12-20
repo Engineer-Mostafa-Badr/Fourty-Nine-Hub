@@ -1,42 +1,37 @@
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/subscription_interceptor.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:path/path.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../../features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 
-class HandleCashback{
+class HandleCashback {
   static ApiConsumer apiConsumer = serviceLocator<ApiConsumer>();
-  static setCount(String key,BuildContext context)async{
-    if(serviceLocator<UserCubit>().isLoggedIn==false){
+  static setCount(String key, BuildContext context) async {
+    if (serviceLocator<UserCubit>().isLoggedIn == false) {
       return;
     }
     int? num = await CacheManager.getInt(key);
-    if(num==null){
-      num=1;
-      CacheManager.setInt(key,num);
-    }else{
-      if(num==9){
-        num=0;
-        CacheManager.setInt(key,num);
+    if (num == null) {
+      num = 1;
+      CacheManager.setInt(key, num);
+    } else {
+      if (num == 9) {
+        num = 0;
+        CacheManager.setInt(key, num);
         context.read<MainCategoriesCubit>().anyCashBack();
-      }else{
+      } else {
         num++;
-        CacheManager.setInt(key,num);
+        CacheManager.setInt(key, num);
       }
       print("$key $num");
     }
   }
-
 
   static postCashbackRequest() async {
     //
@@ -70,5 +65,4 @@ class HandleCashback{
         )
     ]);
   }
-
 }

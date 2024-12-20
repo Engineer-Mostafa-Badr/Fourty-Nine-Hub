@@ -123,14 +123,20 @@ class SubscriptionController {
     final response = await _subscribeUseCase(subscribeParams);
     response.fold((l) {
       if (l is ServerFailure) {
-        if (l.statusCode == 400&&subscribeParams.walletType!=WalletTypes.giftWallet&&subscribeParams.walletType!=WalletTypes.balance) {
+        if (l.statusCode == 400 &&
+            subscribeParams.walletType != WalletTypes.giftWallet &&
+            subscribeParams.walletType != WalletTypes.balance) {
           showActiveSubscriptionAmounts(walletType: subscribeParams.walletType);
-        }else if(l.statusCode == 400&&subscribeParams.walletType==WalletTypes.giftWallet){
+        } else if (l.statusCode == 400 &&
+            subscribeParams.walletType == WalletTypes.giftWallet) {
           AppPages.router.pop();
-          showErrorMessage(context, "You don't have enough balance at Gift Wallet");
-        }else if(l.statusCode == 400&&subscribeParams.walletType==WalletTypes.balance){
+          showErrorMessage(
+              context, "You don't have enough balance at Gift Wallet");
+        } else if (l.statusCode == 400 &&
+            subscribeParams.walletType == WalletTypes.balance) {
           AppPages.router.pop();
-          showErrorMessage(context, "You don't have enough balance at Balance Wallet");
+          showErrorMessage(
+              context, "You don't have enough balance at Balance Wallet");
         } else {
           AppPages.router.pop();
 

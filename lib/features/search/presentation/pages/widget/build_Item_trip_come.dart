@@ -21,7 +21,8 @@ class BuildItemTripCome extends StatelessWidget {
   const BuildItemTripCome({
     super.key,
     required this.tripJoinCardEntity,
-    this.subscribeMessageOnTap, this.requestOnTap,
+    this.subscribeMessageOnTap,
+    this.requestOnTap,
   });
   final TripComeWithYouEntity tripJoinCardEntity;
   final void Function()? requestOnTap;
@@ -63,14 +64,16 @@ class BuildItemTripCome extends StatelessWidget {
                           children: [
                             const Icon(Icons.calendar_month),
                             const Sizer(),
-                            Text(_formatDate(context), style: Styles.headerText()),
+                            Text(_formatDate(context),
+                                style: Styles.headerText()),
                           ],
                         ),
                         const Sizer(),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Icon(Icons.airline_seat_recline_extra_rounded),
+                            const Icon(
+                                Icons.airline_seat_recline_extra_rounded),
                             const Sizer(),
                             Text(' ${tripJoinCardEntity.passengers} ',
                                 style: Styles.headerText()),
@@ -137,15 +140,15 @@ class BuildItemTripCome extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                                Expanded(
-                                  flex: 3,
-                                  child: PremiumRequestButton(
-                                    adId: tripJoinCardEntity.id,
-                                    subCategoryId: tripJoinCardEntity.categoryId,
-                                    subscriptionStatus: tripJoinCardEntity.status,
-                                    //  subscriptionStatus: widget.item.subscriptionStatus??'',
-                                  ),
-                                ),
+                            Expanded(
+                              flex: 3,
+                              child: PremiumRequestButton(
+                                adId: tripJoinCardEntity.id,
+                                subCategoryId: tripJoinCardEntity.categoryId,
+                                subscriptionStatus: tripJoinCardEntity.status,
+                                //  subscriptionStatus: widget.item.subscriptionStatus??'',
+                              ),
+                            ),
                             const Sizer(width: 5),
                             Expanded(
                               flex: 3,
@@ -194,12 +197,12 @@ class BuildItemTripCome extends StatelessWidget {
                     Positioned.directional(
                       top: 10.h,
                       end: 30.w,
-                      textDirection:
-                      context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                      textDirection: context.isArabic
+                          ? TextDirection.rtl
+                          : TextDirection.ltr,
                       child: Column(
                         children: [
-                          Text(
-                              tripJoinCardEntity.price.toStringAsFixed(0),
+                          Text(tripJoinCardEntity.price.toStringAsFixed(0),
                               style: Styles.headerText(
                                   fontSize: 100.sp, color: Colors.green[600])),
                           Text(
@@ -216,7 +219,7 @@ class BuildItemTripCome extends StatelessWidget {
                 ),
                 const Sizer(),
                 Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: 20.h),
+                  padding: EdgeInsets.symmetric(horizontal: 20.h),
                   child: InkWell(
                     onTap: subscribeMessageOnTap,
                     child: Text(
@@ -238,12 +241,9 @@ class BuildItemTripCome extends StatelessWidget {
   }
 
   String _formatDate(BuildContext context) {
-    if (tripJoinCardEntity.time == null) {
-      return '';
-    }
     return intl.DateFormat('dd MMM, hh:mm aaa', context.locale.languageCode)
         .format(DateTime.fromMicrosecondsSinceEpoch(
-        tripJoinCardEntity.time * 1000000));
+            tripJoinCardEntity.time * 1000000));
   }
 
   String _localizeStatus(BuildContext context, String text) {

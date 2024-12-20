@@ -16,7 +16,11 @@ class MealCategoryCard extends StatefulWidget {
   final Function(String) onTap;
   final Function() favouriteSubCategory;
 
-  const MealCategoryCard({super.key, this.subCategory, required this.onTap, required this.favouriteSubCategory});
+  const MealCategoryCard(
+      {super.key,
+      this.subCategory,
+      required this.onTap,
+      required this.favouriteSubCategory});
 
   @override
   State<MealCategoryCard> createState() => _MealCategoryCardState();
@@ -28,7 +32,7 @@ class _MealCategoryCardState extends State<MealCategoryCard> {
     return FittedBox(
       child: Card(
         clipBehavior: Clip.hardEdge,
-        elevation: widget.subCategory?.isSelected==true?0:null,
+        elevation: widget.subCategory?.isSelected == true ? 0 : null,
         // color: widget.subCategory?.isSelected==true?AppColors.SECONDARY_COLOR:cardDarkColor(context),
         child: SizedBox(
           width: 0.55.sw,
@@ -41,37 +45,52 @@ class _MealCategoryCardState extends State<MealCategoryCard> {
                 Stack(
                   children: [
                     // Heart image
-                    widget.subCategory?.fromAsset==true? Image.asset(widget.subCategory?.image??'',fit: BoxFit.fill,height: 300.h,width: 0.55.sw,):ImageFromInternet(image: widget.subCategory?.picture??'',defaultLogo: true,height: 300.h,width: 0.55.sw,),
-                   if(context.read<UserCubit>().isLoggedIn&&widget.subCategory?.id!='') Positioned(
-                      top: 5,
-                      right: 5,
-                      child: IconAppButton(
-                          size: 25,
-                          icon: widget.subCategory?.isFavorite ?? false
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: AppColors.PRIMARY_COLOR_DARK,
-                          onPressed: () async{
-                            await widget.favouriteSubCategory();
-                          }),
-                    ),
+                    widget.subCategory?.fromAsset == true
+                        ? Image.asset(
+                            widget.subCategory?.image ?? '',
+                            fit: BoxFit.fill,
+                            height: 300.h,
+                            width: 0.55.sw,
+                          )
+                        : ImageFromInternet(
+                            image: widget.subCategory?.picture ?? '',
+                            defaultLogo: true,
+                            height: 300.h,
+                            width: 0.55.sw,
+                          ),
+                    if (context.read<UserCubit>().isLoggedIn &&
+                        widget.subCategory?.id != '')
+                      Positioned(
+                        top: 5,
+                        right: 5,
+                        child: IconAppButton(
+                            size: 25,
+                            icon: widget.subCategory?.isFavorite ?? false
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: AppColors.PRIMARY_COLOR_DARK,
+                            onPressed: () async {
+                              await widget.favouriteSubCategory();
+                            }),
+                      ),
                   ],
                 ),
                 Container(
                   width: double.infinity,
-                  color: widget.subCategory?.isSelected==true?AppColors.SECONDARY_COLOR:cardDarkColor(context),
-                  padding:EdgeInsetsDirectional.only(
-                      top: 8.h,
-                      end: 10.w,
-                      start:16.w,
-                      bottom:16.h),
+                  color: widget.subCategory?.isSelected == true
+                      ? AppColors.SECONDARY_COLOR
+                      : cardDarkColor(context),
+                  padding: EdgeInsetsDirectional.only(
+                      top: 8.h, end: 10.w, start: 16.w, bottom: 16.h),
                   child: Label(
                     text: (getLang() == "ar"
                             ? widget.subCategory?.nameAr
                             : widget.subCategory?.nameEn) ??
                         "",
                     style: Styles.headerText(
-                      color: widget.subCategory?.isSelected==true?Colors.white:null,
+                      color: widget.subCategory?.isSelected == true
+                          ? Colors.white
+                          : null,
                     ),
                   ),
                 ),

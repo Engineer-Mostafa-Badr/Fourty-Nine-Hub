@@ -538,8 +538,8 @@ class _ZegoLiveStreamingPreviewPageState
             children: [
               widget.config.preview.bottomBar.showBeautyEffectButton
                   ? SizedBox(
-                width: 0.6.sw,
-                    child: Row(
+                      width: 0.6.sw,
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ZegoToggleMicrophoneButton(
@@ -587,7 +587,6 @@ class _ZegoLiveStreamingPreviewPageState
                             ),
                           ),
                           // const Sizer(),
-
 
                           ZegoScreenSharingToggleButton(
                             buttonSize: buttonSize,
@@ -640,7 +639,7 @@ class _ZegoLiveStreamingPreviewPageState
                           )
                         ],
                       ),
-                  )
+                    )
                   : beautyButtonPlaceHolder,
               // SizedBox(width: 48.zR),
               startButton(),
@@ -717,7 +716,7 @@ class _ZegoLiveStreamingPreviewPageState
             defaultAction(_titleController.text.trim());
           },
           child: Container(
-            width: context.screenWidth *0.6,
+            width: context.screenWidth * 0.6,
             height: 50,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(44.zR),

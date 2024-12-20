@@ -55,12 +55,14 @@ class RestaurantDetailsRepoImpl implements RestaurantDetailsRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> deleteFoodFromCart({required DeleteFoodFromCartParams params}) {
+  Future<Either<Failure, bool>> deleteFoodFromCart(
+      {required DeleteFoodFromCartParams params}) {
     return _remoteDataSource.deleteFoodFromCart(params: params);
   }
 
   @override
-  Future<Either<Failure, bool>> changeQuantity({required ChangeQuantityParams params}) {
+  Future<Either<Failure, bool>> changeQuantity(
+      {required ChangeQuantityParams params}) {
     return _remoteDataSource.changeQuantity(params: params);
   }
 }

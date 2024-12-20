@@ -13,7 +13,7 @@ class FilterAdUseCase extends UseCase<List<AdModel>, FilterModel> {
 
   @override
   Future<Either<Failure, List<AdModel>>> call(
-      FilterModel params,
+    FilterModel params,
   ) {
     return _repo.filterAd(ad: params);
   }

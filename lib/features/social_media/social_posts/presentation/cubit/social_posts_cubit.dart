@@ -124,9 +124,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._createAnonymousChatUseCase,
   ) : super(const SocialPostsState());
 
-
   final shareFormKey = GlobalKey<FormState>();
-
 
   void loadData() async {
     await getFeed(1);
@@ -939,7 +937,8 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 
   // share post
   Future<bool> onShare({required String postId}) async {
-    var response = await _sharePostUseCase(SharePostParams(postId: postId,content: content??''));
+    var response = await _sharePostUseCase(
+        SharePostParams(postId: postId, content: content ?? ''));
     var value = false;
     response.fold(
         (failure) =>

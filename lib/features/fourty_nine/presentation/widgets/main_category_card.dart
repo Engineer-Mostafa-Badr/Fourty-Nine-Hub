@@ -50,13 +50,14 @@ class MainCategoryCard extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  Label(
-                                    text: mainCategory.name,
-                                    style: Styles.headerText(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
+                                  if (mainCategory.name != null)
+                                    Label(
+                                      text: mainCategory.name ?? "",
+                                      style: Styles.headerText(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
                                   Label(
                                     text: '${mainCategory.total} Ads',
                                     style:

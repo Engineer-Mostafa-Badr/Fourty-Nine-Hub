@@ -153,7 +153,6 @@ class CreateTripRider extends StatelessWidget {
                   ],
                 ),
               ),
-
             ],
           );
         },

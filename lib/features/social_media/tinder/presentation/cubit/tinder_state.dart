@@ -4,7 +4,6 @@ import 'package:fourtyninehub/features/social_media/tinder/data/models/anonymous
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/last_seen_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/main_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/near_by_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/normal_chat_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
@@ -102,14 +101,14 @@ class TinderViewState {
     this.currentPage = 0,
     this.uploadImageState = TinderStates.initial,
     this.profileUserData,
-    this.profileUserState =  TinderStates.initial,
+    this.profileUserState = TinderStates.initial,
     this.addCategoryModel,
     this.addCategoryModelState = TinderStates.initial,
     this.userData = const [],
     this.userDataState = TinderStates.initial,
     this.subCategoryData = const [],
     this.subCategoryDataState = TinderStates.initial,
-    this.gifts =  const [],
+    this.gifts = const [],
     this.giftsState = TinderStates.initial,
     this.position = Offset.zero,
     this.positionState = TinderStates.initial,
@@ -125,7 +124,7 @@ class TinderViewState {
     this.currentStoryIndexState = TinderStates.initial,
     this.isUserNearby,
     this.isUserNearbyState = TinderStates.initial,
-    this.lastSeenModel ,
+    this.lastSeenModel,
     this.lastSeenModelState,
     this.getFavCategoryModel,
     this.getFavoriteCategoryModel,
@@ -224,7 +223,7 @@ class TinderViewState {
           anonymousChatResponseState ?? this.anonymousChatResponseState,
       anonymousChatResponse:
           anonymousChatResponse ?? this.anonymousChatResponse,
-      mainCategoryResponse: mainCategoryEntity ?? this.mainCategoryResponse,
+      mainCategoryResponse: mainCategoryEntity ?? mainCategoryResponse,
       mainCategoryResponseState:
           mainCategoryResponseState ?? this.mainCategoryResponseState,
     );

@@ -52,7 +52,7 @@ class CreateAdState {
       this.selectedSubCategory,
       this.status,
       this.cities,
-      this.city='',
+      this.city = '',
       this.governorates,
       this.myAdById,
       this.isUser = true,
@@ -60,7 +60,7 @@ class CreateAdState {
       this.isPrice = true,
       this.isMale = true,
       this.images,
-      this.governorate='',
+      this.governorate = '',
       this.subCategories});
 
   CreateAdState copyWith({
@@ -80,7 +80,6 @@ class CreateAdState {
     bool? isPrice,
     String? city,
     String? governorate,
-
     List<CityEntity>? cities,
     SubCategoryEntity? selectedSubCategory,
     List<UploadFileEntity>? images,

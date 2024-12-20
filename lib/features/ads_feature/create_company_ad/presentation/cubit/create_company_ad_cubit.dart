@@ -26,7 +26,8 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
     this._getPriceUseCases,
     this._companyAddUseCases,
     this._deleteCompanyAddUseCases,
-    this._getPostsCompanyAdUseCase, this._payCompanyAdUseCase,
+    this._getPostsCompanyAdUseCase,
+    this._payCompanyAdUseCase,
   ) : super(const CreateCompanyAdState());
 
   void loadData() async {
@@ -106,7 +107,7 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
   Future<void> payCompanyAd(PayCompanyAdParams params) async {
     emit(state.copyWith(status: StateStatus.loading)); // Start loading state
     final response = await _payCompanyAdUseCase(params);
-  return response.fold(
+    return response.fold(
       (failure) =>
           emit(state.copyWith(failure: failure, status: StateStatus.error)),
       (success) {

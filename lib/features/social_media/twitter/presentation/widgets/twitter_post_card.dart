@@ -318,7 +318,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                       if (index == 3 && myImages!.length > 4)
                         Container(
                           alignment: Alignment.center,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               // borderRadius: BorderRadius.circular(15),
                               ),
                           child: Center(

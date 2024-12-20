@@ -27,29 +27,29 @@ class SearchServiceLocator {
         .registerLazySingleton<FetchSearchUseCase>(() => FetchSearchUseCase(
               serviceLocator(),
             ));
-    serviceLocator
-        .registerLazySingleton<FetchSearchSubCategoryUseCase>(() => FetchSearchSubCategoryUseCase(
+    serviceLocator.registerLazySingleton<FetchSearchSubCategoryUseCase>(
+        () => FetchSearchSubCategoryUseCase(
               serviceLocator(),
             ));
-    serviceLocator
-        .registerLazySingleton<FetchUserSearchUseCase>(() => FetchUserSearchUseCase(
+    serviceLocator.registerLazySingleton<FetchUserSearchUseCase>(
+        () => FetchUserSearchUseCase(
               serviceLocator(),
             ));
-    serviceLocator
-        .registerLazySingleton<FetchAdsSearchUseCase>(() => FetchAdsSearchUseCase(
+    serviceLocator.registerLazySingleton<FetchAdsSearchUseCase>(
+        () => FetchAdsSearchUseCase(
               serviceLocator(),
             ));
-    serviceLocator
-        .registerLazySingleton<FetchPostsSearchUseCase>(() => FetchPostsSearchUseCase(
+    serviceLocator.registerLazySingleton<FetchPostsSearchUseCase>(
+        () => FetchPostsSearchUseCase(
               serviceLocator(),
             ));
 
-    serviceLocator
-        .registerLazySingleton<FetchTripComeSearchUseCase>(() => FetchTripComeSearchUseCase(
+    serviceLocator.registerLazySingleton<FetchTripComeSearchUseCase>(
+        () => FetchTripComeSearchUseCase(
               serviceLocator(),
             ));
-    serviceLocator
-        .registerLazySingleton<FetchReelSearchUseCase>(() => FetchReelSearchUseCase(
+    serviceLocator.registerLazySingleton<FetchReelSearchUseCase>(
+        () => FetchReelSearchUseCase(
               serviceLocator(),
             ));
 

@@ -89,6 +89,7 @@ class ShippingRepository {
     return dataSource.confirm(id: id);
   }
 
+
   Future<Either<Failure, Map<String, dynamic>>> createTrip(
       {required RequestModel model}) async {
     // List<S3UploadModel> imagesS3 = [];

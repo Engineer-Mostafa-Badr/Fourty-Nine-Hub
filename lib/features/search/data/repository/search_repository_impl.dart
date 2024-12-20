@@ -12,42 +12,49 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 
 import '../../domain/repository/search_repository.dart';
 
-class SearchRepositoryImpl extends SearchRepository{
+class SearchRepositoryImpl extends SearchRepository {
   final SearchRemoteDataSource _searchRemoteDataSource;
 
   SearchRepositoryImpl(this._searchRemoteDataSource);
   @override
-  Future<Either<Failure, List<MainCategoryEntity>>> fetchSearch(SearchParams params) {
-   return _searchRemoteDataSource.fetchSearch(params);
+  Future<Either<Failure, List<MainCategoryEntity>>> fetchSearch(
+      SearchParams params) {
+    return _searchRemoteDataSource.fetchSearch(params);
   }
 
   @override
-  Future<Either<Failure, List<UserSearchEntity>>> fetchUserSearch(SearchParams params) {
-   return _searchRemoteDataSource.fetchUserSearch(params);
+  Future<Either<Failure, List<UserSearchEntity>>> fetchUserSearch(
+      SearchParams params) {
+    return _searchRemoteDataSource.fetchUserSearch(params);
   }
 
   @override
-  Future<Either<Failure, List<AdsSearchEntity>>> fetchAdsSearch(SearchParams params) {
-   return _searchRemoteDataSource.fetchAdsSearch(params);
+  Future<Either<Failure, List<AdsSearchEntity>>> fetchAdsSearch(
+      SearchParams params) {
+    return _searchRemoteDataSource.fetchAdsSearch(params);
   }
 
   @override
-  Future<Either<Failure, List<PostEntity>>> fetchPostsSearch(SearchParams params) {
+  Future<Either<Failure, List<PostEntity>>> fetchPostsSearch(
+      SearchParams params) {
     return _searchRemoteDataSource.fetchPostsSearch(params);
   }
 
   @override
-  Future<Either<Failure, List<TripComeWithYouEntity>>> fetchTripComeSearch(SearchParams params) {
+  Future<Either<Failure, List<TripComeWithYouEntity>>> fetchTripComeSearch(
+      SearchParams params) {
     return _searchRemoteDataSource.fetchTripComeSearch(params);
   }
 
   @override
-  Future<Either<Failure, List<ReelsSearchEntity>>> fetchReelSearch(SearchParams params) {
+  Future<Either<Failure, List<ReelsSearchEntity>>> fetchReelSearch(
+      SearchParams params) {
     return _searchRemoteDataSource.fetchReelSearch(params);
   }
 
   @override
-  Future<Either<Failure, List<SubCategoryEntity>>> fetchSearchSubCategory(SearchParams params) {
+  Future<Either<Failure, List<SubCategoryEntity>>> fetchSearchSubCategory(
+      SearchParams params) {
     return _searchRemoteDataSource.fetchSearchSubCategory(params);
   }
 }

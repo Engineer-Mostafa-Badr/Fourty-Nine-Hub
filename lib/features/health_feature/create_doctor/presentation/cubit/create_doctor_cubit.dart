@@ -66,8 +66,7 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
     final userId = UserCubit.to.state.data?.id;
 
     if (_shareCubit.subCategories.isEmpty) {
-      final response =
-          await _getHealthSubcategoriesUseCase.call(userId??'');
+      final response = await _getHealthSubcategoriesUseCase.call(userId ?? '');
       response
           .fold((failure) => emit(CreateDoctorError("Can't Load Specialities")),
               (data) {
@@ -141,9 +140,9 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
     _createDoctorParams.calls?.workDays.clear();
     _createDoctorParams.visitHome?.workDays.clear();
     for (var element in clinicTimetable) {
-      if (element.isAvailable==true) {
-          _createDoctorParams.clinic?.workDays
-              .add(DoctorDayModel.fromEntity(element));
+      if (element.isAvailable == true) {
+        _createDoctorParams.clinic?.workDays
+            .add(DoctorDayModel.fromEntity(element));
       }
     }
 
@@ -163,7 +162,6 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
     _createDoctorParams.clinic?.workDays.toSet().toList();
     _createDoctorParams.calls?.workDays.toSet().toList();
     _createDoctorParams.visitHome?.workDays.toSet().toList();
-
   }
 
   // ================================ DatePickers ===============================
@@ -269,8 +267,7 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
         clinicExamineDurationController.text;
     _createDoctorParams.detectionPeriodCalls =
         callExamineDurationController.text;
-    _createDoctorParams.detectionPeriodvisitHome =
-        '84864';
+    _createDoctorParams.detectionPeriodvisitHome = '84864';
     _createDoctorParams.callsPrice = callPriceController.text;
     _createDoctorParams.visitHomePrice = homeVisitPriceController.text;
     _createDoctorParams.clinicPrice = clinicPriceController.text;

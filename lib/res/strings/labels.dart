@@ -168,7 +168,8 @@ abstract class Labels {
   static const paymentInCash =
       'Payment in cash, and client pay the cost of the gates';
   static const request = 'Request';
-  static const driverDashboard = 'Driver dashboard';
+  static const loadingDashboard = 'Loading dashboard ';
+  static const rideDashboard = 'Ride dashboard ';
   static const premiumRequest = 'Premium Request';
   static const youWillGetPounds =
       'You will get 3,650 pounds annually if you subscribe.';

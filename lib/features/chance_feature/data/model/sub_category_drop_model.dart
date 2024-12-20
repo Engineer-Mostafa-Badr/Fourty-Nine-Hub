@@ -16,12 +16,11 @@ class SubCategoryDropModel extends SubCategoryDropEntity {
       id: json['_id'] ?? '',
       parent: json['parent'] ?? '',
       picture: json['picture'] ?? '',
-      hasAuction: json['has_auction']?? false,
-      nameAr: json['nameAr']?? '',
-      nameEn: json['nameEn']?? '',
+      hasAuction: json['has_auction'] ?? false,
+      nameAr: json['nameAr'] ?? '',
+      nameEn: json['nameEn'] ?? '',
       isFavorite: json['isFavorite'] ?? false,
       numberOfAdsCount: json['numberOfAdsCount'] ?? 0,
     );
   }
-
 }

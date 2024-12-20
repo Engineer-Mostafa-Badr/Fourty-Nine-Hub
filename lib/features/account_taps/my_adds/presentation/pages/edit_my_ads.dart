@@ -154,70 +154,80 @@ class _EditMyAdsState extends State<EditMyAds> {
                                           if (state.myAdById?.images
                                                   .isNotEmpty ??
                                               false)
-                                            state.images == null?  SizedBox(
-                                              height: 80.h,
-                                              child: Row(
-                                                children: List.generate(
-                                                  state.myAdById?.images
-                                                          .length ??
-                                                      0,
-                                                  (index) => SizedBox(
-                                                    height: 100.h,
-                                                    width: 100.w,
-                                                    child: Stack(
-                                                      alignment:
-                                                          AlignmentDirectional
-                                                              .topStart,
-                                                      children: [
-                                                        ImageFromInternet(
+                                            state.images == null
+                                                ? SizedBox(
+                                                    height: 80.h,
+                                                    child: Row(
+                                                      children: List.generate(
+                                                        state.myAdById?.images
+                                                                .length ??
+                                                            0,
+                                                        (index) => SizedBox(
                                                           height: 100.h,
                                                           width: 100.w,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      20.r),
-                                                          fit: BoxFit.fill,
-                                                          image: state
-                                                                  .myAdById
-                                                                  ?.images[
-                                                                      index]
-                                                                  .photo ??
-                                                              '',
-                                                        ),
-                                                        PositionedDirectional(
-                                                          start: 5.w,
-                                                          top: 0,
-                                                          child: IconAppButton(
-                                                            width: 35.w,
-                                                            height: 35.h,
-                                                            icon: Icons
-                                                                .close_sharp,
-                                                            color: Colors.red,
-                                                            backColor:
-                                                                Colors.white,
-                                                            size: 25.w,
-                                                            isCircle: true,
-                                                            onPressed: () =>
-                                                                showAreYouSure(
-                                                              context: context,
-                                                              title: LocaleKeys.alert.localize,
-                                                              subTitle:
-                                                              LocaleKeys.removeImage.localize,
-                                                              action: () {
-                                                                controller.removeImage(
-                                                                    image: state
-                                                                            .images![
-                                                                        index]);
-                                                              },
-                                                            ),
+                                                          child: Stack(
+                                                            alignment:
+                                                                AlignmentDirectional
+                                                                    .topStart,
+                                                            children: [
+                                                              ImageFromInternet(
+                                                                height: 100.h,
+                                                                width: 100.w,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            20.r),
+                                                                fit:
+                                                                    BoxFit.fill,
+                                                                image: state
+                                                                        .myAdById
+                                                                        ?.images[
+                                                                            index]
+                                                                        .photo ??
+                                                                    '',
+                                                              ),
+                                                              PositionedDirectional(
+                                                                start: 5.w,
+                                                                top: 0,
+                                                                child:
+                                                                    IconAppButton(
+                                                                  width: 35.w,
+                                                                  height: 35.h,
+                                                                  icon: Icons
+                                                                      .close_sharp,
+                                                                  color: Colors
+                                                                      .red,
+                                                                  backColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  size: 25.w,
+                                                                  isCircle:
+                                                                      true,
+                                                                  onPressed: () =>
+                                                                      showAreYouSure(
+                                                                    context:
+                                                                        context,
+                                                                    title: LocaleKeys
+                                                                        .alert
+                                                                        .localize,
+                                                                    subTitle: LocaleKeys
+                                                                        .removeImage
+                                                                        .localize,
+                                                                    action: () {
+                                                                      controller.removeImage(
+                                                                          image:
+                                                                              state.images![index]);
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
-                                                      ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ) :const SizedBox.shrink(),
+                                                  )
+                                                : const SizedBox.shrink(),
                                           const Sizer(),
                                           if (state.images != null &&
                                               state.images!.isNotEmpty)
@@ -275,9 +285,12 @@ class _EditMyAdsState extends State<EditMyAds> {
                                                             onPressed: () =>
                                                                 showAreYouSure(
                                                               context: context,
-                                                              title: LocaleKeys.alert.localize,
-                                                              subTitle:
-                                                              LocaleKeys.removeImage.localize,
+                                                              title: LocaleKeys
+                                                                  .alert
+                                                                  .localize,
+                                                              subTitle: LocaleKeys
+                                                                  .removeImage
+                                                                  .localize,
                                                               action: () {
                                                                 controller.removeImage(
                                                                     image: state
@@ -347,8 +360,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  if (state
-                                          .myAdById!.subCategory.hasAuction ==
+                                  if (state.myAdById!.subCategory.hasAuction ==
                                       true) {
                                     state.isSale = false;
                                     print(state.isSale);
@@ -370,8 +382,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                                         color: AppColors.PRIMARY_COLOR)),
                                 alignment: AlignmentDirectional.center,
                                 child: Text(
-                                  state.myAdById!.subCategory.hasAuction ==
-                                          true
+                                  state.myAdById!.subCategory.hasAuction == true
                                       ? LocaleKeys.rent.localize
                                       : LocaleKeys.provider.localize,
                                   style: Styles.mediumText(
@@ -524,7 +535,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                       ),
                       const Sizer(),
                       state.status == CreateAdStates.loadCities
-                          ? Center(child: const CircularProgressIndicator())
+                          ? const Center(child: CircularProgressIndicator())
                           : state.status == CreateAdStates.loadCitiesSuccess
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -664,13 +675,13 @@ class _EditMyAdsState extends State<EditMyAds> {
                         onPressed: () {
                           controller.editMyAds(
                             categorization: widget.categorization,
-                            selectedEducationLevel:selectedEducationLevel ,
+                            selectedEducationLevel: selectedEducationLevel,
                             selectedExperienceLevel: selectedExperienceLevel,
-                                    title: controller.titleController.text,
-                                    desc: controller.descController.text,
-                                    phone: controller.phoneController.text,
-                                    price:
-                                        double.parse(controller.priceController.text),
+                            title: controller.titleController.text,
+                            desc: controller.descController.text,
+                            phone: controller.phoneController.text,
+                            price:
+                                double.parse(controller.priceController.text),
                           );
                         },
                       )

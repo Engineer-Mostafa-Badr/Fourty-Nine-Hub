@@ -281,9 +281,10 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> sharePost({required SharePostParams params}) async {
-    final response =
-        await _apiConsumer.post(EndPoints.shareFacebookPost(params),data: params.toJson());
+  Future<Either<Failure, bool>> sharePost(
+      {required SharePostParams params}) async {
+    final response = await _apiConsumer
+        .post(EndPoints.shareFacebookPost(params), data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 

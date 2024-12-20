@@ -19,7 +19,7 @@ class EditDoctorDocsView extends StatefulWidget {
   final String from;
   final String? frontTitle;
   final String? backTitle;
-  EditDoctorDocsView({
+  const EditDoctorDocsView({
     super.key,
     required this.onSubmit, required this.subCategoryId, required this.from, this.frontTitle, this.backTitle,
   });

@@ -136,12 +136,11 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                         },
                         style: Styles.headerText(fontSize: 26),
                         decoration: InputDecoration(
-                        //  fillColor: Colors.white,
+                          //  fillColor: Colors.white,
                           contentPadding: const EdgeInsets.all(5),
                           hintText:
                               '${LocaleKeys.typeYourComment.localize} ....',
-                          hintStyle: Styles.mediumText(
-                          ),
+                          hintStyle: Styles.mediumText(),
                         ),
                       ),
                     ),

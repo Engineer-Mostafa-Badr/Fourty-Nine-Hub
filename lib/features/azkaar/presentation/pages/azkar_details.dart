@@ -85,7 +85,7 @@ class _AzkarDetailsState extends State<AzkarDetails> {
                   decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor,
                       borderRadius: BorderRadius.circular(
-                       20.r,
+                        20.r,
                       )),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -99,13 +99,14 @@ class _AzkarDetailsState extends State<AzkarDetails> {
                               style: TextStyle(
                                 fontFamily: 'Amiri',
                                 fontSize: 40.sp,
-                                color: Theme.of(context).scaffoldBackgroundColor,
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
                               ),
                             ),
                             TextSpan(
                               text: state.azkarDetail?[index].count != null
                                   ? '(${state.azkarDetail![index].count})' // Show count with parentheses if not null
-                                  : '',// Count text in red
+                                  : '', // Count text in red
                               style: TextStyle(
                                 fontFamily: 'Amiri',
                                 fontSize: 40.sp,
@@ -116,27 +117,27 @@ class _AzkarDetailsState extends State<AzkarDetails> {
                         ),
                         textAlign: TextAlign.right,
                       ),
-                      if(state.azkarDetail![index].description!.isNotEmpty)
-                      Text(state.azkarDetail![index].description!,
-                          textAlign: TextAlign.right,
-                          textDirection: TextDirection.rtl,
-                          style: TextStyle(
-                            fontFamily: 'Amiri',
-                            fontSize: 30.sp,
-                            color: AppColors.SECONDARY_COLOR,
-                          )),
-                      if(state.azkarDetail![index].reference!.isNotEmpty)
-                      Align(
-                        alignment: AlignmentDirectional.topStart,
-                        child: Text(state.azkarDetail![index].reference!,
-                            textAlign: TextAlign.left,
+                      if (state.azkarDetail![index].description!.isNotEmpty)
+                        Text(state.azkarDetail![index].description!,
+                            textAlign: TextAlign.right,
                             textDirection: TextDirection.rtl,
                             style: TextStyle(
                               fontFamily: 'Amiri',
                               fontSize: 30.sp,
                               color: AppColors.SECONDARY_COLOR,
                             )),
-                      ),
+                      if (state.azkarDetail![index].reference!.isNotEmpty)
+                        Align(
+                          alignment: AlignmentDirectional.topStart,
+                          child: Text(state.azkarDetail![index].reference!,
+                              textAlign: TextAlign.left,
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(
+                                fontFamily: 'Amiri',
+                                fontSize: 30.sp,
+                                color: AppColors.SECONDARY_COLOR,
+                              )),
+                        ),
                     ],
                   ),
                 );

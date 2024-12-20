@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class DatePickerField extends StatefulWidget {
   final String? title;
@@ -11,6 +14,7 @@ class DatePickerField extends StatefulWidget {
   final DateTime minDate;
   final TextStyle? textStyle;
   final DateTime maxDate;
+  final bool isAuthentcation;
   final double? borderWidth;
   final Color? borderColor;
   final Function(DateTime?) onDateSelected;
@@ -20,6 +24,7 @@ class DatePickerField extends StatefulWidget {
       this.borderWidth,
       required this.initialDate,
       this.textStyle,
+      this.isAuthentcation = false,
       required this.minDate,
       this.borderColor,
       required this.maxDate,
@@ -36,18 +41,38 @@ class _DatePickerFieldState extends State<DatePickerField> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        final DateTime? picked = await showDatePicker(
-          context: context,
-          initialDate: widget.initialDate,
-          firstDate: widget.minDate,
-          lastDate: widget.maxDate,
-        );
-        if (picked != null && picked != _selectedDate) {
-          setState(() {
-            _selectedDate = picked;
-          });
+        if (widget.isAuthentcation) {
+          if (context.isUserLoggedIn) {
+            final DateTime? picked = await showDatePicker(
+              context: context,
+              initialDate: widget.initialDate,
+              firstDate: widget.minDate,
+              lastDate: widget.maxDate,
+            );
+            if (picked != null && picked != _selectedDate) {
+              setState(() {
+                _selectedDate = picked;
+              });
 
-          widget.onDateSelected(_selectedDate);
+              widget.onDateSelected(_selectedDate);
+            }
+          } else {
+            context.push(Routes.LOGIN);
+          }
+        } else {
+          final DateTime? picked = await showDatePicker(
+            context: context,
+            initialDate: widget.initialDate,
+            firstDate: widget.minDate,
+            lastDate: widget.maxDate,
+          );
+          if (picked != null && picked != _selectedDate) {
+            setState(() {
+              _selectedDate = picked;
+            });
+
+            widget.onDateSelected(_selectedDate);
+          }
         }
       },
       child: Container(
