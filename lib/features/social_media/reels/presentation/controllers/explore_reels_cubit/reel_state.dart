@@ -58,6 +58,7 @@ class ReelsState {
   final bool isInitialized;
   final bool isPlaying;
   final bool showPlayPauseIcon;
+  final String? selectedPrivacy;
   ReelsState({
     this.isCreatingReelView,
     this.isCreatingReply = false,
@@ -97,6 +98,7 @@ class ReelsState {
     this.isUploadingReel = false,
     this.uploadReelErrorMessage,
     this.uploadReelSuccess,
+    this.selectedPrivacy,
   });
 
   ReelsState copyWith({
@@ -139,6 +141,7 @@ class ReelsState {
     bool? isUploadingReel,
     String? uploadReelErrorMessage,
     bool? uploadReelSuccess,
+    String? selectedPrivacy
   }) {
     return ReelsState(
       isCreatingReply: isCreatingReply ?? this.isCreatingReply,
@@ -187,6 +190,7 @@ class ReelsState {
       isInitialized: isInitialized ?? this.isInitialized,
       isPlaying: isPlaying ?? this.isPlaying,
       showPlayPauseIcon: showPlayPauseIcon ?? this.showPlayPauseIcon,
+      selectedPrivacy: selectedPrivacy ?? this.selectedPrivacy,
     );
   }
 }

@@ -1,14 +1,18 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/media_preview.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart' as thumb;
@@ -23,8 +27,6 @@ class MyVoiceVideoRecordingScreen extends StatefulWidget {
   final String? comeFrom;
   final String? totalPrice;
   final String? advertisementType;
-  // final String audioSignedUrl;
-  // final String audioMediaId;
   const MyVoiceVideoRecordingScreen(
       {super.key, this.comeFrom, this.totalPrice, this.advertisementType});
 
@@ -52,14 +54,26 @@ class MyVoiceVideoRecordingScreenState
 
   final List<Filter> filters = FilterLibrary.filters;
   Filter? _selectedFilter;
+  File? _selectedImage;
+  File? _selectedVideo;
+  FlashMode _flashMode = FlashMode.off;
+  late AnimationController _flashAnimationController;
+  late Animation<double> _flashAnimation;
 
   @override
   void initState() {
     super.initState();
     _initCamera();
     _initializeAnimationController();
+    _initializeFlashAnimation();
   }
 
+  void _initializeFlashAnimation() {
+    _flashAnimationController = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
+    _flashAnimation =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_flashAnimationController);
+  }
   Future<void> _initCamera() async {
     try {
       cameras = await availableCameras();
@@ -68,6 +82,21 @@ class MyVoiceVideoRecordingScreenState
       log("Camera initialization error: $e");
       _showErrorDialog(LocaleKeys.error_dialog_camera_init_fail.tr());
     }
+  }
+  void _changeFlashMode() {
+    setState(() {
+      if (_flashMode == FlashMode.off) {
+        _flashMode = FlashMode.torch;
+      } else if (_flashMode == FlashMode.auto) {
+        _flashMode = FlashMode.off;
+      }
+      else {
+        _flashMode = FlashMode.off;
+      }
+    });
+
+    _controller!.setFlashMode(_flashMode);
+    _flashAnimationController.forward(from: 0.0);
   }
 
   void _initializeAnimationController() {
@@ -350,13 +379,17 @@ class MyVoiceVideoRecordingScreenState
         child: Stack(
           children: [
             _buildCameraPreview(),
-            _buildControls(),
             if (isRecording) _buildTimerPopup(),
             Positioned(
-              bottom: 100,
+              bottom: 250.h,
               left: 0,
               right: 0,
-              child: _buildFilterSelector(),
+              child: Column(
+                children: [
+                //  _buildFilterSelector(),
+                  _buildControls(),
+                ],
+              ),
             ),
           ],
         ),
@@ -367,10 +400,48 @@ class MyVoiceVideoRecordingScreenState
   Widget _buildCameraPreview() {
     return SizedBox(
       height: double.infinity,
-      child: ColorFiltered(
-        colorFilter: _selectedFilter?.colorFilter ??
-            const ColorFilter.mode(Colors.transparent, BlendMode.srcOver),
-        child: CameraPreview(_controller!),
+      child: Stack(
+        children: [
+          ColorFiltered(
+            colorFilter: _selectedFilter?.colorFilter ??
+                const ColorFilter.mode(Colors.transparent, BlendMode.srcOver),
+            child: CameraPreview(_controller!),
+          ),
+          Padding(
+            padding:  EdgeInsets.symmetric(
+              vertical: 40.h,
+              horizontal: 20.w
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  children: [
+                    _buildSwitchCameraButton(50.sp),
+                    IconButton(
+                      icon: Icon(
+                        size: 50.sp,
+                        _flashMode == FlashMode.off
+                            ? FontAwesomeIcons.bolt
+                            : FontAwesomeIcons.bolt,
+                        color: _flashMode == FlashMode.off
+                            ? Colors.grey
+                            : _flashMode == FlashMode.auto
+                            ? Colors.yellow.shade100
+                            : Colors.yellow,
+                      ),
+                      onPressed: _changeFlashMode,
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                IconButton(onPressed: (){
+                  Navigator.pop(context);
+                }, icon:  Icon(Icons.clear,size: 50.sp,))
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -405,44 +476,66 @@ class MyVoiceVideoRecordingScreenState
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //  mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Expanded(child: Container()),
-              Expanded(
-                child: GestureDetector(
-                  onLongPress: () => _startRecording(),
-                  onLongPressEnd: (_) => _stopRecording(),
-                  child: Stack(
-                    alignment: Alignment.center,
+              SizedBox(width: 100.w,),
+              Center(
+                child: IconButton(
+                  color: Colors.white,
+                  icon: Stack(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(0),
-                        margin: const EdgeInsets.only(bottom: 0),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.transparent,
-                          border: Border.all(color: Colors.white70, width: 4),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: CustomPaint(
-                            painter: ProgressPainter(
-                              progress: _animationController.value,
-                              color: Colors.pink,
-                            ),
-                            child: Icon(
-                              Icons.fiber_manual_record,
-                              color: Colors.white.withOpacity(0.9),
-                              size: MediaQuery.of(context).size.width * 0.22,
-                            ),
-                          ),
-                        ),
+                      Icon(
+                        size: 60.sp,
+                        Icons.photo_library,
                       ),
                     ],
                   ),
+                  onPressed: () {
+                    _pickMediaFromGallery()
+                      .then((value) {
+                    if(_selectedImage?.path !=null) {
+                     return Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReelsRecordingScreen(
+                              // voiceMediaId: widget.reel.audioMedia,
+                              // voiceSignedUrl: widget.audio.audioSignedUrl,
+                            ),
+                          ));
+                    }
+                  });
+                  }, // Pick an image from gallery
                 ),
               ),
-              Expanded(child: _buildSwitchCameraButton(60.h)),
+              SizedBox(width: 100.w,),
+              GestureDetector(
+                onLongPress: () => _startRecording(),
+                onLongPressEnd: (_) => _stopRecording(),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.transparent,
+                        border: Border.all(color: Colors.white70, width: 8.w),
+                      ),
+                      child: CustomPaint(
+                        painter: ProgressPainter(
+                          progress: _animationController.value,
+                          color: Colors.pink,
+                        ),
+                        child: Icon(
+                          Icons.fiber_manual_record,
+                          color: Colors.white.withOpacity(0.9),
+                          size: MediaQuery.of(context).size.width * 0.22,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+             // Expanded(child: _buildSwitchCameraButton(60.h)),
             ],
           ),
         ],
@@ -454,9 +547,8 @@ class MyVoiceVideoRecordingScreenState
     return IconButton(
       onPressed: _switchCamera,
       icon: Icon(
-        Icons.cameraswitch,
+        Icons.flip_camera_android,
         semanticLabel: LocaleKeys.controls_switch_camera.tr(),
-        color: Colors.white,
         size: width,
       ),
     );
@@ -469,6 +561,61 @@ class MyVoiceVideoRecordingScreenState
     _animationController.dispose();
     _stopTimer?.cancel();
     _notifyTimer?.cancel();
+    _flashAnimationController.dispose();
     super.dispose();
   }
+
+  Future<void> _pickMediaFromGallery() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'mp4', 'mov'],
+      );
+
+      if (result != null && result.files.single.path != null) {
+        final pickedFile = File(result.files.single.path!);
+
+        // Determine the file type based on extension
+        final fileType = pickedFile.path.split('.').last.toLowerCase();
+        final isImage = ['jpg', 'jpeg', 'png'].contains(fileType);
+
+        setState(() {
+          if (isImage) {
+            _selectedImage = pickedFile;
+            _selectedVideo = null;
+          } else {
+            _selectedVideo = pickedFile;
+            _selectedImage = null;
+          }
+        });
+
+        // Navigate to MediaPreviewScreen with the media path and type
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MediaPreviewScreen(
+              mediaPath: pickedFile.path,
+              isImage: isImage,
+            ),
+          ),
+        );
+      } else {
+        print("No media selected.");
+      }
+    } catch (e) {
+      print("Error picking media: $e");
+    }
+  }
+
+
+  Widget _buildMediaPreview() {
+    if (_selectedImage != null) {
+      return Image.file(_selectedImage!);
+    } else if (_selectedVideo != null) {
+      return Text("Video selected: ${_selectedVideo!.path}");
+    } else {
+      return Text("No media selected.");
+    }
+  }
+
 }

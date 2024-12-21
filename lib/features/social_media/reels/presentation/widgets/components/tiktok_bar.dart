@@ -121,16 +121,16 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               }),
               // Following Tab
               _buildTab(LocaleKeys.Snap.localize, 1, onTap: () {
-                if (context
-                    .read<PreloadBloc>()
-                    .state
-                    .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
-                  context
-                      .read<PreloadBloc>()
-                      .state
-                      .controllers[context.read<PreloadBloc>().state.focusedIndex]
-                      ?.pause();
-                }
+                // if (context
+                //     .read<PreloadBloc>()
+                //     .state
+                //     .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+                //   context
+                //       .read<PreloadBloc>()
+                //       .state
+                //       .controllers[context.read<PreloadBloc>().state.focusedIndex]
+                //       ?.pause();
+                // }
                 setState(() {
                   _selectedIndex = 1;
                 });
@@ -140,16 +140,16 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               // For You Tab with rounded underline
               _buildTab(LocaleKeys.Reels.localize, 2, onTap: () {
 
-                if (context
-                    .read<PreloadBloc>()
-                    .state
-                    .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
-                  context
-                      .read<PreloadBloc>()
-                      .state
-                      .controllers[context.read<PreloadBloc>().state.focusedIndex]
-                      ?.pause();
-                }
+                // if (context
+                //     .read<PreloadBloc>()
+                //     .state
+                //     .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+                //   context
+                //       .read<PreloadBloc>()
+                //       .state
+                //       .controllers[context.read<PreloadBloc>().state.focusedIndex]
+                //       ?.pause();
+                // }
                 setState(() {
                   _selectedIndex = 2;
                 });

@@ -73,6 +73,11 @@ class ReelsCubit extends Cubit<ReelsState> {
     emit(state);
   }
 
+  void selectPrivacy({required String privacy}) {
+    emit(state.copyWith(selectedPrivacy: privacy));
+    print(state.selectedPrivacy);
+  }
+
   Future<void> createReelView(String reelId, int duration) async {
     emit(state.copyWith(isCreatingReelView: true));
 
