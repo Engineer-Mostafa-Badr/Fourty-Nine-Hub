@@ -6,7 +6,7 @@ import 'package:fourtyninehub/features/requests_history/data/models/trip_model.d
 import '../../data/models/food_order_model.dart';
 
 abstract class RequestHistoryRepo {
-  Future<Either<Failure, List<TripModel>>> getRideHistory();
+  // Future<Either<Failure, List<TripModel>>> getRideHistory();
   Future<Either<Failure, List<ShippingRequestModel>>> getShippingRequests();
   Future<Either<Failure, List<FoodOrderModel>>> getFoodHistory();
   Future<Either<Failure, Map<String, dynamic>>> rating(

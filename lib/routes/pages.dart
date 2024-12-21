@@ -88,6 +88,7 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.dart';
+import 'package:fourtyninehub/features/requests_history/presentation/cubit/request_history_ride_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/pages/requests_history_view.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_by_rider_model/check_accept_by_rider_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_trip_from_driver_model/check_accept_trip_from_driver_model.dart';
@@ -1604,7 +1605,11 @@ class AppPages {
                     builder: (context, state) =>
                         BlocProvider<RequestHistoryCubit>(
                           create: (_) => serviceLocator(),
-                          child: const HistoryRequestsView(),
+                          child: BlocProvider(
+                            create: (context) => RequestHistoryRideCubit(
+                                apiConsumer: serviceLocator()),
+                            child: const HistoryRequestsView(),
+                          ),
                         )),
                 GoRoute(
                     path: Paths.TRIPDETAILS,
