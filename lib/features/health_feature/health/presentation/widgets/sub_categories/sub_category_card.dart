@@ -38,7 +38,7 @@ class HealthSubCategoryCard extends StatelessWidget {
                 fromHome: true, subCategoryId: subCategory.id));
       },
       child: Container(
-        width: 200,
+        width: 0.55.sw,
         padding: const EdgeInsets.all(10),
         margin: EdgeInsetsDirectional.only(
             end: 10.w, bottom: 10.h, top: 10.h, start: 5.w),
