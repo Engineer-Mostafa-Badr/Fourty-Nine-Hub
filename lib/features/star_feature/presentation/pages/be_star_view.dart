@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/ads/native_ad_card.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -35,13 +36,14 @@ class _BeStarViewState extends State<BeStarView> {
   late ScrollController _scrollController;
   late StarCubit _cubit;
   bool showMore = false;
-
+  final AdsManager _adsManager = AdsManager();
   @override
   void initState() {
     super.initState();
     _cubit = context.read<StarCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
     _cubit.loadInitialData();
+    _adsManager.preloadAds();
   }
 
   void _onScroll() {
@@ -167,6 +169,13 @@ class _BeStarViewState extends State<BeStarView> {
                       shrinkWrap: true,
                       // Allow the ListView to take only the necessary height
                       itemBuilder: (context, index) {
+                        // Insert ads after every 2 items
+                        // if ((index + 1) % 3 == 0) {
+                        //   return getAdIfNeeded(index, AdsManager());
+                        // }
+                        if (index > nativeAdStart && index % adFrequency == adFrequency - 1) {
+                          return getAdIfNeeded(index, _adsManager);
+                        }
                         if (index >= sortedStars.length) {
                           return const Center(
                               child: CircularProgressIndicator());
@@ -454,7 +463,9 @@ class _BeStarViewState extends State<BeStarView> {
                         height: 40.h,
                         color: AppColors.GREY_NORMAL_COLOR,
                       ),
-                      itemCount: sortedStars.length,
+                      itemCount: sortedStars.length // Add extra items for ads
+
+                      // itemCount: sortedStars.length,
                     ),
                   ],
                 ),

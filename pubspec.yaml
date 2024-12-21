@@ -31,6 +31,8 @@ dependencies:
   firebase_auth: ^4.19.6
   firebase_core: ^2.31.0
   firebase_messaging: ^14.9.2
+#  win32: ^5.7.1
+  win32:
 #  win32:
   flutter:
     sdk: flutter
@@ -109,7 +111,7 @@ dependencies:
   html: ^0.15.0
   voice_message_package: ^2.2.1
   flutter_rating_bar:
-
+  google_mobile_ads:
   #for loading
   # skeletons: ^0.0.3
   web_socket_channel: ^2.4.5
