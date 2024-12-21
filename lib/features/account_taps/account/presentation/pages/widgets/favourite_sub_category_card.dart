@@ -19,7 +19,10 @@ import '../../../../../../core/localization/locales.dart';
 
 class FavouriteSubCategoryCard extends StatefulWidget {
   const FavouriteSubCategoryCard(
-      {super.key, required this.item, required this.onFav, required this.mainCategory});
+      {super.key,
+      required this.item,
+      required this.onFav,
+      required this.mainCategory});
 
   final SubCategoryEntity item;
   final MainCategoryEntity mainCategory;
@@ -34,11 +37,13 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.push(Routes.ADS,
-          extra: AdsViewParams(
-              mainCategory: widget.mainCategory,
-              subCategory: widget.item,
-          ),),
+      onTap: () => context.push(
+        Routes.ADS,
+        extra: AdsViewParams(
+          mainCategory: widget.mainCategory,
+          subCategory: widget.item,
+        ),
+      ),
       child: Container(
         margin: EdgeInsets.all(10.w),
         decoration: BoxDecoration(

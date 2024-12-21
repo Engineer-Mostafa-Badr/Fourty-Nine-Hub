@@ -10,6 +10,7 @@ class LiveEntity extends Equatable {
   final String? description;
   final String title;
   final String? topicName;
+  final String? ownerId;
   final List<GoalEntity> gift;
   final List<MembersEntity> members;
 
@@ -19,11 +20,12 @@ class LiveEntity extends Equatable {
     required this.topicName,
     required this.description,
     required this.gift,
+    required this.ownerId,
     required this.members,
     required this.roomId,
   });
 
   @override
   List<Object?> get props =>
-      [id, title, topicName, gift, description, members, roomId];
+      [id, title, topicName, gift,ownerId, description, members, roomId];
 }

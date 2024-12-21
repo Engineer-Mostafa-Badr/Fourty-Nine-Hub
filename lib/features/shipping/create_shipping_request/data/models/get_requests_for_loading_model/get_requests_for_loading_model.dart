@@ -10,7 +10,7 @@ class GetRequestsForLoadingModel {
   bool? isPremium;
   DateTime? createdAt;
   DateTime? updatedAt;
-
+  
   GetRequestsForLoadingModel({
     this.id,
     this.driverId,

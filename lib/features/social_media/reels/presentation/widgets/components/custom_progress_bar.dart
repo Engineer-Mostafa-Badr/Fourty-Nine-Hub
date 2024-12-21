@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
@@ -52,8 +51,8 @@ class _CustomProgressBarState extends State<CustomProgressBar> {
             : 1; // Prevent division by zero
 
         final playedPart = (_isDragging
-            ? _dragValue / durationInMs
-            : position.inMilliseconds / durationInMs)
+                ? _dragValue / durationInMs
+                : position.inMilliseconds / durationInMs)
             .clamp(0.0, 1.0);
         final bufferedPart = bufferedEnd / durationInMs;
 
@@ -174,5 +173,4 @@ class _CustomProgressBarState extends State<CustomProgressBar> {
       },
     );
   }
-
 }

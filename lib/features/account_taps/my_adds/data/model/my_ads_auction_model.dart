@@ -1,4 +1,3 @@
-import 'package:fourtyninehub/features/account_taps/my_adds/data/model/subscription_ad_auction_model.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/data/model/user_auction_model.dart';
 
 import '../../domain/entity/my_ads_auction.dart';
@@ -49,9 +48,9 @@ class MyAuctionAdsModel extends MyAuctionAdsEntity {
       isPremium: json['isPremium'] ?? false,
       createdAt: DateTime.parse(json['createdAt']),
       user: UserAuctionModel.fromJson(json['user']),
-      subscriptions: (json['subscription'] as List).map((e) => SubscriptionAdsAuctionModel.fromJson(e)).toList(),
+      subscriptions: json['typeSubscription'] ??'',
       images: (json['images'] as List).map((e) => MyAuctionImageModel.fromJson(e)).toList(),
-      subscriptionStatus: json['subscriptionStatus'],
+      subscriptionStatus: json['subscriptionStatus'] ??'',
       phoneCountLength: json['phoneCountLength'] ?? 0,
       chatCountLength: json['chatCountLength'] ?? 0,
       loveCountLength: json['loveCountLength'] ?? 0,

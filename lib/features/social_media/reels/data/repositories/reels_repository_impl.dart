@@ -23,7 +23,8 @@ class ReelsRepositoryImpl extends ReelsRepository {
   ReelsRepositoryImpl(this._reelsRemoteDataSource);
 
   @override
-  Future<Either<Failure, ReelsResponse>> getExploreReels(PaginationParams params) {
+  Future<Either<Failure, ReelsResponse>> getExploreReels(
+      PaginationParams params) {
     return _reelsRemoteDataSource.getExploreReels(params);
   }
 
@@ -33,7 +34,8 @@ class ReelsRepositoryImpl extends ReelsRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> createAdvertisement(CreateAdvertisementParams params) {
+  Future<Either<Failure, bool>> createAdvertisement(
+      CreateAdvertisementParams params) {
     return _reelsRemoteDataSource.createAdvertisement(params);
   }
 
@@ -46,6 +48,7 @@ class ReelsRepositoryImpl extends ReelsRepository {
   Future<Either<Failure, ReelSaveResponse>> saveReel(String reelId) {
     return _reelsRemoteDataSource.saveReel(reelId);
   }
+
   @override
   Future<Either<Failure, ReelShareResponse>> shareReel(String reelId) {
     return _reelsRemoteDataSource.shareReel(reelId);
@@ -57,17 +60,20 @@ class ReelsRepositoryImpl extends ReelsRepository {
   }
 
   @override
-  Future<Either<Failure, AddCommentResponse>> addComment(AddReelCommentParams params) {
+  Future<Either<Failure, AddCommentResponse>> addComment(
+      AddReelCommentParams params) {
     return _reelsRemoteDataSource.addComment(params);
   }
 
   @override
-  Future<Either<Failure, AddCommentResponse>> addReply(AddReelReplyParams params) {
+  Future<Either<Failure, AddCommentResponse>> addReply(
+      AddReelReplyParams params) {
     return _reelsRemoteDataSource.addReply(params);
   }
 
   @override
-  Future<Either<Failure, GetCommentsResponse>> getComments(CommentParams params) {
+  Future<Either<Failure, GetCommentsResponse>> getComments(
+      CommentParams params) {
     return _reelsRemoteDataSource.getComments(params);
   }
 
@@ -77,7 +83,8 @@ class ReelsRepositoryImpl extends ReelsRepository {
   }
 
   @override
-  Future<Either<Failure, ReelsForAudioResponse>> getReelsWithSameAudio(ReelsWithSameAudioParams params) {
+  Future<Either<Failure, ReelsForAudioResponse>> getReelsWithSameAudio(
+      ReelsWithSameAudioParams params) {
     return _reelsRemoteDataSource.getReelsWithSameAudio(params);
   }
 }

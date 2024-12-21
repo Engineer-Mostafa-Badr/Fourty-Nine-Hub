@@ -9,8 +9,7 @@ class GetFavouriteSubCategoriesUseCase
   final AccountRepo _repo;
   GetFavouriteSubCategoriesUseCase(this._repo);
   @override
-  Future<Either<Failure, List<SubCategoryEntity>>> call(
-      NoParams params) {
+  Future<Either<Failure, List<SubCategoryEntity>>> call(NoParams params) {
     return _repo.getFavouriteSubcategories();
   }
 }

@@ -18,7 +18,8 @@ import '../models/restaurant_model.dart';
 abstract class RestaurantsRemoteDataSource {
   Future<Either<Failure, bool>> createRestaurant(CreateRestaurantParams params);
   Future<Either<Failure, bool>> changeConnectivity(bool isActive);
-  Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(PaginationParams params);
+  Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(
+      PaginationParams params);
   Future<Either<Failure, List<FoodCategoryModel>>> getFoodCategories();
   Future<Either<Failure, List<FoodCategoryModel>>>
       getMealCategoriesWithCountRestaurants(
@@ -39,7 +40,8 @@ abstract class RestaurantsRemoteDataSource {
     required double lng,
   });
   Future<Either<Failure, int>> numOfRestaurants();
-  Future<Either<Failure, bool>> toggleRestaurantFavourite({required String params});
+  Future<Either<Failure, bool>> toggleRestaurantFavourite(
+      {required String params});
   Future<Either<Failure, List<Restaurant2Model>>> getSubCategoryRestaurants(
       {required GetSubCategoryRestaurants params});
   Future<Either<Failure, IsRestaurantModel>> isRestaurant();
@@ -197,38 +199,34 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
 
   @override
   Future<Either<Failure, bool>> changeConnectivity(bool isActive) async {
-    final response =
-        await _apiConsumer.patch(EndPoints.changeConnectivity,
-            data: {
-            'isActive':isActive
-            }
-        );
+    final response = await _apiConsumer
+        .patch(EndPoints.changeConnectivity, data: {'isActive': isActive});
 
     return response.fold(
-          (Failure failure) {
+      (Failure failure) {
         return Left(failure);
       },
-          (data) {
+      (data) {
         return Right(data['status']);
       },
     );
   }
 
   @override
-  Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(PaginationParams params) async {
+  Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(
+      PaginationParams params) async {
     final response =
         await _apiConsumer.get(EndPoints.foodExpiredOrders(params));
-    return response.fold(
-            (failure) => Left(failure),
-            (data) => Right(ExpiredRequestsResponse.fromJson(data)));
+    return response.fold((failure) => Left(failure),
+        (data) => Right(ExpiredRequestsResponse.fromJson(data)));
   }
 
   @override
-  Future<Either<Failure, bool>> toggleRestaurantFavourite({required String params}) async {
+  Future<Either<Failure, bool>> toggleRestaurantFavourite(
+      {required String params}) async {
     final response =
         await _apiConsumer.post(EndPoints.toggleRestaurantFavourite(params));
     return response.fold(
-            (failure) => Left(failure),
-            (data) => Right(data['status']));
+        (failure) => Left(failure), (data) => Right(data['status']));
   }
 }

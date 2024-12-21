@@ -138,7 +138,9 @@ class InstallmentView extends StatelessWidget {
                               : AppColors.LIGHT_GRAY_COLOR),
                       child: Center(
                         child: Label(
-                            text: context.isArabic?subCategory.nameAr:subCategory.nameEn,
+                            text: context.isArabic
+                                ? subCategory.nameAr
+                                : subCategory.nameEn,
                             style: Styles.mediumText(
                                 color: state.selectedSubCategory == subCategory
                                     ? Colors.white

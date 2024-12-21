@@ -1,7 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
@@ -27,22 +25,27 @@ class RestaurantDetailsView extends StatefulWidget {
 }
 
 class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
-
   late ScrollController _scrollController;
   bool isFirstSearchListenerCall = true;
-  
+
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
-    context.read<RestaurantDetailsCubit>().loadData(id: widget.restaurant.id??'');
+    context
+        .read<RestaurantDetailsCubit>()
+        .loadData(id: widget.restaurant.id ?? '');
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      context.read<RestaurantDetailsCubit>().getMeals(id: widget.restaurant.id??'');
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context
+          .read<RestaurantDetailsCubit>()
+          .getMeals(id: widget.restaurant.id ?? '');
     }
   }
+
   @override
   void dispose() {
     _scrollController.removeListener(_onScroll);
@@ -62,43 +65,57 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
       extendBodyBehindAppBar: true,
       body: BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
         builder: (context, state) {
-          return state.isLoading?const Center(child: CircularProgressIndicator(),):Stack(
-            children: [
-              Column(
-                children: [
-                  Expanded(
-                    child: ListView(
-                      controller: _scrollController,
+          return state.isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Stack(
+                  children: [
+                    Column(
                       children: [
-                          RestaurantHeader(restaurant: widget.restaurant),
-                        const Sizer(),
-                        BuildFoodList(
-                          restaurantId: widget.restaurant.id??'',
+                        Expanded(
+                          child: ListView(
+                            controller: _scrollController,
+                            children: [
+                              RestaurantHeader(restaurant: widget.restaurant),
+                              const Sizer(),
+                              BuildFoodList(
+                                restaurantId: widget.restaurant.id ?? '',
+                              ),
+                              if (context
+                                      .read<RestaurantDetailsCubit>()
+                                      .isLoadingMore ==
+                                  true)
+                                const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                            ],
+                          ),
                         ),
-                        if(context.read<RestaurantDetailsCubit>().isLoadingMore==true)const Center(child: CircularProgressIndicator(),),
+                        _viewCartButton(),
                       ],
                     ),
-                  ),
-                  _viewCartButton(),
-                ],
-              ),
-              if(state.isAddToCart)Container(
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.7),
-                ),
-                child: Center(child: Container(
-                  height: 200.h,
-                  width: 250.w,
-                  padding: EdgeInsets.all(30.w),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15.r)
-                  ),
-                    child: const CircularProgressIndicator(color: AppColors.PRIMARY_COLOR,)),),
-              )
-            ],
-          );
+                    if (state.isAddToCart)
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.7),
+                        ),
+                        child: Center(
+                          child: Container(
+                              height: 200.h,
+                              width: 250.w,
+                              padding: EdgeInsets.all(30.w),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15.r)),
+                              child: const CircularProgressIndicator(
+                                color: AppColors.PRIMARY_COLOR,
+                              )),
+                        ),
+                      )
+                  ],
+                );
         },
       ),
     );
@@ -111,7 +128,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
           width: double.infinity,
           child: Padding(
             padding:
-            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: ElevatedButton(
               onPressed: () {
                 context.push(Routes.FOODCART);

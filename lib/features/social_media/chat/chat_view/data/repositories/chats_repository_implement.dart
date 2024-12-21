@@ -78,17 +78,17 @@ class ChatsRepositoryImplementation extends ChatsRepository {
   void stopListenToNewChats() {
     _chatsRemoteDataSource.stopListenToNewChats();
   }
-  
+
   @override
   Future<Either<Failure, bool>> deleteChat({required String chatId}) {
     return _chatsRemoteDataSource.deleteChat(chatId: chatId);
   }
-  
+
   @override
   Future<Either<Failure, bool>> pinChat({required String chatId}) {
-   return _chatsRemoteDataSource.pinChat(chatId: chatId);
+    return _chatsRemoteDataSource.pinChat(chatId: chatId);
   }
-  
+
   @override
   Future<Either<Failure, bool>> unPinChat({required String chatId}) {
     return _chatsRemoteDataSource.unPinChat(chatId: chatId);

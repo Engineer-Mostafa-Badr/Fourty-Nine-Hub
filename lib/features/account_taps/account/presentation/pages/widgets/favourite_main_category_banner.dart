@@ -59,7 +59,7 @@ class _FavouriteMainCategoryBannerState
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: widget.category.name,
+              text: widget.category.name ?? "",
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -118,7 +118,7 @@ class _FavouriteMainCategoryBannerState
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: widget.category.name,
+              text: widget.category.name ?? '',
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

@@ -23,12 +23,21 @@ class StoriesServiceLocator {
 
     // Register the StoriesRepository
     serviceLocator.registerLazySingleton<StoriesRepository>(
-          () => StoriesRepositoryImpl(serviceLocator()),
+      () => StoriesRepositoryImpl(serviceLocator()),
     );
     // Register the StoryCubit
     serviceLocator.registerFactory<StoryCubit>(
-          () => StoryCubit(serviceLocator(),serviceLocator(),serviceLocator(),serviceLocator(),serviceLocator(),serviceLocator(),serviceLocator(),serviceLocator(),serviceLocator()),
-    );    //
+      () => StoryCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator()),
+    ); //
     // // use cases
     serviceLocator.registerLazySingleton<MakeViewUseCase>(
       () => MakeViewUseCase(
@@ -43,46 +52,45 @@ class StoriesServiceLocator {
     );
 
     serviceLocator.registerLazySingleton<MuteStoriesUseCase>(
-          () => MuteStoriesUseCase(
+      () => MuteStoriesUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<GetMutedStoriesUseCase>(
-          () => GetMutedStoriesUseCase(
+      () => GetMutedStoriesUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<GetStoryViewersUseCase>(
-          () => GetStoryViewersUseCase(
+      () => GetStoryViewersUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<GetFollowersUseCase>(
-          () => GetFollowersUseCase(
+      () => GetFollowersUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<UpdateStoryPrivacyUseCase>(
-          () => UpdateStoryPrivacyUseCase(
+      () => UpdateStoryPrivacyUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<DeleteStoryUseCase>(
-          () => DeleteStoryUseCase(
+      () => DeleteStoryUseCase(
         serviceLocator(),
       ),
     );
 
     serviceLocator.registerLazySingleton<FetchStoriesUseCase>(
-          () => FetchStoriesUseCase(
+      () => FetchStoriesUseCase(
         serviceLocator(),
       ),
     );
-
   }
 }

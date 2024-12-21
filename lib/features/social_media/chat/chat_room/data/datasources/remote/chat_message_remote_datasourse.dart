@@ -23,8 +23,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/set_record_as_listened.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/unpin_message_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_model.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -423,6 +421,8 @@ class MessagesRemoteDataSourceImplementation
     }
   }
 
+
+
   @override
   Future<Either<Failure, bool>> stopRecording({required String chatId}) async {
     try {
@@ -631,10 +631,11 @@ class MessagesRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, String?>> getChatPinnedMessage(GetChatParams params) async {
+  Future<Either<Failure, String?>> getChatPinnedMessage(
+      GetChatParams params) async {
     final response =
         await _apiConsumer.get(EndPoints.getChatDetails(params.chatId));
-    return response.fold((failure){
+    return response.fold((failure) {
       log("Get Chat Remote Data Source: $failure");
       return Left(failure);
     }, (data) {

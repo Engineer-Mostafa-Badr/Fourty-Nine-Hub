@@ -72,7 +72,8 @@ class SelectShippingDestination extends StatelessWidget {
                     const Sizer(),
                     Expanded(
                         child: Text(
-                      state.fromAddress?.address ?? LocaleKeys.selectPickupLocation.tr(),
+                      state.fromAddress?.address ??
+                          LocaleKeys.selectPickupLocation.tr(),
                       maxLines: 1,
                     )),
                   ],

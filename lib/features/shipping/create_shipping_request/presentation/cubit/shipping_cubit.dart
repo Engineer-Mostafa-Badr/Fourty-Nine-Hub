@@ -48,7 +48,7 @@ class ShippingCubit extends Cubit<ShippingState> {
     var response = await repository.getBannerData();
     response.fold(
       (l) {
-        // log(l.message, name: "FailureBanner");
+        log(l.toString(), name: "FailureBanner");
         emit(FailureShippingState(failure: l));
       },
       (r) {
@@ -59,16 +59,41 @@ class ShippingCubit extends Cubit<ShippingState> {
     );
   }
 
-  sortData(String subCateogryId) {
-    var item = bannerModel.subCategories?.indexWhere(
-      (element) => element.subCategoryId == subCateogryId,
+  // sortData(String subCateogryId) {
+  //   var item = bannerModel.subCategories?.indexWhere(
+  //     (element) => element.subCategoryId == subCateogryId,
+  //   );
+  //   if (item == -1) {
+  //     return;
+  //   }
+  //   var removedItem = bannerModel.subCategories?.removeAt(item!);
+  //   bannerModel.subCategories?.insert(0, removedItem!);
+  //   emit(SuccessGetBannerState(model: bannerModel));
+  // }
+
+  void sortData(
+    String subCateogryId, {
+    List<SubCategoryEntity>? originalList,
+  }) {
+    if (originalList == null || originalList.isEmpty) return;
+
+    int itemIndex = originalList.indexWhere(
+      (element) => element.id == subCateogryId,
     );
-    if (item == -1) {
+
+    if (itemIndex == -1) {
       return;
     }
-    var removedItem = bannerModel.subCategories?.removeAt(item!);
-    bannerModel.subCategories?.insert(0, removedItem!);
-    emit(SuccessGetBannerState(model: bannerModel));
+
+    List<SubCategoryEntity> workingList = List.from(originalList);
+
+    SubCategoryEntity removedItem = workingList.removeAt(itemIndex);
+    workingList.insert(0, removedItem);
+
+    emit(SuccessGetBannerState(
+      model: bannerModel,
+      editedCategoryList: workingList,
+    ));
   }
 
   selectSubCategory({required SubCategoryEntity subCategory}) {
@@ -274,20 +299,29 @@ class ShippingCubit extends Cubit<ShippingState> {
         log('llllllllllllllja;sdlkfja;slkdjf;aslkdjf;alskdjfa;slkdjf $l');
       },
       (r) async {
-        for (var i = 0; i < carImagesList.length; i++) {
-          // log(r['data']["$i"].toString(),
-          //     name:
-          //         "lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll");
-          await sendBinaryFileData(
-              file: XFile(listFile[i].path),
-              signedUrl: r['data']["$i"]['signedUrl']);
-          successSendImage(
-            endpoint: EndPoints.successCarImages,
-            data: {
-              "mediaId": r['data']["$i"]['mediaId'],
-            },
-          );
-        }
+        await sendBinaryFileData(
+            file: XFile(listFile[0].path),
+            signedUrl: r['data'][0]['signedUrl']);
+        successSendImage(
+          endpoint: EndPoints.successCarImages,
+          data: {
+            "mediaId": r['data'][0]['mediaId'],
+          },
+        );
+        // for (var i = 0; i < carImagesList.length; i++) {
+        //   log(r.toString(),
+        //       name:
+        //           "getCarImagesS3");
+        // await sendBinaryFileData(
+        //     file: XFile(listFile[i].path),
+        //     signedUrl: r['data']["$i"]['signedUrl']);
+        // successSendImage(
+        //   endpoint: EndPoints.successCarImages,
+        //   data: {
+        //     "mediaId": r['data']["$i"]['mediaId'],
+        //   },
+        // );
+        // }
       },
     );
   }
@@ -430,9 +464,21 @@ class ShippingCubit extends Cubit<ShippingState> {
       ),
     );
     response.fold(
-      (l) {
-        log("faiuerDriverResiget");
-        emit(FailureShippingState(failure: l));
+      (l) async {
+        // log("faiuerDriverResiget");
+        // emit(FailureShippingState(failure: l));
+        // log("successDriverResiget");
+        // cacheService.setSubCategoryDriver(id: model.subCategoryId ?? "");
+        // cacheService.setDriverId(id: r['data']['_id'] ?? "");
+        // emit(SuccessRegisterState(
+        //     message:
+        //         "You have submitted your registration successfully, waiting for administration approval"));
+        // await getUserS3Imag();
+        // await getPlateS3Imag();
+        await getCarImagesS3();
+        await getS3IdImages();
+        await getDrivingLicenseS3();
+        await getLicenseS3();
       },
       (r) async {
         log("successDriverResiget");

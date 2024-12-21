@@ -3,7 +3,6 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/repositories/restaurant_details_repo.dart';
 
-
 class DeleteFoodFromCartUseCase
     extends UseCase<bool, DeleteFoodFromCartParams> {
   final RestaurantDetailsRepo _repository;
@@ -12,7 +11,7 @@ class DeleteFoodFromCartUseCase
 
   @override
   Future<Either<Failure, bool>> call(DeleteFoodFromCartParams params) {
-    return _repository.deleteFoodFromCart(params:params);
+    return _repository.deleteFoodFromCart(params: params);
   }
 }
 
@@ -23,7 +22,7 @@ class DeleteFoodFromCartParams {
   DeleteFoodFromCartParams({required this.restaurantId, required this.foodId});
 
   Map<String, dynamic> toJson() => {
-    'restaurantId': restaurantId,
-    'foodId': foodId,
-  };
+        'restaurantId': restaurantId,
+        'foodId': foodId,
+      };
 }

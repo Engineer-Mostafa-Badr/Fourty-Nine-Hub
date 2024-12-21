@@ -19,12 +19,12 @@ class SubCategoryModel extends SubCategoryEntity {
         : null;
 
     return SubCategoryModel(
-      id: json['_id'] ?? subCategoryData?['_id'] ?? '',
+      id:subCategoryData?['_id'] ??  json['_id'] ?? '',
       nameAr: json['nameAr'] ?? subCategoryData?['nameAr'] ?? '',
       nameEn: json['nameEn'] ?? subCategoryData?['nameEn'] ?? '',
       numberOfContent: json['numberOfAdsCount'] ?? 0,
       image: json['picture'] ?? subCategoryData?['picture'] ?? '',
-      isFavorite: json['isFavorite']?? false,
+      isFavorite: json['isFavorite'] ?? false,
       hasAuction: json['has_auction'] ?? false,
     );
   }

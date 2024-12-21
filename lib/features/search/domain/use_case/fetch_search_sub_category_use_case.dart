@@ -17,4 +17,3 @@ class FetchSearchSubCategoryUseCase
     return await _searchRepository.fetchSearchSubCategory(params);
   }
 }
-

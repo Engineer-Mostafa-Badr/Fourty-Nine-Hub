@@ -3,7 +3,7 @@ class SelectionEntity {
   final String nameEn;
   final String? type;
 
-  SelectionEntity({required this.nameAr, required this.nameEn,this.type});
+  SelectionEntity({required this.nameAr, required this.nameEn, this.type});
 
   Map<String, dynamic> toJson() {
     return {

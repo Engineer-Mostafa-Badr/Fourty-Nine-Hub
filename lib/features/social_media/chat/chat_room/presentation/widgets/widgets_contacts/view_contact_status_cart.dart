@@ -25,7 +25,9 @@ class ViewContactStatusCart extends StatelessWidget {
                   'A bird in the hand is better than two on the tree.',
                   style: Styles.mediumText(
                     fontWeight: FontWeight.w600,
-                    color:context.isDarkMode ? AppColors.BACKGROUND_COLOR: AppColors.PRIMARY_COLOR,
+                    color: context.isDarkMode
+                        ? AppColors.BACKGROUND_COLOR
+                        : AppColors.PRIMARY_COLOR,
                   ),
                 ),
               ),

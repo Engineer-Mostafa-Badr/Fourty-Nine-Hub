@@ -4,8 +4,10 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/banner_model.dart';
+import 'package:fourtyninehub/features/fourty_nine/data/models/currency_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/main_category_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/parent_main_category_model.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/currency_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/parent_main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
@@ -33,7 +35,7 @@ abstract class FourtyNineRemoteDataSource {
   Future<Either<Failure, bool>> removeMainCategoryFromFavorites(String id);
   Future<Either<Failure, BannerModel>> getBannerById({required String id});
   Future<Either<Failure, WalletHomeEntity>> getWalletHome();
-  Future<Either<Failure, String>> getCurrency();
+  Future<Either<Failure, CurrencyEntity>> getCurrency();
   Future<Either<Failure, bool>> anyCashBack();
 }
 
@@ -149,11 +151,11 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, String>> getCurrency() async {
+  Future<Either<Failure, CurrencyEntity>> getCurrency() async {
     final result = await _apiConsumer.get(EndPoints.getCurrency);
     return result.fold(
       (failure) => Left(failure),
-      (data) => Right(data['data']),
+      (data) => Right(CurrencyModel.fromJson(data['data'])),
     );
   }
 
@@ -161,12 +163,12 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
   Future<Either<Failure, bool>> anyCashBack() async {
     final result = await _apiConsumer.post(EndPoints.anyCashBack);
     return result.fold(
-          (failure) {
-            return Left(failure);
-          },
-          (data) {
-            return Right(data['status']);
-          },
+      (failure) {
+        return Left(failure);
+      },
+      (data) {
+        return Right(data['status']);
+      },
     );
   }
 }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../res/style/styles.dart';
@@ -27,17 +25,17 @@ class SocialImageViewer extends StatelessWidget {
       highlightColor: Colors.transparent,
       hoverColor: Colors.transparent,
       splashColor: Colors.transparent,
-      onTap: () => showDialog(
-        context: context,
-        builder: (context) => ImageDetailsScreen(
-          image: image,
-          fromPost: true,
-          isFile: false,
-          onRemoveImage: () {
-            context.pop();
-          },
-        ),
-      ),
+      // onTap: () => showDialog(
+      //   context: context,
+      //   builder: (context) => ImageDetailsScreen(
+      //     image: image,
+      //     fromPost: true,
+      //     isFile: false,
+      //     onRemoveImage: () {
+      //       context.pop();
+      //     },
+      //   ),
+      // ),
       onDoubleTap: () => onDoubleTap != null ? onDoubleTap!() : null,
       child: SizedBox(
           height: height ?? kToolbarHeight * 3,
@@ -53,14 +51,15 @@ class SocialImageViewer extends StatelessWidget {
               ImageFromInternet(image: image),
               if (length > 1)
                 Positioned(
-                    top: 10,
-                    right: 10,
+                    top: 20.h,
+                    right: 20.w,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w.w),
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
                       // height: kToolbarHeight * .5,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          color: Colors.grey),
+                          color: Colors.black54,
+                      ),
                       child: Label(
                           text: '$index/$length',
                           style: Styles.mediumText(color: Colors.white)),

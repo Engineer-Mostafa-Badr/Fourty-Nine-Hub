@@ -6,20 +6,17 @@ import 'package:fourtyninehub/features/account_taps/share_app/presentation/cubit
 class ShareAppCubit extends Cubit<ShareAppState> {
   final ShareAppUseCase _shareAppUseCase;
 
-  ShareAppCubit(
-      this._shareAppUseCase)
-      : super(const ShareAppState());
+  ShareAppCubit(this._shareAppUseCase) : super(const ShareAppState());
 
   Future<void> shareApp() async {
     final response = await _shareAppUseCase.call(const NoParams());
     response.fold(
-            (failure) =>
-            emit(state.copyWith(failure: failure, status: ShareAppStates.error)),
-            (r) => emit(state.copyWith(shareApp: r, status: ShareAppStates.success)));
+        (failure) => emit(
+            state.copyWith(failure: failure, status: ShareAppStates.error)),
+        (r) =>
+            emit(state.copyWith(shareApp: r, status: ShareAppStates.success)));
   }
 }
-
-
 
 // import 'package:bloc/bloc.dart';
 // import 'package:equatable/equatable.dart';

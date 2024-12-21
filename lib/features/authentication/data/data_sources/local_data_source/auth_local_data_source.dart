@@ -14,7 +14,6 @@ abstract class AuthLocalDataSource {
 
   Future<Either<Failure, UserTokensModel?>> getUserTokens();
 
-
   Future<Either<Failure, String?>> getLanguage();
 
   Future<Either<Failure, bool>> saveLanguage(String language);

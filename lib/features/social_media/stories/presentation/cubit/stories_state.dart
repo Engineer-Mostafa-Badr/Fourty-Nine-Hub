@@ -19,10 +19,10 @@ class StoryState {
   StoryState({
     this.mutedStoriesResponse,
     this.viewersResponse,
-    this.followers=const [],
+    this.followers = const [],
     this.isLoadingFollower = false,
     this.errorMessage,
-    this.users=const [],
+    this.users = const [],
     this.isLoading = false,
     this.hasReachedMax = false,
     this.currentPage = 1,
@@ -47,7 +47,7 @@ class StoryState {
       mutedStoriesResponse: mutedStoriesResponse ?? this.mutedStoriesResponse,
       viewersResponse: viewersResponse ?? this.viewersResponse,
       currentStoryCreatedAt:
-      currentStoryCreatedAt ?? this.currentStoryCreatedAt,
+          currentStoryCreatedAt ?? this.currentStoryCreatedAt,
       // New copyWith field
       followers: followers ?? this.followers,
       isLoadingFollower: isLoadingFollower ?? this.isLoadingFollower,
@@ -60,7 +60,6 @@ class StoryState {
     );
   }
 }
-
 
 class StoryInitial extends StoryState {
   StoryInitial() : super();

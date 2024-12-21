@@ -33,7 +33,8 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
   void initState() {
     super.initState();
 
-    context.read<TinderViewCubit>().fetchMainCategoryById(context,
+    context.read<TinderViewCubit>().fetchMainCategoryById(
+          context,
           '6718f27eacb309f8b1f94d0c',
         );
 
@@ -108,8 +109,8 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                           Expanded(
                             child: FittedBox(
                               child: Text(
-                                tinderCubit.state.mainCategoryResponse!
-                                        .name,
+                                tinderCubit.state.mainCategoryResponse!.name ??
+                                    "",
                                 textScaler: TextScaler.noScaling,
                                 style: TextStyle(
                                     // color: AppColors.PRIMARY_COLOR,
@@ -125,7 +126,9 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                     ),
                     const Sizer(),
                     Text(
-                      context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn,
+                      context.isArabic
+                          ? widget.params.subCategory.nameAr
+                          : widget.params.subCategory.nameEn,
                       textScaler: TextScaler.noScaling,
                       style: TextStyle(
                           fontSize: 40.sp,
@@ -134,9 +137,12 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                     ),
                     const Sizer(),
                     Builder(builder: (context) {
-                      String provider =
-                          getServiceName(context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn);
-                      String user = getUserName(context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn);
+                      String provider = getServiceName(context.isArabic
+                          ? widget.params.subCategory.nameAr
+                          : widget.params.subCategory.nameEn);
+                      String user = getUserName(context.isArabic
+                          ? widget.params.subCategory.nameAr
+                          : widget.params.subCategory.nameEn);
                       return TabBar(
                         controller: _tabController,
                         labelColor: AppColors.SECONDARY_COLOR,
@@ -157,12 +163,12 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
                         children: [
                           Center(
                               child: Text(
-                            'Provider: ${getServiceName(context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn)}',
+                            'Provider: ${getServiceName(context.isArabic ? widget.params.subCategory.nameAr : widget.params.subCategory.nameEn)}',
                             textScaler: TextScaler.noScaling,
                           )),
                           Center(
                               child: Text(
-                            'User: ${getUserName(context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn)}',
+                            'User: ${getUserName(context.isArabic ? widget.params.subCategory.nameAr : widget.params.subCategory.nameEn)}',
                             textScaler: TextScaler.noScaling,
                           )),
                         ],

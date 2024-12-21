@@ -3,8 +3,11 @@ import 'vehicle_id.dart';
 
 class TripJoinCardModel extends TripJoinCardEntity {
   // Properties
+  @override
   String? id;
+  @override
   String? userId;
+  @override
   String? categoryId;
   VehicleId? vehicleId;
   String? fromAr;
@@ -15,16 +18,20 @@ class TripJoinCardModel extends TripJoinCardEntity {
   int? duration;
   int? passengers;
   double? price;
+  @override
   String? phone;
   int? time;
   String? countryCode;
+  @override
   bool? isApproved;
+  @override
   String? status;
   bool? isRepeat;
   DateTime? createdAt;
   DateTime? updatedAt;
   String? allowStatus;
   List<String>? paymentMethods;
+  @override
   bool? subscribedPremium;
 
   // Constructor

@@ -1,4 +1,5 @@
-import '../../../../../core/utils/duration_helper.dart';
+import 'package:fourtyninehub/core/utils/time_utils.dart';
+
 
 class TwitterUserEntity {
   final String id;
@@ -8,10 +9,9 @@ class TwitterUserEntity {
   final String email;
   final bool isDocumented;
   final DateTime createdAt;
-  Duration get publishedDuration => DateTime.now().difference(createdAt);
+  Duration get publishedDuration => TimeUtils.calculateDuration(createdAt);
 
-  String get sinceTime =>
-      DurationHelper().sinceTime(duration: publishedDuration);
+  String get sinceTime => TimeUtils.getSinceTime(createdAt);
   TwitterUserEntity({
     required this.id,
     required this.firstName,

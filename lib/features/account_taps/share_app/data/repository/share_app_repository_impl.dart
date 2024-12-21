@@ -4,7 +4,7 @@ import 'package:fourtyninehub/features/account_taps/share_app/data/data_source/s
 import 'package:fourtyninehub/features/account_taps/share_app/domain/entity/share_app_entity.dart';
 import 'package:fourtyninehub/features/account_taps/share_app/domain/repository/share_app_repository.dart';
 
-class ShareAppRepositoryImpl extends ShareAppRepository{
+class ShareAppRepositoryImpl extends ShareAppRepository {
   final ShareAppRemoteDataSource _remoteDataSource;
 
   ShareAppRepositoryImpl(this._remoteDataSource);

@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/utils/duration_helper.dart';
 class TwitterCommentReplyEntity {
   final String id;
   String? content;
+  String? reply;
   dynamic user;
   final String post;
   final String image;
@@ -20,6 +21,7 @@ class TwitterCommentReplyEntity {
   TwitterCommentReplyEntity({
     required this.id,
     required this.user,
+    this.reply,
     required this.content,
     required this.post,
     required this.image,
@@ -31,4 +33,21 @@ class TwitterCommentReplyEntity {
     required this.love,
     this.repliesCount = 0,
   });
+
+  //toJson
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'user': user,
+        'content': content,
+        'reply': reply,
+        'post': post,
+        'image': image,
+        'loveCount': loveCount,
+        'totalCount': totalCount,
+        'isReact': isReact,
+        'edit': edit,
+        'love': love,
+        'repliesCount': repliesCount,
+        'createdAt': createdAt.toIso8601String(),
+      };
 }

@@ -4,9 +4,8 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
-
-
-class FetchSubCategoryDataUseCase extends UseCase<List<SubCategoryEntity>, NoParams> {
+class FetchSubCategoryDataUseCase
+    extends UseCase<List<SubCategoryEntity>, NoParams> {
   final TinderRepository _repository;
 
   FetchSubCategoryDataUseCase(this._repository);
@@ -16,4 +15,3 @@ class FetchSubCategoryDataUseCase extends UseCase<List<SubCategoryEntity>, NoPar
     return _repository.fetchSubCategoryData();
   }
 }
-

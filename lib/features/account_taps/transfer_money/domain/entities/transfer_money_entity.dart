@@ -9,15 +9,15 @@ class TransferMoneyEntity {
   final String currency;
   final String date;
 
-  TransferMoneyEntity(
-      {required this.from,
-      required this.fromUsername,
-      required this.to,
-      required this.toUsername,
-      required this.amount,
-      required this.currency,
-      required this.date,
-      required this.fromEmail,
-      required this.toEmail,
-      });
+  TransferMoneyEntity({
+    required this.from,
+    required this.fromUsername,
+    required this.to,
+    required this.toUsername,
+    required this.amount,
+    required this.currency,
+    required this.date,
+    required this.fromEmail,
+    required this.toEmail,
+  });
 }

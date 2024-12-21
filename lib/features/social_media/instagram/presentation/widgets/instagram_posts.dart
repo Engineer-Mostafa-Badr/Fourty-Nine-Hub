@@ -1,14 +1,13 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/social_image_viewer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -17,22 +16,17 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_comments.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_suggest_people.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/data/models/comment_model.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
-import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -41,13 +35,16 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:snapping_bottom_sheet/snapping_bottom_sheet.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class InstagramPosts extends StatefulWidget {
   const InstagramPosts({
     super.key,
     required this.scrollController,
   });
+
   final ScrollController scrollController;
+
   @override
   State<InstagramPosts> createState() => _InstagramPostsState();
 }
@@ -55,6 +52,7 @@ class InstagramPosts extends StatefulWidget {
 class _InstagramPostsState extends State<InstagramPosts> {
   final commentTextController = TextEditingController();
   final SheetController sheetController = SheetController();
+  bool _isExpanded = false;
 
   void showAsBottomSheet(
       {required Widget child, required Widget footer}) async {
@@ -84,7 +82,51 @@ class _InstagramPostsState extends State<InstagramPosts> {
   @override
   void dispose() {
     widget.scrollController.dispose();
+    _audioPlayer.dispose();
     super.dispose();
+  }
+
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  String? _currentAudioUrl;
+  bool _isMuted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _audioPlayer.onPlayerComplete.listen((event) {
+      // Restart audio when it finishes
+      if (_currentAudioUrl != null && !_isMuted) {
+        _audioPlayer.play(UrlSource(_currentAudioUrl!));
+      }
+    });
+  }
+
+  void _playAudio(String audioUrl) async {
+    if (_currentAudioUrl != audioUrl && !_isMuted) {
+      await _audioPlayer.stop(); // Stop previous audio
+      _currentAudioUrl = audioUrl;
+      await _audioPlayer.play(UrlSource(audioUrl)); // Play new audio
+    }
+  }
+
+  void _stopAudio() async {
+    try {
+      await _audioPlayer.stop(); // Stops current audio playback
+    } catch (e) {
+      debugPrint('Error stopping audio: $e');
+    }
+  }
+
+  void _toggleMute() {
+    setState(() {
+      _isMuted = !_isMuted;
+    });
+
+    if (_isMuted) {
+      _audioPlayer.pause(); // Pause audio when muted
+    } else if (_currentAudioUrl != null) {
+      _audioPlayer.resume(); // Resume audio when unmuted
+    }
   }
 
   @override
@@ -139,7 +181,6 @@ class _InstagramPostsState extends State<InstagramPosts> {
                   );
                 },
                 itemBuilder: (context, item, index) {
-                  final user = context.read<UserCubit>().state.data;
                   final pageController = PageController();
                   if (controller.feedPagingController.itemList?[index].type ==
                       'advertisement') {
@@ -149,175 +190,248 @@ class _InstagramPostsState extends State<InstagramPosts> {
                   } else if (controller
                           .feedPagingController.itemList?[index].type ==
                       'facebook_post') {
-                    return Padding(
-                      padding: const EdgeInsetsDirectional.only(
-                        start: 10.0,
-                        end: 10,
-                        top: 0,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Sizer(),
-                          _buildMainAccountHeader(
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Sizer(),
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.symmetric(horizontal: 20.w),
+                          child: _buildMainAccountHeader(
                               post: controller
                                   .feedPagingController.itemList![index],
                               context: context),
-                          const Sizer(),
-                          SizedBox(
-                            height: kToolbarHeight * 5,
-                            child: PageView.builder(
-                                controller: pageController,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: controller.feedPagingController
-                                    .itemList![index].images!.length,
-                                onPageChanged: (i) {
-                                  controller.changeIndex(i);
-                                },
-                                itemBuilder: (context, i) {
-                                  return SocialImageViewer(
-                                    image: controller.feedPagingController
-                                        .itemList![index].images![i],
-                                    index: i + 1,
-                                    length: controller.feedPagingController
-                                        .itemList![index].images!.length,
-                                    onDoubleTap: () {
-                                      controller.feedPagingController
-                                              .itemList?[index].isLove =
-                                          !controller.feedPagingController
-                                              .itemList![index].isLove!;
-                                      setState(() {});
-                                    },
-                                  );
-                                }),
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          if (controller.feedPagingController.itemList![index]
-                                  .images!.length >
-                              1)
-                            Center(
-                              child: SizedBox(
-                                height: 8.h,
-                                child: ListView.separated(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: controller.feedPagingController
-                                        .itemList![index].images!.length,
-                                    separatorBuilder: (context, index) =>
-                                        const Sizer(
-                                          width: 3,
-                                        ),
-                                    itemBuilder: (context, index) {
-                                      return CircleAvatar(
-                                        radius: 4,
-                                        backgroundColor:
-                                            state.pageIndex == index
-                                                ? AppColors.SECONDARY_COLOR
-                                                : AppColors.PRIMARY_COLOR,
-                                      );
-                                    }),
-                              ),
-                            ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      IconAppButton(
-                                        icon: controller.feedPagingController
-                                                    .itemList?[index].isLove ==
-                                                true
-                                            ? Icons.favorite
-                                            : Icons.favorite_border,
-                                        onPressed: () async {
-                                          var reacted =
-                                              await controller.onReact(
-                                            params: PostReactParams(
-                                              postId: controller
-                                                  .feedPagingController
-                                                  .itemList![index]
-                                                  .id,
-                                              react: 'love',
-                                            ),
-                                          );
-                                          if (reacted == true) {
-                                            controller.feedPagingController
-                                                    .itemList?[index].isLove =
-                                                !controller.feedPagingController
-                                                    .itemList![index].isLove!;
-                                            if (controller.feedPagingController
-                                                    .itemList?[index].isLove ==
-                                                false) {
-                                              controller
-                                                  .feedPagingController
-                                                  .itemList?[index]
-                                                  .loveCount = (controller
-                                                      .feedPagingController
-                                                      .itemList![index]
-                                                      .loveCount! -
-                                                  1);
-                                            } else {
-                                              controller
-                                                  .feedPagingController
-                                                  .itemList?[index]
-                                                  .loveCount = (controller
-                                                      .feedPagingController
-                                                      .itemList![index]
-                                                      .loveCount! +
-                                                  1);
-                                            }
+                        ),
+                        const Sizer(),
+                        SizedBox(
+                          height: kToolbarHeight * 7,
+                          child: Stack(
+                            children: [
+                              PageView.builder(
+                                  controller: pageController,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: controller.feedPagingController
+                                      .itemList?[index].images?.length,
+                                  onPageChanged: (i) {
+                                    controller.changeIndex(i);
+                                    final audio = controller.feedPagingController.itemList?[index].audio;
+                                    if (audio != null && audio.isNotEmpty && !_isMuted) {
+                                      _playAudio(audio[0].sound);
+                                    }else{
+                                      _stopAudio();
+                                    }
+                                  },
+                                  itemBuilder: (context, i) {
+                                    return VisibilityDetector(
+                                      key: Key(index.toString()),
+                                      onVisibilityChanged: (visibilityInfo) {
+                                        if (visibilityInfo.visibleFraction > 0.5 && !_isMuted) {
+                                          final audio = controller.feedPagingController.itemList?[index].audio;
+                                          if (audio!.isNotEmpty) {
+                                            _playAudio(audio[0].sound);
+                                          }else{
+                                            _stopAudio();
                                           }
+                                        }
+                                      },
+                                      child: SocialImageViewer(
+                                        image: controller.feedPagingController
+                                            .itemList![index].images![i],
+                                        index: i + 1,
+                                        length: controller.feedPagingController
+                                            .itemList![index].images!.length,
+                                        onDoubleTap: () {
+                                          controller.feedPagingController
+                                                  .itemList?[index].isLove =
+                                              !controller.feedPagingController
+                                                  .itemList![index].isLove;
                                           setState(() {});
                                         },
-                                        color: controller.feedPagingController
-                                                    .itemList?[index].isLove ==
-                                                true
-                                            ? Colors.red
-                                            : Colors.grey,
-                                        size: 25,
                                       ),
+                                    );
+                                  }),
+                              if(controller.feedPagingController
+                                  .itemList![index].audio!.isNotEmpty)
+                              Positioned(
+                                bottom: 20.h,
+                                left: 20.w,
+                                right: 20.w,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const SizedBox.shrink(),
+                                    GestureDetector(
+                                      onTap: _toggleMute,
+                                      child: CircleAvatar(
+                                        radius: 30.r,
+                                        backgroundColor: Colors.black.withOpacity(0.7),
+                                        child: Icon(
+                                          _isMuted ? Icons.volume_off : Icons.volume_up,
+                                          size: 33.sp,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        if (controller.feedPagingController.itemList![index]
+                                .images!.length >
+                            1)
+                          Center(
+                            child: SizedBox(
+                              height: 10.h,
+                              child: ListView.separated(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: controller.feedPagingController
+                                      .itemList![index].images!.length,
+                                  separatorBuilder: (context, index) =>
                                       const Sizer(
-                                        width: 5,
+                                        width: 3,
                                       ),
-                                      Label(
-                                        text: controller.feedPagingController
-                                                .itemList?[index].loveCount
-                                                .toString() ??
-                                            '',
-                                        style: Styles.mediumText(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      const Sizer(),
-                                      IconAppButton(
-                                        icon: Icons.chat_bubble_outline_rounded,
-                                        onPressed: () {
-                                          bottomSheet(
-                                              context: context,
-                                              isScrollControlled: true,
-                                              widget: BlocProvider.value(
-                                                value: serviceLocator<
-                                                    InstagramCubit>()
-                                                  ..loadComments(
-                                                      context,
-                                                      controller
-                                                          .feedPagingController
-                                                          .itemList![index]
-                                                          .id),
+                                  itemBuilder: (context, index) {
+                                    return CircleAvatar(
+                                      radius: 10.r,
+                                      backgroundColor: state.pageIndex == index
+                                          ? AppColors.SECONDARY_COLOR
+                                          : Theme.of(context).primaryColor,
+                                    );
+                                  }),
+                            ),
+                          ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.symmetric(horizontal: 20.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    IconAppButton(
+                                      icon: controller.feedPagingController
+                                                  .itemList?[index].isLove ==
+                                              true
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      onPressed: () async {
+                                        var reacted = await controller.onReact(
+                                          params: PostReactParams(
+                                            postId: controller
+                                                .feedPagingController
+                                                .itemList![index]
+                                                .id,
+                                            react: 'love',
+                                          ),
+                                        );
+                                        if (reacted == true) {
+                                          controller.feedPagingController
+                                                  .itemList?[index].isLove =
+                                              !controller.feedPagingController
+                                                  .itemList![index].isLove;
+                                          if (controller.feedPagingController
+                                                  .itemList?[index].isLove ==
+                                              false) {
+                                            controller
+                                                .feedPagingController
+                                                .itemList?[index]
+                                                .loveCount = (controller
+                                                    .feedPagingController
+                                                    .itemList![index]
+                                                    .loveCount -
+                                                1);
+                                          } else {
+                                            controller
+                                                .feedPagingController
+                                                .itemList?[index]
+                                                .loveCount = (controller
+                                                    .feedPagingController
+                                                    .itemList![index]
+                                                    .loveCount +
+                                                1);
+                                          }
+                                        }
+                                        setState(() {});
+                                      },
+                                      color: controller.feedPagingController
+                                                  .itemList?[index].isLove ==
+                                              true
+                                          ? Colors.red
+                                          : Colors.grey,
+                                      size: 25,
+                                    ),
+                                    Sizer(
+                                      width: 10.w,
+                                    ),
+                                    Label(
+                                      text: controller.feedPagingController
+                                              .itemList?[index].loveCount
+                                              .toString() ??
+                                          '',
+                                      style: Styles.mediumText(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const Sizer(),
+                                    IconAppButton(
+                                      icon: FontAwesomeIcons.comment,
+                                      onPressed: () {
+                                        // if (!serviceLocator<UserCubit>()
+                                        //     .isLoggedIn) {
+                                        //   context.push(Routes.LOGIN);
+                                        // } else {
+                                        //   showCommentsBottomSheetInstagram(
+                                        //       context,
+                                        //       commentCount: controller.feedPagingController
+                                        //           .itemList?[index].commentsCount
+                                        //           .toString() ??
+                                        //           '',
+                                        //       comment: state.postComments![index],
+                                        //       );
+                                        // }
+                                        showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          isDismissible: true,
+                                          backgroundColor: Colors.transparent,
+                                          builder: (context) {
+                                            return BlocProvider.value(
+                                              value: serviceLocator<
+                                                  InstagramCubit>()
+                                                ..loadComments(
+                                                    context,
+                                                    controller
+                                                        .feedPagingController
+                                                        .itemList![index]
+                                                        .id),
+                                              child: GestureDetector(
+                                                behavior:
+                                                    HitTestBehavior.opaque,
+                                                onTap: () {
+                                                  FocusScope.of(context)
+                                                      .unfocus();
+                                                },
                                                 child: InstagramPostComments(
                                                   postId: controller
                                                       .feedPagingController
                                                       .itemList![index]
                                                       .id,
+                                                  commentCount: controller
+                                                          .feedPagingController
+                                                          .itemList?[index]
+                                                          .commentsCount
+                                                          .toString() ??
+                                                      '',
                                                   onCommentReply:
                                                       (ReplyOnCommentParams
                                                           params) async {
@@ -342,7 +456,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                                                 params.postId);
                                                     currentPost?.commentsCount =
                                                         (currentPost
-                                                                .commentsCount! +
+                                                                .commentsCount +
                                                             1);
                                                     return result;
                                                   },
@@ -392,314 +506,420 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                                     return result;
                                                   },
                                                 ),
-                                              ));
-                                        },
-                                        color: Colors.grey,
-                                        size: 25,
-                                      ),
-                                      const Sizer(
-                                        width: 5,
-                                      ),
-                                      Label(
-                                        text: controller.feedPagingController
-                                                .itemList?[index].commentsCount
-                                                .toString() ??
-                                            '',
-                                        style: Styles.mediumText(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const Expanded(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Sizer(
-                            height: 5.h,
-                          ),
-                          if (controller.feedPagingController.itemList![index]
-                              .content!.isNotEmpty)
-                            Label(
-                                text: controller.feedPagingController
-                                        .itemList?[index].content ??
-                                    ''),
-                          if (controller.feedPagingController.itemList![index]
-                              .content!.isEmpty) ...[
-                            InkWell(
-                              onTap: () {
-                                showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    backgroundColor: Colors.transparent,
-                                    builder: (context){
-                                  return Stack(
-                                    alignment: AlignmentDirectional.bottomCenter,
-                                    children: [
-                                      Container(color: Colors.transparent),
-                                      DraggableScrollableSheet(
-                                        initialChildSize: isKeyboardVisible(context) ? 0.9 : 0.6,
-                                        minChildSize: 0.4,
-                                        maxChildSize: 0.9,
-                                        expand: false,
-                                        builder: (context, scrollController) {
-                                          return Container(
-                                            decoration: BoxDecoration(
-                                              color: context.isDarkMode ? Colors.grey[900] : Colors.white,
-                                              borderRadius: const BorderRadius.only(
-                                                topLeft: Radius.circular(20),
-                                                topRight: Radius.circular(20),
                                               ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      color: Colors.grey,
+                                      size: 25,
+                                    ),
+                                    Sizer(
+                                      width: 20.w,
+                                    ),
+                                    Label(
+                                      text: controller.feedPagingController
+                                              .itemList?[index].commentsCount
+                                              .toString() ??
+                                          '',
+                                      style: Styles.mediumText(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Sizer(
+                          height: 5.h,
+                        ),
+                        if (controller.feedPagingController.itemList![index]
+                            .content!.isNotEmpty)
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.symmetric(
+                                      horizontal: 20.w),
+                                  child: RichText(
+                                    text: WidgetSpan(child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _isExpanded = !_isExpanded;
+                                        });
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              controller.feedPagingController.itemList?[index].content ?? '',
+                                              textAlign: _isArabic(controller.feedPagingController.itemList?[index]
+                                                  .content ??
+                                                      '')
+                                                  ? TextAlign.right
+                                                  : TextAlign.left,
+                                              style: Styles.mediumText(
+                                                  fontSize: 60.sp),
+                                              maxLines: _isExpanded ? null : 3,
+                                              overflow: _isExpanded
+                                                  ? null
+                                                  : TextOverflow.ellipsis,
                                             ),
-                                            child: Column(
-                                              children: <Widget>[
-                                                Expanded(
-                                                  child: BlocProvider.value(
-                                                    value: serviceLocator<InstagramCubit>()
-                                                      ..loadComments(
-                                                          context,
-                                                          controller.feedPagingController
-                                                              .itemList![index].id),
-                                                    child: InstagramPostComments(
-                                                      isShown:true,
-                                                      postId: controller
-                                                          .feedPagingController
-                                                          .itemList![index]
-                                                          .id,
-                                                      onCommentReply:
-                                                          (ReplyOnCommentParams
-                                                      params) async {
-                                                        var result = await controller
-                                                            .replyOnComment(
-                                                          params: ReplyOnCommentParams(
-                                                              postId: params.postId,
-                                                              content: params.content,
-                                                              commentId:
-                                                              params.commentId),
-                                                        );
-                                                        var currentPost = controller
-                                                            .feedPagingController.itemList
-                                                            ?.firstWhere((element) =>
-                                                        element.id ==
-                                                            params.postId);
-                                                        currentPost?.commentsCount =
-                                                        (currentPost.commentsCount! +
-                                                            1);
-                                                        return result;
-                                                      },
-                                                      onAddComment: (PostCommentParams
-                                                      params) async {
-                                                        var result = await controller
-                                                            .onPostComment(
-                                                            params: params);
-                                                        return result;
-                                                      },
-                                                      onDeleteComment: (String id) async {
-                                                        return await controller
-                                                            .deleteComment(
-                                                            context: context,
-                                                            commentId: id,
-                                                            postId: controller
-                                                                .feedPagingController
-                                                                .itemList![index]
-                                                                .id,
-                                                            from: 'feed');
-                                                      },
-                                                      onDeleteReply: (String id) async {
-                                                        return await controller
-                                                            .deleteComment(
-                                                            context: context,
-                                                            commentId: id,
-                                                            postId: controller
-                                                                .feedPagingController
-                                                                .itemList![index]
-                                                                .id,
-                                                            from: 'feed');
-                                                      },
-                                                      onEditComment: (PostCommentParams
-                                                      params) async {
-                                                        var result = await controller
-                                                            .editComment(params: params);
-                                                        return result;
-                                                      },
-                                                    ),
-                                                  ),
-                                                ),
-                                                Divider(color: Colors.grey[800]),
-                                                Row(
-                                                  children: [
-                                                    const ProfileImage(
-                                                      accountId: 0,
-                                                      userId: '',
-                                                    ),
-                                                    const Sizer(),
-                                                    Expanded(
-                                                        child: TextFormField(
-                                                          maxLines: null,
-                                                          controller:
-                                                          commentTextController,
-                                                          onChanged: (v) {
-                                                            setState(() {});
-                                                          },
-                                                          style: Styles.headerText(
-                                                              fontSize: 26),
-                                                          decoration: InputDecoration(
-                                                            fillColor: Colors.white,
-                                                            contentPadding:
-                                                            const EdgeInsets.all(5),
-                                                            hintText:
-                                                            '${LocaleKeys.typeYourComment.localize} ....',
-                                                            hintStyle:
-                                                            Styles.mediumText(),
-                                                          ),
-                                                        )),
-                                                    const Sizer(),
-                                                    IconAppButton(
-                                                        icon: Icons.send,
-                                                        size: 20,
-                                                        isCircle: true,
-                                                        onPressed: () async {
-                                                          CommentEntity data = await controller.onPostComment(
-                                                              params: PostCommentParams(
-                                                                  content:
-                                                                  commentTextController
-                                                                      .text,
-                                                                  postId: controller
-                                                                      .feedPagingController
-                                                                      .itemList![
-                                                                  index]
-                                                                      .id));
-
-                                                          controller
-                                                              .commentsPagingController
-                                                              .itemList
-                                                              ?.insert(
-                                                            0,
-                                                            CommentModel(
-                                                              id: data.id,
-                                                              content:
-                                                              commentTextController
-                                                                  .text,
-                                                              post: controller
-                                                                  .feedPagingController
-                                                                  .itemList![index]
-                                                                  .id,
-                                                              createdAt:
-                                                              DateTime.now(),
-                                                              loveCount:
-                                                              data.loveCount,
-                                                              angryCount:
-                                                              data.angryCount,
-                                                              likesCount:
-                                                              data.likesCount,
-                                                              repliesCount:
-                                                              data.repliesCount,
-                                                              sadCount:
-                                                              data.sadCount,
-                                                              wowCount:
-                                                              data.wowCount,
-                                                              isAngry: false,
-                                                              isLikes: false,
-                                                              isLove: false,
-                                                              isSad: false,
-                                                              isWow: false,
-                                                              user:
-                                                              TwitterUserEntity(
-                                                                id: user!.id,
-                                                                firstName:
-                                                                user.firstName,
-                                                                lastName:
-                                                                user.lastName,
-                                                                createdAt:
-                                                                DateTime.now(),
-                                                                image:
-                                                                user.profilePicture ??
-                                                                    '',
-                                                                email: user.email ??
-                                                                    '',
-                                                                isDocumented: false,
-                                                              ),
-                                                            ),
-                                                          );
-                                                          commentTextController
-                                                              .clear();
-                                                          FocusScope.of(context)
-                                                              .unfocus();
-                                                          setState(() {});
-                                                        })
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                          );
-                                        },
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  );
-                                });
+                                    )),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        // if (controller.feedPagingController.itemList![index]
+                        //     .content!.isEmpty) ...[
+                        //   InkWell(
+                        //       onTap: () {
+                        //         showModalBottomSheet(
+                        //             context: context,
+                        //             isScrollControlled: true,
+                        //             backgroundColor: Colors.transparent,
+                        //             builder: (context) {
+                        //               return Stack(
+                        //                 alignment:
+                        //                     AlignmentDirectional.bottomCenter,
+                        //                 children: [
+                        //                   Container(
+                        //                       color: Colors.transparent),
+                        //                   DraggableScrollableSheet(
+                        //                     initialChildSize:
+                        //                         isKeyboardVisible(context)
+                        //                             ? 0.9
+                        //                             : 0.6,
+                        //                     minChildSize: 0.4,
+                        //                     maxChildSize: 0.9,
+                        //                     expand: false,
+                        //                     builder:
+                        //                         (context, scrollController) {
+                        //                       return Container(
+                        //                         decoration: BoxDecoration(
+                        //                           color: context.isDarkMode
+                        //                               ? Colors.grey[900]
+                        //                               : Colors.white,
+                        //                           borderRadius:
+                        //                               const BorderRadius.only(
+                        //                             topLeft:
+                        //                                 Radius.circular(20),
+                        //                             topRight:
+                        //                                 Radius.circular(20),
+                        //                           ),
+                        //                         ),
+                        //                         child: Column(
+                        //                           children: <Widget>[
+                        //                             Expanded(
+                        //                               child:
+                        //                                   BlocProvider.value(
+                        //                                 value: serviceLocator<
+                        //                                     InstagramCubit>()
+                        //                                   ..loadComments(
+                        //                                       context,
+                        //                                       controller
+                        //                                           .feedPagingController
+                        //                                           .itemList![
+                        //                                               index]
+                        //                                           .id),
+                        //                                 child:
+                        //                                     InstagramPostComments(
+                        //                                       commentCount: controller.feedPagingController
+                        //                                           .itemList?[index].commentsCount
+                        //                                           .toString() ??
+                        //                                           '',
+                        //                                   isShown: true,
+                        //                                   postId: controller
+                        //                                       .feedPagingController
+                        //                                       .itemList![
+                        //                                           index]
+                        //                                       .id,
+                        //                                   onCommentReply:
+                        //                                       (ReplyOnCommentParams
+                        //                                           params) async {
+                        //                                     var result =
+                        //                                         await controller
+                        //                                             .replyOnComment(
+                        //                                       params: ReplyOnCommentParams(
+                        //                                           postId: params
+                        //                                               .postId,
+                        //                                           content: params
+                        //                                               .content,
+                        //                                           commentId:
+                        //                                               params
+                        //                                                   .commentId),
+                        //                                     );
+                        //                                     var currentPost = controller
+                        //                                         .feedPagingController
+                        //                                         .itemList
+                        //                                         ?.firstWhere((element) =>
+                        //                                             element
+                        //                                                 .id ==
+                        //                                             params
+                        //                                                 .postId);
+                        //                                     currentPost
+                        //                                             ?.commentsCount =
+                        //                                         (currentPost
+                        //                                                 .commentsCount +
+                        //                                             1);
+                        //                                     return result;
+                        //                                   },
+                        //                                   onAddComment:
+                        //                                       (PostCommentParams
+                        //                                           params) async {
+                        //                                     var result = await controller
+                        //                                         .onPostComment(
+                        //                                             params:
+                        //                                                 params);
+                        //                                     return result;
+                        //                                   },
+                        //                                   onDeleteComment:
+                        //                                       (String
+                        //                                           id) async {
+                        //                                     return await controller.deleteComment(
+                        //                                         context:
+                        //                                             context,
+                        //                                         commentId: id,
+                        //                                         postId: controller
+                        //                                             .feedPagingController
+                        //                                             .itemList![
+                        //                                                 index]
+                        //                                             .id,
+                        //                                         from: 'feed');
+                        //                                   },
+                        //                                   onDeleteReply:
+                        //                                       (String
+                        //                                           id) async {
+                        //                                     return await controller.deleteComment(
+                        //                                         context:
+                        //                                             context,
+                        //                                         commentId: id,
+                        //                                         postId: controller
+                        //                                             .feedPagingController
+                        //                                             .itemList![
+                        //                                                 index]
+                        //                                             .id,
+                        //                                         from: 'feed');
+                        //                                   },
+                        //                                   onEditComment:
+                        //                                       (PostCommentParams
+                        //                                           params) async {
+                        //                                     var result =
+                        //                                         await controller
+                        //                                             .editComment(
+                        //                                                 params:
+                        //                                                     params);
+                        //                                     return result;
+                        //                                   },
+                        //                                 ),
+                        //                               ),
+                        //                             ),
+                        //                             Divider(
+                        //                                 color:
+                        //                                     Colors.grey[800]),
+                        //                             Row(
+                        //                               children: [
+                        //                                 const ProfileImage(
+                        //                                   accountId: 0,
+                        //                                   userId: '',
+                        //                                 ),
+                        //                                 const Sizer(),
+                        //                                 Expanded(
+                        //                                     child:
+                        //                                         TextFormField(
+                        //                                   maxLines: null,
+                        //                                   controller:
+                        //                                       commentTextController,
+                        //                                   onChanged: (v) {
+                        //                                     setState(() {});
+                        //                                   },
+                        //                                   style: Styles
+                        //                                       .headerText(
+                        //                                           fontSize:
+                        //                                               26),
+                        //                                   decoration:
+                        //                                       InputDecoration(
+                        //                                     fillColor:
+                        //                                         Colors.white,
+                        //                                     contentPadding:
+                        //                                         const EdgeInsets
+                        //                                             .all(5),
+                        //                                     hintText:
+                        //                                         '${LocaleKeys.typeYourComment.localize} ....',
+                        //                                     hintStyle: Styles
+                        //                                         .mediumText(),
+                        //                                   ),
+                        //                                 )),
+                        //                                 const Sizer(),
+                        //                                 IconAppButton(
+                        //                                     icon: Icons.send,
+                        //                                     size: 20,
+                        //                                     isCircle: true,
+                        //                                     onPressed:
+                        //                                         () async {
+                        //                                       CommentEntity data = await controller.onPostComment(
+                        //                                           params: PostCommentParams(
+                        //                                               content:
+                        //                                                   commentTextController
+                        //                                                       .text,
+                        //                                               postId: controller
+                        //                                                   .feedPagingController
+                        //                                                   .itemList![index]
+                        //                                                   .id));
+                        //
+                        //                                       controller
+                        //                                           .commentsPagingController
+                        //                                           .itemList
+                        //                                           ?.insert(
+                        //                                         0,
+                        //                                         CommentModel(
+                        //                                           id: data.id,
+                        //                                           content:
+                        //                                               commentTextController
+                        //                                                   .text,
+                        //                                           post: controller
+                        //                                               .feedPagingController
+                        //                                               .itemList![
+                        //                                                   index]
+                        //                                               .id,
+                        //                                           createdAt:
+                        //                                               DateTime
+                        //                                                   .now(),
+                        //                                           loveCount: data
+                        //                                               .loveCount,
+                        //                                           angryCount:
+                        //                                               data.angryCount,
+                        //                                           likesCount:
+                        //                                               data.likesCount,
+                        //                                           repliesCount:
+                        //                                               data.repliesCount,
+                        //                                           sadCount: data
+                        //                                               .sadCount,
+                        //                                           wowCount: data
+                        //                                               .wowCount,
+                        //                                           isAngry:
+                        //                                               false,
+                        //                                           isLikes:
+                        //                                               false,
+                        //                                           isLove:
+                        //                                               false,
+                        //                                           isSad:
+                        //                                               false,
+                        //                                           isWow:
+                        //                                               false,
+                        //                                           user:
+                        //                                               TwitterUserEntity(
+                        //                                             id: user!
+                        //                                                 .id,
+                        //                                             firstName:
+                        //                                                 user.firstName,
+                        //                                             lastName:
+                        //                                                 user.lastName,
+                        //                                             createdAt:
+                        //                                                 DateTime
+                        //                                                     .now(),
+                        //                                             image:
+                        //                                                 user.profilePicture ??
+                        //                                                     '',
+                        //                                             email:
+                        //                                                 user.email ??
+                        //                                                     '',
+                        //                                             isDocumented:
+                        //                                                 false,
+                        //                                           ),
+                        //                                         ),
+                        //                                       );
+                        //                                       commentTextController
+                        //                                           .clear();
+                        //                                       FocusScope.of(
+                        //                                               context)
+                        //                                           .unfocus();
+                        //                                       setState(() {});
+                        //                                     })
+                        //                               ],
+                        //                             )
+                        //                           ],
+                        //                         ),
+                        //                       );
+                        //                     },
+                        //                   ),
+                        //                 ],
+                        //               );
+                        //             });
+                        //       },
+                        //       child: Label(
+                        //           text: LocaleKeys.showComments.localize))
+                        // ],
+                        if (controller.feedPagingController.itemList![index]
+                                .content!.isEmpty &&
+                            (controller.feedPagingController.itemList![index]
+                                    .firstComment !=
+                                null))
+                          Padding(
+                            padding:  EdgeInsets.symmetric(horizontal: 20.w,vertical: 10.h),
+                            child: RichText(
 
-                              },
-                                child: Label(
-                                    text: LocaleKeys.showComments.localize))
-                          ],
-                          if (controller.feedPagingController.itemList![index]
-                                  .content!.isEmpty &&
-                              (controller.feedPagingController.itemList![index]
-                                      .firstComment !=
-                                  null))
-                            RichText(
                                 text: TextSpan(children: [
                               TextSpan(
                                   text:
                                       '${controller.feedPagingController.itemList?[index].firstComment?.firstName} ${controller.feedPagingController.itemList?[index].firstComment?.lastName}\t\t',
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () => context.push(
+                                      ..onTap = () => context.push(
                                         Routes.INSTAGRAMPROFILE,
                                         extra: controller.feedPagingController
                                             .itemList?[index].user.id),
-                                  style: Styles.mediumText(
-                                    color: context.isDarkMode
-                                        ? AppColors.SECONDARY_COLOR_DARK
-                                        : AppColors.DARK_BLUE_COLOR,
-                                  )),
+                                  style: Styles.mediumText()),
                               TextSpan(
                                   text: controller.feedPagingController
                                               .itemList![index].firstComment ==
                                           null
                                       ? ''
-                                      : controller
-                                          .feedPagingController
-                                          .itemList?[index]
-                                          .firstComment
-                                          ?.content,
+                                      : controller.feedPagingController
+                                          .itemList?[index].firstComment?.content,
                                   style: Styles.mediumText(
                                     color: context.isDarkMode
                                         ? AppColors.LIGHT_GRAY_COLOR
                                         : AppColors.DARK_GRAY_COLOR,
                                   )),
                             ])),
-                          RichText(
-                              text: TextSpan(children: [
-                            TextSpan(
-                                text: controller.feedPagingController
-                                    .itemList?[index].sinceTime,
-                                style: Styles.mediumText(
-                                  color: context.isDarkMode
-                                      ? AppColors.LIGHT_GRAY_COLOR
-                                      : AppColors.DARK_GRAY_COLOR,
-                                )),
-                          ]))
-                        ],
-                      ),
+                          ),
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.symmetric(horizontal: 20.w),
+                          child: Text(
+                              controller.feedPagingController.itemList?[index]
+                                      .sinceTime ??
+                                  '',
+                              style: Styles.mediumText(
+                                  color: AppColors.GREY_NORMAL_COLOR)),
+                        ),
+                      ],
                     );
                   } else {
                     return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Padding(
+                          padding:
+                          EdgeInsetsDirectional.symmetric(horizontal: 20.w),
+                          child: _buildMainAccountHeader(
+                              post: controller
+                                  .feedPagingController.itemList![index],
+                              context: context),
+                        ),
+                        const Sizer(),
                         Container(
                           height: 5.h,
                           width: double.infinity,
@@ -713,6 +933,286 @@ class _InstagramPostsState extends State<InstagramPosts> {
                             item: controller
                                 .feedPagingController.itemList![index],
                           ),
+                        ),
+                        Padding(
+                          padding:
+                          EdgeInsetsDirectional.symmetric(horizontal: 20.w,vertical: 10.h),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    IconAppButton(
+                                      icon: controller.feedPagingController
+                                          .itemList?[index].isLove ==
+                                          true
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      onPressed: () async {
+                                        var reacted = await controller.onReact(
+                                          params: PostReactParams(
+                                            postId: controller
+                                                .feedPagingController
+                                                .itemList![index]
+                                                .id,
+                                            react: 'love',
+                                          ),
+                                        );
+                                        if (reacted == true) {
+                                          controller.feedPagingController
+                                              .itemList?[index].isLove =
+                                          !controller.feedPagingController
+                                              .itemList![index].isLove;
+                                          if (controller.feedPagingController
+                                              .itemList?[index].isLove ==
+                                              false) {
+                                            controller
+                                                .feedPagingController
+                                                .itemList?[index]
+                                                .loveCount = (controller
+                                                .feedPagingController
+                                                .itemList![index]
+                                                .loveCount -
+                                                1);
+                                          } else {
+                                            controller
+                                                .feedPagingController
+                                                .itemList?[index]
+                                                .loveCount = (controller
+                                                .feedPagingController
+                                                .itemList![index]
+                                                .loveCount +
+                                                1);
+                                          }
+                                        }
+                                        setState(() {});
+                                      },
+                                      color: controller.feedPagingController
+                                          .itemList?[index].isLove ==
+                                          true
+                                          ? Colors.red
+                                          : Colors.grey,
+                                      size: 25,
+                                    ),
+                                    Sizer(
+                                      width: 10.w,
+                                    ),
+                                    Label(
+                                      text: controller.feedPagingController
+                                          .itemList?[index].loveCount
+                                          .toString() ??
+                                          '',
+                                      style: Styles.mediumText(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const Sizer(),
+                                    IconAppButton(
+                                      icon: FontAwesomeIcons.comment,
+                                      onPressed: () {
+                                        // if (!serviceLocator<UserCubit>()
+                                        //     .isLoggedIn) {
+                                        //   context.push(Routes.LOGIN);
+                                        // } else {
+                                        //   showCommentsBottomSheetInstagram(
+                                        //       context,
+                                        //       commentCount: controller.feedPagingController
+                                        //           .itemList?[index].commentsCount
+                                        //           .toString() ??
+                                        //           '',
+                                        //       comment: state.postComments![index],
+                                        //       );
+                                        // }
+                                        showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          isDismissible: true,
+                                          backgroundColor: Colors.transparent,
+                                          builder: (context) {
+                                            return BlocProvider.value(
+                                              value: serviceLocator<
+                                                  InstagramCubit>()
+                                                ..loadComments(
+                                                    context,
+                                                    controller
+                                                        .feedPagingController
+                                                        .itemList![index]
+                                                        .id),
+                                              child: GestureDetector(
+                                                behavior:
+                                                HitTestBehavior.opaque,
+                                                onTap: () {
+                                                  FocusScope.of(context)
+                                                      .unfocus();
+                                                },
+                                                child: InstagramPostComments(
+                                                  postId: controller
+                                                      .feedPagingController
+                                                      .itemList![index]
+                                                      .id,
+                                                  commentCount: controller
+                                                      .feedPagingController
+                                                      .itemList?[index]
+                                                      .commentsCount
+                                                      .toString() ??
+                                                      '',
+                                                  onCommentReply:
+                                                      (ReplyOnCommentParams
+                                                  params) async {
+                                                    var result =
+                                                    await controller
+                                                        .replyOnComment(
+                                                      params:
+                                                      ReplyOnCommentParams(
+                                                          postId:
+                                                          params.postId,
+                                                          content: params
+                                                              .content,
+                                                          commentId: params
+                                                              .commentId),
+                                                    );
+                                                    var currentPost = controller
+                                                        .feedPagingController
+                                                        .itemList
+                                                        ?.firstWhere(
+                                                            (element) =>
+                                                        element.id ==
+                                                            params.postId);
+                                                    currentPost?.commentsCount =
+                                                    (currentPost
+                                                        .commentsCount +
+                                                        1);
+                                                    return result;
+                                                  },
+                                                  onAddComment:
+                                                      (PostCommentParams
+                                                  params) async {
+                                                    var result =
+                                                    await controller
+                                                        .onPostComment(
+                                                        params: params);
+                                                    return result;
+                                                  },
+                                                  onDeleteComment:
+                                                      (String id) async {
+                                                    return await controller
+                                                        .deleteComment(
+                                                        context: context,
+                                                        commentId: id,
+                                                        postId: controller
+                                                            .feedPagingController
+                                                            .itemList![
+                                                        index]
+                                                            .id,
+                                                        from: 'feed');
+                                                    // print(result);
+                                                  },
+                                                  onDeleteReply:
+                                                      (String id) async {
+                                                    return await controller
+                                                        .deleteComment(
+                                                        context: context,
+                                                        commentId: id,
+                                                        postId: controller
+                                                            .feedPagingController
+                                                            .itemList![
+                                                        index]
+                                                            .id,
+                                                        from: 'feed');
+                                                  },
+                                                  onEditComment:
+                                                      (PostCommentParams
+                                                  params) async {
+                                                    var result =
+                                                    await controller
+                                                        .editComment(
+                                                        params: params);
+                                                    return result;
+                                                  },
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      color: Colors.grey,
+                                      size: 25,
+                                    ),
+                                    Sizer(
+                                      width: 20.w,
+                                    ),
+                                    Label(
+                                      text: controller.feedPagingController
+                                          .itemList?[index].commentsCount
+                                          .toString() ??
+                                          '',
+                                      style: Styles.mediumText(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (controller.feedPagingController.itemList![index]
+                            .content!.isNotEmpty)
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.symmetric(
+                                      horizontal: 20.w),
+                                  child: RichText(
+                                    text: WidgetSpan(child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _isExpanded = !_isExpanded;
+                                        });
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              controller.feedPagingController.itemList?[index].content ?? '',
+                                              textAlign: _isArabic(controller.feedPagingController.itemList?[index]
+                                                  .content ??
+                                                  '')
+                                                  ? TextAlign.right
+                                                  : TextAlign.left,
+                                              style: Styles.mediumText(
+                                                  fontSize: 60.sp),
+                                              maxLines: _isExpanded ? null : 3,
+                                              overflow: _isExpanded
+                                                  ? null
+                                                  : TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        Padding(
+                          padding:
+                          EdgeInsetsDirectional.symmetric(horizontal: 20.w),
+                          child: Text(
+                              controller.feedPagingController.itemList?[index]
+                                  .sinceTime ??
+                                  '',
+                              style: Styles.mediumText(
+                                  color: AppColors.GREY_NORMAL_COLOR)),
                         ),
                         Container(
                           height: 5.h,
@@ -747,6 +1247,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
             context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
           },
           child: CircleAvatar(
+            radius: 32.r,
             backgroundColor: Colors.white,
             backgroundImage: NetworkImage(
                 (post.user.image != null && post.user.image.isNotEmpty)
@@ -766,7 +1267,9 @@ class _InstagramPostsState extends State<InstagramPosts> {
                     context.push(Routes.INSTAGRAMPROFILE, extra: post.user.id);
                   },
                   child: TextAppButton(
-                      style: TextStyle(color: Theme.of(context).primaryColor),
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 30.sp),
                       label: "${post.user.firstName} ${post.user.lastName}",
                       onPressed: () {
                         context.push(Routes.INSTAGRAMPROFILE,
@@ -779,6 +1282,71 @@ class _InstagramPostsState extends State<InstagramPosts> {
           ],
         )),
       ],
+    );
+  }
+
+  bool _isArabic(String text) {
+    final arabicRegex = RegExp(r'[\u0600-\u06FF]');
+    return arabicRegex.hasMatch(text);
+  }
+}
+
+
+class AudioPlayerWidget extends StatefulWidget {
+  final String audioUrl;
+
+  const AudioPlayerWidget({super.key, required this.audioUrl});
+
+  @override
+  _AudioPlayerWidgetState createState() => _AudioPlayerWidgetState();
+}
+
+class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  bool isPlaying = false;
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+  void toggleAudio() async {
+    if (isPlaying) {
+      await _audioPlayer.pause();
+    } else {
+      await _audioPlayer.play(UrlSource(widget.audioUrl));
+    }
+    setState(() {
+      isPlaying = !isPlaying;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: toggleAudio,
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Colors.black54,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              isPlaying ? Icons.pause : Icons.play_arrow,
+              color: Colors.white,
+            ),
+            const SizedBox(width: 8),
+            const Text(
+              "Play Audio",
+              style: TextStyle(color: Colors.white),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -25,7 +25,8 @@ class _AzkarViewState extends State<AzkarView> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       _cubit.fetchAzkar();
     }
   }
@@ -47,7 +48,7 @@ class _AzkarViewState extends State<AzkarView> {
           children: [
             Text(
               'الاذكار',
-              style:  TextStyle(fontSize: 40.sp),
+              style: TextStyle(fontSize: 40.sp),
             ),
             IconButton(
               icon: const Icon(
@@ -63,9 +64,9 @@ class _AzkarViewState extends State<AzkarView> {
       // appBar: BackAppBar(
       //   label: LocaleKeys.azkar.localize,
       // ),
-      body: BlocBuilder<AzkarCubit,AzkarState>(
+      body: BlocBuilder<AzkarCubit, AzkarState>(
         builder: (BuildContext context, state) {
-          if (state.status ==AzkarStates.loading) {
+          if (state.status == AzkarStates.loading) {
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -83,26 +84,26 @@ class _AzkarViewState extends State<AzkarView> {
                 return const Center(child: CircularProgressIndicator());
               }
               return InkWell(
-                onTap: (){
-                  context.push(Routes.AZKAARDETAILS ,extra: state.akar![index].name);
+                onTap: () {
+                  context.push(Routes.AZKAARDETAILS,
+                      extra: state.akar![index].name);
                 },
                 child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(12.r),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Center(
+                      child: Text(
+                    state.akar![index].name,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Amiri',
+                      fontSize: 40.sp,
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                    ),
+                  )),
                 ),
-                child: Center(
-                    child: Text(
-                      state.akar![index].name,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Amiri',
-                        fontSize: 40.sp,
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                      ),
-
-                    )),
-                            ),
               );
             },
             itemCount: state.akar?.length,

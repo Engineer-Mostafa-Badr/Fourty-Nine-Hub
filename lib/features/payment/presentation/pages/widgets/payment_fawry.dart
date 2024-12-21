@@ -39,7 +39,8 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => serviceLocator<PaymentCacheOutCubit>()..getWallet(),
+      create: (BuildContext context) =>
+          serviceLocator<PaymentCacheOutCubit>()..getWallet(),
       child: BlocConsumer<PaymentCacheOutCubit, PaymentCacheOutState>(
         listener: (BuildContext context, PaymentCacheOutState state) {
           if (state.status == StateStatus.success) {
@@ -66,8 +67,10 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SwitchListTile(
-                    title: Label(maxLines: 2,text: LocaleKeys.HaveWallet.localize,
-                    style: Styles.mediumText(),
+                    title: Label(
+                      maxLines: 2,
+                      text: LocaleKeys.HaveWallet.localize,
+                      style: Styles.mediumText(),
                     ),
                     value: hasDigitalWallet,
                     activeTrackColor: AppColors.SECONDARY_COLOR,
@@ -97,7 +100,6 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
                       labelText: LocaleKeys.phoneNumber.localize,
                       validator: _validatePhoneNumber,
                     ),
-
                   ],
                   if (!hasDigitalWallet) ...[
                     buildInputField(
@@ -134,21 +136,21 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
                   ],
                   const Sizer(height: 30),
                   InkWell(
-                  //  onTap: (){},
+                    //  onTap: (){},
                     onTap: () {
                       if (formKey.currentState!.validate()) {
                         if (hasDigitalWallet) {
                           // Call for digital wallet submission
                           showAreYouSure(
                               title: LocaleKeys.alert.localize,
-                              subTitle:
-                              LocaleKeys.sureWithdrawMoney.localize,
+                              subTitle: LocaleKeys.sureWithdrawMoney.localize,
                               action: () {
                                 context
                                     .read<PaymentCacheOutCubit>()
                                     .payOutRequest(
-                                    params: PayoutRequestParams(
-                                      amount:double.parse(amountController.text),
+                                        params: PayoutRequestParams(
+                                      amount:
+                                          double.parse(amountController.text),
                                       payoutMethod: 'fawry_wallet',
                                       phoneNumber: phoneNumberController.text,
                                       payoutSource: 'main_wallet',
@@ -158,19 +160,20 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
                         } else {
                           showAreYouSure(
                               title: LocaleKeys.alert.localize,
-                              subTitle:
-                              LocaleKeys.sureWithdrawMoney.localize,
+                              subTitle: LocaleKeys.sureWithdrawMoney.localize,
                               action: () {
                                 context
                                     .read<PaymentCacheOutCubit>()
                                     .payOutRequest(
-                                    params: PayoutRequestParams(
-                                      amount:double.parse(amountController.text),
-                                      payoutMethod: 'id_card',
-                                      phoneNumber: phoneNumberController.text,
-                                      payoutSource: 'main_wallet',
-                                      idNumber: nationalIdController.text
-                                    ));
+                                        params: PayoutRequestParams(
+                                            amount: double.parse(
+                                                amountController.text),
+                                            payoutMethod: 'id_card',
+                                            phoneNumber:
+                                                phoneNumberController.text,
+                                            payoutSource: 'main_wallet',
+                                            idNumber:
+                                                nationalIdController.text));
                               },
                               context: context);
                         }
@@ -178,7 +181,8 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
                     },
                     child: Container(
                       alignment: AlignmentDirectional.center,
-                      padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 100.w),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 20.h, horizontal: 100.w),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.r),
                         color: Theme.of(context).primaryColor,
@@ -233,5 +237,4 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
     }
     return null;
   }
-
 }

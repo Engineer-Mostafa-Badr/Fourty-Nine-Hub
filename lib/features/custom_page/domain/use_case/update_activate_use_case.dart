@@ -14,4 +14,3 @@ class UpdateActivateUseCase extends UseCase<bool, bool> {
     return await _customPageRepository.updateActivate(customPage: params);
   }
 }
-

@@ -61,14 +61,16 @@ class MeetingView extends StatelessWidget {
                           Navigator.of(context)
                               .push(createCustomTransitionRoute(
                             MeetingRoom(
-                              shareScreen: false,
-                              isHost: true,
-                              liveID: cubit.meetingId,
-                              userName: context
-                                  .read<UserCubit>()
-                                  .state
-                                  .data!
-                                  .fullName,
+                              payload: MeetingRoomArguments(
+                                userName: context
+                                    .read<UserCubit>()
+                                    .state
+                                    .data!
+                                    .fullName,
+                                isHost: true,
+                                liveID: cubit.meetingId,
+                                shareScreen: false
+                              ),
                             ),
                             TransitionType.rightToLeft,
                           ));
@@ -255,10 +257,10 @@ class MeetingView extends StatelessWidget {
                                       scheduledMeeting.roomId);
                                   if (context.mounted) {
                                     context.go(Routes.MEETINGROOM,
-                                        extra: ZegoArgs(
-                                            scheduledMeeting.roomId,
-                                            true,
-                                            context
+                                        extra: MeetingRoomArguments(
+                                            liveID:scheduledMeeting.roomId,
+                                            isHost:true,
+                                            userName:context
                                                 .read<UserCubit>()
                                                 .state
                                                 .data!
@@ -338,8 +340,7 @@ class MeetingView extends StatelessWidget {
 
   void _scheduleAMeeting(BuildContext context) {
     Navigator.of(context).push(createCustomTransitionRoute(
-        const ScheduleMeetingScreen(),
-        TransitionType.bottomToTop));
+        const ScheduleMeetingScreen(), TransitionType.bottomToTop));
   }
 
   Widget _buildMeetingItem({

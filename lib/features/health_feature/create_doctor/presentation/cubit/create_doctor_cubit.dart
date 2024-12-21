@@ -15,6 +15,8 @@ import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 
 part 'create_doctor_state.dart';
 
@@ -38,7 +40,7 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
     await _getGovernorates();
   }
 
-  Future<void> submit() async {
+  Future<void> submit(BuildContext context) async {
     if (formKey.currentState!.validate()) {
       _saveTextEditingControllers();
       _saveWorkDays();
@@ -50,8 +52,9 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
         response
             .fold((failure) => emit(CreateDoctorError("Can't Create Doctor")),
                 (data) {
-          emit(CreateDoctorSuccess(
-              "You are submit successfully. Please wait admin approve and approval."));
+                  emit(CreateDoctorSuccess(
+                      "You are submit successfully. Please wait admin approve and approval."));
+                  context.go(Routes.VISITA);
         });
       } else {
         emit(CreateDoctorError(checkFilledMessage));
@@ -63,8 +66,7 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
     final userId = UserCubit.to.state.data?.id;
 
     if (_shareCubit.subCategories.isEmpty) {
-      final response =
-          await _getHealthSubcategoriesUseCase.call(userId??'');
+      final response = await _getHealthSubcategoriesUseCase.call(userId ?? '');
       response
           .fold((failure) => emit(CreateDoctorError("Can't Load Specialities")),
               (data) {
@@ -138,9 +140,9 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
     _createDoctorParams.calls?.workDays.clear();
     _createDoctorParams.visitHome?.workDays.clear();
     for (var element in clinicTimetable) {
-      if (element.isAvailable==true) {
-          _createDoctorParams.clinic?.workDays
-              .add(DoctorDayModel.fromEntity(element));
+      if (element.isAvailable == true) {
+        _createDoctorParams.clinic?.workDays
+            .add(DoctorDayModel.fromEntity(element));
       }
     }
 
@@ -160,7 +162,6 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
     _createDoctorParams.clinic?.workDays.toSet().toList();
     _createDoctorParams.calls?.workDays.toSet().toList();
     _createDoctorParams.visitHome?.workDays.toSet().toList();
-
   }
 
   // ================================ DatePickers ===============================
@@ -266,8 +267,7 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
         clinicExamineDurationController.text;
     _createDoctorParams.detectionPeriodCalls =
         callExamineDurationController.text;
-    _createDoctorParams.detectionPeriodvisitHome =
-        '84864';
+    _createDoctorParams.detectionPeriodvisitHome = '84864';
     _createDoctorParams.callsPrice = callPriceController.text;
     _createDoctorParams.visitHomePrice = homeVisitPriceController.text;
     _createDoctorParams.clinicPrice = clinicPriceController.text;

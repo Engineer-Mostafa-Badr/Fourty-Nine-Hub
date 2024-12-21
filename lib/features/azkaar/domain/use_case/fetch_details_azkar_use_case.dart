@@ -3,24 +3,24 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/azkaar/domain/entity/azkar_details_entity.dart';
 import 'package:fourtyninehub/features/azkaar/domain/repository/azkar_repository.dart';
-import 'package:fourtyninehub/features/azkaar/domain/use_case/fetch_azkar_use_case.dart';
 
-class FetchDetailsAzkarUseCase extends UseCase<List<AzkarDetailsEntity>,AzkarDetailsParams>{
+class FetchDetailsAzkarUseCase
+    extends UseCase<List<AzkarDetailsEntity>, AzkarDetailsParams> {
   final AzkarRepository _azkarRepository;
 
   FetchDetailsAzkarUseCase(this._azkarRepository);
   @override
-  Future<Either<Failure, List<AzkarDetailsEntity>>> call(AzkarDetailsParams params) async{
+  Future<Either<Failure, List<AzkarDetailsEntity>>> call(
+      AzkarDetailsParams params) async {
     return await _azkarRepository.fetchAzkarDetail(params);
   }
 }
 
-class AzkarDetailsParams{
+class AzkarDetailsParams {
   final int page;
   final int limit;
   final String category;
 
-  AzkarDetailsParams({required this.page, required this.limit, required this.category});
-
-
+  AzkarDetailsParams(
+      {required this.page, required this.limit, required this.category});
 }

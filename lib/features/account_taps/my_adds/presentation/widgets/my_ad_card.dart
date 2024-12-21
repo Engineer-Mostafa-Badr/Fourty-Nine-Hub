@@ -183,8 +183,7 @@ class MyAdCard extends StatelessWidget {
                           context.pop();
                           showAreYouSure(
                               title: LocaleKeys.alert.localize,
-                              subTitle:
-                              LocaleKeys.adSoldout.localize,
+                              subTitle: LocaleKeys.adSoldout.localize,
                               action: () => context.pop(),
                               context: context);
                         },
@@ -196,8 +195,7 @@ class MyAdCard extends StatelessWidget {
                         onTap: () {
                           showAreYouSure(
                               title: LocaleKeys.alert.localize,
-                              subTitle:
-                              LocaleKeys.adSoldout.localize,
+                              subTitle: LocaleKeys.adSoldout.localize,
                               action: () {},
                               context: context);
                         },

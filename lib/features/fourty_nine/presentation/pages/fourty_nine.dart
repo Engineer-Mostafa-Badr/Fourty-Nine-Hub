@@ -21,6 +21,7 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/firebas
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -53,7 +54,7 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
 
   checkLogin() {
     try {
-      if(!context.isUserLoggedIn) context.read<UserCubit>().getUser();
+      if (!context.isUserLoggedIn) context.read<UserCubit>().getUser();
     } catch (e) {
       print(e.toString());
     }
@@ -90,6 +91,7 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
     context
         .read<NotificationSocketIoCubit>()
         .notificationListener(languageCode: 'en');
+    context.read<LocationSocketCubit>().updateDriverLocationOn();
   }
 
   void _setupScrollController() {
@@ -126,9 +128,11 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
 
     super.dispose();
   }
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    print("objectUser${UserCubit.to.state.data?.id}");
     return BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
       listener: (context, state) {
         if (state is NotificationSocketIoNewNotification) {
@@ -145,13 +149,13 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
       },
       child: Scaffold(
         key: _scaffoldKey,
-        appBar:  HomeAppbar(
+        appBar: HomeAppbar(
           isWithBackArrow: false,
           language: true,
           leading: IconButton(
-            icon: Icon(Icons.menu), // The menu icon
+            icon: const Icon(Icons.menu), // The menu icon
             onPressed: () {
-              HandleCashback.setCount('drawerCount',context);
+              HandleCashback.setCount('drawerCount', context);
               _scaffoldKey.currentState?.openDrawer(); // Open the drawer
             },
           ),
@@ -302,6 +306,7 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
                 AdInterstitialTop.showInterstitialAd();
                 return HandleCashback.setCount('threeDotsCount',context);
               },
+              () => HandleCashback.setCount('threeDotsCount', context),
             ),
             _buildItemTabBar(
               SvgPicture.asset(
@@ -325,7 +330,7 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
   Widget _buildItemTabBar(
     Widget icon,
     String routeName,
-      Function() onTab,
+    Function() onTab,
   ) {
     return InkWell(
       onTap: () {
@@ -424,17 +429,15 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
   Row _auctionAndInstallmentWidget() {
     return Row(
       children: [
-        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
-            () {
-              HandleCashback.setCount('mazadat',context);
+        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize, () {
+          HandleCashback.setCount('mazadat', context);
           context.push(Routes.MAZADAT);
-            }, Icons.group),
+        }, Icons.group),
         const Sizer(),
-        itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize,
-            () {
-              HandleCashback.setCount('installments',context);
+        itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize, () {
+          HandleCashback.setCount('installments', context);
           context.push(Routes.INSTALLMENT);
-            }, Icons.list),
+        }, Icons.list),
       ],
     );
   }
@@ -456,7 +459,7 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
                 icon: Icons.auto_awesome,
                 iconSize: 50.h,
                 onPressed: () async {
-                  HandleCashback.setCount('booking',context);
+                  HandleCashback.setCount('booking', context);
                   int? num = await CacheManager.getInt('booking');
                   print(num);
                 }),
@@ -595,14 +598,13 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
     );
   }
 
-  Widget _buildRideSubCategoryItem({
-    required RideServicesEnum service,
-    required String title,
-    required String image,
-    String? route,
-    bool? isFavorite,
-    required Function() onTab
-  }) {
+  Widget _buildRideSubCategoryItem(
+      {required RideServicesEnum service,
+      required String title,
+      required String image,
+      String? route,
+      bool? isFavorite,
+      required Function() onTab}) {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: service.value()),
       onTap: () {

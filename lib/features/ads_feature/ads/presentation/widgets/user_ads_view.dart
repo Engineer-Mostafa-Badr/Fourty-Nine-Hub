@@ -34,7 +34,6 @@ class UserAdsView extends StatelessWidget {
                         width: 170.h,
                         icon: Icons.filter_alt_rounded,
                         iconLeading: Icons.arrow_drop_down,
-
                         onTap: () async {
                           dynamic data = await context.push(Routes.FILTERADS,
                               extra: CategorizationEntity(
@@ -45,21 +44,23 @@ class UserAdsView extends StatelessWidget {
                                 model: data, filter: userType);
                           }
                         }),
-                    const Sizer(width: 5,),
+                    const Sizer(
+                      width: 5,
+                    ),
                     BadgedLabel(
                         label: LocaleKeys.city.localize,
                         width: 170.h,
                         icon: Icons.filter_alt_rounded,
                         iconLeading: Icons.arrow_drop_down,
-
                         onTap: () async {
-                          dynamic data = await context.push(Routes.GOVERNORATEFILTERADS,
+                          dynamic data = await context.push(
+                              Routes.GOVERNORATEFILTERADS,
                               extra: CategorizationEntity(
                                   mainCategory: params.mainCategory,
                                   subCategory: params.subCategory));
                           if (data != null) {
-                            controller.state.city=data.cityId;
-                            controller.state.governorate=data.governorateId;
+                            controller.state.city = data.cityId;
+                            controller.state.governorate = data.governorateId;
                             controller.loadFilterData(
                                 model: data, filter: userType);
                           }

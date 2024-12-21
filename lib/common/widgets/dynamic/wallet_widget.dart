@@ -32,7 +32,7 @@ class WalletWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MainCategoriesCubit>(
-      create: (BuildContext context) =>serviceLocator()..getWallet(),
+      create: (BuildContext context) => serviceLocator()..getWallet(),
       child: BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
         builder: (BuildContext context, state) {
           return Container(
@@ -99,7 +99,7 @@ class WalletWidget extends StatelessWidget {
                   //showing
                 },
                     LocaleKeys.wallet.tr(),
-                    '${state.wallet?.realAmount.floor() ??''} ',
+                    '${state.wallet?.realAmount.floor() ?? ''} ',
                     state.wallet?.currency ?? ''),
               ],
             ),

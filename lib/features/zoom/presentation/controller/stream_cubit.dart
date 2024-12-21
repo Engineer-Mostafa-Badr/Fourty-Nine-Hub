@@ -1,15 +1,23 @@
 import 'dart:math';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/edit_goal_use_case.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/send_point_listener_usecase.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/send_point_socket_usecase.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/send_points_use_case.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/end_room_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/get_scheuled_rooms_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/join_room_use_case.dart';
+import 'package:fourtyninehub/features/zoom/domain/usecases/send_gift_use_case.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -25,7 +33,7 @@ import '../../../social_media/live_streaming/domain/usecases/listen_batttle_requ
 import '../../../social_media/live_streaming/domain/usecases/listen_to_send_points_use_case.dart';
 import '../../../social_media/live_streaming/domain/usecases/request_battle_use_case.dart';
 import 'stream_state.dart';
-
+import 'package:fourtyninehub/features/zoom/domain/usecases/send_points_use_case.dart' as points;
 final class StreamCubit extends Cubit<StreamState> {
   StreamCubit(
     this.addRoomUseCase,
@@ -34,14 +42,20 @@ final class StreamCubit extends Cubit<StreamState> {
     this.getScheduledRoomsUseCase,
     this.getAllTopicsUseCase,
     this.createLiveUseCase,
+    this.sendLivePointsUseCase,
     this.getAllLivesUseCase,
     this.endLiveUseCase,
     this.sendPointsUseCase,
-    this.listenToSendPointsUseCase, this.listenBattleRequestUseCase, this.requestBattleUseCase,
+    this.listenToSendPointsUseCase,
+    this.listenBattleRequestUseCase,
+    this.requestBattleUseCase, this.editGoalUseCase, this.sendGiftUseCase, this.sendPointSocketUseCase, this.sendPointListenerUseCase,
   ) : super(const StreamState()){
    initSocketListeners();
+
   }
   final AddRoomUseCase addRoomUseCase;
+  final EditGoalUseCase editGoalUseCase;
+  final SendLiveGiftUseCase sendGiftUseCase;
   final JoinRoomUseCase joinRoomUseCase;
   final EndRoomUseCase endRoomUseCase;
   final GetScheduledRoomsUseCase getScheduledRoomsUseCase;
@@ -52,12 +66,16 @@ final class StreamCubit extends Cubit<StreamState> {
   final GetAllLivesUseCase getAllLivesUseCase;
   final EndLiveUseCase endLiveUseCase;
   final SendPointsUseCase sendPointsUseCase;
+  final SendPointSocketUseCase sendPointSocketUseCase;
+  final SendPointListenerUseCase sendPointListenerUseCase;
+  final points.SendPointsUseCase sendLivePointsUseCase;
   final ListenToSendPointsUseCase listenToSendPointsUseCase;
   final ListenBattleRequestUseCase listenBattleRequestUseCase;
   final RequestBattleUseCase requestBattleUseCase;
   String meetingId = '';
   List<TopicEntity> topics = [];
   String liveId = '';
+  String streamId = '';
 
   String get genRandNo {
     int min = 10000000;
@@ -65,8 +83,34 @@ final class StreamCubit extends Cubit<StreamState> {
     final String liveId = '${min + Random().nextInt(max - min)}';
     return liveId;
   }
+  onChangePage(int index){
+    emit(state.copyWith(pageIndex: index));
+  }
 
-//callable class
+  toggleComments(){
+    bool hideComments = state.hideComments??false;
+    emit(state.copyWith(hideComments: !hideComments));
+    print(state.hideComments);
+    print(hideComments);
+  }
+
+  TextEditingController goalController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  onDoublePress() async {
+    int count = state.count??0;
+    if(count>=5){
+      await onSendPointSocket();
+      emit(state.copyWith(count: 0));
+      print("Count = $count");
+    }else{
+      count = (state.count??0)+1;
+      emit(state.copyWith(count: count));
+      print("Count+ = $count");
+    }
+  }
+
+  //callable class
   Future<bool> createNewMeeting({
     DateTime? startTime,
     DateTime? endTime,
@@ -91,6 +135,40 @@ final class StreamCubit extends Cubit<StreamState> {
         isAdd = true;
       }
     });
+
+    // print(isAdd);
+    return isAdd;
+  }
+  Future<bool> editGoal(String giftId,String goal) async {
+    meetingId = genRandNo;
+    print('state.liveCreateResponseEntity?.goals${state.goals}');
+    print(state.goals.length);
+    print(state.goals.firstWhere((e)=>e.giftId==giftId).id);
+    final response = await editGoalUseCase(EditGoalParams(roomID: state.goals.firstWhereOrNull((e)=>e.giftId==giftId)?.id??'', goal: goal,goalId: giftId));
+    emit(state.copyWith(status: StreamsStates.loading));
+    bool isAdd = false;
+    response.fold(
+        (l) => emit(state.copyWith(status: StreamsStates.failure, failure: l)),
+        (r) async {
+          List<GiftData> newGifts=[];
+          GiftData updatedGift = GiftData(
+            nameAr: state.selectedGifts.firstWhere((element) => element.sId==giftId).nameAr,
+            nameEn: state.selectedGifts.firstWhere((element) => element.sId==giftId).nameEn,
+            currentValue: int.parse(goal),
+            editValue: state.selectedGifts.firstWhere((element) => element.sId==giftId).editValue,
+            maximumGoal: state.selectedGifts.firstWhere((element) => element.sId==giftId).maximumGoal,
+            picture: state.selectedGifts.firstWhere((element) => element.sId==giftId).picture,
+            showEdit: state.selectedGifts.firstWhere((element) => element.sId==giftId).showEdit,
+            sId: state.selectedGifts.firstWhere((element) => element.sId==giftId).sId,
+            value: state.selectedGifts.firstWhere((element) => element.sId==giftId).value
+          );
+          newGifts.addAll(state.selectedGifts);
+          newGifts.removeWhere((element) => element.sId==giftId);
+          newGifts.insert(0,updatedGift);
+          print("object $r");
+      emit(state.copyWith(status: StreamsStates.success,selectedGifts: newGifts));
+      isAdd = true;
+        });
 
     // print(isAdd);
     return isAdd;
@@ -141,6 +219,51 @@ final class StreamCubit extends Cubit<StreamState> {
       // print('room Not Ended');
       emit(state.copyWith(status: StreamsStates.failure));
       throw '';
+    });
+  }
+
+  Future<void> onSendPoint() async {
+    emit(state.copyWith(status: StreamsStates.loading));
+    var result = await sendLivePointsUseCase(points.SendPointsParams(streamId: rooms.isNotEmpty?rooms[0].id:ZegoUIKit.instance.getRoom().id, memberId: UserCubit.to.state.data?.id??''
+    ));
+    result.fold((l) {
+      emit(state.copyWith(status: StreamsStates.failure, failure: l));
+    }, (r) {
+      emit(state.copyWith(
+        status: StreamsStates.success,
+      ));
+    });
+  }
+
+  Future<void> onSendPointSocket() async {
+    emit(state.copyWith(status: StreamsStates.loading));
+    var result = await sendPointSocketUseCase(PointsParams(streamId: rooms.isNotEmpty?rooms[state.pageIndex??0].id:'', memberId: rooms.isNotEmpty?rooms[state.pageIndex??0].members[0].id:''));
+    result.fold((l) {
+      emit(state.copyWith(status: StreamsStates.failure, failure: l));
+    }, (r) {
+      emit(state.copyWith(
+        status: StreamsStates.success,
+      ));
+    });
+  }
+
+  Future<void> onSendPointListener() async {
+    emit(state.copyWith(status: StreamsStates.loading));
+    sendPointListenerUseCase(const NoParams());
+    print("Socket is listening");
+    emit(state.copyWith(
+      status: StreamsStates.success,
+    ));
+  }
+
+  Future<void> onSendGift(String giftId) async {
+    var result = await sendGiftUseCase(SendLiveGiftParams(streamId: rooms.isNotEmpty?rooms[state.pageIndex??0].id:'', memberId: rooms.isNotEmpty?rooms[state.pageIndex??0].members[0].id:'', giftId: giftId));
+    result.fold((l) {
+      emit(state.copyWith(status: StreamsStates.failure, failure: l));
+    }, (r) {
+      emit(state.copyWith(
+        status: StreamsStates.success,
+      ));
     });
   }
 
@@ -198,4 +321,44 @@ final class StreamCubit extends Cubit<StreamState> {
   int pageSize = 10;
   int roomsLength = 0;
   List<LiveEntity> rooms = [];
+  bool isLoadingMore = false;
+  bool hasMoreData = true;
+  int currentPage = 1;
+
+  void loadRoomsData() async {
+    emit(state.copyWith(status: StreamsStates.loading));
+    rooms.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await getRooms();
+    emit(state.copyWith(status: StreamsStates.success));
+  }
+
+  getRooms() async {
+    if (!hasMoreData || isLoadingMore) return;
+
+    isLoadingMore = true;
+
+    final response = await getAllLivesUseCase(
+      PaginationParams(page: currentPage,limit: pageSize),
+    );
+
+    response.fold(
+          (failure) => emit(state.copyWith(status: StreamsStates.failure, failure: failure)),
+          (data) {
+        rooms.addAll(data);
+
+        if (data.length < pageSize) {
+          hasMoreData = false;
+        } else {
+          currentPage++;
+        }
+
+        isLoadingMore = false;
+        emit(state.copyWith(status: StreamsStates.success));
+
+      },
+    );
+  }
+
 }

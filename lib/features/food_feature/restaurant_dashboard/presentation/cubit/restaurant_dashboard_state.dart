@@ -48,11 +48,17 @@
 //
 //
 
-
-
 part of 'restaurant_dashboard_cubit.dart';
 
-enum RestaurantDashboardStates { loading,filterLoading, initState, error, success,requestSuccess,requestLoading }
+enum RestaurantDashboardStates {
+  loading,
+  filterLoading,
+  initState,
+  error,
+  success,
+  requestSuccess,
+  requestLoading
+}
 
 extension RestaurantDashboardStateX on RestaurantDashboardState {
   bool get isInitial => status == RestaurantDashboardStates.initState;
@@ -60,8 +66,11 @@ extension RestaurantDashboardStateX on RestaurantDashboardState {
   bool get isFilterLoading => status == RestaurantDashboardStates.filterLoading;
   bool get isError => status == RestaurantDashboardStates.error;
   bool get isSuccess => status == RestaurantDashboardStates.success;
-  bool get isRequestSuccess => status == RestaurantDashboardStates.requestSuccess;
-  bool get isRequestLoading => status == RestaurantDashboardStates.requestLoading;}
+  bool get isRequestSuccess =>
+      status == RestaurantDashboardStates.requestSuccess;
+  bool get isRequestLoading =>
+      status == RestaurantDashboardStates.requestLoading;
+}
 
 @immutable
 class RestaurantDashboardState {
@@ -74,26 +83,26 @@ class RestaurantDashboardState {
   final IsRestaurantModel? isRestaurant;
   final bool connected;
   final RestaurantOrdersModel? orders;
-  RestaurantDashboardState(
+  const RestaurantDashboardState(
       {this.status = RestaurantDashboardStates.loading,
-        this.failure,
-        this.info,
-        this.isRestaurant,
-        this.statistics,
-        this.subCategoryId,
-        this.connected = true,
-        this.successMessage,
-        this.orders});
+      this.failure,
+      this.info,
+      this.isRestaurant,
+      this.statistics,
+      this.subCategoryId,
+      this.connected = true,
+      this.successMessage,
+      this.orders});
   RestaurantDashboardState copyWith(
       {RestaurantDashboardStates? status,
-        Failure? failure,
-        IsRestaurantModel? isRestaurant,
-        RestaurantOrdersModel? orders,
-        Restaurant2Model? info,
-        RestaurantStatistics? statistics,
-        bool? connected,
-        String? subCategoryId,
-        String? successMessage}) {
+      Failure? failure,
+      IsRestaurantModel? isRestaurant,
+      RestaurantOrdersModel? orders,
+      Restaurant2Model? info,
+      RestaurantStatistics? statistics,
+      bool? connected,
+      String? subCategoryId,
+      String? successMessage}) {
     return RestaurantDashboardState(
         status: status ?? this.status,
         failure: failure ?? this.failure,

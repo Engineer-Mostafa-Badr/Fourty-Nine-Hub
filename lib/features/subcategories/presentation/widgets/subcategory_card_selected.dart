@@ -44,7 +44,7 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
       decoration: BoxDecoration(
           border: Border.all(
               color: widget.selected ? Colors.red : Colors.transparent,
-              width: 1),
+              width: 4),
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(5),
           boxShadow: const [
@@ -89,7 +89,6 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
               ],
             ),
           ),
-
           if (!widget.isSmallCard) const Sizer(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -100,7 +99,9 @@ class _SubcategoryCardSelectedState extends State<SubcategoryCardSelected> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Label(
-                        text: context.isArabic?widget.item.nameAr:widget.item.nameEn,
+                        text: context.isArabic
+                            ? widget.item.nameAr
+                            : widget.item.nameEn,
                         style: Styles.mediumText(fontWeight: FontWeight.bold),
                       ),
                       // if (!widget.isSmallCard)

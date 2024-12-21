@@ -9,7 +9,7 @@ class StartTypingMessageUseCase extends UseCase<bool, String> {
   StartTypingMessageUseCase(this._chatRoomRepository);
 
   @override
-  Future<Either<Failure, bool>> call(String params) async{
+  Future<Either<Failure, bool>> call(String params) async {
     return _chatRoomRepository.startTyping(chatId: params);
   }
 }

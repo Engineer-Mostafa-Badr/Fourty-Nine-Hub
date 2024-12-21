@@ -50,7 +50,7 @@ class _PaymentViewState extends State<PaymentView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text(LocaleKeys.paymentOptions.localize),
+        title: Text(LocaleKeys.paymentOptions.localize),
       ),
       body: BlocBuilder<PaymentCubit, PaymentState>(
         builder: (context, state) {
@@ -204,7 +204,7 @@ class _PaymentViewState extends State<PaymentView> {
       case 'InstaPay':
         return _bankTransferPayment();
       default:
-        return  Center(
+        return Center(
           child: Text(LocaleKeys.pleaseSelectPaymentMethod.localize),
         );
     }
@@ -240,7 +240,7 @@ class _PaymentViewState extends State<PaymentView> {
       child: Column(
         children: [
           DropdownButtonFormField<String>(
-            decoration:  InputDecoration(
+            decoration: InputDecoration(
               fillColor: Colors.white,
               labelText: LocaleKeys.phoneNumber.localize,
             ),

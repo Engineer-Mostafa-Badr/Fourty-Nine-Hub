@@ -72,11 +72,12 @@ class BaseApiConsumer extends ApiConsumer {
   );
 
   @override
-  void attachToken(UserTokensEntity? token) async{
+  void attachToken(UserTokensEntity? token) async {
     log(token?.accessToken.toString() ?? "Token", name: "Token");
     _token = token;
-    log(_token?.accessToken.toString()??"Okkkk", name: "lskdjflskdjflskdjflskjdf");
-        // CacheServiceImpl().saveUserToken(_token?.accessToken??"Token");
+    log(_token?.accessToken.toString() ?? "Okkkk",
+        name: "lskdjflskdjflskdjflskjdf");
+    CacheServiceImpl().saveUserToken(_token?.accessToken ?? "Token");
     log("${await CacheManager.getAccessToken()} attached", name: "Token");
     if (token != null) {
       log(token.accessToken.toString(), name: "Token");
@@ -292,7 +293,9 @@ class BaseApiConsumer extends ApiConsumer {
         );
       } else if (e.response?.statusCode == 401) {
         final error = e.response?.data['error'] as Map;
-        return  UnauthorizedFailure(error['message'] as String,);
+        return UnauthorizedFailure(
+          error['message'] as String,
+        );
       } else if (e.response?.data is Map &&
           e.response?.data['message'] is String) {
         return ServerFailure(
@@ -327,7 +330,6 @@ class BaseApiConsumer extends ApiConsumer {
 
   Future<void> refreshToken() async {
     if (_token == null) return;
-
     final result = await post(
       EndPoints.refreshToken,
       data: {
@@ -342,10 +344,8 @@ class BaseApiConsumer extends ApiConsumer {
       (response) {
         final accessToken = response['data']['accessToken'] as String;
         final newToken = _token!.copyWith(accessToken: accessToken);
-
         attachToken(newToken);
         _authLocalDataSource.saveUserTokens(newToken.toModel());
-        
       },
     );
   }

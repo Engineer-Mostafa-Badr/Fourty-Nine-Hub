@@ -9,12 +9,19 @@ import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_c
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
-abstract class SearchRepository{
-  Future<Either<Failure,List<MainCategoryEntity>>> fetchSearch(SearchParams params);
-  Future<Either<Failure,List<SubCategoryEntity>>> fetchSearchSubCategory(SearchParams params);
-  Future<Either<Failure,List<UserSearchEntity>>> fetchUserSearch(SearchParams params);
-  Future<Either<Failure,List<AdsSearchEntity>>> fetchAdsSearch(SearchParams params);
-  Future<Either<Failure,List<PostEntity>>> fetchPostsSearch(SearchParams params);
-  Future<Either<Failure,List<TripComeWithYouEntity>>> fetchTripComeSearch(SearchParams params);
-  Future<Either<Failure,List<ReelsSearchEntity>>> fetchReelSearch(SearchParams params);
+abstract class SearchRepository {
+  Future<Either<Failure, List<MainCategoryEntity>>> fetchSearch(
+      SearchParams params);
+  Future<Either<Failure, List<SubCategoryEntity>>> fetchSearchSubCategory(
+      SearchParams params);
+  Future<Either<Failure, List<UserSearchEntity>>> fetchUserSearch(
+      SearchParams params);
+  Future<Either<Failure, List<AdsSearchEntity>>> fetchAdsSearch(
+      SearchParams params);
+  Future<Either<Failure, List<PostEntity>>> fetchPostsSearch(
+      SearchParams params);
+  Future<Either<Failure, List<TripComeWithYouEntity>>> fetchTripComeSearch(
+      SearchParams params);
+  Future<Either<Failure, List<ReelsSearchEntity>>> fetchReelSearch(
+      SearchParams params);
 }

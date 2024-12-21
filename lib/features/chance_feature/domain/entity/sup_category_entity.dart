@@ -9,5 +9,5 @@ class SubCategoryEntity {
     required this.nameAr,
     required this.nameEn,
     required this.nameCode,
-  }) ;
+  });
 }

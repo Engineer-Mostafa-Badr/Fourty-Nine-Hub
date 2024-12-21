@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -24,7 +23,8 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Label(
-            text: context.isArabic?'السجل التجاري':'The Commercial Register',
+            text:
+                context.isArabic ? 'السجل التجاري' : 'The Commercial Register',
             style: Styles.headerText(),
           ),
           const Sizer(),
@@ -56,7 +56,8 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                                 (state.isCommercialFirstPage ?? true)
                             ? Colors.red
                             : Colors.grey,
-                        title: context.isArabic?'الصفحة الأولي':'First Page',
+                        title:
+                            context.isArabic ? 'الصفحة الأولي' : 'First Page',
                       );
                     },
                   ),
@@ -87,7 +88,8 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                                 (state.isCommercialSecondPage ?? true)
                             ? Colors.red
                             : Colors.grey,
-                        title: context.isArabic?'الصفحة الثانية':'Second Page',
+                        title:
+                            context.isArabic ? 'الصفحة الثانية' : 'Second Page',
                       );
                     },
                   ),
@@ -118,7 +120,8 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                                 (state.isCommercialThirdPage ?? true)
                             ? Colors.red
                             : Colors.grey,
-                        title: context.isArabic?'الصفحة الثالثة':'Third Page',
+                        title:
+                            context.isArabic ? 'الصفحة الثالثة' : 'Third Page',
                       );
                     },
                   ),
@@ -132,7 +135,8 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(right: 5, left: 5, top: 5.0),
               child: Text(
-                LocaleKeys.youHaveToUploadThe3PagesOfCommercialRegistration.localize,
+                LocaleKeys
+                    .youHaveToUploadThe3PagesOfCommercialRegistration.localize,
                 style: const TextStyle(color: Colors.red),
               ),
             ),

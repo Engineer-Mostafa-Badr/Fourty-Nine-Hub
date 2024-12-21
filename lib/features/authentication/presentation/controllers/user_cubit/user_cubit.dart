@@ -24,9 +24,7 @@ import '../../../domain/use_cases/get_user_use_case.dart';
 import '../../../domain/use_cases/sign_out_usecase.dart';
 
 class UserCubit extends Cubit<BasicState<UserEntity>> {
-  static UserCubit to = AppPages
-      .router.routerDelegate.navigatorKey.currentContext!
-      .read<UserCubit>();
+  static UserCubit to = AppPages.router.routerDelegate.navigatorKey.currentContext!.read<UserCubit>();
   final GetUserUseCase _getUserUseCase;
   final GetTokensUseCase _getTokensUseCase;
   final SaveTokensUseCase _saveTokensUseCase;
@@ -109,14 +107,15 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   }
 
   void logout() async {
-    // cacheService.setLogin(false);
-    // _attachTokenUseCase(null);
-    // _saveTokensUseCase(null);
-    // isTokenAttached = false;
+    cacheService.setLogin(false);
+    _attachTokenUseCase(null);
+    _saveTokensUseCase(null);
+    isTokenAttached = false;
     log("Token logout ${await CacheManager.getAccessToken()}");
     emit(state.copyWith(status: StateStatus.loading));
     final result = await _signOutUseCase(const NoParams());
-    result.fold((l) => emit(state.copyWith(status: StateStatus.error)), (r) async {
+    result.fold((l) => emit(state.copyWith(status: StateStatus.error)),
+        (r) async {
       emit(state.copyWith(
           status: StateStatus.success,
           token: null,

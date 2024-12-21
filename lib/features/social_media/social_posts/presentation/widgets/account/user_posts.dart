@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -16,6 +17,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/account/user_post_card.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_post_comments.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -51,14 +53,11 @@ class _UserPostsState extends State<UserPosts> {
               noItemsFoundIndicatorBuilder: (context) {
                 print(controller.userPostsPagingController.itemList?.length);
                 return Padding(
-                    padding: const EdgeInsets.only(top: 200),
+                    padding: EdgeInsets.only(top: 100.h),
                     child: Center(
                       child: Text(
                         LocaleKeys.noPosts.localize,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                        ),
+                        style: Styles.headerText(),
                       ),
                     ));
               },
@@ -69,7 +68,7 @@ class _UserPostsState extends State<UserPosts> {
                 showReacts = false;
                 return state.status == StateStatus.success
                     ? Padding(
-                        padding: const EdgeInsets.only(top: 15.0),
+                        padding:  EdgeInsets.only(top: 30.h),
                         child: UserPostCard(
                           // showReacts: showReacts,
                           post: post,
@@ -115,7 +114,7 @@ class _UserPostsState extends State<UserPosts> {
                                           ?.firstWhere((element) =>
                                               element.id == params.postId);
                                       currentPost?.commentsCount =
-                                          (currentPost.commentsCount! + 1);
+                                          (currentPost.commentsCount + 1);
                                       return result;
                                     },
                                     onCommentReply:
@@ -133,7 +132,7 @@ class _UserPostsState extends State<UserPosts> {
                                           ?.firstWhere((element) =>
                                               element.id == params.postId);
                                       currentPost?.commentsCount =
-                                          (currentPost.commentsCount! + 1);
+                                          (currentPost.commentsCount + 1);
                                       return result;
                                     },
                                     onDeleteComment: (String id) async {
@@ -150,7 +149,7 @@ class _UserPostsState extends State<UserPosts> {
                                                   .id,
                                               from: 'feed');
                                       currentPost?.commentsCount =
-                                          (currentPost.commentsCount! - 1);
+                                          (currentPost.commentsCount - 1);
                                       setState(() {});
                                       return result;
                                     },
@@ -168,7 +167,7 @@ class _UserPostsState extends State<UserPosts> {
                                                   .id,
                                               from: 'feed');
                                       currentPost?.commentsCount =
-                                          (currentPost.commentsCount! - 1);
+                                          (currentPost.commentsCount - 1);
                                       setState(() {});
                                       return result;
                                     },

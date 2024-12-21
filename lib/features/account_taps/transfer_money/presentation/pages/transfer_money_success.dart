@@ -7,7 +7,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/entities/transfer_money_entity.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
-// import 'package:screenshot/screenshot.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -24,180 +24,175 @@ class TransactionSuccessScreen extends StatefulWidget {
 }
 
 class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
-  // final ScreenshotController screenshotController = ScreenshotController();
+  final ScreenshotController screenshotController = ScreenshotController();
 
-  // Future<void> _takeScreenshotAndShare() async {
-  //   // final image = await screenshotController.capture();
-  //   if (image != null) {
-  //     // Save the captured image temporarily to the device
-  //     final directory = await getTemporaryDirectory();
-  //     final imagePath = '${directory.path}/transaction_screenshot.png';
-  //     final imageFile = File(imagePath);
-  //     await imageFile.writeAsBytes(image);
-  //
-  //     // Show the share dialog with options
-  //     await Share.shareXFiles(
-  //       [XFile(imagePath)],
-  //       text: LocaleKeys.transactionSuccessful.localize,
-  //       subject: LocaleKeys.shareTransactionDetails.localize,
-  //     );
-  //   }
-  // }
+  Future<void> _takeScreenshotAndShare() async {
+    final image = await screenshotController.capture();
+    if (image != null) {
+      // Save the captured image temporarily to the device
+      final directory = await getTemporaryDirectory();
+      final imagePath = '${directory.path}/transaction_screenshot.png';
+      final imageFile = File(imagePath);
+      await imageFile.writeAsBytes(image);
+
+      // Show the share dialog with options
+      await Share.shareXFiles(
+        [XFile(imagePath)],
+        text: LocaleKeys.transactionSuccessful.localize,
+        subject: LocaleKeys.shareTransactionDetails.localize,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Set the scaffold background color
       appBar: BackAppBar(
         label: LocaleKeys.transactionSuccessful.localize,
       ),
       body: Column(
         children: [
-          // Expanded(
-          //   child: Screenshot(
-          //     controller: screenshotController,
-          //     child: Container(
-          //       color: Colors.white,
-          //       // Make sure the screenshot container has the same background color
-          //       padding: const EdgeInsets.all(16.0),
-          //       child: SingleChildScrollView(
-          //         child: Column(
-          //           crossAxisAlignment: CrossAxisAlignment.center,
-          //           children: [
-          //             // Success Icon
-          //             Icon(
-          //               Icons.check_circle,
-          //               color: Colors.green,
-          //               size: 200.sp,
-          //             ),
-          //             const Sizer(),
-          //             Text(
-          //               LocaleKeys.yourTransactionWasSuccessful.localize,
-          //               style: Styles.mediumText(),
-          //             ),
-          //             const Sizer(),
-          //             RichText(
-          //               text: TextSpan(
-          //                 children: [
-          //                   TextSpan(
-          //                     text: '${widget.model.amount} ',
-          //                     style: TextStyle(
-          //                       fontSize: 100.sp,
-          //                       fontWeight: FontWeight.bold,
-          //                       color: Colors.black,
-          //                     ),
-          //                   ),
-          //                   TextSpan(
-          //                     text: widget.model.currency,
-          //                     style: TextStyle(
-          //                       fontSize: 40.sp,
-          //                       fontWeight: FontWeight.bold,
-          //                       color: AppColors.SECONDARY_COLOR,
-          //                     ),
-          //                   ),
-          //                 ],
-          //               ),
-          //             ),
-          //             Sizer(height: 15.h),
-          //             Text(
-          //               LocaleKeys.transferMoney.localize,
-          //               style:
-          //                   TextStyle(fontSize: 30.sp, color: Colors.black54),
-          //             ),
-          //             const Sizer(),
-          //             ListTile(
-          //               leading: Image.asset(
-          //                 Assets.logo,
-          //                 width: 80.w,
-          //                 height: 80.h,
-          //               ),
-          //               title: Text(LocaleKeys.from.localize),
-          //               subtitle: Column(
-          //                 crossAxisAlignment: CrossAxisAlignment.start,
-          //                 children: [
-          //                   Text(
-          //                     widget.model.fromUsername,
-          //                     style: Styles.mediumText(
-          //                         fontWeight: FontWeight.bold),
-          //                   ),
-          //                   Text(
-          //                     widget.model.from,
-          //                     style: Styles.mediumText(),
-          //                   ),
-          //                 ],
-          //               ),
-          //             ),
-          //             const Row(
-          //               children: [
-          //                 Expanded(
-          //                   child: Divider(
-          //                     color: AppColors.GREY_NORMAL_COLOR,
-          //                   ),
-          //                 ),
-          //                 CircleAvatar(
-          //                   radius: 15,
-          //                   backgroundColor: AppColors.GREY_NORMAL_COLOR,
-          //                   child: Icon(Icons.check,
-          //                       color: Colors.green, size: 22),
-          //                 ),
-          //                 Expanded(
-          //                   child: Divider(
-          //                     color: AppColors.GREY_NORMAL_COLOR,
-          //                   ),
-          //                 ),
-          //               ],
-          //             ),
-          //             // To Section
-          //             ListTile(
-          //               leading: Icon(Icons.account_balance_wallet,
-          //                   size: 80.sp, color: Colors.orange),
-          //               title: Text(
-          //                 LocaleKeys.to.localize,
-          //                 style: Styles.mediumText(),
-          //               ),
-          //               subtitle: Column(
-          //                 crossAxisAlignment: CrossAxisAlignment.start,
-          //                 children: [
-          //                   Text(
-          //                     widget.model.toUsername,
-          //                     style: Styles.mediumText(
-          //                         fontWeight: FontWeight.bold),
-          //                   ),
-          //                   Text(
-          //                     widget.model.to,
-          //                     style: Styles.mediumText(),
-          //                   ),
-          //                 ],
-          //               ),
-          //             ),
-          //             ListTile(
-          //               trailing: Text(
-          //                 widget.model.date,
-          //                 style: Styles.headerText(),
-          //               ),
-          //               title: Text(
-          //                 '${LocaleKeys.date.localize}: ',
-          //                 style: Styles.headerText(fontWeight: FontWeight.w400),
-          //               ),
-          //             ),
-          //             Sizer(height: 70.h),
-          //             // Powered by Logo
-          //             Image.asset(
-          //               Assets.logo,
-          //               width: 180.w,
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
+          Expanded(
+            child: Screenshot(
+              controller: screenshotController,
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Success Icon
+                      Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 200.sp,
+                      ),
+                      const Sizer(),
+                      Text(
+                        LocaleKeys.yourTransactionWasSuccessful.localize,
+                        style: Styles.mediumText(),
+                      ),
+                      const Sizer(),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '${widget.model.amount} ',
+                              style: TextStyle(
+                                fontSize: 100.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            TextSpan(
+                              text: widget.model.currency,
+                              style: TextStyle(
+                                fontSize: 40.sp,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.SECONDARY_COLOR,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Sizer(height: 15.h),
+                      Text(
+                        LocaleKeys.transferMoney.localize,
+                        style:
+                            TextStyle(fontSize: 30.sp,),
+                      ),
+                      const Sizer(),
+                      ListTile(
+                        leading: Image.asset(
+                          Assets.logo,
+                          width: 80.w,
+                          height: 80.h,
+                        ),
+                        title: Text(LocaleKeys.from.localize),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.model.fromUsername,
+                              style: Styles.mediumText(
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              widget.model.from,
+                              style: Styles.mediumText(),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Row(
+                        children: [
+                          Expanded(
+                            child: Divider(
+                              color: AppColors.GREY_NORMAL_COLOR,
+                            ),
+                          ),
+                          CircleAvatar(
+                            radius: 15,
+                            backgroundColor: AppColors.GREY_NORMAL_COLOR,
+                            child: Icon(Icons.check,
+                                color: Colors.green, size: 22),
+                          ),
+                          Expanded(
+                            child: Divider(
+                              color: AppColors.GREY_NORMAL_COLOR,
+                            ),
+                          ),
+                        ],
+                      ),
+                      // To Section
+                      ListTile(
+                        leading: Icon(Icons.account_balance_wallet,
+                            size: 80.sp, color: Colors.orange),
+                        title: Text(
+                          LocaleKeys.to.localize,
+                          style: Styles.mediumText(),
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.model.toUsername,
+                              style: Styles.mediumText(
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              widget.model.to,
+                              style: Styles.mediumText(),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ListTile(
+                        trailing: Text(
+                          widget.model.date,
+                          style: Styles.headerText(),
+                        ),
+                        title: Text(
+                          '${LocaleKeys.date.localize}: ',
+                          style: Styles.headerText(fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                      Sizer(height: 70.h),
+                      // Powered by Logo
+                      Image.asset(
+                        Assets.logo,
+                        width: 180.w,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
           // Share button placed outside the screenshot area
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton.icon(
-              onPressed: (){},
-              // onPressed: _takeScreenshotAndShare,
+              onPressed: _takeScreenshotAndShare,
               icon: const Icon(
                 Icons.share,
                 color: AppColors.AUTH_CONTAINER_COLOR,

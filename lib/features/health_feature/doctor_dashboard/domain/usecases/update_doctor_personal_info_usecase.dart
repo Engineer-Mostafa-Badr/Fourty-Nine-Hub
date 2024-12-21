@@ -15,4 +15,24 @@ class UpdateDoctorPersonalInfoUsecase
   }
 }
 
-class DoctorPersonalInfoParams {}
+class DoctorPersonalInfoParams {
+  final String governorateId;
+  final String address;
+  final String cityId;
+  final String phone;
+  final String subCategoryId;
+  final String lastName;
+  final String firstName;
+
+  DoctorPersonalInfoParams({required this.governorateId, required this.address, required this.cityId, required this.phone, required this.subCategoryId, required this.lastName, required this.firstName});
+
+  //toJson
+  Map<String, dynamic> toJson() => {
+    'governorateId': governorateId,
+    'address': address, 'cityId': cityId,
+    'phone': phone,
+    'subCategoryId': subCategoryId,
+    'lastName': lastName,
+    'firstName': firstName,
+  };
+}

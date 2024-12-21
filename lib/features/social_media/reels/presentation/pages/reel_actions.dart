@@ -7,7 +7,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/show_comments_sheet.dart';
 import 'package:go_router/go_router.dart';
@@ -31,7 +30,8 @@ class ReelActions extends StatefulWidget {
   final ReelItemType itemType;
   final AnimationController rotationController;
 
-  const ReelActions({super.key,
+  const ReelActions({
+    super.key,
     required this.reel,
     required this.itemType,
     required this.rotationController,
@@ -44,14 +44,8 @@ class ReelActions extends StatefulWidget {
 class _ReelActionsState extends State<ReelActions> {
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final double width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
 
     return SizedBox(
       height: height,
@@ -166,9 +160,8 @@ class _UserInfo extends StatefulWidget {
 }
 
 class _UserInfoState extends State<_UserInfo> {
-  String get _displayName =>
-      capitalizeAndSplit(
-          '${widget.reel.user.firstName} ${widget.reel.user.lastName}');
+  String get _displayName => capitalizeAndSplit(
+      '${widget.reel.user.firstName} ${widget.reel.user.lastName}');
 
   String get _displayReelName {
     final maxLength = (widget.reel.name.length * 0.75).round();
@@ -240,8 +233,7 @@ class _UserInfoState extends State<_UserInfo> {
     );
   }
 
-  TextStyle get _nameTextStyle =>
-      TextStyle(
+  TextStyle get _nameTextStyle => TextStyle(
         fontSize: 50.sp,
         color: Colors.white,
         decoration: TextDecoration.none,
@@ -294,8 +286,7 @@ class _ReelDetails extends StatelessWidget {
     );
   }
 
-  TextStyle get _detailsTextStyle =>
-      TextStyle(
+  TextStyle get _detailsTextStyle => TextStyle(
         fontSize: 30.sp,
         color: Colors.white60,
         decoration: TextDecoration.none,
@@ -543,9 +534,9 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
         children: [
           isReversed
               ? Directionality(
-            textDirection: TextDirection.rtl,
-            child: animatedIcon,
-          )
+                  textDirection: TextDirection.rtl,
+                  child: animatedIcon,
+                )
               : animatedIcon,
           Text(
             count,
@@ -574,8 +565,8 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
     }
   }
 
-  Future<void> _handleCommentAction(BuildContext context,
-      ReelsCubit cubit) async {
+  Future<void> _handleCommentAction(
+      BuildContext context, ReelsCubit cubit) async {
     try {
       await showCommentsBottomSheet(context, reel: reel);
     } catch (e) {
@@ -614,7 +605,6 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
       builder: (context) {
         return SizedBox(
           height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
@@ -659,10 +649,10 @@ class RotatingCircularButton extends StatelessWidget {
                 : Colors.transparent,
             image: reel.audio.audioPicture.isNotEmpty
                 ? DecorationImage(
-              image: NetworkImage(reel.audio.audioPicture),
-              fit: BoxFit.cover,
-              onError: (_, __) {},
-            )
+                    image: NetworkImage(reel.audio.audioPicture),
+                    fit: BoxFit.cover,
+                    onError: (_, __) {},
+                  )
                 : null,
           ),
           child: InkWell(
@@ -673,25 +663,28 @@ class RotatingCircularButton extends StatelessWidget {
                 if (context
                     .read<PreloadBloc>()
                     .state
-                    .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+                    .controllers[
+                        context.read<PreloadBloc>().state.focusedIndex]!
+                    .value
+                    .isPlaying) {
                   context
                       .read<PreloadBloc>()
                       .state
-                      .controllers[context.read<PreloadBloc>().state.focusedIndex]
+                      .controllers[
+                          context.read<PreloadBloc>().state.focusedIndex]
                       ?.pause();
                 }
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        BlocProvider.value(
-                          value: serviceLocator<ReelsCubit>()
-                            ..fetchReelsWithSameAudio(reel.audio.id),
-                          child: InstagramAudioScreen(
-                            audio: reel.audio,
-                            reel: reel,
-                          ),
-                        ),
+                    builder: (context) => BlocProvider.value(
+                      value: serviceLocator<ReelsCubit>()
+                        ..fetchReelsWithSameAudio(reel.audio.id),
+                      child: InstagramAudioScreen(
+                        audio: reel.audio,
+                        reel: reel,
+                      ),
+                    ),
                   ),
                 );
               }

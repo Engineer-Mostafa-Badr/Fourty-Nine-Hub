@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -14,18 +15,35 @@ class ShippingDataSource {
   final CacheService cacheService;
   ShippingDataSource({required this.api, required this.cacheService});
   Future<Either<Failure, Map<String, dynamic>>> getBannerData() async {
-    log(cacheService.getDriverId().toString(), name: "DriverId");
     String? token = await cacheService.getUserToken() ?? "";
     log(token, name: "lllllllllllllllllllllllllddddddddddddddddd");
+    String? userId = extractUserId(token);
     // extractUserId(token ?? "");
-    return api.get("${EndPoints.bannerData}?userId=${extractUserId(token)}");
+    if (userId == null) {
+      return api.get(EndPoints.bannerData);
+    } else {
+      return api.get("${EndPoints.bannerData}?userId=$userId");
+    }
   }
 
 // 66b76065ab3b6f5a3d2273ed
 //66c349d7a684ab473f1c1ed7
   Future<Either<Failure, Map<String, dynamic>>> getS3(
-      {required String endpoint, Map<String, dynamic>? data}) {
-    return api.put(endpoint, data: data);
+      {required String endpoint, Map<String, dynamic>? data}) async {
+    CacheService cacheService = CacheServiceImpl();
+    var token = await cacheService.getUserToken();
+    log(token.toString(), name: "TOKENTOKEN");
+    log(data.toString(), name: "DATADATADATA");
+    log("${EndPoints.developmentBaseUrl}$endpoint", name: "endpointendpoint");
+    var resposne = await Dio().put("${EndPoints.developmentBaseUrl}$endpoint",
+        data: data,
+        options: Options(headers: {"Authorization": "Bearer $token"}));
+    if (resposne.statusCode == 200 || resposne.statusCode == 201) {
+      return Right(resposne.data);
+    } else {
+      log(resposne.data.toString(), name: "S3 Error failure");
+      return const Left(ServerFailure(message: "message"));
+    }
   }
 
   Future<Either<Failure, Map<String, dynamic>>> register(
@@ -107,9 +125,12 @@ class ShippingDataSource {
   }
 
   Future<Either<Failure, Map<String, dynamic>>> callMessage(
-      {required String ownerId, required String subcategoryId}) {
+      {required String ownerId, required String subcategoryId}) async {
+    String? token = await cacheService.getUserToken() ?? "";
+    log(token, name: "lllllllllllllllllllllllllddddddddddddddddd");
+    String? userId = extractUserId(token);
     return api.post(EndPoints.click, data: {
-      "clientId": "66b4659d1c9c4b1cb35bfee4",
+      "clientId": userId,
       "ownerId": ownerId,
       "subcategoryId": subcategoryId
     });
@@ -170,16 +191,20 @@ class ShippingDataSource {
     return api.delete(EndPoints.deleteDriver);
   }
 
-  String extractUserId(String token) {
-    log(token, name: "Token");
-    // فك تشفير الـ token
-    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-    log(decodedToken.toString(), name: "decodedToken");
-    // استخراج الـ UserId من الـ payload
-    // String userId = decodedToken[
-    //     'userId']; // تأكد من أن الـ key هو 'userId' أو الاسم الصحيح في الـ token
+  String? extractUserId(String token) {
+    try {
+      log(token, name: "Token");
+      // فك تشفير الـ token
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      log(decodedToken.toString(), name: "decodedToken");
+      // استخراج الـ UserId من الـ payload
+      // String userId = decodedToken[
+      //     'userId']; // تأكد من أن الـ key هو 'userId' أو الاسم الصحيح في الـ token
 
-    // print("UserId هو: $userId");
-    return decodedToken['sub'];
+      // print("UserId هو: $userId");
+      return decodedToken['sub'];
+    } catch (e) {
+      return null;
+    }
   }
 }

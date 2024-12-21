@@ -22,20 +22,26 @@ class RiderRegisterModel {
   File? licenseImageInFront;
   File? licenseImgeBehind;
   String? idNumber;
+  List<String>? subcategoryIds;
+  String? workingType;
   String? plateInfo;
   String? idExpiryDate;
   String? drvingExpiryDate;
   String? licenseExpiryDate;
+  String? carModel;
   RiderRegisterModel({
     this.driverFirstName,
     this.driverLastName,
+    this.workingType,
     this.vehicleModel,
     this.vehicleBrand,
     this.vehicleColor,
     this.vehicleType,
+    this.subcategoryIds,
     this.vehicleYear,
     this.subcategoryId,
     this.yourFavoriteCity,
+    this.carModel,
     this.pricingPerKm,
     this.phone,
     this.smoker,
@@ -60,13 +66,14 @@ class RiderRegisterModel {
       "vehicleModel": vehicleModel,
       "vehicleBrand": vehicleBrand,
       "vehicleColor": "vehicleColor",
-      "vehicleType": "vehicleType",
+      "vehicleType": vehicleType??'car',
       "vehicleYear": vehicleYear,
-      "subcategoryId": subcategoryId,
+      "workingType": workingType??"percentage",
+      "subcategoryIds": subcategoryIds,
       "pricingPerKm": pricingPerKm,
       "phone": phone,
-      "smoker": smoker,
-      "airConditioner": airCondition,
+      "smoker": smoker ?? false,
+      "airConditioner": airCondition ?? false,
       "city": "cairo",
       "plateInfo": plateInfo,
       "idNumber": idNumber,
@@ -79,6 +86,7 @@ class RiderRegisterModel {
       "driverLastName": driverLastName,
       "subcategoryId": subcategoryId,
       "phone": phone,
+      "carModel" : carModel,
       "plateInfo": plateInfo,
       "idNumber": idNumber
     };

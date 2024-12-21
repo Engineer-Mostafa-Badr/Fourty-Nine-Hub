@@ -23,6 +23,7 @@ class DoctorDayModel extends DoctorDayEntity {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'day': day.name.toLowerCase(),

@@ -8,7 +8,6 @@ class CreateTripRiderCubit extends Cubit<CreateTripRiderState> {
 
   var formKey = GlobalKey<FormState>();
 
-
   void validateAndSubmitForm() {
     if (formKey.currentState?.validate() ?? false) {
       emit(CreateTripRiderSuccess());
@@ -16,7 +15,6 @@ class CreateTripRiderCubit extends Cubit<CreateTripRiderState> {
       emit(CreateTripRiderError(message: "Please fill all fields correctly"));
     }
   }
-
 
   String? validateForm({required String message, required bool condition}) {
     if (condition) {

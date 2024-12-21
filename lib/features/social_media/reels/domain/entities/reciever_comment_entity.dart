@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class ReceiverCommentEntity extends Equatable{
+class ReceiverCommentEntity extends Equatable {
   final String id;
   final String firstName;
   final String lastName;

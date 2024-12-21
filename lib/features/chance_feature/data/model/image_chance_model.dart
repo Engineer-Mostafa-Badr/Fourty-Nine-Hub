@@ -9,10 +9,10 @@ class ImageChanceModel extends ImageChanceEntity {
 
   factory ImageChanceModel.fromJson(Map<String, dynamic> json) {
     return ImageChanceModel(
-      id: json['_id'] ??'',
-      user: json['user'] ??'',
-      subcategoryId: json['subcategoryId'] ??'',
-      photo: json['photo'] ??'',
+      id: json['_id'] ?? '',
+      user: json['user'] ?? '',
+      subcategoryId: json['subcategoryId'] ?? '',
+      photo: json['photo'] ?? '',
     );
   }
 }

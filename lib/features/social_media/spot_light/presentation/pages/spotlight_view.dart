@@ -6,7 +6,6 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/unified_widget_view.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -14,7 +13,6 @@ import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../reels/data/models/new_reels_model.dart';
 import '../../../reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
-import '../../../reels/presentation/widgets/comments.dart';
 import '../../../stories/presentation/cubit/stories_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -264,7 +262,7 @@ class _FollowingSectionState extends State<FollowingSection> {
           width: double.infinity,
           child: BlocConsumer<ReelsCubit, ReelsState>(
             builder: (context, state) {
-              if (state.reelsForFollower?.isEmpty??false) {
+              if (state.reelsForFollower?.isEmpty ?? false) {
                 return const Center(child: CupertinoActivityIndicator());
               }
               return Stack(
@@ -281,7 +279,7 @@ class _FollowingSectionState extends State<FollowingSection> {
                       controller: _scrollController,
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      itemCount: (state.reelsForFollower?.length??0),
+                      itemCount: (state.reelsForFollower?.length ?? 0),
                       itemBuilder: (context, index) {
                         final reel = state.reelsForFollower![index];
                         return SizedBox(
@@ -289,7 +287,7 @@ class _FollowingSectionState extends State<FollowingSection> {
                           child: Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 4.0, vertical: 12.h),
-                            child: _buildReelCard(context, reel,index),
+                            child: _buildReelCard(context, reel, index),
                           ),
                         );
                       },
@@ -312,7 +310,7 @@ class _FollowingSectionState extends State<FollowingSection> {
     );
   }
 
-  Widget _buildReelCard(BuildContext context, Reel reel,int index) {
+  Widget _buildReelCard(BuildContext context, Reel reel, int index) {
     return GestureDetector(
       onTap: () async {
         await Navigator.push(
@@ -364,7 +362,7 @@ class _FollowingSectionState extends State<FollowingSection> {
                   body: UnifiedReelItem(
                     reel: reel,
                     isVisible: true,
-                    index:index,
+                    index: index,
                     itemType: ReelItemType.spotlight,
                   ),
                   // MainReelItem(
@@ -448,7 +446,8 @@ class DiscoverSectionState extends State<DiscoverSection> {
         Flexible(
           child: BlocBuilder<ReelsCubit, ReelsState>(
             builder: (context, state) {
-              if ((state.globalReels?.isEmpty??false) && !(state.globalReelsIsLoading??false)) {
+              if ((state.globalReels.isEmpty ?? false) &&
+                  !(state.globalReelsIsLoading ?? false)) {
                 return const Center(child: CupertinoActivityIndicator());
               }
 
@@ -462,10 +461,10 @@ class DiscoverSectionState extends State<DiscoverSection> {
                   crossAxisSpacing: 8,
                   childAspectRatio: 0.7,
                 ),
-                itemCount:
-                    (state.globalReels?.length??0) + (widget.isFetchingMore ? 1 : 0),
+                itemCount: (state.globalReels.length ?? 0) +
+                    (widget.isFetchingMore ? 1 : 0),
                 itemBuilder: (context, index) {
-                  if (index == (state.globalReels?.length??0) &&
+                  if (index == (state.globalReels.length ?? 0) &&
                       widget.isFetchingMore) {
                     return const Padding(
                       padding: EdgeInsets.all(8.0),
@@ -474,8 +473,8 @@ class DiscoverSectionState extends State<DiscoverSection> {
                       ),
                     );
                   }
-                  final reel = state.globalReels![index];
-                  return _buildReelCard(context, reel,index);
+                  final reel = state.globalReels[index];
+                  return _buildReelCard(context, reel, index);
                 },
               );
             },
@@ -485,7 +484,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
     );
   }
 
-  Widget _buildReelCard(BuildContext context, Reel reel,int index) {
+  Widget _buildReelCard(BuildContext context, Reel reel, int index) {
     return GestureDetector(
       onTap: () async {
         await Navigator.push(
@@ -536,7 +535,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
                 ),
                 body: UnifiedReelItem(
                   reel: reel,
-                  index:index,
+                  index: index,
                   isVisible: true,
                   itemType: ReelItemType.spotlight,
                 ),
@@ -573,9 +572,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
                     color: Colors.white,
                     size: 16,
                   ),
-                  const SizedBox(
-                      width: 4
-                  ),
+                  const SizedBox(width: 4),
                   Text(
                     reel.viewCount.toString(),
                     textScaler: TextScaler.noScaling,

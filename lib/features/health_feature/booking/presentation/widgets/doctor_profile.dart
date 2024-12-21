@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -21,7 +23,7 @@ class BookingDoctorProfileWidget extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 5.h),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
-        color: Colors.white,
+        color: cardDarkColor(context),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -34,7 +36,7 @@ class BookingDoctorProfileWidget extends StatelessWidget {
           ),
           Sizer(height: 16.h),
           Text(
-            '${Labels.doctor} ${toBeginningOfSentenceCase(doctor.fullName)}',
+            '${LocaleKeys.doctor.localize} ${toBeginningOfSentenceCase(doctor.fullName)}',
             style: Styles.headerText(),
           ),
           Sizer(height: 8.h),
@@ -43,7 +45,7 @@ class BookingDoctorProfileWidget extends StatelessWidget {
             overflow: TextOverflow.fade,
             maxLines: 2,
             softWrap: false,
-            style: Styles.smallText(),
+            style: Styles.mediumText(),
           ),
         ],
       ),

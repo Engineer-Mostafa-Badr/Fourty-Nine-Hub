@@ -7,8 +7,6 @@ import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_statistics_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 
-import 'package:fourtyninehub/features/requests_history/domain/entities/food_order_entity.dart';
-
 import '../../domain/repositories/restaurant_dashboard_repo.dart';
 import '../datasources/restaurant_dashboard_remote_datasource.dart';
 
@@ -31,7 +29,8 @@ class RestaurantDashboardRepoImpl implements RestaurantDashboardRepo {
   }
 
   @override
-  Future<Either<Failure, RestaurantOrdersModel>> getRestaurantOrders(PaginationParams params) async {
+  Future<Either<Failure, RestaurantOrdersModel>> getRestaurantOrders(
+      PaginationParams params) async {
     return await _remoteDataSource.getRestaurantOrders(params);
   }
 
@@ -41,7 +40,8 @@ class RestaurantDashboardRepoImpl implements RestaurantDashboardRepo {
   }
 
   @override
-  Future<Either<Failure, RestaurantStatistics>> getRestaurantStatistics() async {
+  Future<Either<Failure, RestaurantStatistics>>
+      getRestaurantStatistics() async {
     return await _remoteDataSource.getRestaurantStatistics();
   }
 
@@ -51,7 +51,8 @@ class RestaurantDashboardRepoImpl implements RestaurantDashboardRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> updateRestaurant(UpdateRestaurantParams params) async {
+  Future<Either<Failure, bool>> updateRestaurant(
+      UpdateRestaurantParams params) async {
     return await _remoteDataSource.updateRestaurant(params);
   }
 }

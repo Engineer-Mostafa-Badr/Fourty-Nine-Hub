@@ -12,7 +12,7 @@ import 'package:fourtyninehub/features/social_media/snap/utils/filters.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:image_filter_pro/named_color_filter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:gallery_saver/gallery_saver.dart';
+// import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:video_player/video_player.dart';
@@ -1227,11 +1227,10 @@ class _AdvancedSnapchatCameraScreenState
               IconButton(
                 color: Colors.red,
                 onPressed: () {
-                  if(context.isUserLoggedIn){
-
-                  context.push(Routes.OTHERSACCOUNT,
-                      extra: serviceLocator<UserCubit>().state.data!.id);
-                  }else{
+                  if (context.isUserLoggedIn) {
+                    context.push(Routes.OTHERSACCOUNT,
+                        extra: serviceLocator<UserCubit>().state.data!.id);
+                  } else {
                     context.go(Routes.LOGIN);
                   }
                 },
@@ -1616,28 +1615,28 @@ class FilteredImageWidgetState extends State<FilteredImageWidget> {
     if (_selectedImage == null) return;
 
     // final filteredImage = await Navigator.of(context).push<File>(
-      // MaterialPageRoute(
-        // builder: (context) => PhotoFilter(
-        //   image: _selectedImage!,
-        //   presets: defaultColorFilters,
-        //   cancelIcon: Icons.cancel,
-        //   applyIcon: Icons.check,
-        //   backgroundColor: Colors.black,
-        //   sliderColor: Colors.blue,
-        //   sliderLabelStyle: const TextStyle(color: Colors.white),
-        //   bottomButtonsTextStyle: const TextStyle(color: Colors.white),
-        //   presetsLabelTextStyle: const TextStyle(color: Colors.white),
-        //   applyingTextStyle: const TextStyle(color: Colors.white),
-        //   compressImage: true,
-        //   onFinishApplyingFilter: (p0) async {
-        //     if (p0 != null) {
-        //       await GallerySaver.saveImage(p0.path);
-        //       _selectedImage = p0;
-        //       setState(() {});
-        //     }
-        //   },
-        // ),
-      // ),
+    // MaterialPageRoute(
+    // builder: (context) => PhotoFilter(
+    //   image: _selectedImage!,
+    //   presets: defaultColorFilters,
+    //   cancelIcon: Icons.cancel,
+    //   applyIcon: Icons.check,
+    //   backgroundColor: Colors.black,
+    //   sliderColor: Colors.blue,
+    //   sliderLabelStyle: const TextStyle(color: Colors.white),
+    //   bottomButtonsTextStyle: const TextStyle(color: Colors.white),
+    //   presetsLabelTextStyle: const TextStyle(color: Colors.white),
+    //   applyingTextStyle: const TextStyle(color: Colors.white),
+    //   compressImage: true,
+    //   onFinishApplyingFilter: (p0) async {
+    //     if (p0 != null) {
+    //       await GallerySaver.saveImage(p0.path);
+    //       _selectedImage = p0;
+    //       setState(() {});
+    //     }
+    //   },
+    // ),
+    // ),
     // );
 
     // if (filteredImage != null) {
@@ -2039,7 +2038,7 @@ Future<void> saveMedia(
   if (filePath.isEmpty) return;
 
   if (mediaType == MediaType.image) {
-    await GallerySaver.saveImage(filePath);
+    // await GallerySaver.saveImage(filePath);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Image saved to gallery!')),
     );
@@ -2048,15 +2047,15 @@ Future<void> saveMedia(
         filePath.endsWith('.avi') ||
         filePath.endsWith('.mov')) {
       // Proceed with saving the video
-      GallerySaver.saveVideo(filePath).then((bool? success) {
-        log(filePath.toString());
-        if (success!) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Video saved to gallery!')),
-          );
-        }
-        log('Video saved: $success');
-      });
+      // GallerySaver.saveVideo(filePath).then((bool? success) {
+      //   log(filePath.toString());
+      //   if (success!) {
+      //     ScaffoldMessenger.of(context).showSnackBar(
+      //       const SnackBar(content: Text('Video saved to gallery!')),
+      //     );
+      //   }
+      //   log('Video saved: $success');
+      // });
     } else {
       log(filePath.toString());
       log('Error: The file is not a video.');
