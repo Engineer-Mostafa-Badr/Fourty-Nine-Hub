@@ -301,12 +301,7 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
                 width: 34.h,
               ),
               Routes.MAINCATEGORIESTREE,
-              () {
-                AdInterstitialTop.loadIntersitialAd();
-                AdInterstitialTop.showInterstitialAd();
-                return HandleCashback.setCount('threeDotsCount',context);
-              },
-              () => HandleCashback.setCount('threeDotsCount', context),
+                  () => HandleCashback.setCount('threeDotsCount', context),
             ),
             _buildItemTabBar(
               SvgPicture.asset(
