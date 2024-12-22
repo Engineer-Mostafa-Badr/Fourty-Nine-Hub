@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_t
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_user_data_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/send_geft_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/upload_tinder_picture_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 class TinderServiceLocator {

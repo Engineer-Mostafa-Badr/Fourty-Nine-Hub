@@ -178,6 +178,9 @@ class DI {
     //     .registerFactory<SliderCubit>(() => SliderCubit(serviceLocator()));
     //
     // // Register the TinderRepository
+    serviceLocator.registerLazySingleton<TinderRepository>(
+      () => TinderRepositoryImpl(repository: serviceLocator()),
+    );
     serviceLocator.registerLazySingleton<GetTripInfoCubit>(
       () => GetTripInfoCubit(repository: serviceLocator()),
     );
