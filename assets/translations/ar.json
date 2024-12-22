@@ -1197,5 +1197,6 @@
   "emergencyRequests": "طلبات الطوارئ",
   "noEmergencyRequests": "لا توجد طلبات الطوارئ",
   "allAppointments": "جميع الحجوزات",
-  "rejectedAppointment": "تم رفض هذا الحجز من قبل"
+  "rejectedAppointment": "تم رفض هذا الحجز من قبل",
+  "continueUsingChatServices":"اكمل باستخدام خدمات المحادثة"
 }
