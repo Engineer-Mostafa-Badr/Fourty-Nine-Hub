@@ -10,6 +10,8 @@ import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
@@ -26,6 +28,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'core/service/background_service.dart';
@@ -54,6 +57,18 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
+
+  final customPageCubit = serviceLocator<CustomPageCubit>();
+  await customPageCubit.fetchActivate(); // Ensure the state is fetched before proceeding
+
+  // Wait for the state to load
+  final isActivated = customPageCubit.state.activate?.customPage ?? false;
+
+  // Determine the initial route based on the activation status
+  final initialRoute = isActivated ? Routes.CUSTOMPAGE : Routes.HOME;
+
+  // Initialize the router with the appropriate initial route
+  AppPages.initializeRouter(initialRoute);
   runApp(
     LocalizationService.rootWidget(
       // child: DevicePreview(
@@ -134,6 +149,9 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           create: (context) => ThemeCubit(),
         ),
+        BlocProvider<CustomPageCubit>(
+          create: (context) => serviceLocator()..fetchActivate(),
+        ),
         BlocProvider(
           create: (context) => serviceLocator<StreamCubit>()
             ..loadLives()
@@ -195,27 +213,33 @@ class _MyAppState extends State<MyApp> {
               return FutureBuilder<bool>(
                   future: CacheManager.getMode(),
                   builder: (context, snapshot) {
-                    return MaterialApp.router(
-                      builder: (context, child) {
-                        return MediaQuery(
-                          data: MediaQuery.of(context)
-                              .copyWith(textScaler: TextScaler.noScaling),
-                          child: child!,
+                    return BlocBuilder<CustomPageCubit,CustomPageState>(
+                      builder: (BuildContext context, custom) {
+                        final isActivated= custom.activate?.customPage ??false;
+                        final initialRoute = isActivated ? Routes.CUSTOMPAGE : Routes.HOME;
+                        return  MaterialApp.router(
+                          builder: (context, child) {
+                            return MediaQuery(
+                              data: MediaQuery.of(context)
+                                  .copyWith(textScaler: TextScaler.noScaling),
+                              child: child!,
+                            );
+                          },
+                          themeMode: (snapshot.data ?? false)
+                              ? ThemeMode.dark
+                              : ThemeMode.light,
+                          theme: lightTheme,
+                          darkTheme: darkTheme,
+                          title: '49',
+                          debugShowCheckedModeBanner: false,
+                          routerConfig: AppPages.router,
+                          localizationsDelegates: context.localizationDelegates,
+                          supportedLocales: context.supportedLocales,
+                          locale: context.locale,
+                          // for device preview package
+                          // builder: DevicePreview.appBuilder,
                         );
                       },
-                      themeMode: (snapshot.data ?? false)
-                          ? ThemeMode.dark
-                          : ThemeMode.light,
-                      theme: lightTheme,
-                      darkTheme: darkTheme,
-                      title: '49',
-                      debugShowCheckedModeBanner: false,
-                      routerConfig: AppPages.router,
-                      localizationsDelegates: context.localizationDelegates,
-                      supportedLocales: context.supportedLocales,
-                      locale: context.locale,
-                      // for device preview package
-                      // builder: DevicePreview.appBuilder,
                     );
                   });
             },

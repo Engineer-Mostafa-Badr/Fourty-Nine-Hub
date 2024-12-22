@@ -37,6 +37,7 @@ import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cub
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/views/carpool_view.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/custom_page.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page_preview.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
@@ -298,22 +299,25 @@ import 'routes.dart';
 class AppPages {
   AppPages._();
 
-  static final router = GoRouter(
+  static late final GoRouter router;
+  static  initializeRouter(String initialRoute) {
+    router = GoRouter(
+    initialLocation: initialRoute,
     routes: <RouteBase>[
       GoRoute(
-        path: Routes.HOME,
-        builder: (context, state) => MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => serviceLocator<SliderCubit>(),
-            ),
-            BlocProvider(
-              create: (context) => serviceLocator<ThumbnailsCubit>(),
-            ),
-          ],
-          child: const FourtyNineView(),
+    path: Routes.HOME,
+    builder: (context, state) => MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => serviceLocator<SliderCubit>(),
         ),
-        routes: <RouteBase>[
+        BlocProvider(
+          create: (context) => serviceLocator<ThumbnailsCubit>(),
+        ),
+      ],
+      child: const FourtyNineView(),
+    ),
+        routes: [
           GoRoute(
             path: Routes.CUSTOMPAGE,
             name: Routes.CUSTOMPAGE,
@@ -2036,6 +2040,6 @@ class AppPages {
           ),
         ],
       ),
-    ],
-  );
+    ]);
+  }
 }
