@@ -335,7 +335,7 @@ class FourtyNineServiceLocator {
       ),
     );
     serviceLocator.registerLazySingleton<FetchMyAdsByIdUseCase>(
-          () => FetchMyAdsByIdUseCase(
+      () => FetchMyAdsByIdUseCase(
         serviceLocator(),
       ),
     );
@@ -446,29 +446,28 @@ class FourtyNineServiceLocator {
         MainCategoriesTapsCubit(serviceLocator(), serviceLocator())
           ..loadData());
     serviceLocator.registerFactory<MyAddsCubit>(() => MyAddsCubit(
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-    )
-      ..loadData());
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        )..loadData());
 
     serviceLocator.registerFactory<MainCategoriesCubit>(
       () => MainCategoriesCubit(

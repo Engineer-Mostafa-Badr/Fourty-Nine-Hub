@@ -114,7 +114,7 @@ class _UserPostsState extends State<UserPosts> {
                                           ?.firstWhere((element) =>
                                               element.id == params.postId);
                                       currentPost?.commentsCount =
-                                          (currentPost.commentsCount! + 1);
+                                          (currentPost.commentsCount + 1);
                                       return result;
                                     },
                                     onCommentReply:
@@ -132,7 +132,7 @@ class _UserPostsState extends State<UserPosts> {
                                           ?.firstWhere((element) =>
                                               element.id == params.postId);
                                       currentPost?.commentsCount =
-                                          (currentPost.commentsCount! + 1);
+                                          (currentPost.commentsCount + 1);
                                       return result;
                                     },
                                     onDeleteComment: (String id) async {
@@ -149,7 +149,7 @@ class _UserPostsState extends State<UserPosts> {
                                                   .id,
                                               from: 'feed');
                                       currentPost?.commentsCount =
-                                          (currentPost.commentsCount! - 1);
+                                          (currentPost.commentsCount - 1);
                                       setState(() {});
                                       return result;
                                     },
@@ -167,7 +167,7 @@ class _UserPostsState extends State<UserPosts> {
                                                   .id,
                                               from: 'feed');
                                       currentPost?.commentsCount =
-                                          (currentPost.commentsCount! - 1);
+                                          (currentPost.commentsCount - 1);
                                       setState(() {});
                                       return result;
                                     },

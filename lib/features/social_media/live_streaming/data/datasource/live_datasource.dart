@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -28,7 +29,8 @@ abstract class LiveDataSource {
   Future<Either<Failure, LiveCreateResponseEntity>> createLive(
       CreateLiveParams params);
 
-  Future<Either<Failure, bool>> sendPointListener(PointsParams params) ;
+  Future<Either<Failure, bool>> sendPointSocket(PointsParams params) ;
+  void sendPointListener() ;
 
   Future<Either<Failure, List<LiveEntity>>> getAllRooms(
       PaginationParams params);
@@ -155,8 +157,8 @@ class LiveDataSourceImpl extends LiveDataSource {
   }
 
   @override
-  Future< void> listenToRequestBattle(NoParams noParams) async{
-  _socket.on(SocketIOListeners.requestBattle, (data) => print(data));
+  Future<void> listenToRequestBattle(NoParams noParams) async {
+    _socket.on(SocketIOListeners.requestBattle, (data) => print(data));
   }
 
   @override
@@ -211,21 +213,44 @@ class LiveDataSourceImpl extends LiveDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> sendPointListener(PointsParams params) async {
+  Future<Either<Failure, bool>> sendPointSocket(PointsParams params) async {
     try {
       // _socket.connect();
-      CliLogger.info('you start recording : ${params.streamId}');
+      CliLogger.info('you start send point : ${params.streamId}');
 
       serviceLocator<Socket>().emit(
-          SocketIOEvents.startRecordingMessage,
+          SocketIOEvents.sendPoint,
           jsonEncode({
             "streamId":params.streamId,
             "memberId":params.memberId
           }));
       return const Right(true);
     } catch (e) {
-      CliLogger.error(' can\'t start recording $e');
-      return const Left(ServerFailure(message: "can't start recording"));
+      CliLogger.error(' can\'t start send point $e');
+      return const Left(ServerFailure(message: "can't start send point"));
     }
   }
+
+  @override
+  void sendPointListener() {
+    try{
+      serviceLocator<Socket>().on(SocketIOListeners.sendPoint, (data) {
+        final decodedData = jsonDecode(data);
+        log("listenToNewMessagesssssssssssss From me");
+        log("listenToNewMessagesssssssssssss  From me$decodedData");
+        if (decodedData is List) {
+          data = decodedData[0];
+        } else {
+          data = decodedData;
+        }
+        CliLogger.info("newMessageFromMe :  $data");
+        // MessageModel messageModel = MessageModel.fromJson(data);
+        // params(messageModel);
+      });
+
+    }catch (e) {
+      CliLogger.info("can't read last message error $e");
+    }
+  }
+
 }

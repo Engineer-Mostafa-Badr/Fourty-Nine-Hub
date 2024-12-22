@@ -11,15 +11,14 @@ class FavouriteDrawerCubit extends Cubit<FavouriteDrawerState> {
       this._favouriteAdsUsecase, this._deleteFavouriteAdsUsecase)
       : super(const FavouriteDrawerState());
 
-
-
   Future<void> fetchFavourite() async {
     emit(state.copyWith(status: FavouriteDrawerStates.loading));
     final response = await _favouriteAdsUsecase(const NoParams());
     response.fold((l) {
       emit(state.copyWith(failure: l, status: FavouriteDrawerStates.error));
     }, (data) {
-      emit(state.copyWith(favourite: data,status: FavouriteDrawerStates.success));
+      emit(state.copyWith(
+          favourite: data, status: FavouriteDrawerStates.success));
     });
   }
 

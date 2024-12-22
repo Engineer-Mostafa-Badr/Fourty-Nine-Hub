@@ -1,19 +1,19 @@
 class CarpoolTripParam {
   final String id;
   final String ownerId;
-  final String? subcategoryId; // Nullable
+  final String? subcategoryId;
   final int seats;
-  final String? driverId; // Nullable
-  final String? driverStatus; // Nullable
+  final String? driverId;
+  final String? driverStatus;
   final bool womenDriverOnly;
   final bool womenOnly;
   final bool comfort;
-  final String? tripStatus; // Nullable
+  final String? tripStatus;
   final double priceForEveryUser;
   final double priceForDriver;
   final int duration;
   final int distance;
-  final String? polyline; // Nullable
+  final String? polyline;
   final DateTime expireAt;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -73,8 +73,8 @@ class CarpoolLocation {
 }
 
 class LocationCoordinates {
-  final double? latitude; // Nullable
-  final double? longitude; // Nullable
+  final double? latitude;
+  final double? longitude;
 
   LocationCoordinates({this.latitude, this.longitude});
 }

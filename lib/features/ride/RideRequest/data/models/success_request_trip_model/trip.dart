@@ -16,7 +16,7 @@ class Trip {
   int? distance;
   int? duration;
   int? passengers;
-  int? price;
+  double? price;
   int? calculateB;
   String? paymentMethod;
   String? status;
@@ -79,7 +79,7 @@ class Trip {
         distance: json['distance'] as int?,
         duration: json['duration'] as int?,
         passengers: json['passengers'] as int?,
-        price: json['price'] as int?,
+        price: double.parse(json['price'].toString()),
         calculateB: json['calculateB'] as int?,
         paymentMethod: json['paymentMethod'] as String?,
         status: json['status'] as String?,

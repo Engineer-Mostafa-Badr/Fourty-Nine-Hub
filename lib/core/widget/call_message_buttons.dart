@@ -15,7 +15,14 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 class CallMessageButtons extends StatefulWidget {
-  const CallMessageButtons({super.key, required this.otherUserId, required this.subcategoryId, required this.phone, required this.id, this.hasReport=false, this.clientId});
+  const CallMessageButtons(
+      {super.key,
+      required this.otherUserId,
+      required this.subcategoryId,
+      required this.phone,
+      required this.id,
+      this.hasReport = false,
+      this.clientId});
   final String otherUserId;
   final String? clientId;
   final String subcategoryId;
@@ -32,8 +39,9 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: ButtonAvailability().isShowButton(
-          clientId: widget.clientId,
-            otherUserId: widget.otherUserId, subcategoryId: widget.subcategoryId ),
+            clientId: widget.clientId,
+            otherUserId: widget.otherUserId,
+            subcategoryId: widget.subcategoryId),
         builder: (context, snap) {
           print(snap.data);
           return Row(
@@ -43,13 +51,22 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                 flex: 3,
                 child: AvaialbleTripsButton(
                   title: LocaleKeys.call.localize,
-                  color: (snap.data == true &&context.read<UserCubit>().isLoggedIn)? AppColors.PRIMARY_COLOR : AppColors.DARK_GRAY_COLOR,
+                  color: (snap.data == true &&
+                          context.read<UserCubit>().isLoggedIn)
+                      ? AppColors.PRIMARY_COLOR
+                      : AppColors.DARK_GRAY_COLOR,
                   icon: Icons.call,
-                  onTap: !context.read<UserCubit>().isLoggedIn?()=>context.push(Routes.LOGIN):snap.data == true ? () {
-                    LaunchURLHelper().call( phone: widget.phone);
-                  } : () async{
-                    SubscriptionMethod().subscribe(subscribeId: widget.subcategoryId, title: LocaleKeys.ads.localize);
-                  },
+                  onTap: !context.read<UserCubit>().isLoggedIn
+                      ? () => context.push(Routes.LOGIN)
+                      : snap.data == true
+                          ? () {
+                              LaunchURLHelper().call(phone: widget.phone);
+                            }
+                          : () async {
+                              SubscriptionMethod().subscribe(
+                                  subscribeId: widget.subcategoryId,
+                                  title: LocaleKeys.ads.localize);
+                            },
                 ),
               ),
               const Sizer(width: 5),
@@ -57,30 +74,43 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                 flex: 3,
                 child: AvaialbleTripsButton(
                   title: LocaleKeys.message.localize,
-                  color: (snap.data == true&&context.read<UserCubit>().isLoggedIn) ? AppColors.PRIMARY_COLOR : AppColors.DARK_GRAY_COLOR,
+                  color: (snap.data == true &&
+                          context.read<UserCubit>().isLoggedIn)
+                      ? AppColors.PRIMARY_COLOR
+                      : AppColors.DARK_GRAY_COLOR,
                   icon: Icons.email,
-                  onTap:!context.read<UserCubit>().isLoggedIn?()=>context.push(Routes.LOGIN): snap.data == true ? () {} : () {
-                    SubscriptionMethod().subscribe(subscribeId: widget.subcategoryId, title: LocaleKeys.ads.localize);
-                  },
+                  onTap: !context.read<UserCubit>().isLoggedIn
+                      ? () => context.push(Routes.LOGIN)
+                      : snap.data == true
+                          ? () {}
+                          : () {
+                              SubscriptionMethod().subscribe(
+                                  subscribeId: widget.subcategoryId,
+                                  title: LocaleKeys.ads.localize);
+                            },
                 ),
               ),
-             if(widget.hasReport==true)...[ const Sizer(width: 5),
-              Expanded(
-                flex: 3,
-                child: AvaialbleTripsButton(
-                  title: LocaleKeys.report.localize,
-                  color: AppColors.SECONDARY_COLOR,
-                  icon: Icons.report,
-                  onTap: !context.read<UserCubit>().isLoggedIn?()=>context.push(Routes.LOGIN):() {
-                    bottomSheet(
-                        context: context,
-                        widget: ReportView(
-                          id: widget.id,
-                          categoryId: widget.subcategoryId,
-                        ));
-                  },
+              if (widget.hasReport == true) ...[
+                const Sizer(width: 5),
+                Expanded(
+                  flex: 3,
+                  child: AvaialbleTripsButton(
+                    title: LocaleKeys.report.localize,
+                    color: AppColors.SECONDARY_COLOR,
+                    icon: Icons.report,
+                    onTap: !context.read<UserCubit>().isLoggedIn
+                        ? () => context.push(Routes.LOGIN)
+                        : () {
+                            bottomSheet(
+                                context: context,
+                                widget: ReportView(
+                                  id: widget.id,
+                                  categoryId: widget.subcategoryId,
+                                ));
+                          },
+                  ),
                 ),
-              ),]
+              ]
             ],
           );
         });

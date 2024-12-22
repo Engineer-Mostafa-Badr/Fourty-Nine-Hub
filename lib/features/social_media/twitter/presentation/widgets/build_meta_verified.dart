@@ -87,6 +87,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                               if (v!.isEmpty) {
                                 return LocaleKeys.nameRequired.localize;
                               }
+                              return null;
                             },
                             style: Styles.mediumText(),
                             decoration: InputDecoration(

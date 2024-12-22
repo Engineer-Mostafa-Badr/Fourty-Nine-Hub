@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -58,14 +59,12 @@ class CreateRestaurantNameField extends StatelessWidget {
               focusedErrorBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 borderSide: BorderSide(
-                  color:
-                      Colors.red,
+                  color: Colors.red,
                 ),
               ),
               filled: false,
-              contentPadding:
-                  const EdgeInsets.all(10),
-              hintText:context.isArabic?'اسم المطعم':'Restaurant Name' ,
+              contentPadding: const EdgeInsets.all(10),
+              hintText: context.isArabic ? 'اسم المطعم' : 'Restaurant Name',
             ),
           ),
           Visibility(
@@ -83,8 +82,9 @@ class CreateRestaurantNameField extends StatelessWidget {
     });
   }
 }
+
 class CreateRestaurantNumberField extends StatelessWidget {
-   const CreateRestaurantNumberField({super.key});
+  const CreateRestaurantNumberField({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +95,8 @@ class CreateRestaurantNumberField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFormField(
-            onChanged: (value) => restaurantLoginCubit.saveNumberTextEditingController(),
+            onChanged: (value) =>
+                restaurantLoginCubit.saveNumberTextEditingController(),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return null;
@@ -140,16 +141,19 @@ class CreateRestaurantNumberField extends StatelessWidget {
               focusedErrorBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 borderSide: BorderSide(
-                  color: Colors.red, // Keep red border when focused with an error
+                  color:
+                      Colors.red, // Keep red border when focused with an error
                 ),
               ),
               filled: false,
-              contentPadding: const EdgeInsets.all(10), // Padding inside the text field
-              hintText:context.isArabic?'رقم المطعم':'Restaurant Number' ,
+              contentPadding:
+                  const EdgeInsets.all(10), // Padding inside the text field
+              hintText: LocaleKeys.restaurantNumber.tr(), // Hint text
+              // contentPadding: const EdgeInsets.all(10), // Padding inside the text field
+              // hintText:context.isArabic?'رقم المطعم':'Restaurant Number' ,
             ),
             keyboardType: TextInputType.phone,
-          )
-,
+          ),
           Visibility(
             visible: state is ValidationState && (state.isNumber ?? false),
             child: Padding(

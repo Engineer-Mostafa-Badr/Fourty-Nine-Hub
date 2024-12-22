@@ -6,7 +6,8 @@ import 'package:fourtyninehub/features/social_media/stories/data/models/muted_st
 
 import '../repositories/stories_repository.dart';
 
-class GetMutedStoriesUseCase extends UseCase<MutedStoriesResponse, PaginationParams> {
+class GetMutedStoriesUseCase
+    extends UseCase<MutedStoriesResponse, PaginationParams> {
   final StoriesRepository _repository;
 
   GetMutedStoriesUseCase(this._repository);

@@ -55,8 +55,7 @@ class _AdCardState extends State<AdCard> {
         splashColor: Colors.transparent,
         hoverColor: Colors.transparent,
         highlightColor: Colors.transparent,
-        onTap: () => context.push(Routes.ADdetails,
-            extra: widget.item.id),
+        onTap: () => context.push(Routes.ADdetails, extra: widget.item.id),
         child: Container(
           width: kToolbarHeight * 2.5,
           height: 600.h,
@@ -72,7 +71,8 @@ class _AdCardState extends State<AdCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if(context.read<UserCubit>().isLoggedIn) _buildTag(status: widget.item.subscriptionStatus ?? ''),
+              if (context.read<UserCubit>().isLoggedIn)
+                _buildTag(status: widget.item.subscriptionStatus ?? ''),
               Expanded(
                 child: Stack(
                   alignment: AlignmentDirectional.topStart,
@@ -106,15 +106,15 @@ class _AdCardState extends State<AdCard> {
                               if (index == 3)
                                 Positioned.fill(
                                     child: Container(
-                                      color: Colors.black.withOpacity(0.8),
-                                      alignment: AlignmentDirectional.center,
-                                      child: Label(
-                                        text: LocaleKeys.seeAll.localize,
-                                        style: Styles.headerText(
-                                            color: Colors.white,
-                                            decoration: TextDecoration.underline),
-                                      ),
-                                    ))
+                                  color: Colors.black.withOpacity(0.8),
+                                  alignment: AlignmentDirectional.center,
+                                  child: Label(
+                                    text: LocaleKeys.seeAll.localize,
+                                    style: Styles.headerText(
+                                        color: Colors.white,
+                                        decoration: TextDecoration.underline),
+                                  ),
+                                ))
                             ],
                           ),
                         ),
@@ -158,7 +158,8 @@ class _AdCardState extends State<AdCard> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 15.w),
+                padding:
+                    EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 15.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

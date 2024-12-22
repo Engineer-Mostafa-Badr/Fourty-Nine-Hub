@@ -50,8 +50,7 @@ class MessageEntity {
       required this.isOneTimeSeenMessage,
       required this.isListened,
       this.isSelected = false,
-      this.isForwarded = false
-      });
+      this.isForwarded = false});
 
   void markAsSeen() {
     seen = true;

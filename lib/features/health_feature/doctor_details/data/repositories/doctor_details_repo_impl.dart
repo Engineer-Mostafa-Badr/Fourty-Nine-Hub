@@ -29,12 +29,14 @@ class DoctorDetailsRepoImpl implements DoctorDetailsRepo {
   }
 
   @override
-  Future<Either<Failure, DoctorEntity>> getDoctorDetailsId(GetDoctorDetailsIdParams params) async {
+  Future<Either<Failure, DoctorEntity>> getDoctorDetailsId(
+      GetDoctorDetailsIdParams params) async {
     return await _remoteDataSource.getDoctorDetailsId(params);
   }
 
   @override
-  Future<Either<Failure, bool>> addDoctorRating(AddDoctorRatingParams params) async{
+  Future<Either<Failure, bool>> addDoctorRating(
+      AddDoctorRatingParams params) async {
     return await _remoteDataSource.addDoctorRating(params);
   }
 
@@ -42,6 +44,4 @@ class DoctorDetailsRepoImpl implements DoctorDetailsRepo {
   Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorRatings(PaginationParams params) async {
     return await _remoteDataSource.getDoctorRatings(params);
   }
-
-
 }

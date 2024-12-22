@@ -65,7 +65,10 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     this._toggleFavoriteCategoryUseCase,
     this._isResturantUseCase,
     this._getMealCategoriesWithCountRestaurantsUseCase,
-    this.apiConsumer, this._changeConnectivityUseCase, this._getExpiredOrdersUseCase, this._toggleRestaurantFavouriteUseCase,
+    this.apiConsumer,
+    this._changeConnectivityUseCase,
+    this._getExpiredOrdersUseCase,
+    this._toggleRestaurantFavouriteUseCase,
   ) : super(const RestaurantsListState());
 
   final service = MainServicesEnum.food;
@@ -88,7 +91,6 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     emit(state.copyWith(status: RestaurantsListStates.success));
   }
 
-
   Future<void> _getUser() async {
     await serviceLocator<UserCubit>()
         .getUser()
@@ -106,9 +108,9 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     response.fold(
         (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
         (data) {
-          isFav = true;
-          emit(state.copyWith(status: RestaurantsListStates.success));
-        });
+      isFav = true;
+      emit(state.copyWith(status: RestaurantsListStates.success));
+    });
     return isFav;
   }
 
@@ -117,8 +119,8 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     response.fold(
         (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
         (data) async {
-          await _getMainCategoryDetails();
-        });
+      await _getMainCategoryDetails();
+    });
   }
 
   Future<bool> toggleFavoriteRestaurant(String id) async {
@@ -127,9 +129,9 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     response.fold(
         (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
         (data) {
-          result = data;
-          emit(state.copyWith(status: RestaurantsListStates.success));
-        });
+      result = data;
+      emit(state.copyWith(status: RestaurantsListStates.success));
+    });
     return result;
   }
 
@@ -149,7 +151,6 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
               IsRestaurantModel(isRestaurant: false, approved: false)));
     }
   }
-
 
   Future<void> getBannerById() async {
     final response = await _getBannerByIdUseCase.call(id: service.id);
@@ -181,7 +182,6 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   //         emit(state.copyWith(allRestaurant: data));
   //       });
   // }
-
 
   // Future<void> _getNumOfRestaurants() async {
   //   final response = await _getNumOfResturantUseCase.call();
@@ -223,9 +223,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
 
   int pageSize = 10;
   final PagingController<int, Restaurant2Model> restaurantsPagingController =
-  PagingController(firstPageKey: 1);
-
-
+      PagingController(firstPageKey: 1);
 
   void loadInitialData() async {
     subCategories.clear();
@@ -235,20 +233,21 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   }
 
   void loadInitialExpiredOrders() async {
-    emit(state.copyWith(status:RestaurantsListStates.loading));
+    emit(state.copyWith(status: RestaurantsListStates.loading));
     expiredOrders.clear();
     currentExpiredOrdersPage = 1;
     hasMoreExpiredOrders = true;
     await getExpiredOrders();
-    emit(state.copyWith(status:RestaurantsListStates.success));
+    emit(state.copyWith(status: RestaurantsListStates.success));
   }
 
   void loadInitialRestaurantsData(String? id) async {
     FoodCategoryEntity selectedCategory;
-    if(subCategories.isNotEmpty){
-      selectedCategory = subCategories.firstWhere((element) => element.id==id);
-    }else{
-      selectedCategory=FoodCategoryEntity(
+    if (subCategories.isNotEmpty) {
+      selectedCategory =
+          subCategories.firstWhere((element) => element.id == id);
+    } else {
+      selectedCategory = FoodCategoryEntity(
         id: '',
         image: Assets.allRestaurants,
         isSelected: true,
@@ -257,16 +256,19 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
         nameEn: 'All Restaurants',
       );
     }
-    emit(state.copyWith(selectedSubCategoryId: id??'',selectedCategory: selectedCategory));
+    emit(state.copyWith(
+        selectedSubCategoryId: id ?? '', selectedCategory: selectedCategory));
     restaurants.clear();
     currentRestaurantsPage = 1;
     hasMoreRestaurantsData = true;
     await fetchRestaurants();
     subCategories.map((e) => e.isSelected = false).toList();
-    if(subCategories.isNotEmpty)subCategories.firstWhere((element) => element.id==state.selectedSubCategoryId).isSelected = true;
-
+    if (subCategories.isNotEmpty) {
+      subCategories
+          .firstWhere((element) => element.id == state.selectedSubCategoryId)
+          .isSelected = true;
+    }
   }
-
 
   bool isLoadingMore = false;
   bool hasMoreData = true;
@@ -279,7 +281,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   int currentRestaurantsPage = 1;
   List<FoodCategoryEntity> subCategories = [];
   List<Restaurant2Model> restaurants = [];
-  List<OrderData> expiredOrders=[];
+  List<OrderData> expiredOrders = [];
 
   Future<void> fetchSubCategories() async {
     if (!hasMoreData || isLoadingMore) return;
@@ -297,13 +299,15 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     emit(state.copyWith(isLoadingMore: true));
 
     final response = await _getMealCategoriesWithCountRestaurantsUseCase(
-        params: PostCommentsParams(userId: user?.id,page: currentPage,limit: pageSize));
+        params: PostCommentsParams(
+            userId: user?.id, page: currentPage, limit: pageSize));
 
     response.fold(
-          (failure) => emit(state.copyWith(failure: failure, status: RestaurantsListStates.error)),
-          (data) {
+      (failure) => emit(state.copyWith(
+          failure: failure, status: RestaurantsListStates.error)),
+      (data) {
         subCategories.addAll(data);
-        if(currentPage == 1) subCategories.insert(0, allRestaurants);
+        if (currentPage == 1) subCategories.insert(0, allRestaurants);
 
         if (data.length < pageSize) {
           hasMoreData = false;
@@ -313,22 +317,31 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
         }
 
         isLoadingMore = false;
-        emit(state.copyWith(mealCategories: subCategories,isLoadingMore: false));
+        emit(state.copyWith(
+            mealCategories: subCategories, isLoadingMore: false));
       },
     );
   }
 
   Future<void> fetchRestaurants() async {
-    if (hasMoreRestaurantsData==false || isLoadingRestaurantMore==true) return;
+    if (hasMoreRestaurantsData == false || isLoadingRestaurantMore == true) {
+      return;
+    }
     print("OpenFuncOOO");
 
     isLoadingRestaurantMore = true;
     emit(state.copyWith(isLoadingRestaurantsMore: true));
-    final response = await _getSubCategoryRestaurantsUseCases(GetSubCategoryRestaurants(id: state.selectedSubCategoryId??'',page: currentRestaurantsPage,limit: pageSize, userId:serviceLocator<UserCubit>().state.data?.id??''));
+    final response = await _getSubCategoryRestaurantsUseCases(
+        GetSubCategoryRestaurants(
+            id: state.selectedSubCategoryId ?? '',
+            page: currentRestaurantsPage,
+            limit: pageSize,
+            userId: serviceLocator<UserCubit>().state.data?.id ?? ''));
 
     response.fold(
-          (failure) => emit(state.copyWith(failure: failure, status: RestaurantsListStates.error)),
-          (data) {
+      (failure) => emit(state.copyWith(
+          failure: failure, status: RestaurantsListStates.error)),
+      (data) {
         restaurants.addAll(data);
 
         if (data.length < pageSize) {
@@ -340,22 +353,22 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
 
         isLoadingRestaurantMore = false;
 
-        emit(state.copyWith(allRestaurant: restaurants,isLoadingRestaurantsMore: false));
+        emit(state.copyWith(
+            allRestaurant: restaurants, isLoadingRestaurantsMore: false));
       },
     );
   }
 
-
   Future<void> _getMainCategoryDetails() async {
     // if (user != null) {
-      final response = await _getMainCategoryDetailsUseCase(service.id);
-      response.fold(
-          (failure) =>
-              emit(state.copyWith(status: RestaurantsListStates.error)),
-          (data) {
-            emit(state.copyWith(
-              mainCategory: data, ));
-          });
+    final response = await _getMainCategoryDetailsUseCase(service.id);
+    response.fold(
+        (failure) => emit(state.copyWith(status: RestaurantsListStates.error)),
+        (data) {
+      emit(state.copyWith(
+        mainCategory: data,
+      ));
+    });
     // }
   }
 
@@ -380,21 +393,23 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   Future<void> getExpiredOrders() async {
     if (!hasMoreExpiredOrders || isLoadingExpiredOrdersMore) return;
 
-
     isLoadingExpiredOrdersMore = true;
     emit(state.copyWith(isLoadingExpiredOrdersMore: true));
 
-    final response = await
-    _getExpiredOrdersUseCase(params:PaginationParams(page: currentExpiredOrdersPage, limit: 5));
+    final response = await _getExpiredOrdersUseCase(
+        params: PaginationParams(page: currentExpiredOrdersPage, limit: 5));
     response.fold(
-          (failure) {
-            isLoadingExpiredOrdersMore = false;
-            emit(state.copyWith(failure: failure,isLoadingExpiredOrdersMore: false, status: RestaurantsListStates.error));
-          },
-          (data) {
-        expiredOrders.addAll(data.data??[]);
+      (failure) {
+        isLoadingExpiredOrdersMore = false;
+        emit(state.copyWith(
+            failure: failure,
+            isLoadingExpiredOrdersMore: false,
+            status: RestaurantsListStates.error));
+      },
+      (data) {
+        expiredOrders.addAll(data.data ?? []);
 
-        if ((data.data?.length??0) < 5) {
+        if ((data.data?.length ?? 0) < 5) {
           hasMoreExpiredOrders = false;
           emit(state.copyWith(isLoadingMore: false));
         } else {
@@ -402,9 +417,9 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
         }
 
         isLoadingExpiredOrdersMore = false;
-        emit(state.copyWith(expiredRequestsResponse: data,isLoadingExpiredOrdersMore: false));
+        emit(state.copyWith(
+            expiredRequestsResponse: data, isLoadingExpiredOrdersMore: false));
       },
     );
   }
 }
-

@@ -76,7 +76,8 @@ class PaymentProviderRepositoryImpl implements PaymentProviderRepository {
   }
 
   @override
-  Future<Either<Failure, InstapayCacheOutEntity>> instapayCacheOut(InstapayParams params) {
+  Future<Either<Failure, InstapayCacheOutEntity>> instapayCacheOut(
+      InstapayParams params) {
     return remoteDataSource.instapayCacheOut(params);
   }
 }

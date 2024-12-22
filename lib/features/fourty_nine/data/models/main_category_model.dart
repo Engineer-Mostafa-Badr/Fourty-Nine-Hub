@@ -25,12 +25,13 @@ class MainCategoryModel extends MainCategoryEntity {
         : null;
 
     return MainCategoryModel(
-      id:  categoryData?['_id'] ?? json['_id'] ?? '',
+      id: categoryData?['_id'] ?? json['_id'] ?? '',
       name: (getLang() == 'ar')
           ? (json['nameAr'] ?? categoryData?['nameAr'] ?? '')
           : (json['nameEn'] ?? categoryData?['nameEn'] ?? ''),
       nameEn: json['nameEn'] ?? categoryData?['nameEn'] ?? '',
-      image: json['image'] ?? categoryData?['image'] ?? UIConst.imagePlaceHolder,
+      image:
+          json['image'] ?? categoryData?['image'] ?? UIConst.imagePlaceHolder,
       banner: json['banner'] ?? categoryData?['banner'] ?? '',
       cover: json['cover'] ?? categoryData?['cover'] ?? '',
       isFavorite: json['isFavorite'] ?? false,
@@ -39,8 +40,8 @@ class MainCategoryModel extends MainCategoryEntity {
       subcategories: json['subCategories'] == null
           ? []
           : (json['subCategories'] as List)
-          .map((e) => SubCategoryModel.fromJson(e))
-          .toList(),
+              .map((e) => SubCategoryModel.fromJson(e))
+              .toList(),
     );
   }
 }

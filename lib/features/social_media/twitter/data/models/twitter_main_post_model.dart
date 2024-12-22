@@ -23,10 +23,6 @@ class TwitterMainPostModel extends TwitterMainPostEntity {
           'TwitterMainPostModel cannot be created from a List<dynamic>. Ensure API response is correct.');
     }
 
-    if (json is! Map<String, dynamic>) {
-      throw ArgumentError('Invalid JSON type for TwitterMainPostModel: $json');
-    }
-
     return TwitterMainPostModel(
       id: json['_id'] ?? '',
       content: json['content'] ?? '',

@@ -22,19 +22,23 @@ class GovernorateFilterAdsView extends StatefulWidget {
   const GovernorateFilterAdsView({super.key, required this.categorization});
 
   @override
-  State<GovernorateFilterAdsView> createState() => _GovernorateFilterAdsViewState();
+  State<GovernorateFilterAdsView> createState() =>
+      _GovernorateFilterAdsViewState();
 }
 
 class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
   @override
   void initState() {
-    context.read<CreateAdCubit>().loadData(subCategoryId: widget.categorization.mainCategory.id);
+    context
+        .read<CreateAdCubit>()
+        .loadData(subCategoryId: widget.categorization.mainCategory.id);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CreateAdCubit, CreateAdState>(listener: (context, state) {
+    return BlocConsumer<CreateAdCubit, CreateAdState>(
+        listener: (context, state) {
       if (state.isError) {
         showErrorMessage(
           context,
@@ -47,7 +51,8 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
     }, builder: (context, state) {
       final controller = context.read<CreateAdCubit>();
       return Scaffold(
-        appBar: BackAppBar(label: "${LocaleKeys.filter.localize} ${LocaleKeys.city.localize}"),
+        appBar: BackAppBar(
+            label: "${LocaleKeys.filter.localize} ${LocaleKeys.city.localize}"),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(10.w),
           child: Column(
@@ -58,76 +63,93 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
                 width: double.infinity,
                 child: DropdownButtonFormField<GovernorateEntity>(
                   decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 12),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                       borderSide: const BorderSide(
                         color: Colors.grey, // Border color
-                        width: 1.0,         // Border width
+                        width: 1.0, // Border width
                       ),
                     ),
                   ),
                   hint: Text(LocaleKeys.selectGovernorate.tr()),
                   value: null,
                   onChanged: (GovernorateEntity? newValue) {
-                    controller.selectGovernorate(newValue?.id??'');
+                    controller.selectGovernorate(newValue?.id ?? '');
                     print("state.governorate${state.governorate}");
                     print("state.city${state.city}");
-                    controller.getCities(newValue?.id??'');
+                    controller.getCities(newValue?.id ?? '');
                   },
                   dropdownColor: Colors.white,
-                  items: state.governorates?.map<DropdownMenuItem<GovernorateEntity>>((GovernorateEntity government) {
+                  items: state.governorates
+                      ?.map<DropdownMenuItem<GovernorateEntity>>(
+                          (GovernorateEntity government) {
                     return DropdownMenuItem<GovernorateEntity>(
                       value: government,
-                      child: Text(getLang()=='ar'?government.nameAr:government.nameEn), // Change to city.nameAr for Arabic
+                      child: Text(getLang() == 'ar'
+                          ? government.nameAr
+                          : government
+                              .nameEn), // Change to city.nameAr for Arabic
                     );
                   }).toList(),
                 ),
               ),
               const Sizer(),
-              state.status==CreateAdStates.loadCities?const Center(child: CircularProgressIndicator()):state.status==CreateAdStates.loadCitiesSuccess?Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children:[
-                  Label(text: LocaleKeys.city.localize),
-                  SizedBox(
-                    width: double.infinity,
-                    child: DropdownButtonFormField<CityEntity>(
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
-                            color: Colors.grey, // Border color
-                            width: 1.0,         // Border width
-                          ),
-                        ),
-                      ),
-                      hint: Text(LocaleKeys.selectCity.tr()),
-                      value: null,
-                      onChanged: (CityEntity? newValue) {
-                        print(newValue?.id);
-                        controller.selectCity(newValue?.id??'');
-                        print("state.governorate${state.governorate}");
-                        print("state.city${state.city}");
-                      },
-                      dropdownColor: Colors.white,
-                      items: state.cities?.map<DropdownMenuItem<CityEntity>>((CityEntity city) {
-                        return DropdownMenuItem<CityEntity>(
-                          value: city,
-                          child: Text(getLang() == 'ar' ? city.nameAr : city.nameEn), // Change to city.nameAr for Arabic
-                        );
-                      }).toList(),
-                    ),
-                  ),
-          
-                ],
-              ):const SizedBox.shrink(),
+              state.status == CreateAdStates.loadCities
+                  ? const Center(child: CircularProgressIndicator())
+                  : state.status == CreateAdStates.loadCitiesSuccess
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Label(text: LocaleKeys.city.localize),
+                            SizedBox(
+                              width: double.infinity,
+                              child: DropdownButtonFormField<CityEntity>(
+                                decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 12),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: const BorderSide(
+                                      color: Colors.grey, // Border color
+                                      width: 1.0, // Border width
+                                    ),
+                                  ),
+                                ),
+                                hint: Text(LocaleKeys.selectCity.tr()),
+                                value: null,
+                                onChanged: (CityEntity? newValue) {
+                                  print(newValue?.id);
+                                  controller.selectCity(newValue?.id ?? '');
+                                  print(
+                                      "state.governorate${state.governorate}");
+                                  print("state.city${state.city}");
+                                },
+                                dropdownColor: Colors.white,
+                                items: state.cities
+                                    ?.map<DropdownMenuItem<CityEntity>>(
+                                        (CityEntity city) {
+                                  return DropdownMenuItem<CityEntity>(
+                                    value: city,
+                                    child: Text(getLang() == 'ar'
+                                        ? city.nameAr
+                                        : city
+                                            .nameEn), // Change to city.nameAr for Arabic
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ],
+                        )
+                      : const SizedBox.shrink(),
               const Sizer(),
               DefaultButton(
-                width: double.infinity,
+                  width: double.infinity,
                   label: LocaleKeys.filter.localize,
                   onPressed: () {
-                    controller.filterGovernorateAds(categorize: widget.categorization, context: context);
+                    controller.filterGovernorateAds(
+                        categorize: widget.categorization, context: context);
                   }),
             ],
           ),
@@ -135,5 +157,4 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
       );
     });
   }
-
 }

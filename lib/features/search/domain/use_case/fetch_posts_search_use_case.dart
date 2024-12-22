@@ -5,15 +5,13 @@ import 'package:fourtyninehub/features/search/domain/repository/search_repositor
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 
-
-class FetchPostsSearchUseCase
-    extends UseCase<List<PostEntity>, SearchParams> {
+class FetchPostsSearchUseCase extends UseCase<List<PostEntity>, SearchParams> {
   final SearchRepository _searchRepository;
 
   FetchPostsSearchUseCase(this._searchRepository);
 
   @override
-  Future<Either<Failure, List<PostEntity>>> call(SearchParams params)async {
+  Future<Either<Failure, List<PostEntity>>> call(SearchParams params) async {
     return await _searchRepository.fetchPostsSearch(params);
   }
 }

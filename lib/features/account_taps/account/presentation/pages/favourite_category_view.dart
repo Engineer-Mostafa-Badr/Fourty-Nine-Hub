@@ -47,7 +47,8 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: InkWell(
                           onTap: () {
-                            context.push(Routes.SUBCATEGORIES, extra: state.data![i]);
+                            context.push(Routes.SUBCATEGORIES,
+                                extra: state.data![i]);
                             print('state.data![i]: ${state.data![i].id}');
                           },
                           child: FavouriteMainCategoryBanner(

@@ -95,8 +95,11 @@ extension TiktokControllerExtension on StreamCubit {
       selectedGifts: updatedGifts,
     ));
   }
- 
-  Future<bool> createLive({required String title,required String roomId,required BuildContext context}) async {
+
+  Future<bool> createLive(
+      {required String title,
+      required String roomId,
+      required BuildContext context}) async {
     bool success = false;
     emit(state.copyWith(status: StreamsStates.loading));
     //extract data from state
@@ -106,7 +109,7 @@ extension TiktokControllerExtension on StreamCubit {
 
     final result = await createLiveUseCase(CreateLiveParams(
       title: title,
-      roomID:roomId,
+      roomID: roomId,
       topicId: '66ec0328a2c474341310cbc3',
       description: state.goalDescription!,
       goals: goalParamsList,
@@ -114,8 +117,8 @@ extension TiktokControllerExtension on StreamCubit {
     result.fold(
         (l) => emit(state.copyWith(status: StreamsStates.failure, failure: l)),
         (r) {
-          success=true;
-          print("objectakldnlka");
+      success = true;
+      print("objectakldnlka");
       CliLogger.info(r.id);
       liveId = r.id;
       streamId = r.streamId;
@@ -205,7 +208,8 @@ extension TiktokControllerExtension on StreamCubit {
   }
 
   void initSocketListeners() {
-    listenForBattleRequest();
-    listenToSendPoints();
+    // listenForBattleRequest();
+    // listenToSendPoints();
+    onSendPointListener();
   }
 }

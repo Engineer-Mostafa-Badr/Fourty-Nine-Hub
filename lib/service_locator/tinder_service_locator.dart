@@ -1,6 +1,4 @@
 import 'package:fourtyninehub/features/social_media/tinder/data/data_sources/tinder_data_source.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/repositories/tinder_repository_impl.dart';
-import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/add_favourite_category_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/chech_user_nearby_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/delete_tinder_picture_use_case.dart';
@@ -14,7 +12,6 @@ import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_u
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/send_geft_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/upload_tinder_picture_use_case.dart';
 import 'package:get_it/get_it.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 
 class TinderServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
@@ -22,8 +19,8 @@ class TinderServiceLocator {
         () => TinderRemoteDataSourceImpl(
               serviceLocator(),
             ));
-    serviceLocator.registerLazySingleton<TinderRepository>(
-        () => TinderRepositoryImpl(serviceLocator()));
+    // serviceLocator.registerLazySingleton<TinderRepository>(
+    //     () => TinderRepositoryImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<GetTinderProfileUseCase>(
         () => GetTinderProfileUseCase(

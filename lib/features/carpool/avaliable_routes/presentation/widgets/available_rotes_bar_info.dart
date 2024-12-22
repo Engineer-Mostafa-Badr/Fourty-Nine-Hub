@@ -20,7 +20,9 @@ class AvilableRoutesBarInfo extends StatelessWidget {
         children: [
           Expanded(
             child: AvailableRoutesPointInfo(
+                tripStatus: entity.tripStatus ?? "",
                 entity: entity,
+                defaultGender: entity.locations[0].gender ?? "male",
                 createdAt: entity.createdAt,
                 seatId: "first",
                 tripId: entity.id,
@@ -31,12 +33,15 @@ class AvilableRoutesBarInfo extends StatelessWidget {
                 isComfort: entity.comfort,
                 price: entity.priceForEveryUser,
                 dotNumber: 1,
+                otpVerified: entity.locations[0].verifiedOtp,
                 status: entity.locations[0].booked ? 'Booked' : 'Free',
                 gender: entity.locations[0].bookedUser?.gender ?? "NA"),
           ),
           Expanded(
             child: AvailableRoutesPointInfo(
+                tripStatus: entity.tripStatus ?? "",
                 entity: entity,
+                defaultGender: entity.locations[1].gender ?? "male",
                 createdAt: entity.createdAt,
                 isComfort: entity.comfort,
                 price: entity.priceForEveryUser,
@@ -47,12 +52,16 @@ class AvilableRoutesBarInfo extends StatelessWidget {
                   GetCurrentLocationDriver.position?.longitude ?? 0
                 ],
                 dotNumber: 2,
+                otpVerified: entity.locations[1].verifiedOtp,
                 status: entity.locations[1].booked ? 'Booked' : 'Free',
                 gender: entity.locations[1].bookedUser?.gender ?? "NA"),
           ),
           Expanded(
             child: AvailableRoutesPointInfo(
+                defaultGender: entity.locations[2].gender ?? "male",
+                tripStatus: entity.tripStatus ?? "",
                 entity: entity,
+                otpVerified: entity.locations[2].verifiedOtp,
                 createdAt: entity.createdAt,
                 isComfort: entity.comfort,
                 price: entity.priceForEveryUser,
@@ -68,6 +77,9 @@ class AvilableRoutesBarInfo extends StatelessWidget {
           ),
           Expanded(
             child: AvailableRoutesPointInfo(
+              tripStatus: entity.tripStatus ?? "",
+              otpVerified: false,
+              defaultGender: "",
               entity: entity,
               createdAt: entity.createdAt,
               seatId: "",

@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_media_model.dart';
 
 class RestaurantMenu extends Equatable {
   final String? id;

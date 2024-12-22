@@ -20,7 +20,8 @@ class DoctorHistoryCard extends StatelessWidget {
       required this.totalValue,
       required this.clinicValue,
       required this.callValue,
-      required this.homeVisitValue, required this.totalEarnedMoney});
+      required this.homeVisitValue,
+      required this.totalEarnedMoney});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,14 @@ class DoctorHistoryCard extends StatelessWidget {
                 width: 20,
               ),
               Label(
-                text: title=='Total Appointments'?totalEarnedMoney.fold(0, (sum, element) => sum + element.count.toInt()).toString():totalEarnedMoney.fold(0, (sum, element) => sum + element.totalEarned.toInt()).toString(),
+                text: title == 'Total Appointments'
+                    ? totalEarnedMoney
+                        .fold(0, (sum, element) => sum + element.count.toInt())
+                        .toString()
+                    : totalEarnedMoney
+                        .fold(0,
+                            (sum, element) => sum + element.totalEarned.toInt())
+                        .toString(),
                 style: Styles.headerText(),
               ),
             ],
@@ -56,27 +64,40 @@ class DoctorHistoryCard extends StatelessWidget {
           ),
           CustomBarChart(
             data: [
-              if(totalEarnedMoney.any((element) => element.appointmentType=='clinic'))BarData(
-                label: Labels.clinic,
-                value: title=='Total Appointments'?totalEarnedMoney
-                    .where((element) => element.appointmentType == 'clinic')
-                    .fold(0, (sum, element) => sum + element.count):totalEarnedMoney
-        .where((element) => element.appointmentType == 'clinic')
-        .fold(0, (sum, element) => sum + element.totalEarned),
-              ),
-              if(totalEarnedMoney.any((element) => element.appointmentType=='calls'))BarData(
-                label: Labels.call,
-                value: title=='Total Appointments'?totalEarnedMoney
-        .where((element) => element.appointmentType == 'calls')
-        .fold(0, (sum, element) => sum + element.count):totalEarnedMoney
-        .where((element) => element.appointmentType == 'calls')
-        .fold(0, (sum, element) => sum + element.totalEarned),
-    ),
-
-              if(totalEarnedMoney.any((element) => element.appointmentType=='homevisit'))BarData(
-                label: Labels.homeVist,
-                value: homeVisitValue,
-              ),
+              if (totalEarnedMoney
+                  .any((element) => element.appointmentType == 'clinic'))
+                BarData(
+                  label: Labels.clinic,
+                  value: title == 'Total Appointments'
+                      ? totalEarnedMoney
+                          .where(
+                              (element) => element.appointmentType == 'clinic')
+                          .fold(0, (sum, element) => sum + element.count)
+                      : totalEarnedMoney
+                          .where(
+                              (element) => element.appointmentType == 'clinic')
+                          .fold(0, (sum, element) => sum + element.totalEarned),
+                ),
+              if (totalEarnedMoney
+                  .any((element) => element.appointmentType == 'calls'))
+                BarData(
+                  label: Labels.call,
+                  value: title == 'Total Appointments'
+                      ? totalEarnedMoney
+                          .where(
+                              (element) => element.appointmentType == 'calls')
+                          .fold(0, (sum, element) => sum + element.count)
+                      : totalEarnedMoney
+                          .where(
+                              (element) => element.appointmentType == 'calls')
+                          .fold(0, (sum, element) => sum + element.totalEarned),
+                ),
+              if (totalEarnedMoney
+                  .any((element) => element.appointmentType == 'homevisit'))
+                BarData(
+                  label: Labels.homeVist,
+                  value: homeVisitValue,
+                ),
             ],
           ),
         ],

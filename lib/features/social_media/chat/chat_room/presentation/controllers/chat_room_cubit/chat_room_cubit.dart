@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
@@ -409,7 +408,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   }
 
   void removeChatToSelectedChats({required ChatEntity chat}) {
-    selectedChatsToForword.removeWhere((chatIterator) => chatIterator.id == chat.id);
+    selectedChatsToForword
+        .removeWhere((chatIterator) => chatIterator.id == chat.id);
     chat.isSelected = false;
     emit(state.copyWith(status: ChatRoomStates.success));
   }

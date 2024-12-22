@@ -132,7 +132,7 @@ class _FollowersViewState extends State<FollowersView> {
                                 )),
                           ],
                         ),
-                        Spacer(),
+                        const Spacer(),
                         // Container(
                         //   padding: EdgeInsets.symmetric(
                         //     vertical: 20.h,

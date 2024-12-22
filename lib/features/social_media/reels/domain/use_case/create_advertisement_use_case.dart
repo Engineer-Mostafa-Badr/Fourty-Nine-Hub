@@ -4,7 +4,8 @@ import 'package:fourtyninehub/core/error/failure.dart';
 
 import '../repositories/reels_repository.dart';
 
-class CreateAdvertisementUseCase extends UseCase<bool, CreateAdvertisementParams> {
+class CreateAdvertisementUseCase
+    extends UseCase<bool, CreateAdvertisementParams> {
   final ReelsRepository _repository;
 
   CreateAdvertisementUseCase(this._repository);
@@ -15,16 +16,17 @@ class CreateAdvertisementUseCase extends UseCase<bool, CreateAdvertisementParams
   }
 }
 
-class CreateAdvertisementParams{
+class CreateAdvertisementParams {
   final List<String> mediaIds;
   final String type;
   final double totalPrice;
 
-  CreateAdvertisementParams({required this.mediaIds, required this.type, required this.totalPrice});
+  CreateAdvertisementParams(
+      {required this.mediaIds, required this.type, required this.totalPrice});
 
   Map<String, dynamic> toJson() => {
-    "media": mediaIds,
-    "advertisement_type": type,
-    "totalPrice": totalPrice,
-  };
+        "media": mediaIds,
+        "advertisement_type": type,
+        "totalPrice": totalPrice,
+      };
 }

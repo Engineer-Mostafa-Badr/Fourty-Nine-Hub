@@ -18,8 +18,12 @@ class StarCubit extends Cubit<StarState> {
   final UploadMyStarUseCase _uploadMyStarUseCase;
   final DeleteMyStarUseCase _deleteMyStarUseCase;
 
-  StarCubit(this._allStarUseCase, this._fetchMylStarUseCase,
-      this._uploadMyStarUseCase, this._deleteMyStarUseCase, this._fetchWinnerStarUseCase)
+  StarCubit(
+      this._allStarUseCase,
+      this._fetchMylStarUseCase,
+      this._uploadMyStarUseCase,
+      this._deleteMyStarUseCase,
+      this._fetchWinnerStarUseCase)
       : super(StarState());
 
   // TextEditingController starController = TextEditingController();
@@ -32,7 +36,6 @@ class StarCubit extends Cubit<StarState> {
   int currentPage = 1;
   int pageSize = 10;
 
-
   void loadInitialData() async {
     emit(state.copyWith(status: StarStates.loading));
     star.clear();
@@ -40,6 +43,7 @@ class StarCubit extends Cubit<StarState> {
     hasMoreData = true;
     await fetchAllStar();
   }
+
   void loadInitialDataWinner() async {
     emit(state.copyWith(status: StarStates.loading));
     winner.clear();
@@ -58,8 +62,9 @@ class StarCubit extends Cubit<StarState> {
     );
 
     response.fold(
-          (failure) => emit(state.copyWith(failure: failure, status: StarStates.error)),
-          (data) {
+      (failure) =>
+          emit(state.copyWith(failure: failure, status: StarStates.error)),
+      (data) {
         star.addAll(data);
 
         if (data.length < pageSize) {
@@ -69,7 +74,7 @@ class StarCubit extends Cubit<StarState> {
         }
 
         isLoadingMore = false;
-        emit(state.copyWith(star: star,status: StarStates.success));
+        emit(state.copyWith(star: star, status: StarStates.success));
       },
     );
   }
@@ -84,8 +89,9 @@ class StarCubit extends Cubit<StarState> {
     );
 
     response.fold(
-          (failure) => emit(state.copyWith(failure: failure, status: StarStates.error)),
-          (data) {
+      (failure) =>
+          emit(state.copyWith(failure: failure, status: StarStates.error)),
+      (data) {
         winner.addAll(data);
 
         if (data.length < pageSize) {
@@ -95,14 +101,13 @@ class StarCubit extends Cubit<StarState> {
         }
 
         isLoadingMore = false;
-        emit(state.copyWith(winner: winner,status: StarStates.success));
+        emit(state.copyWith(winner: winner, status: StarStates.success));
       },
     );
   }
 
   final PagingController<int, StarEntity> starPagingController =
       PagingController(firstPageKey: 1);
-
 
   Future<List<StarEntity>> getPaginatedMyStar(int page) async {
     emit(state.copyWith(status: StarStates.loading));
@@ -133,7 +138,6 @@ class StarCubit extends Cubit<StarState> {
     return main;
   }
 
-
   Future<void> uploadStar({
     required StarParams params,
   }) async {
@@ -142,16 +146,17 @@ class StarCubit extends Cubit<StarState> {
     final response = await _uploadMyStarUseCase(params);
 
     response.fold(
-          (failure) {
+      (failure) {
         emit(state.copyWith(failure: failure, status: StarStates.error));
       },
-          (data) {
+      (data) {
         emit(state.copyWith(
           status: StarStates.uploadSuccess,
         ));
       },
     );
   }
+
   Future<void> deleteMyStar({
     required String id,
   }) async {
@@ -160,10 +165,10 @@ class StarCubit extends Cubit<StarState> {
     final response = await _deleteMyStarUseCase(id);
 
     response.fold(
-          (failure) {
+      (failure) {
         emit(state.copyWith(failure: failure, status: StarStates.error));
       },
-          (data) {
+      (data) {
         emit(state.copyWith(
           status: StarStates.success,
         ));
@@ -191,7 +196,7 @@ class StarCubit extends Cubit<StarState> {
           print(video.length);
           emit(state.copyWith(
               video: video,
-             // backColor: '#FFFFFFFF',
+              // backColor: '#FFFFFFFF',
               status: StarStates.success));
         });
     print("length${state.video?.length}");
@@ -201,6 +206,4 @@ class StarCubit extends Cubit<StarState> {
     selectedVideo = [];
     emit(state.copyWith(video: []));
   }
-
-
 }

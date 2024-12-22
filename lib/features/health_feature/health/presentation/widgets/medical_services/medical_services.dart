@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -36,7 +35,7 @@ class _HealthMedicalServicesState extends State<HealthMedicalServices> {
   Widget build(BuildContext context) {
     return BlocBuilder<HealthCubit, HealthState>(builder: (context, state) {
         return SizedBox(
-          height: 250,
+          height: 0.25.sh,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -66,7 +66,7 @@ class _CreateStarState extends State<CreateStar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  BackAppBar(
+      appBar: BackAppBar(
         label: LocaleKeys.addStar.localize,
       ),
       body: BlocProvider(
@@ -78,35 +78,40 @@ class _CreateStarState extends State<CreateStar> {
               create: (BuildContext context) => serviceLocator(),
               child: BlocConsumer<StarCubit, StarState>(
                 listener: (BuildContext context, state) {
-                  if(state.status ==StarStates.uploadSuccess){
-                    showSuccessMessage(context, LocaleKeys.publishSubmitted.localize);
-                   // context.read<CreatePostCubit>().clearSelectedImages();
-                  //  context.read<StarCubit>().clearSelectedVideos();
+                  if (state.status == StarStates.uploadSuccess) {
+                    showSuccessMessage(
+                        context, LocaleKeys.publishSubmitted.localize);
+                    // context.read<CreatePostCubit>().clearSelectedImages();
+                    //  context.read<StarCubit>().clearSelectedVideos();
                     setState(() {
                       titleController.clear();
                       descController.clear();
-                      controller.selectedImages ==[];
-                      context.read<StarCubit>().selectedVideo==null;
+                      controller.selectedImages == [];
+                      context.read<StarCubit>().selectedVideo == null;
                     });
                   }
-                  if(state.status ==StarStates.error){
-                    showErrorMessage(context,  getFailureMessage(
-                      state.failure!,
+                  if (state.status == StarStates.error) {
+                    showErrorMessage(
                       context,
-                    ),);
+                      getFailureMessage(
+                        state.failure!,
+                        context,
+                      ),
+                    );
                   }
                 },
                 builder: (BuildContext context, state) {
                   controllerStar = context.read<StarCubit>();
 
-
                   // Initialize video controllers based on state.videos
                   _videoControllers = state.video?.map((video) {
-                    return VideoPlayerController.file(File(video.file.path))
-                      ..initialize().then((_) {
-                        setState(() {}); // Refresh when video is initialized
-                      });
-                  }).toList() ??[];
+                        return VideoPlayerController.file(File(video.file.path))
+                          ..initialize().then((_) {
+                            setState(
+                                () {}); // Refresh when video is initialized
+                          });
+                      }).toList() ??
+                      [];
                   return Form(
                     key: formKey,
                     child: SingleChildScrollView(
@@ -139,106 +144,143 @@ class _CreateStarState extends State<CreateStar> {
                                         //   if (!state.isImageUploading)
                                         Row(
                                           children: [
-                                            if(controllerStar.selectedVideo==null)
+                                            if (controllerStar.selectedVideo ==
+                                                null)
                                               Expanded(
-                                              child: BadgedLabel(
-                                                height: 70.h,
-                                                label: LocaleKeys.addImages.localize,
-                                                isBordered: true,
-                                                style: Styles.mediumText(
-                                                    color: AppColors.LIGHT_COLOR),
-                                                color: AppColors.SECONDARY_COLOR,
-                                                isCentered: true,
-                                                close: false,
-                                                onTap: () {
-                                                  showModalBottomSheet(
-                                                    backgroundColor:
-                                                    Theme.of(context).scaffoldBackgroundColor,
-                                                    context: context,
-                                                    builder: (BuildContext context) {
-                                                      return Wrap(
-                                                        children: <Widget>[
-                                                          ListTile(
-                                                            leading:
-                                                            const Icon(Icons.photo_library),
-                                                            title: Text(
-                                                              LocaleKeys.gallery.localize,
+                                                child: BadgedLabel(
+                                                  height: 70.h,
+                                                  label: LocaleKeys
+                                                      .addImages.localize,
+                                                  isBordered: true,
+                                                  style: Styles.mediumText(
+                                                      color: AppColors
+                                                          .LIGHT_COLOR),
+                                                  color:
+                                                      AppColors.SECONDARY_COLOR,
+                                                  isCentered: true,
+                                                  close: false,
+                                                  onTap: () {
+                                                    showModalBottomSheet(
+                                                      backgroundColor: Theme.of(
+                                                              context)
+                                                          .scaffoldBackgroundColor,
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return Wrap(
+                                                          children: <Widget>[
+                                                            ListTile(
+                                                              leading: const Icon(
+                                                                  Icons
+                                                                      .photo_library),
+                                                              title: Text(
+                                                                LocaleKeys
+                                                                    .gallery
+                                                                    .localize,
+                                                              ),
+                                                              onTap: () async {
+                                                                Navigator.pop(
+                                                                    context);
+                                                                controller
+                                                                    .uploadPhoto(
+                                                                        isGallery:
+                                                                            true);
+                                                              },
                                                             ),
-                                                            onTap: () async {
-                                                              Navigator.pop(context);
-                                                              controller.uploadPhoto(
-                                                                  isGallery: true);
-                                                            },
-                                                          ),
-                                                          ListTile(
-                                                            leading: const Icon(Icons.camera_alt),
-                                                            title:
-                                                            Text(LocaleKeys.camera.localize),
-                                                            onTap: () async {
-                                                              Navigator.pop(context);
-                                                              controller.uploadPhoto(
-                                                                  isGallery: false);
-                                                              // await CompanyAdvertiseCubit.get(context)
-                                                              //     .uploadPhoto(isGallery: false);
-                                                              // Reload user data if needed
-                                                            },
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                },
+                                                            ListTile(
+                                                              leading: const Icon(
+                                                                  Icons
+                                                                      .camera_alt),
+                                                              title: Text(
+                                                                  LocaleKeys
+                                                                      .camera
+                                                                      .localize),
+                                                              onTap: () async {
+                                                                Navigator.pop(
+                                                                    context);
+                                                                controller
+                                                                    .uploadPhoto(
+                                                                        isGallery:
+                                                                            false);
+                                                                // await CompanyAdvertiseCubit.get(context)
+                                                                //     .uploadPhoto(isGallery: false);
+                                                                // Reload user data if needed
+                                                              },
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                ),
                                               ),
-                                            ),
                                             const Sizer(),
-                                            if(controller.selectedImages ==null)
+                                            if (controller.selectedImages ==
+                                                null)
                                               Expanded(
-                                              child: BadgedLabel(
-                                                height: 70.h,
-                                                label: 'Add Video',
-                                                isBordered: true,
-                                                style: Styles.mediumText(
-                                                    color: AppColors.LIGHT_COLOR),
-                                                color: AppColors.SECONDARY_COLOR,
-                                                isCentered: true,
-                                                close: false,
-                                                onTap: () {
-                                                  showModalBottomSheet(
-                                                    backgroundColor:
-                                                    Theme.of(context).scaffoldBackgroundColor,
-                                                    context: context,
-                                                    builder: (BuildContext context) {
-                                                      return Wrap(
-                                                        children: <Widget>[
-                                                          ListTile(
-                                                            leading:
-                                                            const Icon(Icons.photo_library),
-                                                            title: Text(
-                                                              LocaleKeys.gallery.localize,
+                                                child: BadgedLabel(
+                                                  height: 70.h,
+                                                  label: 'Add Video',
+                                                  isBordered: true,
+                                                  style: Styles.mediumText(
+                                                      color: AppColors
+                                                          .LIGHT_COLOR),
+                                                  color:
+                                                      AppColors.SECONDARY_COLOR,
+                                                  isCentered: true,
+                                                  close: false,
+                                                  onTap: () {
+                                                    showModalBottomSheet(
+                                                      backgroundColor: Theme.of(
+                                                              context)
+                                                          .scaffoldBackgroundColor,
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return Wrap(
+                                                          children: <Widget>[
+                                                            ListTile(
+                                                              leading: const Icon(
+                                                                  Icons
+                                                                      .photo_library),
+                                                              title: Text(
+                                                                LocaleKeys
+                                                                    .gallery
+                                                                    .localize,
+                                                              ),
+                                                              onTap: () async {
+                                                                Navigator.pop(
+                                                                    context);
+                                                                controllerStar
+                                                                    .uploadVideo(
+                                                                        isGallery:
+                                                                            true);
+                                                              },
                                                             ),
-                                                            onTap: () async {
-                                                              Navigator.pop(context);
-                                                              controllerStar.uploadVideo(
-                                                                  isGallery: true);
-                                                            },
-                                                          ),
-                                                          ListTile(
-                                                            leading: const Icon(Icons.camera_alt),
-                                                            title:
-                                                            Text(LocaleKeys.camera.localize),
-                                                            onTap: () async {
-                                                              Navigator.pop(context);
-                                                              controllerStar.uploadVideo(
-                                                                  isGallery: false);
-                                                            },
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                },
+                                                            ListTile(
+                                                              leading: const Icon(
+                                                                  Icons
+                                                                      .camera_alt),
+                                                              title: Text(
+                                                                  LocaleKeys
+                                                                      .camera
+                                                                      .localize),
+                                                              onTap: () async {
+                                                                Navigator.pop(
+                                                                    context);
+                                                                controllerStar
+                                                                    .uploadVideo(
+                                                                        isGallery:
+                                                                            false);
+                                                              },
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                ),
                                               ),
-                                            ),
                                           ],
                                         ),
                                         // Label(
@@ -255,7 +297,11 @@ class _CreateStarState extends State<CreateStar> {
                                   ),
                                 ),
                                 const Sizer(),
-                                if (context.watch<CreatePostCubit>().selectedImages?.isNotEmpty ?? false)
+                                if (context
+                                        .watch<CreatePostCubit>()
+                                        .selectedImages
+                                        ?.isNotEmpty ??
+                                    false)
                                   SizedBox(
                                     height: kToolbarHeight * 1,
                                     child: ListView.separated(
@@ -285,15 +331,19 @@ class _CreateStarState extends State<CreateStar> {
                                                     backColor: Colors.white,
                                                     size: 25.w,
                                                     isCircle: true,
-                                                    onPressed: () => showAreYouSure(
-                                                        context: context,
-                                                        title: LocaleKeys.alert.localize,
-                                                        subTitle:
-                                                        LocaleKeys.removeImage.localize,
-                                                        action: () {
-                                                          controller
-                                                              .removePhoto(image);
-                                                        }),
+                                                    onPressed: () =>
+                                                        showAreYouSure(
+                                                            context: context,
+                                                            title: LocaleKeys
+                                                                .alert.localize,
+                                                            subTitle: LocaleKeys
+                                                                .removeImage
+                                                                .localize,
+                                                            action: () {
+                                                              controller
+                                                                  .removePhoto(
+                                                                      image);
+                                                            }),
                                                   ),
                                                 ),
                                               ],
@@ -304,25 +354,38 @@ class _CreateStarState extends State<CreateStar> {
                                             const Sizer(),
                                         itemCount: photo.images?.length ?? 0),
                                   ),
-                                if (context.watch<StarCubit>().selectedVideo?.isNotEmpty ?? false)
+                                if (context
+                                        .watch<StarCubit>()
+                                        .selectedVideo
+                                        ?.isNotEmpty ??
+                                    false)
                                   SizedBox(
                                     height: 400.h,
                                     child: ListView.separated(
                                       itemBuilder: (context, index) {
-                                        final videoController = _videoControllers[index];
+                                        final videoController =
+                                            _videoControllers[index];
                                         return SizedBox(
                                           height: 400.h,
                                           width: double.infinity,
                                           child: Stack(
-                                            alignment: AlignmentDirectional.topStart,
+                                            alignment:
+                                                AlignmentDirectional.topStart,
                                             children: [
                                               Positioned.fill(
-                                                child: videoController.value.isInitialized
+                                                child: videoController
+                                                        .value.isInitialized
                                                     ? AspectRatio(
-                                                  aspectRatio: videoController.value.aspectRatio,
-                                                  child: VideoPlayer(videoController),
-                                                )
-                                                    : Center(child: CircularProgressIndicator()),
+                                                        aspectRatio:
+                                                            videoController
+                                                                .value
+                                                                .aspectRatio,
+                                                        child: VideoPlayer(
+                                                            videoController),
+                                                      )
+                                                    : const Center(
+                                                        child:
+                                                            CircularProgressIndicator()),
                                               ),
                                               PositionedDirectional(
                                                 start: 5,
@@ -335,15 +398,21 @@ class _CreateStarState extends State<CreateStar> {
                                                   backColor: Colors.white,
                                                   size: 50.sp,
                                                   isCircle: true,
-                                                  onPressed: () => showAreYouSure(
+                                                  onPressed: () =>
+                                                      showAreYouSure(
                                                     context: context,
-                                                    title: LocaleKeys.alert.localize,
-                                                    subTitle: LocaleKeys.removeVideo.localize,
+                                                    title: LocaleKeys
+                                                        .alert.localize,
+                                                    subTitle: LocaleKeys
+                                                        .removeVideo.localize,
                                                     action: () {
                                                       setState(() {
-                                                        _videoControllers[index].dispose();
-                                                        state.video!.removeAt(index);
-                                                        _videoControllers.removeAt(index);
+                                                        _videoControllers[index]
+                                                            .dispose();
+                                                        state.video!
+                                                            .removeAt(index);
+                                                        _videoControllers
+                                                            .removeAt(index);
                                                       });
                                                     },
                                                   ),
@@ -353,13 +422,14 @@ class _CreateStarState extends State<CreateStar> {
                                           ),
                                         );
                                       },
-                                      separatorBuilder: (context, index) =>  SizedBox(width: 20.w),
+                                      separatorBuilder: (context, index) =>
+                                          SizedBox(width: 20.w),
                                       itemCount: state.video?.length ?? 0,
                                     ),
                                   ),
                               ],
                             ),
-                            Sizer(),
+                            const Sizer(),
                             buildTextField(
                                 label: LocaleKeys.title.localize,
                                 controller: titleController),
@@ -367,24 +437,34 @@ class _CreateStarState extends State<CreateStar> {
                             buildTextField(
                                 label: LocaleKeys.desc.localize,
                                 controller: descController),
-                            Sizer(),
+                            const Sizer(),
                             DefaultButton(
                                 width: double.infinity,
                                 label: LocaleKeys.publish.localize,
                                 backgroundColor: AppColors.SECONDARY_COLOR,
                                 onPressed: () {
                                   print(controller.selectedImages);
-                                  if(formKey.currentState!.validate()) {
-                                    if(controller.selectedImages !=null ||controllerStar.selectedVideo !=null) {
+                                  if (formKey.currentState!.validate()) {
+                                    if (controller.selectedImages != null ||
+                                        controllerStar.selectedVideo != null) {
                                       context.read<StarCubit>().uploadStar(
-                                          params: StarParams(
-                                        title: titleController.text,
-                                        mediaUrl:controllerStar.selectedVideo ?? controller.selectedImages,
-                                        description: descController.text,
-                                        type:controllerStar.selectedVideo==null? 'image' :'video',
-                                      ));
-                                    }else{
-                                      showErrorMessage(context, LocaleKeys.enterImageOrVideo.localize);
+                                              params: StarParams(
+                                            title: titleController.text,
+                                            mediaUrl:
+                                                controllerStar.selectedVideo ??
+                                                    controller.selectedImages,
+                                            description: descController.text,
+                                            type:
+                                                controllerStar.selectedVideo ==
+                                                        null
+                                                    ? 'image'
+                                                    : 'video',
+                                          ));
+                                    } else {
+                                      showErrorMessage(
+                                          context,
+                                          LocaleKeys
+                                              .enterImageOrVideo.localize);
                                     }
                                   }
                                 }),

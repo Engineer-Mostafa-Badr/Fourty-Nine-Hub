@@ -1,6 +1,6 @@
 part of 'restaurant_details_cubit.dart';
 
-enum RestaurantDetailsStates { loading, error,success, initState,addCart }
+enum RestaurantDetailsStates { loading, error, success, initState, addCart }
 
 extension RestaurantDetailsStateX on RestaurantDetailsState {
   bool get isInitial => status == RestaurantDetailsStates.initState;

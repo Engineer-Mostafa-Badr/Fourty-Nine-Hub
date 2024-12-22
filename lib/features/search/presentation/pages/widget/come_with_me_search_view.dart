@@ -26,9 +26,7 @@ class ComeWithMeSearchView extends StatefulWidget {
       _ViewAllTripJoinCardBuilderState();
 }
 
-class _ViewAllTripJoinCardBuilderState
-    extends State<ComeWithMeSearchView> {
-
+class _ViewAllTripJoinCardBuilderState extends State<ComeWithMeSearchView> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -48,7 +46,6 @@ class _ViewAllTripJoinCardBuilderState
                     ),
                   );
                 },
-
                 itemBuilder: (context, item, index) {
                   return BuildItemTripCome(
                     tripJoinCardEntity: item,
@@ -61,7 +58,7 @@ class _ViewAllTripJoinCardBuilderState
                           return BlocProvider(
                             create: (_) => RequestTripJoinCubit(
                               requestTripJoinUseCase:
-                              serviceLocator<RequstTripJoinUseCase>(),
+                                  serviceLocator<RequstTripJoinUseCase>(),
                             ),
                             child: RequstTripJoinBottomSheet(
                                 tripJoinCardEntity: state.tripCome![index]),
@@ -80,9 +77,9 @@ class _ViewAllTripJoinCardBuilderState
                 },
                 noMoreItemsIndicatorBuilder: (context) => Container(),
                 firstPageProgressIndicatorBuilder: (context) =>
-                const CupertinoActivityIndicator(),
+                    const CupertinoActivityIndicator(),
                 newPageProgressIndicatorBuilder: (context) =>
-                const CupertinoActivityIndicator(),
+                    const CupertinoActivityIndicator(),
               ),
             );
           }
@@ -142,7 +139,7 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
   Widget build(BuildContext context) {
     return Padding(
       padding:
-      EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Form(
         key: formKey,
         child: Container(
@@ -182,12 +179,11 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                 onTap: () {
                   if (formKey.currentState!.validate()) {
                     context.read<RequestTripJoinCubit>().makeTripJoinRequest(
-                      addId: widget.tripJoinCardEntity.id,
-                      mobile: phoneNumber,
-                      premuimRequest: widget.isPremium,
-                      subCategory: widget.tripJoinCardEntity.categoryId,
-                      url: '/ride/pick-me/request/'
-                    );
+                        addId: widget.tripJoinCardEntity.id,
+                        mobile: phoneNumber,
+                        premuimRequest: widget.isPremium,
+                        subCategory: widget.tripJoinCardEntity.categoryId,
+                        url: '/ride/pick-me/request/');
                     Future.delayed(const Duration(seconds: 2))
                         .then((value) => context.pop());
                   }

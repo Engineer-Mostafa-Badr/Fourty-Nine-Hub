@@ -5,5 +5,6 @@ import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/usecases/g
 import '../../../../../core/error/failure.dart';
 
 abstract class AdRequestsRepo {
-  Future<Either<Failure, List<AdRequestEntity>>> getAdRequests({required GetAdRequestsParams params});
+  Future<Either<Failure, List<AdRequestEntity>>> getAdRequests(
+      {required GetAdRequestsParams params});
 }

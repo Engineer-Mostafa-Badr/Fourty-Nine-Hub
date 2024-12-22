@@ -11,6 +11,7 @@ class LastNameTextFormField extends MainTextFormField {
       super.currentFocusNode,
       super.nextFocusNode,
       required super.currentController,
+      super.isAuthentcation,
       super.margin = null,
       super.enabled,
       super.maxLength,

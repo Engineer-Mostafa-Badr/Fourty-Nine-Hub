@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_state.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/reels_widget.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../res/style/app_colors.dart';
 import '../controllers/preload_cubit/preload_bloc.dart';
@@ -20,7 +18,9 @@ class ReelView extends StatelessWidget {
         if (context
             .read<PreloadBloc>()
             .state
-            .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+            .controllers[context.read<PreloadBloc>().state.focusedIndex]!
+            .value
+            .isPlaying) {
           context
               .read<PreloadBloc>()
               .state
@@ -72,7 +72,7 @@ class ReelsScreenState extends State<ReelsScreen> {
                     },
                     itemBuilder: (context, index) {
                       // Is at end and isLoading
-                      final bool _isLoading =
+                      final bool isLoading =
                           (state.isLoading && index == state.urls.length - 1);
                       final controller = state.controllers[index];
 
@@ -85,7 +85,7 @@ class ReelsScreenState extends State<ReelsScreen> {
                       return state.focusedIndex == index
                           ? ReelsWidget(
                               index: index,
-                              isLoading: _isLoading,
+                              isLoading: isLoading,
                               controller: controller,
                             )
                           : const SizedBox();

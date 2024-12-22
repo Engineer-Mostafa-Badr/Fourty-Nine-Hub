@@ -7,9 +7,7 @@ class FavouriteCategoryState {
   const FavouriteCategoryState(
       {this.status = StateStatus.loading, this.failure, this.data});
   FavouriteCategoryState copyWith(
-      {StateStatus? status,
-      Failure? failure,
-      List<MainCategoryEntity>? data}) {
+      {StateStatus? status, Failure? failure, List<MainCategoryEntity>? data}) {
     return FavouriteCategoryState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

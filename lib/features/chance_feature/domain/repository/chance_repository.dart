@@ -10,10 +10,13 @@ import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_sub_
 import '../use_case/add_chance_data.dart';
 import 'package:fourtyninehub/features/chance_feature/domain/entity/cahnce_rate_entity.dart';
 
-abstract class ChanceRepository{
+abstract class ChanceRepository {
   Future<List<ChanceEntity>> fetchChance();
-  Future<Either<Failure , bool>> addChance(AddChanceParams params) ;
-  Future<Either<Failure , ChanceRateEntity>> fetchChanceRate(ChanceRateParams params);
-  Future<Either<Failure , List<MainCategoryDropEntity>>> fetchMainCategory(MainCategoryChanceParams params);
-  Future<Either<Failure , List<SubCategoryDropEntity>>> fetchSubCategory(SubCategoryChanceParams params);
+  Future<Either<Failure, bool>> addChance(AddChanceParams params);
+  Future<Either<Failure, ChanceRateEntity>> fetchChanceRate(
+      ChanceRateParams params);
+  Future<Either<Failure, List<MainCategoryDropEntity>>> fetchMainCategory(
+      MainCategoryChanceParams params);
+  Future<Either<Failure, List<SubCategoryDropEntity>>> fetchSubCategory(
+      SubCategoryChanceParams params);
 }

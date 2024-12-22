@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/ads/native_ad_card.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -25,7 +26,7 @@ import '../../../../res/style/styles.dart';
 import '../controller/cubit/star_cubit.dart';
 
 class BeStarView extends StatefulWidget {
-  const BeStarView({Key? key}) : super(key: key);
+  const BeStarView({super.key});
 
   @override
   _BeStarViewState createState() => _BeStarViewState();
@@ -37,13 +38,14 @@ class _BeStarViewState extends State<BeStarView> {
   late ScrollController _scrollController;
   late StarCubit _cubit;
   bool showMore = false;
-
+  final AdsManager _adsManager = AdsManager();
   @override
   void initState() {
     super.initState();
     _cubit = context.read<StarCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
     _cubit.loadInitialData();
+    _adsManager.preloadAds();
   }
 
   void _onScroll() {
@@ -122,7 +124,7 @@ class _BeStarViewState extends State<BeStarView> {
             _initializeVideoControllers(sortedStars);
           }
           // Initialize video controllers if not done yet
-          if (_videoControllers.isEmpty && sortedStars != null) {
+          if (_videoControllers.isEmpty) {
             _initializeVideoControllers(sortedStars);
           }
 
@@ -132,7 +134,7 @@ class _BeStarViewState extends State<BeStarView> {
               onRefresh: () async => context.read<StarCubit>().fetchAllStar(),
               child: SingleChildScrollView(
                 // Keeps the entire content scrollable
-                physics: AlwaysScrollableScrollPhysics(),
+                physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
                     Container(
@@ -173,6 +175,13 @@ class _BeStarViewState extends State<BeStarView> {
                       shrinkWrap: true,
                       // Allow the ListView to take only the necessary height
                       itemBuilder: (context, index) {
+                        // Insert ads after every 2 items
+                        // if ((index + 1) % 3 == 0) {
+                        //   return getAdIfNeeded(index, AdsManager());
+                        // }
+                        if (index > nativeAdStart && index % adFrequency == adFrequency - 1) {
+                          return getAdIfNeeded(index, _adsManager);
+                        }
                         if (index >= sortedStars.length) {
                           return const Center(
                               child: CircularProgressIndicator());
@@ -184,7 +193,6 @@ class _BeStarViewState extends State<BeStarView> {
                         final videoController = _videoControllers[index];
                         //final star = sortedStars[index];
                         // final videoController = _videoControllers[index];
-
 
                         return Column(
                           children: [
@@ -207,8 +215,7 @@ class _BeStarViewState extends State<BeStarView> {
                                         }
                                       },
                                       child: AspectRatio(
-                                        aspectRatio:
-                                           1,
+                                        aspectRatio: 1,
                                         child: Stack(
                                           children: [
                                             VideoPlayer(videoController),
@@ -254,36 +261,61 @@ class _BeStarViewState extends State<BeStarView> {
                                     children: [
                                       GridView.builder(
                                         shrinkWrap: true,
-                                        physics: const NeverScrollableScrollPhysics(),
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
                                         padding: const EdgeInsets.all(10),
-                                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: state.star![index].mediaUrl.length == 1 ? 1 : 2,
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: state.star![index]
+                                                      .mediaUrl.length ==
+                                                  1
+                                              ? 1
+                                              : 2,
                                         ),
-                                        itemCount: state.star![index].mediaUrl.length < 4
+                                        itemCount: state.star![index].mediaUrl
+                                                    .length <
+                                                4
                                             ? state.star![index].mediaUrl.length
                                             : 4,
                                         itemBuilder: (context, mediaIndex) {
-                                          if (mediaIndex >= state.star![index].mediaUrl.length) {
+                                          if (mediaIndex >=
+                                              state.star![index].mediaUrl
+                                                  .length) {
                                             // Skip rendering for out-of-bounds mediaIndex
-                                            return SizedBox.shrink();
+                                            return const SizedBox.shrink();
                                           }
                                           return GestureDetector(
                                             onTap: () {
-                                              if (mediaIndex != 3 || (mediaIndex == 3 && state.star![index].mediaUrl.length == 4)) {
+                                              if (mediaIndex != 3 ||
+                                                  (mediaIndex == 3 &&
+                                                      state
+                                                              .star![index]
+                                                              .mediaUrl
+                                                              .length ==
+                                                          4)) {
                                                 showDialog(
                                                   context: context,
-                                                  builder: (context) => ImageDetails(
-                                                    image: state.star![index].mediaUrl[mediaIndex].mediaKey,
+                                                  builder: (context) =>
+                                                      ImageDetails(
+                                                    image: state
+                                                        .star![index]
+                                                        .mediaUrl[mediaIndex]
+                                                        .mediaKey,
                                                     function: () {},
                                                   ),
                                                 );
                                               } else {
                                                 showDialog(
                                                   context: context,
-                                                  builder: (context) => allImage(
-                                                        () {},
-                                                    state.star![index].mediaUrl.length,
-                                                    state.star![index].mediaUrl[mediaIndex].mediaKey,
+                                                  builder: (context) =>
+                                                      allImage(
+                                                    () {},
+                                                    state.star![index].mediaUrl
+                                                        .length,
+                                                    state
+                                                        .star![index]
+                                                        .mediaUrl[mediaIndex]
+                                                        .mediaKey,
                                                   ),
                                                 );
                                               }
@@ -291,28 +323,51 @@ class _BeStarViewState extends State<BeStarView> {
                                             child: Stack(
                                               children: [
                                                 Container(
-                                                  margin: const EdgeInsetsDirectional.only(end: 10, bottom: 10),
-                                                  padding: const EdgeInsets.all(10),
+                                                  margin:
+                                                      const EdgeInsetsDirectional
+                                                          .only(
+                                                          end: 10, bottom: 10),
+                                                  padding:
+                                                      const EdgeInsets.all(10),
                                                   decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(15),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
                                                     image: DecorationImage(
                                                       fit: BoxFit.fill,
-                                                      image: NetworkImage(state.star![index].mediaUrl[mediaIndex].mediaKey),
+                                                      image: NetworkImage(state
+                                                          .star![index]
+                                                          .mediaUrl[mediaIndex]
+                                                          .mediaKey),
                                                     ),
                                                   ),
                                                 ),
-                                                if (mediaIndex == 3 && state.star![index].mediaUrl.length > 4)
+                                                if (mediaIndex == 3 &&
+                                                    state.star![index].mediaUrl
+                                                            .length >
+                                                        4)
                                                   Container(
-                                                    margin: const EdgeInsetsDirectional.only(end: 10, bottom: 10),
+                                                    margin:
+                                                        const EdgeInsetsDirectional
+                                                            .only(
+                                                            end: 10,
+                                                            bottom: 10),
                                                     alignment: Alignment.center,
                                                     decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(15),
-                                                      color: Colors.black.withOpacity(0.5),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15),
+                                                      color: Colors.black
+                                                          .withOpacity(0.5),
                                                     ),
                                                     child: Center(
                                                       child: Label(
-                                                        text: "+${state.star![index].mediaUrl.length - 4}",
-                                                        style: Styles.headerText(color: Colors.white),
+                                                        text:
+                                                            "+${state.star![index].mediaUrl.length - 4}",
+                                                        style:
+                                                            Styles.headerText(
+                                                                color: Colors
+                                                                    .white),
                                                       ),
                                                     ),
                                                   ),
@@ -328,7 +383,8 @@ class _BeStarViewState extends State<BeStarView> {
                                     child: Align(
                                       alignment: AlignmentDirectional.topEnd,
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
                                         children: [
                                           const Icon(Icons.remove_red_eye),
                                           Sizer(width: 10.w),
@@ -337,9 +393,13 @@ class _BeStarViewState extends State<BeStarView> {
                                             style: Styles.mediumText().copyWith(
                                               shadows: [
                                                 Shadow(
-                                                  offset: Offset(2.0, 2.0), // Position of the shadow
-                                                  blurRadius: 3.0, // Blur radius of the shadow
-                                                  color: Colors.black.withOpacity(0.5), // Shadow color
+                                                  offset: const Offset(2.0,
+                                                      2.0), // Position of the shadow
+                                                  blurRadius:
+                                                      3.0, // Blur radius of the shadow
+                                                  color: Colors.black
+                                                      .withOpacity(
+                                                          0.5), // Shadow color
                                                 ),
                                               ],
                                             ),
@@ -357,19 +417,19 @@ class _BeStarViewState extends State<BeStarView> {
                                         style: Styles.mediumText().copyWith(
                                           shadows: [
                                             Shadow(
-                                              offset: Offset(1.0, 1.0),
+                                              offset: const Offset(1.0, 1.0),
                                               blurRadius: 3.0,
-                                              color: Colors.white.withOpacity(0.5),
+                                              color:
+                                                  Colors.white.withOpacity(0.5),
                                             ),
                                           ],
                                         ),
                                       ),
                                     ),
                                   ),
-
                                 ],
                               ),
-                            Sizer(),
+                            const Sizer(),
                             Align(
                               alignment: AlignmentDirectional.topStart,
                               child: Text(
@@ -409,7 +469,9 @@ class _BeStarViewState extends State<BeStarView> {
                         height: 40.h,
                         color: AppColors.GREY_NORMAL_COLOR,
                       ),
-                      itemCount: sortedStars.length,
+                      itemCount: sortedStars.length // Add extra items for ads
+
+                      // itemCount: sortedStars.length,
                     ),
                   ],
                 ),

@@ -11,6 +11,7 @@ class GetPriceCarpoolUsecase {
   Future<Either<Failure, CarpoolRouteInfoModel>> call({
     required GetPriceCarpoolParam getPriceCarpoolParam,
   }) {
-    return addNewRouteCarpoolRepo.getPriceCarpool(getPriceCarpoolParam: getPriceCarpoolParam);
+    return addNewRouteCarpoolRepo.getPriceCarpool(
+        getPriceCarpoolParam: getPriceCarpoolParam);
   }
 }

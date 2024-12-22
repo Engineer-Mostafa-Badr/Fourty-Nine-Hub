@@ -6,18 +6,17 @@ import 'package:get_it/get_it.dart';
 
 class ShareAppServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
-    serviceLocator
-        .registerLazySingleton<ShareAppRemoteDataSource>(() => ShareAppRemoteDataSourceImpl(
+    serviceLocator.registerLazySingleton<ShareAppRemoteDataSource>(
+        () => ShareAppRemoteDataSourceImpl(
               serviceLocator(),
             ));
 
     serviceLocator.registerLazySingleton<ShareAppRepository>(
         () => ShareAppRepositoryImpl(serviceLocator()));
 
-    serviceLocator
-        .registerLazySingleton<ShareAppUseCase>(() => ShareAppUseCase(
-              serviceLocator(),
-            ));
+    serviceLocator.registerLazySingleton<ShareAppUseCase>(() => ShareAppUseCase(
+          serviceLocator(),
+        ));
 
     // serviceLocator.registerFactory<ShareAppCubit>(() => ShareAppCubit(
     //       serviceLocator(),

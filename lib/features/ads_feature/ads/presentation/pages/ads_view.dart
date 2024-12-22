@@ -38,15 +38,18 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
 
-    if(widget.params.mainCategory.nameEn=='Dating'){
+    if (widget.params.mainCategory.nameEn == 'Dating') {
       context.read<AdvertisementCubit>().loadData(
           subCategoryId: widget.params.subCategory.id,
-          filter: 'male', fromTab: true);
-    }else{
+          filter: 'male',
+          fromTab: true);
+    } else {
       context.read<AdvertisementCubit>().loadData(
           subCategoryId: widget.params.subCategory.id,
-          filter:
-          widget.params.subCategory.hasAuction == true ? 'sale' : 'provider', fromTab: true);
+          filter: widget.params.subCategory.hasAuction == true
+              ? 'sale'
+              : 'provider',
+          fromTab: true);
     }
   }
 
@@ -59,40 +62,40 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     String userType = '';
-    if(_tabController.index==0 && widget.params.mainCategory.nameEn=='Dating'){
-      userType='male';
-    }else if(_tabController.index==1 && widget.params.mainCategory.nameEn=='Dating'){
-      userType='female';
-    }else if(_tabController.index==0&&widget.params.subCategory.hasAuction == true ){
-      userType='sale';
-    }else if(_tabController.index==1&&widget.params.subCategory.hasAuction == true ){
-      userType='rent';
+    if (_tabController.index == 0 &&
+        widget.params.mainCategory.nameEn == 'Dating') {
+      userType = 'male';
+    } else if (_tabController.index == 1 &&
+        widget.params.mainCategory.nameEn == 'Dating') {
+      userType = 'female';
+    } else if (_tabController.index == 0 &&
+        widget.params.subCategory.hasAuction == true) {
+      userType = 'sale';
+    } else if (_tabController.index == 1 &&
+        widget.params.subCategory.hasAuction == true) {
+      userType = 'rent';
       print('provider');
-    }else if(_tabController.index==0&&widget.params.subCategory.hasAuction == false){
-      userType='provider';
+    } else if (_tabController.index == 0 &&
+        widget.params.subCategory.hasAuction == false) {
+      userType = 'provider';
       print('provider');
-    }else{
-      userType='user';
+    } else {
+      userType = 'user';
       print('user');
     }
     print(_tabController.index);
     return Scaffold(
       appBar: const HomeAppbar(),
-      body:
-          BlocConsumer<AdvertisementCubit, AdsState>(
-              listener: (context,state){
-                if(state.status == AdsStates.loading){
-                  print("state.status${state.status}");
-
-                }else if(state.status == AdsStates.error){
-                  print("state.status${state.status}");
-
-                }else if(state.status == AdsStates.success){
-                  print("state.status${state.status}");
-
-                }
-              },
-              builder: (context, state) {
+      body: BlocConsumer<AdvertisementCubit, AdsState>(
+          listener: (context, state) {
+        if (state.status == AdsStates.loading) {
+          print("state.status${state.status}");
+        } else if (state.status == AdsStates.error) {
+          print("state.status${state.status}");
+        } else if (state.status == AdsStates.success) {
+          print("state.status${state.status}");
+        }
+      }, builder: (context, state) {
         final controller = context.read<AdvertisementCubit>();
         return SizedBox(
           width: double.infinity,
@@ -111,7 +114,9 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                       )),
                   const Sizer(),
                   Label(
-                    text: context.isArabic?widget.params.subCategory.nameAr:widget.params.subCategory.nameEn,
+                    text: context.isArabic
+                        ? widget.params.subCategory.nameAr
+                        : widget.params.subCategory.nameEn,
                     style: Styles.headerText(),
                   ),
                   const Sizer(),
@@ -124,66 +129,90 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                     labelStyle: Styles.headerText(),
                     onTap: (i) {
                       if (i == 1) {
-                        state.city='';
-                        state.governorate='';
-                        if(widget.params.mainCategory.nameEn=='Dating'){
+                        state.city = '';
+                        state.governorate = '';
+                        if (widget.params.mainCategory.nameEn == 'Dating') {
                           controller.loadData(
                               subCategoryId: widget.params.subCategory.id,
-                              filter:'female', fromTab: true);
-                        }else{
+                              filter: 'female',
+                              fromTab: true);
+                        } else {
                           controller.loadData(
                               subCategoryId: widget.params.subCategory.id,
-                              filter: widget.params.subCategory.hasAuction == true
-                                  ? 'rent'
-                                  : 'user', fromTab: true);
+                              filter:
+                                  widget.params.subCategory.hasAuction == true
+                                      ? 'rent'
+                                      : 'user',
+                              fromTab: true);
                         }
                       } else {
-                        if(widget.params.mainCategory.nameEn=='Dating'){
+                        if (widget.params.mainCategory.nameEn == 'Dating') {
                           controller.loadData(
                               subCategoryId: widget.params.subCategory.id,
-                              filter: 'male', fromTab: true);
-                        }else{
+                              filter: 'male',
+                              fromTab: true);
+                        } else {
                           controller.loadData(
                               subCategoryId: widget.params.subCategory.id,
-                              filter: widget.params.subCategory.hasAuction == true
-                                  ? 'sale'
-                                  : 'provider', fromTab: true);
+                              filter:
+                                  widget.params.subCategory.hasAuction == true
+                                      ? 'sale'
+                                      : 'provider',
+                              fromTab: true);
                         }
-
                       }
                     },
                     tabs: [
                       Tab(
-                          text: widget.params.mainCategory.nameEn=='Dating'?LocaleKeys.maleUser.localize:widget.params.subCategory.hasAuction == true
-                              ? LocaleKeys.sale.localize
-                              : LocaleKeys.provider.localize),
+                          text: widget.params.mainCategory.nameEn == 'Dating'
+                              ? LocaleKeys.maleUser.localize
+                              : widget.params.subCategory.hasAuction == true
+                                  ? LocaleKeys.sale.localize
+                                  : LocaleKeys.provider.localize),
                       Tab(
-                          text: widget.params.mainCategory.nameEn=='Dating'?LocaleKeys.femaleUser.localize:widget.params.subCategory.hasAuction == true
-                              ? LocaleKeys.rent.localize
-                              : LocaleKeys.user.localize),
+                          text: widget.params.mainCategory.nameEn == 'Dating'
+                              ? LocaleKeys.femaleUser.localize
+                              : widget.params.subCategory.hasAuction == true
+                                  ? LocaleKeys.rent.localize
+                                  : LocaleKeys.user.localize),
                     ],
                   ),
-                      state.status == AdsStates.loading? Center(child: Padding(
-                        padding: EdgeInsets.only(top: 20.h),
-                        child: const CircularProgressIndicator(),
-                      ),):
-                           Expanded(
+                  state.status == AdsStates.loading
+                      ? Center(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 20.h),
+                            child: const CircularProgressIndicator(),
+                          ),
+                        )
+                      : Expanded(
                           child: TabBarView(
-                            physics: const NeverScrollableScrollPhysics(),
-                            controller: _tabController,
-                            children: [
-                              ProviderAdsView(params: widget.params, userType: userType, controller: controller,),
-                              UserAdsView(params: widget.params, userType: userType,),
-                            ],
-                          ))
+                          physics: const NeverScrollableScrollPhysics(),
+                          controller: _tabController,
+                          children: [
+                            ProviderAdsView(
+                              params: widget.params,
+                              userType: userType,
+                              controller: controller,
+                            ),
+                            UserAdsView(
+                              params: widget.params,
+                              userType: userType,
+                            ),
+                          ],
+                        ))
                 ],
               ),
-              if(state.isFilterLoading) Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: Colors.black.withOpacity(0.3),
-                child: const Center(child: CircularProgressIndicator(color: Colors.white,),),
-              )
+              if (state.isFilterLoading)
+                Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: Colors.black.withOpacity(0.3),
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  ),
+                )
             ],
           ),
         );

@@ -45,7 +45,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
 
   checkLogin() {
     try {
-      if(!context.isUserLoggedIn) context.read<UserCubit>().getUser();
+      if (!context.isUserLoggedIn) context.read<UserCubit>().getUser();
     } catch (e) {
       print(e.toString());
     }
@@ -96,6 +96,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
     scrollController.dispose();
     super.dispose();
   }
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -114,12 +115,12 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
         }
       },
       child: Scaffold(
-         bottomNavigationBar: CustomPageBottonNavBar(
-        scrollController: scrollController, currentIndex: 2,
-        isScrollingDown: _isScrollingDown,
-        // mainCategory: 1,
-        // index: 2,
-      ),
+        bottomNavigationBar: CustomPageBottonNavBar(
+          scrollController: scrollController, currentIndex: 2,
+          isScrollingDown: _isScrollingDown,
+          // mainCategory: 1,
+          // index: 2,
+        ),
         body: ListView(
           controller: scrollController,
           shrinkWrap: true,
@@ -156,23 +157,23 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                     child: Column(
                       children: List.generate(
                           6,
-                              (index) => Padding(
-                            padding: EdgeInsets.only(bottom: 15.h),
-                            child: Container(
-                              height: MediaQuery.of(context).size.height *
-                                  .15.h,
-                              width: double.infinity,
-                              margin:
-                              EdgeInsets.symmetric(horizontal: 10.w),
-                              padding:
-                              EdgeInsets.symmetric(horizontal: 10.w),
-                              decoration: BoxDecoration(
-                                color: AppColors.AUTH_CONTAINER_COLOR,
-                                borderRadius: BorderRadius.circular(20.r),
-                                border: Border.all(color: Colors.grey),
-                              ),
-                            ),
-                          )),
+                          (index) => Padding(
+                                padding: EdgeInsets.only(bottom: 15.h),
+                                child: Container(
+                                  height: MediaQuery.of(context).size.height *
+                                      .15.h,
+                                  width: double.infinity,
+                                  margin:
+                                      EdgeInsets.symmetric(horizontal: 10.w),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 10.w),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.AUTH_CONTAINER_COLOR,
+                                    borderRadius: BorderRadius.circular(20.r),
+                                    border: Border.all(color: Colors.grey),
+                                  ),
+                                ),
+                              )),
                     ),
                   );
                 }
@@ -184,7 +185,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          HandleCashback.setCount('mainCategoriesCount',context);
+                          HandleCashback.setCount(
+                              'mainCategoriesCount', context);
                           context.push(Routes.SUBCATEGORIES,
                               extra: state.data![index]);
                         },
@@ -192,8 +194,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                           category: state.data![index],
                           onFavorite: () async {
                             var result =
-                            await controller.toggleFavoriteMedicalService(
-                                state.data![index].id);
+                                await controller.toggleFavoriteMedicalService(
+                                    state.data![index].id);
                             print("result$result");
                             return result;
                           },
@@ -201,7 +203,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                       );
                     },
                     separatorBuilder: (BuildContext context, int index) =>
-                    const Sizer(),
+                        const Sizer(),
                   );
                 } else {
                   return const SizedBox.shrink();
@@ -238,7 +240,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                 width: 34.h,
               ),
               Routes.MAINCATEGORIESTREE,
-                  () => HandleCashback.setCount('threeDotsCount',context),
+              () => HandleCashback.setCount('threeDotsCount', context),
             ),
             _buildItemTabBar(
                 SvgPicture.asset(
@@ -246,11 +248,9 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                   height: 34.h,
                   width: 34.h,
                 ),
-                Routes.MAINCATEGORIESCARDS,
-                    (){
-                  HandleCashback.setCount('mainCategoriesSliderCount',context);
-                }
-            ),
+                Routes.MAINCATEGORIESCARDS, () {
+              HandleCashback.setCount('mainCategoriesSliderCount', context);
+            }),
           ],
         ),
       ),
@@ -258,10 +258,10 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
   }
 
   Widget _buildItemTabBar(
-      Widget icon,
-      String routeName,
-      Function() onTab,
-      ) {
+    Widget icon,
+    String routeName,
+    Function() onTab,
+  ) {
     return InkWell(
       onTap: () {
         onTab();
@@ -276,30 +276,30 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
   }
 
   BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-  _pickMeAndComeWithUWidget() {
+      _pickMeAndComeWithUWidget() {
     return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
       builder: (context, state) {
         if (state.status == StateStatus.loading) {
           return Row(
             children: List.generate(
                 2,
-                    (index) => Expanded(
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.grey[100]!,
-                    highlightColor: Colors.white24,
-                    child: Container(
-                      width: 100.h,
-                      height: kToolbarHeight * 2.h,
-                      margin: const EdgeInsets.symmetric(horizontal: 5),
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      decoration: BoxDecoration(
-                        color: AppColors.AUTH_CONTAINER_COLOR,
-                        borderRadius: BorderRadius.circular(20.r),
-                        border: Border.all(color: Colors.grey),
+                (index) => Expanded(
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey[100]!,
+                        highlightColor: Colors.white24,
+                        child: Container(
+                          width: 100.h,
+                          height: kToolbarHeight * 2.h,
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          decoration: BoxDecoration(
+                            color: AppColors.AUTH_CONTAINER_COLOR,
+                            borderRadius: BorderRadius.circular(20.r),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                )),
+                    )),
           );
         } else if (state.status == StateStatus.success) {
           return Row(
@@ -309,7 +309,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                   service: state.data?[0].service ?? RideServicesEnum.pickMe,
                   title: LocaleKeys.carpool.localize,
                   image: state.data?[0].image ?? '',
-                  onTab: ()=> HandleCashback.setCount('carPoolCount',context),
+                  onTab: () => HandleCashback.setCount('carPoolCount', context),
                   // image: Assets.carpool,
                   // isFavorite: state.data![0].is,
                   // numberOfAds: state.data![0].numberOfAds?.toInt(),
@@ -320,13 +320,14 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
               Expanded(
                 child: _buildRideSubCategoryItem(
                   service:
-                  state.data?[1].service ?? RideServicesEnum.comeWithYou,
+                      state.data?[1].service ?? RideServicesEnum.comeWithYou,
                   title: LocaleKeys.tripJoin.localize,
                   image: state.data?[1].image ?? '',
                   // image: Assets.tripJoin,
 
                   route: Routes.AVAILABLE_TRIPS,
-                  onTab: () => HandleCashback.setCount('tripJoinCount',context),
+                  onTab: () =>
+                      HandleCashback.setCount('tripJoinCount', context),
                   // isFavorite: state.data![1].isFavorite,
                   // numberOfAds: state.data![1].numberOfAds?.toInt(),
                 ),
@@ -336,8 +337,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
         } else {
           return Container(
             padding:
-            //EdgeInsets.all
-            const EdgeInsets.symmetric(horizontal: 10),
+                //EdgeInsets.all
+                const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               LocaleKeys.noRideSubcategories.localize,
               style: TextStyle(fontSize: 32.sp.w, fontWeight: FontWeight.w500),
@@ -351,17 +352,15 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
   Row _auctionAndInstallmentWidget() {
     return Row(
       children: [
-        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
-                () {
-              HandleCashback.setCount('mazadat',context);
-              context.push(Routes.MAZADAT);
-            }, Icons.group),
+        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize, () {
+          HandleCashback.setCount('mazadat', context);
+          context.push(Routes.MAZADAT);
+        }, Icons.group),
         const Sizer(),
-        itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize,
-                () {
-              HandleCashback.setCount('installments',context);
-              context.push(Routes.INSTALLMENT);
-            }, Icons.list),
+        itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize, () {
+          HandleCashback.setCount('installments', context);
+          context.push(Routes.INSTALLMENT);
+        }, Icons.list),
       ],
     );
   }
@@ -383,7 +382,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                 icon: Icons.auto_awesome,
                 iconSize: 50.h,
                 onPressed: () async {
-                  HandleCashback.setCount('booking',context);
+                  HandleCashback.setCount('booking', context);
                   int? num = await CacheManager.getInt('booking');
                   print(num);
                 }),
@@ -434,7 +433,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                 icon: Icons.star,
                 iconSize: 50.h,
                 onPressed: () {
-                  HandleCashback.setCount('beAStarCount',context);
+                  HandleCashback.setCount('beAStarCount', context);
                   context.push(Routes.BE_STAR);
                 }),
           ),
@@ -520,14 +519,13 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
     );
   }
 
-  Widget _buildRideSubCategoryItem({
-    required RideServicesEnum service,
-    required String title,
-    required String image,
-    String? route,
-    bool? isFavorite,
-    required Function() onTab
-  }) {
+  Widget _buildRideSubCategoryItem(
+      {required RideServicesEnum service,
+      required String title,
+      required String image,
+      String? route,
+      bool? isFavorite,
+      required Function() onTab}) {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: service.value()),
       onTap: () {

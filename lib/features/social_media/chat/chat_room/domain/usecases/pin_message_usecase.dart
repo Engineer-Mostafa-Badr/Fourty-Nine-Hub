@@ -14,7 +14,7 @@ class PinMessageUseCase extends UseCase<bool, PinMessageParams> {
   }
 }
 
-class PinMessageParams  {
+class PinMessageParams {
   final String chatId;
   final String messageId;
   PinMessageParams({required this.chatId, required this.messageId});

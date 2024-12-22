@@ -40,8 +40,11 @@ class AdvertisementCubit extends Cubit<AdsState> {
       this._requestComeWithMeUseCase,
       this._requestPickMeUseCase,
       this._removeFavouriteAdUseCase,
-      this._favouriteAdUseCase, this._filterAdUseCase, this._makeAdRequestUsecase, this._makeAdPremiumRequestUsecase)
-      : super( AdsState());
+      this._favouriteAdUseCase,
+      this._filterAdUseCase,
+      this._makeAdRequestUsecase,
+      this._makeAdPremiumRequestUsecase)
+      : super(AdsState());
 
   // void loadData({required String subCategoryId,required String filter}) async {
   //   // emit(state.copyWith(status: AdsStates.loading));
@@ -55,8 +58,11 @@ class AdvertisementCubit extends Cubit<AdsState> {
   //   }
   // }
 
-  void loadData({required String subCategoryId, required String filter,required bool fromTab}) async {
-    if(fromTab==true){
+  void loadData(
+      {required String subCategoryId,
+      required String filter,
+      required bool fromTab}) async {
+    if (fromTab == true) {
       emit(state.copyWith(status: AdsStates.loading));
     }
     await getAds(subCategoryId: subCategoryId, filter: filter, page: 1);
@@ -64,10 +70,13 @@ class AdvertisementCubit extends Cubit<AdsState> {
       print("initStatePageKey : $pageKey");
       getAds(subCategoryId: subCategoryId, filter: filter, page: pageKey);
     });
-    emit(state.copyWith( status: AdsStates.success));
+    emit(state.copyWith(status: AdsStates.success));
   }
 
-  void loadFilterData({required FilterModel model,required String filter,}) async {
+  void loadFilterData({
+    required FilterModel model,
+    required String filter,
+  }) async {
     emit(state.copyWith(status: AdsStates.loading));
     await filterAds(model: model, filter: filter, page: 1);
     adsPagingController.addPageRequestListener((pageKey) {
@@ -81,15 +90,17 @@ class AdvertisementCubit extends Cubit<AdsState> {
     adsPagingController.refresh();
   }
 
-  void changeState(FilterModel model,bool hasFilter){
-    emit(state.copyWith(filterModel: model,hasFilter: hasFilter));
+  void changeState(FilterModel model, bool hasFilter) {
+    emit(state.copyWith(filterModel: model, hasFilter: hasFilter));
   }
 
-  filterAds(
-      {required FilterModel model,required int page,required String filter,}) async
-  {
-    if(page==1){
-      adsPagingController.itemList=[];
+  filterAds({
+    required FilterModel model,
+    required int page,
+    required String filter,
+  }) async {
+    if (page == 1) {
+      adsPagingController.itemList = [];
     }
     // emit(state.copyWith(status: AdsStates.filterLoading));
     print("object");
@@ -97,26 +108,34 @@ class AdvertisementCubit extends Cubit<AdsState> {
     print(filter);
     print("objectHiiiiiiiiiiii");
 
-    FilterModel filterModel = FilterModel(price: model.price, props: model.props, cityId: state.city, governorateId: state.governorate, limit: 15, page: page, subCategoryId: model.subCategoryId,filter:filter);
-      final response = await _filterAdUseCase(filterModel);
-      response.fold(
-              (l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
-              (data) {
-                final isLastPage = data.length < 10;
-                if (page == 1) {
-                  print("page == 1 $page");
-                  adsPagingController.itemList = [];
-                }
-                if (isLastPage) {
-                  print("isLastPage = $isLastPage");
-                  adsPagingController.appendLastPage(data);
-                } else {
-                  print("isNotLastPage = $isLastPage");
-                  final nextPageKey = page + 1;
-                  adsPagingController.appendPage(data, nextPageKey);
-                }
-                print(data.toString());
-          });
+    FilterModel filterModel = FilterModel(
+        price: model.price,
+        props: model.props,
+        cityId: state.city,
+        governorateId: state.governorate,
+        limit: 15,
+        page: page,
+        subCategoryId: model.subCategoryId,
+        filter: filter);
+    final response = await _filterAdUseCase(filterModel);
+    response
+        .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
+            (data) {
+      final isLastPage = data.length < 10;
+      if (page == 1) {
+        print("page == 1 $page");
+        adsPagingController.itemList = [];
+      }
+      if (isLastPage) {
+        print("isLastPage = $isLastPage");
+        adsPagingController.appendLastPage(data);
+      } else {
+        print("isNotLastPage = $isLastPage");
+        final nextPageKey = page + 1;
+        adsPagingController.appendPage(data, nextPageKey);
+      }
+      print(data.toString());
+    });
   }
 
   final PagingController<int, AdModel> adsPagingController =
@@ -125,13 +144,17 @@ class AdvertisementCubit extends Cubit<AdsState> {
       {required String subCategoryId,
       required String filter,
       required int page}) async {
-    final userId = UserCubit.to.isLoggedIn?UserCubit.to.state.data?.id:'';
+    final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
 
-    if(page==1){
-      adsPagingController.itemList=[];
+    if (page == 1) {
+      adsPagingController.itemList = [];
     }
     final response = await _getAdsUseCase(GetAdsParams(
-        subCategoryId: subCategoryId, filter: filter, page: page, limit: 10,userId: userId));
+        subCategoryId: subCategoryId,
+        filter: filter,
+        page: page,
+        limit: 10,
+        userId: userId));
     response
         .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
             (data) async {
@@ -145,7 +168,6 @@ class AdvertisementCubit extends Cubit<AdsState> {
         print(data.length);
         print(data.toString());
         adsPagingController.appendLastPage(data);
-
       } else {
         print("isNotLastPage = $isLastPage");
         final nextPageKey = page + 1;
@@ -222,44 +244,45 @@ class AdvertisementCubit extends Cubit<AdsState> {
     phone = v;
     print(phone);
   }
+
   final formKey = GlobalKey<FormState>();
-  void resetRequest(){
+  void resetRequest() {
     emit(state.copyWith(makeRequest: false));
   }
- Future<bool> makeAdRequest({
+
+  Future<bool> makeAdRequest({
     required String id,
   }) async {
     bool data = false;
-      print(phone);
-      final response = await _makeAdRequestUsecase(
-        AdRequestParams(adId: id, phone: phone ?? ''),
-      );
-      response.fold((l) {
-        emit(state.copyWith(failure: l,makeRequest: false,status: AdsStates.error));
-      }, (r) {
-        data=r;
-        emit(state.copyWith(status: AdsStates.requestSuccess,makeRequest: true));
-      });
+    print(phone);
+    final response = await _makeAdRequestUsecase(
+      AdRequestParams(adId: id, phone: phone ?? ''),
+    );
+    response.fold((l) {
+      emit(state.copyWith(
+          failure: l, makeRequest: false, status: AdsStates.error));
+    }, (r) {
+      data = r;
+      emit(state.copyWith(status: AdsStates.requestSuccess, makeRequest: true));
+    });
     return data;
-
   }
-
 
   Future<bool> makeAdPremiumRequest({
     required String id,
   }) async {
     bool data = false;
-      print(phone);
-      final response = await _makeAdPremiumRequestUsecase(
-        AdRequestParams(adId: id, phone: phone ?? ''),
-      );
-      response.fold((l) {
-        emit(state.copyWith(failure: l,makeRequest: false,status: AdsStates.error));
-      }, (r) {
-        data=r;
-        emit(state.copyWith(status: AdsStates.requestSuccess,makeRequest: true));
-      });
+    print(phone);
+    final response = await _makeAdPremiumRequestUsecase(
+      AdRequestParams(adId: id, phone: phone ?? ''),
+    );
+    response.fold((l) {
+      emit(state.copyWith(
+          failure: l, makeRequest: false, status: AdsStates.error));
+    }, (r) {
+      data = r;
+      emit(state.copyWith(status: AdsStates.requestSuccess, makeRequest: true));
+    });
     return data;
   }
-
 }

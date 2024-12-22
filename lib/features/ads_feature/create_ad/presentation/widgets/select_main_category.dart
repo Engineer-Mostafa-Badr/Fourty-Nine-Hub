@@ -34,7 +34,7 @@ class SelectMainCategory extends StatelessWidget {
           width: kToolbarHeight * .5,
           height: kToolbarHeight * .5,
           source: NetworkImage(category.image)),
-      title: Label(text: category.name),
+      title: category.name == null ? null : Label(text: category.name ?? ""),
     );
   }
 }

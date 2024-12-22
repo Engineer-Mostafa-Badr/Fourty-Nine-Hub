@@ -35,6 +35,7 @@ class _DahsboardDriverScreenState extends State<DahsboardDriverScreen> {
     super.initState();
     context.read<GetAllTripCubit>().getAllTrips();
   }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -63,7 +64,8 @@ class _DahsboardDriverScreenState extends State<DahsboardDriverScreen> {
                     const SizedBox(
                       width: 5,
                     ),
-                    Text( LocaleKeys.pickupDashboard.tr(),
+                    Text(
+                      LocaleKeys.pickupDashboard.tr(),
                       style: const TextStyle(fontSize: 20),
                     )
                   ],
@@ -184,7 +186,9 @@ class NewTripWidget extends StatelessWidget {
                                               walletType: WalletTypes.balance);
                                     },
                                     child: Text(
-                                      LocaleKeys.subscribeToSendOfferContactTheClient.tr(),
+                                      LocaleKeys
+                                          .subscribeToSendOfferContactTheClient
+                                          .tr(),
                                       style: const TextStyle(
                                           fontSize: 16, color: Colors.red),
                                     ),

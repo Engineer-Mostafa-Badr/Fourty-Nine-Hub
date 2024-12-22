@@ -296,7 +296,9 @@ class _TinderCardStackState extends State<TinderCardStack> {
     return BlocBuilder<TinderViewCubit, TinderViewState>(
       builder: (context, state) {
         if (state.lastSeenModelState == TinderStates.failure ||
-            state.lastSeenModelState == TinderStates.initial) return const Sizer();
+            state.lastSeenModelState == TinderStates.initial) {
+          return const Sizer();
+        }
         return Row(
           children: [
             getStatus(context).toString().isNotEmpty

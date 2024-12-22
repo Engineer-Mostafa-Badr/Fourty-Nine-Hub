@@ -113,7 +113,7 @@ class FacebookTweetCard extends StatelessWidget {
     return Row(
       children: [
         InkWell(
-          onTap: () => context.push(Routes.OTHERSACCOUNT,extra: user.id),
+          onTap: () => context.push(Routes.OTHERSACCOUNT, extra: user.id),
           child: CircleAvatar(
             backgroundColor: Colors.white,
             backgroundImage: NetworkImage((user.image != null)
@@ -164,7 +164,10 @@ class FacebookTweetCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ReadMoreLabel(text: post.content ?? '',style: Styles.headerText(color:  Theme.of(context).primaryColor),),
+          ReadMoreLabel(
+            text: post.content ?? '',
+            style: Styles.headerText(color: Theme.of(context).primaryColor),
+          ),
           SizedBox(
             height: 10.h,
           ),
@@ -253,7 +256,10 @@ class FacebookTweetCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ReadMoreLabel(text: post.content ?? '',style: Styles.headerText(color:  Theme.of(context).primaryColor),),
+          ReadMoreLabel(
+            text: post.content ?? '',
+            style: Styles.headerText(color: Theme.of(context).primaryColor),
+          ),
           SizedBox(
             height: 10.h,
           ),

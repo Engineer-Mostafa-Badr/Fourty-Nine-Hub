@@ -125,8 +125,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                     counterText: '',
                     labelStyle:
                         const TextStyle(color: AppColors.QUANTITY_COLOR),
-                    hintStyle:
-                        const TextStyle(color: AppColors.QUANTITY_COLOR),
+                    hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
                     border: const OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.all(

@@ -196,7 +196,9 @@ class _TinderSubCategoryCardState extends State<TinderSubCategoryCard> {
   Widget _buildInfoSection(
     BuildContext context,
   ) {
-    final subCategoryName = context.isArabic?widget.subCategoryCardData.nameAr:widget.subCategoryCardData.nameEn;
+    final subCategoryName = context.isArabic
+        ? widget.subCategoryCardData.nameAr
+        : widget.subCategoryCardData.nameEn;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 2),

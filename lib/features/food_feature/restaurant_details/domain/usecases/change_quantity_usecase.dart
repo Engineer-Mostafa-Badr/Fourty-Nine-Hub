@@ -3,20 +3,18 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/repositories/restaurant_details_repo.dart';
 
-
-class ChangeQuantityUseCase
-    extends UseCase<bool, ChangeQuantityParams> {
+class ChangeQuantityUseCase extends UseCase<bool, ChangeQuantityParams> {
   final RestaurantDetailsRepo _repository;
 
   const ChangeQuantityUseCase(this._repository);
 
   @override
   Future<Either<Failure, bool>> call(ChangeQuantityParams params) {
-    return _repository.changeQuantity(params:params);
+    return _repository.changeQuantity(params: params);
   }
 }
 
-class ChangeQuantityParams{
+class ChangeQuantityParams {
   final String restaurantId;
   final String foodId;
   final int quantity;
@@ -27,10 +25,7 @@ class ChangeQuantityParams{
   });
 
   Map<String, dynamic> toJson() => {
-    'restaurantId': restaurantId,
-    "restaurantItem":{
-      'foodId': foodId,
-      'quantity': quantity
-    }
-  };
+        'restaurantId': restaurantId,
+        "restaurantItem": {'foodId': foodId, 'quantity': quantity}
+      };
 }

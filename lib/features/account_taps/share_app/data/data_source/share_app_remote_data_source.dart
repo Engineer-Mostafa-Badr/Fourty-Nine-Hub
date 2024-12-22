@@ -19,8 +19,8 @@ class ShareAppRemoteDataSourceImpl extends ShareAppRemoteDataSource {
     final response = await _apiConsumer.get(EndPoints.shareApp);
 
     return response.fold(
-      (failure)=>Left(failure),
-      (response)=>Right(ShareAppModel.fromJson(response['data'])),
+      (failure) => Left(failure),
+      (response) => Right(ShareAppModel.fromJson(response['data'])),
     );
   }
 }

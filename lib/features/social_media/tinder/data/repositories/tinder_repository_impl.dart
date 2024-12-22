@@ -23,7 +23,7 @@ class TinderRepositoryImpl extends TinderRepository {
 
   @override
   Future<Either<Failure, GiftApi>> getGifts(PaginationParams params) {
-  return _storiesRemoteDataSource.getGifts(params);
+    return _storiesRemoteDataSource.getGifts(params);
   }
 
   @override
@@ -42,7 +42,8 @@ class TinderRepositoryImpl extends TinderRepository {
   }
 
   @override
-  Future<Either<Failure, CategoryFavoritesResponse>> fetchFavouritesCategories() {
+  Future<Either<Failure, CategoryFavoritesResponse>>
+      fetchFavouritesCategories() {
     return _storiesRemoteDataSource.fetchFavouritesCategories();
   }
 
@@ -90,6 +91,4 @@ class TinderRepositoryImpl extends TinderRepository {
 // Future<Either<Failure, bool>> makeViews(String id) {
 //   return _storiesRemoteDataSource.makeViews(id);
 // }
-
-
 }

@@ -39,7 +39,11 @@ class BadgedLabel extends StatelessWidget {
       this.isBordered = false,
       this.isCentered = false,
       this.close = true,
-      this.textColor = Colors.white, this.icon, this.iconLeading, this.overFlow, this.max});
+      this.textColor = Colors.white,
+      this.icon,
+      this.iconLeading,
+      this.overFlow,
+      this.max});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +57,8 @@ class BadgedLabel extends StatelessWidget {
             height: height,
             width: width,
             margin: EdgeInsets.all(margin ?? 0),
-            padding: padding??EdgeInsets.symmetric(horizontal: 20.w.w, vertical: 6.h.h),
+            padding: padding ??
+                EdgeInsets.symmetric(horizontal: 20.w.w, vertical: 6.h.h),
             //padding: EdgeInsetsDirectional.only(end: 8,top: 5),
             decoration: BoxDecoration(
                 color: isBordered ? color : color,
@@ -81,7 +86,11 @@ class BadgedLabel extends StatelessWidget {
 
   Widget _buildLabelWidget() {
     return Row(
-      mainAxisAlignment: (icon != null&&iconLeading!=null)?MainAxisAlignment.spaceBetween:(icon != null||iconLeading!=null)?MainAxisAlignment.start:MainAxisAlignment.center,
+      mainAxisAlignment: (icon != null && iconLeading != null)
+          ? MainAxisAlignment.spaceBetween
+          : (icon != null || iconLeading != null)
+              ? MainAxisAlignment.start
+              : MainAxisAlignment.center,
       children: [
         if (icon != null)
           Icon(
@@ -91,12 +100,11 @@ class BadgedLabel extends StatelessWidget {
           ),
         Label(
           text: label,
-          style:style?? Styles.mediumText(color: textColor),
+          style: style ?? Styles.mediumText(color: textColor),
           textAlign: TextAlign.center,
           overflow: overFlow,
           maxLines: max,
         ),
-
         if (iconLeading != null)
           Icon(
             iconLeading,

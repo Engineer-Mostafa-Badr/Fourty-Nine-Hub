@@ -50,7 +50,7 @@ class ChatsState {
     this.newMessage,
     this.archived,
     this.archivedChats = const [],
-    this.listenToTypingParams ,
+    this.listenToTypingParams,
     this.listenToRecordingParams,
   });
 

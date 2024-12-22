@@ -7,13 +7,13 @@ class GiftWalletEntity {
   final String updatedAt;
   final String currency;
 
-  GiftWalletEntity(
-      {required this.id,
-      required this.userId,
-      required this.amount,
-      required this.isActive,
-      required this.createdAt,
-      required this.updatedAt,
-      required this.currency,
-      });
+  GiftWalletEntity({
+    required this.id,
+    required this.userId,
+    required this.amount,
+    required this.isActive,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.currency,
+  });
 }

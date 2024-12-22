@@ -20,7 +20,8 @@ import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_video_reel_use_case.dart';
 
 abstract class ReelsRemoteDataSource {
-  Future<Either<Failure, ReelsResponse>> getExploreReels(PaginationParams params);
+  Future<Either<Failure, ReelsResponse>> getExploreReels(
+      PaginationParams params);
 
   Future<Either<Failure, ReelsResponse>> getFollowingReels(int page);
 
@@ -58,7 +59,8 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
   ReelsRemoteDataSourceImpl(this._apiConsumer);
 
   @override
-  Future<Either<Failure, ReelsResponse>> getExploreReels(PaginationParams params) async {
+  Future<Either<Failure, ReelsResponse>> getExploreReels(
+      PaginationParams params) async {
     final response = await _apiConsumer.get(
       EndPoints.getExploreReels,
       queryParameters: params.toJson(),

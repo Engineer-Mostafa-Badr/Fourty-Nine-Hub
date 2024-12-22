@@ -66,7 +66,13 @@ class LiveRepositoryImpl extends LiveRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> sendPointListener(PointsParams params) {
-    return _liveDataSource.sendPointListener(params);
+  Future<Either<Failure, bool>> sendPointSocket(PointsParams params) {
+    return _liveDataSource.sendPointSocket(params);
   }
+
+  @override
+  void sendPointListener() {
+    return _liveDataSource.sendPointListener();
+  }
+
 }

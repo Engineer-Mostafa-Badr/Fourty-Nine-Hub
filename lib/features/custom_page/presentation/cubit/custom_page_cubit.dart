@@ -32,7 +32,9 @@ class CustomPageCubit extends Cubit<CustomPageState> {
       this._fetchNavigateBarUseCase,
       this._updateNavigateBarUseCase,
       this._favouriteCatUseCase,
-      this._updateFavouriteCatUseCase, this._fetchActivateUseCase, this._updateActivateUseCase)
+      this._updateFavouriteCatUseCase,
+      this._fetchActivateUseCase,
+      this._updateActivateUseCase)
       : super(const CustomPageState());
 
   // void loadData() async {

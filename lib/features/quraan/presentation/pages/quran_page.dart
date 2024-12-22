@@ -6,6 +6,8 @@ import 'package:fourtyninehub/features/quraan/presentation/pages/quran_details.d
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class QuranPage extends StatefulWidget {
+  const QuranPage({super.key});
+
   @override
   State<QuranPage> createState() => _QuranPageState();
 }
@@ -42,7 +44,9 @@ class _QuranPageState extends State<QuranPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => QuranViewPage(
-                              surahId: state.quranSurah![index].surahNo, pageNumber: 1,),
+                            surahId: state.quranSurah![index].surahNo,
+                            pageNumber: 1,
+                          ),
                         ),
                       );
                     },
@@ -54,7 +58,9 @@ class _QuranPageState extends State<QuranPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => QuranViewPage(
-                                surahId: state.quranSurah![index].surahNo, pageNumber: 1,),
+                              surahId: state.quranSurah![index].surahNo,
+                              pageNumber: 1,
+                            ),
                           ),
                         );
                       },

@@ -1,8 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -14,12 +12,14 @@ class CreateDoctorIDExpiryDatePicker extends StatelessWidget {
       this.title,
       this.textStyle,
       this.borderColor,
+      this.isAuthentcation = false,
       this.borderWidth});
   final String? Function(Object? value)? validator;
   final dynamic Function(DateTime? date)? onDateSelected;
   final String? title;
   final Color? borderColor;
   final TextStyle? textStyle;
+  final bool isAuthentcation;
   final double? borderWidth;
   @override
   Widget build(BuildContext context) {
@@ -31,6 +31,7 @@ class CreateDoctorIDExpiryDatePicker extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DatePickerField(
+              isAuthentcation: isAuthentcation,
               borderWidth: borderWidth,
               borderColor: field.hasError ? Colors.red : borderColor,
               title: title ?? (context.isArabic?'تاريخ انتهاء الهوية':'ID Expiry Date'),

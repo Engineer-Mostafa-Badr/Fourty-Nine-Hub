@@ -66,7 +66,9 @@ class TripCard extends StatelessWidget {
                     color: AppColors.PRIMARY_COLOR),
                 const Sizer(),
                 Label(
-                  text: context.isArabic?trip.category?.nameAr??'':trip.category?.nameEn ?? '',
+                  text: context.isArabic
+                      ? trip.category?.nameAr ?? ''
+                      : trip.category?.nameEn ?? '',
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
@@ -76,8 +78,7 @@ class TripCard extends StatelessWidget {
                       onPressed: () {
                         showAreYouSure(
                             title: LocaleKeys.alert.localize,
-                            subTitle:
-                            LocaleKeys.areDeleteThisAd.localize,
+                            subTitle: LocaleKeys.areDeleteThisAd.localize,
                             action: () {
                               if (onDelete != null) {
                                 onDelete!(trip.id);
@@ -110,7 +111,8 @@ class TripCard extends StatelessWidget {
             if (trip.offers.isNotEmpty)
               Row(
                 children: [
-                  TextAppButton(label: LocaleKeys.offers.localize, onPressed: () {}),
+                  TextAppButton(
+                      label: LocaleKeys.offers.localize, onPressed: () {}),
                   const Sizer(),
                   Expanded(
                     child: SizedBox(
@@ -245,8 +247,8 @@ class TripCard extends StatelessWidget {
                       })),
             ],
           ),
-        if (request.isAccepted)  BadgedLabel(label: LocaleKeys.Accept.localize),
-        if (request.isRejected)  BadgedLabel(label: LocaleKeys.reject.localize)
+        if (request.isAccepted) BadgedLabel(label: LocaleKeys.Accept.localize),
+        if (request.isRejected) BadgedLabel(label: LocaleKeys.reject.localize)
       ],
     );
   }

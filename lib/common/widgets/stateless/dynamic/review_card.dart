@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/driver_review_entity.dart';
 
 import '../../../../res/style/app_colors.dart';

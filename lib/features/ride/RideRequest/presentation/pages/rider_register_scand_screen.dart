@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -7,6 +10,8 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_for
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/pickers/date/id_expiry_date_picker.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
@@ -15,6 +20,8 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class RiderRegisterScandScreen extends StatefulWidget {
   const RiderRegisterScandScreen({super.key, required this.formKey});
@@ -36,6 +43,7 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
   FocusNode pricingPerKmFocusNode = FocusNode();
   FocusNode vehicleTypeFocusNode = FocusNode();
   FocusNode vehicleYearFocusNode = FocusNode();
+  FocusNode carModelFocusNode = FocusNode();
   FocusNode model = FocusNode();
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
@@ -49,20 +57,8 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
   TextEditingController pricingPerKmController = TextEditingController();
   TextEditingController vehicleTypeController = TextEditingController();
   TextEditingController vehicleYearController = TextEditingController();
-  // GlobalKey<FormState> formKey = GlobalKey();
+  TextEditingController carModelController = TextEditingController();
   bool smoker = false;
-  // String? vehicleModel;
-  // String? vehicleBrand;
-  // String? vehicleColor;
-  // "vehicleType" : "car",
-  //   "vehicleYear" : "1975",
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // context.read<ShippingCubit>().getBannerData();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,9 +89,10 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                   children: [
                     Expanded(
                       child: FirstNameTextFormField(
+                        isAuthentcation: true,
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
-                            return "First name is required!";
+                            return LocaleKeys.firstNameIsRequired.tr();
                           }
                           return null;
                         },
@@ -109,9 +106,10 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                     const Sizer(),
                     Expanded(
                       child: LastNameTextFormField(
+                        isAuthentcation: true,
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
-                            return "Last name is required!";
+                            return LocaleKeys.lastNameIsRequired.tr();
                           }
                           return null;
                         },
@@ -130,14 +128,15 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                   children: [
                     Flexible(
                       child: DefaultTextFormField(
+                        isAuthentcation: true,
                         currentFocusNode: phoneFocusNode,
-                        nextFocusNode: vehicleModelFocusNode,
+                        // nextFocusNode: carModelFocusNode,
                         hint: Labels.phone,
                         hintColor: AppColors.PRIMARY_COLOR,
                         currentController: phoneController,
                         validator: (p0) {
                           if (p0 == null || p0.isEmpty) {
-                            return "Phone is required!";
+                            return LocaleKeys.phoneIsRequired.tr();
                           }
                           return null;
                         },
@@ -151,7 +150,7 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                 FormField(
                   validator: (value) {
                     if (registerRider.model.carImage == null) {
-                      return "This field is required!";
+                      return LocaleKeys.thisFieldIsRequired.tr();
                     }
                     return null;
                   },
@@ -166,9 +165,9 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    "Car Picture",
-                                    style: TextStyle(
+                                  Text(
+                                    LocaleKeys.carPicture.tr(),
+                                    style: const TextStyle(
                                         fontSize: 17,
                                         color: AppColors.PRIMARY_COLOR,
                                         fontWeight: FontWeight.w600),
@@ -181,10 +180,12 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       ImageValidation(
+                                        isAuthentcation: true,
                                         validator: (value) {
                                           return registerRider.validation(
-                                              message:
-                                                  "This field is required.",
+                                              message: LocaleKeys
+                                                  .thisFieldIsRequired
+                                                  .tr(),
                                               condition: registerRider
                                                       .model.carImage ==
                                                   null);
@@ -220,9 +221,9 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Label(
-                                    text: "ID",
-                                    style: TextStyle(
+                                  Label(
+                                    text: LocaleKeys.id.tr(),
+                                    style: const TextStyle(
                                         fontSize: 17,
                                         color: AppColors.PRIMARY_COLOR,
                                         fontWeight: FontWeight.w600),
@@ -239,10 +240,12 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
                                           ImageValidation(
+                                            isAuthentcation: true,
                                             validator: (value) {
                                               return registerRider.validation(
-                                                  message:
-                                                      "This field is required.",
+                                                  message: LocaleKeys
+                                                      .thisFieldIsRequired
+                                                      .tr(),
                                                   condition: registerRider.model
                                                           .idImageInFront ==
                                                       null);
@@ -257,10 +260,12 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                                           ),
                                           const Sizer(),
                                           ImageValidation(
+                                            isAuthentcation: true,
                                             validator: (value) {
                                               return registerRider.validation(
-                                                  message:
-                                                      "This field is required.",
+                                                  message: LocaleKeys
+                                                      .thisFieldIsRequired
+                                                      .tr(),
                                                   condition: registerRider.model
                                                           .idImageInBehind ==
                                                       null);
@@ -327,9 +332,12 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     ImageValidation(
+                                      isAuthentcation: true,
                                       validator: (value) {
                                         return registerRider.validation(
-                                            message: "This field is required.",
+                                            message: LocaleKeys
+                                                .thisFieldIsRequired
+                                                .tr(),
                                             condition: registerRider.model
                                                     .drivingImageInFront ==
                                                 null);
@@ -343,9 +351,12 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                                       hint: Labels.inFront,
                                     ),
                                     ImageValidation(
+                                      isAuthentcation: true,
                                       validator: (value) {
                                         return registerRider.validation(
-                                            message: "This field is required.",
+                                            message: LocaleKeys
+                                                .thisFieldIsRequired
+                                                .tr(),
                                             condition: registerRider
                                                     .model.drivingImageBehind ==
                                                 null);
@@ -400,9 +411,12 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     ImageValidation(
+                                      isAuthentcation: true,
                                       validator: (value) {
                                         return registerRider.validation(
-                                            message: "This field is required.",
+                                            message: LocaleKeys
+                                                .thisFieldIsRequired
+                                                .tr(),
                                             condition: registerRider.model
                                                     .licenseImageInFront ==
                                                 null);
@@ -416,9 +430,12 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                                       hint: Labels.inFront,
                                     ),
                                     ImageValidation(
+                                      isAuthentcation: true,
                                       validator: (value) {
                                         return registerRider.validation(
-                                            message: "This field is required.",
+                                            message: LocaleKeys
+                                                .thisFieldIsRequired
+                                                .tr(),
                                             condition: registerRider
                                                     .model.licenseImgeBehind ==
                                                 null);
@@ -461,15 +478,16 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                   children: [
                     Flexible(
                       child: DefaultTextFormField(
+                        isAuthentcation: true,
                         validator: (p0) {
                           if (p0 == null || p0.isEmpty) {
-                            return "This field is required!";
+                            return LocaleKeys.thisFieldIsRequired.tr();
                           }
                           return null;
                         },
                         currentController: idNumberController,
                         currentFocusNode: idNumberFocusNode,
-                        hint: "ID Number",
+                        hint: LocaleKeys.idNumber.tr(),
                       ),
                     ),
                     const SizedBox(
@@ -477,16 +495,16 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                     ),
                     Flexible(
                       child: DefaultTextFormField(
-                        validator: (p0) {
-                          if (p0 == null || p0.isEmpty) {
-                            return "This field is required!";
-                          }
-                          return null;
-                        },
-                        currentController: plateNumberController,
-                        currentFocusNode: plateNumberFocusNode,
-                        hint: "Plate information",
-                      ),
+                          isAuthentcation: true,
+                          validator: (p0) {
+                            if (p0 == null || p0.isEmpty) {
+                              return LocaleKeys.thisFieldIsRequired.tr();
+                            }
+                            return null;
+                          },
+                          currentController: plateNumberController,
+                          currentFocusNode: plateNumberFocusNode,
+                          hint: LocaleKeys.plateInformation.tr()),
                     ),
                   ],
                 ),
@@ -495,9 +513,10 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                   height: 10,
                 ),
                 CreateDoctorIDExpiryDatePicker(
+                  isAuthentcation: true,
                   validator: (value) {
                     if (registerRider.model.idExpiryDate == null) {
-                      return "This Faild is required!";
+                      return LocaleKeys.thisFieldIsRequired.tr();
                     }
                     return null;
                   },
@@ -517,13 +536,14 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                   height: 10,
                 ),
                 CreateDoctorIDExpiryDatePicker(
+                  isAuthentcation: true,
                   validator: (value) {
                     if (registerRider.model.drvingExpiryDate == null) {
-                      return "This Faild is required!";
+                      return LocaleKeys.thisFieldIsRequired.tr();
                     }
                     return null;
                   },
-                  title: "Driving License Expiry Date",
+                  title: LocaleKeys.drivingLicenseExpiryDate.tr(),
                   textStyle: const TextStyle(
                       fontSize: 17,
                       color: AppColors.PRIMARY_COLOR,
@@ -539,9 +559,10 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                   height: 10,
                 ),
                 CreateDoctorIDExpiryDatePicker(
+                  isAuthentcation: true,
                   validator: (value) {
                     if (registerRider.model.licenseExpiryDate == null) {
-                      return "This Faild is required!";
+                      return LocaleKeys.thisFieldIsRequired.tr();
                     }
                     return null;
                   },
@@ -551,7 +572,7 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                     }
                   },
                   borderWidth: 1,
-                  title: "License Expiry Date",
+                  title: LocaleKeys.licenseExpiryDate.tr(),
                   textStyle: const TextStyle(
                       fontSize: 17,
                       color: AppColors.PRIMARY_COLOR,
@@ -584,6 +605,20 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                     );
                   },
                 ),
+                const Sizer(),
+                DefaultTextFormField(
+                  isAuthentcation: true,
+                  currentFocusNode: carModelFocusNode,
+                  hint: Labels.model,
+                  hintColor: AppColors.PRIMARY_COLOR,
+                  currentController: phoneController,
+                  validator: (p0) {
+                    if (p0 == null || p0.isEmpty) {
+                      return LocaleKeys.phoneIsRequired.tr();
+                    }
+                    return null;
+                  },
+                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -610,29 +645,24 @@ class _RiderRegisterScandScreenState extends State<RiderRegisterScandScreen> {
                     ),
                     label: Labels.submit,
                     onPressed: () {
-                      if (widget.formKey.currentState!.validate()) {
+                      log("message");
+                      if (context.isUserLoggedIn) {
+                        // if (widget.formKey.currentState!.validate()) {
+                        log(firstNameController.text);
                         registerRider.model.driverFirstName =
                             firstNameController.text;
                         registerRider.model.driverLastName =
                             lastNameController.text;
                         registerRider.model.phone = phoneController.text;
                         registerRider.model.idNumber = idNumberController.text;
+                        registerRider.model.carModel = carModelController.text;
                         registerRider.model.plateInfo =
                             plateNumberController.text;
                         registerRider.registerTow(context);
+                        // }
+                      } else {
+                        context.push(Routes.LOGIN);
                       }
-                      // if (formKey.currentState!.validate()) {
-                      //   shippingcubit.model.firstName =
-                      //       firstNameController.text;
-                      //   shippingcubit.model.lastName =
-                      //       lastNameController.text;
-                      //   shippingcubit.model.phone = phoneController.text;
-                      //   shippingcubit.model.idNumber =
-                      //       idNumberController.text;
-                      //   shippingcubit.model.plateInfromation =
-                      //       plateNumberController.text;
-                      //   context.read<ShippingCubit>().register();
-                      // }
                     },
                   ),
                 ),

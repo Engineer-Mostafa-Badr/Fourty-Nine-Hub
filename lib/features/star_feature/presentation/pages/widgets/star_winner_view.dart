@@ -35,7 +35,8 @@ class _StarWinnerViewState extends State<StarWinnerView> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       _cubit.fetchWinnerStar();
     }
   }
@@ -63,17 +64,17 @@ class _StarWinnerViewState extends State<StarWinnerView> {
             child: ListView.separated(
               controller: _scrollController,
               physics: const AlwaysScrollableScrollPhysics(),
-              itemBuilder: (context,index) {
+              itemBuilder: (context, index) {
                 if (index == _cubit.winner.length) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                return buildItem(context,state.winner![index]);
+                return buildItem(context, state.winner![index]);
               },
-              separatorBuilder: (context,index)=>Divider(
+              separatorBuilder: (context, index) => Divider(
                 height: 40.h,
                 color: AppColors.GREY_NORMAL_COLOR,
               ),
-              itemCount: state.winner?.length ??0,
+              itemCount: state.winner?.length ?? 0,
             ),
           );
         },
@@ -81,76 +82,74 @@ class _StarWinnerViewState extends State<StarWinnerView> {
     );
   }
 
-  Widget buildItem(context,StarWinnerEntity star) {
+  Widget buildItem(context, StarWinnerEntity star) {
     final String formattedDateTime =
-    DateFormat('dd/MM/yyyy')
-        .format(star.createdAt!);
+        DateFormat('dd/MM/yyyy').format(star.createdAt!);
 
     DateTime dateTime = DateTime.parse('${star.createdAt!}');
 
     // Get the month
     int month = dateTime.month;
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
-        decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.circular(12.r)),
-        child: Row(
-          children: [
-            InkWell(
-              onTap: () {
-                // context.push(Routes.OTHERSACCOUNT, extra: star.user.id);
-              },
-              child: ImageFromInternet(
-                image:
-                    star.user.image,
-                //  isCircle: true,
-                defaultLogo: false,
-                width: 120.w,
-                height: 120.h,
-                borderRadius: BorderRadius.circular(10.r),
-                fit: BoxFit.fill,
+      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+      decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(12.r)),
+      child: Row(
+        children: [
+          InkWell(
+            onTap: () {
+              // context.push(Routes.OTHERSACCOUNT, extra: star.user.id);
+            },
+            child: ImageFromInternet(
+              image: star.user.image,
+              //  isCircle: true,
+              defaultLogo: false,
+              width: 120.w,
+              height: 120.h,
+              borderRadius: BorderRadius.circular(10.r),
+              fit: BoxFit.fill,
+            ),
+          ),
+          const Sizer(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Label(
+                text: '${star.user.firstName} ${star.user.lastName}',
+                color: Theme.of(context).scaffoldBackgroundColor,
               ),
-            ),
-            Sizer(),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Label(
-                  text: '${star.user.firstName} ${star.user.lastName}',
-                  color: Theme.of(context).scaffoldBackgroundColor,
+              Label(
+                text: '${LocaleKeys.day.localize}: $formattedDateTime',
+                style: Styles.smallText(
+                  fontSize: 50.sp,
+                  color: AppColors.GREY_NORMAL_COLOR,
                 ),
-                Label(
-                  text: '${LocaleKeys.day.localize}: $formattedDateTime',
-                  style: Styles.smallText(
-                    fontSize: 50.sp,
-                    color: AppColors.GREY_NORMAL_COLOR,
-                  ),
+              ),
+              Label(
+                text: '${LocaleKeys.month.localize}: $month',
+                style: Styles.smallText(
+                  fontSize: 50.sp,
+                  color: AppColors.GREY_NORMAL_COLOR,
                 ),
-                Label(
-                  text: '${LocaleKeys.month.localize}: $month',
-                  style: Styles.smallText(
-                    fontSize: 50.sp,
-                    color: AppColors.GREY_NORMAL_COLOR,
-                  ),
+              ),
+              Label(
+                text: '${LocaleKeys.numOfWins.localize}: ${star.numberOfWins}',
+                style: Styles.smallText(
+                  fontSize: 50.sp,
+                  color: AppColors.GREY_NORMAL_COLOR,
                 ),
-                Label(
-                  text: '${LocaleKeys.numOfWins.localize}: ${star.numberOfWins}',
-                  style: Styles.smallText(
-                    fontSize: 50.sp,
-                    color: AppColors.GREY_NORMAL_COLOR,
-                  ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            Text(
-              '🏆',
-              style: Styles.mediumText(
-                  color: AppColors.SECONDARY_COLOR, fontSize: 150.sp),
-            )
-          ],
-        ),
-      );
+              ),
+            ],
+          ),
+          const Spacer(),
+          Text(
+            '🏆',
+            style: Styles.mediumText(
+                color: AppColors.SECONDARY_COLOR, fontSize: 150.sp),
+          )
+        ],
+      ),
+    );
   }
 }

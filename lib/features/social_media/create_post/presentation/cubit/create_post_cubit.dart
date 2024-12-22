@@ -438,6 +438,4 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     selectedImages = [];
     emit(state.copyWith(images: [])); // Emit updated state to notify listeners
   }
-
-
 }
