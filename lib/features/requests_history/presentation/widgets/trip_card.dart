@@ -266,47 +266,87 @@ class TripCard extends StatelessWidget {
                                       color: AppColors.GREY_DARK_COLOR,
                                     ),
                                   ),
-                                  Row(
+                                  Column(
                                     children: [
-                                      Container(
-                                        width: 50,
-                                        height: 50,
-                                        clipBehavior: Clip.antiAlias,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape
-                                              .circle, // Circle shape for the image
-                                        ),
-                                        child: Image.network(
-                                          trip.socketDriverImage ??
-                                              trip.noSocketDriverImage ??
-                                              "",
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 16,
-                                      ),
-                                      Text(
-                                        trip.socketfirstName ??
-                                            trip.noSocketfirstName ??
-                                            "",
-                                        style: Styles.mediumText(
-                                            fontSize: 32,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      SizedBox(
-                                        width: 4,
-                                      ),
-                                      Text(
-                                        trip.socketLastName ??
-                                            trip.noSocketLastName ??
-                                            "",
-                                        style: Styles.mediumText(
-                                            fontSize: 32,
-                                            fontWeight: FontWeight.w500),
+                                      Row(
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Container(
+                                                width: 50,
+                                                height: 50,
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Image.network(
+                                                  trip.socketDriverImage ??
+                                                      trip.noSocketDriverImage ??
+                                                      "",
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      trip.socketfirstName ??
+                                                          trip.noSocketfirstName ??
+                                                          "",
+                                                      style: Styles.mediumText(
+                                                          fontSize: 32,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 4,
+                                                    ),
+                                                    Text(
+                                                      trip.socketLastName ??
+                                                          trip.noSocketLastName ??
+                                                          "",
+                                                      style: Styles.mediumText(
+                                                          fontSize: 32,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.7,
+                                                  child: Text(
+                                                    "${trip.carModelSocket ?? trip.carModelNoSocket ?? ""} , ${trip.plateInfoSocket ?? trip.platInfoNoSocket ?? ""}",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 2,
+                                                    style: Styles.mediumText(
+                                                      fontSize: 32,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: AppColors
+                                                          .DARK_GRAY_COLOR,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
+
                                   const Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 16),

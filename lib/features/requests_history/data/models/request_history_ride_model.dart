@@ -21,6 +21,10 @@ class RequestHistoryRideModel {
   final DriverModel? driver;
   final SubCategoryModel? category;
   final String? userId;
+  final String? carModelSocket;
+  final String? carModelNoSocket;
+  final String? plateInfoSocket;
+  final String? platInfoNoSocket;
   final String? riderId;
   final String? subCategoryId;
   final String? carTypeId;
@@ -48,6 +52,10 @@ class RequestHistoryRideModel {
     this.fromAddress,
     this.noSocketfirstName,
     this.socketfirstName,
+    this.carModelNoSocket,
+    this.carModelSocket,
+    this.platInfoNoSocket,
+    this.plateInfoSocket,
     this.socketLastName,
     this.noSocketLastName,
     this.noSocketDriverImage,
@@ -94,6 +102,10 @@ class RequestHistoryRideModel {
       toCoordinates: json['targetLocation']?['coordinates']?.cast<double>(),
       fromAddress: json['fromTitle'],
       toAddress: json['toTitle'],
+      carModelNoSocket: json['driverId']?['carModel'],
+      carModelSocket: json['riderId']?['carModel'],
+      platInfoNoSocket: json['driverId']?['riderInfoId']['plateInfo'],
+      plateInfoSocket: json['riderId']?['riderInfoId']['plateInfo'],
       duration: json['duration'],
       socketfirstName: json['riderId']?['userId']['firstName'],
       socketLastName: json['riderId']?['userId']['lastName'],
