@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/rating_stars.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -15,14 +16,21 @@ import 'package:fourtyninehub/core/utils/validator.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/add_doctor_rating_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/divider.dart';
-import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
+import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
+import 'package:fourtyninehub/features/zoom/presentation/pages/meeting_room.dart';
+import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/functions/helper/launch_url.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
+import 'package:slide_countdown/slide_countdown.dart';
 
 class DoctorDetailsAccountHeader extends StatefulWidget {
   const DoctorDetailsAccountHeader({super.key});
@@ -37,14 +45,49 @@ class _DoctorDetailsAccountHeaderState extends State<DoctorDetailsAccountHeader>
   final phoneController = TextEditingController();
   int rating = 3;
 
+  TimeOfDay stringToTimeOfDay(String timeString) {
+    // Split the string into hours and minutes
+    final parts = timeString.split(' ');
+    final hourPart = parts[0].replaceAll('h', ''); // Remove the 'h'
+    final minutePart = parts[1].replaceAll('m', ''); // Remove the 'm'
+
+    // Parse the values
+    final hours = int.tryParse(hourPart) ?? 0;
+    final minutes = int.tryParse(minutePart) ?? 0;
+
+    // Return a TimeOfDay instance
+    return TimeOfDay(hour: hours, minute: minutes);
+  }
+
+  bool isNonZeroTime(String timeString) {
+    // Split the string into hours and minutes
+    final parts = timeString.split(' ');
+    final hourPart = parts[0].replaceAll('h', ''); // Remove the 'h'
+    final minutePart = parts[1].replaceAll('m', ''); // Remove the 'm'
+
+    // Parse the values
+    final hours = int.tryParse(hourPart) ?? 0;
+    final minutes = int.tryParse(minutePart) ?? 0;
+
+    // Check if either hours or minutes are non-zero
+    return hours != 0 || minutes != 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     final doctorDetailsCubit = context.read<DoctorDetailsCubit>();
     final doctor = doctorDetailsCubit.doctor;
+    TimeOfDay timeToStart =doctor.timeToStart.isNotEmpty? stringToTimeOfDay(doctor.timeToStart):TimeOfDay.now();
+    bool isNonZero= isNonZeroTime(doctor.timeToStart);
+    print('isBet ${doctor.isBetweenStartAndEnd}');
+    print('doctorRoomMeeting ${doctor.meetingData?.toJson()}');
+    print(isNonZero);
     final formKey = GlobalKey<FormState>();
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SquareImage(
               source: NetworkImage(
@@ -57,7 +100,7 @@ class _DoctorDetailsAccountHeaderState extends State<DoctorDetailsAccountHeader>
             const Sizer(),
             Expanded(
                 child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Row(
                   children: [
@@ -83,7 +126,7 @@ class _DoctorDetailsAccountHeaderState extends State<DoctorDetailsAccountHeader>
                       ),
                     ),
                     AppButton(
-                      label: "Rating",
+                      label: LocaleKeys.rating.localize,
                       icon: Icons.star,
                       textColor: Colors.amber,
                       padding: 10.w,
@@ -92,7 +135,7 @@ class _DoctorDetailsAccountHeaderState extends State<DoctorDetailsAccountHeader>
                       onPressed: () {
                         showModalBottomSheet(
                           backgroundColor:
-                          Colors
+                          context.isDarkMode?AppColors.DARK_BLUE_COLOR:Colors
                               .white,
                           context:
                           context,
@@ -131,7 +174,7 @@ class _DoctorDetailsAccountHeaderState extends State<DoctorDetailsAccountHeader>
                                 Column(
                                   children: [
                                     Label(
-                                      text: "Rate Doctor",
+                                      text: LocaleKeys.rateDoctor.localize,
                                       style: Styles.headerText(),
                                     ),
                                     Sizer(
@@ -169,8 +212,8 @@ class _DoctorDetailsAccountHeaderState extends State<DoctorDetailsAccountHeader>
                                           onChanged: (c) {},
                                           validator: (c) => Validator().emptyValidation(c),
                                           controller: commentController,
-
-                                          decoration: InputDecoration(hintText: LocaleKeys.add_comment_hint.localize,fillColor: Colors.white, hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
+                                          style: Styles.headerText(color:context.isDarkMode? Colors.black:null),
+                                          decoration: InputDecoration(hintText: LocaleKeys.add_comment_hint.localize,fillColor: AppColors.DARK_GRAY_COLOR, hintStyle: Styles.mediumText(color: Colors.white)),
                                         ),
                                       ),
                                       Sizer(
@@ -184,7 +227,8 @@ class _DoctorDetailsAccountHeaderState extends State<DoctorDetailsAccountHeader>
                                           keyboardType: TextInputType.number,
                                           onChanged: (c) {},
                                           controller: phoneController,
-                                          decoration: InputDecoration(hintText: LocaleKeys.phoneNumber.localize, fillColor: Colors.white, hintStyle: Styles.mediumText(color: AppColors.DARK_GRAY_COLOR)),
+                                          style: Styles.headerText(color:context.isDarkMode? Colors.black:null),
+                                          decoration: InputDecoration(hintText: LocaleKeys.phoneNumber.localize, fillColor: AppColors.DARK_GRAY_COLOR, hintStyle: Styles.mediumText(color: Colors.white)),
                                         ),
                                       ),
                                     ],)),
@@ -199,15 +243,14 @@ class _DoctorDetailsAccountHeaderState extends State<DoctorDetailsAccountHeader>
                                                   if(result==true){
                                                     commentController.clear();
                                                     phoneController.clear();
-                                                    rating=0;
+                                                    rating=3;
                                                     setState(() {});
                                                     Navigator.of(context).pop();
-                                                    showSuccessMessage(context, "message");
-
+                                                    showSuccessMessage(context, context.isArabic?"تم اضافة التقييم بنجاح":"Rating added successfully");
                                                   }else{
                                                     commentController.clear();
                                                     phoneController.clear();
-                                                    rating=0;
+                                                    rating=3;
                                                     setState(() {});
                                                     Navigator.of(context).pop();
                                                     showErrorMessage(context, "message");
@@ -259,29 +302,38 @@ class _DoctorDetailsAccountHeaderState extends State<DoctorDetailsAccountHeader>
                   height: 30.h,
                 ),
                 BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
-                  buildWhen: (previous, current) =>
-                      current is DoctorDetailsCheckCallAndMessage ||
-                      current is DoctorDetailsInitial,
                   builder: (context, state) {
-                    if (state is DoctorDetailsCheckCallAndMessage &&
-                        state.enabled) {
+                    if (state.enabled==true) {
                       return Row(
                         children: [
                           Expanded(
                             child: AppButton(
-                              label: Labels.call,
+                              label: LocaleKeys.call.localize,
                               icon: Icons.call,
+                              color: Colors.white,
                               backColor: AppColors.PRIMARY_COLOR,
-                              onPressed: () {},
+                              textColor: Colors.white,
+                              // onPressed: () {},
+                              onPressed: !context.read<UserCubit>().isLoggedIn?()=>context.push(Routes.LOGIN):state.enabled == true ? () {
+                                LaunchURLHelper().call( phone: state.doctor?.phone??'');
+                              } : () async{
+                                SubscriptionMethod().subscribe(subscribeId: state.doctor?.subCategory.id??'', title: LocaleKeys.ads.localize);
+                              },
                             ),
                           ),
                           const Sizer(),
                           Expanded(
                             child: AppButton(
-                              label: Labels.message,
+                              label: LocaleKeys.message.localize,
                               icon: Icons.message,
+                              color: Colors.white,
+                              textColor: Colors.white,
                               backColor: AppColors.PRIMARY_COLOR,
-                              onPressed: () {},
+                              onPressed: !context.read<UserCubit>().isLoggedIn?()=>context.push(Routes.LOGIN):state.enabled == true ? () {
+                                LaunchURLHelper().call( phone: state.doctor?.phone??'');
+                              } : () async{
+                                SubscriptionMethod().subscribe(subscribeId: state.doctor?.subCategory.id??'', title: LocaleKeys.ads.localize);
+                              },
                             ),
                           ),
                         ],
@@ -291,19 +343,26 @@ class _DoctorDetailsAccountHeaderState extends State<DoctorDetailsAccountHeader>
                         children: [
                           Expanded(
                             child: AppButton(
-                              label: Labels.call,
+                              label: LocaleKeys.call.localize,
                               icon: Icons.call,
                               backColor: AppColors.DARK_GRAY_COLOR,
-                              onPressed: () {},
+                              onPressed: !context.read<UserCubit>().isLoggedIn?()=>context.push(Routes.LOGIN):state.enabled == true ? () {
+                                LaunchURLHelper().call( phone: state.doctor?.phone??'');
+                              } : () async{
+                                SubscriptionMethod().subscribe(subscribeId: state.doctor?.subCategory.id??'', title: LocaleKeys.ads.localize);
+                              },
                             ),
                           ),
                           const Sizer(),
                           Expanded(
                             child: AppButton(
-                              label: Labels.message,
+                              label: LocaleKeys.message.localize,
                               icon: Icons.message,
                               backColor: AppColors.DARK_GRAY_COLOR,
-                              onPressed: () {},
+                              onPressed: !context.read<UserCubit>().isLoggedIn?()=>context.push(Routes.LOGIN):state.enabled == true ? () {
+                              } : () async{
+                                SubscriptionMethod().subscribe(subscribeId: state.doctor?.subCategory.id??'', title: LocaleKeys.ads.localize);
+                              },
                             ),
                           ),
                         ],
@@ -316,23 +375,47 @@ class _DoctorDetailsAccountHeaderState extends State<DoctorDetailsAccountHeader>
                 ),
                 Row(
                   children: [
-                    serviceLocator<HealthSharedData>()
-                                .doctorSearchParams
-                                .bookingType ==
-                            BookingTypes.call
-                        ? Expanded(
-                            flex: 4,
-                            child: AppButton(
-                              label: Labels.onlineSession,
-                              onPressed: () {
+                    doctor.isAfterEnd?const Spacer(flex: 4):doctor.isBetweenStartAndEnd==true?Expanded(
+                      flex: 4,
+                      child: AppButton(
+                        label: LocaleKeys.onlineSession.localize,
+                        style: Styles.mediumText(color: Colors.white),
+                        onPressed: () async{
+                          bool result = await context.read<StreamCubit>().joinNewMeeting(doctor.meetingData?.roomId??'');
+                          if (result) {
+                            await context.read<SecretsCubit>().getAllSecrets();
+                            context.go(Routes.MEETINGROOM,
+                                extra: MeetingRoomArguments(
+                                    liveID:doctor.meetingData?.roomId??'',
+                                    isHost:false,
+                                    userName:context
+                                        .read<UserCubit>()
+                                        .state
+                                        .data?.fullName??''));
+                          }
 
-
-
-
+                        },
+                      ),
+                    ):(doctor.timeToStart.isNotEmpty&&isNonZero)?Expanded(
+                      flex: 4,
+                      child: Center(
+                        child: Column(
+                          children: [
+                            Text(context.isArabic?'لديك جلسة بعد':'Online Session After',style: Styles.mediumText(),),
+                            SlideCountdown(
+                              style: Styles.headerText(color: Colors.white),
+                              duration: Duration(minutes: timeToStart.minute,hours: timeToStart.hour),
+                              onDone: (){
+                                setState(() {
+                                  doctor.isBetweenStartAndEnd=true;
+                                });
                               },
                             ),
-                          )
-                        : const Spacer(flex: 4),
+                          ],
+                        ),
+                      ),
+                    )
+                         : const Spacer(flex: 4),
                     const Sizer(),
                     Expanded(
                       child: InkWell(

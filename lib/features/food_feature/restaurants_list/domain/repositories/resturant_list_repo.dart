@@ -23,8 +23,10 @@ abstract class RestaurantListRepo {
 
   Future<Either<Failure, int>> numOfRestaurants();
   Future<Either<Failure, bool>> changeConnectivity(bool isActive);
-  Future<Either<Failure, bool>> toggleRestaurantFavourite({required String params});
-  Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(PaginationParams params);
+  Future<Either<Failure, bool>> toggleRestaurantFavourite(
+      {required String params});
+  Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(
+      PaginationParams params);
   Future<Either<Failure, List<RestaurantModel>>> getTrendingRestaurants({
     required double lat,
     required double lng,

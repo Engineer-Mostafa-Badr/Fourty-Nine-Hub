@@ -94,7 +94,7 @@ class BuildItemAuctionCard extends StatelessWidget {
                               color: AppColors.AUTH_CONTAINER_COLOR,
                               label: LocaleKeys.edit.localize,
                               onPressed: () {
-                                context.push(Routes.EDITAD,extra: item);
+                                context.push(Routes.EDITAD, extra: item);
                                 // Navigator.push(
                                 //     context,
                                 //     MaterialPageRoute(
@@ -206,8 +206,8 @@ class BuildItemAuctionCard extends StatelessWidget {
                   children: [
                     Label(
                         text: context.locale == Locales.english
-                            ? item.mainCategory?.nameEn??''
-                            : item.mainCategory?.nameAr??'',
+                            ? item.mainCategory?.nameEn ?? ''
+                            : item.mainCategory?.nameAr ?? '',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         color: Theme.of(context).scaffoldBackgroundColor),

@@ -1,9 +1,7 @@
 import 'dart:developer';
 import 'dart:isolate';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-
 import '../../features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import '../../features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import '../../features/social_media/reels/presentation/shared/constants.dart';
@@ -13,7 +11,6 @@ Future preloadVideos(int index) async {
   currentContext.read<PreloadBloc>().setLoading(true);
 
   final List<String> allUrls = [];
-
 
   while (true) {
     final urlsBatch = await createIsolate(index);
@@ -49,7 +46,8 @@ Future<List<String>> createIsolate(int index) async {
   isolateSendPort.send([index, isolateResponseReceivePort.sendPort]);
 
   // Wait for the isolate to return the video URLs
-  final isolateResponse = await isolateResponseReceivePort.first as List<String>;
+  final isolateResponse =
+      await isolateResponseReceivePort.first as List<String>;
   return isolateResponse;
 }
 
@@ -85,7 +83,8 @@ Future<List<String>> getReelVideos({int id = 0}) async {
   await Future.delayed(const Duration(milliseconds: kLatency));
 
   // Adjust the end of the sublist based on available videos
-  final int endIndex = (id + kNextLimit) < videos.length ? (id + kNextLimit) : videos.length;
+  final int endIndex =
+      (id + kNextLimit) < videos.length ? (id + kNextLimit) : videos.length;
   log('end index: $endIndex');
   return videos.map((e) => e.videoMedia).toList().sublist(id, endIndex);
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 
 import '../../data/models/new_reels_model.dart';
 import '../widgets/components/unified_widget_view.dart';
@@ -56,7 +55,7 @@ class ReelsScreenForAudioState extends State<ReelsScreenForAudio> {
               }
               return UnifiedReelItem(
                 reel: widget.reels[index],
-                index:index,
+                index: index,
                 isVisible: true,
                 itemType: ReelItemType.instagram,
               );

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/repositories/reider_request_repository.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
@@ -6,17 +8,18 @@ class LocationSocketCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repository;
   LocationSocketCubit({required this.repository}) : super(RiderInitial());
 
-  sendSubCategoryId(String id) {
-    repository.setSubCateogryId(subCategoryId: id);
+  sendSubCategoryId({required String subCategoryId, required String address}) {
+    repository.setSubCateogryId(subCategoryId: subCategoryId, address: address);
   }
 
   updateDriverLocationOn() {
+    log("slkdjfsldkjflskdjlskdjflskdjflskjdf");
     repository.updateDriverLocationOn();
   }
 
-  updateDriverLocationEmit() {
-    repository.updateDriverLocationEmit();
-  }
+  // updateDriverLocationEmit() {
+  //   repository.updateDriverLocationEmit();
+  // }
 
   nearbyDriversEmit({
     required List<dynamic> location,

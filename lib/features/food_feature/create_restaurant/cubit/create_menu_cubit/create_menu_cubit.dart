@@ -17,7 +17,7 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
 
   List<RestaurantMneuModel> get menu => _menu;
 
-  updateMenuItem(context,RestaurantMneuModel menuItem) async {
+  updateMenuItem(context, RestaurantMneuModel menuItem) async {
     Map<String, dynamic> data = {
       "picture": menuItem.photo,
       "price": menuItem.price,
@@ -28,10 +28,10 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
     final response = await apiConsumer.post(url, data: data);
 
     return response.fold(
-          (failure) {
+      (failure) {
         // return Left(failure);
       },
-          (data) {
+      (data) {
         showSuccessMessage(context, data['message']);
         print("${data}v");
       },
@@ -41,48 +41,39 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
   void addMenuItem(BuildContext context, RestaurantMneuModel menuItem) {
     _menu.add(menuItem);
     emit(RestaurantMenuLoaded(List.from(_menu)));
-    context
-        .read<CreateRestaurantCubit>()
-        .createRestaurantParams
-        .mneu = _menu;
+    context.read<CreateRestaurantCubit>().createRestaurantParams.mneu = _menu;
     print(
-        "params: ${context
-            .read<CreateRestaurantCubit>()
-            .createRestaurantParams
-            .toJson()}");
+        "params: ${context.read<CreateRestaurantCubit>().createRestaurantParams.toJson()}");
   }
 
   void removeMenuItem(BuildContext context, RestaurantMneuModel index) {
     _menu.remove(index);
-    context
-        .read<CreateRestaurantCubit>()
-        .createRestaurantParams
-        .mneu = _menu;
+    context.read<CreateRestaurantCubit>().createRestaurantParams.mneu = _menu;
     emit(RestaurantMenuLoaded(List.from(_menu)));
   }
 
   // ================================= upload images =================================
   Future<void> _uploadImage(BuildContext context,
       {required dynamic Function(UploadFileEntity) onUploaded,
-        String? subcategoryId}) async {
+      String? subcategoryId}) async {
     if (context
-        .read<CreateRestaurantCubit>()
-        .createRestaurantParams
-        .subcategoryId !=
-        null ||
+                .read<CreateRestaurantCubit>()
+                .createRestaurantParams
+                .subcategoryId !=
+            null ||
         context
-            .read<CreateRestaurantCubit>()
-            .createRestaurantParams
-            .subcategoryId !=
+                .read<CreateRestaurantCubit>()
+                .createRestaurantParams
+                .subcategoryId !=
             "" ||
         subcategoryId != null ||
         subcategoryId! != '') {
       emit(RestaurantUpLoadPhototLoading("Uploading Image..."));
       await UploadFile().uploadImage(
         subCategoryId: context
-            .read<CreateRestaurantCubit>()
-            .createRestaurantParams
-            .subcategoryId ??
+                .read<CreateRestaurantCubit>()
+                .createRestaurantParams
+                .subcategoryId ??
             subcategoryId ??
             '',
         onUploaded: (value) {
@@ -100,9 +91,9 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
   Future<void> uploadMealImage(BuildContext context, {subcategoryId}) async {
     await _uploadImage(context, subcategoryId: subcategoryId,
         onUploaded: (media) {
-          imageId = media.mediaId;
-          emit(RestaurantMenuImagePicked(media.file.path));
-        });
+      imageId = media.mediaId;
+      emit(RestaurantMenuImagePicked(media.file.path));
+    });
   }
 
   final foodNameController = TextEditingController();

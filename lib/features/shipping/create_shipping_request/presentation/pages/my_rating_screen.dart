@@ -39,7 +39,8 @@ class MyRatingScreen extends StatelessWidget {
                       margin: EdgeInsets.zero,
                       title: "",
                       noBoardr: true,
-                      model: AllTripModel(price: 20, status: LocaleKeys.completed.tr()),
+                      model: AllTripModel(
+                          price: 20, status: LocaleKeys.completed.tr()),
                     ),
                     Container(
                       decoration: const BoxDecoration(

@@ -9,7 +9,7 @@ class UserSearchModel extends UserSearchEntity {
       required super.gender,
       required super.username,
       required super.phone,
-       super.image});
+      super.image});
 
   factory UserSearchModel.fromJson(Map<String, dynamic> json) {
     // Safely access nested fields with null-aware operators
@@ -33,6 +33,4 @@ class UserSearchModel extends UserSearchEntity {
       image: image,
     );
   }
-
-
 }

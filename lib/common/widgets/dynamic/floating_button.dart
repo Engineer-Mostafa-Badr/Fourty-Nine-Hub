@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/Social_home.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../res/assets/assets.dart';
@@ -29,10 +31,10 @@ class FloatingButton extends StatelessWidget {
         onPressed: onTap != null
             ? () => onTap!()
             : () {
-          HandleCashback.setCount('socialCount',context);
+                HandleCashback.setCount('socialCount', context);
 
                 if (changeView == 1) {
-                  context.push(Routes.SOCIAL);
+                  context.push(Routes.SOCIAL,extra: SocialParams(userId: UserCubit.to.state.data?.id??'',index: 0));
                 } else {
                   context.push(Routes.HOME);
                 }
@@ -42,7 +44,7 @@ class FloatingButton extends StatelessWidget {
             ? Icon(
                 icon,
                 color: AppColors.PRIMARY_COLOR,
-          size: 50.sp,
+                size: 50.sp,
               )
             : Image.asset(
                 Assets.logo,

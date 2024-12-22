@@ -4,5 +4,6 @@ import 'package:fourtyninehub/features/carpool/add_new_route/data/models/carpool
 import 'package:fourtyninehub/features/carpool/add_new_route/domain/entities/get_price_carpool_param.dart';
 
 abstract class AddNewRouteCarpoolRepo {
-  Future<Either<Failure, CarpoolRouteInfoModel>> getPriceCarpool({required GetPriceCarpoolParam getPriceCarpoolParam});
+  Future<Either<Failure, CarpoolRouteInfoModel>> getPriceCarpool(
+      {required GetPriceCarpoolParam getPriceCarpoolParam});
 }

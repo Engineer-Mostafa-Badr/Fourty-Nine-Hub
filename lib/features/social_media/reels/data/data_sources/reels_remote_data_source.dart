@@ -18,7 +18,8 @@ import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_with_same_audia_use_case.dart';
 
 abstract class ReelsRemoteDataSource {
-  Future<Either<Failure, ReelsResponse>> getExploreReels(PaginationParams params);
+  Future<Either<Failure, ReelsResponse>> getExploreReels(
+      PaginationParams params);
 
   Future<Either<Failure, ReelsResponse>> getFollowersReels(int page);
 
@@ -54,10 +55,11 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
   ReelsRemoteDataSourceImpl(this._apiConsumer);
 
   @override
-  Future<Either<Failure, ReelsResponse>> getExploreReels(PaginationParams params) async {
+  Future<Either<Failure, ReelsResponse>> getExploreReels(
+      PaginationParams params) async {
     final response = await _apiConsumer.get(
       EndPoints.getExploreReels,
-      // queryParameters: params.toJson(),
+      queryParameters: params.toJson(),
     );
     return response.fold(
       (failure) => Left(failure),

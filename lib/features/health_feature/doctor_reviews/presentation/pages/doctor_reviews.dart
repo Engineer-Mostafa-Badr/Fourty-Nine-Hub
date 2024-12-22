@@ -5,7 +5,9 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
 
 class DoctorReviews extends StatefulWidget {
-  const DoctorReviews({super.key, });
+  const DoctorReviews({
+    super.key,
+  });
 
   @override
   State<DoctorReviews> createState() => _DoctorReviewsState();
@@ -50,10 +52,8 @@ class _DoctorReviewsState extends State<DoctorReviews> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BackAppBar(label: LocaleKeys.adRequests.localize),
-      body: Column(
-        children: [
-
-        ],
+      body: const Column(
+        children: [],
       ),
     );
   }

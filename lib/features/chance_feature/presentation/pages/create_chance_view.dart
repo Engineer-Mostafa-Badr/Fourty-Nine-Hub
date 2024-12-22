@@ -9,22 +9,21 @@ import '../controller/cubit/chance_cubit.dart';
 import '../controller/cubit/chance_states.dart';
 import '../widgets/create_chance_view_body.dart';
 
-
 class CreateChanceView extends StatelessWidget {
   const CreateChanceView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.CreateChance.localize,
-      ),
-      body:  BlocProvider<ChanceCubit>(
-          create: (BuildContext context) =>serviceLocator(),
-          child: BlocBuilder<ChanceCubit,ChanceState>(
+    return Scaffold(
+        appBar: BackAppBar(
+          label: LocaleKeys.CreateChance.localize,
+        ),
+        body: BlocProvider<ChanceCubit>(
+            create: (BuildContext context) => serviceLocator(),
+            child: BlocBuilder<ChanceCubit, ChanceState>(
               builder: (BuildContext context, state) {
                 return const CreateChanceViewBody();
               },
-    )));
+            )));
   }
 }

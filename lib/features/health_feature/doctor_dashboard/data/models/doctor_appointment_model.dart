@@ -10,7 +10,8 @@ class DoctorAppointmentModel extends DoctorAppointmentEntity {
     required super.firstName,
     required super.lastName,
     required super.day,
-    required super.time,
+    required super.startTime,
+    required super.endTime,
     required super.type,
     super.image,
     required super.gender,
@@ -24,7 +25,8 @@ class DoctorAppointmentModel extends DoctorAppointmentEntity {
       lastName: json['userId']['lastName'] ?? '',
       day:
           ((json['day'] ?? json['bookingId']['day'] ?? '') as String).toWeekDay,
-      time: json['time'] ?? json['bookingId']['time'] ?? '',
+      startTime: json['startTime'] ?? json['bookingId']['startTime'] ?? '',
+      endTime: json['endTime'] ?? json['bookingId']['endTime'] ?? '',
       type: ((json['appointmentType'] ??
               json['bookingId']['appointmentType'] ??
               '') as String)

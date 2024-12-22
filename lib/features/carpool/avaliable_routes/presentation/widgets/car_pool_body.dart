@@ -19,7 +19,6 @@ import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/wid
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/test_card_dashboard.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -159,86 +158,59 @@ class _CarPoolBodyState extends State<CarPoolBody>
                   _buildTabContent(context, "myBookings"),
                   _buildTabContent(context, "running"),
                   _buildTabContent(context, "expired"),
-                  // BlocProvider(
-                  //   create: (context) =>
-                  //       GetAvailableTripsForDriversCubit(serviceLocator())
-                  //         ..fetchAllCarpoolTripsForDriver(),
-                  //   child: BlocBuilder<GetAvailableTripsForDriversCubit,
-                  //       GetAvailableTripsForDriversState>(
-                  //     builder: (context, state) {
-                  //       if (state is GetAvailableTripsForDriversLoading) {
-                  //         return const Center(
-                  //             child: CircularProgressIndicator(
-                  //           color: AppColors.PRIMARY_COLOR,
-                  //         ));
-                  //       } else if (state
-                  //           is GetAvailableTripsForDriversSuccess) {
-                  //         return ListView.builder(
-                  //           itemCount: state.trips.length,
-                  //           itemBuilder: (context, index) {
-                  //             final trip = state.trips[index];
-                  //             return BlocProvider(
-                  //               create: (context) =>
-                  //                   AcceptTripForDriverCubit(serviceLocator()),
-                  //               child: BlocListener<AcceptTripForDriverCubit,
-                  //                   AcceptTripForDriverState>(
-                  //                 listener: (context, state) {
-                  //                   if (state is AcceptTripForDriverSuccess) {
-                  //                     BlocProvider.of<
-                  //                                 GetAvailableTripsForDriversCubit>(
-                  //                             context)
-                  //                         .fetchAllCarpoolTripsForDriver();
-                  //                     showSuccessMessage(
-                  //                         context,
-                  //                         LocaleKeys
-                  //                             .theRequestHasBeenSuccessfullyApproved
-                  //                             .localize);
-                  //                   } else if (state
-                  //                       is AcceptTripForDriverFailure) {
-                  //                     showErrorMessage(
-                  //                         context,
-                  //                         LocaleKeys
-                  //                             .theRequestWasSuccessfullyRejected
-                  //                             .localize);
-                  //                   }
-                  //                 },
-                  //                 child: TestCardDashboard(entity: trip),
+                  // BlocBuilder<GetAvailableTripsForDriversCubit,
+                  //     GetAvailableTripsForDriversState>(
+                  //   builder: (context, state) {
+                  //     if (state is GetAvailableTripsForDriversLoading) {
+                  //       return const Center(
+                  //           child: CircularProgressIndicator(
+                  //         color: AppColors.PRIMARY_COLOR,
+                  //       ));
+                  //     } else if (state
+                  //         is GetAvailableTripsForDriversSuccess) {
+                  //       return ListView.builder(
+                  //         itemCount: state.trips.length,
+                  //         itemBuilder: (context, index) {
+                  //           final trip = state.trips[index];
+                  //           return BlocProvider(
+                  //             create: (context) =>
+                  //                 AcceptTripForDriverCubit(serviceLocator()),
+                  //             child: TestCardDashboard(entity: trip),
+                  //           );
+                  //         },
+                  //       );
+                  //     } else if (state
+                  //         is GetAvailableTripsForDriversFailure) {
+                  //       // Show an error message and retry option on failure
+                  //       return Center(
+                  //         child: Column(
+                  //           mainAxisAlignment: MainAxisAlignment.center,
+                  //           children: [
+                  //             Text('Error loading trips. Please try again.'),
+                  //             SizedBox(height: 16),
+                  //             ElevatedButton(
+                  //               style: const ButtonStyle(
+                  //                   backgroundColor: MaterialStatePropertyAll(
+                  //                       AppColors.PRIMARY_COLOR)),
+                  //               onPressed: () {
+                  //                 context
+                  //                     .read<
+                  //                         GetAvailableTripsForDriversCubit>()
+                  //                     .fetchAllCarpoolTrips();
+                  //               },
+                  //               child: const Text(
+                  //                 'Retry',
+                  //                 style: TextStyle(
+                  //                     color: AppColors.AUTH_CONTAINER_COLOR),
                   //               ),
-                  //             );
-                  //           },
-                  //         );
-                  //       } else if (state
-                  //           is GetAvailableTripsForDriversFailure) {
-                  //         // Show an error message and retry option on failure
-                  //         return Center(
-                  //           child: Column(
-                  //             mainAxisAlignment: MainAxisAlignment.center,
-                  //             children: [
-                  //               Text('Error loading trips. Please try again.'),
-                  //               SizedBox(height: 16),
-                  //               ElevatedButton(
-                  //                 style: const ButtonStyle(
-                  //                     backgroundColor: WidgetStatePropertyAll(
-                  //                         AppColors.PRIMARY_COLOR)),
-                  //                 onPressed: () {
-                  //                   context
-                  //                       .read<
-                  //                           GetAvailableTripsForDriversCubit>()
-                  //                       .fetchAllCarpoolTripsForDriver();
-                  //                 },
-                  //                 child: const Text(
-                  //                   'Retry',
-                  //                   style: TextStyle(
-                  //                       color: AppColors.AUTH_CONTAINER_COLOR),
-                  //                 ),
-                  //               ),
-                  //             ],
-                  //           ),
-                  //         );
-                  //       }
-                  //       return const Center(child: Text('No data available.'));
-                  //     },
-                  //   ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       );
+                  //     }
+                  //     // Initial or unexpected state
+                  //     return const Center(child: Text('No data available.'));
+                  //   },
                   // ),
                   // BlocProvider(
                   //     create: (context) => VerifyCompleteDriverCubit(

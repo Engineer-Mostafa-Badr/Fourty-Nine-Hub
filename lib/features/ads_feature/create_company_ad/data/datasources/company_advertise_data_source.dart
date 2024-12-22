@@ -99,13 +99,11 @@ class CompanyAdvertiseDataSourceImpl implements CompanyAdvertiseDataSource {
   @override
   Future<Either<Failure, bool>> payCompanyAd(params) async {
     final response =
-    await _apiConsumer.post(EndPoints.payCompanyAd,
-    data: params.toJson()
-    );
+        await _apiConsumer.post(EndPoints.payCompanyAd, data: params.toJson());
 
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(response['status']),
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
     );
   }
 }

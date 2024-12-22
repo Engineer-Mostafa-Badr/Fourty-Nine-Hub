@@ -16,19 +16,19 @@ class MainSubCategorySearchModel extends MainSubCategorySearchEntity {
       required super.enableInstallmentAndAuction});
 
   factory MainSubCategorySearchModel.fromJson(Map<String, dynamic> json) {
-      return MainSubCategorySearchModel(
-          id: json['_id'] ??'',
-          banner: json['banner'] ?? json['picture'],
-          cover: json['cover'] ??'',
-          index: json['index'] ??0,
-          createdAt: DateTime.parse(json['createdAt']),
-          updatedAt: DateTime.parse(json['updatedAt']),
-          nameAr: json['nameAr'] ??'',
-          nameEn: json['nameEn'] ??'',
-          nameCode: json['nameCode'] ??'',
-          isHidden: json['isHidden'] ??false,
-          enableInstallmentAndAuction: json['EnableInstallmentAndAuction'] ??false,
-          isFavorite: json['isFavorite'] ??false,
-      );
+    return MainSubCategorySearchModel(
+      id: json['_id'] ?? '',
+      banner: json['banner'] ?? json['picture'],
+      cover: json['cover'] ?? '',
+      index: json['index'] ?? 0,
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+      nameAr: json['nameAr'] ?? '',
+      nameEn: json['nameEn'] ?? '',
+      nameCode: json['nameCode'] ?? '',
+      isHidden: json['isHidden'] ?? false,
+      enableInstallmentAndAuction: json['EnableInstallmentAndAuction'] ?? false,
+      isFavorite: json['isFavorite'] ?? false,
+    );
   }
 }

@@ -18,20 +18,30 @@ class MainCategoryModel extends MainCategoryEntity {
     super.subcategories,
   });
 
-  factory MainCategoryModel.fromJson(Map<String, dynamic> json) =>
-      MainCategoryModel(
-          id: json['_id'],
-          name: getLang() == 'ar' ? json['nameAr'] : json['nameEn'],
-          nameEn: json['nameEn'],
-          image: json['image'] ?? UIConst.imagePlaceHolder,
-          banner: json['banner'] ?? '',
-          cover: json['cover'] ?? '',
-          isFavorite: json['isFavorite'] ?? false,
-          total: json['totalAds'] ?? 0,
-          numberOfAdsCount: json['numberOfAdsCount'] ?? 0,
-          subcategories: json['subCategories'] == null
-              ? []
-              : (json['subCategories'] as List)
-                  .map((e) => SubCategoryModel.fromJson(e))
-                  .toList());
+  factory MainCategoryModel.fromJson(Map<String, dynamic> json) {
+    // Check for id, name, etc., in top-level and nested category_id
+    final categoryData = json['category_id'] is Map
+        ? json['category_id'] as Map<String, dynamic>
+        : null;
+
+    return MainCategoryModel(
+      id: categoryData?['_id'] ?? json['_id'] ?? '',
+      name: (getLang() == 'ar')
+          ? (json['nameAr'] ?? categoryData?['nameAr'] ?? '')
+          : (json['nameEn'] ?? categoryData?['nameEn'] ?? ''),
+      nameEn: json['nameEn'] ?? categoryData?['nameEn'] ?? '',
+      image:
+          json['image'] ?? categoryData?['image'] ?? UIConst.imagePlaceHolder,
+      banner: json['banner'] ?? categoryData?['banner'] ?? '',
+      cover: json['cover'] ?? categoryData?['cover'] ?? '',
+      isFavorite: json['isFavorite'] ?? false,
+      total: json['totalAds'] ?? 0,
+      numberOfAdsCount: json['numberOfAdsCount'] ?? 0,
+      subcategories: json['subCategories'] == null
+          ? []
+          : (json['subCategories'] as List)
+              .map((e) => SubCategoryModel.fromJson(e))
+              .toList(),
+    );
+  }
 }

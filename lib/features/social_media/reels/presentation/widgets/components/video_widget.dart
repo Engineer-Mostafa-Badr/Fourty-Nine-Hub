@@ -89,7 +89,6 @@ class _VideoWidgetState extends State<VideoWidget> {
                       ),
                     ),
                   ),
-
                 ],
               ),
             );

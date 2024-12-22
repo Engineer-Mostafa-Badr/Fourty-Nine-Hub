@@ -85,14 +85,14 @@ class _OpenRouteTrackingState extends State<OpenRouteTracking> {
 
   void _addDestinationMarker(LatLng point) {
     setState(() {
-      // markers.add(
-      //   Marker(
-      //     width: 80.0,
-      //     height: 80.0,
-      //     point: point,
-      //     builder: (_) => const Icon(Icons.location_on, color: Colors.red, size: 40.0),
-      //   ),
-      // );
+      markers.add(
+        Marker(
+          width: 80.0,
+          height: 80.0,
+          point: point,
+          child: const Icon(Icons.location_on, color: Colors.red, size: 40.0),
+        ),
+      );
     });
     _getRoute(point);
   }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -12,6 +13,9 @@ import 'package:fourtyninehub/features/social_media/live_streaming/data/model/to
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity/live_entity.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity/live_create_response_entity.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity/topic_entity.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/edit_goal_use_case.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
@@ -24,6 +28,9 @@ import '../../domain/usecases/create_live_use_case.dart';
 abstract class LiveDataSource {
   Future<Either<Failure, LiveCreateResponseEntity>> createLive(
       CreateLiveParams params);
+
+  Future<Either<Failure, bool>> sendPointSocket(PointsParams params) ;
+  void sendPointListener() ;
 
   Future<Either<Failure, List<LiveEntity>>> getAllRooms(
       PaginationParams params);
@@ -43,6 +50,7 @@ abstract class LiveDataSource {
   Future<void> sendPoints(PointsParams params);
 
   Future<void> requestBattle(RequestBattleParams params);
+  Future<Either<Failure, bool>> editGoal(EditGoalParams params);
 
   Future<void> listenToRequestBattle(NoParams noParams);
 
@@ -71,7 +79,7 @@ class LiveDataSourceImpl extends LiveDataSource {
     final result =
         await _apiConsumer.post(EndPoints.createLive, data: params.toJson());
     return result.fold((l) => Left(l), (r) {
-      return Right(LiveCreateResponseModel.fromJson(r['data']['stream']));
+      return Right(LiveCreateResponseModel.fromJson(r['data']));
     });
   }
 
@@ -149,8 +157,8 @@ class LiveDataSourceImpl extends LiveDataSource {
   }
 
   @override
-  Future< void> listenToRequestBattle(NoParams noParams) async{
-  _socket.on(SocketIOListeners.requestBattle, (data) => print(data));
+  Future<void> listenToRequestBattle(NoParams noParams) async {
+    _socket.on(SocketIOListeners.requestBattle, (data) => print(data));
   }
 
   @override
@@ -189,4 +197,60 @@ class LiveDataSourceImpl extends LiveDataSource {
     _socket.connect();
     _socket.on(SocketIOListeners.sendPoints, (data) => print(data.toString()));
   }
+
+  @override
+  Future<Either<Failure, bool>> editGoal(EditGoalParams params) async {
+    final result = await _apiConsumer
+        .put(EndPoints.editGoal(params.roomID), data: params.toJson(), headers: {
+      'Accept-Language':
+      AppPages.router.configuration.navigatorKey.currentContext!.isArabic
+          ? 'ar'
+          : 'en',
+    });
+    return result.fold((l) => Left(l), (r) {
+      return Right(r['status']);
+    });
+  }
+
+  @override
+  Future<Either<Failure, bool>> sendPointSocket(PointsParams params) async {
+    try {
+      // _socket.connect();
+      CliLogger.info('you start send point : ${params.streamId}');
+
+      serviceLocator<Socket>().emit(
+          SocketIOEvents.sendPoint,
+          jsonEncode({
+            "streamId":params.streamId,
+            "memberId":params.memberId
+          }));
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error(' can\'t start send point $e');
+      return const Left(ServerFailure(message: "can't start send point"));
+    }
+  }
+
+  @override
+  void sendPointListener() {
+    try{
+      serviceLocator<Socket>().on(SocketIOListeners.sendPoint, (data) {
+        final decodedData = jsonDecode(data);
+        log("listenToNewMessagesssssssssssss From me");
+        log("listenToNewMessagesssssssssssss  From me$decodedData");
+        if (decodedData is List) {
+          data = decodedData[0];
+        } else {
+          data = decodedData;
+        }
+        CliLogger.info("newMessageFromMe :  $data");
+        // MessageModel messageModel = MessageModel.fromJson(data);
+        // params(messageModel);
+      });
+
+    }catch (e) {
+      CliLogger.info("can't read last message error $e");
+    }
+  }
+
 }

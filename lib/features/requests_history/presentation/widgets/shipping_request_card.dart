@@ -35,7 +35,9 @@ class ShippingRequestCard extends StatelessWidget {
                     color: AppColors.PRIMARY_COLOR),
                 const Sizer(),
                 Label(
-                  text: context.isArabic?trip.category.nameAr:trip.category.nameEn,
+                  text: context.isArabic
+                      ? trip.category.nameAr
+                      : trip.category.nameEn,
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
                 ),
               ],
@@ -63,7 +65,8 @@ class ShippingRequestCard extends StatelessWidget {
             if (trip.offers.isNotEmpty)
               Row(
                 children: [
-                  TextAppButton(label: LocaleKeys.offers.localize, onPressed: () {}),
+                  TextAppButton(
+                      label: LocaleKeys.offers.localize, onPressed: () {}),
                   const Sizer(),
                   Expanded(
                     child: SizedBox(

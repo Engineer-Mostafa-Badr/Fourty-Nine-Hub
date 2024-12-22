@@ -1,18 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/account_taps/account/domain/entities/favourite_category_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../../core/localization/locales.dart';
 
 class FavouriteMainCategoryBanner extends StatefulWidget {
   const FavouriteMainCategoryBanner(
@@ -22,7 +18,7 @@ class FavouriteMainCategoryBanner extends StatefulWidget {
       this.onRegister,
       required this.onFavorite,
       this.isFavorite = false});
-  final FavouriteCategoryEntity category;
+  final MainCategoryEntity category;
   final bool canRegister;
   final Function()? onRegister;
   final Function() onFavorite;
@@ -63,9 +59,7 @@ class _FavouriteMainCategoryBannerState
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: context.locale == Locales.english
-                  ? widget.category.nameEn
-                  : widget.category.nameAr,
+              text: widget.category.name ?? "",
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -124,9 +118,7 @@ class _FavouriteMainCategoryBannerState
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: context.locale == Locales.english
-                  ? widget.category.nameEn
-                  : widget.category.nameAr,
+              text: widget.category.name ?? '',
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -145,17 +137,6 @@ class _FavouriteMainCategoryBannerState
                           ),
                         )
                       : const SizedBox.shrink(),
-                  Sizer(
-                    height: 15.h,
-                  ),
-                  Label(
-                    text:
-                        '${widget.category.numberOfAds.toShortScale} ${Labels.ads}',
-                    style: Styles.mediumText(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  )
                 ],
               ),
             ),

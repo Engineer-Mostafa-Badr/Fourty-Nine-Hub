@@ -26,24 +26,12 @@ class _SubCateogryRideWidgetState extends State<SubCateogryRideWidget> {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: FormField(
-        // validator: (value) {
-        //   return shippingcubit.validation(
-        //       message: "You have to select one sub category!",
-        //       condition:
-        //           shippingcubit.requestModel.subcategoryEntity == null);
-        // },
         builder: (field) {
-          // log(select.toString());
           return BlocBuilder<GetCateogryRiderCubit, RiderState>(
             builder: (context, state) {
               if (state is SuccessGetCateogyRider) {
-                // log(isSelect.toString(), name: "lkjdslkjsdlkfjsdf");
-                // if (!isSelect) {
-                //   if (widget.selectedId != null) {
-                //     select = getSelectedSubCategory(
-                //         categoryes: state.model.subCategories);
-                //   }
-                // }
+                print(
+                    "state.editedCategoryList ${state.editedCategoryList?.first} \n");
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -51,23 +39,23 @@ class _SubCateogryRideWidgetState extends State<SubCateogryRideWidget> {
                       category: MainCategoryEntity(
                           nameEn: state.model.mainCategory?.nameEn,
                           id: state.model.mainCategory?.mainCategoryId ?? "",
-                          name: "Choose your favorite sub category!",
                           image: state.model.mainCategory?.cover ?? "",
                           isFavorite: true,
                           total: state.model.mainCategory?.driverLength ?? 0,
                           cover: state.model.mainCategory?.cover ?? "",
                           banner: state.model.mainCategory?.banner ?? "",
-                          subcategories: sortList(state.model.subCategories)!
-                              .map(
-                                (e) => SubCategoryEntity(
-                                    id: e.subCategoryId!,
-                                    numberOfContent: e.driverCount,
-                                    image: e.picture!,
-                                    isFavorite: e.isFavorite ?? false,
-                                    nameAr: e.subCategoryNameAr??'',
-                                nameEn: e.subCategoryNameEn??''),
-                              )
-                              .toList()),
+                          subcategories: state.editedCategoryList ??
+                              sortList(state.model.subCategories)!
+                                  .map(
+                                    (e) => SubCategoryEntity(
+                                        id: e.subCategoryId!,
+                                        numberOfContent: e.driverCount,
+                                        image: e.picture!,
+                                        isFavorite: e.isFavorite ?? false,
+                                        nameAr: e.subCategoryNameAr ?? '',
+                                        nameEn: e.subCategoryNameEn ?? ''),
+                                  )
+                                  .toList()),
                     ),
                     if (field.hasError)
                       Column(
@@ -87,11 +75,7 @@ class _SubCateogryRideWidgetState extends State<SubCateogryRideWidget> {
                   ],
                 );
               } else {
-                return Container(
-                  width: 12,
-                  height: 12,
-                  color: Colors.red,
-                );
+                return Container();
               }
             },
           );
@@ -103,17 +87,18 @@ class _SubCateogryRideWidgetState extends State<SubCateogryRideWidget> {
   Widget _buildMainCategoriesWidget({
     required MainCategoryEntity category,
   }) {
-    // final shippingCubit = context.read<ShippingCubit>();
     final riderCubit = context.read<RiderTripReelTimeCubit>();
     final categryId = context.read<GetCateogryRiderCubit>();
     final ScrollController controller = ScrollController();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Label(
-          text: category.name,
-          style: Styles.headerText(fontWeight: FontWeight.w400),
-        ),
+        if (category.name != null)
+          Label(
+            text: category.name ?? "",
+            style: Styles.headerText(fontWeight: FontWeight.w400),
+          ),
         if (category.subcategories?.isNotEmpty ?? false)
           SizedBox(
             height: 80,
@@ -121,177 +106,111 @@ class _SubCateogryRideWidgetState extends State<SubCateogryRideWidget> {
               controller: controller,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                return GestureDetector(onTap: () {
-                  setState(() {
-                    context
-                        .read<SelectCateogryCubit>()
-                        .select(id: category.subcategories![index].id, type: 0);
-                    riderCubit.selectCateogry(category.subcategories![index]);
-                    context.read<ShippingCubit>().removeSubCategoryRequest();
-                    categryId.sortData(category.subcategories![index].id);
-                    controller.jumpTo(0);
-                    // context
-                    //     .read<LocationSocketCubit>()
-                    //     .sendSubCategoryId(category.subcategories![index].id);
-                    // context
-                    //     .read<LocationSocketCubit>()
-                    //     .updateDriverLocationOn();
-                    // if (select != null) {
-                    //   if (select!.id == category.subcategories![index].id) {
-                    //     log("lkjdslkjsdlkfjsdf kkkkkkkkk");
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      // Create a temporary working list
+                      List<SubCategoryEntity> workingList =
+                          List.from(category.subcategories!);
 
-                    //     select = null;
-                    // } else {
-                    //   log("lkjdslkjsdlkfjsdf");
-                    //   select = category.subcategories![index];
-                    //   log(select?.id ?? "", name: "lkjdslkjsdlkfjsdf");
-                    // }
-                    // } else {
-                    //   log("lkjdslkjsdlkfjsdf");
-                    //   select = category.subcategories![index];
-                    //   log(select?.id ?? "", name: "lkjdslkjsdlkfjsdf");
-                    // }
-                    // if (select != null) {
-                    //   shippingCubit.seSubCategoryRequest(
-                    //       subCategory: select!);
-                    // }
-                  });
-                }, child: BlocBuilder<SelectCateogryCubit, RiderState>(
-                  builder: (context, state) {
-                    if (state is SuccessSelectCateogryState) {
-                      if (state.type == 0) {
+                      // Select the clicked subcategory and sort it
+                      final selectedSubCategory = workingList[index];
+                      workingList.removeAt(index);
+                      workingList.insert(0, selectedSubCategory);
+
+                      context
+                          .read<SelectCateogryCubit>()
+                          .select(id: workingList[0].id, type: 0);
+                      riderCubit.selectCateogry(workingList[0]);
+                      context.read<ShippingCubit>().removeSubCategoryRequest();
+
+                      categryId.sortData(
+                        workingList[0].id,
+                        orginalList:
+                            BlocProvider.of<GetCateogryRiderCubit>(context)
+                                .bannerModel
+                                .subCategories,
+                        fromRide: true,
+                      );
+                      controller.jumpTo(0);
+                    });
+                  },
+                  child: BlocBuilder<SelectCateogryCubit, RiderState>(
+                    builder: (context, state) {
+                      if (state is SuccessSelectCateogryState) {
                         return SubcategoryCardSelected(
                           selected: riderCubit.subCategory == null
                               ? false
                               : riderCubit.subCategory!.id ==
                                   category.subcategories![index].id,
-                          // selected: select == null
-                          //     ? false
-                          //     : select!.id == category.subcategories![index].id,
                           mainCategory: category,
                           item: category.subcategories![index],
                           isSmallCard: true,
                           onChanged: (value) {
                             setState(() {
-                              riderCubit.selectCateogry(
-                                  category.subcategories![index]);
+                              List<SubCategoryEntity> workingList =
+                                  List.from(category.subcategories!);
 
-                              riderCubit.selectCateogry(
-                                  category.subcategories![index]);
-                              categryId
-                                  .sortData(category.subcategories![index].id);
+                              final selectedSubCategory = workingList[index];
+                              workingList.removeAt(index);
+                              workingList.insert(0, selectedSubCategory);
+
+                              riderCubit.selectCateogry(workingList[0]);
+                              categryId.sortData(
+                                workingList[0].id,
+                                orginalList:
+                                    BlocProvider.of<GetCateogryRiderCubit>(
+                                            context)
+                                        .bannerModel
+                                        .subCategories,
+                              );
                               controller.jumpTo(0);
-                              // if (select != null) {
-                              //   if (select!.id == category.subcategories![index].id) {
-                              //     select = null;
-                              //   }
-                              // } else {
-                              //   select = category.subcategories![index];
-                              // }
-                              // if (select != null) {
-                              //   shippingCubit.seSubCategoryRequest(
-                              //       subCategory: select!);
-                              // }
-                              // log(select.toString());
                             });
                           },
                         );
                       } else {
                         return SubcategoryCardSelected(
-                          selected: false,
-                          // selected: select == null
-                          //     ? false
-                          //     : select!.id == category.subcategories![index].id,
+                          selected: riderCubit.subCategory == null
+                              ? false
+                              : riderCubit.subCategory!.id ==
+                                  category.subcategories![index].id,
                           mainCategory: category,
                           item: category.subcategories![index],
                           isSmallCard: true,
                           onChanged: (value) {
                             setState(() {
-                              riderCubit.selectCateogry(
-                                  category.subcategories![index]);
+                              List<SubCategoryEntity> workingList =
+                                  List.from(category.subcategories!);
 
-                              riderCubit.selectCateogry(
-                                  category.subcategories![index]);
-                              categryId
-                                  .sortData(category.subcategories![index].id);
+                              final selectedSubCategory = workingList[index];
+                              workingList.removeAt(index);
+                              workingList.insert(0, selectedSubCategory);
+
+                              riderCubit.selectCateogry(workingList[0]);
+                              riderCubit.selectCateogry(workingList[0]);
+                              categryId.sortData(
+                                workingList[0].id,
+                                orginalList:
+                                    BlocProvider.of<GetCateogryRiderCubit>(
+                                            context)
+                                        .bannerModel
+                                        .subCategories,
+                              );
                               controller.jumpTo(0);
-                              // if (select != null) {
-                              //   if (select!.id == category.subcategories![index].id) {
-                              //     select = null;
-                              //   }
-                              // } else {
-                              //   select = category.subcategories![index];
-                              // }
-                              // if (select != null) {
-                              //   shippingCubit.seSubCategoryRequest(
-                              //       subCategory: select!);
-                              // }
-                              // log(select.toString());
                             });
                           },
                         );
                       }
-                    } else {
-                      return SubcategoryCardSelected(
-                        selected: riderCubit.subCategory == null
-                            ? false
-                            : riderCubit.subCategory!.id ==
-                                category.subcategories![index].id,
-                        // selected: select == null
-                        //     ? false
-                        //     : select!.id == category.subcategories![index].id,
-                        mainCategory: category,
-                        item: category.subcategories![index],
-                        isSmallCard: true,
-                        onChanged: (value) {
-                          setState(() {
-                            riderCubit
-                                .selectCateogry(category.subcategories![index]);
-
-                            riderCubit
-                                .selectCateogry(category.subcategories![index]);
-                            categryId
-                                .sortData(category.subcategories![index].id);
-                            controller.jumpTo(0);
-                            // if (select != null) {
-                            //   if (select!.id == category.subcategories![index].id) {
-                            //     select = null;
-                            //   }
-                            // } else {
-                            //   select = category.subcategories![index];
-                            // }
-                            // if (select != null) {
-                            //   shippingCubit.seSubCategoryRequest(
-                            //       subCategory: select!);
-                            // }
-                            // log(select.toString());
-                          });
-                        },
-                      );
-                    }
-                  },
-                ));
+                    },
+                  ),
+                );
               },
               separatorBuilder: (context, index) => const Sizer(),
               itemCount: category.subcategories?.length ?? 0,
             ),
-          )
+          ),
       ],
     );
-  }
-
-  SubCategoryEntity? getSelectedSubCategory(
-      {required List<SubCategory>? categoryes}) {
-    SubCategory? model = categoryes?.firstWhere(
-      (element) => true,
-    );
-    // isSelect = true;
-    return SubCategoryEntity(
-        id: model?.subCategoryId ?? "",
-        nameEn: model?.subCategoryNameEn ?? "",
-        nameAr: model?.subCategoryNameAr ?? "",
-        image: model?.picture ?? "",
-        isFavorite: model?.isFavorite ?? false);
   }
 
   List<SubCategory>? sortList(List<SubCategory>? list) {

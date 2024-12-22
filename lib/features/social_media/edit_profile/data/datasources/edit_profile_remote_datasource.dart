@@ -20,7 +20,6 @@ class EditProfileRemoteDataSourceImpl implements EditProfileRemoteDataSource {
       {required EditProfileEntity params}) async {
     final response =
         await _apiConsumer.put(EndPoints.editProfile, data: params.toJson());
-    return response.fold(
-        (l) => Left(l), (data) => Right(data['status']));
+    return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 }

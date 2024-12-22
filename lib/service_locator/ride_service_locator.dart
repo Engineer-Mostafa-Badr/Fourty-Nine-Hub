@@ -61,8 +61,8 @@ class RideServiceLocator {
         () => TripDetailsRemoteDataSourceImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<DriverDashboardRemoteDataSource>(
         () => DriverDashboardRemoteDataSourceImpl(serviceLocator()));
-    serviceLocator
-        .registerLazySingleton(() => RiderDataSource(api: serviceLocator()));
+    serviceLocator.registerLazySingleton(() =>
+        RiderDataSource(api: serviceLocator(), cacheService: serviceLocator()));
 
     // repo
     serviceLocator.registerLazySingleton<RideRequestRepo>(
@@ -91,8 +91,8 @@ class RideServiceLocator {
         )..loadData());
     serviceLocator.registerFactory(
         () => GetCateogryRiderCubit(repo: serviceLocator())..getCateogryData());
-    serviceLocator.registerFactory(
-        () => CheckDriverTypeCubit(repository: serviceLocator())..checkDriverType());
+    serviceLocator.registerFactory(() =>
+        CheckDriverTypeCubit(repository: serviceLocator())..checkDriverType());
     serviceLocator.registerFactory(
         () => FetchCarBrandsCubit(fetchCarBrandUseCase: serviceLocator()));
     serviceLocator.registerFactory(

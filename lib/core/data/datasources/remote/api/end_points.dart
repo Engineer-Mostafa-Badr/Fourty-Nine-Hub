@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usec
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_Id_usecase.dart';
 import 'package:fourtyninehub/features/azkaar/domain/use_case/fetch_azkar_use_case.dart';
 import 'package:fourtyninehub/features/azkaar/domain/use_case/fetch_details_azkar_use_case.dart';
+import 'package:fourtyninehub/features/health_feature/emergency/domain/usecases/get_emergency_requests_use_case.dart';
 import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
@@ -26,7 +27,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/share_post_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/suggest_friends_usecase.dart';
-import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_user_data_use_case.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_user_posts_usecase.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
@@ -184,6 +184,8 @@ class EndPoints {
 
   static const getWallet = '/main-wallet/user-wallet';
   static const transferMoney = '/main-wallet/send-money';
+  static const sendPoints = '/stream/fan/send-points';
+  static sendLiveGift(String id) => '/stream/fan/send-gift/$id';
   static const fetchUsers = '/users/all-usernames';
   static const getPrice = '/advertisementCompany/price';
   static const getSubscription = '/subscription';
@@ -206,6 +208,7 @@ class EndPoints {
   static const deleteAccount = '/users/settings/delete-account';
   static const disableAccount = '/users/settings/disable-account';
   static const enableAccount = '/users/settings/enable-account';
+  static const shareApp = '/users/referral';
 
   // Quran
   static String quranSurah(QuranParams params) =>
@@ -243,6 +246,24 @@ class EndPoints {
       "$developmentBaseUrl/ride/info/picture-optional";
   static String newTripRide = "$developmentBaseUrl/ride/trips/newTrip";
 
+  //Rider no Socket
+  static String createTripNoSocket = "$developmentBaseUrl/ride/trip";
+  static String createPremiumTripNoSocket =
+      "$developmentBaseUrl/ride/trip/premium";
+  static String createOfferNoSocket =
+      "$developmentBaseUrl/ride/trip/createOffer";
+  static String offerAcceptNoSocket =
+      "$developmentBaseUrl/ride/trip/offer/accept";
+  static String offerRejectNoSocket =
+      "$developmentBaseUrl/ride/trip/offer/reject";
+  static String getAllTripNoSocket = "$developmentBaseUrl/ride/trip/all";
+  static String getTripOffersNoSocket = "$developmentBaseUrl/ride/trip/offers";
+  static String getUserLoginTripNoSocket =
+      "$developmentBaseUrl/ride/trip/user/trip";
+  static String deleteTripNoSocket = "$developmentBaseUrl/ride/trip";
+
+  static String recordVoiceRide = "$developmentBaseUrl/ride/trips/record-voice";
+
   //shipping
   static String bannerData = "$developmentBaseUrl/loading/driver/subcategory";
   static const drivingLicenseS3 = '/ride/info/driving-license';
@@ -268,6 +289,10 @@ class EndPoints {
   static String doctorSearch =
       '/health/doctor-search${loggedUserId.isNotEmpty ? "?userId=$loggedUserId" : ""}';
   static const bookEmergency = '/health/book-emergency';
+  static cancelAppointment(String id) => '/health/book-appointment-cancel/$id';
+  static doctorCancelAppointment(String id) => '/health/book-appointment-doctor-cancel/$id';
+  static emergencyRequests(GetEmergencyRequestsParams params) => '/health/show-emergency?limit=${params.limit}&page=${params.page}&subCategory=${params.subCategoryId}';
+  static allAppointments(PaginationParams params) => '/health/doctor/all-doctor-requests?limit=${params.limit}&page=${params.page}';
 
   static String bookRegularAppointment(String appointmentId) =>
       '/health/book-appointment/$appointmentId';
@@ -327,6 +352,9 @@ class EndPoints {
   static const instaPay = '/payment-profile';
   static const requestYellowCard = '/payout/yellow-card';
   static const banks = '/banks';
+  static const requestWithdrawalMainWallet =
+      '/main-wallet/request-withdrawal-mainWallet';
+  static const checkWalletEnough = '/main-wallet/check-wallet-enough';
   static const payout = '/payout/request';
   static const requestInstapay = '/payout/request-instapay';
   static const yellowCardPrice = '/payout/yellow-card/price';
@@ -341,7 +369,9 @@ class EndPoints {
 
   static const isDoctorApproval = '/health/check-doctor-approval';
   static const getDoctorProfile = '/health/doctor-profile';
+  static const getDoctorWorkDays = '/health/doctor-work-days';
   static const updateDoctorProfilePhoto = '/health/doctor/picture';
+  static const updateDoctorTimeTable = '/health/doctor/add-appointments';
   static const updateDoctorPractcing =
       '/health/doctor-upload-license-practicing';
   static const updateDoctorID = '/health/doctor-upload-license-id';
@@ -378,9 +408,10 @@ class EndPoints {
   static deleteRestaurant(String id) => '/restaurants/delete-restaurant/$id';
   static const updateRestaurant = '/restaurants/update-restaurant-info';
   static const favoriteCategory = '$developmentBaseUrl/favorite-category';
+  static const reasons = '$developmentBaseUrl/cancellation/reasons';
   static const sendOfferPremium =
       '$developmentBaseUrl/loading/trip/sendOffer-premium';
-
+//
   // static const acceptLoadingTripOffer =
   //     '$developmentBaseUrl/loading/trip/acceptLoadingTripOffer';
   static const mediasignedUrl =
@@ -473,6 +504,10 @@ class EndPoints {
 
   static const sendRideRequest = '/ride/trips/new';
   static const checkDriverType = '/ride/riders/checkDriver/type';
+  static const createRideTripRequest = '/ride/trip';
+  static const createRideTripRequestPremium = '/ride/trip/premium';
+  static const getAddressFromLatAndLong = '/ride/trips/address/latAndLong';
+
   static const getMyPickMeTrips = '/ride/pick-me/trip/requests';
   static const getAllComeWithMeAds = '/ride/come-with-you/get-all';
   static const getAllPickMeAds = '/ride/pick-me/get-all';
@@ -487,7 +522,7 @@ class EndPoints {
   }
 
   static String favouriteAd(String id) {
-    return '/ads-favourites/adToFavourites/$id';
+    return '/ads-favorites/adToFavorites/$id';
   }
 
   static String removeFavouriteAd(String id) {
@@ -570,6 +605,15 @@ class EndPoints {
     return '/reels/saved?limit=${params.limit}&page=${params.page}&subCategory=${Constants.reelsSubCategory}';
   }
 
+  static String followers(TwitterFeedParams params) {
+    return '/follow/followers?search=${params.search}&limit=${params.limit}&page=${params.page}';
+  }
+
+  static String following(TwitterFeedParams params) {
+    return '/follow/allFollowing?search=${params.search}&limit=${params.limit}&page=${params.page}';
+  }
+
+
   static String createReel(CreateReelParams params) {
     return '/reels/views/${params.reelId}';
   }
@@ -592,6 +636,10 @@ class EndPoints {
 
   static String startTripRider(String id) {
     return '/ride/trips/start/$id';
+  }
+
+  static String partialPayment(String id) {
+    return '/ride/payment/partial-payment/$id';
   }
 
   static String completedTripRider(String id) {
@@ -753,11 +801,15 @@ class EndPoints {
   }
 
   static String getNumOfResturants = '/restaurants/num-of-restaurants';
+  static String toggleRestaurantFavourite(String id) =>
+      '/food/favorite-restaurant/$id';
   static String foodExpiredOrders(PaginationParams params) =>
       '/food/expired-orders?page=${params.page}&limit=${params.limit}';
   static String toggleRestaurantFavourite(String id) =>
       '/food/favorite-restaurant/$id';
 
+  static String foodExpiredOrders(PaginationParams params) =>
+      '/food/expired-orders?page=${params.page}&limit=${params.limit}';
   static String isResturant = '/restaurants/check-user-have-restaurant';
   static String createRestaurant = '/restaurants/create-restaurant';
   static String changeConnectivity = '/restaurants/modify-active';
@@ -796,7 +848,7 @@ class EndPoints {
   static const myAds = '/ads/allMyAds?limit=100';
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const makePremiumRequest = '/ads-requests/makeAdRequest-Premium';
-  static const favouriteAds = '/ads-favourites/allFavouriteAds';
+  static const favouriteAds = '/ads-favorites/allFavoriteAds';
   static const favouriteSubCategories = '/favorite-sub-category';
 
   static String deleteFavouriteAds(String id) {
@@ -924,6 +976,7 @@ class EndPoints {
   //lives
   static String allLiveTopics = '/stream-topic';
   static String createLive = '/stream';
+  static String editGoal(String id) => '/stream/goal/$id';
 
   static String endStream(String id) => '/stream/$id';
   static String allLives = '/stream/explore';

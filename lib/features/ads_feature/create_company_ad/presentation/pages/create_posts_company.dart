@@ -93,15 +93,16 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                             print(controller.selectedImages);
                             print('**************************************');
                             if (formKey.currentState!.validate()) {
-                                context
+                              context
                                   .read<CreateCompanyAdCubit>()
                                   .addPostCompanyAdvertise(
                                     mediaIds: widget.picture
-                                        ? controller.selectedImages ?? showErrorMessage(
-                                                context,
-                                                LocaleKeys
-                                                    .imageNotSelected.localize,
-                                              )
+                                        ? controller.selectedImages ??
+                                            showErrorMessage(
+                                              context,
+                                              LocaleKeys
+                                                  .imageNotSelected.localize,
+                                            )
                                         : null,
                                     type: widget.type,
                                     post: widget.text
@@ -128,7 +129,8 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                 GestureDetector(
                                   onTap: () {
                                     showModalBottomSheet(
-                                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                      backgroundColor: Theme.of(context)
+                                          .scaffoldBackgroundColor,
                                       context: context,
                                       builder: (BuildContext context) {
                                         return Wrap(
@@ -137,7 +139,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                               leading: const Icon(
                                                   Icons.photo_library),
                                               title: Text(
-                                                  LocaleKeys.gallery.localize,
+                                                LocaleKeys.gallery.localize,
                                               ),
                                               onTap: () async {
                                                 Navigator.pop(context);

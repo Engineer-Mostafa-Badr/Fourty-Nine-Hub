@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/currency_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/any_cashback_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_currency_use_case.dart';
@@ -28,7 +29,9 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   MainCategoriesCubit(
     this._getMainCategoriesUseCase,
     this._toggleFavoriteCategoryUseCase,
-    this._getWalletHomeUseCase, this._currencyUseCase, this._anyCashBackUseCase,
+    this._getWalletHomeUseCase,
+    this._currencyUseCase,
+    this._anyCashBackUseCase,
   ) : super(MainCategoriesState());
   Future<void> loadData() async {
     emit(state.copyWith(status: StateStatus.loading));
@@ -124,7 +127,9 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     response.fold((l) {
       emit(state.copyWith(failure: l, status: StateStatus.error));
     }, (data) {
-      emit(state.copyWith(wallet: data,));
+      emit(state.copyWith(
+        wallet: data,
+      ));
       print("state.wallet?.giftWallet ${state.wallet?.giftWallet}");
     });
   }
@@ -134,7 +139,9 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     response.fold((l) {
       emit(state.copyWith(failure: l, status: StateStatus.error));
     }, (data) {
-      emit(state.copyWith(currency: data,));
+      emit(state.copyWith(
+        currency: data,
+      ));
     });
   }
 }

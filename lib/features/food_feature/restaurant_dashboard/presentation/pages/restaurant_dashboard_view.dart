@@ -15,7 +15,6 @@ import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../cubit/restaurant_dashboard_cubit.dart';
@@ -34,14 +33,11 @@ class RestaurantDashboardView extends StatefulWidget {
 }
 
 class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
-
   @override
   void initState() {
     super.initState();
-    // context.read<RestaurantDashboardCubit>().initialize();
+    context.read<RestaurantDashboardCubit>().initialize();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +49,11 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
       body: BlocConsumer<RestaurantDashboardCubit, RestaurantDashboardState>(
           listener: (context, state) {},
           builder: (context, state) {
-            if(state.isLoading){
-              return const Center(child: CircularProgressIndicator(),);
-            }else if(state.isSuccess){
+            if (state.isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state.isSuccess) {
               return Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: CustomScrollView(
@@ -70,32 +68,36 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                               child: PropertyCard(
                                 myRestaurant: true,
                                 item: state.info!,
-                                mealId: 'mealId', favouriteRestaurant: (String id) {  },),
+                                mealId: 'mealId',
+                                favouriteRestaurant: (String id) {},
+                              ),
                             ),
                           Padding(
                               padding:
-                              const EdgeInsets.symmetric(horizontal: 8.0),
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Row(
                                 children: [
                                   Expanded(
                                       child: Label(
-                                        text: state.isRestaurant?.isActive ?? false
-                                            ? LocaleKeys.available.localize
-                                            : LocaleKeys.notAvailable.localize,
-                                        style: Styles.headerText(),
-                                      )),
+                                    text: state.isRestaurant?.isActive ?? false
+                                        ? LocaleKeys.available.localize
+                                        : LocaleKeys.notAvailable.localize,
+                                    style: Styles.headerText(),
+                                  )),
                                   Switch(
-                                      value: state.isRestaurant?.isActive ?? false,
+                                      value:
+                                          state.isRestaurant?.isActive ?? false,
                                       inactiveThumbColor: Colors.white,
                                       activeTrackColor: Colors.grey,
                                       activeColor: AppColors.SECONDARY_COLOR,
                                       trackOutlineColor:
-                                      MaterialStateProperty.resolveWith (
-                                              (sattes)=>Colors.white),
+                                          MaterialStateProperty.resolveWith(
+                                              (sattes) => Colors.white),
                                       onChanged: (v) async {
-
                                         print("vsssss${!v}");
-                                        await context.read<RestaurantDashboardCubit>().changeConnectivityStatus(v);
+                                        await context
+                                            .read<RestaurantDashboardCubit>()
+                                            .changeConnectivityStatus(v);
 
                                         // await context
                                         //     .read<RestaurantsCubit>()
@@ -121,7 +123,7 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                                     label: LocaleKeys.editRegistration.localize,
                                     onPressed: () async {
                                       if (state.isRestaurant?.restaurantId !=
-                                          null &&
+                                              null &&
                                           state.isRestaurant?.restaurantId !=
                                               '' &&
                                           state.info?.subcategoryId?.id !=
@@ -132,39 +134,49 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                                               builder: (context) =>
                                                   BlocProvider<
                                                       CreateRestaurantCubit>(
-                                                    create: (context) =>
+                                                create: (context) =>
                                                     serviceLocator(),
-                                                    child: CreateRestaurantForm(
-                                                        from: 'update',
-                                                        restaurantId:
-                                                        state.isRestaurant?.restaurantId,
-                                                        subcategoryId: state.info?.subcategoryId?.id??''),
-                                                  ),
+                                                child: CreateRestaurantForm(
+                                                    from: 'update',
+                                                    restaurantId: state
+                                                        .isRestaurant
+                                                        ?.restaurantId,
+                                                    subcategoryId: state
+                                                            .info
+                                                            ?.subcategoryId
+                                                            ?.id ??
+                                                        ''),
+                                              ),
                                             ));
-                                        context.read<RestaurantDashboardCubit>().initialize();
+                                        context
+                                            .read<RestaurantDashboardCubit>()
+                                            .initialize();
                                       }
                                     },
                                     backColor: AppColors.PRIMARY_COLOR,
                                     style:
-                                    Styles.headerText(color: Colors.white),
+                                        Styles.headerText(color: Colors.white),
                                   ),
                                 ),
                                 const Sizer(),
                                 Expanded(
                                   child: AppButton(
-                                    label: LocaleKeys.deleteRegistration.localize,
+                                    label:
+                                        LocaleKeys.deleteRegistration.localize,
                                     onPressed: () {
                                       showConfirmationDialog(
                                         context,
-                                        title: LocaleKeys.deleteRegistration.localize,
-                                        message:
-                                        LocaleKeys.sureRemoveRestaurant.localize,
+                                        title: LocaleKeys
+                                            .deleteRegistration.localize,
+                                        message: LocaleKeys
+                                            .sureRemoveRestaurant.localize,
                                         onConfirm: () async {
                                           if (widget.restaurantId.isNotEmpty) {
                                             await context
-                                                .read<RestaurantDashboardCubit>()
+                                                .read<
+                                                    RestaurantDashboardCubit>()
                                                 .deleteRestaurantById(context,
-                                                id: widget.restaurantId);
+                                                    id: widget.restaurantId);
                                             context.pop(true);
                                             // Future.delayed(const Duration(seconds: 1),()=>context.pop(true));
                                           }
@@ -173,7 +185,7 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                                     },
                                     backColor: AppColors.PRIMARY_COLOR_DARK,
                                     style:
-                                    Styles.headerText(color: Colors.white),
+                                        Styles.headerText(color: Colors.white),
                                   ),
                                 ),
                               ],
@@ -182,34 +194,45 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                         ],
                       ),
                     ),
-                    SliverToBoxAdapter(child: Padding(
-                      padding: EdgeInsets.only(top:15.h,left: 4.w,right: 4.w,bottom: 15.h),
-                      child: AppButton(
-                        label: LocaleKeys.subscribe.localize,
-                        onPressed: () {
-                          SubscriptionMethod().subscribe(subscribeId: state.info?.subcategoryId?.id??'', title: LocaleKeys.restaurantDashboard.localize);
-                        },
-                        backColor: AppColors.PRIMARY_COLOR_DARK,
-                        style:
-                        Styles.headerText(color: Colors.white),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            top: 15.h, left: 4.w, right: 4.w, bottom: 15.h),
+                        child: AppButton(
+                          label: LocaleKeys.subscribe.localize,
+                          onPressed: () {
+                            SubscriptionMethod().subscribe(
+                                subscribeId:
+                                    state.info?.subcategoryId?.id ?? '',
+                                title: LocaleKeys.restaurantDashboard.localize);
+                          },
+                          backColor: AppColors.PRIMARY_COLOR_DARK,
+                          style: Styles.headerText(color: Colors.white),
+                        ),
                       ),
-                    ),),
+                    ),
                     SliverToBoxAdapter(
                       child: ListView.separated(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             if (state.orders?.data.orders.length != null &&
-                                index < (state.orders?.data.orders.length??0)) {
+                                index <
+                                    (state.orders?.data.orders.length ?? 0)) {
                               final order = state.orders!.data.orders[index];
                               return Column(
                                 children: [
-                                  RestaurantOrderCard(item: order, subCategoryId: state.info?.subcategoryId?.id??'',),
+                                  RestaurantOrderCard(
+                                    item: order,
+                                    subCategoryId:
+                                        state.info?.subcategoryId?.id ?? '',
+                                  ),
                                   if (state.orders!.data
-                                      .restaurantSubscriptionType !=
+                                          .restaurantSubscriptionType !=
                                       'Not subscribed')
                                     Text(
-                                      LocaleKeys.subscribeToContactTheClient.localize,
+                                      LocaleKeys
+                                          .subscribeToContactTheClient.localize,
                                       style: Styles.headerText(
                                           color: AppColors.PRIMARY_COLOR_DARK),
                                     )
@@ -221,18 +244,17 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                             return const SizedBox();
                           },
                           separatorBuilder: (context, index) => const Sizer(
-                            height: 20,
-                          ),
+                                height: 20,
+                              ),
                           itemCount: state.orders?.data.orders.length ?? 0),
                     )
                   ],
                 ),
               );
-            }else{
+            } else {
               return const SizedBox.shrink();
             }
-            }
-          ),
+          }),
     );
   }
 }

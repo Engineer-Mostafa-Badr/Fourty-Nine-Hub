@@ -10,17 +10,12 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/mneu/show_menu.dart';
 import 'package:fourtyninehub/features/food_feature/edit_food/presentation/cubit/edit_food_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/widgets/build_food_list.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/widgets/item_card.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/widgets/restaurant_header.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -127,8 +122,8 @@ class _EditFoodViewState extends State<EditFoodView>
     if (meal.id != null) {
       showConfirmationDialog(
         context,
-        title: "Delete Item",
-        message: "Are you sure you want to remove this item?",
+        title: context.isArabic?'حذف الوجبة':'Delete Item',
+        message:context.isArabic?'هل أنت متأكد أنك تريد حذف هذا العنصر':'Are you sure you want to remove this item?',
         onConfirm: () async {
           Navigator.pop(context);
          var data =  await context.read<EditFoodCubit>().removeItem(foodId: meal.id??'',context: context);
@@ -146,11 +141,11 @@ class _EditFoodViewState extends State<EditFoodView>
         return ListView.separated(
           controller: _scrollController,
           shrinkWrap: true,
-          itemCount: context.read<EditFoodCubit>().menu.length,
+          itemCount: meals.length,
           separatorBuilder: (context,i)=>const Sizer(),
           // physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
-            final meal = context.read<EditFoodCubit>().menu[index];
+            final meal = meals[index];
             if (meal.id == null) {
               return const SizedBox();
             }
@@ -166,13 +161,13 @@ class _EditFoodViewState extends State<EditFoodView>
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text('Delete Item',style: Styles.headerText(),),
-                            content: Text('Are you sure you want to remove this item?',style: Styles.mediumText(),),
+                            title: Text(context.isArabic?'حذف الوجبة':'Delete Item',style: Styles.headerText(),),
+                            content: Text(context.isArabic?'هل أنت متأكد أنك تريد حذف هذا العنصر':'Are you sure you want to remove this item?',style: Styles.mediumText(),),
                             actions: [
                               TextButton(
                                 onPressed:  () => Navigator.of(context).pop(),
                                 child: Text(
-                                  "No",
+                                  LocaleKeys.no.localize,
                                   style: Styles.mediumText(color: Colors.black),
                                 ),
                               ),
@@ -181,7 +176,7 @@ class _EditFoodViewState extends State<EditFoodView>
                                   onDelete(meal.id??'');
                                 },
                                 child: Text(
-                                  "Yes",
+                                  LocaleKeys.yes.localize,
                                   style: Styles.mediumText(color: Colors.white),
                                 ),
                               ),
@@ -218,9 +213,9 @@ class _EditFoodViewState extends State<EditFoodView>
                     },
                     backgroundColor: Colors.red,
                     borderRadius: BorderRadius.circular(12.0),
-                    foregroundColor: Colors.white,
+                    foregroundColor: context.isDarkMode?AppColors.PRIMARY_COLOR:Colors.white,
                     icon: Icons.delete,
-                    label: 'Delete',
+                    label: LocaleKeys.delete.localize,
                   ),
                 ],
               ),
@@ -228,8 +223,8 @@ class _EditFoodViewState extends State<EditFoodView>
                 height: 100.h,
                 padding: EdgeInsets.all(15.w),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
+                    color:context.isDarkMode?AppColors.PRIMARY_COLOR:Colors.white   ,
+                    borderRadius: BorderRadius.circular(15),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5),
@@ -243,12 +238,12 @@ class _EditFoodViewState extends State<EditFoodView>
                   children: [
                     Expanded(
                       child: Text(
-                        meal?.foodName??'',
-                        style: Styles.headerText(color: AppColors.PRIMARY_COLOR),
+                        meal.foodName??'',
+                        style: Styles.headerText(color:context.isDarkMode?Colors.white: AppColors.PRIMARY_COLOR),
                       ),
                     ),
                     Text(
-                      meal?.price.toString()??'',
+                      meal.price.toString()??'',
                       style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
                     )
                   ],
@@ -316,14 +311,14 @@ class _EditFoodViewState extends State<EditFoodView>
                     children: [
                       _buildTextFormField(
                         controller: foodNameController,
-                        hintText: LocaleKeys.itemName.tr(),
+                        hintText: LocaleKeys.itemName.localize,
                         validatorMessage: LocaleKeys.emptyFieldNotValid.tr(),
                         keyboardType: TextInputType.text,
                       ),
                       const SizedBox(height: 10),
                       _buildTextFormField(
                         controller: priceController,
-                        hintText: LocaleKeys.price.tr(),
+                        hintText: LocaleKeys.price.localize,
                         validatorMessage: LocaleKeys.emptyFieldNotValid.tr(),
                         keyboardType: const TextInputType.numberWithOptions(
                             decimal: true),
@@ -404,34 +399,35 @@ class _EditFoodViewState extends State<EditFoodView>
 
   void _onAddOrUpdatePressed() async {
     if (_formKey.currentState?.validate() ?? false) {
-      final foodName = foodNameController.text;
-      final price = double.tryParse(priceController.text);
-      if (foodName.isNotEmpty && price != null) {
-        final menuItem = RestaurantMneuModel(
-          foodName: foodName,
-          price: price,
-          photoPath: imagePath,
-          photo: context.read<EditFoodCubit>().imageId,
-        );
+      if(context.read<EditFoodCubit>().state.imagePath!=null&&context.read<EditFoodCubit>().state.imagePath!=''){
+        final foodName = foodNameController.text;
+        final price = double.tryParse(priceController.text);
+        if (foodName.isNotEmpty && price != null) {
+          final menuItem = RestaurantMneuModel(
+            foodName: foodName,
+            price: price,
+            photoPath: imagePath,
+            photo: context.read<EditFoodCubit>().imageId,
+          );
 
-        await context
-            .read<EditFoodCubit>()
-            .updateMenuItem(context, menuItem);
-        await context
-            .read<EditFoodCubit>()
-            .loadData(id: widget.restaurantData.restaurantId,first: false);
-        foodNameController.clear();
-        priceController.clear();
+          await context
+              .read<EditFoodCubit>()
+              .updateMenuItem(context, menuItem, id: widget.restaurantData is String? widget.restaurantData:widget.restaurantData.restaurantId);
+          foodNameController.clear();
+          priceController.clear();
+        }
+      }else{
+        showErrorMessage(context, context.isArabic?'يجب اختيار صورة للمنتج':'You have to select an image for the food');
       }
     }
   }
 
   Widget _buildValidationMessage() {
-        return const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           child: Text(
-            "You have to fill all fields!",
-            style: TextStyle(color: Colors.red),
+            context.isArabic?'يجب تعبئة جميع الحقول':"You have to fill all fields!",
+            style: const TextStyle(color: Colors.red),
           ),
         );
   }
@@ -443,6 +439,7 @@ class _EditFoodViewState extends State<EditFoodView>
       appBar: AppBar(),
       body: BlocBuilder<EditFoodCubit,EditFoodState>(
         builder: (context,state) {
+          var cubit = context.read<EditFoodCubit>();
           return state.isLoading?const Center(child: CircularProgressIndicator(),):Column(
             // controller: _scrollController,
             children: [
@@ -461,15 +458,15 @@ class _EditFoodViewState extends State<EditFoodView>
                 ),
               ),
 
-              if (state.meals!=null&&(state.meals?.isNotEmpty ?? false))
+              if (cubit.menu.isNotEmpty)
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: _buildMealsList(state.meals??[],(id) async{
+                    child: _buildMealsList(cubit.menu??[],(id) async{
                       bool result = await context.read<EditFoodCubit>().removeItem(foodId: id,context: context);
                       if(result==true){
                         context.pop();
-                        state.meals?.removeWhere((element) => element.id==id);
+                        cubit.menu.removeWhere((element) => element.id==id);
                         setState(() {
 
                         });

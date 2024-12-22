@@ -3,6 +3,7 @@ import '../../../../../core/utils/duration_helper.dart';
 class CommentEntity {
   final String id;
   String content;
+  String? reply;
   final String post;
   dynamic user;
   bool? isLove;
@@ -28,6 +29,7 @@ class CommentEntity {
   CommentEntity({
     required this.id,
     required this.content,
+    this.reply,
     required this.post,
     required this.createdAt,
     required this.user,
@@ -47,4 +49,27 @@ class CommentEntity {
     this.isHaha = false,
     this.edit = false,
   });
+
+  //toJson
+  Map<String, dynamic> toJson() => {
+    '_id': id,
+    'content': content,
+    'post': post,
+    'isLove': isLove,
+    'isLikes': isLikes,
+    'user': user,
+    'isWow': isWow,
+    'isSad': isSad,
+    'isHaha': isHaha,
+    'isAngry': isAngry,
+    'likesCount': likesCount,
+    'loveCount': loveCount,
+    'wowCount': wowCount,
+    'hahaCount': hahaCount,
+    'sadCount': sadCount,
+    'angryCount': angryCount,
+    'repliesCount': repliesCount,
+    'totalCount': totalCount,
+    'createdAt': createdAt,
+  };
 }

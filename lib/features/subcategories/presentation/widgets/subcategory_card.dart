@@ -64,22 +64,23 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                       url: widget.item.image,
                     ),
                   ),
-                if(context.read<UserCubit>().isLoggedIn)  PositionedDirectional(
-                      top: 10.h,
-                      start: 10.w,
-                      child: IconAppButton(
-                        icon: widget.item.isFavorite == false
-                            ? Icons.favorite_outline
-                            : Icons.favorite,
-                        onPressed: () async {
-                          var result = await widget.onFav();
-                          if (result == true) {
-                            widget.item.isFavorite = !widget.item.isFavorite!;
-                            setState(() {});
-                          }
-                        },
-                        color: AppColors.SECONDARY_COLOR,
-                      ))
+                  if (context.read<UserCubit>().isLoggedIn)
+                    PositionedDirectional(
+                        top: 10.h,
+                        start: 10.w,
+                        child: IconAppButton(
+                          icon: widget.item.isFavorite == false
+                              ? Icons.favorite_outline
+                              : Icons.favorite,
+                          onPressed: () async {
+                            var result = await widget.onFav();
+                            if (result == true) {
+                              widget.item.isFavorite = !widget.item.isFavorite!;
+                              setState(() {});
+                            }
+                          },
+                          color: AppColors.SECONDARY_COLOR,
+                        ))
                 ],
               ),
             ),
@@ -90,8 +91,11 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                 children: [
                   Expanded(
                     child: Label(
-                      text: context.isArabic?widget.item.nameAr:widget.item.nameEn,
-                      style: Styles.smallText(fontWeight: FontWeight.bold,fontSize: 24),
+                      text: context.isArabic
+                          ? widget.item.nameAr
+                          : widget.item.nameEn,
+                      style: Styles.smallText(
+                          fontWeight: FontWeight.bold, fontSize: 24),
                     ),
                   ),
                   IconAppButton(

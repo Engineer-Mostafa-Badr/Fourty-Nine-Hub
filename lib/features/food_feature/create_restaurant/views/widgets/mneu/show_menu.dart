@@ -44,76 +44,73 @@ class ShowMneu extends StatelessWidget {
                 style: Styles.headerText(color: Colors.red),
               ),
               if (createRestaurantCubit.menu.isNotEmpty) ...[
-                  Center(
-                    child: Wrap(
-                      alignment: WrapAlignment.center,
-                      runSpacing: 10,
-                      spacing: 10,
-                      children: [
-                        /// show data
-                        ...createRestaurantCubit.menu.map(
-                          (RestaurantMneuModel e) => Container(
-                            width: MediaQuery.of(context).size.width,
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(width: .4)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ImagePickerPlaceholder(
-                                  image: Image.file(
-                                    File(e.photoPath ?? ""),
-                                    fit: BoxFit.cover,
-                                  ),
+                Center(
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    runSpacing: 10,
+                    spacing: 10,
+                    children: [
+                      /// show data
+                      ...createRestaurantCubit.menu.map(
+                        (RestaurantMneuModel e) => Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(width: .4)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ImagePickerPlaceholder(
+                                image: Image.file(
+                                  File(e.photoPath ?? ""),
+                                  fit: BoxFit.cover,
                                 ),
-                                const Sizer(),
-                                Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      e.foodName ?? "",
-                                      style:
-                                          Styles.headerText(color: Colors.red),
-                                    ),
-                                    Sizer(height: 50.h),
-                                    Text(
-                                      "${e.price ?? ""}",
-                                      style:
-                                          Styles.headerText(color: Colors.red),
-                                    ),
-                                    const Sizer(),
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.red,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        minimumSize: const Size(100, 40),
-                                        maximumSize: const Size(100, 40),
+                              ),
+                              const Sizer(),
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    e.foodName ?? "",
+                                    style: Styles.headerText(color: Colors.red),
+                                  ),
+                                  Sizer(height: 50.h),
+                                  Text(
+                                    "${e.price ?? ""}",
+                                    style: Styles.headerText(color: Colors.red),
+                                  ),
+                                  const Sizer(),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
-                                      onPressed: () {
-                                        createRestaurantCubit.removeMenuItem(
-                                            context, e);
-                                      },
-                                      child: const Text(
-                                        "Remove",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
+                                      minimumSize: const Size(100, 40),
+                                      maximumSize: const Size(100, 40),
+                                    ),
+                                    onPressed: () {
+                                      createRestaurantCubit.removeMenuItem(
+                                          context, e);
+                                    },
+                                    child: const Text(
+                                      "Remove",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
+                ),
               ],
               const Sizer(),
               Container(

@@ -15,7 +15,6 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/notific
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../features/search/presentation/pages/search_view.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -60,6 +59,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
       final currentRoute = ModalRoute.of(context)?.settings.name;
       return currentRoute == targetRoute;
     }
+
     return AppBar(
       toolbarHeight: toolbarHeight,
       bottom: bottom,
@@ -105,7 +105,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   label: LocaleKeys.lang.tr(),
                   style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
                   onPressed: () {
-                    HandleCashback.setCount('langCount',context);
+                    HandleCashback.setCount('langCount', context);
                     if (context.locale == Locales.english) {
                       changeLang(locale: Locales.arabic, context: context);
                     } else {
@@ -135,12 +135,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               child: InkWell(
                 borderRadius: BorderRadius.circular(40.r),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SearchView(),
-                    ),
-                  );
+                  context.push(Routes.SEARCH);
                 },
                 child: Row(
                   children: [
@@ -168,34 +163,33 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     text: LocaleKeys.register.localize,
                     style: Styles.mediumText())),
           // if (language)
-            Padding(
-              padding:  EdgeInsets.symmetric(horizontal:15.w),
-              child: InkWell(
-                onTap: () {
-                  if(isCurrentRoute(context, Routes.CHAT)==true){
-                    return;
-                  }
-                  HandleCashback.setCount('chatCount',context);
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15.w),
+            child: InkWell(
+              onTap: () {
+                if (isCurrentRoute(context, Routes.CHAT) == true) {
+                  return;
+                }
+                HandleCashback.setCount('chatCount', context);
 
-                     context.push(Routes.CHAT);
-
-                },
-                child: SvgPicture.asset(
-                  Assets.message,
-                  height: 30.h,
-                ),
+                context.push(Routes.CHAT);
+              },
+              child: SvgPicture.asset(
+                Assets.message,
+                height: 30.h,
               ),
             ),
+          ),
 
           SizedBox(
             width: 40.w,
           ),
           GestureDetector(
             onTap: () {
-              if(isCurrentRoute(context, Routes.NOTIFICATIONS)==true){
+              if (isCurrentRoute(context, Routes.NOTIFICATIONS) == true) {
                 return;
               }
-              HandleCashback.setCount('notificationCount',context);
+              HandleCashback.setCount('notificationCount', context);
               context.push(context.read<UserCubit>().isLoggedIn
                   ? Routes.NOTIFICATIONS
                   : Routes.LOGIN);

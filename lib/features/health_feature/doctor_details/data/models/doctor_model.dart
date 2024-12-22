@@ -2,6 +2,7 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/doctor_day_model.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_address.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_day_entity.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/data/models/doctor_meeting_model.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
@@ -14,12 +15,15 @@ class DoctorModel extends DoctorEntity {
     required super.id,
     required super.lastName,
     required super.firstName,
+    required super.meetingData,
     required super.subCategory,
     required super.image,
     required super.phone,
     required super.email,
     required super.address,
     required super.clinic,
+    required super.isAfterEnd,
+    required super.isBetweenStartAndEnd,
     required super.calls,
     required super.visitHome,
     required super.clinicPrice,
@@ -30,6 +34,7 @@ class DoctorModel extends DoctorEntity {
     required super.visitHomePrice,
     required super.waitingTime,
     required super.isActive,
+    required super.timeToStart,
     required super.isPremium,
     required super.description,
     required super.classification,
@@ -39,6 +44,8 @@ class DoctorModel extends DoctorEntity {
     required super.appointments,
     required super.clinicDays,
     required super.callDays,
+    required super.currencyEn,
+    required super.currencyAr,
     required super.homeVisitDays,
   });
 
@@ -46,7 +53,11 @@ class DoctorModel extends DoctorEntity {
     return DoctorModel(
       id: json['_id'] ?? '',
       lastName: json['lastName'] ?? '',
+      timeToStart: json['timeToStart'] ?? '0h 0m',
+      isAfterEnd: json['isAfterEnd'] ?? false,
+      isBetweenStartAndEnd: json['isBetweenStartAndEnd'] ?? false,
       firstName: json['firstName'] ?? '',
+      meetingData: json['roomMeeting'] !=null?DoctorMeetingModel.fromJson(json['roomMeeting']):null,
       subCategory: json['subCategoryId'] != null
           ? SubCategoryModel.fromJson(json['subCategoryId'])
           : SubCategoryEntity(
@@ -66,6 +77,8 @@ class DoctorModel extends DoctorEntity {
       clinic: json['clinic'] ?? false,
       calls: json['calls'] ?? false,
       visitHome: json['visitHome'] ?? false,
+      currencyEn: json['currencyEn'] ?? '',
+      currencyAr: json['currencyAr'] ?? '',
       clinicPrice: json['clinicPrice'] ?? '',
       detectionPeriodClinic: json['detectionPeriodClinic'] ?? '',
       detectionPeriodCalls: json['detectionPeriodCalls'] ?? '',

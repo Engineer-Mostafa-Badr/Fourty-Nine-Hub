@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
@@ -38,10 +37,7 @@ class PostsSearchView extends StatelessWidget {
                 return Center(
                   child: Text(
                     LocaleKeys.noPosts.localize,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18.sp,
-                    ),
+                    style: Styles.mediumText(),
                   ),
                 );
               },
@@ -223,9 +219,7 @@ class PostsSearchView extends StatelessWidget {
           );
           }
           return Center(
-            child: Text(LocaleKeys.noResultFound.localize,
-            style: Styles.mediumText(),
-            ),
+            child: Text(LocaleKeys.noResultsFound.localize),
           );
         },
       ),

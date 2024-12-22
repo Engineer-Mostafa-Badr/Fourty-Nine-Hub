@@ -34,7 +34,7 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
             builder: (context, state) {
           final controller = context.read<SocialPostsCubit>();
           return Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(20.w),
             child: Column(
               children: [
                 Row(
@@ -46,20 +46,39 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
                         child: const Icon(Icons.arrow_back)),
                     const Sizer(),
                     Expanded(
-                      child: TextFormField(
-                        controller: searchController,
-                        onChanged: (v) {
-                          if (v.isNotEmpty) {
-                            controller.loadSearchUsers(v);
-                          } else {
-                            controller.usersPagingController.itemList = [];
-                          }
-                        },
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          contentPadding: const EdgeInsets.all(5),
-                          hintStyle: Styles.mediumText(),
-                          hintText: LocaleKeys.searchWithName.localize,
+                      child: Card(
+                        child: TextFormField(
+                          controller: searchController,
+                          onChanged: (v) {
+                            if (v.isNotEmpty) {
+                              controller.loadSearchUsers(v);
+                            } else {
+                              controller.usersPagingController.itemList = [];
+                            }
+                          },
+                          decoration: InputDecoration(
+                            fillColor:
+                                Theme.of(context).scaffoldBackgroundColor,
+                            contentPadding: EdgeInsets.symmetric(horizontal: 20.h),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(60.r),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor)),
+                            disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(60.r),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor)),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(60.r),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor)),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(60.r),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor)),
+                            hintStyle: Styles.mediumText(),
+                            hintText: LocaleKeys.searchWithName.localize,
+                          ),
                         ),
                       ),
                     ),
@@ -93,10 +112,7 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
                 child: Center(
                   child: Text(
                     "No Users",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18.sp,
-                    ),
+                    style: Styles.mediumText(),
                   ),
                 ));
           },

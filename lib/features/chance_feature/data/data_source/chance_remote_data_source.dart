@@ -30,7 +30,6 @@ abstract class ChanceRemoteDataSource {
       MainCategoryChanceParams params);
   Future<Either<Failure, List<SubCategoryDropEntity>>> fetchSubCategory(
       SubCategoryChanceParams params);
-
 }
 
 class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
@@ -120,8 +119,8 @@ class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
       queryParameters: params.paginationParams.toJson(),
     );
     return response.fold(
-          (failure) => Left(failure),
-          (data) {
+      (failure) => Left(failure),
+      (data) {
         final list = (data['data']['mainCategories'] as List)
             .map((e) => MainCategoryDropModel.fromJson(e))
             .toList();
@@ -138,8 +137,8 @@ class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
       queryParameters: params.paginationParams.toJson(),
     );
     return response.fold(
-          (failure) => Left(failure),
-          (data) {
+      (failure) => Left(failure),
+      (data) {
         final list = (data['data']['subcategories'] as List)
             .map((e) => SubCategoryDropModel.fromJson(e))
             .toList();

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,9 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
@@ -64,7 +67,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                           Icon(Icons.group_rounded,size: 40.sp,),
                           const Sizer(),
                           Label(
-                            text: LocaleKeys.peopleYouMayKnow.localize,
+                            text:context.locale == Locales.english? 'People you may know':'أشخاص قد تعرفهم',
                             style: Styles.mediumText(fontSize: 60.sp),
                           ),
                         ],
@@ -104,7 +107,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                     SuggestUserEntity item = controller
                                         .suggestUserPagingController
                                         .itemList![index];
-                                    return InkWell(
+                                    return ClickableWidget(
                                       onTap: () {
                                         context.push(Routes.OTHERSACCOUNT,
                                             extra: controller
@@ -184,7 +187,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                       : Row(
                                                           children: [
                                                             Expanded(
-                                                              child: InkWell(
+                                                              child: ClickableWidget(
                                                                 onTap:
                                                                     () async {
                                                                   if (item.addedSuccessfully ==
@@ -278,7 +281,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                                 ),
                                                                               ),
                                                                             ),
-                                                                            InkWell(
+                                                                            ClickableWidget(
                                                                               onTap: () async {
                                                                                 if (messageController.text.isNotEmpty) {
                                                                                   await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
@@ -352,7 +355,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                             ),
                                                             if (item.addedSuccessfully ==
                                                                 false)
-                                                              InkWell(
+                                                              ClickableWidget(
                                                                 onTap:
                                                                     () async {
                                                                   bool data = await controller.removeSuggestUser(

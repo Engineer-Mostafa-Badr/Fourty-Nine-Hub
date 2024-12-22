@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -119,6 +118,17 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
                               setState(() {});
                             }
                           },
+                          function: (){
+                            controller.replyOnComment(
+                              params: ReplyOnCommentParams(
+                                postId: controller.repliesPagingController
+                                    .itemList![index].post,
+                                commentId: controller.repliesPagingController
+                                    .itemList![index].id,
+                                content: replyTextController.text,
+                              ),
+                            );
+                          }
                         );
                       },
                       noMoreItemsIndicatorBuilder: (context) => Container(),
@@ -223,7 +233,9 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
   Widget _buildCommentCard(
       {required CommentEntity reply,
       required Function(String) onDeleteComment,
-      required Function(String) onDeleteReply}) {
+      required Function(String) onDeleteReply,
+      required Function() function,
+      }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -234,6 +246,7 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
           onReport: (TwitterReportParams params) {},
           onEditComment: (PostCommentParams params) =>
               widget.onEditComment(params),
+          function: function,
         ),
       ],
     );

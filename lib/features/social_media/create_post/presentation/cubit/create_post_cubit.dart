@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_places_usecase.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:just_audio/just_audio.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../domain/entities/activity_entity.dart';
@@ -37,8 +38,67 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       : super(CreatePostState());
 
   List<String>? selectedImages;
+  String? selectedAudio;
 
-  // final scrollController = ScrollController();
+  // void addMusic(String musicPath) {
+  //   emit(state.copyWith(music: musicPath));
+  // }
+
+  // void removeMusic() {
+  //   emit(state.copyWith(music: null));
+  // }
+
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
+  Future<void> addMusic(String musicPath) async {
+    // Update the state with the selected music path
+    emit(state.copyWith(music: musicPath));
+
+    try {
+      // Set the audio source using a file path
+      await _audioPlayer.setAudioSource(AudioSource.uri(Uri.file(musicPath)));
+      await _audioPlayer.play();
+    } catch (e) {
+      // Handle exceptions, such as invalid file paths or unsupported formats
+      print("Error playing music: $e");
+    }
+  }
+
+  Future<void> removeMusic() async {
+    try {
+      await _audioPlayer.stop();
+      emit(state.copyWith(music: null)); // Clear the music from state
+    } catch (e) {
+      print("Error stopping music: $e");
+    }
+  }
+
+  Future<void> playMusic() async {
+    try {
+      if (state.music != null) {
+        await _audioPlayer.play();
+      }
+    } catch (e) {
+      print("Error resuming music: $e");
+    }
+  }
+
+  Future<void> pauseMusic() async {
+    try {
+      await _audioPlayer.pause();
+    } catch (e) {
+      print("Error pausing music: $e");
+    }
+  }
+
+  @override
+  Future<void> close() {
+    _audioPlayer.dispose(); // Dispose the player when no longer needed
+    return super.close();
+  }
+
+
+// final scrollController = ScrollController();
   //
   // void initScroll(){
   //   scrollController.addListener(() {
@@ -155,6 +215,30 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
     await upload.uploadImage(
+        isGallery: isGallery,
+        subCategoryId: '66a3583454e6e337915514db',
+        onUploaded: (UploadFileEntity data) {
+          print("file name ${data.file}");
+          print("mediaId: ${data.mediaId}");
+          selectedImages?.add(data.mediaId);
+          final images = state.images ?? [];
+
+          images.add(data);
+          selectedImages = images.map((e) => e.mediaId).toList();
+          print("selectedImages${selectedImages?.length}");
+          print(images.length);
+          emit(state.copyWith(
+              images: images,
+              backColor: '#FFFFFFFF',
+              status: CreatePostStates.success));
+        });
+    print("length${state.images?.length}");
+  }
+
+  uploadAudio({bool isGallery = true}) async {
+    final UploadFile upload = UploadFile();
+    print("objectssssssssss");
+    await upload.uploadAudio(
         isGallery: isGallery,
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) {
@@ -354,6 +438,4 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     selectedImages = [];
     emit(state.copyWith(images: [])); // Emit updated state to notify listeners
   }
-
-
 }

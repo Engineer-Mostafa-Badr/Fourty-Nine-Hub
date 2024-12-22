@@ -22,8 +22,8 @@ class QuranServiceLocator {
               serviceLocator(),
             ));
 
-    serviceLocator
-        .registerLazySingleton<FetchQuranSurahUseCase>(() => FetchQuranSurahUseCase(
+    serviceLocator.registerLazySingleton<FetchQuranSurahUseCase>(
+        () => FetchQuranSurahUseCase(
               serviceLocator(),
             ));
     serviceLocator
@@ -32,33 +32,31 @@ class QuranServiceLocator {
             ));
 
     serviceLocator.registerFactory<QuranCubit>(() => QuranCubit(
-      serviceLocator(),
-      serviceLocator(),
-    ));
+          serviceLocator(),
+          serviceLocator(),
+        ));
 
     // Akar
     serviceLocator.registerLazySingleton<AzkarRemoteDataSource>(
-            () => AzkarRemoteDataSourceImpl(serviceLocator()));
+        () => AzkarRemoteDataSourceImpl(serviceLocator()));
 
     serviceLocator
         .registerLazySingleton<AzkarRepository>(() => AzkarRepositoryImpl(
-      serviceLocator(),
-    ));
+              serviceLocator(),
+            ));
 
     serviceLocator
         .registerLazySingleton<FetchAzkarUseCase>(() => FetchAzkarUseCase(
-      serviceLocator(),
-    ));
-    serviceLocator
-        .registerLazySingleton<FetchDetailsAzkarUseCase>(() => FetchDetailsAzkarUseCase(
-      serviceLocator(),
-    ));
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<FetchDetailsAzkarUseCase>(
+        () => FetchDetailsAzkarUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerFactory<AzkarCubit>(() => AzkarCubit(
-      serviceLocator(),
-      serviceLocator(),
-    ));
-
-
+          serviceLocator(),
+          serviceLocator(),
+        ));
   }
 }

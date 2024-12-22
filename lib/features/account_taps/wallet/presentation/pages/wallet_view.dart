@@ -11,7 +11,9 @@ import '../../../../../res/style/styles.dart';
 class WalletView extends StatelessWidget {
   // final WalletTypes type;
 
-  const WalletView({super.key,});
+  const WalletView({
+    super.key,
+  });
 
   Widget walletInfo({
     required BuildContext context,

@@ -33,12 +33,12 @@ class _TextPostContentState extends State<TextPostContent> {
         },
         builder: (BuildContext context, state) {
           return PaginationView<CompanyAdEntity>(
-           // loadingWidget: const SizedBox.shrink(),
+            // loadingWidget: const SizedBox.shrink(),
             build: (scrollController, data) {
               return data.isNotEmpty
                   ? Padding(
-                    padding:  EdgeInsets.all(8.w),
-                    child: ListView.separated(
+                      padding: EdgeInsets.all(8.w),
+                      child: ListView.separated(
                         controller: scrollController,
                         itemBuilder: (context, index) => BuildItemTextPost(
                           advertises: data[index],
@@ -57,12 +57,12 @@ class _TextPostContentState extends State<TextPostContent> {
                         separatorBuilder: (context, index) => Divider(
                           color: AppColors.GREY_LIGHT_COLOR,
                           height: 30.h,
-                          endIndent:20.w ,
-                          indent:20.w,
+                          endIndent: 20.w,
+                          indent: 20.w,
                         ),
                         itemCount: data.length,
                       ),
-                  )
+                    )
                   : Center(child: Label(text: LocaleKeys.noTextPosts.localize));
             },
             fetchData: (PaginationParams paginationParams) {

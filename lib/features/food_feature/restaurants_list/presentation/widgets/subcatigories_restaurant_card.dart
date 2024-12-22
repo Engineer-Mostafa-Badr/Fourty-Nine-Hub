@@ -308,7 +308,7 @@ class DetailsSection extends StatelessWidget {
               Expanded(child: Text(item.name ?? '', style: Styles.headerText())),
               if(myRestaurant)ClickableWidget(
                   onTap: (){
-                    context.push(Routes.RestaurantOrders);
+                    context.push(Routes.RESTAURANTORDERS);
                   },
                   child: Text(LocaleKeys.showAllOrders.localize, style: Styles.mediumText(color: AppColors.SECONDARY_COLOR,decoration: TextDecoration.underline,decorationThickness: 2.w))),
             ],
@@ -490,7 +490,7 @@ class CallMessageReportButtons extends StatelessWidget {
               await showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
-                backgroundColor: Colors.transparent,
+                backgroundColor: cardDarkColor(context),
                 builder: (context) {
                   return SizedBox(
                     height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,

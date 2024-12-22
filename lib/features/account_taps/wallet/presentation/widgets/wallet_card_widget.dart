@@ -14,7 +14,11 @@ class WalletCardWidget extends StatelessWidget {
   final double? target;
   final WalletTypes type;
   const WalletCardWidget(
-      {super.key, required this.balance, this.target, required this.type, required this.currency});
+      {super.key,
+      required this.balance,
+      this.target,
+      required this.type,
+      required this.currency});
 
   @override
   Widget build(BuildContext context) {

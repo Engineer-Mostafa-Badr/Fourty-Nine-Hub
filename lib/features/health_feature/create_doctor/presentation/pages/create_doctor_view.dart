@@ -1,9 +1,11 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
@@ -56,14 +58,14 @@ class CreateDoctorView extends StatelessWidget {
       child: Scaffold(
         appBar: const HomeAppbar(),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(15.0),
+          padding: EdgeInsets.all(16.w),
           child: Form(
             key: context.read<CreateDoctorCubit>().formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                    text: LocaleKeys.doctor.tr(),
+                    text: LocaleKeys.doctor.localize,
                     style: Styles.headerText(color: AppColors.SECONDARY_COLOR)),
                 Sizer(height: 20.h),
                 const CreateDoctorSubcategoryDropdown(),
@@ -102,19 +104,34 @@ class CreateDoctorView extends StatelessWidget {
                 Sizer(height: 20.h),
                 const CreateDoctorAddressField(),
                 Sizer(height: 20.h),
+                const Sizer(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("${LocaleKeys.waitingTime.localize}:", style: Styles.mediumText(),),
+                    DefaultTextFormField(
+                      hint: LocaleKeys.waitingTime.localize,
+                      keyboardType: TextInputType.number,
+                      isRequired: true,
+                      currentFocusNode: context.read<CreateDoctorCubit>().waitingTimeFocusNode,
+                      currentController: context.read<CreateDoctorCubit>().waitingTimeController,
+                    ),
+                  ],
+                ),
+                const Sizer(),
                 const CreateDoctorClinicTimeTable(),
                 Sizer(height: 20.h),
                 const CreateDoctorCallTimeTable(),
                 Sizer(height: 20.h),
                 const CreateDoctorHomeVisitTimeTable(),
                 Sizer(height: 20.h),
-                const AppInfoText(
+                AppInfoText(
                     text:
-                        "The application does not deduct any percentage from the service provider."),
+                        context.isArabic?"التطبيق لا يخصم اي نسبه من مزود الخدمة.":"The application does not deduct any percentage from the service provider."),
                 Sizer(height: 20.h),
-                const AppInfoText(
+                AppInfoText(
                     text:
-                        'You will get EGP 3,650 per year if you subscribe daily.'),
+                        context.isArabic?'سوف تحصل على 3650 جنيها في السنه عندما تشترك يوميا.':'You will get EGP 3,650 per year if you subscribe daily.'),
                 Sizer(height: 20.h),
                 const CreateDoctorSubmitButton(),
               ],

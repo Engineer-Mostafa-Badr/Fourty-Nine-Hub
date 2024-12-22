@@ -26,7 +26,7 @@ class CustomButtonCountAds extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  BackAppBar(
+      appBar: BackAppBar(
         label: LocaleKeys.requestAd.localize,
       ),
       body: BlocProvider<MyAddsCubit>(

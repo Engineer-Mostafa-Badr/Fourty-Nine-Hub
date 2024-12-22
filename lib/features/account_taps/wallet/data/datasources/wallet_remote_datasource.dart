@@ -96,7 +96,7 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
       MainCategoryParams params) async {
     final response = await _apiConsumer.get(
       EndPoints.geMainCategoryWallet(params),
-     // queryParameters: params.paginationParams.toJson(),
+      // queryParameters: params.paginationParams.toJson(),
     );
 
     return response.fold(

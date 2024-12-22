@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page_preview.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';
@@ -22,32 +24,42 @@ class CustomPage extends StatefulWidget {
 }
 
 class _CustomPageState extends State<CustomPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: BackAppBar(
         label: LocaleKeys.customPage.localize,
+        leading: IconButton(
+          icon: const Icon(Icons.menu), // The menu icon
+          onPressed: () {
+            // HandleCashback.setCount('drawerCount',context);
+            _scaffoldKey.currentState?.openDrawer(); // Open the drawer
+          },
+        ),
       ),
+      drawer: const DrawerWidget(),
       body: BlocProvider<CustomPageCubit>(
-        create: (BuildContext context) =>serviceLocator()..fetchActivate(),
-        child: BlocBuilder<CustomPageCubit,CustomPageState>(
+        create: (BuildContext context) => serviceLocator()..fetchActivate(),
+        child: BlocBuilder<CustomPageCubit, CustomPageState>(
           builder: (BuildContext context, state) {
-            var controller=context.read<CustomPageCubit>();
+            var controller = context.read<CustomPageCubit>();
             return Column(
               children: [
                 Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: 25.w),
+                  padding: EdgeInsets.symmetric(horizontal: 25.w),
                   child: Row(
                     children: [
                       Expanded(
                           child: Label(
-                            text: LocaleKeys.activatePage.localize,
+                              text: LocaleKeys.activatePage.localize,
                               style: Styles.mediumText(
-                                  fontSize: 65.sp, fontWeight: FontWeight.w400)
-                          )),
+                                  fontSize: 65.sp,
+                                  fontWeight: FontWeight.w400))),
                       Switch(
-                        value: state.activate?.customPage ??false,
-                        onChanged: (v){
+                        value: state.activate?.customPage ?? false,
+                        onChanged: (v) {
                           controller.updateActivate(v);
                         },
                         activeColor: Colors.red,
@@ -79,12 +91,7 @@ class _CustomPageState extends State<CustomPage> {
                       style: Styles.mediumText(
                           fontSize: 65.sp, fontWeight: FontWeight.w400)),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const PagePreview(),
-                      ),
-                    );
+                    context.push(Routes.PAGEPREVIEW);
                   },
                   trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
                 ),

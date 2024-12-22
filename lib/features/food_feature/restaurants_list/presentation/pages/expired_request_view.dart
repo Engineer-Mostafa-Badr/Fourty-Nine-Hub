@@ -1,7 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -10,13 +8,10 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/expired_requests_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:intl/intl.dart';
 
 import '../cubit/restaurants_list_cubit.dart';
 
@@ -24,11 +19,12 @@ class RestaurantExpiredRequestsScreen extends StatefulWidget {
   const RestaurantExpiredRequestsScreen({super.key});
 
   @override
-  State<RestaurantExpiredRequestsScreen> createState() => _RestaurantExpiredRequestsScreenState();
+  State<RestaurantExpiredRequestsScreen> createState() =>
+      _RestaurantExpiredRequestsScreenState();
 }
 
-class _RestaurantExpiredRequestsScreenState extends State<RestaurantExpiredRequestsScreen> {
-
+class _RestaurantExpiredRequestsScreenState
+    extends State<RestaurantExpiredRequestsScreen> {
   late ScrollController _scrollController;
   bool isFirstSearchListenerCall = true;
 
@@ -39,56 +35,61 @@ class _RestaurantExpiredRequestsScreenState extends State<RestaurantExpiredReque
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       context.read<RestaurantsCubit>().getExpiredOrders();
     }
   }
+
   @override
   void dispose() {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: scaffoldDarkColor(context),
       appBar: BackAppBar(
         label: LocaleKeys.expiredRequests.tr(),
       ),
       body: BlocBuilder<RestaurantsCubit, RestaurantsListState>(
-    builder: (context, state) {
-      final controller = context.read<RestaurantsCubit>();
+          builder: (context, state) {
+        final controller = context.read<RestaurantsCubit>();
 
-      if(!state.isLoading){
-        return Column(
-          children: [
-            Expanded(
-              child: ListView.separated(
-                controller: _scrollController,
-                itemCount: controller.expiredOrders.length,
-                itemBuilder: (context, index) {
-                  final request = controller.expiredOrders[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: TripRequestCard(orderData: request),
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const Sizer();
-                },
+        if (!state.isLoading) {
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.separated(
+                  controller: _scrollController,
+                  itemCount: controller.expiredOrders.length,
+                  itemBuilder: (context, index) {
+                    final request = controller.expiredOrders[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: TripRequestCard(orderData: request),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const Sizer();
+                  },
+                ),
               ),
-            ),
-            if(controller.isLoadingExpiredOrdersMore) const Center(child: CircularProgressIndicator(),)
-          ],
-        );
-      }else{
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-    }),
+              if (controller.isLoadingExpiredOrdersMore)
+                const Center(
+                  child: CircularProgressIndicator(),
+                )
+            ],
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      }),
     );
   }
 }

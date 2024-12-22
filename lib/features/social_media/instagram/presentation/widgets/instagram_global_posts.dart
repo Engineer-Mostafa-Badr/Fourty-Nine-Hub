@@ -148,7 +148,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                               !controller
                                                   .globalFeedPagingController
                                                   .itemList![index]
-                                                  .isLove!;
+                                                  .isLove;
                                           setState(() {});
                                         },
                                       );
@@ -233,7 +233,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                       !controller
                                                           .globalFeedPagingController
                                                           .itemList![index]
-                                                          .isLove!;
+                                                          .isLove;
                                                   if (controller
                                                           .globalFeedPagingController
                                                           .itemList?[index]
@@ -245,7 +245,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                         .loveCount = (controller
                                                             .globalFeedPagingController
                                                             .itemList![index]
-                                                            .loveCount! -
+                                                            .loveCount -
                                                         1);
                                                   } else {
                                                     controller
@@ -254,7 +254,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                         .loveCount = (controller
                                                             .globalFeedPagingController
                                                             .itemList![index]
-                                                            .loveCount! +
+                                                            .loveCount +
                                                         1);
                                                   }
                                                 }
@@ -308,6 +308,10 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                                 .id),
                                                       child:
                                                           InstagramPostComments(
+                                                            commentCount: controller.feedPagingController
+                                                                .itemList?[index].commentsCount
+                                                                .toString() ??
+                                                                '',
                                                         postId: controller
                                                             .globalFeedPagingController
                                                             .itemList![index]
@@ -338,7 +342,7 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                           currentPost
                                                                   ?.commentsCount =
                                                               (currentPost
-                                                                      .commentsCount! +
+                                                                      .commentsCount +
                                                                   1);
                                                           return result;
                                                         },

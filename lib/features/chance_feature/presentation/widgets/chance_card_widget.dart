@@ -16,7 +16,9 @@ class ChanceCardWidget extends StatefulWidget {
   const ChanceCardWidget({
     super.key,
     required this.chance,
-    required this.image, required this.subCategoryEntity, required this.mainCategoryEntity,
+    required this.image,
+    required this.subCategoryEntity,
+    required this.mainCategoryEntity,
   });
 
   final ChanceEntity chance;
@@ -30,7 +32,6 @@ class ChanceCardWidget extends StatefulWidget {
 }
 
 class _ChanceCardWidgetState extends State<ChanceCardWidget> {
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -91,7 +92,7 @@ class _ChanceCardWidgetState extends State<ChanceCardWidget> {
                   SizedBox(height: 10.h),
                   const NotSubscribedWidget(),
                   SizedBox(height: 20.h),
-                   const LinerProgressIndicator(),
+                  const LinerProgressIndicator(),
                 ],
               ),
             ),

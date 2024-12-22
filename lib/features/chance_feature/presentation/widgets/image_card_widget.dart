@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
-
 class ImageCardWidget extends StatelessWidget {
   const ImageCardWidget({super.key, required this.image});
   final String image;
@@ -20,8 +19,7 @@ class ImageCardWidget extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          height: context.screenWidth > 600 ? 200 : 150
-      ),
+          height: context.screenWidth > 600 ? 200 : 150),
     );
   }
 }

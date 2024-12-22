@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -31,7 +32,7 @@ class WalletWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MainCategoriesCubit>(
-      create: (BuildContext context) =>serviceLocator()..getWallet(),
+      create: (BuildContext context) => serviceLocator()..getWallet(),
       child: BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
         builder: (BuildContext context, state) {
           return Container(
@@ -58,6 +59,8 @@ class WalletWidget extends StatelessWidget {
                 ),
                 const Sizer(),
                 buildItem(() {
+                  AdInterstitialTop.loadIntersitialAd();
+                  AdInterstitialTop.showInterstitialAd();
                   context.push(Routes.BALANCE);
                 }, LocaleKeys.balance.tr(), '${state.wallet?.balance ?? ''} ',
                     state.wallet?.currency ?? ''),
@@ -73,6 +76,8 @@ class WalletWidget extends StatelessWidget {
                 ),
                 const Sizer(),
                 buildItem(() {
+                  AdInterstitialTop.loadIntersitialAd();
+                  AdInterstitialTop.showInterstitialAd();
                   context.push(Routes.GIFT);
                 }, LocaleKeys.gift.tr(), '${state.wallet?.giftWallet ?? ''} ',
                     state.wallet?.currency ?? ''),
@@ -88,10 +93,13 @@ class WalletWidget extends StatelessWidget {
                 ),
                 const Sizer(),
                 buildItem(() {
+                  AdInterstitialTop.loadIntersitialAd();
+                  AdInterstitialTop.showInterstitialAd();
                   context.push(Routes.WALLET);
+                  //showing
                 },
                     LocaleKeys.wallet.tr(),
-                    '${state.wallet?.realAmount.floor() ??''} ',
+                    '${state.wallet?.realAmount.floor() ?? ''} ',
                     state.wallet?.currency ?? ''),
               ],
             ),

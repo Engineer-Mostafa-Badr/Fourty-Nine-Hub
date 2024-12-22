@@ -3,13 +3,21 @@ import 'package:fourtyninehub/res/strings/labels.dart';
 class AppointmentEntity {
   final String id;
   final String day;
-  final String time;
+  final String startTime;
+  final String endTime;
+  final String appointmentType;
+  final String dateOfDay;
+  final bool isExpired;
   final AppointmentStatus status;
 
   AppointmentEntity(
       {required this.id,
       required this.day,
-      required this.time,
+      required this.startTime,
+      required this.endTime,
+      required this.appointmentType,
+      required this.dateOfDay,
+      required this.isExpired,
       required this.status});
 
   bool get isAvailable => status == AppointmentStatus.pending;

@@ -91,7 +91,7 @@ class _AvailableRoutesBuilderState extends State<AvailableRoutesBuilder> {
             ),
           );
         } else if (state is GetAllTripsFailure) {
-          return Center(child: Text("there is no trips. try again !"));
+          return const Center(child: Text("there is no trips. try again !"));
         } else {
           return const SizedBox();
         }
@@ -161,8 +161,8 @@ class _AvailableRoutesBottomSheetState
                       setState(() {});
                     },
                     activeColor: AppColors.PRIMARY_COLOR,
-                    trackColor: const MaterialStatePropertyAll(
-                        AppColors.SECONDARY_COLOR),
+                    trackColor:
+                        const MaterialStatePropertyAll(AppColors.SECONDARY_COLOR),
                     inactiveThumbColor: Colors.grey,
                   ),
                 ),
@@ -186,8 +186,8 @@ class _AvailableRoutesBottomSheetState
                       setState(() {});
                     },
                     activeColor: AppColors.PRIMARY_COLOR,
-                    trackColor: const MaterialStatePropertyAll(
-                        AppColors.SECONDARY_COLOR),
+                    trackColor:
+                        const MaterialStatePropertyAll(AppColors.SECONDARY_COLOR),
                     inactiveThumbColor: Colors.grey,
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
 
@@ -7,6 +8,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/domain/enti
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/add_doctor_rating_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_Id_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_reviews.dart';
 
 import '../../domain/repositories/doctor_details_repo.dart';
 import '../datasources/doctor_detail_remote_datasource.dart';
@@ -22,24 +24,24 @@ class DoctorDetailsRepoImpl implements DoctorDetailsRepo {
 
   @override
   Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorReviews(
-      String doctorId) {
-    return _remoteDataSource.getDoctorReviews(doctorId);
+      GetUserDoctorRatesParams params) {
+    return _remoteDataSource.getDoctorReviews(params);
   }
 
   @override
-  Future<Either<Failure, DoctorEntity>> getDoctorDetailsId(GetDoctorDetailsIdParams params) async {
+  Future<Either<Failure, DoctorEntity>> getDoctorDetailsId(
+      GetDoctorDetailsIdParams params) async {
     return await _remoteDataSource.getDoctorDetailsId(params);
   }
 
   @override
-  Future<Either<Failure, bool>> addDoctorRating(AddDoctorRatingParams params) async{
+  Future<Either<Failure, bool>> addDoctorRating(
+      AddDoctorRatingParams params) async {
     return await _remoteDataSource.addDoctorRating(params);
   }
 
   @override
-  Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorRatings() async {
-    return await _remoteDataSource.getDoctorRatings();
+  Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorRatings(PaginationParams params) async {
+    return await _remoteDataSource.getDoctorRatings(params);
   }
-
-
 }

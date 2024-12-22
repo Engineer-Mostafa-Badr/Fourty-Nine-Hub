@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -24,7 +22,6 @@ import '../controllers/explore_reels_cubit/reel_cubit.dart';
 import '../widgets/components/snackbars.dart';
 import 'audio_reel_view.dart';
 import 'package:easy_localization/easy_localization.dart';
-
 
 class InstagramAudioScreen extends StatefulWidget {
   final Audio audio;
@@ -222,15 +219,6 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          capitalizeAndSplit2Only(widget.audio.audioName),
-                          softWrap: true,
-                          style: TextStyle(
-                            fontSize: 40.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
                           capitalizeAndSplit(widget.audio.username),
                           softWrap: true,
                           style: TextStyle(
@@ -274,7 +262,8 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ReelsRecordingScreen(
-                              voiceUrl: widget.audio.audioSignedUrl,
+                              voiceMediaId: widget.reel.audioMedia,
+                              voiceSignedUrl: widget.audio.audioSignedUrl,
                             ),
                           ));
                     },
@@ -367,77 +356,74 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                     ],
                   ),
                 ),
-          reelCubit.state.reelsForAudio != null
-              ? Expanded(
-                  child: BlocConsumer<ReelsCubit, ReelsState>(
-                    listener: (context, state) {},
-                    builder: (context, state) {
-                      return GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          childAspectRatio: 0.6,
-                          mainAxisSpacing: 4,
-                          crossAxisSpacing: 4,
-                        ),
-                        itemCount: state.reelsForAudio!.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => BlocProvider.value(
-                                      value: serviceLocator<ReelsCubit>(),
-                                      child: ReelsScreenForAudio(
-                                        navigateTo: index,
-                                        reels: state.reelsForAudio!,
-                                      ),
-                                    ),
-                                  ));
-                            },
-                            child: Stack(
-                              children: [
-                                Image.network(
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  state
-                                      .reelsForAudio![index].thumbnailSignedUrl,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      const Center(
-                                    child: CupertinoActivityIndicator(),
-                                  ),
-                                  fit: BoxFit.cover,
+          Expanded(
+            child: BlocConsumer<ReelsCubit, ReelsState>(
+              listener: (context, state) {},
+              builder: (context, state) {
+                if (state.globalReelsIsLoading) {
+                  return const Center(child: CupertinoActivityIndicator());
+                }
+                return GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 0.6,
+                    mainAxisSpacing: 4,
+                    crossAxisSpacing: 4,
+                  ),
+                  itemCount: state.reelsForAudio!.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BlocProvider.value(
+                                value: serviceLocator<ReelsCubit>(),
+                                child: ReelsScreenForAudio(
+                                  navigateTo: index,
+                                  reels: state.reelsForAudio!,
                                 ),
-                                Positioned(
-                                  bottom: 8,
-                                  left: 2,
-                                  child: Row(
-                                    children: [
-                                      const Icon(Icons.play_arrow, size: 16),
-                                      const SizedBox(width: 4),
-                                      Text(
-                                        state.reelsForAudio![index].viewCount
-                                            .toString(),
-                                        style: TextStyle(
-                                          fontSize: 25.sp,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      ),
-                                    ],
+                              ),
+                            ));
+                      },
+                      child: Stack(
+                        children: [
+                          Image.network(
+                            width: double.infinity,
+                            height: double.infinity,
+                            state.reelsForAudio![index].thumbnailSignedUrl,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Center(
+                              child: CupertinoActivityIndicator(),
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                          Positioned(
+                            bottom: 8,
+                            left: 2,
+                            child: Row(
+                              children: [
+                                const Icon(Icons.play_arrow, size: 16),
+                                const SizedBox(width: 4),
+                                Text(
+                                  state.reelsForAudio![index].viewCount
+                                      .toString(),
+                                  style: TextStyle(
+                                    fontSize: 25.sp,
+                                    fontWeight: FontWeight.normal,
                                   ),
                                 ),
                               ],
                             ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                )
-              : const Center(
-                  child: CupertinoActivityIndicator(),
-                ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          )
         ],
       ),
     );

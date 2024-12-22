@@ -191,7 +191,9 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                       text: LocaleKeys.done.localize,
                       style: Styles.headerText(
                         fontSize: 25,
-                        color: context.isDarkMode? Colors.white:AppColors.PRIMARY_COLOR,
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
                       ),
                     ),
                   ),

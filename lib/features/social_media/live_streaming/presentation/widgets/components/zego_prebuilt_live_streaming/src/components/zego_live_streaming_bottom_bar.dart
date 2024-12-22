@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 
 // Project imports:
@@ -38,6 +38,8 @@ class ZegoLiveStreamingBottomBar extends StatefulWidget {
   final ZegoUIKitPrebuiltLiveStreamingConfig config;
   final ZegoUIKitPrebuiltLiveStreamingEvents events;
   final bool isLiveStream;
+  final Function showComments;
+  final bool isHide;
   final void Function(ZegoLiveStreamingEndEvent event) defaultEndAction;
   final Future<bool> Function(
     ZegoLiveStreamingLeaveConfirmationEvent event,
@@ -60,6 +62,8 @@ class ZegoLiveStreamingBottomBar extends StatefulWidget {
   const ZegoLiveStreamingBottomBar({
     super.key,
     required this.config,
+    required this.showComments,
+    required this.isHide,
     required this.events,
     required this.defaultEndAction,
     required this.defaultLeaveConfirmationAction,
@@ -212,8 +216,8 @@ class FakeTextFieldBuilder extends StatelessWidget {
                 onSheetPop: (int key) {
                   widget.popUpManager.removeAPopUpSheet(key);
                 },
-                buttonSize: Size(context.screenWidth * 0.5, 40),
-                iconSize: Size(context.screenWidth * 0.5, 40),
+                buttonSize: Size(context.screenWidth * 0.80, 40),
+                iconSize: Size(context.screenWidth * 0.80, 40),
                 enabledIcon: ButtonIcon(
                     icon: Container(
                   decoration: BoxDecoration(
@@ -230,9 +234,12 @@ class FakeTextFieldBuilder extends StatelessWidget {
                 ))),
           ),
           IconButton(onPressed: (){
+            print("objectss");
             var cubit = context.read<StreamCubit>();
-            cubit.requestBattle('6706b17a84a6fa95c2c0621b','66cc7223f3e66376f188c48b');
-          }, icon: const Icon(Icons.person_2,color: Colors.white,))
+            cubit.toggleComments();
+            print(context.read<StreamCubit>().state.hideComments);
+            // cubit.requestBattle('6706b17a84a6fa95c2c0621b','66cc7223f3e66376f188c48b');
+          }, icon: Icon(context.read<StreamCubit>().state.hideComments==true?FontAwesomeIcons.commentSlash:FontAwesomeIcons.comment,color: Colors.white,))
         ],
       ),
     );

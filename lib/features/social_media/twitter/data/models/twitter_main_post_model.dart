@@ -17,6 +17,12 @@ class TwitterMainPostModel extends TwitterMainPostEntity {
       required super.user,
       required super.comments});
   factory TwitterMainPostModel.fromJson(Map<String, dynamic> json) {
+    if (json is List) {
+      // Handle case where `mainPost` is a list.
+      throw ArgumentError(
+          'TwitterMainPostModel cannot be created from a List<dynamic>. Ensure API response is correct.');
+    }
+
     return TwitterMainPostModel(
       id: json['_id'] ?? '',
       content: json['content'] ?? '',
@@ -30,7 +36,11 @@ class TwitterMainPostModel extends TwitterMainPostEntity {
       comments:
           json['comments'] != null ? List<String>.from(json['comments']) : [],
       isShared: json['isShared'] ?? false,
-      user: TwitterUserModel.fromJson(json['user']),
+      user: json['sharedUser'] != null
+          ? (json['sharedUser'] is List)
+          ? TwitterUserModel.fromJson(json['sharedUser'][0]) // Handle the first user in the list
+          : TwitterUserModel.fromJson(json['sharedUser']) // If it's a single object
+          : null,
       commentPrivacy: json['commentPrivacy'] ?? 0,
       sharesCount: json['sharesCount'] ?? 0,
       loveCount: json['loveCount'] ?? 0,

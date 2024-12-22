@@ -1,4 +1,3 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_category_model.dart';
@@ -19,7 +18,8 @@ abstract class TinderRepository {
   Future<Either<Failure, List<UserData>>> getUsers(GetUsersParams params);
   Future<Either<Failure, ProfileUserModel>> getUserProfile(String params);
   Future<Either<Failure, SubFavoritesResponse>> fetchFavourites();
-  Future<Either<Failure, CategoryFavoritesResponse>> fetchFavouritesCategories();
+  Future<Either<Failure, CategoryFavoritesResponse>>
+      fetchFavouritesCategories();
   Future<Either<Failure, bool>> addFavouriteCategories(String id);
   Future<Either<Failure, bool>> uploadPictures(List<String> params);
   Future<Either<Failure, NearByModel>> checkUserNearby(String id);

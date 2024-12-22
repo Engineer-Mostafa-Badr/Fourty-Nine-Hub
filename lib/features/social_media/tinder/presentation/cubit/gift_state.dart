@@ -1,4 +1,3 @@
-
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 
 class GiftsState {

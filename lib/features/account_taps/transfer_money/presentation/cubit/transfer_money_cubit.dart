@@ -14,26 +14,29 @@ class TransferMoneyCubit extends Cubit<TransferMoneyState> {
   final FetchUserUseCase _fetchUserUseCase;
   final GetWalletUseCase _getWalletUseCase;
 
-  TransferMoneyCubit(this._transferMoneyUseCase, this._fetchUserUseCase,
-      this._getWalletUseCase,)
-      : super(const TransferMoneyState());
+  TransferMoneyCubit(
+    this._transferMoneyUseCase,
+    this._fetchUserUseCase,
+    this._getWalletUseCase,
+  ) : super(const TransferMoneyState());
 
   Future<void> loadData() async {
     await fetchUsers();
     await getWallet();
   }
+
   TransferMoneyEntity? dataTransfer;
   Future<TransferMoneyEntity> transferMoney({
     required TransferMoneyParams params,
   }) async {
     emit(state.copyWith(status: StateStatus.loading));
     var response = await _transferMoneyUseCase(params);
-     response.fold(
+    response.fold(
       (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
       (data) {
-       // getWallet();
+        // getWallet();
         dataTransfer = data;
-        emit(state.copyWith(dataTransfer: data,status: StateStatus.success));
+        emit(state.copyWith(dataTransfer: data, status: StateStatus.success));
       },
     );
     return dataTransfer!;

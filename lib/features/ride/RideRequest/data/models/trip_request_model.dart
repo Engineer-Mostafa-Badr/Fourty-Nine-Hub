@@ -1,11 +1,11 @@
 class TripRequestModel {
-  int? price;
+  double? price;
   String? fromTitle;
   String? toTitle;
   int? distance;
   int? duration;
-  List<double>? startLocation;
-  List<double>? targetLocation;
+  List<dynamic>? startLocation;
+  List<dynamic>? targetLocation;
   int? calculateB;
   String? paymentMethod;
   int? passengers;
@@ -31,7 +31,7 @@ class TripRequestModel {
 
   factory TripRequestModel.fromJson(Map<String, dynamic> json) {
     return TripRequestModel(
-      price: json['price'] as int?,
+      price: double.parse(json['price'].toString()),
       fromTitle: json['fromTitle'] as String?,
       toTitle: json['toTitle'] as String?,
       distance: json['distance'] as int?,

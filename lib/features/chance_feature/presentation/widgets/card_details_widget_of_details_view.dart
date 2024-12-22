@@ -11,13 +11,13 @@ class CardDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Center(
+    return Center(
       child: Container(
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(15),
-          boxShadow:AppColors.SHADOW_LIGHT,
+          boxShadow: AppColors.SHADOW_LIGHT,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -33,8 +33,10 @@ class CardDetails extends StatelessWidget {
                 fit: BoxFit.fill,
               ),
             ),
-            const SizedBox(height: 20,),
-             Text(
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
               LocaleKeys.SubscriberCompletionRate.localize,
               style: const TextStyle(
                 fontSize: 16,
@@ -56,7 +58,7 @@ class CardDetails extends StatelessWidget {
               ),
             ),
             SizedBox(height: 30.h),
-             Column(
+            Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -70,9 +72,7 @@ class CardDetails extends StatelessWidget {
                 const SizedBox(height: 10),
                 Text(
                   'This product is the Honor 90 Lite Dual SIM phone that comes with FHD screen, high resolution rear camera and powerful processor.',
-                  style: Styles.mediumText(
-
-                  ),
+                  style: Styles.mediumText(),
                 ),
               ],
             ),

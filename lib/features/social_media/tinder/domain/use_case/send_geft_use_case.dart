@@ -3,9 +3,6 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 
-import '../../data/models/tinder_person_model.dart';
-
-
 class SendGiftUseCase extends UseCase<dynamic, SendGiftParams> {
   final TinderRepository _repository;
 
@@ -17,17 +14,19 @@ class SendGiftUseCase extends UseCase<dynamic, SendGiftParams> {
   }
 }
 
-
 class SendGiftParams {
   final String receiverId;
   final String giftId;
 
-  SendGiftParams({required this.receiverId, required this.giftId,});
+  SendGiftParams({
+    required this.receiverId,
+    required this.giftId,
+  });
 
   //toJson
   Map<String, dynamic> toJson() => {
-    'receiverId': receiverId,
-    'giftId': giftId,
-    // 'subCategory':'66af974f8bf69f9469944746',
-  };
+        'receiverId': receiverId,
+        'giftId': giftId,
+        // 'subCategory':'66af974f8bf69f9469944746',
+      };
 }

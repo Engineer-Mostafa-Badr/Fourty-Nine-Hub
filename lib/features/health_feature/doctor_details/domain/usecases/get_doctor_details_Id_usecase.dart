@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/repositories/doctor_details_repo.dart';
-import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import '../../../../../../core/abstract/use_case.dart';
 
 class GetDoctorDetailsIdUseCase
@@ -19,14 +18,20 @@ class GetDoctorDetailsIdUseCase
 class GetDoctorDetailsIdParams {
   final String doctorId;
   final String subCategoryId;
+  final String? bookingType;
   GetDoctorDetailsIdParams({
     required this.doctorId,
     required this.subCategoryId,
+    this.bookingType,
   });
 
   Map<String, dynamic> toJson() {
+    print("objectLogType$bookingType");
     final Map<String, dynamic> data = <String, dynamic>{};
     data['subCategoryId'] = subCategoryId;
+    if (bookingType != null&&bookingType!='') {
+      data['type'] = bookingType=='call'?'calls':bookingType=='home'?'visitHome':'clinic';
+    }
     return data;
   }
 }

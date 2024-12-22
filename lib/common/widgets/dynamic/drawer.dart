@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -22,7 +23,6 @@ import '../../../features/competition/data/repository/competition_repo_impl.dart
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_cubit.dart';
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_state.dart';
 import '../../../features/competition/presentation/view/special_ads_view.dart';
-import '../../../features/custom_page/presentation/page/custom_page.dart';
 import '../../../features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
@@ -43,12 +43,13 @@ class DrawerWidget extends StatefulWidget {
 class _DrawerWidgetState extends State<DrawerWidget> {
   var widgejsonData;
 
-
   @override
   void initState() {
     // TODO: implement initState
+    AdInterstitialTop.loadIntersitialAd();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -75,36 +76,42 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         image: Assets.microphone,
                         label: LocaleKeys.advertiseYourCompany.localize,
                         onTap: () {
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
                           return context.push(Routes.CREATECOMPANYAD);
                         }),
                     drawerListTile(
                         image: Assets.quran,
                         label: LocaleKeys.quraan.localize,
                         onTap: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (builder) => QuranPage()));
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
+
                           return context.push(Routes.QURAAN);
                         }),
                     drawerListTile(
                         image: Assets.azkar,
                         label: LocaleKeys.azkar.localize,
-                        onTap: () => context.push(Routes.AZKAAR)),
+                        onTap: () {
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
+                          return context.push(Routes.AZKAAR);
+                        }),
                     drawerListTile(
                         icon: Icons.maps_home_work_rounded,
                         label: LocaleKeys.customPage.localize,
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const CustomPage()));
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
+                          context.push(Routes.CUSTOMPAGE);
                         }),
                     drawerListTile(
                         image: Assets.favorite_main_category_icon,
                         label: LocaleKeys.favouriteCategories.localize,
                         requireLogin: true,
                         onTap: () async {
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
                           await context.push(Routes.FAVOURITECATEGORIES);
                           context.read<MainCategoriesCubit>().loadData();
                         }),
@@ -151,12 +158,20 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         // icon: Icons.privacy_tip,
                         image: Assets.privacy_icon,
                         label: LocaleKeys.privacy.localize,
-                        onTap: () => context.push(Routes.PRIVACY)),
+                        onTap: () {
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
+                          return context.push(Routes.PRIVACY);
+                        }),
 
                     drawerListTile(
                         image: Assets.policy,
                         label: LocaleKeys.policies.localize,
-                        onTap: () => context.push(Routes.POLICY)),
+                        onTap: () {
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
+                          return context.push(Routes.POLICY);
+                        }),
                     drawerListTile(
                         // icon: Icons.share,
                         image: Assets.share_app_icon,
@@ -402,9 +417,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   Widget competitionSubscription({required BuildContext context}) {
     return InkWell(
-      onTap: () => context.go(
+      onTap: () {
+        AdInterstitialTop.loadIntersitialAd();
+        AdInterstitialTop.showInterstitialAd();
+        context.go(
         context.read<UserCubit>().isLoggedIn ? Routes.LUCKYWHEEL : Routes.LOGIN,
-      ),
+      );
+      },
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.all(20.w),
@@ -649,10 +668,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   String _getFirstTwoWords(String fullName) {
     List<String> words = fullName.split(" ");
-    if (words.length > 1) {
+    print(fullName);
+    if (words.isNotEmpty) {
       // Capitalize the first letter of each word
       words = words.map((word) {
-        return word[0].toUpperCase() + word.substring(1).toLowerCase();
+        return word.isNotEmpty?word[0].toUpperCase() + word.substring(1).toLowerCase():'';
       }).toList();
     }
     return words.length > 1 ? '${words[0]} ${words[1]}' : words[0];

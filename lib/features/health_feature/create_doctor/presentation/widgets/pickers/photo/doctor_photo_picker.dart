@@ -1,12 +1,11 @@
 import 'dart:io';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -27,7 +26,7 @@ class _CreateDoctorProfilePhotoPickerState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Label(
-          text: LocaleKeys.photo.tr(),
+          text: context.isArabic?'الصورة الشخصية':'Profile Photo',
           style: Styles.headerText(),
         ),
         const Sizer(),
@@ -49,9 +48,9 @@ class _CreateDoctorProfilePhotoPickerState
                     },
                     child: BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
                         builder: (context, state) {
-                      return const ImagePickerPlaceholder(
+                      return ImagePickerPlaceholder(
                         borderColor: Colors.grey,
-                        title: 'Photo',
+                        title: context.isArabic?'تغيير الصورة':'Change Photo',
                       );
                     }),
                   )
@@ -65,7 +64,7 @@ class _CreateDoctorProfilePhotoPickerState
                     builder: (context, state) {
                   return ImagePickerPlaceholder(
                     borderColor: Colors.grey,
-                    title: LocaleKeys.photo.tr(),
+                    title: context.isArabic?'اختر صورة':'Choose Photo',
                   );
                 }),
               );

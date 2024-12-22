@@ -15,10 +15,11 @@ class GetMealsUseCase extends UseCase<List<RestaurantMenu>, GetMealsParams> {
   }
 }
 
-class GetMealsParams{
+class GetMealsParams {
   final String restaurantId;
   final int page;
   final int limit;
 
-  GetMealsParams({required this.restaurantId, required this.page, required this.limit});
+  GetMealsParams(
+      {required this.restaurantId, required this.page, required this.limit});
 }

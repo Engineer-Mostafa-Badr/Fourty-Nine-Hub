@@ -13,6 +13,7 @@ class FirstNameTextFormField extends MainTextFormField {
     required super.currentController,
     super.margin = null,
     super.enabled,
+    super.isAuthentcation,
     super.maxLength,
     // super.
     String? Function(String?)? validator,

@@ -5,7 +5,6 @@ import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/t
 
 import '../../data/models/tinder_person_model.dart';
 
-
 class GetUserDataUseCase extends UseCase<List<UserData>, GetUsersParams> {
   final TinderRepository _repository;
 
@@ -17,19 +16,19 @@ class GetUserDataUseCase extends UseCase<List<UserData>, GetUsersParams> {
   }
 }
 
-
 class GetUsersParams {
   final String gender;
   final int page;
   final int limit;
 
-  GetUsersParams({required this.gender, required this.page, required this.limit});
+  GetUsersParams(
+      {required this.gender, required this.page, required this.limit});
 
   //toJson
   Map<String, dynamic> toJson() => {
-    'gender': gender,
-    'page': page,
-    'limit': limit,
-    'subCategory':'66af974f8bf69f9469944746',
-  };
+        'gender': gender,
+        'page': page,
+        'limit': limit,
+        'subCategory': '66af974f8bf69f9469944746',
+      };
 }

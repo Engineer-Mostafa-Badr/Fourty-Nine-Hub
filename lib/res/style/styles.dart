@@ -27,7 +27,7 @@ abstract class Styles {
       double decorationThickness = 0,
       TextDecoration? decoration,
       List<Shadow>? shadows,
-        FontStyle? fontStyle,
+      FontStyle? fontStyle,
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
         fontSize: fontSize.sp,

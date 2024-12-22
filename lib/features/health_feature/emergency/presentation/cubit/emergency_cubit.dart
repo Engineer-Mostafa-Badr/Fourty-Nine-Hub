@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/domain/usecases/book_emergency.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_health_subcategories.dart';
@@ -12,7 +11,7 @@ part 'emergency_state.dart';
 
 class HealthEmergencyCubit extends Cubit<HealthEmergencyState> {
   HealthEmergencyCubit(this._bookHealthEmergencyUseCase, this._healthShare,
-      this._getHealthSubcategoriesUseCase)
+      this._getHealthSubcategoriesUseCase,)
       : super(HealthEmergencyInitial());
   final HealthSharedData _healthShare;
   final GetHealthSubcategoriesUseCase _getHealthSubcategoriesUseCase;

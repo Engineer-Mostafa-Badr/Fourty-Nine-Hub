@@ -29,7 +29,8 @@ class CustomButtonCount extends StatelessWidget {
       ),
       body: BlocProvider<MyAddsCubit>(
         create: (BuildContext context) => serviceLocator()
-          ..getAllCount(params: Params(id: id, status: status))..getMyTripJoin(),
+          ..getAllCount(params: Params(id: id, status: status))
+          ..getMyTripJoin(),
         child: BlocConsumer<MyAddsCubit, MyAddsState>(
           listener: (BuildContext context, MyAddsState state) {},
           builder: (BuildContext context, state) {
@@ -45,7 +46,8 @@ class CustomButtonCount extends StatelessWidget {
                 child: ListView.separated(
                   itemBuilder: (context, index) {
                     return buildItem(
-                        context, state.allCounts![index],
+                      context,
+                      state.allCounts![index],
                     );
                   },
                   separatorBuilder: (context, index) => const Sizer(),
@@ -61,7 +63,10 @@ class CustomButtonCount extends StatelessWidget {
     );
   }
 
-  Widget buildItem(context, GetAllCountsTripJoinEntity model,) =>
+  Widget buildItem(
+    context,
+    GetAllCountsTripJoinEntity model,
+  ) =>
       Container(
         padding: EdgeInsets.all(12.w),
         decoration: BoxDecoration(

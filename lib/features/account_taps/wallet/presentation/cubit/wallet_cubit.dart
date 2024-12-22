@@ -79,6 +79,7 @@ class WalletCubit extends Cubit<WalletState> {
       emit(state.copyWith(subscription: data));
     });
   }
+
   Future<List<MainCategoryWalletEntity>> fetchMainCategoryWallet(
       {required PaginationParams paginationParams}) async {
     List<MainCategoryWalletEntity> category = [];

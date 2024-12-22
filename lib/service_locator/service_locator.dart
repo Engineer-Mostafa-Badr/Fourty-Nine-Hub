@@ -5,8 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/data/datasources/local/database/local_database_data_source.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_client_helper.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/api_client_helper_imp.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/subscription_interceptor.dart';
@@ -15,7 +13,6 @@ import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/core/utils/api_service.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/competition/data/repository/competition_repo_impl.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
@@ -43,6 +40,7 @@ import 'package:fourtyninehub/service_locator/carpool_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
 import 'package:fourtyninehub/service_locator/edit_food_service_locator.dart';
 import 'package:fourtyninehub/service_locator/face_book_service_locator.dart';
+import 'package:fourtyninehub/service_locator/follow_service_locator.dart';
 import 'package:fourtyninehub/service_locator/instagram_service_locator.dart';
 import 'package:fourtyninehub/service_locator/join_trip_carpool_service_locator.dart';
 import 'package:fourtyninehub/service_locator/notification_service_locator.dart';
@@ -54,12 +52,11 @@ import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
 import 'package:fourtyninehub/service_locator/search_service_locator.dart';
 import 'package:fourtyninehub/service_locator/secrets_service_locator.dart';
 import 'package:fourtyninehub/service_locator/setting_service_locator.dart';
+import 'package:fourtyninehub/service_locator/share_app_service_locator.dart';
 import 'package:fourtyninehub/service_locator/shipping_service_locatior.dart';
 import 'package:fourtyninehub/service_locator/star_service_locator.dart';
 import 'package:fourtyninehub/service_locator/stories_service_locator.dart';
-import 'package:fourtyninehub/service_locator/star_service_locator.dart';
 import 'package:fourtyninehub/service_locator/subcategories_service_locator.dart';
-import 'package:fourtyninehub/service_locator/tinder_service_locator.dart';
 import 'package:fourtyninehub/service_locator/transfer_money_service_locator.dart';
 import 'package:fourtyninehub/service_locator/trip_join_service_locator.dart';
 import 'package:fourtyninehub/service_locator/twitter_service_locator.dart';
@@ -140,7 +137,7 @@ class DI {
         OptionBuilder()
             .setTransports(['websocket'])
             .disableAutoConnect()
-            .setExtraHeaders({'Authorization': token??cred}) // optional
+            .setExtraHeaders({'Authorization': token ?? cred}) // optional
             .build()));
     // database
     serviceLocator.registerLazySingleton<Database>(
@@ -291,9 +288,6 @@ class DI {
         serviceLocator(),
       ),
     );
-    serviceLocator.registerLazySingleton<ApiClientHelper>(
-      () => ApiClientHelperImp(),
-    );
     //cacheService
     serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     // base repo
@@ -345,7 +339,6 @@ class DI {
     //secrets
     SecretsServiceLocator.execute(serviceLocator: serviceLocator);
     // notifications
-
     await NotificationsServiceLocator.execute(serviceLocator: serviceLocator);
     InstagramServiceLocator.execute(serviceLocator: serviceLocator);
     FaceBookServiceLocator.execute(serviceLocator: serviceLocator);
@@ -366,7 +359,10 @@ class DI {
     StarServiceLocator.execute(serviceLocator: serviceLocator);
     QuranServiceLocator.execute(serviceLocator: serviceLocator);
     StoriesServiceLocator.execute(serviceLocator: serviceLocator);
+    ShareAppServiceLocator.execute(serviceLocator: serviceLocator);
+    FollowServiceLocator.execute(serviceLocator: serviceLocator);
   }
+
   static Future<void> reset() async {
     await serviceLocator.reset();
   }

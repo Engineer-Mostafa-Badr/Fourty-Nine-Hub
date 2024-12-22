@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
@@ -42,9 +43,7 @@ class CommentInputFieldState extends State<CommentInputField> {
               width: 50,
               height: 50,
               isCircle: true,
-              image: widget.reel.user.profilePictureSignedUrl!.isEmpty
-                  ? UIConst.profilePlaceHolder
-                  : widget.reel.user.profilePictureSignedUrl!,
+              image: context.read<UserCubit>().state.data!.profilePicture??UIConst.profilePlaceHolder,
             ),
             SizedBox(width: 10.w),
             Expanded(
@@ -143,6 +142,4 @@ class CommentInputFieldState extends State<CommentInputField> {
           ]),
         ));
   }
-
-
 }

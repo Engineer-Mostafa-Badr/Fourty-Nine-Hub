@@ -15,13 +15,13 @@ class CreateReelUseCase extends UseCase<bool, CreateReelParams> {
   }
 }
 
-class CreateReelParams{
+class CreateReelParams {
   final String reelId;
   final int duration;
 
   CreateReelParams({required this.reelId, required this.duration});
 
   Map<String, dynamic> toJson() => {
-    "duration": duration,
-  };
+        "duration": duration,
+      };
 }

@@ -4,7 +4,7 @@ import 'package:fourtyninehub/features/star_feature/domain/entity/star_winner_en
 
 import '../../../../../common/functions/global/upload_file.dart';
 
-enum StarStates { loading, initial, success,uploadSuccess,error }
+enum StarStates { loading, initial, success, uploadSuccess, error }
 
 class StarState {
   final StarStates status;
@@ -12,7 +12,6 @@ class StarState {
   final List<StarEntity>? star;
   final List<StarWinnerEntity>? winner;
   final List<UploadFileEntity>? video;
-
 
   StarState({
     this.status = StarStates.loading,

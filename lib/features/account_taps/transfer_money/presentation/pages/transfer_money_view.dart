@@ -87,7 +87,6 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                   padding: const EdgeInsets.all(5),
                   margin: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Form(

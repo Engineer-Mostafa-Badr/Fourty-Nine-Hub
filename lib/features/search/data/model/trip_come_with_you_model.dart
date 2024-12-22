@@ -1,0 +1,72 @@
+import 'package:fourtyninehub/features/search/domain/entity/trip_come_with_you_entity.dart';
+
+class TripComeWithYouModel extends TripComeWithYouEntity {
+  TripComeWithYouModel(
+      {required super.id,
+      required super.userId,
+      required super.userFirstName,
+      required super.userLastName,
+      required super.image,
+      required super.categoryId,
+      required super.categoryNameAr,
+      required super.categoryNameEn,
+      required super.vehicleId,
+      required super.vehicleModel,
+      required super.vehicleBrand,
+      required super.fromAr,
+      required super.toAr,
+      required super.fromEn,
+      required super.toEn,
+      required super.distance,
+      required super.duration,
+      required super.passengers,
+      required super.price,
+      required super.phone,
+      required super.time,
+      required super.countryCode,
+      required super.countRequests,
+      required super.calls,
+      required super.isRepeat,
+      required super.status,
+      required super.statusPriority,
+      required super.adminIgnore,
+      required super.createdAt,
+      required super.updatedAt});
+
+  factory TripComeWithYouModel.fromJson(Map<String, dynamic> json) {
+    return TripComeWithYouModel(
+      id: json["_id"] ?? '',
+      userId: json['userId']['_id'] ?? '',
+      userFirstName: json['userId']['firstName'] ?? '',
+      userLastName: json['userId']['lastName'] ?? '',
+      image: json['userId']?['USER_PROFILE']?['profilePictureKey']
+              ?['mediaKey'] ??
+          '',
+      categoryId: json['categoryId']?['_id'] ?? '',
+      categoryNameAr: json['categoryId']?['nameAr'] ?? '',
+      categoryNameEn: json['categoryId']?['nameEn'] ?? '',
+      vehicleId: json['vehicleId']['_id'] ?? '',
+      vehicleBrand: json['vehicleId']['Brand'] ?? '',
+      vehicleModel: json['vehicleId']['Model'] ?? '',
+      fromAr: json["fromAr"] ?? '',
+      toAr: json["toAr"] ?? '',
+      fromEn: json["fromEn"] ?? '',
+      toEn: json["toEn"] ?? '',
+      distance: json["distance"] ?? 0,
+      duration: json["duration"] ?? 0,
+      passengers: json["passengers"] ?? 1,
+      price: json["price"] ?? 0,
+      phone: json["phone"] ?? '',
+      time: json["time"] ?? 0,
+      countryCode: json["countryCode"] ?? '',
+      countRequests: json["countRequests"] ?? 0,
+      calls: json["calls"] ?? [],
+      isRepeat: json["isRepeat"] ?? false,
+      status: json["status"] ?? '',
+      statusPriority: json["statusPriority"] ?? 0,
+      adminIgnore: json["adminIgnore"] ?? false,
+      createdAt: DateTime.parse(json["createdAt"]),
+      updatedAt: DateTime.parse(json["updatedAt"]),
+    );
+  }
+}

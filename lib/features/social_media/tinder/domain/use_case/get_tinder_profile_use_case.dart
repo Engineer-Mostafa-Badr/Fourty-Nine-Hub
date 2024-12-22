@@ -4,9 +4,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 
-import '../../data/models/tinder_person_model.dart';
-
-
 class GetTinderProfileUseCase extends UseCase<ProfileUserModel, String> {
   final TinderRepository _repository;
 
@@ -17,4 +14,3 @@ class GetTinderProfileUseCase extends UseCase<ProfileUserModel, String> {
     return _repository.getUserProfile(params);
   }
 }
-

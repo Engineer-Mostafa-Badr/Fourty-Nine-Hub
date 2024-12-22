@@ -96,7 +96,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                               ),
                               Label(
                                   text:
-                                      widget.categorization.mainCategory.name),
+                                  context.isArabic?widget.categorization.mainCategory.name??"" :widget.categorization.mainCategory.nameEn!),
                             ],
                           )),
                         ],
@@ -339,7 +339,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                       ),
                       const Sizer(),
                       state.status == CreateAdStates.loadCities
-                          ? Center(child: const CircularProgressIndicator())
+                          ? const Center(child: CircularProgressIndicator())
                           : state.status == CreateAdStates.loadCitiesSuccess
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

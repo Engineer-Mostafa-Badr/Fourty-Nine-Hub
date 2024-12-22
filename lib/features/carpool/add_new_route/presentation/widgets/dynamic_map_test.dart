@@ -12,7 +12,8 @@ class DynamicMapWithPolyline extends StatefulWidget {
   final double? longitude;
   final String? polylineString;
 
-  DynamicMapWithPolyline({
+  const DynamicMapWithPolyline({
+    super.key,
     required this.apiKey,
     required this.url,
     this.useGoogleMaps = false,
@@ -36,10 +37,10 @@ class _DynamicMapWithPolyline extends State<DynamicMapWithPolyline> {
   @override
   void initState() {
     super.initState();
-    print("${widget.polylineString} \n");
+    print("polyLine ${widget.polylineString} \n");
 
     if (widget.latitude == null && widget.longitude == null) {
-      _center = LatLng(30.0444, 31.2357); // Default to Cairo
+      _center = const LatLng(30.0444, 31.2357); // Default to Cairo
     } else {
       _center = LatLng(widget.latitude ?? 30.0444, widget.longitude ?? 31.2357);
     }
@@ -202,7 +203,7 @@ class _DynamicMapWithPolyline extends State<DynamicMapWithPolyline> {
                   markers: widget.latitude != null && widget.longitude != null
                       ? {
                           gmaps.Marker(
-                            markerId: gmaps.MarkerId("pin"),
+                            markerId: const gmaps.MarkerId("pin"),
                             position: gmaps.LatLng(
                               widget.latitude!,
                               widget.longitude!,
@@ -213,7 +214,7 @@ class _DynamicMapWithPolyline extends State<DynamicMapWithPolyline> {
                   polylines: widget.polylineString != null
                       ? {
                           gmaps.Polyline(
-                            polylineId: gmaps.PolylineId("route"),
+                            polylineId: const gmaps.PolylineId("route"),
                             points: polylinePoints
                                 .map((point) => gmaps.LatLng(
                                     point.latitude, point.longitude))
@@ -287,7 +288,7 @@ class _DynamicMapWithPolyline extends State<DynamicMapWithPolyline> {
                         borderRadius: BorderRadius.circular(8),
                         color: AppColors.BACKGROUND_COLOR,
                       ),
-                      child: Icon(
+                      child: const Icon(
                         Icons.add,
                         color: AppColors.PRIMARY_COLOR,
                       ),
@@ -308,7 +309,7 @@ class _DynamicMapWithPolyline extends State<DynamicMapWithPolyline> {
                         borderRadius: BorderRadius.circular(8),
                         color: AppColors.BACKGROUND_COLOR,
                       ),
-                      child: Icon(
+                      child: const Icon(
                         Icons.remove,
                         color: AppColors.PRIMARY_COLOR,
                       ),
