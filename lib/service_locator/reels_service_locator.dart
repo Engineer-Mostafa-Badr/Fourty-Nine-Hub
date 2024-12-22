@@ -13,7 +13,8 @@ import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/save_reel_use_case.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/share_reel_use_case.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/toggle_comment_like_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_reel_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_video_reel_use_case.dart';
 import 'package:get_it/get_it.dart';
 
 class ReelsServiceLocator {
@@ -100,6 +101,16 @@ class ReelsServiceLocator {
 
     serviceLocator.registerLazySingleton<ReelsWithSameAudioUseCase>(
       () => ReelsWithSameAudioUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<UploadReelUseCase>(
+      () => UploadReelUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<UploadVideoReelUseCase>(
+      () => UploadVideoReelUseCase(
         serviceLocator(),
       ),
     );

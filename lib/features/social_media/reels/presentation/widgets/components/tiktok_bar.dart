@@ -104,16 +104,16 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               }),
               const Spacer(), // Explore Tab
               _buildTab(LocaleKeys.Spotlight.localize, 0, onTap: () {
-                if (context
-                    .read<PreloadBloc>()
-                    .state
-                    .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
-                  context
-                      .read<PreloadBloc>()
-                      .state
-                      .controllers[context.read<PreloadBloc>().state.focusedIndex]
-                      ?.pause();
-                }
+                // if (context
+                //     .read<PreloadBloc>()
+                //     .state
+                //     .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+                //   context
+                //       .read<PreloadBloc>()
+                //       .state
+                //       .controllers[context.read<PreloadBloc>().state.focusedIndex]
+                //       ?.pause();
+                // }
                 setState(() {
                   _selectedIndex = 0;
                 });

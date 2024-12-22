@@ -94,6 +94,8 @@ class DI {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator()),
     );
 

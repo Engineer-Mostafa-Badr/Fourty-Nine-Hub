@@ -1,18 +1,16 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:camera/camera.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter/return_code.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/media_preview.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart' as thumb;
@@ -55,7 +53,6 @@ class MyVoiceVideoRecordingScreenState
   final List<Filter> filters = FilterLibrary.filters;
   Filter? _selectedFilter;
   File? _selectedImage;
-  File? _selectedVideo;
   FlashMode _flashMode = FlashMode.off;
   late AnimationController _flashAnimationController;
   late Animation<double> _flashAnimation;
@@ -126,11 +123,6 @@ class MyVoiceVideoRecordingScreenState
     }
   }
 
-  void _applyFilter(Filter filter) {
-    setState(() {
-      _selectedFilter = filter;
-    });
-  }
 
   void _startRecording() async {
     if (_controller!.value.isRecordingVideo) return;
@@ -199,7 +191,6 @@ class MyVoiceVideoRecordingScreenState
     final directory = await getTemporaryDirectory();
     final thumbnail = await thumb.VideoThumbnail.thumbnailFile(
       video: videoThumbnail,
-      // Replace with your video URL or file path
       thumbnailPath: directory.path,
       imageFormat: thumb.ImageFormat.JPEG,
       maxWidth: 128,
@@ -215,17 +206,16 @@ class MyVoiceVideoRecordingScreenState
     final directory = await getTemporaryDirectory();
     filteredVideoPath =
         '${directory.path}/filtered_${DateTime.now().millisecondsSinceEpoch}.mp4';
-    // Construct the FFmpeg command with the selected filter and horizontal flip
     final filterCommand = _selectedFilter?.ffmpegFilter != null
-        ? '${_selectedFilter!.ffmpegFilter},hflip' // Add hflip to the existing filter
-        : 'hflip'; // Just use hflip if no other filter is selected
+        ? '${_selectedFilter!.ffmpegFilter},hflip'
+        : 'hflip';
 
     final commandArgs = [
       '-i', videoPath!,
-      '-vf', filterCommand, // Apply the filter and horizontal flip
-      '-c:v', 'mpeg4', // Use `mpeg4` for faster encoding
-      '-q:v', '5', // Lower quality for faster processing
-      '-b:v', '1M', // Lower bitrate
+      '-vf', filterCommand,
+      '-c:v', 'mpeg4',
+      '-q:v', '5',
+      '-b:v', '1M',
       filteredVideoPath!,
     ];
 
@@ -308,59 +298,6 @@ class MyVoiceVideoRecordingScreenState
     );
   }
 
-  Widget _buildFilterSelector() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        height: 150.h,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: filters.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () => _applyFilter(filters[index]),
-              child: Container(
-                width: 150.h,
-                margin: const EdgeInsets.symmetric(horizontal: 5),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: _selectedFilter == filters[index]
-                          ? Colors.blue
-                          : Colors.transparent),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: FittedBox(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        radius: 30,
-                        backgroundImage: AssetImage(
-                          FilterLibrary.filterImagesPaths[index].toString(),
-                        ),
-                      ),
-                      Text(
-                          context.isArabic
-                              ? filters[index].arName
-                              : filters[index].enName,
-                          maxLines: 1,
-                          overflow: TextOverflow.fade,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 40.sp,
-                          )),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     if (_controller == null || !_controller!.value.isInitialized) {
@@ -386,7 +323,6 @@ class MyVoiceVideoRecordingScreenState
               right: 0,
               child: Column(
                 children: [
-                //  _buildFilterSelector(),
                   _buildControls(),
                 ],
               ),
@@ -476,7 +412,6 @@ class MyVoiceVideoRecordingScreenState
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
-          //  mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               SizedBox(width: 100.w,),
               Center(
@@ -491,20 +426,20 @@ class MyVoiceVideoRecordingScreenState
                     ],
                   ),
                   onPressed: () {
-                    _pickMediaFromGallery()
-                      .then((value) {
-                    if(_selectedImage?.path !=null) {
-                     return Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ReelsRecordingScreen(
-                              // voiceMediaId: widget.reel.audioMedia,
-                              // voiceSignedUrl: widget.audio.audioSignedUrl,
-                            ),
-                          ));
-                    }
-                  });
-                  }, // Pick an image from gallery
+                    context.read<ReelsCubit>().pickMediaFromGallery(context)
+                        .then((value) {
+                      if(_selectedImage?.path !=null) {
+                       return Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ReelsRecordingScreen(
+                                // voiceMediaId: widget.reel.audioMedia,
+                                // voiceSignedUrl: widget.audio.audioSignedUrl,
+                              ),
+                            ));
+                      }
+                    });
+                  },
                 ),
               ),
               SizedBox(width: 100.w,),
@@ -535,7 +470,6 @@ class MyVoiceVideoRecordingScreenState
                   ],
                 ),
               ),
-             // Expanded(child: _buildSwitchCameraButton(60.h)),
             ],
           ),
         ],
@@ -563,59 +497,6 @@ class MyVoiceVideoRecordingScreenState
     _notifyTimer?.cancel();
     _flashAnimationController.dispose();
     super.dispose();
-  }
-
-  Future<void> _pickMediaFromGallery() async {
-    try {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['jpg', 'jpeg', 'png', 'mp4', 'mov'],
-      );
-
-      if (result != null && result.files.single.path != null) {
-        final pickedFile = File(result.files.single.path!);
-
-        // Determine the file type based on extension
-        final fileType = pickedFile.path.split('.').last.toLowerCase();
-        final isImage = ['jpg', 'jpeg', 'png'].contains(fileType);
-
-        setState(() {
-          if (isImage) {
-            _selectedImage = pickedFile;
-            _selectedVideo = null;
-          } else {
-            _selectedVideo = pickedFile;
-            _selectedImage = null;
-          }
-        });
-
-        // Navigate to MediaPreviewScreen with the media path and type
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MediaPreviewScreen(
-              mediaPath: pickedFile.path,
-              isImage: isImage,
-            ),
-          ),
-        );
-      } else {
-        print("No media selected.");
-      }
-    } catch (e) {
-      print("Error picking media: $e");
-    }
-  }
-
-
-  Widget _buildMediaPreview() {
-    if (_selectedImage != null) {
-      return Image.file(_selectedImage!);
-    } else if (_selectedVideo != null) {
-      return Text("Video selected: ${_selectedVideo!.path}");
-    } else {
-      return Text("No media selected.");
-    }
   }
 
 }

@@ -1161,6 +1161,16 @@
   "emergencyRequests": "Emergency Requests",
   "noEmergencyRequests": "No Emergency Requests",
   "allAppointments": "All Appointments",
-  "rejectedAppointment": "Rejected Appointment"
+  "rejectedAppointment": "Rejected Appointment",
+  "uploadSuccessfully": "Upload Successfully",
+  "addDescription": "Add description...",
+  "onlyViewThisPost": "Only you can view this post",
+  "friendsViewThisPost": "Friends can view this post",
+  "followersViewThisPost": "Followers can view this post",
+  "friendsAndFollowersViewThisPost": "Friends and Followers can view this post",
+  "everyoneViewThisPost": "Everyone can view this post",
+  "storyUploaded": "Story uploaded",
+  "story": "Story",
+  "next": "Next"
 
 }

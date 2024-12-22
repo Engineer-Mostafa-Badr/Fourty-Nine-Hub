@@ -1,8 +1,11 @@
 part of 'reel_cubit.dart';
 
+enum ReelsStates { loading, initial, success,uploadSuccess,error }
 class ReelsState {
-
+  final ReelsStates status;
+  final Failure? failure;
   final bool isCreatingReply;
+
 
    List<Reel> globalReels;
   final List<Reel>? reelsForFollowing;
@@ -59,7 +62,10 @@ class ReelsState {
   final bool isPlaying;
   final bool showPlayPauseIcon;
   final String? selectedPrivacy;
+  final List<UploadFileEntity>? video;
   ReelsState({
+    this.status = ReelsStates.loading,
+    this.failure,
     this.isCreatingReelView,
     this.isCreatingReply = false,
     this.reelViewErrorMessage,
@@ -99,9 +105,12 @@ class ReelsState {
     this.uploadReelErrorMessage,
     this.uploadReelSuccess,
     this.selectedPrivacy,
+    this.video,
   });
 
   ReelsState copyWith({
+    Failure? failure,
+    ReelsStates? status,
     bool? isCreatingReply,
     bool? isCreatingReelView,
     String? reelViewErrorMessage,
@@ -141,9 +150,12 @@ class ReelsState {
     bool? isUploadingReel,
     String? uploadReelErrorMessage,
     bool? uploadReelSuccess,
-    String? selectedPrivacy
+    String? selectedPrivacy,
+    List<UploadFileEntity>? video
   }) {
     return ReelsState(
+      status: status ?? this.status,
+      failure: failure ?? this.failure,
       isCreatingReply: isCreatingReply ?? this.isCreatingReply,
       comments: comments ?? this.comments,
       isCreatingReelView: isCreatingReelView ?? this.isCreatingReelView,
@@ -191,6 +203,7 @@ class ReelsState {
       isPlaying: isPlaying ?? this.isPlaying,
       showPlayPauseIcon: showPlayPauseIcon ?? this.showPlayPauseIcon,
       selectedPrivacy: selectedPrivacy ?? this.selectedPrivacy,
+      video: video ?? this.video,
     );
   }
 }

@@ -1,10 +1,11 @@
 import 'dart:io';
-import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/next_media_preview.dart';
@@ -22,10 +23,12 @@ import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 
 
 class MediaPreviewScreen extends StatefulWidget {
+  final String mediaId;
   final String mediaPath;
   final bool isImage;
 
   const MediaPreviewScreen({
+    required this.mediaId,
     required this.mediaPath,
     required this.isImage,
   });
@@ -41,10 +44,8 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
   String? _croppedImagePath;
 
   Future<File> applyFilterAndSaveImage(String originalPath, String filterType) async {
-    // Load the original image
     final originalImage = img.decodeImage(File(originalPath).readAsBytesSync());
 
-    // Apply a filter (example: grayscale)
     img.Image filteredImage;
     if (filterType == 'grayscale') {
       filteredImage = img.grayscale(originalImage!);
@@ -54,7 +55,6 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
       filteredImage = originalImage!;
     }
 
-    // Save the filtered image to a temporary file
     final tempDir = Directory.systemTemp;
     final filteredImagePath = '${tempDir.path}/filtered_image.png';
     File(filteredImagePath).writeAsBytesSync(img.encodePng(filteredImage));
@@ -67,18 +67,10 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
     final tempDir = Directory.systemTemp;
     final filteredVideoPath = '${tempDir.path}/filtered_video.mp4';
 
-    // Construct the FFmpeg command
     final command = '-i $originalPath -vf "$filterCommand" $filteredVideoPath';
 
-    // Execute FFmpeg command
     await FFmpegKit.execute(command).then((session) {
-      final returnCode = session.getReturnCode();
-      // if (ReturnCode.isSuccess(returnCode)) {
-      //   print('Filter applied successfully and saved to $filteredVideoPath');
-      // } else {
-      //   print('Failed to apply filter. Return code: $returnCode');
-      //   throw Exception('Error applying filter to video.');
-      // }
+       session.getReturnCode();
     });
 
     return filteredVideoPath;
@@ -108,7 +100,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
 
   @override
   void dispose() {
-    _videoController?.pause(); // Stop playback immediately
+    _videoController?.pause();
     _videoController?.removeListener(() {});
     _videoController?.dispose();
     super.dispose();
@@ -119,42 +111,6 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
     setState(() {
       _selectedFilter = filter;
     });
-  }
-
-  Future<void> _cropImage() async {
-    final originalFile = File(widget.mediaPath);
-    final originalImage = originalFile.readAsBytesSync();
-    final decodedImage = img.decodeImage(originalImage);
-
-    if (decodedImage != null) {
-      // Define the crop area (e.g., 100x100 square starting at position (50, 50))
-      int cropWidth = 100; // Define the width of the cropped area
-      int cropHeight = 100; // Define the height of the cropped area
-      int startX = 50; // Starting X position (from left)
-      int startY = 50; // Starting Y position (from top)
-
-      // Crop the image using the defined coordinates and size
-      final croppedImage = img.copyCrop(
-        decodedImage,
-        x: startX,
-        y: startY,
-        width: cropWidth,
-        height: cropHeight,
-      );
-
-      // Save the cropped image
-      final croppedImagePath =
-          path.join(path.dirname(widget.mediaPath), 'cropped_image.jpg');
-      final croppedFile = File(croppedImagePath)
-        ..writeAsBytesSync(img.encodeJpg(croppedImage));
-
-      setState(() {
-        _croppedImagePath = croppedFile.path;
-      });
-    } else {
-      // Handle decoding failure
-      print('Failed to decode image.');
-    }
   }
 
   Widget _buildFilterSelector() {
@@ -295,7 +251,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                               description: '',
                             )
                                 .then((value) {
-                              showSuccessMessage(context, 'Filtered Story uploaded');
+                              showSuccessMessage(context, LocaleKeys.storyUploaded.localize);
                             });
                           }
                               : () async {
@@ -315,12 +271,12 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                               description: '',
                             )
                                 .then((value) {
-                              showSuccessMessage(context, 'Filtered Story uploaded');
+                              showSuccessMessage(context, LocaleKeys.storyUploaded.localize);
                             });
                           },
                           color: AppColors.AUTH_CONTAINER_COLOR,
                           textColor: AppColors.QUANTITY_COLOR,
-                          title: 'Story',
+                          title: LocaleKeys.story.localize,
                           image: true,
                         ),
                       ),
@@ -336,11 +292,11 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                               MaterialPageRoute(
                                 builder: (context) => NextMediaPreview(
                                   mediaPath: widget.mediaPath,
+                                  mediaId: widget.mediaId,
                                   isImage: widget.isImage,
                                 ),
                               ),
                             ).then((_) {
-                              // Resume video when returning to this screen
                               if (!widget.isImage) {
                                 _videoController?.play();
                               }
@@ -348,7 +304,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                           },
                           color: AppColors.SECONDARY_COLOR,
                           textColor: AppColors.AUTH_CONTAINER_COLOR,
-                          title: 'Next',
+                          title: LocaleKeys.next.localize,
                         ),
                       ),
                     ],

@@ -10,22 +10,25 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/privacy_status_enum.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_reel_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_video_reel_use_case.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/shared/filter_utiles.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
-import 'package:path/path.dart' as path;
-import '../../../../../../service_locator/service_locator.dart';
+import '../../../../../../routes/routes.dart';
 
 class NextMediaPreview extends StatefulWidget {
+  final String mediaId;
   final String mediaPath;
   final bool isImage;
 
   const NextMediaPreview({
+    required this.mediaId,
     required this.mediaPath,
     required this.isImage,
   });
@@ -39,6 +42,7 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
   final List<Filter> filters = FilterLibrary.filters;
   Filter? _selectedFilter;
   String? _croppedImagePath;
+  var descController = TextEditingController();
 
   @override
   void initState() {
@@ -63,7 +67,12 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
     return Scaffold(
       body: SafeArea(
         child: BlocConsumer<ReelsCubit, ReelsState>(
-          listener: (BuildContext context, state) {},
+          listener: (BuildContext context, state) {
+            if(state.status == ReelsStates.uploadSuccess){
+              showSuccessMessage(context, LocaleKeys.uploadSuccessfully.localize);
+              context.pushReplacementNamed(Routes.REELS);
+            }
+          },
           builder: (BuildContext context, state) {
             final controller = context.read<ReelsCubit>();
             return Padding(
@@ -113,7 +122,7 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
                                       const ColorFilter.mode(Colors.transparent,
                                           BlendMode.multiply),
                                   child: AspectRatio(
-                                    aspectRatio:0.8,
+                                    aspectRatio: 0.8,
                                     child: VideoPlayer(_videoController!),
                                   ),
                                 ),
@@ -123,18 +132,18 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
                   const Sizer(),
                   TextFormField(
                     maxLines: 6,
+                    controller: descController,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       focusedBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
                       fillColor: Theme.of(context).scaffoldBackgroundColor,
-                      hintText:
-                          'Add description...',
+                      hintText: LocaleKeys.addDescription.localize,
                       hintStyle:
                           Styles.mediumText(color: AppColors.GREY_NORMAL_COLOR),
                     ),
                   ),
-                //  const Sizer(),
+                  //  const Sizer(),
                   // Container(
                   //   padding: EdgeInsets.symmetric(
                   //       vertical: 10.h,
@@ -218,16 +227,16 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
                           Expanded(
                             child: Text(
                               state.selectedPrivacy == 'onlyMe'
-                                  ? 'Only you can view this post'
+                                  ? LocaleKeys.onlyViewThisPost.localize
                                   : state.selectedPrivacy == 'friends'
-                                      ? 'Friends can view this post'
+                                      ? LocaleKeys.friendsViewThisPost.localize
                                       : state.selectedPrivacy == 'followers'
-                                          ? 'Followers can view this post'
+                                          ? LocaleKeys.followersViewThisPost.localize
                                           : state.selectedPrivacy ==
                                                   'friendsAndFollowers'
-                                              ? 'Friends and Followers can view this post'
+                                              ? LocaleKeys.friendsAndFollowersViewThisPost.localize
                                                   .localize
-                                              : 'Everyone can view this post',
+                                              : LocaleKeys.everyoneViewThisPost.localize,
                               maxLines: 2,
                               style: Styles.headerText(),
                             ),
@@ -247,7 +256,24 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
                     children: [
                       Expanded(
                         child: buildContainer(
-                          onTap: () {},
+                          onTap: () {
+                            print('Media Path: ${widget.mediaId}');
+                            print('isImage: ${widget.isImage}');
+                            if (widget.isImage == true) {
+                              controller.uploadReel(
+                                  params: UploadReelParams(
+                                      images: [widget.mediaId],
+                                      //audioMedia:'66ae56014894b5d4015bcb02',
+                                      description: descController.text.isNotEmpty ? descController.text : null,
+                                      ));
+                            } else {
+                              controller.uploadVideoReel(
+                                  params: UploadVideoReelParams(
+                                thumbnailMediaId: widget.mediaId,
+                                    description: descController.text.isNotEmpty ? descController.text : null,
+                              ));
+                            }
+                          },
                           color: AppColors.SECONDARY_COLOR,
                           textColor: AppColors.AUTH_CONTAINER_COLOR,
                           title: 'Post',
@@ -262,7 +288,7 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
                                 width: 5.w,
                               ),
                               Text(
-                                'Post',
+                                LocaleKeys.post.localize,
                                 style: Styles.headerText(
                                     color: AppColors.AUTH_CONTAINER_COLOR,
                                     fontSize: 30),
@@ -331,16 +357,5 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
             ),
       ),
     );
-  }
-
-  String _determineFileType(String filePath) {
-    final extension = path.extension(filePath).toLowerCase();
-    if (extension == '.mp4') {
-      return 'video/mp4';
-    } else if (['.jpg', '.jpeg', '.png'].contains(extension)) {
-      return 'image/jpeg';
-    } else {
-      throw Exception('Unsupported file type');
-    }
   }
 }

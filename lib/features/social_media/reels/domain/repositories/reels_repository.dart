@@ -13,6 +13,8 @@ import 'package:fourtyninehub/features/social_media/reels/domain/use_case/add_re
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_advertisement_use_case.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/create_reel_use_case.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_with_same_audia_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_reel_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_video_reel_use_case.dart';
 
 import '../../../../../core/error/failure.dart';
 
@@ -30,4 +32,6 @@ abstract class ReelsRepository {
   // Future<Either<Failure, List<ReelEntity>>> fetchReels(int page);
   Future<Either<Failure, bool>> createReel(CreateReelParams params);
   Future<Either<Failure, bool>> createAdvertisement(CreateAdvertisementParams params);
+  Future<Either<Failure, bool>> uploadReel(UploadReelParams params);
+  Future<Either<Failure, bool>> uploadVideoReel(UploadVideoReelParams params);
 }

@@ -1159,7 +1159,17 @@ class CodegenLoader extends AssetLoader{
   "emergencyRequests": "طلبات الطوارئ",
   "noEmergencyRequests": "لا توجد طلبات الطوارئ",
   "allAppointments": "جميع الحجوزات",
-  "rejectedAppointment": "تم رفض هذا الحجز من قبل"
+  "rejectedAppointment": "تم رفض هذا الحجز من قبل",
+  "uploadSuccessfully": "تم التحميل بنجاح",
+  "addDescription": "أضف وصفًا...",
+  "onlyViewThisPost": "أنت فقط من يمكنه عرض هذا المنشور",
+  "friendsViewThisPost": "يمكن للأصدقاء عرض هذا المنشور",
+  "followersViewThisPost": "يمكن للمتابعين عرض هذا المنشور",
+  "friendsAndFollowersViewThisPost": "يمكن للأصدقاء والمتابعين عرض هذا المنشور",
+  "everyoneViewThisPost": "يمكن للجميع عرض هذا المنشور",
+  "storyUploaded": "تم تحميل القصة",
+  "story": "قصة",
+  "next": "التالي"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2322,7 +2332,17 @@ static const Map<String,dynamic> en = {
   "emergencyRequests": "Emergency Requests",
   "noEmergencyRequests": "No Emergency Requests",
   "allAppointments": "All Appointments",
-  "rejectedAppointment": "Rejected Appointment"
+  "rejectedAppointment": "Rejected Appointment",
+  "uploadSuccessfully": "Upload Successfully",
+  "addDescription": "Add description...",
+  "onlyViewThisPost": "Only you can view this post",
+  "friendsViewThisPost": "Friends can view this post",
+  "followersViewThisPost": "Followers can view this post",
+  "friendsAndFollowersViewThisPost": "Friends and Followers can view this post",
+  "everyoneViewThisPost": "Everyone can view this post",
+  "storyUploaded": "Story uploaded",
+  "story": "Story",
+  "next": "Next"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

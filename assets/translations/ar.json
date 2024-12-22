@@ -1144,5 +1144,15 @@
   "emergencyRequests": "طلبات الطوارئ",
   "noEmergencyRequests": "لا توجد طلبات الطوارئ",
   "allAppointments": "جميع الحجوزات",
-  "rejectedAppointment": "تم رفض هذا الحجز من قبل"
+  "rejectedAppointment": "تم رفض هذا الحجز من قبل",
+  "uploadSuccessfully": "تم التحميل بنجاح",
+  "addDescription": "أضف وصفًا...",
+  "onlyViewThisPost": "أنت فقط من يمكنه عرض هذا المنشور",
+  "friendsViewThisPost": "يمكن للأصدقاء عرض هذا المنشور",
+  "followersViewThisPost": "يمكن للمتابعين عرض هذا المنشور",
+  "friendsAndFollowersViewThisPost": "يمكن للأصدقاء والمتابعين عرض هذا المنشور",
+  "everyoneViewThisPost": "يمكن للجميع عرض هذا المنشور",
+  "storyUploaded": "تم تحميل القصة",
+  "story": "قصة",
+  "next": "التالي"
 }

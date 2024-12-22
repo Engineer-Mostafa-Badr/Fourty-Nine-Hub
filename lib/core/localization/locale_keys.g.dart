@@ -1134,5 +1134,15 @@ abstract class  LocaleKeys {
   static const noEmergencyRequests = 'noEmergencyRequests';
   static const allAppointments = 'allAppointments';
   static const rejectedAppointment = 'rejectedAppointment';
+  static const uploadSuccessfully = 'uploadSuccessfully';
+  static const addDescription = 'addDescription';
+  static const onlyViewThisPost = 'onlyViewThisPost';
+  static const friendsViewThisPost = 'friendsViewThisPost';
+  static const followersViewThisPost = 'followersViewThisPost';
+  static const friendsAndFollowersViewThisPost = 'friendsAndFollowersViewThisPost';
+  static const everyoneViewThisPost = 'everyoneViewThisPost';
+  static const storyUploaded = 'storyUploaded';
+  static const story = 'story';
+  static const next = 'next';
 
 }

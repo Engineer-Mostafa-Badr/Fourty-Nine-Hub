@@ -584,6 +584,7 @@ class EndPoints {
   static String createReel(CreateReelParams params) {
     return '/reels/views/${params.reelId}';
   }
+  static String uploadReel ='/reels';
 
   static String createAdvertisement(CreateAdvertisementParams params) {
     return '/advertisementCompany';

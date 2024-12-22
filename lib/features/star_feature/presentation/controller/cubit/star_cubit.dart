@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
@@ -200,7 +199,7 @@ class StarCubit extends Cubit<StarState> {
 
   void clearSelectedVideos() {
     selectedVideo = [];
-    emit(state.copyWith(video: [])); // Emit updated state to notify listeners
+    emit(state.copyWith(video: []));
   }
 
 
