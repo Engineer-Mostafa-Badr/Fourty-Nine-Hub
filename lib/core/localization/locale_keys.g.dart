@@ -1055,7 +1055,6 @@ abstract class  LocaleKeys {
   static const opened = 'opened';
   static const forwardMessage = 'forwardMessage';
   static const forwarded = 'forwarded';
-  static const continueUsingChatServices = 'continueUsingChatServices';
   static const noFavouriteAds = 'noFavouriteAds';
   static const d = 'd';
   static const m = 'm';
@@ -1186,5 +1185,6 @@ abstract class  LocaleKeys {
   static const noEmergencyRequests = 'noEmergencyRequests';
   static const allAppointments = 'allAppointments';
   static const rejectedAppointment = 'rejectedAppointment';
+  static const continueUsingChatServices = 'continueUsingChatServices';
 
 }

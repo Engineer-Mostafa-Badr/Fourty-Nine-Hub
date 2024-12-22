@@ -11,24 +11,30 @@ class AddNewRouteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              context.pushReplacement(Routes.CAR_POOL);
-            },
-          ),
-          title: Transform(
-            transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
-            child: Text(
-              LocaleKeys.newRoute.localize,
-              style: Styles.headerText(),
+    return WillPopScope(
+      onWillPop: () async {
+        context.pushReplacement(Routes.CAR_POOL);
+        return false;
+      },
+      child: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                context.pushReplacement(Routes.CAR_POOL);
+              },
+            ),
+            title: Transform(
+              transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
+              child: Text(
+                LocaleKeys.newRoute.localize,
+                style: Styles.headerText(),
+              ),
             ),
           ),
+          body: const AddNewRouteBody(),
         ),
-        body: const AddNewRouteBody(),
       ),
     );
   }

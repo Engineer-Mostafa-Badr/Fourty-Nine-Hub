@@ -1081,7 +1081,6 @@ class CodegenLoader extends AssetLoader{
   "opened": "تمت مشاهدته",
   "forwardMessage": "تحويل الرسائل",
   "forwarded": "تمت اعادة توجيهه",
-  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة",
   "noFavouriteAds": "لا توجد إعلانات مفضلة",
   "d": "ي",
   "m": "د",
@@ -1211,7 +1210,8 @@ class CodegenLoader extends AssetLoader{
   "emergencyRequests": "طلبات الطوارئ",
   "noEmergencyRequests": "لا توجد طلبات الطوارئ",
   "allAppointments": "جميع الحجوزات",
-  "rejectedAppointment": "تم رفض هذا الحجز من قبل"
+  "rejectedAppointment": "تم رفض هذا الحجز من قبل",
+  "continueUsingChatServices": "اكمل باستخدام خدمات المحادثة"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2300,15 +2300,6 @@ static const Map<String,dynamic> en = {
   "forwardMessage": "Forward Message",
   "forwarded": "Forwarded",
   "mainCategory": "Main Category",
-  "continueUsingChatServices": " , To continue using chat services",
-  "viewRoute": "View Route",
-  "enterUserOtp": "Enter user OTP",
-  "invalidOtp": "Invalid OTP",
-  "otpVerifiedSuccessfully": "Otp verified successfully",
-  "ifUserReachedClick": "If the passenger has reached their destination, press the button",
-  "reached": "Reached",
-  "running": "Running",
-  "failedTryAgain": "Failed. please try again",
   "comeWithMe": "Come With Me",
   "publishSubmitted": "Your talent submitted successfully wait for administration approved",
   "noFavouriteAds": "There is no favourite ads",
@@ -2428,7 +2419,16 @@ static const Map<String,dynamic> en = {
   "Cash": "Cash",
   "Wallet": "Wallet",
   "youHaveToFillYourNumberOfPassenger": "You have to fill your Number of Passenger",
-  "waitingForReplies": "Waiting for replies..."
+  "waitingForReplies": "Waiting for replies...",
+  "continueUsingChatServices": " , To continue using chat services",
+  "viewRoute": "View Route",
+  "enterUserOtp": "Enter user OTP",
+  "invalidOtp": "Invalid OTP",
+  "otpVerifiedSuccessfully": "Otp verified successfully",
+  "ifUserReachedClick": "If the passenger has reached their destination, press the button",
+  "reached": "Reached",
+  "running": "Running",
+  "failedTryAgain": "Failed. please try again"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

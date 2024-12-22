@@ -44,7 +44,7 @@ class GetAvailableTripsForDriversCubit
     });
   }
 
-  void fetchAllCarpoolTrips() {
+  void fetchAllCarpoolTripsForDriver() {
     _socket.connect();
     emit(GetAvailableTripsForDriversLoading());
     _socket.emit('carpool:getTripForDriver');

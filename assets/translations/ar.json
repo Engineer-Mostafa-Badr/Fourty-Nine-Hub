@@ -1066,7 +1066,6 @@
   "opened": "تمت مشاهدته",
   "forwardMessage": "تحويل الرسائل",
   "forwarded": "تمت اعادة توجيهه",
-  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة",
   "noFavouriteAds": "لا توجد إعلانات مفضلة",
   "d": "ي",
   "m": "د",
@@ -1198,5 +1197,6 @@
   "emergencyRequests": "طلبات الطوارئ",
   "noEmergencyRequests": "لا توجد طلبات الطوارئ",
   "allAppointments": "جميع الحجوزات",
-  "rejectedAppointment": "تم رفض هذا الحجز من قبل"
+  "rejectedAppointment": "تم رفض هذا الحجز من قبل",
+  "continueUsingChatServices":"اكمل باستخدام خدمات المحادثة"
 }

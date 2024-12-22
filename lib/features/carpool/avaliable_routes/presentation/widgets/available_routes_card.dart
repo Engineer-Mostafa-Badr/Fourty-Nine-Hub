@@ -52,13 +52,6 @@ class _AvaiableRoutesCardState extends State<AvaiableRoutesCard> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Text("40:00:00",
-                  //     style: Styles.smallText(
-                  //         color: AppColors.SECONDARY_COLOR,
-                  //         fontWeight: FontWeight.w600)),
-                  // SizedBox(
-                  //   width: 24,
-                  // ),
                   widget.entity.comfort
                       ? Text(LocaleKeys.comfort.localize,
                           style: Styles.mediumText(
@@ -80,20 +73,6 @@ class _AvaiableRoutesCardState extends State<AvaiableRoutesCard> {
                                   fontWeight: FontWeight.w600)),
                           BlocBuilder<GetCurrencyCubit, GetCurrencyState>(
                             builder: (context, state) {
-                              //   if (state is GetCurrencySuccess) {
-                              //     return Text(" ${state.currency}",
-                              //         style: Styles.headerText(
-                              //           fontSize: 22,
-                              //           color: AppColors.SECONDARY_COLOR,
-                              //         ));
-                              //   } else {
-                              //     return Text("",
-                              //         style: Styles.headerText(
-                              //           fontSize: 22,
-                              //           color: AppColors.SECONDARY_COLOR,
-                              //         ));
-                              //   }
-
                               return Text(
                                 context.isArabic
                                     ? BlocProvider.of<GetCurrencyCubit>(context)

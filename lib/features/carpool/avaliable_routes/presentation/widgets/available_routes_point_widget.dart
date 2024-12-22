@@ -17,29 +17,35 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 class AvailableRoutesPointInfo extends StatelessWidget {
-  AvailableRoutesPointInfo({
-    super.key,
-    required this.dotNumber,
-    this.status = '',
-    this.inProgress = true,
-    this.gender = 'male',
-    required this.price,
-    required this.isComfort,
-    required this.tripId,
-    required this.seatId,
-    required this.userLocation,
-    required this.createdAt,
-    required this.entity,
-  });
+  AvailableRoutesPointInfo(
+      {super.key,
+      required this.dotNumber,
+      this.status = '',
+      this.inProgress = true,
+      this.gender = 'male',
+      required this.price,
+      required this.isComfort,
+      required this.tripId,
+      required this.seatId,
+      required this.userLocation,
+      required this.createdAt,
+      required this.tripStatus,
+      required this.defaultGender,
+      required this.entity,
+      required this.otpVerified});
   final int dotNumber;
   final String status;
   final DateTime createdAt;
   final bool inProgress;
   final String gender;
+  final String defaultGender;
   final String tripId;
   final String seatId;
   final List<double> userLocation;
+  final String tripStatus;
+  final bool otpVerified;
   final num price;
+
   final bool isComfort;
   final CarpoolTripParam entity;
   final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
@@ -53,12 +59,8 @@ class AvailableRoutesPointInfo extends StatelessWidget {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-                DateTime.now()
-                                .difference(
-                                    DateTime.parse(createdAt.toString()))
-                                .inMinutes >
-                            60 &&
-                        status == "Free"
+                status == "Free" && tripStatus == "expired" ||
+                        tripStatus == "Completed"
                     ? ""
                     : status == "Free"
                         ? LocaleKeys.free.localize
@@ -90,7 +92,6 @@ class AvailableRoutesPointInfo extends StatelessWidget {
                 Center(
                   child: Container(
                     height: 5,
-                    // height: 200,
                     decoration: const BoxDecoration(
                       border: Border(
                         bottom: BorderSide(color: Colors.black, width: 3),
@@ -104,18 +105,11 @@ class AvailableRoutesPointInfo extends StatelessWidget {
                     height: 50.w,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
-
-                        // color: status == "Free"
-                        color: status == "Free"
+                        color: status == "Free" || otpVerified
                             ? AppColors.CHECK_MARK_COLOR
                             : status == "Booked"
                                 ? Colors.grey
-                                : Colors.blue
-                        //     ? Colors.green
-                        //     : dotNumber == 4
-                        //         ? Colors.blue
-                        //         : Colors.grey,
-                        ),
+                                : Colors.blue),
                   ),
                 ),
               ],
@@ -138,34 +132,29 @@ class AvailableRoutesPointInfo extends StatelessWidget {
       {required final DateTime createdAt, required CarpoolTripParam entity}) {
     // Show "In Progress" or "Finished" when dotNumber is 4
     if (dotNumber == 4) {
-      return DateTime.now()
-                  .difference(DateTime.parse(createdAt.toString()))
-                  .inMinutes <
-              60
-          ? Center(
-              child: Text(
-                inProgress ? LocaleKeys.inProgress.localize : 'Finished',
-                style: Styles.headerText(fontSize: 24),
-                textAlign: TextAlign.center,
-              ),
-            )
-          : Center(
-              child: Text(
-                LocaleKeys.expired.localize,
-                style: Styles.headerText(fontSize: 24),
-                textAlign: TextAlign.center,
-              ),
-            );
+      return Center(
+        child: Text(
+          tripStatus == "Pending"
+              ? LocaleKeys.inProgress.localize
+              : tripStatus == "expired"
+                  ? LocaleKeys.expired.localize
+                  : tripStatus == "Running"
+                      ? LocaleKeys.running.localize
+                      : tripStatus == "Completed"
+                          ? LocaleKeys.completed.localize
+                          : LocaleKeys.inProgress.localize,
+          // inProgress ? LocaleKeys.inProgress.localize : 'Finished',
+          style: Styles.headerText(fontSize: 24),
+          textAlign: TextAlign.center,
+        ),
+      );
     }
 
     return GestureDetector(
       onTap: () {
         if (status.toLowerCase() == 'free') {
           context.read<UserCubit>().isLoggedIn
-              ? DateTime.now()
-                          .difference(DateTime.parse(createdAt.toString()))
-                          .inMinutes <
-                      60
+              ? tripStatus != "expired" && tripStatus != "Completed"
                   ? context.read<UserCubit>().isLoggedIn &&
                           entity.locations[0].bookedUser?.id != userId &&
                           entity.locations[1].bookedUser?.id != userId &&
@@ -184,14 +173,10 @@ class AvailableRoutesPointInfo extends StatelessWidget {
       child: Container(
         color: Colors.transparent,
         child: Stack(
-          alignment: Alignment.center, // Center the image and the border
+          alignment: Alignment.center,
           children: [
-            // Create the red circular border
             if (status.toLowerCase() == 'free')
-              DateTime.now()
-                          .difference(DateTime.parse(createdAt.toString()))
-                          .inMinutes <
-                      60
+              tripStatus != "expired" && tripStatus != "Completed"
                   ? context.read<UserCubit>().isLoggedIn &&
                           entity.locations[0].bookedUser?.id != userId &&
                           entity.locations[1].bookedUser?.id != userId &&
@@ -213,39 +198,48 @@ class AvailableRoutesPointInfo extends StatelessWidget {
               decoration: const BoxDecoration(
                 shape: BoxShape.circle, // Circle shape for the image
               ),
-              child: status.toLowerCase() == 'free'
+              child: tripStatus == "Completed"
                   ? Image.asset(
-                      width: 40,
+                      width: 60,
 
-                      Assets.tripjoin,
+                      defaultGender.toLowerCase() == 'female'
+                          ? Assets.femaleImagePlacehlder
+                          : Assets.maleImagePlaceholder,
                       fit: BoxFit.cover, // Cover the entire circle
                     )
-                  : context.read<UserCubit>().isLoggedIn &&
-                              entity.locations[0].bookedUser?.id == userId &&
-                              dotNumber == 1 ||
-                          entity.locations[1].bookedUser?.id == userId &&
-                              dotNumber == 2 ||
-                          entity.locations[2].bookedUser?.id == userId &&
-                              dotNumber == 3
-                      ? Image.network(
-                          serviceLocator<UserCubit>().state.data != null
-                              ? serviceLocator<UserCubit>()
-                                  .state
-                                  .data!
-                                  .profilePicture!
-                              : UIConst.profilePlaceHolder,
-                          width: 60,
-                          fit: BoxFit.cover,
-                        )
-                      : Image.asset(
-                          width: 60,
-                          // Use the appropriate image based on status and gender
+                  : status.toLowerCase() == 'free'
+                      ? Image.asset(
+                          width: 40,
 
-                          gender.toLowerCase() == 'female'
-                              ? Assets.femaleImagePlacehlder
-                              : Assets.maleImagePlaceholder,
+                          Assets.tripjoin,
                           fit: BoxFit.cover, // Cover the entire circle
-                        ),
+                        )
+                      : context.read<UserCubit>().isLoggedIn &&
+                                  entity.locations[0].bookedUser?.id ==
+                                      userId &&
+                                  dotNumber == 1 ||
+                              entity.locations[1].bookedUser?.id == userId &&
+                                  dotNumber == 2 ||
+                              entity.locations[2].bookedUser?.id == userId &&
+                                  dotNumber == 3
+                          ? Image.network(
+                              serviceLocator<UserCubit>().state.data != null
+                                  ? serviceLocator<UserCubit>()
+                                      .state
+                                      .data!
+                                      .profilePicture!
+                                  : UIConst.profilePlaceHolder,
+                              width: 60,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset(
+                              width: 60,
+
+                              gender.toLowerCase() == 'female'
+                                  ? Assets.femaleImagePlacehlder
+                                  : Assets.maleImagePlaceholder,
+                              fit: BoxFit.cover, // Cover the entire circle
+                            ),
             ),
           ],
         ),

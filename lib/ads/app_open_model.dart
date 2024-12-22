@@ -4,19 +4,19 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 class AppOpenAdManager {
   AppOpenAd? _appOpenAd;
   bool _isShowingAd = false;
-  static bool isLoaded=false;
+  static bool isLoaded = false;
 
   /// Load an AppOpenAd.
   void loadAd() {
     AppOpenAd.load(
       adUnitId: AdHelper.OpenAppAd,
-      // orientation: AppOpenAd.orientationPortrait,
+      orientation: AppOpenAd.orientationPortrait,
       request: const AdRequest(),
       adLoadCallback: AppOpenAdLoadCallback(
         onAdLoaded: (ad) {
           print("Ad Loadede.................................");
           _appOpenAd = ad;
-          isLoaded=true;
+          isLoaded = true;
         },
         onAdFailedToLoad: (error) {
           // Handle the error.
@@ -31,7 +31,8 @@ class AppOpenAdManager {
   }
 
   void showAdIfAvailable() {
-    print("Called=====================================================================");
+    print(
+        "Called=====================================================================");
     if (_appOpenAd == null) {
       print('Tried to show ad before available.');
       loadAd();

@@ -803,7 +803,6 @@ class EndPoints {
   static String getNumOfResturants = '/restaurants/num-of-restaurants';
   static String toggleRestaurantFavourite(String id) =>
       '/food/favorite-restaurant/$id';
-
   static String foodExpiredOrders(PaginationParams params) =>
       '/food/expired-orders?page=${params.page}&limit=${params.limit}';
   static String isResturant = '/restaurants/check-user-have-restaurant';
@@ -1076,6 +1075,13 @@ class EndPoints {
   static String getRequest(String id) =>
       '/ride/come-with-you/trip/requests//$id';
   static String carpoolRoutePrice = '/carpool/price';
+  static String getAcceptedTrips = '/carpool/driver/trip';
+
+  static String verifyUserOtp(String tripId) =>
+      '/carpool/verifyPassengersOtp/$tripId';
+
+  static String completeUserSeat = '/carpool/completeSeat';
+
   static String acceptTripForDriver(String id) =>
       '/carpool/driverAcceptCarpool/$id';
   static String getLatAndLongFromAddress = '/ride/trips/address/latAndLong';

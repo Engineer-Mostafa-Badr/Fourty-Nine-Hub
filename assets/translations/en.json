@@ -1088,15 +1088,6 @@
   "forwardMessage": "Forward Message",
   "forwarded": "Forwarded",
   "mainCategory" : "Main Category",
-  "continueUsingChatServices": " , To continue using chat services",
-  "viewRoute":"View Route",
-  "enterUserOtp":"Enter user OTP",
-  "invalidOtp":"Invalid OTP",
-  "otpVerifiedSuccessfully":"Otp verified successfully",
-  "ifUserReachedClick":"If the passenger has reached their destination, press the button",
-  "reached":"Reached",
-  "running":"Running",
-  "failedTryAgain":"Failed. please try again",
   "comeWithMe" : "Come With Me",
   "publishSubmitted": "Your talent submitted successfully wait for administration approved",
   "noFavouriteAds": "There is no favourite ads",
@@ -1217,6 +1208,15 @@
   "Cash": "Cash",
   "Wallet": "Wallet",
   "youHaveToFillYourNumberOfPassenger": "You have to fill your Number of Passenger",
-  "waitingForReplies":"Waiting for replies..."
+  "waitingForReplies":"Waiting for replies...",
 
+  "continueUsingChatServices": " , To continue using chat services",
+  "viewRoute":"View Route",
+  "enterUserOtp":"Enter user OTP",
+  "invalidOtp":"Invalid OTP",
+  "otpVerifiedSuccessfully":"Otp verified successfully",
+  "ifUserReachedClick":"If the passenger has reached their destination, press the button",
+  "reached":"Reached",
+  "running":"Running",
+  "failedTryAgain":"Failed. please try again"
 }
