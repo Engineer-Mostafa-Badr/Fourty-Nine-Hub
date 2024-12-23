@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/localization/localization_service.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -23,16 +29,17 @@ class _CustomPageState extends State<CustomPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text("Custom Page"),
+      appBar:  BackAppBar(
+        label: LocaleKeys.customPage.localize,
         leading: IconButton(
           icon: const Icon(Icons.menu),
           onPressed: () {
+            HandleCashback.setCount('drawerCount',context);
             _scaffoldKey.currentState?.openDrawer();
           },
         ),
       ),
-      drawer: const Drawer(),
+      drawer: const DrawerWidget(),
       body: BlocProvider<CustomPageCubit>(
         create: (BuildContext context) => serviceLocator()..fetchActivate(),
         child: BlocConsumer<CustomPageCubit, CustomPageState>(
@@ -55,25 +62,16 @@ class _CustomPageState extends State<CustomPage> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Text(
-                          'Activate Custom Page',
-                          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w400),
-                        ),
-                      ),
+                          child: Label(
+                              text: LocaleKeys.activatePage.localize,
+                              style: Styles.mediumText(
+                                  fontSize: 65.sp, fontWeight: FontWeight.w400)
+                          )),
                       Switch(
                         value: state.activate?.customPage ?? false,
                         onChanged: (v) {
                           controller.updateActivate(v);
-
-                          // Dynamically navigate based on the switch value
-                          // if (v) {
-                          //   // Navigate to Custom Page
-                          //   context.pushReplacementNamed(Routes.CUSTOMPAGE);
-                          // } else {
-                          //   // Navigate to Home Page
-                          //   context.pushReplacementNamed(Routes.HOME);
-                          // }
-                        },
+                          },
                         activeColor: Colors.red,
                         inactiveThumbColor: Colors.black,
                         activeTrackColor: Colors.grey,
@@ -83,7 +81,10 @@ class _CustomPageState extends State<CustomPage> {
                   ),
                 ),
                 ListTile(
-                  title: Text('Edit Page', style: TextStyle(fontSize: 18.sp)),
+                  title: Label(
+                      text: LocaleKeys.editPage.localize,
+                      style: Styles.mediumText(
+                          fontSize: 65.sp, fontWeight: FontWeight.w400)),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -92,15 +93,19 @@ class _CustomPageState extends State<CustomPage> {
                       ),
                     );
                   },
-                  trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                  trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
                 ),
                 ListTile(
-                  title: Text('Page Preview', style: TextStyle(fontSize: 18.sp)),
+                  title: Label(
+                      text: LocaleKeys.pagePreview.localize,
+                      style: Styles.mediumText(
+                          fontSize: 65.sp, fontWeight: FontWeight.w400)),
                   onTap: () {
                     context.push(Routes.PAGEPREVIEW);
                   },
-                  trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                  trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
                 ),
+
               ],
             );
           },

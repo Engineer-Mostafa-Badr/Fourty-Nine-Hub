@@ -19,6 +19,8 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/repositories/StoriesRpo.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/repositories/tinder_repository_impl.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_gifts_use_case.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/carpool_service_locator.dart';
@@ -179,7 +181,7 @@ class DI {
     //
     // // Register the TinderRepository
     serviceLocator.registerLazySingleton<TinderRepository>(
-      () => TinderRepositoryImpl(repository: serviceLocator()),
+      () => TinderRepositoryImpl(serviceLocator()),
     );
     serviceLocator.registerLazySingleton<GetTripInfoCubit>(
       () => GetTripInfoCubit(repository: serviceLocator()),
