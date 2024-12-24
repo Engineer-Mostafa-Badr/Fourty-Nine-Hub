@@ -12,7 +12,7 @@ class GetCommentsResponse {
     required this.message,
     required this.data,
   });
-GetCommentsResponse copyWith({
+  GetCommentsResponse copyWith({
     bool? status,
     String? message,
     List<CommentData>? data,
@@ -124,8 +124,6 @@ class CommentData {
           [],
     );
   }
-
-
 
   Map<String, dynamic> toJson() {
     return {

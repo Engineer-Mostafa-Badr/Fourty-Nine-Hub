@@ -16,7 +16,6 @@ class UpdateNavigateBarUseCase extends UseCase<bool, NavigateBarParams> {
 }
 
 class NavigateBarParams {
-  final bool chat;
   final bool find;
   final bool health;
   final bool live;
@@ -27,10 +26,9 @@ class NavigateBarParams {
   final bool ride;
   final bool snap;
   final bool spotlight;
-  final bool tweet;
 
   NavigateBarParams(
-      {required this.chat,
+      {
       required this.find,
       required this.health,
       required this.live,
@@ -41,11 +39,10 @@ class NavigateBarParams {
       required this.ride,
       required this.snap,
       required this.spotlight,
-      required this.tweet});
+      });
 
   Map<String, dynamic> toJson() {
     return {
-      'Chat': chat,
       'Find': find,
       'Health': health,
       'Live': live,
@@ -56,7 +53,6 @@ class NavigateBarParams {
       'Ride': ride,
       'Snap': snap,
       'Spotlight': spotlight,
-      'Tweet': tweet,
     };
   }
 }

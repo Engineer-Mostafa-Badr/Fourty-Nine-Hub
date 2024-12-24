@@ -9,7 +9,8 @@ import '../../../ads/data/models/Ad_model.dart';
 import '../../domain/usecases/make_ad_request_usecase.dart';
 
 abstract class AdDetailsRemoteDataSource {
-  Future<Either<Failure, AddDetailsModel>> getAdDetails({required GetAdDetailsParams params});
+  Future<Either<Failure, AddDetailsModel>> getAdDetails(
+      {required GetAdDetailsParams params});
   Future<Either<Failure, List<AdModel>>> getRelevantAds({required int id});
   Future<Either<Failure, bool>> makeAdRequest(
       {required AdRequestParams params});
@@ -50,11 +51,12 @@ class AdDetailsRemoteDataSourceImpl extends AdDetailsRemoteDataSource {
         await _apiConsumer.post(EndPoints.makeRequest, data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
+
   @override
   Future<Either<Failure, bool>> makeAdPremiumRequest(
       {required AdRequestParams params}) async {
-    final response =
-        await _apiConsumer.post(EndPoints.makePremiumRequest, data: params.toJson());
+    final response = await _apiConsumer.post(EndPoints.makePremiumRequest,
+        data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 }

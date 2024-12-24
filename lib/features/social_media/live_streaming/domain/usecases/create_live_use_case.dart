@@ -28,13 +28,17 @@ class CreateLiveParams {
   final List<GoalParams>? goals;
 
   CreateLiveParams(
-      {required this.title,required this.roomID, this.topicId, this.description, this.goals});
+      {required this.title,
+      required this.roomID,
+      this.topicId,
+      this.description,
+      this.goals});
 
   Map<String, dynamic> toJson() {
     return {
       "title": title,
       "topic": topicId,
-      "roomId":roomID,
+      "roomId": roomID,
       "description": description,
       "goals": goals?.map((goal) => goal.toJson()).toList()
     };
@@ -60,14 +64,16 @@ class PointsParams {
 
   Map<String, dynamic> toJson() {
     return {"streamId": streamId, "memberId": memberId};
-  }}
-  class RequestBattleParams {
-    final String streamId;
-    final String receiverId;
-
-    RequestBattleParams({required this.streamId, required this.receiverId});
-
-    Map<String, dynamic> toJson() {
-      return {"streamId": streamId, "receiverId": receiverId};
-    }
   }
+}
+
+class RequestBattleParams {
+  final String streamId;
+  final String receiverId;
+
+  RequestBattleParams({required this.streamId, required this.receiverId});
+
+  Map<String, dynamic> toJson() {
+    return {"streamId": streamId, "receiverId": receiverId};
+  }
+}

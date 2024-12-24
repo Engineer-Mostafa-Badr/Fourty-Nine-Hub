@@ -17,7 +17,7 @@ class MainCategoryDropModel extends MainCategoryDropEntity {
       id: json['_id'] ?? '',
       banner: json['banner'] ?? '',
       cover: json['cover'] ?? ' ',
-      index: json['index'] ?? 0 ,
+      index: json['index'] ?? 0,
       nameAr: json['nameAr'] ?? '',
       nameEn: json['nameEn'] ?? '',
       isFavorite: json['isFavorite'] ?? false,

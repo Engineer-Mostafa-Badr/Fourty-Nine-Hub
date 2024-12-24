@@ -5,7 +5,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 
-
 class GetGiftsUseCase extends UseCase<GiftApi, PaginationParams> {
   final TinderRepository _repository;
 

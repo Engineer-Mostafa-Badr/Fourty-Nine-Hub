@@ -11,7 +11,9 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class ViewFollowersAndFollowing extends StatefulWidget {
-  const ViewFollowersAndFollowing({super.key});
+  const ViewFollowersAndFollowing({super.key, required this.otherId, required this.email});
+  final String otherId;
+  final String email;
 
   @override
   State<ViewFollowersAndFollowing> createState() =>
@@ -43,7 +45,7 @@ class _ViewFollowersAndFollowingState extends State<ViewFollowersAndFollowing>
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: BackAppBar(label: user!.email!.split('@')[0]),
+        appBar: BackAppBar(label:widget.email =='Hidden'? '':widget.email.split('@')[0]),
         body: BlocProvider<FollowCubit>(
           create: (BuildContext context) => serviceLocator(),
           child: BlocConsumer<FollowCubit, FollowState>(
@@ -65,7 +67,14 @@ class _ViewFollowersAndFollowingState extends State<ViewFollowersAndFollowing>
                       child: TabBarView(
                         controller: _tabController,
                         physics: const NeverScrollableScrollPhysics(),
-                        children: const [FollowersView(), FollowingView()],
+                        children: [
+                          FollowersView(
+                            otherId: widget.otherId,
+                          ),
+                          FollowingView(
+                            otherId: widget.otherId,
+                          )
+                        ],
                       ),
                     ),
                   ),

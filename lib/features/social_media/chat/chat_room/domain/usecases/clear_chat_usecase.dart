@@ -18,5 +18,5 @@ class ClearChatParams {
   final String chatId;
   final bool clearForAll;
 
-  ClearChatParams({required this.chatId, required this.clearForAll}); 
-  }
+  ClearChatParams({required this.chatId, required this.clearForAll});
+}

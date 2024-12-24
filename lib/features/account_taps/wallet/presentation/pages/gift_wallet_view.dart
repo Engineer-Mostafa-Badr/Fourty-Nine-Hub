@@ -39,7 +39,7 @@ class GiftWalletView extends StatelessWidget {
                     WalletCardWidget(
                       balance: '${state.gift?.giftWallet.amount ?? ''}',
                       type: WalletTypes.giftWallet,
-                      currency: state.gift?.currency ??'',
+                      currency: state.gift?.currency ?? '',
                     ),
                     const Sizer(),
                     Label(
@@ -60,8 +60,9 @@ class GiftWalletView extends StatelessWidget {
                             children: [
                               Label(
                                 text: LocaleKeys.luckyWheel.localize,
-                                style:
-                                Styles.mediumText(fontSize: 55.sp,fontWeight: FontWeight.bold),
+                                style: Styles.mediumText(
+                                    fontSize: 55.sp,
+                                    fontWeight: FontWeight.bold),
                               ),
                               const Spacer(),
                               Label(

@@ -7,12 +7,13 @@ import 'package:fourtyninehub/features/star_feature/domain/repository/star_repos
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
 
-class StarRepositoryImpl extends StarRepository{
+class StarRepositoryImpl extends StarRepository {
   final StarRemoteDataSource _remoteDataSource;
 
   StarRepositoryImpl(this._remoteDataSource);
   @override
-  Future<Either<Failure, List<StarEntity>>> fetchAllStar(StarPaginationParams params) {
+  Future<Either<Failure, List<StarEntity>>> fetchAllStar(
+      StarPaginationParams params) {
     return _remoteDataSource.fetchAllStar(params);
   }
 
@@ -32,8 +33,8 @@ class StarRepositoryImpl extends StarRepository{
   }
 
   @override
-  Future<Either<Failure, List<StarWinnerEntity>>> fetchWinnerStar(StarPaginationParams params) {
+  Future<Either<Failure, List<StarWinnerEntity>>> fetchWinnerStar(
+      StarPaginationParams params) {
     return _remoteDataSource.fetchWinnerStar(params);
   }
-
 }

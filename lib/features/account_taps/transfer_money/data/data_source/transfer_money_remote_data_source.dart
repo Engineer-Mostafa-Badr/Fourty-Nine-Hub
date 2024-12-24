@@ -10,7 +10,8 @@ import '../../domain/entities/user_transfer_money_entity.dart';
 import '../../domain/use_case/transfer_money_use_case.dart';
 
 abstract class TransferMoneyRemoteDataSource {
-  Future<Either<Failure, TransferMoneyEntity>> transferMoney(TransferMoneyParams params);
+  Future<Either<Failure, TransferMoneyEntity>> transferMoney(
+      TransferMoneyParams params);
   Future<Either<Failure, List<UserTransferMoneyEntity>>> fetchUser();
 }
 

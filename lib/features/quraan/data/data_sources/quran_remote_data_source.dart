@@ -9,9 +9,9 @@ import 'package:fourtyninehub/features/quraan/domain/entity/surah_entity.dart';
 import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_use_case.dart';
 
 abstract class QuranRemoteDataSource {
-  Future<Either<Failure,List<QuranSurahEntity>>> fetchQuranSurah(QuranParams params);
-  Future<Either<Failure,List<SurahEntity>>> fetchSurah({required int id});
-
+  Future<Either<Failure, List<QuranSurahEntity>>> fetchQuranSurah(
+      QuranParams params);
+  Future<Either<Failure, List<SurahEntity>>> fetchSurah({required int id});
 }
 
 class QuranRemoteDataSourceImpl implements QuranRemoteDataSource {
@@ -20,7 +20,8 @@ class QuranRemoteDataSourceImpl implements QuranRemoteDataSource {
   QuranRemoteDataSourceImpl(this._apiConsumer);
 
   @override
-  Future<Either<Failure, List<QuranSurahEntity>>> fetchQuranSurah(QuranParams params) async {
+  Future<Either<Failure, List<QuranSurahEntity>>> fetchQuranSurah(
+      QuranParams params) async {
     final result = await _apiConsumer.get(EndPoints.quranSurah(params));
     return result.fold(
       (failure) => Left(failure),
@@ -34,7 +35,8 @@ class QuranRemoteDataSourceImpl implements QuranRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<SurahEntity>>> fetchSurah({required int id}) async {
+  Future<Either<Failure, List<SurahEntity>>> fetchSurah(
+      {required int id}) async {
     final result = await _apiConsumer.get(EndPoints.quran(id));
     return result.fold(
       (failure) => Left(failure),
@@ -42,7 +44,9 @@ class QuranRemoteDataSourceImpl implements QuranRemoteDataSource {
         final list = (response['data'] as List)
             .map((e) => SurahModel.fromJson(e))
             .toList();
-        return Right(list,);
+        return Right(
+          list,
+        );
       },
     );
   }

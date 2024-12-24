@@ -73,14 +73,14 @@ class CustomPageBottonNavBar extends StatelessWidget
                 image: Assets.ride,
                 route: Routes.RIDE,
               ),
-            if (navigateBar.tweet)
-              BottomItemModel(
-                icon: FontAwesomeIcons.twitter,
-                label: 'tweet',
-                // Translated text
-                image: Assets.twitter,
-                route: Routes.TWITTER,
-              ),
+            // if (navigateBar.tweet)
+            //   BottomItemModel(
+            //     icon: FontAwesomeIcons.twitter,
+            //     label: 'tweet',
+            //     // Translated text
+            //     image: Assets.twitter,
+            //     route: Routes.TWITTER,
+            //   ),
             if (navigateBar.reel)
               BottomItemModel(
                 icon: FontAwesomeIcons.list,
@@ -89,14 +89,14 @@ class CustomPageBottonNavBar extends StatelessWidget
                 image: Assets.reels,
                 route: Routes.REELS,
               ),
-            if (navigateBar.chat)
-              BottomItemModel(
-                icon: Icons.chat,
-                label: 'chat',
-                // Translated text
-                image: Assets.message,
-                route: Routes.CHAT,
-              ),
+            // if (navigateBar.chat)
+            //   BottomItemModel(
+            //     icon: Icons.chat,
+            //     label: 'chat',
+            //     // Translated text
+            //     image: Assets.message,
+            //     route: Routes.CHAT,
+            //   ),
             if (navigateBar.find)
               BottomItemModel(
                 icon: FontAwesomeIcons.car,
@@ -143,7 +143,10 @@ class CustomPageBottonNavBar extends StatelessWidget
             currentIndex: currentIndex,
             onTap: (index) {
               final selectedItem = visibleItems[index];
-              Navigator.pushNamed(context, selectedItem.route);
+              if (selectedItem.route != ModalRoute.of(context)?.settings.name) {
+                selectedItem.action(context);
+              }
+              //HandleCashback.setCount(pages[index].cacheKey ?? '', context);
             },
             items: visibleItems,
             scrollController: scrollController,

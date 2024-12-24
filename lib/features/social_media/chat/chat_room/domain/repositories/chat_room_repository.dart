@@ -17,7 +17,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/set_record_as_listened.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/unpin_message_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 
 abstract class ChatRoomRepository {
   Future<Either<Failure, bool>> sendMessage(SendMessageParams params);

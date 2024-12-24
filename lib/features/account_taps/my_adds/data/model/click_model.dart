@@ -5,8 +5,8 @@ class ClickModel extends ClickEntity {
 
   factory ClickModel.fromJson(Map<String, dynamic> json) {
     return ClickModel(
-      status: json['status'] ??false,
-      data: json['data'] ??'',
+      status: json['status'] ?? false,
+      data: json['data'] ?? '',
     );
   }
 }

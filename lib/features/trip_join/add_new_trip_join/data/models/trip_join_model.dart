@@ -1,7 +1,9 @@
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/trip_info_entity.dart';
 
 class TripInfoModel extends TripInfoEntity {
+  @override
   final String? type;
+  @override
   final String? polyline;
 
   TripInfoModel({

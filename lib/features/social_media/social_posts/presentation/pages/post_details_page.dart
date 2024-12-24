@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -133,7 +132,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                             builderDelegate:
                                 PagedChildBuilderDelegate<CommentEntity>(
                               noItemsFoundIndicatorBuilder: (context) {
-                                return  Center(
+                                return Center(
                                   child: Text(
                                     LocaleKeys.noComments.localize,
                                     style: const TextStyle(
@@ -152,7 +151,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                           await widget.onCommentReply(params);
 
                                       state.postDetails?.commentsCount =
-                                          (state.postDetails!.commentsCount! +
+                                          (state.postDetails!.commentsCount +
                                               1);
                                       setState(() {});
                                       return result;
@@ -161,7 +160,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                       var result =
                                           await widget.onDeleteComment(id);
                                       state.postDetails?.commentsCount =
-                                          (state.postDetails!.commentsCount! -
+                                          (state.postDetails!.commentsCount -
                                               1);
                                       controller
                                           .commentsPagingController.itemList
@@ -175,7 +174,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                       var result =
                                           await widget.onDeleteReply(id);
                                       state.postDetails?.commentsCount =
-                                          (state.postDetails!.commentsCount! -
+                                          (state.postDetails!.commentsCount -
                                               1);
                                       controller
                                           .repliesPagingController.itemList
@@ -268,7 +267,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                             );
                             // widget.post.commentsCount=(widget.post.commentsCount!+1);
                             state.postDetails?.commentsCount =
-                                (state.postDetails!.commentsCount! + 1);
+                                (state.postDetails!.commentsCount + 1);
                             commentTextController.clear();
                             FocusScope.of(context).unfocus();
                             setState(() {});

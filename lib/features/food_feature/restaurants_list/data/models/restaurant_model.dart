@@ -25,7 +25,7 @@ class RestaurantModel extends RestaurantEntity {
 
   factory RestaurantModel.fromJson(Map<String, dynamic> json) {
     return RestaurantModel(
-        id: json['_id']??json['id'],
+        id: json['_id'] ?? json['id'],
         name: getLang() == 'ar'
             ? json['name_ar'] ?? (json['name_en'])
             : json['name'],

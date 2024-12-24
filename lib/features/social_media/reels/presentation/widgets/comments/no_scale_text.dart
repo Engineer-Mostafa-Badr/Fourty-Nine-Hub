@@ -7,12 +7,12 @@ class NoScaleText extends StatelessWidget {
   final int? maxLines;
 
   const NoScaleText(
-      this.data, {
-        super.key,
-        this.style,
-        this.textAlign,
-        this.maxLines,
-      });
+    this.data, {
+    super.key,
+    this.style,
+    this.textAlign,
+    this.maxLines,
+  });
 
   @override
   Widget build(BuildContext context) {

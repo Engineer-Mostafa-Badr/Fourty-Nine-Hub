@@ -315,7 +315,7 @@ Future<void> showUpdateGoalsSheet(BuildContext context,{bool? showEdit=false, re
       });
 }
 
-Widget _buildItem(BuildContext context,GiftData gift,{bool? showEdit=false, required Function(String id) onEdit, Function? editGift}) {
+Widget _buildItem(BuildContext context,GiftData gift,{required Function(String id) onEdit}) {
   print("gift.showEdit${gift.showEdit}");
   return Row(
       crossAxisAlignment: CrossAxisAlignment.center,

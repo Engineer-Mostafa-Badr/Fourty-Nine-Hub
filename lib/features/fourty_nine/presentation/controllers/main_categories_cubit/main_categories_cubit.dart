@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/currency_enti
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/any_cashback_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_currency_use_case.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_custom_page_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/shared/fourty_nine_shared_data.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
@@ -19,6 +20,7 @@ part 'main_categories_state.dart';
 
 class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   final GetMainCategoriesUseCase _getMainCategoriesUseCase;
+  final GetMainCategoriesCustomPageUseCase _categoriesCustomPageUseCase;
   final AnyCashBackUseCase _anyCashBackUseCase;
   final FourtyNineSharedData _fourtyNineSharedData =
       FourtyNineSharedData.instance;
@@ -29,8 +31,17 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   MainCategoriesCubit(
     this._getMainCategoriesUseCase,
     this._toggleFavoriteCategoryUseCase,
-    this._getWalletHomeUseCase, this._currencyUseCase, this._anyCashBackUseCase,
+    this._getWalletHomeUseCase,
+    this._currencyUseCase,
+    this._anyCashBackUseCase, this._categoriesCustomPageUseCase,
   ) : super(MainCategoriesState());
+
+
+  Future<void> loadDataCategory() async{
+    await loadData();
+    await getMainCategoryCustomPage();
+  }
+
   Future<void> loadData() async {
     emit(state.copyWith(status: StateStatus.loading));
     await UserCubit.to.getUser();
@@ -81,6 +92,56 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     }
   }
 
+  Future<void> getMainCategoryCustomPage() async {
+    emit(state.copyWith(status: StateStatus.loading));
+    await UserCubit.to.getUser();
+    getWallet();
+    getCurrency();
+    if (_fourtyNineSharedData.mainCategories.isEmpty) {
+      final user = UserCubit.to.state.data?.id;
+      print('userId1$user');
+      print('userId1$user');
+      final result = await _categoriesCustomPageUseCase(
+          MainCategoriesParams(page: 1, limit: 100, userId: user ?? ''));
+
+      result.fold(
+        (failure) {
+          emit(state.copyWith(
+            failure: failure,
+            status: StateStatus.error,
+          ));
+          CliLogger.error(
+              'can\'t load main categories there is an error ${failure.toString()}');
+        },
+        (r) {
+          _fourtyNineSharedData.mainCategories = r;
+          CliLogger.info('main categories loaded : ${r.length}');
+          // CliLogger.info('shared main categories loaded : ${_fourtyNineSharedData.mainCategories.length}');
+          // emit(state.copyWith(status: StateStatus.loading));
+          emit(state.copyWith(status: StateStatus.success, customPage: r));
+        },
+      );
+    } else {
+      final user = UserCubit.to.state.data;
+      print('userId2${user?.id ?? ''}');
+      // emit(state.copyWith(status: StateStatus.loading));
+      final result = await _categoriesCustomPageUseCase(
+          MainCategoriesParams(page: 1, limit: 100, userId: user?.id ?? ''));
+
+      result.fold(
+        (failure) => emit(state.copyWith(
+          failure: failure,
+          status: StateStatus.error,
+        )),
+        (r) {
+          // _fourtyNineSharedData.mainCategories = r;
+          // emit(state.copyWith(status: StateStatus.loading));
+          emit(state.copyWith(status: StateStatus.success, customPage: r));
+        },
+      );
+    }
+  }
+
   Future<bool> toggleFavoriteMedicalService(String subcategoryId) async {
     final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
     bool result = false;
@@ -125,7 +186,9 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     response.fold((l) {
       emit(state.copyWith(failure: l, status: StateStatus.error));
     }, (data) {
-      emit(state.copyWith(wallet: data,));
+      emit(state.copyWith(
+        wallet: data,
+      ));
       print("state.wallet?.giftWallet ${state.wallet?.giftWallet}");
     });
   }
@@ -135,7 +198,9 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     response.fold((l) {
       emit(state.copyWith(failure: l, status: StateStatus.error));
     }, (data) {
-      emit(state.copyWith(currency: data,));
+      emit(state.copyWith(
+        currency: data,
+      ));
     });
   }
 }

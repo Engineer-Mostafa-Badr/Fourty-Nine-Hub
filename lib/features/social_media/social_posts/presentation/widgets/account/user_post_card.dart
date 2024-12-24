@@ -472,7 +472,7 @@ class _UserPostCardState extends State<UserPostCard> {
                                 TextSpan(
                                     text: post.sinceTime,
                                     style: Styles.mediumText(color: Colors.grey)),
-                                 TextSpan(text: '  '),
+                                 const TextSpan(text: '  '),
                                  WidgetSpan(
                                     child: Icon(
                                       Icons.group,
@@ -590,7 +590,7 @@ class _UserPostCardState extends State<UserPostCard> {
                             TextSpan(
                                 text: post.sinceTime,
                                 style: Styles.mediumText(color: Colors.grey)),
-                            TextSpan(text: '  '),
+                            const TextSpan(text: '  '),
                             WidgetSpan(
                                 child: Icon(
                                   Icons.group,

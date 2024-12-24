@@ -90,9 +90,6 @@ class AdModel extends AdEntity {
             };
           }
         }).toList(),
-    "address": {
-      "government": governorate,
-      "city": city
-      }
+        "address": {"government": governorate, "city": city}
       };
 }

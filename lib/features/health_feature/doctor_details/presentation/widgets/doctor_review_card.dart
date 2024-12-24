@@ -71,9 +71,9 @@ class DoctorReviewCard extends StatelessWidget {
                   child: Icon(Icons.report,color: AppColors.SECONDARY_COLOR,size: 60.w,))
             ],
           ),
-          Sizer(),
+          const Sizer(),
           ReadMoreLabel(text: review.comment,style: Styles.mediumText(),),
-          if(fromDashboard==true)Sizer(),
+          if(fromDashboard==true)const Sizer(),
           if(fromDashboard==true)Row(
             children: [
               Expanded(

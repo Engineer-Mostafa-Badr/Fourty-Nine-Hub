@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../core/localization/locale_keys.g.dart';
-import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/styles.dart';
+import 'package:restart_app/restart_app.dart';
 
 class CustomPage extends StatefulWidget {
   const CustomPage({super.key});
@@ -25,47 +23,59 @@ class CustomPage extends StatefulWidget {
 
 class _CustomPageState extends State<CustomPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       appBar:  BackAppBar(
         label: LocaleKeys.customPage.localize,
-        leading: IconButton(
-          icon: const Icon(Icons.menu), // The menu icon
-          onPressed: () {
-            // HandleCashback.setCount('drawerCount',context);
-            _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-          },
-        ),
+        // leading: IconButton(
+        //   icon: const Icon(Icons.menu),
+        //   onPressed: () {
+        //     HandleCashback.setCount('drawerCount',context);
+        //     _scaffoldKey.currentState?.openDrawer();
+        //   },
+        // ),
       ),
-      drawer: const DrawerWidget(),
+    //  drawer: const DrawerWidget(),
       body: BlocProvider<CustomPageCubit>(
-        create: (BuildContext context) =>serviceLocator()..fetchActivate(),
-        child: BlocBuilder<CustomPageCubit,CustomPageState>(
+        create: (BuildContext context) => serviceLocator()..fetchActivate(),
+        child: BlocConsumer<CustomPageCubit, CustomPageState>(
+          listener: (BuildContext context, CustomPageState state) {
+            if(state.status ==CustomPageStates.updateSuccess){
+              if(state.activate!.customPage ==true){
+                context.pushReplacementNamed(Routes.CUSTOMPAGE);
+              }else{
+                context.pushReplacementNamed(Routes.HOME);
+              }
+              print('''''''''''''''object''''''''''''''');
+            }
+          },
           builder: (BuildContext context, state) {
-            var controller=context.read<CustomPageCubit>();
+            var controller = context.read<CustomPageCubit>();
             return Column(
               children: [
                 Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: 25.w),
+                  padding: EdgeInsets.symmetric(horizontal: 25.w),
                   child: Row(
                     children: [
                       Expanded(
                           child: Label(
-                            text: LocaleKeys.activatePage.localize,
+                              text: LocaleKeys.activatePage.localize,
                               style: Styles.mediumText(
                                   fontSize: 65.sp, fontWeight: FontWeight.w400)
                           )),
                       Switch(
-                        value: state.activate?.customPage ??false,
-                        onChanged: (v){
+                        value: state.activate?.customPage ?? false,
+                        onChanged: (v) {
                           controller.updateActivate(v);
-                        },
+                          Restart.restartApp();
+                          },
                         activeColor: Colors.red,
                         inactiveThumbColor: Colors.black,
-                        activeTrackColor: AppColors.GREY_NORMAL_COLOR,
-                        inactiveTrackColor: AppColors.GREY_NORMAL_COLOR,
+                        activeTrackColor: Colors.grey,
+                        inactiveTrackColor: Colors.grey,
                       ),
                     ],
                   ),
@@ -91,35 +101,16 @@ class _CustomPageState extends State<CustomPage> {
                       style: Styles.mediumText(
                           fontSize: 65.sp, fontWeight: FontWeight.w400)),
                   onTap: () {
-                    context.push(Routes.PAGEPREVIEW);
+                    context.push(Routes.PAGEPREVIEW,extra: state.activate?.customPage ==true);
                   },
                   trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
                 ),
+
               ],
             );
           },
         ),
       ),
-    );
-  }
-
-  Widget listTileWidget(
-      {required String image,
-      required Widget trailing,
-      required String label,
-      required Function onTap}) {
-    return ListTile(
-      leading: Image.asset(
-        image,
-        width: 50.h,
-        height: 50.h,
-      ),
-      title: Label(
-          text: label,
-          style:
-              Styles.mediumText(fontSize: 65.sp, fontWeight: FontWeight.w400)),
-      onTap: () => onTap(),
-      trailing: trailing,
     );
   }
 }

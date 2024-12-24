@@ -26,16 +26,16 @@ class StarServiceLocator {
         .registerLazySingleton<FetchAllStarUseCase>(() => FetchAllStarUseCase(
               serviceLocator(),
             ));
-    serviceLocator.registerLazySingleton<FetchMylStarUseCase>(
-        () => FetchMylStarUseCase(
+    serviceLocator
+        .registerLazySingleton<FetchMylStarUseCase>(() => FetchMylStarUseCase(
               serviceLocator(),
             ));
-    serviceLocator.registerLazySingleton<UploadMyStarUseCase>(
-        () => UploadMyStarUseCase(
+    serviceLocator
+        .registerLazySingleton<UploadMyStarUseCase>(() => UploadMyStarUseCase(
               serviceLocator(),
             ));
-    serviceLocator.registerLazySingleton<DeleteMyStarUseCase>(
-        () => DeleteMyStarUseCase(
+    serviceLocator
+        .registerLazySingleton<DeleteMyStarUseCase>(() => DeleteMyStarUseCase(
               serviceLocator(),
             ));
     serviceLocator.registerLazySingleton<FetchWinnerStarUseCase>(

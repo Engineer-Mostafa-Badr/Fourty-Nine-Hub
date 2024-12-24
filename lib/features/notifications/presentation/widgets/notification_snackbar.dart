@@ -16,12 +16,15 @@ notificationSnackBar({
   String trimmedBody = notificationEntity.body ?? '';
   trimmedBody = trimmedBody.substring(0, min(trimmedBody.length, 30));
   AudioPlayer player = AudioPlayer();
-  player.play(AssetSource(isAppNotification ? Assets.notificationAudioApp : Assets.notificationAudioServieAndSocial));
+  player.play(AssetSource(isAppNotification
+      ? Assets.notificationAudioApp
+      : Assets.notificationAudioServieAndSocial));
   showTopSnackBar(
     Overlay.of(context),
     GestureDetector(
       onTap: () {
-        context.push(notificationEntity.path ?? '', extra: notificationEntity.payload);
+        context.push(notificationEntity.path ?? '',
+            extra: notificationEntity.payload);
       },
       child: CustomSnackBar.error(
         message: "${notificationEntity.title} \n${notificationEntity.body}",

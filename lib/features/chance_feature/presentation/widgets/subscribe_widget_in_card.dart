@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
+
 class NotSubscribedWidget extends StatelessWidget {
   const NotSubscribedWidget({super.key});
   @override

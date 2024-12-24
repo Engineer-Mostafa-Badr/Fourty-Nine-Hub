@@ -4,16 +4,14 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/chance_feature/domain/entity/cahnce_rate_entity.dart';
 import 'package:fourtyninehub/features/chance_feature/domain/repository/chance_repository.dart';
 
-class GetChanceRateUseCase
-    extends UseCase<ChanceRateEntity, ChanceRateParams> {
+class GetChanceRateUseCase extends UseCase<ChanceRateEntity, ChanceRateParams> {
   final ChanceRepository _chanceRepository;
 
   GetChanceRateUseCase(this._chanceRepository);
 
   @override
   Future<Either<Failure, ChanceRateEntity>> call(
-      ChanceRateParams params) async
-  {
+      ChanceRateParams params) async {
     return await _chanceRepository.fetchChanceRate(params);
   }
 }

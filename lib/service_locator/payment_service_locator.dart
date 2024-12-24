@@ -33,12 +33,12 @@ class PaymentProviderServiceLocator {
             ));
     //Payment Cache Out
     serviceLocator.registerLazySingleton<PaymentCacheOutRemoteDataSource>(
-            () => PaymentCacheOutRemoteDataSourceImpl(
-          serviceLocator(),
-        ));
+        () => PaymentCacheOutRemoteDataSourceImpl(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<PaymentProviderRepository>(
-            () => PaymentProviderRepositoryImpl(serviceLocator()));
+        () => PaymentProviderRepositoryImpl(serviceLocator()));
 
     //Payment Cache Out
     serviceLocator.registerLazySingleton<PaymentCacheOutRepository>(
@@ -69,19 +69,19 @@ class PaymentProviderServiceLocator {
 
     // Payment Cache Out
     serviceLocator.registerLazySingleton<InstapayCacheOutUseCase>(
-            () => InstapayCacheOutUseCase(serviceLocator()));
+        () => InstapayCacheOutUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<RequestYellowCardUseCase>(
-            () => RequestYellowCardUseCase(serviceLocator()));
+        () => RequestYellowCardUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<FetchAllBankUseCase>(
-            () => FetchAllBankUseCase(serviceLocator()));
+        () => FetchAllBankUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<PayOutRequestUseCase>(
-            () => PayOutRequestUseCase(serviceLocator()));
+        () => PayOutRequestUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<RequestInstapayUseCase>(
-            () => RequestInstapayUseCase(serviceLocator()));
+        () => RequestInstapayUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<FetchPriceYellowUseCase>(
-            () => FetchPriceYellowUseCase(serviceLocator()));
+        () => FetchPriceYellowUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<PayoutMethodBankUseCase>(
-            () => PayoutMethodBankUseCase(serviceLocator()));
+        () => PayoutMethodBankUseCase(serviceLocator()));
 
     serviceLocator.registerFactory<PaymentCubit>(() => PaymentCubit(
           serviceLocator(),
@@ -95,15 +95,16 @@ class PaymentProviderServiceLocator {
           serviceLocator(),
         ));
 
-    serviceLocator.registerFactory<PaymentCacheOutCubit>(() => PaymentCacheOutCubit(
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-    ));
+    serviceLocator
+        .registerFactory<PaymentCacheOutCubit>(() => PaymentCacheOutCubit(
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+            ));
   }
 }

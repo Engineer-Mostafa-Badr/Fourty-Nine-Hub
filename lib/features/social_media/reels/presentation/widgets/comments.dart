@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -12,7 +11,6 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../tinder/data/shared/shared.dart';
-import 'dart:ui';
 
 class CommentWidget extends StatefulWidget {
   final CommentData commentData;
@@ -20,14 +18,13 @@ class CommentWidget extends StatefulWidget {
   final FocusNode focusNode;
   String? replyingTo;
   final TextEditingController commentController;
-  CommentWidget({
-    super.key,
-    required this.commentData,
-    required this.focusNode,
-    required this.index,
-    this.replyingTo,
-    required this.commentController
-  });
+  CommentWidget(
+      {super.key,
+      required this.commentData,
+      required this.focusNode,
+      required this.index,
+      this.replyingTo,
+      required this.commentController});
 
   @override
   _CommentWidgetState createState() => _CommentWidgetState();
@@ -37,10 +34,6 @@ class _CommentWidgetState extends State<CommentWidget> {
   bool _isRepliesVisible = false;
   int _displayedRepliesCount = 3;
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -49,9 +42,10 @@ class _CommentWidgetState extends State<CommentWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCommentRow(
-              widget.commentData.comment, widget.commentData.createdAt,false),
+              widget.commentData.comment, widget.commentData.createdAt, false),
           SizedBox(height: 0.h),
-          if (widget.commentData.replies.isNotEmpty) _buildToggleRepliesButton(),
+          if (widget.commentData.replies.isNotEmpty)
+            _buildToggleRepliesButton(),
           if (_isRepliesVisible) ...[
             AnimatedSize(
               duration: const Duration(milliseconds: 300),
@@ -64,7 +58,8 @@ class _CommentWidgetState extends State<CommentWidget> {
     );
   }
 
-  Widget _buildCommentRow(String comment, DateTime createdAt,bool reply,{String? replyId}) {
+  Widget _buildCommentRow(String comment, DateTime createdAt, bool reply,
+      {String? replyId}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -110,7 +105,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                   SizedBox(width: 30.w),
                   _buildReplyButton(),
                   const Spacer(),
-                  _buildLikeButton(reply,replyId: replyId),
+                  _buildLikeButton(reply, replyId: replyId),
                 ],
               ),
             ],
@@ -120,7 +115,8 @@ class _CommentWidgetState extends State<CommentWidget> {
     );
   }
 
-  Widget _buildReplyRow(String comment, DateTime createdAt,bool reply,{String? replyId,bool? isLike,int? replyCount}) {
+  Widget _buildReplyRow(String comment, DateTime createdAt, bool reply,
+      {String? replyId, bool? isLike, int? replyCount}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -166,7 +162,8 @@ class _CommentWidgetState extends State<CommentWidget> {
                   SizedBox(width: 30.w),
                   _buildReplyButton(),
                   const Spacer(),
-                  _buildReplyLikeButton(reply,replyId: replyId,isLike: isLike,likeCount: replyCount),
+                  _buildReplyLikeButton(reply,
+                      replyId: replyId, isLike: isLike, likeCount: replyCount),
                 ],
               ),
             ],
@@ -223,7 +220,7 @@ class _CommentWidgetState extends State<CommentWidget> {
     }
   }
 
-  Widget _buildLikeButton(bool reply,{String? replyId}) {
+  Widget _buildLikeButton(bool reply, {String? replyId}) {
     return Row(
       children: [
         IconButton(
@@ -234,7 +231,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                 : AppColors.GREY_NORMAL_COLOR,
           ),
           onPressed: () {
-            _handleLikeComment(widget.commentData.id, reply,replyId: replyId);
+            _handleLikeComment(widget.commentData.id, reply, replyId: replyId);
           },
         ),
         NoScaleText(
@@ -249,18 +246,19 @@ class _CommentWidgetState extends State<CommentWidget> {
     );
   }
 
-  Widget _buildReplyLikeButton(bool reply,{String? replyId,bool? isLike,int? likeCount}) {
+  Widget _buildReplyLikeButton(bool reply,
+      {String? replyId, bool? isLike, int? likeCount}) {
     return Row(
       children: [
         IconButton(
           icon: Icon(
             Icons.favorite,
-            color: isLike==true
+            color: isLike == true
                 ? AppColors.PRIMARY_COLOR_DARK
                 : AppColors.GREY_NORMAL_COLOR,
           ),
           onPressed: () {
-            _handleLikeComment(widget.commentData.id, reply,replyId: replyId);
+            _handleLikeComment(widget.commentData.id, reply, replyId: replyId);
           },
         ),
         NoScaleText(
@@ -275,9 +273,12 @@ class _CommentWidgetState extends State<CommentWidget> {
     );
   }
 
-  void _handleLikeComment(String commentId, bool isReply ,{String? replyId}) {
+  void _handleLikeComment(String commentId, bool isReply, {String? replyId}) {
     print('isReply : $isReply');
-    context.read<ReelsCubit>().toggleCommentLike(commentId,isReply,replyId:replyId ).then((_) {
+    context
+        .read<ReelsCubit>()
+        .toggleCommentLike(commentId, isReply, replyId: replyId)
+        .then((_) {
       FocusScope.of(context).unfocus();
     }).catchError((error) {
       _showErrorSnackBar('Failed to send like. Please try again.');
@@ -294,7 +295,7 @@ class _CommentWidgetState extends State<CommentWidget> {
         : "View ${widget.commentData.replies.length} ${widget.commentData.replies.length == 1 ? 'Reply' : 'Replies'}";
 
     return Padding(
-      padding:  EdgeInsets.symmetric(horizontal: 40.0.w),
+      padding: EdgeInsets.symmetric(horizontal: 40.0.w),
       child: InkWell(
         onTap: () {
           setState(() {
@@ -310,21 +311,42 @@ class _CommentWidgetState extends State<CommentWidget> {
         },
         child: Row(
           children: [
-            Text(buttonText,style: TextStyle(color: Colors.grey,fontSize:25.sp,fontWeight:FontWeight.w600),),
-            _isRepliesVisible? const Icon(Icons.keyboard_arrow_up,color: Colors.grey,):const Icon(Icons.keyboard_arrow_down,color: Colors.grey,)
+            Text(
+              buttonText,
+              style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 25.sp,
+                  fontWeight: FontWeight.w600),
+            ),
+            _isRepliesVisible
+                ? const Icon(
+                    Icons.keyboard_arrow_up,
+                    color: Colors.grey,
+                  )
+                : const Icon(
+                    Icons.keyboard_arrow_down,
+                    color: Colors.grey,
+                  )
           ],
         ),
       ),
     );
   }
+
   Widget _buildRepliesList() {
-    final repliesToShow = widget.commentData.replies.take(_displayedRepliesCount).toList();
+    final repliesToShow =
+        widget.commentData.replies.take(_displayedRepliesCount).toList();
     return Padding(
       padding: const EdgeInsets.only(left: 40.0, bottom: 8, top: 8),
       child: ListView(
-        shrinkWrap:true,
+        shrinkWrap: true,
         controller: context.read<ReelsCubit>().replyScrollController,
-        children: repliesToShow.map((reply) => _buildReplyRow(reply.comment,reply.createdAt,true,replyId: reply.id,isLike: reply.isLiked,replyCount: reply.likeCount)).toList(),
+        children: repliesToShow
+            .map((reply) => _buildReplyRow(reply.comment, reply.createdAt, true,
+                replyId: reply.id,
+                isLike: reply.isLiked,
+                replyCount: reply.likeCount))
+            .toList(),
       ),
     );
   }

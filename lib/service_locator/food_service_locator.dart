@@ -55,8 +55,9 @@ class FoodServiceLocator {
         () => RestaurantRemoteDataSourceImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<GetAllRestaurantUseCase>(
         () => GetAllRestaurantUseCase(serviceLocator()));
-    serviceLocator.registerFactory<RestaurantDashboardRemoteDataSource>(
-        () => RestaurantDashboardRemoteDataSourceImpl(serviceLocator(),serviceLocator()));
+    serviceLocator.registerFactory<RestaurantDashboardRemoteDataSource>(() =>
+        RestaurantDashboardRemoteDataSourceImpl(
+            serviceLocator(), serviceLocator()));
     serviceLocator.registerLazySingleton<RestaurantsRemoteDataSource>(
         () => RestaurantsRemoteDataSourceImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<FoodCartRemoteDataSource>(
@@ -82,12 +83,11 @@ class FoodServiceLocator {
         () => GetExpiredOrdersUseCase(
               serviceLocator(),
             ));
-    serviceLocator.registerLazySingleton<AddFoodUseCase>(
-        () => AddFoodUseCase(
-              serviceLocator(),
-            ));
-    serviceLocator.registerLazySingleton<DeleteFoodUseCase>(
-        () => DeleteFoodUseCase(
+    serviceLocator.registerLazySingleton<AddFoodUseCase>(() => AddFoodUseCase(
+          serviceLocator(),
+        ));
+    serviceLocator
+        .registerLazySingleton<DeleteFoodUseCase>(() => DeleteFoodUseCase(
               serviceLocator(),
             ));
     serviceLocator.registerLazySingleton<DeleteRestaurantUseCase>(
@@ -95,22 +95,22 @@ class FoodServiceLocator {
               serviceLocator(),
             ));
 
- serviceLocator.registerLazySingleton<UpdateRestaurantUseCase>(
+    serviceLocator.registerLazySingleton<UpdateRestaurantUseCase>(
         () => UpdateRestaurantUseCase(
               serviceLocator(),
             ));
 
- serviceLocator.registerLazySingleton<DeleteFoodFromCartUseCase>(
+    serviceLocator.registerLazySingleton<DeleteFoodFromCartUseCase>(
         () => DeleteFoodFromCartUseCase(
               serviceLocator(),
             ));
 
- serviceLocator.registerLazySingleton<DeleteCartUseCase>(
-        () => DeleteCartUseCase(
+    serviceLocator
+        .registerLazySingleton<DeleteCartUseCase>(() => DeleteCartUseCase(
               serviceLocator(),
             ));
 
- serviceLocator.registerLazySingleton<ChangeQuantityUseCase>(
+    serviceLocator.registerLazySingleton<ChangeQuantityUseCase>(
         () => ChangeQuantityUseCase(
               serviceLocator(),
             ));
@@ -170,8 +170,14 @@ class FoodServiceLocator {
           serviceLocator(),
           serviceLocator(),
         ));
-    serviceLocator.registerFactory<RestaurantDashboardCubit>(
-        () => RestaurantDashboardCubit(serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
+    serviceLocator.registerFactory<RestaurantDashboardCubit>(() =>
+        RestaurantDashboardCubit(
+            serviceLocator(),
+            serviceLocator(),
+            serviceLocator(),
+            serviceLocator(),
+            serviceLocator(),
+            serviceLocator()));
     serviceLocator.registerLazySingleton<GetRestaurantDetailsUseCase>(
         () => GetRestaurantDetailsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetRestaurantInfoUseCase>(

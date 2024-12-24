@@ -48,53 +48,54 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
         title: Text(LocaleKeys.cashOutOption.localize),
       ),
       body: BlocProvider<PaymentCacheOutCubit>(
-        create: (BuildContext context) =>serviceLocator()..payoutMethod(),
+        create: (BuildContext context) => serviceLocator()..payoutMethod(),
         child: BlocBuilder<PaymentCacheOutCubit, PaymentCacheOutState>(
           builder: (context, state) {
             return SingleChildScrollView(
               child: Padding(
-                padding:  EdgeInsets.all(8.w),
+                padding: EdgeInsets.all(8.w),
                 child: Column(
                   children: [
                     Row(
                       children: [
-                        if(state.method?.PaymobCashOut ==true)
-                        Expanded(
-                          child: _buildCustomCard(
-                            onTap: () async {
-                              // final cubit = context.read<PaymentCubit>();
-                              // final url = cubit.state.paymobData?.data;
-                              // if (url != null) {
-                              //   await launchUrl(Uri.parse(url));
-                              // }
-                            },
-                            title: 'Paymob',
-                            titleId: 'Paymob',
-                            icon: Image.asset(
-                              Assets.paymob,
-                              fit: BoxFit.cover,
-                              height: 30.h,
+                        if (state.method?.PaymobCashOut == true)
+                          Expanded(
+                            child: _buildCustomCard(
+                              onTap: () async {
+                                // final cubit = context.read<PaymentCubit>();
+                                // final url = cubit.state.paymobData?.data;
+                                // if (url != null) {
+                                //   await launchUrl(Uri.parse(url));
+                                // }
+                              },
+                              title: 'Paymob',
+                              titleId: 'Paymob',
+                              icon: Image.asset(
+                                Assets.paymob,
+                                fit: BoxFit.cover,
+                                height: 30.h,
+                              ),
+                              color: Colors.blue,
+                              details: LocaleKeys
+                                  .enterYourCreditCardDetails.localize,
+                              context: context,
                             ),
-                            color: Colors.blue,
-                            details: LocaleKeys.enterYourCreditCardDetails.localize,
-                            context: context,
                           ),
-                        ),
-                        if(state.method?.FawryCashOut ==true)
-                        Expanded(
-                          child: _buildCustomCard(
-                            title: 'Fawry',
-                            titleId: 'Fawry',
-                            icon: Image.asset(
-                              Assets.fawry,
-                              fit: BoxFit.cover,
-                              height: 30.h,
+                        if (state.method?.FawryCashOut == true)
+                          Expanded(
+                            child: _buildCustomCard(
+                              title: 'Fawry',
+                              titleId: 'Fawry',
+                              icon: Image.asset(
+                                Assets.fawry,
+                                fit: BoxFit.cover,
+                                height: 30.h,
+                              ),
+                              color: Colors.orange,
+                              details: LocaleKeys.enterPaymobLink.localize,
+                              context: context,
                             ),
-                            color: Colors.orange,
-                            details: LocaleKeys.enterPaymobLink.localize,
-                            context: context,
                           ),
-                        ),
                         Expanded(
                           child: _buildCustomCard(
                             title: 'InstaPay',
@@ -105,21 +106,27 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
                               height: 50.h,
                             ),
                             color: Colors.deepPurple,
-                            details: LocaleKeys.enterBankAccountDetails.localize,
+                            details:
+                                LocaleKeys.enterBankAccountDetails.localize,
                             context: context,
                           ),
                         ),
-                        if(state.method?.YellowCardCashOut ==true)
-                        Expanded(
-                          child: _buildCustomCard(
-                            title: 'Yellow Card',
-                            titleId: 'manual',
-                            icon: Icon(Icons.credit_card,color: Colors.yellow,size: 60.sp,),
-                            color: Colors.orange,
-                            details: LocaleKeys.enterBankAccountDetails.localize,
-                            context: context,
+                        if (state.method?.YellowCardCashOut == true)
+                          Expanded(
+                            child: _buildCustomCard(
+                              title: 'Yellow Card',
+                              titleId: 'manual',
+                              icon: Icon(
+                                Icons.credit_card,
+                                color: Colors.yellow,
+                                size: 60.sp,
+                              ),
+                              color: Colors.orange,
+                              details:
+                                  LocaleKeys.enterBankAccountDetails.localize,
+                              context: context,
+                            ),
                           ),
-                        ),
                       ],
                     ),
                     SizedBox(height: 20.h),
@@ -194,7 +201,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             icon,
-           const Sizer(),
+            const Sizer(),
             Text(
               title,
               style: Styles.mediumText(color: color),

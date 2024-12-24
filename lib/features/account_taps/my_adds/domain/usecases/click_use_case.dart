@@ -26,8 +26,7 @@ class ClickParams {
       required this.ownerId,
       required this.subcategoryId});
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "clientId": clientId,
         "ownerId": ownerId,
         "subcategoryId": subcategoryId,

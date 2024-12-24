@@ -1,0 +1,131 @@
+"filename", "language", "YAML", "Dart", "JSON", "Markdown", "Shell Script", "Ruby", "Gradle", "Java Properties", "XML", "Swift", "C++", "comment", "blank", "total"
+"d:\projects\flutter\49-mobile-app\README.md", "Markdown", 0, 0, 0, -10, 0, 0, 0, 0, 0, 0, 0, 0, -7, -17
+"d:\projects\flutter\49-mobile-app\analysis_options.yaml", "YAML", -3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -22, -4, -29
+"d:\projects\flutter\49-mobile-app\android\app\build.gradle", "Gradle", 0, 0, 0, 0, 0, 0, -61, 0, 0, 0, 0, -8, -15, -84
+"d:\projects\flutter\49-mobile-app\android\app\google-services.json", "JSON", 0, 0, -170, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -170
+"d:\projects\flutter\49-mobile-app\android\app\src\debug\AndroidManifest.xml", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -3, 0, 0, -4, -1, -8
+"d:\projects\flutter\49-mobile-app\android\app\src\main\AndroidManifest.xml", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -94, 0, 0, -17, -5, -116
+"d:\projects\flutter\49-mobile-app\android\app\src\main\res\drawable-v21\launch_background.xml", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -4, 0, 0, -7, -2, -13
+"d:\projects\flutter\49-mobile-app\android\app\src\main\res\drawable\launch_background.xml", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -4, 0, 0, -7, -2, -13
+"d:\projects\flutter\49-mobile-app\android\app\src\main\res\values-night\styles.xml", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -9, 0, 0, -9, -1, -19
+"d:\projects\flutter\49-mobile-app\android\app\src\main\res\values\strings.xml", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -6, 0, 0, 0, -1, -7
+"d:\projects\flutter\49-mobile-app\android\app\src\main\res\values\styles.xml", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -9, 0, 0, -9, -1, -19
+"d:\projects\flutter\49-mobile-app\android\app\src\profile\AndroidManifest.xml", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -3, 0, 0, -4, -1, -8
+"d:\projects\flutter\49-mobile-app\android\build.gradle", "Gradle", 0, 0, 0, 0, 0, 0, -37, 0, 0, 0, 0, 0, -5, -42
+"d:\projects\flutter\49-mobile-app\android\gradle.properties", "Java Properties", 0, 0, 0, 0, 0, 0, 0, -5, 0, 0, 0, 0, 0, -5
+"d:\projects\flutter\49-mobile-app\android\gradle\wrapper\gradle-wrapper.properties", "Java Properties", 0, 0, 0, 0, 0, 0, 0, -5, 0, 0, 0, 0, -1, -6
+"d:\projects\flutter\49-mobile-app\android\settings.gradle", "Gradle", 0, 0, 0, 0, 0, 0, -23, 0, 0, 0, 0, -2, -5, -30
+"d:\projects\flutter\49-mobile-app\assets\icons\camera_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, -1, -2
+"d:\projects\flutter\49-mobile-app\assets\icons\comment_dots.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -12, 0, 0, -4, -6, -22
+"d:\projects\flutter\49-mobile-app\assets\icons\spotlight.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, -1, -2
+"d:\projects\flutter\49-mobile-app\assets\images\burger_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -7, 0, 0, 0, -1, -8
+"d:\projects\flutter\49-mobile-app\assets\images\butterfly.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1
+"d:\projects\flutter\49-mobile-app\assets\images\cheetah.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1
+"d:\projects\flutter\49-mobile-app\assets\images\doctor_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -8, 0, 0, 0, -1, -9
+"d:\projects\flutter\49-mobile-app\assets\images\elephant.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -174, 0, 0, 0, 0, -174
+"d:\projects\flutter\49-mobile-app\assets\images\flower.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1
+"d:\projects\flutter\49-mobile-app\assets\images\gift.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -20, 0, 0, -1, 0, -21
+"d:\projects\flutter\49-mobile-app\assets\images\goods_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -6, 0, 0, 0, -1, -7
+"d:\projects\flutter\49-mobile-app\assets\images\lion.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1
+"d:\projects\flutter\49-mobile-app\assets\images\lists_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -8, 0, 0, 0, -1, -9
+"d:\projects\flutter\49-mobile-app\assets\images\live.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -11, 0, 0, 0, 0, -11
+"d:\projects\flutter\49-mobile-app\assets\images\live_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -18, 0, 0, 0, -1, -19
+"d:\projects\flutter\49-mobile-app\assets\images\message.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -6, 0, 0, 0, -1, -7
+"d:\projects\flutter\49-mobile-app\assets\images\mobile_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -32, 0, 0, 0, 0, -32
+"d:\projects\flutter\49-mobile-app\assets\images\radio.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -15, 0, 0, 0, 0, -15
+"d:\projects\flutter\49-mobile-app\assets\images\reel_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -8, 0, 0, 0, -1, -9
+"d:\projects\flutter\49-mobile-app\assets\images\ride_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -4, 0, 0, 0, -1, -5
+"d:\projects\flutter\49-mobile-app\assets\images\snake.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -275, 0, 0, 0, 0, -275
+"d:\projects\flutter\49-mobile-app\assets\images\social.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -6, 0, 0, 0, -1, -7
+"d:\projects\flutter\49-mobile-app\assets\images\super_gifts.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -29, 0, 0, -1, 0, -30
+"d:\projects\flutter\49-mobile-app\assets\images\three_dots.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -18, 0, 0, 0, -1, -19
+"d:\projects\flutter\49-mobile-app\assets\images\tinder.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -6, 0, 0, 0, -1, -7
+"d:\projects\flutter\49-mobile-app\assets\images\twitter.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -11, 0, 0, 0, 0, -11
+"d:\projects\flutter\49-mobile-app\assets\images\voice_live.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -11, 0, 0, 0, 0, -11
+"d:\projects\flutter\49-mobile-app\assets\images\white_board.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1
+"d:\projects\flutter\49-mobile-app\assets\images\zoom.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -11, 0, 0, 0, 0, -11
+"d:\projects\flutter\49-mobile-app\assets\images\zoom_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -11, 0, 0, 0, 0, -11
+"d:\projects\flutter\49-mobile-app\assets\images\zoom_meeting.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -11, 0, 0, 0, 0, -11
+"d:\projects\flutter\49-mobile-app\assets\json\activities.json", "JSON", 0, 0, -18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -18
+"d:\projects\flutter\49-mobile-app\assets\json\ad_details.json", "JSON", 0, 0, -61, 0, 0, 0, 0, 0, 0, 0, 0, 0, -4, -65
+"d:\projects\flutter\49-mobile-app\assets\json\ad_properties.json", "JSON", 0, 0, -39, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -39
+"d:\projects\flutter\49-mobile-app\assets\json\ads_list.json", "JSON", 0, 0, -135, 0, 0, 0, 0, 0, 0, 0, 0, 0, -8, -143
+"d:\projects\flutter\49-mobile-app\assets\json\auction_categories.json", "JSON", 0, 0, -23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -23
+"d:\projects\flutter\49-mobile-app\assets\json\auction_details.json", "JSON", 0, 0, -107, 0, 0, 0, 0, 0, 0, 0, 0, 0, -4, -111
+"d:\projects\flutter\49-mobile-app\assets\json\auction_list.json", "JSON", 0, 0, -81, 0, 0, 0, 0, 0, 0, 0, 0, 0, -3, -84
+"d:\projects\flutter\49-mobile-app\assets\json\balance_history_list.json", "JSON", 0, 0, -22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -22
+"d:\projects\flutter\49-mobile-app\assets\json\cancel_reasons.json", "JSON", 0, 0, -24, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -25
+"d:\projects\flutter\49-mobile-app\assets\json\car_types.json", "JSON", 0, 0, -32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -32
+"d:\projects\flutter\49-mobile-app\assets\json\cities_list.json", "JSON", 0, 0, -24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -24
+"d:\projects\flutter\49-mobile-app\assets\json\company_ads.json", "JSON", 0, 0, -40, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2, -42
+"d:\projects\flutter\49-mobile-app\assets\json\competitions_list.json", "JSON", 0, 0, -29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -29
+"d:\projects\flutter\49-mobile-app\assets\json\doctor_appointments.json", "JSON", 0, 0, -36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -36
+"d:\projects\flutter\49-mobile-app\assets\json\doctor_bookings_list.json", "JSON", 0, 0, -60, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2, -62
+"d:\projects\flutter\49-mobile-app\assets\json\doctor_details.json", "JSON", 0, 0, -96, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2, -98
+"d:\projects\flutter\49-mobile-app\assets\json\doctor_list.json", "JSON", 0, 0, -72, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -73
+"d:\projects\flutter\49-mobile-app\assets\json\driver.json", "JSON", 0, 0, -39, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -40
+"d:\projects\flutter\49-mobile-app\assets\json\driver_new_trips.json", "JSON", 0, 0, -75, 0, 0, 0, 0, 0, 0, 0, 0, 0, -4, -79
+"d:\projects\flutter\49-mobile-app\assets\json\driver_statistics.json", "JSON", 0, 0, -11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -11
+"d:\projects\flutter\49-mobile-app\assets\json\expected_price.json", "JSON", 0, 0, -9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -9
+"d:\projects\flutter\49-mobile-app\assets\json\favourite_ads_list.json", "JSON", 0, 0, -75, 0, 0, 0, 0, 0, 0, 0, 0, 0, -3, -78
+"d:\projects\flutter\49-mobile-app\assets\json\favourite_categories_list.json", "JSON", 0, 0, -28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -28
+"d:\projects\flutter\49-mobile-app\assets\json\favourite_subcategories_list.json", "JSON", 0, 0, -26, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -26
+"d:\projects\flutter\49-mobile-app\assets\json\feelings.json", "JSON", 0, 0, -18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -18
+"d:\projects\flutter\49-mobile-app\assets\json\food_categories_list.json", "JSON", 0, 0, -23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -23
+"d:\projects\flutter\49-mobile-app\assets\json\food_orders.json", "JSON", 0, 0, -239, 0, 0, 0, 0, 0, 0, 0, 0, 0, -8, -247
+"d:\projects\flutter\49-mobile-app\assets\json\gift_history_list.json", "JSON", 0, 0, -15, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -16
+"d:\projects\flutter\49-mobile-app\assets\json\installment_details.json", "JSON", 0, 0, -85, 0, 0, 0, 0, 0, 0, 0, 0, 0, -5, -90
+"d:\projects\flutter\49-mobile-app\assets\json\installments_list.json", "JSON", 0, 0, -90, 0, 0, 0, 0, 0, 0, 0, 0, 0, -5, -95
+"d:\projects\flutter\49-mobile-app\assets\json\main_categories.json", "JSON", 0, 0, -32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -32
+"d:\projects\flutter\49-mobile-app\assets\json\offers.json", "JSON", 0, 0, -40, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -41
+"d:\projects\flutter\49-mobile-app\assets\json\parent_categories.json", "JSON", 0, 0, -46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -46
+"d:\projects\flutter\49-mobile-app\assets\json\restaurant_details.json", "JSON", 0, 0, -36, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -37
+"d:\projects\flutter\49-mobile-app\assets\json\restaurant_meals.json", "JSON", 0, 0, -124, 0, 0, 0, 0, 0, 0, 0, 0, 0, -4, -128
+"d:\projects\flutter\49-mobile-app\assets\json\restaurants_list.json", "JSON", 0, 0, -57, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -58
+"d:\projects\flutter\49-mobile-app\assets\json\shipping_request.json", "JSON", 0, 0, -61, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2, -63
+"d:\projects\flutter\49-mobile-app\assets\json\shipping_sub_categories.json", "JSON", 0, 0, -28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -28
+"d:\projects\flutter\49-mobile-app\assets\json\slider_items.json", "JSON", 0, 0, -29, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -30
+"d:\projects\flutter\49-mobile-app\assets\json\states_list.json", "JSON", 0, 0, -28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -28
+"d:\projects\flutter\49-mobile-app\assets\json\sub_categories.json", "JSON", 0, 0, -28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -28
+"d:\projects\flutter\49-mobile-app\assets\json\trip_details.json", "JSON", 0, 0, -77, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -78
+"d:\projects\flutter\49-mobile-app\assets\json\trips.json", "JSON", 0, 0, -152, 0, 0, 0, 0, 0, 0, 0, 0, 0, -4, -156
+"d:\projects\flutter\49-mobile-app\assets\json\user_ads.json", "JSON", 0, 0, -121, 0, 0, 0, 0, 0, 0, 0, 0, 0, -10, -131
+"d:\projects\flutter\49-mobile-app\assets\json\users_list.json", "JSON", 0, 0, -44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -44
+"d:\projects\flutter\49-mobile-app\assets\json\wallet_history_list.json", "JSON", 0, 0, -22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -22
+"d:\projects\flutter\49-mobile-app\assets\lottie\OMG_reaction.json", "JSON", 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1
+"d:\projects\flutter\49-mobile-app\assets\lottie\angry_reaction.json", "JSON", 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1
+"d:\projects\flutter\49-mobile-app\assets\lottie\haaha_reaction.json", "JSON", 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1
+"d:\projects\flutter\49-mobile-app\assets\lottie\haha_reaction.json", "JSON", 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1
+"d:\projects\flutter\49-mobile-app\assets\lottie\like_reaction.json", "JSON", 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1
+"d:\projects\flutter\49-mobile-app\assets\lottie\love_reaction.json", "JSON", 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1
+"d:\projects\flutter\49-mobile-app\assets\lottie\sad_reaction.json", "JSON", 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1
+"d:\projects\flutter\49-mobile-app\assets\lottie\warning.json", "JSON", 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1
+"d:\projects\flutter\49-mobile-app\assets\settings\New folder\contact_us_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -7, 0, 0, 0, -1, -8
+"d:\projects\flutter\49-mobile-app\assets\settings\New folder\dashbboard_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -6, 0, 0, 0, -1, -7
+"d:\projects\flutter\49-mobile-app\assets\settings\New folder\favorite_ad_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -3, 0, 0, 0, -1, -4
+"d:\projects\flutter\49-mobile-app\assets\settings\New folder\favorite_main_category_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -6, 0, 0, 0, -1, -7
+"d:\projects\flutter\49-mobile-app\assets\settings\New folder\favorite_sub_category_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -6, 0, 0, 0, -1, -7
+"d:\projects\flutter\49-mobile-app\assets\settings\New folder\lists_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -8, 0, 0, 0, -1, -9
+"d:\projects\flutter\49-mobile-app\assets\settings\New folder\my_ads_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -6, 0, 0, 0, -1, -7
+"d:\projects\flutter\49-mobile-app\assets\settings\New folder\privacy_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -6, 0, 0, 0, -1, -7
+"d:\projects\flutter\49-mobile-app\assets\settings\New folder\settings_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -6, 0, 0, 0, -1, -7
+"d:\projects\flutter\49-mobile-app\assets\settings\New folder\share_app_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -6, 0, 0, 0, -1, -7
+"d:\projects\flutter\49-mobile-app\assets\settings\New folder\sign_out_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -6, 0, 0, 0, -1, -7
+"d:\projects\flutter\49-mobile-app\assets\settings\New folder\wallet_icon.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -7, 0, 0, 0, -1, -8
+"d:\projects\flutter\49-mobile-app\assets\translations\ar.json", "JSON", 0, 0, -1017, 0, 0, 0, 0, 0, 0, 0, 0, 0, -7, -1024
+"d:\projects\flutter\49-mobile-app\assets\translations\en.json", "JSON", 0, 0, -1032, 0, 0, 0, 0, 0, 0, 0, 0, 0, -3, -1035
+"d:\projects\flutter\49-mobile-app\devtools_options.yaml", "YAML", -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -2
+"d:\projects\flutter\49-mobile-app\firebase.json", "JSON", 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1
+"d:\projects\flutter\49-mobile-app\generate.sh", "Shell Script", 0, 0, 0, 0, -2, 0, 0, 0, 0, 0, 0, -8, -6, -16
+"d:\projects\flutter\49-mobile-app\ios\Podfile", "Ruby", 0, 0, 0, 0, 0, -36, 0, 0, 0, 0, 0, -2, -10, -48
+"d:\projects\flutter\49-mobile-app\ios\RunnerTests\RunnerTests.swift", "Swift", 0, 0, 0, 0, 0, 0, 0, 0, 0, -7, 0, -2, -4, -13
+"d:\projects\flutter\49-mobile-app\ios\Runner\AppDelegate.swift", "Swift", 0, 0, 0, 0, 0, 0, 0, 0, 0, -22, 0, 0, -8, -30
+"d:\projects\flutter\49-mobile-app\ios\Runner\Assets.xcassets\AppIcon.appiconset\Contents.json", "JSON", 0, 0, -122, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -122
+"d:\projects\flutter\49-mobile-app\ios\Runner\Assets.xcassets\LaunchImage.imageset\Contents.json", "JSON", 0, 0, -23, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -24
+"d:\projects\flutter\49-mobile-app\ios\Runner\Assets.xcassets\LaunchImage.imageset\README.md", "Markdown", 0, 0, 0, -3, 0, 0, 0, 0, 0, 0, 0, 0, -2, -5
+"d:\projects\flutter\49-mobile-app\ios\Runner\Base.lproj\LaunchScreen.storyboard", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -36, 0, 0, -1, -1, -38
+"d:\projects\flutter\49-mobile-app\ios\Runner\Base.lproj\Main.storyboard", "XML", 0, 0, 0, 0, 0, 0, 0, 0, -25, 0, 0, -1, -1, -27
+"d:\projects\flutter\49-mobile-app\ios\Runner\Runner-Bridging-Header.h", "C++", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, -2
+"d:\projects\flutter\49-mobile-app\ios\firebase_app_id_file.json", "JSON", 0, 0, -7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -7
+"d:\projects\flutter\49-mobile-app\test\widget_test.dart", "Dart", 0, -14, 0, 0, 0, 0, 0, 0, 0, 0, 0, -10, -6, -30
+"Total", "-", -4, -14, -4937, -13, -2, -36, -121, -10, -991, -29, -1, -119, -212, -6489

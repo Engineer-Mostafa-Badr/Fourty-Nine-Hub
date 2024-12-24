@@ -36,6 +36,7 @@ class WalletCubit extends Cubit<WalletState> {
     await getWallet();
     // await fetchWalletHistory();
     await fetchWalletSubscription();
+    await loadInitialData();
   }
 
   WalletEntity? da;
@@ -56,20 +57,47 @@ class WalletCubit extends Cubit<WalletState> {
     ));
   }
 
-  Future<List<WalletHistoryEntity>> fetchWalletHistory(
-      {required PaginationParams paginationParams}) async {
-    final response = await _walletHistoryUseCase(
-      WalletHistoryParams(paginationParams: paginationParams),
-    );
-    List<WalletHistoryEntity> category = [];
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: WalletStates.error));
-    }, (data) {
-      category = data;
-      emit(state.copyWith(history: data));
-    });
-    return category;
+  List<WalletHistoryEntity> history = [];
+  bool isLoadingMore = false;
+  bool hasMoreData = true;
+  int currentPage = 1;
+  int pageSize = 10;
+
+  Future<void> loadInitialData() async {
+    emit(state.copyWith(status: WalletStates.loading));
+    history.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await fetchWalletHistory();
   }
+
+  Future<void> fetchWalletHistory() async {
+    if (!hasMoreData || isLoadingMore) return;
+
+    isLoadingMore = true;
+
+    final response = await _walletHistoryUseCase(
+      WalletHistoryParams(page: currentPage, limit: pageSize),
+    );
+
+    response.fold(
+          (failure) =>
+          emit(state.copyWith(failure: failure, status: WalletStates.error)),
+          (data) {
+        history.addAll(data);
+
+        if (data.length < pageSize) {
+          hasMoreData = false;
+        } else {
+          currentPage++;
+        }
+
+        isLoadingMore = false;
+        emit(state.copyWith(history: history, status: WalletStates.success));
+      },
+    );
+  }
+
 
   Future<void> fetchWalletSubscription() async {
     final response = await _subscriptionWalletUseCase(const NoParams());
@@ -79,6 +107,7 @@ class WalletCubit extends Cubit<WalletState> {
       emit(state.copyWith(subscription: data));
     });
   }
+
   Future<List<MainCategoryWalletEntity>> fetchMainCategoryWallet(
       {required PaginationParams paginationParams}) async {
     List<MainCategoryWalletEntity> category = [];

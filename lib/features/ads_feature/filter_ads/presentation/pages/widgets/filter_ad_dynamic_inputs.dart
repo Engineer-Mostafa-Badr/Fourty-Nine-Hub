@@ -16,7 +16,7 @@ import 'package:go_router/go_router.dart';
 class FilterAdDynamicInputWidget extends StatefulWidget {
   final AdPropertiesEntity property;
   final Function(SelectionEntity) onChanged;
-  final Function(String, bool,String) onTextChanged;
+  final Function(String, bool, String) onTextChanged;
   const FilterAdDynamicInputWidget(
       {super.key,
       required this.property,
@@ -62,7 +62,7 @@ class _FilterAdDynamicInputWidgetState
                 : widget.property.nameEn),
         TextFormField(
           maxLines: null,
-          onChanged: (v) => widget.onTextChanged(v, true,widget.property.type),
+          onChanged: (v) => widget.onTextChanged(v, true, widget.property.type),
           style: Styles.headerText(fontSize: 26),
           decoration: InputDecoration(
               fillColor: Colors.white,
@@ -137,7 +137,7 @@ class _FilterAdDynamicInputWidgetState
     required List<SelectionEntity> values,
   }) {
     return Scaffold(
-      appBar:  BackAppBar(
+      appBar: BackAppBar(
         label: LocaleKeys.select.localize,
       ),
       body: ListView.builder(
@@ -169,7 +169,8 @@ class _FilterAdDynamicInputWidgetState
             Expanded(
               child: TextFormField(
                 maxLines: 1,
-                onChanged: (v) => widget.onTextChanged(v, true,widget.property.type),
+                onChanged: (v) =>
+                    widget.onTextChanged(v, true, widget.property.type),
                 keyboardType: TextInputType.number,
                 style: Styles.headerText(fontSize: 26),
                 decoration: InputDecoration(
@@ -193,7 +194,8 @@ class _FilterAdDynamicInputWidgetState
             Expanded(
                 child: TextFormField(
               maxLines: 1,
-              onChanged: (v) => widget.onTextChanged(v, false,widget.property.type),
+              onChanged: (v) =>
+                  widget.onTextChanged(v, false, widget.property.type),
               keyboardType: TextInputType.number,
               style: Styles.headerText(fontSize: 26),
               decoration: InputDecoration(

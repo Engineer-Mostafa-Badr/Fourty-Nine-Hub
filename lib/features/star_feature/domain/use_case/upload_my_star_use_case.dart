@@ -20,11 +20,14 @@ class StarParams {
   final String description;
   final String type;
 
-  StarParams(
-      {required this.title, required this.mediaUrl, required this.description, required this.type,});
+  StarParams({
+    required this.title,
+    required this.mediaUrl,
+    required this.description,
+    required this.type,
+  });
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'title': title,
         'mediaUrl': mediaUrl,
         'description': description,

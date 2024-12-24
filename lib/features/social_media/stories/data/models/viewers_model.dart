@@ -1,4 +1,3 @@
-
 // Define the main JSON structure
 class ViewersResponse {
   final bool status;
@@ -14,7 +13,8 @@ class ViewersResponse {
   //     ViewersResponse.fromMap(json.decode(str));
   //
   // Convert from map to object
-  factory ViewersResponse.fromJson(Map<String, dynamic> json) => ViewersResponse(
+  factory ViewersResponse.fromJson(Map<String, dynamic> json) =>
+      ViewersResponse(
         status: json["status"] ?? false, // Default to false if missing
         data: json["data"] != null
             ? List<UserData>.from(json["data"].map((x) => UserData.fromMap(x)))

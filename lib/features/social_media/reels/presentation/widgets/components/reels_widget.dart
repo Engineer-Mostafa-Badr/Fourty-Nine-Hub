@@ -1,10 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/animated_heart_wiidget.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/custom_progress_bar.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/unified_widget_view.dart';
@@ -32,11 +29,12 @@ class ReelsWidget extends StatefulWidget {
 
 class _ReelsWidgetState extends State<ReelsWidget>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
-  bool _isVisible = false; // Track visibility state
+  final bool _isVisible = false; // Track visibility state
   bool _isPlaying = false;
   bool _showPlayPauseIcon = false;
   late final AnimationController _rotationController;
 
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance
@@ -128,7 +126,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
   @override
   Widget build(BuildContext context) {
     // super.build(context);
-    final reel = context.read<ReelsCubit>().state.globalReels![widget.index];
+    final reel = context.read<ReelsCubit>().state.globalReels[widget.index];
     final reelCubit = context.read<ReelsCubit>();
     return SizedBox(
       height: context.screenHeight,
@@ -204,9 +202,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
       duration: const Duration(milliseconds: 300),
       child: Center(
         child: Icon(
-          widget.controller.value.isPlaying
-              ? Icons.pause
-              : Icons.play_arrow,
+          widget.controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
           color: Colors.white,
           size: 100,
         ),

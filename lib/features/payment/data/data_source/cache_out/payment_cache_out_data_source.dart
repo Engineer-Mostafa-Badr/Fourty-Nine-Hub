@@ -21,12 +21,11 @@ abstract class PaymentCacheOutRemoteDataSource {
       InstapayParams params);
   Future<Either<Failure, bool>> requestYellowCard(
       RequestYellowCardParams params);
-  Future<Either<Failure,List<ListBankEntity>>>fetchAllBank();
-  Future<Either<Failure,bool>>payoutRequest(PayoutRequestParams params);
-  Future<Either<Failure,bool>> requestInstapay(RequestInstapayParams params);
-  Future<Either<Failure,PriceYellowCardEntity>>fetchPrice();
-  Future<Either<Failure,PayoutMethodEntity>>payoutMethod();
-
+  Future<Either<Failure, List<ListBankEntity>>> fetchAllBank();
+  Future<Either<Failure, bool>> payoutRequest(PayoutRequestParams params);
+  Future<Either<Failure, bool>> requestInstapay(RequestInstapayParams params);
+  Future<Either<Failure, PriceYellowCardEntity>> fetchPrice();
+  Future<Either<Failure, PayoutMethodEntity>> payoutMethod();
 }
 
 class PaymentCacheOutRemoteDataSourceImpl
@@ -34,30 +33,31 @@ class PaymentCacheOutRemoteDataSourceImpl
   final ApiConsumer _apiConsumer;
   PaymentCacheOutRemoteDataSourceImpl(this._apiConsumer);
 
-
   @override
-  Future<Either<Failure, InstapayCacheOutEntity>> instapayCacheOut(InstapayParams params) async {
+  Future<Either<Failure, InstapayCacheOutEntity>> instapayCacheOut(
+      InstapayParams params) async {
     final response = await _apiConsumer.put(
       EndPoints.instaPay,
       data: params.toJson(),
     );
     return response.fold(
-          (failure) => Left(failure),
-          (data) {
+      (failure) => Left(failure),
+      (data) {
         return Right(InstapayCacheOutModel.fromJson(data));
       },
     );
   }
 
   @override
-  Future<Either<Failure, bool>> requestYellowCard(RequestYellowCardParams params) async {
+  Future<Either<Failure, bool>> requestYellowCard(
+      RequestYellowCardParams params) async {
     final response = await _apiConsumer.post(
       EndPoints.requestYellowCard,
       data: params.toJson(),
     );
     return response.fold(
-          (failure) => Left(failure),
-          (data) {
+      (failure) => Left(failure),
+      (data) {
         return Right(data['status']);
       },
     );
@@ -69,8 +69,8 @@ class PaymentCacheOutRemoteDataSourceImpl
       EndPoints.banks,
     );
     return response.fold(
-          (failure) => Left(failure),
-          (data) {
+      (failure) => Left(failure),
+      (data) {
         return Right((data['data'] as List)
             .map((e) => ListBankModel.fromJson(e))
             .toList());
@@ -79,28 +79,26 @@ class PaymentCacheOutRemoteDataSourceImpl
   }
 
   @override
-  Future<Either<Failure, bool>> payoutRequest(PayoutRequestParams params) async {
-    final response = await _apiConsumer.post(
-      EndPoints.payout,
-      data: params.toJson()
-    );
+  Future<Either<Failure, bool>> payoutRequest(
+      PayoutRequestParams params) async {
+    final response =
+        await _apiConsumer.post(EndPoints.payout, data: params.toJson());
     return response.fold(
-          (failure) => Left(failure),
-          (data) {
+      (failure) => Left(failure),
+      (data) {
         return Right((data['status']));
       },
     );
   }
 
   @override
-  Future<Either<Failure, bool>> requestInstapay(RequestInstapayParams params) async {
-    final response = await _apiConsumer.post(
-        EndPoints.requestInstapay,
-        data: params.toJson()
-    );
+  Future<Either<Failure, bool>> requestInstapay(
+      RequestInstapayParams params) async {
+    final response = await _apiConsumer.post(EndPoints.requestInstapay,
+        data: params.toJson());
     return response.fold(
-          (failure) => Left(failure),
-          (data) {
+      (failure) => Left(failure),
+      (data) {
         return Right((data['status']));
       },
     );
@@ -109,11 +107,11 @@ class PaymentCacheOutRemoteDataSourceImpl
   @override
   Future<Either<Failure, PriceYellowCardEntity>> fetchPrice() async {
     final response = await _apiConsumer.get(
-        EndPoints.yellowCardPrice,
+      EndPoints.yellowCardPrice,
     );
     return response.fold(
-          (failure) => Left(failure),
-          (data) {
+      (failure) => Left(failure),
+      (data) {
         return Right(PriceYellowCardModel.fromJson(data['data']));
       },
     );
@@ -125,8 +123,8 @@ class PaymentCacheOutRemoteDataSourceImpl
       EndPoints.payoutMethod,
     );
     return response.fold(
-          (failure) => Left(failure),
-          (data) {
+      (failure) => Left(failure),
+      (data) {
         return Right(PayoutMethodModel.fromJson(data['data']));
       },
     );

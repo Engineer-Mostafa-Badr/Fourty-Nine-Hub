@@ -33,8 +33,7 @@ class _AvailableRoutesBuilderState extends State<AvailableRoutesBuilder> {
         if (state is GetAllTripsLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is GetAllTripsSuccess) {
-          bool hasMatchingTrips =
-              false; // Flag to check if trips match the type
+          bool hasMatchingTrips = false;
 
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 20.h),
@@ -44,29 +43,29 @@ class _AvailableRoutesBuilderState extends State<AvailableRoutesBuilder> {
               itemBuilder: (context, index) {
                 final trip = state.trips[index];
                 bool matchesFilter = false;
-
                 if (widget.type == "expired" &&
-                    DateTime.now()
-                            .difference(
-                                DateTime.parse(trip.createdAt.toString()))
-                            .inMinutes >
-                        60) {
+                    (trip.tripStatus == "expired" ||
+                        trip.tripStatus == "Completed")) {
                   matchesFilter = true;
                 } else if (widget.type == "available" &&
-                    DateTime.now()
-                            .difference(
-                                DateTime.parse(trip.createdAt.toString()))
-                            .inMinutes <
-                        60) {
+                    trip.tripStatus != "Completed" &&
+                    trip.tripStatus != "Full" &&
+                    trip.tripStatus != "Running" &&
+                    trip.tripStatus != "expired" &&
+                    (trip.locations[0].bookedUser == null ||
+                        trip.locations[1].bookedUser == null ||
+                        trip.locations[2].bookedUser == null)) {
                   matchesFilter = true;
                 } else if (widget.type == "myBookings" &&
                     (trip.ownerId == userId ||
                         trip.locations.any(
                             (location) => location.bookedUser?.id == userId))) {
                   matchesFilter = true;
+                } else if (widget.type == "running" &&
+                    trip.tripStatus == "Running") {
+                  matchesFilter = true;
                 }
 
-                // Check if trip matches the current filter type
                 if (matchesFilter) {
                   hasMatchingTrips = true;
                   return AvaiableRoutesCard(entity: trip);
@@ -79,19 +78,20 @@ class _AvailableRoutesBuilderState extends State<AvailableRoutesBuilder> {
                       padding: EdgeInsets.only(
                           top: MediaQuery.of(context).size.height * 0.35),
                       child: Text(
-                        "There are no ${widget.type} trips .",
+                        LocaleKeys.noTripsAvailable.localize,
+                        // "There are no ${widget.type} trips .",
                         style: TextStyle(fontSize: 24.sp, color: Colors.grey),
                       ),
                     ),
                   );
                 }
 
-                return const SizedBox(); // Empty widget for non-matching trips
+                return const SizedBox();
               },
             ),
           );
         } else if (state is GetAllTripsFailure) {
-          return Center(child: Text("there is no trips. try again !"));
+          return const Center(child: Text("there is no trips. try again !"));
         } else {
           return const SizedBox();
         }
@@ -161,8 +161,8 @@ class _AvailableRoutesBottomSheetState
                       setState(() {});
                     },
                     activeColor: AppColors.PRIMARY_COLOR,
-                    trackColor: const MaterialStatePropertyAll(
-                        AppColors.SECONDARY_COLOR),
+                    trackColor:
+                        const MaterialStatePropertyAll(AppColors.SECONDARY_COLOR),
                     inactiveThumbColor: Colors.grey,
                   ),
                 ),
@@ -186,8 +186,8 @@ class _AvailableRoutesBottomSheetState
                       setState(() {});
                     },
                     activeColor: AppColors.PRIMARY_COLOR,
-                    trackColor: const MaterialStatePropertyAll(
-                        AppColors.SECONDARY_COLOR),
+                    trackColor:
+                        const MaterialStatePropertyAll(AppColors.SECONDARY_COLOR),
                     inactiveThumbColor: Colors.grey,
                   ),
                 ),

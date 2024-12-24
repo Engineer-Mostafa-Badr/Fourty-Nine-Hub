@@ -15,9 +15,11 @@ abstract class StoriesRemoteDataSource {
   Future<Either<Failure, bool>> createStory(String id);
   Future<Either<Failure, bool>> muteUserStories(String id);
   Future<Either<Failure, ViewersResponse>> getStoryViewers(String id);
-  Future<Either<Failure, MutedStoriesResponse>> getMutedStories(PaginationParams params);
+  Future<Either<Failure, MutedStoriesResponse>> getMutedStories(
+      PaginationParams params);
   Future<Either<Failure, ResponseModel>> getFollowers();
-  Future<Either<Failure, StoriesResponse>> fetchStories(PaginationParams params);
+  Future<Either<Failure, StoriesResponse>> fetchStories(
+      PaginationParams params);
   Future<Either<Failure, bool>> updatePrivacy(UpdateStoryPrivacyParams params);
 }
 
@@ -26,16 +28,15 @@ class StoriesRemoteDataSourceImpl implements StoriesRemoteDataSource {
 
   StoriesRemoteDataSourceImpl(this._apiConsumer);
 
-
   @override
   Future<Either<Failure, bool>> makeViews(String id) async {
     final response = await _apiConsumer.post(
       EndPoints.makeViews(id),
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            response['status'],
+      (failure) => Left(failure),
+      (response) => Right(
+        response['status'],
       ),
     );
   }
@@ -46,52 +47,47 @@ class StoriesRemoteDataSourceImpl implements StoriesRemoteDataSource {
       EndPoints.deleteStory(id),
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            response['status'],
+      (failure) => Left(failure),
+      (response) => Right(
+        response['status'],
       ),
     );
   }
 
   @override
   Future<Either<Failure, bool>> createStory(String id) async {
-    final response = await _apiConsumer.post(
-      EndPoints.createStory,
-      data: {
-        'text':id
-      }
-    );
+    final response =
+        await _apiConsumer.post(EndPoints.createStory, data: {'text': id});
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            response['status'],
-      ),
-    );
-  }
-
- @override
-  Future<Either<Failure, bool>> muteUserStories(String id) async {
-    final response = await _apiConsumer.post(
-      EndPoints.muteUserStories,
-      data: {"muteUser": id}
-    );
-    return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            response['status'],
+      (failure) => Left(failure),
+      (response) => Right(
+        response['status'],
       ),
     );
   }
 
   @override
-  Future<Either<Failure, MutedStoriesResponse>> getMutedStories(PaginationParams params) async {
+  Future<Either<Failure, bool>> muteUserStories(String id) async {
+    final response = await _apiConsumer
+        .post(EndPoints.muteUserStories, data: {"muteUser": id});
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(
+        response['status'],
+      ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, MutedStoriesResponse>> getMutedStories(
+      PaginationParams params) async {
     final response = await _apiConsumer.get(
-        EndPoints.getMutedStories(params),
+      EndPoints.getMutedStories(params),
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            MutedStoriesResponse.fromJson(response),
+      (failure) => Left(failure),
+      (response) => Right(
+        MutedStoriesResponse.fromJson(response),
       ),
     );
   }
@@ -99,12 +95,12 @@ class StoriesRemoteDataSourceImpl implements StoriesRemoteDataSource {
   @override
   Future<Either<Failure, ViewersResponse>> getStoryViewers(String id) async {
     final response = await _apiConsumer.get(
-        EndPoints.getStoryViewers(id),
+      EndPoints.getStoryViewers(id),
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            ViewersResponse.fromJson(response),
+      (failure) => Left(failure),
+      (response) => Right(
+        ViewersResponse.fromJson(response),
       ),
     );
   }
@@ -112,42 +108,39 @@ class StoriesRemoteDataSourceImpl implements StoriesRemoteDataSource {
   @override
   Future<Either<Failure, ResponseModel>> getFollowers() async {
     final response = await _apiConsumer.get(
-        EndPoints.getFollowers,
+      EndPoints.getFollowers,
     );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            ResponseModel.fromJson(response),
+      (failure) => Left(failure),
+      (response) => Right(
+        ResponseModel.fromJson(response),
       ),
     );
   }
 
   @override
-  Future<Either<Failure, bool>> updatePrivacy(UpdateStoryPrivacyParams params) async {
-    final response = await _apiConsumer.put(
-        EndPoints.updatePrivacy,
-      data: params.toJson()
-    );
+  Future<Either<Failure, bool>> updatePrivacy(
+      UpdateStoryPrivacyParams params) async {
+    final response =
+        await _apiConsumer.put(EndPoints.updatePrivacy, data: params.toJson());
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
+      (failure) => Left(failure),
+      (response) => Right(
         response['status'],
       ),
     );
   }
 
   @override
-  Future<Either<Failure, StoriesResponse>> fetchStories(PaginationParams params) async {
-    final response = await _apiConsumer.get(
-        EndPoints.fetchStories(params),
-      data: params.toJson()
-    );
+  Future<Either<Failure, StoriesResponse>> fetchStories(
+      PaginationParams params) async {
+    final response = await _apiConsumer.get(EndPoints.fetchStories(params),
+        data: params.toJson());
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(
-            StoriesResponse.fromJson(response),
+      (failure) => Left(failure),
+      (response) => Right(
+        StoriesResponse.fromJson(response),
       ),
     );
   }
-
 }

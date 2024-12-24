@@ -14,11 +14,11 @@ final class DestGetLatAndLongLoading extends DestGetLatAndLongState {}
 final class DestGetLatAndLongSuccess extends DestGetLatAndLongState {
   final LatLongData latLongData;
 
-  DestGetLatAndLongSuccess({required this.latLongData});
+  const DestGetLatAndLongSuccess({required this.latLongData});
 }
 
 final class DestGetLatAndLongFailure extends DestGetLatAndLongState {
   final String errorMessage;
 
-  DestGetLatAndLongFailure({required this.errorMessage});
+  const DestGetLatAndLongFailure({required this.errorMessage});
 }

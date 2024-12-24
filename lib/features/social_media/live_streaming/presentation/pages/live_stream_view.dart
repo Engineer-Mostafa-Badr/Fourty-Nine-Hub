@@ -50,15 +50,15 @@ class _LiveStreamViewState extends State<LiveStreamView> {
     print('live id is ${widget.liveID}');
     return SafeArea(
       child: ZegoUIKitPrebuiltLiveStreaming(
-        appID: context.read<SecretsCubit>().state.secrets!.zegoAppId,
-        appSign: context.read<SecretsCubit>().state.secrets!.zegoAppSign,
-        userID: userId,
-        userName: context.read<UserCubit>().state.data!.fullName,
-        liveID: widget.liveID,
-        isLiveStream: true,
-        config: widget.isHost ? hostConfig : audienceConfig
+          appID: context.read<SecretsCubit>().state.secrets!.zegoAppId,
+          appSign: context.read<SecretsCubit>().state.secrets!.zegoAppSign,
+          userID: userId,
+          userName: context.read<UserCubit>().state.data!.fullName,
+          liveID: widget.liveID,
+          isLiveStream: true,
+          config: widget.isHost ? hostConfig : audienceConfig
           // ..foreground = giftForeground()
-      ),
+          ),
     );
   }
 }

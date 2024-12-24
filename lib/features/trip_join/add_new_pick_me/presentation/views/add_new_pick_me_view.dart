@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_pick_me/presentation/widgets/add_new_pick_me_body.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/trip_join_body.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class AddNewPickMeView extends StatelessWidget {

@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'dart:developer';
-
+import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter/return_code.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart' as thumb;
@@ -23,8 +25,6 @@ class MyVoiceVideoRecordingScreen extends StatefulWidget {
   final String? comeFrom;
   final String? totalPrice;
   final String? advertisementType;
-  // final String audioSignedUrl;
-  // final String audioMediaId;
   const MyVoiceVideoRecordingScreen(
       {super.key, this.comeFrom, this.totalPrice, this.advertisementType});
 
@@ -52,14 +52,25 @@ class MyVoiceVideoRecordingScreenState
 
   final List<Filter> filters = FilterLibrary.filters;
   Filter? _selectedFilter;
+  File? _selectedImage;
+  FlashMode _flashMode = FlashMode.off;
+  late AnimationController _flashAnimationController;
+  late Animation<double> _flashAnimation;
 
   @override
   void initState() {
     super.initState();
     _initCamera();
     _initializeAnimationController();
+    _initializeFlashAnimation();
   }
 
+  void _initializeFlashAnimation() {
+    _flashAnimationController = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
+    _flashAnimation =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_flashAnimationController);
+  }
   Future<void> _initCamera() async {
     try {
       cameras = await availableCameras();
@@ -68,6 +79,21 @@ class MyVoiceVideoRecordingScreenState
       log("Camera initialization error: $e");
       _showErrorDialog(LocaleKeys.error_dialog_camera_init_fail.tr());
     }
+  }
+  void _changeFlashMode() {
+    setState(() {
+      if (_flashMode == FlashMode.off) {
+        _flashMode = FlashMode.torch;
+      } else if (_flashMode == FlashMode.auto) {
+        _flashMode = FlashMode.off;
+      }
+      else {
+        _flashMode = FlashMode.off;
+      }
+    });
+
+    _controller!.setFlashMode(_flashMode);
+    _flashAnimationController.forward(from: 0.0);
   }
 
   void _initializeAnimationController() {
@@ -97,11 +123,6 @@ class MyVoiceVideoRecordingScreenState
     }
   }
 
-  void _applyFilter(Filter filter) {
-    setState(() {
-      _selectedFilter = filter;
-    });
-  }
 
   void _startRecording() async {
     if (_controller!.value.isRecordingVideo) return;
@@ -170,7 +191,6 @@ class MyVoiceVideoRecordingScreenState
     final directory = await getTemporaryDirectory();
     final thumbnail = await thumb.VideoThumbnail.thumbnailFile(
       video: videoThumbnail,
-      // Replace with your video URL or file path
       thumbnailPath: directory.path,
       imageFormat: thumb.ImageFormat.JPEG,
       maxWidth: 128,
@@ -186,17 +206,16 @@ class MyVoiceVideoRecordingScreenState
     final directory = await getTemporaryDirectory();
     filteredVideoPath =
         '${directory.path}/filtered_${DateTime.now().millisecondsSinceEpoch}.mp4';
-    // Construct the FFmpeg command with the selected filter and horizontal flip
     final filterCommand = _selectedFilter?.ffmpegFilter != null
-        ? '${_selectedFilter!.ffmpegFilter},hflip' // Add hflip to the existing filter
-        : 'hflip'; // Just use hflip if no other filter is selected
+        ? '${_selectedFilter!.ffmpegFilter},hflip'
+        : 'hflip';
 
     final commandArgs = [
       '-i', videoPath!,
-      '-vf', filterCommand, // Apply the filter and horizontal flip
-      '-c:v', 'mpeg4', // Use `mpeg4` for faster encoding
-      '-q:v', '5', // Lower quality for faster processing
-      '-b:v', '1M', // Lower bitrate
+      '-vf', filterCommand,
+      '-c:v', 'mpeg4',
+      '-q:v', '5',
+      '-b:v', '1M',
       filteredVideoPath!,
     ];
 
@@ -279,59 +298,6 @@ class MyVoiceVideoRecordingScreenState
     );
   }
 
-  Widget _buildFilterSelector() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        height: 150.h,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: filters.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () => _applyFilter(filters[index]),
-              child: Container(
-                width: 150.h,
-                margin: const EdgeInsets.symmetric(horizontal: 5),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: _selectedFilter == filters[index]
-                          ? Colors.blue
-                          : Colors.transparent),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: FittedBox(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        radius: 30,
-                        backgroundImage: AssetImage(
-                          FilterLibrary.filterImagesPaths[index].toString(),
-                        ),
-                      ),
-                      Text(
-                          context.isArabic
-                              ? filters[index].arName
-                              : filters[index].enName,
-                          maxLines: 1,
-                          overflow: TextOverflow.fade,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 40.sp,
-                          )),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     if (_controller == null || !_controller!.value.isInitialized) {
@@ -350,13 +316,16 @@ class MyVoiceVideoRecordingScreenState
         child: Stack(
           children: [
             _buildCameraPreview(),
-            _buildControls(),
             if (isRecording) _buildTimerPopup(),
             Positioned(
-              bottom: 100,
+              bottom: 250.h,
               left: 0,
               right: 0,
-              child: _buildFilterSelector(),
+              child: Column(
+                children: [
+                  _buildControls(),
+                ],
+              ),
             ),
           ],
         ),
@@ -367,10 +336,48 @@ class MyVoiceVideoRecordingScreenState
   Widget _buildCameraPreview() {
     return SizedBox(
       height: double.infinity,
-      child: ColorFiltered(
-        colorFilter: _selectedFilter?.colorFilter ??
-            const ColorFilter.mode(Colors.transparent, BlendMode.srcOver),
-        child: CameraPreview(_controller!),
+      child: Stack(
+        children: [
+          ColorFiltered(
+            colorFilter: _selectedFilter?.colorFilter ??
+                const ColorFilter.mode(Colors.transparent, BlendMode.srcOver),
+            child: CameraPreview(_controller!),
+          ),
+          Padding(
+            padding:  EdgeInsets.symmetric(
+              vertical: 40.h,
+              horizontal: 20.w
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  children: [
+                    _buildSwitchCameraButton(50.sp),
+                    IconButton(
+                      icon: Icon(
+                        size: 50.sp,
+                        _flashMode == FlashMode.off
+                            ? FontAwesomeIcons.bolt
+                            : FontAwesomeIcons.bolt,
+                        color: _flashMode == FlashMode.off
+                            ? Colors.grey
+                            : _flashMode == FlashMode.auto
+                            ? Colors.yellow.shade100
+                            : Colors.yellow,
+                      ),
+                      onPressed: _changeFlashMode,
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                IconButton(onPressed: (){
+                  Navigator.pop(context);
+                }, icon:  Icon(Icons.clear,size: 50.sp,))
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -405,44 +412,64 @@ class MyVoiceVideoRecordingScreenState
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Expanded(child: Container()),
-              Expanded(
-                child: GestureDetector(
-                  onLongPress: () => _startRecording(),
-                  onLongPressEnd: (_) => _stopRecording(),
-                  child: Stack(
-                    alignment: Alignment.center,
+              SizedBox(width: 100.w,),
+              Center(
+                child: IconButton(
+                  color: Colors.white,
+                  icon: Stack(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(0),
-                        margin: const EdgeInsets.only(bottom: 0),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.transparent,
-                          border: Border.all(color: Colors.white70, width: 4),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: CustomPaint(
-                            painter: ProgressPainter(
-                              progress: _animationController.value,
-                              color: Colors.pink,
-                            ),
-                            child: Icon(
-                              Icons.fiber_manual_record,
-                              color: Colors.white.withOpacity(0.9),
-                              size: MediaQuery.of(context).size.width * 0.22,
-                            ),
-                          ),
-                        ),
+                      Icon(
+                        size: 60.sp,
+                        Icons.photo_library,
                       ),
                     ],
                   ),
+                  onPressed: () {
+                    context.read<ReelsCubit>().pickMediaFromGallery(context)
+                        .then((value) {
+                      if(_selectedImage?.path !=null) {
+                       return Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ReelsRecordingScreen(
+                                // voiceMediaId: widget.reel.audioMedia,
+                                // voiceSignedUrl: widget.audio.audioSignedUrl,
+                              ),
+                            ));
+                      }
+                    });
+                  },
                 ),
               ),
-              Expanded(child: _buildSwitchCameraButton(60.h)),
+              SizedBox(width: 100.w,),
+              GestureDetector(
+                onLongPress: () => _startRecording(),
+                onLongPressEnd: (_) => _stopRecording(),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.transparent,
+                        border: Border.all(color: Colors.white70, width: 8.w),
+                      ),
+                      child: CustomPaint(
+                        painter: ProgressPainter(
+                          progress: _animationController.value,
+                          color: Colors.pink,
+                        ),
+                        child: Icon(
+                          Icons.fiber_manual_record,
+                          color: Colors.white.withOpacity(0.9),
+                          size: MediaQuery.of(context).size.width * 0.22,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ],
@@ -454,9 +481,8 @@ class MyVoiceVideoRecordingScreenState
     return IconButton(
       onPressed: _switchCamera,
       icon: Icon(
-        Icons.cameraswitch,
+        Icons.flip_camera_android,
         semanticLabel: LocaleKeys.controls_switch_camera.tr(),
-        color: Colors.white,
         size: width,
       ),
     );
@@ -469,6 +495,8 @@ class MyVoiceVideoRecordingScreenState
     _animationController.dispose();
     _stopTimer?.cancel();
     _notifyTimer?.cancel();
+    _flashAnimationController.dispose();
     super.dispose();
   }
+
 }

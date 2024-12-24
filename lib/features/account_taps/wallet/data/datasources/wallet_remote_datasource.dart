@@ -63,8 +63,7 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
   @override
   Future<Either<Failure, List<WalletHistoryEntity>>> fetchHistoryWallet(
       WalletHistoryParams params) async {
-    final response = await _apiConsumer.get(EndPoints.getHistoryWallet(),
-        queryParameters: params.paginationParams.toJson());
+    final response = await _apiConsumer.get(EndPoints.getHistoryWallet(params));
     return response.fold((l) {
       return Left(l);
     }, (data) {
@@ -96,7 +95,7 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
       MainCategoryParams params) async {
     final response = await _apiConsumer.get(
       EndPoints.geMainCategoryWallet(params),
-     // queryParameters: params.paginationParams.toJson(),
+      // queryParameters: params.paginationParams.toJson(),
     );
 
     return response.fold(

@@ -15,13 +15,11 @@ class SharePostUseCase extends UseCase<bool, SharePostParams> {
   }
 }
 
-class SharePostParams{
+class SharePostParams {
   final String postId;
   final String content;
 
   SharePostParams({required this.postId, required this.content});
 
-  Map<String, dynamic> toJson() => {
-    "content": content
-  };
+  Map<String, dynamic> toJson() => {"content": content};
 }

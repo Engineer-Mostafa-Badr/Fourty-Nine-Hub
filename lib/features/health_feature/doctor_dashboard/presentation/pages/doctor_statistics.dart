@@ -3,12 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/earned_mony_entity.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/doctor_statistics/doctor_statistics_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/history/doctor_history_card.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorStatisticsView extends StatelessWidget {
@@ -32,7 +30,8 @@ class DoctorStatisticsView extends StatelessWidget {
                   totalValue: totalEarnedMoney[0].count,
                   clinicValue: totalEarnedMoney[0].count,
                   callValue: totalEarnedMoney[0].count,
-                  homeVisitValue: totalEarnedMoney[0].count, totalEarnedMoney: totalEarnedMoney,
+                  homeVisitValue: totalEarnedMoney[0].count,
+                  totalEarnedMoney: totalEarnedMoney,
                 ),
               ),
               Sizer(
@@ -43,7 +42,8 @@ class DoctorStatisticsView extends StatelessWidget {
                 totalValue: totalEarnedMoney[0].count,
                 clinicValue: totalEarnedMoney[0].count,
                 callValue: totalEarnedMoney[0].count,
-                homeVisitValue: totalEarnedMoney[0].count, totalEarnedMoney: totalEarnedMoney,
+                homeVisitValue: totalEarnedMoney[0].count,
+                totalEarnedMoney: totalEarnedMoney,
               ),
             ],
           );

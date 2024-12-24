@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
@@ -13,12 +12,10 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/us
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_appointments_by_day.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_unhandled_appointments_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_id_remaining_days.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_practicing_remaining_days.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_subscription_remaining_days.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/doctor_info_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/earned_mony_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/doctor_info_usecase.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/features/health_feature/booking/domain/usecases/doctor_cancel_appointment_use_case.dart';
 
 part 'doctor_dashboard_state.dart';

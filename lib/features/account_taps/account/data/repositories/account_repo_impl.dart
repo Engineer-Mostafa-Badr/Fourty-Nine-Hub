@@ -20,19 +20,18 @@ class AccountRepoImpl implements AccountRepo {
   }
 
   @override
-  Future<Either<Failure, List<MainCategoryEntity>>>
-      getFavouriteCategories() {
+  Future<Either<Failure, List<MainCategoryEntity>>> getFavouriteCategories() {
     return _remoteDataSource.getFavouriteCategories();
   }
 
   @override
-  Future<Either<Failure, List<SubCategoryEntity>>>
-      getFavouriteSubcategories() {
+  Future<Either<Failure, List<SubCategoryEntity>>> getFavouriteSubcategories() {
     return _remoteDataSource.getFavouriteSubcategories();
   }
 
   @override
-  Future<Either<Failure, List<FavouriteAdDrawerEntity>>> getDrawerFavouriteAds() {
+  Future<Either<Failure, List<FavouriteAdDrawerEntity>>>
+      getDrawerFavouriteAds() {
     return _remoteDataSource.getDrawerFavouriteAds();
   }
 

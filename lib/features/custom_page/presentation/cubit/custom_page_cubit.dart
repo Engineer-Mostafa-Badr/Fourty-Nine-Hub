@@ -32,7 +32,9 @@ class CustomPageCubit extends Cubit<CustomPageState> {
       this._fetchNavigateBarUseCase,
       this._updateNavigateBarUseCase,
       this._favouriteCatUseCase,
-      this._updateFavouriteCatUseCase, this._fetchActivateUseCase, this._updateActivateUseCase)
+      this._updateFavouriteCatUseCase,
+      this._fetchActivateUseCase,
+      this._updateActivateUseCase)
       : super(const CustomPageState());
 
   // void loadData() async {
@@ -137,7 +139,7 @@ class CustomPageCubit extends Cubit<CustomPageState> {
     response.fold((l) {
       emit(state.copyWith(failure: l, status: CustomPageStates.error));
     }, (data) {
-      emit(state.copyWith(status: CustomPageStates.success));
+      emit(state.copyWith(status: CustomPageStates.updateSuccess));
       fetchActivate();
     });
   }

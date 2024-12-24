@@ -46,7 +46,7 @@ class FavouriteAdDrawerImageModel extends FavouriteAdDrawerImages {
 
   factory FavouriteAdDrawerImageModel.fromJson(Map<String, dynamic> json) {
     return FavouriteAdDrawerImageModel(
-      id: json['id'] ??'',
+      id: json['id'] ?? '',
       mediaKey: json['mediaKey'] ?? '',
     );
   }

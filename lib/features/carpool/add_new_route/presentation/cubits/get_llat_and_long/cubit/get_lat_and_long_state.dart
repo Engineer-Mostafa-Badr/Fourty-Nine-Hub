@@ -14,11 +14,11 @@ final class GetLatAndLongLoading extends GetLatAndLongState {}
 final class GetLatAndLongSuccess extends GetLatAndLongState {
   final LatLongData latLongData;
 
-  GetLatAndLongSuccess({required this.latLongData});
+  const GetLatAndLongSuccess({required this.latLongData});
 }
 
 final class GetLatAndLongFailure extends GetLatAndLongState {
   final String errorMessage;
 
-  GetLatAndLongFailure({required this.errorMessage});
+  const GetLatAndLongFailure({required this.errorMessage});
 }

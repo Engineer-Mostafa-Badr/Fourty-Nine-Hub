@@ -133,7 +133,7 @@ class _CommentWidgetState extends State<CommentWidgetInsta> {
                                   noItemsFoundIndicatorBuilder: (context) {
                                     print(controller.repliesPagingController
                                         .itemList?.length);
-                                    return SizedBox.shrink();
+                                    return const SizedBox.shrink();
                                   },
                                   itemBuilder: (context, item, index) {
                                     return _buildRepliesList(

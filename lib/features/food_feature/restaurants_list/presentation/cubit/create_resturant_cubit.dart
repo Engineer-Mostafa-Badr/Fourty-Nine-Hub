@@ -50,8 +50,7 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
     final userId = UserCubit.to.state.data?.id;
 
     if (_shareCubit.subCategories.isEmpty) {
-      final response =
-          await _getHealthSubcategoriesUseCase.call(userId??'');
+      final response = await _getHealthSubcategoriesUseCase.call(userId ?? '');
       response.fold(
           (failure) => emit(CreateResturantError("Can't Load Specialities")),
           (data) {

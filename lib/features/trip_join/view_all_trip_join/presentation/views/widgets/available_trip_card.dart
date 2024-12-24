@@ -53,6 +53,39 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
               CustomCard(
                 children: [
                   Row(
+                    children: [
+                      Text(
+                        _localizeStatus(
+                            context, widget.tripJoinCardEntity.status ?? ''),
+                        style: Styles.headerText(
+                          fontSize: 30,
+                          color: AppColors.getSecondryColor(context),
+                        ),
+                      ),
+                      const Spacer(),
+                      Row(
+                        children: [
+                          Text(
+                              widget.tripJoinCardEntity.journeyPrice
+                                      ?.toStringAsFixed(0) ??
+                                  '' "  ",
+                              style: Styles.headerText(
+                                  fontSize: 50, color: Colors.green[600])),
+                          Text(
+                            context.isArabic
+                                ? BlocProvider.of<GetCurrencyCubit>(context)
+                                    .currnecyAr
+                                : BlocProvider.of<GetCurrencyCubit>(context)
+                                    .currnecyEn,
+                            style: Styles.headerText(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.SECONDARY_COLOR),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Icon(Icons.time_to_leave),
@@ -223,44 +256,6 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                   // ),
                 ],
               ),
-              Positioned.directional(
-                top: 5,
-                end: 20,
-                textDirection:
-                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                            widget.tripJoinCardEntity.journeyPrice
-                                    ?.toStringAsFixed(0) ??
-                                '' "  ",
-                            style: Styles.headerText(
-                                fontSize: 70, color: Colors.green[600])),
-                        Text(
-                          context.isArabic
-                              ? BlocProvider.of<GetCurrencyCubit>(context)
-                                  .currnecyAr
-                              : BlocProvider.of<GetCurrencyCubit>(context)
-                                  .currnecyEn,
-                          style: Styles.mediumText(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.SECONDARY_COLOR),
-                        )
-                      ],
-                    ),
-                    Text(
-                      _localizeStatus(
-                          context, widget.tripJoinCardEntity.status ?? ''),
-                      style: Styles.headerText(
-                        fontSize: 30,
-                        color: AppColors.getSecondryColor(context),
-                      ),
-                    ),
-                  ],
-                ),
-              )
             ],
           ),
           const Sizer(),
@@ -294,12 +289,10 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
 
   String _localizeStatus(BuildContext context, String text) {
     switch (text.toLowerCase().trim()) {
-      case 'regular':
-        return context.isArabic ? 'عادي' : 'Regular';
       case 'premium':
         return context.isArabic ? 'مميز' : 'Premium';
       default:
-        return text;
+        return context.isArabic ? 'عادي' : 'Regular';
     }
   }
 }

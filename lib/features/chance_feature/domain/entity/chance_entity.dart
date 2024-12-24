@@ -11,16 +11,16 @@ class ChanceEntity {
   final UserChanceEntity user;
   final SubCategoryEntity subCategoryId;
   final MainCategoryEntity mainCategoryId;
-  final String title ;
+  final String title;
 
-  ChanceEntity(
-      {required this.id,
-      required this.images,
-      required this.description,
-      required this.price,
-      required this.user,
-      required this.subCategoryId,
-      required this.mainCategoryId,
-      required this.title,
-      });
+  ChanceEntity({
+    required this.id,
+    required this.images,
+    required this.description,
+    required this.price,
+    required this.user,
+    required this.subCategoryId,
+    required this.mainCategoryId,
+    required this.title,
+  });
 }

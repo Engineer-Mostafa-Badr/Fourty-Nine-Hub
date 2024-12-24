@@ -1,5 +1,4 @@
 import 'package:fourtyninehub/features/social_media/live_streaming/data/model/goal_model.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity/goal_entity.dart';
 
 import '../../domain/entity/live_create_response_entity.dart';
 

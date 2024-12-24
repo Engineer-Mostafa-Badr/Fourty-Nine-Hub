@@ -3,9 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -653,8 +651,8 @@ class _UserInfoBarState extends State<UserInfoBar> {
               value: 'report',
               child: Row(
                 children: [
-                  Icon(Icons.report, color: AppColors.PRIMARY_COLOR_DARK),
-                  SizedBox(width: 10),
+                  const Icon(Icons.report, color: AppColors.PRIMARY_COLOR_DARK),
+                  const SizedBox(width: 10),
                   Text(
                     LocaleKeys.report.localize,
                     textScaler: TextScaler.noScaling,

@@ -56,7 +56,6 @@ class DriverRequests extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 35),
                             child: GestureDetector(
                               onTap: () {
-                                //هتروح لي صفحه subscription
                                 serviceLocator<SubscriptionController>()
                                     .showActiveSubscriptionAmounts(
                                         walletType: WalletTypes.balance);

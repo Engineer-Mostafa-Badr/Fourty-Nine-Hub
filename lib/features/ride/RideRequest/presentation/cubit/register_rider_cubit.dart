@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rider_register_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/repositories/reider_request_repository.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/sub_category.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/car_images_s3_model/car_image.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/car_images_s3_model/car_images_s3_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/car_license_s3_model/car_license_behind.dart';
@@ -32,11 +34,123 @@ class RegisterRiderCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repo;
   final ShippingRepository repository;
   RiderRegisterModel model = RiderRegisterModel();
+  MultiSelectController<SubCategory> multiSelectController =
+      MultiSelectController<SubCategory>([]);
+  List RICH_VALID_SUBCATEGORY_IDS = [
+    '62c8ba9f8e28a58a3edf57eb',
+    '62c8baa08e28a58a3edf57ed',
+    '62c8baa18e28a58a3edf57ef',
+    '62c8baa28e28a58a3edf57f1',
+    '62c8baa38e28a58a3edf57f3'
+  ];
+
+  List WOMEN_SUBCATEGORY_IDS = [
+    '62ea012a69ea29c91dfc3917',
+    '62c8baa08e28a58a3edf57ed',
+    '62c8baa38e28a58a3edf57f3'
+  ];
+  List<String> NO_SOCKET_SUBCATEGORY_IDS = [
+    "62c8baa48e28a58a3edf57f5",
+    "62c8baa78e28a58a3edf57f9",
+    "62c8baa88e28a58a3edf57fd",
+    "62c8baaa8e28a58a3edf57ff",
+    "62c8baab8e28a58a3edf5801",
+    "62c8baa68e28a58a3edf57f7",
+  ];
+  List<String> SOCKET_CATEGORY_IDS = [
+    "62c8ba9e8e28a58a3edf57e9",
+    "6698736fdaa111da2d775627"
+  ];
+  List<SubCategory> SELECTED_RICH_VALID_SUBCATEGORY_IDS = [];
+  List<SubCategory> SELECTED_WOMEN_SUBCATEGORY_IDS = [];
+  List<SubCategory> SELECTED_NO_SOCKET_SUBCATEGORY_IDS = [];
+  List<SubCategory> SELECTED_SOCKET_CATEGORY_IDS = [];
+  List<SubCategory> selectedSubCategoryList = [];
+  SubCategory? selectedSubCategoryNoSocket;
+
   RegisterRiderCubit({required this.repo, required this.repository})
       : super(RiderInitial());
 
   pickCategory(String id) {
     model.subcategoryId = id;
+  }
+
+  selectSubCategory({required SubCategory subCategory}) {
+    if (subCategory.subCategoryId == "62c8baa08e28a58a3edf57ed" ||
+        subCategory.subCategoryId == "62c8baa38e28a58a3edf57f3") {
+      if (SELECTED_WOMEN_SUBCATEGORY_IDS.isNotEmpty) {
+        if (SELECTED_WOMEN_SUBCATEGORY_IDS.contains(subCategory)) {
+          SELECTED_WOMEN_SUBCATEGORY_IDS.remove(subCategory);
+        } else {
+          SELECTED_WOMEN_SUBCATEGORY_IDS.add(subCategory);
+        }
+      } else {
+        if (SELECTED_RICH_VALID_SUBCATEGORY_IDS.contains(subCategory)) {
+          SELECTED_RICH_VALID_SUBCATEGORY_IDS.remove(subCategory);
+        } else {
+          SELECTED_RICH_VALID_SUBCATEGORY_IDS.add(subCategory);
+        }
+      }
+    } else {
+      if (RICH_VALID_SUBCATEGORY_IDS.contains(subCategory.subCategoryId)) {
+        log("RICH_VALID_SUBCATEGORY_IDS");
+        SELECTED_WOMEN_SUBCATEGORY_IDS.clear();
+        SELECTED_NO_SOCKET_SUBCATEGORY_IDS.clear();
+        SELECTED_SOCKET_CATEGORY_IDS.clear();
+        if (SELECTED_RICH_VALID_SUBCATEGORY_IDS.contains(subCategory)) {
+          log("remove");
+          SELECTED_RICH_VALID_SUBCATEGORY_IDS.remove(subCategory);
+        } else {
+          log("add");
+          SELECTED_RICH_VALID_SUBCATEGORY_IDS.add(subCategory);
+        }
+      } else if (WOMEN_SUBCATEGORY_IDS.contains(subCategory.subCategoryId)) {
+        log("WOMEN_SUBCATEGORY_IDS");
+        SELECTED_NO_SOCKET_SUBCATEGORY_IDS.clear();
+        SELECTED_RICH_VALID_SUBCATEGORY_IDS.clear();
+        SELECTED_SOCKET_CATEGORY_IDS.clear();
+        if (SELECTED_WOMEN_SUBCATEGORY_IDS.contains(subCategory)) {
+          SELECTED_WOMEN_SUBCATEGORY_IDS.remove(subCategory);
+        } else {
+          SELECTED_WOMEN_SUBCATEGORY_IDS.add(subCategory);
+        }
+      } else if (SOCKET_CATEGORY_IDS.contains(subCategory.subCategoryId)) {
+        log("SOCKET_CATEGORY_IDS");
+        SELECTED_NO_SOCKET_SUBCATEGORY_IDS.clear();
+        SELECTED_RICH_VALID_SUBCATEGORY_IDS.clear();
+        SELECTED_SOCKET_CATEGORY_IDS.clear();
+        if (SELECTED_SOCKET_CATEGORY_IDS.contains(subCategory)) {
+          SELECTED_SOCKET_CATEGORY_IDS.clear();
+        } else {
+          SELECTED_SOCKET_CATEGORY_IDS = [subCategory];
+        }
+      } else {
+        log("SELECTED_NO_SOCKET_SUBCATEGORY_IDS",
+            name: subCategory.subCategoryId.toString());
+        SELECTED_RICH_VALID_SUBCATEGORY_IDS.clear();
+        SELECTED_WOMEN_SUBCATEGORY_IDS.clear();
+        SELECTED_SOCKET_CATEGORY_IDS.clear();
+        if (SELECTED_NO_SOCKET_SUBCATEGORY_IDS.contains(subCategory)) {
+          SELECTED_NO_SOCKET_SUBCATEGORY_IDS.remove(subCategory);
+        } else {
+          SELECTED_NO_SOCKET_SUBCATEGORY_IDS = [subCategory];
+        }
+      }
+    }
+    if (SELECTED_WOMEN_SUBCATEGORY_IDS.isNotEmpty) {
+      selectedSubCategoryList = SELECTED_WOMEN_SUBCATEGORY_IDS;
+    }
+    if (SELECTED_RICH_VALID_SUBCATEGORY_IDS.isNotEmpty) {
+      selectedSubCategoryList = SELECTED_RICH_VALID_SUBCATEGORY_IDS;
+    }
+    if (SELECTED_NO_SOCKET_SUBCATEGORY_IDS.isNotEmpty) {
+      selectedSubCategoryList = SELECTED_NO_SOCKET_SUBCATEGORY_IDS;
+    }
+    if (SELECTED_SOCKET_CATEGORY_IDS.isNotEmpty) {
+      selectedSubCategoryList = SELECTED_SOCKET_CATEGORY_IDS;
+    }
+    log(selectedSubCategoryList.toString(),
+        name: "SELECTED_RICH_VALID_SUBCATEGORY_IDS");
   }
 
   String? validation({required String message, required bool condition}) {
@@ -95,18 +209,23 @@ class RegisterRiderCubit extends Cubit<RiderState> {
   }
 
   pickBrand(String brand) {
+    log(brand);
     model.vehicleBrand = brand;
   }
 
   pickModel(String carModel) {
+    log(carModel);
     model.vehicleModel = carModel;
   }
 
   pickYear(String year) {
+    log(year);
     model.vehicleYear = year;
   }
 
   registerOne() async {
+    model.subcategoryIds =
+        selectedSubCategoryList.map((e) => e.subCategoryId ?? '').toList();
     var response = await repo.registerDriver(model: model);
     response.fold(
       (l) {
@@ -123,6 +242,8 @@ class RegisterRiderCubit extends Cubit<RiderState> {
   }
 
   registerTow(BuildContext context) async {
+    log("message");
+    model.subcategoryId = selectedSubCategoryList.first.subCategoryId ?? "";
     var response = await repo.riderRegister(model: model);
     response.fold(
       (l) {

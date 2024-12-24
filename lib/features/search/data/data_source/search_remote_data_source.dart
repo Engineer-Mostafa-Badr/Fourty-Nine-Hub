@@ -20,14 +20,20 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import '../../../../core/error/failure.dart';
 
 abstract class SearchRemoteDataSource {
-  Future<Either<Failure, List<MainCategoryEntity>>> fetchSearch(SearchParams params);
-  Future<Either<Failure,List<SubCategoryEntity>>> fetchSearchSubCategory(SearchParams params);
-  Future<Either<Failure,List<UserSearchEntity>>> fetchUserSearch(SearchParams params);
-  Future<Either<Failure,List<AdsSearchEntity>>> fetchAdsSearch(SearchParams params);
-  Future<Either<Failure,List<PostEntity>>> fetchPostsSearch(SearchParams params);
-  Future<Either<Failure,List<TripComeWithYouEntity>>> fetchTripComeSearch(SearchParams params);
-  Future<Either<Failure,List<ReelsSearchEntity>>> fetchReelSearch(SearchParams params);
-
+  Future<Either<Failure, List<MainCategoryEntity>>> fetchSearch(
+      SearchParams params);
+  Future<Either<Failure, List<SubCategoryEntity>>> fetchSearchSubCategory(
+      SearchParams params);
+  Future<Either<Failure, List<UserSearchEntity>>> fetchUserSearch(
+      SearchParams params);
+  Future<Either<Failure, List<AdsSearchEntity>>> fetchAdsSearch(
+      SearchParams params);
+  Future<Either<Failure, List<PostEntity>>> fetchPostsSearch(
+      SearchParams params);
+  Future<Either<Failure, List<TripComeWithYouEntity>>> fetchTripComeSearch(
+      SearchParams params);
+  Future<Either<Failure, List<ReelsSearchEntity>>> fetchReelSearch(
+      SearchParams params);
 }
 
 class SearchRemoteDataSourceImpl extends SearchRemoteDataSource {
@@ -36,102 +42,93 @@ class SearchRemoteDataSourceImpl extends SearchRemoteDataSource {
   SearchRemoteDataSourceImpl(this._apiConsumer);
 
   @override
-  Future<Either<Failure, List<MainCategoryEntity>>> fetchSearch(SearchParams params) async {
-    final response = await _apiConsumer.get(
-        EndPoints.search(params),
-            data: params.toJson()
-    );
+  Future<Either<Failure, List<MainCategoryEntity>>> fetchSearch(
+      SearchParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.search(params), data: params.toJson());
     return response.fold(
-      (failure)=>Left(failure),
-      (response)=>Right((response['data'] as List)
+      (failure) => Left(failure),
+      (response) => Right((response['data'] as List)
           .map((e) => MainCategoryModel.fromJson(e))
           .toList()),
     );
   }
 
   @override
-  Future<Either<Failure, List<SubCategoryEntity>>> fetchSearchSubCategory(SearchParams params) async {
-    final response = await _apiConsumer.get(
-        EndPoints.search(params),
-        data: params.toJson()
-    );
+  Future<Either<Failure, List<SubCategoryEntity>>> fetchSearchSubCategory(
+      SearchParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.search(params), data: params.toJson());
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right((response['data'] as List)
+      (failure) => Left(failure),
+      (response) => Right((response['data'] as List)
           .map((e) => SubCategoryModel.fromJson(e))
           .toList()),
     );
   }
 
   @override
-  Future<Either<Failure, List<UserSearchEntity>>> fetchUserSearch(SearchParams params) async {
-    final response = await _apiConsumer.get(
-        EndPoints.search(params),
-        data: params.toJson()
-    );
+  Future<Either<Failure, List<UserSearchEntity>>> fetchUserSearch(
+      SearchParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.search(params), data: params.toJson());
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right((response['data'] as List)
+      (failure) => Left(failure),
+      (response) => Right((response['data'] as List)
           .map((e) => UserSearchModel.fromJson(e))
           .toList()),
     );
   }
 
   @override
-  Future<Either<Failure, List<AdsSearchEntity>>> fetchAdsSearch(SearchParams params) async {
-    final response = await _apiConsumer.get(
-        EndPoints.search(params),
-        data: params.toJson()
-    );
+  Future<Either<Failure, List<AdsSearchEntity>>> fetchAdsSearch(
+      SearchParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.search(params), data: params.toJson());
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right((response['data'] as List)
+      (failure) => Left(failure),
+      (response) => Right((response['data'] as List)
           .map((e) => AdsSearchModel.fromJson(e))
           .toList()),
     );
   }
 
   @override
-  Future<Either<Failure, List<PostEntity>>> fetchPostsSearch(SearchParams params) async {
-    final response = await _apiConsumer.get(
-        EndPoints.search(params),
-        data: params.toJson()
-    );
+  Future<Either<Failure, List<PostEntity>>> fetchPostsSearch(
+      SearchParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.search(params), data: params.toJson());
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right((response['data'] as List)
+      (failure) => Left(failure),
+      (response) => Right((response['data'] as List)
           .map((e) => PostModel.fromJson(e))
           .toList()),
     );
   }
 
   @override
-  Future<Either<Failure, List<TripComeWithYouEntity>>> fetchTripComeSearch(SearchParams params) async {
-    final response = await _apiConsumer.get(
-        EndPoints.search(params),
-        data: params.toJson()
-    );
+  Future<Either<Failure, List<TripComeWithYouEntity>>> fetchTripComeSearch(
+      SearchParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.search(params), data: params.toJson());
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right((response['data'] as List)
+      (failure) => Left(failure),
+      (response) => Right((response['data'] as List)
           .map((e) => TripComeWithYouModel.fromJson(e))
           .toList()),
     );
   }
 
   @override
-  Future<Either<Failure, List<ReelsSearchEntity>>> fetchReelSearch(SearchParams params) async {
-    final response = await _apiConsumer.get(
-        EndPoints.search(params),
-        data: params.toJson()
-    );
+  Future<Either<Failure, List<ReelsSearchEntity>>> fetchReelSearch(
+      SearchParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.search(params), data: params.toJson());
     return response.fold(
-          (failure)=>Left(failure),
-          (response)=>Right((response['data'] as List)
+      (failure) => Left(failure),
+      (response) => Right((response['data'] as List)
           .map((e) => ReelsSearchModel.fromJson(e))
           .toList()),
     );
-}
-
-
+  }
 }

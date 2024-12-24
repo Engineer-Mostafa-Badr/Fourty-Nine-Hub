@@ -25,6 +25,8 @@ abstract class FourtyNineRemoteDataSource {
 
   Future<Either<Failure, List<MainCategoryModel>>> getMainCategories(
       MainCategoriesParams params);
+  Future<Either<Failure, List<MainCategoryEntity>>> getMainCategoriesCustomPage(
+      MainCategoriesParams params);
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems();
 
   Future<Either<Failure, MainCategoryEntity>> getMainCategoryDetails(String id);
@@ -70,6 +72,24 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
         return Left(failure);
       },
       (response) => Right((response['data']['mainCategories'] as List)
+          .map((e) => MainCategoryModel.fromJson(e))
+          .toList()),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<MainCategoryEntity>>> getMainCategoriesCustomPage(MainCategoriesParams params) async {
+    final result = await _apiConsumer.get(
+      EndPoints.getMainCategoriesCustomPage,
+      queryParameters: params.toJson(),
+    );
+    return result.fold(
+          (failure) {
+        CliLogger.error(
+            "can't load main categories - from data source - there is an error ${failure.toString()}");
+        return Left(failure);
+      },
+          (response) => Right((response['data']['mainCategories'] as List)
           .map((e) => MainCategoryModel.fromJson(e))
           .toList()),
     );
@@ -163,12 +183,14 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
   Future<Either<Failure, bool>> anyCashBack() async {
     final result = await _apiConsumer.post(EndPoints.anyCashBack);
     return result.fold(
-          (failure) {
-            return Left(failure);
-          },
-          (data) {
-            return Right(data['status']);
-          },
+      (failure) {
+        return Left(failure);
+      },
+      (data) {
+        return Right(data['status']);
+      },
     );
   }
+
+
 }

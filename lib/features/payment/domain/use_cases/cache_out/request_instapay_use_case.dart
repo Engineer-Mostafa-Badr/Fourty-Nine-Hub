@@ -18,22 +18,22 @@ class RequestInstapayParams {
   final String amount;
   final String payoutMethod;
   String? phoneNumber;
-   String payoutSource;
+  String payoutSource;
   String? bankAccountNumber;
   String? bankName;
   String? cardNumber;
   String? instapayAccount;
 
-  RequestInstapayParams(
-      {required this.amount,
-      required this.payoutMethod,
-       this.payoutSource='main_wallet',
-        this.cardNumber,
-        this.bankName,
-        this.bankAccountNumber,
-        this.phoneNumber,
-        this.instapayAccount,
-      });
+  RequestInstapayParams({
+    required this.amount,
+    required this.payoutMethod,
+    this.payoutSource = 'main_wallet',
+    this.cardNumber,
+    this.bankName,
+    this.bankAccountNumber,
+    this.phoneNumber,
+    this.instapayAccount,
+  });
 
   Map<String, dynamic> toJson() => {
         'amount': amount,

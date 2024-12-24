@@ -91,7 +91,8 @@ class SearchRestaurantsCubit extends Cubit<SearchRestaurantState> {
       user = UserCubit.to.state.data;
     } else {}
 
-    await _getMealCategoriesWithCountRestaurants();refreshState();
+    await _getMealCategoriesWithCountRestaurants();
+    refreshState();
   }
 
   Future<void> _getCities(String governorateId) async {
