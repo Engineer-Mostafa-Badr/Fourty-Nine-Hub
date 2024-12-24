@@ -1,40 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/service_page_preview%20copy.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-
-import '../../../../../res/style/styles.dart';
 import '../../../../social_media/social_posts/presentation/pages/Social_home.dart';
 import '../../../../social_media/stories/presentation/cubit/stories_cubit.dart';
 
-class PagePreview extends StatelessWidget {
+class PagePreview extends StatefulWidget {
   const PagePreview({super.key});
+
+  @override
+  State<PagePreview> createState() => _PagePreviewState();
+}
+
+class _PagePreviewState extends State<PagePreview> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2, // Number of tabs
       child: Scaffold(
-        appBar: AppBar(
-          title: Label(
-            text: LocaleKeys.pagePreview.localize,
-            style: Styles.headerText(),
+        key: _scaffoldKey,
+        appBar: HomeAppbar(
+          isWithBackArrow: false,
+          toolbarHeight: kTextTabBarHeight * 4.h,
+          language: true,
+          leading: IconButton(
+            icon: const Icon(Icons.menu), // The menu icon
+            onPressed: () {
+              HandleCashback.setCount('drawerCount', context);
+              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
+            },
           ),
           bottom: TabBar(
             tabs: [
-              Tab(text: LocaleKeys.social.localize), // First Tab
-              Tab(text: LocaleKeys.service.localize), // Second Tab
+              Tab(text: LocaleKeys.social.localize),
+              Tab(text: LocaleKeys.service.localize),
             ],
           ),
         ),
+        drawer: const DrawerWidget(),
         body: TabBarView(
           children: [
             MultiBlocProvider(
@@ -61,10 +78,13 @@ class PagePreview extends StatelessWidget {
                               const EdgeInsets.only(right: 8, left: 8, top: 8),
                           child: social.social?.face == true
                               ? SocialHomeView(
-                            payload: SocialParams(userId: social.social?.userId??'',hideAppBar: true),                           )
-                              : const InstagramView(
+                                  payload: SocialParams(
+                                      userId: social.social?.userId ?? '',
+                                      hideAppBar: true),
+                                )
+                              :social.social?.insta ==true? const InstagramView(
                                   hideAppBar: true,
-                                ),
+                                ) : const TwitterView(),
                         );
                       } else {
                         return const CustomLoading();
@@ -74,7 +94,7 @@ class PagePreview extends StatelessWidget {
                 },
               ),
             ),
-            const ServicePagePreview(), // Content for second tab
+            const ServicePagePreview(),
           ],
         ),
       ),

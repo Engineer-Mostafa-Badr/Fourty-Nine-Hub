@@ -709,6 +709,7 @@ abstract class  LocaleKeys {
   static const noFavouriteSubCategory = 'noFavouriteSubCategory';
   static const face = 'face';
   static const insta = 'insta';
+  static const Tweet = 'Tweet';
   static const socialPage = 'socialPage';
   static const errorLoadingSocialPage = 'errorLoadingSocialPage';
   static const updateSuccessfully = 'updateSuccessfully';

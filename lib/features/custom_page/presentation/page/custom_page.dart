@@ -31,15 +31,15 @@ class _CustomPageState extends State<CustomPage> {
       key: _scaffoldKey,
       appBar:  BackAppBar(
         label: LocaleKeys.customPage.localize,
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () {
-            HandleCashback.setCount('drawerCount',context);
-            _scaffoldKey.currentState?.openDrawer();
-          },
-        ),
+        // leading: IconButton(
+        //   icon: const Icon(Icons.menu),
+        //   onPressed: () {
+        //     HandleCashback.setCount('drawerCount',context);
+        //     _scaffoldKey.currentState?.openDrawer();
+        //   },
+        // ),
       ),
-      drawer: const DrawerWidget(),
+    //  drawer: const DrawerWidget(),
       body: BlocProvider<CustomPageCubit>(
         create: (BuildContext context) => serviceLocator()..fetchActivate(),
         child: BlocConsumer<CustomPageCubit, CustomPageState>(
@@ -71,6 +71,12 @@ class _CustomPageState extends State<CustomPage> {
                         value: state.activate?.customPage ?? false,
                         onChanged: (v) {
                           controller.updateActivate(v);
+                          // if(state.activate!.customPage ==true){
+                          //   context.pushReplacementNamed(Routes.CUSTOMPAGE);
+                          // }else{
+                          //   context.pushReplacementNamed(Routes.HOME);
+                          // }
+                         // Restart.restartApp();
                           },
                         activeColor: Colors.red,
                         inactiveThumbColor: Colors.black,

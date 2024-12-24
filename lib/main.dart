@@ -82,15 +82,12 @@ void main() async {
 
 
   final customPageCubit = serviceLocator<CustomPageCubit>();
-  await customPageCubit.fetchActivate(); // Ensure the state is fetched before proceeding
+  await customPageCubit.fetchActivate();
 
-  // Wait for the state to load
   final isActivated = customPageCubit.state.activate?.customPage ?? false;
 
-  // Determine the initial route based on the activation status
-  final initialRoute = isActivated ? Routes.CUSTOMPAGE : Routes.HOME;
+  final initialRoute = isActivated ? Routes.PAGEPREVIEW : Routes.HOME;
 
-  // Initialize the router with the appropriate initial route
   AppPages.initializeRouter(initialRoute);
   runApp(
     LocalizationService.rootWidget(
@@ -154,6 +151,10 @@ class _MyAppState extends State<MyApp> {
           create: (BuildContext context) =>
               serviceLocator<MainCategoriesCubit>()..loadData(),
         ),
+        // BlocProvider(
+        //   create: (BuildContext context) =>
+        //       serviceLocator<MainCategoriesCubit>()..getMainCategoryCustomPage(),
+        // ),
         BlocProvider(
           create: (context) =>
               LocationSocketCubit(repository: serviceLocator()),
@@ -304,8 +305,6 @@ class _MyAppState extends State<MyApp> {
                   builder: (context, snapshot) {
                     return BlocBuilder<CustomPageCubit,CustomPageState>(
                       builder: (BuildContext context, custom) {
-                        final isActivated= custom.activate?.customPage ??false;
-                        final initialRoute = isActivated ? Routes.CUSTOMPAGE : Routes.HOME;
                         return  MaterialApp.router(
                           builder: (context, child) {
                             return MediaQuery(

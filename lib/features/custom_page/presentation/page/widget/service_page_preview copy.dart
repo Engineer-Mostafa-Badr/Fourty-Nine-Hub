@@ -3,6 +3,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/ads/app_open_model.dart';
+import 'package:fourtyninehub/ads/banner_ad_model.dart';
+import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/wallet_widget.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
@@ -16,7 +20,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
-import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/custom_page_botton_nav_bar.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
@@ -25,10 +28,12 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/firebas
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -39,7 +44,7 @@ class ServicePagePreview extends StatefulWidget {
   State<ServicePagePreview> createState() => _ServicePagePreviewState();
 }
 
-class _ServicePagePreviewState extends State<ServicePagePreview> {
+class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBindingObserver {
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
@@ -50,9 +55,29 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
       print(e.toString());
     }
   }
+  AppOpenAdManager appOpenAdManager = AppOpenAdManager();
+  bool isPaused = false;
+
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // TODO: implement didChangeAppLifecycleState
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused) {
+      print("xd==========================");
+      isPaused = true;
+    }
+    if (state == AppLifecycleState.resumed && isPaused) {
+      print("Resumed==========================");
+      appOpenAdManager.showAdIfAvailable();
+      isPaused = false;
+    }
+  }
 
   @override
   void initState() {
+    appOpenAdManager.loadAd();
+    WidgetsBinding.instance.addObserver(this);
     checkLogin();
     super.initState();
     _setupScrollController();
@@ -62,6 +87,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
     context
         .read<NotificationSocketIoCubit>()
         .notificationListener(languageCode: 'en');
+    context.read<LocationSocketCubit>().updateDriverLocationOn();
   }
 
   void _setupScrollController() {
@@ -94,12 +120,15 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
   @override
   void dispose() {
     scrollController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+
     super.dispose();
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    print("objectUser${UserCubit.to.state.data?.id}");
     return BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
       listener: (context, state) {
         if (state is NotificationSocketIoNewNotification) {
@@ -115,100 +144,98 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
         }
       },
       child: Scaffold(
+        key: _scaffoldKey,
         bottomNavigationBar: CustomPageBottonNavBar(
           scrollController: scrollController, currentIndex: 2,
           isScrollingDown: _isScrollingDown,
           // mainCategory: 1,
           // index: 2,
         ),
+        drawer: const DrawerWidget(),
         body: ListView(
           controller: scrollController,
           shrinkWrap: true,
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           children: [
+            const AddBanner(),
+            //wallet
             context.read<UserCubit>().isLoggedIn
                 ? const WalletWidget()
                 : const SizedBox.shrink(),
-            //    Sizer(),
-            //admob
-            //   const GoogleAddsBanner(),
             _buildStarWidget(),
             const Sizer(),
-            //pick me and come with U
             _pickMeAndComeWithUWidget(),
-            // const Sizer(),
-            // _buildChanceWidget(),
-            // const Sizer(),
-            // _auctionAndInstallmentWidget(),
-            // const Sizer(),
-            // _buildBookingWidget(),
             const Sizer(),
-            //cats layout
             _buildMainCategoriesViews(),
             const Sizer(),
             //main cats
-            BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
-              builder: (context, state) {
-                final controller = context.read<MainCategoriesCubit>();
-                if (state.status == StateStatus.loading) {
-                  return Shimmer.fromColors(
-                    baseColor: Colors.grey[100]!,
-                    highlightColor: Colors.white24,
-                    child: Column(
-                      children: List.generate(
-                          6,
-                          (index) => Padding(
-                                padding: EdgeInsets.only(bottom: 15.h),
-                                child: Container(
-                                  height: MediaQuery.of(context).size.height *
-                                      .15.h,
-                                  width: double.infinity,
-                                  margin:
-                                      EdgeInsets.symmetric(horizontal: 10.w),
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 10.w),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.AUTH_CONTAINER_COLOR,
-                                    borderRadius: BorderRadius.circular(20.r),
-                                    border: Border.all(color: Colors.grey),
-                                  ),
+            BlocProvider(
+              create: (BuildContext context) =>
+              serviceLocator<MainCategoriesCubit>()..getMainCategoryCustomPage(),
+              child: BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+                builder: (context, state) {
+                  final controller = context.read<MainCategoriesCubit>();
+                  if (state.status == StateStatus.loading) {
+                    return Shimmer.fromColors(
+                      baseColor: Colors.grey[100]!,
+                      highlightColor: Colors.white24,
+                      child: Column(
+                        children: List.generate(
+                            6,
+                                (index) => Padding(
+                              padding: EdgeInsets.only(bottom: 15.h),
+                              child: Container(
+                                height: MediaQuery.of(context).size.height *
+                                    .15.h,
+                                width: double.infinity,
+                                margin:
+                                EdgeInsets.symmetric(horizontal: 10.w),
+                                padding:
+                                EdgeInsets.symmetric(horizontal: 10.w),
+                                decoration: BoxDecoration(
+                                  color: AppColors.AUTH_CONTAINER_COLOR,
+                                  borderRadius: BorderRadius.circular(20.r),
+                                  border: Border.all(color: Colors.grey),
                                 ),
-                              )),
-                    ),
-                  );
-                }
-                if (state.data != null) {
-                  return ListView.separated(
-                    itemCount: state.data?.length ?? 0,
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          HandleCashback.setCount(
-                              'mainCategoriesCount', context);
-                          context.push(Routes.SUBCATEGORIES,
-                              extra: state.data![index]);
-                        },
-                        child: MainCategoryBanner(
-                          category: state.data![index],
-                          onFavorite: () async {
-                            var result =
-                                await controller.toggleFavoriteMedicalService(
-                                    state.data![index].id);
-                            print("result$result");
-                            return result;
+                              ),
+                            )),
+                      ),
+                    );
+                  }
+                  if (state.customPage != null) {
+                    return ListView.separated(
+                      itemCount: state.customPage?.length ?? 0,
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            AdInterstitialTop.loadIntersitialAd();
+                            AdInterstitialTop.showInterstitialAd();
+                            HandleCashback.setCount('mainCategoriesCount',context);
+                            context.push(Routes.SUBCATEGORIES,
+                                extra: state.customPage![index]);
                           },
-                        ),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const Sizer(),
-                  );
-                } else {
-                  return const SizedBox.shrink();
-                }
-              },
+                          child: MainCategoryBanner(
+                            category: state.customPage![index],
+                            onFavorite: () async {
+                              var result =
+                              await controller.toggleFavoriteMedicalService(
+                                  state.customPage![index].id);
+                              print("result$result");
+                              return result;
+                            },
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) =>
+                      const Sizer(),
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              ),
             ),
           ],
         ),
@@ -240,7 +267,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                 width: 34.h,
               ),
               Routes.MAINCATEGORIESTREE,
-              () => HandleCashback.setCount('threeDotsCount', context),
+                  () => HandleCashback.setCount('threeDotsCount', context),
             ),
             _buildItemTabBar(
                 SvgPicture.asset(
@@ -248,9 +275,13 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                   height: 34.h,
                   width: 34.h,
                 ),
-                Routes.MAINCATEGORIESCARDS, () {
-              HandleCashback.setCount('mainCategoriesSliderCount', context);
-            }),
+                Routes.MAINCATEGORIESCARDS,
+                    (){
+                  AdInterstitialTop.loadIntersitialAd();
+                  AdInterstitialTop.showInterstitialAd();
+                  HandleCashback.setCount('mainCategoriesSliderCount',context);
+                }
+            ),
           ],
         ),
       ),
@@ -258,10 +289,10 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
   }
 
   Widget _buildItemTabBar(
-    Widget icon,
-    String routeName,
-    Function() onTab,
-  ) {
+      Widget icon,
+      String routeName,
+      Function() onTab,
+      ) {
     return InkWell(
       onTap: () {
         onTab();
@@ -276,30 +307,30 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
   }
 
   BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-      _pickMeAndComeWithUWidget() {
+  _pickMeAndComeWithUWidget() {
     return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
       builder: (context, state) {
         if (state.status == StateStatus.loading) {
           return Row(
             children: List.generate(
                 2,
-                (index) => Expanded(
-                      child: Shimmer.fromColors(
-                        baseColor: Colors.grey[100]!,
-                        highlightColor: Colors.white24,
-                        child: Container(
-                          width: 100.h,
-                          height: kToolbarHeight * 2.h,
-                          margin: const EdgeInsets.symmetric(horizontal: 5),
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          decoration: BoxDecoration(
-                            color: AppColors.AUTH_CONTAINER_COLOR,
-                            borderRadius: BorderRadius.circular(20.r),
-                            border: Border.all(color: Colors.grey),
-                          ),
-                        ),
+                    (index) => Expanded(
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.grey[100]!,
+                    highlightColor: Colors.white24,
+                    child: Container(
+                      width: 100.h,
+                      height: kToolbarHeight * 2.h,
+                      margin: const EdgeInsets.symmetric(horizontal: 5),
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      decoration: BoxDecoration(
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        borderRadius: BorderRadius.circular(20.r),
+                        border: Border.all(color: Colors.grey),
                       ),
-                    )),
+                    ),
+                  ),
+                )),
           );
         } else if (state.status == StateStatus.success) {
           return Row(
@@ -309,7 +340,11 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                   service: state.data?[0].service ?? RideServicesEnum.pickMe,
                   title: LocaleKeys.carpool.localize,
                   image: state.data?[0].image ?? '',
-                  onTab: () => HandleCashback.setCount('carPoolCount', context),
+                  onTab: () {
+                    AdInterstitialTop.loadIntersitialAd();
+                    AdInterstitialTop.showInterstitialAd();
+                    return HandleCashback.setCount('carPoolCount',context);
+                  },
                   // image: Assets.carpool,
                   // isFavorite: state.data![0].is,
                   // numberOfAds: state.data![0].numberOfAds?.toInt(),
@@ -320,14 +355,17 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
               Expanded(
                 child: _buildRideSubCategoryItem(
                   service:
-                      state.data?[1].service ?? RideServicesEnum.comeWithYou,
+                  state.data?[1].service ?? RideServicesEnum.comeWithYou,
                   title: LocaleKeys.tripJoin.localize,
                   image: state.data?[1].image ?? '',
                   // image: Assets.tripJoin,
 
                   route: Routes.AVAILABLE_TRIPS,
-                  onTab: () =>
-                      HandleCashback.setCount('tripJoinCount', context),
+                  onTab: () {
+                    AdInterstitialTop.loadIntersitialAd();
+                    AdInterstitialTop.showInterstitialAd();
+                    return HandleCashback.setCount('tripJoinCount',context);
+                  },
                   // isFavorite: state.data![1].isFavorite,
                   // numberOfAds: state.data![1].numberOfAds?.toInt(),
                 ),
@@ -337,8 +375,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
         } else {
           return Container(
             padding:
-                //EdgeInsets.all
-                const EdgeInsets.symmetric(horizontal: 10),
+            //EdgeInsets.all
+            const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               LocaleKeys.noRideSubcategories.localize,
               style: TextStyle(fontSize: 32.sp.w, fontWeight: FontWeight.w500),
@@ -349,72 +387,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
     );
   }
 
-  Row _auctionAndInstallmentWidget() {
-    return Row(
-      children: [
-        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize, () {
-          HandleCashback.setCount('mazadat', context);
-          context.push(Routes.MAZADAT);
-        }, Icons.group),
-        const Sizer(),
-        itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize, () {
-          HandleCashback.setCount('installments', context);
-          context.push(Routes.INSTALLMENT);
-        }, Icons.list),
-      ],
-    );
-  }
-
-  Widget _buildBookingWidget() {
-    return SizedBox(
-      height: kToolbarHeight * .9.h,
-      width: double.infinity,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: AppButton(
-                color: AppColors.AUTH_CONTAINER_COLOR,
-                label: LocaleKeys.booking.localize,
-                style: Styles.mediumText(
-                  color: AppColors.AUTH_CONTAINER_COLOR,
-                  fontWeight: FontWeight.bold,
-                ),
-                icon: Icons.auto_awesome,
-                iconSize: 50.h,
-                onPressed: () async {
-                  HandleCashback.setCount('booking', context);
-                  int? num = await CacheManager.getInt('booking');
-                  print(num);
-                }),
-          ),
-          Positioned(
-              bottom: 5,
-              left: 5,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              )),
-          Positioned(
-              top: 0,
-              left: 10,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              )),
-          Positioned(
-              top: 15,
-              right: 10,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              ))
-        ],
-      ),
-    );
-  }
 
   Widget _buildStarWidget() {
     return SizedBox(
@@ -433,7 +405,9 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
                 icon: Icons.star,
                 iconSize: 50.h,
                 onPressed: () {
-                  HandleCashback.setCount('beAStarCount', context);
+                  AdInterstitialTop.loadIntersitialAd();
+                  AdInterstitialTop.showInterstitialAd();
+                  HandleCashback.setCount('beAStarCount',context);
                   context.push(Routes.BE_STAR);
                 }),
           ),
@@ -521,11 +495,11 @@ class _ServicePagePreviewState extends State<ServicePagePreview> {
 
   Widget _buildRideSubCategoryItem(
       {required RideServicesEnum service,
-      required String title,
-      required String image,
-      String? route,
-      bool? isFavorite,
-      required Function() onTab}) {
+        required String title,
+        required String image,
+        String? route,
+        bool? isFavorite,
+        required Function() onTab}) {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: service.value()),
       onTap: () {

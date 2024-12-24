@@ -1,7 +1,6 @@
 class NavigateBarEntity {
   final String id;
   final String userId;
-  final bool chat;
   final bool find;
   final bool health;
   final bool live;
@@ -12,12 +11,10 @@ class NavigateBarEntity {
   final bool ride;
   final bool snap;
   final bool spotlight;
-  final bool tweet;
 
   NavigateBarEntity(
       {required this.id,
       required this.userId,
-      required this.chat,
       required this.find,
       required this.health,
       required this.live,
@@ -28,5 +25,5 @@ class NavigateBarEntity {
       required this.ride,
       required this.snap,
       required this.spotlight,
-      required this.tweet});
+      });
 }
