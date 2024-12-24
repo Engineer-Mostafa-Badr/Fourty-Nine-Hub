@@ -6,13 +6,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
+import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/edit_profile_tinder.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../data/shared/shared.dart';
 
@@ -45,39 +48,37 @@ class UserProfilePageState extends State<UserProfilePage> {
 
   Scaffold _buildLoadingScaffold() {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text(
-          context.isArabic ? 'الصفحة الشخصية' : 'Profile',
-          textScaler: TextScaler.noScaling,
-        ),
-      ),
+      appBar: BackAppBar(label: LocaleKeys.profile.localize,),
       body: const Center(child: CupertinoActivityIndicator()),
     );
   }
 
   Scaffold _buildProfileScaffold(BuildContext context) {
+    final userCubit = context.read<UserCubit>();
     return Scaffold(
       floatingActionButton: _buildFloatingActionButton(context),
-      appBar: AppBar(
-        toolbarHeight: kToolbarHeight / 2,
-      ),
+      appBar: BackAppBar(label: LocaleKeys.profile.localize,),
       extendBodyBehindAppBar: true,
       body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 20.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildSwipeCard(context),
-                _buildUserInfo(context),
-                _buildStats(context),
-                const Sizer(
-                  height: kToolbarHeight * 1.5,
-                ),
-              ],
+        child: RefreshIndicator(
+          onRefresh: () async{
+            await context.read<TinderViewCubit>().fetchUserProfile(userId: userCubit.state.data!.id);
+          },
+          child: SingleChildScrollView(
+           // physics: const BouncingScrollPhysics(),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildSwipeCard(context),
+                  _buildUserInfo(context),
+                  _buildStats(context),
+                  const Sizer(
+                    height: kToolbarHeight * 1.5,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -96,11 +97,14 @@ class UserProfilePageState extends State<UserProfilePage> {
   FloatingActionButton _buildFloatingActionButton(BuildContext context) {
     return FloatingActionButton(
       heroTag: 'upload_image',
-      onPressed: () => _handleImageUpload(context),
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>const EditProfileTinder()));
+       // _handleImageUpload(context);
+      },
       backgroundColor: AppColors.SECONDARY_COLOR,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
       child:
-          const Icon(Icons.add_photo_alternate_outlined, color: Colors.white),
+          const Icon(Icons.edit, color: Colors.white),
     );
   }
 
@@ -112,10 +116,10 @@ class UserProfilePageState extends State<UserProfilePage> {
           final userCubit = context.read<UserCubit>();
           final tinderCubit = context.read<TinderViewCubit>();
 
-          await tinderCubit.uploadPictures(pictures: [uploadedFile.mediaId]);
-          await tinderCubit
-              .fetchUserProfile(userId: userCubit.state.data!.id)
-              .then((value) => tinderCubit.resetStoryIndex());
+         // await tinderCubit.uploadPictures(pictures: [uploadedFile.mediaId]);
+          // await tinderCubit
+          //     .fetchUserProfile(userId: userCubit.state.data!.id)
+          //     .then((value) => tinderCubit.resetStoryIndex());
         },
       );
 
@@ -165,6 +169,7 @@ class UserProfilePageState extends State<UserProfilePage> {
             ),
           ),
           const Divider(),
+          if(userId?.birthday !=null)
           _buildListTile(
             icon: Icons.cake,
             iconColor: Colors.redAccent,
@@ -200,16 +205,16 @@ class UserProfilePageState extends State<UserProfilePage> {
     required String subtitle,
   }) {
     return ListTile(
-      leading: Icon(icon, color: iconColor),
+      leading: Icon(icon, color: iconColor,size: 60.sp,),
       title: Text(
         title,
         textScaler: TextScaler.noScaling,
-        style: TextStyle(fontSize: 45.sp),
+        style: Styles.headerText(),
       ),
       subtitle: Text(
         subtitle,
         textScaler: TextScaler.noScaling,
-        style: TextStyle(fontSize: 40.sp),
+        style: Styles.mediumText(fontSize: 65.sp),
       ),
     );
   }

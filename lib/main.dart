@@ -10,6 +10,8 @@ import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
@@ -42,6 +44,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
@@ -77,6 +80,15 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
+
+  final customPageCubit = serviceLocator<CustomPageCubit>();
+  await customPageCubit.fetchActivate();
+
+  final isActivated = customPageCubit.state.activate?.customPage ?? false;
+
+  final initialRoute = isActivated ? Routes.PAGEPREVIEW : Routes.HOME;
+
+  AppPages.initializeRouter(initialRoute);
   runApp(
     LocalizationService.rootWidget(
       // child: DevicePreview(
@@ -139,6 +151,10 @@ class _MyAppState extends State<MyApp> {
           create: (BuildContext context) =>
               serviceLocator<MainCategoriesCubit>()..loadData(),
         ),
+        // BlocProvider(
+        //   create: (BuildContext context) =>
+        //       serviceLocator<MainCategoriesCubit>()..getMainCategoryCustomPage(),
+        // ),
         BlocProvider(
           create: (context) =>
               LocationSocketCubit(repository: serviceLocator()),
@@ -177,6 +193,9 @@ class _MyAppState extends State<MyApp> {
         // ),
         BlocProvider(
           create: (context) => ThemeCubit(),
+        ),
+        BlocProvider<CustomPageCubit>(
+          create: (context) => serviceLocator()..fetchActivate(),
         ),
         BlocProvider(
           create: (context) => serviceLocator<StreamCubit>()
@@ -267,7 +286,7 @@ class _MyAppState extends State<MyApp> {
           create: (context) => CompleteNoSocketCubit(
                                     repository: serviceLocator()),
         ),
-        
+
         // context.read<LocationSocketCubit>().updateDriverLocationOn();
       ],
       child: ScreenUtilInit(
@@ -282,32 +301,35 @@ class _MyAppState extends State<MyApp> {
           return BlocBuilder<ThemeCubit, ThemeStates>(
             builder: (BuildContext context, state) {
               return FutureBuilder<bool>(
-                future: CacheManager.getMode(),
-                builder: (context, snapshot) {
-                  return MaterialApp.router(
-                    builder: (context, child) {
-                      return MediaQuery(
-                        data: MediaQuery.of(context)
-                            .copyWith(textScaler: TextScaler.noScaling),
-                        child: child!,
-                      );
-                    },
-                    themeMode: (snapshot.data ?? false)
-                        ? ThemeMode.dark
-                        : ThemeMode.light,
-                    theme: lightTheme,
-                    darkTheme: darkTheme,
-                    title: '49',
-                    debugShowCheckedModeBanner: false,
-                    routerConfig: AppPages.router,
-                    localizationsDelegates: context.localizationDelegates,
-                    supportedLocales: context.supportedLocales,
-                    locale: context.locale,
-                    // for device preview package
-                    // builder: DevicePreview.appBuilder,
-                  );
-                },
-              );
+                  future: CacheManager.getMode(),
+                  builder: (context, snapshot) {
+                    return BlocBuilder<CustomPageCubit,CustomPageState>(
+                      builder: (BuildContext context, custom) {
+                        return  MaterialApp.router(
+                          builder: (context, child) {
+                            return MediaQuery(
+                              data: MediaQuery.of(context)
+                                  .copyWith(textScaler: TextScaler.noScaling),
+                              child: child!,
+                            );
+                          },
+                          themeMode: (snapshot.data ?? false)
+                              ? ThemeMode.dark
+                              : ThemeMode.light,
+                          theme: lightTheme,
+                          darkTheme: darkTheme,
+                          title: '49',
+                          debugShowCheckedModeBanner: false,
+                          routerConfig: AppPages.router,
+                          localizationsDelegates: context.localizationDelegates,
+                          supportedLocales: context.supportedLocales,
+                          locale: context.locale,
+                          // for device preview package
+                          // builder: DevicePreview.appBuilder,
+                        );
+                      },
+                    );
+                  });
             },
           );
         },

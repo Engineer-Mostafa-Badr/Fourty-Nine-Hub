@@ -117,7 +117,6 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripC
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/partial_payment_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/rider_in_start_location_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_driver_type_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_payment_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/create_trip_request_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_expired_trip_cubit.dart';
@@ -321,22 +320,25 @@ import 'routes.dart';
 class AppPages {
   AppPages._();
 
-  static final router = GoRouter(
+  static late final GoRouter router;
+  static  initializeRouter(String initialRoute) {
+    router = GoRouter(
+    initialLocation: initialRoute,
     routes: <RouteBase>[
       GoRoute(
-        path: Routes.HOME,
-        builder: (context, state) => MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => serviceLocator<SliderCubit>(),
-            ),
-            BlocProvider(
-              create: (context) => serviceLocator<ThumbnailsCubit>(),
-            ),
-          ],
-          child: const FourtyNineView(),
+    path: Routes.HOME,
+    builder: (context, state) => MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => serviceLocator<SliderCubit>(),
         ),
-        routes: <RouteBase>[
+        BlocProvider(
+          create: (context) => serviceLocator<ThumbnailsCubit>(),
+        ),
+      ],
+      child: const FourtyNineView(),
+    ),
+        routes: [
           GoRoute(
             path: Routes.CUSTOMPAGE,
             name: Routes.CUSTOMPAGE,
@@ -354,7 +356,7 @@ class AppPages {
                           create: (context) => serviceLocator<ThumbnailsCubit>(),
                         ),
                       ],
-                      child: const PagePreview(),
+                      child:  PagePreview(state: state.extra as dynamic,),
                     ),),
               ]
           ),
@@ -1139,10 +1141,10 @@ class AppPages {
           GoRoute(
               path: Paths.SNAP,
               name: Routes.SNAP,
-              builder: (context, state) => const SnapView()),
+              builder: (context, state) =>  SnapView()),
           // Spotlight
           GoRoute(
-              path: Paths.SPOTLIGHT,
+                   path: Paths.SPOTLIGHT,
               name: Routes.SPOTLIGHT,
               builder: (context, state) => MultiBlocProvider(
                     providers: [
@@ -2218,6 +2220,6 @@ class AppPages {
           ),
         ],
       ),
-    ],
-  );
+    ]);
+  }
 }

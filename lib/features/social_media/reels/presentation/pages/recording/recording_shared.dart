@@ -1,17 +1,22 @@
 import 'dart:io';
 
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import 'mix_voices.dart';
 import 'my_voice.dart';
 import 'other_voice.dart';
-
+import 'package:path/path.dart' as path;
 import 'package:easy_localization/easy_localization.dart';
 
 class ReelsRecordingScreen extends StatefulWidget {
@@ -92,39 +97,39 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
               },
             ),
           ),
-          SizedBox(
-            height: 20.h,
-          ),
+          // SizedBox(
+          //   height: 20.h,
+          // ),
         ],
       ),
-      bottomNavigationBar: SizedBox(
-        height: kToolbarHeight,
-        child: PageView.builder(
-          controller: _controller,
-          itemCount: widget.voiceSignedUrl == null ? 1 : options.length,
-          onPageChanged: (int index) {
-            setState(() {
-              selectedIndex = index;
-            });
-          },
-          itemBuilder: (context, index) {
-            bool isSelected = index == selectedIndex;
-            return Transform.scale(
-              scale: isSelected ? 1.2 : 1.0,
-              child: Center(
-                child: Text(
-                 widget.voiceSignedUrl == null ? options[0] : options[index],
-                  style: TextStyle(
-                    // color: isSelected? Colors.black:Colors.black,
-                    fontSize: isSelected ? 35.sp : 30.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
+      // bottomNavigationBar: SizedBox(
+      //   height: kToolbarHeight,
+      //   child: PageView.builder(
+      //     controller: _controller,
+      //     itemCount: widget.voiceSignedUrl == null ? 1 : options.length,
+      //     onPageChanged: (int index) {
+      //       setState(() {
+      //         selectedIndex = index;
+      //       });
+      //     },
+      //     itemBuilder: (context, index) {
+      //       bool isSelected = index == selectedIndex;
+      //       return Transform.scale(
+      //         scale: isSelected ? 1.2 : 1.0,
+      //         child: Center(
+      //           child: Text(
+      //            widget.voiceSignedUrl == null ? options[0] : options[index],
+      //             style: TextStyle(
+      //               // color: isSelected? Colors.black:Colors.black,
+      //               fontSize: isSelected ? 35.sp : 30.sp,
+      //               fontWeight: FontWeight.bold,
+      //             ),
+      //           ),
+      //         ),
+      //       );
+      //     },
+      //   ),
+      // ),
     );
   }
 }
@@ -183,6 +188,19 @@ class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
       ..setLooping(true);
   }
 
+  Future<String> applyFilterAndSaveVideo(String originalPath, String filterCommand) async {
+    final tempDir = Directory.systemTemp;
+    final filteredVideoPath = '${tempDir.path}/filtered_video.mp4';
+
+    final command = '-i $originalPath -vf "$filterCommand" $filteredVideoPath';
+
+    await FFmpegKit.execute(command).then((session) {
+      session.getReturnCode();
+    });
+
+    return filteredVideoPath;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -207,12 +225,27 @@ class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
                       builder: (context, state) {
                         return ElevatedButton(
                             onPressed: () async {
-                              print('audioMedia ${widget.audioMediaId}');
-                              // print('audioPath ${widget.videoPath}');
-                             // await context.read<ReelsCubit>().uploadReel(
-                             //      File(widget.videoPath),
-                             //      File(widget.thumbPath),widget.isAudioOriginal,audioMediaId: widget.audioMediaId);
-                            },
+                              print('wwwwwwwwwwwwwwwww${widget.videoPath}');
+                              print('wwwwwwwwwwwwwwwww${widget.audioMediaId}');
+                              print('wwwwwwwwwwwwwwwww${widget.thumbPath}');
+                              final filteredPath =
+                              await applyFilterAndSaveVideo(
+                                  widget.videoPath, 'hue=s=0');
+                              final file = File(filteredPath);
+                              final fileType =
+                              _determineFileType(file.path);
+                              final fileSize = await file.length();
+
+                              await serviceLocator<StoryCubit>()
+                                  .uploadStoryVideoOrImage(
+                                file,
+                                fileType,
+                                fileSize,
+                                description: '',
+                              )
+                                  .then((value) {
+                                showSuccessMessage(context, LocaleKeys.storyUploaded.localize);
+                              });},
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.PRIMARY_COLOR,
                                 textStyle:
@@ -291,5 +324,16 @@ class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  String _determineFileType(String filePath) {
+    final extension = path.extension(filePath).toLowerCase();
+    if (extension == '.mp4') {
+      return 'video/mp4';
+    } else if (['.jpg', '.jpeg', '.png'].contains(extension)) {
+      return 'image/jpeg';
+    } else {
+      throw Exception('Unsupported file type');
+    }
   }
 }

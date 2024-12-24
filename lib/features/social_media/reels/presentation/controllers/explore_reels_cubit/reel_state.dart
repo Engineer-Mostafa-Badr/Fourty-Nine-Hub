@@ -1,10 +1,14 @@
 part of 'reel_cubit.dart';
 
+enum ReelsStates { loading, initial, success,uploadSuccess,error }
 class ReelsState {
+  final ReelsStates status;
+  final Failure? failure;
   final bool isCreatingReply;
 
-  List<Reel> globalReels;
-  final List<Reel>? reelsForFollower;
+
+   List<Reel> globalReels;
+  final List<Reel>? reelsForFollowing;
 
   final List<Reel>? reelsForAudio;
   final int? playingIndex;
@@ -57,13 +61,17 @@ class ReelsState {
   final bool isInitialized;
   final bool isPlaying;
   final bool showPlayPauseIcon;
+  final String? selectedPrivacy;
+  final List<UploadFileEntity>? video;
   ReelsState({
+    this.status = ReelsStates.loading,
+    this.failure,
     this.isCreatingReelView,
     this.isCreatingReply = false,
     this.reelViewErrorMessage,
     this.comments = const [],
     this.reelViewSuccess,
-    this.reelsForFollower,
+    this.reelsForFollowing,
     this.isInitialized = false,
     this.isPlaying = false,
     this.showPlayPauseIcon = true,
@@ -96,14 +104,18 @@ class ReelsState {
     this.isUploadingReel = false,
     this.uploadReelErrorMessage,
     this.uploadReelSuccess,
+    this.selectedPrivacy,
+    this.video,
   });
 
   ReelsState copyWith({
+    Failure? failure,
+    ReelsStates? status,
     bool? isCreatingReply,
     bool? isCreatingReelView,
     String? reelViewErrorMessage,
     bool? reelViewSuccess,
-    List<Reel>? reelsForFollower,
+    List<Reel>? reelsForFollowing,
     bool? reelsForFollowerIsLoading,
     bool? reelsForFollowerHasReachedMax,
     int? reelsForFollowerCurrentPage,
@@ -138,8 +150,12 @@ class ReelsState {
     bool? isUploadingReel,
     String? uploadReelErrorMessage,
     bool? uploadReelSuccess,
+    String? selectedPrivacy,
+    List<UploadFileEntity>? video
   }) {
     return ReelsState(
+      status: status ?? this.status,
+      failure: failure ?? this.failure,
       isCreatingReply: isCreatingReply ?? this.isCreatingReply,
       comments: comments ?? this.comments,
       isCreatingReelView: isCreatingReelView ?? this.isCreatingReelView,
@@ -176,7 +192,7 @@ class ReelsState {
       reelSaveResponse: reelSaveResponse ?? this.reelSaveResponse,
       reelShareResponse: reelShareResponse ?? this.reelShareResponse,
       playingIndex: playingIndex ?? this.playingIndex,
-      reelsForFollower: reelsForFollower ?? this.reelsForFollower,
+      reelsForFollowing: reelsForFollowing ?? this.reelsForFollowing,
       reelsForFollowerCurrentPage:
           reelsForFollowerCurrentPage ?? this.reelsForFollowerCurrentPage,
       reelsForFollowerHasReachedMax:
@@ -186,6 +202,8 @@ class ReelsState {
       isInitialized: isInitialized ?? this.isInitialized,
       isPlaying: isPlaying ?? this.isPlaying,
       showPlayPauseIcon: showPlayPauseIcon ?? this.showPlayPauseIcon,
+      selectedPrivacy: selectedPrivacy ?? this.selectedPrivacy,
+      video: video ?? this.video,
     );
   }
 }

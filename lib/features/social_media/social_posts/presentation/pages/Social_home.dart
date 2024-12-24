@@ -114,7 +114,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                   ),
                 ),
           drawer: widget.params?.hideAppBar==true ? null : const DrawerWidget(),
-          bottomNavigationBar: BottomNavigator(
+          bottomNavigationBar:widget.params?.hideAppBar==true ? null : BottomNavigator(
             scrollController: scrollController,
             isScrollingDown: _isScrollingDown,
             mainCategory: 2,

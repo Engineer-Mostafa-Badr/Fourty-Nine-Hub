@@ -15,6 +15,8 @@ abstract class FourtyNineRepository {
 
   Future<Either<Failure, List<MainCategoryEntity>>> getMainCategories(
       MainCategoriesParams params);
+  Future<Either<Failure, List<MainCategoryEntity>>> getMainCategoriesCustomPage(
+      MainCategoriesParams params);
 
   Future<Either<Failure, MainCategoryEntity>> getMainCategoryDetails(String id);
 

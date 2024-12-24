@@ -3,10 +3,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/unified_widget_view.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../routes/routes.dart';
@@ -73,9 +81,39 @@ class _SpotlightViewState extends State<SpotlightView> {
   Widget build(BuildContext context) {
     final userCubit = serviceLocator<UserCubit>();
     final isLoggedIn = userCubit.isLoggedIn;
+    final userId = userCubit.state.data?.id ?? '';
 
     return Scaffold(
-      appBar: _buildAppBar(context),
+      appBar: BackAppBar(label: LocaleKeys.spotlight_title.tr(),
+      actions: [
+        IconButton(
+          onPressed: () {
+            context.push(
+              Routes.OTHERSACCOUNT,
+              extra: userId,
+            );
+          },
+          icon:  Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: Icon(
+              Icons.person,
+              size: 50.sp,
+            ),
+          ),
+        ),
+          IconButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (_) =>
+                    const SearchAppUsers());
+              },
+              icon: Icon(
+                Icons.search,
+                size: 50.sp,
+              )),
+      ],
+      ),
       body: isLoggedIn
           ? CustomScrollView(
               controller: _scrollController,
@@ -111,37 +149,6 @@ class _SpotlightViewState extends State<SpotlightView> {
     );
   }
 
-  AppBar _buildAppBar(BuildContext context) {
-    final userCubit = serviceLocator<UserCubit>();
-    final userId = userCubit.state.data?.id ?? '';
-
-    return AppBar(
-      elevation: 2,
-      title: Text(
-        LocaleKeys.spotlight_title.tr(),
-        textScaler: TextScaler.noScaling,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 55.sp),
-      ),
-      actions: [
-        IconButton(
-          onPressed: () {
-            context.push(
-              Routes.OTHERSACCOUNT,
-              extra: userId,
-            );
-          },
-          icon: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4.0),
-            child: Icon(
-              Icons.person,
-              size: 35,
-              color: Colors.red,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 }
 
 class FriendsList extends StatelessWidget {
@@ -157,7 +164,7 @@ class FriendsList extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              LocaleKeys.friends_title.tr(), // Localized text
+              LocaleKeys.friends_title.tr(),
               textScaler: TextScaler.noScaling,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50.sp),
             ),
@@ -258,11 +265,11 @@ class _FollowingSectionState extends State<FollowingSection> {
           ),
         ),
         SizedBox(
-          height: MediaQuery.of(context).size.width * 0.7,
+          height: MediaQuery.of(context).size.width * 0.6,
           width: double.infinity,
           child: BlocConsumer<ReelsCubit, ReelsState>(
             builder: (context, state) {
-              if (state.reelsForFollower?.isEmpty ?? false) {
+              if (state.reelsForFollowing?.isEmpty??false) {
                 return const Center(child: CupertinoActivityIndicator());
               }
               return Stack(
@@ -279,15 +286,15 @@ class _FollowingSectionState extends State<FollowingSection> {
                       controller: _scrollController,
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      itemCount: (state.reelsForFollower?.length ?? 0),
+                      itemCount: (state.reelsForFollowing?.length??0),
                       itemBuilder: (context, index) {
-                        final reel = state.reelsForFollower![index];
+                        final reel = state.reelsForFollowing![index];
                         return SizedBox(
                           width: MediaQuery.of(context).size.width / 2.5,
                           child: Padding(
                             padding: EdgeInsets.symmetric(
-                                horizontal: 4.0, vertical: 12.h),
-                            child: _buildReelCard(context, reel, index),
+                                horizontal: 20.w, vertical: 12.h),
+                            child: _buildReelCard(context, reel,index),
                           ),
                         );
                       },
@@ -310,7 +317,7 @@ class _FollowingSectionState extends State<FollowingSection> {
     );
   }
 
-  Widget _buildReelCard(BuildContext context, Reel reel, int index) {
+  Widget _buildReelCard(BuildContext context, Reel reel,int index) {
     return GestureDetector(
       onTap: () async {
         await Navigator.push(
@@ -362,7 +369,7 @@ class _FollowingSectionState extends State<FollowingSection> {
                   body: UnifiedReelItem(
                     reel: reel,
                     isVisible: true,
-                    index: index,
+                    index:index,
                     itemType: ReelItemType.spotlight,
                   ),
                   // MainReelItem(
@@ -384,31 +391,63 @@ class _FollowingSectionState extends State<FollowingSection> {
         elevation: 8,
         clipBehavior: Clip.hardEdge,
         child: Stack(
+          alignment: AlignmentDirectional.bottomStart,
           children: [
+            // Image.network(
+            //   reel.thumbnailSignedUrl,
+            //   width: double.infinity,
+            //   height: double.infinity,
+            //   fit: BoxFit.cover,
+            //   errorBuilder: (context, error, stackTrace) =>
+            //       const Center(child: CupertinoActivityIndicator()),
+            // ),
+            // Positioned(
+            //   bottom: 8,
+            //   left: 2,
+            //   child: Row(
+            //     children: [
+            //       const Icon(
+            //         Icons.play_arrow,
+            //         color: Colors.white,
+            //         size: 16,
+            //       ),
+            //       const SizedBox(width: 4),
+            //       Text(
+            //         reel.viewCount.toString(),
+            //         textScaler: TextScaler.noScaling,
+            //         style: const TextStyle(color: Colors.white),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             Image.network(
-              reel.thumbnailSignedUrl,
+             reel.thumbnailSignedUrl,
               width: double.infinity,
               height: double.infinity,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) =>
-                  const Center(child: CupertinoActivityIndicator()),
+              const SizedBox.shrink(),
             ),
-            Positioned(
-              bottom: 8,
-              left: 2,
-              child: Row(
+            Padding(
+              padding:  EdgeInsets.all(12.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const Icon(
-                    Icons.play_arrow,
-                    color: Colors.white,
-                    size: 16,
+                  CircleAvatar(
+                    radius: 32.w,
+                    backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
+                    child: ImageFromInternet(
+                      image: reel.user.profilePictureSignedUrl ??
+                          UIConst.profilePlaceHolder,
+                      height: 60.h,
+                      width: 60.w,
+                      isCircle: true,
+                    ),
                   ),
-                  const SizedBox(width: 4),
-                  Text(
-                    reel.viewCount.toString(),
-                    textScaler: TextScaler.noScaling,
-                    style: const TextStyle(color: Colors.white),
-                  ),
+                  SizedBox(height: 10.h,),
+                  Label(text: '${reel.user.firstName} ${_getFirstTwoWords(reel.user.lastName)}'),
+                  Label( text: formatDate('${reel.createdAt}'),),
                 ],
               ),
             ),
@@ -417,6 +456,35 @@ class _FollowingSectionState extends State<FollowingSection> {
       ),
     );
   }
+  String formatDate(String createdAt) {
+    final DateTime dateTime = DateTime.parse(createdAt);
+    final DateTime now = DateTime.now();
+
+    final DateTime today = DateTime(now.year, now.month, now.day);
+    final DateTime yesterday = today.subtract(const Duration(days: 1));
+
+    if (dateTime.isAfter(today)) {
+      return LocaleKeys.today.localize;
+    } else if (dateTime.isAfter(yesterday)) {
+      return LocaleKeys.yesterday.localize;
+    } else {
+      return context.locale == Locales.english
+          ? DateFormat('dd/MM/yyyy', 'en').format(dateTime)
+          : DateFormat('yyyy/MM/dd', 'ar').format(dateTime); // Format: 12-3-2022
+    }
+  }
+
+  String _getFirstTwoWords(String fullName) {
+    List<String> words = fullName.split(" ");
+    if (words.length > 1) {
+      // Capitalize the first letter of each word
+      words = words.map((word) {
+        return word[0].toUpperCase() + word.substring(1).toLowerCase();
+      }).toList();
+    }
+    return words.length > 1 ? '${words[0]} ${words[1]}' : words[0];
+  }
+
 }
 
 class DiscoverSection extends StatefulWidget {
@@ -446,25 +514,25 @@ class DiscoverSectionState extends State<DiscoverSection> {
         Flexible(
           child: BlocBuilder<ReelsCubit, ReelsState>(
             builder: (context, state) {
-              if ((state.globalReels.isEmpty ?? false) &&
-                  !(state.globalReelsIsLoading ?? false)) {
+              if ((state.globalReels.isEmpty) && !(state.globalReelsIsLoading)) {
                 return const Center(child: CupertinoActivityIndicator());
               }
 
               return GridView.builder(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 20.w,),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                // GridView won't scroll independently
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8.h,
+                  crossAxisSpacing: 8.w,
                   childAspectRatio: 0.7,
                 ),
-                itemCount: (state.globalReels.length ?? 0) +
-                    (widget.isFetchingMore ? 1 : 0),
+                itemCount:
+                    (state.globalReels.length) + (widget.isFetchingMore ? 1 : 0),
                 itemBuilder: (context, index) {
-                  if (index == (state.globalReels.length ?? 0) &&
+                  if (index == (state.globalReels.length) &&
                       widget.isFetchingMore) {
                     return const Padding(
                       padding: EdgeInsets.all(8.0),
@@ -474,7 +542,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
                     );
                   }
                   final reel = state.globalReels[index];
-                  return _buildReelCard(context, reel, index);
+                  return _buildReelCard(context, reel,index);
                 },
               );
             },
@@ -484,7 +552,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
     );
   }
 
-  Widget _buildReelCard(BuildContext context, Reel reel, int index) {
+  Widget _buildReelCard(BuildContext context, Reel reel,int index) {
     return GestureDetector(
       onTap: () async {
         await Navigator.push(
@@ -535,7 +603,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
                 ),
                 body: UnifiedReelItem(
                   reel: reel,
-                  index: index,
+                  index:index,
                   isVisible: true,
                   itemType: ReelItemType.spotlight,
                 ),
@@ -553,31 +621,58 @@ class DiscoverSectionState extends State<DiscoverSection> {
         elevation: 8,
         clipBehavior: Clip.hardEdge,
         child: Stack(
+          alignment: AlignmentDirectional.bottomStart,
           children: [
+
+            // Positioned(
+            //   bottom: 8,
+            //   left: 2,
+            //   child: Row(
+            //     children: [
+            //       const Icon(
+            //         Icons.play_arrow,
+            //         color: Colors.white,
+            //         size: 16,
+            //       ),
+            //       const SizedBox(
+            //           width: 4
+            //       ),
+            //       Text(
+            //         reel.viewCount.toString(),
+            //         textScaler: TextScaler.noScaling,
+            //         style: const TextStyle(color: Colors.white),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             Image.network(
               reel.thumbnailSignedUrl,
               width: double.infinity,
               height: double.infinity,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) =>
-                  const Center(child: CupertinoActivityIndicator()),
+              const SizedBox.shrink(),
             ),
-            Positioned(
-              bottom: 8,
-              left: 2,
-              child: Row(
+            Padding(
+              padding:  EdgeInsets.all(12.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const Icon(
-                    Icons.play_arrow,
-                    color: Colors.white,
-                    size: 16,
+                  CircleAvatar(
+                    radius: 32.w,
+                    backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
+                    child: ImageFromInternet(
+                      image: reel.user.profilePictureSignedUrl ??
+                          UIConst.profilePlaceHolder,
+                      height: 60.h,
+                      width: 60.w,
+                      isCircle: true,
+                    ),
                   ),
-                  const SizedBox(width: 4),
-                  Text(
-                    reel.viewCount.toString(),
-                    textScaler: TextScaler.noScaling,
-                    style: const TextStyle(color: Colors.white),
-                  ),
+                  SizedBox(height: 10.h,),
+                  Label(text: '${reel.user.firstName} ${_getFirstTwoWords(reel.user.lastName)}'),
+                  Label( text: formatDate('${reel.createdAt}')),
                 ],
               ),
             ),
@@ -586,4 +681,33 @@ class DiscoverSectionState extends State<DiscoverSection> {
       ),
     );
   }
+  String formatDate(String createdAt) {
+    final DateTime dateTime = DateTime.parse(createdAt);
+    final DateTime now = DateTime.now();
+
+    final DateTime today = DateTime(now.year, now.month, now.day);
+    final DateTime yesterday = today.subtract(const Duration(days: 1));
+
+    if (dateTime.isAfter(today)) {
+      return LocaleKeys.today.localize;
+    } else if (dateTime.isAfter(yesterday)) {
+      return LocaleKeys.yesterday.localize;
+    } else {
+      return context.locale == Locales.english
+          ? DateFormat('dd/MM/yyyy', 'en').format(dateTime)
+          : DateFormat('yyyy/MM/dd', 'ar').format(dateTime); // Format: 12-3-2022
+    }
+  }
+
+  String _getFirstTwoWords(String fullName) {
+    List<String> words = fullName.split(" ");
+    if (words.length > 1) {
+      // Capitalize the first letter of each word
+      words = words.map((word) {
+        return word[0].toUpperCase() + word.substring(1).toLowerCase();
+      }).toList();
+    }
+    return words.length > 1 ? '${words[0]} ${words[1]}' : words[0];
+  }
+
 }

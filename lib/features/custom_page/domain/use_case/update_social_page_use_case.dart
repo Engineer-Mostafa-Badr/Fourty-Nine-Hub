@@ -18,12 +18,14 @@ class UpdateSocialPageUseCase extends UseCase<bool, SocialPageParams> {
 class SocialPageParams {
   final bool face;
   final bool insta;
+  final bool tweet;
 
-  SocialPageParams({required this.face, this.insta = false});
+  SocialPageParams({required this.face, this.insta = false,this.tweet = false});
 
   Map<String, dynamic> toJson() => {
         "49Face": face,
         "49Insta": insta,
+        "49Tweet": tweet,
 
         // 'fcmToken': 'fcmToken',
       };

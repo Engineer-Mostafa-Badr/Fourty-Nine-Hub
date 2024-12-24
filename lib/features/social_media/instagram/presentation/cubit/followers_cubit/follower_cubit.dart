@@ -22,20 +22,20 @@ class FollowCubit extends Cubit<FollowState> {
   FollowCubit(this._allFollowersUseCase, this._allFollowingUseCase, {this.pageSize = 10})
       : super(FollowState());
 
-  void loadInitialData(String search) async {
+  void loadInitialData(String search,String otherId) async {
     emit(state.copyWith(status: FollowStates.loading, failure: null));
     followers.clear();
     currentPage = 1;
     hasMoreData = true;
-    await fetchAllFollowers(search);
+    await fetchAllFollowers(search,otherId);
   }
 
-  void loadInitialDataFollowing(String search) async {
+  void loadInitialDataFollowing(String search,String otherId) async {
     emit(state.copyWith(status: FollowStates.loading, failure: null));
     following.clear();
     currentPage = 1;
     hasMoreData = true;
-    await fetchAllFollowing(search);
+    await fetchAllFollowing(search,otherId);
   }
   @override
   Future<void> close() {
@@ -44,14 +44,14 @@ class FollowCubit extends Cubit<FollowState> {
   }
 
   Future<void> _fetchData<T>(
-      String search, Function(TwitterFeedParams) useCase, List<T> dataList) async {
+      String search, String otherId,Function(TwitterFeedParams) useCase, List<T> dataList) async {
     if (!hasMoreData || isLoadingMore) return;
 
     emit(state.copyWith(status: FollowStates.loading));
     isLoadingMore = true;
 
     final response = await useCase(
-      TwitterFeedParams(page: currentPage, limit: pageSize, search: search),
+      TwitterFeedParams(page: currentPage, limit: pageSize, search: search,otherId: otherId),
     );
 
     response.fold(
@@ -74,12 +74,12 @@ class FollowCubit extends Cubit<FollowState> {
     );
   }
 
-  Future<void> fetchAllFollowers(String search) async {
-    await _fetchData(search, _allFollowersUseCase.call, followers);
+  Future<void> fetchAllFollowers(String search,String otherId) async {
+    await _fetchData(search, otherId,_allFollowersUseCase, followers);
   }
 
-  Future<void> fetchAllFollowing(String search) async {
-    await _fetchData(search, _allFollowingUseCase.call, following);
+  Future<void> fetchAllFollowing(String search,String otherId) async {
+    await _fetchData(search, otherId,_allFollowingUseCase, following);
   }
 }
 

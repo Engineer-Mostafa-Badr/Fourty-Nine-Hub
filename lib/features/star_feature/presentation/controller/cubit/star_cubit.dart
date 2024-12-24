@@ -204,6 +204,6 @@ class StarCubit extends Cubit<StarState> {
 
   void clearSelectedVideos() {
     selectedVideo = [];
-    emit(state.copyWith(video: [])); // Emit updated state to notify listeners
+    emit(state.copyWith(video: []));
   }
 }

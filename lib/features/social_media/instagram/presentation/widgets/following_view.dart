@@ -15,7 +15,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 class FollowingView extends StatefulWidget {
-  const FollowingView({super.key});
+  const FollowingView({super.key, required this.otherId});
+  final String otherId;
 
   @override
   State<FollowingView> createState() => _FollowingViewState();
@@ -33,20 +34,20 @@ class _FollowingViewState extends State<FollowingView> {
     super.initState();
     _cubit = context.read<FollowCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
-    _cubit.loadInitialDataFollowing(search);
+    _cubit.loadInitialDataFollowing(search,widget.otherId);
 
     _cubit.searchController.addListener(() {
       if (isFirstSearchListenerCall) {
         isFirstSearchListenerCall = false;
         return;
       }
-      _cubit.loadInitialDataFollowing( _cubit.searchController.text);
+      _cubit.loadInitialDataFollowing( _cubit.searchController.text,widget.otherId);
     });
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      _cubit.fetchAllFollowing(_cubit.searchController.text);
+      _cubit.fetchAllFollowing(_cubit.searchController.text,widget.otherId);
     }
   }
 

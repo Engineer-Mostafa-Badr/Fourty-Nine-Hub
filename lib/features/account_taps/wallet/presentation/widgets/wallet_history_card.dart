@@ -48,7 +48,6 @@ class WalletHistoryCard extends StatelessWidget {
             color: Colors.white,
             size: 30.sp,
           )),
-      onTap: () => onTap!(),
     );
   }
 }

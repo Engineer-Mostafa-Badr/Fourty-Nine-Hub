@@ -709,6 +709,7 @@ abstract class  LocaleKeys {
   static const noFavouriteSubCategory = 'noFavouriteSubCategory';
   static const face = 'face';
   static const insta = 'insta';
+  static const Tweet = 'Tweet';
   static const socialPage = 'socialPage';
   static const errorLoadingSocialPage = 'errorLoadingSocialPage';
   static const updateSuccessfully = 'updateSuccessfully';
@@ -1143,6 +1144,7 @@ abstract class  LocaleKeys {
   static const Wallet = 'Wallet';
   static const youHaveToFillYourNumberOfPassenger = 'youHaveToFillYourNumberOfPassenger';
   static const waitingForReplies = 'waitingForReplies';
+  static const yesterday = 'yesterday';
   static const todayAppointments = 'todayAppointments';
   static const noAppointments = 'noAppointments';
   static const unhandledAppointments = 'unhandledAppointments';
@@ -1186,5 +1188,15 @@ abstract class  LocaleKeys {
   static const allAppointments = 'allAppointments';
   static const rejectedAppointment = 'rejectedAppointment';
   static const continueUsingChatServices = 'continueUsingChatServices';
+  static const uploadSuccessfully = 'uploadSuccessfully';
+  static const addDescription = 'addDescription';
+  static const onlyViewThisPost = 'onlyViewThisPost';
+  static const friendsViewThisPost = 'friendsViewThisPost';
+  static const followersViewThisPost = 'followersViewThisPost';
+  static const friendsAndFollowersViewThisPost = 'friendsAndFollowersViewThisPost';
+  static const everyoneViewThisPost = 'everyoneViewThisPost';
+  static const storyUploaded = 'storyUploaded';
+  static const story = 'story';
+  static const next = 'next';
 
 }

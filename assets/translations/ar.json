@@ -720,6 +720,7 @@
   "noFavouriteSubCategory": "لا توجد فئة فرعية مفضلة .",
   "face": "فيسبوك 49",
   "insta": "إنستا 49",
+  "Tweet": "تغريده 49",
   "socialPage": "صفحة اجتماعية",
   "errorLoadingSocialPage": "خطأ في تحميل الصفحة الاجتماعية",
   "updateSuccessfully": "تم التحديث بنجاح",
@@ -1156,6 +1157,7 @@
     "youHaveToFillYourNumberOfPassenger": "يجب عليك ملء عدد الركاب",
     "waitingForReplies":"...في انتظار الردود",
 
+  "yesterday": "الامس",
   "todayAppointments": "مواعيد اليوم",
   "noAppointments": "لا توجد مواعيد",
   "unhandledAppointments": "المواعيد غير المنجزة",
@@ -1198,5 +1200,15 @@
   "noEmergencyRequests": "لا توجد طلبات الطوارئ",
   "allAppointments": "جميع الحجوزات",
   "rejectedAppointment": "تم رفض هذا الحجز من قبل",
-  "continueUsingChatServices":"اكمل باستخدام خدمات المحادثة"
+  "continueUsingChatServices":"اكمل باستخدام خدمات المحادثة",
+  "uploadSuccessfully": "تم التحميل بنجاح",
+  "addDescription": "أضف وصفًا...",
+  "onlyViewThisPost": "أنت فقط من يمكنه عرض هذا المنشور",
+  "friendsViewThisPost": "يمكن للأصدقاء عرض هذا المنشور",
+  "followersViewThisPost": "يمكن للمتابعين عرض هذا المنشور",
+  "friendsAndFollowersViewThisPost": "يمكن للأصدقاء والمتابعين عرض هذا المنشور",
+  "everyoneViewThisPost": "يمكن للجميع عرض هذا المنشور",
+  "storyUploaded": "تم تحميل القصة",
+  "story": "قصة",
+  "next": "التالي"
 }

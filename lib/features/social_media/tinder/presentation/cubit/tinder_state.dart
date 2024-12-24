@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/add_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/anonymous_chat_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/last_seen_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/near_by_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/normal_chat_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/tinder_person_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/domain/last_seen_entity.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/domain/user_data_tinder_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
 import '../../../../fourty_nine/domain/entities/main_category_entity.dart';
@@ -27,13 +29,14 @@ extension DataStateExtension on TinderViewState {
 
 class TinderViewState {
   final TinderStates status;
-  final List<UserData>? userData0;
+  final Failure? failure;
+  final List<UserDataTinderEntity>? userData0;
   final TinderStates? userDataState0;
   final int? currentPage;
 
   final String? gender; // Made nullable
 
-  final List<UserData>? userData;
+  final List<UserDataTinderEntity>? userData;
   final TinderStates? userDataState;
 
   final ProfileUserData? profileUserData;
@@ -52,6 +55,7 @@ class TinderViewState {
   final TinderStates? subCategoryDataState;
 
   final TinderStates? uploadImageState;
+  final UploadFileEntity? newImage;
 
   final SubFavoritesResponse? getFavCategoryModel;
   final CategoryFavoritesResponse? getFavoriteCategoryModel;
@@ -84,11 +88,13 @@ class TinderViewState {
   final NearByModel? isUserNearby;
   final TinderStates? isUserNearbyState;
 
-  final LastSeenModel? lastSeenModel;
+  final LastSeenEntity? lastSeenModel;
   final TinderStates? lastSeenModelState;
+  final bool? isUploading;
 
   TinderViewState({
     this.status = TinderStates.initial,
+    this.failure,
     this.gender = 'female',
     this.mainCategoryResponse,
     this.mainCategoryResponseState = TinderStates.initial,
@@ -96,19 +102,19 @@ class TinderViewState {
     this.anonymousChatResponseState = TinderStates.initial,
     this.normalChatResponse,
     this.normalChatResponseState = TinderStates.initial,
-    this.userData0 = const [],
+    this.userData0,
     this.userDataState0 = TinderStates.initial,
     this.currentPage = 0,
     this.uploadImageState = TinderStates.initial,
     this.profileUserData,
-    this.profileUserState = TinderStates.initial,
+    this.profileUserState =  TinderStates.initial,
     this.addCategoryModel,
     this.addCategoryModelState = TinderStates.initial,
     this.userData = const [],
     this.userDataState = TinderStates.initial,
     this.subCategoryData = const [],
     this.subCategoryDataState = TinderStates.initial,
-    this.gifts = const [],
+    this.gifts =  const [],
     this.giftsState = TinderStates.initial,
     this.position = Offset.zero,
     this.positionState = TinderStates.initial,
@@ -124,21 +130,24 @@ class TinderViewState {
     this.currentStoryIndexState = TinderStates.initial,
     this.isUserNearby,
     this.isUserNearbyState = TinderStates.initial,
-    this.lastSeenModel,
+    this.lastSeenModel ,
     this.lastSeenModelState,
     this.getFavCategoryModel,
     this.getFavoriteCategoryModel,
     this.getFavCategoryModelState,
+    this.newImage,
+    this.isUploading,
   });
 
   // Method to update the state
   TinderViewState copyWith({
     TinderStates? status,
+    Failure? failure,
     String? gender,
-    List<UserData>? userData0,
+    List<UserDataTinderEntity>? userData0,
     TinderStates? userDataState0,
     int? currentPage,
-    List<UserData>? userData,
+    List<UserDataTinderEntity>? userData,
     TinderStates? userDataState,
     List<SubCategoryEntity>? subCategoryData,
     TinderStates? subCategoryDataState,
@@ -158,7 +167,7 @@ class TinderViewState {
     TinderStates? currentStoryIndexState,
     NearByModel? isUserNearby,
     TinderStates? isUserNearbyState,
-    LastSeenModel? lastSeenModel,
+    LastSeenEntity? lastSeenModel,
     TinderStates? lastSeenModelState,
     MainCategoryEntity? mainCategoryEntity,
     TinderStates? mainCategoryResponseState,
@@ -174,9 +183,12 @@ class TinderViewState {
     CategoryFavoritesResponse? FavoriteCategoryList,
     TinderStates? getFavCategoryListState,
     TinderStates? uploadImageState,
+     UploadFileEntity? newImage,
+    bool? isUploading,
   }) {
     return TinderViewState(
       status: status ?? this.status,
+      failure: failure ?? this.failure,
       gender: gender ?? this.gender,
       userData0: userData0 ?? this.userData0,
       userDataState0: userDataState0 ?? this.userDataState0,
@@ -223,9 +235,13 @@ class TinderViewState {
           anonymousChatResponseState ?? this.anonymousChatResponseState,
       anonymousChatResponse:
           anonymousChatResponse ?? this.anonymousChatResponse,
-      mainCategoryResponse: mainCategoryEntity ?? mainCategoryResponse,
+      mainCategoryResponse: mainCategoryEntity ?? this.mainCategoryResponse,
       mainCategoryResponseState:
           mainCategoryResponseState ?? this.mainCategoryResponseState,
+      newImage:
+      newImage ?? this.newImage,
+      isUploading:
+      isUploading ?? this.isUploading,
     );
   }
 }
