@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
@@ -14,6 +12,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:restart_app/restart_app.dart';
 
 class CustomPage extends StatefulWidget {
   const CustomPage({super.key});
@@ -71,12 +70,7 @@ class _CustomPageState extends State<CustomPage> {
                         value: state.activate?.customPage ?? false,
                         onChanged: (v) {
                           controller.updateActivate(v);
-                          // if(state.activate!.customPage ==true){
-                          //   context.pushReplacementNamed(Routes.CUSTOMPAGE);
-                          // }else{
-                          //   context.pushReplacementNamed(Routes.HOME);
-                          // }
-                         // Restart.restartApp();
+                          Restart.restartApp();
                           },
                         activeColor: Colors.red,
                         inactiveThumbColor: Colors.black,
@@ -107,7 +101,7 @@ class _CustomPageState extends State<CustomPage> {
                       style: Styles.mediumText(
                           fontSize: 65.sp, fontWeight: FontWeight.w400)),
                   onTap: () {
-                    context.push(Routes.PAGEPREVIEW);
+                    context.push(Routes.PAGEPREVIEW,extra: state.activate?.customPage ==true);
                   },
                   trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
                 ),
