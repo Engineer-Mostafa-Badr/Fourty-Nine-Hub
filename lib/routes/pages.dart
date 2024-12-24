@@ -172,6 +172,8 @@ import 'package:fourtyninehub/features/star_feature/presentation/controller/cubi
 import 'package:fourtyninehub/features/star_feature/presentation/pages/be_star_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/star_winner_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
+import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percent_cubit.dart';
+import 'package:fourtyninehub/features/ten_percent/presentation/pages/ten_percent_view.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_pick_me/presentation/cubits/cubit/add_new_pick_me_trip_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_pick_me/presentation/views/add_new_pick_me_view.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_brand_usecase.dart';
@@ -1778,6 +1780,15 @@ class AppPages {
               return BlocProvider<StarCubit>(
                   create: (_) =>serviceLocator(),
                   child: const BeStarView());
+            },
+          ),
+       GoRoute(
+            path: Paths.TenPercent,
+            name: Routes.TenPercent,
+            builder: (context, state) {
+              return BlocProvider<TenPercentCubit>(
+                  create: (_) =>serviceLocator(),
+                  child: const TenPercentView());
             },
           ),
 

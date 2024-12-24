@@ -165,6 +165,7 @@ abstract class Routes {
 
   static const TRIP_JOIN = '/TripJoin';
   static const BE_STAR = '/BeAStar';
+  static const TenPercent = '/TenPercent';
   static const BE_STAR_DETAILS = '/BeAStar/BeAStarDetails';
   static const AVAILABLE_TRIPS = '/AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = '/TripJoinRequestNotification';
@@ -326,6 +327,7 @@ abstract class Paths {
 
   static const TRIP_JOIN = 'TripJoin';
   static const BE_STAR = 'BeAStar';
+  static const TenPercent = 'TenPercent';
   static const BE_STAR_DETAILS = 'BeAStarDetails';
   static const AVAILABLE_TRIPS = 'AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = 'TripJoinRequestNotification';

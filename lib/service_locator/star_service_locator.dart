@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_myl_st
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_winner_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
+import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percent_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 class StarServiceLocator {
@@ -48,6 +49,9 @@ class StarServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+        ));
+
+    serviceLocator.registerFactory<TenPercentCubit>(() => TenPercentCubit(
         ));
   }
 }
