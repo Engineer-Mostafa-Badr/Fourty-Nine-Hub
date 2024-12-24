@@ -19,7 +19,8 @@ class GetWalletHistoryUseCase
 }
 
 class WalletHistoryParams {
-  final PaginationParams paginationParams;
+  final int page;
+  final int limit;
 
-  WalletHistoryParams({required this.paginationParams});
+  WalletHistoryParams({required this.page, required this.limit});
 }

@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/constants/constants.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_ad_details_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
@@ -102,10 +103,8 @@ class EndPoints {
   static String getHistoryBalance() {
     return '/user-transactions/balance';
   }
-
-  static String getHistoryWallet() {
-    return '/user-transactions/mainWallet';
-  }
+  static String getHistoryWallet(WalletHistoryParams params) =>
+      '/user-transactions/mainWallet?page=${params.page}&limit=${params.limit}';
 
   static String geMainCategoryWallet(MainCategoryParams params) {
     return '/categories/main/for-subscriptions?page=1&limit=60';
