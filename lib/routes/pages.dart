@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/m
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/pages/privacy_view.dart';
 import 'package:fourtyninehub/features/account_taps/share_app/presentation/pages/share_the_app.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_history_entity.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/balance_wallet_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
@@ -788,7 +789,7 @@ class AppPages {
           GoRoute(
             path: Paths.BALANCE,
             name: Routes.BALANCE,
-            builder: (context, state) => BlocProvider<WalletCubit>(
+            builder: (context, state) => BlocProvider<BalanceCubit>(
               create: (_) => serviceLocator(),
               child: const BalanceWalletView(),
             ),

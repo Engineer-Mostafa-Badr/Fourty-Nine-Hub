@@ -84,9 +84,7 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
           builder: (BuildContext context, state) {
             var users = state.users;
             var filteredUsers = users?.where((user) {
-              String fullName =
-                  '${capitalize(user.firstName)} ${capitalize(user.lastName)}';
-              return fullName
+              return user.email
                   .toLowerCase()
                   .contains(searchController.text.toLowerCase());
             }).toList();
@@ -216,18 +214,18 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                                 itemCount: filteredUsers.length,
                                 itemBuilder: (context, index) {
                                   var user = filteredUsers[index];
-                                  String fullName =
-                                      '${capitalize(user.firstName)} ${capitalize(user.lastName)}';
+                                  // String fullName =
+                                  //     '${capitalize(user.firstName)} ${capitalize(user.lastName)}';
                                   return ListTile(
                                     title: Text(
-                                      fullName,
+                                      user.email,
                                       style: Styles.mediumText(
                                           color: Theme.of(context)
                                               .scaffoldBackgroundColor),
                                     ),
                                     onTap: () {
                                       setState(() {
-                                        searchController.text = fullName;
+                                        searchController.text = user.email;
                                         selectedUsername = user.userName;
                                         showUserList = false;
                                       });

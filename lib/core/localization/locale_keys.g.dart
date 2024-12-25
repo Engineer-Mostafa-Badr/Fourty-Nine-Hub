@@ -1198,5 +1198,7 @@ abstract class  LocaleKeys {
   static const storyUploaded = 'storyUploaded';
   static const story = 'story';
   static const next = 'next';
+  static const transferTenYears = 'transferTenYears';
+  static const transferFiveYears = 'transferFiveYears';
 
 }

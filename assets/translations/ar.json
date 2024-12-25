@@ -1210,5 +1210,7 @@
   "everyoneViewThisPost": "يمكن للجميع عرض هذا المنشور",
   "storyUploaded": "تم تحميل القصة",
   "story": "قصة",
-  "next": "التالي"
+  "next": "التالي",
+  "transferTenYears":"تم نقل رصيد عشر سنوات إلى محفظة الهدايا",
+  "transferFiveYears":"تم نقل رصيد خمس سنوات إلى محفظة الهدايا"
 }

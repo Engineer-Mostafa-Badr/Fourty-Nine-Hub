@@ -44,8 +44,7 @@ class BalanceRemoteDataSourceImpl extends BalanceRemoteDataSource {
   Future<Either<Failure, List<BalanceHistoryModel>>> fetchHistoryBalance(
       BalanceHistoryParams params) async {
     final response = await _apiConsumer.get(
-      EndPoints.getHistoryBalance(),
-      queryParameters: params.paginationParams.toJson(),
+      EndPoints.getHistoryBalance(params),
     );
     return response.fold((l) {
       return Left(l);

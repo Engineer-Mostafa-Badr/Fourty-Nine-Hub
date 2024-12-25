@@ -19,7 +19,9 @@ class GetBalanceHistoryUseCase
 }
 
 class BalanceHistoryParams {
-  PaginationParams paginationParams;
+  final int page;
+  final int limit;
 
-  BalanceHistoryParams({required this.paginationParams});
+  BalanceHistoryParams({required this.page, required this.limit});
+
 }

@@ -1229,5 +1229,7 @@
   "ifUserReachedClick":"If the passenger has reached their destination, press the button",
   "reached":"Reached",
   "running":"Running",
-  "failedTryAgain":"Failed. please try again"
+  "failedTryAgain":"Failed. please try again",
+  "transferTenYears":"Transfer ten years balance done to gift wallet",
+  "transferFiveYears":"Transfer five years balance done to gift wallet"
 }

@@ -59,10 +59,13 @@ class CompetitionCard extends StatelessWidget {
                     child: Stack(
                       children: [
                         Positioned.fill(
-                          child: CircularProgressIndicator(
-                            value: countOfRequest / maxRequests,
-                            strokeWidth: 10,
-                            color: AppColors.SECONDARY_COLOR,
+                          child: Padding(
+                            padding:  EdgeInsets.all(8.w),
+                            child: CircularProgressIndicator(
+                              value: countOfRequest / maxRequests,
+                              strokeWidth: 8,
+                              color: AppColors.SECONDARY_COLOR,
+                            ),
                           ),
                         ),
                         Positioned.fill(

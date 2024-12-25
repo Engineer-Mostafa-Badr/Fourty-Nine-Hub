@@ -1223,7 +1223,9 @@ class CodegenLoader extends AssetLoader{
   "everyoneViewThisPost": "يمكن للجميع عرض هذا المنشور",
   "storyUploaded": "تم تحميل القصة",
   "story": "قصة",
-  "next": "التالي"
+  "next": "التالي",
+  "transferTenYears": "تم نقل رصيد عشر سنوات إلى محفظة الهدايا",
+  "transferFiveYears": "تم نقل رصيد خمس سنوات إلى محفظة الهدايا"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2451,7 +2453,9 @@ static const Map<String,dynamic> en = {
   "ifUserReachedClick": "If the passenger has reached their destination, press the button",
   "reached": "Reached",
   "running": "Running",
-  "failedTryAgain": "Failed. please try again"
+  "failedTryAgain": "Failed. please try again",
+  "transferTenYears": "Transfer ten years balance done to gift wallet",
+  "transferFiveYears": "Transfer five years balance done to gift wallet"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

@@ -56,7 +56,7 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
             child: Screenshot(
               controller: screenshotController,
               child: Container(
-                padding: const EdgeInsets.all(16.0),
+               // padding: const EdgeInsets.all(16.0),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -112,7 +112,7 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.model.fromUsername,
+                              '@${widget.model.fromEmail.split('@')[0]}',
                               style: Styles.mediumText(
                                   fontWeight: FontWeight.bold),
                             ),
@@ -155,7 +155,7 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.model.toUsername,
+                              '@${widget.model.toEmail.split('@')[0]}',
                               style: Styles.mediumText(
                                   fontWeight: FontWeight.bold),
                             ),
@@ -167,13 +167,22 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
                         ),
                       ),
                       ListTile(
-                        trailing: Text(
-                          widget.model.date,
-                          style: Styles.headerText(),
-                        ),
-                        title: Text(
-                          '${LocaleKeys.date.localize}: ',
-                          style: Styles.headerText(fontWeight: FontWeight.w400),
+                        // trailing: Text(
+                        //   '${LocaleKeys.date.localize}: ${widget.model.date}',
+                        //   //widget.model.date,
+                        //   style: Styles.headerText(),
+                        // ),
+                        title: Row(
+                          children: [
+                            Text(
+                              '${LocaleKeys.date.localize}: ',
+                              style: Styles.headerText(fontWeight: FontWeight.w400,color: AppColors.GREY_NORMAL_COLOR),
+                            ),
+                            Text(
+                              widget.model.date,
+                              style: Styles.headerText(),
+                            ),
+                          ],
                         ),
                       ),
                       Sizer(height: 70.h),
@@ -188,7 +197,6 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
               ),
             ),
           ),
-          // Share button placed outside the screenshot area
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton.icon(
