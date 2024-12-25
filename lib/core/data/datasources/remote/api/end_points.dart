@@ -98,6 +98,10 @@ class EndPoints {
       '/favorite-sub-category/$id';
 
   static const getGift = '/subscriber/competitions';
+  static const requestWithdrawWheel = '/wheels/withdrawal';
+  static String requestWithdrawCompetition(String id) {
+    return '/subscriber/request-withdrawal/$id';
+  }
   static const getBalance = '/main-wallet/user-balance';
 
   static String getHistoryBalance() {

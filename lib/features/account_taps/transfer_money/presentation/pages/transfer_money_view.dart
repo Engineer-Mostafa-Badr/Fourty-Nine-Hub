@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -69,6 +70,15 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
               setState(() {
                 selectedUsername = null;
               });
+            }
+            if (state.status == StateStatus.error) {
+              showErrorMessage(
+                context,
+                getFailureMessage(
+                  state.failure!,
+                  context,
+                ),
+              );
             }
           },
           builder: (BuildContext context, state) {

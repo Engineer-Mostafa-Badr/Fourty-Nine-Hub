@@ -20,6 +20,8 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/w
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/delete_subscription_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_gifts_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/request_withdraw_use_case.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/request_withdraw_wheel_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:get_it/get_it.dart';
@@ -82,6 +84,10 @@ class AccountServiceLocator {
         () => GetWalletUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetWalletGiftsUseCase>(
         () => GetWalletGiftsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<RequestWithdrawUseCase>(
+        () => RequestWithdrawUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<RequestWithdrawWheelUseCase>(
+        () => RequestWithdrawWheelUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<MainCategoryUseCase>(
         () => MainCategoryUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<SubCategoryUseCase>(
@@ -129,6 +135,8 @@ class AccountServiceLocator {
         )..loadData());
 
     serviceLocator.registerFactory<GiftCubit>(() => GiftCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
         )..loadData());
