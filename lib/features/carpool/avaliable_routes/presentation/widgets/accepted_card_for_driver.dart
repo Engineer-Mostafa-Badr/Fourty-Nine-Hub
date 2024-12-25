@@ -201,11 +201,15 @@ class _AcceptedCardImageState extends State<AcceptedCardImage> {
           Navigator.of(context).pop();
 
           showSuccessMessage(context, LocaleKeys.done.localize);
+          BlocProvider.of<VerifyCompleteDriverCubit>(context)
+              .getAcceptedTrips();
         } else if (state is CompleteSeatFailure) {
           Navigator.of(context).pop();
           Navigator.of(context).pop();
 
           showErrorMessage(context, LocaleKeys.failedTryAgain.localize);
+          BlocProvider.of<VerifyCompleteDriverCubit>(context)
+              .getAcceptedTrips();
         } else if (state is VerifyOtpLoading) {
           showDialog(
             context: context,
@@ -224,11 +228,15 @@ class _AcceptedCardImageState extends State<AcceptedCardImage> {
 
           showSuccessMessage(
               context, LocaleKeys.otpVerifiedSuccessfully.localize);
+          BlocProvider.of<VerifyCompleteDriverCubit>(context)
+              .getAcceptedTrips();
         } else if (state is VerifyOtpFailure) {
           Navigator.of(context).pop();
           Navigator.of(context).pop();
 
           showErrorMessage(context, LocaleKeys.invalidOtp.localize);
+          BlocProvider.of<VerifyCompleteDriverCubit>(context)
+              .getAcceptedTrips();
         }
       },
       child: Column(
@@ -237,8 +245,7 @@ class _AcceptedCardImageState extends State<AcceptedCardImage> {
             onTap: () {
               String otpSaved = "";
 
-              final parentContext =
-                  context; // Save the context that has access to the BlocProvider
+              final parentContext = context;
               widget.bookedUser != null
                   ? showModalBottomSheet(
                       context: context,

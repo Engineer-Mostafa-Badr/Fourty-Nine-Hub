@@ -44,6 +44,16 @@ class ViewPickTripDataState extends RiderState {}
 
 class NotViewPickTripDataState extends RiderState {}
 
+class LoadingGetDriverStatus extends RiderState {}
+
+class SuccessGetDriverStatus extends RiderState {
+  final bool status;
+
+  SuccessGetDriverStatus({required this.status});
+}
+
+class FailureGetDriverStatus extends RiderState {}
+
 class SuccessGetTripInfoState extends RiderState {
   final GetTripInfoModel model;
 
@@ -189,6 +199,7 @@ class SuccessSendOfferNoSocketState extends RiderState {}
 class SuccessAcceptOfferNoSocketState extends RiderState {}
 
 class SuccessRejectOfferNoSocketState extends RiderState {}
+
 class SuccessCompleteOfferNoSocketState extends RiderState {}
 
 class SuccessDeleteTripNoSocketState extends RiderState {}
@@ -205,6 +216,6 @@ class SuccessGetAllOfferNoSocketState extends RiderState {
   SuccessGetAllOfferNoSocketState({required this.list});
 }
 
-class SuccessRateDvierState extends RiderState{}
+class SuccessRateDvierState extends RiderState {}
 
-class SuccessCheckTripEndState extends RiderState{}
+class SuccessCheckTripEndState extends RiderState {}

@@ -14,22 +14,33 @@ class AcceptTripForDriverCubit extends Cubit<AcceptTripForDriverState> {
 
   Future<void> acceptTripForDriver({required String tripId}) async {
     try {
+      print("Loading ${tripId}\n");
+
       emit(AcceptTripForDriverLoading());
       final Either<Failure, Map<String, dynamic>> response =
           await apiConsumer.patch(EndPoints.acceptTripForDriver(tripId));
+      print("Loading 2 ${tripId}\n");
 
       response.fold(
-        (failure) => emit(
-            AcceptTripForDriverFailure(errorMessage: Labels.errorHappened)),
+        (failure) {
+          print("EROOOOOR FAilure \n");
+          emit(AcceptTripForDriverFailure(
+              errorMessage: "You cannot accept this trip"));
+        },
         (data) {
           if (data['status']) {
+            print("SSSSSSSuccceeeeeeees \n");
             emit(AcceptTripForDriverSuccess());
           } else {
-            emit(AcceptTripForDriverFailure(errorMessage: 'Please Try again'));
+            print("EROOOOOR FAilure \n");
+            emit(AcceptTripForDriverFailure(
+                errorMessage: "You cannot accept this trip"));
           }
         },
       );
     } catch (e) {
+      print("EROOOOOR FAilure \n");
+
       emit(AcceptTripForDriverFailure(errorMessage: 'Please Try again'));
     }
   }
