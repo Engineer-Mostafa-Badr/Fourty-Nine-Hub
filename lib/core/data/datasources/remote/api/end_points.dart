@@ -911,6 +911,7 @@ class EndPoints {
   }
 
   static String addToCart = '/food/addToCart';
+  static String tenPercent = '/tenPercent/send';
   static String getCart = '/food/getCart';
   static String deleteFromCart = '/food/deleteFromCart';
   static String placeOrder = '/food/make-order';
