@@ -14,6 +14,8 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/tri
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../res/style/styles.dart';
+
 // ignore: must_be_immutable
 class AllTripNoSocketScreen extends StatefulWidget {
   AllTripNoSocketScreen({super.key});

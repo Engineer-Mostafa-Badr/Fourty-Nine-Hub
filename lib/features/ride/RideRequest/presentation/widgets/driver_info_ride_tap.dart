@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/delete_driver_ride_cubit.dart';
@@ -27,7 +29,7 @@ class DriverInfoRideTap extends StatelessWidget {
       child: BlocListener<DeleteDriverRideCubit, RiderState>(
         listener: (context, state) {
           if (state is SuccessDeleteDriverState) {
-            showSuccessMessage(context, 'LocaleKeys');
+            showSuccessMessage(context, LocaleKeys.deleteSuccessfully.tr());
             context.push(Routes.HOME);
           }
         },
@@ -59,11 +61,11 @@ class DriverInfoRideTap extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Label(
-                              text: LocaleKeys.deadlineSubscription.tr(),
+                              text: context.isArabic?"الموعد النهائي للاشتراك المميز":"Deadline Subscription Premium",
                               style: Styles.mediumText(
                                   color: AppColors.PRIMARY_COLOR)),
                           Label(
-                              text: "${state.model.deadlineSubscription}",
+                              text: "${state.model.deadlineSubscriptionPremium}",
                               style: Styles.mediumText(
                                   color: AppColors.PRIMARY_COLOR)),
                         ],
@@ -102,9 +104,10 @@ class DriverInfoRideTap extends StatelessWidget {
                                     style: Styles.headerText(),
                                   ),
                                   Text(
-                                    "${state.model.deadlineSubscription} Day",
+                                    "${state.model.deadlineSubscriptionPremium} Day",
                                     style: Styles.headerText(),
                                   ),
+                                  
                                   const SizedBox(
                                     height: 5,
                                   ),
@@ -215,6 +218,30 @@ class DriverInfoRideTap extends StatelessWidget {
                                   color: AppColors.PRIMARY_COLOR)),
                           Label(
                               text: "${state.model.tripCount}",
+                              style: Styles.mediumText(
+                                  color: AppColors.PRIMARY_COLOR)),
+                        ],
+                      ),
+                      padding: 20,
+                      width: double.infinity,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      label: "",
+                      onPressed: () {},
+                      backColor: Colors.white,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    AppButton(
+                      widget: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Label(
+                              text: context.isArabic?"الموعد النهائي للاشتراك العادي":"Deadline Subscription Regular",
+                              style: Styles.mediumText(
+                                  color: AppColors.PRIMARY_COLOR)),
+                          Label(
+                              text: "${state.model.deadlineSubscriptionRegular}",
                               style: Styles.mediumText(
                                   color: AppColors.PRIMARY_COLOR)),
                         ],

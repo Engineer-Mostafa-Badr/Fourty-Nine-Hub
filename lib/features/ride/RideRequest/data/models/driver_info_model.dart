@@ -7,7 +7,8 @@ class DriverInfoModel {
   int? totalRating;
   bool? freeRide;
   String? workingType;
-  String? deadlineSubscription;
+  int? deadlineSubscriptionRegular;
+  int? deadlineSubscriptionPremium;
   DriverInfoModel({
     this.deadlineId,
     this.deadlineLicense,
@@ -15,7 +16,8 @@ class DriverInfoModel {
     this.tripCount,
     this.profit,
     this.totalRating,
-    this.deadlineSubscription,
+    this.deadlineSubscriptionRegular,
+    this.deadlineSubscriptionPremium,
     this.freeRide,
     this.workingType,
   });
@@ -28,7 +30,8 @@ class DriverInfoModel {
       tripCount: json['tripCount'] as int?,
       profit: json['profit'] as int?,
       totalRating: json['totalRating'] as int?,
-      deadlineSubscription: json['deadlineSubscription'] as String?,
+      deadlineSubscriptionRegular: json['deadlineSubscriptionRegular'] as int?,
+      deadlineSubscriptionPremium: json['deadlineSubscriptionPremium'] as int?,
       freeRide: json['freeRide'] as bool?,
       workingType: json['workingType'] as String?,
     );

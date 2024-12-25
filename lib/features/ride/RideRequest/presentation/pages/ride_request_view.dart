@@ -846,22 +846,21 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
           children: [
             Padding(
               padding: const EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "${widget.model.closerDrivers?.length ?? 0} ${LocaleKeys.driversAreViewingYourRequest.tr()}",
-                    style: Styles.mediumText(
-                      color: !context.isDarkMode
-                          ? AppColors.QUANTITY_COLOR
-                          : Colors.white,
-                    ),
-                  ),
-                  const Spacer(),
-                  BlocBuilder<DriversNearbyCubit, RiderState>(
-                    builder: (context, state) {
-                      if (state is SuccessGetDriversNearState) {
-                        return SizedBox(
+              child: BlocBuilder<DriversNearbyCubit, RiderState>(
+                builder: (context, state) {
+                  if (state is SuccessGetDriversNearState) {
+                    return Row(
+                      children: [
+                        Text(
+                "${state.list.length} ${LocaleKeys.driversAreViewingYourRequest.tr()}",
+                style: Styles.mediumText(
+                  color: !context.isDarkMode
+                      ? AppColors.QUANTITY_COLOR
+                      : Colors.white,
+                ),
+              ),
+              const Spacer(),
+                        SizedBox(
                           height: 30,
                           width: MediaQuery.of(context).size.width * 0.25,
                           child: Stack(
@@ -890,13 +889,13 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                               )
                             ],
                           ),
-                        );
-                      } else {
-                        return Container();
-                      }
-                    },
-                  )
-                ],
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
               ),
             ),
             // Sizer(h),

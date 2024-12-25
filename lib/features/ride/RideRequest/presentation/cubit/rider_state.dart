@@ -229,7 +229,6 @@ class SuccessGetAllOfferNoSocketState extends RiderState {
 
 class SuccessRateDvierState extends RiderState {}
 
-class SuccessCheckTripEndState extends RiderState {}
 
 class SuccessCheckTripEndState extends RiderState {}
 

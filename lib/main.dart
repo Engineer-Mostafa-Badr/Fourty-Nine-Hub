@@ -113,10 +113,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // CacheServiceImpl().removeDriverTripInfo();
-    // CacheServiceImpl().removeRiderTripInfo();
-    // CacheServiceImpl().removeTripState();
-    // log(CacheServiceImpl().isLogin().toString()??"null", name: "userId");
     return MultiBlocProvider(
       providers: [
         BlocProvider(
