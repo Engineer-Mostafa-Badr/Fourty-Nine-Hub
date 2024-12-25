@@ -28,8 +28,22 @@
                 "id":1,
                 "route":"/Wallet",
                 "title":"Mobile Bill",
+                "sub_title":"Get 10% cashback on your mobile bill",
+                "image":"https://g.top4top.io/p_3280zux2l1.png"
+            },
+            {
+                "id":1,
+                "route":"/Wallet",
+                "title":"Traffic violation",
+                "sub_title":"Get 10% cashback on your traffic violation bill",
+                "image":"https://j.top4top.io/p_3280j2vap1.jpg"
+            },
+            {
+                "id":1,
+                "route":"/Wallet",
+                "title":"Electricity Bill",
                 "sub_title":"Get 10% cashback on your electricity bill",
-                "image":"https://drive.google.com/file/d/1SC74SlJ3tl_onGCszy-gB2SWuaLK8rdr/view?usp=sharing"
+                "image":"https://i.top4top.io/p_3280hadqx1.jpg"
             }
 
         ]

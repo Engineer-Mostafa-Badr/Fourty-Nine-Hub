@@ -6,8 +6,12 @@ import 'package:fourtyninehub/core/utils/validator.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class BillValueTextFormField extends MainTextFormField {
-  BillValueTextFormField({
+  @override
+  final String? Function(String?)? validator;
+
+  BillValueTextFormField( {
     super.key,
+    this.validator,
     super.currentFocusNode,
     super.nextFocusNode,
     required super.currentController,
@@ -17,7 +21,7 @@ class BillValueTextFormField extends MainTextFormField {
     super.hintColor,
     super.fillColor,
   }) : super(
-    validator: Validator().validateEmptyValue,
+    validator: validator??Validator().validateEmptyValue,
     hintText: 'Invoice value',
     keyboardType: TextInputType.number,
     textCapitalization: TextCapitalization.words,

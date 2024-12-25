@@ -13,29 +13,45 @@ class TenPercentState {
   final TenPercentStates? status;
   final Failure? failure;
   final bool? isLast;
-  final XFile? file;
-  final String? mediaId;
+  final String? mobileFile;
+  final String? electricityFile;
+  final String? trafficFile;
+  final String? mobileId;
+  final String? electricityId;
+  final String? trafficId;
 
   const TenPercentState({
     this.status,
     this.failure,
     this.isLast,
-    this.file,
-    this.mediaId,
+    this.mobileFile,
+    this.electricityFile,
+    this.trafficFile,
+    this.mobileId,
+    this.electricityId,
+    this.trafficId,
   });
   TenPercentState copyWith({
     TenPercentStates? status,
     Failure? failure,
     bool? isLast,
-    XFile? file,
-    String? mediaId
+    String? mobileFile,
+    String? electricityFile,
+    String? trafficFile,
+    String? mobileId,
+    String? electricityId,
+    String? trafficId
   }) {
     return TenPercentState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
       isLast: isLast ?? this.isLast,
-      file: file ?? this.file,
-      mediaId: mediaId ?? this.mediaId,
+      mobileFile: mobileFile ?? this.mobileFile,
+      electricityFile: electricityFile ?? this.electricityFile,
+      trafficFile: trafficFile ?? this.trafficFile,
+      mobileId: mobileId ?? this.mobileId,
+      electricityId: electricityId ?? this.electricityId,
+      trafficId: trafficId ?? this.trafficId,
     );
   }
 }
