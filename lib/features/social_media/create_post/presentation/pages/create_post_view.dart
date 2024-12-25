@@ -26,7 +26,6 @@ import '../../../../account_taps/privacy/domain/entities/privacy_status_enum.dar
 import '../cubit/create_post_cubit.dart';
 import 'select_feeling_view.dart';
 
-
 class CreatePostView extends StatefulWidget {
   const CreatePostView({super.key, required this.social});
   final String social;
@@ -129,8 +128,6 @@ class _CreatePostViewState extends State<CreatePostView> {
   //   }
   // }
 
-
-
   @override
   Widget build(BuildContext context) {
     final controller = context.read<CreatePostCubit>();
@@ -226,10 +223,11 @@ class _CreatePostViewState extends State<CreatePostView> {
                                                     .localize
                                                 : LocaleKeys.public.localize,
                                 style: Styles.mediumText(
-                                    color: AppColors.AUTH_CONTAINER_COLOR,),
+                                  color: AppColors.AUTH_CONTAINER_COLOR,
+                                ),
                               ),
                               const Sizer(),
-                               Icon(
+                              Icon(
                                 Icons.keyboard_arrow_down_outlined,
                                 size: 30.sp,
                               ),
@@ -275,27 +273,28 @@ class _CreatePostViewState extends State<CreatePostView> {
                                       alignment:
                                           AlignmentDirectional.bottomStart,
                                       child: Padding(
-                                        padding:  EdgeInsets.symmetric(
+                                        padding: EdgeInsets.symmetric(
                                             horizontal: 6.w),
                                         child: Row(
                                           children: [
                                             Text(
-                                              '${LocaleKeys.feeling.localize} ',
+                                                '${LocaleKeys.feeling.localize} ',
                                                 style: Styles.mediumText(
-                                                  color: AppColors.AUTH_CONTAINER_COLOR,)
-                                            ),
-                                            Text(
-                                              state.selectedFeeling!.name,
+                                                  color: AppColors
+                                                      .AUTH_CONTAINER_COLOR,
+                                                )),
+                                            Text(state.selectedFeeling!.name,
                                                 style: Styles.mediumText(
-                                                  color: AppColors.AUTH_CONTAINER_COLOR,)
-                                            ),
+                                                  color: AppColors
+                                                      .AUTH_CONTAINER_COLOR,
+                                                )),
                                           ],
                                         ),
                                       )),
                                 ],
                               ),
                             ),
-                           //Sizer(width: 10.w,),
+                          //Sizer(width: 10.w,),
                           if (state.selectedActivity != null &&
                               state.selectedActivity!.name.isNotEmpty)
                             Container(
@@ -352,7 +351,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20.w),
                       child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                        scrollDirection:
+                            Axis.horizontal, // Enable horizontal scrolling
                         child: Row(
                           children: [
                             Wrap(
@@ -361,12 +361,15 @@ class _CreatePostViewState extends State<CreatePostView> {
                               spacing: 10,
                               children: List.generate(
                                 state.selectedUsers!.length,
-                                    (index) => GestureDetector(
+                                (index) => GestureDetector(
                                   onTap: () {},
                                   child: BadgedLabel(
-                                    label: state.selectedUsers?[index].fullName ?? '',
+                                    label:
+                                        state.selectedUsers?[index].fullName ??
+                                            '',
                                     onRemove: () {
-                                      controller.onRemoveUser(state.selectedUsers![index]);
+                                      controller.onRemoveUser(
+                                          state.selectedUsers![index]);
                                     },
                                   ),
                                 ),
@@ -376,7 +379,6 @@ class _CreatePostViewState extends State<CreatePostView> {
                         ),
                       ),
                     ),
-
                   ],
                   const Sizer(),
                   _buildCreatePost(onChange: (c) {
@@ -572,7 +574,9 @@ class _CreatePostViewState extends State<CreatePostView> {
                         top: 5,
                         child: InkWell(
                           onTap: () {
-                            context.read<CreatePostCubit>().removePhoto(state.images?[index]);
+                            context
+                                .read<CreatePostCubit>()
+                                .removePhoto(state.images?[index]);
                           },
                           child: const Icon(
                             Icons.close,

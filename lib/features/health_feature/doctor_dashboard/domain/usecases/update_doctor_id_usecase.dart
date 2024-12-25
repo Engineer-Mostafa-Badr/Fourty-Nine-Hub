@@ -20,20 +20,26 @@ class DoctorDocsParams {
   final DateTime expireDate;
   final String from;
 
-  DoctorDocsParams({required this.frontImageId, required this.backImageId, required this.expireDate,required this.from});
+  DoctorDocsParams(
+      {required this.frontImageId,
+      required this.backImageId,
+      required this.expireDate,
+      required this.from});
   /*
   idExpiryDate
 idBehindKey
 idFrontKey
    */
   //toJson
-  Map<String, dynamic> toJson() => from=='id'?{
-        'idFrontKey': frontImageId,
-        'idBehindKey': backImageId,
-        'idExpiryDate': expireDate.toIso8601String(),
-      }:{
-        'practicingFront': frontImageId,
-        'practicingBehind': backImageId,
-    'practicingExpiryDate': expireDate.toIso8601String(),
-  };
+  Map<String, dynamic> toJson() => from == 'id'
+      ? {
+          'idFrontKey': frontImageId,
+          'idBehindKey': backImageId,
+          'idExpiryDate': expireDate.toIso8601String(),
+        }
+      : {
+          'practicingFront': frontImageId,
+          'practicingBehind': backImageId,
+          'practicingExpiryDate': expireDate.toIso8601String(),
+        };
 }

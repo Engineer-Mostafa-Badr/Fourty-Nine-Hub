@@ -47,26 +47,39 @@ class EditDoctorProfileView extends StatelessWidget {
             break;
         }
       },
-      builder: (context, state)=>Scaffold(
+      builder: (context, state) => Scaffold(
         appBar: BackAppBar(
           label: LocaleKeys.editProfile.localize,
         ),
-        body: state.status==EditDoctorProfileStateStatus.initial?const Center(child: CircularProgressIndicator()):ListView(
-          padding: const EdgeInsets.all(18),
-          children: [
-            const UpdateProfilePhotoCard(),
-            const Sizer(),
-            UpdateDoctorIdCard(subCategoryId: state.doctor?.subCategory.id??'',),
-            const Sizer(),
-            UpdateDoctorPracticingCirtificateCard(subCategoryId: state.doctor?.subCategory.id??'',),
-            const Sizer(),
-            UpdateDoctorTimetableCard(params: CheckBoxParams(showCall: state.doctor?.calls??false,showHomeVisit: state.doctor?.visitHome??false,showClinic: state.doctor?.clinic??false),),
-            const Sizer(),
-            UpdateDoctorPersonalInfo(doctor: state.doctor!,),
-            const Sizer(),
-            const DeleteDoctorAccountCard(),
-          ],
-        ),
+        body: state.status == EditDoctorProfileStateStatus.initial
+            ? const Center(child: CircularProgressIndicator())
+            : ListView(
+                padding: const EdgeInsets.all(18),
+                children: [
+                  const UpdateProfilePhotoCard(),
+                  const Sizer(),
+                  UpdateDoctorIdCard(
+                    subCategoryId: state.doctor?.subCategory.id ?? '',
+                  ),
+                  const Sizer(),
+                  UpdateDoctorPracticingCirtificateCard(
+                    subCategoryId: state.doctor?.subCategory.id ?? '',
+                  ),
+                  const Sizer(),
+                  UpdateDoctorTimetableCard(
+                    params: CheckBoxParams(
+                        showCall: state.doctor?.calls ?? false,
+                        showHomeVisit: state.doctor?.visitHome ?? false,
+                        showClinic: state.doctor?.clinic ?? false),
+                  ),
+                  const Sizer(),
+                  UpdateDoctorPersonalInfo(
+                    doctor: state.doctor!,
+                  ),
+                  const Sizer(),
+                  const DeleteDoctorAccountCard(),
+                ],
+              ),
       ),
     );
   }

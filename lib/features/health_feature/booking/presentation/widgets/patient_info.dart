@@ -60,7 +60,7 @@ class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
                       currentController: controller.ageController,
                       keyboardType: TextInputType.number,
                       fillColor: cardDarkColor(context),
-                      hint: context.isArabic?'العمر':'Age'),
+                      hint: context.isArabic ? 'العمر' : 'Age'),
                   const Sizer(),
                   DefaultTextFormField(
                       currentFocusNode: controller.notesFocusNode,
@@ -69,14 +69,16 @@ class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
                       validator: (value) =>
                           Validator().shouldNotContainNumbers(value),
                       hint: LocaleKeys.notes.localize),
-                  if(type=='visitHome')...[const Sizer(),
-                  DefaultTextFormField(
-                      currentFocusNode: controller.addressFocusNode,
-                      currentController: controller.addressController,
-                      keyboardType: TextInputType.text,
-                      validator: (value) =>
-                          Validator().emptyValidation(value),
-                      hint: LocaleKeys.address.localize)],
+                  if (type == 'visitHome') ...[
+                    const Sizer(),
+                    DefaultTextFormField(
+                        currentFocusNode: controller.addressFocusNode,
+                        currentController: controller.addressController,
+                        keyboardType: TextInputType.text,
+                        validator: (value) =>
+                            Validator().emptyValidation(value),
+                        hint: LocaleKeys.address.localize)
+                  ],
                 ],
               ),
             ),
@@ -104,7 +106,8 @@ class __GenderSelectorState extends State<_GenderSelector> {
       children: [
         Expanded(
           child: RadioListTile<GenderType>(
-            title: Text(LocaleKeys.maleUser.localize, style: Styles.mediumText()),
+            title:
+                Text(LocaleKeys.maleUser.localize, style: Styles.mediumText()),
             value: GenderType.Male,
             groupValue: _selectedGender,
             onChanged: (value) {
@@ -119,7 +122,8 @@ class __GenderSelectorState extends State<_GenderSelector> {
         ),
         Expanded(
           child: RadioListTile<GenderType>(
-            title: Text(LocaleKeys.femaleUser.localize, style: Styles.mediumText()),
+            title: Text(LocaleKeys.femaleUser.localize,
+                style: Styles.mediumText()),
             value: GenderType.Female,
             groupValue: _selectedGender,
             onChanged: (value) {

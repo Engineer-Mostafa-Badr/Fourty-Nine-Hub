@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const nnew = 'nnew';
   static const today = 'today';
   static const tommorow = 'tommorow';
@@ -80,9 +80,12 @@ abstract class  LocaleKeys {
   static const restaurantName = 'restaurantName';
   static const restaurantNumber = 'restaurantNumber';
   static const theCommercialRegister = 'theCommercialRegister';
-  static const theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider = 'theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider';
-  static const youWillGetEGP3650PerYearIfYouSubscribeDaily = 'youWillGetEGP3650PerYearIfYouSubscribeDaily';
-  static const welcomeToResturantRegisteration = 'welcomeToResturantRegisteration';
+  static const theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider =
+      'theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider';
+  static const youWillGetEGP3650PerYearIfYouSubscribeDaily =
+      'youWillGetEGP3650PerYearIfYouSubscribeDaily';
+  static const welcomeToResturantRegisteration =
+      'welcomeToResturantRegisteration';
   static const selecteSubcategory = 'selecteSubcategory';
   static const photoForRestaurant = 'photoForRestaurant';
   static const searchForFavouriteMeals = 'searchForFavouriteMeals';
@@ -91,7 +94,8 @@ abstract class  LocaleKeys {
   static const thirdPage = 'thirdPage';
   static const selectGovernorate = 'selectGovernorate';
   static const selectCity = 'selectCity';
-  static const newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore = 'newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore';
+  static const newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore =
+      'newBookingsAreWaitingYouGoToResturantDashboardAndExploreMore';
   static const premium = 'premium';
   static const comma = 'comma';
   static const noResultFound = 'noResultFound';
@@ -102,7 +106,8 @@ abstract class  LocaleKeys {
   static const itemName = 'itemName';
   static const price = 'price';
   static const salary = 'salary';
-  static const youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval = 'youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval';
+  static const youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval =
+      'youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval';
   static const selectSubcategoryFirst = 'selectSubcategoryFirst';
   static const uploadingImage = 'uploadingImage';
   static const cantLoadCities = 'cantLoadCities';
@@ -114,7 +119,8 @@ abstract class  LocaleKeys {
   static const cantLoadSpecialities = 'cantLoadSpecialities';
   static const cantLoadSubSubCategories = 'cantLoadSubSubCategories';
   static const creatingRestaurant = 'creatingRestaurant';
-  static const youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove = 'youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove';
+  static const youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove =
+      'youCanEnjoyServingYourClintsUsingYourRestaurantByClickingOnTheRigesterButtonAbove';
   static const photoForMeal = 'photoForMeal';
   static const menu = 'menu';
   static const submit = 'submit';
@@ -312,7 +318,7 @@ abstract class  LocaleKeys {
   static const chatLockMessage = 'chatLockMessage';
   static const createGroupWith = 'createGroupWith';
   static const createGroup = 'createGroup';
-  static const attachments  = 'attachments ';
+  static const attachments = 'attachments ';
   static const docs = 'docs';
   static const links = 'links';
   static const media = 'media';
@@ -376,19 +382,24 @@ abstract class  LocaleKeys {
   static const aBirdInHand = 'aBirdInHand';
   static const permissionDenied = 'permissionDenied';
   static const contacts = 'contacts';
-  static const pleaseLoginRegisterToEnjoyTheApp = 'pleaseLoginRegisterToEnjoyTheApp';
+  static const pleaseLoginRegisterToEnjoyTheApp =
+      'pleaseLoginRegisterToEnjoyTheApp';
   static const noChatsUntilNow = 'noChatsUntilNow';
   static const tinder_header = 'tinder.header';
   static const tinder_favorites = 'tinder.favorites';
   static const tinder_noData = 'tinder.noData';
   static const tinder_find = 'tinder.find';
   static const tinder = 'tinder';
-  static const chat_alert_dialog_pick_chat_type = 'chat_alert_dialog.pick_chat_type';
+  static const chat_alert_dialog_pick_chat_type =
+      'chat_alert_dialog.pick_chat_type';
   static const chat_alert_dialog_anonymous = 'chat_alert_dialog.anonymous';
   static const chat_alert_dialog_regular = 'chat_alert_dialog.regular';
-  static const chat_alert_dialog_error_starting_anonymous = 'chat_alert_dialog.error.starting_anonymous';
-  static const chat_alert_dialog_error_starting_normal = 'chat_alert_dialog.error.starting_normal';
-  static const chat_alert_dialog_error_chat_id_empty = 'chat_alert_dialog.error.chat_id_empty';
+  static const chat_alert_dialog_error_starting_anonymous =
+      'chat_alert_dialog.error.starting_anonymous';
+  static const chat_alert_dialog_error_starting_normal =
+      'chat_alert_dialog.error.starting_normal';
+  static const chat_alert_dialog_error_chat_id_empty =
+      'chat_alert_dialog.error.chat_id_empty';
   static const chat_alert_dialog_error = 'chat_alert_dialog.error';
   static const chat_alert_dialog = 'chat_alert_dialog';
   static const user_info_date_of_birth = 'user_info.date_of_birth';
@@ -562,17 +573,23 @@ abstract class  LocaleKeys {
   static const moneySuccessfully = 'moneySuccessfully';
   static const paymentAddress = 'paymentAddress';
   static const amount = 'amount';
-  static const error_dialog_audio_playback_fail = 'error_dialog.audio_playback_fail';
+  static const error_dialog_audio_playback_fail =
+      'error_dialog.audio_playback_fail';
   static const error_dialog_title = 'error_dialog.title';
   static const error_dialog_ok_button = 'error_dialog.ok_button';
   static const error_dialog_camera_init_fail = 'error_dialog.camera_init_fail';
-  static const error_dialog_controller_init_fail = 'error_dialog.controller_init_fail';
-  static const error_dialog_start_recording_fail = 'error_dialog.start_recording_fail';
-  static const error_dialog_stop_recording_fail = 'error_dialog.stop_recording_fail';
-  static const error_dialog_video_process_fail = 'error_dialog.video_process_fail';
+  static const error_dialog_controller_init_fail =
+      'error_dialog.controller_init_fail';
+  static const error_dialog_start_recording_fail =
+      'error_dialog.start_recording_fail';
+  static const error_dialog_stop_recording_fail =
+      'error_dialog.stop_recording_fail';
+  static const error_dialog_video_process_fail =
+      'error_dialog.video_process_fail';
   static const error_dialog_upload_fail = 'error_dialog.upload_fail';
   static const error_dialog = 'error_dialog';
-  static const reel_upload_success_upload_success = 'reel_upload_success.upload_success';
+  static const reel_upload_success_upload_success =
+      'reel_upload_success.upload_success';
   static const reel_upload_success = 'reel_upload_success';
   static const timer_recording_stops_in = 'timer.recording_stops_in';
   static const timer_seconds = 'timer.seconds';
@@ -625,7 +642,8 @@ abstract class  LocaleKeys {
   static const gift_body_sent_successfully = 'gift_body.sent_successfully';
   static const gift_body_amount_deducted = 'gift_body.amount_deducted';
   static const gift_body_insufficient_funds = 'gift_body.insufficient_funds';
-  static const gift_body_insufficient_funds_message = 'gift_body.insufficient_funds_message';
+  static const gift_body_insufficient_funds_message =
+      'gift_body.insufficient_funds_message';
   static const gift_body_error = 'gift_body.error';
   static const gift_body_unexpected_error = 'gift_body.unexpected_error';
   static const gift_body_ok = 'gift_body.ok';
@@ -712,14 +730,17 @@ abstract class  LocaleKeys {
   static const errorLoadingSocialPage = 'errorLoadingSocialPage';
   static const updateSuccessfully = 'updateSuccessfully';
   static const carpool = 'carpool';
-  static const yourRequestHasBeenSentYouWillReceiveOffersShortly = 'yourRequestHasBeenSentYouWillReceiveOffersShortly';
+  static const yourRequestHasBeenSentYouWillReceiveOffersShortly =
+      'yourRequestHasBeenSentYouWillReceiveOffersShortly';
   static const thisFieldIsRequiredWithPeriod = 'thisFieldIsRequiredWithPeriod';
   static const pickupLocation = 'pickupLocation';
   static const destination = 'destination';
   static const pickupTime = 'pickupTime';
   static const cargoDescription = 'cargoDescription';
-  static const applicationDoesNotDeductPercentageFromServiceProvider = 'applicationDoesNotDeductPercentageFromServiceProvider';
-  static const premiumPackageGivesOpportunityToBeMoreVisible = 'premiumPackageGivesOpportunityToBeMoreVisible';
+  static const applicationDoesNotDeductPercentageFromServiceProvider =
+      'applicationDoesNotDeductPercentageFromServiceProvider';
+  static const premiumPackageGivesOpportunityToBeMoreVisible =
+      'premiumPackageGivesOpportunityToBeMoreVisible';
   static const freeCancellation = 'freeCancellation';
   static const request = 'request';
   static const driverDashboard = 'driverDashboard';
@@ -742,7 +763,8 @@ abstract class  LocaleKeys {
   static const Other = 'Other';
   static const pleaseEnterYourPhoneNumber = 'pleaseEnterYourPhoneNumber';
   static const invalidPhoneNumber = 'invalidPhoneNumber';
-  static const successfullyReceiveYourMoneyShortly = 'successfullyReceiveYourMoneyShortly';
+  static const successfullyReceiveYourMoneyShortly =
+      'successfullyReceiveYourMoneyShortly';
   static const chooseInstaPayOption = 'chooseInstaPayOption';
   static const instaPayAccount = 'instaPayAccount';
   static const instaPayUsernameOrShortcut = 'instaPayUsernameOrShortcut';
@@ -760,17 +782,23 @@ abstract class  LocaleKeys {
   static const enterNumber16digits = 'enterNumber16digits';
   static const invalidCardNumber = 'invalidCardNumber';
   static const pleaseEnterUsername = 'pleaseEnterUsername';
-  static const usernameContainLettersNumbersUnderscores = 'usernameContainLettersNumbersUnderscores';
+  static const usernameContainLettersNumbersUnderscores =
+      'usernameContainLettersNumbersUnderscores';
   static const paymentOptions = 'paymentOptions';
   static const enterYourCreditCardDetails = 'enterYourCreditCardDetails';
   static const enterPaymobLink = 'enterPaymobLink';
   static const enterBankAccountDetails = 'enterBankAccountDetails';
-  static const youCanEnjoyServingYourClientsUsingYourCarByClickingTheRegisterButtonAbove = 'youCanEnjoyServingYourClientsUsingYourCarByClickingTheRegisterButtonAbove';
-  static const theTripHasBeenSuccessfullyClosed = 'theTripHasBeenSuccessfullyClosed';
+  static const youCanEnjoyServingYourClientsUsingYourCarByClickingTheRegisterButtonAbove =
+      'youCanEnjoyServingYourClientsUsingYourCarByClickingTheRegisterButtonAbove';
+  static const theTripHasBeenSuccessfullyClosed =
+      'theTripHasBeenSuccessfullyClosed';
   static const yourRequest = 'yourRequest';
-  static const yourRequestHasBeenSentYoullReceiveOffersShortly = 'yourRequestHasBeenSentYoullReceiveOffersShortly';
-  static const theRequestHasBeenSuccessfullyApproved = 'theRequestHasBeenSuccessfullyApproved';
-  static const theRequestWasSuccessfullyRejected = 'theRequestWasSuccessfullyRejected';
+  static const yourRequestHasBeenSentYoullReceiveOffersShortly =
+      'yourRequestHasBeenSentYoullReceiveOffersShortly';
+  static const theRequestHasBeenSuccessfullyApproved =
+      'theRequestHasBeenSuccessfullyApproved';
+  static const theRequestWasSuccessfullyRejected =
+      'theRequestWasSuccessfullyRejected';
   static const tripIsCompleted = 'tripIsCompleted';
   static const newOffer = 'newOffer';
   static const carModel = 'carModel';
@@ -781,7 +809,8 @@ abstract class  LocaleKeys {
   static const youHaveToSelectOneSubCategory = 'youHaveToSelectOneSubCategory';
   static const chooseYourFavoriteSubCategory = 'chooseYourFavoriteSubCategory';
   static const youHaveToFillYourReceiptPoint = 'youHaveToFillYourReceiptPoint';
-  static const youHaveToFillYourDeliveryPoint = 'youHaveToFillYourDeliveryPoint';
+  static const youHaveToFillYourDeliveryPoint =
+      'youHaveToFillYourDeliveryPoint';
   static const youHaveToFillYourTime = 'youHaveToFillYourTime';
   static const youHaveToFillYourDate = 'youHaveToFillYourDate';
   static const pickupDate = 'pickupDate';
@@ -791,7 +820,8 @@ abstract class  LocaleKeys {
   static const pickupDashboard = 'pickupDashboard';
   static const trips = 'trips';
   static const information = 'information';
-  static const subscribeToSendOfferContactTheClient = 'subscribeToSendOfferContactTheClient';
+  static const subscribeToSendOfferContactTheClient =
+      'subscribeToSendOfferContactTheClient';
   static const registrationForm = 'registrationForm';
   static const deadlineSubscription = 'deadlineSubscription';
   static const subcategoryName = 'subcategoryName';
@@ -820,7 +850,8 @@ abstract class  LocaleKeys {
   static const thisFieldIsRequired = 'thisFieldIsRequired';
   static const thisFieldIsRequired2 = 'thisFieldIsRequired2';
   static const fillYourIdExpiryDate = 'fillYourIdExpiryDate';
-  static const fillYourDrivingLicenseExpiryDate = 'fillYourDrivingLicenseExpiryDate';
+  static const fillYourDrivingLicenseExpiryDate =
+      'fillYourDrivingLicenseExpiryDate';
   static const fillYourLicenseExpiryDate = 'fillYourLicenseExpiryDate';
   static const fillYourCarModel = 'fillYourCarModel';
   static const rider = 'rider';
@@ -855,8 +886,9 @@ abstract class  LocaleKeys {
   static const SubscriberCompletionRate = 'SubscriberCompletionRate';
   static const ChanceDetails = 'ChanceDetails';
   static const ProductDescription = 'ProductDescription';
-  static const Typethevalueyouwanttoparticipation = 'Typethevalueyouwanttoparticipation';
-  static const CreateChance  = 'CreateChance ';
+  static const Typethevalueyouwanttoparticipation =
+      'Typethevalueyouwanttoparticipation';
+  static const CreateChance = 'CreateChance ';
   static const enterPrice = 'enterPrice';
   static const enterTitle = 'enterTitle';
   static const enterDescription = 'enterDescription';
@@ -891,11 +923,13 @@ abstract class  LocaleKeys {
   static const transactionSuccessful = 'transactionSuccessful';
   static const yourTransactionWasSuccessful = 'yourTransactionWasSuccessful';
   static const transferAmount = 'transferAmount';
-  static const premiumPackageMoreVisibilityCashback = 'premiumPackageMoreVisibilityCashback';
+  static const premiumPackageMoreVisibilityCashback =
+      'premiumPackageMoreVisibilityCashback';
   static const inFront = 'inFront';
   static const behind = 'behind';
   static const drivingLicense = 'drivingLicense';
-  static const theApplicationDoesNotDeductAnyPercentage = 'theApplicationDoesNotDeductAnyPercentage';
+  static const theApplicationDoesNotDeductAnyPercentage =
+      'theApplicationDoesNotDeductAnyPercentage';
   static const youWillGetPoundsAnnually = 'youWillGetPoundsAnnually';
   static const license = 'license';
   static const snapCopyOfBillPayment = 'snapCopyOfBillPayment';
@@ -922,7 +956,8 @@ abstract class  LocaleKeys {
   static const showAdRequests = 'showAdRequests';
   static const comfort = 'comfort';
   static const minutesAgo = 'minutesAgo';
-  static const Phonenumbercannotbewrittenindescription = 'Phonenumbercannotbewrittenindescription';
+  static const Phonenumbercannotbewrittenindescription =
+      'Phonenumbercannotbewrittenindescription';
   static const womenOnly = 'womenOnly';
   static const chance = 'chance';
   static const subTab = 'subTab';
@@ -1033,13 +1068,18 @@ abstract class  LocaleKeys {
   static const yes = 'yes';
   static const editFood = 'editFood';
   static const updateYourRestaurant = 'updateYourRestaurant';
-  static const youHaveToChooseFavoriteSubcategory = 'youHaveToChooseFavoriteSubcategory';
+  static const youHaveToChooseFavoriteSubcategory =
+      'youHaveToChooseFavoriteSubcategory';
   static const youHaveToFillRestaurantName = 'youHaveToFillRestaurantName';
-  static const youHaveToFillRestaurantPhoneNumber = 'youHaveToFillRestaurantPhoneNumber';
+  static const youHaveToFillRestaurantPhoneNumber =
+      'youHaveToFillRestaurantPhoneNumber';
   static const addPhoto = 'addPhoto';
-  static const youHaveToUploadAtLeastOnePhoto = 'youHaveToUploadAtLeastOnePhoto';
-  static const youHaveToUploadThe3PagesOfCommercialRegistration = 'youHaveToUploadThe3PagesOfCommercialRegistration';
-  static const youHaveToSelectYourGovernorate = 'youHaveToSelectYourGovernorate';
+  static const youHaveToUploadAtLeastOnePhoto =
+      'youHaveToUploadAtLeastOnePhoto';
+  static const youHaveToUploadThe3PagesOfCommercialRegistration =
+      'youHaveToUploadThe3PagesOfCommercialRegistration';
+  static const youHaveToSelectYourGovernorate =
+      'youHaveToSelectYourGovernorate';
   static const youHaveToSelectYourCity = 'youHaveToSelectYourCity';
   static const reviews = 'reviews';
   static const addToCart = 'addToCart';
@@ -1077,7 +1117,8 @@ abstract class  LocaleKeys {
   static const MinimumFareIs = 'MinimumFareIs';
   static const travelTime = 'travelTime';
   static const DriverDashboard = 'DriverDashboard';
-  static const newTripsAreWaitingYouGoToDriverDashboardAndExploreMore = 'newTripsAreWaitingYouGoToDriverDashboardAndExploreMore';
+  static const newTripsAreWaitingYouGoToDriverDashboardAndExploreMore =
+      'newTripsAreWaitingYouGoToDriverDashboardAndExploreMore';
   static const driversAreViewingYourRequest = 'driversAreViewingYourRequest';
   static const findingDrivers = 'findingDrivers';
   static const yourOffer = 'yourOffer';
@@ -1101,14 +1142,16 @@ abstract class  LocaleKeys {
   static const carBrandRequired = 'carBrandRequired';
   static const carModelRequired = 'carModelRequired';
   static const Year = 'Year';
-  static const yourRequestHasBeenSentSuccessfullyWaitingForTheDriverResponse = 'yourRequestHasBeenSentSuccessfullyWaitingForTheDriverResponse';
+  static const yourRequestHasBeenSentSuccessfullyWaitingForTheDriverResponse =
+      'yourRequestHasBeenSentSuccessfullyWaitingForTheDriverResponse';
   static const startPoint = 'startPoint';
   static const numberOfPassenger = 'numberOfPassenger';
   static const record = 'record';
   static const yourBalanceIsInsufficient = 'yourBalanceIsInsufficient';
   static const Cash = 'Cash';
   static const Wallet = 'Wallet';
-  static const youHaveToFillYourNumberOfPassenger = 'youHaveToFillYourNumberOfPassenger';
+  static const youHaveToFillYourNumberOfPassenger =
+      'youHaveToFillYourNumberOfPassenger';
   static const waitingForReplies = 'waitingForReplies';
   static const technicalExamination = 'technicalExamination';
   static const criminalRecord = 'criminalRecord';

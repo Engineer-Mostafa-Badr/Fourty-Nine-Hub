@@ -67,8 +67,11 @@ class _MealCategoriesState extends State<MealCategories> {
                     children: [
                       const Spacer(),
                       Label(
-                        text: context.isArabic?'مشاهدة المزيد':'See More',
-                        style: Styles.mediumText(decoration: TextDecoration.underline,color: AppColors.PRIMARY_COLOR_DARK),),
+                        text: context.isArabic ? 'مشاهدة المزيد' : 'See More',
+                        style: Styles.mediumText(
+                            decoration: TextDecoration.underline,
+                            color: AppColors.PRIMARY_COLOR_DARK),
+                      ),
                       Icon(
                         Icons.arrow_forward_ios,
                         color: AppColors.PRIMARY_COLOR_DARK,

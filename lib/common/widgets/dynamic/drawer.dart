@@ -649,7 +649,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     if (words.isNotEmpty) {
       // Capitalize the first letter of each word
       words = words.map((word) {
-        return word.isNotEmpty?word[0].toUpperCase() + word.substring(1).toLowerCase():'';
+        return word.isNotEmpty
+            ? word[0].toUpperCase() + word.substring(1).toLowerCase()
+            : '';
       }).toList();
     }
     return words.length > 1 ? '${words[0]} ${words[1]}' : words[0];

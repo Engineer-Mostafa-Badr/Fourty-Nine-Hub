@@ -34,7 +34,8 @@ class CreateDoctorRemoteDataSourceImpl implements CreateDoctorRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> updateDoctorPersonalInfo(CreateDoctorParams params) async {
+  Future<Either<Failure, bool>> updateDoctorPersonalInfo(
+      CreateDoctorParams params) async {
     final response = await _apiConsumer.post(EndPoints.createDoctor,
         data: params.toJson(),
         queryParameters: {'subCategory': params.subCategoryId});

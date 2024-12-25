@@ -91,7 +91,7 @@ class ReelsCubit extends Cubit<ReelsState> {
     File thumbnailUrl,
     bool isAudioOriginal, {
     String? comeFrom,
-        String? audioMediaId,
+    String? audioMediaId,
     String? totalPrice,
     String? advertisementType,
   }) async {
@@ -100,17 +100,17 @@ class ReelsCubit extends Cubit<ReelsState> {
     log('token $token');
     emit(state.copyWith(isUploadingReel: true));
 
-    final thumbResponse = await http.post(
-        'https://49dev.com/api/v1/media/signed-url'.toUri,
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          "type": "image/JPEG",
-          "size": thumbnailUrl.lengthSync(),
-          "subcategoryId": "66684135dbb427ee42aa0141",
-        }));
+    final thumbResponse =
+        await http.post('https://49dev.com/api/v1/media/signed-url'.toUri,
+            headers: {
+              'Authorization': 'Bearer $token',
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode({
+              "type": "image/JPEG",
+              "size": thumbnailUrl.lengthSync(),
+              "subcategoryId": "66684135dbb427ee42aa0141",
+            }));
     log(thumbResponse.statusCode.toString());
     if (thumbResponse.statusCode == 200) {
       final String thumbnailSign =
@@ -121,8 +121,8 @@ class ReelsCubit extends Cubit<ReelsState> {
       http.put(thumbnailSign.toUri,
           headers: {}, body: thumbnailUrl.readAsBytesSync());
 
-
-      http.put('https://49dev.com/api/v1/media/confirm/6736b1bfd72bd0e7c5e1eb9c'.toUri);
+      http.put('https://49dev.com/api/v1/media/confirm/6736b1bfd72bd0e7c5e1eb9c'
+          .toUri);
 
       final response = await http.post(
         Uri.parse(
@@ -144,8 +144,7 @@ class ReelsCubit extends Cubit<ReelsState> {
             "videoWidth": 640,
             // Adjust these values according to your video metadata
             "videoHeight": 360,
-            if(!isAudioOriginal)
-            "inputAudioId": audioMediaId
+            if (!isAudioOriginal) "inputAudioId": audioMediaId
           }
         }),
       );

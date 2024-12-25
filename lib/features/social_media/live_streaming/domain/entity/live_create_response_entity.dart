@@ -6,10 +6,11 @@ class LiveCreateResponseEntity extends Equatable {
   final String id;
   final String streamId;
   final List<GoalEntity> goals;
-  const LiveCreateResponseEntity({required this.id,required this.streamId,required this.goals});
+  const LiveCreateResponseEntity(
+      {required this.id, required this.streamId, required this.goals});
 
   @override
   List<Object> get props {
-    return [id,streamId];
+    return [id, streamId];
   }
 }

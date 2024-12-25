@@ -16,7 +16,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class TripOfferCardNoScoket extends StatefulWidget {
-  TripOfferCardNoScoket({super.key, required this.model});
+  const TripOfferCardNoScoket({super.key, required this.model});
   final AllTripNoSocketModel model;
 
   @override
@@ -172,46 +172,46 @@ class _TripOfferCardNoScoketState extends State<TripOfferCardNoScoket> {
               const SizedBox(
                 height: 10,
               ),
-              if(!(widget.model.acceptedReq??false))
-              Row(
-                children: [
-                  Expanded(
-                    child: AppButton(
-                      style:
-                          Styles.mediumText(fontSize: 28, color: Colors.white),
-                      label: LocaleKeys.sendOffer.tr(),
-                      onPressed: () {
-                        context.read<SendOfferNoSocketCubit>().send(
-                            tripId: widget.model.id ?? "",
-                            model: CreateOfferNoSocketModel(
-                                isPremium: widget.model.isPremium,
-                                price: price.text.isEmpty
-                                    ? widget.model.price!
-                                    : double.parse(price.text),
-                                subcategoryId: widget.model.categoryId));
-                      },
-                      backColor: AppColors.PRIMARY_COLOR,
-                      color: Colors.white,
-                      // height: 40,
+              if (!(widget.model.acceptedReq ?? false))
+                Row(
+                  children: [
+                    Expanded(
+                      child: AppButton(
+                        style: Styles.mediumText(
+                            fontSize: 28, color: Colors.white),
+                        label: LocaleKeys.sendOffer.tr(),
+                        onPressed: () {
+                          context.read<SendOfferNoSocketCubit>().send(
+                              tripId: widget.model.id ?? "",
+                              model: CreateOfferNoSocketModel(
+                                  isPremium: widget.model.isPremium,
+                                  price: price.text.isEmpty
+                                      ? widget.model.price!
+                                      : double.parse(price.text),
+                                  subcategoryId: widget.model.categoryId));
+                        },
+                        backColor: AppColors.PRIMARY_COLOR,
+                        color: Colors.white,
+                        // height: 40,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: DefaultTextFormField(
-                      currentFocusNode: FocusNode(),
-                      currentController: price,
-                      hint: widget.model.price.toString(),
-                      // constraints: const BoxConstraints(
-                      //   maxHeight: kToolbarHeight * .6,
-                      //   minHeight: kToolbarHeight * .6,
-                      // ),
-                      keyboardType: TextInputType.number,
+                    const SizedBox(
+                      width: 10,
                     ),
-                  )
-                ],
-              ),
+                    Expanded(
+                      child: DefaultTextFormField(
+                        currentFocusNode: FocusNode(),
+                        currentController: price,
+                        hint: widget.model.price.toString(),
+                        // constraints: const BoxConstraints(
+                        //   maxHeight: kToolbarHeight * .6,
+                        //   minHeight: kToolbarHeight * .6,
+                        // ),
+                        keyboardType: TextInputType.number,
+                      ),
+                    )
+                  ],
+                ),
               const SizedBox(
                 height: 10,
               ),

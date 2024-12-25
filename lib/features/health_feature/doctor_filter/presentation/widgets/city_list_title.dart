@@ -15,11 +15,13 @@ class CityListTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(context.isArabic?city.nameAr:city.nameEn),
+      title: Text(context.isArabic ? city.nameAr : city.nameEn),
       onTap: () {
         serviceLocator<HealthSharedData>().doctorSearchParams.city = city;
 
-        context.push(Routes.VISITADOCTORLIST,extra: DoctorsListParams(fromHome: false, subCategoryId: '',type: type));
+        context.push(Routes.VISITADOCTORLIST,
+            extra: DoctorsListParams(
+                fromHome: false, subCategoryId: '', type: type));
       },
     );
   }

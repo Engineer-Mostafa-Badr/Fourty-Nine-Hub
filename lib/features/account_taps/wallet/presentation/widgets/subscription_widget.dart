@@ -35,7 +35,9 @@ class SubscriptionWidget extends StatelessWidget {
     } else {
       createdAt = _parseDate(subscription.expireSubscription);
     }
-    final DateTime egyptTime = createdAt?.toUtc().add(const Duration(hours: 3)) ?? DateTime.now().toUtc().add(const Duration(hours: 3));
+    final DateTime egyptTime =
+        createdAt?.toUtc().add(const Duration(hours: 3)) ??
+            DateTime.now().toUtc().add(const Duration(hours: 3));
     final String formattedDateTime = context.locale == Locales.english
         ? DateFormat('dd/MM/yyyy, h:mm a', 'en').format(egyptTime)
         : DateFormat('yyyy/MM/dd, h:mm a', 'ar').format(egyptTime);

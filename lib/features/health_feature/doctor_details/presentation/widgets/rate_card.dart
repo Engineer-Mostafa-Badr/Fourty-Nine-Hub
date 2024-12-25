@@ -14,7 +14,7 @@ class UserDoctorRateCard extends StatelessWidget {
         comment: rate.comment,
         name: rate.userName,
         rate: rate.rate,
-        createdAt: rate.createdAt??'',
+        createdAt: rate.createdAt ?? '',
         id: rate.id,
       ),
     );

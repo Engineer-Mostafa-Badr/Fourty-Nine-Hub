@@ -74,7 +74,7 @@ class _TwitterCommentCardState extends State<TwitterCommentCard> {
             const Sizer(),
             Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -59,7 +59,8 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
                           decoration: InputDecoration(
                             fillColor:
                                 Theme.of(context).scaffoldBackgroundColor,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 20.h),
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 20.h),
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(60.r),
                                 borderSide: BorderSide(

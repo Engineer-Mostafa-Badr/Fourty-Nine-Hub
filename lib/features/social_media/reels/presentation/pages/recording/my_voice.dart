@@ -150,7 +150,6 @@ class MyVoiceVideoRecordingScreenState
       _resetRecordingState();
 
       showUploadReelButton = await _mergeVideoWithFilter();
-
     } catch (e) {
       log("Error stopping recording: $e");
       _showErrorDialog(LocaleKeys.error_dialog_stop_recording_fail.tr());
@@ -219,7 +218,6 @@ class MyVoiceVideoRecordingScreenState
           throw Exception('error_dialog_save_video_fail');
         }
         return savedSuccessfully;
-
       } else {
         final failStackTrace = await session.getFailStackTrace();
         throw Exception(
@@ -233,15 +231,16 @@ class MyVoiceVideoRecordingScreenState
     }
     return false;
   }
+
   void _navigateToPlaybackScreen() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => VideoPlaybackScreen(filteredVideoPath!,_thumbnailPath!,true),
+        builder: (context) =>
+            VideoPlaybackScreen(filteredVideoPath!, _thumbnailPath!, true),
       ),
     );
   }
-
 
   void _switchCamera() {
     setState(() {
@@ -461,7 +460,6 @@ class MyVoiceVideoRecordingScreenState
       ),
     );
   }
-
 
   @override
   void dispose() {

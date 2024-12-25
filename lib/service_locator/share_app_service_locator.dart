@@ -17,7 +17,5 @@ class ShareAppServiceLocator {
     serviceLocator.registerLazySingleton<ShareAppUseCase>(() => ShareAppUseCase(
           serviceLocator(),
         ));
-
-
   }
 }

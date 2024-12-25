@@ -6,5 +6,6 @@ import 'package:fourtyninehub/features/health_feature/emergency/domain/usecases/
 
 abstract class HealthEmergencyRepo {
   Future<Either<Failure, bool>> bookEmergency(BookHealthEmergencyParams params);
-  Future<Either<Failure, List<EmergencyEntity>>> getEmergencyRequests(GetEmergencyRequestsParams params);
+  Future<Either<Failure, List<EmergencyEntity>>> getEmergencyRequests(
+      GetEmergencyRequestsParams params);
 }

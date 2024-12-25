@@ -16,18 +16,17 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/success_request_trip_model/success_request_trip_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_offer_model/trip_request_offer_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/address_search_params_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/cancel_trip_client_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/drivers_nearBy_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/offer_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/raise_fare_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/record_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
@@ -469,7 +468,7 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                     location: state
                                                             .model
                                                             .trip
-                                                            ?.riderLocation
+                                                            ?.startLocation
                                                             ?.coordinates ??
                                                         [],
                                                     subcategoryId: state
@@ -805,6 +804,11 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
   @override
   void initState() {
     getCurrency();
+    context.read<DriversNearbyCubit>().check(
+        tripId: widget.model.trip?.id ?? "",
+        location: widget.model.trip?.startLocation?.coordinates ?? [],
+        subcategoryId: widget.model.trip?.subCategoryId ?? "",
+        address: widget.model.trip?.fromTitle ?? "");
     super.initState();
   }
 
@@ -817,15 +821,13 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
     var raiseFareCubit = context.read<RaiseFareCubit>();
     return BlocListener<CancelTripClientCubit, RiderState>(
       listener: (context, state) {
-        
         log(state.toString(), name: "lkdjslkdfjslkdjflskdjf");
         if (state is SuccessCancelTripClientState) {
-          
           context.pop();
-          context.read<RecordRideCubit>().stopRecord(
-                              subcategoryId: widget.model.trip?.subCategoryId??"",
-                              tripId: widget.model.trip?.id??""
-                            );
+          // context.read<RecordRideCubit>().stopRecord(
+          //                     subcategoryId: widget.model.trip?.subCategoryId??"",
+          //                     tripId: widget.model.trip?.id??""
+          //                   );
         }
         if (state is FailureRiderState) {
           showErrorMessage(context, getFailureMessage(state.failure, context));
@@ -833,9 +835,9 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
       },
       child: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
-          color: AppColors.LIGHT_GRAY_COLOR,
-          borderRadius: BorderRadius.only(
+        decoration: BoxDecoration(
+          color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(30),
             topRight: Radius.circular(30),
           ),
@@ -850,39 +852,49 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                   Text(
                     "${widget.model.closerDrivers?.length ?? 0} ${LocaleKeys.driversAreViewingYourRequest.tr()}",
                     style: Styles.mediumText(
-                      color: Colors.black,
+                      color: !context.isDarkMode
+                          ? AppColors.QUANTITY_COLOR
+                          : Colors.white,
                     ),
                   ),
                   const Spacer(),
-                  SizedBox(
-                    height: 30,
-                    width: 100,
-                    child: Stack(
-                      children: [
-                        ...List.generate(
-                          widget.model.closerDrivers?.take(5).length ?? 0,
-                          (index) {
-                            return Positioned(
-                              left: index * 15,
-                              child: Container(
-                                width: 25,
-                                height: 25,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                        widget.model.closerDrivers?[index]
-                                                .userData?.userPicture ??
-                                            "",
+                  BlocBuilder<DriversNearbyCubit, RiderState>(
+                    builder: (context, state) {
+                      if (state is SuccessGetDriversNearState) {
+                        return SizedBox(
+                          height: 30,
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          child: Stack(
+                            children: [
+                              ...List.generate(
+                                state.list.take(5).length,
+                                (index) {
+                                  return Positioned(
+                                    left: index * 15,
+                                    child: Container(
+                                      width: 25,
+                                      height: 25,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                              state.list[index].userData
+                                                      ?.userPicture ??
+                                                  "",
+                                            ),
+                                            fit: BoxFit.cover),
                                       ),
-                                      fit: BoxFit.cover),
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                      ],
-                    ),
+                                    ),
+                                  );
+                                },
+                              )
+                            ],
+                          ),
+                        );
+                      } else {
+                        return Container();
+                      }
+                    },
                   )
                 ],
               ),
@@ -939,7 +951,6 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            
                             raiseFareCubit.decreasePrice();
                             setState(() {});
                           },
@@ -1003,7 +1014,6 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                         const Spacer(),
                         GestureDetector(
                           onTap: () {
-                            
                             raiseFareCubit.increasePrice(
                                 tripPrice: widget.model.trip?.price ?? 0);
                             setState(() {});
@@ -1190,7 +1200,9 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                         print(widget.model.trip?.id);
 
                         showModalBottomSheet(
-                          backgroundColor: Colors.white,
+                          backgroundColor: context.isDarkMode
+                              ? AppColors.QUANTITY_COLOR
+                              : Colors.white,
                           context: context,
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(
@@ -1252,7 +1264,6 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                                         ),
                                         GestureDetector(
                                           onTap: () async {
-                                            
                                             await context
                                                 .read<CancelTripClientCubit>()
                                                 .cancelTripClient(
@@ -1409,81 +1420,84 @@ class _AcceptOrDeclineTripState extends State<AcceptOrDeclineTrip> {
             const Sizer(),
             Row(
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 8, right: 16, top: 16),
-                      child: Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                  widget.model.profilePicture ?? ""),
-                              fit: BoxFit.cover,
-                            )),
-                      ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8, right: 16, top: 16),
+                    child: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image:
+                                NetworkImage(widget.model.profilePicture ?? ""),
+                            fit: BoxFit.cover,
+                          )),
                     ),
-                  ],
+                  ),
                 ),
                 const Sizer(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    Row(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Row(
+                          children: [
+                            Text(
+                              widget.model.firstName ?? "",
+                              overflow: TextOverflow.ellipsis,
+                              style: Styles.mediumText(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black),
+                            ),
+                            const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            Text(
+                              "${widget.model.averageRating ?? ""} ",
+                              style: Styles.mediumText(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black),
+                            ),
+                            Text(
+                              "(${widget.model.allCountTrip} ${LocaleKeys.rides.tr()})",
+                              style: Styles.mediumText(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                  fontSize: 26),
+                            ),
+                          ],
+                        ),
                         Text(
-                          widget.model.firstName ?? "",
+                          widget.model.model ?? "",
                           style: Styles.mediumText(
                               fontWeight: FontWeight.w600, color: Colors.black),
-                        ),
-                        const Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        ),
-                        Text(
-                          "${widget.model.averageRating ?? ""} ",
-                          style: Styles.mediumText(
-                              fontWeight: FontWeight.w600, color: Colors.black),
-                        ),
-                        Text(
-                          "(${widget.model.allCountTrip} ${LocaleKeys.rides.tr()})",
-                          style: Styles.mediumText(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                              fontSize: 26),
                         ),
                       ],
                     ),
-                    Text(
-                      widget.model.model ?? "",
-                      style: Styles.mediumText(
-                          fontWeight: FontWeight.w600, color: Colors.black),
+                    Column(
+                      children: [
+                        Text(
+                          formatDuration(widget.model.arrivalTimeToClient ?? 0),
+                          style: Styles.headerText(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 30),
+                        ),
+                        Text(
+                          formatDistance(widget.model.distance ?? 0),
+                          style: Styles.headerText(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 30),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                const Spacer(),
-                Column(
-                  children: [
-                    Text(
-                      formatDuration(widget.model.arrivalTimeToClient ?? 0),
-                      style: Styles.headerText(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 30),
-                    ),
-                    Text(
-                      formatDistance(widget.model.distance ?? 0),
-                      style: Styles.headerText(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 30),
-                    ),
-                  ],
-                ),
+                // const Spacer(),
               ],
             ),
             const Sizer(
@@ -1544,7 +1558,7 @@ class _AcceptOrDeclineTripState extends State<AcceptOrDeclineTrip> {
                               .remove();
                         }
                       },
-                      child: AnimatedAcceptButton()),
+                      child: const AnimatedAcceptButton()),
                 )
               ],
             )

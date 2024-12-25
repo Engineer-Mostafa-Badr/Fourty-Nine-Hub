@@ -1,6 +1,5 @@
 import 'package:fourtyninehub/core/utils/time_utils.dart';
 
-
 class TwitterUserEntity {
   final String id;
   final String firstName;

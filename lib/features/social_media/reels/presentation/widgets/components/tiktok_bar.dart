@@ -1,4 +1,3 @@
-
 import 'dart:math';
 import 'dart:ui';
 
@@ -35,11 +34,13 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
   }
+
   int get generateRandom9DigitNumber {
     Random random = Random();
     // Generate a number between 100000000 and 999999999
     return 100000000 + random.nextInt(900000000);
   }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -51,19 +52,18 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               // color: Colors.red,
               child: IconButton(
                   onPressed: () {
-                    if (context
-                        .read<PreloadBloc>()
-                        .state
-                        .controllers[context.read<PreloadBloc>().state.focusedIndex] !=
+                    if (context.read<PreloadBloc>().state.controllers[
+                            context.read<PreloadBloc>().state.focusedIndex] !=
                         null) {
                       context
                           .read<PreloadBloc>()
                           .state
-                          .controllers[context.read<PreloadBloc>().state.focusedIndex]
+                          .controllers[
+                              context.read<PreloadBloc>().state.focusedIndex]
                           ?.pause();
-
                     }
-                      context.read<PreloadBloc>().resetFocusedIndex(context.read<PreloadBloc>().state.focusedIndex);
+                    context.read<PreloadBloc>().resetFocusedIndex(
+                        context.read<PreloadBloc>().state.focusedIndex);
                     Navigator.pop(context);
                   },
                   icon: Icon(
@@ -87,17 +87,20 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 if (context
                     .read<PreloadBloc>()
                     .state
-                    .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+                    .controllers[
+                        context.read<PreloadBloc>().state.focusedIndex]!
+                    .value
+                    .isPlaying) {
                   context
                       .read<PreloadBloc>()
                       .state
-                      .controllers[context.read<PreloadBloc>().state.focusedIndex]
+                      .controllers[
+                          context.read<PreloadBloc>().state.focusedIndex]
                       ?.pause();
                 }
-                if(context.isUserLoggedIn) {
-                showTiktokOption(context, generateRandom9DigitNumber);
-                }
-                else {
+                if (context.isUserLoggedIn) {
+                  showTiktokOption(context, generateRandom9DigitNumber);
+                } else {
                   context.go(Routes.LOGIN);
                 }
               }),
@@ -106,11 +109,15 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 if (context
                     .read<PreloadBloc>()
                     .state
-                    .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+                    .controllers[
+                        context.read<PreloadBloc>().state.focusedIndex]!
+                    .value
+                    .isPlaying) {
                   context
                       .read<PreloadBloc>()
                       .state
-                      .controllers[context.read<PreloadBloc>().state.focusedIndex]
+                      .controllers[
+                          context.read<PreloadBloc>().state.focusedIndex]
                       ?.pause();
                 }
                 setState(() {
@@ -123,11 +130,15 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 if (context
                     .read<PreloadBloc>()
                     .state
-                    .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+                    .controllers[
+                        context.read<PreloadBloc>().state.focusedIndex]!
+                    .value
+                    .isPlaying) {
                   context
                       .read<PreloadBloc>()
                       .state
-                      .controllers[context.read<PreloadBloc>().state.focusedIndex]
+                      .controllers[
+                          context.read<PreloadBloc>().state.focusedIndex]
                       ?.pause();
                 }
                 setState(() {
@@ -138,15 +149,18 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
 
               // For You Tab with rounded underline
               _buildTab(LocaleKeys.Reels.localize, 2, onTap: () {
-
                 if (context
                     .read<PreloadBloc>()
                     .state
-                    .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+                    .controllers[
+                        context.read<PreloadBloc>().state.focusedIndex]!
+                    .value
+                    .isPlaying) {
                   context
                       .read<PreloadBloc>()
                       .state
-                      .controllers[context.read<PreloadBloc>().state.focusedIndex]
+                      .controllers[
+                          context.read<PreloadBloc>().state.focusedIndex]
                       ?.pause();
                 }
                 setState(() {
@@ -165,11 +179,15 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 if (context
                     .read<PreloadBloc>()
                     .state
-                    .controllers[context.read<PreloadBloc>().state.focusedIndex]!.value.isPlaying) {
+                    .controllers[
+                        context.read<PreloadBloc>().state.focusedIndex]!
+                    .value
+                    .isPlaying) {
                   context
                       .read<PreloadBloc>()
                       .state
-                      .controllers[context.read<PreloadBloc>().state.focusedIndex]
+                      .controllers[
+                          context.read<PreloadBloc>().state.focusedIndex]
                       ?.pause();
                 }
                 context.push(Routes.Tinder);

@@ -308,10 +308,13 @@ class _InstagramGlobalPostsState extends State<InstagramGlobalPosts> {
                                                                 .id),
                                                       child:
                                                           InstagramPostComments(
-                                                            commentCount: controller.feedPagingController
-                                                                .itemList?[index].commentsCount
+                                                        commentCount: controller
+                                                                .feedPagingController
+                                                                .itemList?[
+                                                                    index]
+                                                                .commentsCount
                                                                 .toString() ??
-                                                                '',
+                                                            '',
                                                         postId: controller
                                                             .globalFeedPagingController
                                                             .itemList![index]

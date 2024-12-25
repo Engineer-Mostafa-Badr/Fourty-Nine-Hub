@@ -103,23 +103,23 @@ class _VideoGridItemState extends State<VideoGridItem> {
   Widget build(BuildContext context) {
     return _controller.value.isInitialized
         ? GestureDetector(
-      onTap: (){
-        if (_controller.value.isPlaying) {
-          _controller.pause();
-        } else {
-          context.push(Routes.REELS);
-          // controller.play();
-        }
-      },
-          child: AspectRatio(
+            onTap: () {
+              if (_controller.value.isPlaying) {
+                _controller.pause();
+              } else {
+                context.push(Routes.REELS);
+                // controller.play();
+              }
+            },
+            child: AspectRatio(
               aspectRatio: _controller.value.aspectRatio,
               child: Stack(
                 children: [
                   VideoPlayer(_controller),
                   Align(
                     alignment: Alignment.bottomCenter,
-                    child:
-                        VideoProgressIndicator(_controller, allowScrubbing: true),
+                    child: VideoProgressIndicator(_controller,
+                        allowScrubbing: true),
                   ),
                   Center(
                     child: IconButton(
@@ -142,7 +142,7 @@ class _VideoGridItemState extends State<VideoGridItem> {
                 ],
               ),
             ),
-        )
+          )
         : Shimmer.fromColors(
             baseColor: Colors.grey[300]!,
             highlightColor: Colors.grey[100]!,

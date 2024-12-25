@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_t
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/offer_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/raise_fare_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/record_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
@@ -79,19 +78,19 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
           listener: (context, state) async {
             log(state.toString(), name: "klsjdlkjfslkdjflskdjf");
             if (state is SuccessRequestTripState) {
-              await BlocProvider.of<GetCurrencyCubit>(context)
-                  .getCurrencyData();
+              // await BlocProvider.of<GetCurrencyCubit>(context)
+              //     .getCurrencyData();
 
               context.pop();
-              await BlocProvider.of<GetCurrencyCubit>(context)
-                  .getCurrencyData();
+              // await BlocProvider.of<GetCurrencyCubit>(context)
+              //     .getCurrencyData();
 
               context.read<ShowOffersCubit>().showOffers();
               context.read<LocationSocketCubit>().nearbyDriversEmit(
                   tripId: state.model.trip?.id ?? "",
-                  location: state.model.trip?.riderLocation?.coordinates ?? [],
+                  location: state.model.trip?.startLocation?.coordinates ?? [],
                   subcategoryId: state.model.trip?.subCategoryId ?? "");
-              
+
               showModalBottomSheet(
                 context: context,
                 isDismissible: false, // Prevent dismissing by tapping outside

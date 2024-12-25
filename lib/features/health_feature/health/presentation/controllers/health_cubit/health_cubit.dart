@@ -53,7 +53,8 @@ class HealthCubit extends Cubit<HealthState> {
       this._getGovernoratesUseCase,
       this._isDoctorApprovalUsecase,
       this._toggleFavoriteCategoryUseCase,
-      this._deleteFavoriteCategoryUseCase, this._cancelAppointmentUseCase)
+      this._deleteFavoriteCategoryUseCase,
+      this._cancelAppointmentUseCase)
       : super(const HealthState());
 
   final List<HealthBookingFilterModel> services = [
@@ -109,17 +110,16 @@ class HealthCubit extends Cubit<HealthState> {
 
   Future<bool> cancelAppointment(String id) async {
     bool result = false;
-    final response =
-        await _cancelAppointmentUseCase.call(id);
+    final response = await _cancelAppointmentUseCase.call(id);
     response.fold(
         (failure) =>
             emit(state.copyWith(failure: failure, status: HealthStates.error)),
         (data) {
-          List<BookedAppointmentEntity>? newBookings = state.myBookings;
-          newBookings?.removeWhere((element) => element.id == id);
-          result = data;
-          emit(state.copyWith(myBookings: newBookings));
-        });
+      List<BookedAppointmentEntity>? newBookings = state.myBookings;
+      newBookings?.removeWhere((element) => element.id == id);
+      result = data;
+      emit(state.copyWith(myBookings: newBookings));
+    });
     return result;
   }
 

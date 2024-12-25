@@ -31,7 +31,7 @@ dependencies:
   firebase_auth: ^4.19.6
   firebase_core: ^2.31.0
   firebase_messaging: ^14.9.2
-#  win32:
+  win32: ^5.7.1
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.5

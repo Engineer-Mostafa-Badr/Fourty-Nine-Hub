@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -10,6 +11,8 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_trip_from_driver_model/check_accept_trip_from_driver_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/create_offer_no_socket_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/create_trip_ride_request_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/current_trip_ride_model/current_trip_ride_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/driver_near_by_model/driver_near_by_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_info_request_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rating_driver_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rider_register_model.dart';
@@ -319,9 +322,11 @@ class ReiderRequestRepository {
   }
 
   checkTripEnd({required Function() check}) {
+    log("lksdjflskdjflskjdflskjdlfksjdlfjsldkfjsldkjflskdjflskjdf");
     socket.socket.on(
       "Ride:endTrip",
       (data) {
+        log("lksdjflskdjflskjdflskjdlfksjdlfjsldkfjsldkjflskdjflskjdf ok");
         log(data.toString());
         check();
       },
@@ -414,21 +419,111 @@ class ReiderRequestRepository {
       {required RattingDriverModel model}) {
     return dataSource.rating(model: model);
   }
-  Future<Either<Failure, Map<String, dynamic>>> recordVoiceRide({required String tripId, required String mediaId}) {
+
+  Future<Either<Failure, Map<String, dynamic>>> recordVoiceRide(
+      {required String tripId, required String mediaId}) {
     return dataSource.recordVoiceRide(mediaId: mediaId, tripId: tripId);
   }
-  Future<Either<Failure, Map<String, dynamic>>> confirmUpload({required String mediaId}) {
+
+  Future<Either<Failure, Map<String, dynamic>>> confirmUpload(
+      {required String mediaId}) {
     return dataSource.confirmUpload(mediaId: mediaId);
   }
+
   Future<Either<Failure, Map<String, dynamic>>> mediaUrl({
-  required String type,
-  required int size,
-  required String subcategoryId,
-}) {
+    required String type,
+    required int size,
+    required String subcategoryId,
+  }) {
     return dataSource.mediaUrl(
-      size: size,
-      subcategoryId: subcategoryId,
-      type: type
+        size: size, subcategoryId: subcategoryId, type: type);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getDriverInfo() {
+    return dataSource.getDriverInfo();
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> deleteDriver() {
+    return dataSource.deleteDriver();
+  }
+
+  checkStartRecord(Function() onChage) {
+    socket.socket.on(
+      "Ride:startRecord",
+      (data) {
+        onChage();
+      },
     );
+  }
+
+  checkStopRecord(Function() onChage) {
+    socket.socket.on(
+      "Ride:stopRecord",
+      (data) {
+        onChage();
+      },
+    );
+  }
+
+  currentTrip(Function(CurrentTripRideModel model) onChage) {
+    log("lsdjflskdjflskdjflskdjflskdjf");
+    socket.socket.emit("Ride:currentTrip");
+    socket.socket.on(
+      "Ride:currentTrip",
+      (data) {
+        log(data.toString(), name: "lsdjflskdjflskdjflskdjflskdjf");
+        onChage(CurrentTripRideModel.fromJson(jsonDecode(data)));
+        socket.socket.off("Ride:currentTrip");
+      },
+    );
+  }
+
+  // stopSocket(){
+  //   so
+  // }
+
+  driversNearBy({
+    required String tripId,
+    required List location,
+    required String subcategoryId,
+    required String address,
+    required Function(List<DriverNearByModel> model) onChange,
+  }) {
+    log("Starting driversNearBy...");
+    List oldDriver = [];
+    var dataJson = jsonEncode({
+      "subcategoryId": subcategoryId,
+      "address": address,
+      "oldDrivers": oldDriver,
+      "location": [30.024645, 31.201920],
+      "tripId": tripId,
+    });
+    socket.socket.emit("drivers:nearBy", dataJson);
+    Timer? timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      socket.socket.emit("drivers:nearBy", dataJson);
+      log("Emit triggered: $dataJson");
+    });
+    socket.socket.on(
+      "Ride:stopSearch",
+      (data) {
+        timer.cancel();
+      },
+    );
+    List<DriverNearByModel> allData = [];
+    socket.socket.on("drivers:nearBy", (data) {
+      List dataList = jsonDecode(data);
+      allData = dataList.map((e) => DriverNearByModel.fromJson(e)).toList();
+      oldDriver = allData.map((e) => e.driverId).toList();
+      log(oldDriver.toString(), name: "oldDriver");
+      dataJson = jsonEncode({
+      "subcategoryId": subcategoryId,
+      "address": address,
+      "oldDrivers": oldDriver,
+      "location": [30.024645, 31.201920],
+      "tripId": tripId,
+        });
+      onChange(allData);
+      log(data.toString(), name: "Drivers NearBy Data");
+    });
   }
 }

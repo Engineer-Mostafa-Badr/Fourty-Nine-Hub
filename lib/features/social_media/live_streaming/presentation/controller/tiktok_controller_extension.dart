@@ -123,7 +123,9 @@ extension TiktokControllerExtension on StreamCubit {
       liveId = r.id;
       streamId = r.streamId;
       emit(state.copyWith(
-          status: StreamsStates.success, liveCreateResponseEntity: r,goals: r.goals));
+          status: StreamsStates.success,
+          liveCreateResponseEntity: r,
+          goals: r.goals));
     });
     return success;
   }

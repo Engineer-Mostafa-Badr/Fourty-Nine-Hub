@@ -30,7 +30,11 @@ class HealthEmergencyView extends StatelessWidget {
             break;
 
           case HealthEmergencySuccess _:
-            showSuccessMessage(context, context.isArabic?'تم ارسال طلبك بنجاح, سيتم التواصل معك قريبا':'Your request has been sent successfully, doctor will call you soon.');
+            showSuccessMessage(
+                context,
+                context.isArabic
+                    ? 'تم ارسال طلبك بنجاح, سيتم التواصل معك قريبا'
+                    : 'Your request has been sent successfully, doctor will call you soon.');
             break;
 
           default:

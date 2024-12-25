@@ -52,7 +52,7 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
   final commentTextController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   final FocusNode focusNode = FocusNode();
-   bool isReplying = false;
+  bool isReplying = false;
 
   @override
   void initState() {
@@ -66,6 +66,7 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
     commentTextController.dispose();
     super.dispose();
   }
+
   String? replyTo;
 
   @override
@@ -86,7 +87,8 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
         ),
         child: SafeArea(
           child: BlocProvider<InstagramCubit>(
-            create: (BuildContext context) =>serviceLocator()..loadComments(context, widget.postId),
+            create: (BuildContext context) =>
+                serviceLocator()..loadComments(context, widget.postId),
             child: BlocBuilder<InstagramCubit, InstagramState>(
               builder: (BuildContext context, state) {
                 final controller = context.read<InstagramCubit>();
@@ -106,27 +108,28 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                         shrinkWrap: true,
                         // physics: const BouncingScrollPhysics(
                         //     parent: AlwaysScrollableScrollPhysics()),
-                        builderDelegate: PagedChildBuilderDelegate<CommentEntity>(
+                        builderDelegate: PagedChildBuilderDelegate<
+                                CommentEntity>(
                             noItemsFoundIndicatorBuilder: (context) {
                               print(controller
                                   .commentsPagingController.itemList?.length);
                               return Padding(
-                                padding:  EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height *.35),
+                                padding: EdgeInsets.symmetric(
+                                    vertical:
+                                        MediaQuery.of(context).size.height *
+                                            .35),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(
-                                     LocaleKeys.noCommentsYet.localize,
-                                      style: Styles.headerText(fontSize: 100.sp)
-                                    ),
+                                    Text(LocaleKeys.noCommentsYet.localize,
+                                        style: Styles.headerText(
+                                            fontSize: 100.sp)),
                                     const Sizer(),
-                                    Text(
-                                        LocaleKeys.startConversation.localize,
-                                      style: Styles.mediumText(
-                                        fontSize: 70.sp,
-                                        color: AppColors.GREY_NORMAL_COLOR
-                                      )
-                                    ),
+                                    Text(LocaleKeys.startConversation.localize,
+                                        style: Styles.mediumText(
+                                            fontSize: 70.sp,
+                                            color:
+                                                AppColors.GREY_NORMAL_COLOR)),
                                   ],
                                 ),
                               );
@@ -135,12 +138,14 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                               return _buildCommentCard(
                                   index: index,
                                   focusNode: focusNode,
-                                  comment: controller
-                                      .commentsPagingController.itemList![index],
+                                  comment: controller.commentsPagingController
+                                      .itemList![index],
                                   onDeleteComment: (String id) async {
-                                    var result = await widget.onDeleteComment(id);
+                                    var result =
+                                        await widget.onDeleteComment(id);
                                     if (result == true) {
-                                      controller.commentsPagingController.itemList
+                                      controller
+                                          .commentsPagingController.itemList
                                           ?.removeWhere((e) => e.id == id);
                                       setState(() {});
                                     }
@@ -157,7 +162,8 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                                     );
                                   });
                             },
-                            noMoreItemsIndicatorBuilder: (context) => Container(),
+                            noMoreItemsIndicatorBuilder: (context) =>
+                                Container(),
                             firstPageProgressIndicatorBuilder: (context) =>
                                 Container(
                                     margin: const EdgeInsets.only(top: 150),
@@ -300,12 +306,12 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
                         final content = commentTextController.text.trim();
                         if (content.isEmpty) return;
                         //   widget.onAddComment();
-                        if (replyTo != null){
+                        if (replyTo != null) {
                           widget.onCommentReply(ReplyOnCommentParams(
                               postId: widget.postId,
                               commentId: '674a0a806ad30ae85dc39119',
                               content: commentTextController.text));
-                        }else{
+                        } else {
                           CommentEntity data = await widget.onAddComment(
                             PostCommentParams(
                               postId: widget.postId,
@@ -459,7 +465,7 @@ class _InstagramPostCommentsState extends State<InstagramPostComments> {
           onDeleteComment: (String id) => onDeleteComment(id),
           onDeleteReply: (String id) => onDeleteReply(id),
           function: function,
-          onReplyPressed: (){
+          onReplyPressed: () {
             setState(() {
               replyTo = comment.user.firstName; // Or user.username
               commentTextController.text = '@${replyTo!} ';

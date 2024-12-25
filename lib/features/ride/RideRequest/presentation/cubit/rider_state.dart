@@ -3,6 +3,9 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/all_trip_for
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/all_trip_no_socket_model/all_trip_no_socket_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_by_rider_model/check_accept_by_rider_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_trip_from_driver_model/check_accept_trip_from_driver_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/current_trip_ride_model/current_trip_ride_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/driver_info_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/driver_near_by_model/driver_near_by_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_info_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/my_trip_offer_ride_model/my_trip_offer_ride_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/my_trip_ride_model.dart';
@@ -189,6 +192,7 @@ class SuccessSendOfferNoSocketState extends RiderState {}
 class SuccessAcceptOfferNoSocketState extends RiderState {}
 
 class SuccessRejectOfferNoSocketState extends RiderState {}
+
 class SuccessCompleteOfferNoSocketState extends RiderState {}
 
 class SuccessDeleteTripNoSocketState extends RiderState {}
@@ -205,6 +209,30 @@ class SuccessGetAllOfferNoSocketState extends RiderState {
   SuccessGetAllOfferNoSocketState({required this.list});
 }
 
-class SuccessRateDvierState extends RiderState{}
+class SuccessRateDvierState extends RiderState {}
 
-class SuccessCheckTripEndState extends RiderState{}
+class SuccessCheckTripEndState extends RiderState {}
+
+class SuccessStartRecordState extends RiderState {}
+
+class SuccessStopRecordState extends RiderState {}
+
+class SuccessGetDriverInfoState extends RiderState {
+  final DriverInfoModel model;
+
+  SuccessGetDriverInfoState({required this.model});
+}
+
+class SuccessDeleteDriverState extends RiderState {}
+
+class SuccessGetDriversNearState extends RiderState {
+  final List<DriverNearByModel> list;
+
+  SuccessGetDriversNearState({required this.list});
+}
+
+class SuccessGetCurrentTripState extends RiderState {
+  final CurrentTripRideModel model;
+
+  SuccessGetCurrentTripState({required this.model});
+}

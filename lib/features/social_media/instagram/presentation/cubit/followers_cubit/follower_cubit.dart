@@ -19,7 +19,8 @@ class FollowCubit extends Cubit<FollowState> {
   int currentPage = 1;
   final int pageSize;
 
-  FollowCubit(this._allFollowersUseCase, this._allFollowingUseCase, {this.pageSize = 10})
+  FollowCubit(this._allFollowersUseCase, this._allFollowingUseCase,
+      {this.pageSize = 10})
       : super(FollowState());
 
   void loadInitialData(String search) async {
@@ -37,14 +38,15 @@ class FollowCubit extends Cubit<FollowState> {
     hasMoreData = true;
     await fetchAllFollowing(search);
   }
+
   @override
   Future<void> close() {
     searchController.dispose();
     return super.close();
   }
 
-  Future<void> _fetchData<T>(
-      String search, Function(TwitterFeedParams) useCase, List<T> dataList) async {
+  Future<void> _fetchData<T>(String search, Function(TwitterFeedParams) useCase,
+      List<T> dataList) async {
     if (!hasMoreData || isLoadingMore) return;
 
     emit(state.copyWith(status: FollowStates.loading));
@@ -55,11 +57,11 @@ class FollowCubit extends Cubit<FollowState> {
     );
 
     response.fold(
-          (failure) {
+      (failure) {
         isLoadingMore = false;
         emit(state.copyWith(failure: failure, status: FollowStates.error));
       },
-          (data) {
+      (data) {
         dataList.addAll(data);
 
         if (data.length < pageSize) {
@@ -82,4 +84,3 @@ class FollowCubit extends Cubit<FollowState> {
     await _fetchData(search, _allFollowingUseCase.call, following);
   }
 }
-

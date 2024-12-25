@@ -5,7 +5,6 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_starting_point_ride_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/record_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -60,7 +59,6 @@ class _StartTextFieldAndFindWidgetState
               child: CustomButton(
                 title: LocaleKeys.searchFind.localize,
                 onTap: () {
-                  
                   if (formKey.currentState!.validate()) {
                     context.read<GetStartingPointRideCubit>().getStartingPoint(
                         address:

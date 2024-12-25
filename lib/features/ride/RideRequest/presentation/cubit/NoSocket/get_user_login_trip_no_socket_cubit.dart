@@ -19,7 +19,8 @@ class GetUserLoginTripNoSocketCubit extends Cubit<RiderState> {
       },
       (r) {
         if (r['data'] == null) {
-          emit(FailureRiderState(failure: const ServerFailure(message: "Not Found Trip")));
+          emit(FailureRiderState(
+              failure: const ServerFailure(message: "Not Found Trip")));
         }
         emit(SuccessGetUserLoginTripNoSocketState(
             model: MyTripRideModel.fromJson(r['data'])));

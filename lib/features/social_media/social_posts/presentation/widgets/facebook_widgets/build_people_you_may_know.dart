@@ -64,10 +64,15 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.group_rounded,size: 40.sp,),
+                          Icon(
+                            Icons.group_rounded,
+                            size: 40.sp,
+                          ),
                           const Sizer(),
                           Label(
-                            text:context.locale == Locales.english? 'People you may know':'أشخاص قد تعرفهم',
+                            text: context.locale == Locales.english
+                                ? 'People you may know'
+                                : 'أشخاص قد تعرفهم',
                             style: Styles.mediumText(fontSize: 60.sp),
                           ),
                         ],
@@ -158,13 +163,17 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                     text:
                                                         "${item.firstName} ${item.lastName}",
                                                     maxLines: 1,
-                                                    style: Styles.mediumText(color: Theme.of(context).primaryColor),
+                                                    style: Styles.mediumText(
+                                                        color: Theme.of(context)
+                                                            .primaryColor),
                                                   ),
                                                   Label(
                                                     text:
-                                                    "${item.mutualFriendsCount} ${LocaleKeys.mutualFriend.localize}",
+                                                        "${item.mutualFriendsCount} ${LocaleKeys.mutualFriend.localize}",
                                                     maxLines: 1,
-                                                    style: Styles.smallText(color: AppColors.GREY_NORMAL_COLOR),
+                                                    style: Styles.smallText(
+                                                        color: AppColors
+                                                            .GREY_NORMAL_COLOR),
                                                   ),
                                                   Sizer(
                                                     height: 10.h,
@@ -187,7 +196,8 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                       : Row(
                                                           children: [
                                                             Expanded(
-                                                              child: ClickableWidget(
+                                                              child:
+                                                                  ClickableWidget(
                                                                 onTap:
                                                                     () async {
                                                                   if (item.addedSuccessfully ==
@@ -390,14 +400,16 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                     borderRadius:
                                                                         BorderRadius
                                                                             .circular(4),
-                                                                    color: AppColors.SECONDARY_COLOR,
+                                                                    color: AppColors
+                                                                        .SECONDARY_COLOR,
                                                                   ),
                                                                   child: Label(
                                                                     text: LocaleKeys
                                                                         .remove
                                                                         .localize,
                                                                     style: Styles.mediumText(
-                                                                        color: AppColors.AUTH_CONTAINER_COLOR,
+                                                                        color: AppColors
+                                                                            .AUTH_CONTAINER_COLOR,
                                                                         fontSize:
                                                                             22,
                                                                         fontWeight:

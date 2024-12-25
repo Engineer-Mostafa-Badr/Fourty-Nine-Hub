@@ -11,7 +11,8 @@ class GetDoctorReviewsUseCase
 
   GetDoctorReviewsUseCase(this.repo);
   @override
-  Future<Either<Failure, List<UserDoctorRateEntity>>> call(PaginationParams params) {
+  Future<Either<Failure, List<UserDoctorRateEntity>>> call(
+      PaginationParams params) {
     return repo.getDoctorRatings(params);
   }
 }

@@ -19,7 +19,9 @@ class CreateDoctorIDPhotoPicker extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Label(
-          text: context.isArabic?'قم بتحميل هويتك (الوجه والظهر):':'Upload Your ID (Front and Back):',
+          text: context.isArabic
+              ? 'قم بتحميل هويتك (الوجه والظهر):'
+              : 'Upload Your ID (Front and Back):',
           style: Styles.headerText(),
         ),
         const Sizer(),
@@ -42,7 +44,7 @@ class CreateDoctorIDPhotoPicker extends StatelessWidget {
                     );
                   }
                   return ImagePickerPlaceholder(
-                    title: context.isArabic?'الوجه':'Front',
+                    title: context.isArabic ? 'الوجه' : 'Front',
                   );
                 },
               ),
@@ -65,7 +67,7 @@ class CreateDoctorIDPhotoPicker extends StatelessWidget {
                     );
                   }
                   return ImagePickerPlaceholder(
-                    title: context.isArabic?'الخلف':'Back',
+                    title: context.isArabic ? 'الخلف' : 'Back',
                   );
                 },
               ),

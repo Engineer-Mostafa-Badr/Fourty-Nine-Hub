@@ -118,7 +118,9 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         maxLength: widget.maxLength,
         expands: widget.expanded,
         enableSuggestions: widget.enableSuggestions,
-        style:  TextStyle(color: context.isDarkMode?Colors.white:AppColors.QUANTITY_COLOR),
+        style: TextStyle(
+            color:
+                context.isDarkMode ? Colors.white : AppColors.QUANTITY_COLOR),
         textCapitalization: widget.textCapitalization,
         textAlignVertical:
             widget.expanded ? const TextAlignVertical(y: -0.8) : null,
@@ -126,13 +128,17 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         minLines: widget.minLines,
         decoration: InputDecoration(
           fillColor: widget.fillColor ??
-              (widget.enabled ? cardDarkColor(context) : cardDarkColor(context)),
+              (widget.enabled
+                  ? cardDarkColor(context)
+                  : cardDarkColor(context)),
           filled: true,
           contentPadding:
               widget.contentPadding ?? const EdgeInsets.fromLTRB(16, 0, 16, 0),
           hintText: widget.hintText,
           labelText: widget.label,
-          hintStyle:  TextStyle(color:context.isDarkMode?Colors.white: AppColors.QUANTITY_COLOR),
+          hintStyle: TextStyle(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.QUANTITY_COLOR),
           suffixIcon: widget.suffixIcon,
           prefix: widget.prefix,
           label: widget.labelWidget,

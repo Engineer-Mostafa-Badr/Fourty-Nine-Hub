@@ -152,7 +152,7 @@ class ReelsState {
           likeReelCommentResponseMessage ?? this.likeReelCommentResponseMessage,
       globalReels: reels ?? globalReels,
       reelsForAudio: reelsForAudio ?? this.reelsForAudio,
-      globalReelsIsLoading:   isLoading ?? globalReelsIsLoading,
+      globalReelsIsLoading: isLoading ?? globalReelsIsLoading,
       globalReelsHasReachedMax: hasReachedMax ?? globalReelsHasReachedMax,
       globalReelsCurrentPage: currentPage ?? globalReelsCurrentPage,
       isLikingReel: isLikingReel ?? this.isLikingReel,

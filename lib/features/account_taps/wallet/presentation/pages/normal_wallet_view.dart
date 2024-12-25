@@ -203,7 +203,8 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                                 final item = data[index];
                                 return WalletHistoryCard(
                                   title: '${item.transactionAmount}',
-                                  subTitle:formatDateTime(item.createdAt,context),
+                                  subTitle:
+                                      formatDateTime(item.createdAt, context),
                                   amount: item.received == true,
                                   icon: FontAwesomeIcons.check,
                                 );

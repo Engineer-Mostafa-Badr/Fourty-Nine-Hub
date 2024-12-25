@@ -52,7 +52,9 @@ class RestaurantMneuModel extends RestaurantMenu {
       foodName: map['foodName'],
       price: map['price']?.toDouble(),
       picture: map['picture'] != null
-          ? map['picture'] is String? map['picture'] : map['picture']['mediaKey']
+          ? map['picture'] is String
+              ? map['picture']
+              : map['picture']['mediaKey']
           : null,
     );
   }

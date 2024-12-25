@@ -13,20 +13,24 @@ class MeetingRoomArguments {
   final bool isHost;
   final bool? shareScreen;
 
-  MeetingRoomArguments({required this.liveID, required this.userName, required this.isHost, this.shareScreen=false});
+  MeetingRoomArguments(
+      {required this.liveID,
+      required this.userName,
+      required this.isHost,
+      this.shareScreen = false});
 }
+
 class MeetingRoom extends StatefulWidget {
   MeetingRoomArguments? args;
-  MeetingRoom(
-      {super.key, payload}){
-    if(payload is MeetingRoomArguments){
-      args= payload;
-    }else{
+  MeetingRoom({super.key, payload}) {
+    if (payload is MeetingRoomArguments) {
+      args = payload;
+    } else {
       args = MeetingRoomArguments(
-          liveID: payload['room']['roomId'],
-          userName: UserCubit.to.state.data?.firstName??'',
-          isHost: true,
-          shareScreen: false,
+        liveID: payload['room']['roomId'],
+        userName: UserCubit.to.state.data?.firstName ?? '',
+        isHost: true,
+        shareScreen: false,
       );
     }
   }
@@ -94,11 +98,11 @@ class _MeetingRoomState extends State<MeetingRoom> {
             appSign: context.read<SecretsCubit>().state.secrets!.zegoAppSign,
             userID: userId,
             isLiveStream: false,
-            userName: widget.args?.userName??'',
-            liveID: widget.args?.liveID??'',
+            userName: widget.args?.userName ?? '',
+            liveID: widget.args?.liveID ?? '',
 
             // Modify your custom configurations here.
-            config: widget.args?.isHost==true
+            config: widget.args?.isHost == true
                 ? zegoUIKitPrebuiltLiveStreamingHostConfig()
                 : zegoUIKitPrebuiltLiveStreamingConfig(),
           );

@@ -24,7 +24,7 @@ class ReelsRecordingScreen extends StatefulWidget {
   const ReelsRecordingScreen(
       {super.key,
       this.voiceMediaId,
-        this.voiceSignedUrl,
+      this.voiceSignedUrl,
       this.comeFromCompany,
       this.totalPrice,
       this.advertisementType});
@@ -113,7 +113,7 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
               scale: isSelected ? 1.2 : 1.0,
               child: Center(
                 child: Text(
-                 widget.voiceSignedUrl == null ? options[0] : options[index],
+                  widget.voiceSignedUrl == null ? options[0] : options[index],
                   style: TextStyle(
                     // color: isSelected? Colors.black:Colors.black,
                     fontSize: isSelected ? 35.sp : 30.sp,
@@ -162,7 +162,9 @@ class VideoPlaybackScreen extends StatefulWidget {
   final String thumbPath;
   final bool isAudioOriginal;
   final String? audioMediaId;
-  const VideoPlaybackScreen(this.videoPath, this.thumbPath,this.isAudioOriginal, {super.key,this.audioMediaId});
+  const VideoPlaybackScreen(
+      this.videoPath, this.thumbPath, this.isAudioOriginal,
+      {super.key, this.audioMediaId});
 
   @override
   VideoPlaybackScreenState createState() => VideoPlaybackScreenState();
@@ -209,9 +211,9 @@ class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
                             onPressed: () async {
                               print('audioMedia ${widget.audioMediaId}');
                               // print('audioPath ${widget.videoPath}');
-                             // await context.read<ReelsCubit>().uploadReel(
-                             //      File(widget.videoPath),
-                             //      File(widget.thumbPath),widget.isAudioOriginal,audioMediaId: widget.audioMediaId);
+                              // await context.read<ReelsCubit>().uploadReel(
+                              //      File(widget.videoPath),
+                              //      File(widget.thumbPath),widget.isAudioOriginal,audioMediaId: widget.audioMediaId);
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.PRIMARY_COLOR,

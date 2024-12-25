@@ -18,35 +18,51 @@ part 'edit_doctor_timetable_state.dart';
 class EditDoctorTimetableCubit extends Cubit<EditDoctorTimetableState> {
   final GetDoctorWorkDaysUsecase _getDoctorWorkDaysUsecase;
   final UpdateDoctorTimetableUsecase _updateDoctorTimetableUsecase;
-  EditDoctorTimetableCubit(this._getDoctorWorkDaysUsecase, this._updateDoctorTimetableUsecase) : super(EditDoctorTimetableState());
+  EditDoctorTimetableCubit(
+      this._getDoctorWorkDaysUsecase, this._updateDoctorTimetableUsecase)
+      : super(EditDoctorTimetableState());
 
   final TextEditingController clinicPriceController = TextEditingController();
   final TextEditingController callPriceController = TextEditingController();
-  final TextEditingController homeVisitPriceController = TextEditingController();
+  final TextEditingController homeVisitPriceController =
+      TextEditingController();
 
-  final TextEditingController clinicDurationController = TextEditingController();
+  final TextEditingController clinicDurationController =
+      TextEditingController();
   final TextEditingController callDurationController = TextEditingController();
-  final TextEditingController homeVisitDurationController = TextEditingController();
+  final TextEditingController homeVisitDurationController =
+      TextEditingController();
 
   final TextEditingController waitingTimeController = TextEditingController();
 
-  init (CheckBoxParams params)async{
+  init(CheckBoxParams params) async {
     emit(state.copyWith(status: EditDoctorTimetableStateStatus.initial));
     await getDoctorWorkDays();
     await updateTables(params);
     emit(state.copyWith(status: EditDoctorTimetableStateStatus.updated));
   }
 
-  updateTables(CheckBoxParams params){
-    emit(state.copyWith( showCall: params.showCall,showClinic: params.showClinic,showHomeVisit: params.showHomeVisit));
-    print("state.doctorWorkDays?.clinic${state.doctorWorkDays?.clinic.toString()}");
-    clinicPriceController.text = state.doctorWorkDays?.clinicPrice.split(' ')[0]??'';
-    callPriceController.text = state.doctorWorkDays?.callsPrice.split(' ')[0]??'';
-    homeVisitPriceController.text = state.doctorWorkDays?.visitHomePrice.split(' ')[0]??'';
-    clinicDurationController.text = state.doctorWorkDays?.detectionPeriodClinic.split(' ')[0]??'';
-    callDurationController.text = state.doctorWorkDays?.detectionPeriodCalls.split(' ')[0]??'';
-    homeVisitDurationController.text = state.doctorWorkDays?.detectionPeriodVisitHome.split(' ')[0]??'';
-    waitingTimeController.text = state.doctorWorkDays?.waitingTime.split(' ')[0]??'';
+  updateTables(CheckBoxParams params) {
+    emit(state.copyWith(
+        showCall: params.showCall,
+        showClinic: params.showClinic,
+        showHomeVisit: params.showHomeVisit));
+    print(
+        "state.doctorWorkDays?.clinic${state.doctorWorkDays?.clinic.toString()}");
+    clinicPriceController.text =
+        state.doctorWorkDays?.clinicPrice.split(' ')[0] ?? '';
+    callPriceController.text =
+        state.doctorWorkDays?.callsPrice.split(' ')[0] ?? '';
+    homeVisitPriceController.text =
+        state.doctorWorkDays?.visitHomePrice.split(' ')[0] ?? '';
+    clinicDurationController.text =
+        state.doctorWorkDays?.detectionPeriodClinic.split(' ')[0] ?? '';
+    callDurationController.text =
+        state.doctorWorkDays?.detectionPeriodCalls.split(' ')[0] ?? '';
+    homeVisitDurationController.text =
+        state.doctorWorkDays?.detectionPeriodVisitHome.split(' ')[0] ?? '';
+    waitingTimeController.text =
+        state.doctorWorkDays?.waitingTime.split(' ')[0] ?? '';
 
     state.doctorWorkDays?.clinic.forEach((clinicDay) {
       print("clinicDay.day.toWeekDay${clinicDay.day.toWeekDay}");
@@ -83,7 +99,8 @@ class EditDoctorTimetableCubit extends Cubit<EditDoctorTimetableState> {
       DateTime parsedTimeTo = DateFormat.jm().parse(callDay.workTo);
 
       defaultCallTimetable
-          .where((item) => item.day == callDay.day.toWeekDay).toList()
+          .where((item) => item.day == callDay.day.toWeekDay)
+          .toList()
           .forEach((item) {
         item
           ..day = callDay.day.toWeekDay
@@ -93,8 +110,12 @@ class EditDoctorTimetableCubit extends Cubit<EditDoctorTimetableState> {
       });
     });
 
-    emit(state.copyWith(callTimetable: defaultCallTimetable,clinicTimetable: defaultClinicTimetable,homeVisitTimetable: defaultHomeVisitTimetable));
+    emit(state.copyWith(
+        callTimetable: defaultCallTimetable,
+        clinicTimetable: defaultClinicTimetable,
+        homeVisitTimetable: defaultHomeVisitTimetable));
   }
+
   List<DoctorDayEntity> defaultCallTimetable = [
     DoctorDayEntity(day: WeekDays.saturday),
     DoctorDayEntity(day: WeekDays.sunday),
@@ -137,9 +158,14 @@ class EditDoctorTimetableCubit extends Cubit<EditDoctorTimetableState> {
   getDoctorWorkDays() async {
     final response = await _getDoctorWorkDaysUsecase(const NoParams());
     response.fold((l) {
-      emit(state.copyWith(failure: l, status: EditDoctorTimetableStateStatus.error));
+      emit(state.copyWith(
+          failure: l, status: EditDoctorTimetableStateStatus.error));
     }, (data) {
-      emit(state.copyWith( doctorWorkDays: data,showCall: data.calls!=[]?true:false,showClinic: data.clinic!=[]?true:false,showHomeVisit: data.visitHome!=[]?true:false));
+      emit(state.copyWith(
+          doctorWorkDays: data,
+          showCall: data.calls != [] ? true : false,
+          showClinic: data.clinic != [] ? true : false,
+          showHomeVisit: data.visitHome != [] ? true : false));
     });
   }
 
@@ -148,21 +174,41 @@ class EditDoctorTimetableCubit extends Cubit<EditDoctorTimetableState> {
     List<DoctorDayModel> callsDays = [];
     List<DoctorDayModel> clinicDays = [];
     List<DoctorDayModel> homeVisitDays = [];
-    callsDays.addAll(state.callTimetable?.where((element) => element.isAvailable==true).map((e) => DoctorDayModel.fromEntity(e)).toList()??[]);
-    clinicDays.addAll(state.clinicTimetable?.where((element) => element.isAvailable==true).map((e) => DoctorDayModel.fromEntity(e)).toList()??[]);
-    homeVisitDays.addAll(state.homeVisitTimetable?.where((element) => element.isAvailable==true).map((e) => DoctorDayModel.fromEntity(e)).toList()??[]);
-    final response = await _updateDoctorTimetableUsecase(DoctorTimetableParams(hasClinic: state.showClinic??false,hasCalls: state.showCall??false,
-      hasHomeVisit: state.showHomeVisit??false, clinic: WorkDaysParams(clinicDays), calls: WorkDaysParams(callsDays), visitHome: WorkDaysParams(homeVisitDays),
-      detectionPeriodCalls: callDurationController.text, detectionPeriodClinic: clinicDurationController.text, detectionPeriodvisitHome: homeVisitDurationController.text,
-      callsPrice: callPriceController.text,clinicPrice: clinicPriceController.text,visitHomePrice: homeVisitPriceController.text,waitingTime: waitingTimeController.text
-    ));
+    callsDays.addAll(state.callTimetable
+            ?.where((element) => element.isAvailable == true)
+            .map((e) => DoctorDayModel.fromEntity(e))
+            .toList() ??
+        []);
+    clinicDays.addAll(state.clinicTimetable
+            ?.where((element) => element.isAvailable == true)
+            .map((e) => DoctorDayModel.fromEntity(e))
+            .toList() ??
+        []);
+    homeVisitDays.addAll(state.homeVisitTimetable
+            ?.where((element) => element.isAvailable == true)
+            .map((e) => DoctorDayModel.fromEntity(e))
+            .toList() ??
+        []);
+    final response = await _updateDoctorTimetableUsecase(DoctorTimetableParams(
+        hasClinic: state.showClinic ?? false,
+        hasCalls: state.showCall ?? false,
+        hasHomeVisit: state.showHomeVisit ?? false,
+        clinic: WorkDaysParams(clinicDays),
+        calls: WorkDaysParams(callsDays),
+        visitHome: WorkDaysParams(homeVisitDays),
+        detectionPeriodCalls: callDurationController.text,
+        detectionPeriodClinic: clinicDurationController.text,
+        detectionPeriodvisitHome: homeVisitDurationController.text,
+        callsPrice: callPriceController.text,
+        clinicPrice: clinicPriceController.text,
+        visitHomePrice: homeVisitPriceController.text,
+        waitingTime: waitingTimeController.text));
     response.fold((l) {
-      emit(state.copyWith(failure: l, status: EditDoctorTimetableStateStatus.error));
+      emit(state.copyWith(
+          failure: l, status: EditDoctorTimetableStateStatus.error));
     }, (data) {
       emit(state.copyWith(status: EditDoctorTimetableStateStatus.editSuccess));
       context.pop(true);
     });
   }
-
-
 }

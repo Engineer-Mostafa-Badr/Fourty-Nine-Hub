@@ -15,7 +15,7 @@ class DoctorDashboardBanner extends StatelessWidget {
       builder: (context, state) {
         if (state.isDoctor == true) {
           return DashboardBanner(
-            title: context.isArabic?'لوحة التحكم':'Doctor Dashboard',
+            title: context.isArabic ? 'لوحة التحكم' : 'Doctor Dashboard',
             subTitle: Labels.doctorDashboardBannerDiscription,
             route: Routes.DOCTORDASHBOARD,
           );

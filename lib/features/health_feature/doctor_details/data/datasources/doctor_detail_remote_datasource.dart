@@ -22,9 +22,10 @@ abstract class DoctorDetailsRemoteDataSource {
 
   Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorReviews(
       GetUserDoctorRatesParams params);
-  Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorRatings(PaginationParams params);
+  Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorRatings(
+      PaginationParams params);
 
-  Future<Either<Failure, bool>>addDoctorRating(AddDoctorRatingParams params);
+  Future<Either<Failure, bool>> addDoctorRating(AddDoctorRatingParams params);
 }
 
 class DoctorDetailsRemoteDataSourceImpl
@@ -46,8 +47,9 @@ class DoctorDetailsRemoteDataSourceImpl
   @override
   Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorReviews(
       GetUserDoctorRatesParams params) async {
-    final response =
-        await _apiConsumer.get(EndPoints.getDoctorReviewsForUsers(params.doctorId),queryParameters: params.toJson());
+    final response = await _apiConsumer.get(
+        EndPoints.getDoctorReviewsForUsers(params.doctorId),
+        queryParameters: params.toJson());
     return response.fold(
       (failure) => Left(failure),
       (data) => Right(
@@ -59,9 +61,10 @@ class DoctorDetailsRemoteDataSourceImpl
   }
 
   @override
-  Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorRatings(PaginationParams params) async {
-    final response =
-        await _apiConsumer.get(EndPoints.getDoctorReviews,queryParameters: params.toJson());
+  Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorRatings(
+      PaginationParams params) async {
+    final response = await _apiConsumer.get(EndPoints.getDoctorReviews,
+        queryParameters: params.toJson());
     return response.fold(
       (failure) => Left(failure),
       (data) => Right(
@@ -73,27 +76,25 @@ class DoctorDetailsRemoteDataSourceImpl
   }
 
   @override
-  Future<Either<Failure, DoctorEntity>> getDoctorDetailsId(GetDoctorDetailsIdParams params) async {
-    final response =
-        await _apiConsumer.get(EndPoints.getDoctorDetailsId(params),data: params.toJson());
+  Future<Either<Failure, DoctorEntity>> getDoctorDetailsId(
+      GetDoctorDetailsIdParams params) async {
+    final response = await _apiConsumer
+        .get(EndPoints.getDoctorDetailsId(params), data: params.toJson());
     return response.fold(
-          (failure) => Left(failure),
-          (data) => Right(
-        DoctorModel.fromJson(data['data'])
-      ),
+      (failure) => Left(failure),
+      (data) => Right(DoctorModel.fromJson(data['data'])),
     );
   }
 
   @override
-  Future<Either<Failure, bool>> addDoctorRating(AddDoctorRatingParams params) async {
-    final response =
-        await _apiConsumer.post(EndPoints.getDoctorReviewsForUsers(params.doctorId),
-            data: params.toJson());
+  Future<Either<Failure, bool>> addDoctorRating(
+      AddDoctorRatingParams params) async {
+    final response = await _apiConsumer.post(
+        EndPoints.getDoctorReviewsForUsers(params.doctorId),
+        data: params.toJson());
     return response.fold(
-          (failure) => Left(failure),
-          (data) => Right(
-          data['status'] ?? false
-      ),
+      (failure) => Left(failure),
+      (data) => Right(data['status'] ?? false),
     );
   }
 }

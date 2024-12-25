@@ -49,8 +49,8 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
     respone.fold(
       (failure) => emit(state.copyWith(
           status: EditDoctorProfileStateStatus.error, failure: failure)),
-      (data) =>
-          emit(state.copyWith(status: EditDoctorProfileStateStatus.updated,update: true)),
+      (data) => emit(state.copyWith(
+          status: EditDoctorProfileStateStatus.updated, update: true)),
     );
   }
 
@@ -63,11 +63,12 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
 
     respone.fold(
         (failure) => emit(state.copyWith(
-            status: EditDoctorProfileStateStatus.error, failure: failure)),
-        (data) {
-          result = true;
-          emit(state.copyWith(status: EditDoctorProfileStateStatus.updated,update: true));
-        });
+            status: EditDoctorProfileStateStatus.error,
+            failure: failure)), (data) {
+      result = true;
+      emit(state.copyWith(
+          status: EditDoctorProfileStateStatus.updated, update: true));
+    });
     return result;
   }
 
@@ -80,11 +81,12 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
 
     respone.fold(
         (failure) => emit(state.copyWith(
-            status: EditDoctorProfileStateStatus.error, failure: failure)),
-        (data) {
-          result = true;
-          emit(state.copyWith(status: EditDoctorProfileStateStatus.updated,update: true));
-        });
+            status: EditDoctorProfileStateStatus.error,
+            failure: failure)), (data) {
+      result = true;
+      emit(state.copyWith(
+          status: EditDoctorProfileStateStatus.updated, update: true));
+    });
 
     return result;
   }
@@ -96,10 +98,9 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
 
     respone.fold(
         (failure) => emit(state.copyWith(
-            status: EditDoctorProfileStateStatus.error, failure: failure)),
-        (data) {
-          emit(state.copyWith(
-            status: EditDoctorProfileStateStatus.doctorDeleted));
-        });
+            status: EditDoctorProfileStateStatus.error,
+            failure: failure)), (data) {
+      emit(state.copyWith(status: EditDoctorProfileStateStatus.doctorDeleted));
+    });
   }
 }

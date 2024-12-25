@@ -29,5 +29,4 @@ abstract class FourtyNineRepository {
 
   Future<Either<Failure, WalletHomeEntity>> getWalletHome();
   Future<Either<Failure, CurrencyEntity>> getCurrency();
-
 }

@@ -97,8 +97,9 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
                       Sizer(height: 15.h),
                       Text(
                         LocaleKeys.transferMoney.localize,
-                        style:
-                            TextStyle(fontSize: 30.sp,),
+                        style: TextStyle(
+                          fontSize: 30.sp,
+                        ),
                       ),
                       const Sizer(),
                       ListTile(

@@ -31,7 +31,11 @@ class Timetable extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: Styles.headerText(color: context.isDarkMode?Colors.white:AppColors.BARRIER_COLOR)),
+          Text(title,
+              style: Styles.headerText(
+                  color: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.BARRIER_COLOR)),
           const Sizer(),
           _WeekWidget(
             timetale: timetale,
@@ -87,7 +91,8 @@ class _WeekWidgetState extends State<_WeekWidget> {
                 Expanded(
                   child: Text(
                     time.day.toLocalizedString(context),
-                    style: Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
+                    style:
+                        Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -109,7 +114,8 @@ class _WeekWidgetState extends State<_WeekWidget> {
                   int minutes = totalMinutes % 60; // Remainder
 
                   // Print the time in HH:MM format
-                  print("Time: ${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}");
+                  print(
+                      "Time: ${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}");
 
                   if (value.period == DayPeriod.am) {
                     print("The value is AM.");
@@ -123,40 +129,57 @@ class _WeekWidgetState extends State<_WeekWidget> {
                     });
                   } else {
                     showErrorMessage(
-                        context, context.isArabic?'بداية الوقت يجب الا تكون بعد الانتهاء':'Start Time Cannot be after the End Time');
+                        context,
+                        context.isArabic
+                            ? 'بداية الوقت يجب الا تكون بعد الانتهاء'
+                            : 'Start Time Cannot be after the End Time');
                   }
                 }
               });
             },
-            child:context.isArabic? RichText(
-              text: TextSpan(
-                text:'من   ',
-                style: Styles.mediumText(
-                  color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR,
-                ),
-                children: [
-                  TextSpan(
-                    text: formatTimeOfDayLocalized(time.from,context),
-                    style: Styles.mediumText(color:context.isDarkMode?Colors.white: AppColors.DARK_GRAY_COLOR),
+            child: context.isArabic
+                ? RichText(
+                    text: TextSpan(
+                      text: 'من   ',
+                      style: Styles.mediumText(
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: formatTimeOfDayLocalized(time.from, context),
+                          style: Styles.mediumText(
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : AppColors.DARK_GRAY_COLOR),
+                        ),
+                      ],
+                    ),
+                  )
+                : RichText(
+                    text: TextSpan(
+                      text: "from   ",
+                      style: Styles.mediumText(
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: formatTimeOfDayLocalized(time.from, context),
+                          style: Styles.mediumText(
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : AppColors.DARK_GRAY_COLOR),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ):RichText(
-              text: TextSpan(
-                text: "from   ",
-                style: Styles.mediumText(
-                  color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR,
-                ),
-                children: [
-                  TextSpan(
-                    text:formatTimeOfDayLocalized(time.from,context),
-                    style: Styles.mediumText(color: context.isDarkMode?Colors.white:AppColors.DARK_GRAY_COLOR),
-                  ),
-                ],
-              ),
-            ),
           ),
-          Sizer(width: 50.w,),
+          Sizer(
+            width: 50.w,
+          ),
           InkWell(
             onTap: () {
               showTimePicker(
@@ -172,38 +195,53 @@ class _WeekWidgetState extends State<_WeekWidget> {
                     });
                   } else {
                     showErrorMessage(
-                        context, context.isArabic?'انتهاء الوقت يجب ان لا يكون قبل البدايه':'End Time Cannot be before the Start Time');
+                        context,
+                        context.isArabic
+                            ? 'انتهاء الوقت يجب ان لا يكون قبل البدايه'
+                            : 'End Time Cannot be before the Start Time');
                   }
                 }
               });
             },
-            child:context.isArabic?RichText(
-              text: TextSpan(
-                text:'إلي   ',
-                style: Styles.mediumText(
-                  color:context.isDarkMode?Colors.white: AppColors.PRIMARY_COLOR,
-                ),
-                children: [
-                  TextSpan(
-                    text: formatTimeOfDayLocalized(time.to,context),
-                    style: Styles.mediumText(color:context.isDarkMode?Colors.white: AppColors.DARK_GRAY_COLOR),
+            child: context.isArabic
+                ? RichText(
+                    text: TextSpan(
+                      text: 'إلي   ',
+                      style: Styles.mediumText(
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: formatTimeOfDayLocalized(time.to, context),
+                          style: Styles.mediumText(
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : AppColors.DARK_GRAY_COLOR),
+                        ),
+                      ],
+                    ),
+                  )
+                : RichText(
+                    text: TextSpan(
+                      text: "to   ",
+                      style: Styles.mediumText(
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: formatTimeOfDayLocalized(time.to, context),
+                          style: Styles.mediumText(
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : AppColors.DARK_GRAY_COLOR),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ):RichText(
-              text: TextSpan(
-                text: "to   ",
-                style: Styles.mediumText(
-                  color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR,
-                ),
-                children: [
-                  TextSpan(
-                    text:formatTimeOfDayLocalized(time.to,context),
-                    style: Styles.mediumText(color:context.isDarkMode?Colors.white: AppColors.DARK_GRAY_COLOR),
-                  ),
-                ],
-              ),
-            ),
           ),
         ],
       ),
@@ -212,7 +250,7 @@ class _WeekWidgetState extends State<_WeekWidget> {
 
   String formatTimeOfDayLocalized(TimeOfDay time, BuildContext context) {
     // Get the current locale (language code)
-    String languageCode = context.isArabic?'ar':'en';
+    String languageCode = context.isArabic ? 'ar' : 'en';
 
     // Format the time in 12-hour format
     String period = time.period == DayPeriod.am ? 'AM' : 'PM';

@@ -10,7 +10,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_reply_card.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/no_scale_text.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/add_reply_usecase.dart';
@@ -28,7 +27,6 @@ import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../tinder/data/shared/shared.dart';
-import 'dart:ui';
 
 class CommentWidgetInsta extends StatefulWidget {
   final CommentEntity commentData;
@@ -54,7 +52,8 @@ class CommentWidgetInsta extends StatefulWidget {
     required this.onDeleteReply,
     required this.onAddReply,
     required this.onDeleteComment,
-    required this.function, required this.onReplyPressed,
+    required this.function,
+    required this.onReplyPressed,
   });
 
   @override
@@ -419,7 +418,6 @@ class _CommentWidgetState extends State<CommentWidgetInsta> {
     return InkWell(
       onTap: () {
         widget.onReplyPressed();
-
       },
       child: NoScaleText(
         LocaleKeys.reply.localize,

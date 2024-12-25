@@ -13,10 +13,12 @@ class DoctorUnhandledAppointmentsView extends StatefulWidget {
   const DoctorUnhandledAppointmentsView({super.key});
 
   @override
-  State<DoctorUnhandledAppointmentsView> createState() => _DoctorUnhandledAppointmentsViewState();
+  State<DoctorUnhandledAppointmentsView> createState() =>
+      _DoctorUnhandledAppointmentsViewState();
 }
 
-class _DoctorUnhandledAppointmentsViewState extends State<DoctorUnhandledAppointmentsView> {
+class _DoctorUnhandledAppointmentsViewState
+    extends State<DoctorUnhandledAppointmentsView> {
   late ScrollController _scrollController;
 
   @override
@@ -26,9 +28,9 @@ class _DoctorUnhandledAppointmentsViewState extends State<DoctorUnhandledAppoint
     super.initState();
   }
 
-
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       context.read<DoctorUnhandledAppointmentsCubit>().getAppointments();
     }
   }
@@ -37,8 +39,7 @@ class _DoctorUnhandledAppointmentsViewState extends State<DoctorUnhandledAppoint
   Widget build(BuildContext context) {
     return BlocListener<DoctorUnhandledAppointmentsCubit,
         DoctorUnhandledAppointmentsState>(
-      listener: (context, state) {
-      },
+      listener: (context, state) {},
       child: Scaffold(
         appBar: BackAppBar(
           label: LocaleKeys.unhandledAppointments.localize,
@@ -49,8 +50,7 @@ class _DoctorUnhandledAppointmentsViewState extends State<DoctorUnhandledAppoint
             var cubit = context.read<DoctorUnhandledAppointmentsCubit>();
             if (state.isLoading) {
               return const Center(child: CircularProgressIndicator());
-
-            }else {
+            } else {
               if (cubit.appointments.isNotEmpty) {
                 return ListView.separated(
                   shrinkWrap: true,
@@ -71,8 +71,8 @@ class _DoctorUnhandledAppointmentsViewState extends State<DoctorUnhandledAppoint
                   },
                   separatorBuilder: (BuildContext context, int index) =>
                       Divider(
-                        height: 60.h,
-                      ),
+                    height: 60.h,
+                  ),
                 );
               } else {
                 return Center(

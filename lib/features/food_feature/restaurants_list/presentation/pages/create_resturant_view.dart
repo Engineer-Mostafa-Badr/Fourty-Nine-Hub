@@ -77,7 +77,9 @@ class CreateResturantView extends StatelessWidget {
                 Sizer(height: 20.h),
                 CreateDoctorIDExpiryDatePicker(
                   onDateSelected: (date) {
-                    context.read<CreateResturantCubit>().pickIDExpiryDate(date!);
+                    context
+                        .read<CreateResturantCubit>()
+                        .pickIDExpiryDate(date!);
                   },
                 ),
                 Sizer(height: 20.h),

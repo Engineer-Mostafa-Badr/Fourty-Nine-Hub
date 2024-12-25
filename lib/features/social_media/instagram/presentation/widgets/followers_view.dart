@@ -40,12 +40,13 @@ class _FollowersViewState extends State<FollowersView> {
         isFirstSearchListenerCall = false;
         return;
       }
-      _cubit.loadInitialData( _cubit.searchController.text);
+      _cubit.loadInitialData(_cubit.searchController.text);
     });
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       _cubit.fetchAllFollowers(_cubit.searchController.text);
     }
   }
@@ -70,14 +71,16 @@ class _FollowersViewState extends State<FollowersView> {
               controller: _cubit.searchController,
               decoration: InputDecoration(
                   fillColor: Colors.transparent,
-                border: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                contentPadding:  EdgeInsets.only(top: 5.h),
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  contentPadding: EdgeInsets.only(top: 5.h),
                   hintStyle: Styles.mediumText(fontSize: 65.sp),
-                hintText: LocaleKeys.search.localize,
-                prefixIcon: Icon(FontAwesomeIcons.search,size: 30.sp,)
-              ),
+                  hintText: LocaleKeys.search.localize,
+                  prefixIcon: Icon(
+                    FontAwesomeIcons.search,
+                    size: 30.sp,
+                  )),
             ),
           ),
         ),
@@ -89,10 +92,10 @@ class _FollowersViewState extends State<FollowersView> {
             }
             return Expanded(
               child: ListView.separated(
-
                 controller: _scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: _cubit.followers.length + (_cubit.isLoadingMore ? 1 : 0),
+                itemCount:
+                    _cubit.followers.length + (_cubit.isLoadingMore ? 1 : 0),
                 separatorBuilder: (context, index) => const Sizer(),
                 itemBuilder: (context, index) {
                   if (index == _cubit.followers.length) {
@@ -100,9 +103,8 @@ class _FollowersViewState extends State<FollowersView> {
                   }
                   final followers = _cubit.followers[index];
                   return GestureDetector(
-                    onTap: (){
-                       context.push(
-                          Routes.INSTAGRAMPROFILE,
+                    onTap: () {
+                      context.push(Routes.INSTAGRAMPROFILE,
                           extra: followers.followerId);
                     },
                     child: Row(
@@ -119,7 +121,8 @@ class _FollowersViewState extends State<FollowersView> {
                           children: [
                             RichText(
                               text: TextSpan(
-                                  text: "${followers.firstName} ${followers.lastname}",
+                                  text:
+                                      "${followers.firstName} ${followers.lastname}",
                                   style: Styles.headerText(
                                     fontWeight: FontWeight.w600,
                                   )),

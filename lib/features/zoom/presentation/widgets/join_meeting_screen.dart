@@ -179,9 +179,9 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                   context.pushReplacement(
                     Routes.MEETINGROOM,
                     extra: MeetingRoomArguments(
-                      liveID:meetingId,
-                      isHost:context.read<StreamCubit>().isHost,
-                      userName:_userNameController.text.trim().isNotEmpty
+                      liveID: meetingId,
+                      isHost: context.read<StreamCubit>().isHost,
+                      userName: _userNameController.text.trim().isNotEmpty
                           ? _userNameController.text.trim()
                           : context.read<UserCubit>().state.data!.fullName,
                       shareScreen: widget.shareScreen,

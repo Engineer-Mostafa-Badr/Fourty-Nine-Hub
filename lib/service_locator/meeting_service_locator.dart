@@ -35,8 +35,10 @@ class StreamServiceLocator {
     serviceLocator.registerFactory(() => EditGoalUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => EndRoomUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => SendLiveGiftUseCase(serviceLocator()));
-    serviceLocator.registerFactory(() => SendPointSocketUseCase(serviceLocator()));
-    serviceLocator.registerFactory(() => SendPointListenerUseCase(serviceLocator()));
+    serviceLocator
+        .registerFactory(() => SendPointSocketUseCase(serviceLocator()));
+    serviceLocator
+        .registerFactory(() => SendPointListenerUseCase(serviceLocator()));
     serviceLocator
         .registerFactory(() => GetScheduledRoomsUseCase(serviceLocator()));
     //lazy singleton to use it in several places

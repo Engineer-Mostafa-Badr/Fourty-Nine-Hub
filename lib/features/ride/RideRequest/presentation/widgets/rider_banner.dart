@@ -17,11 +17,13 @@ class RiderBanner extends StatefulWidget {
   const RiderBanner({
     super.key,
     required this.model,
+    this.deleteReqeust,
     this.favoriteName,
   });
 
   final BannerModel model;
   final String? favoriteName;
+  final bool? deleteReqeust;
 
   @override
   State<RiderBanner> createState() => _RiderBannerState();
@@ -69,8 +71,7 @@ class _RiderBannerState extends State<RiderBanner> {
       },
       // canRegister: true,
       // canRegister: true,
-      canRegister: !(widget.model.mainCategory?.isDriver ?? false) &&
-          !(widget.model.mainCategory?.isDriverApproved ?? false),
+      canRegister: false,
       category: MainCategoryEntity(
         nameEn: widget.model.mainCategory?.nameEn,
         id: widget.model.mainCategory?.mainCategoryId ?? '',

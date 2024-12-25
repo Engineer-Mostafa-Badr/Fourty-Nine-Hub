@@ -21,7 +21,9 @@ abstract class InstagramRepo {
   Future<Either<Failure, List<PostEntity>>> getUserReels(
       {required UserReelsParams params});
 
-  Future<Either<Failure, List<FollowersEntity>>> getAllFollowers(TwitterFeedParams params);
+  Future<Either<Failure, List<FollowersEntity>>> getAllFollowers(
+      TwitterFeedParams params);
 
-  Future<Either<Failure, List<FollowingEntity>>> getAllFollowing(TwitterFeedParams params);
+  Future<Either<Failure, List<FollowingEntity>>> getAllFollowing(
+      TwitterFeedParams params);
 }

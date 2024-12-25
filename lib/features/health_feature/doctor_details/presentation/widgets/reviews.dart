@@ -31,27 +31,33 @@ class DoctorDetailsReviewsWidget extends StatelessWidget {
           BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
             builder: (context, state) {
               var cubit = context.read<DoctorDetailsCubit>();
-              if(cubit.rates.isEmpty) {
+              if (cubit.rates.isEmpty) {
                 return Padding(
                   padding: EdgeInsets.only(top: 50.h),
                   child: Center(child: Text(LocaleKeys.noReviews.localize)),
                 );
-              }else{
+              } else {
                 return Column(
                   children: [
                     ListView.separated(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: cubit.rates.length>2?2:cubit.rates.length,
+                      itemCount:
+                          cubit.rates.length > 2 ? 2 : cubit.rates.length,
                       separatorBuilder: (context, index) =>
-                      const DoctorDetailsDivider(),
+                          const DoctorDetailsDivider(),
                       itemBuilder: (context, index) =>
                           UserDoctorRateCard(rate: cubit.rates[index]),
                     ),
                     const Sizer(),
-                    if(cubit.rates.length>2)AppButton(label: LocaleKeys.viewAll.localize, onPressed: (){
-                      context.push(Routes.DOCTORREVIEWS,extra: doctorId);
-                    },style: Styles.headerText(color: Colors.white),)
+                    if (cubit.rates.length > 2)
+                      AppButton(
+                        label: LocaleKeys.viewAll.localize,
+                        onPressed: () {
+                          context.push(Routes.DOCTORREVIEWS, extra: doctorId);
+                        },
+                        style: Styles.headerText(color: Colors.white),
+                      )
                   ],
                 );
               }

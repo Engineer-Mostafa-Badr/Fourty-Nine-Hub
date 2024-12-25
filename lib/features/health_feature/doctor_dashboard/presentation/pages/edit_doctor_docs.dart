@@ -21,7 +21,11 @@ class EditDoctorDocsView extends StatefulWidget {
   final String? backTitle;
   const EditDoctorDocsView({
     super.key,
-    required this.onSubmit, required this.subCategoryId, required this.from, this.frontTitle, this.backTitle,
+    required this.onSubmit,
+    required this.subCategoryId,
+    required this.from,
+    this.frontTitle,
+    this.backTitle,
   });
 
   @override
@@ -36,7 +40,9 @@ class _EditDoctorDocsViewState extends State<EditDoctorDocsView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Label(text: LocaleKeys.uploadPhotos.localize, style: Styles.headerText()),
+          Label(
+              text: LocaleKeys.uploadPhotos.localize,
+              style: Styles.headerText()),
           const Sizer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -60,7 +66,8 @@ class _EditDoctorDocsViewState extends State<EditDoctorDocsView> {
           Sizer(
             height: 20.h,
           ),
-          Label(text: LocaleKeys.expireDate.localize, style: Styles.headerText()),
+          Label(
+              text: LocaleKeys.expireDate.localize, style: Styles.headerText()),
           const Sizer(),
           DatePickerField(
             title: LocaleKeys.expireDate.localize,
@@ -68,9 +75,9 @@ class _EditDoctorDocsViewState extends State<EditDoctorDocsView> {
             minDate: now,
             maxDate: DateTime(now.year + 5, now.month, now.day),
             onDateSelected: (date) {
-             setState(() {
-               _expireDate = date;
-             });
+              setState(() {
+                _expireDate = date;
+              });
             },
           ),
           Sizer(
@@ -92,7 +99,8 @@ class _EditDoctorDocsViewState extends State<EditDoctorDocsView> {
                 widget.onSubmit(DoctorDocsParams(
                     backImageId: _backId,
                     frontImageId: _frontId,
-                    expireDate: _expireDate!, from: widget.from));
+                    expireDate: _expireDate!,
+                    from: widget.from));
               }
             },
           )

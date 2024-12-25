@@ -62,8 +62,8 @@ class GiftData {
     this.nameEn,
     this.value = 1,
     this.picture,
-    this.editValue='',
-    this.showEdit=false,
+    this.editValue = '',
+    this.showEdit = false,
     this.currentValue = 1,
     this.maximumGoal = 100,
   });

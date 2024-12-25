@@ -319,7 +319,7 @@ class _BaseIcon extends StatelessWidget {
   final double? iconSize;
   final void Function()? onTap;
 
-  const _BaseIcon({required this.icon, this.onTap, this.iconSize, this.color});
+  const _BaseIcon({required this.icon, this.onTap, this.color, this.iconSize});
 
   @override
   Widget build(BuildContext context) {

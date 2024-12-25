@@ -66,7 +66,6 @@ class _ReportViewState extends State<ReportView> {
                       Center(
                         child: Text(
                           LocaleKeys.noReportCategoriesAvailable.localize,
-
                           style: TextStyle(fontSize: 40.sp),
                         ),
                       )
@@ -116,7 +115,6 @@ class _ReportViewState extends State<ReportView> {
       children: [
         Text(
           LocaleKeys.report.localize,
-
           style: TextStyle(
             fontSize: 55.sp,
             fontWeight: FontWeight.bold,
@@ -159,7 +157,6 @@ class _ReportViewState extends State<ReportView> {
             Expanded(
               child: Text(
                 capitalizeAndSplit(report.displayTitleAr),
-
                 style: TextStyle(
                   fontSize: 30.sp,
                   fontWeight: FontWeight.bold,

@@ -34,7 +34,9 @@ class FloatingButton extends StatelessWidget {
                 HandleCashback.setCount('socialCount', context);
 
                 if (changeView == 1) {
-                  context.push(Routes.SOCIAL,extra: SocialParams(userId: UserCubit.to.state.data?.id??'',index: 0));
+                  context.push(Routes.SOCIAL,
+                      extra: SocialParams(
+                          userId: UserCubit.to.state.data?.id ?? '', index: 0));
                 } else {
                   context.push(Routes.HOME);
                 }

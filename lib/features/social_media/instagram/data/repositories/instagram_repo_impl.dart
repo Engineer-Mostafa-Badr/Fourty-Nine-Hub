@@ -50,12 +50,14 @@ class InstagramRepoImpl implements InstagramRepo {
   }
 
   @override
-  Future<Either<Failure, List<FollowersEntity>>> getAllFollowers(TwitterFeedParams params) {
+  Future<Either<Failure, List<FollowersEntity>>> getAllFollowers(
+      TwitterFeedParams params) {
     return _remoteDataSource.getAllFollowers(params);
   }
 
   @override
-  Future<Either<Failure, List<FollowingEntity>>> getAllFollowing(TwitterFeedParams params) {
-   return _remoteDataSource.getAllFollowing(params);
+  Future<Either<Failure, List<FollowingEntity>>> getAllFollowing(
+      TwitterFeedParams params) {
+    return _remoteDataSource.getAllFollowing(params);
   }
 }

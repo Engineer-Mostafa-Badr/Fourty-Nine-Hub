@@ -6,7 +6,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 class DoctorDashboardPopupMenuButton extends StatelessWidget {
-  const DoctorDashboardPopupMenuButton({super.key, required this.earnedMoney, required this.subCategoryId});
+  const DoctorDashboardPopupMenuButton(
+      {super.key, required this.earnedMoney, required this.subCategoryId});
   final List<EarnedMoneyEntity> earnedMoney;
   final String subCategoryId;
   @override
@@ -19,25 +20,25 @@ class DoctorDashboardPopupMenuButton extends StatelessWidget {
             child: Text(LocaleKeys.editProfile.localize),
           ),
           PopupMenuItem(
-            onTap: (){
-              context.push(Routes.DOCTORREVIEWS,extra: '');
+            onTap: () {
+              context.push(Routes.DOCTORREVIEWS, extra: '');
             },
             child: Text(LocaleKeys.reviews.localize),
           ),
           PopupMenuItem(
-            onTap: (){
-              context.push(Routes.DOCTORSTATISTICS,extra: earnedMoney);
+            onTap: () {
+              context.push(Routes.DOCTORSTATISTICS, extra: earnedMoney);
             },
             child: Text(LocaleKeys.history.localize),
           ),
           PopupMenuItem(
-            onTap: (){
-              context.push(Routes.EMERGENCYREQUESTS,extra: subCategoryId);
+            onTap: () {
+              context.push(Routes.EMERGENCYREQUESTS, extra: subCategoryId);
             },
             child: Text(LocaleKeys.emergencyRequests.localize),
           ),
           PopupMenuItem(
-            onTap: (){
+            onTap: () {
               context.push(Routes.ALLAPPOINTMENTS);
             },
             child: Text(LocaleKeys.allAppointments.localize),

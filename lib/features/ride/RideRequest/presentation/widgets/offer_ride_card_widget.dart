@@ -181,37 +181,37 @@ class OfferRideCardWidget extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                      if(onAccept!=null)
-                      Row(
-                        children: [
-                          Flexible(
-                            child: AppButton(
-                              label: LocaleKeys.decline.tr(),
-                              onPressed: () {
-                                context
-                                    .read<DeclineOfferNoSocketCubit>()
-                                    .decline(id: model.id ?? "");
-                              },
+                      if (onAccept != null)
+                        Row(
+                          children: [
+                            Flexible(
+                              child: AppButton(
+                                label: LocaleKeys.decline.tr(),
+                                onPressed: () {
+                                  context
+                                      .read<DeclineOfferNoSocketCubit>()
+                                      .decline(id: model.id ?? "");
+                                },
+                              ),
                             ),
-                          ),
-                          const Sizer(),
-                          Flexible(
-                            child: AppButton(
-                              color: Colors.white,
-                              backColor: AppColors.PRIMARY_COLOR,
-                              label: LocaleKeys.Accept.tr(),
-                              onPressed: () {
-                                context
-                                    .read<AcceptOfferNoSocketCubit>()
-                                    .accept(id: model.id ?? "");
-                                if(onAccept!=null){
-                                  onAccept!(model);
-                                }
-                              },
-                            ),
-                          )
-                        ],
-                      ),
+                            const Sizer(),
+                            Flexible(
+                              child: AppButton(
+                                color: Colors.white,
+                                backColor: AppColors.PRIMARY_COLOR,
+                                label: LocaleKeys.Accept.tr(),
+                                onPressed: () {
+                                  context
+                                      .read<AcceptOfferNoSocketCubit>()
+                                      .accept(id: model.id ?? "");
+                                  if (onAccept != null) {
+                                    onAccept!(model);
+                                  }
+                                },
+                              ),
+                            )
+                          ],
+                        ),
                       const SizedBox(
                         height: 10,
                       ),
@@ -232,9 +232,9 @@ class OfferRideCardWidget extends StatelessWidget {
                                         : AppColors.DARK_GRAY_COLOR,
                                     onPressed: () {
                                       if (callState.data &&
-                                            (model.isAccepted ?? false)) {
+                                          (model.isAccepted ?? false)) {
                                         launchUrlString(
-                                          "tel://${model.driverId?.phone}");
+                                            "tel://${model.driverId?.phone}");
                                       }
                                     },
                                     style: Styles.mediumText(
