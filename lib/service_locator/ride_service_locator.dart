@@ -110,7 +110,6 @@ class RideServiceLocator {
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
-              serviceLocator(),
             )..loadData());
     serviceLocator.registerFactory<RatingCubit>(() => RatingCubit(
           serviceLocator(),
@@ -160,8 +159,8 @@ class RideServiceLocator {
         () => AddRideRequestUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetFoodHistoryUseCase>(
         () => GetFoodHistoryUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<GetHistoryRideUseCase>(
-        () => GetHistoryRideUseCase(serviceLocator()));
+    // serviceLocator.registerLazySingleton<GetHistoryRideUseCase>(
+    //     () => GetHistoryRideUseCase(serviceLocator()));
     serviceLocator.registerFactory<GetShippingExpectedPriceUseCase>(
         () => GetShippingExpectedPriceUseCase(serviceLocator()));
     serviceLocator.registerFactory<GetShippingSubCategoriesUseCase>(

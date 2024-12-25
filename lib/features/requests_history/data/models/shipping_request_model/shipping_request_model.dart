@@ -1,55 +1,92 @@
-import 'package:fourtyninehub/features/requests_history/data/models/call_model.dart';
-import 'package:fourtyninehub/features/requests_history/data/models/driver_model.dart';
-import 'package:fourtyninehub/features/requests_history/data/models/offer_model.dart';
-import 'package:fourtyninehub/features/requests_history/domain/entities/shipping_request_entity.dart';
-import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
+class ShippingRequestModel {
+  final String id;
+  final List<double> fromCoordinates;
+  final List<double> toCoordinates;
+  final String fromAddress;
+  final String toAddress;
+  final int price;
+  final String time;
+  final String status;
+  final bool isPremium;
+  final String phone;
+  final String createdAt;
+  final String updatedAt;
+  final String currencyEn;
+  final String currencyAr;
+  final String distance;
+  final bool started;
+  final bool ended;
+  final bool canceled;
+  final List calls;
+  final List offers;
+  final dynamic driver; // This could be a custom model like DriverModel
+  final dynamic category; // This could be a custom model like CategoryModel
+  final String moreFromAddressDetails;
+  final String moreToAddressDetails;
+  final String receiverPhone;
+  final String senderPhone;
 
-class ShippingRequestModel extends ShippingRequestEntity {
-  ShippingRequestModel(
-      {required super.id,
-      required super.fromCoordinates,
-      required super.toCoordinates,
-      required super.fromAddress,
-      required super.toAddress,
-      required super.price,
-      required super.time,
-      required super.distance,
-      required super.started,
-      required super.ended,
-      required super.canceled,
-      required super.calls,
-      required super.offers,
-      required super.driver,
-      required super.category,
-      required super.moreFromAddressDetails,
-      required super.moreToAddressDetails,
-      required super.receiverPhone,
-      required super.senderPhone});
+  ShippingRequestModel({
+    required this.id,
+    required this.fromCoordinates,
+    required this.toCoordinates,
+    required this.fromAddress,
+    required this.toAddress,
+    required this.price,
+    required this.time,
+    required this.status,
+    required this.isPremium,
+    required this.phone,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.currencyEn,
+    required this.currencyAr,
+    required this.distance,
+    required this.started,
+    required this.ended,
+    required this.canceled,
+    required this.calls,
+    required this.offers,
+    required this.driver,
+    required this.category,
+    required this.moreFromAddressDetails,
+    required this.moreToAddressDetails,
+    required this.receiverPhone,
+    required this.senderPhone,
+  });
+
   factory ShippingRequestModel.fromJson(Map<String, dynamic> json) {
     return ShippingRequestModel(
-      id: json['id'],
-      fromCoordinates: json['from_coordinates'].cast<double>(),
-      toCoordinates: json['to_coordinates'].cast<double>(),
-      fromAddress: json['from_address'],
-      toAddress: json['to_address'],
-      price: json['price'],
-      time: json['time'],
-      distance: json['distance'],
-      started: json['started'],
-      ended: json['ended'],
-      canceled: json['canceled'] = false,
-      calls: json['calls'] != null
-          ? (json['calls'] as List).map((e) => CallModel.fromJson(e)).toList()
-          : [],
-      offers:
-          (json['offers'] as List).map((e) => OfferModel.fromJson(e)).toList(),
-      driver:
-          json['driver'] != null ? DriverModel.fromJson(json['driver']) : null,
-      category: SubCategoryModel.fromJson(json['category']),
-      moreFromAddressDetails: json['more_from_address_details'],
-      moreToAddressDetails: json['more_to_address_details'],
-      senderPhone: json['sender_phone'],
-      receiverPhone: json['receiver_phone'],
+      id: json['_id'] ?? '', // Fallback to empty string
+      fromCoordinates: json['from_coordinates']?.cast<double>() ?? [],
+      toCoordinates: json['to_coordinates']?.cast<double>() ?? [],
+      fromAddress: json['startLocation'] ?? '',
+      toAddress: json['targetLocation'] ?? '',
+      price: (json['price'] is int)
+          ? json['price']
+          : int.tryParse(json['price'].toString()) ?? 0, // Safely parse as int
+      time: json['time'] ?? '',
+      status: json['status'] ?? '',
+      isPremium: json['isPremium'] ?? false,
+      phone: json['phone'] ?? '',
+      createdAt: json['createdAt'] ?? '',
+      updatedAt: json['updatedAt'] ?? '',
+      currencyEn: json['currency']['currencyEn'] ?? '',
+      currencyAr: json['currency']['currencyAr'] ?? '',
+      distance: json['desc'] ?? '', // Replace with appropriate field
+      started: json['started'] ?? false,
+      ended: json['ended'] ?? false,
+      canceled: json['canceled'] ?? false,
+      calls: json['driverRatingsVirtual'] ??
+          [], // Assuming no need for actual data
+      offers: json['offers'] ?? [],
+      driver: json['driverId'], // Can be parsed as DriverModel if necessary
+      category:
+          json['categoryId'], // Can be parsed as CategoryModel if necessary
+      moreFromAddressDetails: '',
+      moreToAddressDetails: '',
+      receiverPhone: '',
+      senderPhone: json['phone'] ?? '',
     );
   }
 }
