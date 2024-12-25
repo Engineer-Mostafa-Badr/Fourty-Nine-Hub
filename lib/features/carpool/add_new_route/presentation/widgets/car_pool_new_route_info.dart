@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/get_price_carpool/get_price_carpool_cubit.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/mapBox_cubit/cubit/map_box_cubit_cubit.dart';
@@ -116,7 +117,7 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
                 setState(() {});
               },
               activeColor: AppColors.PRIMARY_COLOR,
-              trackOutlineColor: const WidgetStatePropertyAll(Colors.grey),
+              trackOutlineColor: const MaterialStatePropertyAll(Colors.grey),
               activeTrackColor: Colors.grey,
               inactiveTrackColor: Colors.white,
               inactiveThumbColor: Colors.grey,
@@ -140,7 +141,7 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
                     },
                     activeColor: AppColors.PRIMARY_COLOR,
                     trackOutlineColor:
-                        const WidgetStatePropertyAll(Colors.grey),
+                        const MaterialStatePropertyAll(Colors.grey),
                     activeTrackColor: Colors.grey,
                     inactiveTrackColor: Colors.white,
                     inactiveThumbColor: Colors.grey,
@@ -166,7 +167,7 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
                     setState(() {});
                   },
                   activeColor: AppColors.PRIMARY_COLOR,
-                  trackOutlineColor: const WidgetStatePropertyAll(Colors.grey),
+                  trackOutlineColor: const MaterialStatePropertyAll(Colors.grey),
                   activeTrackColor: Colors.grey,
                   inactiveTrackColor: Colors.white,
                   inactiveThumbColor: Colors.grey,
@@ -201,16 +202,6 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
           return Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(
-                flex: 1,
-                child: AvaialbleTripsButton(
-                  title: LocaleKeys.premuimRequest.localize,
-                  // color: testColor,
-                  color: AppColors.getSecondryColor(context),
-                  onTap: () {},
-                ),
-              ),
-              const Sizer(width: 5),
               Expanded(
                 flex: 1,
                 child: AvaialbleTripsButton(
@@ -275,38 +266,47 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
 
   Future<void> createCarPool() async {
     final num finalPrice = _getPriceNum();
-    await createCarPoolCubit.createCarPool(
-      createCarpoolParam: CreateCarpoolParam(
-        comfort: isComfort,
-        destinationAddress:
-            getPriceCarpoolCubit.carpoolRouteInfoModel?.destinationAddress,
-        distance: getPriceCarpoolCubit.carpoolRouteInfoModel?.distance?.toInt(),
-        duration: getPriceCarpoolCubit.carpoolRouteInfoModel?.duration?.toInt(),
-        firstMidpoint: [
-          getPriceCarpoolCubit.carpoolRouteInfoModel?.firstMidpoint?["lat"] ??
-              0,
-          getPriceCarpoolCubit.carpoolRouteInfoModel?.firstMidpoint?["lng"] ?? 0
-        ],
-        locationForFirstMidpoint: getPriceCarpoolCubit
-            .carpoolRouteInfoModel?.locationForFirstMidpoint,
-        locationForSecondMidpoint: getPriceCarpoolCubit
-            .carpoolRouteInfoModel?.locationForSecondMidpoint,
-        originAddress:
-            getPriceCarpoolCubit.carpoolRouteInfoModel?.originAddress,
-        priceForEveryUser: finalPrice.toInt(),
-        secondMidpoint: [
-          getPriceCarpoolCubit.carpoolRouteInfoModel?.secondMidpoint?["lat"] ??
-              0,
-          getPriceCarpoolCubit.carpoolRouteInfoModel?.secondMidpoint?["lng"] ??
-              0
-        ],
-        startLocation:
-            getPriceCarpoolCubit.carpoolRouteInfoModel?.startLocation,
-        targetLocation:
-            getPriceCarpoolCubit.carpoolRouteInfoModel?.targetLocation,
-        womenDriverOnly: isDriverWomanOnly,
-        womenOnly: isWomanOnly,
-      ),
-    );
+    if (finalPrice != 0) {
+      await createCarPoolCubit.createCarPool(
+        createCarpoolParam: CreateCarpoolParam(
+          comfort: isComfort,
+          destinationAddress:
+              getPriceCarpoolCubit.carpoolRouteInfoModel?.destinationAddress,
+          distance:
+              getPriceCarpoolCubit.carpoolRouteInfoModel?.distance?.toInt(),
+          duration:
+              getPriceCarpoolCubit.carpoolRouteInfoModel?.duration?.toInt(),
+          firstMidpoint: [
+            getPriceCarpoolCubit.carpoolRouteInfoModel?.firstMidpoint?["lat"] ??
+                0,
+            getPriceCarpoolCubit.carpoolRouteInfoModel?.firstMidpoint?["lng"] ??
+                0
+          ],
+          locationForFirstMidpoint: getPriceCarpoolCubit
+              .carpoolRouteInfoModel?.locationForFirstMidpoint,
+          locationForSecondMidpoint: getPriceCarpoolCubit
+              .carpoolRouteInfoModel?.locationForSecondMidpoint,
+          originAddress:
+              getPriceCarpoolCubit.carpoolRouteInfoModel?.originAddress,
+          priceForEveryUser: finalPrice.toInt(),
+          secondMidpoint: [
+            getPriceCarpoolCubit
+                    .carpoolRouteInfoModel?.secondMidpoint?["lat"] ??
+                0,
+            getPriceCarpoolCubit
+                    .carpoolRouteInfoModel?.secondMidpoint?["lng"] ??
+                0
+          ],
+          startLocation:
+              getPriceCarpoolCubit.carpoolRouteInfoModel?.startLocation,
+          targetLocation:
+              getPriceCarpoolCubit.carpoolRouteInfoModel?.targetLocation,
+          womenDriverOnly: isDriverWomanOnly,
+          womenOnly: isWomanOnly,
+        ),
+      );
+    } else {
+      showErrorMessage(context, LocaleKeys.pleaseFillAllFields.localize);
+    }
   }
 }

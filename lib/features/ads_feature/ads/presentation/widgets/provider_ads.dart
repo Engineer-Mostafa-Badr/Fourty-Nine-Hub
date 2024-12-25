@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/ads/banner_ad_model.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -7,6 +9,8 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cu
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+
+import '../../../../../ads/native_ad_card.dart';
 
 class ProviderAds extends StatefulWidget {
   const ProviderAds(
@@ -33,6 +37,14 @@ class _ProviderAdsState extends State<ProviderAds> {
   //
   //   // super.initState();
   // }
+  final AdsManager _adsManager = AdsManager();
+
+  @override
+  void initState() {
+
+    super.initState();
+    _adsManager.preloadAds();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,19 +66,26 @@ class _ProviderAdsState extends State<ProviderAds> {
             );
           },
           itemBuilder: (context, item, index) {
-            return CategoriesExtension.fromNameEn(
-                    widget.params.mainCategory.nameEn ?? '')
-                .view(
-              item: item,
-              onFav: (String id) async {
-                var result = await widget.controller.favouriteAd(id);
-                return result;
-              },
-              onRemoveFav: (String id) async {
-                var result = await widget.controller.unFavouriteAd(id);
-                return result;
-              },
-            );
+    // if (index > 0 && index % 3 == 0) {
+/*
+   if (index > nativeAdStart && index % adFrequency == adFrequency - 1) {
+              return getAdIfNeeded(index, _adsManager);
+            }
+ */
+            if (index > 0 && index % 2 == 0) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.5, // Reduced height
+                    child: AdsManagerWidget(),
+                  ),
+                  _buildAdContent(item), // Your content for the ad
+                ],
+              );
+            }
+
+            return _buildAdContent(item); // Regular content without ad
           },
           noMoreItemsIndicatorBuilder: (context) => Container(),
           firstPageProgressIndicatorBuilder: (context) => Container(
@@ -74,6 +93,20 @@ class _ProviderAdsState extends State<ProviderAds> {
               child: const Center(child: CircularProgressIndicator())),
           newPageProgressIndicatorBuilder: (context) =>
               const Center(child: CircularProgressIndicator())),
+    );
+  }
+  Widget _buildAdContent(AdModel item) {
+    return CategoriesExtension.fromNameEn(widget.params.mainCategory.nameEn ?? '')
+        .view(
+      item: item,
+      onFav: (String id) async {
+        var result = await widget.controller.favouriteAd(id);
+        return result;
+      },
+      onRemoveFav: (String id) async {
+        var result = await widget.controller.unFavouriteAd(id);
+        return result;
+      },
     );
   }
 }

@@ -20,6 +20,8 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/controlle
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/repositories/StoriesRpo.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/data_sources/tinder_data_source.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/repositories/tinder_repository_impl.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/add_favourite_category_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/chech_user_nearby_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_favourites_category_use_case.dart';
@@ -220,8 +222,8 @@ class DI {
         () => TinderRemoteDataSourceImpl(
               serviceLocator(),
             ));
-    // serviceLocator.registerLazySingleton<TinderRepository>(
-    //     () => TinderRepositoryImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<TinderRepository>(
+        () => TinderRepositoryImpl(serviceLocator()));
 
     serviceLocator
         .registerLazySingleton<GetUserDataUseCase>(() => GetUserDataUseCase(

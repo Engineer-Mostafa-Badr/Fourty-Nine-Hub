@@ -32,8 +32,11 @@ import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/get_price_carpool/get_price_carpool_cubit.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/here_cubit/cubit/here_location_cubit.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/mapBox_cubit/cubit/map_box_cubit_cubit.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/cubits/verify_complet_driver/cubit/verify_complete_driver_cubit.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/views/add_new_route_view.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/accept_trip/cubit/accept_trip_for_driver_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_cubit.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_available_trips_for_drivers/cubit/get_available_trips_for_drivers_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/views/carpool_view.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
@@ -117,6 +120,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripC
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/completed_trip_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/partial_payment_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/rider_in_start_location_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/change_driver_status_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_driver_type_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/create_trip_request_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/delete_driver_ride_cubit.dart';
@@ -1712,9 +1716,36 @@ class AppPages {
                             create: (context) => DeleteDriverRideCubit(
                                 repository: serviceLocator()),
                           ),
+                          // BlocProvider(
+                          //   create: (context) => GetAllTripRiderCubit(
+                          //       repository: serviceLocator())
+                          //     ..getAllTrip(),
+                          // ),
+                          BlocProvider(
+                            create: (context) => VerifyCompleteDriverCubit(
+                                verifyOtpCompleteSeatDriverRemoteDataSource:
+                                    serviceLocator()),
+                          ),
+                          BlocProvider(
+                            create: (context) =>
+                                GetCurrencyCubit(serviceLocator()),
+                          ),
+                          BlocProvider(
+                            create: (context) =>
+                                GetAvailableTripsForDriversCubit(
+                                    serviceLocator()),
+                          ),
+                          BlocProvider(
+                            create: (context) =>
+                                AcceptTripForDriverCubit(serviceLocator()),
+                          ),
                           BlocProvider(
                             create: (context) => GetRouteRiderCubit(
                                 repository: serviceLocator()),
+                          ),
+                          BlocProvider(
+                            create: (context) =>
+                                ChangeDriverStatusCubit(serviceLocator()),
                           ),
                           BlocProvider(
                             create: (context) => GetRouteRiderCubit(
@@ -1757,6 +1788,10 @@ class AppPages {
                                 repository: serviceLocator()),
                           ),
                           BlocProvider(
+                            create: (context) =>
+                                ChangeDriverStatusCubit(serviceLocator()),
+                          ),
+                          BlocProvider(
                             create: (context) => GetAllTripNoSocketCubit(
                                 repository: serviceLocator())
                               ..get(),
@@ -1769,7 +1804,7 @@ class AppPages {
                             create: (context) =>
                                 CallMessageCubit(repository: serviceLocator()),
                           ),
-                        ], child: const AllTripNoSocketScreen())
+                        ], child: AllTripNoSocketScreen())
                     // BlocProvider(
                     //   create: (_) => GetAllTripRiderCubit(repository: serviceLocator())..getAllTrip(),
                     //   child: const AllRiderTripScreen(),

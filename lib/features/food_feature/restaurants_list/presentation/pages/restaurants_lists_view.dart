@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/ads/native_ad_card.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -37,30 +38,30 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   late ScrollController _scrollController;
   bool isFirstSearchListenerCall = true;
 
+  final AdsManager _adsManager = AdsManager();
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
+    _adsManager.preloadAds();
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
     context.read<RestaurantsCubit>().loadData();
+
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
       context.read<RestaurantsCubit>().fetchRestaurants();
     }
   }
-
   @override
   void dispose() {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -76,12 +77,11 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
             });
           }
         },
-        child: state.isLoading
-            ? const Center(child: CircularProgressIndicator.adaptive())
-            : _buildLoggedInView(state),
+        child: state.isLoading ? const Center(child: CircularProgressIndicator.adaptive()) :_buildLoggedInView(state),
       ),
     );
   }
+
 
   Widget _buildLoggedInView(RestaurantsListState state) {
     return ListView(
@@ -89,78 +89,75 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
       controller: _scrollController,
       shrinkWrap: true,
       children: [
-        const MealBanner(),
-        if (!(state.isResturant?.isRestaurant ?? false))
-          _buildRegisterRestaurantPrompt(state),
-        const Sizer(),
-        Column(
-          children: [
-            if ((state.isResturant?.isRestaurant ?? false) &&
-                (state.isResturant?.approved ?? false))
-              const ResturantDashboardButton(),
-            const Sizer(),
-            _buildSearchAndExpiredRequests(),
-            const Sizer(),
-            const MealCategories(),
-            const Sizer(),
-            Label(
-              text: context.isArabic
-                  ? "${state.selectedCategory?.id != '' ? "مطاعم " : ''}${state.selectedCategory?.nameAr}"
-                  : "${state.selectedCategory?.nameEn}${state.selectedCategory?.id != '' ? " Restaurants" : ''}",
-              style: Styles.headerText(),
-            ),
-            const Sizer(),
-            (state.isLoadingRestaurantsMore == true &&
-                    context.read<RestaurantsCubit>().currentRestaurantsPage ==
-                        1)
-                ? ListView.builder(
-                    itemCount: 1,
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, i) => const PropertyCardShimmer(),
-                  )
-                : context.read<RestaurantsCubit>().restaurants.isNotEmpty
-                    ? ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount:
-                            context.read<RestaurantsCubit>().restaurants.length,
-                        separatorBuilder: (context, index) => const Sizer(),
-                        itemBuilder: (context, i) =>
-                            SubCategoriesRestaurantCard(
-                          item: context.read<RestaurantsCubit>().restaurants[i],
-                          mealId: '',
-                          favouriteRestaurant: (String id) async {
-                            var result = await context
-                                .read<RestaurantsCubit>()
-                                .toggleFavoriteRestaurant(id);
-                            if (result == true) {
-                              context
-                                      .read<RestaurantsCubit>()
-                                      .restaurants[i]
-                                      .isFavorite =
-                                  !context
-                                      .read<RestaurantsCubit>()
-                                      .restaurants[i]
-                                      .isFavorite!;
-                            }
-                          },
-                        ),
-                      )
-                    : Center(
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 40.h),
-                          child: Text(
-                            context.isArabic
-                                ? "لا توجد مطاعم متوفرة."
-                                : "No Restaurants Found.",
-                            style: Styles.mediumText(),
-                          ),
-                        ),
-                      )
-          ],
-        )
+          const MealBanner(),
+          if (!(state.isResturant?.isRestaurant ?? false))
+            _buildRegisterRestaurantPrompt(state),
+          const Sizer(),
+         Padding(
+           padding: EdgeInsets.all(10.w),
+           child: Column(
+             children: [
+               if ((state.isResturant?.isRestaurant ?? false) &&
+                   (state.isResturant?.approved ?? false))
+                 const ResturantDashboardButton(),
+               const Sizer(),
+               _buildSearchAndExpiredRequests(),
+               const Sizer(),
+               const MealCategories(),
+               const Sizer(),
+               Label(
+                 text: context.isArabic?"${state.selectedCategory?.id!=''?"مطاعم ":''}${state.selectedCategory?.nameAr}":"${state.selectedCategory?.nameEn}${state.selectedCategory?.id!=''?" Restaurants":''}",
+                 style: Styles.headerText(),
+               ),
+               const Sizer(),
+               (state.isLoadingRestaurantsMore==true&&context.read<RestaurantsCubit>().currentRestaurantsPage==1)?ListView.builder(
+                 itemCount: 1,
+                 padding: EdgeInsets.zero,
+                 shrinkWrap: true,
+                 physics: const NeverScrollableScrollPhysics(),
+                 itemBuilder: (context,i)=>const PropertyCardShimmer(),
+               ):context.read<RestaurantsCubit>().restaurants.isNotEmpty?ListView.separated(
+                 shrinkWrap: true,
+                 physics: const NeverScrollableScrollPhysics(),
+                 itemCount: context.read<RestaurantsCubit>().restaurants.length,
+                 separatorBuilder: (context, index) => const Sizer(),
+                 itemBuilder: (context,i) {
+                   // if (i > nativeAdStart && i % adFrequency == adFrequency - 1) {
+                   //   return getAdIfNeeded(i, _adsManager);
+                   // }
+                   // if (i > context.read<RestaurantsCubit>().restaurants.length && i % adFrequency == adFrequency - 1) {
+                   //   print("the index ${context.read<RestaurantsCubit>().restaurants.length}");
+                   //   return getAdIfNeeded(i, _adsManager);
+                   // }
+
+                   return Column(
+                     children: [
+                       if (i % adFrequency == adFrequency - 1)
+                         getAdIfNeeded(i, _adsManager), // Only show ad
+                       SubCategoriesRestaurantCard(
+                       item: context.read<RestaurantsCubit>().restaurants[i],
+                       mealId: '', favouriteRestaurant: (String id) async {
+                       var result = await context.read<RestaurantsCubit>().toggleFavoriteRestaurant(id);
+                       if(result==true){
+                         context.read<RestaurantsCubit>().restaurants[i].isFavorite= !context.read<RestaurantsCubit>().restaurants[i].isFavorite!;
+                       }
+                                        },
+                                        ),
+                     ],
+                   );
+                 },
+               ):Center(
+                 child: Padding(
+                   padding: EdgeInsets.only(top: 40.h),
+                   child: Text(
+                     context.isArabic ? "لا توجد مطاعم متوفرة." : "No Restaurants Found.",
+                     style: Styles.mediumText(),
+                   ),
+                 ),
+               )
+             ],
+           ),
+         )
       ],
     );
   }
@@ -191,7 +188,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: Text(
-            LocaleKeys.serveClientsByClickRegister.tr(),
+            LocaleKeys
+                .serveClientsByClickRegister
+                .tr(),
             style: Styles.mediumText(color: Colors.red),
           ),
         ),
@@ -205,21 +204,20 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
         Expanded(
           child: InkWell(
             onTap: () => context.read<UserCubit>().isLoggedIn
-                ? Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BlocProvider(
-                        create: (context) => SearchRestaurantsCubit(
-                          serviceLocator(),
-                          serviceLocator(),
-                          serviceLocator(),
-                          serviceLocator(),
-                        )..loadData(),
-                        child: const SearchRestaurantView(),
-                      ),
-                    ),
-                  )
-                : context.push(Routes.LOGIN),
+                ?Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BlocProvider(
+                  create: (context) => SearchRestaurantsCubit(
+                    serviceLocator(),
+                    serviceLocator(),
+                    serviceLocator(),
+                    serviceLocator(),
+                  )..loadData(),
+                  child: const SearchRestaurantView(),
+                ),
+              ),
+            ):context.push(Routes.LOGIN),
             child: Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -244,16 +242,15 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
             onTap: () {
               context.read<UserCubit>().isLoggedIn
                   ? Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BlocProvider.value(
-                          value: serviceLocator<RestaurantsCubit>()
-                            ..loadInitialExpiredOrders(),
-                          child: const RestaurantExpiredRequestsScreen(),
-                        ),
-                      ),
-                    )
-                  : context.push(Routes.LOGIN);
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BlocProvider.value(
+                    value: serviceLocator<RestaurantsCubit>()
+                      ..loadInitialExpiredOrders(),
+                    child: const RestaurantExpiredRequestsScreen(),
+                  ),
+                ),
+              ):context.push(Routes.LOGIN);
             },
             child: Container(
               alignment: Alignment.centerLeft,
@@ -272,6 +269,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
       ],
     );
   }
+
 }
 
 class NoAuthRestaurantCategory {

@@ -122,45 +122,11 @@ class TestCardDashboard extends StatelessWidget {
                         AvaialbleTripsButton(
                           title: LocaleKeys.Accept.localize,
                           color: AppColors.PRIMARY_COLOR,
-                          onTap: () {
-                            BlocProvider.of<AcceptTripForDriverCubit>(context)
+                          onTap: () async {
+                            await BlocProvider.of<AcceptTripForDriverCubit>(
+                                    context)
                                 .acceptTripForDriver(tripId: entity.id);
                           },
-                        ),
-                        Positioned.directional(
-                          top: 0,
-                          end: 20,
-                          textDirection: context.isArabic
-                              ? TextDirection.rtl
-                              : TextDirection.ltr,
-                          child: SizedBox(
-                            height: 80.0,
-                            width: 20,
-                            child: BlocBuilder<AcceptTripForDriverCubit,
-                                AcceptTripForDriverState>(
-                              builder: (context, state) {
-                                if (state is AcceptTripForDriverLoading) {
-                                  return const Center(
-                                    child: CircularProgressIndicator(
-                                        color: Colors.white),
-                                  );
-                                }
-                                if (state is AcceptTripForDriverSuccess) {
-                                  return Center(
-                                    child: Icon(Icons.check,
-                                        color: Colors.green[400], size: 30),
-                                  );
-                                }
-                                if (state is AcceptTripForDriverFailure) {
-                                  return Center(
-                                    child: Icon(Icons.error,
-                                        color: Colors.red[400], size: 30),
-                                  );
-                                }
-                                return const SizedBox();
-                              },
-                            ),
-                          ),
                         ),
                       ],
                     ),
@@ -170,6 +136,7 @@ class TestCardDashboard extends StatelessWidget {
               const Sizer(),
             ],
           ),
+          const Sizer(),
         ],
       ),
     );

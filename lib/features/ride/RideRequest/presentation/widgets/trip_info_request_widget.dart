@@ -164,51 +164,52 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
                     padding: const EdgeInsets.symmetric(horizontal: 17),
                     child: Column(
                       children: [
-                        BlocListener<GetTripInfoCubit, RiderState>(
-                          listener: (context, state) {
-                            if (state is SuccessGetTripInfoState) {
-                              if (!isBottomSheetShown) {
-                                isBottomSheetShown = true;
-                                WidgetsBinding.instance.addPostFrameCallback(
-                                  (timeStamp) {
-                                    context
-                                        .read<RiderTripReelTimeCubit>()
-                                        .print();
-                                    BlocProvider.of<GetCurrencyCubit>(context)
-                                        .getCurrencyData();
+                        // BlocListener<GetTripInfoCubit, RiderState>(
+                        //   listener: (context, state) {
+                        //     if (state is SuccessGetTripInfoState) {
+                        //       if (!isBottomSheetShown) {
+                        //         isBottomSheetShown = true;
+                        //         WidgetsBinding.instance.addPostFrameCallback(
+                        //           (timeStamp) {
+                        //             context
+                        //                 .read<RiderTripReelTimeCubit>()
+                        //                 .print();
+                        //             BlocProvider.of<GetCurrencyCubit>(context)
+                        //                 .getCurrencyData();
 
-                                    showModalBottomSheet(
-                                      isScrollControlled: true,
-                                      backgroundColor: Colors.white,
-                                      context: context,
-                                      builder: (context) => MultiBlocProvider(
-                                        providers: [
-                                          BlocProvider(
-                                              create: (context) =>
-                                                  GetTripInfoCubit(
-                                                      repository:
-                                                          serviceLocator())),
-                                        ],
-                                        child: BlocProvider(
-                                          create: (context) => GetCurrencyCubit(
-                                              serviceLocator()),
-                                          child: TripInfoButtonSheetWidget(
-                                            model: state.model,
-                                          ),
-                                        ),
-                                      ),
-                                    ).whenComplete(
-                                      () {
-                                        isBottomSheetShown = false;
-                                      },
-                                    );
-                                  },
-                                );
-                              }
-                            }
-                          },
-                          child: Container(),
-                        ),
+                        //             showModalBottomSheet(
+                        //               isScrollControlled: true,
+                        //               backgroundColor: Colors.white,
+                        //               context: context,
+                        //               builder: (context) => MultiBlocProvider(
+                        //                 providers: [
+                        //                   BlocProvider(
+                        //                       create: (context) =>
+                        //                           GetTripInfoCubit(
+                        //                               repository:
+                        //                                   serviceLocator())),
+                        //                 ],
+                        //                 child: BlocProvider(
+                        //                   create: (context) => GetCurrencyCubit(
+                        //                       serviceLocator()),
+                        //                   child: TripInfoButtonSheetWidget(
+                        //                     model: state.model,
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //             ).whenComplete(
+                        //               () {
+                        //                 isBottomSheetShown = false;
+                        //               },
+                        //             );
+                        //           },
+                        //         );
+                        //       }
+                        //     }
+                        //   },
+                        //   child: Container(),
+                        // ),
+
                         const Sizer(),
                       ],
                     ),

@@ -3,6 +3,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/ads/app_open_model.dart';
+import 'package:fourtyninehub/ads/banner_ad_model.dart';
+import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -45,7 +48,7 @@ class FourtyNineView extends StatefulWidget {
   State<FourtyNineView> createState() => _FourtyNineViewState();
 }
 
-class _FourtyNineViewState extends State<FourtyNineView> {
+class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObserver {
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
@@ -56,9 +59,29 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       print(e.toString());
     }
   }
+  AppOpenAdManager appOpenAdManager = AppOpenAdManager();
+  bool isPaused = false;
+
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // TODO: implement didChangeAppLifecycleState
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused) {
+      print("xd==========================");
+      isPaused = true;
+    }
+    if (state == AppLifecycleState.resumed && isPaused) {
+      print("Resumed==========================");
+      appOpenAdManager.showAdIfAvailable();
+      isPaused = false;
+    }
+  }
 
   @override
   void initState() {
+    appOpenAdManager.loadAd();
+    WidgetsBinding.instance.addObserver(this);
     checkLogin();
     super.initState();
     _setupScrollController();
@@ -101,6 +124,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   @override
   void dispose() {
     scrollController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+
     super.dispose();
   }
 
@@ -154,6 +179,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           shrinkWrap: true,
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           children: [
+            AddBanner(),
             //carousel slider
             const AnnounceWidget(),
             !context.read<UserCubit>().isLoggedIn
@@ -219,8 +245,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          HandleCashback.setCount(
-                              'mainCategoriesCount', context);
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
+                          HandleCashback.setCount('mainCategoriesCount',context);
                           context.push(Routes.SUBCATEGORIES,
                               extra: state.data![index]);
                         },
@@ -274,17 +301,21 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 width: 34.h,
               ),
               Routes.MAINCATEGORIESTREE,
-              () => HandleCashback.setCount('threeDotsCount', context),
+                  () => HandleCashback.setCount('threeDotsCount', context),
             ),
             _buildItemTabBar(
-                SvgPicture.asset(
-                  Assets.mobile,
-                  height: 34.h,
-                  width: 34.h,
-                ),
-                Routes.MAINCATEGORIESCARDS, () {
-              HandleCashback.setCount('mainCategoriesSliderCount', context);
-            }),
+              SvgPicture.asset(
+                Assets.mobile,
+                height: 34.h,
+                width: 34.h,
+              ),
+              Routes.MAINCATEGORIESCARDS,
+                (){
+                  AdInterstitialTop.loadIntersitialAd();
+                  AdInterstitialTop.showInterstitialAd();
+                  HandleCashback.setCount('mainCategoriesSliderCount',context);
+                }
+            ),
           ],
         ),
       ),
@@ -343,7 +374,11 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   service: state.data?[0].service ?? RideServicesEnum.pickMe,
                   title: LocaleKeys.carpool.localize,
                   image: state.data?[0].image ?? '',
-                  onTab: () => HandleCashback.setCount('carPoolCount', context),
+                  onTab: () {
+                    AdInterstitialTop.loadIntersitialAd();
+                    AdInterstitialTop.showInterstitialAd();
+                    return HandleCashback.setCount('carPoolCount',context);
+                  },
                   // image: Assets.carpool,
                   // isFavorite: state.data![0].is,
                   // numberOfAds: state.data![0].numberOfAds?.toInt(),
@@ -360,8 +395,11 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   // image: Assets.tripJoin,
 
                   route: Routes.AVAILABLE_TRIPS,
-                  onTab: () =>
-                      HandleCashback.setCount('tripJoinCount', context),
+                  onTab: () {
+                    AdInterstitialTop.loadIntersitialAd();
+                    AdInterstitialTop.showInterstitialAd();
+                    return HandleCashback.setCount('tripJoinCount',context);
+                  },
                   // isFavorite: state.data![1].isFavorite,
                   // numberOfAds: state.data![1].numberOfAds?.toInt(),
                 ),
@@ -467,7 +505,9 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 icon: Icons.star,
                 iconSize: 50.h,
                 onPressed: () {
-                  HandleCashback.setCount('beAStarCount', context);
+                  AdInterstitialTop.loadIntersitialAd();
+                  AdInterstitialTop.showInterstitialAd();
+                  HandleCashback.setCount('beAStarCount',context);
                   context.push(Routes.BE_STAR);
                 }),
           ),

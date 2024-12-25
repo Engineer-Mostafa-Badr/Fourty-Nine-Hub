@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
@@ -31,6 +32,8 @@ class HealthSubCategoryCard extends StatelessWidget {
     print(subCategory.id);
     return GestureDetector(
       onTap: () {
+        AdInterstitialTop.loadIntersitialAd();
+        AdInterstitialTop.showInterstitialAd();
         serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
             subCategory;
         context.push(Routes.VISITADOCTORLIST,
@@ -38,7 +41,7 @@ class HealthSubCategoryCard extends StatelessWidget {
                 fromHome: true, subCategoryId: subCategory.id));
       },
       child: Container(
-        width: 200,
+        width: 0.55.sw,
         padding: const EdgeInsets.all(10),
         margin: EdgeInsetsDirectional.only(
             end: 10.w, bottom: 10.h, top: 10.h, start: 5.w),

@@ -109,7 +109,7 @@ dependencies:
   html: ^0.15.0
   voice_message_package: ^2.2.1
   flutter_rating_bar:
-
+  google_mobile_ads:
   #for loading
   # skeletons: ^0.0.3
   web_socket_channel: ^2.4.5

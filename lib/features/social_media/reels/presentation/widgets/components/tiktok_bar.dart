@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -84,6 +85,8 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               // LIVE Icon with Glow Effect
               const Sizer(),
               _buildLiveIcon(onTap: () {
+                AdInterstitialTop.loadIntersitialAd();
+                AdInterstitialTop.showInterstitialAd();
                 if (context
                     .read<PreloadBloc>()
                     .state
@@ -126,7 +129,9 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 context.push(Routes.SPOTLIGHT);
               }),
               // Following Tab
-              _buildTab(LocaleKeys.Snap.localize, 1, onTap: () {
+              _buildTab("Snap", 1, onTap: () {
+                AdInterstitialTop.loadIntersitialAd();
+                AdInterstitialTop.showInterstitialAd();
                 if (context
                     .read<PreloadBloc>()
                     .state

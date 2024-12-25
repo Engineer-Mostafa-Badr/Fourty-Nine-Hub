@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -114,9 +115,9 @@ class _MealCategoriesState extends State<MealCategories> {
                                 .subCategories[index];
                             return MealCategoryCard(
                               onTap: (String id) {
-                                context
-                                    .read<RestaurantsCubit>()
-                                    .loadInitialRestaurantsData(id);
+                                AdInterstitialTop.loadIntersitialAd();
+                                AdInterstitialTop.showInterstitialAd();
+                                context.read<RestaurantsCubit>().loadInitialRestaurantsData(id);
                               },
                               subCategory: subCategory,
                               favouriteSubCategory: () async {

@@ -1,7 +1,5 @@
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/data_sources/tinder_data_source.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/repositories/tinder_repository_impl.dart';
-import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/add_favourite_category_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/chech_user_nearby_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_favourites_category_use_case.dart';
@@ -21,8 +19,8 @@ class TinderServiceLocator {
         () => TinderRemoteDataSourceImpl(
               serviceLocator(),
             ));
-    serviceLocator.registerLazySingleton<TinderRepository>(
-        () => TinderRepositoryImpl(serviceLocator()));
+    // serviceLocator.registerLazySingleton<TinderRepository>(
+    //     () => TinderRepositoryImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<GetTinderProfileUseCase>(
         () => GetTinderProfileUseCase(
