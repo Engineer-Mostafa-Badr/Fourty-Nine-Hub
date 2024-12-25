@@ -27,11 +27,7 @@ class DoctorListRemoteDataSourceImpl implements DoctorListRemoteDataSource {
     print("objectFromSearch${params.toJson()}");
     final response = await _apiConsumer.get(EndPoints.doctorSearch,
         data: params.toJson(),
-      queryParameters: {
-      "page":params.page,
-        "limit":params.limit
-      }
-        );
+        queryParameters: {"page": params.page, "limit": params.limit});
 
     return response.fold(
         (failure) => Left(failure),
@@ -41,18 +37,15 @@ class DoctorListRemoteDataSourceImpl implements DoctorListRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<DoctorEntity>>> getSubCategoryDoctorsList({required GetSubCategoryDoctorsParams params}) async {
+  Future<Either<Failure, List<DoctorEntity>>> getSubCategoryDoctorsList(
+      {required GetSubCategoryDoctorsParams params}) async {
     print("objectFromSubCat$params");
-    final response = await _apiConsumer.get(
-      EndPoints.doctorSearch,
-      data: {
-      'subCategoryId': params.subCategoryId
-      },
-      queryParameters: params.toJson()
-    );
+    final response = await _apiConsumer.get(EndPoints.doctorSearch,
+        data: {'subCategoryId': params.subCategoryId},
+        queryParameters: params.toJson());
     return response.fold(
-            (failure) => Left(failure),
-            (data) => Right((data['data'] as List)
+        (failure) => Left(failure),
+        (data) => Right((data['data'] as List)
             .map((e) => DoctorModel.fromJson(e))
             .toList()));
   }

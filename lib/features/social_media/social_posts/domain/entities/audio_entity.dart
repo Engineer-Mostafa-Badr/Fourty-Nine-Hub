@@ -1,4 +1,4 @@
-class AudioEntity{
+class AudioEntity {
   final String id;
   final String mediaKey;
   final String sound;

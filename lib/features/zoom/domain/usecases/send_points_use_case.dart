@@ -16,7 +16,6 @@ class SendPointsUseCase extends UseCase<bool, SendPointsParams> {
   }
 }
 
-
 class SendPointsParams {
   final String streamId;
   final String memberId;
@@ -24,9 +23,6 @@ class SendPointsParams {
   SendPointsParams({required this.streamId, required this.memberId});
 
   //toJson
-  Map<String, dynamic> toJson() => {
-    'streamId': streamId,
-    'memberId': memberId,
-    'points':50
-  };
+  Map<String, dynamic> toJson() =>
+      {'streamId': streamId, 'memberId': memberId, 'points': 50};
 }

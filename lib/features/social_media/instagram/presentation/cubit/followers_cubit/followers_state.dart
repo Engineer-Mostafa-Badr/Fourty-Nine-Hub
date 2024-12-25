@@ -10,6 +10,7 @@ extension FollowStateX on FollowState {
   bool get isError => status == FollowStates.error;
   bool get isSuccess => status == FollowStates.success;
 }
+
 class FollowState {
   final FollowStates? status;
   final Failure? failure;
@@ -17,14 +18,13 @@ class FollowState {
   final List<FollowersEntity>? followers;
   final List<FollowingEntity>? following;
 
-  FollowState(
-      {
-        this.status,
-        this.failure,
-        this.followers,
-        this.following,
-        this.isLast,
-      });
+  FollowState({
+    this.status,
+    this.failure,
+    this.followers,
+    this.following,
+    this.isLast,
+  });
   FollowState copyWith({
     FollowStates? status,
     Failure? failure,

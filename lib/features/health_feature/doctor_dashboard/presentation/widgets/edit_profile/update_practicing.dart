@@ -11,7 +11,8 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:go_router/go_router.dart';
 
 class UpdateDoctorPracticingCirtificateCard extends StatelessWidget {
-  const UpdateDoctorPracticingCirtificateCard({super.key, required this.subCategoryId});
+  const UpdateDoctorPracticingCirtificateCard(
+      {super.key, required this.subCategoryId});
   final String subCategoryId;
   @override
   Widget build(BuildContext context) {
@@ -23,16 +24,20 @@ class UpdateDoctorPracticingCirtificateCard extends StatelessWidget {
           widget: EditDoctorDocsView(
             backTitle: LocaleKeys.back.localize,
             frontTitle: LocaleKeys.front.localize,
-            onSubmit: (DoctorDocsParams doctorDocsParams) async{
+            onSubmit: (DoctorDocsParams doctorDocsParams) async {
               bool result = await context
                   .read<EditDoctorProfileCubit>()
                   .updatePracticingCirtificate(doctorDocsParams);
-              if(result == true){
+              if (result == true) {
                 context.pop();
-                Future.delayed(const Duration(milliseconds: 500),(){
-                  showSuccessMessage(context, 'Your request send successfully and waiting for approving');
-                });              }
-            }, subCategoryId: subCategoryId, from: 'Practicing',
+                Future.delayed(const Duration(milliseconds: 500), () {
+                  showSuccessMessage(context,
+                      'Your request send successfully and waiting for approving');
+                });
+              }
+            },
+            subCategoryId: subCategoryId,
+            from: 'Practicing',
           ),
         );
       },

@@ -34,7 +34,8 @@ class CreateDoctorIDExpiryDatePicker extends StatelessWidget {
               isAuthentcation: isAuthentcation,
               borderWidth: borderWidth,
               borderColor: field.hasError ? Colors.red : borderColor,
-              title: title ?? (context.isArabic?'تاريخ انتهاء الهوية':'ID Expiry Date'),
+              title: title ??
+                  (context.isArabic ? 'تاريخ انتهاء الهوية' : 'ID Expiry Date'),
               initialDate: now,
               textStyle: textStyle ?? Styles.mediumText(),
               minDate: now,

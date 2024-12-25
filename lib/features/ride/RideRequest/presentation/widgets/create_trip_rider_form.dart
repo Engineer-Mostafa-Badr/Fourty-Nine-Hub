@@ -225,6 +225,9 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                                   const EdgeInsets.symmetric(horizontal: 12),
                               width: double.infinity,
                               decoration: BoxDecoration(
+                                  color: context.isDarkMode
+                                      ? AppColors.QUANTITY_COLOR
+                                      : Colors.white,
                                   border: Border.all(
                                       color: field.hasError
                                           ? Colors.red
@@ -391,7 +394,8 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                                         passangers: numberOfPassenger,
                                         phone: phone.text,
                                         price: double.parse(offerPrice.text),
-                                        time: "${DateFormat(DateFormat.YEAR_MONTH_DAY).format(date!)}:${time?.hour}:${time?.minute}",
+                                        time:
+                                            "${DateFormat(DateFormat.YEAR_MONTH_DAY).format(date!)}:${time?.hour}:${time?.minute}",
                                         toTitle: destinationController.text,
                                         desc: ""),
                                   );
@@ -415,7 +419,6 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                                 if (formKey.currentState!.validate()) {
                                   createRequestCubit.request(
                                     model: CreateTripRideRequestModel(
-                                      
                                         categoryId: context
                                             .read<RiderTripReelTimeCubit>()
                                             .subCategory
@@ -424,7 +427,8 @@ class _CreateTripRiderFormState extends State<CreateTripRiderForm> {
                                         passangers: numberOfPassenger,
                                         phone: phone.text,
                                         price: double.parse(offerPrice.text),
-                                        time: "${DateFormat(DateFormat.YEAR_MONTH_DAY).format(date!)}:${time?.hour}:${time?.minute}",
+                                        time:
+                                            "${DateFormat(DateFormat.YEAR_MONTH_DAY).format(date!)}:${time?.hour}:${time?.minute}",
                                         toTitle: destinationController.text,
                                         desc: ""),
                                   );

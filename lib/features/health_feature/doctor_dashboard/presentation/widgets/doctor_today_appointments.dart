@@ -32,7 +32,7 @@ class DoctorTodayAppointmentsWidget extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(10),
               color: cardDarkColor(context),
               boxShadow: [
                 BoxShadow(
@@ -41,37 +41,43 @@ class DoctorTodayAppointmentsWidget extends StatelessWidget {
                   blurRadius: 2,
                   offset: const Offset(0, 3),
                 ),
-              ]          ),
+              ]),
           child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
             builder: (context, state) {
-              if (state.todayAppointments!=null&&state.todayAppointments!.isNotEmpty) {
+              if (state.todayAppointments != null &&
+                  state.todayAppointments!.isNotEmpty) {
                 return Column(
                   children: [
                     ListView.separated(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: state.todayAppointments!.length>2?2:state.todayAppointments!.length,
+                      itemCount: state.todayAppointments!.length > 2
+                          ? 2
+                          : state.todayAppointments!.length,
                       itemBuilder: (context, index) => DoctorAppointmentCard(
                         appointment: state.todayAppointments![index],
-                        cancelAppointment: (id){
-                          context.read<DoctorDashboardCubit>().cancelAppointment(id, context);
+                        cancelAppointment: (id) {
+                          context
+                              .read<DoctorDashboardCubit>()
+                              .cancelAppointment(id, context);
                         },
                       ),
                       separatorBuilder: (BuildContext context, int index) =>
                           const Divider(),
                     ),
-                    if(state.todayAppointments!.length>2)AppButton(
-                        label: LocaleKeys.showMore.localize,
-                        style: Styles.mediumText(color: Colors.white),
-                        onPressed: () {
-                          context.push(Routes.DOCTORTODAYAPPOINTMENTS);
-                        })
+                    if (state.todayAppointments!.length > 2)
+                      AppButton(
+                          label: LocaleKeys.showMore.localize,
+                          style: Styles.mediumText(color: Colors.white),
+                          onPressed: () {
+                            context.push(Routes.DOCTORTODAYAPPOINTMENTS);
+                          })
                   ],
                 );
               } else {
                 return Center(
                     child: Text(
-                      LocaleKeys.noAppointments.localize,
+                  LocaleKeys.noAppointments.localize,
                   style: Styles.headerText(
                       color: Theme.of(context).textTheme.bodyMedium?.color),
                 ));
@@ -87,7 +93,8 @@ class DoctorTodayAppointmentsWidget extends StatelessWidget {
 class DoctorAppointmentCard extends StatelessWidget {
   final DoctorAppointmentEntity appointment;
   final Function(String id) cancelAppointment;
-  const DoctorAppointmentCard({super.key, required this.appointment,required this.cancelAppointment});
+  const DoctorAppointmentCard(
+      {super.key, required this.appointment, required this.cancelAppointment});
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +108,7 @@ class DoctorAppointmentCard extends StatelessWidget {
                 ImageFromInternet(
                   width: 120.w,
                   height: 100.h,
-                  image: appointment.image??'',
+                  image: appointment.image ?? '',
                   borderRadius: BorderRadius.circular(15.r),
                   defaultLogo: true,
                   fit: BoxFit.cover,
@@ -130,9 +137,14 @@ class DoctorAppointmentCard extends StatelessWidget {
             children: [
               Text(appointment.startTime),
               const Sizer(),
-              AppButton(label: LocaleKeys.cancel.localize, color: Colors.white,padding: 15.w,backColor: AppColors.PRIMARY_COLOR,onPressed: (){
-                cancelAppointment(appointment.id);
-              })
+              AppButton(
+                  label: LocaleKeys.cancel.localize,
+                  color: Colors.white,
+                  padding: 15.w,
+                  backColor: AppColors.PRIMARY_COLOR,
+                  onPressed: () {
+                    cancelAppointment(appointment.id);
+                  })
             ],
           ),
         ],

@@ -19,7 +19,8 @@ class MyAddsView extends StatefulWidget {
   State<MyAddsView> createState() => _MyAddsViewState();
 }
 
-class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateMixin {
+class _MyAddsViewState extends State<MyAddsView>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late ScrollController _scrollController;
   late MyAddsCubit _myAddsCubit;
@@ -148,7 +149,8 @@ class _MyAddsViewState extends State<MyAddsView> with SingleTickerProviderStateM
           itemCount: state.tripJoin!.docs.length,
           separatorBuilder: (context, index) => const Sizer(),
           itemBuilder: (context, index) {
-            return MyAdsTripJoin(tripJoinCardEntity: state.tripJoin!.docs[index]);
+            return MyAdsTripJoin(
+                tripJoinCardEntity: state.tripJoin!.docs[index]);
           },
         );
       },

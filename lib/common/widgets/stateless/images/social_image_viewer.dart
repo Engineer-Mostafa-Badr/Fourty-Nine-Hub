@@ -57,8 +57,8 @@ class SocialImageViewer extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: 10.w),
                       // height: kToolbarHeight * .5,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.black54,
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.black54,
                       ),
                       child: Label(
                           text: '$index/$length',

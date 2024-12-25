@@ -40,7 +40,10 @@ class ReviewCard extends StatelessWidget {
             )),
           ],
         ),
-        ReadMoreLabel(text: review.comment,style: Styles.mediumText(),),
+        ReadMoreLabel(
+          text: review.comment,
+          style: Styles.mediumText(),
+        ),
         // Label(
         //     text: review.createdAt,
         //     style: Styles.mediumText(fontWeight: FontWeight.w400)),

@@ -18,35 +18,42 @@ class DoctorStatisticsView extends StatelessWidget {
       appBar: const BackAppBar(),
       body: BlocBuilder<DoctorStatisticsCubit, DoctorStatisticsState>(
         builder: (context, state) {
-          return totalEarnedMoney.isEmpty ? Center(child: Text(context.isArabic?'لا يوجد نتائج':'No Result',style: Styles.headerText(),),) : ListView(
-            padding: const EdgeInsets.all(20),
-            children: [
-              InkWell(
-                onTap: () {
-                  // context.push(Routes.ALLDOCTORRESERVATIONS);
-                },
-                child: DoctorHistoryCard(
-                  title: 'Total Appointments',
-                  totalValue: totalEarnedMoney[0].count,
-                  clinicValue: totalEarnedMoney[0].count,
-                  callValue: totalEarnedMoney[0].count,
-                  homeVisitValue: totalEarnedMoney[0].count,
-                  totalEarnedMoney: totalEarnedMoney,
-                ),
-              ),
-              Sizer(
-                height: 20.h,
-              ),
-              DoctorHistoryCard(
-                title: 'Total Earned',
-                totalValue: totalEarnedMoney[0].count,
-                clinicValue: totalEarnedMoney[0].count,
-                callValue: totalEarnedMoney[0].count,
-                homeVisitValue: totalEarnedMoney[0].count,
-                totalEarnedMoney: totalEarnedMoney,
-              ),
-            ],
-          );
+          return totalEarnedMoney.isEmpty
+              ? Center(
+                  child: Text(
+                    context.isArabic ? 'لا يوجد نتائج' : 'No Result',
+                    style: Styles.headerText(),
+                  ),
+                )
+              : ListView(
+                  padding: const EdgeInsets.all(20),
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        // context.push(Routes.ALLDOCTORRESERVATIONS);
+                      },
+                      child: DoctorHistoryCard(
+                        title: 'Total Appointments',
+                        totalValue: totalEarnedMoney[0].count,
+                        clinicValue: totalEarnedMoney[0].count,
+                        callValue: totalEarnedMoney[0].count,
+                        homeVisitValue: totalEarnedMoney[0].count,
+                        totalEarnedMoney: totalEarnedMoney,
+                      ),
+                    ),
+                    Sizer(
+                      height: 20.h,
+                    ),
+                    DoctorHistoryCard(
+                      title: 'Total Earned',
+                      totalValue: totalEarnedMoney[0].count,
+                      clinicValue: totalEarnedMoney[0].count,
+                      callValue: totalEarnedMoney[0].count,
+                      homeVisitValue: totalEarnedMoney[0].count,
+                      totalEarnedMoney: totalEarnedMoney,
+                    ),
+                  ],
+                );
         },
       ),
     );

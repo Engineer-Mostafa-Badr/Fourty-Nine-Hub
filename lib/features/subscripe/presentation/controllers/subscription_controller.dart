@@ -146,7 +146,8 @@ class SubscriptionController {
         showErrorMessage(context, Labels.errorHappened);
       }
     }, (data) {
-      showSuccessMessage(context, context.isArabic? "تم الاشتراك بنجاح":"Subscribed successfully");
+      showSuccessMessage(context,
+          context.isArabic ? "تم الاشتراك بنجاح" : "Subscribed successfully");
     });
   }
 }

@@ -11,18 +11,19 @@ class GovernorateListTitle extends StatelessWidget {
   final String type;
   const GovernorateListTitle({
     super.key,
-    required this.governorate, required this.type,
+    required this.governorate,
+    required this.type,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(context.isArabic?governorate.nameAr:governorate.nameEn),
+      title: Text(context.isArabic ? governorate.nameAr : governorate.nameEn),
       onTap: () {
         serviceLocator<HealthSharedData>().doctorSearchParams.governorate =
             governorate;
 
-        context.push(Routes.FILTERDOCTORCITY,extra: type);
+        context.push(Routes.FILTERDOCTORCITY, extra: type);
       },
     );
   }

@@ -26,8 +26,8 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: cardDarkColor(context),
+              borderRadius: BorderRadius.circular(10),
+              color: cardDarkColor(context),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
@@ -35,15 +35,16 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                   blurRadius: 2,
                   offset: const Offset(0, 3),
                 ),
-              ]
-          ),
+              ]),
           child: Row(
             children: [
               Expanded(
                 child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
                   builder: (context, state) {
                     String days = '0';
-                      days = state.info?.remainingDaysToEndSubscription.toString()??'';
+                    days =
+                        state.info?.remainingDaysToEndSubscription.toString() ??
+                            '';
                     return _Item(
                       numerOfDays: days,
                       label: LocaleKeys.subscription.localize,
@@ -57,7 +58,7 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                 child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
                   builder: (context, state) {
                     String days = '0';
-                      days = state.info?.remainingDaysToExpiryId.toString()??'';
+                    days = state.info?.remainingDaysToExpiryId.toString() ?? '';
                     return _Item(
                       numerOfDays: days,
                       label: LocaleKeys.id.localize, onTap: () {},
@@ -71,10 +72,13 @@ class DoctorRenewDayCountWidget extends StatelessWidget {
                 child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
                   builder: (context, state) {
                     String days = '0';
-                      days = state.info?.remainingDaysToExpiryPracticingId.toString()??'';
+                    days = state.info?.remainingDaysToExpiryPracticingId
+                            .toString() ??
+                        '';
                     return _Item(
                       numerOfDays: days,
-                      label: LocaleKeys.practiceCertification.localize, onTap: () {},
+                      label: LocaleKeys.practiceCertification.localize,
+                      onTap: () {},
                       // onTap: () => context.push(Routes.EDITDOCTORDOCS),
                     );
                   },

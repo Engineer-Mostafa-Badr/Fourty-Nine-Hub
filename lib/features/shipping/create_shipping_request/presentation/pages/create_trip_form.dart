@@ -444,9 +444,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                 height: 40,
                                 label: LocaleKeys.premiumRequest.tr(),
                                 style: Styles.headerText(color: Colors.white),
-                                onPressed: () {
-
-                                },
+                                onPressed: () {},
                               ),
                             ),
                             // const Gap(6),
@@ -524,6 +522,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
   }) {
     final shippingCubit = context.read<ShippingCubit>();
     ScrollController scrollController = ScrollController();
+    final riderCubit = context.read<RiderTripReelTimeCubit>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -617,6 +616,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                   });
                 }, child: BlocBuilder<SelectCateogryCubit, RiderState>(
                   builder: (context, state) {
+                    log(state.toString(), name: "SuccessSelectCateogryState");
                     if (state is SuccessSelectCateogryState) {
                       if (state.type == 1) {
                         return SubcategoryCardSelected(

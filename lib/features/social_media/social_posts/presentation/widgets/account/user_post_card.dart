@@ -54,19 +54,19 @@ class UserPostCard extends StatefulWidget {
 
   const UserPostCard(
       {super.key,
-        required this.post,
-        required this.onReact,
-        this.showOptions = true,
-        this.isMyPost = false,
-        this.fromProfile = false,
-        required this.deletePost,
-        required this.hidePost,
-        required this.showPostDetails,
-        required this.showPostComments,
-        required this.onShare,
-        required this.from,
-        required this.index,
-        required this.onSelectReact});
+      required this.post,
+      required this.onReact,
+      this.showOptions = true,
+      this.isMyPost = false,
+      this.fromProfile = false,
+      required this.deletePost,
+      required this.hidePost,
+      required this.showPostDetails,
+      required this.showPostComments,
+      required this.onShare,
+      required this.from,
+      required this.index,
+      required this.onSelectReact});
 
   @override
   State<UserPostCard> createState() => _UserPostCardState();
@@ -90,16 +90,16 @@ class _UserPostCardState extends State<UserPostCard> {
   Widget build(BuildContext context) {
     return BlocConsumer<SocialPostsCubit, SocialPostsState>(
         listener: (context, state) {
-          if (state.status == StateStatus.error) {
-            showErrorMessage(
-              context,
-              getFailureMessage(
-                state.failure ?? UnknownFailure(''),
-                context,
-              ),
-            );
-          }
-        }, builder: (context, state) {
+      if (state.status == StateStatus.error) {
+        showErrorMessage(
+          context,
+          getFailureMessage(
+            state.failure ?? UnknownFailure(''),
+            context,
+          ),
+        );
+      }
+    }, builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
       var myPost = widget.post;
       return Column(
@@ -161,7 +161,7 @@ class _UserPostCardState extends State<UserPostCard> {
                         },
                         onEditComment: (PostCommentParams params) async {
                           var result =
-                          await controller.editComment(params: params);
+                              await controller.editComment(params: params);
                           return result;
                         },
                       ),
@@ -201,15 +201,15 @@ class _UserPostCardState extends State<UserPostCard> {
                             const Sizer(),
                             const Icon(
                               Icons.lock,
-                             // color: Colors.black,
+                              // color: Colors.black,
                             ),
                             const Sizer(),
                             Label(
                               text: LocaleKeys
                                   .thisContentIsNotAvailableNow.localize,
                               style: Styles.headerText(
-                              //  color: Colors.black,
-                              ),
+                                  //  color: Colors.black,
+                                  ),
                             ),
                           ],
                         ),
@@ -220,9 +220,7 @@ class _UserPostCardState extends State<UserPostCard> {
             ),
           ),
           Padding(
-            padding:  EdgeInsets.symmetric(
-              horizontal: 20.w
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Row(
               children: [
                 if (myPost.likesCount != 0)
@@ -235,9 +233,11 @@ class _UserPostCardState extends State<UserPostCard> {
                   _buildCounterWidget(
                       value: myPost.loveCount, image: Assets.heart),
                 if (myPost.wowCount != 0)
-                  _buildCounterWidget(value: myPost.wowCount, image: Assets.wow),
+                  _buildCounterWidget(
+                      value: myPost.wowCount, image: Assets.wow),
                 if (myPost.sadCount != 0)
-                  _buildCounterWidget(value: myPost.sadCount, image: Assets.sad),
+                  _buildCounterWidget(
+                      value: myPost.sadCount, image: Assets.sad),
                 if (myPost.angryCount != 0)
                   _buildCounterWidget(
                       value: myPost.angryCount, image: Assets.angry),
@@ -279,26 +279,28 @@ class _UserPostCardState extends State<UserPostCard> {
                 Expanded(
                   child: context.read<UserCubit>().isLoggedIn
                       ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          BuildReactionsButtons(
-                          post: widget.post, from: 'userPosts'),
-                          Sizer(width: 20.w,),
-                          Label(
-                              text: LocaleKeys.like.localize,
-                              style: Styles.mediumText(color: Colors.grey)),
-                        ],
-                      )
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            BuildReactionsButtons(
+                                post: widget.post, from: 'userPosts'),
+                            Sizer(
+                              width: 20.w,
+                            ),
+                            Label(
+                                text: LocaleKeys.like.localize,
+                                style: Styles.mediumText(color: Colors.grey)),
+                          ],
+                        )
                       : _buildReactionPlaceHolder(
-                      icon: FontAwesomeIcons.thumbsUp,
-                      label: LocaleKeys.like.localize,
-                      onTap: () {
-                        if (context.read<UserCubit>().isLoggedIn) {
-                          return widget.showPostComments(myPost.id);
-                        } else {
-                          context.push(Routes.LOGIN);
-                        }
-                      }),
+                          icon: FontAwesomeIcons.thumbsUp,
+                          label: LocaleKeys.like.localize,
+                          onTap: () {
+                            if (context.read<UserCubit>().isLoggedIn) {
+                              return widget.showPostComments(myPost.id);
+                            } else {
+                              context.push(Routes.LOGIN);
+                            }
+                          }),
                 ),
                 if (widget.from == 'posts')
                   Expanded(
@@ -394,9 +396,9 @@ class _UserPostCardState extends State<UserPostCard> {
 
   Widget listTile(
       {required IconData icon,
-        required String title,
-        required String subTitle,
-        required Function onTap}) {
+      required String title,
+      required String subTitle,
+      required Function onTap}) {
     return ListTile(
       title: Label(text: title),
       onTap: () {
@@ -419,9 +421,7 @@ class _UserPostCardState extends State<UserPostCard> {
   }) {
     final user = context.read<UserCubit>().state.data;
     return Padding(
-      padding: EdgeInsets.symmetric(
-          horizontal: 20.w
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -449,15 +449,19 @@ class _UserPostCardState extends State<UserPostCard> {
                     InkWell(
                       onTap: () {
                         if (user?.id != post.user.id) {
-                          context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                          context.push(Routes.OTHERSACCOUNT,
+                              extra: post.user.id);
                         }
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Sizer(height: 30.h,),
+                          Sizer(
+                            height: 30.h,
+                          ),
                           TextAppButton(
-                              label: '${post.user.firstName} ${post.user.lastName}',
+                              label:
+                                  '${post.user.firstName} ${post.user.lastName}',
                               style: Styles.mediumText(
                                   color: Theme.of(context).primaryColor,
                                   fontWeight: FontWeight.w700),
@@ -469,17 +473,17 @@ class _UserPostCardState extends State<UserPostCard> {
                               }),
                           RichText(
                               text: TextSpan(children: [
-                                TextSpan(
-                                    text: post.sinceTime,
-                                    style: Styles.mediumText(color: Colors.grey)),
-                                 const TextSpan(text: '  '),
-                                 WidgetSpan(
-                                    child: Icon(
-                                      Icons.group,
-                                      size: 30.sp,
-                                      color: Colors.grey,
-                                    ))
-                              ])),
+                            TextSpan(
+                                text: post.sinceTime,
+                                style: Styles.mediumText(color: Colors.grey)),
+                            const TextSpan(text: '  '),
+                            WidgetSpan(
+                                child: Icon(
+                              Icons.group,
+                              size: 30.sp,
+                              color: Colors.grey,
+                            ))
+                          ])),
                         ],
                       ),
                     ),
@@ -490,7 +494,7 @@ class _UserPostCardState extends State<UserPostCard> {
               if (post.user.id != user?.id &&
                   context.read<UserCubit>().isLoggedIn)
                 Padding(
-                  padding:  EdgeInsets.all(16.w),
+                  padding: EdgeInsets.all(16.w),
                   child: IconAppButton(
                     onPressed: () {
                       bottomSheet(
@@ -505,35 +509,35 @@ class _UserPostCardState extends State<UserPostCard> {
                   ),
                 ),
               const Sizer(),
-              if (post.user.id == user?.id)...[
+              if (post.user.id == user?.id) ...[
                 Padding(
-                  padding:  EdgeInsets.all(16.w),
+                  padding: EdgeInsets.all(16.w),
                   child: IconAppButton(
                     icon: Icons.clear,
                     onPressed: () {
                       bottomSheet(
                           context: context,
                           widget: _buildPostOptions(
-                              fromDetails: widget.from == 'details', post: post));
+                              fromDetails: widget.from == 'details',
+                              post: post));
                     },
                   ),
                 ),
               ]
-
             ],
           ),
           if (post.location != null)
             Row(
               children: [
-                 Icon(
+                Icon(
                   Icons.location_on,
                   size: 40.sp,
                 ),
                 Expanded(
                     child: Label(
-                      text: post.location?.place ?? '',
-                      style: Styles.mediumText(),
-                    ))
+                  text: post.location?.place ?? '',
+                  style: Styles.mediumText(),
+                ))
               ],
             ),
         ],
@@ -564,170 +568,171 @@ class _UserPostCardState extends State<UserPostCard> {
         const Sizer(),
         Expanded(
             child: Row(
-              children: [
-                InkWell(
-                  onTap: () {
-                    if (user?.id != post.user.id) {
-                      context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
-                    }
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextAppButton(
-                          label: '${post.user.firstName} ${post.user.lastName}',
-                          style: Styles.mediumText(
-                              color: Theme.of(context).primaryColor,
-                              fontWeight: FontWeight.w700),
-                          onPressed: () {
-                            if (user?.id != post.user.id) {
-                              context.push(Routes.OTHERSACCOUNT,
-                                  extra: post.user.id);
-                            }
-                          }),
-                      RichText(
-                          text: TextSpan(children: [
-                            TextSpan(
-                                text: post.sinceTime,
-                                style: Styles.mediumText(color: Colors.grey)),
-                            const TextSpan(text: '  '),
-                            WidgetSpan(
-                                child: Icon(
-                                  Icons.group,
-                                  size: 30.sp,
-                                  color: Colors.grey,
-                                ))
-                          ])),
-                    ],
-                  ),
-                ),
-                // _buildActivityFeelingWidget(post),
-              ],
-            )),
+          children: [
+            InkWell(
+              onTap: () {
+                if (user?.id != post.user.id) {
+                  context.push(Routes.OTHERSACCOUNT, extra: post.user.id);
+                }
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextAppButton(
+                      label: '${post.user.firstName} ${post.user.lastName}',
+                      style: Styles.mediumText(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.w700),
+                      onPressed: () {
+                        if (user?.id != post.user.id) {
+                          context.push(Routes.OTHERSACCOUNT,
+                              extra: post.user.id);
+                        }
+                      }),
+                  RichText(
+                      text: TextSpan(children: [
+                    TextSpan(
+                        text: post.sinceTime,
+                        style: Styles.mediumText(color: Colors.grey)),
+                    const TextSpan(text: '  '),
+                    WidgetSpan(
+                        child: Icon(
+                      Icons.group,
+                      size: 30.sp,
+                      color: Colors.grey,
+                    ))
+                  ])),
+                ],
+              ),
+            ),
+            // _buildActivityFeelingWidget(post),
+          ],
+        )),
       ],
     );
   }
 
   Widget _buildContentWidget(
       {String? backgroundColor,
-        required String content,
-        List<String>? images}) {
+      required String content,
+      List<String>? images}) {
     print("contentadasd$content");
     return (backgroundColor != null && backgroundColor != '#FFFFFFFF') &&
-        images!.isEmpty
+            images!.isEmpty
         ? Container(
-      width: double.infinity,
-      height: 260.h,
-      alignment: Alignment.center,
-      margin: EdgeInsets.symmetric(vertical: 10.h),
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
-      color: images.isEmpty
-          ? Color(
-        int.parse(backgroundColor.substring(1), radix: 16),
-      )
-          : Colors.white,
-      child: ReadMoreLabel(
-        text: content,
-        textAlign: _isArabic(content) ? TextAlign.right : TextAlign.left,
-        style: Styles.headerText(
-          //  color: Colors.black,
-            color:context.isDarkMode?Colors.white:Colors.black,
-            fontSize: 60.sp,
-            fontWeight: FontWeight.bold),
-      ),
-    )
-        : Container(
-      width: double.infinity,
-      margin: EdgeInsets.symmetric(vertical: 10.h),
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (content.isNotEmpty)
-            ReadMoreLabel(
+            width: double.infinity,
+            height: 260.h,
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(vertical: 10.h),
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
+            color: images.isEmpty
+                ? Color(
+                    int.parse(backgroundColor.substring(1), radix: 16),
+                  )
+                : Colors.white,
+            child: ReadMoreLabel(
               text: content,
-              style: Styles.mediumText(fontSize: 70.sp,
-                color:context.isDarkMode?Colors.white:Colors.black,
-              ),
-              textAlign:
-              _isArabic(content) ? TextAlign.right : TextAlign.left,
+              textAlign: _isArabic(content) ? TextAlign.right : TextAlign.left,
+              style: Styles.headerText(
+                  //  color: Colors.black,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                  fontSize: 60.sp,
+                  fontWeight: FontWeight.bold),
             ),
-          SizedBox(
-            height: 10.h,
-          ),
-          if ((images?.isNotEmpty ?? false))
-            SizedBox(
-              child: GridView.builder(
-                  padding: const EdgeInsets.all(10),
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: images!.length == 1 ? 1 : 2),
-                  itemCount: images.length < 4 ? images.length : 4,
-                  itemBuilder: (context, index) => InkWell(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    onTap: () {
-                      if (index != 3 ||
-                          (index == 3 && images.length == 4)) {
-                        showDialog(
-                            context: context,
-                            builder: (context) => ImageDetailsScreen(
-                              image: images[index],
-                              fromPost: true,
-                              onRemoveImage: () {
-                                // controller
-                                //     .removePhoto(images![index]);
-                                context.pop();
-                              },
-                            ));
-                      } else {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return ShowPostsImages(
-                                images: images,
-                                onRemoveImage:
-                                    (UploadFileEntity image) {
-                                  // controller.removePhoto(image);
-                                },
-                              );
-                            });
-                      }
-                    },
-                    child: Stack(
-                      children: [
-                        Stack(
-                          children: [
-                            ImageFromInternet(
-                              image: images[index],
-                            ),
-                            if (index == 3 && images.length > 4)
-                              Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color:
-                                  Colors.black.withOpacity(0.5),
-                                ),
-                                child: Center(
-                                  child: Label(
-                                    text: "+${images.length - 4}",
-                                    style: Styles.headerText(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ],
+          )
+        : Container(
+            width: double.infinity,
+            margin: EdgeInsets.symmetric(vertical: 10.h),
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (content.isNotEmpty)
+                  ReadMoreLabel(
+                    text: content,
+                    style: Styles.mediumText(
+                      fontSize: 70.sp,
+                      color: context.isDarkMode ? Colors.white : Colors.black,
                     ),
-                  )),
+                    textAlign:
+                        _isArabic(content) ? TextAlign.right : TextAlign.left,
+                  ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                if ((images?.isNotEmpty ?? false))
+                  SizedBox(
+                    child: GridView.builder(
+                        padding: const EdgeInsets.all(10),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: images!.length == 1 ? 1 : 2),
+                        itemCount: images.length < 4 ? images.length : 4,
+                        itemBuilder: (context, index) => InkWell(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              onTap: () {
+                                if (index != 3 ||
+                                    (index == 3 && images.length == 4)) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => ImageDetailsScreen(
+                                            image: images[index],
+                                            fromPost: true,
+                                            onRemoveImage: () {
+                                              // controller
+                                              //     .removePhoto(images![index]);
+                                              context.pop();
+                                            },
+                                          ));
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return ShowPostsImages(
+                                          images: images,
+                                          onRemoveImage:
+                                              (UploadFileEntity image) {
+                                            // controller.removePhoto(image);
+                                          },
+                                        );
+                                      });
+                                }
+                              },
+                              child: Stack(
+                                children: [
+                                  Stack(
+                                    children: [
+                                      ImageFromInternet(
+                                        image: images[index],
+                                      ),
+                                      if (index == 3 && images.length > 4)
+                                        Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.5),
+                                          ),
+                                          child: Center(
+                                            child: Label(
+                                              text: "+${images.length - 4}",
+                                              style: Styles.headerText(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )),
+                  ),
+              ],
             ),
-        ],
-      ),
-    );
+          );
   }
 
   Widget _buildReactionPlaceHolder({
@@ -791,11 +796,14 @@ class _UserPostCardState extends State<UserPostCard> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    context.push(Routes.OTHERSACCOUNT, extra: post.users![0].id);
+                    context.push(Routes.OTHERSACCOUNT,
+                        extra: post.users![0].id);
                   },
                   child: Label(
-                    text: "${post.users![0].firstName} ${post.users![0].lastName} ",
-                    style: Styles.mediumText(decoration: TextDecoration.underline),
+                    text:
+                        "${post.users![0].firstName} ${post.users![0].lastName} ",
+                    style:
+                        Styles.mediumText(decoration: TextDecoration.underline),
                   ),
                 ),
                 if (post.users!.length > 1)
@@ -817,7 +825,6 @@ class _UserPostCardState extends State<UserPostCard> {
       ),
     );
   }
-
 
   bool _isArabic(String text) {
     final RegExp arabicRegex = RegExp(r'^[\u0600-\u06FF\s]+$');

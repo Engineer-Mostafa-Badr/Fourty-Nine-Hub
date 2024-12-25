@@ -8,8 +8,7 @@ import '../../../../../core/error/failure.dart';
 abstract class BookAppointmentRepo {
   Future<Either<Failure, bool>> bookRegularAppointment(
       BookAppointmentParams params);
-  Future<Either<Failure, bool>> doctorCancelAppointment(
-      String id);
+  Future<Either<Failure, bool>> doctorCancelAppointment(String id);
 
   Future<Either<Failure, List<AllAppointmentEntity>>> allAppointment(
       PaginationParams params);

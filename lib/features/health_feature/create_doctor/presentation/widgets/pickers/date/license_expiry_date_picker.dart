@@ -12,7 +12,7 @@ class CreateDoctorLicenseExpiryDatePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
     return DatePickerField(
-      title: context.isArabic?'تاريخ انتهاء الترخيص':'License Expiry Date',
+      title: context.isArabic ? 'تاريخ انتهاء الترخيص' : 'License Expiry Date',
       textStyle: Styles.mediumText(),
       initialDate: now,
       minDate: now,

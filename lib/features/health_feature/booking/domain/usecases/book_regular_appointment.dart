@@ -28,7 +28,7 @@ class BookAppointmentParams {
   Map<String, dynamic> toJson() {
     return {
       'phone': phone,
-      if(address.isNotEmpty)'address':address,
+      if (address.isNotEmpty) 'address': address,
       'additionalNotes': notes,
       'gender': gender.name.toLowerCase(),
     };

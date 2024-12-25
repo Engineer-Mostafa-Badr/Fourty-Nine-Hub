@@ -10,7 +10,8 @@ class GetAllFollowingUseCase
   final InstagramRepo _repo;
   GetAllFollowingUseCase(this._repo);
   @override
-  Future<Either<Failure, List<FollowingEntity>>> call(TwitterFeedParams params) async {
+  Future<Either<Failure, List<FollowingEntity>>> call(
+      TwitterFeedParams params) async {
     return await _repo.getAllFollowing(params);
   }
 }

@@ -144,7 +144,10 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                             fontSize: widget.priceFontSize,
                           ),
                         ),
-                        if (!widget.noBracts) (widget.model.isPremium??false)? Text(LocaleKeys.premium.tr()):Container()
+                        if (!widget.noBracts)
+                          (widget.model.isPremium ?? false)
+                              ? Text(LocaleKeys.premium.tr())
+                              : Container()
                       ],
                     ),
                   ],
@@ -158,7 +161,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                           const Icon(Icons.calendar_month),
                           Flexible(
                             child: Text(
-                              widget.model.time??"",
+                              widget.model.time ?? "",
                               style: const TextStyle(fontSize: 13),
                             ),
                           ),
@@ -253,44 +256,47 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              if(!(widget.model.acceptedReq??false))
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: AppButton(
-                                      style: Styles.mediumText(
-                                          fontSize: 28, color: Colors.white),
-                                      label: LocaleKeys.sendOffer.tr(),
-                                      onPressed: () {
-                                        tripCubit.newOffer(
-                                            id: widget.model.id ?? "",
-                                            price: double.tryParse(price.text)?? widget.model.price??0,
-                                            message: LocaleKeys
-                                                .theRequestHasBeenSuccessfullyApproved
-                                                .tr());
-                                      },
-                                      backColor: AppColors.PRIMARY_COLOR,
-                                      color: Colors.white,
-                                      // height: 40,
+                              if (!(widget.model.acceptedReq ?? false))
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: AppButton(
+                                        style: Styles.mediumText(
+                                            fontSize: 28, color: Colors.white),
+                                        label: LocaleKeys.sendOffer.tr(),
+                                        onPressed: () {
+                                          tripCubit.newOffer(
+                                              id: widget.model.id ?? "",
+                                              price:
+                                                  double.tryParse(price.text) ??
+                                                      widget.model.price ??
+                                                      0,
+                                              message: LocaleKeys
+                                                  .theRequestHasBeenSuccessfullyApproved
+                                                  .tr());
+                                        },
+                                        backColor: AppColors.PRIMARY_COLOR,
+                                        color: Colors.white,
+                                        // height: 40,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: DefaultTextFormField(
-                                      currentFocusNode: FocusNode(),
-                                      currentController: price,
-                                      hint: widget.model.price.toString(),
-                                      // constraints: const BoxConstraints(
-                                      //   maxHeight: kToolbarHeight * .6,
-                                      //   minHeight: kToolbarHeight * .6,
-                                      // ),
-                                      keyboardType: TextInputType.number,
+                                    const SizedBox(
+                                      width: 10,
                                     ),
-                                  )
-                                ],
-                              ),
+                                    Expanded(
+                                      child: DefaultTextFormField(
+                                        currentFocusNode: FocusNode(),
+                                        currentController: price,
+                                        hint: widget.model.price.toString(),
+                                        // constraints: const BoxConstraints(
+                                        //   maxHeight: kToolbarHeight * .6,
+                                        //   minHeight: kToolbarHeight * .6,
+                                        // ),
+                                        keyboardType: TextInputType.number,
+                                      ),
+                                    )
+                                  ],
+                                ),
                               const SizedBox(
                                 height: 10,
                               ),

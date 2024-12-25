@@ -29,19 +29,19 @@ class TwitterPostDetailsNotify extends StatefulWidget {
   TwitterPostDetailsNotify({
     super.key,
     payload,
-  }){
-    if(payload is String){
+  }) {
+    if (payload is String) {
       postId = payload;
-    }else{
-      if(payload["isReply"]!=null){
-        isReply=payload["isReply"];
+    } else {
+      if (payload["isReply"] != null) {
+        isReply = payload["isReply"];
       }
-      if(payload['comment']!=null&&payload['isReply']==false){
-        comment =TwitterPostCommentModel.fromJson(payload['comment']);
+      if (payload['comment'] != null && payload['isReply'] == false) {
+        comment = TwitterPostCommentModel.fromJson(payload['comment']);
         print("comment?.toJson${comment?.toJson()}");
       }
-      if(payload['comment']!=null&&payload['isReply']==true){
-        reply =TwitterCommentReplyModel.fromJson(payload['comment']);
+      if (payload['comment'] != null && payload['isReply'] == true) {
+        reply = TwitterCommentReplyModel.fromJson(payload['comment']);
         print("reply?.toJson${comment?.toJson()}");
       }
       postId = payload['postId'];
@@ -53,25 +53,25 @@ class TwitterPostDetailsNotify extends StatefulWidget {
   TwitterCommentReplyEntity? reply;
 
   @override
-  State<TwitterPostDetailsNotify> createState() => _TwitterPostDetailsNotifyState();
+  State<TwitterPostDetailsNotify> createState() =>
+      _TwitterPostDetailsNotifyState();
 }
 
 class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
-
   @override
   void initState() {
     context.read<TwitterCubit>().getTwitterPost(
-      context,
-      widget.postId??'',
-      '',
-    );
-    if(widget.isReply!=null){
-      if(widget.isReply==true){
-        Future.delayed(const Duration(milliseconds: 500),() async {
+          context,
+          widget.postId ?? '',
+          '',
+        );
+    if (widget.isReply != null) {
+      if (widget.isReply == true) {
+        Future.delayed(const Duration(milliseconds: 500), () async {
           showReplies();
         });
-      }else{
-        Future.delayed(const Duration(milliseconds: 500),() async {
+      } else {
+        Future.delayed(const Duration(milliseconds: 500), () async {
           showComments();
         });
       }
@@ -79,6 +79,7 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
 
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -158,8 +159,7 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
                               setState(() {});
                               return result;
                             },
-                            onCommentReact:
-                                (TwitterCommentReactParams params) {
+                            onCommentReact: (TwitterCommentReactParams params) {
                               controller.onCommentReact(params: params);
                             },
                             onGetReplies: (String id,
@@ -215,12 +215,12 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
                   },
                   deletePost: (String id) {
                     controller.deletePost(
-                        context: context, postId: widget.postId??'');
+                        context: context, postId: widget.postId ?? '');
                     context.pop();
                   },
                   hidePost: (String id) {
                     controller.deletePost(
-                        context: context, postId: widget.postId??'');
+                        context: context, postId: widget.postId ?? '');
                     context.pop();
                   },
                   onDeleteComment: (String id) async {
@@ -241,92 +241,102 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
     );
   }
 
-  showComments(){
+  showComments() {
     return bottomSheet(
       context: context,
       isScrollControlled: true,
       widget: BlocProvider.value(
         value: serviceLocator<TwitterCubit>()
-          ..loadComments(
-              context,
-              widget.postId??'',comment: widget.comment),
+          ..loadComments(context, widget.postId ?? '', comment: widget.comment),
         child: TwitterPostComments(
           comments: const [],
-          postId: widget.postId??'',
+          postId: widget.postId ?? '',
           user: context.read<UserCubit>().state.data,
           onAddComment: (TwitterPostCommentParams params) =>
               context.read<TwitterCubit>().onPostComment(params: params),
-          onAddReply:
-              (TwitterCommentReplyParams params) async {
-            return await context.read<TwitterCubit>().onCommentReply(
-                params: params);
+          onAddReply: (TwitterCommentReplyParams params) async {
+            return await context
+                .read<TwitterCubit>()
+                .onCommentReply(params: params);
           },
-          onCommentReact:
-              (TwitterCommentReactParams params) {
+          onCommentReact: (TwitterCommentReactParams params) {
             context.read<TwitterCubit>().onCommentReact(params: params);
           },
-          onGetReplies: (String id,
-              TwitterPostCommentEntity comment) async {},
+          onGetReplies: (String id, TwitterPostCommentEntity comment) async {},
           newCommentId: '',
           state: const TwitterState(),
           onReport: (TwitterReportParams params) {
             context.read<TwitterCubit>().onReport(params);
           },
-          onEditComment:
-              (TwitterPostCommentParams params) async {
-            return await context.read<TwitterCubit>().editComment(
-                params: params);
+          onEditComment: (TwitterPostCommentParams params) async {
+            return await context
+                .read<TwitterCubit>()
+                .editComment(params: params);
           },
-          onDeleteComment: (id) async =>
-          await context.read<TwitterCubit>().deleteComment(
-              context: context,
-              commentId: id,
-              postId: widget.postId??'',
-              from: 'posts'),
+          onDeleteComment: (id) async => await context
+              .read<TwitterCubit>()
+              .deleteComment(
+                  context: context,
+                  commentId: id,
+                  postId: widget.postId ?? '',
+                  from: 'posts'),
         ),
       ),
     );
   }
-  showReplies(){
+
+  showReplies() {
     return bottomSheet(
       context: context,
       isScrollControlled: true,
       widget: BlocProvider.value(
         value: serviceLocator<TwitterCubit>()
-          ..loadReplies(context, widget.reply?.reply??'',reply: widget.reply),
+          ..loadReplies(context, widget.reply?.reply ?? '',
+              reply: widget.reply),
         child: TwitterCommentReplies(
           replies: const [],
           onAddReply: (TwitterCommentReplyParams params) async {
-            var result = await context.read<TwitterCubit>().onCommentReply(
-                params: params);
+            var result = await context
+                .read<TwitterCubit>()
+                .onCommentReply(params: params);
             context.read<TwitterCubit>().state.postDetails?.commentsCount =
-            (context.read<TwitterCubit>().state.postDetails!.commentsCount! + 1);
+                (context
+                        .read<TwitterCubit>()
+                        .state
+                        .postDetails!
+                        .commentsCount! +
+                    1);
             setState(() {});
             return result;
           },
-          commentId: widget.reply?.reply??'',
-          postId: widget.postId??'',
+          commentId: widget.reply?.reply ?? '',
+          postId: widget.postId ?? '',
           onReplyReact: (String id) {
             context.read<TwitterCubit>().onCommentReact(
-              params: TwitterCommentReactParams(
-                commentId: id,
-                react: 'love',
-              ),
-            );
+                  params: TwitterCommentReactParams(
+                    commentId: id,
+                    react: 'love',
+                  ),
+                );
           },
           onReport: (TwitterReportParams params) {
             context.read<TwitterCubit>().onReport(params);
           },
           onEditReply: (TwitterPostCommentParams params) async =>
-          await context.read<TwitterCubit>().editComment(params: params),
+              await context.read<TwitterCubit>().editComment(params: params),
           onDeleteReply: (id) async {
             var result = await context.read<TwitterCubit>().deleteComment(
                 context: context,
                 commentId: id,
-                postId:context.read<TwitterCubit>().state.postDetails!.id,
+                postId: context.read<TwitterCubit>().state.postDetails!.id,
                 from: 'details');
             context.read<TwitterCubit>().state.postDetails?.commentsCount =
-            (context.read<TwitterCubit>().state.postDetails!.commentsCount! - 1);
+                (context
+                        .read<TwitterCubit>()
+                        .state
+                        .postDetails!
+                        .commentsCount! -
+                    1);
             setState(() {});
             return result;
           },

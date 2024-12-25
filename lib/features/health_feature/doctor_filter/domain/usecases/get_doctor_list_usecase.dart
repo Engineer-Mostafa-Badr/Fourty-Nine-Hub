@@ -23,7 +23,7 @@ class GetDoctorListUseCase
 class DoctorSearchParams {
   int page = 1;
   int limit = 10;
-  String type ='';
+  String type = '';
   GovernorateEntity governorate =
       GovernorateEntity(id: '', nameEn: '', nameAr: '');
   CityEntity city = CityEntity(id: '', nameEn: '', nameAr: '');

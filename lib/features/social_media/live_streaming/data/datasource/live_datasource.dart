@@ -29,8 +29,8 @@ abstract class LiveDataSource {
   Future<Either<Failure, LiveCreateResponseEntity>> createLive(
       CreateLiveParams params);
 
-  Future<Either<Failure, bool>> sendPointSocket(PointsParams params) ;
-  void sendPointListener() ;
+  Future<Either<Failure, bool>> sendPointSocket(PointsParams params);
+  void sendPointListener();
 
   Future<Either<Failure, List<LiveEntity>>> getAllRooms(
       PaginationParams params);
@@ -200,13 +200,14 @@ class LiveDataSourceImpl extends LiveDataSource {
 
   @override
   Future<Either<Failure, bool>> editGoal(EditGoalParams params) async {
-    final result = await _apiConsumer
-        .put(EndPoints.editGoal(params.roomID), data: params.toJson(), headers: {
-      'Accept-Language':
-      AppPages.router.configuration.navigatorKey.currentContext!.isArabic
-          ? 'ar'
-          : 'en',
-    });
+    final result = await _apiConsumer.put(EndPoints.editGoal(params.roomID),
+        data: params.toJson(),
+        headers: {
+          'Accept-Language': AppPages
+                  .router.configuration.navigatorKey.currentContext!.isArabic
+              ? 'ar'
+              : 'en',
+        });
     return result.fold((l) => Left(l), (r) {
       return Right(r['status']);
     });
@@ -220,10 +221,8 @@ class LiveDataSourceImpl extends LiveDataSource {
 
       serviceLocator<Socket>().emit(
           SocketIOEvents.sendPoint,
-          jsonEncode({
-            "streamId":params.streamId,
-            "memberId":params.memberId
-          }));
+          jsonEncode(
+              {"streamId": params.streamId, "memberId": params.memberId}));
       return const Right(true);
     } catch (e) {
       CliLogger.error(' can\'t start send point $e');
@@ -233,7 +232,7 @@ class LiveDataSourceImpl extends LiveDataSource {
 
   @override
   void sendPointListener() {
-    try{
+    try {
       serviceLocator<Socket>().on(SocketIOListeners.sendPoint, (data) {
         final decodedData = jsonDecode(data);
         log("listenToNewMessagesssssssssssss From me");
@@ -247,10 +246,8 @@ class LiveDataSourceImpl extends LiveDataSource {
         // MessageModel messageModel = MessageModel.fromJson(data);
         // params(messageModel);
       });
-
-    }catch (e) {
+    } catch (e) {
       CliLogger.info("can't read last message error $e");
     }
   }
-
 }

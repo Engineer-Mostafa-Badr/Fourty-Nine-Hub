@@ -115,7 +115,6 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
   Future<Either<Failure, bool>> cancelAppointment(String id) async {
     final response = await _apiConsumer.delete(EndPoints.cancelAppointment(id));
     return response.fold(
-            (failure) => Left(failure),
-            (data) => Right((data['status'])));
+        (failure) => Left(failure), (data) => Right((data['status'])));
   }
 }

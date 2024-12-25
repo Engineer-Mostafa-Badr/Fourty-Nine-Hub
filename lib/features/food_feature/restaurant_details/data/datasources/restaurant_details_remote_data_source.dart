@@ -16,13 +16,14 @@ abstract class RestaurantRemoteDataSource {
       {required GetMealsParams params});
   Future<Either<Failure, Restaurant2Model>> getRestaurantDetails(
       {required String restaurantId});
-  Future<Either<Failure, bool>> deleteFood(
-      {required String id});
+  Future<Either<Failure, bool>> deleteFood({required String id});
   Future<Either<Failure, RestaurantMenu>> addFood(
       {required AddFoodParams params});
   Future<Either<Failure, bool>> addCart();
-  Future<Either<Failure, bool>> deleteFoodFromCart({required DeleteFoodFromCartParams params});
-  Future<Either<Failure, bool>> changeQuantity({required ChangeQuantityParams params});
+  Future<Either<Failure, bool>> deleteFoodFromCart(
+      {required DeleteFoodFromCartParams params});
+  Future<Either<Failure, bool>> changeQuantity(
+      {required ChangeQuantityParams params});
   Future<Either<Failure, bool>> addToCart({
     required String restaurantId,
     required String foodId,
@@ -52,8 +53,7 @@ class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
   @override
   Future<Either<Failure, List<RestaurantMneuModel>>> getMeals(
       {required GetMealsParams params}) async {
-    final response =
-        await _apiConsumer.get(EndPoints.restaurantMeals(params));
+    final response = await _apiConsumer.get(EndPoints.restaurantMeals(params));
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data']['items'] as List)
@@ -72,40 +72,42 @@ class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
 
   @override
   Future<Either<Failure, bool>> deleteFood({required String id}) async {
-    final response =
-        await _apiConsumer.delete(EndPoints.deleteFood(id));
-    return response.fold((failure) => Left(failure),
-            (data) => Right(data['status']));
+    final response = await _apiConsumer.delete(EndPoints.deleteFood(id));
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, RestaurantMenu>> addFood({required AddFoodParams params}) async {
+  Future<Either<Failure, RestaurantMenu>> addFood(
+      {required AddFoodParams params}) async {
     final response =
-        await _apiConsumer.post(EndPoints.addFood,data: params.toJson());
+        await _apiConsumer.post(EndPoints.addFood, data: params.toJson());
     return response.fold((failure) => Left(failure),
-            (data) => Right(RestaurantMneuModel.fromJson(data['data'])));
+        (data) => Right(RestaurantMneuModel.fromJson(data['data'])));
   }
 
   @override
   Future<Either<Failure, bool>> addCart() async {
-    final response =
-        await _apiConsumer.delete(EndPoints.deleteCart);
-    return response.fold((failure) => Left(failure),
-            (data) => Right(data['status']));  }
-
-  @override
-  Future<Either<Failure, bool>> deleteFoodFromCart({required DeleteFoodFromCartParams params}) async {
-    final response =
-        await _apiConsumer.delete(EndPoints.deleteFoodFromCart,data: params.toJson());
-    return response.fold((failure) => Left(failure),
-            (data) => Right(data['status']));
+    final response = await _apiConsumer.delete(EndPoints.deleteCart);
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
   }
 
   @override
-  Future<Either<Failure, bool>> changeQuantity({required ChangeQuantityParams params}) async {
-    final response =
-        await _apiConsumer.put(EndPoints.changeFoodQuantity,data: params.toJson());
-    return response.fold((failure) => Left(failure),
-            (data) => Right(data['status']));
+  Future<Either<Failure, bool>> deleteFoodFromCart(
+      {required DeleteFoodFromCartParams params}) async {
+    final response = await _apiConsumer.delete(EndPoints.deleteFoodFromCart,
+        data: params.toJson());
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> changeQuantity(
+      {required ChangeQuantityParams params}) async {
+    final response = await _apiConsumer.put(EndPoints.changeFoodQuantity,
+        data: params.toJson());
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
   }
 }

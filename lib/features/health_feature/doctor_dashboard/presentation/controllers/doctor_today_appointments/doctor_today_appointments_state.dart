@@ -1,6 +1,13 @@
 part of 'doctor_today_appointments_cubit.dart';
 
-enum DoctorTodayAppointmentsStates { loading,startCancelLoading,endCancelLoading, initState, error, success }
+enum DoctorTodayAppointmentsStates {
+  loading,
+  startCancelLoading,
+  endCancelLoading,
+  initState,
+  error,
+  success
+}
 
 extension DoctorTodayAppointmentsStateX on DoctorTodayAppointmentsState {
   bool get isInitial => status == DoctorTodayAppointmentsStates.initState;

@@ -40,19 +40,25 @@ class EmergencyCard extends StatelessWidget {
                 Expanded(
                   child: Label(
                       text:
-                      '${LocaleKeys.emergency.localize} ${LocaleKeys.booking.localize}: ${DateFormat('yyyy-MM-dd').format(DateTime.parse(emergency.createdAt))}',
-                      style:
-                      Styles.mediumText(color: Theme.of(context).primaryColor)),
+                          '${LocaleKeys.emergency.localize} ${LocaleKeys.booking.localize}: ${DateFormat('yyyy-MM-dd').format(DateTime.parse(emergency.createdAt))}',
+                      style: Styles.mediumText(
+                          color: Theme.of(context).primaryColor)),
                 ),
-                IconButton(onPressed: (){
-                  bottomSheet(
-                      context: context,
-                      backColor: cardDarkColor(context),
-                      widget: ReportView(
-                        id: emergency.userId,
-                        categoryId: emergency.subCategory.id,
-                      ));
-                }, icon: const Icon(Icons.report_gmailerrorred,color: AppColors.SECONDARY_COLOR,),)
+                IconButton(
+                  onPressed: () {
+                    bottomSheet(
+                        context: context,
+                        backColor: cardDarkColor(context),
+                        widget: ReportView(
+                          id: emergency.userId,
+                          categoryId: emergency.subCategory.id,
+                        ));
+                  },
+                  icon: const Icon(
+                    Icons.report_gmailerrorred,
+                    color: AppColors.SECONDARY_COLOR,
+                  ),
+                )
               ],
             ),
           ),
@@ -65,7 +71,9 @@ class EmergencyCard extends StatelessWidget {
                 radius: 10,
                 height: kToolbarHeight,
                 width: kToolbarHeight,
-                source: AssetImage(emergency.gender=='male'?Assets.maleImagePlaceholder:Assets.femaleImagePlacehlder),
+                source: AssetImage(emergency.gender == 'male'
+                    ? Assets.maleImagePlaceholder
+                    : Assets.femaleImagePlacehlder),
               ),
               const Sizer(),
               Expanded(
@@ -83,9 +91,15 @@ class EmergencyCard extends StatelessWidget {
                   ],
                 ),
               ),
-              AppButton(label: LocaleKeys.call.localize,backColor: AppColors.PRIMARY_COLOR,padding: 30.w, onPressed: (){
-                LaunchURLHelper().call( phone: emergency.phone);
-              },style: Styles.mediumText(color: Colors.white),)
+              AppButton(
+                label: LocaleKeys.call.localize,
+                backColor: AppColors.PRIMARY_COLOR,
+                padding: 30.w,
+                onPressed: () {
+                  LaunchURLHelper().call(phone: emergency.phone);
+                },
+                style: Styles.mediumText(color: Colors.white),
+              )
             ],
           ),
         ],

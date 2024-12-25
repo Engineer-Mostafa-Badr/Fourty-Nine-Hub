@@ -150,7 +150,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                 ),
                 child: Row(
                   children: [
-                     ProfileImage(
+                    ProfileImage(
                       accountId: 0,
                       userId: '',
                       imageURL: user?.profilePicture,
@@ -236,9 +236,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
       required Function(TwitterCommentReplyParams) onAddReply,
       required Function(String) onDeleteComment}) {
     return Padding(
-      padding:  EdgeInsets.only(
-        bottom: 30.h
-      ),
+      padding: EdgeInsets.only(bottom: 30.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

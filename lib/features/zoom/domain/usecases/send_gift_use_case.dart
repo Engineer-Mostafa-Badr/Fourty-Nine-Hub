@@ -16,17 +16,17 @@ class SendLiveGiftUseCase extends UseCase<bool, SendLiveGiftParams> {
   }
 }
 
-
 class SendLiveGiftParams {
   final String streamId;
   final String giftId;
   final String memberId;
 
-  SendLiveGiftParams({required this.streamId, required this.memberId, required this.giftId});
+  SendLiveGiftParams(
+      {required this.streamId, required this.memberId, required this.giftId});
 
   //toJson
   Map<String, dynamic> toJson() => {
-    'giftId': giftId,
-    'memberId': memberId,
-  };
+        'giftId': giftId,
+        'memberId': memberId,
+      };
 }

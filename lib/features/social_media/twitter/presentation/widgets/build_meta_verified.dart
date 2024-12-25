@@ -214,7 +214,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-         Icon(
+        Icon(
           Icons.camera_alt,
           size: 90.sp,
           color: AppColors.LIGHT_GRAY_COLOR,
@@ -232,7 +232,8 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
         label: LocaleKeys.requestVerification.localize,
         backColor: AppColors.Arrow_Icon_color,
         onPressed: onTap,
-        textStyle: Styles.mediumText(fontSize: 65.sp,color: AppColors.AUTH_CONTAINER_COLOR),
+        textStyle: Styles.mediumText(
+            fontSize: 65.sp, color: AppColors.AUTH_CONTAINER_COLOR),
       ),
     );
   }

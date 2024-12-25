@@ -12,9 +12,9 @@ class EditDoctorPhoneField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle =
-        Theme.of(context).textTheme.bodyMedium?.copyWith(color: context.isDarkMode?Colors.white:Colors.black) ??
-            TextStyle(color:context.isDarkMode?Colors.white: Colors.black);
+    final textStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: context.isDarkMode ? Colors.white : Colors.black) ??
+        TextStyle(color: context.isDarkMode ? Colors.white : Colors.black);
     return TextFormField(
       focusNode: FocusNode(),
       controller: context.read<EditDoctorPersonalInfoCubit>().phoneController,
@@ -22,11 +22,13 @@ class EditDoctorPhoneField extends StatelessWidget {
       cursorColor: Colors.blue,
       style: textStyle,
       decoration: InputDecoration(
-        fillColor: cardDarkColor(context) ,
+        fillColor: cardDarkColor(context),
         filled: true,
         contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-        hintText:  LocaleKeys.phoneNumber.localize,
-        hintStyle: textStyle.copyWith(color: context.isDarkMode?Colors.white:AppColors.QUANTITY_COLOR),
+        hintText: LocaleKeys.phoneNumber.localize,
+        hintStyle: textStyle.copyWith(
+            color:
+                context.isDarkMode ? Colors.white : AppColors.QUANTITY_COLOR),
         counterText: '',
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),

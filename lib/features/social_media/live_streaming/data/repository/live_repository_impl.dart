@@ -24,7 +24,6 @@ class LiveRepositoryImpl extends LiveRepository {
     return _liveDataSource.createLive(params);
   }
 
-
   @override
   Future<Either<Failure, List<LiveEntity>>> getAllRooms(
       PaginationParams params) {
@@ -74,5 +73,4 @@ class LiveRepositoryImpl extends LiveRepository {
   void sendPointListener() {
     return _liveDataSource.sendPointListener();
   }
-
 }

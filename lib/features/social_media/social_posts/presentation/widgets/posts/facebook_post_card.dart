@@ -184,34 +184,34 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     children: [
                       if (myPost.likesCount != 0)
                         _buildCounterWidget(
-                            value: myPost.likesCount,
-                            image: Assets.like,
-                            ),
+                          value: myPost.likesCount,
+                          image: Assets.like,
+                        ),
                       if (myPost.hahaCount != 0)
                         _buildCounterWidget(
-                            value: myPost.hahaCount,
-                            image: Assets.haha,
-                            ),
+                          value: myPost.hahaCount,
+                          image: Assets.haha,
+                        ),
                       if (myPost.loveCount != 0)
                         _buildCounterWidget(
-                            value: myPost.loveCount,
-                            image: Assets.heart,
-                            ),
+                          value: myPost.loveCount,
+                          image: Assets.heart,
+                        ),
                       if (myPost.wowCount != 0)
                         _buildCounterWidget(
-                            value: myPost.wowCount,
-                            image: Assets.wow,
-                            ),
+                          value: myPost.wowCount,
+                          image: Assets.wow,
+                        ),
                       if (myPost.sadCount != 0)
                         _buildCounterWidget(
-                            value: myPost.sadCount,
-                            image: Assets.sad,
-                            ),
+                          value: myPost.sadCount,
+                          image: Assets.sad,
+                        ),
                       if (myPost.angryCount != 0)
                         _buildCounterWidget(
-                            value: myPost.angryCount,
-                            image: Assets.angry,
-                            ),
+                          value: myPost.angryCount,
+                          image: Assets.angry,
+                        ),
                       const Spacer(),
                       ClickableWidget(
                         onTap: () => widget.showPostComments(myPost.id),
@@ -434,34 +434,34 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   children: [
                     if (myPost.likesCount != 0)
                       _buildCounterWidget(
-                          value: myPost.likesCount,
-                          image: Assets.like,
-                          ),
+                        value: myPost.likesCount,
+                        image: Assets.like,
+                      ),
                     if (myPost.hahaCount != 0)
                       _buildCounterWidget(
-                          value: myPost.hahaCount,
-                          image: Assets.haha,
-                          ),
+                        value: myPost.hahaCount,
+                        image: Assets.haha,
+                      ),
                     if (myPost.loveCount != 0)
                       _buildCounterWidget(
-                          value: myPost.loveCount,
-                          image: Assets.heart,
-                          ),
+                        value: myPost.loveCount,
+                        image: Assets.heart,
+                      ),
                     if (myPost.wowCount != 0)
                       _buildCounterWidget(
-                          value: myPost.wowCount,
-                          image: Assets.wow,
-                          ),
+                        value: myPost.wowCount,
+                        image: Assets.wow,
+                      ),
                     if (myPost.sadCount != 0)
                       _buildCounterWidget(
-                          value: myPost.sadCount,
-                          image: Assets.sad,
-                          ),
+                        value: myPost.sadCount,
+                        image: Assets.sad,
+                      ),
                     if (myPost.angryCount != 0)
                       _buildCounterWidget(
-                          value: myPost.angryCount,
-                          image: Assets.angry,
-                          ),
+                        value: myPost.angryCount,
+                        image: Assets.angry,
+                      ),
                     const Spacer(),
                     ClickableWidget(
                       onTap: () => widget.showPostComments(myPost.id),
@@ -891,7 +891,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 },
                 child: Row(
                   children: [
-                     Icon(
+                    Icon(
                       Icons.location_on,
                       size: 40.sp,
                     ),
@@ -1287,7 +1287,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                               Text(
                                 // state.posts![index].getReactionCount(reaction).toString(),
                                 '1',
-                                style: Styles.mediumText(color: AppColors.GREY_NORMAL_COLOR),
+                                style: Styles.mediumText(
+                                    color: AppColors.GREY_NORMAL_COLOR),
                               ),
                             ],
                           ),
@@ -1299,7 +1300,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                     Expanded(
                       child: TabBarView(
                         children: Reaction.values.map((reaction) {
-                          final users = getUsersForReaction(reaction, state.posts![0]);
+                          final users =
+                              getUsersForReaction(reaction, state.posts![0]);
                           return ListView.separated(
                             itemBuilder: (context, userIndex) => Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -1324,8 +1326,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                       ),
                                       CircleAvatar(
                                         radius: 25.r,
-                                        backgroundColor:
-                                        Theme.of(context).scaffoldBackgroundColor,
+                                        backgroundColor: Theme.of(context)
+                                            .scaffoldBackgroundColor,
                                         child: Image.asset(
                                           reaction.image(),
                                           height: 40.h,
@@ -1359,7 +1361,6 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                         }).toList(),
                       ),
                     )
-
                   ],
                 );
               },
@@ -1371,7 +1372,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
   }
 
 // Helper function to get users for a specific reaction
-  List<TwitterUserModel> getUsersForReaction(Reaction reaction, PostEntity post) {
+  List<TwitterUserModel> getUsersForReaction(
+      Reaction reaction, PostEntity post) {
     switch (reaction) {
       case Reaction.like:
         return post.likedUsers ?? [];
@@ -1387,8 +1389,6 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
         return post.angryUsers ?? [];
     }
   }
-
-
 
 // void showCustomBottomSheet(BuildContext context) {
   //   showModalBottomSheet(

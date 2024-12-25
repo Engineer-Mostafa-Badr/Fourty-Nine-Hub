@@ -46,43 +46,49 @@ class DoctorUnhandledAppointmentsWidget extends StatelessWidget {
               ]),
           child: BlocBuilder<DoctorDashboardCubit, DoctorDashboardState>(
             builder: (context, state) {
-              if (state.unhandledAppointments!=null&&state.unhandledAppointments!.isNotEmpty) {
-                print("state.unhandledAppointments!.isNotEmpty${state.unhandledAppointments!.isNotEmpty}");
+              if (state.unhandledAppointments != null &&
+                  state.unhandledAppointments!.isNotEmpty) {
+                print(
+                    "state.unhandledAppointments!.isNotEmpty${state.unhandledAppointments!.isNotEmpty}");
                 return Column(
                   children: [
                     ListView.separated(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: state.unhandledAppointments!.length>2?2:state.unhandledAppointments!.length,
+                        itemCount: state.unhandledAppointments!.length > 2
+                            ? 2
+                            : state.unhandledAppointments!.length,
                         separatorBuilder: (context, index) => const Divider(),
                         itemBuilder: (context, index) {
-                          final appointment = state.unhandledAppointments![index];
+                          final appointment =
+                              state.unhandledAppointments![index];
                           return DoctorUnhandledAppointmentCard(
                             appointment: appointment,
                             onAccept: () => context
                                 .read<DoctorDashboardCubit>()
-                                .acceptAppointment(appointment.id,context),
+                                .acceptAppointment(appointment.id, context),
                             onReject: () => context
                                 .read<DoctorDashboardCubit>()
-                                .rejectAppointment(appointment.id,context),
+                                .rejectAppointment(appointment.id, context),
                           );
                         }),
                     const Sizer(),
-                    if(state.unhandledAppointments!.length>2)AppButton(
-                        label: LocaleKeys.showMore.localize,
-                        style: Styles.mediumText(color: Colors.white),
-                        onPressed: () {
-                          context.push(Routes.DOCTORUNHANDLEDAPPOINTMENTS);
-                        })
+                    if (state.unhandledAppointments!.length > 2)
+                      AppButton(
+                          label: LocaleKeys.showMore.localize,
+                          style: Styles.mediumText(color: Colors.white),
+                          onPressed: () {
+                            context.push(Routes.DOCTORUNHANDLEDAPPOINTMENTS);
+                          })
                   ],
                 );
-              }else{
+              } else {
                 return Center(
                     child: Text(
-                      LocaleKeys.noAppointments.localize,
-                      style: Styles.headerText(
-                          color: Theme.of(context).textTheme.bodyMedium?.color),
-                    ));
+                  LocaleKeys.noAppointments.localize,
+                  style: Styles.headerText(
+                      color: Theme.of(context).textTheme.bodyMedium?.color),
+                ));
               }
             },
           ),

@@ -17,7 +17,8 @@ class HealthEmergencyRepoImpl implements HealthEmergencyRepo {
   }
 
   @override
-  Future<Either<Failure, List<EmergencyEntity>>> getEmergencyRequests(GetEmergencyRequestsParams params) {
+  Future<Either<Failure, List<EmergencyEntity>>> getEmergencyRequests(
+      GetEmergencyRequestsParams params) {
     return _dataSource.getEmergencyRequests(params);
   }
 }

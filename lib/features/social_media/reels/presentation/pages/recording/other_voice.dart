@@ -72,6 +72,7 @@ class OtherVoiceVideoRecordingScreenState
       _thumbnailPath = thumbnail;
     });
   }
+
   final List<Filter> filters = FilterLibrary.filters;
   Filter? _selectedFilter;
 
@@ -140,7 +141,6 @@ class OtherVoiceVideoRecordingScreenState
     _initCamera();
     _initializeAnimationController();
     _loadAndPlayAudio();
-
   }
 
   Future<void> _initCamera() async {
@@ -181,10 +181,9 @@ class OtherVoiceVideoRecordingScreenState
   }
 
   Future _loadAndPlayAudio() async {
-      print('Audio try to play');
-      await _audioPlayer.setUrl(widget.voiceUrl);
-      _audioPlayer.setLoopMode(LoopMode.one);
-
+    print('Audio try to play');
+    await _audioPlayer.setUrl(widget.voiceUrl);
+    _audioPlayer.setLoopMode(LoopMode.one);
   }
 
   void _startRecording() async {
@@ -225,14 +224,13 @@ class OtherVoiceVideoRecordingScreenState
 
   void _stopRecording() async {
     if (!_controller!.value.isRecordingVideo) return;
-          final videoFile = await _controller!.stopVideoRecording();
-      videoPath = videoFile.path;
-      setState(() {
-        isRecording = false;
-      });
-      _resetRecordingState();
-      showUploadReelButton = await _mergeVideoWithAudio();
-
+    final videoFile = await _controller!.stopVideoRecording();
+    videoPath = videoFile.path;
+    setState(() {
+      isRecording = false;
+    });
+    _resetRecordingState();
+    showUploadReelButton = await _mergeVideoWithAudio();
   }
 
   void _resetRecordingState() {
@@ -242,7 +240,6 @@ class OtherVoiceVideoRecordingScreenState
     _stopTimer?.cancel();
     _notifyTimer?.cancel();
   }
-
 
   Future<bool?> _mergeVideoWithAudio() async {
     final directory = await getTemporaryDirectory();
@@ -284,11 +281,13 @@ class OtherVoiceVideoRecordingScreenState
       setState(() {
         showGalleryBtn = true; // Show the gallery button if save is successful
       });
-      showSuccessMessage(context, "Video saved successfully and ready to be shared");
+      showSuccessMessage(
+          context, "Video saved successfully and ready to be shared");
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => VideoPlaybackScreen(mergedVideoPath!,_thumbnailPath!,false),
+          builder: (context) =>
+              VideoPlaybackScreen(mergedVideoPath!, _thumbnailPath!, false),
         ),
       );
     }
@@ -299,8 +298,6 @@ class OtherVoiceVideoRecordingScreenState
     // log("Merged video file size: ${file.lengthSync()} bytes");
     return false;
   }
-
-
 
   void _switchCamera() {
     setState(() {
@@ -483,7 +480,12 @@ class OtherVoiceVideoRecordingScreenState
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => VideoPlaybackScreen(mergedVideoPath!,_thumbnailPath!,false,audioMediaId: widget.voiceMediaId,),
+        builder: (context) => VideoPlaybackScreen(
+          mergedVideoPath!,
+          _thumbnailPath!,
+          false,
+          audioMediaId: widget.voiceMediaId,
+        ),
       ),
     );
   }

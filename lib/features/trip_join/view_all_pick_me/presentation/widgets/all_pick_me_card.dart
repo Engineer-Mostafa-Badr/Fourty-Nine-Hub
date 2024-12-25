@@ -166,7 +166,7 @@ class AllPickMeCard extends StatelessWidget {
                   const Sizer(),
                   CallMessageButtons(
                     otherUserId: pickMeCardEntity.userId!,
-                    subcategoryId: pickMeCardEntity.categoryId ??'',
+                    subcategoryId: pickMeCardEntity.categoryId ?? '',
                     phone: pickMeCardEntity.phone!,
                     id: pickMeCardEntity.id!,
                     hasReport: true,

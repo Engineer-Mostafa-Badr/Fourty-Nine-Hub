@@ -1,255 +1,653 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
+
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_come_with_me_usecase.dart';
-import 'package:fourtyninehub/features/requests_history/domain/entities/trip_entity.dart';
-import 'package:go_router/go_router.dart';
-import 'package:google_static_maps_controller/google_static_maps_controller.dart';
+import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widgets/dynamic_map_test.dart';
+import 'package:fourtyninehub/features/requests_history/data/models/request_history_ride_model.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
-import '../../../../common/widgets/stateful/maps/static_map.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
 import '../../../ride/trip_details/domain/entities/trip_request_entity.dart';
-import '../../../ride/trip_details/presentation/widgets/trip_details.dart';
 
 class TripCard extends StatelessWidget {
-  final TripEntity trip;
-  final List<TripRequestEntity>? requests;
-  final Function(String)? onAccept;
-  final Function(String)? onReject;
-  final Function(String)? onDelete;
-  final bool showDelete;
+  final RequestHistoryRideModel trip;
 
-  final Function(RequestParams)? onRequest;
-  const TripCard(
-      {super.key,
-      required this.trip,
-      this.requests,
-      this.onAccept,
-      this.onDelete,
-      this.onRequest,
-      this.showDelete = false,
-      this.onReject});
+  const TripCard({
+    super.key,
+    required this.trip,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => bottomSheet(
-          context: context,
-          isScrollControlled: true,
-          widget: TripDetailsWidget(
-            trip: trip,
-          )),
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+            context: context,
+            isDismissible: false,
+            isScrollControlled: true,
+            builder: (BuildContext context) {
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        color: context.isDarkMode
+                            ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
+                            : AppColors.LIGHT_COLOR,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 24, horizontal: 16),
+                          child: Column(
+                            children: [
+                              Row(children: [
+                                GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Icon(Icons.arrow_back_ios)),
+                                const Spacer(),
+                                Text(
+                                  formatDate(trip.createdAt!,
+                                      context.isArabic ? "arabic" : "english"),
+                                  style: Styles.headerText(fontSize: 30),
+                                ),
+                                const Spacer()
+                              ]),
+                              const Sizer(
+                                height: 30,
+                              ),
+                              Container(
+                                height: 200,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(24)),
+                                child: const DynamicMapWithPolyline(
+                                  polylineString: "",
+                                  // BlocProvider.of<GetTripInfoCubit>(context).polyLine,
+                                  useGoogleMaps: true,
+                                  url:
+                                      "https://maps.googleapis.com/maps/api/js?key=AIzaSyBBHEFa7D7qMSL4ivZhCqRQ4ok4sQN-Egc",
+                                  apiKey:
+                                      "AIzaSyBBHEFa7D7qMSL4ivZhCqRQ4ok4sQN-Egc",
+                                ),
+                              ),
+                              const Sizer(
+                                height: 30,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: 12,
+                                        height: 12,
+                                        decoration: BoxDecoration(
+                                          color: Colors.blue,
+                                          shape: BoxShape.circle,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.blue.withOpacity(0.5),
+                                              spreadRadius: 3,
+                                              blurRadius: 4,
+                                              offset: Offset(1, 1),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(width: 16),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.5,
+                                        child: Text(trip.fromAddress ?? "",
+                                            overflow: TextOverflow.visible,
+                                            maxLines: 1,
+                                            style: Styles.mediumText(
+                                                fontSize: 32,
+                                                fontWeight: FontWeight.w400)),
+                                      ),
+                                      const Spacer(),
+                                      Text(formatTimeClock(
+                                          trip.startTime, context))
+                                    ],
+                                  ),
+                                  SizedBox(height: 1),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 6, right: 6),
+                                        child: Container(
+                                          height: 14,
+                                          child: CustomPaint(
+                                            size: Size(1, 14),
+                                            painter: DottedLinePainter(),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 1),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: 12,
+                                        height: 12,
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          shape: BoxShape.circle,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.green.withOpacity(0.5),
+                                              spreadRadius: 3,
+                                              blurRadius: 4,
+                                              offset: Offset(1, 1),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.5,
+                                        child: Text(trip.toAddress ?? "",
+                                            overflow: TextOverflow.visible,
+                                            maxLines: 1,
+                                            style: Styles.mediumText(
+                                                fontSize: 32,
+                                                fontWeight: FontWeight.w400)),
+                                      ),
+                                      const Spacer(),
+                                      Text(formatTimeClockEnd(trip.startTime,
+                                          context, trip.duration ?? 0))
+                                    ],
+                                  ),
+                                  const Sizer(height: 36),
+                                  trip.duration != null
+                                      ? Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Icon(Icons.schedule),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  context.isArabic
+                                                      ? "المدة"
+                                                      : "Duration",
+                                                  style: Styles.mediumText(
+                                                      fontSize: 32,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: AppColors
+                                                          .GREY_DARK_COLOR),
+                                                ),
+                                                Text(
+                                                  formatDuration(
+                                                      trip.duration ?? 0,
+                                                      context),
+                                                  style: Styles.mediumText(
+                                                      fontSize: 32,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ],
+                                            ),
+                                            const Spacer(),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const Icon(
+                                                    Icons.pin_drop_outlined),
+                                                SizedBox(
+                                                  width: 8,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      context.isArabic
+                                                          ? "المسافة"
+                                                          : "Distance",
+                                                      style: Styles.mediumText(
+                                                          fontSize: 32,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color: AppColors
+                                                              .GREY_DARK_COLOR),
+                                                    ),
+                                                    Text(
+                                                      formatDistance(
+                                                          trip.distance ?? 0,
+                                                          context),
+                                                      style: Styles.mediumText(
+                                                          fontSize: 32,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        )
+                                      : const SizedBox(),
+                                  // const Spacer(),
+
+                                  const Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16),
+                                    child: const Divider(
+                                      height: 1,
+                                      color: AppColors.GREY_DARK_COLOR,
+                                    ),
+                                  ),
+                                  Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Container(
+                                                width: 50,
+                                                height: 50,
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Image.network(
+                                                  trip.socketDriverImage ??
+                                                      trip.noSocketDriverImage ??
+                                                      "",
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      trip.socketfirstName ??
+                                                          trip.noSocketfirstName ??
+                                                          "",
+                                                      style: Styles.mediumText(
+                                                          fontSize: 32,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 4,
+                                                    ),
+                                                    Text(
+                                                      trip.socketLastName ??
+                                                          trip.noSocketLastName ??
+                                                          "",
+                                                      style: Styles.mediumText(
+                                                          fontSize: 32,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.7,
+                                                  child: Text(
+                                                    "${trip.carModelSocket ?? trip.carModelNoSocket ?? ""} , ${trip.plateInfoSocket ?? trip.platInfoNoSocket ?? ""}",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 2,
+                                                    style: Styles.mediumText(
+                                                      fontSize: 32,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: AppColors
+                                                          .DARK_GRAY_COLOR,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+
+                                  const Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16),
+                                    child: const Divider(
+                                      height: 1,
+                                      color: AppColors.GREY_DARK_COLOR,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(context.isArabic ? "أنا دفعت" : "I paid",
+                                      style: Styles.headerText()),
+                                  const Spacer()
+                                ],
+                              ),
+                              Sizer(
+                                height: 36,
+                              ),
+                              Row(
+                                children: [
+                                  Text(context.isArabic ? "أجرة" : "Fare",
+                                      style: Styles.headerText(
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.w600)),
+                                  const Spacer(),
+                                  Text(
+                                    "${trip.price}${context.isArabic ? trip.currencyAr : trip.currencyEn}",
+                                    style: Styles.headerText(fontSize: 30),
+                                  ),
+                                ],
+                              ),
+                              Sizer(
+                                height: 16,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                      context.isArabic
+                                          ? "التكلفة المدفوعة"
+                                          : "Total paid",
+                                      style: Styles.headerText(
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.w600)),
+                                  const Spacer(),
+                                  Text(
+                                    "${trip.price}${context.isArabic ? trip.currencyAr : trip.currencyEn}",
+                                    style: Styles.headerText(fontSize: 30),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )),
+                  ],
+                ),
+              );
+            });
+      },
       child: Container(
-        padding: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey, width: .5),
-            borderRadius: BorderRadius.circular(10)),
+        color: Colors.transparent,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                const Icon(FontAwesomeIcons.car,
-                    color: AppColors.PRIMARY_COLOR),
-                const Sizer(),
-                Label(
-                  text: context.isArabic
-                      ? trip.category?.nameAr ?? ''
-                      : trip.category?.nameEn ?? '',
-                  style: Styles.mediumText(fontWeight: FontWeight.bold),
-                ),
-                const Spacer(),
-                if (showDelete)
-                  TextAppButton(
-                      label: LocaleKeys.deleteAd.localize,
-                      onPressed: () {
-                        showAreYouSure(
-                            title: LocaleKeys.alert.localize,
-                            subTitle: LocaleKeys.areDeleteThisAd.localize,
-                            action: () {
-                              if (onDelete != null) {
-                                onDelete!(trip.id);
-                              }
-                            },
-                            context: context);
-                      })
-              ],
-            ),
-            Row(
-              children: [
-                const Icon(
-                  Icons.location_searching,
-                  color: AppColors.PRIMARY_COLOR,
-                ),
-                const Sizer(),
-                Expanded(child: Label(text: trip.fromAddress)),
-              ],
-            ),
-            Row(
-              children: [
-                const Icon(
-                  Icons.location_on,
-                  color: AppColors.SECONDARY_COLOR,
-                ),
-                const Sizer(),
-                Expanded(child: Label(text: trip.toAddress)),
-              ],
-            ),
-            if (trip.offers.isNotEmpty)
-              Row(
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
+              child: Row(
                 children: [
-                  TextAppButton(
-                      label: LocaleKeys.offers.localize, onPressed: () {}),
-                  const Sizer(),
-                  Expanded(
-                    child: SizedBox(
-                      height: kToolbarHeight * .5,
-                      child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            final offer = trip.offers[index];
-                            return CircleAvatar(
-                              backgroundColor: Colors.white,
-                              radius: 10,
-                              backgroundImage:
-                                  NetworkImage(offer.profileImage ?? ''),
-                            );
-                          },
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(),
-                          itemCount: trip.offers.length),
-                    ),
+                  Text(
+                    formatDate(trip.createdAt!,
+                        context.isArabic ? "arabic" : "english"),
+                    style: Styles.headerText(fontSize: 30),
+                  ),
+                  Spacer(),
+                  Text(
+                    "${trip.price}${context.isArabic ? trip.currencyAr : trip.currencyEn}",
+                    style: Styles.headerText(fontSize: 30),
                   ),
                 ],
               ),
-            const Sizer(),
-            if (requests?.isNotEmpty ?? false)
-              ListView.builder(
-                  itemCount: requests?.length ?? 0,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return _buildRequestCard(request: requests![index]);
-                  }),
-            const Sizer(),
-            StaticMapWidget(
-              height: kToolbarHeight * 1.5,
-              radius: 10,
-              markers: [
-                Marker(locations: [
-                  Location(trip.fromCoordinates[0], trip.fromCoordinates[1]),
-                  Location(trip.toCoordinates[0], trip.toCoordinates[1]),
-                ])
-              ],
-              paths: [
-                Location(trip.fromCoordinates[0], trip.fromCoordinates[1]),
-                Location(trip.toCoordinates[0], trip.toCoordinates[1]),
-              ],
             ),
-            const Sizer(),
-            if (onRequest != null)
-              AppButton(
-                  label: LocaleKeys.request.localize,
-                  onPressed: () {
-                    bottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        widget: _buildPhoneWidget(context));
-                  })
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Sizer(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 12,
+                                height: 12,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.blue.withOpacity(0.5),
+                                      spreadRadius: 3,
+                                      blurRadius: 4,
+                                      offset: Offset(1, 1),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 16),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                child: Text(trip.fromAddress ?? "",
+                                    overflow: TextOverflow.visible,
+                                    maxLines: 1,
+                                    style: Styles.mediumText(
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.w400)),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 1),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 6, right: 6),
+                                child: Container(
+                                  height: 14,
+                                  child: CustomPaint(
+                                    size: Size(1, 14),
+                                    painter: DottedLinePainter(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 1),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 12,
+                                height: 12,
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.green.withOpacity(0.5),
+                                      spreadRadius: 3,
+                                      blurRadius: 4,
+                                      offset: Offset(1, 1),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 16),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                child: Text(trip.toAddress ?? "",
+                                    overflow: TextOverflow.visible,
+                                    maxLines: 1,
+                                    style: Styles.mediumText(
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.w400)),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 22,
+                    color: AppColors.LIGHT_GRAY_COLOR2,
+                  ),
+                ],
+              ),
+            ),
+            const Sizer(
+              height: 24,
+            ),
+            Divider(
+              height: 2,
+              color: AppColors.LIGHT_GRAY_COLOR,
+            )
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildPhoneWidget(BuildContext context) {
-    final formState = GlobalKey<FormState>();
-    late String phone;
-    return Form(
-      key: formState,
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(15), topLeft: Radius.circular(15))),
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            Label(
-                text: LocaleKeys.contactPhone.localize,
-                style: Styles.mediumText(fontWeight: FontWeight.bold)),
-            const Sizer(),
-            FormTextField(
-                hint: LocaleKeys.phone.localize,
-                type: TextInputType.number,
-                style: TextStyle(
-                    fontSize: 20.sp,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold),
-                action: (v) => phone = v),
-            const Sizer(),
-            AppButton(
-                label: LocaleKeys.done.localize,
-                onPressed: () {
-                  if (formState.currentState!.validate()) {
-                    context.pop();
+String formatDistance(int meters, BuildContext context) {
+  if (meters >= 1000) {
+    double kilometers = meters / 1000;
+    return context.isArabic
+        ? '${kilometers.toStringAsFixed(2)} كم'
+        : '${kilometers.toStringAsFixed(2)} km';
+  } else {
+    return context.isArabic ? '$meters م' : '$meters m';
+  }
+}
 
-                    onRequest!(
-                        RequestParams(subCategoryId: trip.id, phone: phone));
-                  }
-                }),
-          ],
-        ),
-      ),
-    );
+String formatDuration(int totalSeconds, BuildContext context) {
+  if (totalSeconds >= 3600) {
+    int hours = totalSeconds ~/ 3600;
+    int minutes = (totalSeconds % 3600) ~/ 60;
+    return context.isArabic ? '$hours س, $minutes د' : '$hours h, $minutes min';
+  } else if (totalSeconds >= 60) {
+    int minutes = totalSeconds ~/ 60;
+    return context.isArabic ? '$minutes د' : '$minutes min';
+  } else {
+    return context.isArabic ? '$totalSeconds ثانية' : '$totalSeconds s';
+  }
+}
+
+// , $s
+String formatTimeClockEnd(
+    String? startTime, BuildContext context, int secondsToAdd) {
+  if (startTime == null || startTime.isEmpty) return '';
+
+  // Parse the startTime string to DateTime
+  DateTime dateTime = DateTime.parse(startTime);
+
+  // Add seconds to the parsed DateTime
+  dateTime = dateTime.add(Duration(seconds: secondsToAdd));
+
+  // Get the formatted time
+  String time = DateFormat.jm().format(dateTime); // "4:02 PM" or "4:02 م"
+
+  // Check if the context locale is Arabic
+  if (Localizations.localeOf(context).languageCode == 'ar') {
+    // Convert 'AM'/'PM' to 'ص' or 'م' in Arabic
+    time = time.replaceAll('AM', 'ص').replaceAll('PM', 'م');
   }
 
-  Widget _buildRequestCard({required TripRequestEntity request}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(text: request.user?.fullName ?? ''),
-        Label(text: request.phone),
-        if (!request.isAccepted && !request.isRejected)
-          Row(
-            children: [
-              Expanded(
-                  child: AppButton(
-                      label: LocaleKeys.reject.localize,
-                      onPressed: () {
-                        if (onReject != null) {
-                          onReject!(request.id);
-                        }
-                      })),
-              const Sizer(),
-              Expanded(
-                  child: AppButton(
-                      label: LocaleKeys.Accept.localize,
-                      backColor: Colors.green,
-                      onPressed: () {
-                        if (onAccept != null) {
-                          onAccept!(request.id);
-                        }
-                      })),
-            ],
-          ),
-        if (request.isAccepted) BadgedLabel(label: LocaleKeys.Accept.localize),
-        if (request.isRejected) BadgedLabel(label: LocaleKeys.reject.localize)
-      ],
-    );
+  return time;
+}
+
+String formatTimeClock(String? startTime, BuildContext context) {
+  if (startTime == null || startTime.isEmpty) return '';
+
+  DateTime dateTime = DateTime.parse(startTime);
+
+  String time = DateFormat.jm().format(dateTime); // "4:02 PM" or "4:02 م"
+
+  if (Localizations.localeOf(context).languageCode == 'ar') {
+    time = time.replaceAll('AM', 'ص').replaceAll('PM', 'م');
+  }
+
+  return time;
+}
+
+String formatDate(String dateString, String language) {
+  DateTime date = DateTime.parse(dateString);
+
+  final DateFormat formatter = language == "arabic"
+      ? DateFormat("d MMMM, h:mm a", "ar_SA")
+      : DateFormat("d MMMM, h:mm a");
+
+  String formattedDate = formatter.format(date);
+
+  return formattedDate;
+}
+
+class DottedLinePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = const Color.fromARGB(255, 189, 193, 196)
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = 2;
+
+    double dashWidth = 2;
+    double dashSpace = 3.0;
+    double startX = 0.0;
+
+    while (startX < size.height) {
+      canvas.drawLine(
+        Offset(0, startX),
+        Offset(0, startX + dashWidth),
+        paint,
+      );
+      startX += dashWidth + dashSpace;
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
   }
 }

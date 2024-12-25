@@ -26,9 +26,11 @@ abstract class InstagramRemoteDataSource {
   Future<Either<Failure, List<PostEntity>>> getSavedReels(
       {required TwitterFeedParams params});
 
-  Future<Either<Failure, List<FollowersEntity>>> getAllFollowers(TwitterFeedParams params);
+  Future<Either<Failure, List<FollowersEntity>>> getAllFollowers(
+      TwitterFeedParams params);
 
-  Future<Either<Failure, List<FollowingEntity>>> getAllFollowing(TwitterFeedParams params);
+  Future<Either<Failure, List<FollowingEntity>>> getAllFollowing(
+      TwitterFeedParams params);
 }
 
 class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
@@ -127,7 +129,8 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<FollowersEntity>>> getAllFollowers(TwitterFeedParams params) async {
+  Future<Either<Failure, List<FollowersEntity>>> getAllFollowers(
+      TwitterFeedParams params) async {
     final response = await _apiConsumer.get(EndPoints.followers(params));
 
     return response.fold((l) {
@@ -141,7 +144,8 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<FollowingEntity>>> getAllFollowing(TwitterFeedParams params) async {
+  Future<Either<Failure, List<FollowingEntity>>> getAllFollowing(
+      TwitterFeedParams params) async {
     final response = await _apiConsumer.get(EndPoints.following(params));
 
     return response.fold((l) {

@@ -17,14 +17,14 @@ class EditDoctorPersonalInfoView extends StatefulWidget {
   const EditDoctorPersonalInfoView({super.key, required this.doctor});
   final DoctorEntity doctor;
   @override
-  State<EditDoctorPersonalInfoView> createState() => _EditDoctorPersonalInfoViewState();
+  State<EditDoctorPersonalInfoView> createState() =>
+      _EditDoctorPersonalInfoViewState();
 }
 
-class _EditDoctorPersonalInfoViewState extends State<EditDoctorPersonalInfoView> {
-
+class _EditDoctorPersonalInfoViewState
+    extends State<EditDoctorPersonalInfoView> {
   @override
   void initState() {
-
     context.read<EditDoctorPersonalInfoCubit>().init(widget.doctor);
     // Future.delayed(Duration(milliseconds: 500),() async {
     //   await context.read<EditDoctorPersonalInfoCubit>().onSelectInitialGovernorate(widget.d.address.governorateId);
@@ -38,41 +38,46 @@ class _EditDoctorPersonalInfoViewState extends State<EditDoctorPersonalInfoView>
       appBar: BackAppBar(
         label: LocaleKeys.edit.localize,
       ),
-      body: BlocBuilder<EditDoctorPersonalInfoCubit,EditDoctorPersonalInfoState>(
-        builder: (context,state) {
-          print("widget.doctor.address.governorateId${widget.doctor.address.governorateId}");
-          return state.isLoading?const Center(child: CircularProgressIndicator(),):ListView(
-            padding: const EdgeInsets.all(18),
-            children: [
-              const EditDoctorSpecialityField(),
-              Sizer(
-                height: 30.h,
-              ),
-              const EditDoctorNameField(),
-              Sizer(
-                height: 30.h,
-              ),
-              const EditDoctorPhoneField(
-
-              ),
-              Sizer(
-                height: 30.h,
-              ),
-              const EditDoctorAddressField(),
-              Sizer(
-                height: 60.h,
-              ),
-              AppButton(
-                label: LocaleKeys.update.localize,
-                // height: 50.h,
-                onPressed: () {
-                  context.read<EditDoctorPersonalInfoCubit>().updateDoctorPersonalInfo(context);
-                },
+      body:
+          BlocBuilder<EditDoctorPersonalInfoCubit, EditDoctorPersonalInfoState>(
+              builder: (context, state) {
+        print(
+            "widget.doctor.address.governorateId${widget.doctor.address.governorateId}");
+        return state.isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
               )
-            ],
-          );
-        }
-      ),
+            : ListView(
+                padding: const EdgeInsets.all(18),
+                children: [
+                  const EditDoctorSpecialityField(),
+                  Sizer(
+                    height: 30.h,
+                  ),
+                  const EditDoctorNameField(),
+                  Sizer(
+                    height: 30.h,
+                  ),
+                  const EditDoctorPhoneField(),
+                  Sizer(
+                    height: 30.h,
+                  ),
+                  const EditDoctorAddressField(),
+                  Sizer(
+                    height: 60.h,
+                  ),
+                  AppButton(
+                    label: LocaleKeys.update.localize,
+                    // height: 50.h,
+                    onPressed: () {
+                      context
+                          .read<EditDoctorPersonalInfoCubit>()
+                          .updateDoctorPersonalInfo(context);
+                    },
+                  )
+                ],
+              );
+      }),
     );
   }
 }

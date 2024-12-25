@@ -268,7 +268,9 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
         if (label != null || label != '') ...[
           ReadMoreLabel(
             text: label ?? '',
-            style: Styles.headerText(fontSize: 30,color: context.isDarkMode?Colors.white:Colors.black),
+            style: Styles.headerText(
+                fontSize: 30,
+                color: context.isDarkMode ? Colors.white : Colors.black),
           ),
           const Sizer(),
         ],
@@ -364,7 +366,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
               ),
         const Sizer(),
         Label(
-            text: "${post.user.firstName??''} ${post.user.lastName??''}",
+            text: "${post.user.firstName ?? ''} ${post.user.lastName ?? ''}",
             style: Styles.mediumText(fontWeight: FontWeight.w500)),
         const Sizer(
           width: 4,
@@ -493,7 +495,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                       accountId: 0,
                       imageURL: post.postShare?.user?.image,
                       fromProfile: widget.fromProfile,
-                      userId: post.postShare?.user?.id??'',
+                      userId: post.postShare?.user?.id ?? '',
                     ),
               const Sizer(),
               Expanded(
@@ -504,15 +506,18 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                       children: [
                         Label(
                             text: post.postShare == null
-                                ? "${post.user?.firstName??''} ${post.user?.lastName??''}"
-                                : "${post.postShare?.user?.firstName??''} ${post.postShare?.user?.lastName??''}",
+                                ? "${post.user?.firstName ?? ''} ${post.user?.lastName ?? ''}"
+                                : "${post.postShare?.user?.firstName ?? ''} ${post.postShare?.user?.lastName ?? ''}",
 
                             // text: post.isShared == true
                             //     ? "${postMain.user!.firstName} ${postMain.user!.lastName}"
                             //     : "${post.user!.firstName} ${post.user!.lastName}",
-                            style: Styles.mediumText(fontWeight: FontWeight.w500)),
-                        if (post.user?.isDocumented == true && post.isShared == false ||
-                            (post.user?.isDocumented == true && post.isShared == true))
+                            style:
+                                Styles.mediumText(fontWeight: FontWeight.w500)),
+                        if (post.user?.isDocumented == true &&
+                                post.isShared == false ||
+                            (post.user?.isDocumented == true &&
+                                post.isShared == true))
                           Icon(
                             Icons.verified,
                             color: Theme.of(context).primaryColor,
@@ -521,7 +526,7 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
                     ),
                     Label(
                         text:
-                            '@${(post.postShare == null ? post.user?.email ?? '' : post.postShare?.user?.email??'')?.split('@')[0]}',
+                            '@${(post.postShare == null ? post.user?.email ?? '' : post.postShare?.user?.email ?? '')?.split('@')[0]}',
                         maxLines: 1,
                         style: Styles.mediumText(color: Colors.grey)),
                   ],

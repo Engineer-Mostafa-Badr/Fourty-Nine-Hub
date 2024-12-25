@@ -1,10 +1,8 @@
 // ignore: unused_import
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -34,15 +32,15 @@ class WebSocketHelper {
   Future<void> notificationListener(
       Function(Map<String, dynamic> data) notificationCallback) async {
     try {
-      pr(await CacheManager.getAccessToken());
-      pr('notificationListener is called ');
+      // pr(await CacheManager.getAccessToken());
+      // pr('notificationListener is called ');
       socket.disconnect();
       socket.io.close();
       socket.io.cleanup();
-      pr('token saved in the instance of the socket is ');
-      pr(socket.io.options?['extraHeaders']?['authorization']);
-      pr('saved token is ');
-      pr(await CacheManager.getAccessToken());
+      // pr('token saved in the instance of the socket is ');
+      // pr(socket.io.options?['extraHeaders']?['authorization']);
+      // pr('saved token is ');
+      // pr(await CacheManager.getAccessToken());
 
       // socket.io.options?['extraHeaders']?['authorization'] =
       //     await TokenManager.getAccessToken();
@@ -54,14 +52,14 @@ class WebSocketHelper {
       socket.on('getRooms', (data) => pr('get rooms : $data'));
 
       socket.on('NotificationCreated', (data) {
-        log(data.toString(), name: "Ljkdlfjsdlfkjsldkfjsldkjflskdjf");
-        pr('NotificationCreated Event is recieved and the data is: ');
-        pr(data);
+        // log(data.toString(), name: "Ljkdlfjsdlfkjsldkfjsldkjflskdjf");
+        // pr('NotificationCreated Event is recieved and the data is: ');
+        // pr(data);
         Map<String, dynamic> json = jsonDecode(data);
         AudioPlayer player = AudioPlayer();
         if (json['metadata']['newTrip'] ?? false) {
-          log(json['metadata']['newTrip'].toString(),
-              name: "Ljkdlfjsdlfkjsldkfjsldkjflskdjf");
+          // log(json['metadata']['newTrip'].toString(),
+          //     name: "Ljkdlfjsdlfkjsldkfjsldkjflskdjf");
           Future.delayed(
             const Duration(seconds: 2),
             () {
@@ -73,22 +71,22 @@ class WebSocketHelper {
       });
 
       socket.on('error', (data) {
-        pr("error $data");
+        pr("error ");
       });
 
       socket.onDisconnect((_) => pr('disconnect'));
 
-      socket.onerror((e) => pr('onError $e'));
+      socket.onerror((e) => pr('onError '));
     } catch (e) {
-      pr('Exception Thrown $e');
+      // pr('Exception Thrown $e');
     }
   }
 
   Future<String?> getUserToken() async {
     return serviceLocator<GetTokensUseCase>()
         . //
-    call(const NoParams())
+        call(const NoParams())
         . //
-    then((value) => value.fold((l) => null, (r) => r?.accessToken));
+        then((value) => value.fold((l) => null, (r) => r?.accessToken));
   }
 }

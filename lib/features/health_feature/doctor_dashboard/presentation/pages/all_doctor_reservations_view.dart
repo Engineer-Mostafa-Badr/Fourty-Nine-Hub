@@ -26,8 +26,8 @@ class AllDoctorReservationsView extends StatelessWidget {
                     context.read<AllDoctorReservationsCubit>().scrollController,
                 itemCount: state.reservations.length,
                 itemBuilder: (context, index) => DoctorAppointmentCard(
-                  appointment: state.reservations[index], cancelAppointment: (String id) {
-                },
+                  appointment: state.reservations[index],
+                  cancelAppointment: (String id) {},
                 ),
                 separatorBuilder: (BuildContext context, int index) =>
                     const Divider(),

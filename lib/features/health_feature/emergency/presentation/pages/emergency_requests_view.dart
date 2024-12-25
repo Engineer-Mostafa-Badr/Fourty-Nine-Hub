@@ -18,19 +18,23 @@ class EmergencyRequestsView extends StatefulWidget {
 }
 
 class _EmergencyRequestsViewState extends State<EmergencyRequestsView> {
-
   late ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
-    context.read<EmergencyRequestsCubit>().loadEmergencies(widget.subCategoryId);
+    context
+        .read<EmergencyRequestsCubit>()
+        .loadEmergencies(widget.subCategoryId);
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      context.read<EmergencyRequestsCubit>().getEmergencies(widget.subCategoryId);
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context
+          .read<EmergencyRequestsCubit>()
+          .getEmergencies(widget.subCategoryId);
     }
   }
 
@@ -40,6 +44,7 @@ class _EmergencyRequestsViewState extends State<EmergencyRequestsView> {
     _scrollController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,17 +52,27 @@ class _EmergencyRequestsViewState extends State<EmergencyRequestsView> {
         label: LocaleKeys.emergencyRequests.localize,
       ),
       body: BlocBuilder<EmergencyRequestsCubit, EmergencyRequestsState>(
-        builder: (context,state) {
-          var cubit = context.read<EmergencyRequestsCubit>();
-          return state.isLoading?const Center(child: CircularProgressIndicator()):cubit.emergencies.isNotEmpty?ListView.separated(
-            controller: _scrollController,
-            padding: EdgeInsets.all(15.w),
-            itemCount: cubit.emergencies.length,
-            separatorBuilder: (context,i)=>const Sizer(),
-            itemBuilder: (context,i)=>EmergencyCard(emergency: cubit.emergencies[i],),
-          ):Center(child: Text(LocaleKeys.noEmergencyRequests.localize,style: Styles.headerText(),),);
-        }
-      ),
+          builder: (context, state) {
+        var cubit = context.read<EmergencyRequestsCubit>();
+        return state.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : cubit.emergencies.isNotEmpty
+                ? ListView.separated(
+                    controller: _scrollController,
+                    padding: EdgeInsets.all(15.w),
+                    itemCount: cubit.emergencies.length,
+                    separatorBuilder: (context, i) => const Sizer(),
+                    itemBuilder: (context, i) => EmergencyCard(
+                      emergency: cubit.emergencies[i],
+                    ),
+                  )
+                : Center(
+                    child: Text(
+                      LocaleKeys.noEmergencyRequests.localize,
+                      style: Styles.headerText(),
+                    ),
+                  );
+      }),
     );
   }
 }

@@ -24,6 +24,9 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSoc
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/rating_driver_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/cancel_trip_client_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/cancel_trip_rider_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/check_start_record_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/check_stop_record_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/drivers_nearBy_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/start_trip_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/accept_offer_by_driver_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_accept_by_driver_cubit.dart';
@@ -32,6 +35,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_all_trip_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_reasons_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_ride_currentTrip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/offer_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/record_ride_cubit.dart';
@@ -121,13 +125,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // CacheServiceImpl().removeDriverTripInfo();
-    // CacheServiceImpl().removeRiderTripInfo();
-    // CacheServiceImpl().removeTripState();
-    // log(CacheServiceImpl().isLogin().toString()??"null", name: "userId");
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => CheckTripEndCubit(repository: serviceLocator())),
+        BlocProvider(
+            create: (context) =>
+                CheckTripEndCubit(repository: serviceLocator())),
         BlocProvider(
           create: (context) => serviceLocator<UserCubit>()..getUser(),
         ),
@@ -180,8 +182,7 @@ class _MyAppState extends State<MyApp> {
               AcceptOfferByDriverCubit(repository: serviceLocator()),
         ),
         BlocProvider(
-          create: (context) =>
-              RecordRideCubit(repository: serviceLocator()),
+          create: (context) => RecordRideCubit(repository: serviceLocator()),
         ),
         // //  tinder to be reviewed
         // BlocProvider(
@@ -279,15 +280,29 @@ class _MyAppState extends State<MyApp> {
               CancelTripRiderCubit(repository: serviceLocator()),
         ),
         BlocProvider(
-          create: (context) => RatingDriverCubit(
-                                    repository: serviceLocator()),
+          create: (context) => RatingDriverCubit(repository: serviceLocator()),
         ),
         BlocProvider(
-          create: (context) => CompleteNoSocketCubit(
-                                    repository: serviceLocator()),
+          create: (context) =>
+              CompleteNoSocketCubit(repository: serviceLocator()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              CheckStopRecordCubit(repository: serviceLocator()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              CheckStartRecordCubit(repository: serviceLocator()),
         ),
 
         // context.read<LocationSocketCubit>().updateDriverLocationOn();
+        BlocProvider(
+          create: (context) =>
+              GetRideCurrenttripCubit(repository: serviceLocator())..get(),
+        ),
+        BlocProvider(
+          create: (context) => DriversNearbyCubit(repository: serviceLocator()),
+        ),
       ],
       child: ScreenUtilInit(
         designSize: const Size(750, 1334),

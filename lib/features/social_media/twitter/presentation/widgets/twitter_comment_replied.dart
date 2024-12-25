@@ -116,11 +116,11 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                 decoration: const BoxDecoration(),
                 child: Row(
                   children: [
-                     ProfileImage(
+                    ProfileImage(
                       accountId: 0,
                       userId: '',
-                       imageURL: user!.profilePicture,
-                     ),
+                      imageURL: user!.profilePicture,
+                    ),
                     const Sizer(),
                     Expanded(
                         child: TextFormField(
@@ -161,7 +161,7 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                                   createdAt: data.createdAt,
                                   user: TwitterUserEntity(
                                       id: user.id,
-                                      firstName: user.firstName ,
+                                      firstName: user.firstName,
                                       lastName: user.lastName,
                                       createdAt: DateTime.now(),
                                       image: user.profilePicture ?? '',
@@ -187,9 +187,7 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
       {required TwitterCommentReplyEntity reply,
       required Function(String) onDeleteReply}) {
     return Padding(
-      padding:  EdgeInsets.only(
-        bottom: 30.h
-      ),
+      padding: EdgeInsets.only(bottom: 30.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

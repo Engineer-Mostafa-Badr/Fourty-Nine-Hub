@@ -26,7 +26,11 @@ class TwitterPostCommentModel extends TwitterPostCommentEntity {
           ? json['user']
           : TwitterUserModel.fromJson(json['user']),
       content: json['content'] ?? '',
-      post: json['post']!=null?json['post'] is String? json['post']: '':'',
+      post: json['post'] != null
+          ? json['post'] is String
+              ? json['post']
+              : ''
+          : '',
       loveCount: json['loveCount'] ?? 0,
       repliesCount: json['repliesCount'] ?? 0,
       createdAt: DateTime.parse(json['createdAt']),

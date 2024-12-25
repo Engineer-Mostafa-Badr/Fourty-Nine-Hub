@@ -10,15 +10,17 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../widgets/doctor_card.dart';
 
-class DoctorsListParams{
+class DoctorsListParams {
   final bool fromHome;
   final String subCategoryId;
   final String? type;
 
-  DoctorsListParams({required this.fromHome, required this.subCategoryId,this.type=''});
+  DoctorsListParams(
+      {required this.fromHome, required this.subCategoryId, this.type = ''});
 }
+
 class DoctorsListView extends StatefulWidget {
-  const DoctorsListView({super.key,required this.params});
+  const DoctorsListView({super.key, required this.params});
   final DoctorsListParams params;
   @override
   State<DoctorsListView> createState() => _DoctorsListViewState();
@@ -30,15 +32,22 @@ class _DoctorsListViewState extends State<DoctorsListView> {
   @override
   void initState() {
     _scrollController = ScrollController()..addListener(_onScroll);
-    widget.params.fromHome==true?context.read<DoctorsListCubit>().loadInitialData(widget.params.subCategoryId):context.read<DoctorsListCubit>().loadData();
+    widget.params.fromHome == true
+        ? context
+            .read<DoctorsListCubit>()
+            .loadInitialData(widget.params.subCategoryId)
+        : context.read<DoctorsListCubit>().loadData();
     super.initState();
   }
 
-  void _onScroll() async{
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+  void _onScroll() async {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       print("object");
-      context.read<DoctorsListCubit>().getDoctorsFromSubCategory(widget.params.subCategoryId);
-     print("object");
+      context
+          .read<DoctorsListCubit>()
+          .getDoctorsFromSubCategory(widget.params.subCategoryId);
+      print("object");
     }
   }
 
@@ -52,33 +61,50 @@ class _DoctorsListViewState extends State<DoctorsListView> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<DoctorsListCubit, DoctorsListState>(
-      listener: (context, state) {
-      },
+      listener: (context, state) {},
       child: Scaffold(
         appBar: BackAppBar(
           label: LocaleKeys.doctorList.localize,
         ),
         body: BlocBuilder<DoctorsListCubit, DoctorsListState>(
             builder: (context, state) {
-          if(state.isLoading){
-            return const Center(child: CircularProgressIndicator(),);
-          }else{
-            return context.read<DoctorsListCubit>().doctors.isEmpty?Center(child: Text(LocaleKeys.noDoctorsFound.localize,style: Styles.headerText(),),):Column(
-              children: [
-                Expanded(
-                  child: ListView.separated(
-                    controller: _scrollController,
-                      padding:
-                      EdgeInsets.symmetric(horizontal: 15, vertical: 10.h),
-                      itemBuilder: (context, index) => DoctorCard(
-                        doctor: context.read<DoctorsListCubit>().doctors[index], type: widget.params.type??'',
-                      ),
-                      separatorBuilder: (context, index) => const Sizer(),
-                      itemCount: context.read<DoctorsListCubit>().doctors.length),
-                ),
-                if(context.read<DoctorsListCubit>().isLoadingMore) const Center(child: CircularProgressIndicator(),)
-              ],
+          if (state.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
             );
+          } else {
+            return context.read<DoctorsListCubit>().doctors.isEmpty
+                ? Center(
+                    child: Text(
+                      LocaleKeys.noDoctorsFound.localize,
+                      style: Styles.headerText(),
+                    ),
+                  )
+                : Column(
+                    children: [
+                      Expanded(
+                        child: ListView.separated(
+                            controller: _scrollController,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 10.h),
+                            itemBuilder: (context, index) => DoctorCard(
+                                  doctor: context
+                                      .read<DoctorsListCubit>()
+                                      .doctors[index],
+                                  type: widget.params.type ?? '',
+                                ),
+                            separatorBuilder: (context, index) => const Sizer(),
+                            itemCount: context
+                                .read<DoctorsListCubit>()
+                                .doctors
+                                .length),
+                      ),
+                      if (context.read<DoctorsListCubit>().isLoadingMore)
+                        const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                    ],
+                  );
           }
         }),
       ),

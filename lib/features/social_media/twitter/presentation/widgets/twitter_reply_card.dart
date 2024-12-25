@@ -80,10 +80,10 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                             color: AppColors.GREY_NORMAL_COLOR)),
                   ],
                 ),
-                Text( widget.reply.content ?? '',
+                Text(
+                  widget.reply.content ?? '',
                   textAlign: TextAlign.start,
                   style: Styles.mediumText(fontSize: 60.sp),
-
                 ),
               ],
             )),

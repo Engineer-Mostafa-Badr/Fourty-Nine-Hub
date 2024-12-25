@@ -27,7 +27,9 @@ class ReelView extends StatelessWidget {
               .controllers[context.read<PreloadBloc>().state.focusedIndex]
               ?.pause();
         }
-          context.read<PreloadBloc>().resetFocusedIndex(context.read<PreloadBloc>().state.focusedIndex);
+        context
+            .read<PreloadBloc>()
+            .resetFocusedIndex(context.read<PreloadBloc>().state.focusedIndex);
         //   context.pop();
         // return Future.value(true);
       },

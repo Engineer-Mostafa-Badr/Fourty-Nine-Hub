@@ -1,6 +1,5 @@
 part of 'edit_doctor_timetable_cubit.dart';
 
-
 enum EditDoctorTimetableStateStatus {
   initial,
   startLoading,
@@ -30,9 +29,9 @@ class EditDoctorTimetableState {
     this.clinicTimetable,
     this.doctorWorkDays,
     this.homeVisitTimetable,
-    this.showCall=false,
-    this.showHomeVisit=false,
-    this.showClinic=false,
+    this.showCall = false,
+    this.showHomeVisit = false,
+    this.showClinic = false,
   });
   EditDoctorTimetableState copyWith({
     EditDoctorTimetableStateStatus? status,
@@ -46,15 +45,14 @@ class EditDoctorTimetableState {
     bool? showClinic,
   }) {
     return EditDoctorTimetableState(
-      status: status ?? this.status,
-      failure: failure ?? this.failure,
-      callTimetable: callTimetable ?? this.callTimetable,
-      clinicTimetable: clinicTimetable ?? this.clinicTimetable,
-      homeVisitTimetable: homeVisitTimetable ?? this.homeVisitTimetable,
-      showCall: showCall ?? this.showCall,
-      showHomeVisit: showHomeVisit ?? this.showHomeVisit,
-      showClinic: showClinic ?? this.showClinic,
-      doctorWorkDays: doctorWorkDays ?? this.doctorWorkDays
-    );
+        status: status ?? this.status,
+        failure: failure ?? this.failure,
+        callTimetable: callTimetable ?? this.callTimetable,
+        clinicTimetable: clinicTimetable ?? this.clinicTimetable,
+        homeVisitTimetable: homeVisitTimetable ?? this.homeVisitTimetable,
+        showCall: showCall ?? this.showCall,
+        showHomeVisit: showHomeVisit ?? this.showHomeVisit,
+        showClinic: showClinic ?? this.showClinic,
+        doctorWorkDays: doctorWorkDays ?? this.doctorWorkDays);
   }
 }

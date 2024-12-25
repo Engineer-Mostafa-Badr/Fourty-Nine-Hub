@@ -33,7 +33,9 @@ import '../../../social_media/live_streaming/domain/usecases/listen_batttle_requ
 import '../../../social_media/live_streaming/domain/usecases/listen_to_send_points_use_case.dart';
 import '../../../social_media/live_streaming/domain/usecases/request_battle_use_case.dart';
 import 'stream_state.dart';
-import 'package:fourtyninehub/features/zoom/domain/usecases/send_points_use_case.dart' as points;
+import 'package:fourtyninehub/features/zoom/domain/usecases/send_points_use_case.dart'
+    as points;
+
 final class StreamCubit extends Cubit<StreamState> {
   StreamCubit(
     this.addRoomUseCase,
@@ -48,10 +50,13 @@ final class StreamCubit extends Cubit<StreamState> {
     this.sendPointsUseCase,
     this.listenToSendPointsUseCase,
     this.listenBattleRequestUseCase,
-    this.requestBattleUseCase, this.editGoalUseCase, this.sendGiftUseCase, this.sendPointSocketUseCase, this.sendPointListenerUseCase,
-  ) : super(const StreamState()){
-   initSocketListeners();
-
+    this.requestBattleUseCase,
+    this.editGoalUseCase,
+    this.sendGiftUseCase,
+    this.sendPointSocketUseCase,
+    this.sendPointListenerUseCase,
+  ) : super(const StreamState()) {
+    initSocketListeners();
   }
   final AddRoomUseCase addRoomUseCase;
   final EditGoalUseCase editGoalUseCase;
@@ -83,12 +88,13 @@ final class StreamCubit extends Cubit<StreamState> {
     final String liveId = '${min + Random().nextInt(max - min)}';
     return liveId;
   }
-  onChangePage(int index){
+
+  onChangePage(int index) {
     emit(state.copyWith(pageIndex: index));
   }
 
-  toggleComments(){
-    bool hideComments = state.hideComments??false;
+  toggleComments() {
+    bool hideComments = state.hideComments ?? false;
     emit(state.copyWith(hideComments: !hideComments));
     print(state.hideComments);
     print(hideComments);
@@ -98,13 +104,13 @@ final class StreamCubit extends Cubit<StreamState> {
   final formKey = GlobalKey<FormState>();
 
   onDoublePress() async {
-    int count = state.count??0;
-    if(count>=5){
+    int count = state.count ?? 0;
+    if (count >= 5) {
       await onSendPointSocket();
       emit(state.copyWith(count: 0));
       print("Count = $count");
-    }else{
-      count = (state.count??0)+1;
+    } else {
+      count = (state.count ?? 0) + 1;
       emit(state.copyWith(count: count));
       print("Count+ = $count");
     }
@@ -139,45 +145,67 @@ final class StreamCubit extends Cubit<StreamState> {
     // print(isAdd);
     return isAdd;
   }
-  Future<bool> editGoal(String giftId,String goal) async {
+
+  Future<bool> editGoal(String giftId, String goal) async {
     meetingId = genRandNo;
     print('state.liveCreateResponseEntity?.goals${state.goals}');
     print(state.goals.length);
-    print(state.goals.firstWhere((e)=>e.giftId==giftId).id);
-    final response = await editGoalUseCase(EditGoalParams(roomID: state.goals.firstWhereOrNull((e)=>e.giftId==giftId)?.id??'', goal: goal,goalId: giftId));
+    print(state.goals.firstWhere((e) => e.giftId == giftId).id);
+    final response = await editGoalUseCase(EditGoalParams(
+        roomID:
+            state.goals.firstWhereOrNull((e) => e.giftId == giftId)?.id ?? '',
+        goal: goal,
+        goalId: giftId));
     emit(state.copyWith(status: StreamsStates.loading));
     bool isAdd = false;
     response.fold(
         (l) => emit(state.copyWith(status: StreamsStates.failure, failure: l)),
         (r) async {
-          List<GiftData> newGifts=[];
-          GiftData updatedGift = GiftData(
-            nameAr: state.selectedGifts.firstWhere((element) => element.sId==giftId).nameAr,
-            nameEn: state.selectedGifts.firstWhere((element) => element.sId==giftId).nameEn,
-            currentValue: int.parse(goal),
-            editValue: state.selectedGifts.firstWhere((element) => element.sId==giftId).editValue,
-            maximumGoal: state.selectedGifts.firstWhere((element) => element.sId==giftId).maximumGoal,
-            picture: state.selectedGifts.firstWhere((element) => element.sId==giftId).picture,
-            showEdit: state.selectedGifts.firstWhere((element) => element.sId==giftId).showEdit,
-            sId: state.selectedGifts.firstWhere((element) => element.sId==giftId).sId,
-            value: state.selectedGifts.firstWhere((element) => element.sId==giftId).value
-          );
-          newGifts.addAll(state.selectedGifts);
-          newGifts.removeWhere((element) => element.sId==giftId);
-          newGifts.insert(0,updatedGift);
-          print("object $r");
-      emit(state.copyWith(status: StreamsStates.success,selectedGifts: newGifts));
+      List<GiftData> newGifts = [];
+      GiftData updatedGift = GiftData(
+          nameAr: state.selectedGifts
+              .firstWhere((element) => element.sId == giftId)
+              .nameAr,
+          nameEn: state.selectedGifts
+              .firstWhere((element) => element.sId == giftId)
+              .nameEn,
+          currentValue: int.parse(goal),
+          editValue: state.selectedGifts
+              .firstWhere((element) => element.sId == giftId)
+              .editValue,
+          maximumGoal: state.selectedGifts
+              .firstWhere((element) => element.sId == giftId)
+              .maximumGoal,
+          picture: state.selectedGifts
+              .firstWhere((element) => element.sId == giftId)
+              .picture,
+          showEdit: state.selectedGifts
+              .firstWhere((element) => element.sId == giftId)
+              .showEdit,
+          sId: state.selectedGifts
+              .firstWhere((element) => element.sId == giftId)
+              .sId,
+          value: state.selectedGifts
+              .firstWhere((element) => element.sId == giftId)
+              .value);
+      newGifts.addAll(state.selectedGifts);
+      newGifts.removeWhere((element) => element.sId == giftId);
+      newGifts.insert(0, updatedGift);
+      print("object $r");
+      emit(state.copyWith(
+          status: StreamsStates.success, selectedGifts: newGifts));
       isAdd = true;
-        });
+    });
 
     // print(isAdd);
     return isAdd;
   }
 
   bool isHost = false;
-  void reInititiateState(){
+  void reInititiateState() {
     emit(state.copyWith(status: StreamsStates.initial));
   }
+
   Future<bool> joinNewMeeting(String roomId) async {
     emit(state.copyWith(status: StreamsStates.loading));
     final response = await joinRoomUseCase(MeetingParams(id: roomId));
@@ -224,8 +252,10 @@ final class StreamCubit extends Cubit<StreamState> {
 
   Future<void> onSendPoint() async {
     emit(state.copyWith(status: StreamsStates.loading));
-    var result = await sendLivePointsUseCase(points.SendPointsParams(streamId: rooms.isNotEmpty?rooms[0].id:ZegoUIKit.instance.getRoom().id, memberId: UserCubit.to.state.data?.id??''
-    ));
+    var result = await sendLivePointsUseCase(points.SendPointsParams(
+        streamId:
+            rooms.isNotEmpty ? rooms[0].id : ZegoUIKit.instance.getRoom().id,
+        memberId: UserCubit.to.state.data?.id ?? ''));
     result.fold((l) {
       emit(state.copyWith(status: StreamsStates.failure, failure: l));
     }, (r) {
@@ -237,7 +267,10 @@ final class StreamCubit extends Cubit<StreamState> {
 
   Future<void> onSendPointSocket() async {
     emit(state.copyWith(status: StreamsStates.loading));
-    var result = await sendPointSocketUseCase(PointsParams(streamId: rooms.isNotEmpty?rooms[state.pageIndex??0].id:'', memberId: rooms.isNotEmpty?rooms[state.pageIndex??0].members[0].id:''));
+    var result = await sendPointSocketUseCase(PointsParams(
+        streamId: rooms.isNotEmpty ? rooms[state.pageIndex ?? 0].id : '',
+        memberId:
+            rooms.isNotEmpty ? rooms[state.pageIndex ?? 0].members[0].id : ''));
     result.fold((l) {
       emit(state.copyWith(status: StreamsStates.failure, failure: l));
     }, (r) {
@@ -257,7 +290,11 @@ final class StreamCubit extends Cubit<StreamState> {
   }
 
   Future<void> onSendGift(String giftId) async {
-    var result = await sendGiftUseCase(SendLiveGiftParams(streamId: rooms.isNotEmpty?rooms[state.pageIndex??0].id:'', memberId: rooms.isNotEmpty?rooms[state.pageIndex??0].members[0].id:'', giftId: giftId));
+    var result = await sendGiftUseCase(SendLiveGiftParams(
+        streamId: rooms.isNotEmpty ? rooms[state.pageIndex ?? 0].id : '',
+        memberId:
+            rooms.isNotEmpty ? rooms[state.pageIndex ?? 0].members[0].id : '',
+        giftId: giftId));
     result.fold((l) {
       emit(state.copyWith(status: StreamsStates.failure, failure: l));
     }, (r) {
@@ -340,12 +377,13 @@ final class StreamCubit extends Cubit<StreamState> {
     isLoadingMore = true;
 
     final response = await getAllLivesUseCase(
-      PaginationParams(page: currentPage,limit: pageSize),
+      PaginationParams(page: currentPage, limit: pageSize),
     );
 
     response.fold(
-          (failure) => emit(state.copyWith(status: StreamsStates.failure, failure: failure)),
-          (data) {
+      (failure) =>
+          emit(state.copyWith(status: StreamsStates.failure, failure: failure)),
+      (data) {
         rooms.addAll(data);
 
         if (data.length < pageSize) {
@@ -356,9 +394,7 @@ final class StreamCubit extends Cubit<StreamState> {
 
         isLoadingMore = false;
         emit(state.copyWith(status: StreamsStates.success));
-
       },
     );
   }
-
 }

@@ -21,65 +21,79 @@ class DoctorDetailsAppointmentsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final doctorDetailsCubit = context.read<DoctorDetailsCubit>();
     final doctor = doctorDetailsCubit.doctor;
-    final List<AppointmentEntity> callsAppointments= doctorDetailsCubit.doctor.appointments.where((element) => element.appointmentType=='calls').toList();
-    final List<AppointmentEntity> visitHomeAppointments= doctorDetailsCubit.doctor.appointments.where((element) => element.appointmentType=='visitHome').toList();
-    final List<AppointmentEntity> clinicAppointments= doctorDetailsCubit.doctor.appointments.where((element) => element.appointmentType=='clinic').toList();
+    final List<AppointmentEntity> callsAppointments = doctorDetailsCubit
+        .doctor.appointments
+        .where((element) => element.appointmentType == 'calls')
+        .toList();
+    final List<AppointmentEntity> visitHomeAppointments = doctorDetailsCubit
+        .doctor.appointments
+        .where((element) => element.appointmentType == 'visitHome')
+        .toList();
+    final List<AppointmentEntity> clinicAppointments = doctorDetailsCubit
+        .doctor.appointments
+        .where((element) => element.appointmentType == 'clinic')
+        .toList();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Label(text: LocaleKeys.chooseBookingTime.localize, style: Styles.headerText()),
+        Label(
+            text: LocaleKeys.chooseBookingTime.localize,
+            style: Styles.headerText()),
         const Sizer(),
-        if(clinicAppointments.isNotEmpty)...[
+        if (clinicAppointments.isNotEmpty) ...[
           const Sizer(),
           Text(LocaleKeys.clinicVisit.localize, style: Styles.mediumText()),
           const Sizer(),
           SizedBox(
-            height: kToolbarHeight * 2.5,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: clinicAppointments.length,
-              itemBuilder: (context, index) {
-                return _DayScheduleWidget(
-                  item: clinicAppointments[index],
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Sizer(),
-            ))],
-        if(callsAppointments.isNotEmpty)...[
+              height: kToolbarHeight * 2.5,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: clinicAppointments.length,
+                itemBuilder: (context, index) {
+                  return _DayScheduleWidget(
+                    item: clinicAppointments[index],
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Sizer(),
+              ))
+        ],
+        if (callsAppointments.isNotEmpty) ...[
           const Sizer(),
           Text(LocaleKeys.call.localize, style: Styles.mediumText()),
           const Sizer(),
           SizedBox(
-            height: kToolbarHeight * 2.5,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: callsAppointments.length,
-              itemBuilder: (context, index) {
-                return _DayScheduleWidget(
-                  item: callsAppointments[index],
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Sizer(),
-            ))],
-        if(visitHomeAppointments.isNotEmpty)...[
+              height: kToolbarHeight * 2.5,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: callsAppointments.length,
+                itemBuilder: (context, index) {
+                  return _DayScheduleWidget(
+                    item: callsAppointments[index],
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Sizer(),
+              ))
+        ],
+        if (visitHomeAppointments.isNotEmpty) ...[
           const Sizer(),
           Text(LocaleKeys.homeVisit.localize, style: Styles.mediumText()),
           const Sizer(),
           SizedBox(
-            height: kToolbarHeight * 2.5,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: visitHomeAppointments.length,
-              itemBuilder: (context, index) {
-                return _DayScheduleWidget(
-                  item: visitHomeAppointments[index],
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Sizer(),
-            ))],
+              height: kToolbarHeight * 2.5,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: visitHomeAppointments.length,
+                itemBuilder: (context, index) {
+                  return _DayScheduleWidget(
+                    item: visitHomeAppointments[index],
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Sizer(),
+              ))
+        ],
         const DoctorDetailsDivider(),
       ],
     );
@@ -95,6 +109,7 @@ bool isBeforeNow(String dateTimeString) {
     return false;
   }
 }
+
 String extractTime(String input) {
   return input.split(' ').first; // Extracts "10:00"
 }
@@ -108,15 +123,15 @@ bool _isTimeOfDayAfter(String dateTimeString) {
   final now = DateTime.now().toUtc();
   TimeOfDay t1 = TimeOfDay.fromDateTime(dateTime);
   TimeOfDay t2 = TimeOfDay.now();
-  if(dateTime.day > now.day){
+  if (dateTime.day > now.day) {
     return true;
-  }else if(dateTime.day == now.day){
+  } else if (dateTime.day == now.day) {
     return (t1.hour > t2.hour) || (t1.hour == t2.hour && t1.minute > t2.minute);
-
-  }else{
+  } else {
     return false;
   }
 }
+
 class _DayScheduleWidget extends StatelessWidget {
   final AppointmentEntity item;
   const _DayScheduleWidget({required this.item});
@@ -150,15 +165,18 @@ class _DayScheduleWidget extends StatelessWidget {
           Expanded(
               child: Center(
             child: Label(
-              text: "${extractTime(item.startTime)} ${(extractPeriod(item.startTime).toLowerCase()=='pm')?(context.isArabic?'مساءا':'PM'):(context.isArabic?'صباحا':'AM')}",
+              text:
+                  "${extractTime(item.startTime)} ${(extractPeriod(item.startTime).toLowerCase() == 'pm') ? (context.isArabic ? 'مساءا' : 'PM') : (context.isArabic ? 'صباحا' : 'AM')}",
               textAlign: TextAlign.center,
             ),
           )),
           AppButton(
               label: LocaleKeys.book.localize,
-              backColor: (item.isAvailable&&_isTimeOfDayAfter(item.dateOfDay))
+              backColor: (item.isAvailable && _isTimeOfDayAfter(item.dateOfDay))
                   ? AppColors.SECONDARY_COLOR
-                  : (context.isDarkMode?AppColors.DARK_GRAY_COLOR:AppColors.LIGHT_GRAY_COLOR),
+                  : (context.isDarkMode
+                      ? AppColors.DARK_GRAY_COLOR
+                      : AppColors.LIGHT_GRAY_COLOR),
               onPressed: () {
                 if (item.isAvailable) {
                   context.read<DoctorDetailsCubit>().selectedAppointment = item;

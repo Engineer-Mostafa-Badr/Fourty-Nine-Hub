@@ -36,24 +36,30 @@ class DoctorDashboardView extends StatelessWidget {
         //     break;
         // }
       },
-      builder: (context, state) =>  Scaffold(
+      builder: (context, state) => Scaffold(
         appBar: BackAppBar(
           label: LocaleKeys.doctorDashboard.localize,
           actions: [
-            DoctorDashboardPopupMenuButton(earnedMoney: context.read<DoctorDashboardCubit>().totalEarnedMoney, subCategoryId: state.info?.subCategoryId??'',),
+            DoctorDashboardPopupMenuButton(
+              earnedMoney:
+                  context.read<DoctorDashboardCubit>().totalEarnedMoney,
+              subCategoryId: state.info?.subCategoryId ?? '',
+            ),
           ],
         ),
-        body:state.status==DoctorDashboardStateStatus.startLoading?const Center(child: CircularProgressIndicator()): ListView(
-          padding: const EdgeInsets.all(18),
-          children: const [
-            DoctorRenewDayCountWidget(),
-            Sizer(),
-            DoctorTodayAppointmentsWidget(),
-            Sizer(),
-            DoctorUnhandledAppointmentsWidget(),
-            Sizer()
-          ],
-        ),
+        body: state.status == DoctorDashboardStateStatus.startLoading
+            ? const Center(child: CircularProgressIndicator())
+            : ListView(
+                padding: const EdgeInsets.all(18),
+                children: const [
+                  DoctorRenewDayCountWidget(),
+                  Sizer(),
+                  DoctorTodayAppointmentsWidget(),
+                  Sizer(),
+                  DoctorUnhandledAppointmentsWidget(),
+                  Sizer()
+                ],
+              ),
       ),
     );
   }

@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/my_trip_offer_ride_model/my_trip_offer_ride_model.dart';
@@ -262,7 +263,9 @@ class _MyTripInfoRideWidgetState extends State<MyTripInfoRideWidget> {
                       onPressed: () {
                         if (state.model.status == "Accepted") {
                           showModalBottomSheet(
-                            backgroundColor: Colors.white,
+                            backgroundColor: context.isDarkMode
+                                ? AppColors.QUANTITY_COLOR
+                                : Colors.white,
                             context: context,
                             builder: (context) => RattingDriverWidget(
                               driverId: state.model.driverId,
@@ -280,35 +283,50 @@ class _MyTripInfoRideWidgetState extends State<MyTripInfoRideWidget> {
                     // state.model.status == "Accepted"
                     //     ? Container()
                     //     :
-                         BlocBuilder<GetTripOffersNoSocketCubit, RiderState>(
-                            builder: (context, state) {
-                              if (state is SuccessGetAllOfferNoSocketState) {
-                                return Column(
-                                  children: [
-                                    ...List.generate(
-                                      state.list.length,
-                                      (index) => (state.list[index].isAccepted??false)? OfferRideCardWidget(
-                                        model: state.list[index],
-                                      ):OfferRideCardWidget(
-                                        model: state.list[index],
-                                         onAccept: (model) {
-                                          acceptedOffer = state.list[index];
-                                          context.read<CallMessageCubit>().getCallMessage(ownerId: state.list[index].driverId?.userId?.id??"", subcategoryId: state.list[index].subcategoryId??"");
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              } else {
-                                return Center(
-                                    child: Text(
-                                  LocaleKeys
-                                      .yourRequestHasBeenSentYouWillReceiveOffersShortly
-                                      .tr(),
-                                ));
-                              }
-                            },
-                          )
+                    BlocBuilder<GetTripOffersNoSocketCubit, RiderState>(
+                      builder: (context, state) {
+                        if (state is SuccessGetAllOfferNoSocketState) {
+                          return Column(
+                            children: [
+                              ...List.generate(
+                                state.list.length,
+                                (index) =>
+                                    (state.list[index].isAccepted ?? false)
+                                        ? OfferRideCardWidget(
+                                            model: state.list[index],
+                                          )
+                                        : OfferRideCardWidget(
+                                            model: state.list[index],
+                                            onAccept: (model) {
+                                              acceptedOffer = state.list[index];
+                                              context
+                                                  .read<CallMessageCubit>()
+                                                  .getCallMessage(
+                                                      ownerId: state
+                                                              .list[index]
+                                                              .driverId
+                                                              ?.userId
+                                                              ?.id ??
+                                                          "",
+                                                      subcategoryId: state
+                                                              .list[index]
+                                                              .subcategoryId ??
+                                                          "");
+                                            },
+                                          ),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return Center(
+                              child: Text(
+                            LocaleKeys
+                                .yourRequestHasBeenSentYouWillReceiveOffersShortly
+                                .tr(),
+                          ));
+                        }
+                      },
+                    )
                   ],
                 );
               } else {
@@ -439,6 +457,7 @@ class _RattingDriverWidgetState extends State<RattingDriverWidget> {
                             comment: comment.text,
                             driverId: widget.driverId,
                             tripId: widget.tripId));
+                    context.pop();
                   }
                 },
               ),

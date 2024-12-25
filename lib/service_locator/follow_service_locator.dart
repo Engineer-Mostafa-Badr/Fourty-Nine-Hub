@@ -5,16 +5,14 @@ import 'package:get_it/get_it.dart';
 
 class FollowServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
-
-    serviceLocator
-        .registerLazySingleton<GetAllFollowersUseCase>(() => GetAllFollowersUseCase(
+    serviceLocator.registerLazySingleton<GetAllFollowersUseCase>(
+        () => GetAllFollowersUseCase(
               serviceLocator(),
             ));
     serviceLocator.registerLazySingleton<GetAllFollowingUseCase>(
         () => GetAllFollowingUseCase(
               serviceLocator(),
             ));
-
 
     serviceLocator.registerFactory<FollowCubit>(() => FollowCubit(
           serviceLocator(),

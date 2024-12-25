@@ -10,21 +10,22 @@ class GetEmergencyRequestsUseCase
   GetEmergencyRequestsUseCase(this._repo);
 
   @override
-  Future<Either<Failure, List<EmergencyEntity>>> call(GetEmergencyRequestsParams params) {
+  Future<Either<Failure, List<EmergencyEntity>>> call(
+      GetEmergencyRequestsParams params) {
     return _repo.getEmergencyRequests(params);
   }
 }
 
-class GetEmergencyRequestsParams{
+class GetEmergencyRequestsParams {
   final String subCategoryId;
   final int page;
   final int limit;
 
-  GetEmergencyRequestsParams({required this.subCategoryId,required this.page,required this.limit});
+  GetEmergencyRequestsParams(
+      {required this.subCategoryId, required this.page, required this.limit});
 
   Map<String, dynamic> toJson() => {
         'page': page,
         'limit': limit,
       };
 }
-

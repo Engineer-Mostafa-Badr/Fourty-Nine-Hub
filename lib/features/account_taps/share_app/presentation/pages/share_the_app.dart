@@ -52,9 +52,8 @@ class ShareTheApp extends StatelessWidget {
                         style: Styles.headerText(),
                       ),
                       const Sizer(),
-                       Label(
-                        text:
-                        LocaleKeys.shareFodeFriends.localize,
+                      Label(
+                        text: LocaleKeys.shareFodeFriends.localize,
                         maxLines: 5,
                       ),
                       const Sizer(),
@@ -85,18 +84,16 @@ class ShareTheApp extends StatelessWidget {
           onLongPress: () {
             Clipboard.setData(ClipboardData(text: referralId)).then((_) {
               ScaffoldMessenger.of(context).showSnackBar(
-                 SnackBar(
-                    content: Text(LocaleKeys.referralClipboard.localize)),
+                SnackBar(content: Text(LocaleKeys.referralClipboard.localize)),
               );
             });
           },
           child: BadgedLabel(
-            height: 50,
-            width: double.infinity,
-            color: AppColors.PRIMARY_COLOR,
-            style: Styles.mediumText(),
-            label:  '${LocaleKeys.yourReferralID.localize} $referralId'
-          ),
+              height: 50,
+              width: double.infinity,
+              color: AppColors.PRIMARY_COLOR,
+              style: Styles.mediumText(),
+              label: '${LocaleKeys.yourReferralID.localize} $referralId'),
         ),
         const Sizer(),
         AppButton(
@@ -125,9 +122,8 @@ https://example.com/download
               if (isReferredUserDownloaded) {
                 // controller.updateShareStatistics(); // Call your cubit method to update statistics
                 ScaffoldMessenger.of(context).showSnackBar(
-                   SnackBar(
-                      content:
-                          Text(LocaleKeys.referralSuccessful.localize)),
+                  SnackBar(
+                      content: Text(LocaleKeys.referralSuccessful.localize)),
                 );
               }
             } else {

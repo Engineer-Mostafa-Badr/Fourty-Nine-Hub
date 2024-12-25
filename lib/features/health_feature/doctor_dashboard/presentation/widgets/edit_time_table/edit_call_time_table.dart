@@ -15,32 +15,28 @@ class EditDoctorCallTimeTable extends StatelessWidget {
     final doctorLoginCubit = context.read<EditDoctorTimetableCubit>();
     return BlocBuilder<EditDoctorTimetableCubit, EditDoctorTimetableState>(
       builder: (context, state) {
-          return Timetable(
-            title: LocaleKeys.call.localize,
-            timetale: state.callTimetable??[],
-            child: Column(
-              children: [
-                DefaultTextFormField(
-                    hint: 'Call Price',
-                    keyboardType: TextInputType.number,
-                    isRequired: true,
-                    currentFocusNode: FocusNode(),
-                    nextFocusNode:
-                        FocusNode(),
-                    currentController: doctorLoginCubit.callPriceController
-                ),
-                const Sizer(),
-                DefaultTextFormField(
-                    hint: 'Call Examine Duration (in minutes)',
-                    keyboardType: TextInputType.number,
-                    isRequired: true,
-                    currentFocusNode:
-                        FocusNode(),
-                    currentController:
-                    doctorLoginCubit.callDurationController),
-              ],
-            ),
-          );
+        return Timetable(
+          title: LocaleKeys.call.localize,
+          timetale: state.callTimetable ?? [],
+          child: Column(
+            children: [
+              DefaultTextFormField(
+                  hint: 'Call Price',
+                  keyboardType: TextInputType.number,
+                  isRequired: true,
+                  currentFocusNode: FocusNode(),
+                  nextFocusNode: FocusNode(),
+                  currentController: doctorLoginCubit.callPriceController),
+              const Sizer(),
+              DefaultTextFormField(
+                  hint: 'Call Examine Duration (in minutes)',
+                  keyboardType: TextInputType.number,
+                  isRequired: true,
+                  currentFocusNode: FocusNode(),
+                  currentController: doctorLoginCubit.callDurationController),
+            ],
+          ),
+        );
       },
     );
   }

@@ -22,7 +22,6 @@ class DoctorUnhandledAppointmentsCubit
       this._doctorRejectAppointmentUsecase)
       : super(const DoctorUnhandledAppointmentsState());
 
-
   List<DoctorAppointmentEntity> appointments = [];
   bool isLoadingMore = false;
   bool hasMoreData = true;
@@ -37,19 +36,17 @@ class DoctorUnhandledAppointmentsCubit
     await getAppointments();
   }
 
-
-
   Future<void> getAppointments() async {
     if (!hasMoreData || isLoadingMore) return;
 
     isLoadingMore = true;
     final response = await _getDoctorUnhandledAppointmentsUseCase
-        .call(PaginationParams(page: currentPage,limit: pageSize));
-
+        .call(PaginationParams(page: currentPage, limit: pageSize));
 
     response.fold(
-          (failure) => emit(state.copyWith(failure: failure, status: DoctorUnhandledAppointmentsStates.error)),
-          (data) {
+      (failure) => emit(state.copyWith(
+          failure: failure, status: DoctorUnhandledAppointmentsStates.error)),
+      (data) {
         appointments.addAll(data);
 
         if (data.length < pageSize) {
@@ -91,7 +88,8 @@ class DoctorUnhandledAppointmentsCubit
     final response = await _doctorAcceptAppointmentUsecase.call(appointmentId);
     response.fold(
       (failure) {
-        emit(state.copyWith(failure: failure, status: DoctorUnhandledAppointmentsStates.error));
+        emit(state.copyWith(
+            failure: failure, status: DoctorUnhandledAppointmentsStates.error));
       },
       (data) {
         appointments.removeWhere((element) => element.id == appointmentId);
@@ -104,7 +102,8 @@ class DoctorUnhandledAppointmentsCubit
     final response = await _doctorRejectAppointmentUsecase.call(appointmentId);
     response.fold(
       (failure) {
-        emit(state.copyWith(failure: failure, status: DoctorUnhandledAppointmentsStates.error));
+        emit(state.copyWith(
+            failure: failure, status: DoctorUnhandledAppointmentsStates.error));
       },
       (data) {
         appointments.removeWhere((element) => element.id == appointmentId);

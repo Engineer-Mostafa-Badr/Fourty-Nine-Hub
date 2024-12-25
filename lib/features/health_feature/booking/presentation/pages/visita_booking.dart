@@ -52,7 +52,11 @@ class _VisitaBookingState extends State<VisitaBooking> {
           listener: (context, state) {
             switch (state) {
               case BookDoctorAppointmentSuccessState _:
-                showSuccessMessage(context, context.isArabic?'تم الحجز بنجاح و في انتظار الموافقة':'Booking done successfully and waiting for doctor approval');
+                showSuccessMessage(
+                    context,
+                    context.isArabic
+                        ? 'تم الحجز بنجاح و في انتظار الموافقة'
+                        : 'Booking done successfully and waiting for doctor approval');
                 Future.delayed(const Duration(seconds: 1));
                 context.pushAndRemoveUntil(
                     Routes.VISITA, (route) => route == Routes.HOME);
@@ -78,7 +82,10 @@ class _VisitaBookingState extends State<VisitaBooking> {
               child: ListView(
                 children: [
                   const BookingDoctorProfileWidget(),
-                  BookDoctorAppointmentPatientInfoCard(type: widget.doctorDetailsCubit.selectedAppointment.appointmentType,),
+                  BookDoctorAppointmentPatientInfoCard(
+                    type: widget
+                        .doctorDetailsCubit.selectedAppointment.appointmentType,
+                  ),
                   const BookDoctorAppointmentTimeCard(),
                   const BookDoctorAppointmentLocationInfoCard(),
                   const BookDoctorAppointmentFeesCard(),

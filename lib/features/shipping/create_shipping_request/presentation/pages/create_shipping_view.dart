@@ -622,13 +622,15 @@ class RequestOfferCard extends StatelessWidget {
                                 label: "Call".tr(),
                                 color: Colors.white,
                                 icon: Icons.call,
-                                backColor: state.data && (model.isAccepted??false)
-                                    ? AppColors.PRIMARY_COLOR
-                                    : AppColors.DARK_GRAY_COLOR,
+                                backColor:
+                                    state.data && (model.isAccepted ?? false)
+                                        ? AppColors.PRIMARY_COLOR
+                                        : AppColors.DARK_GRAY_COLOR,
                                 onPressed: () {
-                                  if (state.data && (model.isAccepted??false)) {
+                                  if (state.data &&
+                                      (model.isAccepted ?? false)) {
                                     launchUrlString(
-                                      "tel://${model.driverId?.phone}");
+                                        "tel://${model.driverId?.phone}");
                                   }
                                 },
                                 style: Styles.mediumText(
@@ -642,9 +644,10 @@ class RequestOfferCard extends StatelessWidget {
                               child: AppButton(
                                 label: LocaleKeys.message.tr(),
                                 icon: Icons.message,
-                                backColor: state.data && (model.isAccepted??false)
-                                    ? AppColors.PRIMARY_COLOR
-                                    : AppColors.DARK_GRAY_COLOR,
+                                backColor:
+                                    state.data && (model.isAccepted ?? false)
+                                        ? AppColors.PRIMARY_COLOR
+                                        : AppColors.DARK_GRAY_COLOR,
                                 style: Styles.mediumText(
                                     fontSize: 15, color: Colors.white),
                                 onPressed: () {},
@@ -691,7 +694,6 @@ class RequestOfferCard extends StatelessWidget {
                                 icon: Icons.call,
                                 backColor: AppColors.DARK_GRAY_COLOR,
                                 onPressed: () {
-                                  
                                   // serviceLocator<SubscriptionController>()
                                   //     .showSubscriptionPlans(
                                   //         subCategoryId:

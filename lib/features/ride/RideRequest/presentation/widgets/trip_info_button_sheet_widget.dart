@@ -4,7 +4,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -18,7 +17,6 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_payment_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/raise_fare_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/record_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
@@ -27,7 +25,6 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:go_router/go_router.dart';
 
 class TripInfoButtonSheetWidget extends StatefulWidget {
   const TripInfoButtonSheetWidget({super.key, required this.model});
@@ -70,7 +67,9 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
             ),
             Container(
               decoration: BoxDecoration(
-                color: context.isDarkMode ? Colors.black : Colors.white,
+                color: context.isDarkMode
+                    ? AppColors.QUANTITY_COLOR
+                    : Colors.white,
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(24),
                   bottomRight: Radius.circular(24),
@@ -127,7 +126,7 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                           : Colors.black,
                                       errorText: context.isArabic
                                           ? "الأجرة الموصى بها هي ${BlocProvider.of<GetCurrencyCubit>(context).currnecyAr}${widget.model.price?.toInt()}"
-                                          : "Recommended fare is ${BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}${(getTripInfoCubit.model.comfort??false)?((widget.model.comfort??0)+(widget.model.price??0)): widget.model.price?.toInt()}",
+                                          : "Recommended fare is ${BlocProvider.of<GetCurrencyCubit>(context).currnecyEn}${(getTripInfoCubit.model.comfort ?? false) ? ((widget.model.comfort ?? 0) + (widget.model.price ?? 0)) : widget.model.price?.toInt()}",
                                       focusedErrorBorder:
                                           const UnderlineInputBorder(
                                         borderSide: BorderSide(
@@ -201,6 +200,8 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                             ? "يرجى ملء هذا الحقل"
                                             : "Please fill in this field";
                                       }
+                                      log(widget.model.lowestFare.toString(),
+                                          name: "lskdjflskjdlksjdf");
                                       if ((double.tryParse(value.toString()) ??
                                               0) <
                                           (widget.model.lowestFare ?? 0)) {
@@ -229,7 +230,9 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
             Flexible(
               child: Container(
                 decoration: BoxDecoration(
-                  color: context.isDarkMode ? Colors.black : Colors.white,
+                  color: context.isDarkMode
+                      ? AppColors.QUANTITY_COLOR
+                      : Colors.white,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(24),
                     topRight: Radius.circular(24),
@@ -468,6 +471,15 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                             value: getTripInfoCubit.model.comfort ?? false,
                             onChanged: (value) {
                               getTripInfoCubit.comfort(value);
+                              if (value) {
+                                price.text = (double.parse(price.text) +
+                                        (widget.model.comfort ?? 0))
+                                    .toStringAsFixed(0);
+                              } else {
+                                price.text = (double.parse(price.text) -
+                                        (widget.model.comfort ?? 0))
+                                    .toStringAsFixed(0);
+                              }
                               setState(() {});
                             },
                           ),
@@ -746,11 +758,8 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                 //     location:صw
                                 //         state.model.trip?.riderLocation?.coordinates ?? [],
                                 //     subcategoryId: state.model.trip?.subCategoryId ?? "");
-                                await BlocProvider.of<GetCurrencyCubit>(context)
-                                    .getCurrencyData();
-                                if (getTripInfoCubit.record) {
-                                  context.read<RecordRideCubit>().startRecord();
-                                }
+                                // await BlocProvider.of<GetCurrencyCubit>(context)
+                                //     .getCurrencyData();
                                 showModalBottomSheet(
                                   context: context,
                                   isDismissible:
