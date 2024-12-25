@@ -5,13 +5,13 @@ import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_
 
 import '../repositories/reels_repository.dart';
 
-class GetFollowersReelsUseCase extends UseCase<ReelsResponse, int> {
+class GetFollowingReelsUseCase extends UseCase<ReelsResponse, int> {
   final ReelsRepository _repository;
 
-  GetFollowersReelsUseCase(this._repository);
+  GetFollowingReelsUseCase(this._repository);
 
   @override
   Future<Either<Failure, ReelsResponse>> call(int params) {
-    return _repository.getFollowersReels(params);
+    return _repository.getFollowingReels(params);
   }
 }

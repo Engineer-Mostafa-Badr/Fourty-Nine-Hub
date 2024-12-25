@@ -113,7 +113,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           AdInterstitialTop.loadIntersitialAd();
                           AdInterstitialTop.showInterstitialAd();
                           await context.push(Routes.FAVOURITECATEGORIES);
-                          context.read<MainCategoriesCubit>().loadData();
+                          context.read<MainCategoriesCubit>().loadDataCategory();
+                         // context.read<MainCategoriesCubit>().getMainCategoryCustomPage();
                         }),
 
                     drawerListTile(

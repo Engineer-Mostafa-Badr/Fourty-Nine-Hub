@@ -17,5 +17,10 @@ class ShareAppServiceLocator {
     serviceLocator.registerLazySingleton<ShareAppUseCase>(() => ShareAppUseCase(
           serviceLocator(),
         ));
+
+    // serviceLocator.registerFactory<ShareAppCubit>(() => ShareAppCubit(
+    //       serviceLocator(),
+    //     ));
+
   }
 }

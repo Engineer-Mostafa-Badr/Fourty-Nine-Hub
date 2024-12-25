@@ -201,6 +201,8 @@ import 'package:fourtyninehub/features/star_feature/presentation/controller/cubi
 import 'package:fourtyninehub/features/star_feature/presentation/pages/be_star_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/star_winner_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
+import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percent_cubit.dart';
+import 'package:fourtyninehub/features/ten_percent/presentation/pages/ten_percent_view.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_pick_me/presentation/cubits/cubit/add_new_pick_me_trip_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_pick_me/presentation/views/add_new_pick_me_view.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_brand_usecase.dart';
@@ -327,43 +329,46 @@ import 'routes.dart';
 class AppPages {
   AppPages._();
 
-  static final router = GoRouter(
+  static late final GoRouter router;
+  static  initializeRouter(String initialRoute) {
+    router = GoRouter(
+    initialLocation: initialRoute,
     routes: <RouteBase>[
       GoRoute(
-        path: Routes.HOME,
-        builder: (context, state) => MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => serviceLocator<SliderCubit>(),
-            ),
-            BlocProvider(
-              create: (context) => serviceLocator<ThumbnailsCubit>(),
-            ),
-          ],
-          child: const FourtyNineView(),
+    path: Routes.HOME,
+    builder: (context, state) => MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => serviceLocator<SliderCubit>(),
         ),
-        routes: <RouteBase>[
+        BlocProvider(
+          create: (context) => serviceLocator<ThumbnailsCubit>(),
+        ),
+      ],
+      child: const FourtyNineView(),
+    ),
+        routes: [
           GoRoute(
               path: Routes.CUSTOMPAGE,
               name: Routes.CUSTOMPAGE,
               builder: (context, state) => const CustomPage(),
               routes: [
                 GoRoute(
-                  path: Paths.PAGEPREVIEW,
-                  name: Routes.PAGEPREVIEW,
-                  builder: (context, state) => MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) => serviceLocator<SliderCubit>(),
-                      ),
-                      BlocProvider(
-                        create: (context) => serviceLocator<ThumbnailsCubit>(),
-                      ),
-                    ],
-                    child: const PagePreview(),
-                  ),
-                ),
-              ]),
+                    path: Paths.PAGEPREVIEW,
+                    name: Routes.PAGEPREVIEW,
+                    builder: (context, state) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          create: (context) => serviceLocator<SliderCubit>(),
+                        ),
+                        BlocProvider(
+                          create: (context) => serviceLocator<ThumbnailsCubit>(),
+                        ),
+                      ],
+                      child:  PagePreview(state: state.extra as dynamic,),
+                    ),),
+              ]
+          ),
           GoRoute(
             path: Paths.RestaurantDashboard,
             name: Routes.RestaurantDashboard,
@@ -1155,10 +1160,10 @@ class AppPages {
           GoRoute(
               path: Paths.SNAP,
               name: Routes.SNAP,
-              builder: (context, state) => const SnapView()),
+              builder: (context, state) =>  SnapView()),
           // Spotlight
           GoRoute(
-              path: Paths.SPOTLIGHT,
+                   path: Paths.SPOTLIGHT,
               name: Routes.SPOTLIGHT,
               builder: (context, state) => MultiBlocProvider(
                     providers: [
@@ -2039,6 +2044,15 @@ class AppPages {
                   create: (_) => serviceLocator(), child: const BeStarView());
             },
           ),
+       GoRoute(
+            path: Paths.TenPercent,
+            name: Routes.TenPercent,
+            builder: (context, state) {
+              return BlocProvider<TenPercentCubit>(
+                  create: (_) =>serviceLocator(),
+                  child: const TenPercentView());
+            },
+          ),
 
           // ___________________ trip join ______________
           GoRoute(
@@ -2295,6 +2309,6 @@ class AppPages {
           ),
         ],
       ),
-    ],
-  );
+    ]);
+  }
 }

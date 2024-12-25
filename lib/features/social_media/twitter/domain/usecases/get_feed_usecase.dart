@@ -19,10 +19,12 @@ class TwitterFeedParams {
   final int page;
   final int limit;
   String? search;
-  TwitterFeedParams({required this.page, required this.limit, this.search});
+  String? otherId;
+  TwitterFeedParams({required this.page, required this.limit, this.search,this.otherId});
   Map<String, dynamic> toJson() => {
         'page': page,
         'limit': limit,
+        'otherId': limit,
         // 'subCategory':'66b77e77bb35968b535dc944'
       };
 }

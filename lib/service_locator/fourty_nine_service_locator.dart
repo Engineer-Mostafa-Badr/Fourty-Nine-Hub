@@ -46,6 +46,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/any_cashback
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_banner_by_id_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/add_main_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_currency_use_case.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_custom_page_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_wallet_home_use_case.dart';
@@ -53,6 +54,11 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/remove_main_
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
+import 'package:fourtyninehub/features/social_media/snap/data/data_source/snap_remote_data_source.dart';
+import 'package:fourtyninehub/features/social_media/snap/data/repository/snap_repository_impl.dart';
+import 'package:fourtyninehub/features/social_media/snap/domain/repository/snap_repository.dart';
+import 'package:fourtyninehub/features/social_media/snap/domain/use_case/fetch_filter_snap_use_case.dart';
+import 'package:fourtyninehub/features/social_media/snap/presentation/cubit/snap_cubit.dart';
 import 'package:get_it/get_it.dart';
 import '../features/account_taps/contact_us/domain/repositories/contact_us_repo.dart';
 import '../features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
@@ -122,6 +128,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<SnapRemoteDataSource>(
+      () => SnapRemoteDataSourceImpl(
+        serviceLocator(),
+      ),
+    );
 
     serviceLocator.registerLazySingleton<FourtyNineRepository>(
       () => FourtyNineRepositoryImpl(
@@ -158,6 +169,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<SnapRepository>(
+      () => SnapRepositoryImpl(
+        serviceLocator(),
+      ),
+    );
 
     // use cases
     serviceLocator.registerLazySingleton<GetParentMainCategoriesUseCase>(
@@ -190,6 +206,11 @@ class FourtyNineServiceLocator {
 
     serviceLocator.registerLazySingleton<GetMainCategoriesUseCase>(
       () => GetMainCategoriesUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<GetMainCategoriesCustomPageUseCase>(
+      () => GetMainCategoriesCustomPageUseCase(
         serviceLocator(),
       ),
     );
@@ -400,6 +421,11 @@ class FourtyNineServiceLocator {
         serviceLocator(),
       ),
     );
+    serviceLocator.registerLazySingleton<FetchFilterSnapUseCase>(
+      () => FetchFilterSnapUseCase(
+        serviceLocator(),
+      ),
+    );
     serviceLocator.registerLazySingleton<GetCurrencyUseCase>(
       () => GetCurrencyUseCase(serviceLocator()),
     );
@@ -456,6 +482,7 @@ class FourtyNineServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
       ),
     );
 
@@ -501,6 +528,11 @@ class FourtyNineServiceLocator {
     // AdRequestsCubit
     serviceLocator.registerFactory<AdRequestsCubit>(
       () => AdRequestsCubit(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerFactory<SnapCubit>(
+      () => SnapCubit(
         serviceLocator(),
       ),
     );

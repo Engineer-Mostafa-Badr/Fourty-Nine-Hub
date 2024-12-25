@@ -139,7 +139,7 @@ class CustomPageCubit extends Cubit<CustomPageState> {
     response.fold((l) {
       emit(state.copyWith(failure: l, status: CustomPageStates.error));
     }, (data) {
-      emit(state.copyWith(status: CustomPageStates.success));
+      emit(state.copyWith(status: CustomPageStates.updateSuccess));
       fetchActivate();
     });
   }

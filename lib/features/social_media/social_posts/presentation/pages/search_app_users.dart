@@ -47,6 +47,7 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
                     const Sizer(),
                     Expanded(
                       child: Card(
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         child: TextFormField(
                           controller: searchController,
                           onChanged: (v) {
