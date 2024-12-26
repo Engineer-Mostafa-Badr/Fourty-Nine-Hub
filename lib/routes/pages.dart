@@ -1109,7 +1109,7 @@ class AppPages {
             name: Routes.CHAT,
             builder: (context, state) => BlocProvider<ChatsCubit>(
               create: (_) => serviceLocator(),
-              child: const ChatView(),
+              child: ChatView(chatsViewParams: state.extra as ChatsViewParams),
             ),
           ),
 
@@ -1137,7 +1137,7 @@ class AppPages {
                   path: Paths.VIEWCONTACT,
                   name: Routes.VIEWCONTACT,
                   builder: (context, state) => ViewContactView(
-                    sender: state.extra as String,
+                    chatsCubit: state.extra as ChatsCubit,
                   ),
                 ),
                 GoRoute(
@@ -1737,8 +1737,7 @@ class AppPages {
                           ),
                           BlocProvider(
                             create: (context) =>
-                                GetAvailableTripsForDriversCubit(
-                                    serviceLocator()),
+                                GetAvailableTripsForDriversCubit(),
                           ),
                           BlocProvider(
                             create: (context) =>
@@ -2242,10 +2241,12 @@ class AppPages {
             builder: (context, state) {
               return MultiBlocProvider(providers: [
                 BlocProvider<GetAllTripsCubit>(
-                  create: (context) => GetAllTripsCubit(serviceLocator()),
+                  create: (context) => GetAllTripsCubit(),
                 ),
                 BlocProvider<GetCurrencyCubit>(
-                  create: (context) => GetCurrencyCubit(serviceLocator()),
+                  create: (context) => GetCurrencyCubit(
+                    serviceLocator(),
+                  ),
                 ),
                 BlocProvider<JoinTripCarPoolCubit>(
                   create: (context) => JoinTripCarPoolCubit(
@@ -2272,7 +2273,7 @@ class AppPages {
                       getPriceCarpoolUsecase: serviceLocator()),
                 ),
                 BlocProvider<GetAllTripsCubit>(
-                  create: (context) => GetAllTripsCubit(serviceLocator()),
+                  create: (context) => GetAllTripsCubit(),
                 ),
                 BlocProvider<CreateCarPoolCubit>(
                   create: (context) => CreateCarPoolCubit(
@@ -2283,7 +2284,7 @@ class AppPages {
                   create: (context) => MapBoxDestCubit(),
                 ),
                 BlocProvider<GetAllTripsCubit>(
-                  create: (context) => GetAllTripsCubit(serviceLocator()),
+                  create: (context) => GetAllTripsCubit(),
                 ),
                 BlocProvider<GetCurrencyCubit>(
                   create: (context) => GetCurrencyCubit(

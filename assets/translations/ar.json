@@ -1057,8 +1057,8 @@
   "reviews": "مراجعة",
   "addToCart": "إضافة الي السلة",
   "showAllOrders": "عرض كل الطلبات",
-  "viewRoute":"عرض المسار",
   "rating": "تقييم",
+  "viewRoute":"عرض المسار",
   "rateDoctor": "تقييم الطبيب",
   "mutualFriend": "صديق مشترك",
   "clearForEveryone": "مسح لدي الجميع",
@@ -1177,7 +1177,6 @@
   "timeTableUpdatedSuccess": "تم تعديل الجدول الزمني بنجاح",
   "callFees": "رسوم الاتصال",
   "clinicFees": "رسوم العيادة",
-  "restaurantOrders": "طلبات المطعم",
   "criminalRecord": "سجل جنائي",
   "technicalExamination": "الفحص الفني",
   "homeVisitFees": "رسوم الزيارة المنزلية",
@@ -1200,7 +1199,6 @@
   "noEmergencyRequests": "لا توجد طلبات الطوارئ",
   "allAppointments": "جميع الحجوزات",
   "rejectedAppointment": "تم رفض هذا الحجز من قبل",
-  "continueUsingChatServices":"اكمل باستخدام خدمات المحادثة",
   "uploadSuccessfully": "تم التحميل بنجاح",
   "addDescription": "أضف وصفًا...",
   "onlyViewThisPost": "أنت فقط من يمكنه عرض هذا المنشور",
@@ -1210,5 +1208,9 @@
   "everyoneViewThisPost": "يمكن للجميع عرض هذا المنشور",
   "storyUploaded": "تم تحميل القصة",
   "story": "قصة",
-  "next": "التالي"
+  "next": "التالي",
+  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة",
+  "recoverDeletedChats": "استعادة الدردشات المحذوفة",
+  "sureRecoverDeletedChats": "هل تريد استعادة الدردشات المحذوفة؟",
+  "restaurantOrders": "طلبات المطاعم"
 }

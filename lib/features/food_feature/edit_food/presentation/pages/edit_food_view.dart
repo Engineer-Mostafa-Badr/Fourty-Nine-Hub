@@ -48,8 +48,8 @@ class _EditFoodViewState extends State<EditFoodView>
     with AutomaticKeepAliveClientMixin {
   bool showValidator = false;
 
-  final ApiConsumer apiConsumer =
-      BaseApiConsumer(serviceLocator(), serviceLocator());
+  // final ApiConsumer apiConsumer =
+  //     BaseApiConsumer(serviceLocator());
 
   // final ScrollController _scrollController = ScrollController();
   final TextEditingController foodNameController = TextEditingController();

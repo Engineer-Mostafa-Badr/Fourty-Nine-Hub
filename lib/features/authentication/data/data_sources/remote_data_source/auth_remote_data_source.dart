@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
@@ -8,19 +9,33 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_tokens_model.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_new_forget_password_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/login_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/send_forget_password_otp_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/update_profile_view_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_forget_password_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_otp_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/create_anonymous_chat_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/create_normal_chat_use_case.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../../core/utils/shared_pref.dart';
 
 abstract class AuthRemoteDataSource {
   const AuthRemoteDataSource();
+
+  Future<Either<Failure, bool>> updateUserBio({
+    required String bio,
+  });
+
+  Future<Either<Failure, bool>> updateUserName({
+    required String name,
+  });
 
   Future<Either<Failure, UserTokensModel>> login(LoginParams loginParams);
 
@@ -54,6 +69,20 @@ abstract class AuthRemoteDataSource {
   void attachToken(UserTokensModel? token);
 
   Future<Either<Failure, void>> logout();
+
+  Future<Either<Failure, ChatEntity>> createNormalChat(
+      CreateNormalChatParams params);
+
+  Future<Either<Failure, ChatEntity>> createAnonymousChat(
+      CreateAnonymousChatParams params);
+  Future<Either<Failure, bool>> updateProfileView(
+      UpdateProfileViewParams params);
+
+  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViews(
+      GetProfileViewsParams params);
+
+  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViewsByUserId(
+      GetProfileViewsParams params);
 }
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
@@ -292,6 +321,103 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       // await registerSocket();
 
       return Right(r);
+    });
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateUserBio({required String bio}) async {
+    final result =
+        await _apiConsumer.put(EndPoints.updateUserBio(), data: {'bio': bio});
+    log(result.toString(), name: "updateUserBio");
+    return result.fold((failure) {
+      log(failure.toString(), name: "updateUserBio");
+      return Left(failure);
+    }, (response) {
+      return Right(response['status']);
+    });
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateUserName({required String name}) async {
+    final result = await _apiConsumer.put(EndPoints.updateUserName(),
+        data: {'firstName': name, 'lastName': ' '});
+    log(result.toString(), name: "updateUserName");
+    return result.fold((failure) {
+      log(failure.toString(), name: "updateUserName");
+      return Left(failure);
+    }, (response) {
+      return Right(response['status']);
+    });
+  }
+
+  @override
+  Future<Either<Failure, ChatEntity>> createNormalChat(
+      CreateNormalChatParams params) async {
+    final response = await _apiConsumer.post(EndPoints.createNormalChat(
+      categoryId: params.categoryId,
+      otherUserId: params.otherUserId,
+    ));
+    return response.fold((failure) => Left(failure),
+        (data) => Right(ChatModel.fromJson(data['data']['chat'])));
+  }
+
+  @override
+  Future<Either<Failure, ChatEntity>> createAnonymousChat(
+      CreateAnonymousChatParams params) async {
+    final response = await _apiConsumer
+        .post(EndPoints.createAnonymousChat(params.otherUserId));
+
+    return response.fold((failure) => Left(failure),
+        (data) => Right(ChatModel.fromJson(data['data']['chat'])));
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateProfileView(
+      UpdateProfileViewParams params) async {
+    final response = await _apiConsumer
+        .post(EndPoints.updateProfileview(params.userId), data: {
+      'viewAction': params.isProfile
+          ? UpdateProfileViewActionType.profile
+          : UpdateProfileViewActionType.avatar
+    });
+    return response.fold(
+        (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViews(
+      GetProfileViewsParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getProfileviews(
+        params.isProfile
+            ? UpdateProfileViewActionType.profile
+            : UpdateProfileViewActionType.avatar,
+      ),
+    );
+    return response.fold((failure) => Left(failure), (data) {
+      List<GetProfileViewsEntity> profileViews = (data['data'] as List)
+          .map((e) => GetProfileViewsEntity.fromJson(e))
+          .toList();
+      return Right(profileViews);
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViewsByUserId(
+      GetProfileViewsParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getProfileviewsByUserId(
+        userId: params.userId,
+        viewAction: params.isProfile
+            ? UpdateProfileViewActionType.profile
+            : UpdateProfileViewActionType.avatar,
+      ),
+    );
+    return response.fold((failure) => Left(failure), (data) {
+      List<GetProfileViewsEntity> profileViews = (data['data']['views'] as List)
+          .map((e) => GetProfileViewsEntity.fromJson(e))
+          .toList();
+      return Right(profileViews);
     });
   }
 }

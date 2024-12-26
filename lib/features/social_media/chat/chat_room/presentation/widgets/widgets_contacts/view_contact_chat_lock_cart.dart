@@ -19,7 +19,7 @@ class ViewContactChatLockCart extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Icon(
-            Icons.speaker_notes_off,
+            Icons.mail_lock,
             color: AppColors.GREY_DARK_COLOR,
             size: 24,
           ),

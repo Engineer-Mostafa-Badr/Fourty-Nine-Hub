@@ -23,6 +23,7 @@ import 'package:fourtyninehub/features/notifications/presentation/widgets/notifi
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -52,9 +53,9 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
-  checkLogin() {
+  checkLogin()async {
     try {
-      if (!context.isUserLoggedIn) context.read<UserCubit>().getUser();
+      if(!context.isUserLoggedIn) await context.read<UserCubit>().getUser();
     } catch (e) {
       print(e.toString());
     }
@@ -79,12 +80,14 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
   }
 
   @override
-  void initState() {
+  void didChangeDependencies() async {
     appOpenAdManager.loadAd();
     WidgetsBinding.instance.addObserver(this);
-    checkLogin();
-    super.initState();
+
+    await checkLogin();
+    super.didChangeDependencies();
     _setupScrollController();
+
     context
         .read<FirebaseNotficationsCubit>()
         .setupInterceptedMessage(context: context);

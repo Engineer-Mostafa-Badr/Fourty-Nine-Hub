@@ -64,7 +64,7 @@ class JoinTripCarpoolServiceLocator {
       () => GetAllTripsRemoteDataSourceImpl(),
     );
     serviceLocator.registerFactory<GetAvailableTripsForDriversCubit>(
-        () => GetAvailableTripsForDriversCubit(serviceLocator()));
+        () => GetAvailableTripsForDriversCubit());
 
     serviceLocator.registerLazySingleton<GetAllTripsRepo>(
       () => GetAllTripsRepoImp(
@@ -75,7 +75,7 @@ class JoinTripCarpoolServiceLocator {
     serviceLocator.registerFactory(() => GetAllTripsUseCase(serviceLocator()));
 
     serviceLocator.registerLazySingleton<GetAllTripsCubit>(
-        () => GetAllTripsCubit(serviceLocator()));
+        () => GetAllTripsCubit());
 
     //Get Currency//
     serviceLocator.registerFactory<GetCurrencyCubit>(
