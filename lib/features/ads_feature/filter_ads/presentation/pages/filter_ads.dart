@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -10,10 +9,12 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/widgets/filter_ad_dynamic_inputs.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class FilterAdsView extends StatefulWidget {
@@ -113,12 +114,23 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                   itemCount: state.filterAdProperties?.length ?? 0,
                 ),
                 const Sizer(),
-                DefaultButton(
-                    label: LocaleKeys.filter.localize,
-                    onPressed: () {
-                      controller.filterAds(
-                          categorize: widget.categorization, context: context);
-                    }),
+                ClickableWidget(
+                  onTap: (){
+                controller.filterAds(
+                categorize: widget.categorization, context: context);
+                },
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: AppColors.PRIMARY_COLOR,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Label(
+                      text: LocaleKeys.filter.localize,
+                      style: Styles.headerText(color: Colors.white),
+                    ),
+                )),
               ],
             );
           }),
