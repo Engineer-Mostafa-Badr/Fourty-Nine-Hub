@@ -76,6 +76,7 @@ class FirebaseHelper {
 
   void _handleMessage(RemoteMessage message) {
     // pr(message.data);
+    // log(message.data.toString(), name: "notificationnotificationnotificationnotificationnotification");
     // pr(message.data.runtimeType);
     FirebaseNotificationEntitiy firebaseNotificationEntitiy =
         FirebaseNotificationEntitiy.fromMap(message.data);
@@ -85,9 +86,9 @@ class FirebaseHelper {
       notificationPageLoaded = true;
       Future.delayed(const Duration(seconds: 3))
           .then((value) => notificationPageLoaded = false);
-      // pr('status is success ');
-      pr(firebaseNotificationEntitiy.path);
-      pr(firebaseNotificationEntitiy.payload);
+      pr('status is success ');
+      // pr(firebaseNotificationEntitiy.path);
+      // pr(firebaseNotificationEntitiy.payload);
       context.push(firebaseNotificationEntitiy.path ?? '',
           extra: firebaseNotificationEntitiy.payload);
     }

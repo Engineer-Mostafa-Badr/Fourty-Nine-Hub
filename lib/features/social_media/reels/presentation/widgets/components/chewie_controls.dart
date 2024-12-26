@@ -1,4 +1,3 @@
-
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -15,7 +14,7 @@ class CustomChewieControls extends StatefulWidget {
   State<CustomChewieControls> createState() => _CustomChewieControlsState();
 }
 
-class _CustomChewieControlsState extends State<CustomChewieControls>    {
+class _CustomChewieControlsState extends State<CustomChewieControls> {
   @override
   Widget build(BuildContext context) {
     return Stack(

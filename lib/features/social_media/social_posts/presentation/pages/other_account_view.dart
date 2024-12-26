@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -21,7 +20,6 @@ import 'package:fourtyninehub/features/social_media/create_post/presentation/wid
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/api_error_page.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/message_button.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/saved_reels_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
@@ -49,7 +47,7 @@ class OtherAccountView extends StatefulWidget {
       print("payloadpayloadpayload $payload");
       // print(id);
       // print('itemId${payload['itemId']}');
-      userId = payload['itemId'];
+      userId = payload['userId'];
     }
   }
   var userId;
@@ -59,6 +57,12 @@ class OtherAccountView extends StatefulWidget {
 }
 
 class _OtherAccountViewState extends State<OtherAccountView> {
+  @override
+  void initState() {
+    context.read<SocialPostsCubit>().getUserProfile(id: widget.userId ?? '');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final loginUser = context.read<UserCubit>().state.data;
@@ -75,364 +79,353 @@ class _OtherAccountViewState extends State<OtherAccountView> {
           final controller = context.read<SocialPostsCubit>();
           return state.status == StateStatus.loading
               ? const Center(child: CircularProgressIndicator())
-              : state.status == StateStatus.error
-                  ? ApiErrorPage(
-                      message: getFailureMessage(
-                        state.failure ?? UnknownFailure(''),
-                        context,
-                      ),
-                    )
-                  : CustomScrollView(
-                      slivers: [
-                        SliverToBoxAdapter(
-                            child: Container(
-                                width: double.infinity,
-                                padding: EdgeInsetsDirectional.only(
-                                    top: 80.h, end: 20.w, start: 20.w),
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      IconButton(
-                                          onPressed: () => context.pop(),
-                                          icon: const Icon(
-                                            Icons.arrow_back,
-                                          )),
-                                      if (context
-                                              .read<UserCubit>()
-                                              .isLoggedIn &&
-                                          loginUser?.id != widget.userId)
-                                        PopupMenuButton(
-                                            icon: const Icon(
-                                              Icons.more_vert,
-                                            ),
-                                            itemBuilder: (context) {
-                                              return [
-                                                if (loginUser?.id !=
-                                                    state.profileData?.id)
-                                                  PopupMenuItem<int>(
-                                                    value: 4,
-                                                    child: Text(LocaleKeys
-                                                        .report.localize),
-                                                    onTap: () {
-                                                      bottomSheet(
-                                                          context: context,
-                                                          widget: ReportView(
-                                                            id: widget.userId,
-                                                            categoryId:
-                                                                '66b77e77bb35968b535dc944',
-                                                          ));
-                                                    },
-                                                  ),
-                                                if (loginUser?.id !=
-                                                    state.profileData?.id)
-                                                  PopupMenuItem<int>(
-                                                    value: 5,
-                                                    child: Text(state
-                                                                .profileData
-                                                                ?.isBlock ==
-                                                            true
-                                                        ? LocaleKeys
-                                                            .unBlock.localize
-                                                        : LocaleKeys
-                                                            .block.localize),
-                                                    onTap: () async {
-                                                      // context.pop();
-                                                      var result =
-                                                          await controller
-                                                              .blockUser(
-                                                                  context:
-                                                                      context,
-                                                                  userId: widget
-                                                                      .userId);
-                                                      print("result:$result");
-                                                      if (result == true) {
-                                                        print("object");
-                                                        if (state.profileData
-                                                                ?.isBlock ==
-                                                            false) {
-                                                          state.profileData
-                                                              ?.isBlock = true;
-                                                          showSuccessMessage(
-                                                              context,
-                                                              LocaleKeys
-                                                                  .blockedSuccessfully
-                                                                  .localize);
-                                                        } else {
-                                                          state.profileData
-                                                              ?.isBlock = false;
-                                                          showSuccessMessage(
-                                                              context,
-                                                              LocaleKeys
-                                                                  .unBlockedSuccessfully
-                                                                  .localize);
-                                                        }
-                                                      }
-                                                    },
-                                                  ),
-                                                if (loginUser?.id ==
-                                                    state.profileData?.id)
-                                                  PopupMenuItem<int>(
-                                                    value: 5,
-                                                    child: Text(LocaleKeys
-                                                        .editProfile.localize),
-                                                    onTap: () async {
-                                                      await context.push(
-                                                          Routes.EDITPROFILE);
-                                                      controller.getUserProfile(
-                                                          id: widget.userId);
-                                                    },
-                                                  )
-                                              ];
-                                            }),
-                                      if (context
-                                              .read<UserCubit>()
-                                              .isLoggedIn &&
-                                          loginUser?.id == widget.userId)
-                                        IconButton(
-                                            onPressed: () {
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (_) =>
-                                                      const SearchAppUsers());
-                                            },
-                                            icon: const Icon(
-                                              Icons.search,
-                                            )),
-                                    ]))),
-                        SliverToBoxAdapter(
-                          child: Column(
-                            children: [
-                              _buildAccountCounter(
-                                  context: context,
-                                  user: state.profileData!,
-                                  onFollow: () async {
-                                    if (context.read<UserCubit>().isLoggedIn) {
-                                      if (state.profileData?.isFollowed ==
-                                          true) {
-                                        var result =
-                                            await controller.unFollowRequest(
-                                                context: context,
-                                                userId: state.profileData!.id);
-                                        if (result == true) {
-                                          state.profileData?.isFollowed = false;
-                                          setState(() {});
-                                        }
-                                      } else {
-                                        var result =
-                                            await controller.followRequest(
-                                                context: context,
-                                                userId: state.profileData!.id);
-                                        if (result == true) {
-                                          state.profileData?.isFollowed = true;
-                                          setState(() {});
-                                        }
-                                      }
-                                    } else {
-                                      context.push(Routes.LOGIN);
-                                    }
-                                  },
-                                  onAddFriend: () async {
-                                    // print("object");
-                                    if (context.read<UserCubit>().isLoggedIn) {
-                                      if (state.profileData?.areFriends ==
-                                          true) {
-                                      } else {
-                                        if (state.profileData
-                                                ?.sentFriendRequest ==
-                                            true) {
-                                          var result = await controller
-                                              .removeFriendRequest(
-                                                  context: context,
-                                                  userId:
-                                                      state.profileData!.id);
-                                          if (result == true) {
-                                            state.profileData
-                                                ?.sentFriendRequest = false;
-                                            setState(() {});
-                                          }
-                                        } else {
-                                          var result =
-                                              await controller.friendRequest(
-                                                  context: context,
-                                                  userId:
-                                                      state.profileData!.id);
-                                          if (result == true) {
-                                            state.profileData
-                                                ?.sentFriendRequest = true;
-                                            setState(() {});
-                                          }
-                                        }
-                                      }
-                                    } else {
-                                      context.push(Routes.LOGIN);
-                                    }
-                                  },
-                                  onAcceptFriend: () async {
-                                    bool result =
-                                        await controller.acceptRejectFriend(
-                                            params:
-                                                AcceptRejectFriendRequestParams(
-                                                    userId: widget.userId,
-                                                    status: true));
-                                    state.profileData?.isSenTRequest = false;
-                                    state.profileData?.areFriends = true;
-                                    state.profileData!.friendsCount =
-                                        state.profileData!.friendsCount! + 1;
-                                    print(state.profileData?.friendsCount);
-                                    setState(() {});
-                                    return result;
-                                  },
-                                  onRejectFriend: () async {
-                                    bool result =
-                                        await controller.acceptRejectFriend(
-                                            params:
-                                                AcceptRejectFriendRequestParams(
-                                                    userId: widget.userId,
-                                                    status: false));
-                                    state.profileData?.isSenTRequest = false;
-                                    setState(() {});
-                                    return result;
-                                  },
-                                  onDeleteFriend: () async {
-                                    bool result = await controller.deleteFriend(
-                                        userId: widget.userId);
-                                    state.profileData?.areFriends = false;
-                                    state.profileData!.friendsCount =
-                                        state.profileData!.friendsCount! - 1;
-                                    print(state.profileData?.friendsCount);
-                                    setState(() {});
-                                    return result;
-                                  },
-                                  editProfile: () async {
-                                    await context.push(Routes.EDITPROFILE);
-                                    controller.getUserProfile(
-                                        id: widget.userId);
-                                  },
-                                  selectImageGallary: () {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return Wrap(
-                                          children: <Widget>[
-                                            ListTile(
-                                              leading: const Icon(
-                                                  Icons.photo_library),
-                                              title: Text(
-                                                  LocaleKeys.gallery.localize),
-                                              onTap: () async {
-                                                Navigator.pop(context);
-                                                await controller.uploadPhoto(
-                                                    isGallery: true);
-                                                // Reload user data if needed
-                                              },
-                                            ),
-                                            ListTile(
-                                              leading:
-                                                  const Icon(Icons.camera_alt),
-                                              title: Text(
-                                                  LocaleKeys.camera.localize),
-                                              onTap: () async {
-                                                Navigator.pop(context);
-                                                await controller.uploadPhoto(
-                                                    isGallery: false);
-                                                // Reload user data if needed
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  },
-                                  selectCoverImage: () {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return Wrap(
-                                          children: <Widget>[
-                                            ListTile(
-                                              leading: const Icon(
-                                                  Icons.photo_library),
-                                              title: Text(
-                                                  LocaleKeys.gallery.localize),
-                                              onTap: () async {
-                                                Navigator.pop(context);
-                                                await controller
-                                                    .uploadCoverPhoto(
-                                                        isGallery: true);
-                                                // Reload user data if needed
-                                              },
-                                            ),
-                                            ListTile(
-                                              leading:
-                                                  const Icon(Icons.camera_alt),
-                                              title: Text(
-                                                  LocaleKeys.camera.localize),
-                                              onTap: () async {
-                                                Navigator.pop(context);
-                                                await controller
-                                                    .uploadCoverPhoto(
-                                                        isGallery: false);
-                                                // Reload user data if needed
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  }),
-                              if (loginUser?.id == widget.userId)
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 8.0, vertical: 6.h),
-                                  child: AppButton(
-                                    label: LocaleKeys.editProfile.localize,
-                                    onPressed: () async {
-                                      await context.push(Routes.EDITPROFILE);
-                                      controller.getUserProfile(
-                                          id: widget.userId);
-                                    },
-                                    color: Colors.white,
-                                    backColor: AppColors.PRIMARY_COLOR,
+              : CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                        child: Container(
+                            width: double.infinity,
+                            padding: EdgeInsetsDirectional.only(
+                                top: 80.h, end: 20.w, start: 20.w),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  IconButton(
+                                      onPressed: () => context.pop(),
+                                      icon: const Icon(
+                                        Icons.arrow_back,
+                                      )),
+                                  Text(
+                                    '${state.profileData?.firstName} ${state.profileData?.lastName}',
+                                    style: Styles.headerText(fontSize: 70.sp),
                                   ),
-                                )
-                            ],
-                          ),
-                        ),
-                        SliverToBoxAdapter(
-                          child: state.profileData?.isBlock == false
-                              ? Column(
-                                  children: [
-                                    TabBar(
-                                        labelStyle: Styles.mediumText(),
-                                        isScrollable: true,
-                                        tabAlignment: TabAlignment.center,
-                                        onTap: (i) {
-                                          controller.changeUserPage(i);
+                                  const Spacer(),
+                                  if (context.read<UserCubit>().isLoggedIn &&
+                                      loginUser?.id != widget.userId)
+                                    PopupMenuButton(
+                                        color: Theme.of(context)
+                                            .scaffoldBackgroundColor,
+                                        icon: const Icon(
+                                          Icons.more_vert,
+                                        ),
+                                        itemBuilder: (context) {
+                                          return [
+                                            if (loginUser?.id !=
+                                                state.profileData?.id)
+                                              PopupMenuItem<int>(
+                                                value: 4,
+                                                child: Text(
+                                                    LocaleKeys.report.localize),
+                                                onTap: () {
+                                                  bottomSheet(
+                                                      context: context,
+                                                      widget: ReportView(
+                                                        id: widget.userId,
+                                                        categoryId:
+                                                            '66b77e77bb35968b535dc944',
+                                                      ));
+                                                },
+                                              ),
+                                            if (loginUser?.id !=
+                                                state.profileData?.id)
+                                              PopupMenuItem<int>(
+                                                value: 5,
+                                                child: Text(state.profileData
+                                                            ?.isBlock ==
+                                                        true
+                                                    ? LocaleKeys
+                                                        .unBlock.localize
+                                                    : LocaleKeys
+                                                        .block.localize),
+                                                onTap: () async {
+                                                  // context.pop();
+                                                  var result = await controller
+                                                      .blockUser(
+                                                          context: context,
+                                                          userId:
+                                                              widget.userId);
+                                                  print("result:$result");
+                                                  if (result == true) {
+                                                    print("object");
+                                                    if (state.profileData
+                                                            ?.isBlock ==
+                                                        false) {
+                                                      state.profileData
+                                                          ?.isBlock = true;
+                                                      showSuccessMessage(
+                                                          context,
+                                                          LocaleKeys
+                                                              .blockedSuccessfully
+                                                              .localize);
+                                                    } else {
+                                                      state.profileData
+                                                          ?.isBlock = false;
+                                                      showSuccessMessage(
+                                                          context,
+                                                          LocaleKeys
+                                                              .unBlockedSuccessfully
+                                                              .localize);
+                                                    }
+                                                  }
+                                                },
+                                              ),
+                                            if (loginUser?.id ==
+                                                state.profileData?.id)
+                                              PopupMenuItem<int>(
+                                                value: 5,
+                                                child: Text(LocaleKeys
+                                                    .editProfile.localize),
+                                                onTap: () async {
+                                                  await context
+                                                      .push(Routes.EDITPROFILE);
+                                                  controller.getUserProfile(
+                                                      id: widget.userId);
+                                                },
+                                              )
+                                          ];
+                                        }),
+                                  if (context.read<UserCubit>().isLoggedIn &&
+                                      loginUser?.id == widget.userId)
+                                    IconButton(
+                                        onPressed: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (_) =>
+                                                  const SearchAppUsers());
                                         },
-                                        tabs: [
-                                          Tab(
-                                            text: LocaleKeys.posts.localize,
-                                          ),
-                                          Tab(
-                                            text: LocaleKeys.Tweets.localize,
-                                          ),
-                                          Tab(
-                                            text: LocaleKeys.reels.localize,
-                                          ),
-                                          if (context
-                                                  .read<UserCubit>()
-                                                  .state
-                                                  .data
-                                                  ?.id ==
-                                              widget.userId)
-                                            Tab(
-                                              text: LocaleKeys
-                                                  .savedReels.localize,
-                                            ),
-                                        ]),
-                                    // _buildAccountPages(state.profileData!),
-                                  ],
+                                        icon: const Icon(
+                                          Icons.search,
+                                        )),
+                                ]))),
+                    SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          _buildAccountCounter(
+                              context: context,
+                              user: state.profileData!,
+                              onFollow: () async {
+                                if (context.read<UserCubit>().isLoggedIn) {
+                                  if (state.profileData?.isFollowed == true) {
+                                    var result =
+                                        await controller.unFollowRequest(
+                                            context: context,
+                                            userId: state.profileData!.id);
+                                    if (result == true) {
+                                      state.profileData?.isFollowed = false;
+                                      setState(() {});
+                                    }
+                                  } else {
+                                    var result = await controller.followRequest(
+                                        context: context,
+                                        userId: state.profileData!.id);
+                                    if (result == true) {
+                                      state.profileData?.isFollowed = true;
+                                      setState(() {});
+                                    }
+                                  }
+                                } else {
+                                  context.push(Routes.LOGIN);
+                                }
+                              },
+                              onAddFriend: () async {
+                                // print("object");
+                                if (context.read<UserCubit>().isLoggedIn) {
+                                  if (state.profileData?.areFriends == true) {
+                                  } else {
+                                    if (state.profileData?.sentFriendRequest ==
+                                        true) {
+                                      var result =
+                                          await controller.removeFriendRequest(
+                                              context: context,
+                                              userId: state.profileData!.id);
+                                      if (result == true) {
+                                        state.profileData?.sentFriendRequest =
+                                            false;
+                                        setState(() {});
+                                      }
+                                    } else {
+                                      var result =
+                                          await controller.friendRequest(
+                                              context: context,
+                                              userId: state.profileData!.id);
+                                      if (result == true) {
+                                        state.profileData?.sentFriendRequest =
+                                            true;
+                                        setState(() {});
+                                      }
+                                    }
+                                  }
+                                } else {
+                                  context.push(Routes.LOGIN);
+                                }
+                              },
+                              onAcceptFriend: () async {
+                                bool result =
+                                    await controller.acceptRejectFriend(
+                                        params: AcceptRejectFriendRequestParams(
+                                            userId: widget.userId,
+                                            status: true));
+                                state.profileData?.isSenTRequest = false;
+                                state.profileData?.areFriends = true;
+                                state.profileData!.friendsCount =
+                                    state.profileData!.friendsCount! + 1;
+                                print(state.profileData?.friendsCount);
+                                setState(() {});
+                                return result;
+                              },
+                              onRejectFriend: () async {
+                                bool result =
+                                    await controller.acceptRejectFriend(
+                                        params: AcceptRejectFriendRequestParams(
+                                            userId: widget.userId,
+                                            status: false));
+                                state.profileData?.isSenTRequest = false;
+                                setState(() {});
+                                return result;
+                              },
+                              onDeleteFriend: () async {
+                                bool result = await controller.deleteFriend(
+                                    userId: widget.userId);
+                                state.profileData?.areFriends = false;
+                                state.profileData!.friendsCount =
+                                    state.profileData!.friendsCount! - 1;
+                                print(state.profileData?.friendsCount);
+                                setState(() {});
+                                return result;
+                              },
+                              editProfile: () async {
+                                await context.push(Routes.EDITPROFILE);
+                                controller.getUserProfile(id: widget.userId);
+                              },
+                              selectImageGallary: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Wrap(
+                                      children: <Widget>[
+                                        ListTile(
+                                          leading:
+                                              const Icon(Icons.photo_library),
+                                          title:
+                                              Text(LocaleKeys.gallery.localize),
+                                          onTap: () async {
+                                            Navigator.pop(context);
+                                            await controller.uploadPhoto(
+                                                isGallery: true);
+                                            // Reload user data if needed
+                                          },
+                                        ),
+                                        ListTile(
+                                          leading: const Icon(Icons.camera_alt),
+                                          title:
+                                              Text(LocaleKeys.camera.localize),
+                                          onTap: () async {
+                                            Navigator.pop(context);
+                                            await controller.uploadPhoto(
+                                                isGallery: false);
+                                            // Reload user data if needed
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              selectCoverImage: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Wrap(
+                                      children: <Widget>[
+                                        ListTile(
+                                          leading:
+                                              const Icon(Icons.photo_library),
+                                          title:
+                                              Text(LocaleKeys.gallery.localize),
+                                          onTap: () async {
+                                            Navigator.pop(context);
+                                            await controller.uploadCoverPhoto(
+                                                isGallery: true);
+                                            // Reload user data if needed
+                                          },
+                                        ),
+                                        ListTile(
+                                          leading: const Icon(Icons.camera_alt),
+                                          title:
+                                              Text(LocaleKeys.camera.localize),
+                                          onTap: () async {
+                                            Navigator.pop(context);
+                                            await controller.uploadCoverPhoto(
+                                                isGallery: false);
+                                            // Reload user data if needed
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }),
+                          if (loginUser?.id == widget.userId)
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 8.0, vertical: 6.h),
+                              child: AppButton(
+                                label: LocaleKeys.editProfile.localize,
+                                onPressed: () async {
+                                  await context.push(Routes.EDITPROFILE);
+                                  controller.getUserProfile(id: widget.userId);
+                                },
+                                color: Colors.white,
+                                backColor: AppColors.PRIMARY_COLOR,
+                              ),
+                            )
+                        ],
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: state.profileData?.isBlock == false &&
+                              state.profileData?.blockMe == false
+                          ? Column(
+                              children: [
+                                TabBar(
+                                    labelStyle: Styles.mediumText(),
+                                    isScrollable: true,
+                                    tabAlignment: TabAlignment.center,
+                                    onTap: (i) {
+                                      controller.changeUserPage(i);
+                                    },
+                                    tabs: [
+                                      Tab(
+                                        text: LocaleKeys.posts.localize,
+                                      ),
+                                      Tab(
+                                        text: LocaleKeys.Tweets.localize,
+                                      ),
+                                      Tab(
+                                        text: LocaleKeys.reels.localize,
+                                      ),
+                                      if (context
+                                              .read<UserCubit>()
+                                              .state
+                                              .data
+                                              ?.id ==
+                                          widget.userId)
+                                        Tab(
+                                          text: LocaleKeys.savedReels.localize,
+                                        ),
+                                    ]),
+                                // _buildAccountPages(state.profileData!),
+                              ],
+                            )
+                          : state.profileData?.blockMe == true
+                              ? Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 25.0),
+                                    child: Label(
+                                      text: context.isArabic
+                                          ? 'انت محظور من هذا المستخدم'
+                                          : 'You are blocked by this user',
+                                    ),
+                                  ),
                                 )
                               : Center(
                                   child: Padding(
@@ -443,31 +436,35 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                     ),
                                   ),
                                 ),
-                        ),
-                        state.profilePage == 0 &&
-                                state.profileData?.isBlock == false
-                            ? UserPosts(
+                    ),
+                    state.profilePage == 0 &&
+                            state.profileData?.isBlock == false &&
+                            state.profileData?.blockMe == false
+                        ? UserPosts(
+                            userData: state.profileData!,
+                          )
+                        : state.profilePage == 1 &&
+                                state.profileData?.isBlock == false &&
+                                state.profileData?.blockMe == false
+                            ? UserTweets(
                                 userData: state.profileData!,
                               )
-                            : state.profilePage == 1 &&
-                                    state.profileData?.isBlock == false
-                                ? UserTweets(
+                            : state.profilePage == 2 &&
+                                    state.profileData?.isBlock == false &&
+                                    state.profileData?.blockMe == false
+                                ? UserReels(
                                     userData: state.profileData!,
                                   )
                                 : state.profilePage == 2 &&
-                                        state.profileData?.isBlock == false
-                                    ? UserReels(
-                                        userData: state.profileData!,
-                                      )
-                                    : state.profilePage == 2 &&
-                                            state.profileData?.isBlock == false
-                                        ? SavedReelsView(
-                                            userData: state.profileData!)
-                                        : const SliverToBoxAdapter(
-                                            child: SizedBox.shrink(),
-                                          ),
-                      ],
-                    );
+                                        state.profileData?.isBlock == false &&
+                                        state.profileData?.blockMe == false
+                                    ? SavedReelsView(
+                                        userData: state.profileData!)
+                                    : const SliverToBoxAdapter(
+                                        child: SizedBox.shrink(),
+                                      ),
+                  ],
+                );
         }),
       ),
     );
@@ -491,7 +488,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 350.h,
+            height: 380.h,
             child: Stack(
               children: [
                 Positioned.fill(
@@ -568,6 +565,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         ],
                       ),
                     ),
+                    const Sizer(),
                     Expanded(
                         child: Padding(
                       padding:
@@ -579,7 +577,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                  width: 210.w,
+                                  width: 180.w,
                                   child: AppButton(
                                       // height: 120.h,
                                       width: kToolbarHeight * 1.5,
@@ -646,7 +644,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                                   color: Colors.white),
                                             )))
                                     : SizedBox(
-                                        width: 210.w,
+                                        width: user.sentFriendRequest == true
+                                            ? 230.w
+                                            : 180.w,
                                         child: AppButton(
                                             // height: 80.h,
                                             padding: 5,
@@ -680,7 +680,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   ],
                 )),
                 PositionedDirectional(
-                    bottom: 20.h,
+                    bottom: 1.h,
                     start: 10,
                     child: Stack(
                       alignment: AlignmentDirectional.bottomEnd,
@@ -711,7 +711,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                   ),
                                 ),
                               )
-                            : InkWell(
+                            : GestureDetector(
                                 onTap: () {
                                   if (context.isUserLoggedIn) {
                                     context
@@ -731,21 +731,22 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           ));
                                 },
                                 child: CircleAvatar(
-                                  radius: 110.w,
+                                  radius: 160.w,
                                   backgroundColor:
                                       Theme.of(context).scaffoldBackgroundColor,
                                   child: ImageFromInternet(
                                     image: user.profilePicture ??
                                         UIConst.profilePlaceHolder,
-                                    height: 180.h,
-                                    width: 250.w,
+                                    height: 250.h,
+                                    width: 300.w,
                                     isCircle: true,
                                   ),
                                 ),
                               ),
                         if (loginUser?.id == user.id)
                           PositionedDirectional(
-                            // end: 5.w,
+                            end: 30.w,
+                            bottom: 10.h,
                             child: InkWell(
                               onTap: () {
                                 selectImageGallary();
@@ -903,10 +904,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   ],
                 ),
                 Sizer(height: 5.h),
-                Label(
-                  text: user.bio,
-                  style: Styles.mediumText(),
-                ),
+                if (user.bio.isNotEmpty && user.bio != 'Hidden')
+                  Label(
+                    text: user.bio,
+                    style: Styles.mediumText(),
+                  ),
                 Sizer(height: 5.h),
                 if (user.city.isNotEmpty ||
                     user.job.isNotEmpty ||

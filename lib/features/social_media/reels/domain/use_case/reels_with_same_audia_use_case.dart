@@ -5,22 +5,23 @@ import 'package:fourtyninehub/features/social_media/reels/data/models/audio_reel
 
 import '../repositories/reels_repository.dart';
 
-class ReelsWithSameAudioUseCase extends UseCase<ReelsForAudioResponse, ReelsWithSameAudioParams> {
+class ReelsWithSameAudioUseCase
+    extends UseCase<ReelsForAudioResponse, ReelsWithSameAudioParams> {
   final ReelsRepository _repository;
 
   ReelsWithSameAudioUseCase(this._repository);
 
   @override
-  Future<Either<Failure, ReelsForAudioResponse>> call(ReelsWithSameAudioParams params) {
+  Future<Either<Failure, ReelsForAudioResponse>> call(
+      ReelsWithSameAudioParams params) {
     return _repository.getReelsWithSameAudio(params);
   }
 }
 
-
-class ReelsWithSameAudioParams{
+class ReelsWithSameAudioParams {
   final String audioId;
-  int? page ;
-  int? limit ;
+  int? page;
+  int? limit;
 
   ReelsWithSameAudioParams({required this.audioId, this.page, this.limit});
 }

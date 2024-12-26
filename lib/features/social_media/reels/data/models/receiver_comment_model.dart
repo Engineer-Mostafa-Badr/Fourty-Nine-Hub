@@ -10,7 +10,7 @@ class ReceiverCommentModel extends ReceiverCommentEntity {
 
   factory ReceiverCommentModel.fromJson(Map<String, dynamic> json) {
     return ReceiverCommentModel(
-      id: json['_id']??'',
+      id: json['_id'] ?? '',
       firstName: json['firstName'],
       lastName: json['lastName'],
       // profilePictureSignedUrl: json['profilePictureSignedUrl'],

@@ -33,8 +33,10 @@ class LiveServiceLocator {
     serviceLocator.registerFactory(() => CreateLiveUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => EndLiveUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => SendPointsUseCase(serviceLocator()));
-    serviceLocator.registerFactory(() => RequestBattleUseCase(serviceLocator()));
-    serviceLocator.registerFactory(() => ListenBattleRequestUseCase(serviceLocator()));
+    serviceLocator
+        .registerFactory(() => RequestBattleUseCase(serviceLocator()));
+    serviceLocator
+        .registerFactory(() => ListenBattleRequestUseCase(serviceLocator()));
     serviceLocator
         .registerFactory(() => ListenToSendPointsUseCase(serviceLocator()));
     serviceLocator.registerFactory(

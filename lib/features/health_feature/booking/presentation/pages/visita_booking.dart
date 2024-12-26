@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/doctor_profile.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/location.dart';
@@ -19,7 +21,6 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
-import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../cubit/book_doctor_appointment_cubit.dart';
 
@@ -43,15 +44,19 @@ class _VisitaBookingState extends State<VisitaBooking> {
     final controller = context.read<BookDoctorAppointmentCubit>();
 
     return Scaffold(
-        appBar: const BackAppBar(
-          label: Labels.confirmBooking,
+        appBar: BackAppBar(
+          label: LocaleKeys.confirmBooking.localize,
         ),
         body: BlocConsumer<BookDoctorAppointmentCubit,
             BookDoctorAppointmentState>(
           listener: (context, state) {
             switch (state) {
               case BookDoctorAppointmentSuccessState _:
-                showSuccessMessage(context, 'waitingDoctorAppointment');
+                showSuccessMessage(
+                    context,
+                    context.isArabic
+                        ? 'تم الحجز بنجاح و في انتظار الموافقة'
+                        : 'Booking done successfully and waiting for doctor approval');
                 Future.delayed(const Duration(seconds: 1));
                 context.pushAndRemoveUntil(
                     Routes.VISITA, (route) => route == Routes.HOME);
@@ -77,7 +82,10 @@ class _VisitaBookingState extends State<VisitaBooking> {
               child: ListView(
                 children: [
                   const BookingDoctorProfileWidget(),
-                  const BookDoctorAppointmentPatientInfoCard(),
+                  BookDoctorAppointmentPatientInfoCard(
+                    type: widget
+                        .doctorDetailsCubit.selectedAppointment.appointmentType,
+                  ),
                   const BookDoctorAppointmentTimeCard(),
                   const BookDoctorAppointmentLocationInfoCard(),
                   const BookDoctorAppointmentFeesCard(),
@@ -89,16 +97,19 @@ class _VisitaBookingState extends State<VisitaBooking> {
                         child: AppButton(
                             color: AppColors.LIGHT_COLOR,
                             height: 50.h,
-                            label: "${Labels.premium} ${Labels.book}",
+                            label: LocaleKeys.premiumBook.localize,
                             onPressed: () {
                               serviceLocator<SubscriptionController>()
                                   .checkIfUserSubscribed(
-                                title:context.isArabic? serviceLocator<HealthSharedData>()
-                                    .doctorSearchParams
-                                    .subCategory
-                                    .nameAr: serviceLocator<HealthSharedData>()
-                                    .doctorSearchParams
-                                    .subCategory.nameEn,
+                                title: context.isArabic
+                                    ? serviceLocator<HealthSharedData>()
+                                        .doctorSearchParams
+                                        .subCategory
+                                        .nameAr
+                                    : serviceLocator<HealthSharedData>()
+                                        .doctorSearchParams
+                                        .subCategory
+                                        .nameEn,
                                 onSubscribed: () async {
                                   await controller.premiumBook();
                                 },
@@ -115,7 +126,7 @@ class _VisitaBookingState extends State<VisitaBooking> {
                         child: AppButton(
                             height: 50.h,
                             color: AppColors.LIGHT_COLOR,
-                            label: Labels.book,
+                            label: LocaleKeys.book.localize,
                             backColor: AppColors.PRIMARY_COLOR,
                             onPressed: () => controller.regularBooking()),
                       ),

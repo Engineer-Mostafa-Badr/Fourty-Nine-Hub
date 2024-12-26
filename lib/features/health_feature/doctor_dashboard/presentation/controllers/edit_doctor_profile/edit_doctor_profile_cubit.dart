@@ -30,6 +30,7 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
   }
 
   Future<void> _getDoctorProfile() async {
+    emit(state.copyWith(status: EditDoctorProfileStateStatus.initial));
     final response = await _getDoctorProfileUseCase(const NoParams());
 
     response.fold(
@@ -48,25 +49,31 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
     respone.fold(
       (failure) => emit(state.copyWith(
           status: EditDoctorProfileStateStatus.error, failure: failure)),
-      (data) =>
-          emit(state.copyWith(status: EditDoctorProfileStateStatus.updated)),
+      (data) => emit(state.copyWith(
+          status: EditDoctorProfileStateStatus.updated, update: true)),
     );
   }
 
-  Future<void> updateID(DoctorDocsParams params) async {
+  Future<bool> updateID(DoctorDocsParams params) async {
+    bool result = false;
     emit(state.copyWith(status: EditDoctorProfileStateStatus.startLoading));
-
+    print("Doctor params.toJson()${params.toJson()}");
     final respone = await _updateDoctorIDUsecase(params);
     emit(state.copyWith(status: EditDoctorProfileStateStatus.endLoading));
 
     respone.fold(
         (failure) => emit(state.copyWith(
-            status: EditDoctorProfileStateStatus.error, failure: failure)),
-        (data) =>
-            emit(state.copyWith(status: EditDoctorProfileStateStatus.updated)));
+            status: EditDoctorProfileStateStatus.error,
+            failure: failure)), (data) {
+      result = true;
+      emit(state.copyWith(
+          status: EditDoctorProfileStateStatus.updated, update: true));
+    });
+    return result;
   }
 
-  Future<void> updatePracticingCirtificate(DoctorDocsParams params) async {
+  Future<bool> updatePracticingCirtificate(DoctorDocsParams params) async {
+    bool result = false;
     emit(state.copyWith(status: EditDoctorProfileStateStatus.startLoading));
 
     final respone = await _updateDoctorPracticingCirtificateUsecase(params);
@@ -74,9 +81,14 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
 
     respone.fold(
         (failure) => emit(state.copyWith(
-            status: EditDoctorProfileStateStatus.error, failure: failure)),
-        (data) =>
-            emit(state.copyWith(status: EditDoctorProfileStateStatus.updated)));
+            status: EditDoctorProfileStateStatus.error,
+            failure: failure)), (data) {
+      result = true;
+      emit(state.copyWith(
+          status: EditDoctorProfileStateStatus.updated, update: true));
+    });
+
+    return result;
   }
 
   Future<void> deleteAccount() async {
@@ -86,8 +98,9 @@ class EditDoctorProfileCubit extends Cubit<EditDoctorProfileState> {
 
     respone.fold(
         (failure) => emit(state.copyWith(
-            status: EditDoctorProfileStateStatus.error, failure: failure)),
-        (data) => emit(state.copyWith(
-            status: EditDoctorProfileStateStatus.doctorDeleted)));
+            status: EditDoctorProfileStateStatus.error,
+            failure: failure)), (data) {
+      emit(state.copyWith(status: EditDoctorProfileStateStatus.doctorDeleted));
+    });
   }
 }

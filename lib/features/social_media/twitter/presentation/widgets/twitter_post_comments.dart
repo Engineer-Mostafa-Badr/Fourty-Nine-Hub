@@ -65,6 +65,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TwitterCubit, TwitterState>(builder: (context, state) {
+      final user = context.read<UserCubit>().state.data;
       final controller = context.read<TwitterCubit>();
       return Scaffold(
         // backgroundColor: Colors.white,
@@ -149,9 +150,10 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                 ),
                 child: Row(
                   children: [
-                    const ProfileImage(
+                    ProfileImage(
                       accountId: 0,
                       userId: '',
+                      imageURL: user?.profilePicture,
                     ),
                     const Sizer(),
                     Expanded(
@@ -233,52 +235,55 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
       required Function(TwitterReportParams) onReport,
       required Function(TwitterCommentReplyParams) onAddReply,
       required Function(String) onDeleteComment}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TwitterCommentCard(
-          comment: comment,
-          onCommentReact: () {
-            widget.onCommentReact(TwitterCommentReactParams(
-                commentId: comment.id, react: 'love'));
-            comment.isReact = !comment.isReact!;
-          },
-          onCommentReply: () {
-            widget.onGetReplies(comment.id, comment);
-            bottomSheet(
-              context: context,
-              isScrollControlled: true,
-              widget: BlocProvider.value(
-                value: serviceLocator<TwitterCubit>()
-                  ..loadReplies(context, comment.id),
-                child: TwitterCommentReplies(
-                  replies: const [],
-                  onAddReply: (TwitterCommentReplyParams params) async =>
-                      await onAddReply(params),
-                  commentId: comment.id,
-                  postId: comment.post,
-                  onReplyReact: (String id) {
-                    onReplyReact(id);
-                  },
-                  onReport: (TwitterReportParams params) {
-                    onReport(params);
-                  },
-                  onEditReply: (TwitterPostCommentParams params) =>
-                      widget.onEditComment(params),
-                  onDeleteReply: (id) => widget.onDeleteComment(id),
+    return Padding(
+      padding: EdgeInsets.only(bottom: 30.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TwitterCommentCard(
+            comment: comment,
+            onCommentReact: () {
+              widget.onCommentReact(TwitterCommentReactParams(
+                  commentId: comment.id, react: 'love'));
+              comment.isReact = !comment.isReact!;
+            },
+            onCommentReply: () {
+              widget.onGetReplies(comment.id, comment);
+              bottomSheet(
+                context: context,
+                isScrollControlled: true,
+                widget: BlocProvider.value(
+                  value: serviceLocator<TwitterCubit>()
+                    ..loadReplies(context, comment.id),
+                  child: TwitterCommentReplies(
+                    replies: const [],
+                    onAddReply: (TwitterCommentReplyParams params) async =>
+                        await onAddReply(params),
+                    commentId: comment.id,
+                    postId: comment.post,
+                    onReplyReact: (String id) {
+                      onReplyReact(id);
+                    },
+                    onReport: (TwitterReportParams params) {
+                      onReport(params);
+                    },
+                    onEditReply: (TwitterPostCommentParams params) =>
+                        widget.onEditComment(params),
+                    onDeleteReply: (id) => widget.onDeleteComment(id),
+                  ),
                 ),
-              ),
-            );
-            print(comment.showReplies);
-          },
-          onReport: (TwitterReportParams params) {
-            widget.onReport(params);
-          },
-          onEditComment: (TwitterPostCommentParams params) =>
-              widget.onEditComment(params),
-          onDeleteComment: (id) => onDeleteComment(id),
-        ),
-      ],
+              );
+              print(comment.showReplies);
+            },
+            onReport: (TwitterReportParams params) {
+              widget.onReport(params);
+            },
+            onEditComment: (TwitterPostCommentParams params) =>
+                widget.onEditComment(params),
+            onDeleteComment: (id) => onDeleteComment(id),
+          ),
+        ],
+      ),
     );
   }
 }

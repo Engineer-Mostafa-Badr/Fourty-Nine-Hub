@@ -12,13 +12,13 @@ class AzkarDetailsModel extends AzkarDetailsEntity {
 
   factory AzkarDetailsModel.fromJson(Map<String, dynamic> json) {
     return AzkarDetailsModel(
-      id: json['_id'] ??'',
-      category: json['category'] ??'',
-      zekr: json['zekr'] ??'',
-      description: json['description'] ??'',
+      id: json['_id'] ?? '',
+      category: json['category'] ?? '',
+      zekr: json['zekr'] ?? '',
+      description: json['description'] ?? '',
       count: json['count'],
-      reference: json['reference']  ??'',
-      search: json['search']  ??'',
+      reference: json['reference'] ?? '',
+      search: json['search'] ?? '',
     );
   }
 }

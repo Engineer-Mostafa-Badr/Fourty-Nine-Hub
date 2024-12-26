@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 
-
 class ThemeCubit extends Cubit<ThemeStates> {
   ThemeCubit() : super(LightThemeModeStates());
 
@@ -24,6 +23,5 @@ class ThemeCubit extends Cubit<ThemeStates> {
     emit(DarkThemeModeStates());
     print(isDarkTheme);
     print('isDark saved to ${await CacheManager.getMode()}');
-
   }
 }

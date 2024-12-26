@@ -3,12 +3,12 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class WebSocketHelper {
   // final Socket socket;
@@ -57,6 +57,20 @@ class WebSocketHelper {
         pr(data);
         notificationCallback(jsonDecode(data));
       });
+
+      Map<String, dynamic> json = jsonDecode(data);
+      AudioPlayer player = AudioPlayer();
+      if (json['metadata']['newTrip'] ?? false) {
+        // log(json['metadata']['newTrip'].toString(),
+        //     name: "Ljkdlfjsdlfkjsldkfjsldkjflskdjf");
+        Future.delayed(
+          const Duration(seconds: 2),
+              () {
+            player.play(AssetSource("audio/u_have_a_new_ride_ar.mp3"));
+          },
+        );
+      }
+      notificationCallback(jsonDecode(data));
 
       SharedWebSocket.socket!.on('error', (data) {
         pr("error $data");

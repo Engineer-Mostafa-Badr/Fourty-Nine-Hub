@@ -1,12 +1,11 @@
 import 'dart:io';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -20,7 +19,9 @@ class CreateDoctorLicensePhotoPicker extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Label(
-          text: LocaleKeys.licenseFrontAndBack.tr(),
+          text: context.isArabic
+              ? 'قم بتحميل الترخيص  (الوجه والظهر)'
+              : 'Upload Your License (Front and Back)',
           style: Styles.headerText(),
         ),
         const Sizer(),
@@ -43,7 +44,7 @@ class CreateDoctorLicensePhotoPicker extends StatelessWidget {
                     );
                   }
                   return ImagePickerPlaceholder(
-                    title: LocaleKeys.front.tr(),
+                    title: context.isArabic ? 'الوجه' : 'Front',
                   );
                 },
               ),
@@ -66,7 +67,7 @@ class CreateDoctorLicensePhotoPicker extends StatelessWidget {
                     );
                   }
                   return ImagePickerPlaceholder(
-                    title: LocaleKeys.back.tr(),
+                    title: context.isArabic ? 'الخلف' : 'Back',
                   );
                 },
               ),

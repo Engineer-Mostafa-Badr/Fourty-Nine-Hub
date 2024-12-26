@@ -42,7 +42,7 @@ class ChanceDetailsView extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: BlocProvider<ChanceCubit>(
-          create: (context) => serviceLocator()..getChanceRate(id: chance.id) ,
+          create: (context) => serviceLocator()..getChanceRate(id: chance.id),
           child: BlocConsumer<ChanceCubit, ChanceState>(
             listener: (context, state) {},
             builder: (context, state) {
@@ -81,7 +81,8 @@ class ChanceDetailsView extends StatelessWidget {
                                 BuildContext context,
                                 int itemIndex,
                                 int pageViewIndex,
-                              ) => Container(
+                              ) =>
+                                  Container(
                                 height: 250.h,
                                 width: 330.w,
                                 decoration: const BoxDecoration(

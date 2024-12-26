@@ -21,7 +21,7 @@ class RoundedButtonWithImage extends StatelessWidget {
           onPressed: onPressed,
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.resolveWith(
-                  (states) => Colors.blueGrey.withOpacity(0.2),
+              (states) => Colors.blueGrey.withOpacity(0.2),
             ),
           ),
           icon: const Icon(

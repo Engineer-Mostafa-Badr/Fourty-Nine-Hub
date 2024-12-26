@@ -136,15 +136,15 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
   Widget _buildContactSelector() {
     return BlocBuilder<StoryCubit, StoryState>(
       builder: (context, state) {
-        if (state.isLoading??false) {
+        if (state.isLoading ?? false) {
           return const Center(child: CircularProgressIndicator());
-        } else if (state.followers.isEmpty??false) {
+        } else if (state.followers.isEmpty ?? false) {
           return Center(
               child: Text(
                   LocaleKeys.no_contacts_available.tr())); // Localized string
         } else {
           return ListView.builder(
-            itemCount: state.followers.length??0,
+            itemCount: state.followers.length ?? 0,
             itemBuilder: (context, index) {
               return _buildContactListTile(state.followers[index]);
             },

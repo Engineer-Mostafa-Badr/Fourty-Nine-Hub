@@ -11,12 +11,12 @@ class Trip {
   int? profit;
   bool? autoAccept;
   bool? isPremium;
-  UserLocation? userLocation;
-  RiderLocation? riderLocation;
+  UserLocation? startLocation;
+  RiderLocation? targetLocation;
   int? distance;
   int? duration;
   int? passengers;
-  int? price;
+  double? price;
   int? calculateB;
   String? paymentMethod;
   String? status;
@@ -39,8 +39,8 @@ class Trip {
     this.profit,
     this.autoAccept,
     this.isPremium,
-    this.userLocation,
-    this.riderLocation,
+    this.startLocation,
+    this.targetLocation,
     this.distance,
     this.duration,
     this.passengers,
@@ -68,18 +68,18 @@ class Trip {
         profit: json['profit'] as int?,
         autoAccept: json['autoAccept'] as bool?,
         isPremium: json['isPremium'] as bool?,
-        userLocation: json['userLocation'] == null
+        startLocation: json['userLocation'] == null
             ? null
             : UserLocation.fromJson(
                 json['userLocation'] as Map<String, dynamic>),
-        riderLocation: json['riderLocation'] == null
+        targetLocation: json['riderLocation'] == null
             ? null
             : RiderLocation.fromJson(
                 json['riderLocation'] as Map<String, dynamic>),
         distance: json['distance'] as int?,
         duration: json['duration'] as int?,
         passengers: json['passengers'] as int?,
-        price: json['price'] as int?,
+        price: double.parse(json['price'].toString()),
         calculateB: json['calculateB'] as int?,
         paymentMethod: json['paymentMethod'] as String?,
         status: json['status'] as String?,
@@ -107,8 +107,8 @@ class Trip {
         'profit': profit,
         'autoAccept': autoAccept,
         'isPremium': isPremium,
-        'userLocation': userLocation?.toJson(),
-        'riderLocation': riderLocation?.toJson(),
+        'userLocation': startLocation?.toJson(),
+        'riderLocation': targetLocation?.toJson(),
         'distance': distance,
         'duration': duration,
         'passengers': passengers,

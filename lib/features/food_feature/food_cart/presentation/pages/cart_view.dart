@@ -18,11 +18,11 @@ import '../../../../../core/localization/locale_keys.g.dart'; // Ensure correct 
 
 // Helper functions (assuming these are defined elsewhere in your project)
 Color scaffoldDarkColor(BuildContext context) {
-  return context.isArabic ? Colors.white.withOpacity(0.09) : Colors.white;
+  return context.isDarkMode ? Colors.white.withOpacity(0.09) : Colors.white;
 }
 
 Color cardDarkColor(BuildContext context) {
-  return context.isArabic ? Colors.white.withOpacity(0.04) : Colors.white;
+  return context.isDarkMode ? Colors.white.withOpacity(0.04) : Colors.white;
 }
 
 class FoodCartView extends StatefulWidget {
@@ -88,9 +88,10 @@ class _FoodCartViewState extends State<FoodCartView> {
           restaurantId: restaurantId,
           foodId: mealId,
         );
-    if(context.read<RestaurantDetailsCubit>().state.cart?.allItems.length==1){
+    if (context.read<RestaurantDetailsCubit>().state.cart?.allItems.length ==
+        1) {
       context.pop();
-    }else{
+    } else {
       await context.read<RestaurantDetailsCubit>().fetchCart();
     }
   }
@@ -99,22 +100,22 @@ class _FoodCartViewState extends State<FoodCartView> {
     required String restaurantId,
     required String foodId,
   }) async {
-    if(context.read<RestaurantDetailsCubit>().state.cart?.allItems.length==1){
+    if (context.read<RestaurantDetailsCubit>().state.cart?.allItems.length ==
+        1) {
       await context.read<RestaurantDetailsCubit>().deleteFromCart(
-        context,
-        restaurantId: restaurantId,
-        foodId: foodId,
-      );
+            context,
+            restaurantId: restaurantId,
+            foodId: foodId,
+          );
       context.pop();
-    }else{
+    } else {
       await context.read<RestaurantDetailsCubit>().deleteFromCart(
-        context,
-        restaurantId: restaurantId,
-        foodId: foodId,
-      );
+            context,
+            restaurantId: restaurantId,
+            foodId: foodId,
+          );
       await context.read<RestaurantDetailsCubit>().fetchCart();
     }
-
   }
 
   void _showFoodRequestBottomSheet({
@@ -127,7 +128,7 @@ class _FoodCartViewState extends State<FoodCartView> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      backgroundColor: context.isArabic ? Colors.black : Colors.white,
+      backgroundColor: context.isDarkMode ? Colors.black : Colors.white,
       builder: (context) {
         return BlocProvider.value(
           value: serviceLocator<RestaurantDetailsCubit>(),
@@ -147,11 +148,11 @@ class _FoodCartViewState extends State<FoodCartView> {
       appBar: _buildAppBar(),
       body: BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
         builder: (context, state) {
-          if(state.isLoading){
+          if (state.isLoading) {
             return const Center(
               child: CircularProgressIndicator(),
             );
-          }else if (state.cart!=null && state.cart!.allItems.isNotEmpty) {
+          } else if (state.cart != null && state.cart!.allItems.isNotEmpty) {
             return _buildCartContent(state.cart!);
           } else {
             return Center(
@@ -181,12 +182,14 @@ class _FoodCartViewState extends State<FoodCartView> {
             itemCount: cart.allItems.length,
             itemBuilder: (context, index) {
               final cartItem = cart.allItems[index];
-              return _buildCartItem(cartItem, context.isArabic?cart.currencyAr:cart.currencyEn);
+              return _buildCartItem(cartItem,
+                  context.isArabic ? cart.currencyAr : cart.currencyEn);
             },
           ),
         ),
         const Divider(),
-        _buildCartSummary(cart, context.isArabic?cart.currencyAr:cart.currencyEn),
+        _buildCartSummary(
+            cart, context.isArabic ? cart.currencyAr : cart.currencyEn),
       ],
     );
   }
@@ -258,8 +261,17 @@ class _FoodCartViewState extends State<FoodCartView> {
             ),
           ],
         ),
-        child: BuildCartItem(foodImageUrl: foodImageUrl,quantity: quantity,currency: currency,cartItem: cartItem,foodId: foodId,foodName: foodName,totalPrice: totalPrice, restaurantId: cartItem.restaurant?.id ?? '', removeItem: (String restaurantId, String foodId)=>_removeItem(restaurantId: restaurantId, foodId: foodId),
-
+        child: BuildCartItem(
+          foodImageUrl: foodImageUrl,
+          quantity: quantity,
+          currency: currency,
+          cartItem: cartItem,
+          foodId: foodId,
+          foodName: foodName,
+          totalPrice: totalPrice,
+          restaurantId: cartItem.restaurant?.id ?? '',
+          removeItem: (String restaurantId, String foodId) =>
+              _removeItem(restaurantId: restaurantId, foodId: foodId),
         ),
       ),
     );
@@ -300,7 +312,7 @@ class _FoodCartViewState extends State<FoodCartView> {
     String foodId,
     String foodName,
     int quantity,
-  double totalPrice,
+    double totalPrice,
     String currency,
   ) {
     int localQuantity = quantity;
@@ -319,20 +331,20 @@ class _FoodCartViewState extends State<FoodCartView> {
                 Row(
                   children: [
                     _buildQuantityButton(
-                      icon: quantity>1?Icons.remove:Icons.delete,
-                      color: quantity>1?null:AppColors.SECONDARY_COLOR,
+                      icon: quantity > 1 ? Icons.remove : Icons.delete,
+                      color: quantity > 1 ? null : AppColors.SECONDARY_COLOR,
                       onTap: () {
                         setState(() {
-                        //   quantity>1?_decrement(
-                        //     restaurantId: cartItem.restaurant?.id ?? '',
-                        //     mealId: foodId,
-                        //     qtyChange: 1,
-                        //     currentQty: quantity,
-                        //   ):_deleteFromCart(
-                        //     mealId: foodId,
-                        //     restaurantId: cartItem.restaurant?.id ?? '',
-                        //   );
-                          if(localQuantity>0){
+                          //   quantity>1?_decrement(
+                          //     restaurantId: cartItem.restaurant?.id ?? '',
+                          //     mealId: foodId,
+                          //     qtyChange: 1,
+                          //     currentQty: quantity,
+                          //   ):_deleteFromCart(
+                          //     mealId: foodId,
+                          //     restaurantId: cartItem.restaurant?.id ?? '',
+                          //   );
+                          if (localQuantity > 0) {
                             localQuantity--;
                           }
                         });
@@ -348,7 +360,7 @@ class _FoodCartViewState extends State<FoodCartView> {
                       icon: Icons.add,
                       onTap: () {
                         print("object");
-                        localQuantity+=1;
+                        localQuantity += 1;
 
                         setState(() {
                           // _updateQuantity(
@@ -365,18 +377,14 @@ class _FoodCartViewState extends State<FoodCartView> {
               ],
             ),
           ),
-          _buildItemPrice(totalPrice, currency,localQuantity!=quantity),
-
+          _buildItemPrice(totalPrice, currency, localQuantity != quantity),
         ],
       ),
     );
   }
 
-  Widget _buildQuantityButton({
-    required IconData icon,
-    required VoidCallback onTap,
-    Color? color
-  }) {
+  Widget _buildQuantityButton(
+      {required IconData icon, required VoidCallback onTap, Color? color}) {
     return InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
@@ -397,7 +405,7 @@ class _FoodCartViewState extends State<FoodCartView> {
     );
   }
 
-  Widget _buildItemPrice(double totalPrice, String currency,bool showConfirm) {
+  Widget _buildItemPrice(double totalPrice, String currency, bool showConfirm) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -416,12 +424,11 @@ class _FoodCartViewState extends State<FoodCartView> {
           ],
         ),
         const SizedBox(height: 40),
-        if(showConfirm) ClickableWidget(
-          onTap: () {
-
-          },
-          child: Label(text: "text"),
-        )
+        if (showConfirm)
+          ClickableWidget(
+            onTap: () {},
+            child: const Label(text: "text"),
+          )
       ],
     );
   }

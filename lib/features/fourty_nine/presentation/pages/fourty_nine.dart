@@ -3,6 +3,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/ads/app_open_model.dart';
+import 'package:fourtyninehub/ads/banner_ad_model.dart';
+import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -18,6 +21,7 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/firebas
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:go_router/go_router.dart';
@@ -45,7 +49,7 @@ class FourtyNineView extends StatefulWidget {
   State<FourtyNineView> createState() => _FourtyNineViewState();
 }
 
-class _FourtyNineViewState extends State<FourtyNineView> {
+class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObserver {
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
@@ -56,19 +60,41 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       print(e.toString());
     }
   }
+  AppOpenAdManager appOpenAdManager = AppOpenAdManager();
+  bool isPaused = false;
+
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // TODO: implement didChangeAppLifecycleState
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused) {
+      print("xd==========================");
+      isPaused = true;
+    }
+    if (state == AppLifecycleState.resumed && isPaused) {
+      print("Resumed==========================");
+      appOpenAdManager.showAdIfAvailable();
+      isPaused = false;
+    }
+  }
 
   @override
   void didChangeDependencies() async {
+    appOpenAdManager.loadAd();
+    WidgetsBinding.instance.addObserver(this);
+
     await checkLogin();
     super.didChangeDependencies();
     _setupScrollController();
-    
+
     context
         .read<FirebaseNotficationsCubit>()
         .setupInterceptedMessage(context: context);
     context
         .read<NotificationSocketIoCubit>()
         .notificationListener(languageCode: 'en');
+    context.read<LocationSocketCubit>().updateDriverLocationOn();
   }
 
   void _setupScrollController() {
@@ -101,11 +127,15 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   @override
   void dispose() {
     scrollController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+
     super.dispose();
   }
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    print("objectUser${UserCubit.to.state.data?.id}");
     return BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
       listener: (context, state) {
         if (state is NotificationSocketIoNewNotification) {
@@ -122,13 +152,13 @@ class _FourtyNineViewState extends State<FourtyNineView> {
       },
       child: Scaffold(
         key: _scaffoldKey,
-        appBar:  HomeAppbar(
+        appBar: HomeAppbar(
           isWithBackArrow: false,
           language: true,
           leading: IconButton(
-            icon: Icon(Icons.menu), // The menu icon
+            icon: const Icon(Icons.menu), // The menu icon
             onPressed: () {
-              HandleCashback.setCount('drawerCount',context);
+              HandleCashback.setCount('drawerCount', context);
               _scaffoldKey.currentState?.openDrawer(); // Open the drawer
             },
           ),
@@ -152,6 +182,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
           shrinkWrap: true,
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           children: [
+            AddBanner(),
             //carousel slider
             const AnnounceWidget(),
             !context.read<UserCubit>().isLoggedIn
@@ -168,10 +199,10 @@ class _FourtyNineViewState extends State<FourtyNineView> {
             const Sizer(),
             //pick me and come with U
             _pickMeAndComeWithUWidget(),
-            // const Sizer(),
-            // _buildChanceWidget(),
             const Sizer(),
-            _auctionAndInstallmentWidget(),
+            _buildTenPercentWidget(),
+            // const Sizer(),
+            // _auctionAndInstallmentWidget(),
             // const Sizer(),
             // _buildBookingWidget(),
             const Sizer(),
@@ -217,6 +248,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
                           HandleCashback.setCount('mainCategoriesCount',context);
                           context.push(Routes.SUBCATEGORIES,
                               extra: state.data![index]);
@@ -271,7 +304,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 width: 34.h,
               ),
               Routes.MAINCATEGORIESTREE,
-              () => HandleCashback.setCount('threeDotsCount',context),
+                  () => HandleCashback.setCount('threeDotsCount', context),
             ),
             _buildItemTabBar(
               SvgPicture.asset(
@@ -281,6 +314,8 @@ class _FourtyNineViewState extends State<FourtyNineView> {
               ),
               Routes.MAINCATEGORIESCARDS,
                 (){
+                  AdInterstitialTop.loadIntersitialAd();
+                  AdInterstitialTop.showInterstitialAd();
                   HandleCashback.setCount('mainCategoriesSliderCount',context);
                 }
             ),
@@ -293,7 +328,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   Widget _buildItemTabBar(
     Widget icon,
     String routeName,
-      Function() onTab,
+    Function() onTab,
   ) {
     return InkWell(
       onTap: () {
@@ -342,7 +377,11 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   service: state.data?[0].service ?? RideServicesEnum.pickMe,
                   title: LocaleKeys.carpool.localize,
                   image: state.data?[0].image ?? '',
-                  onTab: ()=> HandleCashback.setCount('carPoolCount',context),
+                  onTab: () {
+                    AdInterstitialTop.loadIntersitialAd();
+                    AdInterstitialTop.showInterstitialAd();
+                    return HandleCashback.setCount('carPoolCount',context);
+                  },
                   // image: Assets.carpool,
                   // isFavorite: state.data![0].is,
                   // numberOfAds: state.data![0].numberOfAds?.toInt(),
@@ -359,7 +398,11 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                   // image: Assets.tripJoin,
 
                   route: Routes.AVAILABLE_TRIPS,
-                  onTab: () => HandleCashback.setCount('tripJoinCount',context),
+                  onTab: () {
+                    AdInterstitialTop.loadIntersitialAd();
+                    AdInterstitialTop.showInterstitialAd();
+                    return HandleCashback.setCount('tripJoinCount',context);
+                  },
                   // isFavorite: state.data![1].isFavorite,
                   // numberOfAds: state.data![1].numberOfAds?.toInt(),
                 ),
@@ -384,17 +427,15 @@ class _FourtyNineViewState extends State<FourtyNineView> {
   Row _auctionAndInstallmentWidget() {
     return Row(
       children: [
-        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize,
-            () {
-              HandleCashback.setCount('mazadat',context);
+        itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize, () {
+          HandleCashback.setCount('mazadat', context);
           context.push(Routes.MAZADAT);
-            }, Icons.group),
+        }, Icons.group),
         const Sizer(),
-        itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize,
-            () {
-              HandleCashback.setCount('installments',context);
+        itemAuctionAndInstallmentWidget(LocaleKeys.installments.localize, () {
+          HandleCashback.setCount('installments', context);
           context.push(Routes.INSTALLMENT);
-            }, Icons.list),
+        }, Icons.list),
       ],
     );
   }
@@ -416,7 +457,7 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 icon: Icons.auto_awesome,
                 iconSize: 50.h,
                 onPressed: () async {
-                  HandleCashback.setCount('booking',context);
+                  HandleCashback.setCount('booking', context);
                   int? num = await CacheManager.getInt('booking');
                   print(num);
                 }),
@@ -467,8 +508,59 @@ class _FourtyNineViewState extends State<FourtyNineView> {
                 icon: Icons.star,
                 iconSize: 50.h,
                 onPressed: () {
+                  AdInterstitialTop.loadIntersitialAd();
+                  AdInterstitialTop.showInterstitialAd();
                   HandleCashback.setCount('beAStarCount',context);
                   context.push(Routes.BE_STAR);
+                }),
+          ),
+          Positioned(
+              bottom: 5,
+              left: 5,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 0,
+              left: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 15,
+              right: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              ))
+        ],
+      ),
+    );
+  }
+  Widget _buildTenPercentWidget() {
+    return SizedBox(
+      height: kToolbarHeight * .9.h,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: AppButton(
+                color: AppColors.AUTH_CONTAINER_COLOR,
+                label: '10% Cashback',
+                style: Styles.mediumText(
+                  color: AppColors.AUTH_CONTAINER_COLOR,
+                  fontWeight: FontWeight.bold,
+                ),
+                icon: Icons.star,
+                iconSize: 50.h,
+                onPressed: () {
+                  HandleCashback.setCount('tenPercentCount',context);
+                  context.push(Routes.TenPercent);
                 }),
           ),
           Positioned(
@@ -553,14 +645,13 @@ class _FourtyNineViewState extends State<FourtyNineView> {
     );
   }
 
-  Widget _buildRideSubCategoryItem({
-    required RideServicesEnum service,
-    required String title,
-    required String image,
-    String? route,
-    bool? isFavorite,
-    required Function() onTab
-  }) {
+  Widget _buildRideSubCategoryItem(
+      {required RideServicesEnum service,
+      required String title,
+      required String image,
+      String? route,
+      bool? isFavorite,
+      required Function() onTab}) {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: service.value()),
       onTap: () {

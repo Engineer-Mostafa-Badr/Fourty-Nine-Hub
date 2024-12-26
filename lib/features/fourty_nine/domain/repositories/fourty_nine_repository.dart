@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/banner.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/currency_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
@@ -14,6 +15,8 @@ abstract class FourtyNineRepository {
 
   Future<Either<Failure, List<MainCategoryEntity>>> getMainCategories(
       MainCategoriesParams params);
+  Future<Either<Failure, List<MainCategoryEntity>>> getMainCategoriesCustomPage(
+      MainCategoriesParams params);
 
   Future<Either<Failure, MainCategoryEntity>> getMainCategoryDetails(String id);
 
@@ -27,6 +30,5 @@ abstract class FourtyNineRepository {
   Future<Either<Failure, Banner>> getBannerById({required String id});
 
   Future<Either<Failure, WalletHomeEntity>> getWalletHome();
-  Future<Either<Failure, String>> getCurrency();
-
+  Future<Either<Failure, CurrencyEntity>> getCurrency();
 }

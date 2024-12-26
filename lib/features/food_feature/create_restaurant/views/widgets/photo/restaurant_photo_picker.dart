@@ -78,7 +78,7 @@ class _CreateRestaurantProfilePhotoPickerState
           ),
           Visibility(
             visible: state is ValidationState && (state.isName ?? true),
-            child:  Padding(
+            child: Padding(
               padding: const EdgeInsets.only(right: 5, left: 5, top: 5.0),
               child: Text(
                 LocaleKeys.youHaveToUploadAtLeastOnePhoto.localize,

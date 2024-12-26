@@ -11,6 +11,7 @@ class CreatePostState {
   final FeelingEntity? selectedFeeling;
   final PlaceEntity? place;
   final List<UploadFileEntity>? images;
+  final UploadFileEntity? audio;
   final List<PostUserEntity>? users;
   final List<PostUserEntity>? selectedUsers;
   final String? selectedPrivacy;
@@ -19,10 +20,12 @@ class CreatePostState {
   final bool isBiggerThan80;
   final bool isBiggerThen150;
   final bool isBiggerThen120;
+  final String? music;
   CreatePostState(
       {this.status = CreatePostStates.error,
       this.failure,
       this.images,
+      this.audio,
       this.activities,
       this.feelings,
       this.backColor = "#FFFFFFFF",
@@ -32,6 +35,7 @@ class CreatePostState {
       this.isBiggerThen120 = false,
       this.selectedActivity,
       this.selectedFeeling,
+      this.music,
       this.users,
       this.place,
       this.selectedUsers,
@@ -39,6 +43,7 @@ class CreatePostState {
   CreatePostState copyWith({
     CreatePostStates? status,
     List<UploadFileEntity>? images,
+    UploadFileEntity? audio,
     Failure? failure,
     List<ActivityEntity>? activities,
     List<FeelingEntity>? feelings,
@@ -53,11 +58,13 @@ class CreatePostState {
     bool? isBiggerThan80,
     bool? isBiggerThen150,
     bool? isBiggerThen120,
+    String? music,
   }) {
     return CreatePostState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
       images: images ?? this.images,
+      audio: audio ?? this.audio,
       activities: activities ?? this.activities,
       feelings: feelings ?? this.feelings,
       selectedActivity: selectedActivity ?? this.selectedActivity,
@@ -71,6 +78,7 @@ class CreatePostState {
       isBiggerThan80: isBiggerThan80 ?? this.isBiggerThan80,
       isBiggerThen150: isBiggerThen150 ?? this.isBiggerThen150,
       isBiggerThen120: isBiggerThen120 ?? this.isBiggerThen120,
+      music: music ?? this.music,
     );
   }
 }

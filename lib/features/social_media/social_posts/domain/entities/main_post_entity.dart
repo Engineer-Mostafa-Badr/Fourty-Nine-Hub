@@ -1,6 +1,6 @@
+import 'package:fourtyninehub/core/utils/time_utils.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
-import '../../../../../core/utils/duration_helper.dart';
 
 class MainPostEntity {
   final String id;
@@ -15,10 +15,9 @@ class MainPostEntity {
   String? backgroundColor;
 
   DateTime? createdAt;
-  Duration get publishedDuration => DateTime.now().difference(createdAt!);
+  Duration get publishedDuration => TimeUtils.calculateDuration(createdAt);
 
-  String get sinceTime =>
-      DurationHelper().sinceTime(duration: publishedDuration);
+  String get sinceTime => TimeUtils.getSinceTime(createdAt);
 
   MainPostEntity({
     required this.id,

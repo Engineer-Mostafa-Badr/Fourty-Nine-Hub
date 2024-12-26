@@ -28,19 +28,18 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   String? replyToUser;
   final bool isReplying = false;
 
-
-
   @override
   void initState() {
     super.initState();
-scrollController.addListener(_onScroll);
+    scrollController.addListener(_onScroll);
     focusNode.requestFocus();
-    context
-        .read<ReelsCubit>()
-        .loadInitialComments(widget.reel.id); // Fetch comments once when initialized
+    context.read<ReelsCubit>().loadInitialComments(
+        widget.reel.id); // Fetch comments once when initialized
   }
+
   void _onScroll() {
-    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 200) {
+    if (scrollController.position.pixels >=
+        scrollController.position.maxScrollExtent - 200) {
       context.read<ReelsCubit>().getComments(widget.reel.id);
     }
   }
@@ -127,9 +126,12 @@ scrollController.addListener(_onScroll);
     return Expanded(
       child: BlocBuilder<ReelsCubit, ReelsState>(
         builder: (context, state) {
-          if (state.isFetchingComments && context.read<ReelsCubit>().comments.isEmpty) {
+          if (state.isFetchingComments &&
+              context.read<ReelsCubit>().comments.isEmpty) {
             return const Center(
-              child: CircularProgressIndicator(color: AppColors.SECONDARY_COLOR,),
+              child: CircularProgressIndicator(
+                color: AppColors.SECONDARY_COLOR,
+              ),
             );
           }
           final comments = context.read<ReelsCubit>().comments;

@@ -5,7 +5,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/walle
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_history_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_subscription_entity.dart';
 
-enum WalletStates { loading, initial, error }
+enum WalletStates { loading, initial, error, success }
 
 class WalletState {
   final WalletStates status;

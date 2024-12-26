@@ -356,6 +356,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 label: LocaleKeys.google.localize,
                 backColor: AppColors.LIGHT_GRAY_COLOR,
                 textColor: Colors.black,
+                color: AppColors.PRIMARY_COLOR,
                 icon: FontAwesomeIcons.google,
                 onPressed: () async {
                   // await  loginCubit.handleGoogleSignIn();
@@ -389,8 +390,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                 backColor: AppColors.LIGHT_GRAY_COLOR,
                 textColor: Colors.black,
                 icon: FontAwesomeIcons.facebook,
+                color: AppColors.PRIMARY_COLOR,
                 onPressed: () async {
-                  // await loginCubit.signInWithFacebook();
+                  await loginCubit.signInWithFacebook();
                 },
               ),
             ),
@@ -625,6 +627,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   borderRadius: BorderRadius.circular(20.r),
                   // controller: registerCubit.firstNameController,
                   // label: 'E-mail or phone number',
+                  controller: registerCubit.referralId,
                   style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                   hint: LocaleKeys.code.localize,
                   prefix: Container(

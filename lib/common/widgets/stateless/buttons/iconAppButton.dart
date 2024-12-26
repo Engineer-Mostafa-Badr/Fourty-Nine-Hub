@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 
 class IconAppButton extends StatelessWidget {
   final double? size, height, width, margin, padding, radius;
@@ -30,7 +31,7 @@ class IconAppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return ClickableWidget(
       onTap: () => onPressed(),
       child: Container(
           alignment: Alignment.center,

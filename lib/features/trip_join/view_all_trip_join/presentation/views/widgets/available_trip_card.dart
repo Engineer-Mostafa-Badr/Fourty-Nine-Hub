@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
@@ -51,6 +52,39 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
             children: [
               CustomCard(
                 children: [
+                  Row(
+                    children: [
+                      Text(
+                        _localizeStatus(
+                            context, widget.tripJoinCardEntity.status ?? ''),
+                        style: Styles.headerText(
+                          fontSize: 30,
+                          color: AppColors.getSecondryColor(context),
+                        ),
+                      ),
+                      const Spacer(),
+                      Row(
+                        children: [
+                          Text(
+                              widget.tripJoinCardEntity.journeyPrice
+                                      ?.toStringAsFixed(0) ??
+                                  '' "  ",
+                              style: Styles.headerText(
+                                  fontSize: 50, color: Colors.green[600])),
+                          Text(
+                            context.isArabic
+                                ? BlocProvider.of<GetCurrencyCubit>(context)
+                                    .currnecyAr
+                                : BlocProvider.of<GetCurrencyCubit>(context)
+                                    .currnecyEn,
+                            style: Styles.headerText(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.SECONDARY_COLOR),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -174,85 +208,54 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                     ],
                   ),
                   const Sizer(),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: AvaialbleTripsButton(
-                          title: LocaleKeys.call.localize,
-                          color: (widget.tripJoinCardEntity.isApproved ?? false)
-                              ? AppColors.PRIMARY_COLOR
-                              : AppColors.DARK_GRAY_COLOR,
-                          icon: Icons.call,
-                          onTap: widget.callOnTap,
-                        ),
-                      ),
-                      const Sizer(width: 5),
-                      Expanded(
-                        flex: 3,
-                        child: AvaialbleTripsButton(
-                          title: LocaleKeys.message.localize,
-                          color: (widget.tripJoinCardEntity.isApproved ?? false)
-                              ? AppColors.PRIMARY_COLOR
-                              : AppColors.DARK_GRAY_COLOR,
-                          icon: Icons.email,
-                          onTap: widget.messageOnTap,
-                        ),
-                      ),
-                      const Sizer(width: 5),
-                      Expanded(
-                        flex: 3,
-                        child: AvaialbleTripsButton(
-                          title: LocaleKeys.report.localize,
-                          // color: testColor,
-                          color: AppColors.getSecondryColor(context),
-                          icon: Icons.report,
-                          onTap: widget.reportOnTap,
-                        ),
-                      ),
-                    ],
+                  CallMessageButtons(
+                    otherUserId: widget.tripJoinCardEntity.userId!,
+                    subcategoryId: widget.tripJoinCardEntity.categoryId!,
+                    phone: widget.tripJoinCardEntity.phone!,
+                    id: widget.tripJoinCardEntity.id!,
+                    hasReport: true,
                   ),
+                  // Row(
+                  //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   children: [
+                  //     Expanded(
+                  //       flex: 3,
+                  //       child: AvaialbleTripsButton(
+                  //         title: LocaleKeys.call.localize,
+                  //         color: (widget.tripJoinCardEntity.isApproved ?? false)
+                  //             ? AppColors.PRIMARY_COLOR
+                  //             : AppColors.DARK_GRAY_COLOR,
+                  //         icon: Icons.call,
+                  //         onTap: widget.callOnTap,
+                  //       ),
+                  //     ),
+                  //     const Sizer(width: 5),
+                  //     Expanded(
+                  //       flex: 3,
+                  //       child: AvaialbleTripsButton(
+                  //         title: LocaleKeys.message.localize,
+                  //         color: (widget.tripJoinCardEntity.isApproved ?? false)
+                  //             ? AppColors.PRIMARY_COLOR
+                  //             : AppColors.DARK_GRAY_COLOR,
+                  //         icon: Icons.email,
+                  //         onTap: widget.messageOnTap,
+                  //       ),
+                  //     ),
+                  //     const Sizer(width: 5),
+                  //     Expanded(
+                  //       flex: 3,
+                  //       child: AvaialbleTripsButton(
+                  //         title: LocaleKeys.report.localize,
+                  //         // color: testColor,
+                  //         color: AppColors.getSecondryColor(context),
+                  //         icon: Icons.report,
+                  //         onTap: widget.reportOnTap,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
-              Positioned.directional(
-                top: 5,
-                end: 20,
-                textDirection:
-                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                            widget.tripJoinCardEntity.journeyPrice
-                                    ?.toStringAsFixed(0) ??
-                                '' "  ",
-                            style: Styles.headerText(
-                                fontSize: 70, color: Colors.green[600])),
-                        Text(
-                          context.isArabic
-                              ? BlocProvider.of<GetCurrencyCubit>(context)
-                                  .currnecyAr
-                              : BlocProvider.of<GetCurrencyCubit>(context)
-                                  .currnecyEn,
-                          style: Styles.mediumText(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.SECONDARY_COLOR),
-                        )
-                      ],
-                    ),
-                    Text(
-                      _localizeStatus(
-                          context, widget.tripJoinCardEntity.status ?? ''),
-                      style: Styles.headerText(
-                        fontSize: 30,
-                        color: AppColors.getSecondryColor(context),
-                      ),
-                    ),
-                  ],
-                ),
-              )
             ],
           ),
           const Sizer(),
@@ -286,12 +289,10 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
 
   String _localizeStatus(BuildContext context, String text) {
     switch (text.toLowerCase().trim()) {
-      case 'regular':
-        return context.isArabic ? 'عادي' : 'Regular';
       case 'premium':
         return context.isArabic ? 'مميز' : 'Premium';
       default:
-        return text;
+        return context.isArabic ? 'عادي' : 'Regular';
     }
   }
 }

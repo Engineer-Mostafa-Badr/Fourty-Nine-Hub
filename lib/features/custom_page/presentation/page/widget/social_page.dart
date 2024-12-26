@@ -19,13 +19,13 @@ class SocialPage extends StatefulWidget {
 }
 
 class _SocialPageState extends State<SocialPage> {
-  // Variable to keep track of the selected item index
   int? _selectedItem;
 
-  // List of 2 items
+  // Updated list with three items
   final List<String> _items = [
     LocaleKeys.face.localize,
     LocaleKeys.insta.localize,
+    LocaleKeys.tweet.localize,
   ];
 
   @override
@@ -39,9 +39,14 @@ class _SocialPageState extends State<SocialPage> {
         child: BlocConsumer<CustomPageCubit, CustomPageState>(
           listener: (BuildContext context, state) {
             if (state.status == CustomPageStates.success) {
-              // Check the state of face to set the selected item
               setState(() {
-                _selectedItem = state.social!.face == true ? 0 : 1;
+                if (state.social!.face == true) {
+                  _selectedItem = 0; // Face
+                } else if (state.social!.insta == true) {
+                  _selectedItem = 1; // Insta
+                } else {
+                  _selectedItem = 2; // 49Tweet
+                }
               });
             }
           },
@@ -55,12 +60,11 @@ class _SocialPageState extends State<SocialPage> {
                   return ListTile(
                     leading: Radio<int>(
                       value: index,
-                      groupValue: _selectedItem, // Currently selected item
-                      activeColor:
-                          Theme.of(context).primaryColor, // Color when selected
+                      groupValue: _selectedItem,
+                      activeColor: Theme.of(context).primaryColor,
                       onChanged: (int? value) {
                         setState(() {
-                          _selectedItem = value; // Update selected item
+                          _selectedItem = value;
                         });
                       },
                     ),
@@ -69,19 +73,18 @@ class _SocialPageState extends State<SocialPage> {
                       style: Styles.mediumText(
                         fontSize: 65.sp,
                         fontWeight: FontWeight.w400,
-                        color: Theme.of(context)
-                            .primaryColor, // Color changes if selected
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
-                    selected: _selectedItem == index, // Highlight selected item
-                    selectedTileColor: Colors
-                        .transparent, // Optional color change for selected item
+                    selected: _selectedItem == index,
+                    selectedTileColor: Colors.transparent,
                   );
                 },
               );
             } else {
               return Center(
-                  child: Text(LocaleKeys.errorLoadingSocialPage.localize));
+                child: Text(LocaleKeys.errorLoadingSocialPage.localize),
+              );
             }
           },
         ),
@@ -99,13 +102,17 @@ class _SocialPageState extends State<SocialPage> {
             return FloatingActionButton(
               backgroundColor: Theme.of(context).primaryColor,
               onPressed: () {
-                // Map selectedItem index to a boolean for 'face'
-                bool face = _selectedItem == 0 ? true : false;
+                bool face = _selectedItem == 0;
+                bool insta = _selectedItem == 1;
+                bool tweet = _selectedItem == 2;
 
-                // Call the updateSocialPage method with the selected value
-                context
-                    .read<CustomPageCubit>()
-                    .updateSocialPage(SocialPageParams(face: face));
+                context.read<CustomPageCubit>().updateSocialPage(
+                  SocialPageParams(
+                    face: face,
+                    insta: insta,
+                    tweet: tweet, // Add 'tweet' as a new parameter
+                  ),
+                );
 
                 print('Selected Item: ${_items[_selectedItem!]}');
               },

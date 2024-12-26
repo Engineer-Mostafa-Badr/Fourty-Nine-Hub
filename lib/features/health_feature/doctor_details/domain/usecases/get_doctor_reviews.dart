@@ -5,12 +5,25 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/domain/enti
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/repositories/doctor_details_repo.dart';
 
 class GetUserDoctorRatessUseCase
-    extends UseCase<List<UserDoctorRateEntity>, String> {
+    extends UseCase<List<UserDoctorRateEntity>, GetUserDoctorRatesParams> {
   final DoctorDetailsRepo repo;
 
   GetUserDoctorRatessUseCase(this.repo);
   @override
-  Future<Either<Failure, List<UserDoctorRateEntity>>> call(String params) {
+  Future<Either<Failure, List<UserDoctorRateEntity>>> call(
+      GetUserDoctorRatesParams params) {
     return repo.getDoctorReviews(params);
+  }
+}
+
+class GetUserDoctorRatesParams {
+  final String doctorId;
+  final int page;
+  final int limit;
+  GetUserDoctorRatesParams(
+      {required this.doctorId, required this.page, required this.limit});
+  //toJson
+  Map<String, dynamic> toJson() {
+    return {'page': page, 'limit': limit};
   }
 }

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/banner_model.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/currency_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/wallet_home_entity.dart';
@@ -27,6 +28,10 @@ class FourtyNineRepositoryImpl implements FourtyNineRepository {
     return _fourtyNineRemoteDataSource.getMainCategories(params);
   }
 
+  @override
+  Future<Either<Failure, List<MainCategoryEntity>>> getMainCategoriesCustomPage(MainCategoriesParams params) {
+    return _fourtyNineRemoteDataSource.getMainCategoriesCustomPage(params);
+  }
   @override
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems() {
     return _fourtyNineRemoteDataSource.getSliderItems();
@@ -64,7 +69,7 @@ class FourtyNineRepositoryImpl implements FourtyNineRepository {
   }
 
   @override
-  Future<Either<Failure, String>> getCurrency() {
+  Future<Either<Failure, CurrencyEntity>> getCurrency() {
     return _fourtyNineRemoteDataSource.getCurrency();
   }
 

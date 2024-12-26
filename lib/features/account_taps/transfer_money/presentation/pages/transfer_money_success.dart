@@ -47,7 +47,6 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Set the scaffold background color
       appBar: BackAppBar(
         label: LocaleKeys.transactionSuccessful.localize,
       ),
@@ -57,8 +56,6 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
             child: Screenshot(
               controller: screenshotController,
               child: Container(
-                color: Colors.white,
-                // Make sure the screenshot container has the same background color
                 padding: const EdgeInsets.all(16.0),
                 child: SingleChildScrollView(
                   child: Column(
@@ -84,7 +81,6 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
                               style: TextStyle(
                                 fontSize: 100.sp,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
                               ),
                             ),
                             TextSpan(
@@ -101,8 +97,9 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
                       Sizer(height: 15.h),
                       Text(
                         LocaleKeys.transferMoney.localize,
-                        style:
-                            TextStyle(fontSize: 30.sp, color: Colors.black54),
+                        style: TextStyle(
+                          fontSize: 30.sp,
+                        ),
                       ),
                       const Sizer(),
                       ListTile(

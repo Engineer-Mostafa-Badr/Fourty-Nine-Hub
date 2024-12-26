@@ -8,19 +8,24 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 class RiderTripReelTimeCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repository;
   SubCategoryEntity? subCategory;
+  SubCategoryEntity? tempCategory;
   RiderTripReelTimeCubit({required this.repository}) : super(RiderInitial());
   selectCateogry(SubCategoryEntity value) {
+    log("lskdjflksdjflskdfjslkdfsdlkfjskdf");
     if (value.id == "62c8ba9f8e28a58a3edf57eb" ||
-        value.id == "62ea012a69ea29c91dfc3917" ||
-        value.id == "6698736fdaa111da2d775627" ||
+        value.id == "62c8baa08e28a58a3edf57ed" ||
+        value.id == "62c8baa18e28a58a3edf57ef" ||
         value.id == "62c8baa28e28a58a3edf57f1" ||
         value.id == "62c8baa38e28a58a3edf57f3" ||
-        value.id == "62c8ba9e8e28a58a3edf57e9") {
+        value.id == "6698736fdaa111da2d775627" ||
+        value.id == "62ea012a69ea29c91dfc3917") {
       emit(ViewPickTripDataState());
       subCategory = value;
+      tempCategory = value;
     } else {
       emit(NotViewPickTripDataState());
       subCategory = value;
+      tempCategory = value;
     }
   }
 
@@ -29,5 +34,8 @@ class RiderTripReelTimeCubit extends Cubit<RiderState> {
     log(subCategory.toString(), name: "lskdfjlskdjflskdjf");
   }
 
-  getTripInformation() {}
+  print() {
+    log(subCategory.toString(), name: "lskdfjlskdjflskdjf");
+    log(tempCategory.toString(), name: "lskdfjlskdjflskdjf");
+  }
 }

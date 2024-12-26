@@ -82,7 +82,8 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
         title: Text(LocaleKeys.favoriteCategory.localize),
       ),
       body: BlocProvider<CustomPageCubit>(
-        create: (BuildContext context) => serviceLocator<CustomPageCubit>()..fetchFavouriteCat(),
+        create: (BuildContext context) =>
+            serviceLocator<CustomPageCubit>()..fetchFavouriteCat(),
         child: BlocBuilder<CustomPageCubit, CustomPageState>(
           builder: (BuildContext context, state) {
             if (state.status == CustomPageStates.success) {
@@ -111,7 +112,9 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                     title: Text(
                       categoryName,
                       style: Styles.mediumText(
-                          fontSize: 65.sp, fontWeight: FontWeight.w400, color: Theme.of(context).primaryColor),
+                          fontSize: 65.sp,
+                          fontWeight: FontWeight.w400,
+                          color: Theme.of(context).primaryColor),
                     ),
                     selected: isSelected,
                   );
@@ -120,7 +123,8 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
             } else if (state.status == CustomPageStates.loading) {
               return const Center(child: CircularProgressIndicator());
             } else {
-              return Center(child: Text(LocaleKeys.failedToLoadCategories.localize));
+              return Center(
+                  child: Text(LocaleKeys.failedToLoadCategories.localize));
             }
           },
         ),
@@ -130,7 +134,8 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
         child: BlocConsumer<CustomPageCubit, CustomPageState>(
           listener: (BuildContext context, state) {
             if (state.status == CustomPageStates.success) {
-              showSuccessMessage(context, LocaleKeys.updateSuccessfully.localize);
+              showSuccessMessage(
+                  context, LocaleKeys.updateSuccessfully.localize);
             }
           },
           builder: (BuildContext context, Object? state) {
@@ -138,29 +143,44 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
               backgroundColor: Theme.of(context).primaryColor,
               onPressed: () {
                 // Collect selected categories
-                final selectedCategories =
-                    _categoriesMap.entries.where((entry) => entry.value == true).map((entry) => entry.key).toList();
+                final selectedCategories = _categoriesMap.entries
+                    .where((entry) => entry.value == true)
+                    .map((entry) => entry.key)
+                    .toList();
 
-                if (selectedCategories.length >= 3 && selectedCategories.length <= 8) {
-                  context.read<CustomPageCubit>().updateFavouriteCat(FavouriteCatParams(
+                if (selectedCategories.length >= 3 &&
+                    selectedCategories.length <= 8) {
+                  context
+                      .read<CustomPageCubit>()
+                      .updateFavouriteCat(FavouriteCatParams(
                         animals: _categoriesMap["Animals"] ?? false,
                         cars: _categoriesMap["Cars"] ?? false,
-                        collectiblesGifts: _categoriesMap["Collectibles Gifts"] ?? false,
-                        computersCameras: _categoriesMap["Computers Cameras"] ?? false,
+                        collectiblesGifts:
+                            _categoriesMap["Collectibles Gifts"] ?? false,
+                        computersCameras:
+                            _categoriesMap["Computers Cameras"] ?? false,
                         craft: _categoriesMap["Craft"] ?? false,
                         dating: _categoriesMap["Dating"] ?? false,
-                        discountsOffers: _categoriesMap["Discounts Offers"] ?? false,
+                        discountsOffers:
+                            _categoriesMap["Discounts Offers"] ?? false,
                         doctorJob: _categoriesMap["Doctor Job"] ?? false,
-                        electricalDevices: _categoriesMap["Electrical Devices"] ?? false,
+                        electricalDevices:
+                            _categoriesMap["Electrical Devices"] ?? false,
                         equipment: _categoriesMap["Equipment"] ?? false,
                         farming: _categoriesMap["Farming"] ?? false,
-                        fashionBeauty: _categoriesMap["Fashion Beauty"] ?? false,
-                        governmentServices: _categoriesMap["Government Services"] ?? false,
-                        homeEssentials: _categoriesMap["Home Essentials"] ?? false,
+                        fashionBeauty:
+                            _categoriesMap["Fashion Beauty"] ?? false,
+                        governmentServices:
+                            _categoriesMap["Government Services"] ?? false,
+                        homeEssentials:
+                            _categoriesMap["Home Essentials"] ?? false,
                         homeService: _categoriesMap["Home Service"] ?? false,
-                        marketingSales: _categoriesMap["Marketing Sales"] ?? false,
-                        medicalService: _categoriesMap["Medical Service"] ?? false,
-                        mobilesTablets: _categoriesMap["Mobiles Tablets"] ?? false,
+                        marketingSales:
+                            _categoriesMap["Marketing Sales"] ?? false,
+                        medicalService:
+                            _categoriesMap["Medical Service"] ?? false,
+                        mobilesTablets:
+                            _categoriesMap["Mobiles Tablets"] ?? false,
                         packaging: _categoriesMap["Packaging"] ?? false,
                         ports: _categoriesMap["Ports"] ?? false,
                         projects: _categoriesMap["Projects"] ?? false,
@@ -172,10 +192,12 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                         spareParts: _categoriesMap["Spare Parts"] ?? false,
                         technology: _categoriesMap["Technology"] ?? false,
                         vehicles: _categoriesMap["Vehicles"] ?? false,
-                        wholesaleTrade: _categoriesMap["Wholesale Trade"] ?? false,
+                        wholesaleTrade:
+                            _categoriesMap["Wholesale Trade"] ?? false,
                         // Adding the missing fields
                         accessories: _categoriesMap["Accessories"] ?? false,
-                        accountantJob: _categoriesMap["Accountant Job"] ?? false,
+                        accountantJob:
+                            _categoriesMap["Accountant Job"] ?? false,
                         charitys: _categoriesMap["Charitys"] ?? false,
                         education: _categoriesMap["Education"] ?? false,
                         engineerJob: _categoriesMap["Engineer Job"] ?? false,
@@ -183,12 +205,15 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                         fitness: _categoriesMap["Fitness"] ?? false,
                         handmades: _categoriesMap["Handmades"] ?? false,
                         healthyTools: _categoriesMap["Healthy Tools"] ?? false,
-                        jewelryWatches: _categoriesMap["Jewelry Watches"] ?? false,
+                        jewelryWatches:
+                            _categoriesMap["Jewelry Watches"] ?? false,
                         libraries: _categoriesMap["Libraries"] ?? false,
-                        musicalInstruments: _categoriesMap["Musical Instruments"] ?? false,
+                        musicalInstruments:
+                            _categoriesMap["Musical Instruments"] ?? false,
                         scenery: _categoriesMap["Scenery"] ?? false,
                         talent: _categoriesMap["Talent"] ?? false,
-                        travelTourism: _categoriesMap["Travel Tourism"] ?? false,
+                        travelTourism:
+                            _categoriesMap["Travel Tourism"] ?? false,
                         otherJob: _categoriesMap["Other Job"] ?? false,
                       ));
                 } else {
@@ -200,7 +225,8 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                   );
                 }
               },
-              child: Icon(Icons.check, color: Theme.of(context).scaffoldBackgroundColor),
+              child: Icon(Icons.check,
+                  color: Theme.of(context).scaffoldBackgroundColor),
             );
           },
         ),

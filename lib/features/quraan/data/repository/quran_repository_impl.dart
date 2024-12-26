@@ -6,12 +6,13 @@ import 'package:fourtyninehub/features/quraan/domain/entity/surah_entity.dart';
 import 'package:fourtyninehub/features/quraan/domain/repository/quran_repository.dart';
 import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_use_case.dart';
 
- class QuranRepositoryImpl extends QuranRepository{
-   final QuranRemoteDataSource _remoteDataSource;
+class QuranRepositoryImpl extends QuranRepository {
+  final QuranRemoteDataSource _remoteDataSource;
 
   QuranRepositoryImpl(this._remoteDataSource);
   @override
-  Future<Either<Failure, List<QuranSurahEntity>>> fetchQuranSurah(QuranParams params) {
+  Future<Either<Failure, List<QuranSurahEntity>>> fetchQuranSurah(
+      QuranParams params) {
     return _remoteDataSource.fetchQuranSurah(params);
   }
 
@@ -19,5 +20,4 @@ import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_
   Future<Either<Failure, List<SurahEntity>>> fetchSurah({required int id}) {
     return _remoteDataSource.fetchSurah(id: id);
   }
-
 }

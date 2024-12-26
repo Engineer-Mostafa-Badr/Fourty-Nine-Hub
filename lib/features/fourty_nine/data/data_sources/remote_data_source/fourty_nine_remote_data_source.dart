@@ -4,8 +4,10 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/banner_model.dart';
+import 'package:fourtyninehub/features/fourty_nine/data/models/currency_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/main_category_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/parent_main_category_model.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/currency_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/parent_main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
@@ -23,6 +25,8 @@ abstract class FourtyNineRemoteDataSource {
 
   Future<Either<Failure, List<MainCategoryModel>>> getMainCategories(
       MainCategoriesParams params);
+  Future<Either<Failure, List<MainCategoryEntity>>> getMainCategoriesCustomPage(
+      MainCategoriesParams params);
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems();
 
   Future<Either<Failure, MainCategoryEntity>> getMainCategoryDetails(String id);
@@ -33,7 +37,7 @@ abstract class FourtyNineRemoteDataSource {
   Future<Either<Failure, bool>> removeMainCategoryFromFavorites(String id);
   Future<Either<Failure, BannerModel>> getBannerById({required String id});
   Future<Either<Failure, WalletHomeEntity>> getWalletHome();
-  Future<Either<Failure, String>> getCurrency();
+  Future<Either<Failure, CurrencyEntity>> getCurrency();
   Future<Either<Failure, bool>> anyCashBack();
 }
 
@@ -68,6 +72,24 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
         return Left(failure);
       },
       (response) => Right((response['data']['mainCategories'] as List)
+          .map((e) => MainCategoryModel.fromJson(e))
+          .toList()),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<MainCategoryEntity>>> getMainCategoriesCustomPage(MainCategoriesParams params) async {
+    final result = await _apiConsumer.get(
+      EndPoints.getMainCategoriesCustomPage,
+      queryParameters: params.toJson(),
+    );
+    return result.fold(
+          (failure) {
+        CliLogger.error(
+            "can't load main categories - from data source - there is an error ${failure.toString()}");
+        return Left(failure);
+      },
+          (response) => Right((response['data']['mainCategories'] as List)
           .map((e) => MainCategoryModel.fromJson(e))
           .toList()),
     );
@@ -149,11 +171,11 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, String>> getCurrency() async {
+  Future<Either<Failure, CurrencyEntity>> getCurrency() async {
     final result = await _apiConsumer.get(EndPoints.getCurrency);
     return result.fold(
       (failure) => Left(failure),
-      (data) => Right(data['data']),
+      (data) => Right(CurrencyModel.fromJson(data['data'])),
     );
   }
 
@@ -161,12 +183,14 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
   Future<Either<Failure, bool>> anyCashBack() async {
     final result = await _apiConsumer.post(EndPoints.anyCashBack);
     return result.fold(
-          (failure) {
-            return Left(failure);
-          },
-          (data) {
-            return Right(data['status']);
-          },
+      (failure) {
+        return Left(failure);
+      },
+      (data) {
+        return Right(data['status']);
+      },
     );
   }
+
+
 }

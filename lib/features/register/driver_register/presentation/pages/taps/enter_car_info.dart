@@ -90,7 +90,8 @@ class EnterCarInfo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Label(
-            text: 'I register in ${context.isArabic?state.subCategory?.nameAr:state.subCategory?.nameEn ?? ''}',
+            text:
+                'I register in ${context.isArabic ? state.subCategory?.nameAr : state.subCategory?.nameEn ?? ''}',
             style: Styles.headerText(),
           ),
           GridView.builder(
@@ -107,7 +108,11 @@ class EnterCarInfo extends StatelessWidget {
                         value: subCategory == state.subCategory,
                         onChanged: (v) => controller.changeSubCategorySelection(
                             item: subCategory)),
-                    Expanded(child: Label(text: context.isArabic?subCategory.nameAr:subCategory.nameEn)),
+                    Expanded(
+                        child: Label(
+                            text: context.isArabic
+                                ? subCategory.nameAr
+                                : subCategory.nameEn)),
                   ],
                 );
               }),

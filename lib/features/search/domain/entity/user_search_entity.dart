@@ -16,5 +16,5 @@ class UserSearchEntity {
       required this.gender,
       required this.username,
       required this.phone,
-       this.image});
+      this.image});
 }

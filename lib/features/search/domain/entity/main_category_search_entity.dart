@@ -10,7 +10,7 @@ class MainSubCategorySearchEntity {
   final String nameCode;
   final bool isHidden;
   final bool enableInstallmentAndAuction;
-   bool? isFavorite;
+  bool? isFavorite;
 
   MainSubCategorySearchEntity(
       {required this.id,

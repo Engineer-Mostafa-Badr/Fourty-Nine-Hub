@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -54,9 +53,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
     super.initState();
     context.read<GetMyTripCubit>().getMyTrip();
     WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) {
-        
-      },
+      (timeStamp) {},
     );
   }
 
@@ -204,8 +201,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                                         horizontal: 10,
                                       ),
                                       child: Text(
-                                        LocaleKeys
-                                            .serveClientsByClickRegister
+                                        LocaleKeys.serveClientsByClickRegister
                                             .tr(),
                                         style: const TextStyle(
                                           color: Colors.red,
@@ -252,7 +248,7 @@ class _CreateShippingViewState extends State<CreateShippingView> {
                       const SizedBox(
                         height: 10,
                       ),
-                     ],
+                    ],
                   ),
                 ),
               ),
@@ -400,6 +396,9 @@ class RequestOfferCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<CallMessageCubit>().getCallMessage(
+        ownerId: model.driverId?.userId?.id ?? "",
+        subcategoryId: model.driverId?.categoryId ?? "");
     return BlocListener<AcceptDeclineTripCubit, ShippingState>(
       listener: (context, state) {
         log(state.toString(), name: "loadingState");
@@ -497,7 +496,7 @@ class RequestOfferCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          LocaleKeys.carModel.tr(),
+                          model.driverId?.carModel ?? "".tr(),
                           style: const TextStyle(fontSize: 15),
                         ),
                         const SizedBox(
@@ -611,15 +610,11 @@ class RequestOfferCard extends StatelessWidget {
                 if (!isHistory)
                   BlocBuilder<CallMessageCubit, ShippingState>(
                     builder: (context, state) {
-                      if (state is FailureShippingState) {
-                        log(getFailureMessage(state.failure, context),
-                            name: "lskdjflskdjfslkdjfslkdjfslkdjf");
-                      }
                       log(state.toString(),
-                          name: "lskdjflskdjfslkdjfslkdjfslkdjf");
+                          name: "lskdjflskdjfslkdjfslkdjfslkdjf l");
                       if (state is SuccessGetCallMessageState) {
                         log(state.data.toString(),
-                            name: "lskdjflskdjfslkdjfslkdjfslkdjf");
+                            name: "lskdjflskdjfslkdjfslkdjfslkdjf i k");
                         return Row(
                           children: [
                             Expanded(
@@ -627,10 +622,17 @@ class RequestOfferCard extends StatelessWidget {
                                 label: "Call".tr(),
                                 color: Colors.white,
                                 icon: Icons.call,
-                                backColor: state.data
-                                    ? AppColors.PRIMARY_COLOR
-                                    : AppColors.DARK_GRAY_COLOR,
-                                onPressed: () {},
+                                backColor:
+                                    state.data && (model.isAccepted ?? false)
+                                        ? AppColors.PRIMARY_COLOR
+                                        : AppColors.DARK_GRAY_COLOR,
+                                onPressed: () {
+                                  if (state.data &&
+                                      (model.isAccepted ?? false)) {
+                                    launchUrlString(
+                                        "tel://${model.driverId?.phone}");
+                                  }
+                                },
                                 style: Styles.mediumText(
                                     fontSize: 28, color: Colors.white),
                               ),
@@ -642,9 +644,10 @@ class RequestOfferCard extends StatelessWidget {
                               child: AppButton(
                                 label: LocaleKeys.message.tr(),
                                 icon: Icons.message,
-                                backColor: state.data
-                                    ? AppColors.PRIMARY_COLOR
-                                    : AppColors.DARK_GRAY_COLOR,
+                                backColor:
+                                    state.data && (model.isAccepted ?? false)
+                                        ? AppColors.PRIMARY_COLOR
+                                        : AppColors.DARK_GRAY_COLOR,
                                 style: Styles.mediumText(
                                     fontSize: 15, color: Colors.white),
                                 onPressed: () {},
@@ -681,6 +684,7 @@ class RequestOfferCard extends StatelessWidget {
                           ],
                         );
                       } else {
+                        log("slkdfslkdfslkdfkdkdkdkdkdkd");
                         return Row(
                           children: [
                             Expanded(
@@ -690,8 +694,6 @@ class RequestOfferCard extends StatelessWidget {
                                 icon: Icons.call,
                                 backColor: AppColors.DARK_GRAY_COLOR,
                                 onPressed: () {
-                                  launchUrlString(
-                                      "tel://${model.driverId?.phone}");
                                   // serviceLocator<SubscriptionController>()
                                   //     .showSubscriptionPlans(
                                   //         subCategoryId:

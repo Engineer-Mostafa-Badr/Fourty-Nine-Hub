@@ -10,12 +10,14 @@ class MainCategory {
   bool? isFavorite;
   bool? isDriverApproved;
   bool? haveTrip;
+  bool? isSocketCategory;
   MainCategory({
     this.mainCategoryId,
     this.nameAr,
     this.nameEn,
     this.banner,
     this.cover,
+    this.isSocketCategory,
     this.haveTrip,
     this.driverLength,
     this.isDriver,
@@ -28,6 +30,7 @@ class MainCategory {
         mainCategoryId: json['mainCategoryId'] as String?,
         nameAr: json['nameAr'] as String?,
         nameEn: json['nameEn'] as String?,
+        isSocketCategory: json['isSocketCategory'] as bool?,
         banner: json['banner'] as String?,
         cover: json['cover'] as String?,
         haveTrip: (json['haveTrip'] as bool?) ?? false,

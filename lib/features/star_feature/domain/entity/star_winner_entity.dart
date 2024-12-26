@@ -11,15 +11,14 @@ class StarWinnerEntity {
   String? createAt;
   Duration get publishedDuration => DateTime.now().difference(createdAt!);
 
-  String get sinceTime =>
-      DurationHelper().getTimeDifference( createdAt!);
+  String get sinceTime => DurationHelper().getTimeDifference(createdAt!);
 
-  StarWinnerEntity(
-      {required this.id,
-      required this.user,
-      required this.numberOfWins,
-      required this.profit,
-        this.createdAt,
-        this.createAt,
-      });
+  StarWinnerEntity({
+    required this.id,
+    required this.user,
+    required this.numberOfWins,
+    required this.profit,
+    this.createdAt,
+    this.createAt,
+  });
 }

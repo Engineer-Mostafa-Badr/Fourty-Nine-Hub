@@ -78,7 +78,9 @@ class MyAddsCubit extends Cubit<MyAddsState> {
       this._getMyOtherAdsUseCase,
       this._allCountsUseCase,
       this._allCountsAdsUseCase,
-      this._editMyAdsUseCase, this._clickUseCase, this._adsByIdUseCase)
+      this._editMyAdsUseCase,
+      this._clickUseCase,
+      this._adsByIdUseCase)
       : super(const MyAddsState());
 
   void loadData() async {
@@ -302,7 +304,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
           print(images.length);
           emit(state.copyWith(
               images: images,
-             // backColor: '#FFFFFFFF',
+              // backColor: '#FFFFFFFF',
               status: MyAddsStates.success));
         });
     print("length${state.images?.length}");
@@ -320,10 +322,9 @@ class MyAddsCubit extends Cubit<MyAddsState> {
   }) async {
     final response = await _editMyAdsUseCase(params);
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-            (r) =>
-            emit(state.copyWith(status: MyAddsStates.initState)));
+        (r) => emit(state.copyWith(status: MyAddsStates.initState)));
   }
 
   Future<void> click({
@@ -331,21 +332,18 @@ class MyAddsCubit extends Cubit<MyAddsState> {
   }) async {
     final response = await _clickUseCase(params);
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-            (r) =>
-            emit(state.copyWith(click: r,status: MyAddsStates.success)));
+        (r) => emit(state.copyWith(click: r, status: MyAddsStates.success)));
   }
-
 
   Future<void> fetchMyAdsById({
     required String id,
   }) async {
     final response = await _adsByIdUseCase(id);
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: MyAddsStates.error)),
-            (r) =>
-            emit(state.copyWith(adsById: r,status: MyAddsStates.success)));
+        (r) => emit(state.copyWith(adsById: r, status: MyAddsStates.success)));
   }
 }

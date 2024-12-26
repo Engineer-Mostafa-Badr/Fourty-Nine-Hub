@@ -16,8 +16,8 @@ class HealthBookingTypesWidgt extends StatelessWidget {
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         childAspectRatio: 2,
         crossAxisCount: 2,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
+        mainAxisSpacing: 30,
+        crossAxisSpacing: 50,
       ),
       itemBuilder: (context, index) => HealthBookingTypeCard(
         bookingFilterModel: services[index],

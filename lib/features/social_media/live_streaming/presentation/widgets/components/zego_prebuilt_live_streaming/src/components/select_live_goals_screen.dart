@@ -18,14 +18,13 @@ import '../../../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../../../../../zoom/presentation/controller/stream_cubit.dart';
 import '../../../../../../../../zoom/presentation/controller/stream_state.dart';
-import '../../../../../../../reels/presentation/widgets/comments.dart';
 import '../../../../../../../tinder/data/models/gift_model.dart';
 import '../../../../../../../tinder/data/shared/shared.dart';
 import '../../../../../../../tinder/presentation/cubit/gift_cubit.dart';
 
 class SelectLiveGoalsScreen extends StatefulWidget {
-  const SelectLiveGoalsScreen({super.key});
-
+  const SelectLiveGoalsScreen({super.key, this.fromLive = false});
+  final bool? fromLive;
   @override
   State<SelectLiveGoalsScreen> createState() => _SelectLiveGoalsScreenState();
 }

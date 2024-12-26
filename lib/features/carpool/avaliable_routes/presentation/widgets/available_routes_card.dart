@@ -12,7 +12,6 @@ import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cub
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/address_info_list.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/available_rotes_bar_info.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -53,13 +52,6 @@ class _AvaiableRoutesCardState extends State<AvaiableRoutesCard> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Text("40:00:00",
-                  //     style: Styles.smallText(
-                  //         color: AppColors.SECONDARY_COLOR,
-                  //         fontWeight: FontWeight.w600)),
-                  // SizedBox(
-                  //   width: 24,
-                  // ),
                   widget.entity.comfort
                       ? Text(LocaleKeys.comfort.localize,
                           style: Styles.mediumText(
@@ -81,20 +73,6 @@ class _AvaiableRoutesCardState extends State<AvaiableRoutesCard> {
                                   fontWeight: FontWeight.w600)),
                           BlocBuilder<GetCurrencyCubit, GetCurrencyState>(
                             builder: (context, state) {
-                              //   if (state is GetCurrencySuccess) {
-                              //     return Text(" ${state.currency}",
-                              //         style: Styles.headerText(
-                              //           fontSize: 22,
-                              //           color: AppColors.SECONDARY_COLOR,
-                              //         ));
-                              //   } else {
-                              //     return Text("",
-                              //         style: Styles.headerText(
-                              //           fontSize: 22,
-                              //           color: AppColors.SECONDARY_COLOR,
-                              //         ));
-                              //   }
-
                               return Text(
                                 context.isArabic
                                     ? BlocProvider.of<GetCurrencyCubit>(context)

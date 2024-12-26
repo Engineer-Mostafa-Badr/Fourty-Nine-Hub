@@ -27,43 +27,44 @@ class HealthView extends StatelessWidget {
         body: BlocBuilder<HealthCubit, HealthState>(
           builder: (context, state) {
             // var controller = context.read<HealthCubit>();
-            return state.isLoading ? const Center(child: CircularProgressIndicator()) : ListView(
-              padding: EdgeInsets.all(16.0.w),
-              children: [
-                const HealthBanner(),
-                if (state.isDoctor == false)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: ClickableWidget(
-                      onTap: () {
-                        if (context.read<UserCubit>().isLoggedIn) {
-                          context.push(Routes.CREATEDOCTOR);
-                          // context.push(Routes.CREATERESTURANT);
-                        }
-                      },
-                      child: Text(
-            LocaleKeys
-                .serveClientsByClickRegister
-                .localize,
-                        style: const TextStyle(
-                          color: Colors.red,
+            return state.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ListView(
+                    padding: EdgeInsets.all(16.0.w),
+                    children: [
+                      const HealthBanner(),
+                      if (state.isDoctor == false)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: ClickableWidget(
+                            onTap: () {
+                              if (context.read<UserCubit>().isLoggedIn) {
+                                context.push(Routes.CREATEDOCTOR);
+                                // context.push(Routes.CREATERESTURANT);
+                              }
+                            },
+                            child: Text(
+                              LocaleKeys.serveClientsByClickRegister.localize,
+                              style: const TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                const Sizer(),
-                if (state.isApproved == true) const DoctorDashboardBanner(),
-                const Sizer(),
-                const HealthBookingTypesWidgt(),
-                const Sizer(),
-                const HealthSubCategories(),
-                const Sizer(),
-                const HealthMedicalServices(),
-                const Sizer(),
-                const HealthBookings(),
-                const Sizer(),
-              ],
-            );
+                      const Sizer(),
+                      if (state.isApproved == true)
+                        const DoctorDashboardBanner(),
+                      const Sizer(),
+                      const HealthBookingTypesWidgt(),
+                      const Sizer(),
+                      const HealthSubCategories(),
+                      const Sizer(),
+                      const HealthMedicalServices(),
+                      const Sizer(),
+                      const HealthBookings(),
+                      const Sizer(),
+                    ],
+                  );
           },
         ));
   }

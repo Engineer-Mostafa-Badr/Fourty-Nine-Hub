@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/us
 import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/get_meals_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 import '../../domain/repositories/restaurant_details_repo.dart';
 import '../datasources/restaurant_details_remote_data_source.dart';
 
@@ -44,7 +45,8 @@ class RestaurantDetailsRepoImpl implements RestaurantDetailsRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> addFood({required AddFoodParams params}) {
+  Future<Either<Failure, RestaurantMenu>> addFood(
+      {required AddFoodParams params}) {
     return _remoteDataSource.addFood(params: params);
   }
 
@@ -54,12 +56,14 @@ class RestaurantDetailsRepoImpl implements RestaurantDetailsRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> deleteFoodFromCart({required DeleteFoodFromCartParams params}) {
+  Future<Either<Failure, bool>> deleteFoodFromCart(
+      {required DeleteFoodFromCartParams params}) {
     return _remoteDataSource.deleteFoodFromCart(params: params);
   }
 
   @override
-  Future<Either<Failure, bool>> changeQuantity({required ChangeQuantityParams params}) {
+  Future<Either<Failure, bool>> changeQuantity(
+      {required ChangeQuantityParams params}) {
     return _remoteDataSource.changeQuantity(params: params);
   }
 }

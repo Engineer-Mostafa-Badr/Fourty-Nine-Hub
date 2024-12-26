@@ -56,7 +56,7 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
       final user = context.read<UserCubit>().state.data;
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          toolbarHeight: 200.h,
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.grey),
           title: Label(
@@ -86,10 +86,7 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                           child: Center(
                             child: Text(
                               LocaleKeys.noReplied.localize,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
+                              style: Styles.mediumText(),
                             ),
                           ));
                     },
@@ -116,14 +113,13 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
             ),
             Container(
                 height: kToolbarHeight,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
+                decoration: const BoxDecoration(),
                 child: Row(
                   children: [
-                    const ProfileImage(
+                    ProfileImage(
                       accountId: 0,
                       userId: '',
+                      imageURL: user!.profilePicture,
                     ),
                     const Sizer(),
                     Expanded(
@@ -135,7 +131,6 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                       },
                       style: Styles.headerText(fontSize: 26),
                       decoration: InputDecoration(
-                        fillColor: Colors.white,
                         contentPadding: const EdgeInsets.all(5),
                         hintText: '${LocaleKeys.typeYourReply.localize} ....',
                         hintStyle: Styles.mediumText(),
@@ -165,12 +160,12 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                                   post: widget.postId,
                                   createdAt: data.createdAt,
                                   user: TwitterUserEntity(
-                                      id: user?.id ?? '',
-                                      firstName: user?.firstName ?? '',
-                                      lastName: user?.lastName ?? '',
+                                      id: user.id,
+                                      firstName: user.firstName,
+                                      lastName: user.lastName,
                                       createdAt: DateTime.now(),
-                                      image: user?.profilePicture ?? '',
-                                      email: user?.email ?? '',
+                                      image: user.profilePicture ?? '',
+                                      email: user.email ?? '',
                                       isDocumented: false),
                                   love: data.love,
                                   isReact: data.isReact,
@@ -191,23 +186,26 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
   Widget _buildCommentCard(
       {required TwitterCommentReplyEntity reply,
       required Function(String) onDeleteReply}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TwitterReplyCard(
-          reply: reply,
-          onReplyReact: (String id) {
-            widget.onReplyReact(id);
-            reply.isReact = !reply.isReact!;
-          },
-          onReport: (TwitterReportParams params) {
-            widget.onReport(params);
-          },
-          onEditReply: (TwitterPostCommentParams params) =>
-              widget.onEditReply(params),
-          onDeleteReply: (id) => onDeleteReply(id),
-        ),
-      ],
+    return Padding(
+      padding: EdgeInsets.only(bottom: 30.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TwitterReplyCard(
+            reply: reply,
+            onReplyReact: (String id) {
+              widget.onReplyReact(id);
+              reply.isReact = !reply.isReact!;
+            },
+            onReport: (TwitterReportParams params) {
+              widget.onReport(params);
+            },
+            onEditReply: (TwitterPostCommentParams params) =>
+                widget.onEditReply(params),
+            onDeleteReply: (id) => onDeleteReply(id),
+          ),
+        ],
+      ),
     );
   }
 }

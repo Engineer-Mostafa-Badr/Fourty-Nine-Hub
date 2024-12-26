@@ -204,13 +204,12 @@ class _mapPickerState extends State<MapPicker> {
 
   _getPolyline() async {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      googleApiKey: mapKey,
-      request: PolylineRequest(
-        origin: PointLatLng(widget.lat ?? 0, widget.lng ?? 0),
-        destination: PointLatLng(widget.destLat ?? 0, widget.destLng ?? 0),
-        mode: TravelMode.driving,
-        wayPoints: []
-      ));
+        googleApiKey: mapKey,
+        request: PolylineRequest(
+            origin: PointLatLng(widget.lat ?? 0, widget.lng ?? 0),
+            destination: PointLatLng(widget.destLat ?? 0, widget.destLng ?? 0),
+            mode: TravelMode.driving,
+            wayPoints: []));
     if (result.points.isNotEmpty) {
       for (var point in result.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));

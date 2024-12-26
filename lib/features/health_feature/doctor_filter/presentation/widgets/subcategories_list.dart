@@ -5,7 +5,8 @@ import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorsSubcategoriesFilterList extends StatelessWidget {
-  const DoctorsSubcategoriesFilterList({super.key});
+  const DoctorsSubcategoriesFilterList({super.key, required this.type});
+  final String type;
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +21,10 @@ class DoctorsSubcategoriesFilterList extends StatelessWidget {
               separatorBuilder: (context, index) => SizedBox(
                 height: 10.h,
               ),
-              itemBuilder: (context, index) =>
-                  SubcategoryListTitle(specialty: state.subCategories[index]),
+              itemBuilder: (context, index) => SubcategoryListTitle(
+                specialty: state.subCategories[index],
+                type: type,
+              ),
             ));
           case DoctorSubcategoryFilterError _:
             return Center(child: Text(state.message));

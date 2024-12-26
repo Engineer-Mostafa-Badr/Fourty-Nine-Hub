@@ -7,18 +7,38 @@ import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 
 import '../../../social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
-class MeetingRoom extends StatefulWidget {
-  const MeetingRoom(
-      {super.key,
-      required this.liveID,
-      required this.isHost,
-      required this.userName,
-      this.shareScreen = false});
-
+class MeetingRoomArguments {
   final String liveID;
   final String userName;
   final bool isHost;
-  final bool shareScreen;
+  final bool? shareScreen;
+
+  MeetingRoomArguments(
+      {required this.liveID,
+      required this.userName,
+      required this.isHost,
+      this.shareScreen = false});
+}
+
+class MeetingRoom extends StatefulWidget {
+  MeetingRoomArguments? args;
+  MeetingRoom({super.key, payload}) {
+    if (payload is MeetingRoomArguments) {
+      args = payload;
+    } else {
+      args = MeetingRoomArguments(
+        liveID: payload['room']['roomId'],
+        userName: UserCubit.to.state.data?.firstName ?? '',
+        isHost: true,
+        shareScreen: false,
+      );
+    }
+  }
+
+  // final String liveID;
+  // final String userName;
+  // final bool isHost;
+  // final bool shareScreen;
 
   @override
   State<MeetingRoom> createState() => _MeetingRoomState();
@@ -78,11 +98,11 @@ class _MeetingRoomState extends State<MeetingRoom> {
             appSign: context.read<SecretsCubit>().state.secrets!.zegoAppSign,
             userID: userId,
             isLiveStream: false,
-            userName: widget.userName,
-            liveID: widget.liveID,
+            userName: widget.args?.userName ?? '',
+            liveID: widget.args?.liveID ?? '',
 
             // Modify your custom configurations here.
-            config: widget.isHost
+            config: widget.args?.isHost == true
                 ? zegoUIKitPrebuiltLiveStreamingHostConfig()
                 : zegoUIKitPrebuiltLiveStreamingConfig(),
           );
@@ -94,7 +114,7 @@ class _MeetingRoomState extends State<MeetingRoom> {
   void _turnOnShareScreenWhenJoining() async {
     // print('share screen mode');
     // print('share screen mode ${widget.shareScreen}');
-    if (widget.shareScreen) {
+    if (widget.args?.shareScreen == true) {
       await ZegoUIKit().startSharingScreen();
       ZegoUIKit().getScreenSharingStateNotifier().value = true;
     }

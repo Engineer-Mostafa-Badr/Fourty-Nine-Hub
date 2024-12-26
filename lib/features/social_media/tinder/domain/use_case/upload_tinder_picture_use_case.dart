@@ -8,14 +8,27 @@ import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/t
 import '../../data/models/tinder_person_model.dart';
 
 
-class UploadTinderPictureUseCase extends UseCase<bool, List<String>> {
+class UploadTinderPictureUseCase extends UseCase<bool, AddImagesParams> {
   final TinderRepository _repository;
 
   UploadTinderPictureUseCase(this._repository);
 
   @override
-  Future<Either<Failure, bool>> call(List<String> params) {
+  Future<Either<Failure, bool>> call(AddImagesParams params) {
     return _repository.uploadPictures(params);
   }
+}
+
+class AddImagesParams{
+  List<String>? media;
+
+  AddImagesParams({
+    this.media,
+  });
+
+  Map<String, dynamic> toJson() => {
+
+    'pictures': media,
+  };
 }
 

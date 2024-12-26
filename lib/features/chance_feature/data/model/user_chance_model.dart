@@ -11,12 +11,12 @@ class UserChanceModel extends UserChanceEntity {
 
   factory UserChanceModel.fromJson(Map<String, dynamic> json) {
     return UserChanceModel(
-      id: json['_id'] ??'',
-      firstName: json['firstName'] ??'',
-      lastName: json['lastName'] ??'',
-      email: json['email'] ??'',
-      twitterDocumentation: json['twitter_documentation'] ??false,
-      image: json['image'] ??'',
+      id: json['_id'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      email: json['email'] ?? '',
+      twitterDocumentation: json['twitter_documentation'] ?? false,
+      image: json['image'] ?? '',
     );
   }
 }

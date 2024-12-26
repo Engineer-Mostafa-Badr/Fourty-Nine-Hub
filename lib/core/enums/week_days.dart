@@ -1,4 +1,36 @@
+import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+
 enum WeekDays { sunday, monday, tuesday, wednesday, thursday, friday, saturday }
+
+extension WeekDaysLocalization on WeekDays {
+  String toLocalizedString(BuildContext context) {
+    switch (context.isArabic) {
+      case true: // Arabic translations
+        return {
+              WeekDays.sunday: 'الأحد',
+              WeekDays.monday: 'الإثنين',
+              WeekDays.tuesday: 'الثلاثاء',
+              WeekDays.wednesday: 'الأربعاء',
+              WeekDays.thursday: 'الخميس',
+              WeekDays.friday: 'الجمعة',
+              WeekDays.saturday: 'السبت',
+            }[this] ??
+            '';
+      case false:
+      default:
+        return {
+          WeekDays.sunday: 'Sunday',
+          WeekDays.monday: 'Monday',
+          WeekDays.tuesday: 'Tuesday',
+          WeekDays.wednesday: 'Wednesday',
+          WeekDays.thursday: 'Thursday',
+          WeekDays.friday: 'Friday',
+          WeekDays.saturday: 'Saturday',
+        }[this]!;
+    }
+  }
+}
 
 extension WeekDaysExtensionOnString on String {
   WeekDays get toWeekDay {

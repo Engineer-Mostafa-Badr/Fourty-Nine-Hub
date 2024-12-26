@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -29,8 +28,10 @@ class ImagePickerPlaceholder extends StatelessWidget {
       // **Null Handling for Width and Height**
       // Ensure that if either height or width is null, a default value is provided.
       // Note: In the original code, width and height seem to be swapped.
-      width: height ?? 150.h, // Consider verifying if this should be `width: width ?? 150.w`
-      height: width ?? 150.h,  // Consider verifying if this should be `height: height ?? 150.h`
+      width: height ??
+          150.h, // Consider verifying if this should be `width: width ?? 150.w`
+      height: width ??
+          150.h, // Consider verifying if this should be `height: height ?? 150.h`
 
       decoration: BoxDecoration(
         // **Null Handling for Border Color**

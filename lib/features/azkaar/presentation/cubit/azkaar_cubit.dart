@@ -10,9 +10,9 @@ class AzkarCubit extends Cubit<AzkarState> {
   final FetchDetailsAzkarUseCase _detailsAzkarUseCase;
 
   AzkarCubit(
-      this._azkarUseCase, this._detailsAzkarUseCase,
-      ) : super(const AzkarState());
-
+    this._azkarUseCase,
+    this._detailsAzkarUseCase,
+  ) : super(const AzkarState());
 
   List<AzkarEntity> azkar = [];
   List<AzkarDetailsEntity> azkarDetails = [];
@@ -21,7 +21,6 @@ class AzkarCubit extends Cubit<AzkarState> {
   int currentPage = 1;
   int pageSize = 10;
 
-
   void loadInitialData() async {
     emit(state.copyWith(status: AzkarStates.loading));
     azkar.clear();
@@ -29,6 +28,7 @@ class AzkarCubit extends Cubit<AzkarState> {
     hasMoreData = true;
     await fetchAzkar();
   }
+
   void loadAzkarData(String category) async {
     emit(state.copyWith(status: AzkarStates.loading));
     azkar.clear();
@@ -47,8 +47,9 @@ class AzkarCubit extends Cubit<AzkarState> {
     );
 
     response.fold(
-          (failure) => emit(state.copyWith(failure: failure, status: AzkarStates.error)),
-          (data) {
+      (failure) =>
+          emit(state.copyWith(failure: failure, status: AzkarStates.error)),
+      (data) {
         azkar.addAll(data);
 
         if (data.length < pageSize) {
@@ -58,11 +59,10 @@ class AzkarCubit extends Cubit<AzkarState> {
         }
 
         isLoadingMore = false;
-        emit(state.copyWith(akar: azkar,status: AzkarStates.success));
+        emit(state.copyWith(akar: azkar, status: AzkarStates.success));
       },
     );
   }
-
 
   Future<void> fetchDetailsAzkar(String category) async {
     if (!hasMoreData || isLoadingMore) return;
@@ -70,12 +70,14 @@ class AzkarCubit extends Cubit<AzkarState> {
     isLoadingMore = true;
 
     final response = await _detailsAzkarUseCase(
-      AzkarDetailsParams(category: category, page: currentPage, limit: pageSize),
+      AzkarDetailsParams(
+          category: category, page: currentPage, limit: pageSize),
     );
 
     response.fold(
-          (failure) => emit(state.copyWith(failure: failure, status: AzkarStates.error)),
-          (data) {
+      (failure) =>
+          emit(state.copyWith(failure: failure, status: AzkarStates.error)),
+      (data) {
         azkarDetails.addAll(data);
 
         if (data.length < pageSize) {
@@ -85,9 +87,9 @@ class AzkarCubit extends Cubit<AzkarState> {
         }
 
         isLoadingMore = false;
-        emit(state.copyWith(azkarDetail: azkarDetails,status: AzkarStates.success));
+        emit(state.copyWith(
+            azkarDetail: azkarDetails, status: AzkarStates.success));
       },
     );
   }
-
 }

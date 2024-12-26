@@ -216,35 +216,39 @@ class _GoogleMapTrackingState extends State<GoogleMapTracking> {
   Widget build(BuildContext context) {
     // log(currentLocation.toString());
     return Scaffold(
-      body: 
-      // currentLocation == null
+      body:
+          // currentLocation == null
           // ? const Center(
           //     child: CircularProgressIndicator(
           //       color: AppColors.PRIMARY_COLOR,
           //     ),
           //   )
           // :
-           GoogleMap(
-              initialCameraPosition:
-                  CameraPosition(target: widget.startLocation, zoom: 13),
-              polylines: {
-                Polyline(
-                  polylineId: const PolylineId("polyline"),
-                  points: polyLineLatLong.map((e) => LatLng(e.last, e.first),).toList(),
-                  color: Colors.blue,
-                  // width: 2
+          GoogleMap(
+        initialCameraPosition:
+            CameraPosition(target: widget.startLocation, zoom: 13),
+        polylines: {
+          Polyline(
+            polylineId: const PolylineId("polyline"),
+            points: polyLineLatLong
+                .map(
+                  (e) => LatLng(e.last, e.first),
                 )
-              },
-              markers: {
-                Marker(
-                    markerId: const MarkerId("start"),
-                    position: widget.startLocation),
-                Marker(markerId: const MarkerId("end"), position: widget.endLocation),
-              },
-              onMapCreated: (controller) {
-                _controller.complete(controller);
-              },
-            ),
+                .toList(),
+            color: Colors.blue,
+            // width: 2
+          )
+        },
+        markers: {
+          Marker(
+              markerId: const MarkerId("start"),
+              position: widget.startLocation),
+          Marker(markerId: const MarkerId("end"), position: widget.endLocation),
+        },
+        onMapCreated: (controller) {
+          _controller.complete(controller);
+        },
+      ),
     );
   }
 }

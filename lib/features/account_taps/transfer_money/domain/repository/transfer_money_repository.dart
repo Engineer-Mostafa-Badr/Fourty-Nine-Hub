@@ -6,6 +6,7 @@ import '../entities/user_transfer_money_entity.dart';
 import '../use_case/transfer_money_use_case.dart';
 
 abstract class TransferMoneyRepository {
-  Future<Either<Failure, TransferMoneyEntity>> transferMoney(TransferMoneyParams params);
+  Future<Either<Failure, TransferMoneyEntity>> transferMoney(
+      TransferMoneyParams params);
   Future<Either<Failure, List<UserTransferMoneyEntity>>> fetchUser();
 }

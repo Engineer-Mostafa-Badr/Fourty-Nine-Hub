@@ -48,9 +48,9 @@ class _AttachmentTypesState extends State<AttachmentTypes> {
                   await widget.chatRoomCubit.pickDocuments();
                   if (widget.chatRoomCubit.media.isNotEmpty) {
                     context.push(Routes.ONETIMEDOCUMENTMESSAGE,
-                      extra: OneTimeDocumentMessageViewParams(
-                        chatRoomCubit: widget.chatRoomCubit,
-                      ));
+                        extra: OneTimeDocumentMessageViewParams(
+                          chatRoomCubit: widget.chatRoomCubit,
+                        ));
                   }
                   setState(() {
                     isLoading = false;

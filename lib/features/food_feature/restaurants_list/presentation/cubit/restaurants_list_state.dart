@@ -44,13 +44,14 @@ class RestaurantsListState {
   final MainCategoryEntity? mainCategory;
   final IsRestaurantModel? isResturant;
   final List<Restaurant2Model>?
-  allRestaurant; // Using Restaurant2Model for consistency
+      allRestaurant; // Using Restaurant2Model for consistency
   final List<RestaurantEntity>? trendingRestaurants;
   final List<Restaurant2Model>? subCategories;
   final List<FoodCategoryEntity>? mealCategories;
   final List<SubCategoryEntity>? categories;
 
-  const RestaurantsListState({this.expiredRequestsResponse,
+  const RestaurantsListState({
+    this.expiredRequestsResponse,
     this.status = RestaurantsListStates.loading,
     this.mealCategories,
     this.failure,
@@ -58,10 +59,10 @@ class RestaurantsListState {
     this.numOfRestaurants,
     this.mainCategory,
     this.allRestaurant,
-    this.isLoadingMore=false,
-    this.isLoadingExpiredOrdersMore=false,
+    this.isLoadingMore = false,
+    this.isLoadingExpiredOrdersMore = false,
     this.selectedCategory,
-    this.selectedSubCategoryId='',
+    this.selectedSubCategoryId = '',
     this.isLoadingRestaurantsMore,
     this.isResturant,
     this.nearByRestaurants,
@@ -82,7 +83,7 @@ class RestaurantsListState {
     String? selectedSubCategoryId,
     FoodCategoryEntity? selectedCategory,
     List<Restaurant2Model>?
-    allRestaurant, // Using Restaurant2Model for consistency
+        allRestaurant, // Using Restaurant2Model for consistency
     int? numOfRestaurants,
     Banner? banner,
     MainCategoryEntity? mainCategory,
@@ -94,12 +95,14 @@ class RestaurantsListState {
     return RestaurantsListState(
       status: status ?? this.status,
       expiredRequestsResponse:
-      expiredRequestsResponse ?? this.expiredRequestsResponse,
+          expiredRequestsResponse ?? this.expiredRequestsResponse,
       mealCategories: mealCategories ?? this.mealCategories,
       numOfRestaurants: numOfRestaurants ?? this.numOfRestaurants,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
-      isLoadingExpiredOrdersMore: isLoadingExpiredOrdersMore ?? this.isLoadingExpiredOrdersMore,
-      isLoadingRestaurantsMore: isLoadingRestaurantsMore ?? this.isLoadingRestaurantsMore,
+      isLoadingExpiredOrdersMore:
+          isLoadingExpiredOrdersMore ?? this.isLoadingExpiredOrdersMore,
+      isLoadingRestaurantsMore:
+          isLoadingRestaurantsMore ?? this.isLoadingRestaurantsMore,
       allRestaurant: allRestaurant ?? this.allRestaurant,
       failure: failure ?? this.failure,
       mainCategory: mainCategory ?? this.mainCategory,
@@ -109,7 +112,8 @@ class RestaurantsListState {
       banner: banner ?? this.banner,
       trendingRestaurants: trendingRestaurants ?? this.trendingRestaurants,
       categories: categories ?? this.categories,
-      selectedSubCategoryId: selectedSubCategoryId ?? this.selectedSubCategoryId,
+      selectedSubCategoryId:
+          selectedSubCategoryId ?? this.selectedSubCategoryId,
       selectedCategory: selectedCategory ?? this.selectedCategory,
     );
   }

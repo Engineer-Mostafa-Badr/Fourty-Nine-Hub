@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -63,13 +64,24 @@ class _ReplyCardState extends State<ReplyCard> {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Label(
-                    text: widget.reply.user.firstName,
-                    style: Styles.mediumText(
-                        fontWeight: FontWeight.bold, color: widget.textColor)),
-                Label(
-                    text: widget.reply.sinceTime,
-                    style: Styles.mediumText(color: widget.textColor)),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Label(
+                        text: widget.reply.user.firstName,
+                        style: Styles.mediumText(fontWeight: FontWeight.bold)),
+                    const Sizer(),
+                    Label(
+                        text: widget.reply.sinceTime,
+                        style: Styles.mediumText(
+                            color: AppColors.GREY_NORMAL_COLOR)),
+                  ],
+                ),
+                Text(
+                  widget.reply.content,
+                  textAlign: TextAlign.start,
+                  style: Styles.mediumText(fontSize: 65.sp),
+                ),
               ],
             )),
             GestureDetector(
@@ -84,15 +96,9 @@ class _ReplyCardState extends State<ReplyCard> {
                 },
                 child: Icon(
                   Icons.more_horiz_outlined,
-                  color: widget.textColor,
-                  size: 20,
+                  size: 40.sp,
                 )),
           ],
-        ),
-        const Sizer(),
-        Text(
-          widget.reply.content,
-          style: Styles.mediumText(color: widget.textColor),
         ),
         if (widget.reply.edit == true)
           SizedBox(
@@ -210,7 +216,6 @@ class _ReplyCardState extends State<ReplyCard> {
       },
       leading: Icon(
         icon,
-        color: iconColor ?? Colors.black,
       ),
       subtitle: Label(
         text: subTitle,

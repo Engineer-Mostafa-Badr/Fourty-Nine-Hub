@@ -19,10 +19,10 @@ class RestaurantOrdersModel {
   }
 
   Map<String, dynamic> toJson() => {
-    'status': status,
-    'message': message,
-    'data': data.toJson(),
-  };
+        'status': status,
+        'message': message,
+        'data': data.toJson(),
+      };
 }
 
 // RestaurantData Class
@@ -48,9 +48,9 @@ class RestaurantData {
   }
 
   Map<String, dynamic> toJson() => {
-    'orders': List<dynamic>.from(orders.map((x) => x.toJson())),
-    'restaurantSubscriptionType': restaurantSubscriptionType,
-  };
+        'orders': List<dynamic>.from(orders.map((x) => x.toJson())),
+        'restaurantSubscriptionType': restaurantSubscriptionType,
+      };
 }
 
 // RestaurantOrder Class
@@ -65,7 +65,8 @@ class RestaurantOrder {
   final String phone;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final String currency;
+  final String currencyAr;
+  final String currencyEn;
   final String openCallAndChat;
 
   RestaurantOrder({
@@ -79,7 +80,8 @@ class RestaurantOrder {
     required this.phone,
     required this.createdAt,
     required this.updatedAt,
-    required this.currency,
+    required this.currencyAr,
+    required this.currencyEn,
     required this.openCallAndChat,
   });
 
@@ -95,25 +97,28 @@ class RestaurantOrder {
       phone: json['phone'],
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
-      currency: json['currency'],
-      openCallAndChat: json['OpenCallAndChat'] ?? 'disable', // Default to 'disable' if not present
+      currencyAr: json['currencyAr'],
+      currencyEn: json['currencyEn'],
+      openCallAndChat: json['OpenCallAndChat'] ??
+          'disable', // Default to 'disable' if not present
     );
   }
 
   Map<String, dynamic> toJson() => {
-    '_id': id,
-    'userId': userInfo.toJson(),
-    'restaurantId': restaurantId,
-    'orders': List<dynamic>.from(orders.map((x) => x.toJson())),
-    'total': total,
-    'isPremium': isPremium,
-    'address': address, // Nullable field
-    'phone': phone,
-    'createdAt': createdAt.toIso8601String(),
-    'updatedAt': updatedAt.toIso8601String(),
-    'currency': currency,
-    'OpenCallAndChat': openCallAndChat,
-  };
+        '_id': id,
+        'userId': userInfo.toJson(),
+        'restaurantId': restaurantId,
+        'orders': List<dynamic>.from(orders.map((x) => x.toJson())),
+        'total': total,
+        'isPremium': isPremium,
+        'address': address, // Nullable field
+        'phone': phone,
+        'createdAt': createdAt.toIso8601String(),
+        'updatedAt': updatedAt.toIso8601String(),
+        'currencyAr': currencyAr,
+        'currencyEn': currencyEn,
+        'OpenCallAndChat': openCallAndChat,
+      };
 }
 
 // Order Class
@@ -134,7 +139,9 @@ class Order {
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
-      foodId:json['foodId']!=null? Food.fromJson(json['foodId']):Food(id: '', foodName: ''),
+      foodId: json['foodId'] != null
+          ? Food.fromJson(json['foodId'])
+          : Food(id: '', foodName: ''),
       quantity: json['quantity'],
       price: (json['price'] as num).toDouble(),
       totalPriceOfItem: (json['totalPriceOfItem'] as num).toDouble(),
@@ -143,12 +150,12 @@ class Order {
   }
 
   Map<String, dynamic> toJson() => {
-    'foodId': foodId.toJson(),
-    'quantity': quantity,
-    'price': price,
-    'totalPriceOfItem': totalPriceOfItem,
-    '_id': id,
-  };
+        'foodId': foodId.toJson(),
+        'quantity': quantity,
+        'price': price,
+        'totalPriceOfItem': totalPriceOfItem,
+        '_id': id,
+      };
 }
 
 // Food Class
@@ -169,9 +176,9 @@ class Food {
   }
 
   Map<String, dynamic> toJson() => {
-    '_id': id,
-    'foodName': foodName,
-  };
+        '_id': id,
+        'foodName': foodName,
+      };
 }
 
 // UserInfo Class
@@ -195,8 +202,8 @@ class UserInfo {
   }
 
   Map<String, dynamic> toJson() => {
-    '_id': id,
-    'firstName': firstName,
-    'gender': gender,
-  };
+        '_id': id,
+        'firstName': firstName,
+        'gender': gender,
+      };
 }

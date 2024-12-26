@@ -12,9 +12,9 @@ class ChanceState extends Equatable {
   final Failure? failure;
   final List<ChanceEntity>? chance;
   final ChanceRateEntity? rate;
-  final List<MainCategoryDropEntity>? mainCategory ;
+  final List<MainCategoryDropEntity>? mainCategory;
 
-  const ChanceState( {
+  const ChanceState({
     this.status = ChanceStates.loading,
     this.failure,
     this.chance,
@@ -27,24 +27,21 @@ class ChanceState extends Equatable {
     Failure? failure,
     List<ChanceEntity>? chance,
     ChanceRateEntity? rate,
-    List<MainCategoryDropEntity>? mainCategory ,
+    List<MainCategoryDropEntity>? mainCategory,
   }) {
     return ChanceState(
-      status: status ?? this.status,
-      failure: failure ?? this.failure,
-      chance: chance ?? this.chance,
-      rate:  rate ?? this.rate,
-      mainCategory: mainCategory ?? this.mainCategory
-    );
+        status: status ?? this.status,
+        failure: failure ?? this.failure,
+        chance: chance ?? this.chance,
+        rate: rate ?? this.rate,
+        mainCategory: mainCategory ?? this.mainCategory);
   }
 
   @override
-  List<Object?> get props => [status , failure , chance , rate ,mainCategory];
-
-
+  List<Object?> get props => [status, failure, chance, rate, mainCategory];
 }
-extension ChanceStateX on ChanceState
-{
+
+extension ChanceStateX on ChanceState {
   bool get isInitial => status == ChanceStates.initial;
 
   bool get isLoading => status == ChanceStates.loading;
@@ -52,7 +49,4 @@ extension ChanceStateX on ChanceState
   bool get isSuccess => status == ChanceStates.success;
 
   bool get isFailure => status == ChanceStates.error;
-
 }
-
-

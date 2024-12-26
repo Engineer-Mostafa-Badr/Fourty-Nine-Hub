@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity/live_create_response_entity.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity/topic_entity.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/repository/live_repository.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/edit_goal_use_case.dart';
 import 'package:fourtyninehub/features/zoom/domain/usecases/add_room_use_case.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
@@ -56,5 +57,20 @@ class LiveRepositoryImpl extends LiveRepository {
   @override
   Future<void> requestBattle(RequestBattleParams params) {
     return _liveDataSource.requestBattle(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> editGoal(EditGoalParams params) {
+    return _liveDataSource.editGoal(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> sendPointSocket(PointsParams params) {
+    return _liveDataSource.sendPointSocket(params);
+  }
+
+  @override
+  void sendPointListener() {
+    return _liveDataSource.sendPointListener();
   }
 }

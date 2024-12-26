@@ -15,7 +15,9 @@ import '../../../../../core/localization/locale_keys.g.dart';
 class DoctorCityFilterView extends StatefulWidget {
   const DoctorCityFilterView({
     super.key,
+    required this.type,
   });
+  final String type;
 
   @override
   State<DoctorCityFilterView> createState() => _DoctorCityFilterViewState();
@@ -65,8 +67,10 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
                         child: ListView.separated(
                       itemCount: state.cities.length,
                       separatorBuilder: (context, index) => const Divider(),
-                      itemBuilder: (context, index) =>
-                          CityListTitle(city: state.cities[index]),
+                      itemBuilder: (context, index) => CityListTitle(
+                        city: state.cities[index],
+                        type: widget.type,
+                      ),
                     ));
                   case DoctorCityFilterError _:
                     return Center(child: Text(state.message));

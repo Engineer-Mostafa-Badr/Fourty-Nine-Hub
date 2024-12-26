@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -19,12 +20,13 @@ class MainCategoryBanner extends StatefulWidget {
   final Function()? onRegister;
   final Function() onFavorite;
   bool? isFavorite;
-
+  final bool removeFavorite;
   MainCategoryBanner({
     super.key,
     this.canRegister = false,
     this.onRegister,
     required this.category,
+    this.removeFavorite = false,
     required this.onFavorite,
     this.isFavorite,
   });
@@ -71,7 +73,9 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: widget.category.name,
+              text: context.locale == Locales.english
+                  ? widget.category.nameEn!
+                  : widget.category.name ?? "",
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -83,26 +87,28 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   context.read<UserCubit>().isLoggedIn
-                      ? IconButton(
-                          color: AppColors.SECONDARY_COLOR,
-                          onPressed: () async {
-                            final result = await widget.onFavorite();
-                            print("resutlt=$result");
-                            if (result == true) {
-                              print(result);
-                              setState(() {
-                                widget.category.isFavorite =
-                                    !widget.category.isFavorite!;
-                                print(widget.category.isFavorite);
-                                widget.isFavorite = result;
-                                print("===================$result");
-                              });
-                            }
-                          },
-                          icon: Icon(widget.category.isFavorite == true
-                              ? Icons.favorite
-                              : Icons.favorite_border),
-                        )
+                      ? widget.removeFavorite
+                          ? Container()
+                          : IconButton(
+                              color: AppColors.SECONDARY_COLOR,
+                              onPressed: () async {
+                                final result = await widget.onFavorite();
+                                print("resutlt=$result");
+                                if (result == true) {
+                                  print(result);
+                                  setState(() {
+                                    widget.category.isFavorite =
+                                        !widget.category.isFavorite!;
+                                    print(widget.category.isFavorite);
+                                    widget.isFavorite = result;
+                                    print("===================$result");
+                                  });
+                                }
+                              },
+                              icon: Icon(widget.category.isFavorite == true
+                                  ? Icons.favorite
+                                  : Icons.favorite_border),
+                            )
                       : const SizedBox.shrink(),
                   // Label(
                   //   text:
@@ -141,7 +147,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: widget.category.name,
+              text: widget.category.name ?? "",
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

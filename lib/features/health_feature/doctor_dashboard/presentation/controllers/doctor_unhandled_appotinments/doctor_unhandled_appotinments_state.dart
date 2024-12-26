@@ -1,29 +1,37 @@
 part of 'doctor_unhandled_appotinments_cubit.dart';
 
-sealed class DoctorUnhandledAppointmentsState {
-  const DoctorUnhandledAppointmentsState();
+enum DoctorUnhandledAppointmentsStates { loading, initState, error, success }
+
+extension DoctorUnhandledAppointmentsStateX
+    on DoctorUnhandledAppointmentsState {
+  bool get isInitial => status == DoctorUnhandledAppointmentsStates.initState;
+  bool get isLoading => status == DoctorUnhandledAppointmentsStates.loading;
+  bool get isError => status == DoctorUnhandledAppointmentsStates.error;
+  bool get isSuccess => status == DoctorUnhandledAppointmentsStates.success;
 }
 
-final class DoctorUnhandledAppointmentsInitial
-    extends DoctorUnhandledAppointmentsState {}
-
-final class DoctorUnhandledAppointmentsLoading
-    extends DoctorUnhandledAppointmentsState {}
-
-final class DoctorUnhandledAppointmentsLoaded
-    extends DoctorUnhandledAppointmentsState {
-  final List<DoctorAppointmentEntity> appointments;
-  const DoctorUnhandledAppointmentsLoaded(this.appointments);
-}
-
-final class DoctorUnhandledAppointmentsError
-    extends DoctorUnhandledAppointmentsState {
-  final String message;
-  const DoctorUnhandledAppointmentsError(this.message);
-}
-
-final class DoctorUnhandledAppotinmentsShowSuccessfulMessage
-    extends DoctorUnhandledAppointmentsState {
-  final String message;
-  const DoctorUnhandledAppotinmentsShowSuccessfulMessage(this.message);
+class DoctorUnhandledAppointmentsState {
+  final DoctorUnhandledAppointmentsStates? status;
+  final Failure? failure;
+  final bool? isLast;
+  final List<DoctorAppointmentEntity>? appointments;
+  const DoctorUnhandledAppointmentsState({
+    this.status,
+    this.failure,
+    this.appointments,
+    this.isLast,
+  });
+  DoctorUnhandledAppointmentsState copyWith({
+    DoctorUnhandledAppointmentsStates? status,
+    Failure? failure,
+    bool? isLast,
+    List<DoctorAppointmentEntity>? appointments,
+  }) {
+    return DoctorUnhandledAppointmentsState(
+      status: status ?? this.status,
+      failure: failure ?? this.failure,
+      appointments: appointments ?? this.appointments,
+      isLast: isLast ?? this.isLast,
+    );
+  }
 }

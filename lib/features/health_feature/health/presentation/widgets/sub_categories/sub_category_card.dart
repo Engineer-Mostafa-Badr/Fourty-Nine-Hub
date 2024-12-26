@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
@@ -31,26 +32,30 @@ class HealthSubCategoryCard extends StatelessWidget {
     print(subCategory.id);
     return GestureDetector(
       onTap: () {
+        AdInterstitialTop.loadIntersitialAd();
+        AdInterstitialTop.showInterstitialAd();
         serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
             subCategory;
-        context.push(Routes.VISITADOCTORLIST,extra: DoctorsListParams(fromHome: true,subCategoryId: subCategory.id));
+        context.push(Routes.VISITADOCTORLIST,
+            extra: DoctorsListParams(
+                fromHome: true, subCategoryId: subCategory.id));
       },
       child: Container(
-        width: 200,
+        width: 0.55.sw,
         padding: const EdgeInsets.all(10),
-        margin: EdgeInsetsDirectional.only(end: 10.w,bottom: 10.h,top: 10.h,start: 5.w),
+        margin: EdgeInsetsDirectional.only(
+            end: 10.w, bottom: 10.h, top: 10.h, start: 5.w),
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 2,
-              offset: const Offset(0, 3),
-            ),
-          ]
-        ),
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 2,
+                offset: const Offset(0, 3),
+              ),
+            ]),
         child: Column(
           children: [
             Expanded(
@@ -65,30 +70,31 @@ class HealthSubCategoryCard extends StatelessWidget {
                       url: subCategory.image,
                     ),
                   ),
-                  if(context.read<UserCubit>().isLoggedIn)Positioned(
-                      top: 5,
-                      right: 5,
-                      child: IconAppButton(
-                          size: 20,
-                          icon: subCategory.isFavorite == true
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: ThemeCubit.get(context).isDarkTheme
-                              ? AppColors.QUANTITY_COLOR
-                              : AppColors.PRIMARY_COLOR_DARK,
-                          onPressed: () {
-                            if (context.read<UserCubit>().isLoggedIn) {
-                              log("${subCategory.isFavorite}777777777777777777777777777777777");
+                  if (context.read<UserCubit>().isLoggedIn)
+                    Positioned(
+                        top: 5,
+                        right: 5,
+                        child: IconAppButton(
+                            size: 20,
+                            icon: subCategory.isFavorite == true
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: ThemeCubit.get(context).isDarkTheme
+                                ? AppColors.QUANTITY_COLOR
+                                : AppColors.PRIMARY_COLOR_DARK,
+                            onPressed: () {
+                              if (context.read<UserCubit>().isLoggedIn) {
+                                log("${subCategory.isFavorite}777777777777777777777777777777777");
 
-                              context
-                                  .read<HealthCubit>()
-                                  .toggleFavoriteSubcategory(subCategory.id);
+                                context
+                                    .read<HealthCubit>()
+                                    .toggleFavoriteSubcategory(subCategory.id);
 
-                              log("${subCategory.isFavorite}777777777777777777777777777777777");                            }else {
-                              context.push(Routes.REGISTER);
-                            }
-
-                          })),
+                                log("${subCategory.isFavorite}777777777777777777777777777777777");
+                              } else {
+                                context.push(Routes.REGISTER);
+                              }
+                            })),
                 ],
               ),
             )),
@@ -106,10 +112,11 @@ class HealthSubCategoryCard extends StatelessWidget {
                   ],
                 ),
                 Label(
-                  text: context.isArabic?subCategory.nameAr:subCategory.nameEn,
+                  text: context.isArabic
+                      ? subCategory.nameAr
+                      : subCategory.nameEn,
                   style: Styles.mediumText(fontWeight: FontWeight.bold),
                 ),
-
               ],
             ),
           ],

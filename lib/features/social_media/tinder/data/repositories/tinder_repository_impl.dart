@@ -1,5 +1,3 @@
-
-
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -7,15 +5,16 @@ import 'package:fourtyninehub/features/social_media/tinder/data/data_sources/tin
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/get_fav_sub_category_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/models/last_seen_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/near_by_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/profile_user_model.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/domain/last_seen_entity.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/domain/user_data_tinder_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_user_data_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/send_geft_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/upload_tinder_picture_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
-import '../models/tinder_person_model.dart';
 
 class TinderRepositoryImpl extends TinderRepository {
   final TinderRemoteDataSource _storiesRemoteDataSource;
@@ -24,11 +23,11 @@ class TinderRepositoryImpl extends TinderRepository {
 
   @override
   Future<Either<Failure, GiftApi>> getGifts(PaginationParams params) {
-  return _storiesRemoteDataSource.getGifts(params);
+    return _storiesRemoteDataSource.getGifts(params);
   }
 
   @override
-  Future<Either<Failure, List<UserData>>> getUsers(GetUsersParams params) {
+  Future<Either<Failure, List<UserDataTinderEntity>>> getUsers(GetUsersParams params) {
     return _storiesRemoteDataSource.getUsers(params);
   }
 
@@ -43,7 +42,8 @@ class TinderRepositoryImpl extends TinderRepository {
   }
 
   @override
-  Future<Either<Failure, CategoryFavoritesResponse>> fetchFavouritesCategories() {
+  Future<Either<Failure, CategoryFavoritesResponse>>
+      fetchFavouritesCategories() {
     return _storiesRemoteDataSource.fetchFavouritesCategories();
   }
 
@@ -53,7 +53,7 @@ class TinderRepositoryImpl extends TinderRepository {
   }
 
   @override
-  Future<Either<Failure, LastSeenModel>> fetchLastSeen(String id) {
+  Future<Either<Failure, LastSeenEntity>> fetchLastSeen(String id) {
     return _storiesRemoteDataSource.fetchLastSeen(id);
   }
 
@@ -78,14 +78,17 @@ class TinderRepositoryImpl extends TinderRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> uploadPictures(List<String> params) {
+  Future<Either<Failure, bool>> uploadPictures(AddImagesParams params) {
     return _storiesRemoteDataSource.uploadPictures(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> deletePictures(String id) {
+    return _storiesRemoteDataSource.deletePictures(id);
   }
 
 // @override
 // Future<Either<Failure, bool>> makeViews(String id) {
 //   return _storiesRemoteDataSource.makeViews(id);
 // }
-
-
 }

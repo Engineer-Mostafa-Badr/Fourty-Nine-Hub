@@ -1,6 +1,6 @@
 import 'package:fourtyninehub/core/utils/duration_helper.dart';
 
-class AdRequestEntity{
+class AdRequestEntity {
   final String requestId;
   final String adId;
   final String userName;
@@ -19,10 +19,22 @@ class AdRequestEntity{
 
   Duration get publishedDuration => DateTime.now().difference(createdAt);
 
-  String get sinceTime =>
-      DurationHelper().getTimeDifference( createdAt);
+  String get sinceTime => DurationHelper().getTimeDifference(createdAt);
 
-
-  AdRequestEntity({required this.requestId, required this.adId, required this.subCategoryId, required this.userName, required this.adTitle, required this.phone, required this.adDesc, required this.adPrice, required this.gender, required this.email, required this.requestUserId, required this.adUserId, required this.enabled, required this.createdAt, required this.updatedAt});
-
+  AdRequestEntity(
+      {required this.requestId,
+      required this.adId,
+      required this.subCategoryId,
+      required this.userName,
+      required this.adTitle,
+      required this.phone,
+      required this.adDesc,
+      required this.adPrice,
+      required this.gender,
+      required this.email,
+      required this.requestUserId,
+      required this.adUserId,
+      required this.enabled,
+      required this.createdAt,
+      required this.updatedAt});
 }

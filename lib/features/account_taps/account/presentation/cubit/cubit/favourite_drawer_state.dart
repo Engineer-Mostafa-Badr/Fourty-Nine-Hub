@@ -2,7 +2,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 
 import '../../../domain/entities/favourite_ad_drawer_entity.dart';
 
-enum FavouriteDrawerStates { loading, success,successDelete,initial, error }
+enum FavouriteDrawerStates { loading, success, successDelete, initial, error }
 
 class FavouriteDrawerState {
   final FavouriteDrawerStates status;
@@ -15,12 +15,10 @@ class FavouriteDrawerState {
     this.favourite,
   });
 
-  FavouriteDrawerState copyWith({
-    FavouriteDrawerStates? status,
-    Failure? failure,
-    List<FavouriteAdDrawerEntity>? favourite
-
-  }) {
+  FavouriteDrawerState copyWith(
+      {FavouriteDrawerStates? status,
+      Failure? failure,
+      List<FavouriteAdDrawerEntity>? favourite}) {
     return FavouriteDrawerState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

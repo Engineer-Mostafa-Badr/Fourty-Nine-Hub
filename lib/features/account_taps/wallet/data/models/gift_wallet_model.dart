@@ -1,15 +1,15 @@
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/gift_wallet_entity.dart';
 
 class GiftWalletModel extends GiftWalletEntity {
-  GiftWalletModel(
-      {required super.id,
-      required super.userId,
-      super.amount,
-      required super.isActive,
-      required super.createdAt,
-      required super.updatedAt,
-      required super.currency,
-      });
+  GiftWalletModel({
+    required super.id,
+    required super.userId,
+    super.amount,
+    required super.isActive,
+    required super.createdAt,
+    required super.updatedAt,
+    required super.currency,
+  });
   factory GiftWalletModel.fromJson(Map<String, dynamic> json) {
     return GiftWalletModel(
       id: json['_id'] ?? '',

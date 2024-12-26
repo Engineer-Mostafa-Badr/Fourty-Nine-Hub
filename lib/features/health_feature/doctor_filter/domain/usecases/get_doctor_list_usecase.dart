@@ -21,6 +21,9 @@ class GetDoctorListUseCase
 }
 
 class DoctorSearchParams {
+  int page = 1;
+  int limit = 10;
+  String type = '';
   GovernorateEntity governorate =
       GovernorateEntity(id: '', nameEn: '', nameAr: '');
   CityEntity city = CityEntity(id: '', nameEn: '', nameAr: '');
@@ -39,13 +42,16 @@ class DoctorSearchParams {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['subCategoryId'] = subCategory.id;
     if (bookingType != null) {
-      data['type'] = bookingType?.name=='home'?'visitHome':bookingType?.name=='call'?'calls':'clinic';
+      data['type'] = bookingType?.name == 'home'
+          ? 'visitHome'
+          : bookingType?.name == 'call'
+              ? 'calls'
+              : 'clinic';
       if (bookingType != BookingTypes.call) {
         data['governorateId'] = governorate.id;
         data['cityId'] = city.id;
       }
     }
-
     return data;
   }
 }

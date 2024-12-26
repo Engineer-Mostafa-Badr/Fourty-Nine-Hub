@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -14,9 +15,9 @@ class CreateDoctorSubmitButton extends StatelessWidget {
         Expanded(
           child: ElevatedAppButton(
             onPressed: () {
-              context.read<CreateDoctorCubit>().submit();
+              context.read<CreateDoctorCubit>().submit(context);
             },
-            label: 'Submit',
+            label: context.isArabic ? 'ارسال' : 'Submit',
             textStyle: Styles.headerText().copyWith(color: Colors.white),
           ),
         ),

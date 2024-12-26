@@ -26,7 +26,6 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
-
 class CreateRestaurantForm extends StatefulWidget {
   final String? from;
   final String? restaurantId;
@@ -42,8 +41,9 @@ class CreateRestaurantForm extends StatefulWidget {
 class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
   bool editFood = false;
 
+  @override
   initState() {
-      context.read<CreateRestaurantCubit>().loadData();
+    context.read<CreateRestaurantCubit>().loadData();
 
     super.initState();
   }
@@ -71,14 +71,14 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
         }
       },
       child: Scaffold(
-        appBar: const HomeAppbar(),
-        body: BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
-          builder: (context, state) {
-            if(state is CreateRestaurantLoading){
+          appBar: const HomeAppbar(),
+          body: BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
+              builder: (context, state) {
+            if (state is CreateRestaurantLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            }else{
+            } else {
               return SingleChildScrollView(
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
@@ -96,35 +96,41 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                             child: Text(
                               widget.from == 'update'
                                   ? LocaleKeys.updateYourRestaurant.localize
-                                  : LocaleKeys.welcomeToResturantRegisteration.tr(),
+                                  : LocaleKeys.welcomeToResturantRegisteration
+                                      .tr(),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style:
-                              Styles.headerText(color: AppColors.SECONDARY_COLOR),
+                              style: Styles.headerText(
+                                  color: AppColors.SECONDARY_COLOR),
                             ),
                           ),
                         ),
-                        if(widget.from == 'update')ElevatedAppButton(
-                          label: LocaleKeys.editFood.localize,
-                          onPressed: () {
-                            context.push(Routes.EditFoodView,
-                                extra: EditFoodParams(restaurantId: widget.restaurantId??'',subCategoryId: widget.subcategoryId??''));
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //       builder: (context) => BlocProvider.value(
-                            //         value: serviceLocator<RestaurantDetailsCubit>(),
-                            //         child:
-                            //             EditFoodView(payload: widget.restaurantId!),
-                            //       ),
-                            //     ));
-                            setState(() {
-                              editFood = true;
-                            });
-                          },
-                          textStyle: Styles.mediumText(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        )
+                        if (widget.from == 'update')
+                          ElevatedAppButton(
+                            label: LocaleKeys.editFood.localize,
+                            onPressed: () {
+                              context.push(Routes.EditFoodView,
+                                  extra: EditFoodParams(
+                                      restaurantId: widget.restaurantId ?? '',
+                                      subCategoryId:
+                                          widget.subcategoryId ?? ''));
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //       builder: (context) => BlocProvider.value(
+                              //         value: serviceLocator<RestaurantDetailsCubit>(),
+                              //         child:
+                              //             EditFoodView(payload: widget.restaurantId!),
+                              //       ),
+                              //     ));
+                              setState(() {
+                                editFood = true;
+                              });
+                            },
+                            textStyle: Styles.mediumText(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          )
                       ],
                     ),
                     Sizer(height: 20.h),
@@ -168,7 +174,8 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                             .tr()),
                     Sizer(height: 20.h),
                     AppInfoText(
-                        text: LocaleKeys.youWillGetEGP3650PerYearIfYouSubscribeDaily
+                        text: LocaleKeys
+                            .youWillGetEGP3650PerYearIfYouSubscribeDaily
                             .tr()),
                     Sizer(height: 20.h),
                     if (widget.from == 'update')
@@ -196,9 +203,7 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                 ),
               );
             }
-          }
-        )
-      ),
+          })),
     );
   }
 }

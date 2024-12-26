@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/post_comment_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
@@ -48,6 +49,7 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             widget.reply.user.image == ''
                 ? const ProfileImage(
@@ -65,13 +67,24 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Label(
-                    text: widget.reply.user.firstName,
-                    style: Styles.mediumText(
-                        fontWeight: FontWeight.bold, color: widget.textColor)),
-                Label(
-                    text: widget.reply.sinceTime,
-                    style: Styles.mediumText(color: widget.textColor)),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Label(
+                        text: widget.reply.user.firstName,
+                        style: Styles.mediumText(fontWeight: FontWeight.bold)),
+                    const Sizer(),
+                    Label(
+                        text: widget.reply.sinceTime,
+                        style: Styles.mediumText(
+                            color: AppColors.GREY_NORMAL_COLOR)),
+                  ],
+                ),
+                Text(
+                  widget.reply.content ?? '',
+                  textAlign: TextAlign.start,
+                  style: Styles.mediumText(fontSize: 60.sp),
+                ),
               ],
             )),
             GestureDetector(
@@ -86,17 +99,10 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
               },
               child: Icon(
                 Icons.more_horiz_outlined,
-                color: widget.textColor,
-                size: 20,
+                size: 50.sp,
               ),
             ),
           ],
-        ),
-        const Sizer(),
-        Label(
-          textAlign: TextAlign.start,
-          text: widget.reply.content ?? '',
-          style: Styles.mediumText(color: widget.textColor),
         ),
         if (widget.reply.edit == true)
           Row(
@@ -135,7 +141,7 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
             ],
           ),
         Sizer(
-          height: 5.h,
+          height: 10.h,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -159,11 +165,12 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
                 color: widget.reply.isReact == false ? Colors.grey : Colors.red,
               ),
             ),
+            Sizer(
+              width: 10.h,
+            ),
             Label(
               text: "${widget.reply.loveCount}",
-              style: Styles.mediumText(
-                color: widget.textColor,
-              ),
+              style: Styles.mediumText(),
             ),
           ],
         ),
@@ -233,7 +240,6 @@ class _TwitterReplyCardState extends State<TwitterReplyCard> {
       },
       leading: Icon(
         icon,
-        color: iconColor ?? Colors.black,
       ),
       subtitle: Label(
         text: subTitle,

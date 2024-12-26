@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_pick_me/domain/entities/pickme_entity.dart';
@@ -163,45 +164,52 @@ class AllPickMeCard extends StatelessWidget {
                     ],
                   ),
                   const Sizer(),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: AvaialbleTripsButton(
-                          title: LocaleKeys.call.localize,
-                          color: (pickMeCardEntity.isApproved ?? false)
-                              ? AppColors.PRIMARY_COLOR
-                              : AppColors.DARK_GRAY_COLOR,
-                          icon: Icons.call,
-                          onTap: callOnTap,
-                        ),
-                      ),
-                      const Sizer(width: 5),
-                      Expanded(
-                        flex: 3,
-                        child: AvaialbleTripsButton(
-                          title: LocaleKeys.message.localize,
-                          color: (pickMeCardEntity.isApproved ?? false)
-                              ? AppColors.PRIMARY_COLOR
-                              : AppColors.DARK_GRAY_COLOR,
-                          icon: Icons.email,
-                          onTap: messageOnTap,
-                        ),
-                      ),
-                      const Sizer(width: 5),
-                      Expanded(
-                        flex: 3,
-                        child: AvaialbleTripsButton(
-                          title: LocaleKeys.report.localize,
-                          // color: testColor,
-                          color: AppColors.getSecondryColor(context),
-                          icon: Icons.report,
-                          onTap: reportOnTap,
-                        ),
-                      ),
-                    ],
+                  CallMessageButtons(
+                    otherUserId: pickMeCardEntity.userId!,
+                    subcategoryId: pickMeCardEntity.categoryId ?? '',
+                    phone: pickMeCardEntity.phone!,
+                    id: pickMeCardEntity.id!,
+                    hasReport: true,
                   ),
+                  // Row(
+                  //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   children: [
+                  //     Expanded(
+                  //       flex: 3,
+                  //       child: AvaialbleTripsButton(
+                  //         title: LocaleKeys.call.localize,
+                  //         color: (pickMeCardEntity.isApproved ?? false)
+                  //             ? AppColors.PRIMARY_COLOR
+                  //             : AppColors.DARK_GRAY_COLOR,
+                  //         icon: Icons.call,
+                  //         onTap: callOnTap,
+                  //       ),
+                  //     ),
+                  //     const Sizer(width: 5),
+                  //     Expanded(
+                  //       flex: 3,
+                  //       child: AvaialbleTripsButton(
+                  //         title: LocaleKeys.message.localize,
+                  //         color: (pickMeCardEntity.isApproved ?? false)
+                  //             ? AppColors.PRIMARY_COLOR
+                  //             : AppColors.DARK_GRAY_COLOR,
+                  //         icon: Icons.email,
+                  //         onTap: messageOnTap,
+                  //       ),
+                  //     ),
+                  //     const Sizer(width: 5),
+                  //     Expanded(
+                  //       flex: 3,
+                  //       child: AvaialbleTripsButton(
+                  //         title: LocaleKeys.report.localize,
+                  //         // color: testColor,
+                  //         color: AppColors.getSecondryColor(context),
+                  //         icon: Icons.report,
+                  //         onTap: reportOnTap,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
 
                   // RequestButton
                   //  CallMessageButtons(

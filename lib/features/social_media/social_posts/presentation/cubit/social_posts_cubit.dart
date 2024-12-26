@@ -121,9 +121,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._searchUsersUsecase,
   ) : super(const SocialPostsState());
 
-
   final shareFormKey = GlobalKey<FormState>();
-
 
   void loadData() async {
     await getFeed(1);
@@ -175,20 +173,30 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     });
   }
 
-  void loadReplies(BuildContext context, String commentId) async {
-    await getCommentReplies(context: context, commentId: commentId, page: 1);
+  void loadReplies(BuildContext context, String commentId,
+      {CommentEntity? comment}) async {
+    await getCommentReplies(
+        context: context, commentId: commentId, page: 1, comment: comment);
     commentsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getCommentReplies(context: context, commentId: commentId, page: pageKey);
+      getCommentReplies(
+          context: context,
+          commentId: commentId,
+          page: pageKey,
+          comment: comment);
     });
   }
 
-  void loadPostDetails(BuildContext context, String postId) async {
+  void loadPostDetails(BuildContext context, String postId,
+      {CommentEntity? comment}) async {
+    print("objectCOOOMMM$comment");
     await getPostDetails(postId);
-    await getPostComments(context: context, postId: postId, page: 1);
+    await getPostComments(
+        context: context, postId: postId, page: 1, comment: comment);
     commentsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getPostComments(context: context, postId: postId, page: pageKey);
+      getPostComments(
+          context: context, postId: postId, comment: comment, page: pageKey);
     });
   }
 
@@ -621,7 +629,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
             ?.firstWhere((element) => element.id == params.postId);
         print("comment count${currentPost?.commentsCount}");
 
-        currentPost?.commentsCount = (currentPost.commentsCount! + 1);
+        currentPost?.commentsCount = (currentPost.commentsCount + 1);
       }
       emit(state.copyWith(status: StateStatus.success));
     });
@@ -643,7 +651,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
             ?.firstWhere((element) => element.id == params.postId);
         print("commmmmment count${currentPost?.commentsCount}");
 
-        currentPost?.commentsCount = (currentPost.commentsCount! + 1);
+        currentPost?.commentsCount = (currentPost.commentsCount + 1);
       }
 
       emit(state.copyWith(newComment: data, status: StateStatus.success));
@@ -659,6 +667,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   Future<void> getPostComments(
       {required BuildContext context,
       required String postId,
+      CommentEntity? comment,
       required int page}) async {
     final response = await _getPostCommentsUseCase(
       PostCommentsParams(
@@ -671,18 +680,24 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
         (data) {
+      List<CommentEntity> list =
+          data.where((element) => element.id != comment?.id).toList();
       final isLastPage = data.length < pageSize;
       if (page == 1) {
         print("page == 1 $page");
         commentsPagingController.itemList = [];
+        if (comment != null) {
+          print("objectadadsadsa");
+          commentsPagingController.itemList?.insert(0, comment);
+        }
       }
       if (isLastPage) {
         print("isLastPage = $isLastPage");
-        commentsPagingController.appendLastPage(data);
+        commentsPagingController.appendLastPage(list);
       } else {
         print("isNotLastPage = $isLastPage");
         final nextPageKey = page + 1;
-        commentsPagingController.appendPage(data, nextPageKey);
+        commentsPagingController.appendPage(list, nextPageKey);
       }
       emit(
         state.copyWith(
@@ -699,6 +714,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   Future<void> getCommentReplies(
       {required BuildContext context,
       required String commentId,
+      CommentEntity? comment,
       required int page}) async {
     final response = await _getPostCommentRepliesUseCase(
       PostCommentsParams(
@@ -711,18 +727,24 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
         (data) {
+      List<CommentEntity> list =
+          data.where((element) => element.id != comment?.id).toList();
       final isLastPage = data.length < pageSize;
       if (page == 1) {
         print("page == 1 $page");
         repliesPagingController.itemList = [];
+        if (comment != null) {
+          print("objectadadsadsa");
+          repliesPagingController.itemList?.insert(0, comment);
+        }
       }
       if (isLastPage) {
         print("isLastPage = $isLastPage");
-        repliesPagingController.appendLastPage(data);
+        repliesPagingController.appendLastPage(list);
       } else {
         print("isNotLastPage = $isLastPage");
         final nextPageKey = page + 1;
-        repliesPagingController.appendPage(data, nextPageKey);
+        repliesPagingController.appendPage(list, nextPageKey);
       }
       emit(
         state.copyWith(
@@ -760,11 +782,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
             ?.firstWhere((element) => element.id == postId);
         print("commmmmment count${currentPost?.commentsCount}");
 
-        currentPost?.commentsCount = (currentPost.commentsCount! - 1);
+        currentPost?.commentsCount = (currentPost.commentsCount - 1);
       } else {
         if (state.postDetails != null) {
           state.postDetails?.commentsCount =
-              (state.postDetails!.commentsCount! - 1);
+              (state.postDetails!.commentsCount - 1);
         }
       }
       emit(state.copyWith(status: StateStatus.success));
@@ -831,9 +853,10 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       {required BuildContext context, required String userId}) async {
     final response = await _followUserUseCase(userId);
     bool isFollow = false;
-    response.fold(
-        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-        (r) {
+    response.fold((l) {
+      showErrorMessage(context, getFailureMessage(l, context));
+      emit(state.copyWith(failure: l, status: StateStatus.error));
+    }, (r) {
       isFollow = r;
       emit(state.copyWith(friendRequest: r, status: StateStatus.success));
     });
@@ -890,7 +913,8 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 
   // share post
   Future<bool> onShare({required String postId}) async {
-    var response = await _sharePostUseCase(SharePostParams(postId: postId,content: content??''));
+    var response = await _sharePostUseCase(
+        SharePostParams(postId: postId, content: content ?? ''));
     var value = false;
     response.fold(
         (failure) =>

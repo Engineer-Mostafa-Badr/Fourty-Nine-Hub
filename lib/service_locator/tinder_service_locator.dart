@@ -1,9 +1,7 @@
-import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/data_sources/tinder_data_source.dart';
-import 'package:fourtyninehub/features/social_media/tinder/data/repositories/tinder_repository_impl.dart';
-import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/add_favourite_category_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/chech_user_nearby_use_case.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/delete_tinder_picture_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_favourites_category_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_favourites_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/fetch_gifts_use_case.dart';
@@ -13,8 +11,8 @@ import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_t
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_user_data_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/send_geft_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/upload_tinder_picture_use_case.dart';
-import 'package:get_it/get_it.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
+import 'package:get_it/get_it.dart';
 
 class TinderServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
@@ -22,8 +20,8 @@ class TinderServiceLocator {
         () => TinderRemoteDataSourceImpl(
               serviceLocator(),
             ));
-    serviceLocator.registerLazySingleton<TinderRepository>(
-        () => TinderRepositoryImpl(serviceLocator()));
+    // serviceLocator.registerLazySingleton<TinderRepository>(
+    //     () => TinderRepositoryImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<GetTinderProfileUseCase>(
         () => GetTinderProfileUseCase(
@@ -63,10 +61,10 @@ class TinderServiceLocator {
               serviceLocator(),
             ));
 
-    serviceLocator.registerLazySingleton<GetMainCategoryDetailsUseCase>(
-        () => GetMainCategoryDetailsUseCase(
-              serviceLocator(),
-            ));
+    // serviceLocator.registerLazySingleton<GetMainCategoryDetailsUseCase>(
+    //     () => GetMainCategoryDetailsUseCase(
+    //           serviceLocator(),
+    //         ));
 
     serviceLocator.registerLazySingleton<GetTinderFavouritesCategoryUseCase>(
         () => GetTinderFavouritesCategoryUseCase(
@@ -80,5 +78,26 @@ class TinderServiceLocator {
         () => AddTinderFavouriteCategoryUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<DeleteTinderPictureUseCase>(
+        () => DeleteTinderPictureUseCase(
+              serviceLocator(),
+            ));
+
+    serviceLocator.registerFactory<TinderViewCubit>(() => TinderViewCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+    ));
   }
-}
+  }

@@ -7,6 +7,7 @@ class TwitterPostModel extends TwitterPostEntity {
   TwitterPostModel(
       {required super.id,
       required super.content,
+      super.postShare,
       required super.createdAt,
       super.commentsCount,
       super.images,
@@ -25,6 +26,9 @@ class TwitterPostModel extends TwitterPostEntity {
     return TwitterPostModel(
       id: json['_id'],
       content: json['content'],
+      postShare: json['mainPost'] != null
+          ? TwitterMainPostModel.fromJson(json['mainPost'])
+          : null,
       images: json['media'] != null
           ? List<String>.from(
               json['media'].map((mediaItem) => mediaItem['photo']))
@@ -37,9 +41,13 @@ class TwitterPostModel extends TwitterPostEntity {
       isReact: json['isReact'] ?? false,
       photo: json['photo'] ?? '',
       mainPost: json['mainPost'] != null
-          ? json['mainPost'] is String
-              ? json['mainPost']
-              : TwitterMainPostModel.fromJson(json['mainPost'])
+          ? (json['mainPost'] is Map<String, dynamic>)
+              ? TwitterMainPostModel.fromJson(json['mainPost']) // Single post
+              : (json['mainPost'] is List<dynamic>)
+                  ? json['mainPost']
+                      .map((item) => TwitterMainPostModel.fromJson(item))
+                      .toList() // Multiple posts
+                  : null
           : null,
       user: json['user'] is String
           ? json['user']

@@ -15,15 +15,20 @@ class PreloadBloc extends Cubit<PreloadState> {
     emit(state.copyWith(isLoading: isLoading));
   }
 
+  void resetFocusedIndex(int index) {
+    emit(state.copyWith(focusedIndex: 0, reloadCounter: 0));
+    _disposeControllerAtIndex(index);
+  }
+
   // Fetch videos from the API and initialize controllers for the first videos
   Future<void> getVideosFromApi() async {
     setLoading(true);
     try {
       log('Fetching videos from API');
-      final List<String> _urls = await getReelVideos();
-      log('Fetched URLs: $_urls');
+      final List<String> urls = await getReelVideos();
+      log('Fetched URLs: $urls');
 
-      final updatedUrls = List<String>.from(state.urls)..addAll(_urls);
+      final updatedUrls = List<String>.from(state.urls)..addAll(urls);
       log('message urls: ${updatedUrls.length}');
       emit(state.copyWith(
         urls: updatedUrls,
@@ -92,7 +97,7 @@ class PreloadBloc extends Cubit<PreloadState> {
 
   Future<void> _initializeControllerAtIndex(int index) async {
     final controller =
-    VideoPlayerController.networkUrl(state.urls[index].toUri);
+        VideoPlayerController.networkUrl(state.urls[index].toUri);
     state.controllers[index] = controller;
 
     await controller.initialize();
@@ -116,5 +121,11 @@ class PreloadBloc extends Cubit<PreloadState> {
     final controller = state.controllers.remove(index);
     controller?.dispose();
     log('🚀🚀🚀 DISPOSED $index');
+  }
+
+  void _disposeAllControllers() {
+    for (var controller in state.controllers.values) {
+      controller.dispose();
+    }
   }
 }

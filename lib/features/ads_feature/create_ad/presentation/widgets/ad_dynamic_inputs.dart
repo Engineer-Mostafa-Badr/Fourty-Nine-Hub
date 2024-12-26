@@ -24,7 +24,8 @@ class AdDynamicInputWidget extends StatefulWidget {
       {super.key,
       required this.property,
       required this.onChanged,
-      required this.onTextChanged, required this.selectedProp});
+      required this.onTextChanged,
+      required this.selectedProp});
 
   @override
   State<AdDynamicInputWidget> createState() => _AdDynamicInputWidgetState();
@@ -138,7 +139,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
     required List<SelectionEntity> values,
   }) {
     return Scaffold(
-      appBar:  BackAppBar(
+      appBar: BackAppBar(
         label: LocaleKeys.select.localize,
       ),
       body: ListView.builder(

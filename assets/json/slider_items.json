@@ -23,6 +23,27 @@
                 "title":"Yellow Card",
                 "sub_title":"Get Yellow card from fawry branch if you got 300 L.E",
                 "image":"https://techbuild.africa/wp-content/uploads/2023/07/Untitled-design-48.png"
+            },
+            {
+                "id":1,
+                "route":"/Wallet",
+                "title":"Mobile Bill",
+                "sub_title":"Get 10% cashback on your mobile bill",
+                "image":"https://g.top4top.io/p_3280zux2l1.png"
+            },
+            {
+                "id":1,
+                "route":"/Wallet",
+                "title":"Traffic violation",
+                "sub_title":"Get 10% cashback on your traffic violation bill",
+                "image":"https://j.top4top.io/p_3280j2vap1.jpg"
+            },
+            {
+                "id":1,
+                "route":"/Wallet",
+                "title":"Electricity Bill",
+                "sub_title":"Get 10% cashback on your electricity bill",
+                "image":"https://i.top4top.io/p_3280hadqx1.jpg"
             }
 
         ]

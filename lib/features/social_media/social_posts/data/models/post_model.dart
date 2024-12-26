@@ -1,58 +1,66 @@
 import 'package:fourtyninehub/features/social_media/create_post/data/models/activity_model.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/models/feeling_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/instagram_post_model.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/data/models/audio_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/location_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/main_post_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
 
 class PostModel extends PostEntity {
-  PostModel(
-      {required super.id,
-      super.content,
-      super.location,
-      super.createdAt,
-      super.createAt,
-      required super.type,
-      super.angryCount,
-      super.commentsCount,
-      super.images,
-      super.users,
-      super.isShared,
-      super.likesCount,
-      super.loveCount,
-      super.totalCount,
-      super.hahaCount,
-      super.sadCount,
-      super.commentPrivacy,
-      super.privacy,
-      super.sharesCount,
-      super.isLove,
-      super.isLikes,
-      super.isWow,
-      super.isSad,
-      super.isAngry,
-      super.isHaha,
-      super.activity,
-      super.feeling,
-      super.backgroundColor,
-      super.comments,
-      super.firstComment,
-      super.love,
-      super.isReact,
-      super.shares,
-      super.isDocumentation,
-      super.advertisementType,
-      super.post,
-      super.description,
-      super.mainPost,
-      super.isApproved,
-      required super.user,
-      super.wowCount,
-      super.name,
-      super.videoMedia,
-      super.audioMedia,
-      required super.photo});
+  PostModel({
+    required super.id,
+    super.content,
+    super.location,
+    super.createdAt,
+    super.createAt,
+    required super.type,
+    required super.audio,
+    super.angryCount,
+    super.commentsCount,
+    super.images,
+    super.users,
+    super.isShared,
+    super.likesCount,
+    super.loveCount,
+    super.totalCount,
+    super.hahaCount,
+    super.sadCount,
+    super.commentPrivacy,
+    super.privacy,
+    super.sharesCount,
+    super.isLove,
+    super.isLikes,
+    super.isWow,
+    super.isSad,
+    super.isAngry,
+    super.isHaha,
+    super.activity,
+    super.feeling,
+    super.backgroundColor,
+    super.comments,
+    super.firstComment,
+    super.isReact,
+    super.shares,
+    super.isDocumentation,
+    super.advertisementType,
+    super.post,
+    super.description,
+    super.mainPost,
+    super.isApproved,
+    required super.user,
+    super.wowCount,
+    super.name,
+    super.videoMedia,
+    super.audioMedia,
+    required super.photo,
+    required super.angryUsers,
+    required super.hahaUsers,
+    required super.likedUsers,
+    required super.loveUsers,
+    required super.sadUsers,
+    required super.wowUsers,
+  });
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
         id: json['_id'],
@@ -62,8 +70,8 @@ class PostModel extends PostEntity {
             : null,
         type: json['type'] ?? '',
         images: json['media'] != null
-            ? List<String>.from(
-                json['media'].map((mediaItem) => mediaItem['photo']))
+            ? List<String>.from(json['media'].map(
+                (mediaItem) => mediaItem['photo'] ?? mediaItem['mediaKey']))
             : null,
         isShared: json['isShared'] ?? false,
         advertisementType: json['advertisement_type'] ?? '',
@@ -109,7 +117,8 @@ class PostModel extends PostEntity {
         createdAt: json['createdAt'] != null
             ? DateTime.parse(json['createdAt'])
             : null,
-        createAt: json['createAt']??'',
+        createAt:
+            json['createAt'] != null ? DateTime.parse(json['createAt']) : null,
         shares: json['shares'] != null ? List<String>.from(json['shares']) : [],
         commentsCount: json['commentsCount'] ?? 0,
         comments: json['comments'] == null
@@ -123,14 +132,50 @@ class PostModel extends PostEntity {
         firstComment: json['firstComment'] != null
             ? InstagramPostModel.fromJson(json['firstComment'])
             : null,
-        love: json['love'] == null
-            ? null
-            : (json['love'] as List)
-                .map((e) => TwitterUserModel.fromJson(e))
-                .toList(),
+        // love: json['love'] != null ? List<String>.from(json['love']) : [],
+        // love: json['love'] == null
+        //     ? null
+        //     : (json['love'] as List)
+        //     .map((e) => TwitterUserModel.fromJson(e))
+        //     .toList(),
         users: json['with'] == null
             ? null
             : (json['with'] as List)
+                .map((e) => TwitterUserModel.fromJson(e))
+                .toList(),
+        audio: json['audios'] == null
+            ? null
+            : (json['audios'] as List)
+                .map((e) => AudioModel.fromJson(e))
+                .toList(),
+        likedUsers: json['likedUsers'] == null
+            ? null
+            : (json['likedUsers'] as List)
+                .map((e) => TwitterUserModel.fromJson(e))
+                .toList(),
+        sadUsers: json['sadUsers'] == null
+            ? null
+            : (json['sadUsers'] as List)
+                .map((e) => TwitterUserModel.fromJson(e))
+                .toList(),
+        wowUsers: json['wowUsers'] == null
+            ? null
+            : (json['wowUsers'] as List)
+                .map((e) => TwitterUserModel.fromJson(e))
+                .toList(),
+        hahaUsers: json['hahaUsers'] == null
+            ? null
+            : (json['hahaUsers'] as List)
+                .map((e) => TwitterUserModel.fromJson(e))
+                .toList(),
+        angryUsers: json['angryUsers'] == null
+            ? null
+            : (json['angryUsers'] as List)
+                .map((e) => TwitterUserModel.fromJson(e))
+                .toList(),
+        loveUsers: json['loveUsers'] == null
+            ? null
+            : (json['loveUsers'] as List)
                 .map((e) => TwitterUserModel.fromJson(e))
                 .toList(),
         photo: json['photo'] ?? '',

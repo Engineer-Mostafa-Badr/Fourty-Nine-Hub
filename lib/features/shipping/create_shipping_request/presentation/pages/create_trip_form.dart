@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
@@ -23,6 +24,8 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card_selected.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../../common/widgets/stateful/maps/map_picker.dart';
@@ -113,15 +116,13 @@ class _CreateTripFormState extends State<CreateTripForm> {
                               nameEn: state.model.mainCategory?.nameEn,
                               id: state.model.mainCategory?.mainCategoryId ??
                                   "",
-                              name:
-                                  LocaleKeys.chooseYourFavoriteSubCategory.tr(),
                               image: state.model.mainCategory?.cover ?? "",
                               isFavorite: true,
                               total:
                                   state.model.mainCategory?.driverLength ?? 0,
                               cover: state.model.mainCategory?.cover ?? "",
                               banner: state.model.mainCategory?.banner ?? "",
-                              subcategories:
+                              subcategories: state.editedCategoryList ??
                                   sortList(state.model.subCategories)!
                                       .map(
                                         (e) => SubCategoryEntity(
@@ -129,8 +130,8 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                             numberOfContent: e.driverCount,
                                             image: e.picture!,
                                             isFavorite: e.isFavorite ?? false,
-                                            nameEn: e.subCategoryNameEn??'',
-                                            nameAr: e.subCategoryNameAr??''),
+                                            nameEn: e.subCategoryNameEn ?? '',
+                                            nameAr: e.subCategoryNameAr ?? ''),
                                       )
                                       .toList()),
                         ),
@@ -174,6 +175,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                           children: [
                             Expanded(
                               child: DefaultTextFormField(
+                                isAuthentcation: true,
                                 margin: EdgeInsets.zero,
                                 validator: (value) {
                                   return shippingcubit.validation(
@@ -192,6 +194,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                             ),
                             Expanded(
                               child: DefaultTextFormField(
+                                isAuthentcation: true,
                                 margin: EdgeInsets.zero,
                                 constraints: const BoxConstraints(
                                     maxWidth: double.infinity),
@@ -218,15 +221,15 @@ class _CreateTripFormState extends State<CreateTripForm> {
                           children: [
                             Flexible(
                               child: DefaultTextFormField(
-                                  margin: EdgeInsets.zero,
-                                  validator: (value) {
-                                    return shippingcubit.validation(
-                                        message: LocaleKeys
-                                            .youHaveToFillYourTime
-                                            .tr(),
-                                        condition: time == null);
-                                  },
-                                  onTap: () async {
+                                margin: EdgeInsets.zero,
+                                validator: (value) {
+                                  return shippingcubit.validation(
+                                      message:
+                                          LocaleKeys.youHaveToFillYourTime.tr(),
+                                      condition: time == null);
+                                },
+                                onTap: () async {
+                                  if (context.isUserLoggedIn) {
                                     TimeOfDay? pickedTime =
                                         await showTimePicker(
                                             context: context,
@@ -234,21 +237,26 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                     if (pickedTime != null) {
                                       time = pickedTime;
                                     }
-                                    setState(() {});
-                                  },
-                                  readOnly: true,
-                                  currentController: TextEditingController(),
-                                  currentFocusNode: FocusNode(),
-                                  // hint: "نقطة الاستلام",
-                                  hint: time != null
-                                      ? "${time!.hour}:${time!.minute}"
-                                      : LocaleKeys.pickupTime.tr()),
+                                  } else {
+                                    context.push(Routes.LOGIN);
+                                  }
+
+                                  setState(() {});
+                                },
+                                readOnly: true,
+                                currentController: TextEditingController(),
+                                currentFocusNode: FocusNode(),
+                                hint: time != null
+                                    ? "${time!.hour.toString().padLeft(2, '0')}:${time!.minute.toString().padLeft(2, '0')}"
+                                    : LocaleKeys.pickupTime.tr(),
+                              ),
                             ),
                             const SizedBox(
                               width: 5,
                             ),
                             Flexible(
                               child: DefaultTextFormField(
+                                isAuthentcation: true,
                                 margin: EdgeInsets.zero,
                                 validator: (value) {
                                   return shippingcubit.validation(
@@ -257,13 +265,18 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                       condition: date == null);
                                 },
                                 onTap: () async {
-                                  DateTime? pickedDate = await showDatePicker(
-                                    context: context,
-                                    firstDate: DateTime.now(),
-                                    lastDate:
-                                        DateTime(DateTime.now().year + 150),
-                                  );
-                                  date = pickedDate;
+                                  if (context.isUserLoggedIn) {
+                                    DateTime? pickedDate = await showDatePicker(
+                                      context: context,
+                                      firstDate: DateTime.now(),
+                                      lastDate:
+                                          DateTime(DateTime.now().year + 150),
+                                    );
+                                    date = pickedDate;
+                                  } else {
+                                    context.push(Routes.LOGIN);
+                                  }
+
                                   setState(() {});
                                 },
                                 readOnly: true,
@@ -288,7 +301,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                               return LocaleKeys.youHaveToFillYourDescription
                                   .tr();
                             } else {
-                              if (regex.hasMatch(value ?? "")) {
+                              if (!regex.hasMatch(value ?? "")) {
                                 return null;
                               } else {
                                 return LocaleKeys
@@ -296,16 +309,17 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                     .tr();
                               }
                             }
-
-                            // return shippingcubit.validation(
-                            //     message: LocaleKeys.youHaveToFillYourDescription
-                            //         .tr(),
-                            //     condition: decoration.text.isEmpty);
                           },
                           controller: decoration,
                           minLines: 3,
                           maxLines: 3,
                           maxLength: 100,
+                          onChanged: (value) {
+                            log(value.toString());
+                            if (!context.isUserLoggedIn) {
+                              context.push(Routes.LOGIN);
+                            }
+                          },
                           focusNode: decorationFocusNode,
                           style:
                               const TextStyle(color: AppColors.QUANTITY_COLOR),
@@ -359,6 +373,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                           children: [
                             Expanded(
                               child: DefaultTextFormField(
+                                isAuthentcation: true,
                                 margin: EdgeInsets.zero,
                                 keyboardType: TextInputType.number,
                                 validator: (value) {
@@ -380,6 +395,7 @@ class _CreateTripFormState extends State<CreateTripForm> {
                             ),
                             Expanded(
                               child: DefaultTextFormField(
+                                isAuthentcation: true,
                                 style: Styles.smallText(),
                                 margin: EdgeInsets.zero,
                                 validator: (value) {
@@ -440,22 +456,29 @@ class _CreateTripFormState extends State<CreateTripForm> {
                                 label: LocaleKeys.request.tr(),
                                 style: Styles.headerText(color: Colors.white),
                                 onPressed: () async {
-                                  if (widget.formKey.currentState!.validate()) {
-                                    context.read<CreateTripCubit>().createTrip(
-                                          model: RequestModel(
-                                            date:
-                                                "${date!.year}/${date!.month}/${date!.day}",
-                                            deliveryPoint: deliveryPoint.text,
-                                            description: decoration.text,
-                                            offerPrice: offerPrice.text,
-                                            // tripImages: tripImages,
-                                            phone: phone.text,
-                                            subcategoryEntity: select,
-                                            receiptPoint: receiptPoint.text,
-                                            time:
-                                                "${time!.hour}:${time!.minute}",
-                                          ),
-                                        );
+                                  if (context.isUserLoggedIn) {
+                                    if (widget.formKey.currentState!
+                                        .validate()) {
+                                      context
+                                          .read<CreateTripCubit>()
+                                          .createTrip(
+                                            model: RequestModel(
+                                              date:
+                                                  "${date!.year}/${date!.month}/${date!.day}",
+                                              deliveryPoint: deliveryPoint.text,
+                                              description: decoration.text,
+                                              offerPrice: offerPrice.text,
+                                              // tripImages: tripImages,
+                                              phone: phone.text,
+                                              subcategoryEntity: select,
+                                              receiptPoint: receiptPoint.text,
+                                              time:
+                                                  "${time!.hour}:${time!.minute}",
+                                            ),
+                                          );
+                                    }
+                                  } else {
+                                    context.push(Routes.LOGIN);
                                   }
                                 },
                               ),
@@ -499,13 +522,15 @@ class _CreateTripFormState extends State<CreateTripForm> {
   }) {
     final shippingCubit = context.read<ShippingCubit>();
     ScrollController scrollController = ScrollController();
+    final riderCubit = context.read<RiderTripReelTimeCubit>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Label(
-          text: category.name,
-          style: Styles.headerText(fontWeight: FontWeight.w400),
-        ),
+        if (category.name != null)
+          Label(
+            text: category.name ?? "",
+            style: Styles.headerText(fontWeight: FontWeight.w400),
+          ),
         if (category.subcategories?.isNotEmpty ?? false)
           SizedBox(
             height: 80,
@@ -513,27 +538,85 @@ class _CreateTripFormState extends State<CreateTripForm> {
               controller: scrollController,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                return GestureDetector(onTap: () {
+                return GestureDetector(
+
+                    //   onTap: () {
+                    //   setState(() {
+                    //     shippingCubit.sortData(category.subcategories![index].id);
+                    //     scrollController.jumpTo(0);
+                    //     if (select != null) {
+                    //       if (select!.id == category.subcategories![index].id) {
+                    //         select = null;
+                    //       } else {
+                    //         select = category.subcategories![index];
+                    //       }
+                    //     } else {
+                    //       select = category.subcategories![index];
+                    //     }
+                    //     if (select != null) {
+                    //       shippingCubit.seSubCategoryRequest(subCategory: select!);
+                    //       context.read<SelectCateogryCubit>().select(
+                    //           id: category.subcategories![index].id, type: 1);
+                    //     }
+                    //   });
+                    // },
+                    onTap: () {
                   setState(() {
-                    shippingCubit.sortData(category.subcategories![index].id);
+                    List<SubCategoryEntity> workingList =
+                        category.subcategories!.map((e) {
+                      return SubCategoryEntity(
+                        id: e.id,
+                        nameAr: e.nameAr,
+                        nameEn: e.nameEn,
+                        image: e.image,
+                        hasAuction: e.hasAuction ?? false,
+                        isFavorite: e.isFavorite ?? false,
+                        numberOfContent: e.numberOfContent ?? 0,
+                      );
+                    }).toList();
+
+                    final selectedSubCategory = workingList[index];
+                    // workingList.removeAt(index);
+                    // workingList.insert(0, selectedSubCategory);
+
+                    List<SubCategoryEntity> originalList =
+                        BlocProvider.of<ShippingCubit>(context)
+                            .bannerModel
+                            .subCategories!
+                            .map((e) => SubCategoryEntity(
+                                  id: e.subCategoryId ?? "",
+                                  nameAr: e.subCategoryNameAr ?? "",
+                                  nameEn: e.subCategoryNameEn ?? "",
+                                  image: e.picture ?? "",
+                                  hasAuction: false,
+                                  isFavorite: e.isFavorite ?? false,
+                                  numberOfContent: e.driverCount ?? 0,
+                                ))
+                            .toList();
+                    shippingCubit.sortData(
+                      selectedSubCategory.id,
+                      originalList: originalList,
+                    );
+
                     scrollController.jumpTo(0);
-                    if (select != null) {
-                      if (select!.id == category.subcategories![index].id) {
-                        select = null;
-                      } else {
-                        select = category.subcategories![index];
-                      }
+
+                    if (select != null &&
+                        select!.id == selectedSubCategory.id) {
+                      select = null;
                     } else {
-                      select = category.subcategories![index];
+                      select = selectedSubCategory;
                     }
+
                     if (select != null) {
                       shippingCubit.seSubCategoryRequest(subCategory: select!);
-                      context.read<SelectCateogryCubit>().select(
-                          id: category.subcategories![index].id, type: 1);
+                      context
+                          .read<SelectCateogryCubit>()
+                          .select(id: workingList[0].id, type: 1);
                     }
                   });
                 }, child: BlocBuilder<SelectCateogryCubit, RiderState>(
                   builder: (context, state) {
+                    log(state.toString(), name: "SuccessSelectCateogryState");
                     if (state is SuccessSelectCateogryState) {
                       if (state.type == 1) {
                         return SubcategoryCardSelected(

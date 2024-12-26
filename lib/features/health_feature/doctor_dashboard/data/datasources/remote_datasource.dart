@@ -5,8 +5,10 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/models/doctor_appointment_model.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/models/doctor_statistics_model.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/data/models/doctor_work_days_model.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_statistics_entity.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_work_days_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_appointments_by_day.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_id_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/update_doctor_personal_info_usecase.dart';
@@ -47,6 +49,7 @@ abstract class DoctorDashboardRemoteDataSource {
   Future<Either<Failure, bool>> updateProfilePhoto(String photoId);
 
   Future<Either<Failure, bool>> updateTimetable(DoctorTimetableParams params);
+  Future<Either<Failure, DoctorWorkDaysEntity>> getWorkDays();
 }
 
 class DoctorDashboardRemoteDataSourceImpl
@@ -164,6 +167,7 @@ class DoctorDashboardRemoteDataSourceImpl
 
   @override
   Future<Either<Failure, bool>> updateID(DoctorDocsParams params) async {
+    print("objectPArams ${params.toJson()}");
     final response = await _apiConsumer.post(
       EndPoints.updateDoctorID,
       data: params.toJson(),
@@ -174,9 +178,14 @@ class DoctorDashboardRemoteDataSourceImpl
 
   @override
   Future<Either<Failure, bool>> updatePersonalInfo(
-      DoctorPersonalInfoParams params) {
-    // TODO: implement updatePersonalInfo
-    throw UnimplementedError();
+      DoctorPersonalInfoParams params) async {
+    print("objectPArams ${params.toJson()}");
+    final response = await _apiConsumer.put(
+      EndPoints.createDoctor,
+      data: params.toJson(),
+    );
+
+    return response.fold((l) => Left(l), (r) => Right(r['status'] as bool));
   }
 
   @override
@@ -199,8 +208,20 @@ class DoctorDashboardRemoteDataSourceImpl
   }
 
   @override
-  Future<Either<Failure, bool>> updateTimetable(DoctorTimetableParams params) {
-    // TODO: implement updateTimetable
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> updateTimetable(
+      DoctorTimetableParams params) async {
+    final response = await _apiConsumer.post(EndPoints.updateDoctorTimeTable,
+        data: params.toJson());
+
+    return response.fold((l) => Left(l), (r) => Right(r['status'] as bool));
+  }
+
+  @override
+  Future<Either<Failure, DoctorWorkDaysEntity>> getWorkDays() async {
+    final response = await _apiConsumer.get(EndPoints.getDoctorWorkDays);
+    return response.fold(
+      (failure) => Left(failure),
+      (data) => Right(DoctorWorkDaysModel.fromJson(data['data'])),
+    );
   }
 }

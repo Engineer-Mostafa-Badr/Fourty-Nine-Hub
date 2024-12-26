@@ -10,8 +10,10 @@ import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_st
 import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
 
 abstract class StarRemoteDataSource {
-  Future<Either<Failure, List<StarEntity>>> fetchAllStar(StarPaginationParams params);
-  Future<Either<Failure, List<StarWinnerEntity>>> fetchWinnerStar(StarPaginationParams params);
+  Future<Either<Failure, List<StarEntity>>> fetchAllStar(
+      StarPaginationParams params);
+  Future<Either<Failure, List<StarWinnerEntity>>> fetchWinnerStar(
+      StarPaginationParams params);
 
   Future<Either<Failure, List<StarEntity>>> fetchMyStar();
 
@@ -25,7 +27,8 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
   StarRemoteDataSourceImpl(this._apiConsumer);
 
   @override
-  Future<Either<Failure, List<StarEntity>>> fetchAllStar(StarPaginationParams params) async {
+  Future<Either<Failure, List<StarEntity>>> fetchAllStar(
+      StarPaginationParams params) async {
     final response = await _apiConsumer.get(EndPoints.allStar(params));
 
     return response.fold(
@@ -67,24 +70,26 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
 
   @override
   Future<Either<Failure, bool>> deleteMyStar({required String id}) async {
-    final response =
-    await _apiConsumer.delete(EndPoints.deleteMyStar(id: id),);
+    final response = await _apiConsumer.delete(
+      EndPoints.deleteMyStar(id: id),
+    );
 
     return response.fold(
-          (failure) => Left(failure),
-          (response) {
+      (failure) => Left(failure),
+      (response) {
         return Right((response['status']));
       },
     );
   }
 
   @override
-  Future<Either<Failure, List<StarWinnerEntity>>> fetchWinnerStar(StarPaginationParams params) async {
+  Future<Either<Failure, List<StarWinnerEntity>>> fetchWinnerStar(
+      StarPaginationParams params) async {
     final response = await _apiConsumer.get(EndPoints.winnerStar(params));
 
     return response.fold(
-          (failure) => Left(failure),
-          (response) {
+      (failure) => Left(failure),
+      (response) {
         return Right((response['data'] as List)
             .map((e) => StarWinnerModel.fromJson(e))
             .toList());

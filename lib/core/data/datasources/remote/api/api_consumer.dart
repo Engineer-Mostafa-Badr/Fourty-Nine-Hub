@@ -338,7 +338,6 @@ class BaseApiConsumer extends ApiConsumer {
 
   Future<void> refreshToken() async {
     if (_token == null) return;
-
     final result = await post(
       EndPoints.refreshToken,
       data: {
@@ -353,7 +352,6 @@ class BaseApiConsumer extends ApiConsumer {
       (response) {
         final accessToken = response['data']['accessToken'] as String;
         final newToken = _token!.copyWith(accessToken: accessToken);
-
         attachToken(newToken);
         // _authLocalDataSource.saveUserTokens(newToken.toModel());
         CacheManager.saveAccessToken(accessToken);

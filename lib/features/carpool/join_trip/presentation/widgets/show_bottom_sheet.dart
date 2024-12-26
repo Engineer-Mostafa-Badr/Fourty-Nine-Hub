@@ -20,6 +20,7 @@ void showCreateRouteModalSheet(BuildContext context,
     required List<double> userLocation,
     required String tripId,
     required bool isComfort,
+    // required num comfortPrice,
     required num price}) {
   //  final joinTripCarpoolRepo = JoinTripCarpoolRepoImp(joinTripRemoteDataSource: null);
 
@@ -37,6 +38,7 @@ void showCreateRouteModalSheet(BuildContext context,
                 create: (context) => serviceLocator()),
           ],
           child: CreateRouteBottomSheet(
+            // comfortPrice: comfortPrice,
             seatId: seatId,
             tripId: tripId,
             userLocation: userLocation,
@@ -51,6 +53,7 @@ class CreateRouteBottomSheet extends StatefulWidget {
   bool isComfort;
   final num price;
   final String seatId;
+  // final num comfortPrice;
   final String tripId;
   final List<double> userLocation;
   CreateRouteBottomSheet(
@@ -58,6 +61,7 @@ class CreateRouteBottomSheet extends StatefulWidget {
       required this.isComfort,
       required this.price,
       required this.seatId,
+      // required this.comfortPrice,
       required this.tripId,
       required this.userLocation});
 
@@ -82,7 +86,6 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     joinTripCarPoolCubit.close();
     getCurrencyCubit.close();
     super.dispose();
@@ -144,32 +147,32 @@ class _CreateRouteBottomSheetState extends State<CreateRouteBottomSheet> {
                 ],
               ),
               const Sizer(),
-              !widget.isComfort
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(LocaleKeys.comfort.localize,
-                            style: Styles.headerText()),
-                        Transform.scale(
-                          scale: 0.8,
-                          child: Switch(
-                            value: localComfortToggle,
-                            onChanged: (value) {
-                              setState(() {
-                                localComfortToggle = !localComfortToggle;
-                              });
-                            },
-                            activeColor: AppColors.PRIMARY_COLOR,
-                            trackOutlineColor:
-                                const MaterialStatePropertyAll(Colors.grey),
-                            activeTrackColor: Colors.grey,
-                            inactiveTrackColor: Colors.white,
-                            inactiveThumbColor: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    )
-                  : const SizedBox(),
+              // !widget.isComfort
+              //     ? Row(
+              //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //         children: [
+              //           Text(LocaleKeys.comfort.localize,
+              //               style: Styles.headerText()),
+              //           Transform.scale(
+              //             scale: 0.8,
+              //             child: Switch(
+              //               value: localComfortToggle,
+              //               onChanged: (value) {
+              //                 setState(() {
+              //                   localComfortToggle = !localComfortToggle;
+              //                 });
+              //               },
+              //               activeColor: AppColors.PRIMARY_COLOR,
+              //               trackOutlineColor:
+              //                   const MaterialStatePropertyAll(Colors.grey),
+              //               activeTrackColor: Colors.grey,
+              //               inactiveTrackColor: Colors.white,
+              //               inactiveThumbColor: Colors.grey,
+              //             ),
+              //           ),
+              //         ],
+              //       )
+              //     : const SizedBox(),
               const Sizer(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,

@@ -8,7 +8,6 @@ import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/us
 import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/delete_cart_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/delete_food_from_cart_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/delete_food_usecase.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 
 import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
@@ -34,8 +33,16 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
   final DeleteCartUseCase _deleteCartUseCase;
   final DeleteFoodFromCartUseCase _deleteFoodFromCartUseCase;
 
-  RestaurantDetailsCubit(this._addToCartUseCase, this._getMealsUseCase,
-      this._getRestaurantDetailsUseCase, this.apiConsumer, this._deleteFoodUseCase, this._addFoodUseCase, this._changeQuantityUseCase, this._deleteCartUseCase, this._deleteFoodFromCartUseCase)
+  RestaurantDetailsCubit(
+      this._addToCartUseCase,
+      this._getMealsUseCase,
+      this._getRestaurantDetailsUseCase,
+      this.apiConsumer,
+      this._deleteFoodUseCase,
+      this._addFoodUseCase,
+      this._changeQuantityUseCase,
+      this._deleteCartUseCase,
+      this._deleteFoodFromCartUseCase)
       : super(const RestaurantDetailsState());
 
   loadInitialData({required String id}) async {
@@ -54,19 +61,22 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
   bool hasMoreData = true;
   int currentPage = 1;
   int pageSize = 10;
-  List<RestaurantMenu> menu=[];
+  List<RestaurantMenu> menu = [];
 
-  Future<void> getMeals({required String id,}) async {
-
+  Future<void> getMeals({
+    required String id,
+  }) async {
     if (!hasMoreData || isLoadingMore) return;
 
     isLoadingMore = true;
 
-    final response = await _getMealsUseCase(GetMealsParams(restaurantId: id, page: currentPage, limit: pageSize));
+    final response = await _getMealsUseCase(
+        GetMealsParams(restaurantId: id, page: currentPage, limit: pageSize));
 
     response.fold(
-          (failure) => emit(state.copyWith(failure: failure, status: RestaurantDetailsStates.error)),
-          (data) {
+      (failure) => emit(state.copyWith(
+          failure: failure, status: RestaurantDetailsStates.error)),
+      (data) {
         menu.addAll(data);
 
         if (data.length < pageSize) {
@@ -76,12 +86,13 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
         }
 
         isLoadingMore = false;
-        emit(state.copyWith(status: RestaurantDetailsStates.initState,meals: data));
+        emit(state.copyWith(
+            status: RestaurantDetailsStates.initState, meals: data));
       },
     );
   }
 
-   addToCart(context,
+  addToCart(context,
       {required String restaurantId,
       required String foodId,
       required int quantity}) async {
@@ -105,8 +116,8 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
       required int quantity}) async {
     bool result = false;
     emit(state.copyWith(status: RestaurantDetailsStates.addCart));
-    final response = await _changeQuantityUseCase(
-        ChangeQuantityParams(restaurantId: restaurantId, foodId: foodId, quantity: quantity));
+    final response = await _changeQuantityUseCase(ChangeQuantityParams(
+        restaurantId: restaurantId, foodId: foodId, quantity: quantity));
     response.fold((l) {
       showErrorMessage(context, getFailureMessage(l, context));
       emit(state.copyWith(failure: l, status: RestaurantDetailsStates.error));
@@ -121,20 +132,22 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
     emit(state.copyWith(status: RestaurantDetailsStates.addCart));
     List<SelectedMealModel> selectedMeals = state.selectedMeals ?? [];
     selectedMeals.removeAt(index);
-    emit(state.copyWith(status: RestaurantDetailsStates.success,selectedMeals: selectedMeals));
+    emit(state.copyWith(
+        status: RestaurantDetailsStates.success, selectedMeals: selectedMeals));
   }
 
-  Future<bool> removeItem({required String foodId,required BuildContext context}) async {
+  Future<bool> removeItem(
+      {required String foodId, required BuildContext context}) async {
     final res = await _deleteFoodUseCase(foodId);
     bool result = false;
     res.fold(
-          (failure) {
+      (failure) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Failed to delete item')),
         );
       },
-          (r) async {
-            result=true;
+      (r) async {
+        result = true;
       },
     );
 
@@ -169,7 +182,9 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
   }
 
   Future<void> fetchCart({bool? first = false}) async {
-    if(first==true)emit(state.copyWith(status: RestaurantDetailsStates.loading, cart: null));
+    if (first == true) {
+      emit(state.copyWith(status: RestaurantDetailsStates.loading, cart: null));
+    }
 
     const url = 'https://49dev.com/api/v1/food/getCart';
 
@@ -204,22 +219,23 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
     required String foodId,
   }) async {
     emit(state.copyWith(status: RestaurantDetailsStates.loading));
-      final response = await _deleteFoodFromCartUseCase(DeleteFoodFromCartParams(restaurantId: restaurantId, foodId: foodId));
+    final response = await _deleteFoodFromCartUseCase(
+        DeleteFoodFromCartParams(restaurantId: restaurantId, foodId: foodId));
 
-      response.fold(
-        (failure) {
-          emit(state.copyWith(
-            status: RestaurantDetailsStates.error,
-            failure: failure,
-          ));
-          showErrorMessage(context, getFailureMessage(failure, context));
-        },
-        (data) {
-          emit(state.copyWith(
-            status: RestaurantDetailsStates.initState,
-          ));
-        },
-      );
+    response.fold(
+      (failure) {
+        emit(state.copyWith(
+          status: RestaurantDetailsStates.error,
+          failure: failure,
+        ));
+        showErrorMessage(context, getFailureMessage(failure, context));
+      },
+      (data) {
+        emit(state.copyWith(
+          status: RestaurantDetailsStates.initState,
+        ));
+      },
+    );
   }
 
   Future<void> createPremiumOrder(
@@ -271,7 +287,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
         //           Expanded(
         //             child: Text(
         //               data['message'],
-        //               textScaleFactor: 1.0,
+        //               ,
         //               style: const TextStyle(
         //                 fontWeight: FontWeight.w500,
         //                 color: AppColors.QUANTITY_COLOR,
@@ -354,7 +370,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
         //           Expanded(
         //             child: Text(
         //               data['message'],
-        //               textScaleFactor: 1.0,
+        //               ,
         //               style: const TextStyle(
         //                 fontWeight: FontWeight.w500,
         //                 color: AppColors.QUANTITY_COLOR,

@@ -4,19 +4,22 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/phone_number_text_field.dart';
 import 'package:fourtyninehub/core/enums/gender_type.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/validator.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/info.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
-  const BookDoctorAppointmentPatientInfoCard({super.key});
-
+  const BookDoctorAppointmentPatientInfoCard({super.key, required this.type});
+  final String type;
   @override
   Widget build(BuildContext context) {
     final controller = context.read<BookDoctorAppointmentCubit>();
@@ -38,7 +41,7 @@ class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
               ),
             ),
             const Sizer(),
-            Text(Labels.gender, style: Styles.headerText()),
+            Text(LocaleKeys.gender.localize, style: Styles.headerText()),
             const _GenderSelector(),
             const Sizer(),
             Form(
@@ -56,7 +59,8 @@ class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
                       currentFocusNode: controller.ageFocusNode,
                       currentController: controller.ageController,
                       keyboardType: TextInputType.number,
-                      hint: Labels.age),
+                      fillColor: cardDarkColor(context),
+                      hint: context.isArabic ? 'العمر' : 'Age'),
                   const Sizer(),
                   DefaultTextFormField(
                       currentFocusNode: controller.notesFocusNode,
@@ -64,7 +68,17 @@ class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
                       keyboardType: TextInputType.text,
                       validator: (value) =>
                           Validator().shouldNotContainNumbers(value),
-                      hint: Labels.notes),
+                      hint: LocaleKeys.notes.localize),
+                  if (type == 'visitHome') ...[
+                    const Sizer(),
+                    DefaultTextFormField(
+                        currentFocusNode: controller.addressFocusNode,
+                        currentController: controller.addressController,
+                        keyboardType: TextInputType.text,
+                        validator: (value) =>
+                            Validator().emptyValidation(value),
+                        hint: LocaleKeys.address.localize)
+                  ],
                 ],
               ),
             ),
@@ -92,7 +106,8 @@ class __GenderSelectorState extends State<_GenderSelector> {
       children: [
         Expanded(
           child: RadioListTile<GenderType>(
-            title: Text(Labels.male, style: Styles.mediumText()),
+            title:
+                Text(LocaleKeys.maleUser.localize, style: Styles.mediumText()),
             value: GenderType.Male,
             groupValue: _selectedGender,
             onChanged: (value) {
@@ -107,7 +122,8 @@ class __GenderSelectorState extends State<_GenderSelector> {
         ),
         Expanded(
           child: RadioListTile<GenderType>(
-            title: Text(Labels.female, style: Styles.mediumText()),
+            title: Text(LocaleKeys.femaleUser.localize,
+                style: Styles.mediumText()),
             value: GenderType.Female,
             groupValue: _selectedGender,
             onChanged: (value) {

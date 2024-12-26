@@ -29,41 +29,50 @@ class UserAdsView extends StatelessWidget {
                 margin: EdgeInsetsDirectional.all(10.w),
                 child: Row(
                   children: [
-                    BadgedLabel(
-                        label: LocaleKeys.filter.localize,
-                        width: 170.h,
-                        icon: Icons.filter_alt_rounded,
-                        iconLeading: Icons.arrow_drop_down,
-
-                        onTap: () async {
-                          dynamic data = await context.push(Routes.FILTERADS,
-                              extra: CategorizationEntity(
-                                  mainCategory: params.mainCategory,
-                                  subCategory: params.subCategory));
-                          if (data != null) {
-                            controller.loadFilterData(
-                                model: data, filter: userType);
-                          }
-                        }),
-                    const Sizer(width: 5,),
-                    BadgedLabel(
-                        label: LocaleKeys.city.localize,
-                        width: 170.h,
-                        icon: Icons.filter_alt_rounded,
-                        iconLeading: Icons.arrow_drop_down,
-
-                        onTap: () async {
-                          dynamic data = await context.push(Routes.GOVERNORATEFILTERADS,
-                              extra: CategorizationEntity(
-                                  mainCategory: params.mainCategory,
-                                  subCategory: params.subCategory));
-                          if (data != null) {
-                            controller.state.city=data.cityId;
-                            controller.state.governorate=data.governorateId;
-                            controller.loadFilterData(
-                                model: data, filter: userType);
-                          }
-                        }),
+                    Expanded(
+                      child: BadgedLabel(
+                          label: LocaleKeys.filter.localize,
+                          width: 170.h,
+                          icon: Icons.filter_alt_rounded,
+                          padding: EdgeInsets.symmetric(
+                              vertical: 15.h, horizontal: 5.w),
+                          iconLeading: Icons.arrow_drop_down,
+                          onTap: () async {
+                            dynamic data = await context.push(Routes.FILTERADS,
+                                extra: CategorizationEntity(
+                                    mainCategory: params.mainCategory,
+                                    subCategory: params.subCategory));
+                            if (data != null) {
+                              controller.loadFilterData(
+                                  model: data, filter: userType);
+                            }
+                          }),
+                    ),
+                    const Sizer(
+                      width: 5,
+                    ),
+                    Expanded(
+                      child: BadgedLabel(
+                          label: LocaleKeys.city.localize,
+                          width: 170.h,
+                          padding: EdgeInsets.symmetric(
+                              vertical: 15.h, horizontal: 5.w),
+                          icon: Icons.filter_alt_rounded,
+                          iconLeading: Icons.arrow_drop_down,
+                          onTap: () async {
+                            dynamic data = await context.push(
+                                Routes.GOVERNORATEFILTERADS,
+                                extra: CategorizationEntity(
+                                    mainCategory: params.mainCategory,
+                                    subCategory: params.subCategory));
+                            if (data != null) {
+                              controller.state.city = data.cityId;
+                              controller.state.governorate = data.governorateId;
+                              controller.loadFilterData(
+                                  model: data, filter: userType);
+                            }
+                          }),
+                    ),
                   ],
                 ))),
         Expanded(

@@ -90,7 +90,9 @@ class NotificationModel extends NotificationEntity {
       titleTranslationCode: json['titleTranslationCode'] as String?,
       bodyTranslationCode: json['bodyTranslationCode'] as String?,
       path: json['path'] as String?,
-      gender: json['userInfo']!=null?json['userInfo']['gender'] as String?:'male',
+      gender: json['userInfo'] != null
+          ? json['userInfo']['gender'] as String?
+          : 'male',
       payload: json['metadata'] == null
           ? null
           : json['metadata'] as Map<String, dynamic>,

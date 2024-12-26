@@ -14,12 +14,11 @@ class SearchModel extends SearchEntity {
       main: (json['mainCategories'] as List)
           .map((e) => MainSubCategorySearchModel.fromJson(e))
           .toList(),
-      sub:  (json['subCategories'] as List)
+      sub: (json['subCategories'] as List)
           .map((e) => MainSubCategorySearchModel.fromJson(e))
           .toList(),
-      ads:  (json['ads'] as List)
-          .map((e) => AdsSearchModel.fromJson(e))
-          .toList(),
+      ads:
+          (json['ads'] as List).map((e) => AdsSearchModel.fromJson(e)).toList(),
     );
   }
 }

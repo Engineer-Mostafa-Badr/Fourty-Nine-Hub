@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
+import 'package:fourtyninehub/core/service/cache_service.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
@@ -30,6 +35,7 @@ abstract class MainTextFormField extends StatefulWidget {
   final bool readOnly;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
+  final bool isAuthentcation;
   final String? label;
   final Widget? prefix;
   final ValueChanged<String>? onChanged;
@@ -47,6 +53,7 @@ abstract class MainTextFormField extends StatefulWidget {
     this.labelWidget,
     this.prefix,
     this.readOnly = false,
+    this.isAuthentcation = false,
     this.noBoarder = false,
     this.nextFocusNode,
     required this.currentController,
@@ -111,7 +118,9 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         maxLength: widget.maxLength,
         expands: widget.expanded,
         enableSuggestions: widget.enableSuggestions,
-        style: const TextStyle(color: AppColors.QUANTITY_COLOR),
+        style: TextStyle(
+            color:
+                context.isDarkMode ? Colors.white : AppColors.QUANTITY_COLOR),
         textCapitalization: widget.textCapitalization,
         textAlignVertical:
             widget.expanded ? const TextAlignVertical(y: -0.8) : null,
@@ -119,13 +128,17 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         minLines: widget.minLines,
         decoration: InputDecoration(
           fillColor: widget.fillColor ??
-              (widget.enabled ? Colors.white : Colors.white),
+              (widget.enabled
+                  ? cardDarkColor(context)
+                  : cardDarkColor(context)),
           filled: true,
           contentPadding:
               widget.contentPadding ?? const EdgeInsets.fromLTRB(16, 0, 16, 0),
           hintText: widget.hintText,
           labelText: widget.label,
-          hintStyle: const TextStyle(color: AppColors.QUANTITY_COLOR),
+          hintStyle: TextStyle(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.QUANTITY_COLOR),
           suffixIcon: widget.suffixIcon,
           prefix: widget.prefix,
           label: widget.labelWidget,
@@ -169,13 +182,27 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         ),
         validator: widget.validator,
         onChanged: (text) {
-          if (text.isEmpty) {
-            setState(() => _currentDir = null);
+          if (widget.isAuthentcation) {
+            if (CacheServiceImpl().isLogin() ?? false) {
+              if (text.isEmpty) {
+                setState(() => _currentDir = null);
+              } else {
+                final dir = _getDirection(text);
+                if (dir != _currentDir) setState(() => _currentDir = dir);
+              }
+              (widget.onChanged ?? (_) {})(text);
+            } else {
+              context.push(Routes.LOGIN);
+            }
           } else {
-            final dir = _getDirection(text);
-            if (dir != _currentDir) setState(() => _currentDir = dir);
+            if (text.isEmpty) {
+              setState(() => _currentDir = null);
+            } else {
+              final dir = _getDirection(text);
+              if (dir != _currentDir) setState(() => _currentDir = dir);
+            }
+            (widget.onChanged ?? (_) {})(text);
           }
-          (widget.onChanged ?? (_) {})(text);
         },
         onFieldSubmitted: (String value) {
           FocusScope.of(context).requestFocus(widget.nextFocusNode);

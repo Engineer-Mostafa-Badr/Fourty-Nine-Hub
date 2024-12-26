@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/utils/date_time.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_states.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/wallet_card_widget.dart';
@@ -164,14 +164,10 @@ class BalanceWalletView extends StatelessWidget {
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
-                                    //  final item = state.history![index];
-                                    final DateTime createdAt = DateTime.parse(data[index].createdAt);
-                                    final DateTime egyptTime = createdAt.toUtc().add(const Duration(hours: 3));
-                                    final String formattedDateTime = DateFormat('dd/MM/yyyy, h:mm a').format(egyptTime);
 
                                     return WalletHistoryCard(
                                         title: '${data[index].transactionAmount}',
-                                        subTitle: formattedDateTime,
+                                        subTitle: formatDateTime(data[index].createdAt,context),
                                         onTap: () {},
                                         //amount: item.amount,
                                         icon: FontAwesomeIcons.check);

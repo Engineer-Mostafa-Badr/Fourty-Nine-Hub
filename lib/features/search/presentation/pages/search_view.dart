@@ -3,9 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/ads_search_view.dart';
+import 'package:fourtyninehub/features/search/presentation/pages/widget/come_with_me_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/main_category_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/posts_search_view.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/profile_search_view.dart';
@@ -31,7 +34,7 @@ class _SearchViewState extends State<SearchView>
   void initState() {
     context.read<SearchCubit>().initPref();
     super.initState();
-    _tabController = TabController(length: 7, vsync: this); // Updated length
+    _tabController = TabController(length: 9, vsync: this); // Updated length
   }
 
   @override
@@ -50,7 +53,7 @@ class _SearchViewState extends State<SearchView>
             Navigator.pop(context);
           },
         ),
-        title: BlocBuilder<SearchCubit,SearchState>(
+        title: BlocBuilder<SearchCubit, SearchState>(
           builder: (BuildContext context, state) {
             return Card(
               color: Colors.white,
@@ -65,22 +68,23 @@ class _SearchViewState extends State<SearchView>
                 ),
                 child: FormTextField(
                   controller: context.read<SearchCubit>().searchController,
-                  action: (v) async{
+                  action: (v) async {
                     if (v.isNotEmpty) {
                       final prefs = await SharedPreferences.getInstance();
-                      String? filter =  prefs.getString('filter');
-                      print('context.read<SearchCubit>().state.filter??''${filter??''}');
+                      String? filter = prefs.getString('filter');
+                      print('context.read<SearchCubit>().state.filter??'
+                          '${filter ?? ''}');
                       context.read<SearchCubit>().loadData(
-                        SearchParams(
-                          search: v,
-                          filter: filter??'',
-                          params: PaginationParams(page: 1),
-                        ),
-                      );
+                            SearchParams(
+                              search: v,
+                              filter: filter ?? '',
+                              params: PaginationParams(page: 1),
+                            ),
+                          );
                     }
                   },
                   height: 70.h,
-                  hint: 'Search',
+                  hint: LocaleKeys.search.localize,
                   borderRadius: BorderRadius.circular(40.r),
                   style: Styles.mediumText(color: AppColors.GREY_NORMAL_COLOR),
                   prefix: Icon(
@@ -98,33 +102,39 @@ class _SearchViewState extends State<SearchView>
           tabAlignment: TabAlignment.start,
           isScrollable: true,
           // Enable scrolling for the TabBar
-          onTap: (i)async{
+          onTap: (i) async {
             final prefs = await SharedPreferences.getInstance();
 
-            if(i==0){
+            if (i == 0) {
               await prefs.setString('filter', 'totalUsers');
-            }else if(i==1){
+            } else if (i == 1) {
               await prefs.setString('filter', 'reels');
-            }else if(i==2){
+            } else if (i == 2) {
               await prefs.setString('filter', 'posts');
-            }else if(i==3){
+            } else if (i == 3) {
               await prefs.setString('filter', 'mainCategories');
-            }else if(i==4){
+            } else if (i == 4) {
               await prefs.setString('filter', 'subCategories');
-            }else if(i==5){
+            } else if (i == 5) {
               await prefs.setString('filter', 'ads');
-            }else if(i==6){
-              await prefs.setString('filter', 'trip');
+            } else if (i == 6) {
+              await prefs.setString('filter', 'comeWithYouTrips');
+            } else if (i == 7) {
+              await prefs.setString('filter', 'carpoolTrips');
+            } else if (i == 8) {
+              await prefs.setString('filter', 'rideTrips');
             }
-            String? filter =  prefs.getString('filter');
+            String? filter = prefs.getString('filter');
 
-            print('context.read<SearchCubit>().state.filter??''${filter??''}');
-              context.read<SearchCubit>().loadData(SearchParams(
-                search: context.read<SearchCubit>().searchController.text,
-                filter: filter??'',
-                params: PaginationParams(page: 1),
-              ));
-            print('context.read<SearchCubit>().state.filter1??''${filter??''}');
+            print(
+                'context.read<SearchCubit>().state.filter??' '${filter ?? ''}');
+            context.read<SearchCubit>().loadData(SearchParams(
+                  search: context.read<SearchCubit>().searchController.text,
+                  filter: filter ?? '',
+                  params: PaginationParams(page: 1),
+                ));
+            print('context.read<SearchCubit>().state.filter1??'
+                '${filter ?? ''}');
           },
           controller: _tabController,
           labelColor: Theme.of(context).primaryColor,
@@ -132,29 +142,33 @@ class _SearchViewState extends State<SearchView>
           indicatorColor: AppColors.SECONDARY_COLOR,
           dividerColor: AppColors.GREY_LIGHT_COLOR,
           padding: EdgeInsets.only(right: 40.w),
-          labelPadding:  EdgeInsets.only(left: 20.w),
+          labelPadding: EdgeInsets.only(left: 20.w),
           labelStyle: Styles.mediumText(fontSize: 32),
-          tabs: const [
-            Tab(text: 'Profile'),
-            Tab(text: 'Reel'),
-            Tab(text: 'Post'),
-            Tab(text: 'Main Category'),
-            Tab(text: 'Sub Category'),
-            Tab(text: 'Ads'),
-            Tab(text: 'Trip'),
+          tabs: [
+            Tab(text: LocaleKeys.profile.localize),
+            Tab(text: LocaleKeys.reel.localize),
+            Tab(text: LocaleKeys.post.localize),
+            Tab(text: LocaleKeys.mainCategory.localize),
+            Tab(text: LocaleKeys.subCategory.localize),
+            Tab(text: LocaleKeys.ads.localize),
+            Tab(text: LocaleKeys.comeWithMe.localize),
+            Tab(text: LocaleKeys.carpool.localize),
+            Tab(text: LocaleKeys.ride.localize),
           ],
         ),
       ),
       body: TabBarView(
         controller: _tabController,
         physics: const NeverScrollableScrollPhysics(),
-        children:  const [
+        children: const [
           ProfileSearchView(),
           ReelSearchView(),
           PostsSearchView(),
           MainCategorySearchView(),
           SubCategorySearchView(),
-            AdsSearchView(),
+          AdsSearchView(),
+          ComeWithMeSearchView(),
+          Center(child: Text('Trip')),
           Center(child: Text('Trip')),
         ],
       ),

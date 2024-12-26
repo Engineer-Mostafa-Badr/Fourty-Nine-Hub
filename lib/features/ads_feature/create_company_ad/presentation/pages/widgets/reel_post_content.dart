@@ -70,7 +70,7 @@ class ReelsScreenState extends State<ReelsScreen> {
       },
       builder: (context, state) {
         return PaginationView<CompanyAdEntity>(
-         // loadingWidget: const SizedBox.shrink(),
+          // loadingWidget: const SizedBox.shrink(),
           build:
               (ScrollController scrollController, List<CompanyAdEntity> data) {
             if (data.isEmpty) {

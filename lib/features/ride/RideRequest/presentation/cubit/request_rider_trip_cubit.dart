@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 
 class RequestRiderTripCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repository;
+  SuccessRequestTripModel? trip;
   RequestRiderTripCubit({required this.repository}) : super(RiderInitial());
   request({required TripRequestModel model}) async {
     var response = await repository.request(model: model);
@@ -17,8 +18,10 @@ class RequestRiderTripCubit extends Cubit<RiderState> {
       },
       (data) {
         log(data.toString(), name: "lsjfsdfjklkkkkkkkkkkkllllllksdlklkkk");
-        emit(SuccessRequestTripState(
-            model: SuccessRequestTripModel.fromJson(data['data'])));
+        SuccessRequestTripModel model =
+            SuccessRequestTripModel.fromJson(data['data']);
+        trip = model;
+        emit(SuccessRequestTripState(model: model));
       },
     );
   }

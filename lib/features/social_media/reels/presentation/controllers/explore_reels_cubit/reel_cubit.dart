@@ -1,9 +1,9 @@
-import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -25,10 +25,11 @@ import 'package:fourtyninehub/features/social_media/reels/domain/use_case/reels_
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/save_reel_use_case.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/share_reel_use_case.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/toggle_comment_like_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_reel_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_video_reel_use_case.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/media_preview.dart';
 import 'package:fourtyninehub/res/style/const.dart';
-import 'package:http/http.dart' as http;
-
-import '../../../../../../core/utils/shared_pref.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/data_sources/reels_remote_data_source.dart';
 
@@ -38,7 +39,7 @@ class ReelsCubit extends Cubit<ReelsState> {
   final CreateReelUseCase _createReelUseCase;
   final CreateAdvertisementUseCase _advertisementUseCase;
   final GetExploreReelsUseCase _getExploreReelsUseCase;
-  final GetFollowersReelsUseCase _getFollowersReelsUseCase;
+  final GetFollowingReelsUseCase _getFollowingReelsUseCase;
   final SaveReelUseCase _saveReelUseCase;
   final ShareReelUseCase _shareReelUseCase;
   final LikeReelUseCase _likeReelUseCase;
@@ -47,12 +48,14 @@ class ReelsCubit extends Cubit<ReelsState> {
   final GetCommentsUseCase _getCommentsUseCase;
   final ToggleCommentLikeUseCase _toggleCommentLikeUseCase;
   final ReelsWithSameAudioUseCase _reelsWithSameAudioUseCase;
+  final UploadReelUseCase _uploadReelUseCase;
+  final UploadVideoReelUseCase _uploadVideoReelUseCase;
 
   ReelsCubit(
       this._createReelUseCase,
       this._advertisementUseCase,
       this._getExploreReelsUseCase,
-      this._getFollowersReelsUseCase,
+      this._getFollowingReelsUseCase,
       this._saveReelUseCase,
       this._shareReelUseCase,
       this._likeReelUseCase,
@@ -60,7 +63,7 @@ class ReelsCubit extends Cubit<ReelsState> {
       this._addReplyUseCase,
       this._getCommentsUseCase,
       this._toggleCommentLikeUseCase,
-      this._reelsWithSameAudioUseCase)
+      this._reelsWithSameAudioUseCase, this._uploadReelUseCase, this._uploadVideoReelUseCase)
       : super(ReelsState());
 
   var pauseChild = false;
@@ -69,6 +72,11 @@ class ReelsCubit extends Cubit<ReelsState> {
     pauseChild = pause;
 
     emit(state);
+  }
+
+  void selectPrivacy({required String privacy}) {
+    emit(state.copyWith(selectedPrivacy: privacy));
+    print(state.selectedPrivacy);
   }
 
   Future<void> createReelView(String reelId, int duration) async {
@@ -85,61 +93,111 @@ class ReelsCubit extends Cubit<ReelsState> {
     );
   }
 
-  Future<void> uploadReel(
-    File videoFile, {
-    String? comeFrom,
-    String? totalPrice,
-    String? advertisementType,
+  Future<void> uploadReel({
+    required UploadReelParams params,
   }) async {
-    print('video size is  ${videoFile.lengthSync()} MB');
+    emit(state.copyWith(status: ReelsStates.loading));
 
-    // Step 1: Generate Signed URL
-    final token = await CacheManager.getAccessToken();
-    final response = await http.post(
-      Uri.parse(
-          'https://49dev.com/api/v1/reels?subCategory=66684135dbb427ee42aa0141'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
+    final response = await _uploadReelUseCase(params);
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: ReelsStates.error));
       },
-      body: jsonEncode({
-        "subcategoryId": "66684135dbb427ee42aa0141",
-        "isAudioOriginal": false,
-        "metadata": {
-          "name": videoFile.path.split('/').last,
-          "size": videoFile.lengthSync(),
-          "type": "video/mp4",
-          "videoWidth": 640,
-          // Adjust these values according to your video metadata
-          "videoHeight": 360,
-          "inputAudioId": "66ba3fb7baf9033183036cd0"
-        }
-      }),
+          (data) {
+        emit(state.copyWith(
+          status: ReelsStates.uploadSuccess,
+        ));
+      },
     );
+  }
+  Future<void> uploadVideoReel({
+    required UploadVideoReelParams params,
+  }) async {
+    emit(state.copyWith(status: ReelsStates.loading));
 
-    if (response.statusCode == 200) {
-      final responseData = json.decode(response.body);
-      log("${responseData['data']['signedUrl']}1111111111111111111111111111111111111111111111111111111111111111111111");
-      final signedUrl = responseData['data']['signedUrl'];
+    final response = await _uploadVideoReelUseCase(params);
 
-      // Step 2: Upload Video using the Signed URL
-      final uploadResponse = await http.put(
-        Uri.parse(signedUrl),
-        headers: {
-          'Content-Type': 'video/mp4',
-        },
-        body: videoFile.readAsBytesSync(),
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: ReelsStates.error));
+      },
+          (data) {
+        emit(state.copyWith(
+          status: ReelsStates.uploadSuccess,
+        ));
+      },
+    );
+  }
+
+  String? selectedVideo;
+  String? selectedImage;
+
+  Future<void> pickMediaFromGallery(BuildContext context) async {
+    final uploadFile = UploadFile2();
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'mp4', 'mov'],
       );
 
-      if (uploadResponse.statusCode == 200) {
-        log('Video uploaded successfully!>>>>${responseData['data']['mediaId']}/////////1111111111111111111111111111111111111111111111111111111111111111111111');
-        if (comeFrom == 'company') {
-          createAdvertisement([responseData['data']['mediaId']],
-              advertisementType!, double.parse(totalPrice!));
+      if (result != null && result.files.single.path != null) {
+        final pickedFile = XFile(result.files.single.path!);  // Use XFile here
+
+        // Determine file type
+        final fileType = pickedFile.path.split('.').last.toLowerCase();
+        final isImage = ['jpg', 'jpeg', 'png'].contains(fileType);
+
+        if (isImage) {
+          await uploadFile.uploadImage(
+            file: pickedFile,  // Pass XFile
+            subCategoryId: '66a3583454e6e337915514db',
+            onUploaded: (UploadFileEntity data) async {
+              print("Uploaded Image Media ID: ${data.mediaId}");
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MediaPreviewScreen(
+                    mediaId: data.mediaId,
+                    mediaPath: pickedFile.path,
+                    isImage: true,
+                  ),
+                ),
+              );
+            },
+          );
+        } else {
+          await uploadFile.uploadVideo(
+            file: pickedFile,  // Pass XFile
+            subCategoryId: '66a3583454e6e337915514db',
+            onUploaded: (UploadFileEntity data) async {
+              print("Uploaded Video Media ID: ${data.mediaId}");
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MediaPreviewScreen(
+                    mediaId: data.mediaId,
+                    mediaPath: pickedFile.path,
+                    isImage: false,
+                  ),
+                ),
+              );
+            },
+          );
         }
-      } else {}
-    } else {}
+      } else {
+        print("No media selected.");
+      }
+    } catch (e) {
+      print("Error picking media: $e");
+    }
   }
+
+
+
+
+
+
 
   Future<void> createAdvertisement(
       List<String> mediaIds, String type, double totalPrice) async {
@@ -155,18 +213,18 @@ class ReelsCubit extends Cubit<ReelsState> {
     );
   }
 
-
   bool isLoadingReelsMore = false;
   bool hasMoreReelsData = true;
   int currentReelPage = 1;
-  int reelPageSize = 10;
+  int reelPageSize = 100;
 
   Future<void> fetchReels() async {
     if ((state.globalReelsIsLoading ?? false) ||
         (state.globalReelsHasReachedMax ?? false)) return;
 
     emit(state.copyWith(isLoading: true));
-    final result = await _getExploreReelsUseCase(PaginationParams(page: currentReelPage,limit: reelPageSize));
+    final result = await _getExploreReelsUseCase(
+        PaginationParams(page: currentReelPage, limit: reelPageSize));
 
     result.fold(
       (failure) =>
@@ -191,15 +249,15 @@ class ReelsCubit extends Cubit<ReelsState> {
 
     emit(state.copyWith(reelsForFollowerIsLoading: true));
 
-    final result = await _getFollowersReelsUseCase(1);
+    final result = await _getFollowingReelsUseCase(1);
 
     result.fold(
       (failure) =>
           emit(state.copyWith(reelViewErrorMessage: failure.toString())),
       (data) {
         emit(state.copyWith(
-          reelsForFollower: [
-            ...state.reelsForFollower ?? [],
+          reelsForFollowing: [
+            ...state.reelsForFollowing ?? [],
             ...data.data.reels
           ],
           reelsForFollowerIsLoading: false,
@@ -218,9 +276,7 @@ class ReelsCubit extends Cubit<ReelsState> {
       (failure) =>
           emit(state.copyWith(reelViewErrorMessage: failure.toString())),
       (data) {
-        emit(state.copyWith(reelSaveResponse: data
-            // Add any state update logic here if necessary
-            ));
+        emit(state.copyWith(reelSaveResponse: data));
         message = data.message ?? '';
       },
     );
@@ -340,10 +396,8 @@ class ReelsCubit extends Cubit<ReelsState> {
         comments[parentCommentIndex].replies.insert(0, newReply);
       }
       if (comments[parentCommentIndex].replies.length == 1) {
-        print('first reply');
         _scrollToFirstReply();
       } else {
-        print('latest reply');
         _scrollToLatestReply();
       }
       emit(state.copyWith(
@@ -423,32 +477,31 @@ class ReelsCubit extends Cubit<ReelsState> {
     });
   }
 
-  Future<void> toggleCommentLike(String commentId, bool isReply,{String? replyId}) async {
+  Future<void> toggleCommentLike(String commentId, bool isReply,
+      {String? replyId}) async {
     emit(state.copyWith(isLikingComment: true));
-    final result = await _toggleCommentLikeUseCase(isReply==true?replyId??'':commentId);
+    final result = await _toggleCommentLikeUseCase(
+        isReply == true ? replyId ?? '' : commentId);
     result.fold((failure) {
-      print('failure message');
       emit(state.copyWith(
           isLikingComment: false,
           likeReelErrorMessage:
               'An error occurred while liking/unliking the comment'));
     }, (data) {
-      print("Toggle Like Result: $data"); // Debugging output
+      // Debugging output
 
       final updatedComments = comments.map((comment) {
         if (isReply) {
           // Debug: Check if we are updating a reply
-          print("Updating a reply with commentId: $commentId");
 
           final updatedReplies = comment.replies.map((reply) {
             if (reply.id == replyId) {
               // print("Found matching reply with id: ${reply.id}"); // Debugging output
 
               final isLiked = data == "like";
-            print('Updated replies: $isLiked');
-            print('Updated replies: ${reply.id}');
-            reply.isLiked = isLiked;
-            reply.likeCount = isLiked ? reply.likeCount + 1 : reply.likeCount - 1;
+              reply.isLiked = isLiked;
+              reply.likeCount =
+                  isLiked ? reply.likeCount + 1 : reply.likeCount - 1;
               return reply;
             }
             return reply;
@@ -459,21 +512,20 @@ class ReelsCubit extends Cubit<ReelsState> {
           return comment;
         } else {
           // Debug: Check if we are updating a main comment
-          print("Updating a main comment with commentId: $commentId");
 
           // If it's a main comment, update the main comment like data
           if (comment.id == commentId) {
-            print("Found matching main comment with id: ${comment.id}"); // Debugging output
+            // Debugging output
 
             final isLiked = data == "like";
-        print('Normal like $isLiked');
             // return comment.copyWith(
             //   isLiked: isLiked,
             //   likeCount:
             //       isLiked ? comment.likeCount + 1 : comment.likeCount - 1,
             // );
             comment.isLiked = isLiked;
-            comment.likeCount = isLiked ? comment.likeCount + 1 : comment.likeCount - 1;
+            comment.likeCount =
+                isLiked ? comment.likeCount + 1 : comment.likeCount - 1;
             return comment;
           }
         }
@@ -493,26 +545,19 @@ class ReelsCubit extends Cubit<ReelsState> {
 
   Future<void> fetchReelsWithSameAudio(String audioId,
       {bool isInitialLoad = false}) async {
-    if ((state.globalReelsIsLoading ?? false) ||
-        (state.globalReelsHasReachedMax ?? false)) return;
-
     emit(state.copyWith(isLoading: true));
-    final int pageToFetch =
-        isInitialLoad ? 1 : (state.globalReelsCurrentPage) + 1;
+
     final result = await _reelsWithSameAudioUseCase(
         ReelsWithSameAudioParams(audioId: audioId));
-    result.fold((failure) => emit(state.copyWith(isLoading: false)), (data) {
-      final bool hasReachedMax =
-          pageToFetch >= data.data!.pagination!.pageCount!;
+    result.fold((failure) {
+      emit(state.copyWith(isLoading: false));
+    }, (data) {
       final List<Reel> newReels = data.data?.reels ?? [];
       log("${newReels.first.user.firstName}----------------------------------------------------------------------------------------------");
 
       emit(state.copyWith(
-        reelsForAudio:
-            isInitialLoad ? newReels : [...?state.reelsForAudio, ...newReels],
+        reelsForAudio: [...state.reelsForAudio ?? [], ...newReels],
         isLoading: false,
-        hasReachedMax: hasReachedMax,
-        currentPage: pageToFetch,
       ));
     });
   }

@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 Future<void> openGoogleMapsWithRoute(
     String start, String end, String polyline) async {
   // Base URL for Google Maps
-  final String baseUrl = 'https://www.google.com/maps/dir/?api=1';
+  const String baseUrl = 'https://www.google.com/maps/dir/?api=1';
 
   // Format the URL for Google Maps with start, end, and polyline
   final String url =
@@ -26,7 +26,9 @@ class TestPolyLineWithGoogleMap extends StatelessWidget {
 
   // Define the start and end points
   final String startLocation = '30.1088,31.31545'; // Example: San Francisco
-  final String endLocation = '30.06141,31.33169'; // Example: Los Angeles
+  final String endLocation = '30.06141,31.33169';
+
+  const TestPolyLineWithGoogleMap({super.key}); // Example: Los Angeles
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class TestPolyLineWithGoogleMap extends StatelessWidget {
           await openGoogleMapsWithRoute(
               startLocation, endLocation, polylineString);
         },
-        child: Text('Show Route in Google Maps'),
+        child: const Text('Show Route in Google Maps'),
       ),
     );
   }

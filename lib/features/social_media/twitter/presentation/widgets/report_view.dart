@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/reports_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../tinder/data/shared/shared.dart';
-import '../../../tinder/presentation/pages/user_profile.dart';
 import '../../domain/usecases/twitter_report_usecase.dart';
 import '../bloc/twitter_bloc.dart';
 
@@ -71,7 +66,6 @@ class _ReportViewState extends State<ReportView> {
                       Center(
                         child: Text(
                           LocaleKeys.noReportCategoriesAvailable.localize,
-                          textScaleFactor: 1.0,
                           style: TextStyle(fontSize: 40.sp),
                         ),
                       )
@@ -121,7 +115,6 @@ class _ReportViewState extends State<ReportView> {
       children: [
         Text(
           LocaleKeys.report.localize,
-          textScaleFactor: 1.0,
           style: TextStyle(
             fontSize: 55.sp,
             fontWeight: FontWeight.bold,
@@ -164,7 +157,6 @@ class _ReportViewState extends State<ReportView> {
             Expanded(
               child: Text(
                 capitalizeAndSplit(report.displayTitleAr),
-                textScaleFactor: 1.0,
                 style: TextStyle(
                   fontSize: 30.sp,
                   fontWeight: FontWeight.bold,
@@ -199,13 +191,12 @@ class _ReportViewState extends State<ReportView> {
       children: [
         Expanded(
           child: MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: const TextScaler.linear(1.0)),
             // Disable scaling
 
             child: Container(
-              constraints: BoxConstraints(
-                maxHeight: 150.h
-              ),
+              constraints: BoxConstraints(maxHeight: 150.h),
               child: TextField(
                 maxLines: null,
                 style: TextStyle(
@@ -239,15 +230,15 @@ class _ReportViewState extends State<ReportView> {
                     borderSide:
                         const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
                   ),
-                  enabledBorder:  OutlineInputBorder(
+                  enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25.0),
                     borderSide:
-                    const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
+                        const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
                   ),
-                  errorBorder:  OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25.0),
-                  borderSide:
-                  const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                    borderSide:
+                        const BorderSide(color: AppColors.LIGHT_GRAY_COLOR),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25.0),

@@ -1,17 +1,10 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_gifts_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/gift_state.dart';
-import 'package:http/http.dart' as http;
 
-import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/utils/shared_pref.dart';
-import '../../../../../service_locator/service_locator.dart';
-import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 
 class GiftsCubit extends Cubit<GiftsState> {
   String? token;
@@ -50,19 +43,16 @@ class GiftsCubit extends Cubit<GiftsState> {
     }
   }
 
-
   Future<GiftsData?> _fetchGiftsFromApi(String accessToken) async {
     final response = await _getGiftsUseCase(
       PaginationParams(page: _currentPage, limit: _limit),
     );
     GiftsData? responseData;
-    response.fold(
-            (failure) {
-          throw Exception("Failed to fetch gifts");
-        },
-            (data) async{
-          responseData= data.data;
-        });
+    response.fold((failure) {
+      throw Exception("Failed to fetch gifts");
+    }, (data) async {
+      responseData = data.data;
+    });
     return responseData;
   }
 }

@@ -14,8 +14,6 @@ class LiveCard extends StatefulWidget {
 class _LiveCardState extends State<LiveCard> {
   @override
   Widget build(BuildContext context) {
-  return LiveStreamView(liveID: widget.live.roomId, isHost: false);
-
+    return LiveStreamView(liveID: widget.live.roomId, isHost: false);
   }
-
 }

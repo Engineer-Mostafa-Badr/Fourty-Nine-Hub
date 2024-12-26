@@ -11,8 +11,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 
 class DoctorGovernorateFilterView extends StatelessWidget {
-  const DoctorGovernorateFilterView({super.key});
-
+  const DoctorGovernorateFilterView({super.key, required this.type});
+  final String type;
   @override
   Widget build(BuildContext context) {
     final doctorGovernorateFilter =
@@ -61,7 +61,9 @@ class DoctorGovernorateFilterView extends StatelessWidget {
                     itemCount: state.governorates.length,
                     separatorBuilder: (context, index) => const Divider(),
                     itemBuilder: (context, index) => GovernorateListTitle(
-                        governorate: state.governorates[index]),
+                      governorate: state.governorates[index],
+                      type: type,
+                    ),
                   ));
                 } else {
                   return const SizedBox.shrink();

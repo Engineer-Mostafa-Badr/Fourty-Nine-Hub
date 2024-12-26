@@ -16,7 +16,8 @@ class RestaurantDashboardOrders extends StatefulWidget {
   const RestaurantDashboardOrders({super.key});
 
   @override
-  State<RestaurantDashboardOrders> createState() => _RestaurantDashboardOrdersState();
+  State<RestaurantDashboardOrders> createState() =>
+      _RestaurantDashboardOrdersState();
 }
 
 class _RestaurantDashboardOrdersState extends State<RestaurantDashboardOrders> {
@@ -31,80 +32,100 @@ class _RestaurantDashboardOrdersState extends State<RestaurantDashboardOrders> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent -200) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       context.read<RestaurantDashboardCubit>().getOrders();
     }
   }
+
   @override
   void dispose() {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
           LocaleKeys.restaurantOrders.localize,
-          style: Styles.headerText(),),
+          style: Styles.headerText(),
+        ),
       ),
-      body: BlocBuilder<RestaurantDashboardCubit,RestaurantDashboardState>(
-        builder: (context,state) {
-          var controller = context.read<RestaurantDashboardCubit>();
-          return state.isLoading?const Center(child: CircularProgressIndicator(),):controller.orders.isNotEmpty?ListView(
-            padding: EdgeInsets.all(16.w),
-            controller: _scrollController,
-            shrinkWrap: true,
-            children: [
-              if (controller.orders[0].openCallAndChat !=
-                  'enable')
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        LocaleKeys.subscribeToContactTheClient.localize,
-                        style: Styles.headerText(
-                            color: AppColors.PRIMARY_COLOR_DARK),
-                      ),
-                    ),
-                    ClickableWidget(
-                      onTap: (){
-                        SubscriptionMethod().subscribe(subscribeId: state.orders?.data.subcategoryId??'', title: LocaleKeys.restaurantDashboard.localize);
-                      },
-                      child: Text(
-                        LocaleKeys.subscribe.localize,
-                        style: Styles.headerText(
-                            color: AppColors.PRIMARY_COLOR,decorationThickness: 2.w,decoration: TextDecoration.underline),
-                      ),
-                    ),
-                  ],
-                )
-              else
-                const Sizer(),
-              ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                      final order = controller.orders[index];
-                      return Column(
-                        children: [
-                          RestaurantOrderCard(item: order, subCategoryId: state.orders?.data.subcategoryId??'',),
-
-                        ],
-                      );
-                  },
-                  separatorBuilder: (context, index) => const Sizer(
-                    height: 20,
-                  ),
-                  itemCount: controller.orders.length ),
-              if(controller.isLoadingMore==true)const Center(child: CircularProgressIndicator(),),
-            ],
-          ):Center(
-            child: Label(text: LocaleKeys.thereNoItems.localize),
-          );
-        }
-      ),
+      body: BlocBuilder<RestaurantDashboardCubit, RestaurantDashboardState>(
+          builder: (context, state) {
+        var controller = context.read<RestaurantDashboardCubit>();
+        return state.isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : controller.orders.isNotEmpty
+                ? ListView(
+                    padding: EdgeInsets.all(16.w),
+                    controller: _scrollController,
+                    shrinkWrap: true,
+                    children: [
+                      if (controller.orders[0].openCallAndChat != 'enable')
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                LocaleKeys.subscribeToContactTheClient.localize,
+                                style: Styles.headerText(
+                                    color: AppColors.PRIMARY_COLOR_DARK),
+                              ),
+                            ),
+                            ClickableWidget(
+                              onTap: () {
+                                SubscriptionMethod().subscribe(
+                                    subscribeId:
+                                        state.orders?.data.subcategoryId ?? '',
+                                    title: LocaleKeys
+                                        .restaurantDashboard.localize);
+                              },
+                              child: Text(
+                                LocaleKeys.subscribe.localize,
+                                style: Styles.headerText(
+                                    color: AppColors.PRIMARY_COLOR,
+                                    decorationThickness: 2.w,
+                                    decoration: TextDecoration.underline),
+                              ),
+                            ),
+                          ],
+                        )
+                      else
+                        const Sizer(),
+                      ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final order = controller.orders[index];
+                            return Column(
+                              children: [
+                                RestaurantOrderCard(
+                                  item: order,
+                                  subCategoryId:
+                                      state.orders?.data.subcategoryId ?? '',
+                                ),
+                              ],
+                            );
+                          },
+                          separatorBuilder: (context, index) => const Sizer(
+                                height: 20,
+                              ),
+                          itemCount: controller.orders.length),
+                      if (controller.isLoadingMore == true)
+                        const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                    ],
+                  )
+                : Center(
+                    child: Label(text: LocaleKeys.thereNoItems.localize),
+                  );
+      }),
     );
   }
 }

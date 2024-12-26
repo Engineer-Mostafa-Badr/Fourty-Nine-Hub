@@ -8,8 +8,10 @@ class DoctorAddressModel extends DoctorAddressEntity {
 
   factory DoctorAddressModel.fromJson(Map<String, dynamic> json) {
     return DoctorAddressModel(
-      governorateId: json['governorate'] ?? '',
-      cityId: json['city'] ?? '',
+      governorateId: json['governorate'] is String
+          ? json['governorate']
+          : json['governorate']['_id'] ?? '',
+      cityId: json['city'] is String ? json['city'] : json['city']['_id'] ?? '',
       address: json['address'] ?? '',
     );
   }

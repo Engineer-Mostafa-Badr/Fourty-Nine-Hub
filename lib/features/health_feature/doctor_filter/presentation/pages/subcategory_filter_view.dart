@@ -11,8 +11,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorSubcategoryFilterView extends StatelessWidget {
-  const DoctorSubcategoryFilterView({super.key});
-
+  const DoctorSubcategoryFilterView({super.key, required this.type});
+  final String type;
   @override
   Widget build(BuildContext context) {
     final doctorSubcategoryFilter =
@@ -43,7 +43,9 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
             Sizer(
               height: 30.h,
             ),
-            const DoctorsSubcategoriesFilterList()
+            DoctorsSubcategoriesFilterList(
+              type: type,
+            )
           ],
         ),
       ),

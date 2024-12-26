@@ -49,6 +49,85 @@ class _CreatePostViewState extends State<CreatePostView> {
     super.dispose();
   }
 
+  // String? _filePath;
+  // TextEditingController _startController = TextEditingController();
+  // TextEditingController _endController = TextEditingController();
+  //
+  // Future<void> pickAudioFile() async {
+  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
+  //     type: FileType.audio,
+  //   );
+  //
+  //   if (result != null && result.files.isNotEmpty) {
+  //     setState(() {
+  //       _filePath = result.files.single.path;
+  //     });
+  //   } else {
+  //     // Handle case when the user cancels file picking.
+  //     print("No file selected.");
+  //   }
+  // }
+
+  // Future<void> extractAudioSegment(String inputFilePath, String outputFilePath, int startSecond, int endSecond) async {
+  //   final FlutterFFmpeg _flutterFFmpeg = FlutterFFmpeg();
+  //
+  //   // Construct the FFmpeg command to extract the audio segment.
+  //   String command = '-i $inputFilePath -ss $startSecond -to $endSecond -c copy $outputFilePath';
+  //
+  //   // Execute the command.
+  //   await _flutterFFmpeg.execute(command);
+  // }
+
+  // Future<void> uploadAudio(String filePath, String uploadUrl) async {
+  //   FormData formData = FormData.fromMap({
+  //     'file': await MultipartFile.fromFile(filePath, filename: 'audio_segment.mp3'),
+  //   });
+  //
+  //
+  //   try {
+  //     Response response = await Dio().post(uploadUrl, data: formData);
+  //     print('Upload response: ${response.data}');
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Upload successful!')),
+  //     );
+  //   } catch (e) {
+  //     print('Upload failed: $e');
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Upload failed!')),
+  //     );
+  //   }
+  // }
+  //
+  // void _handleUpload() async {
+  //   if (_filePath == null) {
+  //     print("No file selected.");
+  //     return;
+  //   }
+  //
+  //   try {
+  //     int startSecond = int.parse(_startController.text);
+  //     int endSecond = int.parse(_endController.text);
+  //
+  //     if (startSecond < 0 || endSecond <= startSecond) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(content: Text('Invalid start or end time!')),
+  //       );
+  //       return;
+  //     }
+  //
+  //     String outputFilePath = '/path/to/output/audio_segment.mp3';
+  //  //   await extractAudioSegment(_filePath!, outputFilePath, startSecond, endSecond);
+  //
+  //     // Replace with your upload URL
+  //     await uploadAudio(outputFilePath, 'https://your-api-endpoint.com/upload');
+  //   } catch (e) {
+  //     print('Error: $e');
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Error processing audio!')),
+  //     );
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     final controller = context.read<CreatePostCubit>();
@@ -144,13 +223,13 @@ class _CreatePostViewState extends State<CreatePostView> {
                                                     .localize
                                                 : LocaleKeys.public.localize,
                                 style: Styles.mediumText(
-                                    color: AppColors.PRIMARY_COLOR,
-                                    fontSize: 24),
+                                  color: AppColors.AUTH_CONTAINER_COLOR,
+                                ),
                               ),
                               const Sizer(),
-                              const Icon(
+                              Icon(
                                 Icons.keyboard_arrow_down_outlined,
-                                size: 16,
+                                size: 30.sp,
                               ),
                             ],
                           ),
@@ -194,29 +273,28 @@ class _CreatePostViewState extends State<CreatePostView> {
                                       alignment:
                                           AlignmentDirectional.bottomStart,
                                       child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 6),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 6.w),
                                         child: Row(
                                           children: [
                                             Text(
-                                              '${LocaleKeys.feeling.localize} ',
-                                              style: Styles.headerText(
-                                                  fontSize: 24),
-                                            ),
-                                            Text(
-                                              state.selectedFeeling!.name,
-                                              style: Styles.mediumText(
-                                                  color:
-                                                      AppColors.PRIMARY_COLOR,
-                                                  fontSize: 24),
-                                            ),
+                                                '${LocaleKeys.feeling.localize} ',
+                                                style: Styles.mediumText(
+                                                  color: AppColors
+                                                      .AUTH_CONTAINER_COLOR,
+                                                )),
+                                            Text(state.selectedFeeling!.name,
+                                                style: Styles.mediumText(
+                                                  color: AppColors
+                                                      .AUTH_CONTAINER_COLOR,
+                                                )),
                                           ],
                                         ),
                                       )),
                                 ],
                               ),
                             ),
-                          const Sizer(),
+                          //Sizer(width: 10.w,),
                           if (state.selectedActivity != null &&
                               state.selectedActivity!.name.isNotEmpty)
                             Container(
@@ -252,9 +330,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                                             horizontal: 10),
                                         child: Text(
                                           state.selectedActivity!.name,
-                                          style: Styles.mediumText(
-                                              color: AppColors.PRIMARY_COLOR,
-                                              fontSize: 24),
+                                          style: Styles.mediumText(),
                                         ),
                                       )),
                                 ],
@@ -273,24 +349,33 @@ class _CreatePostViewState extends State<CreatePostView> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        runSpacing: 10,
-                        spacing: 10,
-                        children: List.generate(
-                          state.selectedUsers!.length,
-                          (index) => GestureDetector(
-                              onTap: () {},
-                              child: BadgedLabel(
-                                label:
-                                    state.selectedUsers?[index].fullName ?? '',
-                                width: 100,
-                                onRemove: () {
-                                  controller.onRemoveUser(
-                                      state.selectedUsers![index]);
-                                },
-                              )),
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: SingleChildScrollView(
+                        scrollDirection:
+                            Axis.horizontal, // Enable horizontal scrolling
+                        child: Row(
+                          children: [
+                            Wrap(
+                              direction: Axis.horizontal,
+                              runSpacing: 10,
+                              spacing: 10,
+                              children: List.generate(
+                                state.selectedUsers!.length,
+                                (index) => GestureDetector(
+                                  onTap: () {},
+                                  child: BadgedLabel(
+                                    label:
+                                        state.selectedUsers?[index].fullName ??
+                                            '',
+                                    onRemove: () {
+                                      controller.onRemoveUser(
+                                          state.selectedUsers![index]);
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -403,38 +488,45 @@ class _CreatePostViewState extends State<CreatePostView> {
 
   Widget _buildMediaCard() {
     return BlocBuilder<CreatePostCubit, CreatePostState>(
-        builder: (context, state) {
-      final controller = context.read<CreatePostCubit>();
-      return GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(10),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: state.images!.length == 1 ? 1 : 2,
-              childAspectRatio: 1 / 2),
-          itemCount: state.images!.length < 4 ? state.images!.length : 4,
-          itemBuilder: (context, index) => InkWell(
+      builder: (context, state) {
+        final createPostCubit = context.read<CreatePostCubit>();
+        return Column(
+          children: [
+            // Existing Image Grid
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(10),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: state.images!.length == 1 ? 1 : 2,
+                childAspectRatio: 1 / 2,
+              ),
+              itemCount: state.images!.length < 4 ? state.images!.length : 4,
+              itemBuilder: (context, index) => InkWell(
+                // Handle image interactions
                 onTap: () {
                   if (index != 3 || (index == 3 && state.images!.length == 4)) {
                     showDialog(
-                        context: context,
-                        builder: (context) => ImageDetailsScreen(
-                              image: state.images![index].file.path,
-                              isFile: true,
-                              onRemoveImage: () {
-                                controller.removePhoto(state.images![index]);
-                                context.pop();
-                              },
-                            ));
+                      context: context,
+                      builder: (context) => ImageDetailsScreen(
+                        image: state.images![index].file.path,
+                        isFile: true,
+                        onRemoveImage: () {
+                          createPostCubit.removePhoto(state.images![index]);
+                          context.pop();
+                        },
+                      ),
+                    );
                   } else {
                     showDialog(
-                        context: context,
-                        builder: (context) => ShowAllImages(
-                              images: state.images!,
-                              onRemoveImage: (UploadFileEntity image) {
-                                controller.removePhoto(image);
-                              },
-                            ));
+                      context: context,
+                      builder: (context) => ShowAllImages(
+                        images: state.images!,
+                        onRemoveImage: (UploadFileEntity image) {
+                          createPostCubit.removePhoto(image);
+                        },
+                      ),
+                    );
                   }
                 },
                 child: Stack(
@@ -482,7 +574,9 @@ class _CreatePostViewState extends State<CreatePostView> {
                         top: 5,
                         child: InkWell(
                           onTap: () {
-                            controller.removePhoto(state.images?[index]);
+                            context
+                                .read<CreatePostCubit>()
+                                .removePhoto(state.images?[index]);
                           },
                           child: const Icon(
                             Icons.close,
@@ -492,8 +586,140 @@ class _CreatePostViewState extends State<CreatePostView> {
                       ),
                   ],
                 ),
-              ));
-    });
+              ),
+            ),
+            // const SizedBox(height: 16),
+            // ElevatedButton(
+            //   onPressed: pickAudioFile,
+            //   child: Text('Pick Audio File'),
+            // ),
+            // SizedBox(height: 10),
+            // ElevatedButton(
+            //   onPressed: _handleUpload,
+            //   child: Text('Upload Audio Segment'),
+            // ),
+            // ElevatedButton(
+            //   onPressed: _pickAudioFile,
+            //   child: Text('Pick Audio File'),
+            // ),
+            // // Music Selection UI
+            // if (_audioFile != null)
+            //   Padding(
+            //     padding: const EdgeInsets.all(8.0),
+            //     child: Text('Audio File Picked: ${_audioFile!.path}'),
+            //   ),
+            // Container(
+            //   height: 150,
+            //   width: 150,
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(10),
+            //     image: DecorationImage(
+            //       image: AssetImage(Assets.image), // Replace with your image
+            //       fit: BoxFit.cover,
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(height: 20),
+            // // Audio title
+            // Text(
+            //   '(feat. Onuy) - KEBDA',
+            //   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            //   textAlign: TextAlign.center,
+            // ),
+            // SizedBox(height: 10),
+            // // Artist name
+            // Text(
+            //   'Afroto',
+            //   style: TextStyle(fontSize: 16, color: Colors.grey),
+            // ),
+            // SizedBox(height: 20),
+            // // Audio progress bar
+            // Slider(
+            //   value: _audioPlayer.position.inSeconds.toDouble(),
+            //   max: _audioPlayer.duration?.inSeconds.toDouble() ?? 1,
+            //   onChanged: (value) {
+            //     _audioPlayer.seek(Duration(seconds: value.toInt()));
+            //   },
+            // ),
+            // // Play/Pause button
+            // IconButton(
+            //   icon: Icon(
+            //     _isPlaying ? Icons.pause : Icons.play_arrow,
+            //     size: 40,
+            //   ),
+            //   onPressed: () async {
+            //     if (_isPlaying) {
+            //       await _audioPlayer.pause();
+            //     } else {
+            //       await _audioPlayer.play();
+            //     }
+            //     setState(() {
+            //       _isPlaying = !_isPlaying;
+            //     });
+            //     _pickAudioFile();
+            //   },
+            // ),
+            // SizedBox(height: 20),
+            // // Placeholder for waveform (to be implemented)
+            // Container(
+            //   height: 50,
+            //   color: Colors.grey[300],
+            //   child: Center(
+            //     child: Text(
+            //       'Waveform placeholder',
+            //       style: TextStyle(color: Colors.grey),
+            //     ),
+            //   ),
+            // ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.start,
+            //   children: [
+            //     IconButton(
+            //       icon: const Icon(Icons.music_note, color: Colors.blue),
+            //       onPressed: () async {
+            //         final result = await FilePicker.platform.pickFiles(
+            //           type: FileType.audio,
+            //         );
+            //         if (result != null && result.files.isNotEmpty) {
+            //           final selectedMusic = result.files.single.path!;
+            //           audioCubit.addMusic(selectedMusic);
+            //         }
+            //       },
+            //     ),
+            //     if (state.music != null)
+            //       Expanded(
+            //         child: Text(
+            //           'Selected Music: ${state.music}',
+            //           overflow: TextOverflow.ellipsis,
+            //           style: const TextStyle(color: Colors.black),
+            //         ),
+            //       ),
+            //     if (state.music != null)
+            //       IconButton(
+            //         icon: const Icon(Icons.close, color: Colors.red),
+            //         onPressed: () => audioCubit.removeMusic(),
+            //       ),
+            //   ],
+            // ),
+            // // Music Playback Controls
+            // if (state.music != null)
+            //   Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       IconButton(
+            //         icon: const Icon(Icons.play_arrow, color: Colors.green),
+            //         onPressed: () => audioCubit.playMusic(),
+            //       ),
+            //       IconButton(
+            //         icon: const Icon(Icons.pause, color: Colors.orange),
+            //         onPressed: () => audioCubit.pauseMusic(),
+            //       ),
+            //     ],
+            //   ),
+          ],
+        );
+      },
+    );
   }
 
   Widget _buildColorsBallet({required BuildContext context}) {
@@ -627,7 +853,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                       Text(
                         LocaleKeys.feeling.localize,
                         style: Styles.mediumText(
-                            fontSize: 34, fontWeight: FontWeight.w500),
+                            fontSize: 65.sp, fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),

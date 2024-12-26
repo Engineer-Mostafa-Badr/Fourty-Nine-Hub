@@ -13,10 +13,10 @@ class RequestHistoryRepoImpl extends RequestHistoryRepo {
   final RequestHistoryRemoteDataSource _remoteDataSource;
   RequestHistoryRepoImpl(this._remoteDataSource);
 
-  @override
-  Future<Either<Failure, List<TripModel>>> getRideHistory() async {
-    return await _remoteDataSource.getRideHistory();
-  }
+  // @override
+  // Future<Either<Failure, List<TripModel>>> getRideHistory() async {
+  //   return await _remoteDataSource.getRideHistory();
+  // }
 
   @override
   Future<Either<Failure, List<FoodOrderModel>>> getFoodHistory() async {

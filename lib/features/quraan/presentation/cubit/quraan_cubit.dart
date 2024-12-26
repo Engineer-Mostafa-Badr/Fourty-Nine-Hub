@@ -9,18 +9,16 @@ class QuranCubit extends Cubit<QuranState> {
   final FetchSurahUseCase _surahUseCase;
 
   QuranCubit(
-      this._quranSurahUseCase,
-      this._surahUseCase,
-      ) : super(const QuranState());
-
+    this._quranSurahUseCase,
+    this._surahUseCase,
+  ) : super(const QuranState());
 
   List<QuranSurahEntity> quran = [];
- // List<AzkarDetailsEntity> azkarDetails = [];
+  // List<AzkarDetailsEntity> azkarDetails = [];
   bool isLoadingMore = false;
   bool hasMoreData = true;
   int currentPage = 1;
   int pageSize = 10;
-
 
   void loadInitialData() async {
     emit(state.copyWith(status: QuranStates.loading));
@@ -47,9 +45,10 @@ class QuranCubit extends Cubit<QuranState> {
     );
 
     response.fold(
-          (failure) => emit(state.copyWith(failure: failure, status: QuranStates.error)),
-          (data) {
-            quran.addAll(data);
+      (failure) =>
+          emit(state.copyWith(failure: failure, status: QuranStates.error)),
+      (data) {
+        quran.addAll(data);
 
         if (data.length < pageSize) {
           hasMoreData = false;
@@ -58,11 +57,10 @@ class QuranCubit extends Cubit<QuranState> {
         }
 
         isLoadingMore = false;
-        emit(state.copyWith(quranSurah: quran,status: QuranStates.success));
+        emit(state.copyWith(quranSurah: quran, status: QuranStates.success));
       },
     );
   }
-
 
   // Future<void> fetchQuranSurah() async {
   //   emit(state.copyWith( status: QuranStates.loading));
@@ -75,12 +73,12 @@ class QuranCubit extends Cubit<QuranState> {
   // }
 
   Future<void> fetchSurah({required int id}) async {
-    emit(state.copyWith( status: QuranStates.loading));
+    emit(state.copyWith(status: QuranStates.loading));
     final response = await _surahUseCase.call(id);
     response.fold((l) {
       emit(state.copyWith(failure: l, status: QuranStates.error));
     }, (data) {
-      emit(state.copyWith(surah: data,status: QuranStates.success));
+      emit(state.copyWith(surah: data, status: QuranStates.success));
     });
   }
 }

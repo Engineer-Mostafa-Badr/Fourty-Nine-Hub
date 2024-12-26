@@ -410,10 +410,10 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-         FaIcon(
-          Icons.thumb_up_alt_outlined,
+        FaIcon(
+          FontAwesomeIcons.thumbsUp,
           color: Colors.grey,
-          size: 32.sp,
+          size: 40.sp,
         ),
         if (widget.from == 'posts') ...[
           Label(

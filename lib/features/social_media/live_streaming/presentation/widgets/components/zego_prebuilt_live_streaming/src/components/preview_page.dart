@@ -538,8 +538,8 @@ class _ZegoLiveStreamingPreviewPageState
             children: [
               widget.config.preview.bottomBar.showBeautyEffectButton
                   ? SizedBox(
-                width: 0.6.sw,
-                    child: Row(
+                      width: 0.6.sw,
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ZegoToggleMicrophoneButton(
@@ -587,7 +587,6 @@ class _ZegoLiveStreamingPreviewPageState
                             ),
                           ),
                           // const Sizer(),
-
 
                           ZegoScreenSharingToggleButton(
                             buttonSize: buttonSize,
@@ -640,7 +639,7 @@ class _ZegoLiveStreamingPreviewPageState
                           )
                         ],
                       ),
-                  )
+                    )
                   : beautyButtonPlaceHolder,
               // SizedBox(width: 48.zR),
               startButton(),
@@ -682,10 +681,30 @@ class _ZegoLiveStreamingPreviewPageState
             );
             return;
           }
-          if (title != null && title.isNotEmpty) {
-            widget.startedNotifier.value = true;
+          if (title != null &&
+              title.isNotEmpty &&
+              context.read<StreamCubit>().state.selectedGifts.isNotEmpty &&
+              context.read<StreamCubit>().state.topic.isNotEmpty) {
+            var result = await context.read<StreamCubit>().createLive(
+                  title: title,
+                  roomId: widget.liveID,
+                  context: context,
+                );
+            if (result == true && context.mounted) {
+              widget.startedNotifier.value = true;
+            }
           } else {
-            showErrorMessage(context, 'Please enter simple title');
+            if (title == null && (title?.isEmpty ?? false)) {
+              showErrorMessage(context, 'Please enter simple title');
+            } else if (context
+                .read<StreamCubit>()
+                .state
+                .selectedGifts
+                .isEmpty) {
+              showErrorMessage(context, 'Please select gifts');
+            } else if (context.read<StreamCubit>().state.topic.isEmpty) {
+              showErrorMessage(context, 'Please select topic');
+            }
           }
           // context.read<StreamCubit>().createLive(title: title)
         },
@@ -702,7 +721,7 @@ class _ZegoLiveStreamingPreviewPageState
             defaultAction(_titleController.text.trim());
           },
           child: Container(
-            width: context.screenWidth *0.6,
+            width: context.screenWidth * 0.6,
             height: 50,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(44.zR),

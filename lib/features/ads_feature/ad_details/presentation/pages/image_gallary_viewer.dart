@@ -35,13 +35,15 @@ class ImageGalleryPage extends StatelessWidget {
                   Icons.arrow_back,
                   color: Colors.white,
                   size: 60.w,
-                  shadows: context.isDarkMode? [
-                    const Shadow(
-                      color: Colors.black,
-                      blurRadius: 5,
-                      offset: Offset(1, 1), // changes position of shadow
-                    ),
-                  ]:[],
+                  shadows: context.isDarkMode
+                      ? [
+                          const Shadow(
+                            color: Colors.black,
+                            blurRadius: 5,
+                            offset: Offset(1, 1), // changes position of shadow
+                          ),
+                        ]
+                      : [],
                 ),
               ),
             ),
@@ -52,13 +54,12 @@ class ImageGalleryPage extends StatelessWidget {
                 builder: (BuildContext context, int index) {
                   return PhotoViewGalleryPageOptions(
                     imageProvider: NetworkImage(images[index]),
-                    initialScale: PhotoViewComputedScale.contained ,
+                    initialScale: PhotoViewComputedScale.contained,
                     heroAttributes: PhotoViewHeroAttributes(tag: images[index]),
                   );
                 },
                 pageController: pageController,
-                onPageChanged: (index) {
-                },
+                onPageChanged: (index) {},
                 loadingBuilder: (context, event) => Center(
                   child: SizedBox(
                     width: 20.0,
@@ -66,7 +67,8 @@ class ImageGalleryPage extends StatelessWidget {
                     child: CircularProgressIndicator(
                       value: event == null
                           ? 0
-                          : event.cumulativeBytesLoaded / event.expectedTotalBytes!,
+                          : event.cumulativeBytesLoaded /
+                              event.expectedTotalBytes!,
                     ),
                   ),
                 ),

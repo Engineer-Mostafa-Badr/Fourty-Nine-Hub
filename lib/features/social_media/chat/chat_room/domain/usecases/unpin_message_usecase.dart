@@ -14,7 +14,7 @@ class UnPinMessageUseCase extends UseCase<bool, UnPinMessageParams> {
   }
 }
 
-class UnPinMessageParams  {
+class UnPinMessageParams {
   final String chatId;
   UnPinMessageParams({required this.chatId});
 }

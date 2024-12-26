@@ -5,7 +5,8 @@ import 'package:fourtyninehub/features/social_media/reels/data/models/add_commen
 
 import '../repositories/reels_repository.dart';
 
-class AddReelReplyUseCase extends UseCase<AddCommentResponse, AddReelReplyParams> {
+class AddReelReplyUseCase
+    extends UseCase<AddCommentResponse, AddReelReplyParams> {
   final ReelsRepository _repository;
 
   AddReelReplyUseCase(this._repository);
@@ -16,16 +17,20 @@ class AddReelReplyUseCase extends UseCase<AddCommentResponse, AddReelReplyParams
   }
 }
 
-class AddReelReplyParams{
+class AddReelReplyParams {
   final String reelId;
-    final String comment;
-    final String? receiverComment;
-    final String? parentCommentId;
+  final String comment;
+  final String? receiverComment;
+  final String? parentCommentId;
 
-  AddReelReplyParams({required this.reelId, required this.comment,required this.receiverComment, required this.parentCommentId});
+  AddReelReplyParams(
+      {required this.reelId,
+      required this.comment,
+      required this.receiverComment,
+      required this.parentCommentId});
   Map<String, dynamic> toJson() => {
-    'comment': comment,
-    if(receiverComment!=null)'receiverComment': receiverComment,
-    if(parentCommentId!=null)'parentCommentId': parentCommentId
-  };
+        'comment': comment,
+        if (receiverComment != null) 'receiverComment': receiverComment,
+        if (parentCommentId != null) 'parentCommentId': parentCommentId
+      };
 }

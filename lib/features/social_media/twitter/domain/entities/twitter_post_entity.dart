@@ -1,5 +1,6 @@
+import 'package:fourtyninehub/core/utils/time_utils.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
-import '../../../../../core/utils/duration_helper.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_main_post_entity.dart';
 import '../../../../../res/assets/assets.dart';
 
 class TwitterPostEntity {
@@ -8,6 +9,7 @@ class TwitterPostEntity {
   final List<String>? images;
   final List<String>? shares;
   final List<TwitterUserModel>? love;
+  TwitterMainPostEntity? postShare;
   final dynamic mainPost;
   bool? isShared;
   final dynamic user;
@@ -19,14 +21,14 @@ class TwitterPostEntity {
   bool? isReact;
   String? photo;
   final DateTime createdAt;
-  Duration get publishedDuration => DateTime.now().difference(createdAt);
+  Duration get publishedDuration => TimeUtils.calculateDuration(createdAt);
 
-  String get sinceTime =>
-      DurationHelper().sinceTime(duration: publishedDuration);
+  String get sinceTime => TimeUtils.getSinceTime(createdAt);
 
   TwitterPostEntity(
       {required this.id,
       required this.content,
+      this.postShare,
       this.images,
       this.shares,
       this.love,

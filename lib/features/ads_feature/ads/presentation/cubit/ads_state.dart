@@ -1,6 +1,14 @@
 part of 'ads_cubit.dart';
 
-enum AdsStates { loading,filterLoading, initState, error, success,requestSuccess,requestLoading }
+enum AdsStates {
+  loading,
+  filterLoading,
+  initState,
+  error,
+  success,
+  requestSuccess,
+  requestLoading
+}
 
 extension AdsStateX on AdsState {
   bool get isInitial => status == AdsStates.initState;
@@ -9,7 +17,8 @@ extension AdsStateX on AdsState {
   bool get isError => status == AdsStates.error;
   bool get isSuccess => status == AdsStates.success;
   bool get isRequestSuccess => status == AdsStates.requestSuccess;
-  bool get isRequestLoading => status == AdsStates.requestLoading;}
+  bool get isRequestLoading => status == AdsStates.requestLoading;
+}
 
 @immutable
 class AdsState {
@@ -27,10 +36,11 @@ class AdsState {
       {this.ads,
       this.failure,
       this.status,
-        this.city='', this.governorate='',
+      this.city = '',
+      this.governorate = '',
       this.filterModel,
-      this.hasFilter=false,
-      this.makeRequest=false,
+      this.hasFilter = false,
+      this.makeRequest = false,
       this.comeWithMeAds,
       this.pickMeAds});
   AdsState copyWith({

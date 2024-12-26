@@ -43,7 +43,7 @@ class UploadFile {
           await sendBinaryFileData(
                   file: file, signedUrl: data['data']['signedUrl'])
               .then((value) async {
-                print("amdl;maldmaslkd");
+            print("amdl;maldmaslkd");
             final mediaId = data['data']['mediaId'];
             final confirmUploadResponse = await serviceLocator<ApiConsumer>()
                 .put(EndPoints.confirmUpload(mediaId));
@@ -62,20 +62,86 @@ class UploadFile {
     return null;
   }
 
+  Future<Either<Failure, bool>?> uploadAudio({
+    bool isGallery = true,
+    required String subCategoryId,
+    required Function(UploadFileEntity) onUploaded,
+  }) async {
+    final file = await FilePickerHelper()
+        .pickMedia(isGallery: isGallery)
+        .then((file) async {
+      if (file != null) {
+        final bytes = await file.readAsBytes();
+        int size = bytes.length;
+        // Step 2: Get a signed URL for uploading.
+        final signedURLResponse = await serviceLocator<ApiConsumer>().post(
+          EndPoints.mediaUrl,
+          data: {
+            "type": "audio/${file.mimeType ?? 'mp3'}",
+            "size": size,
+            "subcategoryId": subCategoryId,
+          },
+        );
+
+        // Step 3: Handle the signed URL response.
+        return signedURLResponse.fold(
+          (failure) {
+            // Log and handle failure in getting signed URL.
+            print(failure.toString());
+            return Left(failure);
+          },
+          (data) async {
+            log("Signed URL response: ${jsonEncode(data)}");
+
+            // Step 4: Upload the audio to the signed URL.
+            await sendBinaryFileData(
+              file: file,
+              signedUrl: data['data']['signedUrl'],
+            ).then((value) async {
+              // Step 5: Confirm the upload.
+              final mediaId = data['data']['mediaId'];
+              final confirmUploadResponse = await serviceLocator<ApiConsumer>()
+                  .put(EndPoints.confirmUpload(mediaId));
+
+              // Handle the confirmation response.
+              confirmUploadResponse.fold(
+                (failure) {
+                  print("Error confirming upload: $failure");
+                  return Left(failure);
+                },
+                (confirmation) {
+                  print("Upload confirmed.");
+                  // Pass the uploaded file details to the callback function.
+                  onUploaded(UploadFileEntity(mediaId: mediaId, file: file));
+                  return const Right(true);
+                },
+              );
+            });
+          },
+        );
+      }
+    });
+    return null;
+  }
+
   Future<Either<Failure, bool>?> uploadVideo({
     bool isGallery = true,
     required String subCategoryId,
     required Function(UploadFileEntity) onUploaded,
   }) async {
     final file = await FilePickerHelper()
-        .pickVideo(isGallery: isGallery) // Assuming you have a method to pick video files
+        .pickVideo(
+            isGallery:
+                isGallery) // Assuming you have a method to pick video files
         .then((file) async {
       if (file != null) {
         final bytes = await file.readAsBytes();
         int size = bytes.length;
         // Get signed URL
-        final signedURLResponse = await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
-          "type": "video/${file.mimeType ?? 'mp4'}", // Change to video MIME type
+        final signedURLResponse =
+            await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
+          "type":
+              "video/${file.mimeType ?? 'mp4'}", // Change to video MIME type
           "size": size,
           "subcategoryId": subCategoryId
         });
@@ -85,7 +151,8 @@ class UploadFile {
           print(l.toString());
         }, (data) async {
           log("responseData: ${jsonEncode(data)}");
-          await sendBinaryFileData(file: file, signedUrl: data['data']['signedUrl'])
+          await sendBinaryFileData(
+                  file: file, signedUrl: data['data']['signedUrl'])
               .then((value) async {
             final mediaId = data['data']['mediaId'];
             final confirmUploadResponse = await serviceLocator<ApiConsumer>()
@@ -103,7 +170,6 @@ class UploadFile {
     });
     return null;
   }
-
 
   static Future<String?> uploadPickedFile({
     required File file,
@@ -161,9 +227,8 @@ class UploadFile {
     }
   }
 
-Future<void> sendBinaryFileData(
-      {required XFile file, required String signedUrl}) async
-  {
+  Future<void> sendBinaryFileData(
+      {required XFile file, required String signedUrl}) async {
     print("signedUrl$signedUrl");
     Uint8List image = await file.readAsBytes();
     print("object${image.length}");
@@ -179,11 +244,122 @@ Future<void> sendBinaryFileData(
       // 'File-Name': fileName,
     });
 
-    await Dio().put(signedUrl,
-        data: image, options: options);
+    await Dio().put(signedUrl, data: image, options: options);
     print("aasl;das;ld,");
   }
 }
+
+class UploadFile2 {
+  Future<Either<Failure, bool>?> uploadImage({
+    required XFile file, // Change to XFile
+    required String subCategoryId,
+    required Function(UploadFileEntity) onUploaded,
+  }) async {
+    try {
+      final bytes = await file.readAsBytes(); // XFile method
+      int size = bytes.length;
+
+      // Step 1: Get a signed URL
+      final signedURLResponse = await serviceLocator<ApiConsumer>().post(
+        EndPoints.mediaUrl,
+        data: {
+          "type": "image/${file.path.split('.').last}",
+          "size": size,
+          "subcategoryId": subCategoryId,
+        },
+      );
+
+      return signedURLResponse.fold((failure) {
+        print("Error getting signed URL: $failure");
+        return Left(failure);
+      }, (data) async {
+        final signedUrl = data['data']['signedUrl'];
+        final mediaId = data['data']['mediaId'];
+
+        // Step 2: Upload the image to the signed URL
+        await sendBinaryFileData(file: file, signedUrl: signedUrl);
+
+        // Step 3: Confirm the upload
+        final confirmUploadResponse = await serviceLocator<ApiConsumer>()
+            .put(EndPoints.confirmUpload(mediaId));
+
+        return confirmUploadResponse.fold((failure) {
+          print("Error confirming upload: $failure");
+          return Left(failure);
+        }, (_) {
+          onUploaded(UploadFileEntity(mediaId: mediaId, file: file)); // XFile here
+          return const Right(true);
+        });
+      });
+    } catch (e) {
+      print("Error uploading image: $e");
+      return null;
+    }
+  }
+
+  Future<Either<Failure, bool>?> uploadVideo({
+    required XFile file, // Change to XFile
+    required String subCategoryId,
+    required Function(UploadFileEntity) onUploaded,
+  }) async {
+    try {
+      final bytes = await file.readAsBytes(); // XFile method
+      int size = bytes.length;
+
+      // Step 1: Get a signed URL
+      final signedURLResponse = await serviceLocator<ApiConsumer>().post(
+        EndPoints.mediaUrl,
+        data: {
+          "type": "video/${file.path.split('.').last}",
+          "size": size,
+          "subcategoryId": subCategoryId,
+        },
+      );
+
+      return signedURLResponse.fold((failure) {
+        print("Error getting signed URL: $failure");
+        return Left(failure);
+      }, (data) async {
+        final signedUrl = data['data']['signedUrl'];
+        final mediaId = data['data']['mediaId'];
+
+        // Step 2: Upload the video to the signed URL
+        await sendBinaryFileData(file: file, signedUrl: signedUrl);
+
+        // Step 3: Confirm the upload
+        final confirmUploadResponse = await serviceLocator<ApiConsumer>()
+            .put(EndPoints.confirmUpload(mediaId));
+
+        return confirmUploadResponse.fold((failure) {
+          print("Error confirming upload: $failure");
+          return Left(failure);
+        }, (_) {
+          onUploaded(UploadFileEntity(mediaId: mediaId, file: file)); // XFile here
+          return const Right(true);
+        });
+      });
+    } catch (e) {
+      print("Error uploading video: $e");
+      return null;
+    }
+  }
+
+  Future<void> sendBinaryFileData({
+    required XFile file, // Change to XFile
+    required String signedUrl,
+  }) async {
+    final fileBytes = await file.readAsBytes(); // XFile method
+    final options = Options(
+      contentType: 'application/octet-stream',
+      headers: {
+        'Content-Length': fileBytes.length,
+      },
+    );
+
+    await Dio().put(signedUrl, data: fileBytes, options: options);
+  }
+}
+
 
 class UploadFileEntity {
   final String mediaId;

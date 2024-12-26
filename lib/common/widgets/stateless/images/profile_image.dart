@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../res/style/app_colors.dart';
@@ -22,7 +23,7 @@ class ProfileImage extends StatelessWidget {
       {super.key,
       required this.accountId,
       required this.userId,
-      this.size = 15,
+      this.size = 40,
       this.withBorder = false,
       this.imageURL,
       this.borderColor = AppColors.SECONDARY_COLOR,
@@ -43,10 +44,10 @@ class ProfileImage extends StatelessWidget {
         }
       },
       child: CircleAvatar(
-        radius: withBorder ? size + 2 : size,
+        radius: withBorder ? size.sp + 2 : size.sp,
         backgroundColor: borderColor,
         child: CircleAvatar(
-          radius: size,
+          radius: size.sp,
           backgroundColor: Colors.white,
           backgroundImage: CachedNetworkImageProvider(
               imageURL ?? UIConst.profilePlaceHolder),

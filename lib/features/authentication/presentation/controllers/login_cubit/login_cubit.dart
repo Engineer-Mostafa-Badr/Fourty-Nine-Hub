@@ -1,10 +1,10 @@
-
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
@@ -43,7 +43,7 @@ class LoginCubit extends Cubit<LoginState> {
   Future<void> login(GlobalKey<FormState> formKey, BuildContext context) async {
     String? token = await FirebaseMessaging.instance.getToken();
     log("all tokens before login : ${await CacheManager.getAccessToken()}");
-    
+
     if (formKey.currentState!.validate()) {
       emit(LoginLoading());
       final result = await _loginUseCase(
@@ -56,7 +56,7 @@ class LoginCubit extends Cubit<LoginState> {
 
       result.fold(
         (failure) => emit(LoginError(failure)),
-        (userToken)async {
+        (userToken) async {
           //_attachToken(userToken); // Attach to dio
           // _saveTokens(userToken); // Ensure tokens are saved before proceeding
           // pr('state token is  ${userToken}');
@@ -120,6 +120,39 @@ class LoginCubit extends Cubit<LoginState> {
     );
   }
 
+  Future<UserCredential> signInWithFacebook() async {
+    try {
+      // Trigger the sign-in flow
+      // final LoginResult loginResult = await FacebookAuth.instance.login();
+
+      // if (loginResult.status == LoginStatus.success) {
+      //   // Log access token for debugging
+      //   // log('Access Token: ${loginResult.accessToken!.token}');
+      //   log('Message: ${loginResult.message}');
+
+      //   // Create a credential from the access token
+      //   final OAuthCredential facebookAuthCredential =
+      //       FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+      //   // Sign in with Firebase using the credential
+      //   UserCredential userCredential = await FirebaseAuth.instance
+      //       .signInWithCredential(facebookAuthCredential);
+
+      //   // Log user details for debugging
+      //   log('Username: ${userCredential.additionalUserInfo?.username}');
+      //   log('Email: ${userCredential.user?.email}');
+      //   log('Photo URL: ${userCredential.user?.photoURL}');
+
+      //   // Return the signed-in user credential
+      //   return userCredential;
+      // } else {
+        throw Exception('Facebook login failed: ${''}');
+      // }
+    } catch (e) {
+      log('Error during Facebook sign-in: $e');
+      rethrow;
+    }
+  }
 
   @override
   Future<void> close() {
@@ -128,4 +161,3 @@ class LoginCubit extends Cubit<LoginState> {
     return super.close();
   }
 }
-

@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_state.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/reels_widget.dart';
 
@@ -15,9 +13,31 @@ class ReelView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: ReelsScreen(),
+    return PopScope(
+      onPopInvoked: (res) {
+        if (context
+            .read<PreloadBloc>()
+            .state
+            .controllers[context.read<PreloadBloc>().state.focusedIndex]!
+            .value
+            .isPlaying) {
+          context
+              .read<PreloadBloc>()
+              .state
+              .controllers[context.read<PreloadBloc>().state.focusedIndex]
+              ?.pause();
+        }
+        context
+            .read<PreloadBloc>()
+            .resetFocusedIndex(context.read<PreloadBloc>().state.focusedIndex);
+        //   context.pop();
+        // return Future.value(true);
+      },
+      canPop: true,
+      child: const Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: ReelsScreen(),
+      ),
     );
   }
 }
@@ -33,7 +53,6 @@ class ReelsScreenState extends State<ReelsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PreloadBloc, PreloadState>(
-      // bloc: BlocProvider.of<PreloadBloc>(context)..add(GetVideosFromApiEvent()),
       builder: (context, state) {
         return Stack(
           children: [
@@ -51,22 +70,24 @@ class ReelsScreenState extends State<ReelsScreen> {
                     scrollDirection: Axis.vertical,
                     itemCount: state.urls.length,
                     onPageChanged: (index) async {
-
                       context.read<PreloadBloc>().onVideoIndexChanged(index);
                     },
                     itemBuilder: (context, index) {
                       // Is at end and isLoading
-                      final bool _isLoading =
+                      final bool isLoading =
                           (state.isLoading && index == state.urls.length - 1);
                       final controller = state.controllers[index];
 
                       if (controller == null) {
-                        return const Center(child:CircularProgressIndicator(color: AppColors.SECONDARY_COLOR,));
+                        return const Center(
+                            child: CircularProgressIndicator(
+                          color: AppColors.SECONDARY_COLOR,
+                        ));
                       }
                       return state.focusedIndex == index
                           ? ReelsWidget(
                               index: index,
-                              isLoading: _isLoading,
+                              isLoading: isLoading,
                               controller: controller,
                             )
                           : const SizedBox();

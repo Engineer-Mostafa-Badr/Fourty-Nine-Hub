@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,7 +31,8 @@ class _QuraanViewState extends State<QuraanView> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       _cubit.fetchQuranSurah();
     }
   }
@@ -43,6 +43,7 @@ class _QuraanViewState extends State<QuraanView> {
     _scrollController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +54,7 @@ class _QuraanViewState extends State<QuraanView> {
           children: [
             Text(
               'القران الكريم',
-              style:  TextStyle(fontSize: 40.sp),
+              style: TextStyle(fontSize: 40.sp),
             ),
             IconButton(
               icon: const Icon(
@@ -70,32 +71,36 @@ class _QuraanViewState extends State<QuraanView> {
         textDirection: TextDirection.rtl, // Set the whole screen to RTL
         child: BlocBuilder<QuranCubit, QuranState>(
           builder: (BuildContext context, state) {
-            if(state.status ==QuranStates.loading){
+            if (state.status == QuranStates.loading) {
               return const CustomLoading();
             }
             return Padding(
-                padding: EdgeInsets.all(12.w),
+              padding: EdgeInsets.all(12.w),
               child: ListView.separated(
                 controller: _scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),
-                itemBuilder: (context,index) {
+                itemBuilder: (context, index) {
                   if (index == _cubit.quran.length) {
                     return const Center(child: CircularProgressIndicator());
                   }
                   return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => QuranViewPage(
-                            surahId: state.quranSurah![index].surahNo, pageNumber: 0,),
-                        ),
-                      );
-                    },
-                    child: buildItem(context,state.quranSurah![index]));
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => QuranViewPage(
+                              surahId: state.quranSurah![index].surahNo,
+                              pageNumber: 0,
+                            ),
+                          ),
+                        );
+                      },
+                      child: buildItem(context, state.quranSurah![index]));
                 },
-                separatorBuilder: (context,index)=>const Divider(color: AppColors.GREY_NORMAL_COLOR,),
-                itemCount: state.quranSurah?.length ??0,
+                separatorBuilder: (context, index) => const Divider(
+                  color: AppColors.GREY_NORMAL_COLOR,
+                ),
+                itemCount: state.quranSurah?.length ?? 0,
               ),
             );
           },
@@ -104,34 +109,27 @@ class _QuraanViewState extends State<QuraanView> {
     );
   }
 
-  Widget buildItem(context,QuranSurahEntity model) =>
-      Row(
+  Widget buildItem(context, QuranSurahEntity model) => Row(
         children: [
           Container(
-            width: 80.w,
-             height: 80.h,
+              width: 80.w,
+              height: 80.h,
               decoration: BoxDecoration(
-                color: Theme
-                    .of(context)
-                    .primaryColor,
+                color: Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Center(
                 child: Label(
                   text: '${model.surahNo}',
                   style: Styles.headerText(
-                      color: Theme
-                          .of(context)
-                          .scaffoldBackgroundColor),
+                      color: Theme.of(context).scaffoldBackgroundColor),
                 ),
               )),
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 30.w),
               decoration: BoxDecoration(
-                color: Theme
-                    .of(context)
-                    .scaffoldBackgroundColor,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Row(
@@ -139,9 +137,7 @@ class _QuraanViewState extends State<QuraanView> {
                   Text(
                     model.surahNameAr,
                     style: Styles.headerText(
-                        color: Theme
-                            .of(context)
-                            .primaryColor),
+                        color: Theme.of(context).primaryColor),
                     textAlign: TextAlign.right,
                   ),
                   const Spacer(),
@@ -150,24 +146,22 @@ class _QuraanViewState extends State<QuraanView> {
                       Text(
                         'اياتها',
                         style: Styles.headerText(
-                            color: Theme
-                                .of(context)
-                                .primaryColor),
+                            color: Theme.of(context).primaryColor),
                         textAlign: TextAlign.right,
                       ),
                       Text(
-                       '${ model.total_ayah_surah}',
+                        '${model.total_ayah_surah}',
                         style: Styles.headerText(
-                            color: Theme
-                                .of(context)
-                                .primaryColor),
+                            color: Theme.of(context).primaryColor),
                         textAlign: TextAlign.right,
                       ),
                     ],
                   ),
                   const Sizer(),
                   Image.asset(
-                   model.place_of_revelation=='Meccan'? Assets.maka:Assets.madina,
+                    model.place_of_revelation == 'Meccan'
+                        ? Assets.maka
+                        : Assets.madina,
                     height: 70.h,
                     width: 70.w,
                   )

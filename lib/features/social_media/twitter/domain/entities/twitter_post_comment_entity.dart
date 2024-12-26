@@ -37,4 +37,23 @@ class TwitterPostCommentEntity {
       this.isReact = false,
       this.edit = false,
       this.replies});
+
+  //toJson
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'user': user,
+        'content': content,
+        'post': post,
+        // 'image': image,
+        'adminIgnore': adminIgnore,
+        'loveCount': loveCount,
+        'repliesCount': repliesCount,
+        'showReplies': showReplies,
+        'addReply': addReply,
+        'isReact': isReact,
+        'edit': edit,
+        'love': love,
+        'replies': replies?.map((e) => e.toJson()).toList(),
+        'createdAt': createdAt.toIso8601String(),
+      };
 }
