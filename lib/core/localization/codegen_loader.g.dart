@@ -1224,7 +1224,8 @@ class CodegenLoader extends AssetLoader{
   "next": "التالي",
   "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة",
   "recoverDeletedChats": "استعادة الدردشات المحذوفة",
-  "sureRecoverDeletedChats": "هل تريد استعادة الدردشات المحذوفة؟"
+  "sureRecoverDeletedChats": "هل تريد استعادة الدردشات المحذوفة؟",
+  "restaurantOrders": "طلبات المطاعم"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",

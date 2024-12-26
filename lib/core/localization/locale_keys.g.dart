@@ -1199,5 +1199,6 @@ abstract class  LocaleKeys {
   static const continueUsingChatServices = 'continueUsingChatServices';
   static const recoverDeletedChats = 'recoverDeletedChats';
   static const sureRecoverDeletedChats = 'sureRecoverDeletedChats';
+  static const restaurantOrders = 'restaurantOrders';
 
 }
