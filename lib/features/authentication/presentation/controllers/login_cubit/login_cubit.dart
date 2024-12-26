@@ -42,6 +42,8 @@ class LoginCubit extends Cubit<LoginState> {
 
   Future<void> login(GlobalKey<FormState> formKey, BuildContext context) async {
     String? token = await FirebaseMessaging.instance.getToken();
+    log("all tokens before login : ${await CacheManager.getAccessToken()}");
+    
     if (formKey.currentState!.validate()) {
       emit(LoginLoading());
       final result = await _loginUseCase(
@@ -59,6 +61,8 @@ class LoginCubit extends Cubit<LoginState> {
           // _saveTokens(userToken); // Ensure tokens are saved before proceeding
           // pr('state token is  ${userToken}');
           log("Token logout ${await CacheManager.getAccessToken()}");
+          log("Token userToken access ${userToken.accessToken}");
+          log("Token userToken refresh ${userToken.refreshToken}");
           await CacheManager.saveAccessToken(userToken.accessToken);
           await CacheManager.saveRefreshToken(userToken.refreshToken);
 
@@ -66,7 +70,7 @@ class LoginCubit extends Cubit<LoginState> {
           // await DI.execute(token: await CacheManager.getAccessToken());
           // serviceLocator<Socket>().connect();
           // ignore: use_build_context_synchronously
-          // SharedWebSocket.instance.connect(token: userToken.accessToken);
+          SharedWebSocket.connect(token: userToken.accessToken);
           emit(LoginSuccess(userTokensEntity: userToken));
         },
       );
@@ -111,7 +115,7 @@ class LoginCubit extends Cubit<LoginState> {
         _attachToken(userToken); // Attach to dio
         await _saveTokens(
             userToken); // Ensure tokens are saved before proceeding
-        emit(LoginSuccess(userTokensEntity: userToken));
+        // emit(LoginSuccess(userTokensEntity: userToken));
       },
     );
   }

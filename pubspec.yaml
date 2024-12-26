@@ -35,6 +35,7 @@ dependencies:
   flutter_bloc: ^8.1.5
   photo_view:
   # flutter_phoenix: "^1.0.0"
+  restart_app: ^1.2.1
   flutter_cache_manager: ^3.3.3
   flutter_card_swiper: ^7.0.1
   flutter_contacts: ^1.1.9+2

@@ -332,10 +332,12 @@ class AppPages {
                   value: serviceLocator()..loadData(),
                 ),
                 BlocProvider(
-                  create: (context)=>serviceLocator<EditFoodCubit>(),
+                  create: (context) => serviceLocator<EditFoodCubit>(),
                 )
               ],
-              child: EditFoodView(payload: state.extra,),
+              child: EditFoodView(
+                payload: state.extra,
+              ),
             ),
           ),
           // FLIP CARDS
@@ -362,14 +364,16 @@ class AppPages {
             path: Paths.ONETIMEDOCUMENTMESSAGEVIEW,
             name: Routes.ONETIMEDOCUMENTMESSAGE,
             builder: (context, state) => OneTimeDocumentMessageView(
-              oneTimeDocumentMessageViewParams: state.extra as OneTimeDocumentMessageViewParams,
+              oneTimeDocumentMessageViewParams:
+                  state.extra as OneTimeDocumentMessageViewParams,
             ),
           ),
           GoRoute(
             path: Paths.FORWARDMESSAGESVIEW,
             name: Routes.FORWARDMESSAGES,
             builder: (context, state) => ForwardMessagesView(
-              forwardMessagesViewParams: state.extra as ForwardMessagesViewParams,
+              forwardMessagesViewParams:
+                  state.extra as ForwardMessagesViewParams,
             ),
           ),
           GoRoute(
@@ -681,9 +685,11 @@ class AppPages {
                     path: Paths.AZKAARDETAILS,
                     name: Routes.AZKAARDETAILS,
                     builder: (context, state) => BlocProvider<AzkarCubit>(
-                      create: (_) => serviceLocator(),
-                      child: AzkarDetails(category: state.extra as String,),
-                    )),
+                          create: (_) => serviceLocator(),
+                          child: AzkarDetails(
+                            category: state.extra as String,
+                          ),
+                        )),
               ],
               builder: (context, state) => BlocProvider<AzkarCubit>(
                     create: (_) => serviceLocator(),
@@ -697,8 +703,8 @@ class AppPages {
               builder: (context, state) => BlocProvider<WalletCubit>(
                     create: (_) => serviceLocator(),
                     child: const WalletView(
-                      // type: state.extra as WalletTypes,
-                    ),
+                        // type: state.extra as WalletTypes,
+                        ),
                   ),
               routes: [
                 GoRoute(
@@ -1001,7 +1007,7 @@ class AppPages {
             name: Routes.CHAT,
             builder: (context, state) => BlocProvider<ChatsCubit>(
               create: (_) => serviceLocator(),
-              child: const ChatView(),
+              child: ChatView(chatsViewParams: state.extra as ChatsViewParams),
             ),
           ),
 
@@ -1029,7 +1035,7 @@ class AppPages {
                   path: Paths.VIEWCONTACT,
                   name: Routes.VIEWCONTACT,
                   builder: (context, state) => ViewContactView(
-                    sender: state.extra as String,
+                    chatsCubit: state.extra as ChatsCubit,
                   ),
                 ),
                 GoRoute(
@@ -1135,11 +1141,12 @@ class AppPages {
                 GoRoute(
                   path: Paths.VISITADOCTORLIST,
                   name: Routes.VISITADOCTORLIST,
-                  builder: (context, state) =>
-                      BlocProvider<DoctorsListCubit>(
-                        create: (context) => serviceLocator(),
-                        child: DoctorsListView(params: state.extra as DoctorsListParams,),
-                      ),
+                  builder: (context, state) => BlocProvider<DoctorsListCubit>(
+                    create: (context) => serviceLocator(),
+                    child: DoctorsListView(
+                      params: state.extra as DoctorsListParams,
+                    ),
+                  ),
                 ),
                 GoRoute(
                     path: Paths.VISITADOCTORDETAILS,
@@ -1165,7 +1172,6 @@ class AppPages {
                 GoRoute(
                     path: Paths.DOCTORDASHBOARD,
                     name: Routes.DOCTORDASHBOARD,
-
                     builder: (context, state) =>
                         BlocProvider<DoctorDashboardCubit>(
                             create: (_) => serviceLocator(),
@@ -1189,7 +1195,10 @@ class AppPages {
                     builder: (context, state) =>
                         BlocProvider<DoctorStatisticsCubit>(
                           create: (context) => serviceLocator(),
-                          child: DoctorStatisticsView(totalEarnedMoney: state.extra as List<EarnedMoneyEntity>,),
+                          child: DoctorStatisticsView(
+                            totalEarnedMoney:
+                                state.extra as List<EarnedMoneyEntity>,
+                          ),
                         )),
                 GoRoute(
                     path: Paths.DOCTORREVIEWS,
@@ -1258,7 +1267,8 @@ class AppPages {
                     path: Paths.RESTAURANTDETAILS,
                     name: Routes.RESTAURANTDETAILS,
                     builder: (context, state) => BlocProvider(
-                      create:(context)=>  serviceLocator<RestaurantDetailsCubit>(),
+                          create: (context) =>
+                              serviceLocator<RestaurantDetailsCubit>(),
                           child: RestaurantDetailsView(
                             restaurant: state.extra as Restaurant,
                           ),
@@ -1267,9 +1277,9 @@ class AppPages {
                       GoRoute(
                           path: Paths.FOODCART,
                           name: Routes.FOODCART,
-                          builder: (context, state) =>
-                              BlocProvider(
-                                create:(context)=> serviceLocator<RestaurantDetailsCubit>(),
+                          builder: (context, state) => BlocProvider(
+                                create: (context) =>
+                                    serviceLocator<RestaurantDetailsCubit>(),
                                 child: const FoodCartView(),
                               ))
                     ])
@@ -1683,15 +1693,14 @@ class AppPages {
                 name: Routes.BE_STAR_DETAILS,
                 builder: (context, state) {
                   return BlocProvider<StarCubit>(
-                      create: (_) =>serviceLocator(),
+                      create: (_) => serviceLocator(),
                       child: const StarWinnerView());
                 },
               ),
             ],
             builder: (context, state) {
               return BlocProvider<StarCubit>(
-                  create: (_) =>serviceLocator(),
-                  child: const BeStarView());
+                  create: (_) => serviceLocator(), child: const BeStarView());
             },
           ),
 

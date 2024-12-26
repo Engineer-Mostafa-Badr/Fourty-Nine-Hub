@@ -54,7 +54,7 @@ class ReiderRequestRepository {
       "address":
           "٧٣ شارع أحمد عيسى من، شجرة مريم، قسم المطرية، محافظة  4532331، مصر"
     });
-    SharedWebSocket.instance.socket!.io.emit("subcategory:driver", [data]);
+    SharedWebSocket.socket!.io.emit("subcategory:driver", [data]);
   }
 
   updateDriverLocationEmit() {
@@ -64,8 +64,8 @@ class ReiderRequestRepository {
       "subcategoryId": "string",
     });
 
-    SharedWebSocket.instance.socket!.io.emit("driver:location", [data]);
-    SharedWebSocket.instance.socket!.io.on(
+    SharedWebSocket.socket!.io.emit("driver:location", [data]);
+    SharedWebSocket.socket!.io.on(
       "driver:location",
       (data) {
         log("-----------------------------------------------------",
@@ -78,7 +78,7 @@ class ReiderRequestRepository {
   }
 
   updateDriverLocationOn() {
-    SharedWebSocket.instance.socket!.io.on(
+    SharedWebSocket.socket!.io.on(
       "driver:location",
       (data) {
         log(data.toString());
@@ -96,7 +96,7 @@ class ReiderRequestRepository {
       "subcategoryId": "62c8ba9f8e28a58a3edf57eb",
       "tripId": "66f0cb0681573362b3c41e18"
     });
-    SharedWebSocket.instance.socket!.emit("drivers:nearBy", [data]);
+    SharedWebSocket.socket!.emit("drivers:nearBy", [data]);
   }
 
 //   RequestSocketResponse nearbyDriversOn() {
@@ -162,7 +162,7 @@ class ReiderRequestRepository {
 //   }
 
   riseFare({required String offer, required String tripId}) {
-    SharedWebSocket.instance.socket!
+    SharedWebSocket.socket!
         .emit("trip:updatePrice", jsonEncode({"offer": offer, tripId: tripId}));
   }
 
@@ -178,7 +178,7 @@ class ReiderRequestRepository {
 
   void tripSoketOn(Function(OfferDataModel data) onData) {
     log("llllllllllllllllllllllllllllllllllllllllllllllllllll");
-    SharedWebSocket.instance.socket!.on(
+    SharedWebSocket.socket!.on(
       "Ride:sendOffer",
       (data) {
         OfferDataModel model = OfferDataModel.fromJson(jsonDecode(data));
@@ -194,8 +194,8 @@ class ReiderRequestRepository {
 
   List<TripResponseModel> getAllTripRider() {
     List<TripResponseModel> list = [];
-    SharedWebSocket.instance.socket!.emit("Ride:getAllTrip");
-    SharedWebSocket.instance.socket!.on(
+    SharedWebSocket.socket!.emit("Ride:getAllTrip");
+    SharedWebSocket.socket!.on(
       "Ride:getAllTrip",
       (data) {
         log(data.toString(), name: "lksdjfkdjjdjdjdjdjdjdjdjdjjddddd");
@@ -220,6 +220,7 @@ class ReiderRequestRepository {
   Future<Either<Failure, Map<String, dynamic>>> expiredTrip() {
     return dataSource.getExpairedTrip();
   }
+
   Future<Either<Failure, Map<String, dynamic>>> checkDriverType() {
     return dataSource.checkDriverType();
   }

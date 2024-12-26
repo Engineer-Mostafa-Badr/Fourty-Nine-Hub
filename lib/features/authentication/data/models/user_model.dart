@@ -41,7 +41,7 @@ class UserModel extends UserEntity {
       friendsCount: json['friends_count'] ?? 0,
       followersCount: json['followers_count'] ?? 0,
       followingCount: json['following_count'] ?? 0,
-      wallet: (json['wallet'] as num).toInt() ?? 0,
+      wallet: json['wallet'] == null ? 0 : (json['wallet'] as num).toInt(),
       isRider: json['isRider'] ?? false,
       isDoctor: json['isDoctor'] ?? false,
       isRestaurant: json['isRestaurant'] ?? false,

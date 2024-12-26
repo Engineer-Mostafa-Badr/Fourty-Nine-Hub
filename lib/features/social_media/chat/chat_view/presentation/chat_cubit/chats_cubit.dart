@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +6,7 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/core/enums/chat_categories.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_new_message_usecase.dart';
@@ -14,18 +14,25 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_typing_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/mark_messages_as_delivered_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_listen_to_messages.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/update_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatMuteState_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/changeChatToArchiveNormal_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/connect_me_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/delete_chat_use_case.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/disconnect_me_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chat_last_seen_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_online_offline_status_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/listen_to_new_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/pin_chat_use_case.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/recover_deleted_chats_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/show_deleted_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unpin_chat_use_case.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/update_user_bio_usecase.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/update_user_name_usecase.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
-import 'package:icons_launcher/utils/cli_logger.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 
 part 'chats_state.dart';
 
@@ -38,14 +45,23 @@ class ChatsCubit extends Cubit<ChatsState> {
   final MarkMessagesAsDeliveredUseCase _markMeesagesAsDeliveredUseCase;
   final GetChatsUseCase _getChatsUseCase;
   final DeleteChatUseCase _deleteChatUseCase;
+  final GetUserUseCase _getUserUseCase;
+  final RecoverDeletedChatsUseCase _recoverDeletedChatsUseCase;
   final PinChatUseCase _pinChatUseCase;
   final UnPinChatUseCase _unPinChatUseCase;
+  final ConnectMeUseCase _connectMeUseCase;
+  final DisconnectMeUseCase _disconnectMeUseCase;
+  final GetOnlineOfflineStatusUseCase _getOnlineOfflineStatusUseCase;
+  final UpdateChatUseCase _updateChatUseCase;
+  final GetChatLastSeenUseCase _getChatLastSeenUseCase;
   final ChangeChatToArchiveOrNormalUseCase _changeChatToArchiveOrNormalUseCase;
   final ChangeChatMuteStateUseCase _changeChatMuteStateUseCase;
   final Map<String, ChatEntity> _chats = {};
   ChatCategories _selectedChatCategory = ChatCategories.values.first;
   late ChatEntity _selectedChat;
   List<ChatEntity> selectedChats = [];
+  UserEntity? user;
+  List<LastSeenChatsEntity> lastSeenChats = [];
 
   ChatsCubit(
     this._getChatsUseCase,
@@ -60,6 +76,13 @@ class ChatsCubit extends Cubit<ChatsState> {
     this._listenToNewChatUseCase,
     this._listenToTypingUseCase,
     this._listenToRecordingUseCase,
+    this._updateChatUseCase,
+    this._getUserUseCase,
+    this._getChatLastSeenUseCase,
+    this._recoverDeletedChatsUseCase,
+    this._connectMeUseCase,
+    this._disconnectMeUseCase,
+    this._getOnlineOfflineStatusUseCase,
   ) : super(const ChatsState());
 
   // Selected Chats
@@ -76,13 +99,15 @@ class ChatsCubit extends Cubit<ChatsState> {
   }
 
   Future<void> init() async {
+    log("init chats cubit");
     await getChatsByCategory(_selectedChatCategory);
 
     _listenToNewMessages();
     _listenToNewChat();
     _listenToTyping();
     _listenToRecording();
-    SharedWebSocket.instance.socket!.on("error", (date) {
+    connectMe();
+    SharedWebSocket.socket!.on("error", (date) {
       log("error from socket : $date");
     });
   }
@@ -147,11 +172,13 @@ class ChatsCubit extends Cubit<ChatsState> {
     final response = await _getChatsUseCase(params);
     response.fold(
       (l) => emit(state.copyWith(status: ChatsStates.error, failure: l)),
-      (fetchedChats) {
+      (fetchedChats) async {
         final List<ChatEntity> pinnedChatList = [];
         final List<ChatEntity> unpinnedChatList = [];
 
         for (final chat in fetchedChats) {
+          await getOnlineOfflineStatus(chat: chat);
+
           log(chat.isPinned.toString());
           // Add to the corresponding list based on pinned status
           if (chat.isPinned) {
@@ -280,13 +307,14 @@ class ChatsCubit extends Cubit<ChatsState> {
   @override
   Future<void> close() {
     _stopListenToMessagesUseCase(const NoParams());
-    SharedWebSocket.instance.socket!.off(SocketIOListeners.typingMessage);
-    SharedWebSocket.instance.socket!.off(SocketIOListeners.recordingMessage);
-    SharedWebSocket.instance.socket!.off(SocketIOListeners.creatingNewChat);
+    SharedWebSocket.socket!.off(SocketIOListeners.typingMessage);
+    SharedWebSocket.socket!.off(SocketIOListeners.recordingMessage);
+    SharedWebSocket.socket!.off(SocketIOListeners.creatingNewChat);
+    disconnectMe();
     return super.close();
   }
 
-  Future<void> changeArchiveChat() async {
+  Future<void> changeArchiveChat({required bool isArchivedTab}) async {
     for (var chat in selectedChats) {
       // chat.archived = !chat.archived;
       log("archived = ${chat.archived}");
@@ -299,7 +327,12 @@ class ChatsCubit extends Cubit<ChatsState> {
       chat.isSelected = false; // setter getter in chatsEntity
     }
     selectedChats.clear();
-    await getArchivedChats();
+
+    if (isArchivedTab) {
+      await getArchivedChats();
+    } else {
+      await getChatsByCategory(_selectedChatCategory);
+    }
   }
 
   Future<void> changeMuteChat() async {
@@ -333,40 +366,61 @@ class ChatsCubit extends Cubit<ChatsState> {
     await getChatsByCategory(_selectedChatCategory);
   }
 
-  // Local Storage
-  // Future<void> pinAndUnpinChat() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<void> recoverDeletedChats() async {
+    final respons = await _recoverDeletedChatsUseCase(const NoParams());
+    respons.fold((l) => null, (r) async {
+      log("recoverDeletedChats = $r");
+      await getChatsByCategory(_selectedChatCategory);
+    });
+  }
 
-  //   // Retrieve the current list of pinned chat IDs from SharedPreferences
-  //   List<String> pinnedChats = prefs.getStringList('pinnedChats') ?? [];
+  Future<void> connectMe() async {
+    final respons = await _connectMeUseCase(const NoParams());
+    respons.fold((l) => null, (r) async {
+      log("connectMe = $r");
+    });
+  }
 
-  //   for (var chat in selectedChats) {
-  //     log("toggle pin/unpin = ${chat.id}");
+  Future<void> disconnectMe() async {
+    final respons = await _disconnectMeUseCase(const NoParams());
+    respons.fold((l) => null, (r) async {
+      log("disconnectMe = $r");
+    });
+  }
 
-  //     if (pinnedChats.contains(chat.id)) {
-  //       // If the chat is already pinned, unpin it
-  //       pinnedChats.remove(chat.id);
-  //       chat.isPinned = false; // Update the pinned status in your ChatEntity
-  //       log("unpin = ${chat.id}");
-  //     } else {
-  //       // If the chat is not pinned, pin it
-  //       pinnedChats.add(chat.id);
-  //       chat.isPinned = true; // Update the pinned status in your ChatEntity
-  //       log("pin = ${chat.id}");
-  //     }
+  Future<void> getUser() async {
+    final respons = await _getUserUseCase(selectedChat.userId);
+    respons.fold((l) => null, (r) {
+      log("user = ${r.email}");
+      user = r;
+    });
+    emit(state.copyWith(
+      status: ChatsStates.success,
+    ));
+  }
 
-  //     chat.isSelected = false; // Reset the selection status
-  //   }
+  Future<void> getOnlineOfflineStatus({required ChatEntity chat}) async {
+    final respons = await _getOnlineOfflineStatusUseCase(chat.userId);
+    respons.fold((l) => null, (r) {
+      log("status = ${r.status}");
+      log("formattedDate = ${r.formatDate}");
 
-  //   // Save the updated list of pinned chat IDs back to SharedPreferences
-  //   await prefs.setStringList('pinnedChats', pinnedChats);
+      chat.lastSeen = r.status == "online" ? "Online" : r.formatDate;
+      log("lastSeen is equal to = ${chat.lastSeen}");
+      chat.online = (chat.lastSeen != "" && chat.lastSeen == "Online");
+    });
+  }
 
-  //   // Clear selected chats after action is complete
-  //   selectedChats.clear();
-
-  //   // Refresh the chat list by category
-  //   await getChatsByCategory(_selectedChatCategory);
-  // }
+  Future<void> getChatLastSeen({required String chatId}) async {
+    lastSeenChats.clear();
+    final respons = await _getChatLastSeenUseCase(chatId);
+    respons.fold((l) => null, (r) {
+      lastSeenChats.addAll(r);
+    });
+    emit(state.copyWith(
+      status: ChatsStates.success,
+    ));
+  }
 
   // Remote Storage
   Future<void> pinAndUnpinChat() async {
@@ -397,5 +451,18 @@ class ChatsCubit extends Cubit<ChatsState> {
 
     // Refresh the chat list by category
     await getChatsByCategory(_selectedChatCategory);
+  }
+
+  Future<void> updateChat({required ChatEntity chat}) async {
+    final response = await _updateChatUseCase(
+        UpdateChatParams(chatId: chat.id, isTimerActive: chat.isTimerActive));
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: ChatsStates.error)),
+        (data) {
+      log("update chat result $data");
+      chat.isTimerActive = !chat.isTimerActive;
+      emit(state.copyWith(status: ChatsStates.success));
+    });
   }
 }

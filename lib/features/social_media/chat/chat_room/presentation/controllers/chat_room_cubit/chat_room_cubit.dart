@@ -18,10 +18,12 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_shared_contacts_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/clear_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_one_time_view_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_clear_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_delete_message.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_delivered_messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_one_time_message_seen.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_pin_message_usecase.dart';
@@ -39,7 +41,10 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_recording_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/stop_typing_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/unpin_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/update_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_online_offline_status_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/show_deleted_message_usecase.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -55,6 +60,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   final MarkMessageAsSeenUseCase _markMessageAsSeenUseCase;
   final ListenToSeenMessagesUseCase _listenToSeenMessagesUseCase;
   final SetRecordAsListenedUseCase _setRecordAsListenedUseCase;
+  final DeleteMessageUseCase _deleteMessageUseCase;
+  final ListenToDeleteMessageUseCase _listenToDeleteMessageUseCase;
   final ListenToRecordListened _listenToRecordListenedUseCase;
   final StopListenToSeenMessagesUseCase _stopListenToSeenMessagesUseCase;
   final ListenToDeliveredMessagesUseCase _listenToDeliveredMessagesUseCase;
@@ -65,11 +72,15 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   final StopRecordingMessageUseCase _stopRecordingMessageUseCase;
   final PinMessageUseCase _pinMessageUseCase;
   final UnPinMessageUseCase _unpinMessageUseCase;
+
   final ListenToPinMessageUseCase _listenToPinMessageUseCase;
   final ListenToUnPinMessageUseCase _listenToUnPinMessageUseCase;
   final StopListenToDeliveredMessagesUseCase
       _stopListenToDeliveredMessagesUseCase;
   final ClearChatUseCase _clearChatUseCase;
+  final ShowDeletedMessageUseCase _showDeletedMessageUseCase;
+  MessageEntity? deletedMessage;
+
   final ListenToClearChatUseCase _listenToClearChatUseCase;
   final ScrollController scrollController = ScrollController();
   final TextEditingController messageTextController = TextEditingController();
@@ -111,6 +122,9 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     this._unpinMessageUseCase,
     this._listenToPinMessageUseCase,
     this._listenToUnPinMessageUseCase,
+    this._deleteMessageUseCase,
+    this._listenToDeleteMessageUseCase,
+    this._showDeletedMessageUseCase,
   ) : super(const ChatRoomState()) {
     _listenToDeliveredMessages();
     _listenToSeenMessages();
@@ -119,7 +133,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     _listenToClearChat();
     _listenToPinMessage();
     _listenToUnPinMessage();
-    SharedWebSocket.instance.socket!.emit('Chat:getRooms');
+    _listenToDeleteMessage();
+    SharedWebSocket.socket!.emit('Chat:getRooms');
   }
 
   Future<void> init({required ChatEntity selectedChat}) async {
@@ -130,7 +145,12 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       chat.pinnedMessageId = getChatPinnedMessage;
       log("Get Chat pinned message id: ${chat.pinnedMessageId}");
     }
-    await _getMessages();
+    _messages.clear();
+    await getMessages(pageNumber: 1);
+  }
+
+  int getMessagesCount() {
+    return _messages.length;
   }
 
   Future<String?> _getChat() async {
@@ -159,6 +179,19 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     emit(state.copyWith(status: ChatRoomStates.messagesSelected));
   }
 
+  Future<void> showDeletedMessage({required MessageEntity message}) async {
+    final result = await _showDeletedMessageUseCase(
+        ShowDeletedMessageParams(chatId: chat.id, messageId: message.id));
+    result.fold((l) {
+      log(l.toString());
+      emit(state.copyWith(failure: l, status: ChatRoomStates.error));
+    }, (r) {
+      deletedMessage = r;
+      log("show deleted message chat room cubit Right: $r");
+      emit(state.copyWith(status: ChatRoomStates.success));
+    });
+  }
+
   void clearSelectedMessages() {
     for (var message in selectedMessages) {
       message.isSelected = false;
@@ -172,17 +205,22 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   }
 
 // =========================================== get messages ===========================================
-  Future<void> _getMessages() async {
-    _messages.clear();
+  Future<void> getMessages({required int pageNumber}) async {
+    // _messages.clear();
     final response = await _getMessagesUseCase(GetMessagesParams(
-        chatId: chat.id, pagination: PaginationParams(limit: 20, page: 1)));
+        chatId: chat.id,
+        pagination: PaginationParams(limit: 20, page: pageNumber)));
 
     response.fold(
         (failure) => emit(
             state.copyWith(failure: failure, status: ChatRoomStates.error)),
         (data) {
+      _messages = _messages.reverse();
       for (final message in data) {
-        _messages[message.id] = message;
+        if (!message.isTimerExpired) {
+          // remove messages that are expired
+          _messages[message.id] = message;
+        }
       }
       _messages = _messages.reverse();
 
@@ -193,7 +231,9 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       }
       emit(state.copyWith(
           messages: _messages.values.toList(), status: ChatRoomStates.success));
-      _scrollDown();
+      if (pageNumber == 1) {
+        _scrollDown();
+      }
     });
   }
 
@@ -410,7 +450,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   }
 
   void removeChatToSelectedChats({required ChatEntity chat}) {
-    selectedChatsToForword.removeWhere((chatIterator) => chatIterator.id == chat.id);
+    selectedChatsToForword
+        .removeWhere((chatIterator) => chatIterator.id == chat.id);
     chat.isSelected = false;
     emit(state.copyWith(status: ChatRoomStates.success));
   }
@@ -597,6 +638,39 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     });
   }
 
+  Future<void> deleteMessages() async {
+    for (MessageEntity message in selectedMessages) {
+      await _deleteMessageUseCase(DeleteMessageParams(
+        chatId: chat.id,
+        messageId: message.id,
+      ));
+      message.isSelected = false;
+    }
+    selectedMessages.clear();
+    emit(state.copyWith(status: ChatRoomStates.success));
+  }
+
+  void _listenToDeleteMessage() {
+    _listenToDeleteMessageUseCase.call((deleteMessageParams) {
+      if (deleteMessageParams.chatId == chat.id) {
+        _messages[deleteMessageParams.messageId]?.markAsDeleted();
+        if (chat.lastMessage != null) {
+          if (chat.lastMessage?.id == deleteMessageParams.messageId) {
+            chat.lastMessage?.text = 'Message Deleted';
+            chat.lastMessage?.isDeleted = true;
+          }
+        }
+        log('Deleteeeee Messageeeeeeeeeeeeee: ${_messages[deleteMessageParams.messageId]?.text}');
+        emit(
+          state.copyWith(
+            messages: _messages.values.toList(),
+            status: ChatRoomStates.success,
+          ),
+        );
+      }
+    });
+  }
+
   // =========================================================================================================
 
   void _scrollDown() => Timer(const Duration(milliseconds: 200),
@@ -606,11 +680,12 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   Future<void> close() {
     _stopListenToSeenMessagesUseCase(const NoParams());
     _stopListenToDeliveredMessagesUseCase(const NoParams());
-    SharedWebSocket.instance.socket!.off(SocketIOListeners.setRecordAsListened);
-    SharedWebSocket.instance.socket!.off(SocketIOListeners.oneTimeMessageSeen);
-    SharedWebSocket.instance.socket!.off(SocketIOListeners.clearChat);
-    SharedWebSocket.instance.socket!.off(SocketIOListeners.pinMessage);
-    SharedWebSocket.instance.socket!.off(SocketIOListeners.unPinMessage);
+    SharedWebSocket.socket!.off(SocketIOListeners.setRecordAsListened);
+    SharedWebSocket.socket!.off(SocketIOListeners.oneTimeMessageSeen);
+    SharedWebSocket.socket!.off(SocketIOListeners.clearChat);
+    SharedWebSocket.socket!.off(SocketIOListeners.pinMessage);
+    SharedWebSocket.socket!.off(SocketIOListeners.unPinMessage);
+    SharedWebSocket.socket!.off(SocketIOListeners.messageDeleted);
     return super.close();
   }
 }

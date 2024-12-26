@@ -57,8 +57,8 @@ class _EditFoodViewState extends State<EditFoodView>
 
   bool showValidator = false;
 
-  final ApiConsumer apiConsumer =
-      BaseApiConsumer(serviceLocator(), serviceLocator());
+  // final ApiConsumer apiConsumer =
+  //     BaseApiConsumer(serviceLocator());
 
   // final ScrollController _scrollController = ScrollController();
   final TextEditingController foodNameController = TextEditingController();

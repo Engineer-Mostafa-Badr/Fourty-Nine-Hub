@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -7,11 +9,14 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
@@ -36,15 +41,15 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 
 class OtherAccountView extends StatefulWidget {
-  OtherAccountView({super.key, payload}){
+  OtherAccountView({super.key, payload}) {
     print("objectitemId$payload");
-    if(payload is String){
-      userId=payload;
-    }else {
+    if (payload is String) {
+      userId = payload;
+    } else {
       print("payloadpayloadpayload $payload");
       // print(id);
       // print('itemId${payload['itemId']}');
-      userId=payload['itemId'];
+      userId = payload['itemId'];
     }
   }
   var userId;
@@ -57,7 +62,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
   @override
   Widget build(BuildContext context) {
     final loginUser = context.read<UserCubit>().state.data;
-
+    if (context.isUserLoggedIn) {
+      context
+          .read<UserCubit>()
+          .updateProfileView(isProfile: true, userId: widget.userId);
+    }
     return DefaultTabController(
       length: loginUser?.id == widget.userId ? 4 : 3,
       child: Scaffold(
@@ -78,7 +87,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         SliverToBoxAdapter(
                             child: Container(
                                 width: double.infinity,
-                                padding:  EdgeInsetsDirectional.only(
+                                padding: EdgeInsetsDirectional.only(
                                     top: 80.h, end: 20.w, start: 20.w),
                                 child: Row(
                                     mainAxisAlignment:
@@ -189,7 +198,6 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                             },
                                             icon: const Icon(
                                               Icons.search,
-
                                             )),
                                     ]))),
                         SliverToBoxAdapter(
@@ -547,8 +555,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 selectCoverImage();
                               },
                               child: Container(
-                                  padding:  EdgeInsets.all(10.w),
-                                  margin:  EdgeInsets.all(20.w),
+                                  padding: EdgeInsets.all(10.w),
+                                  margin: EdgeInsets.all(20.w),
                                   decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: AppColors.GREY_LIGHT_COLOR),
@@ -705,6 +713,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               )
                             : InkWell(
                                 onTap: () {
+                                  if (context.isUserLoggedIn) {
+                                    context
+                                        .read<UserCubit>()
+                                        .updateProfileView(isProfile: false, userId: widget.userId);
+                                  }
                                   showDialog(
                                       context: context,
                                       builder: (context) => ImageDetailsScreen(
@@ -719,7 +732,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 },
                                 child: CircleAvatar(
                                   radius: 110.w,
-                                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                  backgroundColor:
+                                      Theme.of(context).scaffoldBackgroundColor,
                                   child: ImageFromInternet(
                                     image: user.profilePicture ??
                                         UIConst.profilePlaceHolder,
@@ -737,7 +751,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 selectImageGallary();
                               },
                               child: Container(
-                                  padding:  EdgeInsets.all(15.w),
+                                  padding: EdgeInsets.all(15.w),
                                   decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: AppColors.GREY_LIGHT_COLOR),
@@ -768,8 +782,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                 Label(
                                     text: "${user.firstName} ${user.lastName}",
                                     style: Styles.headerText(
-                                        fontWeight: FontWeight.w600,
-
+                                      fontWeight: FontWeight.w600,
                                     )),
                                 const Sizer(
                                   width: 5,
@@ -786,15 +799,15 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               overflow: TextOverflow.ellipsis,
                               text: TextSpan(children: [
                                 TextSpan(
-                                    text: "${user.firstName} ${user.lastName}",
-                                    style: Styles.headerText(
-                                        fontWeight: FontWeight.w600,
-                                        ),),
-                                if (user.job.isNotEmpty && user.job !='Hidden')
+                                  text: "${user.firstName} ${user.lastName}",
+                                  style: Styles.headerText(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                if (user.job.isNotEmpty && user.job != 'Hidden')
                                   TextSpan(
                                       text: '\t(${user.job})',
-                                      style: Styles.headerText(
-                                           fontSize: 26)),
+                                      style: Styles.headerText(fontSize: 26)),
                               ])),
                     ),
                     if (loginUser?.id != widget.userId)
@@ -803,26 +816,37 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         normalPress: () async {
                           if (context.read<UserCubit>().isLoggedIn) {
                             if (state.profileData?.areFriends == true) {
-                              var result = await context
-                                  .read<SocialPostsCubit>()
+                              ChatEntity? chat = await context
+                                  .read<UserCubit>()
                                   .createNormalChat(
-                                      widget.userId, ChatCategoriesIds.social);
-                              if (result == true) {
-                                context.push(Routes.CHAT);
-                              }
+                                    otherId: widget.userId,
+                                    categoryId: ChatCategoriesIds.social,
+                                  );
+                              context.pop();
+                              context.push(
+                                Routes.CHAT,
+                                extra: ChatsViewParams(
+                                  isFromStartChat: true,
+                                  initialTabIndex: 0,
+                                  selectedChat: chat,
+                                ),
+                              );
                             } else {
-                              var result = await context
-                                  .read<SocialPostsCubit>()
+                              ChatEntity? chat = await context
+                                  .read<UserCubit>()
                                   .createNormalChat(
-                                      widget.userId, ChatCategoriesIds.greet);
-                              if (result == true) {
-                                context.pop();
-                                context.push(Routes.CHAT);
-                              } else {
-                                showErrorMessage(context,
-                                    getFailureMessage(state.failure!, context));
-                                context.pop();
-                              }
+                                    otherId: widget.userId,
+                                    categoryId: ChatCategoriesIds.greet,
+                                  );
+                              context.pop();
+                              context.push(
+                                Routes.CHAT,
+                                extra: ChatsViewParams(
+                                  isFromStartChat: true,
+                                  initialTabIndex: 0,
+                                  selectedChat: chat,
+                                ),
+                              );
                             }
                           } else {
                             context.push(Routes.LOGIN);
@@ -830,17 +854,20 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         },
                         anonymousPress: () async {
                           if (context.read<UserCubit>().isLoggedIn) {
-                            var result = await context
-                                .read<SocialPostsCubit>()
-                                .createAnonymousChat(widget.userId);
-                            if (result == true) {
-                              context.pop();
-                              context.push(Routes.CHATROOM);
-                            } else {
-                              showErrorMessage(context,
-                                  getFailureMessage(state.failure!, context));
-                              context.pop();
-                            }
+                            ChatEntity? chat = await context
+                                .read<UserCubit>()
+                                .createAnonymousChat(
+                                  otherId: widget.userId,
+                                );
+                            context.pop();
+                            context.push(
+                              Routes.CHAT,
+                              extra: ChatsViewParams(
+                                isFromStartChat: true,
+                                initialTabIndex: 0,
+                                selectedChat: chat,
+                              ),
+                            );
                           } else {
                             context.push(Routes.LOGIN);
                           }
@@ -877,8 +904,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                 ),
                 Sizer(height: 5.h),
                 Label(
-                    text: user.bio,
-                    style: Styles.mediumText(),
+                  text: user.bio,
+                  style: Styles.mediumText(),
                 ),
                 Sizer(height: 5.h),
                 if (user.city.isNotEmpty ||
@@ -888,7 +915,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (user.city.isNotEmpty && user.city !='Hidden') ...[
+                      if (user.city.isNotEmpty && user.city != 'Hidden') ...[
                         Row(
                           children: [
                             const Icon(
@@ -908,8 +935,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             Expanded(
                               child: Label(
                                 text: user.city,
-                                style: Styles.headerText(
-                                     fontSize: 30),
+                                style: Styles.headerText(fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -919,7 +945,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           height: 5.h,
                         ),
                       ],
-                      if (user.country.isNotEmpty && user.country !='Hidden') ...[
+                      if (user.country.isNotEmpty &&
+                          user.country != 'Hidden') ...[
                         Row(
                           children: [
                             const Icon(
@@ -939,8 +966,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             Expanded(
                               child: Label(
                                 text: user.country,
-                                style: Styles.headerText(
-                                     fontSize: 30),
+                                style: Styles.headerText(fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -970,8 +996,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             Expanded(
                               child: Label(
                                 text: user.job,
-                                style: Styles.headerText(
-                                     fontSize: 30),
+                                style: Styles.headerText(fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -981,7 +1006,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           height: 5.h,
                         ),
                       ],
-                      if (user.phone.isNotEmpty && user.phone !='Hidden') ...[
+                      if (user.phone.isNotEmpty && user.phone != 'Hidden') ...[
                         Row(
                           children: [
                             const Icon(
@@ -999,8 +1024,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             Expanded(
                               child: Label(
                                 text: user.phone,
-                                style: Styles.headerText(
-                                     fontSize: 30),
+                                style: Styles.headerText(fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -1010,7 +1034,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           height: 5.h,
                         ),
                       ],
-                      if (user.maritalStatus.isNotEmpty && user.maritalStatus !='Hidden') ...[
+                      if (user.maritalStatus.isNotEmpty &&
+                          user.maritalStatus != 'Hidden') ...[
                         Row(
                           children: [
                             const Icon(
@@ -1023,8 +1048,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             Expanded(
                               child: Label(
                                 text: user.maritalStatus,
-                                style: Styles.headerText(
-                                     fontSize: 30),
+                                style: Styles.headerText(fontSize: 30),
                                 maxLines: 1,
                               ),
                             ),
@@ -1048,9 +1072,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
     return RichText(
         text: TextSpan(children: [
       TextSpan(
-          text: value,
-          style: Styles.mediumText(
-               fontWeight: FontWeight.w500)),
+          text: value, style: Styles.mediumText(fontWeight: FontWeight.w500)),
       TextSpan(
           text: label,
           style: Styles.mediumText(

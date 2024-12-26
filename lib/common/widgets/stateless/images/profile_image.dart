@@ -1,5 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../res/style/app_colors.dart';
@@ -30,6 +33,12 @@ class ProfileImage extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (fromProfile == false && userId.isNotEmpty) {
+          if (context.isUserLoggedIn) {
+            context.read<UserCubit>().updateProfileView(
+                  isProfile: false,
+                  userId: userId,
+                );
+          }
           context.push(Routes.OTHERSACCOUNT, extra: userId);
         }
       },

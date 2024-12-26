@@ -50,21 +50,21 @@ class WebSocketHelper {
       //   pr('Connect To Socket successfully ');
       // });
 
-      SharedWebSocket.instance.socket!.on('getRooms', (data) => pr('get rooms : $data'));
+      SharedWebSocket.socket!.on('getRooms', (data) => pr('get rooms : $data'));
 
-      SharedWebSocket.instance.socket!.on('NotificationCreated', (data) {
+      SharedWebSocket.socket!.on('NotificationCreated', (data) {
         pr('NotificationCreated Event is recieved and the data is: ');
         pr(data);
         notificationCallback(jsonDecode(data));
       });
 
-      SharedWebSocket.instance.socket!.on('error', (data) {
+      SharedWebSocket.socket!.on('error', (data) {
         pr("error $data");
       });
 
-      SharedWebSocket.instance.socket!.onDisconnect((_) => pr('disconnect'));
+      SharedWebSocket.socket!.onDisconnect((_) => pr('disconnect'));
 
-      SharedWebSocket.instance.socket!.onerror((e) => pr('onError $e'));
+      SharedWebSocket.socket!.onerror((e) => pr('onError $e'));
     } catch (e) {
       pr('Exception Thrown $e');
     }

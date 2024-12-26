@@ -15,11 +15,13 @@ class ChatEntity {
   bool typing = false;
   bool recording = false;
   bool online;
+  String? lastSeen;
   MessageEntity? lastMessage;
   String? pinnedMessageId;
   MessageEntity? pinnedMessage;
   bool isSelected = false;
   bool isPinned = false;
+  bool isTimerActive = false;
 
   ChatEntity({
     required this.id,
@@ -41,5 +43,7 @@ class ChatEntity {
     this.pinnedMessageId,
     this.isSelected = false,
     this.isPinned = false,
+    this.isTimerActive = false,
+    this.lastSeen,
   });
 }

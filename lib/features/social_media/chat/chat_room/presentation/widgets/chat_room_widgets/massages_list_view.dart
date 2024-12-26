@@ -57,6 +57,75 @@ import 'message_card.dart';
 //   }
 // }
 
+// class MessagesListView extends StatelessWidget {
+//   const MessagesListView({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final chatRoomCubit = context.read<ChatRoomCubit>();
+
+//     return BlocListener<ChatsCubit, ChatsState>(
+//       listener: (context, state) {
+//         if (state.isNewMessage && state.newMessage != null) {
+//           chatRoomCubit.addMessage(state.newMessage!);
+//         }
+//       },
+//       child: BlocBuilder<ChatRoomCubit, ChatRoomState>(
+//         builder: (context, state) {
+//           if (state.messages != null && state.messages!.isNotEmpty) {
+//             return Expanded(
+//               child: Scrollbar(
+//                 interactive: true,
+//                 thumbVisibility: true,
+//                 thickness: 4,
+//                 radius: const Radius.circular(16),
+//                 child: ListView.builder(
+//                   itemCount: state.messages!.length,
+//                   controller: chatRoomCubit.scrollController,
+//                   itemBuilder: (context, index) {
+//                     final message = state.messages![index];
+//                     final messageDate = message
+//                         .createdAt; // Assuming message has a timestamp field
+
+//                     bool shouldShowDate = true;
+
+//                     if (index > 0) {
+//                       final previousMessageDate =
+//                           state.messages![index - 1].createdAt;
+//                       shouldShowDate =
+//                           previousMessageDate.day != messageDate.day ||
+//                               previousMessageDate.month != messageDate.month ||
+//                               previousMessageDate.year != messageDate.year;
+//                     }
+
+//                     return Column(
+//                       crossAxisAlignment: CrossAxisAlignment.stretch,
+//                       children: [
+//                         if (shouldShowDate)
+//                           DateWidget(
+//                               date:
+//                                   messageDate), // Insert date widget when date changes
+//                         MessageCard(
+//                           messageEntity: message,
+//                           anotherUserName: 'Anonymous',
+//                         ),
+//                       ],
+//                     );
+//                   },
+//                 ),
+//               ),
+//             );
+//           } else {
+//             return const Center(
+//               child: SizedBox(),
+//             );
+//           }
+//         },
+//       ),
+//     );
+//   }
+// }
+
 class MessagesListView extends StatelessWidget {
   const MessagesListView({super.key});
 
@@ -79,39 +148,57 @@ class MessagesListView extends StatelessWidget {
                 thumbVisibility: true,
                 thickness: 4,
                 radius: const Radius.circular(16),
-                child: ListView.builder(
-                  itemCount: state.messages!.length,
-                  controller: chatRoomCubit.scrollController,
-                  itemBuilder: (context, index) {
-                    final message = state.messages![index];
-                    final messageDate = message
-                        .createdAt; // Assuming message has a timestamp field
-
-                    bool shouldShowDate = true;
-
-                    if (index > 0) {
-                      final previousMessageDate =
-                          state.messages![index - 1].createdAt;
-                      shouldShowDate =
-                          previousMessageDate.day != messageDate.day ||
-                              previousMessageDate.month != messageDate.month ||
-                              previousMessageDate.year != messageDate.year;
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (scrollNotification) {
+                    if (scrollNotification is ScrollEndNotification &&
+                        scrollNotification.metrics.pixels ==
+                            scrollNotification.metrics.minScrollExtent) {
+                      // Trigger loading more messages when reaching the bottom
+                      final currentPage = (state.messages!.length / 20).ceil();
+                      chatRoomCubit.getMessages(pageNumber: currentPage + 1);
+                      return true;
                     }
-
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        if (shouldShowDate)
-                          DateWidget(
-                              date:
-                                  messageDate), // Insert date widget when date changes
-                        MessageCard(
-                          messageEntity: message,
-                          anotherUserName: 'Anonymous',
-                        ),
-                      ],
-                    );
+                    return false;
                   },
+                  child: ListView.builder(
+                    itemCount: state.messages!.length, // Add one for the loading indicator
+                    controller: chatRoomCubit.scrollController,
+                    itemBuilder: (context, index) {
+                      // if (index == state.messages!.length) {
+                      //   // Show a loading indicator at the end
+                      //   return const Center(child: CircularProgressIndicator());
+                      // }
+
+                      final message = state.messages![index];
+                      final messageDate = message
+                          .createdAt; // Assuming message has a timestamp field
+
+                      bool shouldShowDate = true;
+
+                      if (index > 0) {
+                        final previousMessageDate =
+                            state.messages![index - 1].createdAt;
+                        shouldShowDate = previousMessageDate.day !=
+                                messageDate.day ||
+                            previousMessageDate.month != messageDate.month ||
+                            previousMessageDate.year != messageDate.year;
+                      }
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          if (shouldShowDate)
+                            DateWidget(
+                                date:
+                                    messageDate), // Insert date widget when date changes
+                          MessageCard(
+                            messageEntity: message,
+                            anotherUserName: 'Anonymous',
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
               ),
             );

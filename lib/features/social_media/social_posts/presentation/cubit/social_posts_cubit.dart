@@ -8,8 +8,8 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/change_react.dart';
 import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_anonymous_chat_use_case.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_normal_chat_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/create_anonymous_chat_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/create_normal_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/react_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
@@ -86,13 +86,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final AcceptRejectFriendRequestUseCase _acceptRejectFriendRequestUseCase;
   final DeleteFriendUseCase _deleteFriendUseCase;
   final SearchUsersUsecase _searchUsersUsecase;
-  final CreateNormalChatUseCase _createNormalChatUseCase;
-  final CreateAnonymousChatUseCase _createAnonymousChatUseCase;
+  
 
   SocialPostsCubit(
     this._getFeedUseCase,
     this._getUserPostsUseCase,
-    this._createNormalChatUseCase,
     this._postReactUseCase,
     this._getPostCommentsUseCase,
     this._postCommentUseCase,
@@ -121,7 +119,6 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._getGlobalFeedUseCase,
     this._viewProfileUseCase,
     this._searchUsersUsecase,
-    this._createAnonymousChatUseCase,
   ) : super(const SocialPostsState());
 
 
@@ -330,35 +327,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     });
   }
 
-  // create normal chat
-  Future<bool> createNormalChat(String otherId, String categoryId) async {
-    // emit(state.copyWith(status: StateStatus.loading));
-    final response = await _createNormalChatUseCase(
-        CreateNormalChatParams(otherUserId: otherId, categoryId: categoryId));
-    bool result = false;
-    response.fold(
-        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-        (data) async {
-      result = data;
-      emit(state.copyWith(status: StateStatus.success));
-    });
-    return result;
-  }
-
-  // create anonymous chat
-  Future<bool> createAnonymousChat(String otherId) async {
-    // emit(state.copyWith(status: StateStatus.loading));
-    final response = await _createAnonymousChatUseCase(
-        CreateAnonymousChatParams(otherUserId: otherId));
-    bool result = false;
-    response.fold(
-        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-        (data) async {
-      result = data;
-      emit(state.copyWith(status: StateStatus.success));
-    });
-    return result;
-  }
+  
 
   // get advertisements
   Future<List<PostEntity>> getAdvertisements() async {

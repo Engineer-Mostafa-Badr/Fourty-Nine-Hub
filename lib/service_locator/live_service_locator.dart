@@ -18,7 +18,7 @@ class LiveServiceLocator {
     serviceLocator.registerLazySingleton<LiveDataSource>(
       () => LiveDataSourceImpl(
         apiConsumer: serviceLocator(),
-        socket: serviceLocator(),
+        
       ),
     );
 

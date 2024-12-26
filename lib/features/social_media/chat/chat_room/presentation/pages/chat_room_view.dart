@@ -222,6 +222,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/massages_list_view.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -470,7 +471,11 @@ class _ChatRoomViewState extends State<ChatRoomView>
                             }
                           },
                         ),
-                        const SendMessageWidget(),
+                        (chatRoomCubit.chat.categoryId ==
+                                    ChatCategoriesIds.greet &&
+                                chatRoomCubit.getMessagesCount() > 0)
+                            ? const SizedBox()
+                            : const SendMessageWidget(),
                       ],
                     ),
                   ),

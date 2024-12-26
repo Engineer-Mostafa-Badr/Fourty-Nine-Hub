@@ -27,6 +27,7 @@ class MessageEntity {
   bool isListened;
   bool isSelected = false;
   bool isForwarded = false;
+  bool isTimerExpired = false;
 
   MessageEntity(
       {required this.id,
@@ -50,7 +51,8 @@ class MessageEntity {
       required this.isOneTimeSeenMessage,
       required this.isListened,
       this.isSelected = false,
-      this.isForwarded = false
+      this.isForwarded = false,
+      this.isTimerExpired = false,
       });
 
   void markAsSeen() {
@@ -61,6 +63,10 @@ class MessageEntity {
 
   void markAsListened() {
     isListened = true;
+  }
+
+  void markAsDeleted() {
+    isDeleted = true;
   }
 
   void markAsOneTimeView() {

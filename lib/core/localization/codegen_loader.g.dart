@@ -1080,7 +1080,9 @@ class CodegenLoader extends AssetLoader{
   "opened": "تمت مشاهدته",
   "forwardMessage": "تحويل الرسائل",
   "forwarded": "تمت اعادة توجيهه",
-  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة"
+  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة",
+  "recoverDeletedChats": "استعادة الدردشات المحذوفة",
+  "sureRecoverDeletedChats": "هل تريد استعادة الدردشات المحذوفة؟"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2165,7 +2167,9 @@ static const Map<String,dynamic> en = {
   "opened": "Opened",
   "forwardMessage": "Forward Message",
   "forwarded": "Forwarded",
-  "continueUsingChatServices": " , To continue using chat services"
+  "continueUsingChatServices": " , To continue using chat services",
+  "recoverDeletedChats": "Recover Deleted Chats",
+  "sureRecoverDeletedChats": "Are you sure you want to recover deleted chats?"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

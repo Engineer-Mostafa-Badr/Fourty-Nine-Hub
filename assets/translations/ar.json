@@ -1066,5 +1066,7 @@
   "opened": "تمت مشاهدته",
   "forwardMessage": "تحويل الرسائل",
   "forwarded": "تمت اعادة توجيهه",
-  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة"
+  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة",
+  "recoverDeletedChats": "استعادة الدردشات المحذوفة",
+  "sureRecoverDeletedChats": "هل تريد استعادة الدردشات المحذوفة؟"
 }

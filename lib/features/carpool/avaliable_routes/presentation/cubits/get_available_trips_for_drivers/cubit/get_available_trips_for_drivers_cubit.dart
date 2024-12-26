@@ -4,12 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/get_all_trips_entity.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 
-
 part 'get_available_trips_for_drivers_state.dart';
 
 class GetAvailableTripsForDriversCubit
     extends Cubit<GetAvailableTripsForDriversState> {
-  // final Socket SharedWebSocket.instance.socket!;
+  // final Socket SharedWebSocket.socket!;
 
   GetAvailableTripsForDriversCubit()
       : super(GetAvailableTripsForDriversInitial()) {
@@ -17,12 +16,12 @@ class GetAvailableTripsForDriversCubit
   }
 
   void _initializeSocketListeners() {
-    if (!SharedWebSocket.instance.socket!.connected) {
-      SharedWebSocket.instance.socket!.connect();
-      print("Socket connection initiated...");
-    }
+    // if (!SharedWebSocket.instance.socket!.connected) {
+    //   SharedWebSocket.instance.socket!.connect();
+    //   print("Socket connection initiated...");
+    // }
 
-    SharedWebSocket.instance.socket!.on('carpool:getTripForDriver', (data) {
+    SharedWebSocket.socket!.on('carpool:getTripForDriver', (data) {
       print("---------------------\n");
 
       try {
@@ -34,21 +33,21 @@ class GetAvailableTripsForDriversCubit
       }
     });
 
-    SharedWebSocket.instance.socket!.on('connect_error', (error) {
+    SharedWebSocket.socket!.on('connect_error', (error) {
       print("Socket connection error: $error");
       emit(GetAvailableTripsForDriversFailure(
           errorMessage: 'Error occurred. Please try again: $error'));
     });
 
-    SharedWebSocket.instance.socket!.on('disconnect', (data) {
+    SharedWebSocket.socket!.on('disconnect', (data) {
       print('Socket disconnected: $data');
     });
   }
 
   void fetchAllCarpoolTrips() {
-    SharedWebSocket.instance.socket!.connect();
-    emit(GetAvailableTripsForDriversLoading());
-    SharedWebSocket.instance.socket!.emit('carpool:getTripForDriver');
+    // SharedWebSocket.instance.socket!.connect();
+    // emit(GetAvailableTripsForDriversLoading());
+    SharedWebSocket.socket!.emit('carpool:getTripForDriver');
   }
 
   List<CarpoolTripParam> _parseTrips(dynamic data) {

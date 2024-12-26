@@ -10,6 +10,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/clear_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_one_time_view_message_usecase.dart';
@@ -23,6 +24,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/set_record_as_listened.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/unpin_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/update_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -41,7 +43,11 @@ abstract class MessagesRemoteDataSource {
   void listenToPinMessage(Function(ListenToPinMessageParams params) params);
   void listenToUnPinMessage(Function(ListenToUnPinMessageParams params) params);
 
+  void listenToDeleteMessage(Function(DeleteMessageParams) params);
+
   Future<Either<Failure, bool>> sendMessage(SendMessageParams params);
+
+  Future<Either<Failure, bool>> updateChat(UpdateChatParams params);
 
   Future<Either<Failure, bool>> startTyping({required String chatId});
   Future<Either<Failure, bool>> stopTyping({required String chatId});
@@ -55,10 +61,7 @@ abstract class MessagesRemoteDataSource {
   void listenToRecordingStatus(
       Function(ListenToRecordingParams listenToTypingParams) params);
 
-  Future<Either<Failure, bool>> deleteMessage({
-    required String chatId,
-    required String messageId,
-  });
+  Future<Either<Failure, bool>> deleteMessage(DeleteMessageParams params);
 
   void stopListenToMessages();
 
@@ -654,13 +657,15 @@ class MessagesRemoteDataSourceImplementation
 
   @override
   Future<Either<Failure, bool>> deleteMessage(
-      {required String chatId, required String messageId}) async {
+      DeleteMessageParams params) async {
     var data = {
-      "chatId": chatId,
-      "messageId": messageId,
+      "chatId": params.chatId,
+      "messageId": params.messageId,
     };
     final response =
         await _apiConsumer.delete(EndPoints.deleteChatMessage, data: data);
+    SharedWebSocket.socket!
+        .emit(SocketIOEvents.deleteMessage, jsonEncode(data));
     return response.fold(
         (failure) => Left(failure), (data) => Right(data['status']));
   }
@@ -669,8 +674,7 @@ class MessagesRemoteDataSourceImplementation
   void listenToNewMessages(Function(MessageEntity message) params) {
     try {
       // _socket.connect();
-      SharedWebSocket.instance.socket!.on(SocketIOListeners.newMessageFromMe,
-          (data) {
+      SharedWebSocket.socket!.on(SocketIOListeners.newMessageFromMe, (data) {
         final decodedData = jsonDecode(data);
         log("listenToNewMessagesssssssssssss From me");
         log("listenToNewMessagesssssssssssss  From me$decodedData");
@@ -683,8 +687,7 @@ class MessagesRemoteDataSourceImplementation
         MessageModel messageModel = MessageModel.fromJson(data);
         params(messageModel);
       });
-      SharedWebSocket.instance.socket!.on(SocketIOListeners.newMessageFromOther,
-          (data) {
+      SharedWebSocket.socket!.on(SocketIOListeners.newMessageFromOther, (data) {
         final decodedData = jsonDecode(data);
         log("listenToNewMessagesssssssssssss From Other");
         log("listenToNewMessagesssssssssssss From Other$decodedData");
@@ -715,7 +718,7 @@ class MessagesRemoteDataSourceImplementation
           mediaIds.add(id);
         }
       }
-      SharedWebSocket.instance.socket!.emit(
+      SharedWebSocket.socket!.emit(
           SocketIOEvents.sendMessage,
           jsonEncode({
             "chatId": params.chat.id,
@@ -778,8 +781,8 @@ class MessagesRemoteDataSourceImplementation
 
   @override
   void stopListenToMessages() {
-    SharedWebSocket.instance.socket!.off(SocketIOListeners.newMessageFromOther);
-    SharedWebSocket.instance.socket!.off(SocketIOListeners.newMessageFromMe);
+    SharedWebSocket.socket!.off(SocketIOListeners.newMessageFromOther);
+    SharedWebSocket.socket!.off(SocketIOListeners.newMessageFromMe);
   }
 
   @override
@@ -811,7 +814,7 @@ class MessagesRemoteDataSourceImplementation
     try {
       // _socket.connect();
       CliLogger.info("you mark messages as seen : chatId ${params.chatId}");
-      SharedWebSocket.instance.socket!.emit(
+      SharedWebSocket.socket!.emit(
           SocketIOEvents.markMessageAsSeen,
           jsonEncode({
             "chatId": params.chatId,
@@ -827,8 +830,7 @@ class MessagesRemoteDataSourceImplementation
   void listenToDeliveredStatus(Function(String chatId) params) {
     try {
       // _socket.connect();
-      SharedWebSocket.instance.socket!.on(SocketIOListeners.messageDelivered,
-          (data) {
+      SharedWebSocket.socket!.on(SocketIOListeners.messageDelivered, (data) {
         final decodedData = jsonDecode(data);
         if (decodedData is List) {
           data = decodedData[0];
@@ -848,8 +850,7 @@ class MessagesRemoteDataSourceImplementation
   void listenToSeenStatus(Function(List<MessageEntity> messages) params) {
     try {
       // _socket.connect();
-      SharedWebSocket.instance.socket!.on(SocketIOListeners.messageSeen,
-          (data) {
+      SharedWebSocket.socket!.on(SocketIOListeners.messageSeen, (data) {
         CliLogger.info("messageSeen :  $data");
         params((jsonDecode(data) as List)
             .map((e) => MessageModel.fromJson(e))
@@ -862,12 +863,12 @@ class MessagesRemoteDataSourceImplementation
 
   @override
   void stopListenToDeliveredStatus() {
-    SharedWebSocket.instance.socket!.off(SocketIOListeners.messageDelivered);
+    SharedWebSocket.socket!.off(SocketIOListeners.messageDelivered);
   }
 
   @override
   void stopListenToSeenStatus() {
-    SharedWebSocket.instance.socket!.off(SocketIOListeners.messageSeen);
+    SharedWebSocket.socket!.off(SocketIOListeners.messageSeen);
   }
 
   @override
@@ -876,8 +877,7 @@ class MessagesRemoteDataSourceImplementation
     try {
       // _socket.connect();
       CliLogger.info("you mark messages as delivered");
-      SharedWebSocket.instance.socket!.emit(
-          SocketIOEvents.markMessageAsDelivered,
+      SharedWebSocket.socket!.emit(SocketIOEvents.markMessageAsDelivered,
           jsonEncode({"chatId": params.chatId}));
       return const Right(true);
     } catch (e) {
@@ -893,7 +893,7 @@ class MessagesRemoteDataSourceImplementation
       // _socket.connect();
       CliLogger.info('you start typing : $chatId');
 
-      SharedWebSocket.instance.socket!.emit(
+      SharedWebSocket.socket!.emit(
           SocketIOEvents.startTypingMessage,
           jsonEncode({
             "chatId": chatId,
@@ -911,7 +911,7 @@ class MessagesRemoteDataSourceImplementation
       // serviceLocator<Socket>().connect();
       CliLogger.info('you stop typing : $chatId');
 
-      SharedWebSocket.instance.socket!.emit(
+      SharedWebSocket.socket!.emit(
           SocketIOEvents.stopTypingMessage,
           jsonEncode({
             "chatId": chatId,
@@ -928,8 +928,7 @@ class MessagesRemoteDataSourceImplementation
       Function(ListenToTypingParams listenToTypingParams) params) {
     try {
       // _socket.connect();
-      SharedWebSocket.instance.socket!.on(SocketIOListeners.typingMessage,
-          (data) {
+      SharedWebSocket.socket!.on(SocketIOListeners.typingMessage, (data) {
         log(data.toString());
         final decodedData = jsonDecode(data);
         log("listenToTypingStatus :  $data");
@@ -954,8 +953,7 @@ class MessagesRemoteDataSourceImplementation
       Function(ListenToRecordingParams listenToRecordingParams) params) {
     try {
       // _socket.connect();
-      SharedWebSocket.instance.socket!.on(SocketIOListeners.recordingMessage,
-          (data) {
+      SharedWebSocket.socket!.on(SocketIOListeners.recordingMessage, (data) {
         log(data.toString());
         final decodedData = jsonDecode(data);
         log("listenToRecordingStatus :  $data");
@@ -981,7 +979,7 @@ class MessagesRemoteDataSourceImplementation
       // _socket.connect();
       CliLogger.info('you start recording : $chatId');
 
-      SharedWebSocket.instance.socket!.emit(
+      SharedWebSocket.socket!.emit(
           SocketIOEvents.startRecordingMessage,
           jsonEncode({
             "chatId": chatId,
@@ -999,7 +997,7 @@ class MessagesRemoteDataSourceImplementation
       // _socket.connect();
       CliLogger.info('you stop recording : $chatId');
 
-      SharedWebSocket.instance.socket!.emit(
+      SharedWebSocket.socket!.emit(
           SocketIOEvents.stopRecordingMessage,
           jsonEncode({
             "chatId": chatId,
@@ -1031,8 +1029,7 @@ class MessagesRemoteDataSourceImplementation
   void listenToSeenOneTimeViewMessage(Function(MessageEntity message) params) {
     try {
       // _socket.connect();
-      SharedWebSocket.instance.socket!.on(SocketIOListeners.oneTimeMessageSeen,
-          (data) {
+      SharedWebSocket.socket!.on(SocketIOListeners.oneTimeMessageSeen, (data) {
         final decodedData = jsonDecode(data);
         log(" listenToSeenOneTimeViewMessage :  $data");
         log(" listenToSeenOneTimeViewMessage decodedData:  $decodedData");
@@ -1060,7 +1057,7 @@ class MessagesRemoteDataSourceImplementation
       CliLogger.info(
           'you set record as listened remote data source : ${params.chatId}');
 
-      SharedWebSocket.instance.socket!.emit(
+      SharedWebSocket.socket!.emit(
           SocketIOEvents.setRecordAsListened,
           jsonEncode({
             "chatId": params.chatId,
@@ -1079,8 +1076,7 @@ class MessagesRemoteDataSourceImplementation
           params) async {
     try {
       // _socket.connect();
-      SharedWebSocket.instance.socket!.on(SocketIOListeners.setRecordAsListened,
-          (data) {
+      SharedWebSocket.socket!.on(SocketIOListeners.setRecordAsListened, (data) {
         final decodedData = jsonDecode(data);
         log("listenToRecordListened remote data source :  $data");
         log("listenToRecordListened remote data source : $decodedData");
@@ -1115,7 +1111,7 @@ class MessagesRemoteDataSourceImplementation
   void listenToClearChatStatus(Function(String chatId) params) {
     try {
       // _socket.connect();
-      SharedWebSocket.instance.socket!.on(SocketIOListeners.clearChat, (data) {
+      SharedWebSocket.socket!.on(SocketIOListeners.clearChat, (data) {
         final decodedData = jsonDecode(data);
         log("Clear Chat remote data source :  $data");
         log("Clear Chat remote data source : $decodedData");
@@ -1161,7 +1157,7 @@ class MessagesRemoteDataSourceImplementation
   void listenToPinMessage(Function(ListenToPinMessageParams params) params) {
     try {
       // _socket.connect();
-      SharedWebSocket.instance.socket!.on(SocketIOListeners.pinMessage, (data) {
+      SharedWebSocket.socket!.on(SocketIOListeners.pinMessage, (data) {
         final decodedData = jsonDecode(data);
         log("Pin Message remote data source :  $data");
         log("Pin Message remote data source : $decodedData");
@@ -1184,8 +1180,7 @@ class MessagesRemoteDataSourceImplementation
       Function(ListenToUnPinMessageParams params) params) {
     try {
       // _socket.connect();
-      SharedWebSocket.instance.socket!.on(SocketIOListeners.unPinMessage,
-          (data) {
+      SharedWebSocket.socket!.on(SocketIOListeners.unPinMessage, (data) {
         final decodedData = jsonDecode(data);
         log("UnPin Message remote data source :  $data");
         log("UnPin Message remote data source : $decodedData");
@@ -1215,5 +1210,43 @@ class MessagesRemoteDataSourceImplementation
       log("Get Chat Remote Data Source pinnedMessage: ${data['data']['pinnedMessage']}");
       return Right(data['data']['pinnedMessage']);
     });
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateChat(UpdateChatParams params) async {
+    var data = {
+      "timerActive": params.isTimerActive,
+    };
+    final response =
+        await _apiConsumer.put(EndPoints.updateChat(params.chatId), data: data);
+    return response.fold((failure) {
+      log("updateChat Remote Data Source: $failure");
+      return Left(failure);
+    }, (data) {
+      log("updateChat Remote Data Source: $data");
+      log("updateChat Remote Data Source pinnedMessage: ${data['data']}");
+      return Right(data['status']);
+    });
+  }
+  
+  @override
+  void listenToDeleteMessage(Function(DeleteMessageParams p1) params) {
+   try {
+      SharedWebSocket.socket!.on(SocketIOListeners.messageDeleted, (data) {
+        final decodedData = jsonDecode(data);
+        log("Delete Message remote data source :  $data");
+        log("Delete Message remote data source : $decodedData");
+        if (decodedData is List) {
+          data = decodedData[0];
+        } else {
+          data = decodedData;
+        }
+        CliLogger.info("Delete Message remote data source :  $data");
+        params(DeleteMessageParams(
+            chatId: data['chatId'], messageId: data['messageId']));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to delete message error $e");
+    }
   }
 }

@@ -1055,5 +1055,7 @@ abstract class  LocaleKeys {
   static const forwardMessage = 'forwardMessage';
   static const forwarded = 'forwarded';
   static const continueUsingChatServices = 'continueUsingChatServices';
+  static const recoverDeletedChats = 'recoverDeletedChats';
+  static const sureRecoverDeletedChats = 'sureRecoverDeletedChats';
 
 }

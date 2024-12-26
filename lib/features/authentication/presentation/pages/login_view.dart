@@ -100,13 +100,13 @@ class _LoginViewState extends State<LoginView> {
               ),
             );
           } else if (state is LoginSuccess) {
-            await CacheManager.saveAccessToken(
-                state.userTokensEntity.accessToken);
-            await CacheManager.saveRefreshToken(
-                state.userTokensEntity.refreshToken);
-            await BackgroundService.reStartWebSocketService(
-                state.userTokensEntity.accessToken);
-            serviceLocator<UserCubit>()
+            // await CacheManager.saveAccessToken(
+            //     state.userTokensEntity.accessToken);
+            // await CacheManager.saveRefreshToken(
+            //     state.userTokensEntity.refreshToken);
+            // await BackgroundService.reStartWebSocketService(
+            //     state.userTokensEntity.accessToken);
+             serviceLocator<UserCubit>()
               ..setLogin(true)
               ..attachToken()
               ..getUser().then((value) async {
@@ -123,8 +123,8 @@ class _LoginViewState extends State<LoginView> {
                     '/////////////////////////////////////////////////////////////////////////');
                 debugPrint(serviceLocator<UserCubit>().state.data.toString());
                 // Navigator.pop(context);
-                Navigator.pop(context);
-                context.push(Routes.HOME);
+                // Navigator.pop(context);
+                context.pushReplacement(Routes.HOME);
               });
             context
                 .read<NotificationSocketIoCubit>()

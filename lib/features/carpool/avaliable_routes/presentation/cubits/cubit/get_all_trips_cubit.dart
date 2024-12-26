@@ -7,19 +7,19 @@ import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class GetAllTripsCubit extends Cubit<GetAllTripsState> {
-  // final Socket SharedWebSocket.instance.socket!;
+  // final Socket SharedWebSocket.socket!;
 
   GetAllTripsCubit() : super(GetAllTripsInitial()) {
     _initializeSocketListeners();
   }
 
   void _initializeSocketListeners() {
-    if (!SharedWebSocket.instance.socket!.connected) {
-      SharedWebSocket.instance.socket!.connect();
-      print("Socket connection initiated...");
-    }
+    // if (!SharedWebSocket.instance.socket!.connected) {
+    //   SharedWebSocket.instance.socket!.connect();
+    //   print("Socket connection initiated...");
+    // }
 
-    SharedWebSocket.instance.socket!.on('carpool:getAllTrip', (data) {
+    SharedWebSocket.socket!.on('carpool:getAllTrip', (data) {
       print("Data received from server: $data");
 
       try {
@@ -30,12 +30,12 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
       }
     });
 
-    SharedWebSocket.instance.socket!.on('connect_error', (error) {
+    SharedWebSocket.socket!.on('connect_error', (error) {
       print("there is no trips try again");
       emit(GetAllTripsFailure('there is no trips try again'));
     });
 
-    SharedWebSocket.instance.socket!.on('disconnect', (data) {
+    SharedWebSocket.socket!.on('disconnect', (data) {
       print('Socket disconnected: $data');
     });
   }
@@ -43,7 +43,7 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
   void fetchAllCarpoolTrips() {
     // SharedWebSocket.instance.socket!.connect();
     emit(GetAllTripsLoading());
-    SharedWebSocket.instance.socket!.emit('carpool:getAllTrip');
+    SharedWebSocket.socket!.emit('carpool:getAllTrip');
   }
 
   List<CarpoolTripParam> _parseTrips(dynamic data) {

@@ -19,7 +19,7 @@ class ViewContactChatLockCart extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Icon(
-            Icons.speaker_notes_off,
+            Icons.mail_lock,
             color: AppColors.GREY_DARK_COLOR,
             size: 24,
           ),
@@ -34,7 +34,9 @@ class ViewContactChatLockCart extends StatelessWidget {
                   LocaleKeys.chatLock.tr(),
                   style: Styles.mediumText(
                     fontWeight: FontWeight.w600,
-                    color:context.isDarkMode ? AppColors.BACKGROUND_COLOR: AppColors.PRIMARY_COLOR,
+                    color: context.isDarkMode
+                        ? AppColors.BACKGROUND_COLOR
+                        : AppColors.PRIMARY_COLOR,
                   ),
                 ),
                 ConstrainedBox(
