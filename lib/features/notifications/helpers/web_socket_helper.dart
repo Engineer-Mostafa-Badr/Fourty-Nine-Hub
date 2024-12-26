@@ -55,22 +55,22 @@ class WebSocketHelper {
       SharedWebSocket.socket!.on('NotificationCreated', (data) {
         pr('NotificationCreated Event is recieved and the data is: ');
         pr(data);
+        Map<String, dynamic> json = jsonDecode(data);
+        AudioPlayer player = AudioPlayer();
+        if (json['metadata']['newTrip'] ?? false) {
+          // log(json['metadata']['newTrip'].toString(),
+          //     name: "Ljkdlfjsdlfkjsldkfjsldkjflskdjf");
+          Future.delayed(
+            const Duration(seconds: 2),
+                () {
+              player.play(AssetSource("audio/u_have_a_new_ride_ar.mp3"));
+            },
+          );
+        }
         notificationCallback(jsonDecode(data));
+
       });
 
-      Map<String, dynamic> json = jsonDecode(data);
-      AudioPlayer player = AudioPlayer();
-      if (json['metadata']['newTrip'] ?? false) {
-        // log(json['metadata']['newTrip'].toString(),
-        //     name: "Ljkdlfjsdlfkjsldkfjsldkjflskdjf");
-        Future.delayed(
-          const Duration(seconds: 2),
-              () {
-            player.play(AssetSource("audio/u_have_a_new_ride_ar.mp3"));
-          },
-        );
-      }
-      notificationCallback(jsonDecode(data));
 
       SharedWebSocket.socket!.on('error', (data) {
         pr("error $data");

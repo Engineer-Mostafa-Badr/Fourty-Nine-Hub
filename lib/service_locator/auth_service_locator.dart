@@ -165,6 +165,7 @@ class AuthServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
       )..attachToken(),
     );
     serviceLocator.registerSingleton(

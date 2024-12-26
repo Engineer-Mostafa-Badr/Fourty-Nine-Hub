@@ -1737,8 +1737,7 @@ class AppPages {
                           ),
                           BlocProvider(
                             create: (context) =>
-                                GetAvailableTripsForDriversCubit(
-                                    serviceLocator()),
+                                GetAvailableTripsForDriversCubit(),
                           ),
                           BlocProvider(
                             create: (context) =>
