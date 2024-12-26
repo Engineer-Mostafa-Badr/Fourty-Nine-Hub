@@ -34,23 +34,22 @@ class FaceBookPostDetails extends StatefulWidget {
   String? postId;
   CommentEntity? comment;
   bool? isReply;
-  FaceBookPostDetails({super.key,payload}){
-    if(payload is String){
+  FaceBookPostDetails({super.key, payload}) {
+    if (payload is String) {
       postId = payload;
-    }else{
+    } else {
       postId = payload['postId'];
-      if(payload['comment']!=null){
-        comment =CommentModel.fromJson(payload['comment']);
+      if (payload['comment'] != null) {
+        comment = CommentModel.fromJson(payload['comment']);
         print("comment?.toJson${comment?.toJson()}");
       }
-      if(payload['isReply'] == true){
+      if (payload['isReply'] == true) {
         isReply = true;
-      }else{
+      } else {
         isReply = false;
       }
     }
   }
-
 
   @override
   State<FaceBookPostDetails> createState() => _FaceBookPostDetailsState();
@@ -63,10 +62,12 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
 
   @override
   void initState() {
-    context.read<SocialPostsCubit>().loadPostDetails(context, widget.postId??'',comment: widget.comment);
-    if(widget.isReply == true){
+    context
+        .read<SocialPostsCubit>()
+        .loadPostDetails(context, widget.postId ?? '', comment: widget.comment);
+    if (widget.isReply == true) {
       print("adnaslkdasldma");
-      Future.delayed(const Duration(milliseconds: 500),()=>showReplies());
+      Future.delayed(const Duration(milliseconds: 500), () => showReplies());
     }
     super.initState();
   }
@@ -75,13 +76,13 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
   Widget build(BuildContext context) {
     final user = context.read<UserCubit>().state.data;
 
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         // toolbarHeight: 200.h,
         iconTheme: const IconThemeData(color: Colors.grey),
-        title: Label(text: LocaleKeys.post.localize, style: Styles.mediumText()),
+        title:
+            Label(text: LocaleKeys.post.localize, style: Styles.mediumText()),
         leading: IconButton(
             onPressed: () => context.pop(), icon: const Icon(Icons.arrow_back)),
         centerTitle: true,
@@ -119,23 +120,23 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                                 FacebookPostCard(
                                   post: state.postDetails!,
                                   onReact: (params) async {
-                                    var result = await controller
-                                        .onReact(params: params, from: 'posts');
+                                    var result = await controller.onReact(
+                                        params: params, from: 'posts');
                                     return result;
                                   },
-                                  deletePost: (postId)=>controller.deletePost(
+                                  deletePost: (postId) => controller.deletePost(
                                       context: context, postId: postId),
-                                  hidePost: (String postId) => controller.hidePost(
-                                      context: context, postId: postId),
+                                  hidePost: (String postId) =>
+                                      controller.hidePost(
+                                          context: context, postId: postId),
                                   showPostComments: (String v) {
                                     bottomSheet(
                                         context: context,
                                         isScrollControlled: true,
                                         widget: BlocProvider.value(
-                                          value: serviceLocator<SocialPostsCubit>()
-                                            ..loadComments(
-                                                context,
-                                                v),
+                                          value:
+                                              serviceLocator<SocialPostsCubit>()
+                                                ..loadComments(context, v),
                                           child: FacebookPostComments(
                                             postId: v,
                                             onAddComment:
@@ -149,28 +150,35 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                                                 params: ReplyOnCommentParams(
                                                     postId: params.postId,
                                                     content: params.content,
-                                                    commentId: params.commentId),
+                                                    commentId:
+                                                        params.commentId),
                                                 from: 'feed',
                                               );
                                             },
                                             onDeleteComment: (String id) async {
-                                              return await controller.deleteComment(
-                                                  context: context,
-                                                  commentId: id,
-                                                  postId: state.postDetails?.id??'',
-                                                  from: 'feed');
+                                              return await controller
+                                                  .deleteComment(
+                                                      context: context,
+                                                      commentId: id,
+                                                      postId: state.postDetails
+                                                              ?.id ??
+                                                          '',
+                                                      from: 'feed');
                                               // print(result);
                                             },
                                             onDeleteReply: (String id) async {
-                                              return await controller.deleteComment(
-                                                  context: context,
-                                                  commentId: id,
-                                                  postId: state.postDetails?.id??'',
-                                                  from: 'feed');
+                                              return await controller
+                                                  .deleteComment(
+                                                      context: context,
+                                                      commentId: id,
+                                                      postId: state.postDetails
+                                                              ?.id ??
+                                                          '',
+                                                      from: 'feed');
                                             },
                                             from: 'feed',
-                                            onEditComment:
-                                                (PostCommentParams params) async {
+                                            onEditComment: (PostCommentParams
+                                                params) async {
                                               var result = await controller
                                                   .editComment(params: params);
                                               return result;
@@ -178,74 +186,98 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                                           ),
                                         ));
                                   },
-                                  showPostDetails: (PostEntity post) => bottomSheet(
-                                      context: context,
-                                      isScrollControlled: true,
-                                      widget: BlocProvider.value(
-                                        value: serviceLocator<SocialPostsCubit>()
-                                          ..loadPostDetails(
-                                              context,
-                                              state.postDetails?.isShared ==
-                                                  true
-                                                  ? state.postDetails?.mainPost?.id??''
-                                                  : state.postDetails?.id??''),
-                                        child: PostDetailsPage(
-                                          comments: const [],
-                                          postId: state.postDetails?.id??'',
-                                          deletePost: (String postId) =>
-                                              controller.deletePost(
-                                                  context: context, postId: postId),
-                                          hidePost: (String postId) =>
-                                              controller.hidePost(
-                                                  context: context, postId: postId),
-                                          onAddComment:
-                                              (PostCommentParams params) =>
-                                              controller.onPostComment(
-                                                  params: params,
-                                                  from: 'details'),
-                                          onReact: (params) => controller.onReact(
-                                              params: params, from: 'posts'),
-                                          showPostComments: (postId) {},
-                                          showPostDetails: (PostEntity post) {},
-                                          // post: controller.feedPagingController.itemList![index],
+                                  showPostDetails: (PostEntity post) =>
+                                      bottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          widget: BlocProvider.value(
+                                            value: serviceLocator<
+                                                SocialPostsCubit>()
+                                              ..loadPostDetails(
+                                                  context,
+                                                  state.postDetails?.isShared ==
+                                                          true
+                                                      ? state.postDetails
+                                                              ?.mainPost?.id ??
+                                                          ''
+                                                      : state.postDetails?.id ??
+                                                          ''),
+                                            child: PostDetailsPage(
+                                              comments: const [],
+                                              postId:
+                                                  state.postDetails?.id ?? '',
+                                              deletePost: (String postId) =>
+                                                  controller.deletePost(
+                                                      context: context,
+                                                      postId: postId),
+                                              hidePost: (String postId) =>
+                                                  controller.hidePost(
+                                                      context: context,
+                                                      postId: postId),
+                                              onAddComment:
+                                                  (PostCommentParams params) =>
+                                                      controller.onPostComment(
+                                                          params: params,
+                                                          from: 'details'),
+                                              onReact: (params) =>
+                                                  controller.onReact(
+                                                      params: params,
+                                                      from: 'posts'),
+                                              showPostComments: (postId) {},
+                                              showPostDetails:
+                                                  (PostEntity post) {},
+                                              // post: controller.feedPagingController.itemList![index],
 
-                                          onCommentReply:
-                                              (ReplyOnCommentParams params) {
-                                            return controller.replyOnComment(
-                                              params: ReplyOnCommentParams(
-                                                  postId: params.postId,
-                                                  content: params.content,
-                                                  commentId: params.commentId),
-                                              from: 'details',
-                                            );
-                                          },
-                                          onDeleteComment: (String id) async {
-                                            return await controller.deleteComment(
-                                                context: context,
-                                                commentId: id,
-                                                postId: state.postDetails?.id??'',
-                                                from: 'feed');
-                                            // print(result);
-                                          },
-                                          onDeleteReply: (String id) async {
-                                            return await controller.deleteComment(
-                                                context: context,
-                                                commentId: id,
-                                                postId:state.postDetails?.id??'',
-                                                from: 'feed');
-                                          },
-                                          onEditComment:
-                                              (PostCommentParams params) async {
-                                            var result = await controller
-                                                .editComment(params: params);
-                                            return result;
-                                          },
-                                        ),
-                                      )),
+                                              onCommentReply:
+                                                  (ReplyOnCommentParams
+                                                      params) {
+                                                return controller
+                                                    .replyOnComment(
+                                                  params: ReplyOnCommentParams(
+                                                      postId: params.postId,
+                                                      content: params.content,
+                                                      commentId:
+                                                          params.commentId),
+                                                  from: 'details',
+                                                );
+                                              },
+                                              onDeleteComment:
+                                                  (String id) async {
+                                                return await controller
+                                                    .deleteComment(
+                                                        context: context,
+                                                        commentId: id,
+                                                        postId: state
+                                                                .postDetails
+                                                                ?.id ??
+                                                            '',
+                                                        from: 'feed');
+                                                // print(result);
+                                              },
+                                              onDeleteReply: (String id) async {
+                                                return await controller
+                                                    .deleteComment(
+                                                        context: context,
+                                                        commentId: id,
+                                                        postId: state
+                                                                .postDetails
+                                                                ?.id ??
+                                                            '',
+                                                        from: 'feed');
+                                              },
+                                              onEditComment: (PostCommentParams
+                                                  params) async {
+                                                var result = await controller
+                                                    .editComment(
+                                                        params: params);
+                                                return result;
+                                              },
+                                            ),
+                                          )),
                                   onShare: (String id) {},
                                   from: 'details',
                                   isMyPost:
-                                  user?.id == state.postDetails?.user.id,
+                                      user?.id == state.postDetails?.user.id,
                                   index: 0,
                                 ),
                                 const Divider(),
@@ -254,11 +286,11 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                           ),
                           PagedSliverList<int, CommentEntity>(
                             pagingController:
-                            controller.commentsPagingController,
+                                controller.commentsPagingController,
                             builderDelegate:
-                            PagedChildBuilderDelegate<CommentEntity>(
+                                PagedChildBuilderDelegate<CommentEntity>(
                               noItemsFoundIndicatorBuilder: (context) {
-                                return  Center(
+                                return Center(
                                   child: Text(
                                     LocaleKeys.noComments.localize,
                                     style: const TextStyle(
@@ -271,7 +303,8 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                                 return _buildCommentCard(
                                     comment: controller.commentsPagingController
                                         .itemList![index],
-                                    onCommentReply: (ReplyOnCommentParams params) {
+                                    onCommentReply:
+                                        (ReplyOnCommentParams params) {
                                       return controller.replyOnComment(
                                         params: ReplyOnCommentParams(
                                             postId: params.postId,
@@ -281,17 +314,20 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                                       );
                                     },
                                     onDeleteComment: (String id) async {
-                                       bool result = await controller.deleteComment(
-                                          context: context,
-                                          commentId: id,
-                                          postId: state.postDetails?.id??'',
-                                          from: 'feed');
-                                       if(result == true){
-                                         controller.commentsPagingController.itemList?.removeWhere((element) => element.id==id);
-                                         setState(() {
-
-                                         });
-                                       }
+                                      bool result =
+                                          await controller.deleteComment(
+                                              context: context,
+                                              commentId: id,
+                                              postId:
+                                                  state.postDetails?.id ?? '',
+                                              from: 'feed');
+                                      if (result == true) {
+                                        controller
+                                            .commentsPagingController.itemList
+                                            ?.removeWhere(
+                                                (element) => element.id == id);
+                                        setState(() {});
+                                      }
 
                                       // print(result);
                                     },
@@ -305,18 +341,19 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                                               .id,
                                           from: 'feed');
                                     },
-                                    onEditComment: (PostCommentParams params) async {
-                                      var result = await controller
-                                          .editComment(params: params);
+                                    onEditComment:
+                                        (PostCommentParams params) async {
+                                      var result = await controller.editComment(
+                                          params: params);
                                       return result;
                                     });
                               },
                               noMoreItemsIndicatorBuilder: (context) =>
                                   Container(),
                               firstPageProgressIndicatorBuilder: (context) =>
-                              const CupertinoActivityIndicator(),
+                                  const CupertinoActivityIndicator(),
                               newPageProgressIndicatorBuilder: (context) =>
-                              const CupertinoActivityIndicator(),
+                                  const CupertinoActivityIndicator(),
                             ),
                           ),
                         ],
@@ -337,21 +374,25 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                       const Sizer(),
                       Expanded(
                           child: TextFormField(
-                            maxLines: null,
-                            controller: commentTextController,
-                            onChanged: (v) {
-                              setState(() {});
-                            },
-                            style: Styles.headerText(fontSize: 26),
-                            decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.all(5),
-                              hintText: 'Type your comment ....',
-                              hintStyle: Styles.mediumText(),
-                            ),
-                          )),
+                        maxLines: null,
+                        controller: commentTextController,
+                        onChanged: (v) {
+                          setState(() {});
+                        },
+                        style: Styles.headerText(fontSize: 26),
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(5),
+                          hintText: 'Type your comment ....',
+                          hintStyle: Styles.mediumText(),
+                        ),
+                      )),
                       const Sizer(),
-                      if(loading==true) CircularProgressIndicator(strokeWidth: 8.w,),
-                      if (commentTextController.text.isNotEmpty&&(loading ==false||loading==null))
+                      if (loading == true)
+                        CircularProgressIndicator(
+                          strokeWidth: 8.w,
+                        ),
+                      if (commentTextController.text.isNotEmpty &&
+                          (loading == false || loading == null))
                         IconAppButton(
                           icon: Icons.send,
                           size: 20,
@@ -363,7 +404,8 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                             CommentEntity data = await controller.onPostComment(
                                 params: PostCommentParams(
                                     postId: state.postDetails!.id,
-                                    content: commentTextController.text), from: '');
+                                    content: commentTextController.text),
+                                from: '');
                             setState(() {
                               loading = false;
                             });
@@ -374,7 +416,7 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                               CommentModel(
                                 id: data.id,
                                 content: commentTextController.text,
-                                post: widget.postId??'',
+                                post: widget.postId ?? '',
                                 createdAt: DateTime.now(),
                                 loveCount: data.loveCount,
                                 angryCount: data.angryCount,
@@ -400,7 +442,7 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                             );
                             // widget.post.commentsCount=(widget.post.commentsCount!+1);
                             state.postDetails?.commentsCount =
-                            (state.postDetails!.commentsCount + 1);
+                                (state.postDetails!.commentsCount + 1);
                             commentTextController.clear();
                             FocusScope.of(context).unfocus();
                             setState(() {});
@@ -415,50 +457,54 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
     );
   }
 
-  showReplies(){
+  showReplies() {
     return bottomSheet(
         context: context,
         isScrollControlled: true,
         widget: BlocProvider.value(
           value: serviceLocator<SocialPostsCubit>()
-            ..loadReplies(context, widget.comment?.reply??'',comment: widget.comment),
+            ..loadReplies(context, widget.comment?.reply ?? '',
+                comment: widget.comment),
           child: CommentReplies(
             replies: const [],
-            postId: widget.postId??'',
-            commentId: widget.comment?.reply??'',
+            postId: widget.postId ?? '',
+            commentId: widget.comment?.reply ?? '',
             onAddReply: (ReplyOnCommentParams params) async {
-              var result = await context.read<SocialPostsCubit>().replyOnComment(
-                params: ReplyOnCommentParams(
-                    postId: params.postId,
-                    content: params.content,
-                    commentId: params.commentId),
-                from: 'feed',
-              );
+              var result =
+                  await context.read<SocialPostsCubit>().replyOnComment(
+                        params: ReplyOnCommentParams(
+                            postId: params.postId,
+                            content: params.content,
+                            commentId: params.commentId),
+                        from: 'feed',
+                      );
               setState(() {});
               return result;
             },
-            onDeleteReply:(String id) async {
+            onDeleteReply: (String id) async {
               return await context.read<SocialPostsCubit>().deleteComment(
                   context: context,
                   commentId: id,
-                  postId: widget.postId??'',
+                  postId: widget.postId ?? '',
                   from: 'details');
             },
             from: 'details',
             onEditComment: (PostCommentParams params) async {
-              var result = await context.read<SocialPostsCubit>()
+              var result = await context
+                  .read<SocialPostsCubit>()
                   .editComment(params: params);
               return result;
             },
           ),
         ));
   }
+
   Widget _buildCommentCard(
       {required CommentEntity comment,
-        required Function(ReplyOnCommentParams) onCommentReply,
-        required Function(PostCommentParams params) onEditComment,
-        required dynamic Function(String) onDeleteComment,
-        required dynamic Function(String) onDeleteReply}) {
+      required Function(ReplyOnCommentParams) onCommentReply,
+      required Function(PostCommentParams params) onEditComment,
+      required dynamic Function(String) onDeleteComment,
+      required dynamic Function(String) onDeleteReply}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -475,8 +521,7 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
             onDeleteComment: (String id) => onDeleteComment(id),
             onDeleteReply: (String id) => onDeleteReply(id),
             from: 'feed',
-            onEditComment: (PostCommentParams params) =>
-                onEditComment(params),
+            onEditComment: (PostCommentParams params) => onEditComment(params),
           ),
         ),
         if (comment.repliesCount != 0)

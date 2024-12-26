@@ -57,7 +57,9 @@ class DoctorModel extends DoctorEntity {
       isAfterEnd: json['isAfterEnd'] ?? false,
       isBetweenStartAndEnd: json['isBetweenStartAndEnd'] ?? false,
       firstName: json['firstName'] ?? '',
-      meetingData: json['roomMeeting'] !=null?DoctorMeetingModel.fromJson(json['roomMeeting']):null,
+      meetingData: json['roomMeeting'] != null
+          ? DoctorMeetingModel.fromJson(json['roomMeeting'])
+          : null,
       subCategory: json['subCategoryId'] != null
           ? SubCategoryModel.fromJson(json['subCategoryId'])
           : SubCategoryEntity(

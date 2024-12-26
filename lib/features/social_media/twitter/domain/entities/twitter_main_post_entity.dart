@@ -26,7 +26,7 @@ class TwitterMainPostEntity {
       this.images,
       this.shares,
       this.love,
-       this.user,
+      this.user,
       this.commentPrivacy = 1,
       this.isShared = false,
       this.commentsCount = 0,

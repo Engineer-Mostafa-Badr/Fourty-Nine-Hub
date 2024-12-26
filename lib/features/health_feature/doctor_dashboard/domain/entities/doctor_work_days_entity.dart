@@ -16,5 +16,19 @@ class DoctorWorkDaysEntity {
   final String createdAt;
   final String updatedAt;
 
-  DoctorWorkDaysEntity({required this.id, required this.clinic, required this.visitHome, required this.calls, required this.doctorId, required this.clinicPrice, required this.waitingTime, required this.detectionPeriodClinic, required this.visitHomePrice, required this.detectionPeriodVisitHome, required this.callsPrice, required this.detectionPeriodCalls, required this.createdAt, required this.updatedAt});
+  DoctorWorkDaysEntity(
+      {required this.id,
+      required this.clinic,
+      required this.visitHome,
+      required this.calls,
+      required this.doctorId,
+      required this.clinicPrice,
+      required this.waitingTime,
+      required this.detectionPeriodClinic,
+      required this.visitHomePrice,
+      required this.detectionPeriodVisitHome,
+      required this.callsPrice,
+      required this.detectionPeriodCalls,
+      required this.createdAt,
+      required this.updatedAt});
 }

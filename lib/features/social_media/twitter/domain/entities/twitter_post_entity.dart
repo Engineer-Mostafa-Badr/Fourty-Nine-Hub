@@ -9,7 +9,7 @@ class TwitterPostEntity {
   final List<String>? images;
   final List<String>? shares;
   final List<TwitterUserModel>? love;
-   TwitterMainPostEntity? postShare;
+  TwitterMainPostEntity? postShare;
   final dynamic mainPost;
   bool? isShared;
   final dynamic user;
@@ -28,7 +28,7 @@ class TwitterPostEntity {
   TwitterPostEntity(
       {required this.id,
       required this.content,
-       this.postShare,
+      this.postShare,
       this.images,
       this.shares,
       this.love,

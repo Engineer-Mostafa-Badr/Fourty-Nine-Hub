@@ -67,63 +67,62 @@ class UploadFile {
     required String subCategoryId,
     required Function(UploadFileEntity) onUploaded,
   }) async {
-      final file = await FilePickerHelper()
-          .pickMedia(isGallery: isGallery)
-          .then((file) async {
-        if (file != null) {
-          final bytes = await file.readAsBytes();
-          int size = bytes.length;
-          // Step 2: Get a signed URL for uploading.
-          final signedURLResponse = await serviceLocator<ApiConsumer>().post(
-            EndPoints.mediaUrl,
-            data: {
-              "type": "audio/${file.mimeType ?? 'mp3'}",
-              "size": size,
-              "subcategoryId": subCategoryId,
-            },
-          );
+    final file = await FilePickerHelper()
+        .pickMedia(isGallery: isGallery)
+        .then((file) async {
+      if (file != null) {
+        final bytes = await file.readAsBytes();
+        int size = bytes.length;
+        // Step 2: Get a signed URL for uploading.
+        final signedURLResponse = await serviceLocator<ApiConsumer>().post(
+          EndPoints.mediaUrl,
+          data: {
+            "type": "audio/${file.mimeType ?? 'mp3'}",
+            "size": size,
+            "subcategoryId": subCategoryId,
+          },
+        );
 
-          // Step 3: Handle the signed URL response.
-          return signedURLResponse.fold(
+        // Step 3: Handle the signed URL response.
+        return signedURLResponse.fold(
+          (failure) {
+            // Log and handle failure in getting signed URL.
+            print(failure.toString());
+            return Left(failure);
+          },
+          (data) async {
+            log("Signed URL response: ${jsonEncode(data)}");
+
+            // Step 4: Upload the audio to the signed URL.
+            await sendBinaryFileData(
+              file: file,
+              signedUrl: data['data']['signedUrl'],
+            ).then((value) async {
+              // Step 5: Confirm the upload.
+              final mediaId = data['data']['mediaId'];
+              final confirmUploadResponse = await serviceLocator<ApiConsumer>()
+                  .put(EndPoints.confirmUpload(mediaId));
+
+              // Handle the confirmation response.
+              confirmUploadResponse.fold(
                 (failure) {
-              // Log and handle failure in getting signed URL.
-              print(failure.toString());
-              return Left(failure);
-            },
-                (data) async {
-              log("Signed URL response: ${jsonEncode(data)}");
-
-              // Step 4: Upload the audio to the signed URL.
-              await sendBinaryFileData(
-                file: file,
-                signedUrl: data['data']['signedUrl'],
-              ).then((value) async {
-                // Step 5: Confirm the upload.
-                final mediaId = data['data']['mediaId'];
-                final confirmUploadResponse = await serviceLocator<ApiConsumer>()
-                    .put(EndPoints.confirmUpload(mediaId));
-
-                // Handle the confirmation response.
-                confirmUploadResponse.fold(
-                      (failure) {
-                    print("Error confirming upload: $failure");
-                    return Left(failure);
-                  },
-                      (confirmation) {
-                    print("Upload confirmed.");
-                    // Pass the uploaded file details to the callback function.
-                    onUploaded(UploadFileEntity(mediaId: mediaId, file: file));
-                    return const Right(true);
-                  },
-                );
-              });
-            },
-          );
-        }
-      });
-      return null;
-    }
-
+                  print("Error confirming upload: $failure");
+                  return Left(failure);
+                },
+                (confirmation) {
+                  print("Upload confirmed.");
+                  // Pass the uploaded file details to the callback function.
+                  onUploaded(UploadFileEntity(mediaId: mediaId, file: file));
+                  return const Right(true);
+                },
+              );
+            });
+          },
+        );
+      }
+    });
+    return null;
+  }
 
   Future<Either<Failure, bool>?> uploadVideo({
     bool isGallery = true,

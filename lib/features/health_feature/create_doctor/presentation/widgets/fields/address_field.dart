@@ -14,11 +14,16 @@ class CreateDoctorAddressField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("${LocaleKeys.address.localize}:",style: Styles.mediumText(),),
+        Text(
+          "${LocaleKeys.address.localize}:",
+          style: Styles.mediumText(),
+        ),
         TextFormField(
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return context.isArabic?'برجاء ادخال العنوان':'Please enter address';
+              return context.isArabic
+                  ? 'برجاء ادخال العنوان'
+                  : 'Please enter address';
             }
             return null;
           },
@@ -62,7 +67,7 @@ class CreateDoctorAddressField extends StatelessWidget {
             filled: false,
             contentPadding:
                 const EdgeInsets.all(10), // Padding inside the text field
-            hintText: context.isArabic?'العنوان':'Address',
+            hintText: context.isArabic ? 'العنوان' : 'Address',
             hintStyle: Styles.mediumText(), // Hint text
           ),
         ),

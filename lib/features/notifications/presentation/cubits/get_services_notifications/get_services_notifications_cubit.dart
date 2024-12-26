@@ -5,7 +5,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/notification_entity.dart';
 import 'package:fourtyninehub/features/notifications/domain/usecases/get_notifications_usecase.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 
 part 'get_services_notifications_state.dart';
@@ -26,9 +25,9 @@ class GetServicesNotificationsCubit
     final getUnreadNotificationsCountCubit =
         context.read<GetUnreadNotificationsCountCubit>();
     getUnreadNotificationsCountCubit.getUnreadNotificationsCount();
-    pr('getServicesNotifications is called');
-    pr('pages: $page');
-    pr('notifications: $notifications');
+    // pr('getServicesNotifications is called');
+    // pr('pages: $page');
+    // pr('notifications: $notifications');
     emit(GetServicesNotificationsLoading());
     final response = await getNotficationsUseCase.call(
         type: 'services', page: page, languageCode: languageCode);

@@ -32,7 +32,9 @@ class HealthBookingCard extends StatelessWidget {
             appointment.bookingType;
         serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
             appointment.doctor.subCategory;
-        context.push(Routes.VISITADOCTORDETAILS, extra:DoctorDetailsParams(doctorId: appointment.doctor.id,fromSearch: false));
+        context.push(Routes.VISITADOCTORDETAILS,
+            extra: DoctorDetailsParams(
+                doctorId: appointment.doctor.id, fromSearch: false));
 
         // context.push(Routes.VISITADOCTORDETAILS, extra: DoctorDetailsParams(fromSearch: true, doctorId: appointment.doctor.id,type: appointment.bookingType.name,subCategoryId:appointment.doctor.subCategory.id));
       },
@@ -82,9 +84,16 @@ class HealthBookingCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                AppButton(label: LocaleKeys.cancel.localize,padding: 15.w, onPressed: (){
-                  context.read<HealthCubit>().cancelAppointment(appointment.id);
-                },style: Styles.mediumText(color: Colors.white),)
+                AppButton(
+                  label: LocaleKeys.cancel.localize,
+                  padding: 15.w,
+                  onPressed: () {
+                    context
+                        .read<HealthCubit>()
+                        .cancelAppointment(appointment.id);
+                  },
+                  style: Styles.mediumText(color: Colors.white),
+                )
               ],
             ),
           ],

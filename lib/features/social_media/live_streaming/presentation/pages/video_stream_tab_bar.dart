@@ -32,7 +32,7 @@ class _VideoStreamTabBarState extends State<VideoStreamTabBar> {
 
     // Trigger pagination when reaching the last loaded page
     if (_pageController.position.pixels >=
-        _pageController.position.maxScrollExtent - 100 &&
+            _pageController.position.maxScrollExtent - 100 &&
         !cubit.isLoadingMore &&
         cubit.hasMoreData) {
       cubit.getRooms();
@@ -52,7 +52,7 @@ class _VideoStreamTabBarState extends State<VideoStreamTabBar> {
           return PageView.builder(
             controller: _pageController,
             // scrollDirection: Axis.vertical, // Vertical scrolling
-            onPageChanged: (i){},
+            onPageChanged: (i) {},
             itemCount: cubit.rooms.length + (cubit.hasMoreData ? 1 : 0),
             itemBuilder: (context, index) {
               if (index < cubit.rooms.length) {

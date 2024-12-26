@@ -30,7 +30,8 @@ void showTiktokOption(BuildContext context, int randomNumber) =>
           builder: (_, controller) {
             return Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor, // Set background color
+                color: Theme.of(context)
+                    .scaffoldBackgroundColor, // Set background color
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(20)),
                 boxShadow: [

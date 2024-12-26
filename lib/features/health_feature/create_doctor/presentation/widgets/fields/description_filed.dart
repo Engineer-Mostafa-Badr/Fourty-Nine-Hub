@@ -14,11 +14,16 @@ class CreateDoctorDescriptionField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("${LocaleKeys.desc.localize}:",style: Styles.mediumText(),),
+        Text(
+          "${LocaleKeys.desc.localize}:",
+          style: Styles.mediumText(),
+        ),
         TextFormField(
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return context.isArabic?'برجاء ادخال الوصف':'Please enter description';
+              return context.isArabic
+                  ? 'برجاء ادخال الوصف'
+                  : 'Please enter description';
             }
             return null;
           },
@@ -62,7 +67,7 @@ class CreateDoctorDescriptionField extends StatelessWidget {
             filled: false,
             contentPadding:
                 const EdgeInsets.all(10), // Padding inside the text field
-            hintText: context.isArabic?'اضافة وصف':'Add description',
+            hintText: context.isArabic ? 'اضافة وصف' : 'Add description',
             hintStyle: Styles.mediumText(), // Hint text
           ),
         ),

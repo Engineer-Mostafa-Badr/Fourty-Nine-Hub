@@ -66,9 +66,9 @@ class RiderRegisterModel {
       "vehicleModel": vehicleModel,
       "vehicleBrand": vehicleBrand,
       "vehicleColor": "vehicleColor",
-      "vehicleType": vehicleType??'car',
+      "vehicleType": vehicleType ?? 'car',
       "vehicleYear": vehicleYear,
-      "workingType": workingType??"percentage",
+      "workingType": workingType ?? "percentage",
       "subcategoryIds": subcategoryIds,
       "pricingPerKm": pricingPerKm,
       "phone": phone,
@@ -86,7 +86,7 @@ class RiderRegisterModel {
       "driverLastName": driverLastName,
       "subcategoryId": subcategoryId,
       "phone": phone,
-      "carModel" : carModel,
+      "carModel": carModel,
       "plateInfo": plateInfo,
       "idNumber": idNumber
     };

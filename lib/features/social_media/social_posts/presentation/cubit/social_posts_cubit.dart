@@ -176,11 +176,17 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     });
   }
 
-  void loadReplies(BuildContext context, String commentId,{CommentEntity? comment}) async {
-    await getCommentReplies(context: context, commentId: commentId, page: 1,comment: comment);
+  void loadReplies(BuildContext context, String commentId,
+      {CommentEntity? comment}) async {
+    await getCommentReplies(
+        context: context, commentId: commentId, page: 1, comment: comment);
     commentsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getCommentReplies(context: context, commentId: commentId, page: pageKey,comment: comment);
+      getCommentReplies(
+          context: context,
+          commentId: commentId,
+          page: pageKey,
+          comment: comment);
     });
   }
 
@@ -188,10 +194,12 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       {CommentEntity? comment}) async {
     print("objectCOOOMMM$comment");
     await getPostDetails(postId);
-    await getPostComments(context: context, postId: postId, page: 1,comment: comment);
+    await getPostComments(
+        context: context, postId: postId, page: 1, comment: comment);
     commentsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getPostComments(context: context, postId: postId,comment: comment, page: pageKey);
+      getPostComments(
+          context: context, postId: postId, comment: comment, page: pageKey);
     });
   }
 
@@ -690,9 +698,8 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   Future<void> getPostComments(
       {required BuildContext context,
       required String postId,
-        CommentEntity? comment,
+      CommentEntity? comment,
       required int page}) async {
-
     final response = await _getPostCommentsUseCase(
       PostCommentsParams(
         page: page,
@@ -704,12 +711,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
         (data) {
-          List<CommentEntity> list = data.where((element) => element.id!=comment?.id).toList();
+      List<CommentEntity> list =
+          data.where((element) => element.id != comment?.id).toList();
       final isLastPage = data.length < pageSize;
       if (page == 1) {
         print("page == 1 $page");
         commentsPagingController.itemList = [];
-        if(comment!=null){
+        if (comment != null) {
           print("objectadadsadsa");
           commentsPagingController.itemList?.insert(0, comment);
         }
@@ -750,12 +758,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
         (data) {
-          List<CommentEntity> list = data.where((element) => element.id!=comment?.id).toList();
+      List<CommentEntity> list =
+          data.where((element) => element.id != comment?.id).toList();
       final isLastPage = data.length < pageSize;
       if (page == 1) {
         print("page == 1 $page");
         repliesPagingController.itemList = [];
-        if(comment!=null){
+        if (comment != null) {
           print("objectadadsadsa");
           repliesPagingController.itemList?.insert(0, comment);
         }
@@ -875,12 +884,10 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       {required BuildContext context, required String userId}) async {
     final response = await _followUserUseCase(userId);
     bool isFollow = false;
-    response.fold(
-        (l) {
-          showErrorMessage(context, getFailureMessage(l, context));
-          emit(state.copyWith(failure: l, status: StateStatus.error));
-        },
-        (r) {
+    response.fold((l) {
+      showErrorMessage(context, getFailureMessage(l, context));
+      emit(state.copyWith(failure: l, status: StateStatus.error));
+    }, (r) {
       isFollow = r;
       emit(state.copyWith(friendRequest: r, status: StateStatus.success));
     });

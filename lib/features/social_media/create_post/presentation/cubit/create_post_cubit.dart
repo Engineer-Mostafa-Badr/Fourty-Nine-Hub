@@ -97,7 +97,6 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     return super.close();
   }
 
-
 // final scrollController = ScrollController();
   //
   // void initScroll(){

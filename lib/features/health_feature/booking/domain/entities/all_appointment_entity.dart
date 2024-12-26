@@ -19,5 +19,24 @@ class AllAppointmentEntity {
   final String createdAt;
   final String updatedAt;
 
-  AllAppointmentEntity({required this.id, required this.doctorId, required this.userId, required this.firstName, required this.lastName, required this.gender, required this.bookingId, required this.appointmentType, required this.day, required this.startTime, required this.endTime, required this.dateOfDay, required this.status, required this.phone, required this.additionalNotes, required this.isPremium, required this.expired, required this.createdAt, required this.updatedAt});
+  AllAppointmentEntity(
+      {required this.id,
+      required this.doctorId,
+      required this.userId,
+      required this.firstName,
+      required this.lastName,
+      required this.gender,
+      required this.bookingId,
+      required this.appointmentType,
+      required this.day,
+      required this.startTime,
+      required this.endTime,
+      required this.dateOfDay,
+      required this.status,
+      required this.phone,
+      required this.additionalNotes,
+      required this.isPremium,
+      required this.expired,
+      required this.createdAt,
+      required this.updatedAt});
 }

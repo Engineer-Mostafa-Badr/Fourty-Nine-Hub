@@ -41,7 +41,8 @@ class DoctorDetailsRepoImpl implements DoctorDetailsRepo {
   }
 
   @override
-  Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorRatings(PaginationParams params) async {
+  Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorRatings(
+      PaginationParams params) async {
     return await _remoteDataSource.getDoctorRatings(params);
   }
 }

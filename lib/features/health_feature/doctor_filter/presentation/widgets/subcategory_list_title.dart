@@ -12,21 +12,25 @@ import 'package:go_router/go_router.dart';
 
 class SubcategoryListTitle extends StatelessWidget {
   final SubCategoryEntity specialty;
-  const SubcategoryListTitle({super.key, required this.specialty, required this.type});
+  const SubcategoryListTitle(
+      {super.key, required this.specialty, required this.type});
   final String type;
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: ImageFromInternet(image: specialty.image, height: 250.h, width: 120.w),
-      title: Text(context.isArabic?specialty.nameAr:specialty.nameEn),
+      leading: ImageFromInternet(
+          image: specialty.image, height: 250.h, width: 120.w),
+      title: Text(context.isArabic ? specialty.nameAr : specialty.nameEn),
       onTap: () {
         serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
             specialty;
         if (serviceLocator<HealthSharedData>().doctorSearchParams.bookingType ==
             BookingTypes.call) {
-          context.push(Routes.VISITADOCTORLIST,extra: DoctorsListParams(fromHome: false,subCategoryId: '',type: type));
+          context.push(Routes.VISITADOCTORLIST,
+              extra: DoctorsListParams(
+                  fromHome: false, subCategoryId: '', type: type));
         } else {
-          context.push(Routes.FILTERDOCTORGOVERNORATE,extra: type);
+          context.push(Routes.FILTERDOCTORGOVERNORATE, extra: type);
         }
       },
     );

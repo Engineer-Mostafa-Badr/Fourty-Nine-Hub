@@ -67,7 +67,7 @@ class DoctorEntity {
     required this.visitHomePrice,
     required this.meetingData,
     required String waitingTime,
-    required this. timeToStart,
+    required this.timeToStart,
     required this.isActive,
     required this.isPremium,
     required this.description,

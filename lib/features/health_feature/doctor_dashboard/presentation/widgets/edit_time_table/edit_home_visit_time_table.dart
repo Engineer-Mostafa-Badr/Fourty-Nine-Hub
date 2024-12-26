@@ -15,35 +15,30 @@ class EditDoctorHomeVisitTimeTable extends StatelessWidget {
     final cubit = context.read<EditDoctorTimetableCubit>();
     return BlocBuilder<EditDoctorTimetableCubit, EditDoctorTimetableState>(
       builder: (context, state) {
-          return Timetable(
-              title: LocaleKeys.homeVisit.localize,
-              timetale: state.homeVisitTimetable??[],
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  DefaultTextFormField(
-                    currentFocusNode: FocusNode(),
-                    currentController:
-                    cubit.homeVisitPriceController,
-                    nextFocusNode:
-                        FocusNode(),
-                    keyboardType: TextInputType.number,
-                    isRequired: true,
-                    hint: 'Home Visit Price',
-                  ),
-                  const Sizer(),
-                  DefaultTextFormField(
-                    hint: 'Home Visit Examine Duration (in minutes)',
-                    keyboardType: TextInputType.number,
-                    isRequired: true,
-                    currentFocusNode:
-                    FocusNode(),
-                    currentController:
-                    cubit.homeVisitDurationController,
-                  ),
-                ],
-              ));
-
+        return Timetable(
+            title: LocaleKeys.homeVisit.localize,
+            timetale: state.homeVisitTimetable ?? [],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DefaultTextFormField(
+                  currentFocusNode: FocusNode(),
+                  currentController: cubit.homeVisitPriceController,
+                  nextFocusNode: FocusNode(),
+                  keyboardType: TextInputType.number,
+                  isRequired: true,
+                  hint: 'Home Visit Price',
+                ),
+                const Sizer(),
+                DefaultTextFormField(
+                  hint: 'Home Visit Examine Duration (in minutes)',
+                  keyboardType: TextInputType.number,
+                  isRequired: true,
+                  currentFocusNode: FocusNode(),
+                  currentController: cubit.homeVisitDurationController,
+                ),
+              ],
+            ));
       },
     );
   }

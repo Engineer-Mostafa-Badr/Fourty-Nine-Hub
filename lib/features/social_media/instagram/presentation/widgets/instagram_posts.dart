@@ -214,10 +214,15 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                       .itemList?[index].images?.length,
                                   onPageChanged: (i) {
                                     controller.changeIndex(i);
-                                    final audio = controller.feedPagingController.itemList?[index].audio;
-                                    if (audio != null && audio.isNotEmpty && !_isMuted) {
+                                    final audio = controller
+                                        .feedPagingController
+                                        .itemList?[index]
+                                        .audio;
+                                    if (audio != null &&
+                                        audio.isNotEmpty &&
+                                        !_isMuted) {
                                       _playAudio(audio[0].sound);
-                                    }else{
+                                    } else {
                                       _stopAudio();
                                     }
                                   },
@@ -225,11 +230,16 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                     return VisibilityDetector(
                                       key: Key(index.toString()),
                                       onVisibilityChanged: (visibilityInfo) {
-                                        if (visibilityInfo.visibleFraction > 0.5 && !_isMuted) {
-                                          final audio = controller.feedPagingController.itemList?[index].audio;
+                                        if (visibilityInfo.visibleFraction >
+                                                0.5 &&
+                                            !_isMuted) {
+                                          final audio = controller
+                                              .feedPagingController
+                                              .itemList?[index]
+                                              .audio;
                                           if (audio!.isNotEmpty) {
                                             _playAudio(audio[0].sound);
-                                          }else{
+                                          } else {
                                             _stopAudio();
                                           }
                                         }
@@ -250,31 +260,35 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                       ),
                                     );
                                   }),
-                              if(controller.feedPagingController
+                              if (controller.feedPagingController
                                   .itemList![index].audio!.isNotEmpty)
-                              Positioned(
-                                bottom: 20.h,
-                                left: 20.w,
-                                right: 20.w,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const SizedBox.shrink(),
-                                    GestureDetector(
-                                      onTap: _toggleMute,
-                                      child: CircleAvatar(
-                                        radius: 30.r,
-                                        backgroundColor: Colors.black.withOpacity(0.7),
-                                        child: Icon(
-                                          _isMuted ? Icons.volume_off : Icons.volume_up,
-                                          size: 33.sp,
-                                          color: Colors.white,
+                                Positioned(
+                                  bottom: 20.h,
+                                  left: 20.w,
+                                  right: 20.w,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const SizedBox.shrink(),
+                                      GestureDetector(
+                                        onTap: _toggleMute,
+                                        child: CircleAvatar(
+                                          radius: 30.r,
+                                          backgroundColor:
+                                              Colors.black.withOpacity(0.7),
+                                          child: Icon(
+                                            _isMuted
+                                                ? Icons.volume_off
+                                                : Icons.volume_up,
+                                            size: 33.sp,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),
@@ -550,7 +564,8 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                   padding: EdgeInsetsDirectional.symmetric(
                                       horizontal: 20.w),
                                   child: RichText(
-                                    text: WidgetSpan(child: GestureDetector(
+                                    text: WidgetSpan(
+                                        child: GestureDetector(
                                       onTap: () {
                                         setState(() {
                                           _isExpanded = !_isExpanded;
@@ -560,9 +575,15 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              controller.feedPagingController.itemList?[index].content ?? '',
-                                              textAlign: _isArabic(controller.feedPagingController.itemList?[index]
-                                                  .content ??
+                                              controller
+                                                      .feedPagingController
+                                                      .itemList?[index]
+                                                      .content ??
+                                                  '',
+                                              textAlign: _isArabic(controller
+                                                          .feedPagingController
+                                                          .itemList?[index]
+                                                          .content ??
                                                       '')
                                                   ? TextAlign.right
                                                   : TextAlign.left,
@@ -868,15 +889,15 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                     .firstComment !=
                                 null))
                           Padding(
-                            padding:  EdgeInsets.symmetric(horizontal: 20.w,vertical: 10.h),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20.w, vertical: 10.h),
                             child: RichText(
-
                                 text: TextSpan(children: [
                               TextSpan(
                                   text:
                                       '${controller.feedPagingController.itemList?[index].firstComment?.firstName} ${controller.feedPagingController.itemList?[index].firstComment?.lastName}\t\t',
                                   recognizer: TapGestureRecognizer()
-                                      ..onTap = () => context.push(
+                                    ..onTap = () => context.push(
                                         Routes.INSTAGRAMPROFILE,
                                         extra: controller.feedPagingController
                                             .itemList?[index].user.id),
@@ -886,8 +907,11 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                               .itemList![index].firstComment ==
                                           null
                                       ? ''
-                                      : controller.feedPagingController
-                                          .itemList?[index].firstComment?.content,
+                                      : controller
+                                          .feedPagingController
+                                          .itemList?[index]
+                                          .firstComment
+                                          ?.content,
                                   style: Styles.mediumText(
                                     color: context.isDarkMode
                                         ? AppColors.LIGHT_GRAY_COLOR
@@ -913,7 +937,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                       children: [
                         Padding(
                           padding:
-                          EdgeInsetsDirectional.symmetric(horizontal: 20.w),
+                              EdgeInsetsDirectional.symmetric(horizontal: 20.w),
                           child: _buildMainAccountHeader(
                               post: controller
                                   .feedPagingController.itemList![index],
@@ -935,8 +959,8 @@ class _InstagramPostsState extends State<InstagramPosts> {
                           ),
                         ),
                         Padding(
-                          padding:
-                          EdgeInsetsDirectional.symmetric(horizontal: 20.w,vertical: 10.h),
+                          padding: EdgeInsetsDirectional.symmetric(
+                              horizontal: 20.w, vertical: 10.h),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -946,8 +970,8 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                   children: [
                                     IconAppButton(
                                       icon: controller.feedPagingController
-                                          .itemList?[index].isLove ==
-                                          true
+                                                  .itemList?[index].isLove ==
+                                              true
                                           ? Icons.favorite
                                           : Icons.favorite_border,
                                       onPressed: () async {
@@ -962,36 +986,36 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                         );
                                         if (reacted == true) {
                                           controller.feedPagingController
-                                              .itemList?[index].isLove =
-                                          !controller.feedPagingController
-                                              .itemList![index].isLove;
+                                                  .itemList?[index].isLove =
+                                              !controller.feedPagingController
+                                                  .itemList![index].isLove;
                                           if (controller.feedPagingController
-                                              .itemList?[index].isLove ==
+                                                  .itemList?[index].isLove ==
                                               false) {
                                             controller
                                                 .feedPagingController
                                                 .itemList?[index]
                                                 .loveCount = (controller
-                                                .feedPagingController
-                                                .itemList![index]
-                                                .loveCount -
+                                                    .feedPagingController
+                                                    .itemList![index]
+                                                    .loveCount -
                                                 1);
                                           } else {
                                             controller
                                                 .feedPagingController
                                                 .itemList?[index]
                                                 .loveCount = (controller
-                                                .feedPagingController
-                                                .itemList![index]
-                                                .loveCount +
+                                                    .feedPagingController
+                                                    .itemList![index]
+                                                    .loveCount +
                                                 1);
                                           }
                                         }
                                         setState(() {});
                                       },
                                       color: controller.feedPagingController
-                                          .itemList?[index].isLove ==
-                                          true
+                                                  .itemList?[index].isLove ==
+                                              true
                                           ? Colors.red
                                           : Colors.grey,
                                       size: 25,
@@ -1001,8 +1025,8 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                     ),
                                     Label(
                                       text: controller.feedPagingController
-                                          .itemList?[index].loveCount
-                                          .toString() ??
+                                              .itemList?[index].loveCount
+                                              .toString() ??
                                           '',
                                       style: Styles.mediumText(
                                           fontWeight: FontWeight.bold),
@@ -1041,7 +1065,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                                         .id),
                                               child: GestureDetector(
                                                 behavior:
-                                                HitTestBehavior.opaque,
+                                                    HitTestBehavior.opaque,
                                                 onTap: () {
                                                   FocusScope.of(context)
                                                       .unfocus();
@@ -1052,82 +1076,82 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                                       .itemList![index]
                                                       .id,
                                                   commentCount: controller
-                                                      .feedPagingController
-                                                      .itemList?[index]
-                                                      .commentsCount
-                                                      .toString() ??
+                                                          .feedPagingController
+                                                          .itemList?[index]
+                                                          .commentsCount
+                                                          .toString() ??
                                                       '',
                                                   onCommentReply:
                                                       (ReplyOnCommentParams
-                                                  params) async {
+                                                          params) async {
                                                     var result =
-                                                    await controller
-                                                        .replyOnComment(
+                                                        await controller
+                                                            .replyOnComment(
                                                       params:
-                                                      ReplyOnCommentParams(
-                                                          postId:
-                                                          params.postId,
-                                                          content: params
-                                                              .content,
-                                                          commentId: params
-                                                              .commentId),
+                                                          ReplyOnCommentParams(
+                                                              postId:
+                                                                  params.postId,
+                                                              content: params
+                                                                  .content,
+                                                              commentId: params
+                                                                  .commentId),
                                                     );
                                                     var currentPost = controller
                                                         .feedPagingController
                                                         .itemList
                                                         ?.firstWhere(
                                                             (element) =>
-                                                        element.id ==
-                                                            params.postId);
+                                                                element.id ==
+                                                                params.postId);
                                                     currentPost?.commentsCount =
-                                                    (currentPost
-                                                        .commentsCount +
-                                                        1);
+                                                        (currentPost
+                                                                .commentsCount +
+                                                            1);
                                                     return result;
                                                   },
                                                   onAddComment:
                                                       (PostCommentParams
-                                                  params) async {
+                                                          params) async {
                                                     var result =
-                                                    await controller
-                                                        .onPostComment(
-                                                        params: params);
+                                                        await controller
+                                                            .onPostComment(
+                                                                params: params);
                                                     return result;
                                                   },
                                                   onDeleteComment:
                                                       (String id) async {
                                                     return await controller
                                                         .deleteComment(
-                                                        context: context,
-                                                        commentId: id,
-                                                        postId: controller
-                                                            .feedPagingController
-                                                            .itemList![
-                                                        index]
-                                                            .id,
-                                                        from: 'feed');
+                                                            context: context,
+                                                            commentId: id,
+                                                            postId: controller
+                                                                .feedPagingController
+                                                                .itemList![
+                                                                    index]
+                                                                .id,
+                                                            from: 'feed');
                                                     // print(result);
                                                   },
                                                   onDeleteReply:
                                                       (String id) async {
                                                     return await controller
                                                         .deleteComment(
-                                                        context: context,
-                                                        commentId: id,
-                                                        postId: controller
-                                                            .feedPagingController
-                                                            .itemList![
-                                                        index]
-                                                            .id,
-                                                        from: 'feed');
+                                                            context: context,
+                                                            commentId: id,
+                                                            postId: controller
+                                                                .feedPagingController
+                                                                .itemList![
+                                                                    index]
+                                                                .id,
+                                                            from: 'feed');
                                                   },
                                                   onEditComment:
                                                       (PostCommentParams
-                                                  params) async {
+                                                          params) async {
                                                     var result =
-                                                    await controller
-                                                        .editComment(
-                                                        params: params);
+                                                        await controller
+                                                            .editComment(
+                                                                params: params);
                                                     return result;
                                                   },
                                                 ),
@@ -1144,8 +1168,8 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                     ),
                                     Label(
                                       text: controller.feedPagingController
-                                          .itemList?[index].commentsCount
-                                          .toString() ??
+                                              .itemList?[index].commentsCount
+                                              .toString() ??
                                           '',
                                       style: Styles.mediumText(
                                           fontWeight: FontWeight.bold),
@@ -1172,7 +1196,8 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                   padding: EdgeInsetsDirectional.symmetric(
                                       horizontal: 20.w),
                                   child: RichText(
-                                    text: WidgetSpan(child: GestureDetector(
+                                    text: WidgetSpan(
+                                        child: GestureDetector(
                                       onTap: () {
                                         setState(() {
                                           _isExpanded = !_isExpanded;
@@ -1182,10 +1207,16 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              controller.feedPagingController.itemList?[index].content ?? '',
-                                              textAlign: _isArabic(controller.feedPagingController.itemList?[index]
-                                                  .content ??
-                                                  '')
+                                              controller
+                                                      .feedPagingController
+                                                      .itemList?[index]
+                                                      .content ??
+                                                  '',
+                                              textAlign: _isArabic(controller
+                                                          .feedPagingController
+                                                          .itemList?[index]
+                                                          .content ??
+                                                      '')
                                                   ? TextAlign.right
                                                   : TextAlign.left,
                                               style: Styles.mediumText(
@@ -1206,10 +1237,10 @@ class _InstagramPostsState extends State<InstagramPosts> {
                           ),
                         Padding(
                           padding:
-                          EdgeInsetsDirectional.symmetric(horizontal: 20.w),
+                              EdgeInsetsDirectional.symmetric(horizontal: 20.w),
                           child: Text(
                               controller.feedPagingController.itemList?[index]
-                                  .sinceTime ??
+                                      .sinceTime ??
                                   '',
                               style: Styles.mediumText(
                                   color: AppColors.GREY_NORMAL_COLOR)),
@@ -1290,7 +1321,6 @@ class _InstagramPostsState extends State<InstagramPosts> {
     return arabicRegex.hasMatch(text);
   }
 }
-
 
 class AudioPlayerWidget extends StatefulWidget {
   final String audioUrl;

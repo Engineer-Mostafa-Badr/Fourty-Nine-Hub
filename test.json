@@ -1,0 +1,2145 @@
+[
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0560422,
+          31.2206315
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "_id": "676871153f6fbfb93c391d2c",
+      "userId": {
+        "_id": "66b4ddef589df89edc18d48c",
+        "firstName": "zyad",
+        "lastName": "zyad",
+        "email": "zyadmohamd456@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4ddef589df89edc18d48e",
+          "userId": "66b4ddef589df89edc18d48c",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4ddef589df89edc18d48c"
+      },
+      "riderId": {
+        "_id": "66e057af51f4bced71f262f5",
+        "userId": {
+          "_id": "66bcbd183aa2f0e6b120aa6b",
+          "firstName": "khaled",
+          "lastName": "ahmed",
+          "email": "ag349255@gmail.com",
+          "gender": "male",
+          "USER_PROFILE": {
+            "_id": "66bcbd183aa2f0e6b120aa6e",
+            "userId": "66bcbd183aa2f0e6b120aa6b",
+            "profilePictureKey": "6766c581419f82e26b16da8e"
+          },
+          "id": "66bcbd183aa2f0e6b120aa6b"
+        },
+        "phone": "00201157772072",
+        "carTypeId": {
+          "_id": "66980209daa111da2d7733a1"
+        }
+      },
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "4d Gezira St, Omar Al Khayam, Zamalek, Cairo Governorate 4270150, Egypt",
+      "toTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 2781,
+      "duration": 500,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "completed",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "819022",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-22T20:05:41.430Z",
+      "updatedAt": "2024-12-22T20:09:04.710Z",
+      "startTime": "2024-12-22T20:08:42.696Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "6768b1103f6fbfb93c3952ae",
+      "userId": {
+        "_id": "66b4ddef589df89edc18d48c",
+        "firstName": "zyad",
+        "lastName": "zyad",
+        "email": "zyadmohamd456@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4ddef589df89edc18d48e",
+          "userId": "66b4ddef589df89edc18d48c",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4ddef589df89edc18d48c"
+      },
+      "riderId": {
+        "_id": "66e057af51f4bced71f262f5",
+        "userId": {
+          "_id": "66bcbd183aa2f0e6b120aa6b",
+          "firstName": "khaled",
+          "lastName": "ahmed",
+          "email": "ag349255@gmail.com",
+          "gender": "male",
+          "USER_PROFILE": {
+            "_id": "66bcbd183aa2f0e6b120aa6e",
+            "userId": "66bcbd183aa2f0e6b120aa6b",
+            "profilePictureKey": "6766c581419f82e26b16da8e"
+          },
+          "id": "66bcbd183aa2f0e6b120aa6b"
+        },
+        "phone": "00201157772072",
+        "carTypeId": {
+          "_id": "66980209daa111da2d7733a1"
+        }
+      },
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": true,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 882,
+      "calculateB": 0,
+      "paymentMethod": "partial",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "025507",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": "6768b25c3f6fbfb93c3958ef",
+      "recordingVoice": null,
+      "createdAt": "2024-12-23T00:38:40.579Z",
+      "updatedAt": "2024-12-23T00:44:23.750Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.4252515,
+          31.0742071
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "_id": "6768b6f33f6fbfb93c395e8d",
+      "userId": {
+        "_id": "66b4ddef589df89edc18d48c",
+        "firstName": "zyad",
+        "lastName": "zyad",
+        "email": "zyadmohamd456@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4ddef589df89edc18d48e",
+          "userId": "66b4ddef589df89edc18d48c",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4ddef589df89edc18d48c"
+      },
+      "riderId": {
+        "_id": "66e057af51f4bced71f262f5",
+        "userId": {
+          "_id": "66bcbd183aa2f0e6b120aa6b",
+          "firstName": "khaled",
+          "lastName": "ahmed",
+          "email": "ag349255@gmail.com",
+          "gender": "male",
+          "USER_PROFILE": {
+            "_id": "66bcbd183aa2f0e6b120aa6e",
+            "userId": "66bcbd183aa2f0e6b120aa6b",
+            "profilePictureKey": "6766c581419f82e26b16da8e"
+          },
+          "id": "66bcbd183aa2f0e6b120aa6b"
+        },
+        "phone": "00201157772072",
+        "carTypeId": {
+          "_id": "66980209daa111da2d7733a1"
+        }
+      },
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "C3GG+224, Al Baranqah, El-Bagour, Menofia Governorate 6076105, Egypt",
+      "toTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "profit": 0,
+      "autoAccept": true,
+      "isPremium": false,
+      "distance": 69809,
+      "duration": 5445,
+      "passengers": 4,
+      "price": 8510,
+      "calculateB": 0,
+      "paymentMethod": "partial",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "296058",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": "6768b7b83f6fbfb93c3961ed",
+      "recordingVoice": null,
+      "createdAt": "2024-12-23T01:03:47.647Z",
+      "updatedAt": "2024-12-23T21:57:23.471Z",
+      "startTime": "2024-12-23T01:07:15.883Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676961cc3f6fbfb93c39983a",
+      "userId": {
+        "_id": "66c349d7a684ab473f1c1ed7",
+        "firstName": "khaled",
+        "lastName": "ahmed",
+        "email": "mshehab841@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "6730b06dd970a7c34c3e3b9e",
+          "userId": "66c349d7a684ab473f1c1ed7",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66c349d7a684ab473f1c1ed7"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 43,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "pending",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-23T13:12:44.231Z",
+      "updatedAt": "2024-12-23T13:12:44.231Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676962173f6fbfb93c399c06",
+      "userId": {
+        "_id": "670bfdfb8d1041f316ca3e7c",
+        "firstName": "Ahmed Ali",
+        "lastName": " ",
+        "email": "ahmaad.ali.abdulrahman@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "670bfdfb8d1041f316ca3e7f",
+          "userId": "670bfdfb8d1041f316ca3e7c",
+          "profilePictureKey": "67688d393f6fbfb93c3946f3"
+        },
+        "id": "670bfdfb8d1041f316ca3e7c"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 43,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "pending",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-23T13:13:59.853Z",
+      "updatedAt": "2024-12-23T13:13:59.853Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "6769f72604d41221aa13554a",
+      "userId": {
+        "_id": "66b4ddef589df89edc18d48c",
+        "firstName": "zyad",
+        "lastName": "zyad",
+        "email": "zyadmohamd456@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4ddef589df89edc18d48e",
+          "userId": "66b4ddef589df89edc18d48c",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4ddef589df89edc18d48c"
+      },
+      "riderId": {
+        "_id": "66e057af51f4bced71f262f5",
+        "userId": {
+          "_id": "66bcbd183aa2f0e6b120aa6b",
+          "firstName": "khaled",
+          "lastName": "ahmed",
+          "email": "ag349255@gmail.com",
+          "gender": "male",
+          "USER_PROFILE": {
+            "_id": "66bcbd183aa2f0e6b120aa6e",
+            "userId": "66bcbd183aa2f0e6b120aa6b",
+            "profilePictureKey": "6766c581419f82e26b16da8e"
+          },
+          "id": "66bcbd183aa2f0e6b120aa6b"
+        },
+        "phone": "00201157772072",
+        "carTypeId": {
+          "_id": "66980209daa111da2d7733a1"
+        }
+      },
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "400653",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-23T23:49:58.741Z",
+      "updatedAt": "2024-12-23T23:52:34.081Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "_id": "6769f7e804d41221aa135f76",
+      "userId": {
+        "_id": "66b4ddef589df89edc18d48c",
+        "firstName": "zyad",
+        "lastName": "zyad",
+        "email": "zyadmohamd456@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4ddef589df89edc18d48e",
+          "userId": "66b4ddef589df89edc18d48c",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4ddef589df89edc18d48c"
+      },
+      "riderId": {
+        "_id": "66e057af51f4bced71f262f5",
+        "userId": {
+          "_id": "66bcbd183aa2f0e6b120aa6b",
+          "firstName": "khaled",
+          "lastName": "ahmed",
+          "email": "ag349255@gmail.com",
+          "gender": "male",
+          "USER_PROFILE": {
+            "_id": "66bcbd183aa2f0e6b120aa6e",
+            "userId": "66bcbd183aa2f0e6b120aa6b",
+            "profilePictureKey": "6766c581419f82e26b16da8e"
+          },
+          "id": "66bcbd183aa2f0e6b120aa6b"
+        },
+        "phone": "00201157772072",
+        "carTypeId": {
+          "_id": "66980209daa111da2d7733a1"
+        }
+      },
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "toTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5953,
+      "duration": 709,
+      "passengers": 4,
+      "price": 89,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "completed",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "115507",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-23T23:53:12.419Z",
+      "updatedAt": "2024-12-23T23:54:38.255Z",
+      "startTime": "2024-12-23T23:54:21.520Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "6769f8fd04d41221aa1365ad",
+      "userId": {
+        "_id": "66b4ddef589df89edc18d48c",
+        "firstName": "zyad",
+        "lastName": "zyad",
+        "email": "zyadmohamd456@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4ddef589df89edc18d48e",
+          "userId": "66b4ddef589df89edc18d48c",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4ddef589df89edc18d48c"
+      },
+      "riderId": {
+        "_id": "66e057af51f4bced71f262f5",
+        "userId": {
+          "_id": "66bcbd183aa2f0e6b120aa6b",
+          "firstName": "khaled",
+          "lastName": "ahmed",
+          "email": "ag349255@gmail.com",
+          "gender": "male",
+          "USER_PROFILE": {
+            "_id": "66bcbd183aa2f0e6b120aa6e",
+            "userId": "66bcbd183aa2f0e6b120aa6b",
+            "profilePictureKey": "6766c581419f82e26b16da8e"
+          },
+          "id": "66bcbd183aa2f0e6b120aa6b"
+        },
+        "phone": "00201157772072",
+        "carTypeId": {
+          "_id": "66980209daa111da2d7733a1"
+        }
+      },
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "564018",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-23T23:57:49.270Z",
+      "updatedAt": "2024-12-24T19:05:11.592Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.133298,
+          31.329616
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.098281,
+          31.329383
+        ]
+      },
+      "_id": "676aceebe6b3682fd7a4c9ea",
+      "userId": {
+        "_id": "66ca3e98d62c72b67feec0f1",
+        "firstName": "Moaz",
+        "lastName": "Mohamed",
+        "email": "moaz68860@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66ca3e98d62c72b67feec0f4",
+          "userId": "66ca3e98d62c72b67feec0f1",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66ca3e98d62c72b67feec0f1"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "5 القنال، معادي السرايات الغربية، قسم المعادي، محافظة القاهرة‬ 4212220، مصر",
+      "toTitle": "19 شارع دمنهور، البستان، قسم مصر الجديدة، محافظة القاهرة‬ 4460313، مصر",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 25708,
+      "duration": 2304,
+      "passengers": 4,
+      "price": 125,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "pending",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T15:10:35.358Z",
+      "updatedAt": "2024-12-24T15:10:35.358Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.133298,
+          31.329616
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.098281,
+          31.329383
+        ]
+      },
+      "_id": "676b064797ce6975f5e8676f",
+      "userId": {
+        "_id": "66b76065ab3b6f5a3d2273ed",
+        "firstName": "khaled",
+        "lastName": "ahmed",
+        "email": "mohamedshehab0001@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b76065ab3b6f5a3d2273f0",
+          "userId": "66b76065ab3b6f5a3d2273ed",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b76065ab3b6f5a3d2273ed"
+      },
+      "riderId": {
+        "_id": "66e057af51f4bced71f262f5",
+        "userId": {
+          "_id": "66bcbd183aa2f0e6b120aa6b",
+          "firstName": "khaled",
+          "lastName": "ahmed",
+          "email": "ag349255@gmail.com",
+          "gender": "male",
+          "USER_PROFILE": {
+            "_id": "66bcbd183aa2f0e6b120aa6e",
+            "userId": "66bcbd183aa2f0e6b120aa6b",
+            "profilePictureKey": "6766c581419f82e26b16da8e"
+          },
+          "id": "66bcbd183aa2f0e6b120aa6b"
+        },
+        "phone": "00201157772072",
+        "carTypeId": {
+          "_id": "66980209daa111da2d7733a1"
+        }
+      },
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "5 القنال، معادي السرايات الغربية، قسم المعادي، محافظة القاهرة‬ 4212220، مصر",
+      "toTitle": "19 شارع دمنهور، البستان، قسم مصر الجديدة، محافظة القاهرة‬ 4460313، مصر",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 25708,
+      "duration": 2304,
+      "passengers": 4,
+      "price": 125,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "completed",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "893766",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T19:06:47.491Z",
+      "updatedAt": "2024-12-24T20:28:26.184Z",
+      "startTime": "2024-12-24T20:21:42.375Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b1a6a9cbc1030d7ed99f3",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 150,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T20:32:42.037Z",
+      "updatedAt": "2024-12-24T20:38:42.296Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b1bf472e422246b4347e7",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T20:39:16.285Z",
+      "updatedAt": "2024-12-24T20:51:18.379Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b1f37cf410d386fece7f7",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T20:53:11.328Z",
+      "updatedAt": "2024-12-24T20:53:36.243Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b25cc3084cdfd1f0ba947",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T21:21:16.877Z",
+      "updatedAt": "2024-12-24T21:23:18.623Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b26f7bbceff7875416631",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T21:26:15.688Z",
+      "updatedAt": "2024-12-24T21:27:24.929Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b275fff36109379ef904f",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T21:27:59.085Z",
+      "updatedAt": "2024-12-24T21:28:38.947Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b2795e950e42d25db1ef6",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T21:28:53.139Z",
+      "updatedAt": "2024-12-24T21:30:00.295Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b27e4d403913f5d124725",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T21:30:12.292Z",
+      "updatedAt": "2024-12-24T21:31:48.318Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b28663ea57626bb0b31a2",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T21:32:22.452Z",
+      "updatedAt": "2024-12-24T21:33:41.775Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b28ed6a6190bcb3baa88b",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T21:34:37.495Z",
+      "updatedAt": "2024-12-24T21:35:30.320Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b29d87f45247dcff6b708",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 90,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T21:38:32.506Z",
+      "updatedAt": "2024-12-24T21:40:32.978Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b30f0e232d7dd6a44d72b",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T22:08:48.043Z",
+      "updatedAt": "2024-12-24T22:09:20.387Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b3463e232d7dd6a44e56b",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T22:23:31.919Z",
+      "updatedAt": "2024-12-24T22:31:46.579Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b3926e232d7dd6a44ebbc",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T22:43:50.197Z",
+      "updatedAt": "2024-12-24T22:49:33.390Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b3a87e232d7dd6a44ec6c",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T22:49:43.902Z",
+      "updatedAt": "2024-12-24T22:51:41.373Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b3b00e232d7dd6a44ecfe",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T22:51:44.501Z",
+      "updatedAt": "2024-12-24T22:52:22.063Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b3b59e232d7dd6a44ef70",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-24T22:53:13.777Z",
+      "updatedAt": "2024-12-24T22:53:40.970Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676b5e23aa092e041fbd3ffa",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-25T01:21:39.864Z",
+      "updatedAt": "2024-12-25T01:22:05.378Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676bfea9aa092e041fbd7826",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": true,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 90,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-25T12:46:33.666Z",
+      "updatedAt": "2024-12-25T12:55:35.952Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676c03edaa092e041fbd8d3e",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": true,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 90,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-25T13:09:01.809Z",
+      "updatedAt": "2024-12-25T13:13:13.047Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "_id": "676c054aaa092e041fbd9bac",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "toTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "profit": 0,
+      "autoAccept": false,
+      "isPremium": false,
+      "distance": 5953,
+      "duration": 709,
+      "passengers": 4,
+      "price": 90,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-25T13:14:50.911Z",
+      "updatedAt": "2024-12-25T13:16:08.221Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "_id": "676c05b9aa092e041fbd9f4d",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "toTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "profit": 0,
+      "autoAccept": true,
+      "isPremium": false,
+      "distance": 5953,
+      "duration": 709,
+      "passengers": 4,
+      "price": 90,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-25T13:16:41.272Z",
+      "updatedAt": "2024-12-25T13:22:13.541Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "_id": "676c070eaa092e041fbdac0c",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "toTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "profit": 0,
+      "autoAccept": true,
+      "isPremium": true,
+      "distance": 5953,
+      "duration": 709,
+      "passengers": 4,
+      "price": 90,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "canceled",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-25T13:22:22.400Z",
+      "updatedAt": "2024-12-25T13:23:33.023Z"
+    },
+    {
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0444196,
+          31.2357116
+        ]
+      },
+      "targetLocation": {
+        "type": "Point",
+        "coordinates": [
+          30.0130557,
+          31.2088526
+        ]
+      },
+      "_id": "676c07f8aa092e041fbdb706",
+      "userId": {
+        "_id": "66b4659d1c9c4b1cb35bfee4",
+        "firstName": "zyad",
+        "lastName": "mohamed",
+        "email": "zyadmohamed122232@gmail.com",
+        "gender": "male",
+        "USER_PROFILE": {
+          "_id": "66b4659d1c9c4b1cb35bfee6",
+          "userId": "66b4659d1c9c4b1cb35bfee4",
+          "profilePictureKey": "6766c581419f82e26b16da8e"
+        },
+        "id": "66b4659d1c9c4b1cb35bfee4"
+      },
+      "riderId": null,
+      "subCategoryId": {
+        "_id": "62c8ba9f8e28a58a3edf57eb",
+        "nameAr": "كابتن",
+        "nameEn": "Captain"
+      },
+      "carTypeId": null,
+      "fromTitle": "1 Mohammed Mahmoud, ميدان التحرير, Qasr El Nil, Cairo Governorate 4272077, Egypt",
+      "toTitle": "حدائق الاهرام عقار ٧٣ الف البوابه الاولى، Al Omraneyah Ash Sharqeyah, Al Giza, Giza Governorate 3724113, Egypt",
+      "profit": 0,
+      "autoAccept": true,
+      "isPremium": false,
+      "distance": 5073,
+      "duration": 638,
+      "passengers": 4,
+      "price": 80,
+      "calculateB": 0,
+      "paymentMethod": "cash",
+      "status": "pending",
+      "penalty": 0,
+      "payed_penalty": false,
+      "isUserGetCashback": false,
+      "isRiderGetCashback": false,
+      "OTP": "",
+      "freeTripForDriver": false,
+      "holdMoneyForTrip": null,
+      "recordingVoice": null,
+      "createdAt": "2024-12-25T13:26:16.067Z",
+      "updatedAt": "2024-12-25T13:26:16.067Z"
+    }
+  ]

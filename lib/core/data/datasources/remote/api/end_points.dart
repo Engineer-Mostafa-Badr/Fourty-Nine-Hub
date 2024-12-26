@@ -290,9 +290,12 @@ class EndPoints {
       '/health/doctor-search${loggedUserId.isNotEmpty ? "?userId=$loggedUserId" : ""}';
   static const bookEmergency = '/health/book-emergency';
   static cancelAppointment(String id) => '/health/book-appointment-cancel/$id';
-  static doctorCancelAppointment(String id) => '/health/book-appointment-doctor-cancel/$id';
-  static emergencyRequests(GetEmergencyRequestsParams params) => '/health/show-emergency?limit=${params.limit}&page=${params.page}&subCategory=${params.subCategoryId}';
-  static allAppointments(PaginationParams params) => '/health/doctor/all-doctor-requests?limit=${params.limit}&page=${params.page}';
+  static doctorCancelAppointment(String id) =>
+      '/health/book-appointment-doctor-cancel/$id';
+  static emergencyRequests(GetEmergencyRequestsParams params) =>
+      '/health/show-emergency?limit=${params.limit}&page=${params.page}&subCategory=${params.subCategoryId}';
+  static allAppointments(PaginationParams params) =>
+      '/health/doctor/all-doctor-requests?limit=${params.limit}&page=${params.page}';
 
   static String bookRegularAppointment(String appointmentId) =>
       '/health/book-appointment/$appointmentId';
@@ -608,7 +611,6 @@ class EndPoints {
   static String following(TwitterFeedParams params) {
     return '/follow/allFollowing?search=${params.search}&limit=${params.limit}&page=${params.page}&otherId=${params.otherId}';
   }
-
 
   static String createReel(CreateReelParams params) {
     return '/reels/views/${params.reelId}';

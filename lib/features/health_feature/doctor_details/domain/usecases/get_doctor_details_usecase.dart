@@ -28,8 +28,12 @@ class GetDoctorDetailsParams {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['subCategoryId'] = subCategoryId;
-    if (bookingType != null&&bookingType!='') {
-      data['type'] = bookingType=='call'?'calls':bookingType=='home'?'visitHome':'clinic';
+    if (bookingType != null && bookingType != '') {
+      data['type'] = bookingType == 'call'
+          ? 'calls'
+          : bookingType == 'home'
+              ? 'visitHome'
+              : 'clinic';
     }
     return data;
   }

@@ -10,21 +10,20 @@ class GetUserDoctorRatessUseCase
 
   GetUserDoctorRatessUseCase(this.repo);
   @override
-  Future<Either<Failure, List<UserDoctorRateEntity>>> call(GetUserDoctorRatesParams params) {
+  Future<Either<Failure, List<UserDoctorRateEntity>>> call(
+      GetUserDoctorRatesParams params) {
     return repo.getDoctorReviews(params);
   }
 }
 
-class GetUserDoctorRatesParams{
+class GetUserDoctorRatesParams {
   final String doctorId;
   final int page;
   final int limit;
-  GetUserDoctorRatesParams({required this.doctorId,required this.page,required this.limit});
+  GetUserDoctorRatesParams(
+      {required this.doctorId, required this.page, required this.limit});
   //toJson
-  Map<String,dynamic> toJson(){
-    return {
-      'page':page,
-      'limit':limit
-    };
+  Map<String, dynamic> toJson() {
+    return {'page': page, 'limit': limit};
   }
 }

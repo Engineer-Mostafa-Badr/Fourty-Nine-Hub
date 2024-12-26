@@ -11,17 +11,17 @@ class GetSubCategoryDoctorsListUseCase
   GetSubCategoryDoctorsListUseCase(this._repo);
 
   @override
-  Future<Either<Failure, List<DoctorEntity>>> call(GetSubCategoryDoctorsParams params) {
+  Future<Either<Failure, List<DoctorEntity>>> call(
+      GetSubCategoryDoctorsParams params) {
     return _repo.getSubCategoryDoctorsList(params: params);
   }
 }
 
 class GetSubCategoryDoctorsParams extends PaginationParams {
   final String subCategoryId;
-  GetSubCategoryDoctorsParams({required this.subCategoryId, required super.page, required super.limit});
+  GetSubCategoryDoctorsParams(
+      {required this.subCategoryId, required super.page, required super.limit});
 
   @override
-  Map<String, dynamic> toJson() => {
-    'page': page,
-    'limit': limit};
+  Map<String, dynamic> toJson() => {'page': page, 'limit': limit};
 }

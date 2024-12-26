@@ -47,6 +47,7 @@ class RiderDataSource {
 
   Future<Either<Failure, Map<String, dynamic>>> getTripInfo(
       {required GetTripInfoRequestModel model}) {
+    log(model.toJson().toString(), name: "lsdjflskdjflksdjf");
     return api.post("${EndPoints.expectedPrice}/${model.subCateogryId}",
         data: model.toJson());
   }
@@ -260,17 +261,34 @@ class RiderDataSource {
       {required RattingDriverModel model}) {
     return api.post("/driver/rating", data: model.toJson());
   }
-  Future<Either<Failure, Map<String, dynamic>>> mediaUrl({required String type, required int size, required String subcategoryId}){
+
+  Future<Either<Failure, Map<String, dynamic>>> mediaUrl(
+      {required String type,
+      required int size,
+      required String subcategoryId}) {
     return api.post(EndPoints.mediaUrl, data: {
-    "type":"audio/$type",
-    "size": size,
-    "subcategoryId": subcategoryId
-});
+      "type": "audio/$type",
+      "size": size,
+      "subcategoryId": subcategoryId
+    });
   }
-  Future<Either<Failure, Map<String, dynamic>>> recordVoiceRide({required String tripId, required String mediaId}){
-    return api.put("${EndPoints.recordVoiceRide}/$tripId", data: {"mediaId": mediaId});
+
+  Future<Either<Failure, Map<String, dynamic>>> recordVoiceRide(
+      {required String tripId, required String mediaId}) {
+    return api.put("${EndPoints.recordVoiceRide}/$tripId",
+        data: {"mediaId": mediaId});
   }
-  Future<Either<Failure, Map<String, dynamic>>> confirmUpload({required String mediaId}){
+
+  Future<Either<Failure, Map<String, dynamic>>> confirmUpload(
+      {required String mediaId}) {
     return api.put(EndPoints.confirmUpload(mediaId));
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getDriverInfo() {
+    return api.get("/ride/riders/driverStatistics");
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> deleteDriver() {
+    return api.delete("/ride/riders");
   }
 }

@@ -1,6 +1,13 @@
 part of 'all_appointments_cubit.dart';
 
-enum AllAppointmentsStates { loading,startLoading,endLoading, initState, error, success }
+enum AllAppointmentsStates {
+  loading,
+  startLoading,
+  endLoading,
+  initState,
+  error,
+  success
+}
 
 extension AllAppointmentsStateX on AllAppointmentsState {
   bool get isInitial => status == AllAppointmentsStates.initState;

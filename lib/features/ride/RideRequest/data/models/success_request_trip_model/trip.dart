@@ -11,8 +11,8 @@ class Trip {
   int? profit;
   bool? autoAccept;
   bool? isPremium;
-  UserLocation? userLocation;
-  RiderLocation? riderLocation;
+  UserLocation? startLocation;
+  RiderLocation? targetLocation;
   int? distance;
   int? duration;
   int? passengers;
@@ -39,8 +39,8 @@ class Trip {
     this.profit,
     this.autoAccept,
     this.isPremium,
-    this.userLocation,
-    this.riderLocation,
+    this.startLocation,
+    this.targetLocation,
     this.distance,
     this.duration,
     this.passengers,
@@ -68,11 +68,11 @@ class Trip {
         profit: json['profit'] as int?,
         autoAccept: json['autoAccept'] as bool?,
         isPremium: json['isPremium'] as bool?,
-        userLocation: json['userLocation'] == null
+        startLocation: json['userLocation'] == null
             ? null
             : UserLocation.fromJson(
                 json['userLocation'] as Map<String, dynamic>),
-        riderLocation: json['riderLocation'] == null
+        targetLocation: json['riderLocation'] == null
             ? null
             : RiderLocation.fromJson(
                 json['riderLocation'] as Map<String, dynamic>),
@@ -107,8 +107,8 @@ class Trip {
         'profit': profit,
         'autoAccept': autoAccept,
         'isPremium': isPremium,
-        'userLocation': userLocation?.toJson(),
-        'riderLocation': riderLocation?.toJson(),
+        'userLocation': startLocation?.toJson(),
+        'riderLocation': targetLocation?.toJson(),
         'distance': distance,
         'duration': duration,
         'passengers': passengers,

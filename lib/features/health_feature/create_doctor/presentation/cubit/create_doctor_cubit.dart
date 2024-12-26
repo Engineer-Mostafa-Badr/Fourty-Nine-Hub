@@ -52,9 +52,9 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
         response
             .fold((failure) => emit(CreateDoctorError("Can't Create Doctor")),
                 (data) {
-                  emit(CreateDoctorSuccess(
-                      "You are submit successfully. Please wait admin approve and approval."));
-                  context.go(Routes.VISITA);
+          emit(CreateDoctorSuccess(
+              "You are submit successfully. Please wait admin approve and approval."));
+          context.go(Routes.VISITA);
         });
       } else {
         emit(CreateDoctorError(checkFilledMessage));

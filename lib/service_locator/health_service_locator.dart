@@ -264,16 +264,18 @@ class HealthServiceLocator {
           serviceLocator(),
           serviceLocator(),
         ));
-    serviceLocator.registerFactory<EditDoctorPersonalInfoCubit>(() => EditDoctorPersonalInfoCubit(
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-        ));
-    serviceLocator.registerFactory<EditDoctorTimetableCubit>(() => EditDoctorTimetableCubit(
-      serviceLocator(),
-      serviceLocator(),
-        ));
+    serviceLocator.registerFactory<EditDoctorPersonalInfoCubit>(
+        () => EditDoctorPersonalInfoCubit(
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+            ));
+    serviceLocator.registerFactory<EditDoctorTimetableCubit>(
+        () => EditDoctorTimetableCubit(
+              serviceLocator(),
+              serviceLocator(),
+            ));
     serviceLocator.registerFactory<HealthCubit>(() => HealthCubit(
           serviceLocator(),
           serviceLocator(),
@@ -309,9 +311,10 @@ class HealthServiceLocator {
             serviceLocator(), serviceLocator(), serviceLocator())
           ..loadData());
 
-    serviceLocator.registerFactory<EmergencyRequestsCubit>(() =>
-        EmergencyRequestsCubit(
-            serviceLocator(),));
+    serviceLocator
+        .registerFactory<EmergencyRequestsCubit>(() => EmergencyRequestsCubit(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerFactory(() =>
         DoctorGovernorateFilterCubit(serviceLocator(), serviceLocator())
@@ -325,8 +328,8 @@ class HealthServiceLocator {
               serviceLocator(),
             ));
 
-    serviceLocator.registerFactory<AllAppointmentsCubit>(
-        () => AllAppointmentsCubit(
+    serviceLocator
+        .registerFactory<AllAppointmentsCubit>(() => AllAppointmentsCubit(
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),

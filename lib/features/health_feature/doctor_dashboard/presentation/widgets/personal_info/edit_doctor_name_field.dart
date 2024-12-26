@@ -16,7 +16,8 @@ class EditDoctorNameField extends StatelessWidget {
         Expanded(
           child: FirstNameTextFormField(
             currentFocusNode: FocusNode(),
-            currentController: context.read<EditDoctorPersonalInfoCubit>().firstNameController,
+            currentController:
+                context.read<EditDoctorPersonalInfoCubit>().firstNameController,
             nextFocusNode: FocusNode(),
           ),
         ),
@@ -24,7 +25,8 @@ class EditDoctorNameField extends StatelessWidget {
         Expanded(
           child: LastNameTextFormField(
             currentFocusNode: FocusNode(),
-            currentController: context.read<EditDoctorPersonalInfoCubit>().lastNameController,
+            currentController:
+                context.read<EditDoctorPersonalInfoCubit>().lastNameController,
             nextFocusNode: FocusNode(),
           ),
         ),

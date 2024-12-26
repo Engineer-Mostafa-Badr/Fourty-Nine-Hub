@@ -15,9 +15,9 @@ class DoctorTodayAppointmentsCubit extends Cubit<DoctorTodayAppointmentsState> {
   final GetDoctorAppointmentsByDayUseCase _getDoctorAppointmentsByDayUseCase;
   final DoctorCancelAppointmentUseCase _doctorCancelAppointmentUseCase;
 
-  DoctorTodayAppointmentsCubit(this._getDoctorAppointmentsByDayUseCase,this._doctorCancelAppointmentUseCase)
+  DoctorTodayAppointmentsCubit(this._getDoctorAppointmentsByDayUseCase,
+      this._doctorCancelAppointmentUseCase)
       : super(const DoctorTodayAppointmentsState());
-
 
   List<DoctorAppointmentEntity> appointments = [];
   bool isLoadingMore = false;
@@ -33,8 +33,6 @@ class DoctorTodayAppointmentsCubit extends Cubit<DoctorTodayAppointmentsState> {
     await getAppointmentsByDay();
   }
 
-
-
   Future<void> getAppointmentsByDay() async {
     if (!hasMoreData || isLoadingMore) return;
 
@@ -42,12 +40,13 @@ class DoctorTodayAppointmentsCubit extends Cubit<DoctorTodayAppointmentsState> {
     final response = await _getDoctorAppointmentsByDayUseCase(
         GetDoctorAppointmentsByDayParams(
             day: DateTime.now().weekday.toWeekDay,
-            paginationParams: PaginationParams(page: currentPage,limit: pageSize)));
-
+            paginationParams:
+                PaginationParams(page: currentPage, limit: pageSize)));
 
     response.fold(
-          (failure) => emit(state.copyWith(failure: failure, status: DoctorTodayAppointmentsStates.error)),
-          (data) {
+      (failure) => emit(state.copyWith(
+          failure: failure, status: DoctorTodayAppointmentsStates.error)),
+      (data) {
         appointments.addAll(data);
 
         if (data.length < pageSize) {
@@ -62,15 +61,22 @@ class DoctorTodayAppointmentsCubit extends Cubit<DoctorTodayAppointmentsState> {
     );
   }
 
-  Future<void> cancelAppointment(String appointmentId,BuildContext context) async {
-    emit(state.copyWith(status: DoctorTodayAppointmentsStates.startCancelLoading));
+  Future<void> cancelAppointment(
+      String appointmentId, BuildContext context) async {
+    emit(state.copyWith(
+        status: DoctorTodayAppointmentsStates.startCancelLoading));
     final response = await _doctorCancelAppointmentUseCase.call(appointmentId);
-    emit(state.copyWith(status: DoctorTodayAppointmentsStates.endCancelLoading));
+    emit(
+        state.copyWith(status: DoctorTodayAppointmentsStates.endCancelLoading));
     response.fold(
-          (l) => emit(state.copyWith(status: DoctorTodayAppointmentsStates.error)),
-          (r) {
-        appointments.removeWhere((element)=>element.id==appointmentId);
-        showSuccessMessage(context, context.isArabic?'تم إلغاء الحجز بنجاح':'Appointment Cancelled Successfully');
+      (l) => emit(state.copyWith(status: DoctorTodayAppointmentsStates.error)),
+      (r) {
+        appointments.removeWhere((element) => element.id == appointmentId);
+        showSuccessMessage(
+            context,
+            context.isArabic
+                ? 'تم إلغاء الحجز بنجاح'
+                : 'Appointment Cancelled Successfully');
         emit(state.copyWith(status: DoctorTodayAppointmentsStates.success));
       },
     );

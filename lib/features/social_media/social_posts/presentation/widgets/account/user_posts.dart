@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
@@ -68,7 +67,7 @@ class _UserPostsState extends State<UserPosts> {
                 showReacts = false;
                 return state.status == StateStatus.success
                     ? Padding(
-                        padding:  EdgeInsets.only(top: 30.h),
+                        padding: EdgeInsets.only(top: 30.h),
                         child: UserPostCard(
                           // showReacts: showReacts,
                           post: post,

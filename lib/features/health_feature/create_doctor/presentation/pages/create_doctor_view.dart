@@ -108,13 +108,20 @@ class CreateDoctorView extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("${LocaleKeys.waitingTime.localize}:", style: Styles.mediumText(),),
+                    Text(
+                      "${LocaleKeys.waitingTime.localize}:",
+                      style: Styles.mediumText(),
+                    ),
                     DefaultTextFormField(
                       hint: LocaleKeys.waitingTime.localize,
                       keyboardType: TextInputType.number,
                       isRequired: true,
-                      currentFocusNode: context.read<CreateDoctorCubit>().waitingTimeFocusNode,
-                      currentController: context.read<CreateDoctorCubit>().waitingTimeController,
+                      currentFocusNode: context
+                          .read<CreateDoctorCubit>()
+                          .waitingTimeFocusNode,
+                      currentController: context
+                          .read<CreateDoctorCubit>()
+                          .waitingTimeController,
                     ),
                   ],
                 ),
@@ -126,12 +133,14 @@ class CreateDoctorView extends StatelessWidget {
                 const CreateDoctorHomeVisitTimeTable(),
                 Sizer(height: 20.h),
                 AppInfoText(
-                    text:
-                        context.isArabic?"التطبيق لا يخصم اي نسبه من مزود الخدمة.":"The application does not deduct any percentage from the service provider."),
+                    text: context.isArabic
+                        ? "التطبيق لا يخصم اي نسبه من مزود الخدمة."
+                        : "The application does not deduct any percentage from the service provider."),
                 Sizer(height: 20.h),
                 AppInfoText(
-                    text:
-                        context.isArabic?'سوف تحصل على 3650 جنيها في السنه عندما تشترك يوميا.':'You will get EGP 3,650 per year if you subscribe daily.'),
+                    text: context.isArabic
+                        ? 'سوف تحصل على 3650 جنيها في السنه عندما تشترك يوميا.'
+                        : 'You will get EGP 3,650 per year if you subscribe daily.'),
                 Sizer(height: 20.h),
                 const CreateDoctorSubmitButton(),
               ],

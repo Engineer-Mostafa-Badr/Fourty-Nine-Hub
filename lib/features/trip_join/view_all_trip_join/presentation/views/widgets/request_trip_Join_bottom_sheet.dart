@@ -68,7 +68,9 @@ class _RequstTripJoinBottomSheetState extends State<RequstTripJoinBottomSheet> {
                   return _validateMobile(value);
                 },
               ),
-               Sizer(height: 40.h,),
+              Sizer(
+                height: 40.h,
+              ),
               InkWell(
                 onTap: () {
                   if (formKey.currentState!.validate()) {

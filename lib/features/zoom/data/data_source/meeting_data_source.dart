@@ -93,13 +93,15 @@ class MeetingDataSourceImpl extends MeetingDataSource {
 
   @override
   Future<Either<Failure, bool>> sendPoints(SendPointsParams params) async {
-    final result = await apiConsumer.post(EndPoints.sendPoints,data: params.toJson());
+    final result =
+        await apiConsumer.post(EndPoints.sendPoints, data: params.toJson());
     return result.fold((l) => Left(l), (r) => Right(r['status']));
   }
 
   @override
   Future<Either<Failure, bool>> sendGift(SendLiveGiftParams params) async {
-    final result = await apiConsumer.post(EndPoints.sendLiveGift(params.streamId),data: params.toJson());
+    final result = await apiConsumer
+        .post(EndPoints.sendLiveGift(params.streamId), data: params.toJson());
     return result.fold((l) => Left(l), (r) => Right(r['status']));
   }
 }

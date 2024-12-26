@@ -9,11 +9,13 @@ class DashboardBanner extends StatelessWidget {
   final String? subTitle;
   final String? route;
   final restaurantId;
+  final bool deleteReqeust;
   final void Function()? onTap;
 
   const DashboardBanner(
       {super.key,
       this.subTitle,
+      this.deleteReqeust = false,
       required this.title,
       this.route,
       this.onTap,

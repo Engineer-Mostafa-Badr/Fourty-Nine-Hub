@@ -20,18 +20,31 @@ class DoctorTimetableParams {
   final bool hasClinic;
   final bool hasHomeVisit;
   final bool hasCalls;
-  final WorkDaysParams? clinic ;
-  final WorkDaysParams? calls ;
-  final WorkDaysParams? visitHome ;
-  final String? detectionPeriodClinic ;
-  final String? detectionPeriodCalls ;
-  final String? detectionPeriodvisitHome ;
-  final String? clinicPrice ;
-  final String? callsPrice ;
-  final String? visitHomePrice ;
-  final String? waitingTime ;
+  final WorkDaysParams? clinic;
+  final WorkDaysParams? calls;
+  final WorkDaysParams? visitHome;
+  final String? detectionPeriodClinic;
+  final String? detectionPeriodCalls;
+  final String? detectionPeriodvisitHome;
+  final String? clinicPrice;
+  final String? callsPrice;
+  final String? visitHomePrice;
+  final String? waitingTime;
 
-  DoctorTimetableParams({required this.hasClinic, required this.hasHomeVisit, required this.hasCalls, required this.clinic, required this.calls, required this.visitHome, required this.detectionPeriodClinic, required this.detectionPeriodCalls, required this.detectionPeriodvisitHome, required this.clinicPrice, required this.callsPrice, required this.visitHomePrice, required this.waitingTime});
+  DoctorTimetableParams(
+      {required this.hasClinic,
+      required this.hasHomeVisit,
+      required this.hasCalls,
+      required this.clinic,
+      required this.calls,
+      required this.visitHome,
+      required this.detectionPeriodClinic,
+      required this.detectionPeriodCalls,
+      required this.detectionPeriodvisitHome,
+      required this.clinicPrice,
+      required this.callsPrice,
+      required this.visitHomePrice,
+      required this.waitingTime});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -82,7 +95,7 @@ class DoctorTimetableParams {
     }
     if (hasClinic &&
         ((clinicPrice ?? '').isEmpty ||
-            (waitingTime?.isEmpty!=null&&waitingTime?.isEmpty!=[]) ||
+            (waitingTime?.isEmpty != null && waitingTime?.isEmpty != []) ||
             (detectionPeriodClinic ?? '').isEmpty)) {
       return "Please enter your clinic price, waiting time and examination period";
     }
@@ -105,5 +118,3 @@ class DoctorTimetableParams {
     return null;
   }
 }
-
-

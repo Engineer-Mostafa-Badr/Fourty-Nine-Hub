@@ -90,13 +90,19 @@ class _CreateAdViewState extends State<CreateAdView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Label(
-                                text: context.isArabic?widget.categorization.subCategory.nameAr:widget.categorization.subCategory.nameEn,
+                                text: context.isArabic
+                                    ? widget.categorization.subCategory.nameAr
+                                    : widget.categorization.subCategory.nameEn,
                                 style: Styles.mediumText(
                                     fontWeight: FontWeight.bold),
                               ),
                               Label(
-                                  text:
-                                  context.isArabic?widget.categorization.mainCategory.name??"" :widget.categorization.mainCategory.nameEn!),
+                                  text: context.isArabic
+                                      ? widget.categorization.mainCategory
+                                              .name ??
+                                          ""
+                                      : widget
+                                          .categorization.mainCategory.nameEn!),
                             ],
                           )),
                         ],

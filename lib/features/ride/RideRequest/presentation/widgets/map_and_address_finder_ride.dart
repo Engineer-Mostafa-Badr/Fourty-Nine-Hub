@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widgets/dynamic_map_test.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/get_current_location_driver.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_destination_point_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_starting_point_ride_cubit.dart';
@@ -10,20 +11,25 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/destination_text_field_and_find_ride_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/start_text_field_and_find_widget.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/trip_info_button_sheet_widget.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapAndAddressFinderRide extends StatefulWidget {
   const MapAndAddressFinderRide({super.key});
-
   @override
   State<MapAndAddressFinderRide> createState() =>
       _MapAndAddressFinderRideState();
 }
 
+bool? isBottomSheetShown;
+
 class _MapAndAddressFinderRideState extends State<MapAndAddressFinderRide> {
   @override
   void initState() {
+    isBottomSheetShown = false;
+
     super.initState();
     _setUserCurrentLocation();
   }
@@ -49,9 +55,8 @@ class _MapAndAddressFinderRideState extends State<MapAndAddressFinderRide> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // const GoogleMapViewAddres(),
-        BlocBuilder<GetDestinationPointRideCubit, RiderState>(
-          builder: (context, destState) {
+        BlocConsumer<GetDestinationPointRideCubit, RiderState>(
+          listener: (context, destState) {
             if (destState is SuccessGetDestinationPointState &&
                 BlocProvider.of<GetStartingPointRideCubit>(context).startLat !=
                     null &&
@@ -76,9 +81,60 @@ class _MapAndAddressFinderRideState extends State<MapAndAddressFinderRide> {
                           .endLat!,
                       BlocProvider.of<GetDestinationPointRideCubit>(context)
                           .endLong!));
+            }
+          },
+          builder: (context, destState) {
+            if (destState is SuccessGetDestinationPointState &&
+                BlocProvider.of<GetStartingPointRideCubit>(context).startLat !=
+                    null &&
+                BlocProvider.of<GetStartingPointRideCubit>(context).startLong !=
+                    null &&
+                BlocProvider.of<GetDestinationPointRideCubit>(context).endLat !=
+                    null &&
+                BlocProvider.of<GetDestinationPointRideCubit>(context)
+                        .endLong !=
+                    null) {
               print("i am in first case \n");
 
-              return BlocBuilder<GetTripInfoCubit, RiderState>(
+              return BlocConsumer<GetTripInfoCubit, RiderState>(
+                listener: (context, state) {
+                  if (state is SuccessGetTripInfoState) {
+                    if (!isBottomSheetShown!) {
+                      isBottomSheetShown = true;
+                      WidgetsBinding.instance.addPostFrameCallback(
+                        (timeStamp) {
+                          context.read<RiderTripReelTimeCubit>().print();
+                          BlocProvider.of<GetCurrencyCubit>(context)
+                              .getCurrencyData();
+
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                            backgroundColor: Colors.white,
+                            context: context,
+                            builder: (context) => MultiBlocProvider(
+                              providers: [
+                                BlocProvider(
+                                    create: (context) => GetTripInfoCubit(
+                                        repository: serviceLocator())),
+                              ],
+                              child: BlocProvider(
+                                create: (context) =>
+                                    GetCurrencyCubit(serviceLocator()),
+                                child: TripInfoButtonSheetWidget(
+                                  model: state.model,
+                                ),
+                              ),
+                            ),
+                          ).whenComplete(
+                            () {
+                              isBottomSheetShown = false;
+                            },
+                          );
+                        },
+                      );
+                    }
+                  }
+                },
                 builder: (context, state) {
                   if (state is SuccessGetTripInfoState) {
                     return SizedBox(

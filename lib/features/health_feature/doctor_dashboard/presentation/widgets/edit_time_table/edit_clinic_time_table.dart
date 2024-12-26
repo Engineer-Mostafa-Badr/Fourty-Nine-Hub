@@ -15,33 +15,31 @@ class EditDoctorClinicTimeTable extends StatelessWidget {
     final doctorLoginCubit = context.read<EditDoctorTimetableCubit>();
     return BlocBuilder<EditDoctorTimetableCubit, EditDoctorTimetableState>(
       builder: (context, state) {
-          return Timetable(
-              title: LocaleKeys.clinicVisit.localize,
-              timetale: state.clinicTimetable??[],
-              child: Column(
-                children: [
-                  DefaultTextFormField(
-                    currentFocusNode: FocusNode(),
-                    currentController: doctorLoginCubit.clinicPriceController,
-                    nextFocusNode: FocusNode(),
-                    keyboardType: TextInputType.number,
-                    isRequired: true,
-                    hint: 'Clinic Price',
-                  ),
-                  const Sizer(),
-                  DefaultTextFormField(
-                    hint: 'Clinic Examine Duration (in minutes)',
-                    keyboardType: TextInputType.number,
-                    isRequired: true,
-                    nextFocusNode: FocusNode(),
-                    currentFocusNode:
-                    FocusNode(),
-                    currentController:
-                    doctorLoginCubit.clinicDurationController,
-                  ),
-                  const Sizer(),
-                ],
-              ));
+        return Timetable(
+            title: LocaleKeys.clinicVisit.localize,
+            timetale: state.clinicTimetable ?? [],
+            child: Column(
+              children: [
+                DefaultTextFormField(
+                  currentFocusNode: FocusNode(),
+                  currentController: doctorLoginCubit.clinicPriceController,
+                  nextFocusNode: FocusNode(),
+                  keyboardType: TextInputType.number,
+                  isRequired: true,
+                  hint: 'Clinic Price',
+                ),
+                const Sizer(),
+                DefaultTextFormField(
+                  hint: 'Clinic Examine Duration (in minutes)',
+                  keyboardType: TextInputType.number,
+                  isRequired: true,
+                  nextFocusNode: FocusNode(),
+                  currentFocusNode: FocusNode(),
+                  currentController: doctorLoginCubit.clinicDurationController,
+                ),
+                const Sizer(),
+              ],
+            ));
       },
     );
   }

@@ -19,7 +19,8 @@ class TwitterUserModel extends TwitterUserEntity {
       final userProfile = json['USER_PROFILE'] as Map<String, dynamic>;
       if (userProfile['profilePictureKey'] is Map<String, dynamic>) {
         // Check if profilePictureKey is also a Map
-        final profilePictureKey = userProfile['profilePictureKey'] as Map<String, dynamic>;
+        final profilePictureKey =
+            userProfile['profilePictureKey'] as Map<String, dynamic>;
         image = profilePictureKey['mediaKey'] as String?;
       }
     }
@@ -34,7 +35,6 @@ class TwitterUserModel extends TwitterUserEntity {
               json['lastName'].substring(1).toLowerCase() ??
           '',
       image: image,
-
       email: json['email'] ?? '',
       isDocumented: json['twitter_documentation'] ?? false,
       createdAt: json['createdAt'] is String

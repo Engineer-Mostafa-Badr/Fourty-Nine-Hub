@@ -92,7 +92,10 @@ class RestaurantOrderCard extends StatelessWidget {
                           Text('${order.total.ceil()} ',
                               style: Styles.headerText(
                                   color: AppColors.WHATS_APP_COLOR)),
-                          Text(context.isArabic?order.currencyAr:order.currencyEn,
+                          Text(
+                              context.isArabic
+                                  ? order.currencyAr
+                                  : order.currencyEn,
                               style: Styles.mediumText(
                                   color: AppColors.PRIMARY_COLOR_DARK,
                                   fontWeight: FontWeight.bold)),

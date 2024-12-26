@@ -208,9 +208,10 @@ class DoctorDashboardRemoteDataSourceImpl
   }
 
   @override
-  Future<Either<Failure, bool>> updateTimetable(DoctorTimetableParams params) async {
-    final response = await _apiConsumer
-        .post(EndPoints.updateDoctorTimeTable, data: params.toJson());
+  Future<Either<Failure, bool>> updateTimetable(
+      DoctorTimetableParams params) async {
+    final response = await _apiConsumer.post(EndPoints.updateDoctorTimeTable,
+        data: params.toJson());
 
     return response.fold((l) => Left(l), (r) => Right(r['status'] as bool));
   }
@@ -219,8 +220,8 @@ class DoctorDashboardRemoteDataSourceImpl
   Future<Either<Failure, DoctorWorkDaysEntity>> getWorkDays() async {
     final response = await _apiConsumer.get(EndPoints.getDoctorWorkDays);
     return response.fold(
-          (failure) => Left(failure),
-          (data) => Right(DoctorWorkDaysModel.fromJson(data['data'])),
+      (failure) => Left(failure),
+      (data) => Right(DoctorWorkDaysModel.fromJson(data['data'])),
     );
   }
 }

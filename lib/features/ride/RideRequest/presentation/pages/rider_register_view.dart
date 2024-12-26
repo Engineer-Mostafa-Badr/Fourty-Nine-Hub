@@ -220,12 +220,11 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
                                                     .WOMEN_SUBCATEGORY_IDS),
                                             containsList: registerRider
                                                 .SELECTED_RICH_VALID_SUBCATEGORY_IDS);
-                                      }
-                                      else if(registerRider
+                                      } else if (registerRider
                                           .SELECTED_SOCKET_CATEGORY_IDS
-                                          .isNotEmpty){
-                                           log("SELECTED_SOCKET_CATEGORY_IDS");
-                                       return  ViewRideCategory(
+                                          .isNotEmpty) {
+                                        log("SELECTED_SOCKET_CATEGORY_IDS");
+                                        return ViewRideCategory(
                                             onChanged: () {
                                               log("SELECTED_SOCKET_CATEGORY_IDS");
                                               setState(() {
@@ -242,8 +241,7 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
                                                     .SOCKET_CATEGORY_IDS),
                                             containsList: registerRider
                                                 .SELECTED_SOCKET_CATEGORY_IDS);
-                                      }
-                                      else {
+                                      } else {
                                         return ViewRideCategory(
                                             onChanged: () {
                                               setState(() {

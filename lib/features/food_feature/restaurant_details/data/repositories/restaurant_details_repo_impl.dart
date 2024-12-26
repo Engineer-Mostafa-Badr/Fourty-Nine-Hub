@@ -45,7 +45,8 @@ class RestaurantDetailsRepoImpl implements RestaurantDetailsRepo {
   }
 
   @override
-  Future<Either<Failure, RestaurantMenu>> addFood({required AddFoodParams params}) {
+  Future<Either<Failure, RestaurantMenu>> addFood(
+      {required AddFoodParams params}) {
     return _remoteDataSource.addFood(params: params);
   }
 

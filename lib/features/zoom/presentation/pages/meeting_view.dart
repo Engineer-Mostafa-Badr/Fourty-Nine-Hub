@@ -62,15 +62,14 @@ class MeetingView extends StatelessWidget {
                               .push(createCustomTransitionRoute(
                             MeetingRoom(
                               payload: MeetingRoomArguments(
-                                userName: context
-                                    .read<UserCubit>()
-                                    .state
-                                    .data!
-                                    .fullName,
-                                isHost: true,
-                                liveID: cubit.meetingId,
-                                shareScreen: false
-                              ),
+                                  userName: context
+                                      .read<UserCubit>()
+                                      .state
+                                      .data!
+                                      .fullName,
+                                  isHost: true,
+                                  liveID: cubit.meetingId,
+                                  shareScreen: false),
                             ),
                             TransitionType.rightToLeft,
                           ));
@@ -258,9 +257,9 @@ class MeetingView extends StatelessWidget {
                                   if (context.mounted) {
                                     context.go(Routes.MEETINGROOM,
                                         extra: MeetingRoomArguments(
-                                            liveID:scheduledMeeting.roomId,
-                                            isHost:true,
-                                            userName:context
+                                            liveID: scheduledMeeting.roomId,
+                                            isHost: true,
+                                            userName: context
                                                 .read<UserCubit>()
                                                 .state
                                                 .data!

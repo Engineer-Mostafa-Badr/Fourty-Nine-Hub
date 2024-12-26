@@ -29,7 +29,10 @@ class CreateDoctorGovernorateDropdown extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("${LocaleKeys.selectGovernorate.localize}:",style: Styles.mediumText(),),
+              Text(
+                "${LocaleKeys.selectGovernorate.localize}:",
+                style: Styles.mediumText(),
+              ),
               FormField(
                 validator: validator,
                 builder: (field) {
@@ -43,29 +46,35 @@ class CreateDoctorGovernorateDropdown extends StatelessWidget {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(
-                                    color:
-                                        field.hasError ? Colors.red : Colors.grey)),
+                                    color: field.hasError
+                                        ? Colors.red
+                                        : Colors.grey)),
                             errorBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(
-                                  color: field.hasError ? Colors.red : Colors.grey,
+                                  color:
+                                      field.hasError ? Colors.red : Colors.grey,
                                 )),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(
-                                  color: field.hasError ? Colors.red : Colors.grey,
+                                  color:
+                                      field.hasError ? Colors.red : Colors.grey,
                                 )),
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(
-                                  color: field.hasError ? Colors.red : Colors.grey,
+                                  color:
+                                      field.hasError ? Colors.red : Colors.grey,
                                 )),
                           ),
                           width: MediaQuery.of(context).size.width * 0.96,
                           hintText: LocaleKeys.governorate.tr(),
                           dropdownMenuEntries: state.governorates
-                              .map((e) =>
-                                  DropdownMenuEntry(value: e, label: context.isArabic?e.nameAr:e.nameEn))
+                              .map((e) => DropdownMenuEntry(
+                                  value: e,
+                                  label:
+                                      context.isArabic ? e.nameAr : e.nameEn))
                               .toList(),
                           onSelected: onSelected),
                       if (field.hasError)

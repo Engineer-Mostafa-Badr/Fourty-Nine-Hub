@@ -50,7 +50,8 @@ class _CustomPhoneTextFormFieldState extends State<CustomPhoneTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = TextStyle(color: context.isDarkMode?Colors.white:AppColors.QUANTITY_COLOR);
+    final textStyle = TextStyle(
+        color: context.isDarkMode ? Colors.white : AppColors.QUANTITY_COLOR);
 
     return Container(
       margin: widget.margin,
@@ -107,11 +108,16 @@ class _CustomPhoneTextFormFieldState extends State<CustomPhoneTextFormField> {
               keyboardType: TextInputType.phone,
               decoration: InputDecoration(
                 fillColor: widget.fillColor ??
-                    (widget.isEnabled ?cardDarkColor(context) : cardDarkColor(context)),
+                    (widget.isEnabled
+                        ? cardDarkColor(context)
+                        : cardDarkColor(context)),
                 filled: true,
                 contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 hintText: widget.hint ?? LocaleKeys.phoneNumber.localize,
-                hintStyle: textStyle.copyWith(color: context.isDarkMode?Colors.white:AppColors.QUANTITY_COLOR),
+                hintStyle: textStyle.copyWith(
+                    color: context.isDarkMode
+                        ? Colors.white
+                        : AppColors.QUANTITY_COLOR),
                 counterText: '',
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),

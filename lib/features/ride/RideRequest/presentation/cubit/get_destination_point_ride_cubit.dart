@@ -10,6 +10,8 @@ class GetDestinationPointRideCubit extends Cubit<RiderState> {
   GetDestinationPointRideCubit({required this.repository})
       : super(RiderInitial());
   getDestinationPoint({required String address}) async {
+    endLat = null;
+    endLong = null;
     emit(DestintionLocationLoading());
     var response = await repository.getAddressFromLatAndLong(address: address);
     response.fold(

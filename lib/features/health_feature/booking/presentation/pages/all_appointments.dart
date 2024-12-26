@@ -27,7 +27,8 @@ class _AllAppointmentsViewState extends State<AllAppointmentsView> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       context.read<AllAppointmentsCubit>().getAllAppointments();
     }
   }
@@ -46,15 +47,26 @@ class _AllAppointmentsViewState extends State<AllAppointmentsView> {
         label: LocaleKeys.allAppointments.localize,
       ),
       body: BlocBuilder<AllAppointmentsCubit, AllAppointmentsState>(
-        builder: (context,state){
+        builder: (context, state) {
           var cubit = context.read<AllAppointmentsCubit>();
-          return state.isLoading?const Center(child: CircularProgressIndicator()):cubit.appointments.isNotEmpty?ListView.separated(
-            controller: _scrollController,
-            padding: EdgeInsets.all(15.w),
-            itemCount: cubit.appointments.length,
-            separatorBuilder: (context,i)=>const Sizer(),
-            itemBuilder: (context,i)=>AllAppointmentsCard(appointment: cubit.appointments[i],),
-          ):Center(child: Text(LocaleKeys.noAppointments.localize,style: Styles.headerText(),),);
+          return state.isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : cubit.appointments.isNotEmpty
+                  ? ListView.separated(
+                      controller: _scrollController,
+                      padding: EdgeInsets.all(15.w),
+                      itemCount: cubit.appointments.length,
+                      separatorBuilder: (context, i) => const Sizer(),
+                      itemBuilder: (context, i) => AllAppointmentsCard(
+                        appointment: cubit.appointments[i],
+                      ),
+                    )
+                  : Center(
+                      child: Text(
+                        LocaleKeys.noAppointments.localize,
+                        style: Styles.headerText(),
+                      ),
+                    );
         },
       ),
     );

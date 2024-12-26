@@ -19,7 +19,9 @@ class CommentInputFieldInsta extends StatefulWidget {
     required this.commentController,
     required this.isReplying,
     required this.controller,
-    required this.onAddComment, required this.postId, required this.focusNode,
+    required this.onAddComment,
+    required this.postId,
+    required this.focusNode,
   });
 
   @override
@@ -27,11 +29,10 @@ class CommentInputFieldInsta extends StatefulWidget {
 }
 
 class CommentInputFieldState extends State<CommentInputFieldInsta> {
-
   String? replyTo;
   @override
   Widget build(BuildContext context) {
-    return  Padding(
+    return Padding(
         padding: MediaQuery.of(context).viewInsets,
         child: Padding(
           padding: const EdgeInsets.all(8.0)
@@ -41,7 +42,8 @@ class CommentInputFieldState extends State<CommentInputFieldInsta> {
               width: 50,
               height: 50,
               isCircle: true,
-              image: context.read<UserCubit>().state.data!.profilePicture??UIConst.profilePlaceHolder,
+              image: context.read<UserCubit>().state.data!.profilePicture ??
+                  UIConst.profilePlaceHolder,
             ),
             SizedBox(width: 10.w),
             Expanded(
@@ -59,28 +61,28 @@ class CommentInputFieldState extends State<CommentInputFieldInsta> {
                   filled: true,
                   suffixIcon: widget.commentController.text.isNotEmpty
                       ? Container(
-                    margin: EdgeInsetsDirectional.only(
-                        end: 10.w, top: 10, bottom: 10),
-                    padding: const EdgeInsets.all(3)
-                        .add(EdgeInsets.symmetric(horizontal: 10.w)),
-                    decoration: BoxDecoration(
-                      color: AppColors.SECONDARY_COLOR,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: InkWell(
-                      onTap: (){
-                        widget.onAddComment();
-                      },
-                      child: Icon(
-                        Icons.arrow_upward,
-                        color: Colors.white,
-                        size: 30.h,
-                      ),
-                    ),
-                  )
+                          margin: EdgeInsetsDirectional.only(
+                              end: 10.w, top: 10, bottom: 10),
+                          padding: const EdgeInsets.all(3)
+                              .add(EdgeInsets.symmetric(horizontal: 10.w)),
+                          decoration: BoxDecoration(
+                            color: AppColors.SECONDARY_COLOR,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              widget.onAddComment();
+                            },
+                            child: Icon(
+                              Icons.arrow_upward,
+                              color: Colors.white,
+                              size: 30.h,
+                            ),
+                          ),
+                        )
                       : null,
                   fillColor:
-                  context.isDarkMode ? Colors.grey[800] : Colors.black12,
+                      context.isDarkMode ? Colors.grey[800] : Colors.black12,
                   hintText: replyTo != null
                       ? "Replying to @$replyTo"
                       : "Add a comment...",
@@ -108,6 +110,4 @@ class CommentInputFieldState extends State<CommentInputFieldInsta> {
           ]),
         ));
   }
-
-
 }

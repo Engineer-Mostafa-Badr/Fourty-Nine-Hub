@@ -32,9 +32,11 @@ class DoctorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if(UserCubit.to.isLoggedIn){
-          context.push(Routes.VISITADOCTORDETAILS, extra:DoctorDetailsParams(doctorId: doctor.id,fromSearch: false,type: type));
-        }else{
+        if (UserCubit.to.isLoggedIn) {
+          context.push(Routes.VISITADOCTORDETAILS,
+              extra: DoctorDetailsParams(
+                  doctorId: doctor.id, fromSearch: false, type: type));
+        } else {
           context.push(Routes.LOGIN);
         }
       },
@@ -80,39 +82,42 @@ class DoctorCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                if(doctor.classification!='NotSubscribed')Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.h),
-                  decoration: BoxDecoration(
-                    color: doctor.isPremium ? Colors.black : Colors.white,
-                    borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(
-                      color: doctor.isPremium ? Colors.amber : Colors.grey,
-                      width: 2.0,
+                if (doctor.classification != 'NotSubscribed')
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.h),
+                    decoration: BoxDecoration(
+                      color: doctor.isPremium ? Colors.black : Colors.white,
+                      borderRadius: BorderRadius.circular(20.0),
+                      border: Border.all(
+                        color: doctor.isPremium ? Colors.amber : Colors.grey,
+                        width: 2.0,
+                      ),
+                      boxShadow: doctor.isPremium
+                          ? [
+                              BoxShadow(
+                                color: Colors.amber.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 8,
+                                offset: const Offset(
+                                    0, 3), // changes position of shadow
+                              ),
+                            ]
+                          : null,
                     ),
-                    boxShadow: doctor.isPremium
-                        ? [
-                            BoxShadow(
-                              color: Colors.amber.withOpacity(0.5),
-                              spreadRadius: 2,
-                              blurRadius: 8,
-                              offset: const Offset(
-                                  0, 3), // changes position of shadow
-                            ),
-                          ]
-                        : null,
-                  ),
-                  child: Text(
-                    doctor.classification== "Regular subscription"? LocaleKeys.regular.localize : LocaleKeys.premium.localize,
-                    style: TextStyle(
-                      color: doctor.isPremium ? Colors.amber : Colors.grey,
-                      fontWeight: doctor.isPremium
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      fontSize: 16.sp,
+                    child: Text(
+                      doctor.classification == "Regular subscription"
+                          ? LocaleKeys.regular.localize
+                          : LocaleKeys.premium.localize,
+                      style: TextStyle(
+                        color: doctor.isPremium ? Colors.amber : Colors.grey,
+                        fontWeight: doctor.isPremium
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                        fontSize: 16.sp,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
             const Sizer(),
@@ -127,7 +132,9 @@ class DoctorCard extends StatelessWidget {
                     child: ReadMoreLabel(
                   text: doctor.description,
                   trimLines: 1,
-                      style: Styles.mediumText(color: context.isDarkMode?null:AppColors.PRIMARY_COLOR),
+                  style: Styles.mediumText(
+                      color:
+                          context.isDarkMode ? null : AppColors.PRIMARY_COLOR),
                 ))
               ],
             ),
@@ -142,18 +149,24 @@ class DoctorCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if(doctor.clinicPrice.isNotEmpty)Label(
-                        text: '${LocaleKeys.clinicFees.localize}: ${doctor.clinicPrice} ${context.isArabic?doctor.currencyAr:doctor.currencyEn}',
-                        style: Styles.mediumText(),
-                      ),
-                      if(doctor.callsPrice.isNotEmpty)Label(
-                        text: '${LocaleKeys.callFees.localize}: ${doctor.callsPrice} ${context.isArabic?doctor.currencyAr:doctor.currencyEn}',
-                        style: Styles.mediumText(),
-                      ),
-                      if(doctor.visitHomePrice.isNotEmpty)Label(
-                        text: '${LocaleKeys.homeVisitFees.localize}: ${doctor.visitHomePrice} ${context.isArabic?doctor.currencyAr:doctor.currencyEn}',
-                        style: Styles.mediumText(),
-                      ),
+                      if (doctor.clinicPrice.isNotEmpty)
+                        Label(
+                          text:
+                              '${LocaleKeys.clinicFees.localize}: ${doctor.clinicPrice} ${context.isArabic ? doctor.currencyAr : doctor.currencyEn}',
+                          style: Styles.mediumText(),
+                        ),
+                      if (doctor.callsPrice.isNotEmpty)
+                        Label(
+                          text:
+                              '${LocaleKeys.callFees.localize}: ${doctor.callsPrice} ${context.isArabic ? doctor.currencyAr : doctor.currencyEn}',
+                          style: Styles.mediumText(),
+                        ),
+                      if (doctor.visitHomePrice.isNotEmpty)
+                        Label(
+                          text:
+                              '${LocaleKeys.homeVisitFees.localize}: ${doctor.visitHomePrice} ${context.isArabic ? doctor.currencyAr : doctor.currencyEn}',
+                          style: Styles.mediumText(),
+                        ),
                     ],
                   ),
                 )

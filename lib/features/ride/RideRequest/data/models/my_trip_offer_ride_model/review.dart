@@ -20,7 +20,7 @@ class Review {
         numberOfReviewers: json['numberOfReviewers'] as int?,
         ratingDriver: double.parse(json['ratingDriver'].toString()),
         ratingTrip: double.parse(json['ratingTrip'].toString()),
-        ratingService:  double.parse(json['ratingService'].toString()),
+        ratingService: double.parse(json['ratingService'].toString()),
         comments: json['comments'] as List<dynamic>?,
       );
 

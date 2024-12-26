@@ -7,7 +7,7 @@ class SendPointListenerUseCase extends NormalUseCase<void, NoParams> {
   SendPointListenerUseCase(this._liveRepository);
 
   @override
-  void call(NoParams params) async{
+  void call(NoParams params) async {
     return _liveRepository.sendPointListener();
   }
 }

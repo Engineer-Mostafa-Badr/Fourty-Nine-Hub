@@ -21,15 +21,20 @@ class UpdateDoctorIdCard extends StatelessWidget {
         bottomSheet(
           context: context,
           widget: EditDoctorDocsView(
-            onSubmit: (DoctorDocsParams doctorDocsParams) async{
-              bool result =await context.read<EditDoctorProfileCubit>().updateID(doctorDocsParams);
-              if(result == true){
+            onSubmit: (DoctorDocsParams doctorDocsParams) async {
+              bool result = await context
+                  .read<EditDoctorProfileCubit>()
+                  .updateID(doctorDocsParams);
+              if (result == true) {
                 context.pop();
-                Future.delayed(const Duration(milliseconds: 500),(){
-                  showSuccessMessage(context, 'Your request send successfully and waiting for approving');
+                Future.delayed(const Duration(milliseconds: 500), () {
+                  showSuccessMessage(context,
+                      'Your request send successfully and waiting for approving');
                 });
               }
-            }, subCategoryId: subCategoryId, from: 'id',
+            },
+            subCategoryId: subCategoryId,
+            from: 'id',
           ),
         );
       },

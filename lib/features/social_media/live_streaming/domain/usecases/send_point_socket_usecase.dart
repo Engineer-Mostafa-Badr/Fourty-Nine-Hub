@@ -10,7 +10,7 @@ class SendPointSocketUseCase extends UseCase<bool, PointsParams> {
   SendPointSocketUseCase(this._liveRepository);
 
   @override
-  Future<Either<Failure, bool>> call(PointsParams params) async{
+  Future<Either<Failure, bool>> call(PointsParams params) async {
     return _liveRepository.sendPointSocket(params);
   }
 }

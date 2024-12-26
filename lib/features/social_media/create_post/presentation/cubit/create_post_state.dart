@@ -58,7 +58,7 @@ class CreatePostState {
     bool? isBiggerThan80,
     bool? isBiggerThen150,
     bool? isBiggerThen120,
-     String? music,
+    String? music,
   }) {
     return CreatePostState(
       status: status ?? this.status,

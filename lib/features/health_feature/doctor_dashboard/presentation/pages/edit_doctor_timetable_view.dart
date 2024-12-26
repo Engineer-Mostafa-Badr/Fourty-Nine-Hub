@@ -15,14 +15,14 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/edit_time_table/time_table_options_checkbox.dart';
 
 class EditDoctorTimetableView extends StatefulWidget {
-  const EditDoctorTimetableView({super.key,required this.params});
+  const EditDoctorTimetableView({super.key, required this.params});
   final CheckBoxParams params;
   @override
-  State<EditDoctorTimetableView> createState() => _EditDoctorTimetableViewState();
+  State<EditDoctorTimetableView> createState() =>
+      _EditDoctorTimetableViewState();
 }
 
 class _EditDoctorTimetableViewState extends State<EditDoctorTimetableView> {
-
   @override
   void initState() {
     context.read<EditDoctorTimetableCubit>().init(widget.params);
@@ -37,28 +37,52 @@ class _EditDoctorTimetableViewState extends State<EditDoctorTimetableView> {
         backColor: cardDarkColor(context),
       ),
       body: BlocBuilder<EditDoctorTimetableCubit, EditDoctorTimetableState>(
-          builder: (context,state)=>state.status==EditDoctorTimetableStateStatus.initial?const Center(child: CircularProgressIndicator()):ListView(
-            padding: EdgeInsets.all(10.w),
-            shrinkWrap: true,
-            children: [
-              EditTimeTableOptionsCheckbox(),
-              if(state.showClinic==true||state.showCall==true||state.showHomeVisit==true)...[DefaultTextFormField(
-                hint: 'Waiting time (in minutes)',
-                keyboardType: TextInputType.number,
-                isRequired: true,
-                currentFocusNode: FocusNode(),
-                currentController: context.read<EditDoctorTimetableCubit>().waitingTimeController,
-              ),const Sizer()],
-              if(state.showClinic==true)...[const EditDoctorClinicTimeTable(),const Sizer()],
-              if(state.showCall==true)...[const EditDoctorCallTimeTable(),const Sizer()],
-              if(state.showHomeVisit==true)...[const EditDoctorHomeVisitTimeTable(),const Sizer()],
-              state.status==EditDoctorTimetableStateStatus.editLoading?const Center(child: CircularProgressIndicator()):AppButton(label: LocaleKeys.update.localize, onPressed: (){
-                context.read<EditDoctorTimetableCubit>().updateTimeTable(context);
-              },)
-            ],
-
-          )
-      ),
+          builder: (context, state) => state.status ==
+                  EditDoctorTimetableStateStatus.initial
+              ? const Center(child: CircularProgressIndicator())
+              : ListView(
+                  padding: EdgeInsets.all(10.w),
+                  shrinkWrap: true,
+                  children: [
+                    const EditTimeTableOptionsCheckbox(),
+                    if (state.showClinic == true ||
+                        state.showCall == true ||
+                        state.showHomeVisit == true) ...[
+                      DefaultTextFormField(
+                        hint: 'Waiting time (in minutes)',
+                        keyboardType: TextInputType.number,
+                        isRequired: true,
+                        currentFocusNode: FocusNode(),
+                        currentController: context
+                            .read<EditDoctorTimetableCubit>()
+                            .waitingTimeController,
+                      ),
+                      const Sizer()
+                    ],
+                    if (state.showClinic == true) ...[
+                      const EditDoctorClinicTimeTable(),
+                      const Sizer()
+                    ],
+                    if (state.showCall == true) ...[
+                      const EditDoctorCallTimeTable(),
+                      const Sizer()
+                    ],
+                    if (state.showHomeVisit == true) ...[
+                      const EditDoctorHomeVisitTimeTable(),
+                      const Sizer()
+                    ],
+                    state.status == EditDoctorTimetableStateStatus.editLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : AppButton(
+                            label: LocaleKeys.update.localize,
+                            onPressed: () {
+                              context
+                                  .read<EditDoctorTimetableCubit>()
+                                  .updateTimeTable(context);
+                            },
+                          )
+                  ],
+                )),
     );
   }
 }

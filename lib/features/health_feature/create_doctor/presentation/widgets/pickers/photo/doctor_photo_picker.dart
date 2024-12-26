@@ -26,7 +26,7 @@ class _CreateDoctorProfilePhotoPickerState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Label(
-          text: context.isArabic?'الصورة الشخصية':'Profile Photo',
+          text: context.isArabic ? 'الصورة الشخصية' : 'Profile Photo',
           style: Styles.headerText(),
         ),
         const Sizer(),
@@ -50,7 +50,8 @@ class _CreateDoctorProfilePhotoPickerState
                         builder: (context, state) {
                       return ImagePickerPlaceholder(
                         borderColor: Colors.grey,
-                        title: context.isArabic?'تغيير الصورة':'Change Photo',
+                        title:
+                            context.isArabic ? 'تغيير الصورة' : 'Change Photo',
                       );
                     }),
                   )
@@ -64,7 +65,7 @@ class _CreateDoctorProfilePhotoPickerState
                     builder: (context, state) {
                   return ImagePickerPlaceholder(
                     borderColor: Colors.grey,
-                    title: context.isArabic?'اختر صورة':'Choose Photo',
+                    title: context.isArabic ? 'اختر صورة' : 'Choose Photo',
                   );
                 }),
               );

@@ -27,7 +27,6 @@ class GetTripInfoCubit extends Cubit<RiderState> {
       destinationLatLng.latitude,
       destinationLatLng.longitude
     ], subCateogryId: subCateogryId, comfort: true));
-    // "62c8ba9f8e28a58a3edf57eb"
     response.fold(
       (l) {
         emit(FailureRiderState(failure: l));

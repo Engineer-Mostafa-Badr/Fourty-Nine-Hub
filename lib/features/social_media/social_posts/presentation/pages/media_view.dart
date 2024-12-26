@@ -66,58 +66,61 @@ class _MediaViewState extends State<MediaView> {
                 );
               },
               itemBuilder: (context, item, index) {
-                final sortedPosts = controller.mediaPagingController.itemList?..sort(
-                      (a, b) => b.createdAt!.compareTo(a.createdAt!),
-                );
+                final sortedPosts = controller.mediaPagingController.itemList
+                  ?..sort(
+                    (a, b) => b.createdAt!.compareTo(a.createdAt!),
+                  );
 
                 final sortedItem = sortedPosts![index];
 
                 return state.status == StateStatus.success
                     ? Container(
-                  padding: EdgeInsets.only(top: 5.h, left: 5.w),
-                  child: GestureDetector(
-                    onTap: () {
-                      // Pass the selected image and the sorted list to the next screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => InstagramProfilePostsView(
-                            initialImage: sortedItem,
-                            posts: sortedPosts,
+                        padding: EdgeInsets.only(top: 5.h, left: 5.w),
+                        child: GestureDetector(
+                          onTap: () {
+                            // Pass the selected image and the sorted list to the next screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => InstagramProfilePostsView(
+                                  initialImage: sortedItem,
+                                  posts: sortedPosts,
+                                ),
+                              ),
+                            );
+                          },
+                          child: ClipRRect(
+                            child: CachedNetworkImage(
+                              height: 300.h,
+                              imageUrl: sortedItem.images?[0] ?? '',
+                              fit: BoxFit.fill,
+                              placeholder: (context, url) => const Center(
+                                child: CupertinoActivityIndicator(radius: 25),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Center(
+                                child: Icon(Icons.error),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Center(
+                        child: Label(
+                          text: getFailureMessage(
+                            state.failure ?? UnknownFailure(''),
+                            context,
                           ),
                         ),
                       );
-                    },
-                    child: ClipRRect(
-                      child: CachedNetworkImage(
-                        height: 300.h,
-                        imageUrl: sortedItem.images?[0] ?? '',
-                        fit: BoxFit.fill,
-                        placeholder: (context, url) => const Center(
-                          child: CupertinoActivityIndicator(radius: 25),
-                        ),
-                        errorWidget: (context, url, error) => const Center(
-                          child: Icon(Icons.error),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-                    : Center(
-                  child: Label(
-                    text: getFailureMessage(
-                      state.failure ?? UnknownFailure(''),
-                      context,
-                    ),
-                  ),
-                );
               },
               noMoreItemsIndicatorBuilder: (context) => Container(),
               firstPageProgressIndicatorBuilder: (context) => Container(
                 margin: const EdgeInsets.only(top: 150),
                 child: const CupertinoActivityIndicator(),
               ),
-              newPageProgressIndicatorBuilder: (context) => const CupertinoActivityIndicator(),
+              newPageProgressIndicatorBuilder: (context) =>
+                  const CupertinoActivityIndicator(),
             ),
           );
         },
