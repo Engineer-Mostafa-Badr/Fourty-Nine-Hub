@@ -4,13 +4,20 @@ import 'package:fourtyninehub/core/error/failure.dart';
 
 import '../repositories/restaurant_dashboard_repo.dart';
 
-class DeleteRestaurantUseCase extends UseCase<bool, String> {
+class DeleteRestaurantUseCase extends UseCase<bool, DeleteResturantParams> {
   final RestaurantDashboardRepo _repository;
 
   const DeleteRestaurantUseCase(this._repository);
 
   @override
-  Future<Either<Failure, bool>> call(String params) {
+  Future<Either<Failure, bool>> call(DeleteResturantParams params) {
     return _repository.deleteRestaurant(params);
   }
+}
+
+class DeleteResturantParams{
+  final String restaurantId;
+  final String subCategoryId;
+
+  DeleteResturantParams({required this.restaurantId, required this.subCategoryId});
 }

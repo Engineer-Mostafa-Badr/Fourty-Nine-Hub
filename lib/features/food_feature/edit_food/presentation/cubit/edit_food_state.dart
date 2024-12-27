@@ -29,6 +29,7 @@ class EditFoodState {
   final String? imagePath;
   final bool connected;
   final List<RestaurantMenu>? meals;
+  final IsRestaurantModel? isResturant;
   EditFoodState({
     this.status = EditFoodStates.loading,
     this.failure,
@@ -37,6 +38,7 @@ class EditFoodState {
     this.meals,
     this.connected = true,
     this.successMessage,
+    this.isResturant,
   });
   EditFoodState copyWith(
       {EditFoodStates? status,
@@ -45,7 +47,9 @@ class EditFoodState {
       List<RestaurantMenu>? meals,
       bool? connected,
       String? imagePath,
-      String? successMessage}) {
+      String? successMessage,
+         IsRestaurantModel? isResturant,
+      }) {
     return EditFoodState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
@@ -54,6 +58,7 @@ class EditFoodState {
       restaurant: restaurant ?? this.restaurant,
       meals: meals ?? this.meals,
       successMessage: successMessage ?? this.successMessage,
+      isResturant: isResturant ?? this.isResturant,
     );
   }
 }

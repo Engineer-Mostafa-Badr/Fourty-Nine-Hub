@@ -465,7 +465,7 @@ class EndPoints {
   static const muteUserStories = '/stories/muteUserStory';
   static const updatePrivacy = '/stories/privacy';
   static const getFollowers =
-      '/follow/followers?subCategory=62ef7cf658c90d4a7ed48120';
+      '/follow/followers?subCategory=66b77e77bb35968b535dc944';
   static addReelComment(AddReelCommentParams params) =>
       '/reels/comments/${params.reelId}';
   static addReelReply(AddReelReplyParams params) =>
@@ -583,15 +583,15 @@ class EndPoints {
   }
 
   static String getInstagramPosts(TwitterFeedParams params) {
-    return '/instagram/feed?limit=${params.limit}&page=${params.page}&subCategory=${Constants.instagramSubCategory}';
+    return '/instagram/feed?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getUserMedia(InstagramUserMediaParams params) {
-    return '/instagram/posts/${params.userId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.instagramSubCategory}';
+    return '/instagram/posts/${params.userId}?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getInstagramGlobalPosts(TwitterFeedParams params) {
-    return '/instagram/feed/general?limit=${params.limit}&page=${params.page}&subCategory=${Constants.instagramSubCategory}';
+    return '/instagram/feed/general?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getReels(TwitterFeedParams params) {
@@ -607,7 +607,7 @@ class EndPoints {
   }
 
   static String followers(TwitterFeedParams params) {
-    return '/follow/followers?search=${params.search}&limit=${params.limit}&page=${params.page}&otherId=${params.otherId}';
+    return '/follow/followers?subCategory=66b77e77bb35968b535dc944&search=${params.search}&limit=${params.limit}&page=${params.page}&otherId=${params.otherId}';
   }
 
   static String following(TwitterFeedParams params) {
@@ -782,15 +782,15 @@ class EndPoints {
   }
 
   static String followRequest(String userId) {
-    return '/follow/make-follow/$userId?subCategory=${Constants.instagramSubCategory}';
+    return '/follow/make-follow/$userId?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String deleteFollow(String userId) {
-    return '/follow/unfollow/$userId?subCategory=${Constants.instagramSubCategory}';
+    return '/follow/unfollow/$userId?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String greetMessage(String userId) {
-    return '/users/greet/$userId?subCategory=${Constants.instagramSubCategory}';
+    return '/users/greet/$userId?subCategory=${Constants.facebookSubCategory}';
   }
 
   static String removeSuggestUser(String userId) {
