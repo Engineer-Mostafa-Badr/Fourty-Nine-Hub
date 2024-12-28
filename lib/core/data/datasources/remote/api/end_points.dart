@@ -152,7 +152,7 @@ class EndPoints {
   static String allStar(StarPaginationParams params) =>
       '/talent/?page=${params.page}&limit=${params.limit}';
   static String winnerStar(StarPaginationParams params) =>
-      '/subscriber/winners?page=${params.page}&limit=${params.limit}';
+      '/talent/all-winner?page=${params.page}&limit=${params.limit}';
   static const myStar = '/talent/my-talent';
   static const uploadStar = '/talent/upload';
   static String deleteMyStar({required String id}) => '/talent/$id';
