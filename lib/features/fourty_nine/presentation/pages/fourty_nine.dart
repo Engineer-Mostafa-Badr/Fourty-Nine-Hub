@@ -23,7 +23,6 @@ import 'package:fourtyninehub/features/notifications/presentation/widgets/notifi
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -79,6 +78,7 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
     }
   }
 
+
   @override
   void didChangeDependencies() async {
     appOpenAdManager.loadAd();
@@ -91,9 +91,6 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
     context
         .read<FirebaseNotficationsCubit>()
         .setupInterceptedMessage(context: context);
-    context
-        .read<NotificationSocketIoCubit>()
-        .notificationListener(languageCode: 'en');
     context.read<LocationSocketCubit>().updateDriverLocationOn();
   }
 
@@ -118,9 +115,17 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
     context
         .read<FirebaseNotficationsCubit>()
         .setupInterceptedMessage(context: context);
+    // context
+    //     .read<NotificationSocketIoCubit>()
+    //     .notificationListener(languageCode: 'en');
+  }
+
+  @override
+  initState(){
     context
         .read<NotificationSocketIoCubit>()
         .notificationListener(languageCode: 'en');
+
     super.initState();
   }
 
