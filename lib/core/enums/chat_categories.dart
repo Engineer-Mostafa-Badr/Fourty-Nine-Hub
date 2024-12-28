@@ -7,12 +7,12 @@ enum ChatCategories {
   // serviceCalls,
   // greet,
   unread,
-  groups,
+  // groups,
   // anonymous,
   // locked,
   // archived,
   calls,
-  broadcast,
+  // broadcast,
 }
 
 extension ChatCategoriesExtension on ChatCategories {
@@ -28,8 +28,8 @@ extension ChatCategoriesExtension on ChatCategories {
       //   return LocaleKeys.servicesCalls;
       // case ChatCategories.greet:
       //   return LocaleKeys.greet;
-      case ChatCategories.groups:
-        return LocaleKeys.groups;
+      // case ChatCategories.groups:
+      //   return LocaleKeys.groups;
       // case ChatCategories.anonymous:
       //   return LocaleKeys.anonymous;
       // case ChatCategories.locked:
@@ -40,8 +40,8 @@ extension ChatCategoriesExtension on ChatCategories {
         return LocaleKeys.call;
       // case ChatCategories.archived:
       //   return LocaleKeys.archive;
-      case ChatCategories.broadcast:
-        return LocaleKeys.broadcast;
+      // case ChatCategories.broadcast:
+      //   return LocaleKeys.broadcast;
     }
   }
 }

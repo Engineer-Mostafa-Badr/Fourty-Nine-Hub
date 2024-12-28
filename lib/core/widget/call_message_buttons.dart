@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/button_availability.dart';
@@ -7,6 +9,8 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
@@ -82,7 +86,22 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                   onTap: !context.read<UserCubit>().isLoggedIn
                       ? () => context.push(Routes.LOGIN)
                       : snap.data == true
-                          ? () {}
+                          ? () async {
+                              ChatEntity? chat = await context
+                                  .read<UserCubit>()
+                                  .createNormalChat(
+                                    otherId: widget.otherUserId,
+                                    categoryId: widget.subcategoryId,
+                                  );
+                              context.push(
+                                Routes.CHAT,
+                                extra: ChatsViewParams(
+                                  isFromStartChat: true,
+                                  initialTabIndex: 1,
+                                  selectedChat: chat,
+                                ),
+                              );
+                            }
                           : () {
                               SubscriptionMethod().subscribe(
                                   subscribeId: widget.subcategoryId,

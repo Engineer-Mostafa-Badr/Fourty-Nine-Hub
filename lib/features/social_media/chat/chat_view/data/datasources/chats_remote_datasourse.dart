@@ -6,23 +6,42 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/authentication/data/models/user_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/seen_history_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_category_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_category_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_anonymous_chat_use_case.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/create_normal_chat_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/create_anonymous_chat_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/create_normal_chat_use_case.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chat_last_seen_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_online_offline_status_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/show_deleted_message_usecase.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 abstract class ChatsRemoteDataSource {
   Future<Either<Failure, List<ChatEntity>>> getChats(GetChatsParams params);
 
+  Future<Either<Failure, List<LastSeenChatsEntity>>> getChatLastSeen(
+      String chatId);
+
   Future<Either<Failure, bool>> changeChatMuteState({
     required String chatId,
   });
+
+  Future<Either<Failure, MessageModel>> showDeletedMessage(
+      ShowDeletedMessageParams params);
+
+  Future<Either<Failure, UserModel>> getUser({
+    required String userId,
+  });
+
+  Future<Either<Failure, GetOnlineOfflineStatusEntity>> getOnlineOfflineStatus(
+      {required String userId});
 
   Future<Either<Failure, bool>> changeChatToArchiveOrToNormal({
     required String chatId,
@@ -47,14 +66,13 @@ abstract class ChatsRemoteDataSource {
   });
 
   Future<Either<Failure, ChatCategoryEntity>> getGroups();
-
+  Future<Either<Failure, bool>> recoverDeletedChats();
+  Future<Either<Failure, bool>> connectMe();
+  Future<Either<Failure, bool>> disconnectMe();
   Future<Either<Failure, List<SeenHistoryModel>>> getSeenHistoryList(
       {required String chatId});
 
-  Future<Either<Failure, bool>> createNormalChat(CreateNormalChatParams params);
-
-  Future<Either<Failure, bool>> createAnonymousChat(
-      CreateAnonymousChatParams params);
+  
 
   void stopListenToNewChats();
 
@@ -63,9 +81,9 @@ abstract class ChatsRemoteDataSource {
 
 class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
   final ApiConsumer _apiConsumer;
-  final Socket _socket;
+  // final Socket _socket;
 
-  ChatsRemoteDataSourceImplementation(this._apiConsumer, this._socket);
+  ChatsRemoteDataSourceImplementation(this._apiConsumer);
 
   @override
   Future<Either<Failure, List<ChatEntity>>> getChats(
@@ -159,33 +177,14 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
             .toList()));
   }
 
-  @override
-  Future<Either<Failure, bool>> createNormalChat(
-      CreateNormalChatParams params) async {
-    final response = await _apiConsumer.post(EndPoints.createNormalChat(
-      categoryId: params.categoryId,
-      otherUserId: params.otherUserId,
-    ));
-    return response.fold(
-        (failure) => Left(failure), (data) => Right(data['status']));
-  }
-
-  @override
-  Future<Either<Failure, bool>> createAnonymousChat(
-      CreateAnonymousChatParams params) async {
-    final response = await _apiConsumer
-        .post(EndPoints.createAnonymousChat(params.otherUserId));
-
-    return response.fold(
-        (failure) => Left(failure), (data) => Right(data['status']));
-  }
+  
 
   @override
   void listenToNewChats(Function(ChatEntity) params) {
     try {
-      _socket.connect();
+      // SharedWebSocket.instance.socket!.connect();
 
-      _socket.on(SocketIOListeners.creatingNewChat, (data) {
+      SharedWebSocket.socket!.on(SocketIOListeners.creatingNewChat, (data) {
         log("decoded data : \n$data");
         try {
           final decodedData =
@@ -244,5 +243,92 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
     final response = await _apiConsumer.put(EndPoints.pinAndUnPinChat(chatId));
     return response.fold(
         (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, UserModel>> getUser({required String userId}) async {
+    final result = await _apiConsumer.get(EndPoints.getUser(userId));
+    log(result.toString(), name: "email");
+    return result.fold((failure) => Left(failure), (response) {
+      final user = UserModel.fromJson(
+        response['data'],
+      );
+      return Right(user);
+    });
+  }
+
+  @override
+  Future<Either<Failure, MessageModel>> showDeletedMessage(
+      ShowDeletedMessageParams params) async {
+    var data = {
+      "chatId": params.chatId,
+      "messageId": params.messageId,
+    };
+    final response =
+        await _apiConsumer.post(EndPoints.getDeletedMessage(), data: data);
+    log("Show Deleted Message: $response");
+    return response.fold((failure) => Left(failure), (data) {
+      MessageModel messageModel = MessageModel.fromJson(data['data']);
+      return Right(messageModel);
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<LastSeenChatsEntity>>> getChatLastSeen(
+      String chatId) async {
+    final response = await _apiConsumer.get(EndPoints.getChatLastSeen(chatId));
+    log("getChatLastSeen: $response");
+    return response.fold((failure) => Left(failure), (data) {
+      List<LastSeenChatsEntity> messageModel =
+          (data['data']['lastSeen'] as List)
+              .map((e) => LastSeenChatsEntity.fromJson(e))
+              .toList();
+      return Right(messageModel);
+    });
+  }
+
+  @override
+  Future<Either<Failure, bool>> recoverDeletedChats() async {
+    final response = await _apiConsumer.put(EndPoints.recoverDeletedChats());
+    log("recoverDeletedChats: $response");
+    return response.fold((failure) => Left(failure), (data) {
+      log("recoverDeletedChats: $data");
+      return Right(data['status']);
+    });
+  }
+
+  @override
+  Future<Either<Failure, bool>> connectMe() async {
+    try {
+      CliLogger.info("connect me");
+      SharedWebSocket.socket!.emit(SocketIOEvents.connectMe);
+      return const Right(true);
+    } catch (e) {
+      CliLogger.info("connect me error $e");
+      return const Left(ServerFailure(message: "connect me error"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> disconnectMe() async {
+    try {
+      CliLogger.info("disconnect me");
+      SharedWebSocket.socket!.emit(SocketIOEvents.disconnectMe);
+      return const Right(true);
+    } catch (e) {
+      CliLogger.info("disconnect me error $e");
+      return const Left(ServerFailure(message: "disconnect me error"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, GetOnlineOfflineStatusEntity>> getOnlineOfflineStatus(
+      {required String userId}) async {
+    final response =
+        await _apiConsumer.get(EndPoints.getOnlineOfflineStatus(userId));
+    log("Get Online Offline Status: $response");
+    return response.fold((failure) => Left(failure), (data) {
+      return Right(GetOnlineOfflineStatusEntity.fromJson(data['data']));
+    });
   }
 }

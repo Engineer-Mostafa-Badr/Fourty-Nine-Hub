@@ -938,6 +938,10 @@ class EndPoints {
     return '/chat/get-chat-details/$chatId';
   }
 
+  static String updateChat(String chatId) {
+    return '/chat/update-chat-member/$chatId';
+  }
+
   static String createNormalChat(
       {required String categoryId, required String otherUserId}) {
     return '/chat/start-chat/$otherUserId?categoryId=$categoryId';
@@ -946,6 +950,13 @@ class EndPoints {
   static String createAnonymousChat(String otherUserId) =>
       '/chat/start-anonymous-chat/$otherUserId';
 
+  static String updateProfileview(String viewAction) =>
+      '/users/profile-view/$viewAction';
+
+  static String getProfileviews(String viewAction) =>
+      '/users/profile-view-unique?viewAction=$viewAction';
+  static String getProfileviewsByUserId({required String viewAction, required String userId}) =>
+      '/users/profile-view/$userId?viewAction=$viewAction';
   //club voice
   static String allClubVoiceRooms = '/clubvoice';
   static String createClubVoiceRoom = '/clubvoice';
@@ -992,6 +1003,18 @@ class EndPoints {
     return '/chat/pin-chat/$chatId';
   }
 
+  static String getUser(String userId) {
+    return '/dashboard/users/$userId';
+  }
+
+  static String updateUserName() {
+    return '/users';
+  }
+
+  static String updateUserBio() {
+    return '/users';
+  }
+
   static String changeChatToArchiveOrNormal(String chatId) {
     return '/chat/archive-chat/$chatId';
   }
@@ -1023,6 +1046,22 @@ class EndPoints {
 
   static String getOneTimeViewMessage() {
     return '/chat/message/one-time-message';
+  }
+
+  static String getDeletedMessage() {
+    return '/chat/message/recover';
+  }
+
+  static String getChatLastSeen(String chatId) {
+    return '/chat/last-seen-logs/$chatId';
+  }
+
+  static String getOnlineOfflineStatus(String userId) {
+    return "/users/last-seen/$userId";
+  }
+
+  static String recoverDeletedChats() {
+    return '/chat/recover-all-chats';
   }
 
   static String clearChat(String chatId) {

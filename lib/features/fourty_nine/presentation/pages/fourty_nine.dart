@@ -52,9 +52,9 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
-  checkLogin() {
+  checkLogin()async {
     try {
-      if (!context.isUserLoggedIn) context.read<UserCubit>().getUser();
+      if(!context.isUserLoggedIn) await context.read<UserCubit>().getUser();
     } catch (e) {
       print(e.toString());
     }
@@ -78,19 +78,19 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
     }
   }
 
+
   @override
-  void initState() {
+  void didChangeDependencies() async {
     appOpenAdManager.loadAd();
     WidgetsBinding.instance.addObserver(this);
-    checkLogin();
-    super.initState();
+
+    await checkLogin();
+    super.didChangeDependencies();
     _setupScrollController();
+
     context
         .read<FirebaseNotficationsCubit>()
         .setupInterceptedMessage(context: context);
-    context
-        .read<NotificationSocketIoCubit>()
-        .notificationListener(languageCode: 'en');
     context.read<LocationSocketCubit>().updateDriverLocationOn();
   }
 
@@ -115,9 +115,17 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
     context
         .read<FirebaseNotficationsCubit>()
         .setupInterceptedMessage(context: context);
+    // context
+    //     .read<NotificationSocketIoCubit>()
+    //     .notificationListener(languageCode: 'en');
+  }
+
+  @override
+  initState(){
     context
         .read<NotificationSocketIoCubit>()
         .notificationListener(languageCode: 'en');
+
     super.initState();
   }
 

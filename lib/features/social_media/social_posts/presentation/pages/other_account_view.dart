@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -11,7 +13,9 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
@@ -62,7 +66,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
   @override
   Widget build(BuildContext context) {
     final loginUser = context.read<UserCubit>().state.data;
-
+    if (context.isUserLoggedIn) {
+      context
+          .read<UserCubit>()
+          .updateProfileView(isProfile: true, userId: widget.userId);
+    }
     return DefaultTabController(
       length: loginUser?.id == widget.userId ? 4 : 3,
       child: Scaffold(
@@ -705,6 +713,11 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               )
                             : GestureDetector(
                                 onTap: () {
+                                  if (context.isUserLoggedIn) {
+                                    context
+                                        .read<UserCubit>()
+                                        .updateProfileView(isProfile: false, userId: widget.userId);
+                                  }
                                   showDialog(
                                       context: context,
                                       builder: (context) => ImageDetailsScreen(
@@ -804,26 +817,37 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         normalPress: () async {
                           if (context.read<UserCubit>().isLoggedIn) {
                             if (state.profileData?.areFriends == true) {
-                              var result = await context
-                                  .read<SocialPostsCubit>()
+                              ChatEntity? chat = await context
+                                  .read<UserCubit>()
                                   .createNormalChat(
-                                      widget.userId, ChatCategoriesIds.social);
-                              if (result == true) {
-                                context.push(Routes.CHAT);
-                              }
+                                    otherId: widget.userId,
+                                    categoryId: ChatCategoriesIds.social,
+                                  );
+                              context.pop();
+                              context.push(
+                                Routes.CHAT,
+                                extra: ChatsViewParams(
+                                  isFromStartChat: true,
+                                  initialTabIndex: 0,
+                                  selectedChat: chat,
+                                ),
+                              );
                             } else {
-                              var result = await context
-                                  .read<SocialPostsCubit>()
+                              ChatEntity? chat = await context
+                                  .read<UserCubit>()
                                   .createNormalChat(
-                                      widget.userId, ChatCategoriesIds.greet);
-                              if (result == true) {
-                                context.pop();
-                                context.push(Routes.CHAT);
-                              } else {
-                                showErrorMessage(context,
-                                    getFailureMessage(state.failure!, context));
-                                context.pop();
-                              }
+                                    otherId: widget.userId,
+                                    categoryId: ChatCategoriesIds.greet,
+                                  );
+                              context.pop();
+                              context.push(
+                                Routes.CHAT,
+                                extra: ChatsViewParams(
+                                  isFromStartChat: true,
+                                  initialTabIndex: 0,
+                                  selectedChat: chat,
+                                ),
+                              );
                             }
                           } else {
                             context.push(Routes.LOGIN);
@@ -831,17 +855,20 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                         },
                         anonymousPress: () async {
                           if (context.read<UserCubit>().isLoggedIn) {
-                            var result = await context
-                                .read<SocialPostsCubit>()
-                                .createAnonymousChat(widget.userId);
-                            if (result == true) {
-                              context.pop();
-                              context.push(Routes.CHATROOM);
-                            } else {
-                              showErrorMessage(context,
-                                  getFailureMessage(state.failure!, context));
-                              context.pop();
-                            }
+                            ChatEntity? chat = await context
+                                .read<UserCubit>()
+                                .createAnonymousChat(
+                                  otherId: widget.userId,
+                                );
+                            context.pop();
+                            context.push(
+                              Routes.CHAT,
+                              extra: ChatsViewParams(
+                                isFromStartChat: true,
+                                initialTabIndex: 0,
+                                selectedChat: chat,
+                              ),
+                            );
                           } else {
                             context.push(Routes.LOGIN);
                           }

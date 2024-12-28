@@ -1072,8 +1072,8 @@ class CodegenLoader extends AssetLoader{
   "reviews": "مراجعة",
   "addToCart": "إضافة الي السلة",
   "showAllOrders": "عرض كل الطلبات",
-  "viewRoute": "عرض المسار",
   "rating": "تقييم",
+  "viewRoute": "عرض المسار",
   "rateDoctor": "تقييم الطبيب",
   "mutualFriend": "صديق مشترك",
   "clearForEveryone": "مسح لدي الجميع",
@@ -1190,7 +1190,6 @@ class CodegenLoader extends AssetLoader{
   "timeTableUpdatedSuccess": "تم تعديل الجدول الزمني بنجاح",
   "callFees": "رسوم الاتصال",
   "clinicFees": "رسوم العيادة",
-  "restaurantOrders": "طلبات المطعم",
   "criminalRecord": "سجل جنائي",
   "technicalExamination": "الفحص الفني",
   "homeVisitFees": "رسوم الزيارة المنزلية",
@@ -1213,7 +1212,6 @@ class CodegenLoader extends AssetLoader{
   "noEmergencyRequests": "لا توجد طلبات الطوارئ",
   "allAppointments": "جميع الحجوزات",
   "rejectedAppointment": "تم رفض هذا الحجز من قبل",
-  "continueUsingChatServices": "اكمل باستخدام خدمات المحادثة",
   "uploadSuccessfully": "تم التحميل بنجاح",
   "addDescription": "أضف وصفًا...",
   "onlyViewThisPost": "أنت فقط من يمكنه عرض هذا المنشور",
@@ -1223,7 +1221,11 @@ class CodegenLoader extends AssetLoader{
   "everyoneViewThisPost": "يمكن للجميع عرض هذا المنشور",
   "storyUploaded": "تم تحميل القصة",
   "story": "قصة",
-  "next": "التالي"
+  "next": "التالي",
+  "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة",
+  "recoverDeletedChats": "استعادة الدردشات المحذوفة",
+  "sureRecoverDeletedChats": "هل تريد استعادة الدردشات المحذوفة؟",
+  "restaurantOrders": "طلبات المطاعم"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2443,7 +2445,6 @@ static const Map<String,dynamic> en = {
   "Wallet": "Wallet",
   "youHaveToFillYourNumberOfPassenger": "You have to fill your Number of Passenger",
   "waitingForReplies": "Waiting for replies...",
-  "continueUsingChatServices": " , To continue using chat services",
   "viewRoute": "View Route",
   "enterUserOtp": "Enter user OTP",
   "invalidOtp": "Invalid OTP",
@@ -2451,7 +2452,10 @@ static const Map<String,dynamic> en = {
   "ifUserReachedClick": "If the passenger has reached their destination, press the button",
   "reached": "Reached",
   "running": "Running",
-  "failedTryAgain": "Failed. please try again"
+  "failedTryAgain": "Failed. please try again",
+  "continueUsingChatServices": " , To continue using chat services",
+  "recoverDeletedChats": "Recover Deleted Chats",
+  "sureRecoverDeletedChats": "Are you sure you want to recover deleted chats?"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
