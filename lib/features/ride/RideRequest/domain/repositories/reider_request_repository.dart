@@ -510,18 +510,20 @@ class ReiderRequestRepository {
       },
     );
     List<DriverNearByModel> allData = [];
-    socket.socket.on("drivers:nearBy", (data) {
+    socket.socket.on(
+      "drivers:nearBy",
+      (data) {
         List dataList = jsonDecode(data);
         allData = dataList.map((e) => DriverNearByModel.fromJson(e)).toList();
         oldDriver = allData.map((e) => e.driverId).toList();
         log(oldDriver.toString(), name: "oldDriver");
         dataJson = jsonEncode({
-        "subcategoryId": subcategoryId,
-        "address": address,
-        "oldDrivers": oldDriver,
-        "location": [30.024645, 31.201920],
-        "tripId": tripId,
-          });
+          "subcategoryId": subcategoryId,
+          "address": address,
+          "oldDrivers": oldDriver,
+          "location": [30.024645, 31.201920],
+          "tripId": tripId,
+        });
         onChange(allData);
         log(data.toString(), name: "Drivers NearBy Data");
       },
