@@ -32,6 +32,7 @@ class NotificationSocketIoCubit extends Cubit<NotificationSocketIoState> {
           return;
         }
         if (type == 'app') {
+          print("shehab app notification");
           getAppNotificationsCubit.notifications = [];
           getAppNotificationsCubit.page = 1;
           await getAppNotificationsCubit.getAppNotifications(
@@ -43,6 +44,7 @@ class NotificationSocketIoCubit extends Cubit<NotificationSocketIoState> {
           return;
         }
         if (type == 'social') {
+          print("shehab social notification");
           getSocialNotificationsCubit.notifications = [];
           getSocialNotificationsCubit.page = 1;
           await getSocialNotificationsCubit.getSocialNotifications(
@@ -54,6 +56,7 @@ class NotificationSocketIoCubit extends Cubit<NotificationSocketIoState> {
           return;
         }
         if (type == 'services') {
+          print("shehab service notification");
           getServicesNotificationsCubit.notifications = [];
           getServicesNotificationsCubit.page = 1;
           await getServicesNotificationsCubit.getServicesNotifications(
