@@ -1046,8 +1046,8 @@ abstract class  LocaleKeys {
   static const reviews = 'reviews';
   static const addToCart = 'addToCart';
   static const showAllOrders = 'showAllOrders';
-  static const viewRoute = 'viewRoute';
   static const rating = 'rating';
+  static const viewRoute = 'viewRoute';
   static const rateDoctor = 'rateDoctor';
   static const mutualFriend = 'mutualFriend';
   static const clearForEveryone = 'clearForEveryone';
@@ -1164,7 +1164,6 @@ abstract class  LocaleKeys {
   static const timeTableUpdatedSuccess = 'timeTableUpdatedSuccess';
   static const callFees = 'callFees';
   static const clinicFees = 'clinicFees';
-  static const restaurantOrders = 'restaurantOrders';
   static const criminalRecord = 'criminalRecord';
   static const technicalExamination = 'technicalExamination';
   static const homeVisitFees = 'homeVisitFees';
@@ -1187,7 +1186,6 @@ abstract class  LocaleKeys {
   static const noEmergencyRequests = 'noEmergencyRequests';
   static const allAppointments = 'allAppointments';
   static const rejectedAppointment = 'rejectedAppointment';
-  static const continueUsingChatServices = 'continueUsingChatServices';
   static const uploadSuccessfully = 'uploadSuccessfully';
   static const addDescription = 'addDescription';
   static const onlyViewThisPost = 'onlyViewThisPost';
@@ -1198,5 +1196,9 @@ abstract class  LocaleKeys {
   static const storyUploaded = 'storyUploaded';
   static const story = 'story';
   static const next = 'next';
+  static const continueUsingChatServices = 'continueUsingChatServices';
+  static const recoverDeletedChats = 'recoverDeletedChats';
+  static const sureRecoverDeletedChats = 'sureRecoverDeletedChats';
+  static const restaurantOrders = 'restaurantOrders';
 
 }

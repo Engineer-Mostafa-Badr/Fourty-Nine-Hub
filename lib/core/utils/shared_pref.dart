@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheManager {
@@ -31,10 +33,14 @@ class CacheManager {
   }
 
   // Delete all tokens
+
   static Future<bool> deleteAllTokens() async {
     try {
       final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_accessTokenKey);
+      await prefs.remove(_refreshTokenKey);
       await prefs.clear();
+      log("all tokens deleted ref token :${prefs.getString(_refreshTokenKey)} , access token : ${prefs.getString(_accessTokenKey)}");
       return true;
     } catch (e) {
       return false;

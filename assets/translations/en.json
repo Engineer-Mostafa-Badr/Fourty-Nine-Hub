@@ -1221,7 +1221,6 @@
   "youHaveToFillYourNumberOfPassenger": "You have to fill your Number of Passenger",
   "waitingForReplies":"Waiting for replies...",
 
-  "continueUsingChatServices": " , To continue using chat services",
   "viewRoute":"View Route",
   "enterUserOtp":"Enter user OTP",
   "invalidOtp":"Invalid OTP",
@@ -1229,5 +1228,8 @@
   "ifUserReachedClick":"If the passenger has reached their destination, press the button",
   "reached":"Reached",
   "running":"Running",
-  "failedTryAgain":"Failed. please try again"
+  "failedTryAgain":"Failed. please try again",
+  "continueUsingChatServices": " , To continue using chat services",
+  "recoverDeletedChats": "Recover Deleted Chats",
+  "sureRecoverDeletedChats": "Are you sure you want to recover deleted chats?"
 }

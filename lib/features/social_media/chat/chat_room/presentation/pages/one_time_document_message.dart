@@ -328,8 +328,8 @@ class _OneTimeDocumentMessageViewState
                   for (var media in tempMedia) {
                     widget.oneTimeDocumentMessageViewParams.chatRoomCubit.media
                         .add(media);
-                    widget.oneTimeDocumentMessageViewParams.chatRoomCubit
-                        .isOneTimeView = true;
+                    // widget.oneTimeDocumentMessageViewParams.chatRoomCubit
+                    //     .isOneTimeView = true;
                     await widget.oneTimeDocumentMessageViewParams.chatRoomCubit
                         .sendMessage();
                     widget.oneTimeDocumentMessageViewParams.chatRoomCubit.media
@@ -472,7 +472,8 @@ class _OneTimeDocumentMessageViewState
                 left: 8,
                 child: IconButton(
                   icon: Icon(
-                    context.read<ChatRoomCubit>().isOneTimeView
+                    widget.oneTimeDocumentMessageViewParams.chatRoomCubit
+                            .isOneTimeView
                         ? Icons.looks_one
                         : Icons.looks_one_outlined,
                     color: Colors.grey,
@@ -480,8 +481,10 @@ class _OneTimeDocumentMessageViewState
                   ),
                   onPressed: () async {
                     setState(() {
-                      context.read<ChatRoomCubit>().isOneTimeView =
-                          !context.read<ChatRoomCubit>().isOneTimeView;
+                      widget.oneTimeDocumentMessageViewParams.chatRoomCubit
+                              .isOneTimeView =
+                          !widget.oneTimeDocumentMessageViewParams.chatRoomCubit
+                              .isOneTimeView;
                     });
                   },
                 ),

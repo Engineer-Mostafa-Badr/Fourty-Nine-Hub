@@ -43,7 +43,7 @@ class NotificationsServiceLocator {
     );
 
     serviceLocator.registerLazySingleton<WebSocketHelper>(
-      () => WebSocketHelper(socket: serviceLocator()),
+      () => WebSocketHelper(),
     );
     serviceLocator.registerLazySingleton<NotificationListenerUseCase>(
       () => NotificationListenerUseCase(notificationRepo: serviceLocator()),

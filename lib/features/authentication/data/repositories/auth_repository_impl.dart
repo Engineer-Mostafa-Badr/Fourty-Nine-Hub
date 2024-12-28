@@ -7,13 +7,18 @@ import 'package:fourtyninehub/features/authentication/data/data_sources/remote_d
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_new_forget_password_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/login_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/send_forget_password_otp_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/update_profile_view_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_forget_password_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_otp_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/create_anonymous_chat_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/create_normal_chat_use_case.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
@@ -166,6 +171,42 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either<Failure, void>> signOut() {
     return _remoteDataSource.logout();
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateUserBio(String bio) {
+    return _remoteDataSource.updateUserBio(bio: bio);
+  }
+  
+  @override
+  Future<Either<Failure, bool>> updateUserName(String name) {
+    return _remoteDataSource.updateUserName(name: name);
+  }
+  @override
+  Future<Either<Failure, ChatEntity>> createNormalChat(
+      CreateNormalChatParams params) {
+    return _remoteDataSource.createNormalChat(params);
+  }
+
+  @override
+  Future<Either<Failure, ChatEntity>> createAnonymousChat(
+      CreateAnonymousChatParams params) {
+    return _remoteDataSource.createAnonymousChat(params);
+  }
+  
+  @override
+  Future<Either<Failure, bool>> updateProfileView(UpdateProfileViewParams params) {
+    return _remoteDataSource.updateProfileView(params);
+  }
+
+  @override
+  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViews(GetProfileViewsParams params) {
+    return _remoteDataSource.getProfileViews(params);
+  }
+  
+  @override
+  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViewsByUserId(GetProfileViewsParams params) {
+    return _remoteDataSource.getProfileViewsByUserId(params);
   }
 }
 //enum: ['google', 'facebook', 'local', 'apple']
