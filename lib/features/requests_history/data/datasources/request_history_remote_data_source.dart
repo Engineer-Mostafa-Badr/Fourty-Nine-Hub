@@ -3,7 +3,6 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/food_order_model.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/shipping_request_model/shipping_request_model.dart';
-import 'package:fourtyninehub/features/requests_history/data/models/trip_model.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../../../res/assets/jsons.dart';
@@ -58,7 +57,7 @@ class RequestHistoryRemoteDataSourceImpl
     print("hello == from shipping \n");
     final response = await _apiConsumer
         .get("https://49dev.com/api/v1/loading/trip/allUserTrips");
-    print("response ==${response}\n");
+    print("response ==$response\n");
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data'] as List)

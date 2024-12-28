@@ -4,15 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/abstract/main_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/mneu/name/price_text_form_field.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percent_cubit.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/pages/widget/bill_value_field.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -116,6 +113,7 @@ class _TenPercentViewState extends State<TenPercentView> {
                   if (p0!.isEmpty&&(state.electricityId!=null&&state.electricityId!.isNotEmpty)) {
                     return 'Please enter value';
                   }
+                  return null;
                 },),
                 const Sizer(),
                 Label(text: "Mobile bill",style: Styles.headerText(),),

@@ -11,7 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:gallery_saver/gallery_saver.dart';
+// import 'package:gallery_saver/gallery_saver.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../shared/filter_utiles.dart';
@@ -216,15 +216,15 @@ class MixVoiceVideoRecordingScreenState
     log('stats length ${stats.length.toString()}');
     log('logs ${logs.toString()}');
     log('returned ${returned?.getValue().toString()}');
-    final savedSuccessfully = await GallerySaver.saveVideo(mergedVideoPath!);
+    // final savedSuccessfully = await GallerySaver.saveVideo(mergedVideoPath!);
     await _generateThumbnail(mergedVideoPath!);
     _navigateToPlaybackScreen();
-    if (savedSuccessfully ?? false) {
-      print('saved');
-      setState(() {
-        showGalleryBtn = true; // Show the gallery button if save is successful
-      });
-    }
+    // if (savedSuccessfully ?? false) {
+    //   print('saved');
+    //   setState(() {
+    //     showGalleryBtn = true; // Show the gallery button if save is successful
+    //   });
+    // }
     final output = await session.getOutput();
     log("alibaba output: $output");
     log('final merged file path ${mergedVideoPath.toString()}');

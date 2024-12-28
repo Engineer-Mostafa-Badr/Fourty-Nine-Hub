@@ -306,7 +306,7 @@ class _AcceptedCardImageState extends State<AcceptedCardImage> {
                                     ),
                                   ),
                                 ),
-                                Sizer(),
+                                const Sizer(),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 24),

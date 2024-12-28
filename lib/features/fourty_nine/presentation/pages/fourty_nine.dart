@@ -187,7 +187,7 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
           shrinkWrap: true,
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           children: [
-            AddBanner(),
+            const AddBanner(),
             //carousel slider
             const AnnounceWidget(),
             !context.read<UserCubit>().isLoggedIn

@@ -5,7 +5,6 @@ import 'package:fourtyninehub/features/requests_history/data/datasources/request
 import 'package:fourtyninehub/features/requests_history/data/models/food_order_model.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/shipping_request_model/shipping_request_model.dart';
 
-import 'package:fourtyninehub/features/requests_history/data/models/trip_model.dart';
 
 import '../../domain/repositories/history_ride_repo.dart';
 

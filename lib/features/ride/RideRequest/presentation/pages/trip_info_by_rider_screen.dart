@@ -285,13 +285,13 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
                               GestureDetector(
                                 onTap: () {
                                   launchUrlString(
-                                      "tel://${widget.model.userPhone}");
+                                      "tel://${widget.model.driverPhone}");
                                 },
                                 child: Row(
                                   children: [
                                     const Icon(Icons.phone),
                                     const Sizer(),
-                                    Text(widget.model.userPhone ?? "")
+                                    Text(widget.model.driverPhone ?? "")
                                   ],
                                 ),
                               ),

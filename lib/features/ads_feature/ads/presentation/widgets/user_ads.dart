@@ -59,7 +59,7 @@ class _UserAdsState extends State<UserAds> {
             );
           },
           itemBuilder: (context, item, index) {
-            print("item ${index}");
+            print("item $index");
 
             // Calculate the actual item index in the data list
             // int actualItemIndex = index - ((index - nativeAdStart) ~/ adFrequency);

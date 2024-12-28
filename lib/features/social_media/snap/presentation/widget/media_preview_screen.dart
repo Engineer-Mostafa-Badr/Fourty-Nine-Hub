@@ -7,7 +7,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:gallery_saver/gallery_saver.dart';
+// import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -94,7 +94,7 @@ class _MediaPreviewState extends State<MediaPreview> {
 
       if (filteredImage.existsSync()) {
         // Optionally save to the gallery
-        await GallerySaver.saveImage(filteredImage.path);
+        // await GallerySaver.saveImage(filteredImage.path);
         print('Filtered image saved at: ${filteredImage.path}');
       } else {
         print('Error: Saved image does not exist');
@@ -142,7 +142,7 @@ class _MediaPreviewState extends State<MediaPreview> {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
+            child: SizedBox(
               //margin: const EdgeInsets.only(bottom: 12),
               width: double.infinity,
               height: double.infinity,

@@ -9,7 +9,6 @@ import '../../../health_feature/health/domain/entities/appointment_booking_entit
 import '../../../health_feature/health/domain/usecases/get_my_appointment_bookings_usecase.dart';
 import '../../data/models/food_order_model.dart';
 import '../../domain/usecases/get_food_history_usecase.dart';
-import '../../domain/usecases/get_history_ride_use_case.dart';
 import '../../domain/usecases/get_shipping_requests_usecase.dart';
 
 part 'request_history_state.dart';

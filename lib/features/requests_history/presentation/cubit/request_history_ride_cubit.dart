@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/request_history_ride_model.dart';
-import 'package:fourtyninehub/features/requests_history/data/models/trip_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 
 class RequestHistoryRideCubit extends Cubit<RiderState> {
@@ -15,7 +14,7 @@ class RequestHistoryRideCubit extends Cubit<RiderState> {
       print("hello from ==ride cubit \n");
       final response =
           await apiConsumer.get("https://49dev.com/api/v1/ride/trips/user");
-      print("ride response== ${response}\n");
+      print("ride response== $response\n");
       response.fold(
         (failure) {
           emit(FailureRiderState(failure: failure));

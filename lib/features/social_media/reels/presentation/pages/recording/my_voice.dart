@@ -11,7 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
-import 'package:gallery_saver/gallery_saver.dart';
+// import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart' as thumb;
 
@@ -227,16 +227,16 @@ class MyVoiceVideoRecordingScreenState
       log("FFmpeg output: $output");
       if (ReturnCode.isSuccess(returnCode)) {
         log("FFmpeg process succeeded");
-        final savedSuccessfully =
-            await GallerySaver.saveVideo(filteredVideoPath!);
+        // final savedSuccessfully =
+        //     await GallerySaver.saveVideo(filteredVideoPath!);
         await _generateThumbnail(filteredVideoPath!);
         _navigateToPlaybackScreen();
-        if (savedSuccessfully ?? false) {
-          log('Saved');
-        } else {
-          throw Exception('error_dialog_save_video_fail');
-        }
-        return savedSuccessfully;
+        // if (savedSuccessfully ?? false) {
+        //   log('Saved');
+        // } else {
+        //   throw Exception('error_dialog_save_video_fail');
+        // }
+        // return savedSuccessfully;
       } else {
         final failStackTrace = await session.getFailStackTrace();
         throw Exception(

@@ -20,7 +20,7 @@ class EditFoodCubit extends Cubit<EditFoodState> {
 
   EditFoodCubit(this._getRestaurantDetailsUseCase, this._getMealsUseCase,
       this._deleteFoodUseCase, this._addFoodUseCase)
-      : super(EditFoodState());
+      : super(const EditFoodState());
 
   loadData({required String id, required bool first}) async {
     // menu.clear();

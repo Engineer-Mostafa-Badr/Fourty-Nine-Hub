@@ -132,7 +132,8 @@ class _FlutterLocalNotificationHelper {
           requestAlertPermission: true,
           requestBadgePermission: true,
           requestSoundPermission: true,
-          onDidReceiveLocalNotification: onDidReceiveLocalNotification),
+          // onDidReceiveLocalNotification: onDidReceiveLocalNotification
+          ),
     ));
   }
 
