@@ -39,7 +39,7 @@ class SettingsView extends StatelessWidget {
                   context,
                   LocaleKeys.deleteSuccessfully.localize,
                 );
-                controller.logout();
+                controller.logout(context);
                 context.push(Routes.HOME);
               }
               if (state.status == SettingStates.success1) {
@@ -47,7 +47,7 @@ class SettingsView extends StatelessWidget {
                   context,
                   LocaleKeys.disableAccount.localize,
                 );
-                controller.logout();
+                controller.logout(context);
                 context.push(Routes.HOME);
               }
             },

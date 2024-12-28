@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -118,17 +120,19 @@ class DI {
 
     await LocalizationService.init();
     await SQFLiteDataSource.instance.initDatabase();
-    final cred = await CacheManager.getAccessToken();
-    CliLogger.info('token from getit $cred');
-    CliLogger.info('token outside getit $token');
+    // final cred = await CacheManager.getAccessToken();
+    // CliLogger.info('token from getit $cred');
+    // CliLogger.info('token outside getit $token');
     // socket
-    serviceLocator.registerLazySingleton<Socket>(() => io(
-        'https://49dev.com',
-        OptionBuilder()
-            .setTransports(['websocket'])
-            .disableAutoConnect()
-            .setExtraHeaders({'Authorization': token ?? cred}) // optional
-            .build()));
+    // serviceLocator.registerLazySingleton<Socket>(() => io(
+    //     'https://49dev.com',
+    //     OptionBuilder()
+    //         .setTransports(['websocket'])
+    //         .disableAutoConnect()
+    //         .setExtraHeaders({'Authorization': token??cred}) // optional
+    //         .build()));
+
+
     // database
     serviceLocator.registerLazySingleton<Database>(
         () => SQFLiteDataSource.instance.database);
@@ -278,9 +282,11 @@ class DI {
     serviceLocator.registerLazySingleton<ApiConsumer>(
       () => BaseApiConsumer(
         serviceLocator(),
-        serviceLocator(),
       ),
     );
+    // serviceLocator.registerLazySingleton<ApiClientHelper>(
+    //   () => ApiClientHelperImp(),
+    // );
     //cacheService
     serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     // base repo
@@ -358,6 +364,21 @@ class DI {
   }
 
   static Future<void> reset() async {
+    log("Resetting service locator...");
     await serviceLocator.reset();
   }
+
+  // static Future<void> registerSocket({required String? token}) async {
+  //   final cred = await CacheManager.getAccessToken();
+  //   CliLogger.info('token from getit $cred');
+  //   CliLogger.info('token outside getit $token');
+  //   // socket
+  //   serviceLocator.registerFactory<Socket>(() => io(
+  //       'https://49dev.com',
+  //       OptionBuilder()
+  //           .setTransports(['websocket'])
+  //           .disableAutoConnect()
+  //           .setExtraHeaders({'Authorization': token??cred}) // optional
+  //           .build()));
+  // }
 }

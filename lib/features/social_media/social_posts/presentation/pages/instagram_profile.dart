@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -17,7 +19,9 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/view_followers_and_following.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
@@ -56,7 +60,9 @@ class _InstagramProfileState extends State<InstagramProfile> {
   @override
   Widget build(BuildContext context) {
     final loginUser = context.read<UserCubit>().state.data;
-
+    if (context.isUserLoggedIn) {
+      context.read<UserCubit>().updateProfileView(isProfile: true, userId: widget.userId);
+    }
     return DefaultTabController(
       length: loginUser?.id == widget.userId ? 3 : 2,
       child: Scaffold(
@@ -522,7 +528,10 @@ class _InstagramProfileState extends State<InstagramProfile> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (user.city.isNotEmpty || user.country.isNotEmpty && user.country !='Hidden' && user.city !='Hidden') ...[
+                      if (user.city.isNotEmpty ||
+                          user.country.isNotEmpty &&
+                              user.country != 'Hidden' &&
+                              user.city != 'Hidden') ...[
                         Row(
                           children: [
                             Expanded(
@@ -543,7 +552,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                           height: 5.h,
                         ),
                       ],
-                      if (user.phone.isNotEmpty && user.phone !='Hidden') ...[
+                      if (user.phone.isNotEmpty && user.phone != 'Hidden') ...[
                         Row(
                           children: [
                             Expanded(
@@ -563,7 +572,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                           height: 5.h,
                         ),
                       ],
-                      if (user.job.isNotEmpty && user.job !='Hidden')
+                      if (user.job.isNotEmpty && user.job != 'Hidden')
                         Row(
                           children: [
                             Expanded(
@@ -584,7 +593,9 @@ class _InstagramProfileState extends State<InstagramProfile> {
               ],
             ),
           ),
-          if (user.followers != null && user.followers!.isNotEmpty && user.followers !='Hidden')
+          if (user.followers != null &&
+              user.followers!.isNotEmpty &&
+              user.followers != 'Hidden')
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.h),
               child: Row(
@@ -669,58 +680,71 @@ class _InstagramProfileState extends State<InstagramProfile> {
                             }),
                       ),
                       const Sizer(),
-                      Expanded(
+                      if (loginUser?.id != widget.userId)
+                        Expanded(
                           child: MessageButton(
-                              user: state.profileData!,
-                              normalPress: () async {
-                                if (context.read<UserCubit>().isLoggedIn) {
-                                  if (state.profileData?.areFriends == true) {
-                                    var result = await context
-                                        .read<SocialPostsCubit>()
-                                        .createNormalChat(widget.userId,
-                                            ChatCategoriesIds.social);
-                                    if (result == true) {
-                                      context.push(Routes.CHAT);
-                                    }
-                                  } else {
-                                    var result = await context
-                                        .read<SocialPostsCubit>()
-                                        .createNormalChat(widget.userId,
-                                            ChatCategoriesIds.greet);
-                                    if (result == true) {
-                                      context.pop();
-                                      context.push(Routes.CHAT);
-                                    } else {
-                                      showErrorMessage(
-                                          context,
-                                          getFailureMessage(
-                                              state.failure!, context));
-                                      context.pop();
-                                    }
-                                  }
+                            user: state.profileData!,
+                            normalPress: () async {
+                              if (context.read<UserCubit>().isLoggedIn) {
+                                if (state.profileData?.areFriends == true) {
+                                  ChatEntity? chat = await context
+                                      .read<UserCubit>()
+                                      .createNormalChat(
+                                        otherId: widget.userId,
+                                        categoryId: ChatCategoriesIds.social,
+                                      );
+                                  context.pop();
+                                  context.push(
+                                    Routes.CHAT,
+                                    extra: ChatsViewParams(
+                                      isFromStartChat: true,
+                                      initialTabIndex: 0,
+                                      selectedChat: chat,
+                                    ),
+                                  );
                                 } else {
-                                  context.push(Routes.LOGIN);
+                                  ChatEntity? chat = await context
+                                      .read<UserCubit>()
+                                      .createNormalChat(
+                                        otherId: widget.userId,
+                                        categoryId: ChatCategoriesIds.greet,
+                                      );
+                                  context.pop();
+                                  context.push(
+                                    Routes.CHAT,
+                                    extra: ChatsViewParams(
+                                      isFromStartChat: true,
+                                      initialTabIndex: 0,
+                                      selectedChat: chat,
+                                    ),
+                                  );
                                 }
-                              },
-                              anonymousPress: () async {
-                                if (context.read<UserCubit>().isLoggedIn) {
-                                  var result = await context
-                                      .read<SocialPostsCubit>()
-                                      .createAnonymousChat(widget.userId);
-                                  if (result == true) {
-                                    context.pop();
-                                    context.push(Routes.CHAT);
-                                  } else {
-                                    showErrorMessage(
-                                        context,
-                                        getFailureMessage(
-                                            state.failure!, context));
-                                    context.pop();
-                                  }
-                                } else {
-                                  context.push(Routes.LOGIN);
-                                }
-                              })),
+                              } else {
+                                context.push(Routes.LOGIN);
+                              }
+                            },
+                            anonymousPress: () async {
+                              if (context.read<UserCubit>().isLoggedIn) {
+                                ChatEntity? chat = await context
+                                    .read<UserCubit>()
+                                    .createAnonymousChat(
+                                      otherId: widget.userId,
+                                    );
+                                context.pop();
+                                context.push(
+                                  Routes.CHAT,
+                                  extra: ChatsViewParams(
+                                    isFromStartChat: true,
+                                    initialTabIndex: 0,
+                                    selectedChat: chat,
+                                  ),
+                                );
+                              } else {
+                                context.push(Routes.LOGIN);
+                              }
+                            },
+                          ),
+                        ),
                       const Sizer(),
                       InkWell(
                         onTap: showHideSuggestPeople,

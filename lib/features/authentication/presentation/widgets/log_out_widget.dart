@@ -8,7 +8,9 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:go_router/go_router.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 import '../../../../res/style/app_colors.dart';
@@ -24,7 +26,7 @@ class LogoutWidget extends StatefulWidget {
 }
 
 class _LogoutWidgetState extends State<LogoutWidget> {
-  final Socket _socket = serviceLocator<Socket>();
+  // final Socket _socket = serviceLocator<Socket>();
 
   @override
   Widget build(BuildContext context) {
@@ -57,17 +59,20 @@ class _LogoutWidgetState extends State<LogoutWidget> {
                 height: 50.h,
                 label: LocaleKeys.logout.localize,
                 color: AppColors.AUTH_CONTAINER_COLOR,
-                onPressed: () {
-                  controller.logout();
+                onPressed: () async {
+                  await controller.logout(context);
                   //Phoenix.rebirth(context);
                   // setState(() {});
                   // context.pop();
-                  _socket.connect();
-                  _socket.emit(
-                    'disconnectMe',
-                  );
-                  context.pop();
-                  context.push(Routes.HOME);
+                  // SharedWebSocket.instance.socket!.emit(
+                  //   'disconnectMe',
+                  // );
+                  // context.pop();
+                  // ignore: use_build_context_synchronously
+                  await DI.reset();
+                  await DI.execute();
+                  context.pushReplacement(Routes.HOME);
+                  // await Restart.restartApp();
                   // context.read<MainCategoriesCubit>().loadData(context);
                   // setState(() {});
                 },

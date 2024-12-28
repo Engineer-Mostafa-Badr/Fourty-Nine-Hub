@@ -52,7 +52,7 @@ class _TwitterViewState extends State<TwitterView> {
               builder: (context, state) {
             UserEntity? userData = state.data;
             return context.read<UserCubit>().isLoggedIn
-                ? _buildTwitterWidget(userData!)
+                ? _buildTwitterWidget()
                 : _buildGlobalTwitterWidget();
           }),
         ),
@@ -89,7 +89,7 @@ class _TwitterViewState extends State<TwitterView> {
     );
   }
 
-  Widget _buildTwitterWidget(UserEntity userData) {
+  Widget _buildTwitterWidget() {
     return BlocProvider<TwitterCubit>(
       create: (_) => serviceLocator()..loadData(),
       child:

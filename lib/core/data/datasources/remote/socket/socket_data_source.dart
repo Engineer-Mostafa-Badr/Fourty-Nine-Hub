@@ -53,6 +53,7 @@ abstract class SocketIOListeners {
   static const String sendPoints = 'Stream:SendPoint';
   static const String requestBattle = 'Stream:SendBattleRequest';
   static const String creatingNewChat = 'newChat';
+  static const String messageDeleted = 'messageDeleted';
   static const String typingMessage = 'messageTyping';
   static const String recordingMessage = 'messageRecording';
   static const String oneTimeMessageSeen = 'oneTimeMessageSeen';
@@ -65,15 +66,17 @@ abstract class SocketIOListeners {
 
 abstract class SocketIOEvents {
   static const String reactMessage = 'Message:React';
-  static const String disconnectMe = 'Message:React';
   static const String sendMessage = 'Message:Send';
   static const String markMessageAsSeen = 'Message:Seen';
+  static const String deleteMessage = 'Message:Delete';
   static const String markMessageAsDelivered = 'Message:Delivered';
   static const String startTypingMessage = 'Message:Typing';
   static const String stopTypingMessage = 'Message:StopTyping';
   static const String startRecordingMessage = 'Message:Recording';
   static const String stopRecordingMessage = 'Message:StopRecording';
   static const String setRecordAsListened = 'Message:Listen';
+  static const String connectMe = 'connectMe';
+  static const String disconnectMe = 'disconnectMe';
   static const String sendPoint = 'Stream:SendPoint';
 }
 

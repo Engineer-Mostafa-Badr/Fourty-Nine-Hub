@@ -62,13 +62,13 @@ abstract class ApiConsumer {
 
 class BaseApiConsumer extends ApiConsumer {
   final Dio _dio;
-  final AuthLocalDataSource _authLocalDataSource;
+  // final AuthLocalDataSource _authLocalDataSource;
 
   UserTokensEntity? _token;
 
   BaseApiConsumer(
     this._dio,
-    this._authLocalDataSource,
+    // this._authLocalDataSource,
   );
 
   @override
@@ -77,11 +77,13 @@ class BaseApiConsumer extends ApiConsumer {
     _token = token;
     log(_token?.accessToken.toString() ?? "Okkkk",
         name: "lskdjflskdjflskdjflskjdf");
-    CacheServiceImpl().saveUserToken(_token?.accessToken ?? "Token");
+    // CacheServiceImpl().saveUserToken(_token?.accessToken??"Token");
     log("${await CacheManager.getAccessToken()} attached", name: "Token");
     if (token != null) {
       log(token.accessToken.toString(), name: "Token");
       _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
+      // _dio.options.headers['Authorization'] = 'Bearer ${await CacheManager.getAccessToken()}';
+      // _dio.options.headers['Authorization'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6ImEzMWEyNzkzLWFiYTEtNDliOC1iZTgzLTlkYzM2NWZhOTk1OCIsImlhdCI6MTczMjA1MTYzMywiZXhwIjo1NTczMjA1MTYzMywic3ViIjoiNjZkODZhODJlOWNkMzk5NzAwMmY2MzM2In0.Mcl_dnYecdxc2htakepeWmZUYMDjfdjYkvgwWb4p9ok';
     }
   }
 
@@ -210,6 +212,9 @@ class BaseApiConsumer extends ApiConsumer {
       Map<String, dynamic>? headers}) async {
     try {
       log(data.toString());
+      if (url.contains('/chat/get-chats')) {
+        log("post get chats");
+      }
       final result = await _dio.post(
         url,
         data: formData ?? data,
@@ -227,13 +232,14 @@ class BaseApiConsumer extends ApiConsumer {
       if (e is DioException &&
           e.response?.statusCode == 401 &&
           isTokenAttached) {
-        return refreshToken().then(
-          (_) => post(
-            url,
-            queryParameters: queryParameters,
-            data: data,
-          ),
-        );
+        return Left(_getFailure(e));
+        // return refreshToken().then(
+        //   (_) => post(
+        //     url,
+        //     queryParameters: queryParameters,
+        //     data: data,
+        //   ),
+        // );
       } else {
         // if (e is DioException) {
         //   pr('${e.response?.data}');
@@ -269,15 +275,17 @@ class BaseApiConsumer extends ApiConsumer {
       if (e is DioException &&
           e.response?.statusCode == 401 &&
           isTokenAttached) {
-        return refreshToken().then(
-          (_) => put(
-            url,
-            queryParameters: queryParameters,
-            data: data,
-            headers: headers,
-          ),
-        );
+        return Left(_getFailure(e));
+        // return refreshToken().then(
+        //   (_) => put(
+        //     url,
+        //     queryParameters: queryParameters,
+        //     data: data,
+        //     headers: headers,
+        //   ),
+        // );
       } else {
+        log(e.toString(), name: "The Exception");
         return Left(_getFailure(e));
       }
     }
@@ -338,14 +346,15 @@ class BaseApiConsumer extends ApiConsumer {
     );
     result.fold(
       (_) {
-        _authLocalDataSource.saveUserTokens(null);
+        // _authLocalDataSource.saveUserTokens(null);
         attachToken(null);
       },
       (response) {
         final accessToken = response['data']['accessToken'] as String;
         final newToken = _token!.copyWith(accessToken: accessToken);
         attachToken(newToken);
-        _authLocalDataSource.saveUserTokens(newToken.toModel());
+        // _authLocalDataSource.saveUserTokens(newToken.toModel());
+        CacheManager.saveAccessToken(accessToken);
       },
     );
   }
