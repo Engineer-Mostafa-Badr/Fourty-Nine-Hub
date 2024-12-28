@@ -29,7 +29,7 @@ class EditFoodState {
   final String? imagePath;
   final bool connected;
   final List<RestaurantMenu>? meals;
-  EditFoodState({
+  const EditFoodState({
     this.status = EditFoodStates.loading,
     this.failure,
     this.restaurant,

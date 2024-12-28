@@ -5,7 +5,6 @@ import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_info_model.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/offer_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/raise_fare_cubit.dart';
@@ -14,7 +13,6 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/ride_request_view.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/trip_info_button_sheet_widget.dart';
 import 'package:fourtyninehub/features/ride/rider_shipping/presentation/pages/create_trip_rider.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -160,8 +158,8 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
               builder: (context, state) {
                 if (state is ViewPickTripDataState) {
                   log(state.toString(), name: "lskdjflskdjflkjfdlkddddd");
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 17),
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 17),
                     child: Column(
                       children: [
                         // BlocListener<GetTripInfoCubit, RiderState>(
@@ -210,7 +208,7 @@ class _TripInfoRequestWidgetState extends State<TripInfoRequestWidget> {
                         //   child: Container(),
                         // ),
 
-                        const Sizer(),
+                        Sizer(),
                       ],
                     ),
                   );

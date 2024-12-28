@@ -19,7 +19,6 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 import 'package:fourtyninehub/features/ride/driver_dashboard/data/datasources/driver_dashboard_remote_data_source.dart';
 import 'package:fourtyninehub/features/requests_history/data/datasources/request_history_remote_data_source.dart';
 import 'package:fourtyninehub/features/requests_history/data/repositories/history_ride_repo_impl.dart';
-import 'package:fourtyninehub/features/requests_history/domain/usecases/get_history_ride_use_case.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/domain/usecases/accept_ride_usecase.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/domain/usecases/create_rider_offer_usecase.dart';
 import 'package:fourtyninehub/features/ride/trip_details/data/datasources/remote_data_source.dart';

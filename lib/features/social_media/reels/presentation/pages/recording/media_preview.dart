@@ -27,7 +27,7 @@ class MediaPreviewScreen extends StatefulWidget {
   final String mediaPath;
   final bool isImage;
 
-  const MediaPreviewScreen({
+  const MediaPreviewScreen({super.key, 
     required this.mediaId,
     required this.mediaPath,
     required this.isImage,
@@ -183,6 +183,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,

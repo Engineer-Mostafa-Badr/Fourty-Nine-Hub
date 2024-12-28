@@ -6,9 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:gallery_saver/gallery_saver.dart';
+// import 'package:gallery_saver/gallery_saver.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -274,23 +273,23 @@ class OtherVoiceVideoRecordingScreenState
     log('stats length ${stats.length.toString()}');
     log('logs ${logs.toString()}');
     log('returned ${returned?.getValue().toString()}');
-    final savedSuccessfully = await GallerySaver.saveVideo(mergedVideoPath!);
+    // final savedSuccessfully = await GallerySaver.saveVideo(mergedVideoPath!);
     await _generateThumbnail(mergedVideoPath!);
-    if (savedSuccessfully ?? false) {
-      print('saved');
-      setState(() {
-        showGalleryBtn = true; // Show the gallery button if save is successful
-      });
-      showSuccessMessage(
-          context, "Video saved successfully and ready to be shared");
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              VideoPlaybackScreen(mergedVideoPath!, _thumbnailPath!, false),
-        ),
-      );
-    }
+    // if (savedSuccessfully ?? false) {
+    //   print('saved');
+    //   setState(() {
+    //     showGalleryBtn = true; // Show the gallery button if save is successful
+    //   });
+    //   showSuccessMessage(
+    //       context, "Video saved successfully and ready to be shared");
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) =>
+    //           VideoPlaybackScreen(mergedVideoPath!, _thumbnailPath!, false),
+    //     ),
+    //   );
+    // }
     // final output = await session.getOutput();
     // log("alibaba output: $output");
     // log('final merged file path ${mergedVideoPath.toString()}');

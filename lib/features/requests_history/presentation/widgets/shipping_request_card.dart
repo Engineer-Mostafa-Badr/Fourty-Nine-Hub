@@ -23,7 +23,7 @@ class ShippingRequestCard extends StatelessWidget {
                     trip.createdAt, context.isArabic ? "arabic" : "english"),
                 style: Styles.headerText(fontSize: 30),
               ),
-              Spacer(),
+              const Spacer(),
               Text(
                 "${trip.price}${context.isArabic ? trip.currencyAr : trip.currencyEn}",
                 style: Styles.headerText(fontSize: 30),
@@ -56,12 +56,12 @@ class ShippingRequestCard extends StatelessWidget {
                               color: Colors.blue.withOpacity(0.5),
                               spreadRadius: 3,
                               blurRadius: 4,
-                              offset: Offset(1, 1),
+                              offset: const Offset(1, 1),
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.6,
                         child: Text(trip.fromAddress,
@@ -72,23 +72,23 @@ class ShippingRequestCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 1),
+                  const SizedBox(height: 1),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 6, right: 6),
-                        child: Container(
+                        child: SizedBox(
                           height: 14,
                           child: CustomPaint(
-                            size: Size(1, 14),
+                            size: const Size(1, 14),
                             painter: DottedLinePainter(),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 1),
+                  const SizedBox(height: 1),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -103,12 +103,12 @@ class ShippingRequestCard extends StatelessWidget {
                               color: Colors.green.withOpacity(0.5),
                               spreadRadius: 3,
                               blurRadius: 4,
-                              offset: Offset(1, 1),
+                              offset: const Offset(1, 1),
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.6,
                         child: Text(trip.toAddress,
@@ -127,7 +127,7 @@ class ShippingRequestCard extends StatelessWidget {
         const Sizer(
           height: 24,
         ),
-        Divider(
+        const Divider(
           height: 2,
           color: AppColors.LIGHT_GRAY_COLOR,
         )

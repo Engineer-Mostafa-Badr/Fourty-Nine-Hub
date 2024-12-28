@@ -465,7 +465,7 @@ class _AdvancedSnapchatCameraScreenState
                               ],
                             ),
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomePage()));
                              // Navigator.push(context, MaterialPageRoute(builder: (context)=>FaceDetectionCamera()));
                             }, // Pick an image from gallery
                           ),

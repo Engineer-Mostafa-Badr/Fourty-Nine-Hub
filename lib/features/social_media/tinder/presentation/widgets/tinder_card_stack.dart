@@ -264,7 +264,9 @@ class _TinderCardStackState extends State<TinderCardStack> {
     }
     if (lastSeenModel?.status == 'online') {
       if (lastSeenModel?.lastSeen != null ||
-          lastSeenModel?.lastSeen != '') return '';
+          lastSeenModel?.lastSeen != '') {
+        return '';
+      }
 
       return context.isArabic ? 'متصل' : 'online';
     }

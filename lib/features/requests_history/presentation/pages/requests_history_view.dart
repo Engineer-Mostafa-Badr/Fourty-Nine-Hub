@@ -12,7 +12,6 @@ import 'package:fourtyninehub/features/requests_history/presentation/cubit/reque
 import 'package:fourtyninehub/features/requests_history/presentation/widgets/trip_card.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/pages/tripjoin_request_view.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../res/assets/assets.dart';

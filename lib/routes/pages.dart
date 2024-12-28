@@ -1160,7 +1160,7 @@ class AppPages {
           GoRoute(
               path: Paths.SNAP,
               name: Routes.SNAP,
-              builder: (context, state) =>  SnapView()),
+              builder: (context, state) =>  const SnapView()),
           // Spotlight
           GoRoute(
                    path: Paths.SPOTLIGHT,
@@ -1809,7 +1809,7 @@ class AppPages {
                             create: (context) =>
                                 CallMessageCubit(repository: serviceLocator()),
                           ),
-                        ], child: AllTripNoSocketScreen())
+                        ], child: const AllTripNoSocketScreen())
                     // BlocProvider(
                     //   create: (_) => GetAllTripRiderCubit(repository: serviceLocator())..getAllTrip(),
                     //   child: const AllRiderTripScreen(),

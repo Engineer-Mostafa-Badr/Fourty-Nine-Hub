@@ -18,7 +18,7 @@ import '../../../../../res/style/styles.dart';
 
 // ignore: must_be_immutable
 class AllTripNoSocketScreen extends StatefulWidget {
-  AllTripNoSocketScreen({super.key});
+  const AllTripNoSocketScreen({super.key});
 
   @override
   State<AllTripNoSocketScreen> createState() => _AllTripNoSocketScreenState();
