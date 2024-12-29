@@ -36,7 +36,7 @@ class WalletWidget extends StatelessWidget {
       child: BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
         builder: (BuildContext context, state) {
           return Container(
-            height: 90.h,
+            height: 100.h,
             margin: EdgeInsets.symmetric(
                 vertical: 10.h, horizontal: margin?.w ?? 5.w),
             padding: const EdgeInsets.all(5),

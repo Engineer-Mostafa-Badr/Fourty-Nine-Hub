@@ -100,6 +100,7 @@ import 'package:fourtyninehub/features/installment_feature/installment_details/p
 import 'package:fourtyninehub/features/installment_feature/installment_list/presentation/cubit/installment_list_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
+import 'package:fourtyninehub/features/married/presentation/pages/married_view.dart';
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.dart';
@@ -1075,6 +1076,10 @@ class AppPages {
                       ),
                     ]),
               ]),
+          GoRoute(
+                  path: Paths.Married,
+                  name: Routes.Married,
+                  builder: (context, state) => const MarriedView()),
           // MazadatView
           GoRoute(
               path: Paths.MAZADAT,
