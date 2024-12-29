@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/payment/domain/entities/payment_provider_entity.dart';
+import 'package:fourtyninehub/features/payment/domain/use_cases/get_payment_provider_use_case.dart';
 
 import '../../../../common/functions/global/upload_file.dart';
 import '../../../../core/abstract/use_case.dart';
@@ -28,7 +30,7 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
     this._payOutRequestUseCase,
     this._requestInstapayUseCase,
     this._priceYellowUseCase,
-    this._methodBankUseCase,
+    this._methodBankUseCase, this.getPaymentProviderUseCase,
   ) : super(PaymentCacheOutState());
 
   final InstapayCacheOutUseCase _instapayCacheOutUseCase;
@@ -39,6 +41,7 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
   final RequestInstapayUseCase _requestInstapayUseCase;
   final FetchPriceYellowUseCase _priceYellowUseCase;
   final PayoutMethodBankUseCase _methodBankUseCase;
+  final GetPaymentProviderUseCase getPaymentProviderUseCase;
 
   List<String>? selectedImages;
 
@@ -214,5 +217,26 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
         ));
       },
     );
+  }
+
+  Map<String, String> paymentProviderMap = {};
+  Future<List<PaymentProviderEntity>> getPaymentProvider() async {
+    emit(state.copyWith(status: StateStatus.loading));
+
+    final response = await getPaymentProviderUseCase(const NoParams());
+    List<PaymentProviderEntity> paymentProviderList = [];
+    response.fold(
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (data) {
+          paymentProviderList.addAll(data);
+          for (var provider in paymentProviderList) {
+            paymentProviderMap[provider.nameEn] = provider.id;
+            print('Fetched provider: ${provider.nameEn}, ID: ${provider.id}');
+          }
+          emit(state.copyWith(
+              data: paymentProviderList, status: StateStatus.success));
+        });
+    print("Payment Data:${paymentProviderList.length}");
+    return paymentProviderList;
   }
 }

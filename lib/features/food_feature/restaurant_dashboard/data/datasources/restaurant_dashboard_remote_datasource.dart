@@ -9,11 +9,13 @@ import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_statistics_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 
+import '../../domain/usecases/delete_restaurant_usecase.dart';
+
 abstract class RestaurantDashboardRemoteDataSource {
   Future<Either<Failure, RestaurantOrdersModel>> getRestaurantOrders(
       PaginationParams params);
   Future<Either<Failure, bool>> changeActiveStatus();
-  Future<Either<Failure, bool>> deleteRestaurant(String restaurantId);
+  Future<Either<Failure, bool>> deleteRestaurant(DeleteResturantParams params);
   Future<Either<Failure, bool>> updateRestaurant(UpdateRestaurantParams params);
   Future<Either<Failure, Restaurant2Model>> getRestaurantInfo();
   Future<Either<Failure, RestaurantStatistics>> getRestaurantStatistics();
@@ -73,9 +75,11 @@ class RestaurantDashboardRemoteDataSourceImpl
   }
 
   @override
-  Future<Either<Failure, bool>> deleteRestaurant(String restaurantId) async {
+  Future<Either<Failure, bool>> deleteRestaurant(DeleteResturantParams params) async {
     final response =
-        await _apiServices.delete(EndPoints.deleteRestaurant(restaurantId));
+        await _apiServices.delete(EndPoints.deleteRestaurant(params.restaurantId),
+        queryParameters: {"subCategory": params.subCategoryId}
+        );
     return response.fold((l) {
       return Left(l);
     }, (data) {
@@ -86,7 +90,9 @@ class RestaurantDashboardRemoteDataSourceImpl
   @override
   Future<Either<Failure, bool>> updateRestaurant(params) async {
     final response = await _apiServices.put(EndPoints.updateRestaurant,
-        data: params.toJson());
+        data: params.toJson(),
+        queryParameters: {"subCategory": params.subcategoryId}
+    );
     return response.fold((l) {
       return Left(l);
     }, (data) {

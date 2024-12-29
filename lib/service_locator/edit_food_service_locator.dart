@@ -14,6 +14,7 @@ class EditFoodServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
         ));
   }
 }

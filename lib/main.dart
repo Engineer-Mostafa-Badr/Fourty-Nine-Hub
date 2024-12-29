@@ -88,7 +88,7 @@ void main() async {
   final customPageCubit = serviceLocator<CustomPageCubit>();
   await customPageCubit.fetchActivate();
 
-  final isActivated = customPageCubit.state.activate?.customPage ?? false;
+  final isActivated =  false;
 
   final initialRoute = isActivated ? Routes.PAGEPREVIEW : Routes.HOME;
 
