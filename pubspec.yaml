@@ -10,7 +10,6 @@ environment:
 
 dependencies:
   widget_and_text_animator:
-  advance_pdf_viewer2: ^2.0.5+1
   audio_video_progress_bar: ^1.0.0
   cached_network_image: ^3.3.1
   camera: ^0.11.0+2
@@ -32,17 +31,16 @@ dependencies:
   firebase_core: ^2.31.0
   firebase_messaging: ^14.9.2
 #  win32: ^5.7.1
-  win32:
-#  win32:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.5
   photo_view:
+  # flutter_phoenix: "^1.0.0"
   flutter_cache_manager: ^3.3.3
   flutter_card_swiper: ^7.0.1
   flutter_contacts: ^1.1.9+2
   flutter_credit_card: ^4.0.1
-  flutter_facebook_auth: 3.5.0
+  # flutter_facebook_auth: ^3.5.0
   flutter_fortune_wheel: ^1.3.1
   flutter_local_notifications: ^17.1.2
   flutter_polyline_points: ^2.1.0
@@ -54,7 +52,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   flutter_typeahead: null
   font_awesome_flutter: ^10.7.0
-  gallery_saver: ^2.3.2
+#  gallery_saver: ^2.3.2
   get_it: ^7.7.0
   go_router: ^14.1.2
   google_maps_flutter: ^2.6.1
@@ -69,7 +67,7 @@ dependencies:
   # icons_launcher: ^2.1.7
   #  mapbox_gl: ^0.14.0
   # image: ^3.0.0
-  image_gallery_saver: 2.0.3
+#  image_gallery_saver: 2.0.3
   image_picker: ^1.1.2
   infinite_scroll_pagination: ^4.0.0
   insta_image_viewer: ^1.0.4
@@ -97,14 +95,14 @@ dependencies:
   top_snackbar_flutter: ^3.1.0
   transparent_image: ^2.0.1
   audioplayers: ^6.1.0
-  uni_links: ^0.5.1
+#  uni_links: ^0.5.1
   url_launcher: 6.2.6
   video_player: ^2.9.1
   video_thumbnail: null
   visibility_detector: ^0.3.3
   webview_flutter: ^4.8.0
   # zego_uikit_prebuilt_live_audio_room: ^3.7.5
-  zego_uikit_signaling_plugin: ^2.8.2
+  zego_uikit_signaling_plugin: ^2.8.8
   # image_filter_pro: ^0.1.11
   path: 1.9.0
   open_file: ^3.5.4
@@ -128,7 +126,7 @@ dependencies:
   jwt_decoder:
   flutter_pdfview: ^1.3.4
   #google_ml_kit: ^0.19.0
-  google_mlkit_face_detection: ^0.12.0
+#  google_mlkit_face_detection: ^0.12.0
   deepar_flutter: ^0.0.5
   quran: ^1.3.1
   # location: ^4.4.0
@@ -143,9 +141,9 @@ dependencies:
   multi_select_flutter: ^4.1.3
   flutter_rating: ^2.0.2
   flutter_staggered_grid_view: ^0.7.0
-  flutter_sound: ^9.6.0
+#  flutter_sound: ^9.6.0`
   flutter_background_service: ^5.0.10
-  restart_app: ^1.3.1
+  restart_app:
 dependency_overrides:
   http: ^0.13.3
   permission_handler: ^11.0.1
@@ -185,7 +183,6 @@ flutter:
     - assets/49 Notification 01.mp3
     - assets/lembi.mp3
     - assets/ChatSounds/
-    - assets/previews/
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

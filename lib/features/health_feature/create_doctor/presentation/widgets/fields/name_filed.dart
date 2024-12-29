@@ -20,11 +20,16 @@ class CreateDoctorNameField extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("${context.isArabic?'الاسم الاول':'First name'}:",style: Styles.mediumText(),),
+                  Text(
+                    "${context.isArabic ? 'الاسم الاول' : 'First name'}:",
+                    style: Styles.mediumText(),
+                  ),
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return context.isArabic?'برجاء ادخال الاسم الاول': 'Please enter first name';
+                        return context.isArabic
+                            ? 'برجاء ادخال الاسم الاول'
+                            : 'Please enter first name';
                       }
                       return null;
                     },
@@ -34,7 +39,8 @@ class CreateDoctorNameField extends StatelessWidget {
                       enabledBorder: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                         borderSide: BorderSide(
-                          color: Colors.grey, // Use grey as the default border color
+                          color: Colors
+                              .grey, // Use grey as the default border color
                         ),
                       ),
                       // Border when the field is focused
@@ -62,14 +68,14 @@ class CreateDoctorNameField extends StatelessWidget {
                       focusedErrorBorder: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                         borderSide: BorderSide(
-                          color:
-                              Colors.red, // Keep red border when focused with an error
+                          color: Colors
+                              .red, // Keep red border when focused with an error
                         ),
                       ),
                       filled: false,
-                      contentPadding:
-                          const EdgeInsets.all(10), // Padding inside the text field
-                      hintText: context.isArabic?'الاسم الاول':'First name',
+                      contentPadding: const EdgeInsets.all(
+                          10), // Padding inside the text field
+                      hintText: context.isArabic ? 'الاسم الاول' : 'First name',
                       hintStyle: Styles.mediumText(), // Hint text
                     ),
                   ),
@@ -81,11 +87,16 @@ class CreateDoctorNameField extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("${context.isArabic?'اللقب':'Last name'}:",style: Styles.mediumText(),),
+                  Text(
+                    "${context.isArabic ? 'اللقب' : 'Last name'}:",
+                    style: Styles.mediumText(),
+                  ),
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return context.isArabic?'برجاء ادخال اللقب': 'Please enter last name';
+                        return context.isArabic
+                            ? 'برجاء ادخال اللقب'
+                            : 'Please enter last name';
                       }
                       return null;
                     },
@@ -95,7 +106,8 @@ class CreateDoctorNameField extends StatelessWidget {
                       enabledBorder: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                         borderSide: BorderSide(
-                          color: Colors.grey, // Use grey as the default border color
+                          color: Colors
+                              .grey, // Use grey as the default border color
                         ),
                       ),
                       // Border when the field is focused
@@ -123,14 +135,14 @@ class CreateDoctorNameField extends StatelessWidget {
                       focusedErrorBorder: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                         borderSide: BorderSide(
-                          color:
-                              Colors.red, // Keep red border when focused with an error
+                          color: Colors
+                              .red, // Keep red border when focused with an error
                         ),
                       ),
                       filled: false,
-                      contentPadding:
-                          const EdgeInsets.all(10), // Padding inside the text field
-                      hintText: context.isArabic?'اللقب':'Last name',
+                      contentPadding: const EdgeInsets.all(
+                          10), // Padding inside the text field
+                      hintText: context.isArabic ? 'اللقب' : 'Last name',
                       hintStyle: Styles.mediumText(), // Hint text
                     ),
                   ),
@@ -143,11 +155,16 @@ class CreateDoctorNameField extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("${context.isArabic?'رقم الهاتف':'Phone number'}:",style: Styles.mediumText(),),
+            Text(
+              "${context.isArabic ? 'رقم الهاتف' : 'Phone number'}:",
+              style: Styles.mediumText(),
+            ),
             TextFormField(
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return context.isArabic?'برجاء ادخال رقم الهاتف': 'Please enter phone number';
+                  return context.isArabic
+                      ? 'برجاء ادخال رقم الهاتف'
+                      : 'Please enter phone number';
                 }
                 return null;
               },
@@ -185,14 +202,14 @@ class CreateDoctorNameField extends StatelessWidget {
                 focusedErrorBorder: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                   borderSide: BorderSide(
-                    color:
-                    Colors.red, // Keep red border when focused with an error
+                    color: Colors
+                        .red, // Keep red border when focused with an error
                   ),
                 ),
                 filled: false,
                 contentPadding:
-                const EdgeInsets.all(10), // Padding inside the text field
-                hintText: context.isArabic?'رقم الهاتف':'Phone number',
+                    const EdgeInsets.all(10), // Padding inside the text field
+                hintText: context.isArabic ? 'رقم الهاتف' : 'Phone number',
                 hintStyle: Styles.mediumText(), // Hint text
               ),
             ),

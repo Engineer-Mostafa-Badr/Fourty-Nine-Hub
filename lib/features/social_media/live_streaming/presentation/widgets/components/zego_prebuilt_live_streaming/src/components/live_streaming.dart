@@ -298,7 +298,7 @@ class _ZegoUIKitPrebuiltLiveStreamingState extends State<ZegoLiveStreamingPage>
 
   @override
   Widget build(BuildContext context) {
-    return ZegoLiveStreamingManagers().hostManager?.isLocalHost??false
+    return ZegoLiveStreamingManagers().hostManager?.isLocalHost ?? false
         ? ValueListenableBuilder<ZegoUIKitUser?>(
             valueListenable: ZegoLiveStreamingManagers().hostManager!.notifier,
             builder: (context, host, _) {
@@ -655,7 +655,7 @@ class _ZegoUIKitPrebuiltLiveStreamingState extends State<ZegoLiveStreamingPage>
       animationDuration: const Duration(seconds: 1),
       heartIcon: Icons.favorite,
       iconColor: AppColors.SECONDARY_COLOR,
-      onDoubleTap: (){
+      onDoubleTap: () {
         context.read<StreamCubit>().onDoublePress();
       },
       child: ZegoLiveStreamingLivePage(

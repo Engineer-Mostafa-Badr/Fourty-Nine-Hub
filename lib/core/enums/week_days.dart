@@ -8,14 +8,15 @@ extension WeekDaysLocalization on WeekDays {
     switch (context.isArabic) {
       case true: // Arabic translations
         return {
-          WeekDays.sunday: 'الأحد',
-          WeekDays.monday: 'الإثنين',
-          WeekDays.tuesday: 'الثلاثاء',
-          WeekDays.wednesday: 'الأربعاء',
-          WeekDays.thursday: 'الخميس',
-          WeekDays.friday: 'الجمعة',
-          WeekDays.saturday: 'السبت',
-        }[this]??'';
+              WeekDays.sunday: 'الأحد',
+              WeekDays.monday: 'الإثنين',
+              WeekDays.tuesday: 'الثلاثاء',
+              WeekDays.wednesday: 'الأربعاء',
+              WeekDays.thursday: 'الخميس',
+              WeekDays.friday: 'الجمعة',
+              WeekDays.saturday: 'السبت',
+            }[this] ??
+            '';
       case false:
       default:
         return {

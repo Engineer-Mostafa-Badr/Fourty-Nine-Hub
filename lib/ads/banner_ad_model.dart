@@ -5,7 +5,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'ad_helper.dart';
 
 class AddBanner extends StatefulWidget {
-  const AddBanner({Key? key}) : super(key: key);
+  const AddBanner({super.key});
 
   @override
   State<AddBanner> createState() => _AddBannerState();
@@ -14,7 +14,7 @@ class AddBanner extends StatefulWidget {
 class _AddBannerState extends State<AddBanner> {
   BannerAd? bannerAd;
   bool _isAdReady = false;
-  AdSize _adSize = AdSize.fullBanner;
+  final AdSize _adSize = AdSize.fullBanner;
 
   void _createBannerAd() {
     bannerAd = BannerAd(
@@ -56,7 +56,7 @@ class _AddBannerState extends State<AddBanner> {
       child: AdWidget(ad: bannerAd!),
     );
   }else{
-    return Container(
+    return const SizedBox(
       width: double.infinity,
       height: 15,
     );

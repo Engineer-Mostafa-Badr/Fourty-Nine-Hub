@@ -14,7 +14,7 @@ class UpdateDoctorPersonalInfo extends StatelessWidget {
     return EditDoctorProfileCard(
       title: LocaleKeys.personalInformation.localize,
       onTap: () {
-        context.push(Routes.EDITDOCTORPERSONALINFO,extra: doctor);
+        context.push(Routes.EDITDOCTORPERSONALINFO, extra: doctor);
       },
     );
   }

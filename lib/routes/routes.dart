@@ -66,8 +66,8 @@ abstract class Routes {
   static const CONTACTSVIEW = '/ContactsView';
   static const MAZADAT = '/Mazadat';
   static const VISITA = '/Visita';
-  static const EMERGENCYREQUESTS= '/Visita/EmergencyRequests';
-  static const ALLAPPOINTMENTS= '/Visita/AllAppointments';
+  static const EMERGENCYREQUESTS = '/Visita/EmergencyRequests';
+  static const ALLAPPOINTMENTS = '/Visita/AllAppointments';
   static const VISITAEMERGENCY = '/Visita/VisitaEmergency';
   static const CREATEDOCTOR = '/Visita/CreateDoctor';
   static const FILTERDOCTORSUBCATEGORY = '/Visita/FilterDoctorSubcategory';
@@ -92,7 +92,8 @@ abstract class Routes {
   static const DOCTORREVIEWS = '/Visita/DoctorReviews';
   static const AllDOCTORREVIEWS = '/Visita/AllDoctorReviews';
   static const DOCTORTODAYAPPOINTMENTS = '/Visita/DoctorTodayAppointments';
-  static const DOCTORUNHANDLEDAPPOINTMENTS = '/Visita/DoctorUnhandledAppointments';
+  static const DOCTORUNHANDLEDAPPOINTMENTS =
+      '/Visita/DoctorUnhandledAppointments';
   static const ALLDOCTORRESERVATIONS = '/Visita/AllDoctorReservations';
   static const FOOD = '/Food';
 
@@ -165,6 +166,7 @@ abstract class Routes {
 
   static const TRIP_JOIN = '/TripJoin';
   static const BE_STAR = '/BeAStar';
+  static const TenPercent = '/TenPercent';
   static const BE_STAR_DETAILS = '/BeAStar/BeAStarDetails';
   static const AVAILABLE_TRIPS = '/AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = '/TripJoinRequestNotification';
@@ -184,7 +186,6 @@ abstract class Routes {
   static const TRIPINFOBYDRIVERSCREEN = '/Ride/TripInfoByDriverScreen';
   static const ALLTRIPNOSOCKETSCREEN = '/Ride/AllTripNoSocketScreen';
   static const TripRideRating = '/Ride/TripRideRating';
-
 }
 
 abstract class Paths {
@@ -331,6 +332,7 @@ abstract class Paths {
 
   static const TRIP_JOIN = 'TripJoin';
   static const BE_STAR = 'BeAStar';
+  static const TenPercent = 'TenPercent';
   static const BE_STAR_DETAILS = 'BeAStarDetails';
   static const AVAILABLE_TRIPS = 'AvailableTrips';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = 'TripJoinRequestNotification';

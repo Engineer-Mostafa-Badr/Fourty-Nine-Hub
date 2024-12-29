@@ -43,7 +43,8 @@ class CommentInputFieldState extends State<CommentInputField> {
               width: 50,
               height: 50,
               isCircle: true,
-              image: context.read<UserCubit>().state.data!.profilePicture??UIConst.profilePlaceHolder,
+              image: context.read<UserCubit>().state.data!.profilePicture ??
+                  UIConst.profilePlaceHolder,
             ),
             SizedBox(width: 10.w),
             Expanded(

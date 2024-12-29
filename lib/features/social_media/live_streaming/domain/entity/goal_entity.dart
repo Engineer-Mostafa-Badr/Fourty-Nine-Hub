@@ -13,7 +13,6 @@ class GoalEntity extends Equatable {
     required this.currentValue,
   });
 
-
   //toJson
   Map<String, dynamic> toJson() => {
         "id": id,

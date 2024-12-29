@@ -5,7 +5,9 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 class TimeUtils {
   /// Calculates the duration since the provided [createdAt] time.
   static Duration calculateDuration(DateTime? createdAt) {
-    return createdAt != null ? DateTime.now().difference(createdAt) : Duration.zero;
+    return createdAt != null
+        ? DateTime.now().difference(createdAt)
+        : Duration.zero;
   }
 
   /// Returns a human-readable time difference (e.g., "3 h", "2 days", or "15 October 2023")
@@ -56,5 +58,4 @@ class TimeUtils {
 
     return monthNames[month - 1];
   }
-
 }

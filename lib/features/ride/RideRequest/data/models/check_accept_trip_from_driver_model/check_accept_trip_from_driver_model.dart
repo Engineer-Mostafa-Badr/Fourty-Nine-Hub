@@ -30,11 +30,13 @@ class CheckAcceptTripFromDriverModel {
   String? otp;
   DateTime? createdAt;
   DateTime? updatedAt;
-
+  String? userPhone;
+  String? driverPhone;
   CheckAcceptTripFromDriverModel({
     this.startLocation,
     this.targetLocation,
     this.id,
+    this.userPhone,
     this.userId,
     this.riderId,
     this.subCategoryId,
@@ -42,6 +44,7 @@ class CheckAcceptTripFromDriverModel {
     this.fromTitle,
     this.toTitle,
     this.profit,
+    this.driverPhone,
     this.autoAccept,
     this.isPremium,
     this.distance,
@@ -84,6 +87,8 @@ class CheckAcceptTripFromDriverModel {
       distance: json['distance'] as int?,
       duration: json['duration'] as int?,
       passengers: json['passengers'] as int?,
+      userPhone: json['userPhone'] as String?,
+      driverPhone: json['driverPhone'] as String?,
       price: double.parse(json['price'].toString()),
       calculateB: json['calculateB'] as int?,
       paymentMethod: json['paymentMethod'] as String?,

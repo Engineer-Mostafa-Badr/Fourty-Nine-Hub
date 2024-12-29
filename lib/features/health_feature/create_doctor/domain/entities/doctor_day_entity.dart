@@ -16,9 +16,9 @@ class DoctorDayEntity {
 
   //toJson
   Map<String, dynamic> toJson() => {
-    'day': day.name.toLowerCase(),
-    'workFrom': from,
-    'workTo': to,
-    'isAvailable': isAvailable
-  };
+        'day': day.name.toLowerCase(),
+        'workFrom': from,
+        'workTo': to,
+        'isAvailable': isAvailable
+      };
 }

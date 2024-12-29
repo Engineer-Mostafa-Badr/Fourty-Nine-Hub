@@ -6,11 +6,9 @@ import 'package:fourtyninehub/features/health_feature/emergency/domain/usecases/
 part 'emergency_requests_state.dart';
 
 class EmergencyRequestsCubit extends Cubit<EmergencyRequestsState> {
-  EmergencyRequestsCubit( this._getEmergencyRequestsUseCase)
+  EmergencyRequestsCubit(this._getEmergencyRequestsUseCase)
       : super(const EmergencyRequestsState());
   final GetEmergencyRequestsUseCase _getEmergencyRequestsUseCase;
-
-
 
   List<EmergencyEntity> emergencies = [];
   bool isLoadingMore = false;
@@ -26,19 +24,24 @@ class EmergencyRequestsCubit extends Cubit<EmergencyRequestsState> {
     await getEmergencies(subCategoryId);
   }
 
-  getEmergencies(String subCategoryId) async{
+  getEmergencies(String subCategoryId) async {
     if (!hasMoreData || isLoadingMore) return;
 
     isLoadingMore = true;
 
     final response = await _getEmergencyRequestsUseCase(
-      GetEmergencyRequestsParams( page: currentPage, limit: pageSize, subCategoryId: subCategoryId,),
+      GetEmergencyRequestsParams(
+        page: currentPage,
+        limit: pageSize,
+        subCategoryId: subCategoryId,
+      ),
     );
 
     response.fold(
-          (failure) => emit(state.copyWith(failure: failure, status: EmergencyRequestsStates.error)),
-          (data) {
-            emergencies.addAll(data);
+      (failure) => emit(state.copyWith(
+          failure: failure, status: EmergencyRequestsStates.error)),
+      (data) {
+        emergencies.addAll(data);
 
         if (data.length < pageSize) {
           hasMoreData = false;
@@ -51,6 +54,4 @@ class EmergencyRequestsCubit extends Cubit<EmergencyRequestsState> {
       },
     );
   }
-
-
 }

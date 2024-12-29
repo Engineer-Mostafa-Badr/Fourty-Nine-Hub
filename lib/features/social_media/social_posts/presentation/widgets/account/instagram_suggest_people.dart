@@ -65,7 +65,8 @@ class _InstagramProfileSuggestPeopleState
                       child: PagedListView<int, SuggestUserEntity>(
                         scrollDirection: Axis.horizontal,
                         padding: EdgeInsets.symmetric(
-                            vertical: 8.h,),
+                          vertical: 8.h,
+                        ),
                         pagingController:
                             controller.suggestUserPagingController,
                         shrinkWrap: true,
@@ -77,8 +78,7 @@ class _InstagramProfileSuggestPeopleState
                                   print(controller.suggestUserPagingController
                                       .itemList?.length);
                                   return Padding(
-                                      padding:
-                                           EdgeInsets.only(top: 400.h),
+                                      padding: EdgeInsets.only(top: 400.h),
                                       child: Center(
                                         child: Label(
                                           text: LocaleKeys
@@ -101,11 +101,9 @@ class _InstagramProfileSuggestPeopleState
                                     },
                                     child: Container(
                                       width: 320.w,
-                                      padding:
-                                           EdgeInsets.only(bottom: 10.h),
-                                      margin:
-                                          const EdgeInsetsDirectional.only(
-                                              end: 10),
+                                      padding: EdgeInsets.only(bottom: 10.h),
+                                      margin: const EdgeInsetsDirectional.only(
+                                          end: 10),
                                       decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(8.r),
@@ -121,30 +119,39 @@ class _InstagramProfileSuggestPeopleState
                                               children: [
                                                 Align(
                                                   alignment:
-                                                  AlignmentDirectional.topEnd,
+                                                      AlignmentDirectional
+                                                          .topEnd,
                                                   child: Padding(
-                                                    padding:  EdgeInsets.all(8.w),
+                                                    padding:
+                                                        EdgeInsets.all(8.w),
                                                     child: InkWell(
                                                       onTap: () async {
-                                                        bool data = await controller
-                                                            .removeSuggestUser(
-                                                            context: context,
-                                                            userId: item.id);
+                                                        bool data =
+                                                            await controller
+                                                                .removeSuggestUser(
+                                                                    context:
+                                                                        context,
+                                                                    userId: item
+                                                                        .id);
                                                         if (data == true) {
                                                           controller
                                                               .suggestUserPagingController
                                                               .itemList
                                                               ?.removeWhere((e) =>
-                                                          e.id ==
-                                                              controller
-                                                                  .suggestUserPagingController
-                                                                  .itemList?[
-                                                              index]
-                                                                  .id);
+                                                                  e.id ==
+                                                                  controller
+                                                                      .suggestUserPagingController
+                                                                      .itemList?[
+                                                                          index]
+                                                                      .id);
                                                           setState(() {});
                                                         }
                                                       },
-                                                      child: const Icon(Icons.close,color: AppColors.GREY_NORMAL_COLOR,),
+                                                      child: const Icon(
+                                                        Icons.close,
+                                                        color: AppColors
+                                                            .GREY_NORMAL_COLOR,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -160,9 +167,8 @@ class _InstagramProfileSuggestPeopleState
                                             ),
                                           ),
                                           Padding(
-                                            padding:
-                                                 EdgeInsets.symmetric(
-                                                    horizontal: 12.w),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 12.w),
                                             child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
@@ -174,7 +180,8 @@ class _InstagramProfileSuggestPeopleState
                                                   text:
                                                       "${item.firstName} ${item.lastName}",
                                                   maxLines: 1,
-                                                  style: Styles.mediumText(fontSize: 65.sp),
+                                                  style: Styles.mediumText(
+                                                      fontSize: 65.sp),
                                                 ),
                                                 SizedBox(
                                                   height: 10.h,
@@ -198,15 +205,14 @@ class _InstagramProfileSuggestPeopleState
                                                         children: [
                                                           Expanded(
                                                             child: InkWell(
-                                                              onTap:
-                                                                  () async {
+                                                              onTap: () async {
                                                                 if (item.followSuccessfully ==
                                                                     false) {
                                                                   var response = await controller.followRequest(
                                                                       context:
                                                                           context,
-                                                                      userId:
-                                                                          item.id);
+                                                                      userId: item
+                                                                          .id);
                                                                   if (response ==
                                                                       true) {
                                                                     item.followSuccessfully =
@@ -228,12 +234,14 @@ class _InstagramProfileSuggestPeopleState
                                                                             AppColors.BACKGROUND_COLOR,
                                                                         surfaceTintColor:
                                                                             AppColors.BACKGROUND_COLOR,
-                                                                        shape:
-                                                                            OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
+                                                                        shape: OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(4)),
                                                                         title:
                                                                             Label(
-                                                                          text:
-                                                                              LocaleKeys.enterGreetMessage.localize,
+                                                                          text: LocaleKeys
+                                                                              .enterGreetMessage
+                                                                              .localize,
                                                                           style:
                                                                               Styles.headerText(),
                                                                         ),
@@ -256,16 +264,19 @@ class _InstagramProfileSuggestPeopleState
                                                                         ),
                                                                         actions: <Widget>[
                                                                           TextButton(
-                                                                            onPressed: () {
+                                                                            onPressed:
+                                                                                () {
                                                                               Navigator.of(context).pop(); // Close the dialog
                                                                             },
-                                                                            child: Label(
+                                                                            child:
+                                                                                Label(
                                                                               text: LocaleKeys.cancel.localize,
                                                                               style: Styles.headerText(),
                                                                             ),
                                                                           ),
                                                                           InkWell(
-                                                                            onTap: () async {
+                                                                            onTap:
+                                                                                () async {
                                                                               if (messageController.text.isNotEmpty) {
                                                                                 await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
                                                                                 controller.suggestUserPagingController.itemList?.removeWhere((element) => element.id == controller.suggestUserPagingController.itemList?[index].id);
@@ -274,7 +285,8 @@ class _InstagramProfileSuggestPeopleState
                                                                                 setState(() {});
                                                                               }
                                                                             },
-                                                                            child: Container(
+                                                                            child:
+                                                                                Container(
                                                                               width: 100,
                                                                               padding: const EdgeInsets.all(5),
                                                                               decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(15)),
@@ -291,42 +303,43 @@ class _InstagramProfileSuggestPeopleState
                                                                   );
                                                                 }
                                                               },
-                                                              child: item.sendWelcomeSuccessfully ==
-                                                                      true
-                                                                  ? Label(
-                                                                      text: LocaleKeys
-                                                                          .messageSentSuccessfully
-                                                                          .localize,
-                                                                      style: Styles
-                                                                          .headerText(),
-                                                                    )
-                                                                  : Container(
-                                                                      height:
-                                                                          55.h,
-                                                                      alignment:
-                                                                          Alignment.center,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        border: item.followSuccessfully == true
-                                                                            ? Border.all()
-                                                                            : null,
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(12.r),
-                                                                        color: item.followSuccessfully == false
-                                                                            ? AppColors.PRIMARY_COLOR
-                                                                            : Colors.white,
-                                                                      ),
-                                                                      child:
-                                                                          Label(
-                                                                        text: item.followSuccessfully == false
-                                                                            ? LocaleKeys.follow.localize
-                                                                            : LocaleKeys.sendGreetMessage.localize,
-                                                                        style: Styles.mediumText(
-                                                                          fontSize: 65.sp,
-                                                                            color: item.followSuccessfully == true ? AppColors.PRIMARY_COLOR_DARK : Colors.white,
-                                                                            fontWeight: FontWeight.bold),
-                                                                      ),
-                                                                    ),
+                                                              child:
+                                                                  item.sendWelcomeSuccessfully ==
+                                                                          true
+                                                                      ? Label(
+                                                                          text: LocaleKeys
+                                                                              .messageSentSuccessfully
+                                                                              .localize,
+                                                                          style:
+                                                                              Styles.headerText(),
+                                                                        )
+                                                                      : Container(
+                                                                          height:
+                                                                              55.h,
+                                                                          alignment:
+                                                                              Alignment.center,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            border: item.followSuccessfully == true
+                                                                                ? Border.all()
+                                                                                : null,
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(12.r),
+                                                                            color: item.followSuccessfully == false
+                                                                                ? AppColors.PRIMARY_COLOR
+                                                                                : Colors.white,
+                                                                          ),
+                                                                          child:
+                                                                              Label(
+                                                                            text: item.followSuccessfully == false
+                                                                                ? LocaleKeys.follow.localize
+                                                                                : LocaleKeys.sendGreetMessage.localize,
+                                                                            style: Styles.mediumText(
+                                                                                fontSize: 65.sp,
+                                                                                color: item.followSuccessfully == true ? AppColors.PRIMARY_COLOR_DARK : Colors.white,
+                                                                                fontWeight: FontWeight.bold),
+                                                                          ),
+                                                                        ),
                                                             ),
                                                           ),
                                                         ],
@@ -341,8 +354,8 @@ class _InstagramProfileSuggestPeopleState
                                 },
                                 noMoreItemsIndicatorBuilder: (context) =>
                                     Container(),
-                                firstPageProgressIndicatorBuilder:
-                                    (context) => const Center(
+                                firstPageProgressIndicatorBuilder: (context) =>
+                                    const Center(
                                         child: CupertinoActivityIndicator()),
                                 newPageProgressIndicatorBuilder: (context) =>
                                     const Center(

@@ -8,10 +8,10 @@ import android.util.Log
 
 class BootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
-        if (intent?.action == Intent.ACTION_BOOT_COMPLETED) {
+       // if (intent?.action == Intent.ACTION_BOOT_COMPLETED) {
             // Start the WebSocketService when the device is rebooted
-            val serviceIntent = Intent(context, WebSocketService::class.java)
-            context.startForegroundService(serviceIntent)
-        }
+            //val serviceIntent = Intent(context, WebSocketService::class.java)
+            //context.startForegroundService(serviceIntent)
+       // }
     }
 }

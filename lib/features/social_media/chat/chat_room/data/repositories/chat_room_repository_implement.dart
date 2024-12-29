@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasour
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/clear_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_chat_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_one_time_view_message_usecase.dart';
@@ -19,6 +20,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/set_record_as_listened.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/unpin_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/update_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 
 class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   final MessagesRemoteDataSource _chatRemoteDataSource;
@@ -104,7 +107,6 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   Future<Either<Failure, bool>> startRecording({required String chatId}) {
     return _chatRemoteDataSource.startRecording(chatId: chatId);
   }
-
   
   @override
   Future<Either<Failure, bool>> stopRecording({required String chatId}) {
@@ -164,5 +166,20 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   @override
   Future<Either<Failure, String?>> getChatPinnedMessage(GetChatParams params) async{
     return await _chatRemoteDataSource.getChatPinnedMessage(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateChat(UpdateChatParams params) {
+    return _chatRemoteDataSource.updateChat(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteMessage(DeleteMessageParams params) {
+    return _chatRemoteDataSource.deleteMessage(params);
+  }
+  
+  @override
+  void listenToDeleteMessage(Function(DeleteMessageParams p1) params) {
+    _chatRemoteDataSource.listenToDeleteMessage(params);
   }
 }

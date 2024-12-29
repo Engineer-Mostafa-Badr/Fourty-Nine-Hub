@@ -80,13 +80,17 @@ class BottomSheetContentState extends State<BottomSheetContent> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                if(widget.goals?.isNotEmpty??false)...[Text("Live Goals:",style: Styles.headerText(),),
+                if (widget.goals?.isNotEmpty ?? false) ...[
+                  Text(
+                    "Live Goals:",
+                    style: Styles.headerText(),
+                  ),
                   SizedBox(
                     height: 180.h,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       padding: EdgeInsets.zero,
-                      itemCount: (widget.goals?.length??0),
+                      itemCount: (widget.goals?.length ?? 0),
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return _buildGiftItemForSelect(
@@ -99,11 +103,15 @@ class BottomSheetContentState extends State<BottomSheetContent> {
                     ),
                   ),
                 ],
-                Text("Live Gifts:",style: Styles.headerText(),),
+                Text(
+                  "Live Gifts:",
+                  style: Styles.headerText(),
+                ),
                 Expanded(
                   child: GridView.builder(
                     controller: _scrollController,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: crossAxisCount,
                       childAspectRatio: 1 / 0.95, // Adjust aspect ratio
                     ),
@@ -123,7 +131,8 @@ class BottomSheetContentState extends State<BottomSheetContent> {
                               receiverId: widget.receiverId);
                         }
                       } else {
-                        return const Center(child: CupertinoActivityIndicator());
+                        return const Center(
+                            child: CupertinoActivityIndicator());
                       }
                     },
                   ),
@@ -134,7 +143,6 @@ class BottomSheetContentState extends State<BottomSheetContent> {
         } else if (state is GiftsError) {
           return Center(
               child: Text(state.message,
-
                   style: const TextStyle(color: Colors.white)));
         } else {
           return Container();
@@ -364,7 +372,6 @@ class BottomSheetContentState extends State<BottomSheetContent> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         ),
         child: Text(LocaleKeys.ok.tr(),
-
             style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.normal)),
       ),
       if (isError)
@@ -381,7 +388,6 @@ class BottomSheetContentState extends State<BottomSheetContent> {
           ),
           child: Text(
             LocaleKeys.gift_body_charge_wallet.tr(),
-
             style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.normal),
           ),
         ),
@@ -512,13 +518,13 @@ Future<void> showGiftBottomSheet(BuildContext context,
                           padding: const EdgeInsets.all(4.0),
                           child: OutlinedButton(
                             style: ButtonStyle(
-                              side: const MaterialStatePropertyAll(BorderSide(
+                              side: const WidgetStatePropertyAll(BorderSide(
                                   width: 1, color: AppColors.ACCENT_COLOR)),
                               iconColor:
-                                  const MaterialStatePropertyAll(Colors.white),
+                                  const WidgetStatePropertyAll(Colors.white),
                               backgroundColor: context.isDarkMode
-                                  ? const MaterialStatePropertyAll(Colors.black)
-                                  : MaterialStatePropertyAll(
+                                  ? const WidgetStatePropertyAll(Colors.black)
+                                  : WidgetStatePropertyAll(
                                       Colors.grey.withOpacity(0.9)),
                             ),
                             onPressed: () {
@@ -603,7 +609,7 @@ pleaseLoginWidget(context) {
         child: OutlinedButton(
           onPressed: () => context.push(Routes.LOGIN),
           style: ButtonStyle(
-              foregroundColor: MaterialStatePropertyAll(
+              foregroundColor: WidgetStatePropertyAll(
                   context.isDarkMode ? Colors.white70 : Colors.black87)),
           child: FittedBox(
             child: Text(

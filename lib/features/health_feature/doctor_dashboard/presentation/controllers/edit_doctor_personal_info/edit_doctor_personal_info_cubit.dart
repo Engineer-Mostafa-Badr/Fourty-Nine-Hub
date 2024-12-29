@@ -24,7 +24,11 @@ class EditDoctorPersonalInfoCubit extends Cubit<EditDoctorPersonalInfoState> {
   final GetCitiesUseCase _getCitiesUseCase;
   final GetHealthSubcategoriesUseCase _getHealthSubcategoriesUseCase;
   final UpdateDoctorPersonalInfoUsecase _updateDoctorPersonalInfoUsecase;
-  EditDoctorPersonalInfoCubit(this._getGovernoratesUseCase, this._getCitiesUseCase, this._getHealthSubcategoriesUseCase, this._updateDoctorPersonalInfoUsecase)
+  EditDoctorPersonalInfoCubit(
+      this._getGovernoratesUseCase,
+      this._getCitiesUseCase,
+      this._getHealthSubcategoriesUseCase,
+      this._updateDoctorPersonalInfoUsecase)
       : super(const EditDoctorPersonalInfoState());
 
   final TextEditingController firstNameController = TextEditingController();
@@ -38,23 +42,27 @@ class EditDoctorPersonalInfoCubit extends Cubit<EditDoctorPersonalInfoState> {
     await getGovernorates(id: data.address.governorateId);
     await getSubCategories();
     emit(state.copyWith(status: EditDoctorPersonalInfoStates.success));
-
-
   }
 
-  initData(DoctorEntity data){
-    firstNameController.text=data.firstName;
-    lastNameController.text=data.lastName;
-    addressController.text=data.address.address;
-    phoneController.text=data.phone;
+  initData(DoctorEntity data) {
+    firstNameController.text = data.firstName;
+    lastNameController.text = data.lastName;
+    addressController.text = data.address.address;
+    phoneController.text = data.phone;
     print("data.address.cityId${data.address.cityId}");
-    emit(state.copyWith(selectedSpeciality: data.subCategory.id,selectedGovernorateId: data.address.governorateId,selectedCityId: data.address.cityId));
+    emit(state.copyWith(
+        selectedSpeciality: data.subCategory.id,
+        selectedGovernorateId: data.address.governorateId,
+        selectedCityId: data.address.cityId));
   }
 
   getGovernorates({String? id}) async {
     final response = await _getGovernoratesUseCase.call(const NoParams());
-    response.fold((failure) => emit(state.copyWith(failure: failure, status: EditDoctorPersonalInfoStates.error)), (governorates) {
-      if(id!=null&&governorates.isNotEmpty){
+    response.fold(
+        (failure) => emit(state.copyWith(
+            failure: failure,
+            status: EditDoctorPersonalInfoStates.error)), (governorates) {
+      if (id != null && governorates.isNotEmpty) {
         getCities(id);
       }
       emit(state.copyWith(governorates: governorates));
@@ -64,66 +72,73 @@ class EditDoctorPersonalInfoCubit extends Cubit<EditDoctorPersonalInfoState> {
   getCities(String governorateId) async {
     emit(state.copyWith(status: EditDoctorPersonalInfoStates.loadCities));
     final response = await _getCitiesUseCase.call(governorateId);
-    response.fold((failure) => emit(state.copyWith(failure: failure, status: EditDoctorPersonalInfoStates.error)), (data) => emit(state.copyWith(cities: data,status: EditDoctorPersonalInfoStates.loadCitiesSuccess)));
+    response.fold(
+        (failure) => emit(state.copyWith(
+            failure: failure, status: EditDoctorPersonalInfoStates.error)),
+        (data) => emit(state.copyWith(
+            cities: data,
+            status: EditDoctorPersonalInfoStates.loadCitiesSuccess)));
   }
 
   Future<void> getSubCategories() async {
     final userId = UserCubit.to.state.data?.id;
 
-      final response =
-      await _getHealthSubcategoriesUseCase.call(userId??'');
-      response
-          .fold((failure) => emit(state.copyWith(status: EditDoctorPersonalInfoStates.error, failure: failure)),
-              (data) {
-
-            emit(state.copyWith(speciality: data));
-          });
-
+    final response = await _getHealthSubcategoriesUseCase.call(userId ?? '');
+    response.fold(
+        (failure) => emit(state.copyWith(
+            status: EditDoctorPersonalInfoStates.error,
+            failure: failure)), (data) {
+      emit(state.copyWith(speciality: data));
+    });
   }
 
   void onSelectGovernorate(String id) {
-    if(state.selectedGovernorateId!=null&&state.selectedGovernorateId==id)return;
-    emit(state.copyWith(selectedGovernorateId: id,selectedCityId: ''));
+    if (state.selectedGovernorateId != null &&
+        state.selectedGovernorateId == id) {
+      return;
+    }
+    emit(state.copyWith(selectedGovernorateId: id, selectedCityId: ''));
     print("state.governorateCubit${state.selectedGovernorateId}");
     print("state.cityCubit${state.selectedCityId}");
 
     getCities(id);
   }
+
   onSelectInitialGovernorate(String id) {
-    String selectedId = state.governorates?.firstWhere((element) => element.nameEn==id).id??'';
-    emit(state.copyWith(selectedGovernorateId: selectedId,selectedCityId: ''));
+    String selectedId =
+        state.governorates?.firstWhere((element) => element.nameEn == id).id ??
+            '';
+    emit(state.copyWith(selectedGovernorateId: selectedId, selectedCityId: ''));
     print("state.governorateCubit${state.selectedGovernorateId}");
     print("state.cityCubit${state.selectedCityId}");
 
     getCities(selectedId);
   }
 
-  updateDoctorPersonalInfo(BuildContext context)async{
+  updateDoctorPersonalInfo(BuildContext context) async {
     final response =
         await _updateDoctorPersonalInfoUsecase.call(DoctorPersonalInfoParams(
-          firstName: firstNameController.text,
-          lastName: lastNameController.text,
-          address: addressController.text,
-          phone: phoneController.text,
-          governorateId: state.selectedGovernorateId??'',
-          cityId: state.selectedCityId??'',
-          subCategoryId: state.selectedSpeciality??'',
-        ));
+      firstName: firstNameController.text,
+      lastName: lastNameController.text,
+      address: addressController.text,
+      phone: phoneController.text,
+      governorateId: state.selectedGovernorateId ?? '',
+      cityId: state.selectedCityId ?? '',
+      subCategoryId: state.selectedSpeciality ?? '',
+    ));
 
-    response
-        .fold((failure) {
-          showErrorMessage(context, getFailureMessage(failure, context));
-          emit(state.copyWith(status: EditDoctorPersonalInfoStates.error, failure: failure));
-        },
-            (data) {
-          showSuccessMessage(context, LocaleKeys.updateSuccessfully.localize);
-          context.pop(true);
-        });
-
+    response.fold((failure) {
+      showErrorMessage(context, getFailureMessage(failure, context));
+      emit(state.copyWith(
+          status: EditDoctorPersonalInfoStates.error, failure: failure));
+    }, (data) {
+      showSuccessMessage(context, LocaleKeys.updateSuccessfully.localize);
+      context.pop(true);
+    });
   }
 
   void onSelectCity(String id) {
-    if(state.selectedCityId!=null&&state.selectedCityId==id)return;
+    if (state.selectedCityId != null && state.selectedCityId == id) return;
     emit(state.copyWith(selectedCityId: id));
     print("state.governorateCubit${state.selectedGovernorateId}");
     print("state.cityCubit${state.selectedCityId}");

@@ -4,6 +4,9 @@ class WorkDayEntity {
   final String workFrom;
   final String workTo;
 
-  WorkDayEntity({required this.id, required this.day, required this.workFrom, required this.workTo});
-
+  WorkDayEntity(
+      {required this.id,
+      required this.day,
+      required this.workFrom,
+      required this.workTo});
 }

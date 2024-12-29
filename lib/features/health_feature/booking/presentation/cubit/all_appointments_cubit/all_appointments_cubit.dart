@@ -18,8 +18,12 @@ class AllAppointmentsCubit extends Cubit<AllAppointmentsState> {
   final DoctorAcceptAppointmentUsecase _doctorAcceptAppointmentUseCase;
   final DoctorCancelAppointmentUseCase _doctorCancelAppointmentUseCase;
   final DoctorRejectAppointmentUsecase _doctorRejectAppointmentUsecase;
-  AllAppointmentsCubit(this._getAdRequestsUseCase, this._doctorAcceptAppointmentUseCase, this._doctorRejectAppointmentUsecase, this._doctorCancelAppointmentUseCase) : super(const AllAppointmentsState());
-
+  AllAppointmentsCubit(
+      this._getAdRequestsUseCase,
+      this._doctorAcceptAppointmentUseCase,
+      this._doctorRejectAppointmentUsecase,
+      this._doctorCancelAppointmentUseCase)
+      : super(const AllAppointmentsState());
 
   TextEditingController searchController = TextEditingController();
   List<AllAppointmentEntity> appointments = [];
@@ -27,7 +31,6 @@ class AllAppointmentsCubit extends Cubit<AllAppointmentsState> {
   bool hasMoreData = true;
   int currentPage = 1;
   int pageSize = 10;
-
 
   void loadInitialData() async {
     emit(state.copyWith(status: AllAppointmentsStates.loading));
@@ -47,8 +50,9 @@ class AllAppointmentsCubit extends Cubit<AllAppointmentsState> {
     );
 
     response.fold(
-          (failure) => emit(state.copyWith(failure: failure, status: AllAppointmentsStates.error)),
-          (data) {
+      (failure) => emit(state.copyWith(
+          failure: failure, status: AllAppointmentsStates.error)),
+      (data) {
         appointments.addAll(data);
 
         if (data.length < pageSize) {
@@ -63,48 +67,65 @@ class AllAppointmentsCubit extends Cubit<AllAppointmentsState> {
     );
   }
 
-
-  Future<void> acceptAppointment(String appointmentId,BuildContext context) async {
+  Future<void> acceptAppointment(
+      String appointmentId, BuildContext context) async {
     emit(state.copyWith(status: AllAppointmentsStates.startLoading));
     final response = await _doctorAcceptAppointmentUseCase.call(appointmentId);
     emit(state.copyWith(status: AllAppointmentsStates.endLoading));
     response.fold(
-          (l) => emit(state.copyWith(status: AllAppointmentsStates.error)),
-          (r) {
-            appointments.firstWhereOrNull((element)=>element.id==appointmentId)?.status='accepted';
-        showSuccessMessage(context, context.isArabic?'تم قبول الحجز بنجاح':'Appointment Accepted Successfully');
+      (l) => emit(state.copyWith(status: AllAppointmentsStates.error)),
+      (r) {
+        appointments
+            .firstWhereOrNull((element) => element.id == appointmentId)
+            ?.status = 'accepted';
+        showSuccessMessage(
+            context,
+            context.isArabic
+                ? 'تم قبول الحجز بنجاح'
+                : 'Appointment Accepted Successfully');
         emit(state.copyWith(status: AllAppointmentsStates.success));
       },
     );
   }
 
-  Future<void> cancelAppointment(String appointmentId,BuildContext context) async {
+  Future<void> cancelAppointment(
+      String appointmentId, BuildContext context) async {
     emit(state.copyWith(status: AllAppointmentsStates.startLoading));
     final response = await _doctorCancelAppointmentUseCase.call(appointmentId);
     emit(state.copyWith(status: AllAppointmentsStates.endLoading));
     response.fold(
-          (l) => emit(state.copyWith(status: AllAppointmentsStates.error)),
-          (r) {
-            appointments.removeWhere((element)=>element.bookingId==appointmentId);
-        showSuccessMessage(context, context.isArabic?'تم إلغاء الحجز بنجاح':'Appointment Cancelled Successfully');
+      (l) => emit(state.copyWith(status: AllAppointmentsStates.error)),
+      (r) {
+        appointments
+            .removeWhere((element) => element.bookingId == appointmentId);
+        showSuccessMessage(
+            context,
+            context.isArabic
+                ? 'تم إلغاء الحجز بنجاح'
+                : 'Appointment Cancelled Successfully');
         emit(state.copyWith(status: AllAppointmentsStates.success));
       },
     );
   }
 
-  Future<void> rejectAppointment(String appointmentId,BuildContext context) async {
+  Future<void> rejectAppointment(
+      String appointmentId, BuildContext context) async {
     emit(state.copyWith(status: AllAppointmentsStates.startLoading));
     final response = await _doctorRejectAppointmentUsecase.call(appointmentId);
     emit(state.copyWith(status: AllAppointmentsStates.endLoading));
     response.fold(
-          (l) => emit(state.copyWith(status: AllAppointmentsStates.error)),
-          (r) {
-            appointments.firstWhereOrNull((element)=>element.id==appointmentId)?.status='rejected';
-        showSuccessMessage(context, context.isArabic?'تم رفض الحجز بنجاح':'Appointment Rejected Successfully');
-            emit(state.copyWith(status: AllAppointmentsStates.success));
+      (l) => emit(state.copyWith(status: AllAppointmentsStates.error)),
+      (r) {
+        appointments
+            .firstWhereOrNull((element) => element.id == appointmentId)
+            ?.status = 'rejected';
+        showSuccessMessage(
+            context,
+            context.isArabic
+                ? 'تم رفض الحجز بنجاح'
+                : 'Appointment Rejected Successfully');
+        emit(state.copyWith(status: AllAppointmentsStates.success));
       },
     );
   }
-
-
 }

@@ -34,8 +34,10 @@ class AllAppointmentsCard extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(vertical: 5.h),
             child: Label(
-                text: '${appointment.appointmentType.toBookingType.translatedName} ${LocaleKeys.booking.localize}: \n${LocaleKeys.from.localize} ${appointment.startTime} ${LocaleKeys.to.localize} ${appointment.endTime}',
-                style: Styles.mediumText(color: Theme.of(context).primaryColor)),
+                text:
+                    '${appointment.appointmentType.toBookingType.translatedName} ${LocaleKeys.booking.localize}: \n${LocaleKeys.from.localize} ${appointment.startTime} ${LocaleKeys.to.localize} ${appointment.endTime}',
+                style:
+                    Styles.mediumText(color: Theme.of(context).primaryColor)),
           ),
           const Divider(
             color: AppColors.DARK_GRAY_COLOR,
@@ -46,7 +48,9 @@ class AllAppointmentsCard extends StatelessWidget {
                 radius: 10,
                 height: kToolbarHeight,
                 width: kToolbarHeight,
-                source: AssetImage(appointment.gender=='male'?Assets.maleImagePlaceholder:Assets.femaleImagePlacehlder),
+                source: AssetImage(appointment.gender == 'male'
+                    ? Assets.maleImagePlaceholder
+                    : Assets.femaleImagePlacehlder),
               ),
               const Sizer(),
               Expanded(
@@ -67,25 +71,57 @@ class AllAppointmentsCard extends StatelessWidget {
             ],
           ),
           const Sizer(),
-          if(appointment.status=='pending')Row(
-            children: [
-              Expanded(
-                child: AppButton(label: LocaleKeys.Accept.localize,backColor: AppColors.PRIMARY_COLOR,padding: 30.w, onPressed: (){
-                  context.read<AllAppointmentsCubit>().acceptAppointment(appointment.id, context);
-                },style: Styles.mediumText(color: Colors.white),),
-              ),
-              const Sizer(),
-              Expanded(
-                child: AppButton(label: LocaleKeys.reject.localize,backColor: AppColors.SECONDARY_COLOR,padding: 30.w, onPressed: (){
-                  context.read<AllAppointmentsCubit>().rejectAppointment(appointment.id, context);
-                },style: Styles.mediumText(color: Colors.white),),
-              )
-            ],
-          ),
-          if(appointment.status=='rejected')Center(child: Label(text: LocaleKeys.rejectedAppointment.localize,style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),)),
-          if(appointment.status=='accepted')AppButton(label: LocaleKeys.cancel.localize,backColor: AppColors.PRIMARY_COLOR,padding: 30.w, onPressed: (){
-            context.read<AllAppointmentsCubit>().cancelAppointment(appointment.bookingId, context);
-              },style: Styles.mediumText(color: Colors.white),)],
+          if (appointment.status == 'pending')
+            Row(
+              children: [
+                Expanded(
+                  child: AppButton(
+                    label: LocaleKeys.Accept.localize,
+                    backColor: AppColors.PRIMARY_COLOR,
+                    padding: 30.w,
+                    onPressed: () {
+                      context
+                          .read<AllAppointmentsCubit>()
+                          .acceptAppointment(appointment.id, context);
+                    },
+                    style: Styles.mediumText(color: Colors.white),
+                  ),
+                ),
+                const Sizer(),
+                Expanded(
+                  child: AppButton(
+                    label: LocaleKeys.reject.localize,
+                    backColor: AppColors.SECONDARY_COLOR,
+                    padding: 30.w,
+                    onPressed: () {
+                      context
+                          .read<AllAppointmentsCubit>()
+                          .rejectAppointment(appointment.id, context);
+                    },
+                    style: Styles.mediumText(color: Colors.white),
+                  ),
+                )
+              ],
+            ),
+          if (appointment.status == 'rejected')
+            Center(
+                child: Label(
+              text: LocaleKeys.rejectedAppointment.localize,
+              style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
+            )),
+          if (appointment.status == 'accepted')
+            AppButton(
+              label: LocaleKeys.cancel.localize,
+              backColor: AppColors.PRIMARY_COLOR,
+              padding: 30.w,
+              onPressed: () {
+                context
+                    .read<AllAppointmentsCubit>()
+                    .cancelAppointment(appointment.bookingId, context);
+              },
+              style: Styles.mediumText(color: Colors.white),
+            )
+        ],
       ),
     );
   }

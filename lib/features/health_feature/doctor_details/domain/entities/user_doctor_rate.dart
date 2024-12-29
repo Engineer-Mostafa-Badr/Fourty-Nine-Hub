@@ -10,7 +10,11 @@ class UserDoctorRateEntity extends DoctorRateEntity {
   UserDoctorRateEntity(
       {required super.id,
       required super.comment,
-        this.phone,this.userId, this.gender,this.createdAt, this.openCall,
+      this.phone,
+      this.userId,
+      this.gender,
+      this.createdAt,
+      this.openCall,
       required super.rate,
       required this.userName});
 }

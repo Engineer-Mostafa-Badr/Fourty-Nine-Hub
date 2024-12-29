@@ -17,7 +17,7 @@ class CreateDoctorSubmitButton extends StatelessWidget {
             onPressed: () {
               context.read<CreateDoctorCubit>().submit(context);
             },
-            label: context.isArabic?'ارسال':'Submit',
+            label: context.isArabic ? 'ارسال' : 'Submit',
             textStyle: Styles.headerText().copyWith(color: Colors.white),
           ),
         ),

@@ -11,7 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import  'package:gallery_saver/gallery_saver.dart';
+// import 'package:gallery_saver/gallery_saver.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../shared/filter_utiles.dart';
@@ -86,17 +86,14 @@ class MixVoiceVideoRecordingScreenState
   }
 
   Future<void> _loadAndPlayAudio() async {
-
-      await _audioPlayer.setUrl(widget.voiceUrl);
-      log('loaded ${widget.voiceUrl}');
-      _audioPlayer.setLoopMode(LoopMode.one);
-
+    await _audioPlayer.setUrl(widget.voiceUrl);
+    log('loaded ${widget.voiceUrl}');
+    _audioPlayer.setLoopMode(LoopMode.one);
   }
 
   Future<void> _initCamera() async {
-      cameras = await availableCameras();
-      await _initializeCameraController(cameras[isFrontCamera ? 1 : 0]);
-
+    cameras = await availableCameras();
+    await _initializeCameraController(cameras[isFrontCamera ? 1 : 0]);
   }
 
   void _initializeAnimationController() {
@@ -135,23 +132,22 @@ class MixVoiceVideoRecordingScreenState
   void _startRecording() async {
     if (_controller!.value.isRecordingVideo) return;
 
-       final directory = await getTemporaryDirectory();
-      videoPath =
-          '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
-      await _controller!.startVideoRecording();
-      setState(() {
-        showUploadReelButton = false;
+    final directory = await getTemporaryDirectory();
+    videoPath =
+        '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
+    await _controller!.startVideoRecording();
+    setState(() {
+      showUploadReelButton = false;
 
-        isRecording = true;
-        showGalleryBtn = false;
-      });
+      isRecording = true;
+      showGalleryBtn = false;
+    });
 
-      _animationController.reset();
-      _animationController.forward();
-      _startTimers();
-      _audioPlayer.setVolume(0.5);
-      _audioPlayer.play(); // Start the audio playback
-
+    _animationController.reset();
+    _animationController.forward();
+    _startTimers();
+    _audioPlayer.setVolume(0.5);
+    _audioPlayer.play(); // Start the audio playback
   }
 
   void _startTimers() {
@@ -194,7 +190,7 @@ class MixVoiceVideoRecordingScreenState
   Future<bool?> _mergeVideoWithAudio() async {
     final directory = await getTemporaryDirectory();
     mergedVideoPath =
-    '${directory.path}/merged_${DateTime.now().millisecondsSinceEpoch}.mp4';
+        '${directory.path}/merged_${DateTime.now().millisecondsSinceEpoch}.mp4';
 
     // Combine the selected filter with the horizontal flip (if any filter exists)
     final filterCommand = _selectedFilter?.ffmpegFilter != null
@@ -211,7 +207,6 @@ class MixVoiceVideoRecordingScreenState
       mergedVideoPath!,
     ];
 
-
     log("Executing FFmpeg command: ${commandArgs.join(' ')}");
 
     final session = await FFmpegKit.executeWithArguments(commandArgs);
@@ -221,15 +216,15 @@ class MixVoiceVideoRecordingScreenState
     log('stats length ${stats.length.toString()}');
     log('logs ${logs.toString()}');
     log('returned ${returned?.getValue().toString()}');
-    final savedSuccessfully = await GallerySaver.saveVideo(mergedVideoPath!);
+    // final savedSuccessfully = await GallerySaver.saveVideo(mergedVideoPath!);
     await _generateThumbnail(mergedVideoPath!);
     _navigateToPlaybackScreen();
-    if (savedSuccessfully ?? false) {
-      print('saved');
-      setState(() {
-        showGalleryBtn = true; // Show the gallery button if save is successful
-      });
-    }
+    // if (savedSuccessfully ?? false) {
+    //   print('saved');
+    //   setState(() {
+    //     showGalleryBtn = true; // Show the gallery button if save is successful
+    //   });
+    // }
     final output = await session.getOutput();
     log("alibaba output: $output");
     log('final merged file path ${mergedVideoPath.toString()}');
@@ -237,7 +232,6 @@ class MixVoiceVideoRecordingScreenState
     log("Merged video file size: ${file.lengthSync()} bytes");
     return false;
   }
-
 
   void _switchCamera() {
     setState(() {
@@ -254,14 +248,12 @@ class MixVoiceVideoRecordingScreenState
           padding: const EdgeInsets.all(16.0),
           child: Text(
             LocaleKeys.error_dialog_title.tr(),
-
           ),
         ),
         content: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
             message,
-
           ),
         ),
         actions: [
@@ -269,7 +261,6 @@ class MixVoiceVideoRecordingScreenState
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
               LocaleKeys.error_dialog_ok_button.tr(),
-
               style: const TextStyle(color: AppColors.SECONDARY_COLOR),
             ),
           ),
@@ -313,7 +304,6 @@ class MixVoiceVideoRecordingScreenState
                           context.isArabic
                               ? filters[index].arName
                               : filters[index].enName,
-
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           style: TextStyle(
@@ -391,7 +381,6 @@ class MixVoiceVideoRecordingScreenState
             LocaleKeys.timer_recording_stops_in.tr() +
                 _secondsRemaining.toString() +
                 LocaleKeys.timer_seconds.tr(),
-
             style: TextStyle(color: Colors.white, fontSize: 30.sp),
           ),
         ),
@@ -408,7 +397,7 @@ class MixVoiceVideoRecordingScreenState
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-             const Spacer(),
+              const Spacer(),
               Expanded(
                 child: GestureDetector(
                   onLongPress: () => _startRecording(),
@@ -467,7 +456,12 @@ class MixVoiceVideoRecordingScreenState
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => VideoPlaybackScreen(mergedVideoPath!,_thumbnailPath!,false,audioMediaId: widget.voiceMediaId,),
+        builder: (context) => VideoPlaybackScreen(
+          mergedVideoPath!,
+          _thumbnailPath!,
+          false,
+          audioMediaId: widget.voiceMediaId,
+        ),
       ),
     );
   }
@@ -483,4 +477,3 @@ class MixVoiceVideoRecordingScreenState
     super.dispose();
   }
 }
-

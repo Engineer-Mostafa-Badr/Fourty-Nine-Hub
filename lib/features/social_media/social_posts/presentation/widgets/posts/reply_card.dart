@@ -62,29 +62,28 @@ class _ReplyCardState extends State<ReplyCard> {
             const Sizer(),
             Expanded(
                 child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Label(
-                            text: widget.reply.user.firstName,
-                            style: Styles.mediumText(fontWeight: FontWeight.bold)),
-                        const Sizer(),
-                        Label(
-                            text: widget.reply.sinceTime,
-                            style: Styles.mediumText(
-                                color: AppColors.GREY_NORMAL_COLOR)),
-                      ],
-                    ),
-                    Text(
-                      widget.reply.content,
-                      textAlign: TextAlign.start,
-                      style: Styles.mediumText(fontSize: 65.sp),
-                    ),
+                    Label(
+                        text: widget.reply.user.firstName,
+                        style: Styles.mediumText(fontWeight: FontWeight.bold)),
+                    const Sizer(),
+                    Label(
+                        text: widget.reply.sinceTime,
+                        style: Styles.mediumText(
+                            color: AppColors.GREY_NORMAL_COLOR)),
                   ],
-                )),
-
+                ),
+                Text(
+                  widget.reply.content,
+                  textAlign: TextAlign.start,
+                  style: Styles.mediumText(fontSize: 65.sp),
+                ),
+              ],
+            )),
             GestureDetector(
                 onTap: () {
                   bottomSheet(

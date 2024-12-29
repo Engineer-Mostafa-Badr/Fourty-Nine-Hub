@@ -15,16 +15,16 @@ class StopWatchRecord {
 
   StopWatchRecord.fromRawValue(this.rawValue, {bool isLapHours = true})
       : hours =
-  (rawValue != null) ? StopWatchTimer.getRawHours(rawValue) : null,
+            (rawValue != null) ? StopWatchTimer.getRawHours(rawValue) : null,
         minute =
-        (rawValue != null) ? StopWatchTimer.getRawMinute(rawValue) : null,
+            (rawValue != null) ? StopWatchTimer.getRawMinute(rawValue) : null,
         second =
-        (rawValue != null) ? StopWatchTimer.getRawSecond(rawValue) : null,
+            (rawValue != null) ? StopWatchTimer.getRawSecond(rawValue) : null,
         displayTime = (rawValue != null)
             ? StopWatchTimer.getDisplayTime(
-          rawValue,
-          hours: isLapHours,
-        )
+                rawValue,
+                hours: isLapHours,
+              )
             : null;
 
   int? rawValue;
@@ -69,9 +69,9 @@ class StopWatchTimer {
 
     _rawTimeController = BehaviorSubject<int>.seeded(presetMillisecond);
     _secondTimeController =
-    BehaviorSubject<int>.seeded(getRawSecond(presetMillisecond));
+        BehaviorSubject<int>.seeded(getRawSecond(presetMillisecond));
     _minuteTimeController =
-    BehaviorSubject<int>.seeded(getRawMinute(presetMillisecond));
+        BehaviorSubject<int>.seeded(getRawMinute(presetMillisecond));
 
     _elapsedTime.listen((value) {
       _rawTimeController.add(value);
@@ -112,7 +112,7 @@ class StopWatchTimer {
   ValueStream<int> get minuteTime => _minuteTimeController;
 
   final BehaviorSubject<List<StopWatchRecord>> _recordsController =
-  BehaviorSubject<List<StopWatchRecord>>.seeded([]);
+      BehaviorSubject<List<StopWatchRecord>>.seeded([]);
   ValueStream<List<StopWatchRecord>> get records => _recordsController;
 
   final PublishSubject<bool> _onStoppedController = PublishSubject<bool>();
@@ -143,15 +143,15 @@ class StopWatchTimer {
 
   /// Get display time.
   static String getDisplayTime(
-      int value, {
-        bool hours = true,
-        bool minute = true,
-        bool second = true,
-        bool milliSecond = true,
-        String hoursRightBreak = ':',
-        String minuteRightBreak = ':',
-        String secondRightBreak = '.',
-      }) {
+    int value, {
+    bool hours = true,
+    bool minute = true,
+    bool second = true,
+    bool milliSecond = true,
+    String hoursRightBreak = ':',
+    String minuteRightBreak = ':',
+    String secondRightBreak = '.',
+  }) {
     final hoursStr = getDisplayTimeHours(value);
     final mStr = getDisplayTimeMinute(value, hours: hours);
     final sStr = getDisplayTimeSecond(value);
@@ -360,9 +360,9 @@ class StopWatchTimer {
       _getCurrentSessionTime() + _previousTotalSessionTime + _presetTime;
 
   int _getCountDownTime() => max(
-    _presetTime - (_getCurrentSessionTime() + _previousTotalSessionTime),
-    0,
-  );
+        _presetTime - (_getCurrentSessionTime() + _previousTotalSessionTime),
+        0,
+      );
 
   int _getCurrentSessionTime() => isRunning
       ? DateTime.now().millisecondsSinceEpoch - _currentSessionStartTime

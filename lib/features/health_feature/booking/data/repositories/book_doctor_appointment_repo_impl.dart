@@ -25,7 +25,8 @@ class BookAppointmentRepoImpl implements BookAppointmentRepo {
   }
 
   @override
-  Future<Either<Failure, List<AllAppointmentEntity>>> allAppointment(PaginationParams params) {
+  Future<Either<Failure, List<AllAppointmentEntity>>> allAppointment(
+      PaginationParams params) {
     return _remoteDataSource.allAppointment(params);
   }
 

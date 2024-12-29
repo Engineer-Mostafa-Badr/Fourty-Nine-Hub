@@ -35,7 +35,7 @@ class CommentCard extends StatefulWidget {
 
   const CommentCard(
       {super.key,
-      this.textColor =Colors.black,
+      this.textColor = Colors.black,
       required this.comment,
       required this.onAddReply,
       required this.onDeleteComment,
@@ -72,28 +72,28 @@ class _CommentCardState extends State<CommentCard> {
             const Sizer(),
             Expanded(
                 child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Label(
-                            text: widget.comment.user.firstName,
-                            style: Styles.mediumText(fontWeight: FontWeight.bold)),
-                        const Sizer(),
-                        Label(
-                            text: widget.comment.sinceTime,
-                            style: Styles.mediumText(
-                                color: AppColors.GREY_NORMAL_COLOR)),
-                      ],
-                    ),
-                    Text(
-                      widget.comment.content ?? '',
-                      textAlign: TextAlign.start,
-                      style: Styles.mediumText(fontSize: 65.sp),
-                    ),
+                    Label(
+                        text: widget.comment.user.firstName,
+                        style: Styles.mediumText(fontWeight: FontWeight.bold)),
+                    const Sizer(),
+                    Label(
+                        text: widget.comment.sinceTime,
+                        style: Styles.mediumText(
+                            color: AppColors.GREY_NORMAL_COLOR)),
                   ],
-                )),
+                ),
+                Text(
+                  widget.comment.content ?? '',
+                  textAlign: TextAlign.start,
+                  style: Styles.mediumText(fontSize: 65.sp),
+                ),
+              ],
+            )),
             const Sizer(),
             GestureDetector(
               onTap: () {
@@ -107,7 +107,7 @@ class _CommentCardState extends State<CommentCard> {
               },
               child: Icon(
                 Icons.more_horiz_outlined,
-                color:  Theme.of(context).primaryColor,
+                color: Theme.of(context).primaryColor,
                 size: 50.sp,
               ),
             ),
@@ -259,7 +259,7 @@ class _CommentCardState extends State<CommentCard> {
       },
       leading: Icon(
         icon,
-        color: iconColor ??  Theme.of(context).primaryColor,
+        color: iconColor ?? Theme.of(context).primaryColor,
       ),
       subtitle: Label(
         text: subTitle,

@@ -21,7 +21,7 @@ class LiveModel extends LiveEntity {
       id: json['_id'],
       title: json['title'],
       topicName: json['topicName'],
-      ownerId: json['owner']['_id']??'',
+      ownerId: json['owner']['_id'] ?? '',
       gift: List.from(json['goals']).map((e) => GoalModel.fromJson(e)).toList(),
       description: json['description'],
       members: List.from(json['members'])

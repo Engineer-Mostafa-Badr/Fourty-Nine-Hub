@@ -125,7 +125,6 @@ class PostEntity {
   });
 }
 
-
 enum Reaction { like, haha, love, wow, sad, angry }
 
 extension ReactionX on Reaction {

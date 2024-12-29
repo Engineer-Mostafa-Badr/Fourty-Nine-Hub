@@ -17,7 +17,7 @@ class CreateDoctorHomeVisitTimeTable extends StatelessWidget {
       builder: (context, state) {
         if (state is CreateDoctorShowHomeVisit && state.check) {
           return Timetable(
-              title: context.isArabic?'زيارة منزلية':'Home Visit',
+              title: context.isArabic ? 'زيارة منزلية' : 'Home Visit',
               timetale: createDoctorCubit.homeVisitTimetable,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,18 +30,22 @@ class CreateDoctorHomeVisitTimeTable extends StatelessWidget {
                         createDoctorCubit.homeVisitExamineDurationFocusNode,
                     keyboardType: TextInputType.number,
                     isRequired: true,
-                    hint: context.isArabic?'سعر الزيارة المنزلية':'Home Visit Price',
+                    hint: context.isArabic
+                        ? 'سعر الزيارة المنزلية'
+                        : 'Home Visit Price',
                   ),
                   const Sizer(),
                   DefaultTextFormField(
-                    hint: context.isArabic?'مدة الفحص في الزيارة المنزلية (بالدقائق)':'Home Visit Examine Duration (in minutes)',
+                    hint: context.isArabic
+                        ? 'مدة الفحص في الزيارة المنزلية (بالدقائق)'
+                        : 'Home Visit Examine Duration (in minutes)',
                     keyboardType: TextInputType.number,
                     isRequired: true,
                     nextFocusNode: createDoctorCubit.waitingTimeFocusNode,
                     currentFocusNode:
-                    createDoctorCubit.homeVisitExamineDurationFocusNode,
+                        createDoctorCubit.homeVisitExamineDurationFocusNode,
                     currentController:
-                    createDoctorCubit.homeVisitExamineDurationController,
+                        createDoctorCubit.homeVisitExamineDurationController,
                   ),
                 ],
               ));

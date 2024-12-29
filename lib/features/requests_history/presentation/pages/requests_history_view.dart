@@ -8,7 +8,9 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/cubit/request_history_cubit.dart';
+import 'package:fourtyninehub/features/requests_history/presentation/cubit/request_history_ride_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/widgets/trip_card.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/pages/tripjoin_request_view.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
@@ -17,8 +19,19 @@ import '../../../health_feature/health/presentation/widgets/booking/booking_card
 import '../widgets/food_order_card.dart';
 import '../widgets/shipping_request_card.dart';
 
-class HistoryRequestsView extends StatelessWidget {
+class HistoryRequestsView extends StatefulWidget {
   const HistoryRequestsView({super.key});
+
+  @override
+  State<HistoryRequestsView> createState() => _HistoryRequestsViewState();
+}
+
+class _HistoryRequestsViewState extends State<HistoryRequestsView> {
+  @override
+  void initState() {
+    BlocProvider.of<RequestHistoryRideCubit>(context).getRideTrips();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,14 +145,18 @@ class HistoryRequestsView extends StatelessWidget {
   }
 
   Widget _buildRideRequests() {
-    return BlocBuilder<RequestHistoryCubit, RequestHistoryState>(
+    return BlocBuilder<RequestHistoryRideCubit, RiderState>(
         builder: (context, state) {
-      return ListView.separated(
-          itemCount: state.trips?.length ?? 0,
-          separatorBuilder: (context, index) => const Sizer(),
-          itemBuilder: (context, index) {
-            return TripCard(trip: state.trips![index]);
-          });
+      if (state is SucccessHistoryRiderState) {
+        return ListView.separated(
+            itemCount: state.trips?.length ?? 0,
+            separatorBuilder: (context, index) => const Sizer(),
+            itemBuilder: (context, index) {
+              return TripCard(trip: state.trips![index]);
+            });
+      } else {
+        return const SizedBox();
+      }
     });
   }
 

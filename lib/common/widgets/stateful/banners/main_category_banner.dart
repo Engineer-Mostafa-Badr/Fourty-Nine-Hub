@@ -73,7 +73,9 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: context.locale == Locales.english?widget.category.nameEn!:widget.category.name??"",
+              text: context.locale == Locales.english
+                  ? widget.category.nameEn!
+                  : widget.category.name ?? "",
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -85,26 +87,28 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   context.read<UserCubit>().isLoggedIn
-                      ? widget.removeFavorite?Container(): IconButton(
-                          color: AppColors.SECONDARY_COLOR,
-                          onPressed: () async {
-                            final result = await widget.onFavorite();
-                            print("resutlt=$result");
-                            if (result == true) {
-                              print(result);
-                              setState(() {
-                                widget.category.isFavorite =
-                                    !widget.category.isFavorite!;
-                                print(widget.category.isFavorite);
-                                widget.isFavorite = result;
-                                print("===================$result");
-                              });
-                            }
-                          },
-                          icon: Icon(widget.category.isFavorite == true
-                              ? Icons.favorite
-                              : Icons.favorite_border),
-                        )
+                      ? widget.removeFavorite
+                          ? Container()
+                          : IconButton(
+                              color: AppColors.SECONDARY_COLOR,
+                              onPressed: () async {
+                                final result = await widget.onFavorite();
+                                print("resutlt=$result");
+                                if (result == true) {
+                                  print(result);
+                                  setState(() {
+                                    widget.category.isFavorite =
+                                        !widget.category.isFavorite!;
+                                    print(widget.category.isFavorite);
+                                    widget.isFavorite = result;
+                                    print("===================$result");
+                                  });
+                                }
+                              },
+                              icon: Icon(widget.category.isFavorite == true
+                                  ? Icons.favorite
+                                  : Icons.favorite_border),
+                            )
                       : const SizedBox.shrink(),
                   // Label(
                   //   text:
@@ -143,7 +147,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
           children: [
             PositionedDirectional(end: 0, child: _buildRegisterButton()),
             Label(
-              text: widget.category.name??"",
+              text: widget.category.name ?? "",
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

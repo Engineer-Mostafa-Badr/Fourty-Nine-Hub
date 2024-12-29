@@ -44,13 +44,17 @@ class MyAuctionAdsModel extends MyAuctionAdsEntity {
       userId: json['user_id'] ?? '',
       isApproved: json['is_approved'] ?? false,
       subCategory: MyAuctionSubCategoryModel.fromJson(json['subCategoryId']),
-      mainCategory: json['mainCategoryId']!=null?MyAuctionMainCategoryModel.fromJson(json['mainCategoryId']):null,
+      mainCategory: json['mainCategoryId'] != null
+          ? MyAuctionMainCategoryModel.fromJson(json['mainCategoryId'])
+          : null,
       isPremium: json['isPremium'] ?? false,
       createdAt: DateTime.parse(json['createdAt']),
       user: UserAuctionModel.fromJson(json['user']),
-      subscriptions: json['typeSubscription'] ??'',
-      images: (json['images'] as List).map((e) => MyAuctionImageModel.fromJson(e)).toList(),
-      subscriptionStatus: json['subscriptionStatus'] ??'',
+      subscriptions: json['typeSubscription'] ?? '',
+      images: (json['images'] as List)
+          .map((e) => MyAuctionImageModel.fromJson(e))
+          .toList(),
+      subscriptionStatus: json['subscriptionStatus'] ?? '',
       phoneCountLength: json['phoneCountLength'] ?? 0,
       chatCountLength: json['chatCountLength'] ?? 0,
       loveCountLength: json['loveCountLength'] ?? 0,

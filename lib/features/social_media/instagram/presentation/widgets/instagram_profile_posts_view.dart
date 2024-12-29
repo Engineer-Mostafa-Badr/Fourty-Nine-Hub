@@ -124,8 +124,8 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                     children: [
                       const Sizer(),
                       Padding(
-                        padding: EdgeInsetsDirectional.symmetric(
-                            horizontal: 20.w),
+                        padding:
+                            EdgeInsetsDirectional.symmetric(horizontal: 20.w),
                         child: _buildMainAccountHeader(
                             post: sortedPosts[index], context: context),
                       ),
@@ -148,7 +148,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                 length: sortedPosts[index].images!.length,
                                 onDoubleTap: () {
                                   sortedPosts[index].isLove =
-                                  !sortedPosts[index].isLove;
+                                      !sortedPosts[index].isLove;
                                   setState(() {});
                                 },
                               );
@@ -164,17 +164,15 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                             child: ListView.separated(
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
-                                itemCount:
-                                sortedPosts[index].images!.length,
+                                itemCount: sortedPosts[index].images!.length,
                                 separatorBuilder: (context, index) =>
-                                const Sizer(
-                                  width: 3,
-                                ),
+                                    const Sizer(
+                                      width: 3,
+                                    ),
                                 itemBuilder: (context, index) {
                                   return CircleAvatar(
                                     radius: 10.r,
-                                    backgroundColor: state.pageIndex ==
-                                        index
+                                    backgroundColor: state.pageIndex == index
                                         ? AppColors.SECONDARY_COLOR
                                         : Theme.of(context).primaryColor,
                                   );
@@ -185,25 +183,21 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                         height: 10.h,
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.symmetric(
-                            horizontal: 20.w),
+                        padding:
+                            EdgeInsetsDirectional.symmetric(horizontal: 20.w),
                         child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
                               child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   IconAppButton(
-                                    icon:
-                                    sortedPosts[index].isLove == true
+                                    icon: sortedPosts[index].isLove == true
                                         ? Icons.favorite
                                         : Icons.favorite_border,
                                     onPressed: () async {
-                                      var reacted =
-                                      await controller.onReact(
+                                      var reacted = await controller.onReact(
                                         params: PostReactParams(
                                           postId: sortedPosts[index].id,
                                           react: 'love',
@@ -211,24 +205,21 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                       );
                                       if (reacted == true) {
                                         sortedPosts[index].isLove =
-                                        !sortedPosts[index].isLove;
+                                            !sortedPosts[index].isLove;
                                         if (sortedPosts[index].isLove ==
                                             false) {
                                           sortedPosts[index].loveCount =
-                                          (sortedPosts[index]
-                                              .loveCount -
-                                              1);
+                                              (sortedPosts[index].loveCount -
+                                                  1);
                                         } else {
                                           sortedPosts[index].loveCount =
-                                          (sortedPosts[index]
-                                              .loveCount +
-                                              1);
+                                              (sortedPosts[index].loveCount +
+                                                  1);
                                         }
                                       }
                                       setState(() {});
                                     },
-                                    color:
-                                    sortedPosts[index].isLove == true
+                                    color: sortedPosts[index].isLove == true
                                         ? Colors.red
                                         : Colors.grey,
                                     size: 25,
@@ -237,9 +228,8 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                     width: 10.w,
                                   ),
                                   Label(
-                                    text: sortedPosts[index]
-                                        .loveCount
-                                        .toString(),
+                                    text:
+                                        sortedPosts[index].loveCount.toString(),
                                     style: Styles.mediumText(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -264,102 +254,84 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                         context: context,
                                         isScrollControlled: true,
                                         isDismissible: true,
-                                        backgroundColor:
-                                        Colors.transparent,
+                                        backgroundColor: Colors.transparent,
                                         builder: (context) {
                                           return BlocProvider.value(
-                                            value: serviceLocator<
-                                                InstagramCubit>()
-                                              ..loadComments(context,
-                                                  sortedPosts[index].id),
+                                            value:
+                                                serviceLocator<InstagramCubit>()
+                                                  ..loadComments(context,
+                                                      sortedPosts[index].id),
                                             child: GestureDetector(
-                                              behavior:
-                                              HitTestBehavior.opaque,
+                                              behavior: HitTestBehavior.opaque,
                                               onTap: () {
                                                 FocusScope.of(context)
                                                     .unfocus();
                                               },
-                                              child:
-                                              InstagramPostComments(
-                                                postId:
-                                                sortedPosts[index].id,
-                                                commentCount:
-                                                sortedPosts[index]
+                                              child: InstagramPostComments(
+                                                postId: sortedPosts[index].id,
+                                                commentCount: sortedPosts[index]
                                                     .commentsCount
                                                     .toString(),
                                                 onCommentReply:
                                                     (ReplyOnCommentParams
-                                                params) async {
-                                                  var result =
-                                                  await controller
+                                                        params) async {
+                                                  var result = await controller
                                                       .replyOnComment(
-                                                    params: ReplyOnCommentParams(
-                                                        postId:
-                                                        params.postId,
-                                                        content: params
-                                                            .content,
-                                                        commentId: params
-                                                            .commentId),
+                                                    params:
+                                                        ReplyOnCommentParams(
+                                                            postId:
+                                                                params.postId,
+                                                            content:
+                                                                params.content,
+                                                            commentId: params
+                                                                .commentId),
                                                   );
-                                                  var currentPost =
-                                                  sortedPosts.firstWhere(
-                                                          (element) =>
-                                                      element
-                                                          .id ==
-                                                          params
-                                                              .postId);
-                                                  currentPost
-                                                      .commentsCount =
-                                                  (currentPost
-                                                      .commentsCount +
-                                                      1);
+                                                  var currentPost = sortedPosts
+                                                      .firstWhere((element) =>
+                                                          element.id ==
+                                                          params.postId);
+                                                  currentPost.commentsCount =
+                                                      (currentPost
+                                                              .commentsCount +
+                                                          1);
                                                   return result;
                                                 },
-                                                onAddComment:
-                                                    (PostCommentParams
-                                                params) async {
-                                                  var result =
-                                                  await controller
+                                                onAddComment: (PostCommentParams
+                                                    params) async {
+                                                  var result = await controller
                                                       .onPostComment(
-                                                      params:
-                                                      params);
+                                                          params: params);
                                                   return result;
                                                 },
                                                 onDeleteComment:
                                                     (String id) async {
                                                   return await controller
                                                       .deleteComment(
-                                                      context:
-                                                      context,
-                                                      commentId: id,
-                                                      postId:
-                                                      sortedPosts[
-                                                      index]
-                                                          .id,
-                                                      from: 'feed');
+                                                          context: context,
+                                                          commentId: id,
+                                                          postId:
+                                                              sortedPosts[index]
+                                                                  .id,
+                                                          from: 'feed');
                                                   // print(result);
                                                 },
                                                 onDeleteReply:
                                                     (String id) async {
                                                   return await controller
                                                       .deleteComment(
-                                                      context:
-                                                      context,
-                                                      commentId: id,
-                                                      postId:
-                                                      sortedPosts[
-                                                      index]
-                                                          .id,
-                                                      from: 'feed');
+                                                          context: context,
+                                                          commentId: id,
+                                                          postId:
+                                                              sortedPosts[index]
+                                                                  .id,
+                                                          from: 'feed');
                                                 },
                                                 onEditComment:
                                                     (PostCommentParams
-                                                params) async {
-                                                  var result =
-                                                  await controller
+                                                        params) async {
+                                                  var result = await controller
                                                       .editComment(
-                                                      params:
-                                                      params);
+                                                          params: params);
                                                   return result;
                                                 },
                                               ),
@@ -407,35 +379,33 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                 child: RichText(
                                   text: WidgetSpan(
                                       child: GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            _isExpanded = !_isExpanded;
-                                          });
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                sortedPosts[index].content ??
-                                                    '',
-                                                textAlign: _isArabic(
+                                    onTap: () {
+                                      setState(() {
+                                        _isExpanded = !_isExpanded;
+                                      });
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            sortedPosts[index].content ?? '',
+                                            textAlign: _isArabic(
                                                     sortedPosts[index]
-                                                        .content ??
+                                                            .content ??
                                                         '')
-                                                    ? TextAlign.right
-                                                    : TextAlign.left,
-                                                style: Styles.mediumText(
-                                                    fontSize: 60.sp),
-                                                maxLines:
-                                                _isExpanded ? null : 3,
-                                                overflow: _isExpanded
-                                                    ? null
-                                                    : TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ],
+                                                ? TextAlign.right
+                                                : TextAlign.left,
+                                            style: Styles.mediumText(
+                                                fontSize: 60.sp),
+                                            maxLines: _isExpanded ? null : 3,
+                                            overflow: _isExpanded
+                                                ? null
+                                                : TextOverflow.ellipsis,
+                                          ),
                                         ),
-                                      )),
+                                      ],
+                                    ),
+                                  )),
                                 ),
                               ),
                             ),
@@ -728,31 +698,28 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                               horizontal: 20.w, vertical: 10.h),
                           child: RichText(
                               text: TextSpan(children: [
-                                TextSpan(
-                                    text:
+                            TextSpan(
+                                text:
                                     '${sortedPosts[index].firstComment?.firstName} ${sortedPosts[index].firstComment?.lastName}\t\t',
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () => context.push(
-                                          Routes.INSTAGRAMPROFILE,
-                                          extra: sortedPosts[index].user.id),
-                                    style: Styles.mediumText()),
-                                TextSpan(
-                                    text: sortedPosts[index].firstComment ==
-                                        null
-                                        ? ''
-                                        : sortedPosts[index]
-                                        .firstComment
-                                        ?.content,
-                                    style: Styles.mediumText(
-                                      color: context.isDarkMode
-                                          ? AppColors.LIGHT_GRAY_COLOR
-                                          : AppColors.DARK_GRAY_COLOR,
-                                    )),
-                              ])),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () => context.push(
+                                      Routes.INSTAGRAMPROFILE,
+                                      extra: sortedPosts[index].user.id),
+                                style: Styles.mediumText()),
+                            TextSpan(
+                                text: sortedPosts[index].firstComment == null
+                                    ? ''
+                                    : sortedPosts[index].firstComment?.content,
+                                style: Styles.mediumText(
+                                  color: context.isDarkMode
+                                      ? AppColors.LIGHT_GRAY_COLOR
+                                      : AppColors.DARK_GRAY_COLOR,
+                                )),
+                          ])),
                         ),
                       Padding(
-                        padding: EdgeInsetsDirectional.symmetric(
-                            horizontal: 20.w),
+                        padding:
+                            EdgeInsetsDirectional.symmetric(horizontal: 20.w),
                         child: Text(sortedPosts[index].sinceTime,
                             style: Styles.mediumText(
                                 color: AppColors.GREY_NORMAL_COLOR)),
@@ -764,8 +731,8 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsetsDirectional.symmetric(
-                            horizontal: 20.w),
+                        padding:
+                            EdgeInsetsDirectional.symmetric(horizontal: 20.w),
                         child: _buildMainAccountHeader(
                             post: sortedPosts[index], context: context),
                       ),
@@ -787,22 +754,18 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                         padding: EdgeInsetsDirectional.symmetric(
                             horizontal: 20.w, vertical: 10.h),
                         child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
                               child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   IconAppButton(
-                                    icon:
-                                    sortedPosts[index].isLove == true
+                                    icon: sortedPosts[index].isLove == true
                                         ? Icons.favorite
                                         : Icons.favorite_border,
                                     onPressed: () async {
-                                      var reacted =
-                                      await controller.onReact(
+                                      var reacted = await controller.onReact(
                                         params: PostReactParams(
                                           postId: sortedPosts[index].id,
                                           react: 'love',
@@ -810,24 +773,21 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                       );
                                       if (reacted == true) {
                                         sortedPosts[index].isLove =
-                                        !sortedPosts[index].isLove;
+                                            !sortedPosts[index].isLove;
                                         if (sortedPosts[index].isLove ==
                                             false) {
                                           sortedPosts[index].loveCount =
-                                          (sortedPosts[index]
-                                              .loveCount -
-                                              1);
+                                              (sortedPosts[index].loveCount -
+                                                  1);
                                         } else {
                                           sortedPosts[index].loveCount =
-                                          (sortedPosts[index]
-                                              .loveCount +
-                                              1);
+                                              (sortedPosts[index].loveCount +
+                                                  1);
                                         }
                                       }
                                       setState(() {});
                                     },
-                                    color:
-                                    sortedPosts[index].isLove == true
+                                    color: sortedPosts[index].isLove == true
                                         ? Colors.red
                                         : Colors.grey,
                                     size: 25,
@@ -836,9 +796,8 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                     width: 10.w,
                                   ),
                                   Label(
-                                    text: sortedPosts[index]
-                                        .loveCount
-                                        .toString(),
+                                    text:
+                                        sortedPosts[index].loveCount.toString(),
                                     style: Styles.mediumText(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -863,102 +822,84 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                         context: context,
                                         isScrollControlled: true,
                                         isDismissible: true,
-                                        backgroundColor:
-                                        Colors.transparent,
+                                        backgroundColor: Colors.transparent,
                                         builder: (context) {
                                           return BlocProvider.value(
-                                            value: serviceLocator<
-                                                InstagramCubit>()
-                                              ..loadComments(context,
-                                                  sortedPosts[index].id),
+                                            value:
+                                                serviceLocator<InstagramCubit>()
+                                                  ..loadComments(context,
+                                                      sortedPosts[index].id),
                                             child: GestureDetector(
-                                              behavior:
-                                              HitTestBehavior.opaque,
+                                              behavior: HitTestBehavior.opaque,
                                               onTap: () {
                                                 FocusScope.of(context)
                                                     .unfocus();
                                               },
-                                              child:
-                                              InstagramPostComments(
-                                                postId:
-                                                sortedPosts[index].id,
-                                                commentCount:
-                                                sortedPosts[index]
+                                              child: InstagramPostComments(
+                                                postId: sortedPosts[index].id,
+                                                commentCount: sortedPosts[index]
                                                     .commentsCount
                                                     .toString(),
                                                 onCommentReply:
                                                     (ReplyOnCommentParams
-                                                params) async {
-                                                  var result =
-                                                  await controller
+                                                        params) async {
+                                                  var result = await controller
                                                       .replyOnComment(
-                                                    params: ReplyOnCommentParams(
-                                                        postId:
-                                                        params.postId,
-                                                        content: params
-                                                            .content,
-                                                        commentId: params
-                                                            .commentId),
+                                                    params:
+                                                        ReplyOnCommentParams(
+                                                            postId:
+                                                                params.postId,
+                                                            content:
+                                                                params.content,
+                                                            commentId: params
+                                                                .commentId),
                                                   );
-                                                  var currentPost =
-                                                  sortedPosts.firstWhere(
-                                                          (element) =>
-                                                      element
-                                                          .id ==
-                                                          params
-                                                              .postId);
-                                                  currentPost
-                                                      .commentsCount =
-                                                  (currentPost
-                                                      .commentsCount +
-                                                      1);
+                                                  var currentPost = sortedPosts
+                                                      .firstWhere((element) =>
+                                                          element.id ==
+                                                          params.postId);
+                                                  currentPost.commentsCount =
+                                                      (currentPost
+                                                              .commentsCount +
+                                                          1);
                                                   return result;
                                                 },
-                                                onAddComment:
-                                                    (PostCommentParams
-                                                params) async {
-                                                  var result =
-                                                  await controller
+                                                onAddComment: (PostCommentParams
+                                                    params) async {
+                                                  var result = await controller
                                                       .onPostComment(
-                                                      params:
-                                                      params);
+                                                          params: params);
                                                   return result;
                                                 },
                                                 onDeleteComment:
                                                     (String id) async {
                                                   return await controller
                                                       .deleteComment(
-                                                      context:
-                                                      context,
-                                                      commentId: id,
-                                                      postId:
-                                                      sortedPosts[
-                                                      index]
-                                                          .id,
-                                                      from: 'feed');
+                                                          context: context,
+                                                          commentId: id,
+                                                          postId:
+                                                              sortedPosts[index]
+                                                                  .id,
+                                                          from: 'feed');
                                                   // print(result);
                                                 },
                                                 onDeleteReply:
                                                     (String id) async {
                                                   return await controller
                                                       .deleteComment(
-                                                      context:
-                                                      context,
-                                                      commentId: id,
-                                                      postId:
-                                                      sortedPosts[
-                                                      index]
-                                                          .id,
-                                                      from: 'feed');
+                                                          context: context,
+                                                          commentId: id,
+                                                          postId:
+                                                              sortedPosts[index]
+                                                                  .id,
+                                                          from: 'feed');
                                                 },
                                                 onEditComment:
                                                     (PostCommentParams
-                                                params) async {
-                                                  var result =
-                                                  await controller
+                                                        params) async {
+                                                  var result = await controller
                                                       .editComment(
-                                                      params:
-                                                      params);
+                                                          params: params);
                                                   return result;
                                                 },
                                               ),
@@ -1003,43 +944,41 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                 child: RichText(
                                   text: WidgetSpan(
                                       child: GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            _isExpanded = !_isExpanded;
-                                          });
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                sortedPosts[index].content ??
-                                                    '',
-                                                textAlign: _isArabic(
+                                    onTap: () {
+                                      setState(() {
+                                        _isExpanded = !_isExpanded;
+                                      });
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            sortedPosts[index].content ?? '',
+                                            textAlign: _isArabic(
                                                     sortedPosts[index]
-                                                        .content ??
+                                                            .content ??
                                                         '')
-                                                    ? TextAlign.right
-                                                    : TextAlign.left,
-                                                style: Styles.mediumText(
-                                                    fontSize: 60.sp),
-                                                maxLines:
-                                                _isExpanded ? null : 3,
-                                                overflow: _isExpanded
-                                                    ? null
-                                                    : TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ],
+                                                ? TextAlign.right
+                                                : TextAlign.left,
+                                            style: Styles.mediumText(
+                                                fontSize: 60.sp),
+                                            maxLines: _isExpanded ? null : 3,
+                                            overflow: _isExpanded
+                                                ? null
+                                                : TextOverflow.ellipsis,
+                                          ),
                                         ),
-                                      )),
+                                      ],
+                                    ),
+                                  )),
                                 ),
                               ),
                             ),
                           ],
                         ),
                       Padding(
-                        padding: EdgeInsetsDirectional.symmetric(
-                            horizontal: 20.w),
+                        padding:
+                            EdgeInsetsDirectional.symmetric(horizontal: 20.w),
                         child: Text(sortedPosts[index].sinceTime,
                             style: Styles.mediumText(
                                 color: AppColors.GREY_NORMAL_COLOR)),
@@ -1053,7 +992,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                   );
                 }
               },
-              separatorBuilder: (context,index)=>const Sizer(),
+              separatorBuilder: (context, index) => const Sizer(),
               itemCount: sortedPosts.length,
             ),
           );

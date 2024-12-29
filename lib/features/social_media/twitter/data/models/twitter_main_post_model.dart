@@ -38,8 +38,10 @@ class TwitterMainPostModel extends TwitterMainPostEntity {
       isShared: json['isShared'] ?? false,
       user: json['sharedUser'] != null
           ? (json['sharedUser'] is List)
-          ? TwitterUserModel.fromJson(json['sharedUser'][0]) // Handle the first user in the list
-          : TwitterUserModel.fromJson(json['sharedUser']) // If it's a single object
+              ? TwitterUserModel.fromJson(
+                  json['sharedUser'][0]) // Handle the first user in the list
+              : TwitterUserModel.fromJson(
+                  json['sharedUser']) // If it's a single object
           : null,
       commentPrivacy: json['commentPrivacy'] ?? 0,
       sharesCount: json['sharesCount'] ?? 0,

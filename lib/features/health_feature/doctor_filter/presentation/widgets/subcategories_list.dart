@@ -21,8 +21,10 @@ class DoctorsSubcategoriesFilterList extends StatelessWidget {
               separatorBuilder: (context, index) => SizedBox(
                 height: 10.h,
               ),
-              itemBuilder: (context, index) =>
-                  SubcategoryListTitle(specialty: state.subCategories[index], type: type,),
+              itemBuilder: (context, index) => SubcategoryListTitle(
+                specialty: state.subCategories[index],
+                type: type,
+              ),
             ));
           case DoctorSubcategoryFilterError _:
             return Center(child: Text(state.message));

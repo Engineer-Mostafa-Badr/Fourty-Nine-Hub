@@ -24,7 +24,7 @@ class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {
           const FavouriteSubCategoryState(),
         );
 
-  Future<void> load()async{
+  Future<void> load() async {
     emit(state.copyWith(status: StateStatus.loading));
     await loadData();
     await loadDataMain();
@@ -42,13 +42,14 @@ class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {
         ),
         (data) {
           return state.copyWith(
-          status: StateStatus.success,
+            status: StateStatus.success,
             data: data,
-        );
+          );
         },
       ),
     );
   }
+
   //
   // Future<List<SubCategoryEntity>> getSubcategories(
   //     {required PaginationParams paginationParams}) async {
@@ -68,7 +69,7 @@ class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {
   Future<void> loadDataMain() async {
     emit(state.copyWith(status: StateStatus.loading));
     await UserCubit.to.getUser();
-     {
+    {
       final user = UserCubit.to.state.data?.id;
       print('userId1$user');
       print('userId1$user');
@@ -76,7 +77,7 @@ class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {
           MainCategoriesParams(page: 1, limit: 100, userId: user ?? ''));
 
       result.fold(
-            (failure) {
+        (failure) {
           emit(state.copyWith(
             failure: failure,
             status: StateStatus.error,
@@ -84,7 +85,7 @@ class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {
           CliLogger.error(
               'can\'t load main categories there is an error ${failure.toString()}');
         },
-            (r) {
+        (r) {
           emit(state.copyWith(status: StateStatus.success, mainCategory: r));
         },
       );

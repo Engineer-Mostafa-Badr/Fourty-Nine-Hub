@@ -12,7 +12,10 @@ import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../res/assets/assets.dart';
@@ -171,8 +174,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   return;
                 }
                 HandleCashback.setCount('chatCount', context);
-
-                context.push(Routes.CHAT);
+                context.push(Routes.CHAT, extra: ChatsViewParams());
               },
               child: SvgPicture.asset(
                 Assets.message,

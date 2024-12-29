@@ -1,18 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/shipping_request_model/shipping_request_model.dart';
-import 'package:go_router/go_router.dart';
-import 'package:google_static_maps_controller/google_static_maps_controller.dart';
-import '../../../../common/widgets/stateful/maps/static_map.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import '../../../../routes/routes.dart';
 
 class ShippingRequestCard extends StatelessWidget {
   final ShippingRequestModel trip;
@@ -20,93 +12,166 @@ class ShippingRequestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => context.push(Routes.TRIPDETAILS),
-      child: Container(
-        padding: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey, width: .5),
-            borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const Icon(FontAwesomeIcons.car,
-                    color: AppColors.PRIMARY_COLOR),
-                const Sizer(),
-                Label(
-                  text: context.isArabic
-                      ? trip.category.nameAr
-                      : trip.category.nameEn,
-                  style: Styles.mediumText(fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                const Icon(
-                  Icons.location_searching,
-                  color: AppColors.PRIMARY_COLOR,
-                ),
-                const Sizer(),
-                Expanded(child: Label(text: trip.fromAddress)),
-              ],
-            ),
-            Row(
-              children: [
-                const Icon(
-                  Icons.location_on,
-                  color: AppColors.SECONDARY_COLOR,
-                ),
-                const Sizer(),
-                Expanded(child: Label(text: trip.toAddress)),
-              ],
-            ),
-            if (trip.offers.isNotEmpty)
-              Row(
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
+          child: Row(
+            children: [
+              Text(
+                formatDate(
+                    trip.createdAt, context.isArabic ? "arabic" : "english"),
+                style: Styles.headerText(fontSize: 30),
+              ),
+              const Spacer(),
+              Text(
+                "${trip.price}${context.isArabic ? trip.currencyAr : trip.currencyEn}",
+                style: Styles.headerText(fontSize: 30),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 16,
+            right: 16,
+          ),
+          child: Column(
+            children: [
+              const Sizer(),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  TextAppButton(
-                      label: LocaleKeys.offers.localize, onPressed: () {}),
-                  const Sizer(),
-                  Expanded(
-                    child: SizedBox(
-                      height: kToolbarHeight * .5,
-                      child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            final offer = trip.offers[index];
-                            return CircleAvatar(
-                              backgroundColor: Colors.white,
-                              radius: 10,
-                              backgroundImage:
-                                  NetworkImage(offer.profileImage ?? ''),
-                            );
-                          },
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(),
-                          itemCount: trip.offers.length),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 12,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.blue.withOpacity(0.5),
+                              spreadRadius: 3,
+                              blurRadius: 4,
+                              offset: const Offset(1, 1),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: Text(trip.fromAddress,
+                            overflow: TextOverflow.visible,
+                            maxLines: 1,
+                            style: Styles.mediumText(
+                                fontSize: 32, fontWeight: FontWeight.w400)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 1),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6, right: 6),
+                        child: SizedBox(
+                          height: 14,
+                          child: CustomPaint(
+                            size: const Size(1, 14),
+                            painter: DottedLinePainter(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 1),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 12,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.green.withOpacity(0.5),
+                              spreadRadius: 3,
+                              blurRadius: 4,
+                              offset: const Offset(1, 1),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: Text(trip.toAddress,
+                            overflow: TextOverflow.visible,
+                            maxLines: 1,
+                            style: Styles.mediumText(
+                                fontSize: 32, fontWeight: FontWeight.w400)),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            const Sizer(),
-            StaticMapWidget(
-              height: kToolbarHeight * 1.5,
-              radius: 10,
-              markers: [
-                Marker(locations: [
-                  Location(trip.fromCoordinates[0], trip.fromCoordinates[1]),
-                  Location(trip.toCoordinates[0], trip.toCoordinates[1]),
-                ])
-              ],
-              paths: [
-                Location(trip.fromCoordinates[0], trip.fromCoordinates[1]),
-                Location(trip.toCoordinates[0], trip.toCoordinates[1]),
-              ],
-            )
-          ],
+            ],
+          ),
         ),
-      ),
+        const Sizer(
+          height: 24,
+        ),
+        const Divider(
+          height: 2,
+          color: AppColors.LIGHT_GRAY_COLOR,
+        )
+      ],
     );
+  }
+}
+
+String formatDate(String dateString, String language) {
+  DateTime date = DateTime.parse(dateString);
+
+  final DateFormat formatter = language == "arabic"
+      ? DateFormat("d MMMM, h:mm a", "ar_SA")
+      : DateFormat("d MMMM, h:mm a");
+
+  String formattedDate = formatter.format(date);
+
+  return formattedDate;
+}
+
+class DottedLinePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = const Color.fromARGB(255, 189, 193, 196)
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = 2;
+
+    double dashWidth = 2;
+    double dashSpace = 3.0;
+    double startX = 0.0;
+
+    while (startX < size.height) {
+      canvas.drawLine(
+        Offset(0, startX),
+        Offset(0, startX + dashWidth),
+        paint,
+      );
+      startX += dashWidth + dashSpace;
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
   }
 }

@@ -27,40 +27,47 @@ class _FavouriteViewState extends State<FavouriteView> {
         label: LocaleKeys.favouriteAds.localize,
       ),
       body: BlocProvider<FavouriteDrawerCubit>(
-        create: (BuildContext context) =>serviceLocator()..fetchFavourite(),
+        create: (BuildContext context) => serviceLocator()..fetchFavourite(),
         child: BlocConsumer<FavouriteDrawerCubit, FavouriteDrawerState>(
-            builder: (context, state) {
-          if (state.status ==FavouriteDrawerStates.loading) {
-            return const Center(child: CircularProgressIndicator.adaptive());
-          }
-          return Padding(
-            padding: EdgeInsets.all(10.0.w),
-            child:state.favourite!.isNotEmpty && state.favourite !=null? ListView.builder(
-                itemBuilder: (context, index) => AdCardDrawerFavourite(
-                      item: state.favourite![index],
-                      onFav: (String) {},
-                      onRemoveFav: () {
-                        context.read<FavouriteDrawerCubit>().deleteFavouriteAds(id: state.favourite![index].id);
-                      },
-                    ),
-                // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                //     childAspectRatio: .8,
-                //     mainAxisSpacing: 10,
-                //     crossAxisSpacing: 10,
-                //     crossAxisCount: 2),
-                itemCount: state.favourite?.length ?? 0)
-            :Center(
-                child: Label(
-                    style: Styles.mediumText(fontSize: 60.sp),
-                    maxLines: 3,
-                    textAlign: TextAlign.center,
-                    text: LocaleKeys.noFavouriteAds.localize)),
-          );
-        }, listener: (BuildContext context, FavouriteDrawerState state) {
-              if(state.status ==FavouriteDrawerStates.successDelete){
-                showSuccessMessage(context, LocaleKeys.removeFavouriteSuccessfully.localize);
-              }
-        },),
+          builder: (context, state) {
+            if (state.status == FavouriteDrawerStates.loading) {
+              return const Center(child: CircularProgressIndicator.adaptive());
+            }
+            return Padding(
+              padding: EdgeInsets.all(10.0.w),
+              child: state.favourite!.isNotEmpty && state.favourite != null
+                  ? ListView.builder(
+                      itemBuilder: (context, index) => AdCardDrawerFavourite(
+                            item: state.favourite![index],
+                            onFav: (String) {},
+                            onRemoveFav: () {
+                              context
+                                  .read<FavouriteDrawerCubit>()
+                                  .deleteFavouriteAds(
+                                      id: state.favourite![index].id);
+                            },
+                          ),
+                      // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      //     childAspectRatio: .8,
+                      //     mainAxisSpacing: 10,
+                      //     crossAxisSpacing: 10,
+                      //     crossAxisCount: 2),
+                      itemCount: state.favourite?.length ?? 0)
+                  : Center(
+                      child: Label(
+                          style: Styles.mediumText(fontSize: 60.sp),
+                          maxLines: 3,
+                          textAlign: TextAlign.center,
+                          text: LocaleKeys.noFavouriteAds.localize)),
+            );
+          },
+          listener: (BuildContext context, FavouriteDrawerState state) {
+            if (state.status == FavouriteDrawerStates.successDelete) {
+              showSuccessMessage(
+                  context, LocaleKeys.removeFavouriteSuccessfully.localize);
+            }
+          },
+        ),
       ),
     );
   }

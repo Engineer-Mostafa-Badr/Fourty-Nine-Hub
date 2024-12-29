@@ -6,9 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:gallery_saver/gallery_saver.dart';
+// import 'package:gallery_saver/gallery_saver.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -72,6 +71,7 @@ class OtherVoiceVideoRecordingScreenState
       _thumbnailPath = thumbnail;
     });
   }
+
   final List<Filter> filters = FilterLibrary.filters;
   Filter? _selectedFilter;
 
@@ -140,7 +140,6 @@ class OtherVoiceVideoRecordingScreenState
     _initCamera();
     _initializeAnimationController();
     _loadAndPlayAudio();
-
   }
 
   Future<void> _initCamera() async {
@@ -181,10 +180,9 @@ class OtherVoiceVideoRecordingScreenState
   }
 
   Future _loadAndPlayAudio() async {
-      print('Audio try to play');
-      await _audioPlayer.setUrl(widget.voiceUrl);
-      _audioPlayer.setLoopMode(LoopMode.one);
-
+    print('Audio try to play');
+    await _audioPlayer.setUrl(widget.voiceUrl);
+    _audioPlayer.setLoopMode(LoopMode.one);
   }
 
   void _startRecording() async {
@@ -225,14 +223,13 @@ class OtherVoiceVideoRecordingScreenState
 
   void _stopRecording() async {
     if (!_controller!.value.isRecordingVideo) return;
-          final videoFile = await _controller!.stopVideoRecording();
-      videoPath = videoFile.path;
-      setState(() {
-        isRecording = false;
-      });
-      _resetRecordingState();
-      showUploadReelButton = await _mergeVideoWithAudio();
-
+    final videoFile = await _controller!.stopVideoRecording();
+    videoPath = videoFile.path;
+    setState(() {
+      isRecording = false;
+    });
+    _resetRecordingState();
+    showUploadReelButton = await _mergeVideoWithAudio();
   }
 
   void _resetRecordingState() {
@@ -242,7 +239,6 @@ class OtherVoiceVideoRecordingScreenState
     _stopTimer?.cancel();
     _notifyTimer?.cancel();
   }
-
 
   Future<bool?> _mergeVideoWithAudio() async {
     final directory = await getTemporaryDirectory();
@@ -277,21 +273,23 @@ class OtherVoiceVideoRecordingScreenState
     log('stats length ${stats.length.toString()}');
     log('logs ${logs.toString()}');
     log('returned ${returned?.getValue().toString()}');
-    final savedSuccessfully = await GallerySaver.saveVideo(mergedVideoPath!);
+    // final savedSuccessfully = await GallerySaver.saveVideo(mergedVideoPath!);
     await _generateThumbnail(mergedVideoPath!);
-    if (savedSuccessfully ?? false) {
-      print('saved');
-      setState(() {
-        showGalleryBtn = true; // Show the gallery button if save is successful
-      });
-      showSuccessMessage(context, "Video saved successfully and ready to be shared");
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => VideoPlaybackScreen(mergedVideoPath!,_thumbnailPath!,false),
-        ),
-      );
-    }
+    // if (savedSuccessfully ?? false) {
+    //   print('saved');
+    //   setState(() {
+    //     showGalleryBtn = true; // Show the gallery button if save is successful
+    //   });
+    //   showSuccessMessage(
+    //       context, "Video saved successfully and ready to be shared");
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) =>
+    //           VideoPlaybackScreen(mergedVideoPath!, _thumbnailPath!, false),
+    //     ),
+    //   );
+    // }
     // final output = await session.getOutput();
     // log("alibaba output: $output");
     // log('final merged file path ${mergedVideoPath.toString()}');
@@ -299,8 +297,6 @@ class OtherVoiceVideoRecordingScreenState
     // log("Merged video file size: ${file.lengthSync()} bytes");
     return false;
   }
-
-
 
   void _switchCamera() {
     setState(() {
@@ -483,7 +479,12 @@ class OtherVoiceVideoRecordingScreenState
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => VideoPlaybackScreen(mergedVideoPath!,_thumbnailPath!,false,audioMediaId: widget.voiceMediaId,),
+        builder: (context) => VideoPlaybackScreen(
+          mergedVideoPath!,
+          _thumbnailPath!,
+          false,
+          audioMediaId: widget.voiceMediaId,
+        ),
       ),
     );
   }

@@ -18,7 +18,7 @@ class EditDoctorProfileState {
   EditDoctorProfileState({
     this.status = EditDoctorProfileStateStatus.initial,
     this.failure,
-    this.update=false,
+    this.update = false,
     this.doctor,
   });
   EditDoctorProfileState copyWith({

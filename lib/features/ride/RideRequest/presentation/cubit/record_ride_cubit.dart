@@ -43,7 +43,8 @@ class RecordRideCubit extends Cubit<RiderState> {
     }
   }
 
-  Future<String?> stopRecord({required String subcategoryId, required String tripId}) async {
+  Future<String?> stopRecord(
+      {required String subcategoryId, required String tripId}) async {
     try {
       log('stopRecord');
       String? path = await record.stop();
@@ -77,7 +78,10 @@ class RecordRideCubit extends Cubit<RiderState> {
       (l) {},
       (r) {
         sendBinaryFileData(
-            file: XFile(path), signedUrl: r['data']['signedUrl'],  mediaId: r['data']['mediaId'], tripId: tripId);
+            file: XFile(path),
+            signedUrl: r['data']['signedUrl'],
+            mediaId: r['data']['mediaId'],
+            tripId: tripId);
       },
     );
   }
@@ -104,24 +108,20 @@ class RecordRideCubit extends Cubit<RiderState> {
     log(response.data.toString(), name: "uploadImage");
     log(response.statusCode.toString(), name: "uploadImage");
     if (response.statusCode == 200) {
-      confirmUpload(
-          mediaId: mediaId,
-          tripId: tripId);
-      
+      confirmUpload(mediaId: mediaId, tripId: tripId);
     }
-    
   }
 
   getFileExtension(File file) {
     log("image/${path.extension(file.path).substring(1)}");
     if (file.existsSync()) {
-      return "${path.extension(file.path).substring(1)}";
+      return path.extension(file.path).substring(1);
     } else {
       return "image/png";
     }
   }
 
-   Future<int> getFileSize(File file) async {
+  Future<int> getFileSize(File file) async {
     final bytes = await file.readAsBytes();
     return bytes.length;
   }
@@ -139,6 +139,5 @@ class RecordRideCubit extends Cubit<RiderState> {
   uploadVice({required String tripId, required String mediaId}) async {
     var response =
         await repository.recordVoiceRide(tripId: tripId, mediaId: mediaId);
-    
   }
 }

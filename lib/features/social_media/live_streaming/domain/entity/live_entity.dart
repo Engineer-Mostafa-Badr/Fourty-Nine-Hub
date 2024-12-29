@@ -27,5 +27,5 @@ class LiveEntity extends Equatable {
 
   @override
   List<Object?> get props =>
-      [id, title, topicName, gift,ownerId, description, members, roomId];
+      [id, title, topicName, gift, ownerId, description, members, roomId];
 }

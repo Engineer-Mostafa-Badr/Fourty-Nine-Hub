@@ -1,6 +1,5 @@
 part of 'doctor_details_cubit.dart';
 
-
 enum DoctorDetailsStates { loading, initState, error, success }
 
 extension DoctorDetailsStateX on DoctorDetailsState {

@@ -11,24 +11,31 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/presentatio
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/reviews.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/waiting.dart';
 
-class DoctorDetailsParams{
+class DoctorDetailsParams {
   final String doctorId;
   final bool? fromSearch;
   final String? subCategoryId;
   final String? type;
-  DoctorDetailsParams({required this.doctorId, this.fromSearch=false,this.type,this.subCategoryId});
+  DoctorDetailsParams(
+      {required this.doctorId,
+      this.fromSearch = false,
+      this.type,
+      this.subCategoryId});
 }
 
 class DoctorDetailsView extends StatefulWidget {
   DoctorDetailsParams? params;
-  DoctorDetailsView({super.key, payload}){
+  DoctorDetailsView({super.key, payload}) {
     print("objectitemId$payload");
-    if(payload is DoctorDetailsParams){
+    if (payload is DoctorDetailsParams) {
       params = payload;
-    }else {
+    } else {
       print("payloadpayloadpayload $payload");
-      params = DoctorDetailsParams(doctorId: payload['doctorId'],subCategoryId: payload['subCategoryId'],type: payload['type'],fromSearch: false);
-
+      params = DoctorDetailsParams(
+          doctorId: payload['doctorId'],
+          subCategoryId: payload['subCategoryId'],
+          type: payload['type'],
+          fromSearch: false);
     }
   }
   @override
@@ -63,7 +70,9 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                   const DoctorDetailsWaitingTimeCard(),
                   const DoctorDetailsAddressCard(),
                   const DoctorDetailsAppointmentsCard(),
-                  DoctorDetailsReviewsWidget(doctorId: widget.params?.doctorId??'',),
+                  DoctorDetailsReviewsWidget(
+                    doctorId: widget.params?.doctorId ?? '',
+                  ),
                 ],
               );
             }

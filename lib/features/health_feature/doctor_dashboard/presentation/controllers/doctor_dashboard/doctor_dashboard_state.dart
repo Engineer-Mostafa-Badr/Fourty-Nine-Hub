@@ -54,7 +54,7 @@ class DoctorDashboardState {
         iDRemainingDays: iDRemainingDays ?? this.iDRemainingDays,
         info: info ?? this.info,
         todayAppointments: todayAppointments ?? this.todayAppointments,
-        unhandledAppointments: unhandledAppointments ?? this.unhandledAppointments
-    );
+        unhandledAppointments:
+            unhandledAppointments ?? this.unhandledAppointments);
   }
 }

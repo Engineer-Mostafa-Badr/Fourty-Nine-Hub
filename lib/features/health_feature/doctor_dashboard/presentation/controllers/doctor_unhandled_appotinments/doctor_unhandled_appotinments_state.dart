@@ -2,7 +2,8 @@ part of 'doctor_unhandled_appotinments_cubit.dart';
 
 enum DoctorUnhandledAppointmentsStates { loading, initState, error, success }
 
-extension DoctorUnhandledAppointmentsStateX on DoctorUnhandledAppointmentsState {
+extension DoctorUnhandledAppointmentsStateX
+    on DoctorUnhandledAppointmentsState {
   bool get isInitial => status == DoctorUnhandledAppointmentsStates.initState;
   bool get isLoading => status == DoctorUnhandledAppointmentsStates.loading;
   bool get isError => status == DoctorUnhandledAppointmentsStates.error;

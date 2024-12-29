@@ -8,7 +8,7 @@ class CommentModel extends CommentEntity {
       required super.content,
       required super.post,
       required super.createdAt,
-        super.reply,
+      super.reply,
       super.angryCount,
       super.likesCount,
       super.loveCount,
@@ -29,8 +29,12 @@ class CommentModel extends CommentEntity {
     return CommentModel(
       id: json['_id'],
       content: json['content'],
-      reply: json['reply']??'',
-      post: json['post']!=null?json['post'] is String?json['post']:'':'',
+      reply: json['reply'] ?? '',
+      post: json['post'] != null
+          ? json['post'] is String
+              ? json['post']
+              : ''
+          : '',
       isLove: json['isLove'] ?? false,
       isLikes: json['isLikes'] ?? false,
       user: json['user'] is String

@@ -271,9 +271,9 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
               ),
               Row(
                 children: [
-                  Expanded(
+                  Flexible(
+                    flex: 15,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Switch(
                           inactiveTrackColor: AppColors.GREY_LIGHT_COLOR,
@@ -289,7 +289,6 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                           value: registerRider.model.airCondition ?? false,
                         ),
                         Flexible(
-                          flex: 3,
                           child: Text(
                             LocaleKeys.airConditionAc.tr(),
                             style: const TextStyle(fontSize: 16),
@@ -298,32 +297,27 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Switch(
-                          inactiveTrackColor: AppColors.GREY_LIGHT_COLOR,
-                          onChanged: (value) {
-                            setState(() {
-                              if (context.isUserLoggedIn) {
-                                registerRider.model.smoker = value;
-                              } else {
-                                context.push(Routes.LOGIN);
-                              }
-                            });
-                          },
-                          value: registerRider.model.smoker ?? false,
-                        ),
-                        Text(
-                          LocaleKeys.Smoker.tr(),
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      Switch(
+                        inactiveTrackColor: AppColors.GREY_LIGHT_COLOR,
+                        onChanged: (value) {
+                          setState(() {
+                            if (context.isUserLoggedIn) {
+                              registerRider.model.smoker = value;
+                            } else {
+                              context.push(Routes.LOGIN);
+                            }
+                          });
+                        },
+                        value: registerRider.model.smoker ?? false,
+                      ),
+                      Text(
+                        LocaleKeys.Smoker.tr(),
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
                   )
                 ],
               ),
@@ -487,7 +481,7 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
               const SizedBox(height: 10),
 
               const SizedBox(height: 10),
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
@@ -981,25 +975,24 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
                     // log(formKey.currentState!.validate().toString(),
                     // name: "laksjdf");
                     // if (widget.formKey.currentState?.validate() ?? false) {
-                      registerRider.model.driverFirstName =
-                          firstNameController.text;
-                      registerRider.model.driverLastName =
-                          lastNameController.text;
-                      registerRider.model.phone = phoneController.text;
-                      registerRider.model.pricingPerKm =
-                          double.tryParse(pricingPerKmController.text) ?? 0;
-                      // registerRider.model.vehicleModel =
-                      //     vehicleModelController.text;
-                      // registerRider.model.vehicleBrand =
-                      //     vehicleBrandController.text;
-                      // registerRider.model.vehicleYear =
-                      //     vehicleYearController.text;
-                      registerRider.model.yourFavoriteCity =
-                          yourFavoriteCiryController.text;
-                      registerRider.model.idNumber = idNumberController.text;
-                      registerRider.model.plateInfo =
-                          plateNumberController.text;
-                      registerRider.registerOne();
+                    registerRider.model.driverFirstName =
+                        firstNameController.text;
+                    registerRider.model.driverLastName =
+                        lastNameController.text;
+                    registerRider.model.phone = phoneController.text;
+                    registerRider.model.pricingPerKm =
+                        double.tryParse(pricingPerKmController.text) ?? 0;
+                    // registerRider.model.vehicleModel =
+                    //     vehicleModelController.text;
+                    // registerRider.model.vehicleBrand =
+                    //     vehicleBrandController.text;
+                    // registerRider.model.vehicleYear =
+                    //     vehicleYearController.text;
+                    registerRider.model.yourFavoriteCity =
+                        yourFavoriteCiryController.text;
+                    registerRider.model.idNumber = idNumberController.text;
+                    registerRider.model.plateInfo = plateNumberController.text;
+                    registerRider.registerOne();
                     // }
                     // registerRider.register();
                     // log("${registerRider.model.registerOne()}",

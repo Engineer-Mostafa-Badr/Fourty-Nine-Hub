@@ -93,12 +93,16 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                             capitalizeAndSplit(
                                 '${widget.reply.user.firstName} ${widget.reply.user.lastName}'),
                             style: TextStyle(
-                              color: context.isDarkMode ? Colors.white70 : Colors.grey,
+                              color: context.isDarkMode
+                                  ? Colors.white70
+                                  : Colors.grey,
                               fontSize: 25.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(width: 10.w,),
+                          SizedBox(
+                            width: 10.w,
+                          ),
                           NoScaleText(
                             formatDateTime(widget.reply.createdAt),
                             style: TextStyle(
@@ -112,7 +116,9 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                       NoScaleText(
                         widget.reply.content,
                         style: TextStyle(
-                          color: context.isDarkMode ? Colors.white70 : Colors.black87,
+                          color: context.isDarkMode
+                              ? Colors.white70
+                              : Colors.black87,
                           fontSize: 25.sp,
                         ),
                       ),
@@ -121,7 +127,7 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                         children: [
                           _buildReplyButton(),
                           const Spacer(),
-                      // _buildReplyLikeButton(reply,replyId: replyId,isLike: isLike,likeCount: replyCount),
+                          // _buildReplyLikeButton(reply,replyId: replyId,isLike: isLike,likeCount: replyCount),
                         ],
                       ),
                     ],
@@ -181,7 +187,8 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                                       postId: widget.reply.id, react: 'love'));
                               if (result == true) {
                                 widget.reply.isLove = false;
-                                widget.reply.loveCount = (widget.reply.loveCount! - 1);
+                                widget.reply.loveCount =
+                                    (widget.reply.loveCount! - 1);
                                 setState(() {});
                               } else {
                                 showErrorMessage(
@@ -198,7 +205,8 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                                       postId: widget.reply.id, react: 'love'));
                               if (result == true) {
                                 widget.reply.isLove = true;
-                                widget.reply.loveCount = (widget.reply.loveCount! + 1);
+                                widget.reply.loveCount =
+                                    (widget.reply.loveCount! + 1);
                                 setState(() {});
                               } else {
                                 showErrorMessage(
@@ -215,11 +223,12 @@ class _InstagramReplyCardState extends State<InstagramReplyCard> {
                             widget.reply.isLove == false
                                 ? Icons.favorite_border
                                 : Icons.favorite,
-                            color:
-                            widget.reply.isLove == false ? Colors.grey : Colors.red,
+                            color: widget.reply.isLove == false
+                                ? Colors.grey
+                                : Colors.red,
                           ),
                         ),
-                         SizedBox(
+                        SizedBox(
                           height: 10.h,
                         ),
                         Label(text: '${widget.reply.loveCount}'),

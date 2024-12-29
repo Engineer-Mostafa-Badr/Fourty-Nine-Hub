@@ -26,6 +26,7 @@ class AdsManager {
 
   void _loadAd() {
     final nativeAd = NativeAd(
+      factoryId: "",
       adUnitId: adUnitId,
       listener: NativeAdListener(
         onAdLoaded: (ad) {
@@ -46,9 +47,9 @@ class AdsManager {
         mediaAspectRatio: MediaAspectRatio.any,
         videoOptions: VideoOptions(startMuted: true),
       ),
-      nativeTemplateStyle: NativeTemplateStyle(
-        templateType: TemplateType.medium,
-      ),
+      // nativeTemplateStyle: NativeTemplateStyle(
+      //   templateType: TemplateType.medium,
+      // ),
     );
     nativeAd.load();
   }
@@ -100,7 +101,7 @@ Widget getAdIfNeeded(int index, AdsManager adsManager) {
     // Return ad widget if needed, else show a placeholder Text
     return adsManager.nativeAds.isNotEmpty
         ? adsManager.getAdWidget(index ~/ adFrequency)
-        : SizedBox.shrink();
+        : const SizedBox.shrink();
   }
   return const SizedBox(); // No ad for other indices
 }
@@ -190,7 +191,7 @@ class AdsManager1 {
 
 
 class AdsManagerWidget extends StatefulWidget {
-  const AdsManagerWidget({Key? key}) : super(key: key);
+  const AdsManagerWidget({super.key});
 
   @override
   _AdsManagerWidgetState createState() => _AdsManagerWidgetState();
@@ -221,6 +222,7 @@ class _AdsManagerWidgetState extends State<AdsManagerWidget> {
 
   void _loadAd() {
     final nativeAd = NativeAd(
+      factoryId: "",
       adUnitId: adUnitId,
       listener: NativeAdListener(
         onAdLoaded: (ad) {
@@ -242,9 +244,9 @@ class _AdsManagerWidgetState extends State<AdsManagerWidget> {
         mediaAspectRatio: MediaAspectRatio.any,
         videoOptions: VideoOptions(startMuted: true),
       ),
-      nativeTemplateStyle: NativeTemplateStyle(
-        templateType: TemplateType.medium,
-      ),
+      // nativeTemplateStyle: NativeTemplateStyle(
+      //   templateType: TemplateType.medium,
+      // ),
     );
     nativeAd.load();
   }

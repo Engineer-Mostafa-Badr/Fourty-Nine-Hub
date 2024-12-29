@@ -3,13 +3,12 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/food_order_model.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/shipping_request_model/shipping_request_model.dart';
-import 'package:fourtyninehub/features/requests_history/data/models/trip_model.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../../../res/assets/jsons.dart';
 
 abstract class RequestHistoryRemoteDataSource {
-  Future<Either<Failure, List<TripModel>>> getRideHistory();
+  // Future<Either<Failure, List<TripModel>>> getRideHistory();
   Future<Either<Failure, List<ShippingRequestModel>>> getShippingRequests();
   Future<Either<Failure, List<FoodOrderModel>>> getFoodHistory();
   Future<Either<Failure, Map<String, dynamic>>> rating(
@@ -27,15 +26,20 @@ class RequestHistoryRemoteDataSourceImpl
   final ApiConsumer _apiConsumer;
   RequestHistoryRemoteDataSourceImpl(this._apiConsumer);
 
-  @override
-  Future<Either<Failure, List<TripModel>>> getRideHistory() async {
-    final response = await _apiConsumer.get(Jsons.trips);
-    return response.fold(
-        (failure) => Left(failure),
-        (data) => Right((data['data']['trips'] as List)
-            .map((e) => TripModel.fromJson(e))
-            .toList()));
-  }
+  // @override
+  // Future<Either<Failure, List<TripModel>>> getRideHistory() async {
+  //   print("hello == from ride \n");
+
+  //   final response =
+  //       await _apiConsumer.get("https://49dev.com/api/v1/ride/trips/use");
+  //   print("response ==${response}\n");
+
+  //   return response.fold(
+  //       (failure) => Left(failure),
+  //       (data) => Right((data['data']['trips'] as List)
+  //           .map((e) => TripModel.fromJson(e))
+  //           .toList()));
+  // }
 
   @override
   Future<Either<Failure, List<FoodOrderModel>>> getFoodHistory() async {
@@ -50,7 +54,10 @@ class RequestHistoryRemoteDataSourceImpl
   @override
   Future<Either<Failure, List<ShippingRequestModel>>>
       getShippingRequests() async {
-    final response = await _apiConsumer.get(Jsons.shippingRequests);
+    print("hello == from shipping \n");
+    final response = await _apiConsumer
+        .get("https://49dev.com/api/v1/loading/trip/allUserTrips");
+    print("response ==$response\n");
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data'] as List)

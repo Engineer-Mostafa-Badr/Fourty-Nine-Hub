@@ -100,36 +100,35 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
                       },
                       itemBuilder: (context, item, index) {
                         return _buildCommentCard(
-                          reply: controller
-                              .repliesPagingController.itemList![index],
-                          onDeleteComment: (String id) async {
-                            var result = await widget.onDeleteReply(id);
-                            if (result == true) {
-                              controller.commentsPagingController.itemList
-                                  ?.removeWhere((e) => e.id == id);
-                              setState(() {});
-                            }
-                          },
-                          onDeleteReply: (String id) async {
-                            var result = await widget.onDeleteReply(id);
-                            if (result == true) {
-                              controller.repliesPagingController.itemList
-                                  ?.removeWhere((e) => e.id == id);
-                              setState(() {});
-                            }
-                          },
-                          function: (){
-                            controller.replyOnComment(
-                              params: ReplyOnCommentParams(
-                                postId: controller.repliesPagingController
-                                    .itemList![index].post,
-                                commentId: controller.repliesPagingController
-                                    .itemList![index].id,
-                                content: replyTextController.text,
-                              ),
-                            );
-                          }
-                        );
+                            reply: controller
+                                .repliesPagingController.itemList![index],
+                            onDeleteComment: (String id) async {
+                              var result = await widget.onDeleteReply(id);
+                              if (result == true) {
+                                controller.commentsPagingController.itemList
+                                    ?.removeWhere((e) => e.id == id);
+                                setState(() {});
+                              }
+                            },
+                            onDeleteReply: (String id) async {
+                              var result = await widget.onDeleteReply(id);
+                              if (result == true) {
+                                controller.repliesPagingController.itemList
+                                    ?.removeWhere((e) => e.id == id);
+                                setState(() {});
+                              }
+                            },
+                            function: () {
+                              controller.replyOnComment(
+                                params: ReplyOnCommentParams(
+                                  postId: controller.repliesPagingController
+                                      .itemList![index].post,
+                                  commentId: controller.repliesPagingController
+                                      .itemList![index].id,
+                                  content: replyTextController.text,
+                                ),
+                              );
+                            });
                       },
                       noMoreItemsIndicatorBuilder: (context) => Container(),
                       firstPageProgressIndicatorBuilder: (context) => Container(
@@ -230,12 +229,12 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
     );
   }
 
-  Widget _buildCommentCard(
-      {required CommentEntity reply,
-      required Function(String) onDeleteComment,
-      required Function(String) onDeleteReply,
-      required Function() function,
-      }) {
+  Widget _buildCommentCard({
+    required CommentEntity reply,
+    required Function(String) onDeleteComment,
+    required Function(String) onDeleteReply,
+    required Function() function,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

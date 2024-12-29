@@ -10,9 +10,11 @@ import 'package:fourtyninehub/res/strings/labels.dart';
 part 'emergency_state.dart';
 
 class HealthEmergencyCubit extends Cubit<HealthEmergencyState> {
-  HealthEmergencyCubit(this._bookHealthEmergencyUseCase, this._healthShare,
-      this._getHealthSubcategoriesUseCase,)
-      : super(HealthEmergencyInitial());
+  HealthEmergencyCubit(
+    this._bookHealthEmergencyUseCase,
+    this._healthShare,
+    this._getHealthSubcategoriesUseCase,
+  ) : super(HealthEmergencyInitial());
   final HealthSharedData _healthShare;
   final GetHealthSubcategoriesUseCase _getHealthSubcategoriesUseCase;
 
@@ -28,8 +30,7 @@ class HealthEmergencyCubit extends Cubit<HealthEmergencyState> {
     final userId = UserCubit.to.state.data?.id;
 
     if (_healthShare.subCategories.isEmpty) {
-      final response =
-          await _getHealthSubcategoriesUseCase.call(userId??'');
+      final response = await _getHealthSubcategoriesUseCase.call(userId ?? '');
       response.fold(
           (failure) =>
               emit(HealthEmergencyError(message: Labels.errorHappened)),

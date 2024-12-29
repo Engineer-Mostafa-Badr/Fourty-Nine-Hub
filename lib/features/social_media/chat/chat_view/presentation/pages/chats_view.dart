@@ -270,6 +270,8 @@
 // }
 //after add index to navigate
 
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -288,6 +290,7 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/widgets/my_broadcast_card.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/archived_chats_view.dart';
@@ -304,17 +307,27 @@ import '../../../../stories/presentation/cubit/stories_cubit.dart';
 import '../widgets/calling_card.dart';
 import '../widgets/chat_card.dart';
 
-class ChatView extends StatefulWidget {
+class ChatsViewParams {
   final int initialTabIndex;
+  bool isFromStartChat = false;
+  ChatEntity? selectedChat;
+  ChatsViewParams(
+      {this.initialTabIndex = 0,
+      this.isFromStartChat = false,
+      this.selectedChat});
+}
 
-  const ChatView({super.key, this.initialTabIndex = 0});
+// ignore: must_be_immutable
+class ChatView extends StatefulWidget {
+  final ChatsViewParams chatsViewParams;
+  const ChatView({super.key, required this.chatsViewParams});
 
   @override
   State<ChatView> createState() => _ChatViewState();
 }
 
 class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
-  late ChatsCubit chatCubit;
+  late ChatsCubit chatsCubit;
   late TabController tabController;
   bool expandedOptions = false;
   late ScrollController scrollController;
@@ -322,12 +335,24 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    chatCubit = context.read<ChatsCubit>()..init();
+    if (widget.chatsViewParams.isFromStartChat) {
+      chatsCubit = context.read<ChatsCubit>()..init();
+      chatsCubit.selectChat = widget.chatsViewParams.selectedChat!;
+
+      Future.microtask(() async {
+        await context
+            .read<ChatsCubit>()
+            .getOnlineOfflineStatus(chat: widget.chatsViewParams.selectedChat!);
+        context.push(Routes.CHATROOM, extra: chatsCubit);
+      });
+    } else {
+      chatsCubit = context.read<ChatsCubit>()..init();
+    }
     tabController =
         TabController(length: ChatCategories.values.length, vsync: this)
           ..addListener(() {
             if (tabController.previousIndex != tabController.index) {
-              chatCubit.getChatsByCategory(
+              chatsCubit.getChatsByCategory(
                   ChatCategories.values[tabController.index]);
             }
           });
@@ -366,7 +391,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: ChatCategories.values.length,
-      initialIndex: widget.initialTabIndex,
+      initialIndex: widget.chatsViewParams.initialTabIndex,
       child: BlocBuilder<ChatsCubit, ChatsState>(
         builder: (context, state) {
           return SharedScaffold(
@@ -402,11 +427,21 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                                 .selectedChats
                                                 .isNotEmpty
                                             ? "${context.read<ChatsCubit>().selectedChats.length} ${LocaleKeys.selected.tr()}"
-                                            : "",
-                                        style: Styles.mediumText(
-                                            color: context.isDarkMode
-                                                ? Colors.white
-                                                : AppColors.PRIMARY_COLOR),
+                                            : "49 Hub",
+                                        style: context
+                                                .read<ChatsCubit>()
+                                                .selectedChats
+                                                .isNotEmpty
+                                            ? Styles.mediumText(
+                                                color: context.isDarkMode
+                                                    ? Colors.white
+                                                    : AppColors.PRIMARY_COLOR)
+                                            : Styles.headerText(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 48,
+                                                color: context.isDarkMode
+                                                    ? Colors.white
+                                                    : AppColors.PRIMARY_COLOR),
                                       ),
                                     ),
                                     const Spacer(),
@@ -459,7 +494,8 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                                 onPressed: () async {
                                                   await context
                                                       .read<ChatsCubit>()
-                                                      .changeArchiveChat();
+                                                      .changeArchiveChat(
+                                                          isArchivedTab: false);
                                                 },
                                                 icon: Icon(
                                                   Icons.archive,
@@ -490,9 +526,14 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                             ),
                                             offset: const Offset(0, 50),
                                             onSelected: (int value) async {
-                                              if (value == 4) {
+                                              if (value == 0) {
                                                 context.push(
                                                     Routes.CHATPROFILEVIEW);
+                                              }
+                                              if (value == 1) {
+                                                await context
+                                                    .read<ChatsCubit>()
+                                                    .recoverDeletedChats();
                                               }
                                             },
                                             itemBuilder: (context) {
@@ -644,10 +685,37 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
 
   List<PopupMenuEntry<int>> _mainMenuBuilder() {
     return [
+      // PopupMenuItem<int>(
+      //   value: 0,
+      //   child: Text(
+      //     LocaleKeys.newGroup.tr(),
+      //     style: Styles.mediumText(
+      //         color:
+      //             context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+      //   ),
+      // ),
+      // PopupMenuItem<int>(
+      //   value: 1,
+      //   child: Text(
+      //     LocaleKeys.newBroadcast.tr(),
+      //     style: Styles.mediumText(
+      //         color:
+      //             context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+      //   ),
+      // ),
+      // PopupMenuItem<int>(
+      //   value: 2,
+      //   child: Text(
+      //     LocaleKeys.linkedDevice.tr(),
+      //     style: Styles.mediumText(
+      //         color:
+      //             context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+      //   ),
+      // ),
       PopupMenuItem<int>(
         value: 0,
         child: Text(
-          LocaleKeys.newGroup.tr(),
+          LocaleKeys.recoverDeletedChats.tr(),
           style: Styles.mediumText(
               color:
                   context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
@@ -655,33 +723,6 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       ),
       PopupMenuItem<int>(
         value: 1,
-        child: Text(
-          LocaleKeys.newBroadcast.tr(),
-          style: Styles.mediumText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
-        ),
-      ),
-      PopupMenuItem<int>(
-        value: 2,
-        child: Text(
-          LocaleKeys.linkedDevice.tr(),
-          style: Styles.mediumText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
-        ),
-      ),
-      PopupMenuItem<int>(
-        value: 3,
-        child: Text(
-          LocaleKeys.starredMessages.tr(),
-          style: Styles.mediumText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
-        ),
-      ),
-      PopupMenuItem<int>(
-        value: 4,
         child: Text(
           LocaleKeys.profile.tr(),
           style: Styles.mediumText(
@@ -718,6 +759,21 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       case ChatCategories.social:
         return Column(
           children: [
+            InkWell(
+              onTap: () {
+                setState(() {
+                  expandedOptions = !expandedOptions;
+                });
+              },
+              child: SizedBox(
+                width: double.infinity,
+                child: Icon(
+                  expandedOptions
+                      ? Icons.keyboard_double_arrow_up_outlined
+                      : Icons.keyboard_double_arrow_down_outlined,
+                ),
+              ),
+            ),
             ChatOptions(
               icon: Icons.archive,
               text: LocaleKeys.archive.tr(),
@@ -725,14 +781,14 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                 final result = await context.push(Routes.ARCHIVEDCHATS,
                     extra: OptionsChatsViewParams(
                       category: 'Archive',
-                      chatsCubit: chatCubit,
+                      chatsCubit: chatsCubit,
                       isSecret: false,
                     ));
 
                 // Check if the result is true, refresh the home page
                 if (result == true) {
                   log("pop");
-                  await chatCubit.getChatsByCategory(ChatCategories.social);
+                  await chatsCubit.getChatsByCategory(ChatCategories.social);
                   setState(() {});
                 }
               },
@@ -756,14 +812,14 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                         final result = await context.push(Routes.ARCHIVEDCHATS,
                             extra: OptionsChatsViewParams(
                               category: 'LockedChats',
-                              chatsCubit: chatCubit,
+                              chatsCubit: chatsCubit,
                               isSecret: true,
                             ));
 
                         // Check if the result is true, refresh the home page
                         if (result == true) {
                           log("pop");
-                          await chatCubit
+                          await chatsCubit
                               .getChatsByCategory(ChatCategories.social);
                           setState(() {});
                         }
@@ -788,14 +844,14 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                         final result = await context.push(Routes.ARCHIVEDCHATS,
                             extra: OptionsChatsViewParams(
                               category: ChatCategoriesIds.anonymous,
-                              chatsCubit: chatCubit,
+                              chatsCubit: chatsCubit,
                               isSecret: false,
                             ));
 
                         // Check if the result is true, refresh the home page
                         if (result == true) {
                           log("pop");
-                          await chatCubit
+                          await chatsCubit
                               .getChatsByCategory(ChatCategories.social);
                           setState(() {});
                         }
@@ -820,14 +876,14 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                         final result = await context.push(Routes.ARCHIVEDCHATS,
                             extra: OptionsChatsViewParams(
                               category: ChatCategoriesIds.greet,
-                              chatsCubit: chatCubit,
+                              chatsCubit: chatsCubit,
                               isSecret: false,
                             ));
 
                         // Check if the result is true, refresh the home page
                         if (result == true) {
                           log("pop");
-                          await chatCubit
+                          await chatsCubit
                               .getChatsByCategory(ChatCategories.social);
                           setState(() {});
                         }
@@ -850,14 +906,14 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                 final result = await context.push(Routes.ARCHIVEDCHATS,
                     extra: OptionsChatsViewParams(
                       category: 'Archive',
-                      chatsCubit: chatCubit,
+                      chatsCubit: chatsCubit,
                       isSecret: false,
                     ));
 
                 // Check if the result is true, refresh the home page
                 if (result == true) {
                   log("pop");
-                  await chatCubit.getChatsByCategory(ChatCategories.service);
+                  await chatsCubit.getChatsByCategory(ChatCategories.service);
                   setState(() {});
                 }
               },
@@ -880,14 +936,14 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                         final result = await context.push(Routes.ARCHIVEDCHATS,
                             extra: OptionsChatsViewParams(
                               category: 'LockedChats',
-                              chatsCubit: chatCubit,
+                              chatsCubit: chatsCubit,
                               isSecret: true,
                             ));
 
                         // Check if the result is true, refresh the home page
                         if (result == true) {
                           log("pop");
-                          await chatCubit
+                          await chatsCubit
                               .getChatsByCategory(ChatCategories.service);
                           setState(() {});
                         }
@@ -900,13 +956,18 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
             const MessagesAreEndToEndEncrypted(),
           ],
         );
-      case ChatCategories.groups:
+      // case ChatCategories.groups:
       case ChatCategories.unread:
-        return _buildCategoryChats();
+        return Column(
+          children: [
+            _buildCategoryChats(),
+            const MessagesAreEndToEndEncrypted(),
+          ],
+        );
       case ChatCategories.calls:
         return _buildCallingHistory(isVideo: false);
-      case ChatCategories.broadcast:
-        return buildBroadcast();
+      // case ChatCategories.broadcast:
+      //   return buildBroadcast();
       //   case ChatCategories.archived:
       // case ChatCategories.anonymous:
       // case ChatCategories.greet:
@@ -990,7 +1051,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                             child: ChatCard(
                               isSecret: isSecret,
                               chat: state.chats?[index],
-                              chatsCubit: chatCubit,
+                              chatsCubit: chatsCubit,
                             ),
                           ),
                     separatorBuilder: (context, index) => const SizedBox(),

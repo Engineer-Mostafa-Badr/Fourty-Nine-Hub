@@ -15,21 +15,21 @@ class InstagramState {
   final List<FollowersEntity>? followers;
   final List<FollowingEntity>? following;
 
-  InstagramState(
-      {this.advertisementsPage = 0,
-      this.newPage = 0,
-      this.pageIndex = 0,
-      this.posts,
-      this.status,
-      this.failure,
-      this.newComment,
-      this.postComments,
-      this.suggestedFriends,
-      this.followers,
-      this.following,
-      this.media,
-      this.count = 0,
-      });
+  InstagramState({
+    this.advertisementsPage = 0,
+    this.newPage = 0,
+    this.pageIndex = 0,
+    this.posts,
+    this.status,
+    this.failure,
+    this.newComment,
+    this.postComments,
+    this.suggestedFriends,
+    this.followers,
+    this.following,
+    this.media,
+    this.count = 0,
+  });
   InstagramState copyWith({
     StateStatus? status,
     Failure? failure,
@@ -43,7 +43,7 @@ class InstagramState {
     CommentEntity? newComment,
     List<CommentEntity>? postComments,
     List<FollowersEntity>? followers,
-     List<FollowingEntity>? following,
+    List<FollowingEntity>? following,
   }) {
     return InstagramState(
       status: status ?? this.status,

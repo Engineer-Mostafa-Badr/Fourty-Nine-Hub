@@ -91,7 +91,7 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                                       activeTrackColor: Colors.grey,
                                       activeColor: AppColors.SECONDARY_COLOR,
                                       trackOutlineColor:
-                                          MaterialStateProperty.resolveWith(
+                                          WidgetStateProperty.resolveWith(
                                               (sattes) => Colors.white),
                                       onChanged: (v) async {
                                         print("vsssss${!v}");

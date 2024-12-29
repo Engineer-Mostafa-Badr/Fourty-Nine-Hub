@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -109,21 +111,16 @@ class _SubCateogryRideWidgetState extends State<SubCateogryRideWidget> {
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      // Create a temporary working list
                       List<SubCategoryEntity> workingList =
                           List.from(category.subcategories!);
-
-                      // Select the clicked subcategory and sort it
                       final selectedSubCategory = workingList[index];
                       workingList.removeAt(index);
                       workingList.insert(0, selectedSubCategory);
-
                       context
                           .read<SelectCateogryCubit>()
                           .select(id: workingList[0].id, type: 0);
                       riderCubit.selectCateogry(workingList[0]);
                       context.read<ShippingCubit>().removeSubCategoryRequest();
-
                       categryId.sortData(
                         workingList[0].id,
                         orginalList:
@@ -137,43 +134,71 @@ class _SubCateogryRideWidgetState extends State<SubCateogryRideWidget> {
                   },
                   child: BlocBuilder<SelectCateogryCubit, RiderState>(
                     builder: (context, state) {
+                      log(state.toString());
                       if (state is SuccessSelectCateogryState) {
-                        return SubcategoryCardSelected(
-                          selected: riderCubit.subCategory == null
-                              ? false
-                              : riderCubit.subCategory!.id ==
-                                  category.subcategories![index].id,
-                          mainCategory: category,
-                          item: category.subcategories![index],
-                          isSmallCard: true,
-                          onChanged: (value) {
-                            setState(() {
-                              List<SubCategoryEntity> workingList =
-                                  List.from(category.subcategories!);
+                        if (state.type == 0) {
+                          return SubcategoryCardSelected(
+                            selected: riderCubit.subCategory == null
+                                ? false
+                                : riderCubit.subCategory!.id ==
+                                    category.subcategories![index].id,
+                            mainCategory: category,
+                            item: category.subcategories![index],
+                            isSmallCard: true,
+                            onChanged: (value) {
+                              setState(() {
+                                List<SubCategoryEntity> workingList =
+                                    List.from(category.subcategories!);
 
-                              final selectedSubCategory = workingList[index];
-                              workingList.removeAt(index);
-                              workingList.insert(0, selectedSubCategory);
+                                final selectedSubCategory = workingList[index];
+                                workingList.removeAt(index);
+                                workingList.insert(0, selectedSubCategory);
 
-                              riderCubit.selectCateogry(workingList[0]);
-                              categryId.sortData(
-                                workingList[0].id,
-                                orginalList:
-                                    BlocProvider.of<GetCateogryRiderCubit>(
-                                            context)
-                                        .bannerModel
-                                        .subCategories,
-                              );
-                              controller.jumpTo(0);
-                            });
-                          },
-                        );
+                                riderCubit.selectCateogry(workingList[0]);
+                                categryId.sortData(
+                                  workingList[0].id,
+                                  orginalList:
+                                      BlocProvider.of<GetCateogryRiderCubit>(
+                                              context)
+                                          .bannerModel
+                                          .subCategories,
+                                );
+                                controller.jumpTo(0);
+                              });
+                            },
+                          );
+                        } else {
+                          return SubcategoryCardSelected(
+                            selected: false,
+                            mainCategory: category,
+                            item: category.subcategories![index],
+                            isSmallCard: true,
+                            onChanged: (value) {
+                              setState(() {
+                                List<SubCategoryEntity> workingList =
+                                    List.from(category.subcategories!);
+
+                                final selectedSubCategory = workingList[index];
+                                workingList.removeAt(index);
+                                workingList.insert(0, selectedSubCategory);
+
+                                riderCubit.selectCateogry(workingList[0]);
+                                categryId.sortData(
+                                  workingList[0].id,
+                                  orginalList:
+                                      BlocProvider.of<GetCateogryRiderCubit>(
+                                              context)
+                                          .bannerModel
+                                          .subCategories,
+                                );
+                                controller.jumpTo(0);
+                              });
+                            },
+                          );
+                        }
                       } else {
                         return SubcategoryCardSelected(
-                          selected: riderCubit.subCategory == null
-                              ? false
-                              : riderCubit.subCategory!.id ==
-                                  category.subcategories![index].id,
+                          selected: false,
                           mainCategory: category,
                           item: category.subcategories![index],
                           isSmallCard: true,

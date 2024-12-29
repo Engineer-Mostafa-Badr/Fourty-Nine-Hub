@@ -17,12 +17,12 @@ class CreateDoctorCallTimeTable extends StatelessWidget {
       builder: (context, state) {
         if (state is CreateDoctorShowCall && state.check) {
           return Timetable(
-            title: context.isArabic?'مكالمة':'Call',
+            title: context.isArabic ? 'مكالمة' : 'Call',
             timetale: doctorLoginCubit.callTimetable,
             child: Column(
               children: [
                 DefaultTextFormField(
-                    hint: context.isArabic?'سعر المكالمة':'Call Price',
+                    hint: context.isArabic ? 'سعر المكالمة' : 'Call Price',
                     keyboardType: TextInputType.number,
                     isRequired: true,
                     currentFocusNode: doctorLoginCubit.callPriceFocusNode,
@@ -31,7 +31,9 @@ class CreateDoctorCallTimeTable extends StatelessWidget {
                     currentController: doctorLoginCubit.callPriceController),
                 const Sizer(),
                 DefaultTextFormField(
-                    hint: context.isArabic?'مدة الفحص عبر المكالمة (بالدقائق)':'Call Examine Duration (in minutes)',
+                    hint: context.isArabic
+                        ? 'مدة الفحص عبر المكالمة (بالدقائق)'
+                        : 'Call Examine Duration (in minutes)',
                     keyboardType: TextInputType.number,
                     isRequired: true,
                     currentFocusNode:

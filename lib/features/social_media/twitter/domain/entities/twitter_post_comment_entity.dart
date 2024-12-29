@@ -38,7 +38,6 @@ class TwitterPostCommentEntity {
       this.edit = false,
       this.replies});
 
-
   //toJson
   Map<String, dynamic> toJson() => {
         'id': id,

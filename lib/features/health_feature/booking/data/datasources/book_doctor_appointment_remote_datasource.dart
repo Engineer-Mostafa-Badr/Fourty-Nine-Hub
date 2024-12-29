@@ -13,8 +13,7 @@ abstract class BookAppointmentRemoteDataSource {
 
   Future<Either<Failure, bool>> bookPremiumAppointment(
       BookAppointmentParams params);
-  Future<Either<Failure, bool>> doctorCancelAppointment(
-      String id);
+  Future<Either<Failure, bool>> doctorCancelAppointment(String id);
   Future<Either<Failure, List<AllAppointmentEntity>>> allAppointment(
       PaginationParams params);
 }
@@ -48,19 +47,25 @@ class BookAppointmentRemoteDataSourceImpl
   }
 
   @override
-  Future<Either<Failure, List<AllAppointmentEntity>>> allAppointment(PaginationParams params) async {
+  Future<Either<Failure, List<AllAppointmentEntity>>> allAppointment(
+      PaginationParams params) async {
     final response = await _apiConsumer.get(
       EndPoints.allAppointments(params),
     );
 
-    return response.fold((l) => Left(l), (r) => Right((r['data'] as List)
-        .map((e) => AllAppointmentModel.fromJson(e))
-        .toList()));  }
+    return response.fold(
+        (l) => Left(l),
+        (r) => Right((r['data'] as List)
+            .map((e) => AllAppointmentModel.fromJson(e))
+            .toList()));
+  }
 
   @override
   Future<Either<Failure, bool>> doctorCancelAppointment(String id) async {
-    final response = await _apiConsumer.delete(EndPoints.doctorCancelAppointment(id));
+    final response =
+        await _apiConsumer.delete(EndPoints.doctorCancelAppointment(id));
     return response.fold((failure) => Left(failure), (data) {
       return Right(data['status']);
-    });}
+    });
+  }
 }

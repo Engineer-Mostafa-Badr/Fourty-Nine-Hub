@@ -191,7 +191,8 @@ class CheckAcceptByRiderModel {
   String? otp;
   DateTime? createdAt;
   DateTime? updatedAt;
-
+  String? driverPhone;
+  String? userPhone;
   CheckAcceptByRiderModel({
     this.startLocation,
     this.targetLocation,
@@ -206,6 +207,8 @@ class CheckAcceptByRiderModel {
     this.autoAccept,
     this.isPremium,
     this.distance,
+    this.driverPhone,
+    this.userPhone,
     this.duration,
     this.passengers,
     this.price,
@@ -232,6 +235,8 @@ class CheckAcceptByRiderModel {
       id: json['_id'] as String?,
       userId: json['userId'] as String?,
       riderId: json['riderId'],
+      userPhone: json['userPhone'] as String?,
+      driverPhone: json['driverPhone'] as String?,
       subCategoryId: json['subCategoryId'] as String?,
       carTypeId: json['carTypeId'],
       fromTitle: json['fromTitle'] as String?,
@@ -242,7 +247,7 @@ class CheckAcceptByRiderModel {
       distance: json['distance'] as int?,
       duration: json['duration'] as int?,
       passengers: json['passengers'] as int?,
-      price: double.parse(json['price'].toString()),
+      price: double.tryParse(json['price'].toString()),
       calculateB: json['calculateB'] as int?,
       paymentMethod: json['paymentMethod'] as String?,
       status: (json['status'].toString()) as String?,

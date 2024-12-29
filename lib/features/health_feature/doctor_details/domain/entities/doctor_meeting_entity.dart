@@ -10,7 +10,17 @@ class DoctorMeetingEntity {
   final String createdAt;
   final String updatedAt;
 
-  DoctorMeetingEntity({required this.id, required this.roomId, required this.userId, required this.isFinish, required this.startDate, required this.endDate, required this.title,  this.members, required this.createdAt, required this.updatedAt});
+  DoctorMeetingEntity(
+      {required this.id,
+      required this.roomId,
+      required this.userId,
+      required this.isFinish,
+      required this.startDate,
+      required this.endDate,
+      required this.title,
+      this.members,
+      required this.createdAt,
+      required this.updatedAt});
 
   //toJson
   Map<String, dynamic> toJson() => {
@@ -25,5 +35,4 @@ class DoctorMeetingEntity {
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
-
 }

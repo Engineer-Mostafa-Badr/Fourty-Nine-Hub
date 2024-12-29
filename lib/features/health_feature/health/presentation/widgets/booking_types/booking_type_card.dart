@@ -21,7 +21,8 @@ class HealthBookingTypeCard extends StatelessWidget {
         if (context.read<UserCubit>().isLoggedIn) {
           serviceLocator<HealthSharedData>().doctorSearchParams.bookingType =
               bookingFilterModel.bookingType;
-          context.push(bookingFilterModel.route, extra: bookingFilterModel.bookingType.name);
+          context.push(bookingFilterModel.route,
+              extra: bookingFilterModel.bookingType.name);
         } else {
           context.push(Routes.REGISTER);
         }

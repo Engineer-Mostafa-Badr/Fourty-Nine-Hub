@@ -25,7 +25,7 @@ class _HealthBannerState extends State<HealthBanner> {
             category: state.mainCategory != null
                 ? MainCategoryEntity(
                     id: state.mainCategory?.id ?? "",
-                    name: context.isArabic?'صحة':'Health',
+                    name: context.isArabic ? 'صحة' : 'Health',
                     image: state.mainCategory?.image ?? "",
                     banner: state.mainCategory?.banner ?? "",
                     cover: state.mainCategory?.cover ?? "",
@@ -35,7 +35,7 @@ class _HealthBannerState extends State<HealthBanner> {
                   )
                 : MainCategoryEntity(
                     id: state.banner?.id ?? "",
-                    name: context.isArabic?'صحة':'Health',
+                    name: context.isArabic ? 'صحة' : 'Health',
                     image: state.banner?.banner ?? "",
                     banner: state.banner?.banner ?? "",
                     cover: state.banner?.cover ?? "",

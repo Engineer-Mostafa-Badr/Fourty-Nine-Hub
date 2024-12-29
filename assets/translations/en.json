@@ -1221,7 +1221,6 @@
   "youHaveToFillYourNumberOfPassenger": "You have to fill your Number of Passenger",
   "waitingForReplies":"Waiting for replies...",
 
-  "continueUsingChatServices": " , To continue using chat services",
   "viewRoute":"View Route",
   "enterUserOtp":"Enter user OTP",
   "invalidOtp":"Invalid OTP",
@@ -1231,5 +1230,8 @@
   "running":"Running",
   "failedTryAgain":"Failed. please try again",
   "transferTenYears":"Transfer ten years balance done to gift wallet",
-  "transferFiveYears":"Transfer five years balance done to gift wallet"
+  "transferFiveYears":"Transfer five years balance done to gift wallet",
+  "continueUsingChatServices": " , To continue using chat services",
+  "recoverDeletedChats": "Recover Deleted Chats",
+  "sureRecoverDeletedChats": "Are you sure you want to recover deleted chats?"
 }

@@ -19,7 +19,7 @@ class SubCategoryModel extends SubCategoryEntity {
         : null;
 
     return SubCategoryModel(
-      id:subCategoryData?['_id'] ??  json['_id'] ?? '',
+      id: subCategoryData?['_id'] ?? json['_id'] ?? '',
       nameAr: json['nameAr'] ?? subCategoryData?['nameAr'] ?? '',
       nameEn: json['nameEn'] ?? subCategoryData?['nameEn'] ?? '',
       numberOfContent: json['numberOfAdsCount'] ?? 0,

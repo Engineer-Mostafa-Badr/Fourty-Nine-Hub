@@ -17,7 +17,7 @@ class CreateDoctorClinicTimeTable extends StatelessWidget {
       builder: (context, state) {
         if (state is CreateDoctorShowClinic && state.check) {
           return Timetable(
-              title: context.isArabic?'العيادة':'Clinic',
+              title: context.isArabic ? 'العيادة' : 'Clinic',
               timetale: createDoctorCubit.clinicTimetable,
               child: Column(
                 children: [
@@ -28,11 +28,15 @@ class CreateDoctorClinicTimeTable extends StatelessWidget {
                         createDoctorCubit.clinicExamineDurationFocusNode,
                     keyboardType: TextInputType.number,
                     isRequired: true,
-                    hint: context.isArabic?'سعر الكشف في العيادة':'Clinic Price',
+                    hint: context.isArabic
+                        ? 'سعر الكشف في العيادة'
+                        : 'Clinic Price',
                   ),
                   const Sizer(),
                   DefaultTextFormField(
-                    hint: context.isArabic?'مدة الفحص في العيادة (بالدقائق)':'Clinic Examine Duration (in minutes)',
+                    hint: context.isArabic
+                        ? 'مدة الفحص في العيادة (بالدقائق)'
+                        : 'Clinic Examine Duration (in minutes)',
                     keyboardType: TextInputType.number,
                     isRequired: true,
                     nextFocusNode: createDoctorCubit.waitingTimeFocusNode,

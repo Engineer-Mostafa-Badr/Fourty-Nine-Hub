@@ -391,9 +391,23 @@ class _MediaAttachementsTabState extends State<MediaAttachementsTab> {
                           ? CustomChachedNetworkImage(
                               mediaUrl: media.url,
                             )
-                          : CustomVideoCard(
-                              videoUrl: media.url,
-                            );
+                          : media.type == FileTypeEnum.audio
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: AppColors.SECONDARY_COLOR,
+                                  ),
+                                  child: const Center(
+                                    child: Icon(
+                                      Icons.headphones,
+                                      color: AppColors.BACKGROUND_COLOR,
+                                      size: 36,
+                                    ),
+                                  ),
+                                )
+                              : CustomVideoCard(
+                                  videoUrl: media.url,
+                                );
                     }
                   }
                 }

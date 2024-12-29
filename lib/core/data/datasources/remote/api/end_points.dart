@@ -295,9 +295,12 @@ class EndPoints {
       '/health/doctor-search${loggedUserId.isNotEmpty ? "?userId=$loggedUserId" : ""}';
   static const bookEmergency = '/health/book-emergency';
   static cancelAppointment(String id) => '/health/book-appointment-cancel/$id';
-  static doctorCancelAppointment(String id) => '/health/book-appointment-doctor-cancel/$id';
-  static emergencyRequests(GetEmergencyRequestsParams params) => '/health/show-emergency?limit=${params.limit}&page=${params.page}&subCategory=${params.subCategoryId}';
-  static allAppointments(PaginationParams params) => '/health/doctor/all-doctor-requests?limit=${params.limit}&page=${params.page}';
+  static doctorCancelAppointment(String id) =>
+      '/health/book-appointment-doctor-cancel/$id';
+  static emergencyRequests(GetEmergencyRequestsParams params) =>
+      '/health/show-emergency?limit=${params.limit}&page=${params.page}&subCategory=${params.subCategoryId}';
+  static allAppointments(PaginationParams params) =>
+      '/health/doctor/all-doctor-requests?limit=${params.limit}&page=${params.page}';
 
   static String bookRegularAppointment(String appointmentId) =>
       '/health/book-appointment/$appointmentId';
@@ -614,7 +617,6 @@ class EndPoints {
     return '/follow/allFollowing?search=${params.search}&limit=${params.limit}&page=${params.page}&otherId=${params.otherId}';
   }
 
-
   static String createReel(CreateReelParams params) {
     return '/reels/views/${params.reelId}';
   }
@@ -916,6 +918,7 @@ class EndPoints {
   }
 
   static String addToCart = '/food/addToCart';
+  static String tenPercent = '/tenPercent/send';
   static String getCart = '/food/getCart';
   static String deleteFromCart = '/food/deleteFromCart';
   static String placeOrder = '/food/make-order';
@@ -940,6 +943,10 @@ class EndPoints {
     return '/chat/get-chat-details/$chatId';
   }
 
+  static String updateChat(String chatId) {
+    return '/chat/update-chat-member/$chatId';
+  }
+
   static String createNormalChat(
       {required String categoryId, required String otherUserId}) {
     return '/chat/start-chat/$otherUserId?categoryId=$categoryId';
@@ -948,6 +955,13 @@ class EndPoints {
   static String createAnonymousChat(String otherUserId) =>
       '/chat/start-anonymous-chat/$otherUserId';
 
+  static String updateProfileview(String viewAction) =>
+      '/users/profile-view/$viewAction';
+
+  static String getProfileviews(String viewAction) =>
+      '/users/profile-view-unique?viewAction=$viewAction';
+  static String getProfileviewsByUserId({required String viewAction, required String userId}) =>
+      '/users/profile-view/$userId?viewAction=$viewAction';
   //club voice
   static String allClubVoiceRooms = '/clubvoice';
   static String createClubVoiceRoom = '/clubvoice';
@@ -994,6 +1008,18 @@ class EndPoints {
     return '/chat/pin-chat/$chatId';
   }
 
+  static String getUser(String userId) {
+    return '/dashboard/users/$userId';
+  }
+
+  static String updateUserName() {
+    return '/users';
+  }
+
+  static String updateUserBio() {
+    return '/users';
+  }
+
   static String changeChatToArchiveOrNormal(String chatId) {
     return '/chat/archive-chat/$chatId';
   }
@@ -1025,6 +1051,22 @@ class EndPoints {
 
   static String getOneTimeViewMessage() {
     return '/chat/message/one-time-message';
+  }
+
+  static String getDeletedMessage() {
+    return '/chat/message/recover';
+  }
+
+  static String getChatLastSeen(String chatId) {
+    return '/chat/last-seen-logs/$chatId';
+  }
+
+  static String getOnlineOfflineStatus(String userId) {
+    return "/users/last-seen/$userId";
+  }
+
+  static String recoverDeletedChats() {
+    return '/chat/recover-all-chats';
   }
 
   static String clearChat(String chatId) {

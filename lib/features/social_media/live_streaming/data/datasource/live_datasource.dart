@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/data/model/to
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity/live_entity.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity/live_create_response_entity.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/entity/topic_entity.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/domain/usecases/edit_goal_use_case.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -29,8 +30,8 @@ abstract class LiveDataSource {
   Future<Either<Failure, LiveCreateResponseEntity>> createLive(
       CreateLiveParams params);
 
-  Future<Either<Failure, bool>> sendPointSocket(PointsParams params) ;
-  void sendPointListener() ;
+  Future<Either<Failure, bool>> sendPointSocket(PointsParams params);
+  void sendPointListener();
 
   Future<Either<Failure, List<LiveEntity>>> getAllRooms(
       PaginationParams params);
@@ -67,11 +68,10 @@ abstract class LiveDataSource {
 
 class LiveDataSourceImpl extends LiveDataSource {
   final ApiConsumer _apiConsumer;
-  final Socket _socket;
+  // final Socket _socket;
 
-  LiveDataSourceImpl({required ApiConsumer apiConsumer, required Socket socket})
-      : _socket = socket,
-        _apiConsumer = apiConsumer;
+  LiveDataSourceImpl({required ApiConsumer apiConsumer})
+      : _apiConsumer = apiConsumer;
 
   @override
   Future<Either<Failure, LiveCreateResponseEntity>> createLive(
@@ -152,13 +152,15 @@ class LiveDataSourceImpl extends LiveDataSource {
 
   @override
   Future<void> requestBattle(RequestBattleParams params) async {
-    _socket.connect();
-    _socket.emit(SocketIOListeners.requestBattle, params.toJson);
+    // _socket.connect();
+    SharedWebSocket.socket!
+        .emit(SocketIOListeners.requestBattle, params.toJson);
   }
 
   @override
   Future<void> listenToRequestBattle(NoParams noParams) async {
-    _socket.on(SocketIOListeners.requestBattle, (data) => print(data));
+    SharedWebSocket.socket!
+        .on(SocketIOListeners.requestBattle, (data) => print(data));
   }
 
   @override
@@ -176,11 +178,11 @@ class LiveDataSourceImpl extends LiveDataSource {
   @override
   Future<void> sendPoints(PointsParams params) async {
     // TODO: connect socket
-    _socket.connect();
+    // _socket.connect();
     print('Connected');
 
     /// TODO: emit event
-    _socket.emit(
+    SharedWebSocket.socket!.emit(
         SocketIOListeners.sendPoints,
         jsonEncode({
           "memberId": params.memberId,
@@ -194,19 +196,21 @@ class LiveDataSourceImpl extends LiveDataSource {
 
   @override
   Future<void> listenToSendLiveGoal(NoParams noParams) async {
-    _socket.connect();
-    _socket.on(SocketIOListeners.sendPoints, (data) => print(data.toString()));
+    // _socket.connect();
+    SharedWebSocket.socket!
+        .on(SocketIOListeners.sendPoints, (data) => print(data.toString()));
   }
 
   @override
   Future<Either<Failure, bool>> editGoal(EditGoalParams params) async {
-    final result = await _apiConsumer
-        .put(EndPoints.editGoal(params.roomID), data: params.toJson(), headers: {
-      'Accept-Language':
-      AppPages.router.configuration.navigatorKey.currentContext!.isArabic
-          ? 'ar'
-          : 'en',
-    });
+    final result = await _apiConsumer.put(EndPoints.editGoal(params.roomID),
+        data: params.toJson(),
+        headers: {
+          'Accept-Language': AppPages
+                  .router.configuration.navigatorKey.currentContext!.isArabic
+              ? 'ar'
+              : 'en',
+        });
     return result.fold((l) => Left(l), (r) {
       return Right(r['status']);
     });
@@ -220,10 +224,8 @@ class LiveDataSourceImpl extends LiveDataSource {
 
       serviceLocator<Socket>().emit(
           SocketIOEvents.sendPoint,
-          jsonEncode({
-            "streamId":params.streamId,
-            "memberId":params.memberId
-          }));
+          jsonEncode(
+              {"streamId": params.streamId, "memberId": params.memberId}));
       return const Right(true);
     } catch (e) {
       CliLogger.error(' can\'t start send point $e');
@@ -233,7 +235,7 @@ class LiveDataSourceImpl extends LiveDataSource {
 
   @override
   void sendPointListener() {
-    try{
+    try {
       serviceLocator<Socket>().on(SocketIOListeners.sendPoint, (data) {
         final decodedData = jsonDecode(data);
         log("listenToNewMessagesssssssssssss From me");
@@ -247,10 +249,8 @@ class LiveDataSourceImpl extends LiveDataSource {
         // MessageModel messageModel = MessageModel.fromJson(data);
         // params(messageModel);
       });
-
-    }catch (e) {
+    } catch (e) {
       CliLogger.info("can't read last message error $e");
     }
   }
-
 }

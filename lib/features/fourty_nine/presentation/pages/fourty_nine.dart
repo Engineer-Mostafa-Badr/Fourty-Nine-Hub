@@ -52,9 +52,9 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
-  checkLogin() {
+  checkLogin()async {
     try {
-      if (!context.isUserLoggedIn) context.read<UserCubit>().getUser();
+      if(!context.isUserLoggedIn) await context.read<UserCubit>().getUser();
     } catch (e) {
       print(e.toString());
     }
@@ -78,19 +78,19 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
     }
   }
 
+
   @override
-  void initState() {
+  void didChangeDependencies() async {
     appOpenAdManager.loadAd();
     WidgetsBinding.instance.addObserver(this);
-    checkLogin();
-    super.initState();
+
+    await checkLogin();
+    super.didChangeDependencies();
     _setupScrollController();
+
     context
         .read<FirebaseNotficationsCubit>()
         .setupInterceptedMessage(context: context);
-    context
-        .read<NotificationSocketIoCubit>()
-        .notificationListener(languageCode: 'en');
     context.read<LocationSocketCubit>().updateDriverLocationOn();
   }
 
@@ -115,9 +115,17 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
     context
         .read<FirebaseNotficationsCubit>()
         .setupInterceptedMessage(context: context);
+    // context
+    //     .read<NotificationSocketIoCubit>()
+    //     .notificationListener(languageCode: 'en');
+  }
+
+  @override
+  initState(){
     context
         .read<NotificationSocketIoCubit>()
         .notificationListener(languageCode: 'en');
+
     super.initState();
   }
 
@@ -179,7 +187,7 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
           shrinkWrap: true,
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           children: [
-            AddBanner(),
+            const AddBanner(),
             //carousel slider
             const AnnounceWidget(),
             !context.read<UserCubit>().isLoggedIn
@@ -196,8 +204,8 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
             const Sizer(),
             //pick me and come with U
             _pickMeAndComeWithUWidget(),
-            // const Sizer(),
-            // _buildChanceWidget(),
+            const Sizer(),
+            _buildTenPercentWidget(),
             // const Sizer(),
             // _auctionAndInstallmentWidget(),
             // const Sizer(),
@@ -509,6 +517,55 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
                   AdInterstitialTop.showInterstitialAd();
                   HandleCashback.setCount('beAStarCount',context);
                   context.push(Routes.BE_STAR);
+                }),
+          ),
+          Positioned(
+              bottom: 5,
+              left: 5,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 0,
+              left: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 15,
+              right: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              ))
+        ],
+      ),
+    );
+  }
+  Widget _buildTenPercentWidget() {
+    return SizedBox(
+      height: kToolbarHeight * .9.h,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: AppButton(
+                color: AppColors.AUTH_CONTAINER_COLOR,
+                label: '10% Cashback',
+                style: Styles.mediumText(
+                  color: AppColors.AUTH_CONTAINER_COLOR,
+                  fontWeight: FontWeight.bold,
+                ),
+                icon: Icons.star,
+                iconSize: 50.h,
+                onPressed: () {
+                  HandleCashback.setCount('tenPercentCount',context);
+                  context.push(Routes.TenPercent);
                 }),
           ),
           Positioned(

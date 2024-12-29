@@ -10,7 +10,8 @@ import 'package:fourtyninehub/features/health_feature/emergency/domain/usecases/
 
 abstract class HealthEmergencyRemoteDataSource {
   Future<Either<Failure, bool>> bookEmergency(BookHealthEmergencyParams params);
-  Future<Either<Failure, List<EmergencyEntity>>> getEmergencyRequests(GetEmergencyRequestsParams params);
+  Future<Either<Failure, List<EmergencyEntity>>> getEmergencyRequests(
+      GetEmergencyRequestsParams params);
 }
 
 class HealthEmergencyRemoteDataSourceImpl
@@ -30,17 +31,19 @@ class HealthEmergencyRemoteDataSourceImpl
   }
 
   @override
-  Future<Either<Failure, List<EmergencyEntity>>> getEmergencyRequests(GetEmergencyRequestsParams params) async {
+  Future<Either<Failure, List<EmergencyEntity>>> getEmergencyRequests(
+      GetEmergencyRequestsParams params) async {
     final response = await _apiConsumer.get(
       EndPoints.emergencyRequests(params),
     );
 
-    return response.fold((l) => Left(l), (r) => Right((r['data'] as List)
-        .map((e) => EmergencyModel.fromJson(e))
-        .toList()));
+    return response.fold(
+        (l) => Left(l),
+        (r) => Right((r['data'] as List)
+            .map((e) => EmergencyModel.fromJson(e))
+            .toList()));
   }
 }
-
 
 /*
 (data['data'] as List)

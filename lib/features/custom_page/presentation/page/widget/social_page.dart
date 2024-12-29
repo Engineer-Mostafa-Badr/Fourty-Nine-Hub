@@ -25,7 +25,7 @@ class _SocialPageState extends State<SocialPage> {
   final List<String> _items = [
     LocaleKeys.face.localize,
     LocaleKeys.insta.localize,
-    LocaleKeys.Tweet.localize,
+    LocaleKeys.tweet.localize,
   ];
 
   @override

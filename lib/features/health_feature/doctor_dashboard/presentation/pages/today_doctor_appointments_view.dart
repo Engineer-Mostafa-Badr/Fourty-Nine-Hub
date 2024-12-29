@@ -13,10 +13,12 @@ class DoctorTodayAppointmentsView extends StatefulWidget {
   const DoctorTodayAppointmentsView({super.key});
 
   @override
-  State<DoctorTodayAppointmentsView> createState() => _DoctorTodayAppointmentsViewState();
+  State<DoctorTodayAppointmentsView> createState() =>
+      _DoctorTodayAppointmentsViewState();
 }
 
-class _DoctorTodayAppointmentsViewState extends State<DoctorTodayAppointmentsView> {
+class _DoctorTodayAppointmentsViewState
+    extends State<DoctorTodayAppointmentsView> {
   late ScrollController _scrollController;
 
   @override
@@ -26,13 +28,12 @@ class _DoctorTodayAppointmentsViewState extends State<DoctorTodayAppointmentsVie
     super.initState();
   }
 
-
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       context.read<DoctorTodayAppointmentsCubit>().getAppointmentsByDay();
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +54,15 @@ class _DoctorTodayAppointmentsViewState extends State<DoctorTodayAppointmentsVie
                 controller: _scrollController,
                 itemCount: cubit.appointments.length,
                 itemBuilder: (context, index) => DoctorAppointmentCard(
-                  appointment: cubit.appointments[index], cancelAppointment: (String id) {
-                    context.read<DoctorTodayAppointmentsCubit>().cancelAppointment(id, context);
-                },
+                  appointment: cubit.appointments[index],
+                  cancelAppointment: (String id) {
+                    context
+                        .read<DoctorTodayAppointmentsCubit>()
+                        .cancelAppointment(id, context);
+                  },
                 ),
                 separatorBuilder: (BuildContext context, int index) =>
-                const Divider(),
+                    const Divider(),
               );
             } else {
               return Center(

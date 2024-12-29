@@ -1,6 +1,5 @@
 part of 'doctors_list_cubit.dart';
 
-
 enum DoctorsListStates { loading, initState, error, success }
 
 extension DoctorsListStateX on DoctorsListState {
@@ -33,4 +32,3 @@ class DoctorsListState {
     );
   }
 }
-

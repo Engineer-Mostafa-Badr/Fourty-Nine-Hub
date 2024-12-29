@@ -23,7 +23,7 @@ import '../../../../../../../tinder/data/shared/shared.dart';
 import '../../../../../../../tinder/presentation/cubit/gift_cubit.dart';
 
 class SelectLiveGoalsScreen extends StatefulWidget {
-  const SelectLiveGoalsScreen({super.key, this.fromLive=false});
+  const SelectLiveGoalsScreen({super.key, this.fromLive = false});
   final bool? fromLive;
   @override
   State<SelectLiveGoalsScreen> createState() => _SelectLiveGoalsScreenState();
