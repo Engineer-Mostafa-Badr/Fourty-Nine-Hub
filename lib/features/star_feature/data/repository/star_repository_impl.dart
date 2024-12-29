@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/star_feature/data/data_source/star_remote_data_source.dart';
+import 'package:fourtyninehub/features/star_feature/domain/entity/banner_talent_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_winner_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/repository/star_repository.dart';
@@ -36,5 +37,10 @@ class StarRepositoryImpl extends StarRepository {
   Future<Either<Failure, List<StarWinnerEntity>>> fetchWinnerStar(
       StarPaginationParams params) {
     return _remoteDataSource.fetchWinnerStar(params);
+  }
+
+  @override
+  Future<Either<Failure, BannerTalentEntity>> fetchBanner() {
+    return _remoteDataSource.fetchBanner();
   }
 }

@@ -13,7 +13,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/floating_action_button_star.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
@@ -46,6 +45,7 @@ class _BeStarViewState extends State<BeStarView> {
     _scrollController = ScrollController()..addListener(_onScroll);
     _cubit.loadInitialData();
     _adsManager.preloadAds();
+    _cubit.fetchBanner();
   }
 
   void _onScroll() {
@@ -69,7 +69,7 @@ class _BeStarViewState extends State<BeStarView> {
       if (controller != null) {
         controller
           ..initialize().then((_) {
-            if (mounted) setState(() {}); // Update UI after initialization
+            if (mounted) setState(() {});
           })
           ..addListener(() {
             if (controller.value.position == controller.value.duration) {
@@ -137,16 +137,18 @@ class _BeStarViewState extends State<BeStarView> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
+                    ImageFromInternet(image: state.banner?.banner ??''),
                     Container(
                       width: double.infinity,
                       height: 240.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.r),
-                        image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: AssetImage(Assets.win),
-                        ),
+                        // image: DecorationImage(
+                        //   fit: BoxFit.fill,
+                        //   image: NetworkImage(state.banner?.banner ??''),
+                        // ),
                       ),
+                      child: ImageFromInternet(image: state.banner?.banner ??''),
                     ),
                     const Sizer(),
                     Text(

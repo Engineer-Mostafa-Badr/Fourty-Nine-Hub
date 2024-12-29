@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.da
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_winner_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/delete_my_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
+import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_banner_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_myl_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_winner_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
@@ -17,13 +18,14 @@ class StarCubit extends Cubit<StarState> {
   final FetchWinnerStarUseCase _fetchWinnerStarUseCase;
   final UploadMyStarUseCase _uploadMyStarUseCase;
   final DeleteMyStarUseCase _deleteMyStarUseCase;
+  final FetchBannerUseCase _bannerUseCase;
 
   StarCubit(
       this._allStarUseCase,
       this._fetchMylStarUseCase,
       this._uploadMyStarUseCase,
       this._deleteMyStarUseCase,
-      this._fetchWinnerStarUseCase)
+      this._fetchWinnerStarUseCase, this._bannerUseCase)
       : super(StarState());
 
   // TextEditingController starController = TextEditingController();
@@ -152,6 +154,24 @@ class StarCubit extends Cubit<StarState> {
       (data) {
         emit(state.copyWith(
           status: StarStates.uploadSuccess,
+        ));
+      },
+    );
+  }
+
+  Future<void> fetchBanner() async {
+    emit(state.copyWith(status: StarStates.loading));
+
+    final response = await _bannerUseCase(const NoParams());
+
+    response.fold(
+      (failure) {
+        emit(state.copyWith(failure: failure, status: StarStates.error));
+      },
+      (data) {
+        emit(state.copyWith(
+          banner: data,
+          status: StarStates.success,
         ));
       },
     );

@@ -62,7 +62,7 @@ class WalletWidget extends StatelessWidget {
                   AdInterstitialTop.loadIntersitialAd();
                   AdInterstitialTop.showInterstitialAd();
                   context.push(Routes.BALANCE);
-                }, LocaleKeys.balance.tr(), '${state.wallet?.balance ?? ''} ',
+                }, LocaleKeys.balance.tr(), '${state.wallet?.balance.toStringAsFixed(0) ?? ''} ',
                     state.wallet?.currency ?? ''),
                 Container(
                   width: 2.w,
@@ -79,7 +79,7 @@ class WalletWidget extends StatelessWidget {
                   AdInterstitialTop.loadIntersitialAd();
                   AdInterstitialTop.showInterstitialAd();
                   context.push(Routes.GIFT);
-                }, LocaleKeys.gift.tr(), '${state.wallet?.giftWallet ?? ''} ',
+                }, LocaleKeys.gift.tr(), '${state.wallet?.giftWallet.toStringAsFixed(0)  ?? ''} ',
                     state.wallet?.currency ?? ''),
                 Container(
                   width: 2.h,
@@ -99,7 +99,7 @@ class WalletWidget extends StatelessWidget {
                   //showing
                 },
                     LocaleKeys.wallet.tr(),
-                    '${state.wallet?.realAmount.floor() ?? ''} ',
+                    '${state.wallet?.realAmount.toStringAsFixed(0)  ?? ''} ',
                     state.wallet?.currency ?? ''),
               ],
             ),
@@ -128,7 +128,7 @@ class WalletWidget extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: Label(
-                      text: amount,
+                      text: amount.toString(),
                       style: Styles.mediumText(
                         fontWeight: FontWeight.bold,
                       )),

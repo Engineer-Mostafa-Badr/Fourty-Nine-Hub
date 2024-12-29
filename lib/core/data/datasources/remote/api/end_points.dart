@@ -156,6 +156,7 @@ class EndPoints {
       '/talent/all-winner?page=${params.page}&limit=${params.limit}';
   static const myStar = '/talent/my-talent';
   static const uploadStar = '/talent/upload';
+  static const bannerTalent = '/talent/banner';
   static String deleteMyStar({required String id}) => '/talent/$id';
 
   //My Ads
