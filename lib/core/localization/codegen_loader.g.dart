@@ -1221,11 +1221,14 @@ class CodegenLoader extends AssetLoader{
   "everyoneViewThisPost": "يمكن للجميع عرض هذا المنشور",
   "storyUploaded": "تم تحميل القصة",
   "story": "قصة",
-  "next": "التالي",
   "continueUsingChatServices": " , للاستمرار في استخدام خدمات الدردشة",
   "recoverDeletedChats": "استعادة الدردشات المحذوفة",
   "sureRecoverDeletedChats": "هل تريد استعادة الدردشات المحذوفة؟",
-  "restaurantOrders": "طلبات المطاعم"
+  "restaurantOrders": "طلبات المطاعم",
+  "next": "التالي",
+  "transferTenYears": "تم نقل رصيد عشر سنوات إلى محفظة الهدايا",
+  "transferFiveYears": "تم نقل رصيد خمس سنوات إلى محفظة الهدايا",
+  "marriage": "زواج"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2453,9 +2456,12 @@ static const Map<String,dynamic> en = {
   "reached": "Reached",
   "running": "Running",
   "failedTryAgain": "Failed. please try again",
+  "transferTenYears": "Transfer ten years balance done to gift wallet",
+  "transferFiveYears": "Transfer five years balance done to gift wallet",
   "continueUsingChatServices": " , To continue using chat services",
   "recoverDeletedChats": "Recover Deleted Chats",
-  "sureRecoverDeletedChats": "Are you sure you want to recover deleted chats?"
+  "sureRecoverDeletedChats": "Are you sure you want to recover deleted chats?",
+  "marriage": "Marriage"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

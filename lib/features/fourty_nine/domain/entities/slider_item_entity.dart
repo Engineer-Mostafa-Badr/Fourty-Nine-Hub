@@ -1,5 +1,5 @@
 class SliderItemEntity {
-  final int id;
+  final String id;
   final String route;
   final String title;
   final String subTitle;

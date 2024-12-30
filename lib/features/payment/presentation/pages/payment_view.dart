@@ -241,10 +241,10 @@ class _PaymentViewState extends State<PaymentView> {
         children: [
           DropdownButtonFormField<String>(
             decoration: InputDecoration(
-              fillColor: Colors.white,
+              //fillColor: Colors.white,
               labelText: LocaleKeys.phoneNumber.localize,
             ),
-            dropdownColor: Colors.blue.withOpacity(0.5),
+            dropdownColor: Theme.of(context).scaffoldBackgroundColor,
             items: phoneNumbers.map((phone) {
               return DropdownMenuItem<String>(
                 value: phone,
@@ -257,7 +257,7 @@ class _PaymentViewState extends State<PaymentView> {
               }
             },
           ),
-          SizedBox(height: 15.h),
+          SizedBox(height: 25.h),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.PRIMARY_COLOR,
@@ -277,7 +277,7 @@ class _PaymentViewState extends State<PaymentView> {
                 text: LocaleKeys.snapCopyOfBillPayment.localize,
                 style: Styles.headerText(),
               ),
-              const SizedBox(),
+               SizedBox(height: 10.h,),
               InkWell(
                 onTap: () async {
                   await cubit.uploadProfileImage();
@@ -297,6 +297,7 @@ class _PaymentViewState extends State<PaymentView> {
                   },
                 ),
               ),
+              SizedBox(height: 10.h,),
               BlocBuilder<PaymentCubit, PaymentState>(
                 builder: (context, state) {
                   return ElevatedButton(
@@ -324,8 +325,7 @@ class _PaymentViewState extends State<PaymentView> {
                     },
                     child: Text(
                       LocaleKeys.sendReviewApproval.localize,
-                      style: TextStyle(
-                          color: AppColors.LIGHT_COLOR, fontSize: 20.sp),
+                      style: Styles.mediumText(color: AppColors.AUTH_CONTAINER_COLOR),
                     ),
                   );
                 },

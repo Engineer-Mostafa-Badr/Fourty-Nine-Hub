@@ -2,8 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/check_withdraw_balance_use_cse.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_balance_use_case.dart';
-
-import '../../../../../../common/models/public/pagination_params.dart';
 import '../../../domain/entities/balance/balance_history_entity.dart';
 import '../../../domain/usecases/get_balance_history_use_case.dart';
 import '../../../domain/usecases/transfer_balance_use_cse.dart';
@@ -28,9 +26,10 @@ class BalanceCubit extends Cubit<BalanceState> {
     this._checkRequestWithdrawUseCase,
   ) : super(const BalanceState());
 
-  void loadData() async {
+   loadData() async {
     await fetchBalanceWallet();
     await checkRequestWithdrawBalance();
+    await loadInitialData();
     // await fetchBalanceHistory();
   }
 
@@ -43,25 +42,66 @@ class BalanceCubit extends Cubit<BalanceState> {
     });
   }
 
-  Future<List<BalanceHistoryEntity>> fetchBalanceHistory({
-    required PaginationParams paginationParams,
-  }) async {
-    List<BalanceHistoryEntity> history = [];
+  List<BalanceHistoryEntity> history = [];
+  bool isLoadingMore = false;
+  bool hasMoreData = true;
+  int currentPage = 1;
+  int pageSize = 10;
+
+  Future<void> loadInitialData() async {
+    emit(state.copyWith(status: BalanceStates.loading));
+    history.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await fetchBalancetHistory();
+  }
+
+  Future<void> fetchBalancetHistory() async {
+    if (!hasMoreData || isLoadingMore) return;
+
+    isLoadingMore = true;
 
     final response = await _balanceHistoryUseCase(
-      BalanceHistoryParams(paginationParams: paginationParams),
+      BalanceHistoryParams(page: currentPage, limit: pageSize),
     );
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: BalanceStates.error));
-    }, (data) {
-      history = data;
-      // print('///////////////////////////////////////');
-      // print(data.giftWallet.userId);
-      // print('///////////////////////////////////////');
-      //   emit(state.copyWith(history: data));
-    });
-    return history;
+
+    response.fold(
+          (failure) =>
+          emit(state.copyWith(failure: failure, status: BalanceStates.error)),
+          (data) {
+        history.addAll(data);
+
+        if (data.length < pageSize) {
+          hasMoreData = false;
+        } else {
+          currentPage++;
+        }
+
+        isLoadingMore = false;
+        emit(state.copyWith(history: history, status: BalanceStates.success));
+      },
+    );
   }
+
+  // Future<List<BalanceHistoryEntity>> fetchBalanceHistory({
+  //   required PaginationParams paginationParams,
+  // }) async {
+  //   List<BalanceHistoryEntity> history = [];
+  //
+  //   final response = await _balanceHistoryUseCase(
+  //     BalanceHistoryParams(paginationParams: paginationParams),
+  //   );
+  //   response.fold((l) {
+  //     emit(state.copyWith(failure: l, status: BalanceStates.error));
+  //   }, (data) {
+  //     history = data;
+  //     // print('///////////////////////////////////////');
+  //     // print(data.giftWallet.userId);
+  //     // print('///////////////////////////////////////');
+  //     //   emit(state.copyWith(history: data));
+  //   });
+  //   return history;
+  // }
 
   transferFiveBalance() async {
     final response = await _transferFiveBalanceUseCase(const NoParams());
