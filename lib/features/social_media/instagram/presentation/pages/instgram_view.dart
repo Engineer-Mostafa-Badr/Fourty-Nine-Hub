@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
@@ -9,6 +10,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_global_posts.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_posts.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -106,14 +108,27 @@ class _InstagramViewState extends State<InstagramView> {
                       ),
                     )
                   : null,
-              child: Icon(
-                i == 0 ? Icons.grid_4x4_outlined : Icons.person,
-                color: i == 0
-                    ? context.isDarkMode
-                        ? AppColors.PRIMARY_COLOR_DARK
-                        : AppColors.PRIMARY_COLOR
-                    : Colors.grey,
-                size: 40.w,
+              child: Row(
+                children: [
+                  Icon(
+                    i == 0 ? Icons.grid_4x4_outlined : Icons.person,
+                    color: i == 0
+                        ? context.isDarkMode
+                            ? AppColors.PRIMARY_COLOR_DARK
+                            : AppColors.PRIMARY_COLOR
+                        : Colors.grey,
+                    size: 40.w,
+                  ),
+                  SizedBox(
+                    width: 8.w,
+                  ),
+                  Label(text: i == 0 ? 'Home' : 'Profile',style: Styles.headerText(color: i == 0
+                      ? context.isDarkMode
+                      ? AppColors.PRIMARY_COLOR_DARK
+                      : AppColors.PRIMARY_COLOR
+                      : Colors.grey,fontSize: 30),)
+
+                ],
               ),
             ),
           ),
