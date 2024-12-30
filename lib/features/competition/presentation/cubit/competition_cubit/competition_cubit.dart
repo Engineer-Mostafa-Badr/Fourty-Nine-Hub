@@ -1,42 +1,52 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/competition/data/repository/competition_repo.dart';
-
-import '../../../../../core/error/failure.dart';
-import 'competition_state.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/features/competition/domain/use_case/fetch_competition_use_case.dart';
+import 'package:fourtyninehub/features/competition/domain/use_case/fetch_winner_competition_use_case.dart';
+import 'package:fourtyninehub/features/competition/presentation/cubit/competition_cubit/competition_state.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_currency_use_case.dart';
 
 class CompetitionCubit extends Cubit<CompetitionState> {
-  CompetitionCubit(this.competitionRepo) : super(CompetitionInitial());
+  final FetchCompetitionUseCase _competitionUseCase;
+  final FetchWinnerCompetitionUseCase _winnerCompetitionUseCase;
+  final GetCurrencyUseCase _currencyUseCase;
 
-  final CompetitionRepo competitionRepo;
-  static CompetitionCubit get(context) => BlocProvider.of(context);
+  CompetitionCubit(
+      this._competitionUseCase,
+      this._winnerCompetitionUseCase, this._currencyUseCase,
+     )
+      : super(const CompetitionState());
 
-  //Timer? _pollingTimer;
+  Future<void> loadData() async{
+    await fetchCompetition();
+    await getCurrency();
+  }
 
-  void fetchCompetition(context) async {
-    emit(CompetitionLoadingState());
-    var result = await competitionRepo.fetchCompetition();
-    result.fold((failure) {
-      emit(CompetitionErrorState(
-          errMessage: getFailureMessage(failure, context)));
-      print(getFailureMessage(failure, context));
-    }, (competition) {
-      emit(CompetitionSuccessState(competitionModel: competition));
+  Future<void> fetchCompetition() async {
+    final response = await _competitionUseCase.call(const NoParams());
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: CompetitionStates.error));
+    }, (data) {
+      emit(state.copyWith(competition: data, status: CompetitionStates.success));
+    });
+  }
+  Future<void> fetchWinnerCompetition() async {
+    final response = await _winnerCompetitionUseCase.call(const NoParams());
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: CompetitionStates.error));
+    }, (data) {
+      emit(state.copyWith(winner: data, status: CompetitionStates.success));
     });
   }
 
-  // void _startPolling(context) {
-  //   _pollingTimer?.cancel();
-  //
-  //   // Start polling every 10 seconds (adjust the interval as needed)
-  //   _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
-  //     var result =await competitionRepo.fetchCompetition();
-  //
-  //     result.fold((failure) {
-  //       emit(CompetitionErrorState(errMessage: getFailureMessage(failure, context)));
-  //       print(getFailureMessage(failure, context));
-  //     }, (competition) {
-  //       emit(CompetitionSuccessState(competitionModel: competition));
-  //     });
-  //   });
-  // }
+  Future<void> getCurrency() async {
+    final response = await _currencyUseCase.call(const NoParams());
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: CompetitionStates.error));
+    }, (data) {
+      emit(state.copyWith(
+        currency: data,
+        status: CompetitionStates.success
+      ));
+    });
+  }
 }

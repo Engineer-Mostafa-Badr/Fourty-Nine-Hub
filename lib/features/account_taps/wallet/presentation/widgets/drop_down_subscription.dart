@@ -190,18 +190,20 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
                   selectedSubCategory = newSubCategoryId;
                 });
                 if (newSubCategoryId != null) {
-                  print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-                  print(newSubCategoryId);
-                  print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-                  serviceLocator<SubscriptionController>()
-                      .showSubscriptionPlans(
+                  final selectedSubCategoryEntity = subCategories.firstWhere(
+                        (subCategory) => subCategory.id == newSubCategoryId,
+                  );
+
+                  serviceLocator<SubscriptionController>().showSubscriptionPlans(
                     wallets: [
                       WalletTypes.mainWallet,
                       WalletTypes.giftWallet,
                       WalletTypes.balance,
                     ],
                     subCategoryId: newSubCategoryId,
-                    title: LocaleKeys.ads.localize,
+                    title: context.locale == Locales.english
+                        ? selectedSubCategoryEntity.nameEn
+                        : selectedSubCategoryEntity.nameAr,
                   );
                 }
               },

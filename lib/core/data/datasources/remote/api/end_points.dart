@@ -85,6 +85,8 @@ class EndPoints {
   static const getCurrency = '/main-wallet/app-currency';
   static const anyCashBack = '/cashback/any';
   static const sliderItems = '/sliders/to-app';
+  static const competition = '/subscriber/competitionsSubscriber';
+  static const winnerCompetition = '/subscriber/winners';
   static String loggedUserId = UserCubit.to.state.data?.id ?? '';
   static String getMainCategoryDetails(String id) =>
       '/categories/main/$id${loggedUserId.isNotEmpty ? '?userId=$loggedUserId' : ''}';
