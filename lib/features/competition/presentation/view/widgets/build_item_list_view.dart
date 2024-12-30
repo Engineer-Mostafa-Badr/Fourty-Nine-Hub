@@ -67,7 +67,7 @@ class BuildItemListView extends StatelessWidget {
                           : '${context.locale == Locales.english ? currency.currencyEn : currency.currencyAr} ${model.amount.toStringAsFixed(0)}'),
                 ),
               ),
-              SizedBox(width: 50.w),
+              SizedBox(width: 55.w),
               Expanded(
                 child: Container(
                   padding:
@@ -85,7 +85,7 @@ class BuildItemListView extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: 5.w),
+              SizedBox(width: 10.w),
               Expanded(
                 child: Container(
                  // height: 50,
@@ -104,7 +104,7 @@ class BuildItemListView extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: 50.w),
+              SizedBox(width: 55.w),
               CustomPaint(
                 size: const Size(20, 20),
                 painter: DonutChartPainter(
@@ -117,7 +117,7 @@ class BuildItemListView extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 20.h, // Space between the text and the row
+          height: 25.h,
         ),
         Padding(
           padding: EdgeInsets.only(left: 5.w),
