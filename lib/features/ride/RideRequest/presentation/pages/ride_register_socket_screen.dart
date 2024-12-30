@@ -15,29 +15,37 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/presentation
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/picture_optional_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/behind_driver_license_card_register_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/car_info_rider.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/driver_license_card_register_ride_widget.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/front_driver_license_card_register_widget.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/user_info_card_register_ride_widget.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/image_validation.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_brands/fetch_car_brands_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_models/fetch_car_models_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_year_type/fetch_car_year_type_cubit.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-class RiderRegisterOne extends StatefulWidget {
-  const RiderRegisterOne({
+class RideRegisterSocketScreen extends StatefulWidget {
+  const RideRegisterSocketScreen({
     super.key,
     required this.formKey,
   });
   final GlobalKey<FormState> formKey;
   @override
-  State<RiderRegisterOne> createState() => _RiderRegisterOneState();
+  State<RideRegisterSocketScreen> createState() =>
+      _RideRegisterSocketScreenState();
 }
 
-class _RiderRegisterOneState extends State<RiderRegisterOne> {
+class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
   FocusNode firstNameFocusNode = FocusNode();
   FocusNode lastNameFocusNode = FocusNode();
   FocusNode phoneFocusNode = FocusNode();
@@ -73,6 +81,7 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
 
   String workingType = 'percentage';
   String vehicleType = 'car';
+  DateTime? birthDate;
   // "workingType" : "percentage" //percentage or subscribePackage
   @override
   void initState() {
@@ -100,94 +109,18 @@ class _RiderRegisterOneState extends State<RiderRegisterOne> {
         }
         return SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(
                 height: 5,
               ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: FirstNameTextFormField(
-                      isAuthentcation: true,
-                      validator: (String? value) {
-                        if (value == null || value.isEmpty) {
-                          return LocaleKeys.firstNameIsRequired.tr();
-                        }
-                        return null;
-                      },
-                      // style: TextStyle(fontSize: 16, color: Colors.red, fontWeight: FontWeight.w600),
-                      hintColor: AppColors.PRIMARY_COLOR,
-                      currentFocusNode: firstNameFocusNode,
-                      nextFocusNode: lastNameFocusNode,
-                      currentController: firstNameController,
-                    ),
-                  ),
-                  const Sizer(),
-                  Expanded(
-                    child: LastNameTextFormField(
-                      isAuthentcation: true,
-                      validator: (String? value) {
-                        if (value == null || value.isEmpty) {
-                          return LocaleKeys.lastNameIsRequired.tr();
-                        }
-                        return null;
-                      },
-                      hintColor: AppColors.PRIMARY_COLOR,
-                      currentController: lastNameController,
-                      nextFocusNode: phoneFocusNode,
-                      currentFocusNode: lastNameFocusNode,
-                    ),
-                  ),
-                ],
-              ),
-              // const Gap(30),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Flexible(
-                    child: DefaultTextFormField(
-                      isAuthentcation: true,
-                      currentFocusNode: phoneFocusNode,
-                      nextFocusNode: vehicleModelFocusNode,
-                      hint: Labels.phone,
-                      hintColor: AppColors.PRIMARY_COLOR,
-                      currentController: phoneController,
-                      validator: (p0) {
-                        if (p0 == null || p0.isEmpty) {
-                          return LocaleKeys.phoneIsRequired.tr();
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Flexible(
-                    child: DefaultTextFormField(
-                      isAuthentcation: true,
-                      currentFocusNode: pricingPerKmFocusNode,
-                      nextFocusNode: model,
-                      hint: LocaleKeys.pricingPerKm.tr(),
-                      hintColor: AppColors.PRIMARY_COLOR,
-                      currentController: pricingPerKmController,
-                      validator: (p0) {
-                        if (p0 == null || p0.isEmpty) {
-                          return LocaleKeys.pricingPerKmIsRequired.tr();
-                        }
-                        return null;
-                      },
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
+              UserInfoCardRegisterRideWidget(),
+              Sizer(height: 30,),
+              DriverLicenseCardRegisterRideWidget(),
+              Sizer(height: 30,),
+              FrontDriverLicenseCardRegisterWidget(),
+              Sizer(height: 30,),
+              BehindDriverLicenseCardRegisterWidget(),
               const CarInfoRider(),
               const Sizer(),
               const SizedBox(

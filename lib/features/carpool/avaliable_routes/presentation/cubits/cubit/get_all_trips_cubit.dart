@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/get_all_trips_entity.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_state.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 
 class GetAllTripsCubit extends Cubit<GetAllTripsState> {
   // final Socket SharedWebSocket.socket!;

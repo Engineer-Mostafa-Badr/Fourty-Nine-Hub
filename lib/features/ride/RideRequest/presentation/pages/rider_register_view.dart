@@ -9,7 +9,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/rider_register_one.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/ride_register_socket_screen.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/rider_register_scand_screen.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/sub_category.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -62,7 +62,7 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
       body: Form(
         key: formKey,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 0),
           child: BlocConsumer<RegisterRiderCubit, RiderState>(
             listener: (context, state) {
               if (state is SuccessRegisterRiderState) {
@@ -418,7 +418,7 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
       );
     } else {
       log("RiderRegisterScandScreen");
-      return RiderRegisterOne(
+      return RideRegisterSocketScreen(
         formKey: formKey,
       );
     }
