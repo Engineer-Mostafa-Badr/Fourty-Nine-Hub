@@ -1,6 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/get_all_trips_entity.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/cubit/get_all_trips_state.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
@@ -8,9 +13,9 @@ import 'package:fourtyninehub/shared_web_socket.dart';
 class GetAllTripsCubit extends Cubit<GetAllTripsState> {
   // final Socket SharedWebSocket.socket!;
 
-  GetAllTripsCubit() : super(GetAllTripsInitial()) {
-    _initializeSocketListeners();
-  }
+  final ApiConsumer apiConsumer;
+
+  GetAllTripsCubit({required this.apiConsumer}) : super(GetAllTripsInitial()) {}
 
   void _initializeSocketListeners() {
     // if (!SharedWebSocket.instance.socket!.connected) {
@@ -39,10 +44,44 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
     });
   }
 
-  void fetchAllCarpoolTrips() {
-    // SharedWebSocket.instance.socket!.connect();
+  void fetchAllCarpoolTrips({bool isLoggedIn = false}) async {
     emit(GetAllTripsLoading());
-    SharedWebSocket.socket!.emit('carpool:getAllTrip');
+
+    // SharedWebSocket.socket!.connect();
+
+    if (!isLoggedIn) {
+      int limit = 0;
+      int page = 0;
+
+      try {
+        final Either<Failure, Map<String, dynamic>> response =
+            await apiConsumer.get(
+          EndPoints.getTripsForNotLoggedInUsers,
+          queryParameters: {'limit': limit, 'page': page},
+        );
+
+        response.fold(
+          (failure) =>
+              emit(GetAllTripsFailure('There are no trips, try again')),
+          (data) {
+            try {
+              emit(GetAllTripsLoading());
+
+              final trips = _parseTrips(data['data']);
+              emit(GetAllTripsSuccess(trips));
+            } catch (e) {
+              emit(GetAllTripsFailure('There are no trips, try again'));
+            }
+          },
+        );
+      } catch (e) {
+        emit(GetAllTripsFailure('An error occurred, try again later'));
+      }
+    } else {
+      _initializeSocketListeners();
+
+      SharedWebSocket.socket!.emit('carpool:getAllTrip');
+    }
   }
 
   List<CarpoolTripParam> _parseTrips(dynamic data) {
@@ -58,7 +97,9 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
         throw Exception('Failed to decode JSON');
       }
     }
-
+    if (data is Map<String, dynamic> && data.containsKey('data')) {
+      data = data['data'];
+    }
     if (data is! List) {
       throw Exception('Expected a list of trips but got ${data.runtimeType}');
     }
@@ -120,7 +161,7 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
 
   @override
   Future<void> close() {
-    // SharedWebSocket.instance.socket!.dispose();
+    SharedWebSocket.socket!.off("carpool:getAllTrip");
     return super.close();
   }
 }

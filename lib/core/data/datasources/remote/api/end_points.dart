@@ -80,7 +80,8 @@ class EndPoints {
 
   static String getBannerByID({required String id}) => '/categories/main/$id';
   static const getMainCategoriesWithoutSubcategories = '/categories/main';
-  static const getMainCategoriesCustomPage = '/navigators/navigateCategories-enable';
+  static const getMainCategoriesCustomPage =
+      '/navigators/navigateCategories-enable';
   static const getWalletHome = '/main-wallet/user-wallets-amount';
   static const getCurrency = '/main-wallet/app-currency';
   static const anyCashBack = '/cashback/any';
@@ -109,6 +110,7 @@ class EndPoints {
   static String getHistoryBalance(BalanceHistoryParams params) {
     return '/user-transactions/balance?page=${params.page}&limit=${params.limit}';
   }
+
   static String getHistoryWallet(WalletHistoryParams params) =>
       '/user-transactions/mainWallet?page=${params.page}&limit=${params.limit}';
 
@@ -440,33 +442,42 @@ class EndPoints {
   // reels
   static const getExploreReels = '/reels/explore';
   static const snap = '/categories/main/snap-filters';
-  static const fetchReelsForFollowers = '/reels/followers?subCategory=66684135dbb427ee42aa0141';
+  static const fetchReelsForFollowers =
+      '/reels/followers?subCategory=66684135dbb427ee42aa0141';
   static const fetchReelsForFollowing = '/reels/followings';
-  static saveReel(String id)=> '/reels/saved/$id';
-  static shareReel(String id)=> '/reels/share/$id';
-  static likeReel(String id)=> '/reels/likes/$id';
-  static getComments(String id)=> '/reels/comments/$id';
-  static getReelsWithSameAudio(ReelsWithSameAudioParams params)=> '/reels/audio/${params.audioId}';
-  static toggleCommentLike(String id)=> '/reels/comments/like/$id';
-  static makeViews(String id)=> '/stories/view/$id';
-  static getGifts(PaginationParams params)=> '/dashboard-gifts?limit=${params.limit}&page=${params.page}';
-  static getTinderUserProfile(String params)=> '/tinder/get-profile/$params?subCategory=66b2683f3a360fbdbf110767';
-  static const getUsers= '/tinder/';
-  static const fetchSubCategoryData= '/tinder/subCategories';
-  static const fetchFavourites= '/favorite-sub-category';
-  static const fetchFavouritesCategory= '/favorite-category';
-  static deleteStory(String id)=> '/stories/$id';
-  static addFavouriteCategories(String id)=> '/favorite-sub-category/$id';
-  static fetchLastSeen(String id)=> '/users/last-seen/$id';
-  static const sendGift= '/tinder/sendGifts?subCategory=6718f27eacb309f8b1f94d0c';
-  static const fetchGifts= '/dashboard-gifts?limit=10';
-  static const tinderUploadPicture= '/tinder/uploadPictures?subCategory=66af974f8bf69f9469944746';
-  static tinderDeletePicture(String id)=> '/tinder/removePicture/$id?subCategory=6718f27eacb309f8b1f94d0c&';
+  static saveReel(String id) => '/reels/saved/$id';
+  static shareReel(String id) => '/reels/share/$id';
+  static likeReel(String id) => '/reels/likes/$id';
+  static getComments(String id) => '/reels/comments/$id';
+  static getReelsWithSameAudio(ReelsWithSameAudioParams params) =>
+      '/reels/audio/${params.audioId}';
+  static toggleCommentLike(String id) => '/reels/comments/like/$id';
+  static makeViews(String id) => '/stories/view/$id';
+  static getGifts(PaginationParams params) =>
+      '/dashboard-gifts?limit=${params.limit}&page=${params.page}';
+  static getTinderUserProfile(String params) =>
+      '/tinder/get-profile/$params?subCategory=66b2683f3a360fbdbf110767';
+  static const getUsers = '/tinder/';
+  static const fetchSubCategoryData = '/tinder/subCategories';
+  static const fetchFavourites = '/favorite-sub-category';
+  static const fetchFavouritesCategory = '/favorite-category';
+  static deleteStory(String id) => '/stories/$id';
+  static addFavouriteCategories(String id) => '/favorite-sub-category/$id';
+  static fetchLastSeen(String id) => '/users/last-seen/$id';
+  static const sendGift =
+      '/tinder/sendGifts?subCategory=6718f27eacb309f8b1f94d0c';
+  static const fetchGifts = '/dashboard-gifts?limit=10';
+  static const tinderUploadPicture =
+      '/tinder/uploadPictures?subCategory=66af974f8bf69f9469944746';
+  static tinderDeletePicture(String id) =>
+      '/tinder/removePicture/$id?subCategory=6718f27eacb309f8b1f94d0c&';
 
-  static const createStory= '/stories/text';
-  static getStoryViewers(String id)=> '/Stories/view/$id';
-  static getMutedStories(PaginationParams params)=> '/stories/mutedStories?limit=${params.limit}&page=${params.page}';
-  static fetchStories(PaginationParams params)=> '/stories/explore?limit=${params.limit}&page=${params.page}';
+  static const createStory = '/stories/text';
+  static getStoryViewers(String id) => '/Stories/view/$id';
+  static getMutedStories(PaginationParams params) =>
+      '/stories/mutedStories?limit=${params.limit}&page=${params.page}';
+  static fetchStories(PaginationParams params) =>
+      '/stories/explore?limit=${params.limit}&page=${params.page}';
   static const muteUserStories = '/stories/muteUserStory';
   static const updatePrivacy = '/stories/privacy';
   static const getFollowers =
@@ -622,7 +633,8 @@ class EndPoints {
   static String createReel(CreateReelParams params) {
     return '/reels/views/${params.reelId}';
   }
-  static String uploadReel ='/reels';
+
+  static String uploadReel = '/reels';
 
   static String createAdvertisement(CreateAdvertisementParams params) {
     return '/advertisementCompany';
@@ -962,7 +974,8 @@ class EndPoints {
 
   static String getProfileviews(String viewAction) =>
       '/users/profile-view-unique?viewAction=$viewAction';
-  static String getProfileviewsByUserId({required String viewAction, required String userId}) =>
+  static String getProfileviewsByUserId(
+          {required String viewAction, required String userId}) =>
       '/users/profile-view/$userId?viewAction=$viewAction';
   //club voice
   static String allClubVoiceRooms = '/clubvoice';
@@ -1122,6 +1135,7 @@ class EndPoints {
       '/ride/come-with-you/trip/requests//$id';
   static String carpoolRoutePrice = '/carpool/price';
   static String getAcceptedTrips = '/carpool/driver/trip';
+  static String getTripsForNotLoggedInUsers = '/carpool/trips';
 
   static String verifyUserOtp(String tripId) =>
       '/carpool/verifyPassengersOtp/$tripId';
