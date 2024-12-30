@@ -9,11 +9,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/shared/constants.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 import '../../../domain/use_cases/apple_sign_in_usecase.dart';
 import '../../../domain/use_cases/login_use_case.dart';
 import '../../../domain/use_cases/save_tokens_use_case.dart';
@@ -50,7 +47,7 @@ class LoginCubit extends Cubit<LoginState> {
         LoginParams(
           email: emailTextController.text.trim(),
           password: passwordTextController.text.trim(),
-          token: token!,
+          token: token??"",
         ),
     );
 

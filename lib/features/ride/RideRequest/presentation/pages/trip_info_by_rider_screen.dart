@@ -95,7 +95,7 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
                       : Colors.white,
                   context: context,
                   builder: (context) => RattingDriverWidget(
-                    driverId: "widget.model.driverId",
+                    driverId: widget.model.userId??"",
                     tripId: widget.model.id ?? "",
                   ),
                 ).whenComplete(

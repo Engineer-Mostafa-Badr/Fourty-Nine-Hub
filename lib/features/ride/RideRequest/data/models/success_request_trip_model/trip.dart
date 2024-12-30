@@ -68,14 +68,14 @@ class Trip {
         profit: json['profit'] as int?,
         autoAccept: json['autoAccept'] as bool?,
         isPremium: json['isPremium'] as bool?,
-        startLocation: json['userLocation'] == null
+        startLocation: json['startLocation'] == null
             ? null
             : UserLocation.fromJson(
-                json['userLocation'] as Map<String, dynamic>),
-        targetLocation: json['riderLocation'] == null
+                json['startLocation'] as Map<String, dynamic>),
+        targetLocation: json['targetLocation'] == null
             ? null
             : RiderLocation.fromJson(
-                json['riderLocation'] as Map<String, dynamic>),
+                json['targetLocation'] as Map<String, dynamic>),
         distance: json['distance'] as int?,
         duration: json['duration'] as int?,
         passengers: json['passengers'] as int?,

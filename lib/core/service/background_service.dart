@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'package:icons_launcher/utils/cli_logger.dart';
 
 abstract class BackgroundService {
   static const _platform = MethodChannel('com.app.fourtynine/websocket');

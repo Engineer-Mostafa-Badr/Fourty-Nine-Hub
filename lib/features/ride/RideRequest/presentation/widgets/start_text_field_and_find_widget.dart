@@ -5,7 +5,9 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_starting_point_ride_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
@@ -76,6 +78,11 @@ class _StartTextFieldAndFindWidgetState
 
   Widget? _getIcon(RiderState state) {
     if (state is SuccessGetStartingPointState) {
+      context.read<LocationSocketCubit>().sendSubCategoryId(
+                    subCategoryId:
+                        context.read<RiderTripReelTimeCubit>().tempCategory!.id,
+                    address: state.address,
+                  );
       return const Icon(
         Icons.check,
         color: AppColors.CHECK_MARK_COLOR,
