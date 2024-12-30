@@ -223,24 +223,22 @@ class _AdCardState extends State<AdCard> {
                             ],
                           ),
                           RichText(
+
                               text: TextSpan(
                                   children: details.map((e) {
-                            return WidgetSpan(
-                                child: Row(
+                            return TextSpan(
                               children: [
-                                Label(
-                                    text:
-                                        '${getLang() == 'ar' ? e.value.nameAr : e.value.nameEn} : ',
-                                    style: Styles.mediumText(
-                                        color: AppColors.SECONDARY_COLOR)),
-                                Label(
-                                    text: getLang() == 'ar'
-                                        ? e.value.nameAr
-                                        : e.value.nameEn,
-                                    style: Styles.mediumText(
-                                        color: AppColors.PRIMARY_COLOR)),
+                                TextSpan(
+                                    text: '${getLang() == 'ar' ? e.nameAr : e.nameEn} : ',
+                                  style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
+                                ),
+                                const WidgetSpan(child: Icon(Icons.add)),
+                                TextSpan(
+                                  text: "${getLang() == 'ar'? e.value.nameAr: e.value.nameEn}    ",
+                                  style: Styles.mediumText(color: AppColors.GREY_DARK_COLOR),
+                                ),
                               ],
-                            ));
+                                );
                           }).toList())),
                           Label(
                             text: widget.item.formattedRestTime,
