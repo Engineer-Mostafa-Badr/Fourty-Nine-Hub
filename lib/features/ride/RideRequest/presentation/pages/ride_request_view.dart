@@ -1265,13 +1265,18 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                                         GestureDetector(
                                           onTap: () async {
                                             // log("message");
-                                            await context
+                                            bool result = await context
                                                 .read<CancelTripClientCubit>()
                                                 .cancelTripClient(
                                                   id: widget.model.trip?.id ??
                                                       "",
                                                 );
-                                            Navigator.pop(context);
+                                            if(result == true){
+                                              showSuccessMessage(context, LocaleKeys.successCancelTrip.tr());
+                                              Navigator.pop(context);
+                                            }else{
+                                              Navigator.pop(context);
+                                            }
                                           },
                                           child: Container(
                                             height: 60,
