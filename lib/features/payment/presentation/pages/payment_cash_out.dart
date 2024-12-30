@@ -48,7 +48,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
         title: Text(LocaleKeys.cashOutOption.localize),
       ),
       body: BlocProvider<PaymentCacheOutCubit>(
-        create: (BuildContext context) => serviceLocator()..payoutMethod(),
+        create: (BuildContext context) => serviceLocator()..payoutMethod()..getPaymentProvider(),
         child: BlocBuilder<PaymentCacheOutCubit, PaymentCacheOutState>(
           builder: (context, state) {
             return SingleChildScrollView(
@@ -62,11 +62,11 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
                           Expanded(
                             child: _buildCustomCard(
                               onTap: () async {
-                                // final cubit = context.read<PaymentCubit>();
-                                // final url = cubit.state.paymobData?.data;
-                                // if (url != null) {
-                                //   await launchUrl(Uri.parse(url));
-                                // }
+                                final cubit = context.read<PaymentCubit>();
+                                final url = cubit.state.paymobData?.data;
+                                if (url != null) {
+                                  await launchUrl(Uri.parse(url));
+                                }
                               },
                               title: 'Paymob',
                               titleId: 'Paymob',
@@ -76,8 +76,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
                                 height: 30.h,
                               ),
                               color: Colors.blue,
-                              details: LocaleKeys
-                                  .enterYourCreditCardDetails.localize,
+                              details: LocaleKeys.enterYourCreditCardDetails.localize,
                               context: context,
                             ),
                           ),
@@ -165,8 +164,8 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
         if (_selectedProviderId != null) {
           print('Provider ID for $title: $_selectedProviderId');
 
-          // cubit.getPaymobData(
-          //     amountId: widget.amountId, providerId: _selectedProviderId!);
+          cubit.getPaymobData(
+              amountId: "100", providerId: _selectedProviderId!);
         } else {
           print('Provider ID not found for $title');
         }

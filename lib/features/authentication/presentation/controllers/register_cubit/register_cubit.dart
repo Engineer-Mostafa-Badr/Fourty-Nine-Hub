@@ -63,7 +63,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         confirmPassword: confirmPasswordTextController.text.trim(),
         isMale: isMale,
         referralId: referralId.text.trim(),
-        token: token!,
+        token: token??"",
       ),
     );
     emit(

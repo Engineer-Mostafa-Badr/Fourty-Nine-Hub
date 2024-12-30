@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -70,13 +71,20 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                 selectedUsername = null;
               });
             }
+            if (state.status == StateStatus.error) {
+              showErrorMessage(
+                context,
+                getFailureMessage(
+                  state.failure!,
+                  context,
+                ),
+              );
+            }
           },
           builder: (BuildContext context, state) {
             var users = state.users;
             var filteredUsers = users?.where((user) {
-              String fullName =
-                  '${capitalize(user.firstName)} ${capitalize(user.lastName)}';
-              return fullName
+              return user.email
                   .toLowerCase()
                   .contains(searchController.text.toLowerCase());
             }).toList();
@@ -206,18 +214,18 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                                 itemCount: filteredUsers.length,
                                 itemBuilder: (context, index) {
                                   var user = filteredUsers[index];
-                                  String fullName =
-                                      '${capitalize(user.firstName)} ${capitalize(user.lastName)}';
+                                  // String fullName =
+                                  //     '${capitalize(user.firstName)} ${capitalize(user.lastName)}';
                                   return ListTile(
                                     title: Text(
-                                      fullName,
+                                      user.email,
                                       style: Styles.mediumText(
                                           color: Theme.of(context)
                                               .scaffoldBackgroundColor),
                                     ),
                                     onTap: () {
                                       setState(() {
-                                        searchController.text = fullName;
+                                        searchController.text = user.email;
                                         selectedUsername = user.userName;
                                         showUserList = false;
                                       });

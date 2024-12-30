@@ -28,10 +28,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/listen_to_new_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/pin_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/recover_deleted_chats_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/show_deleted_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/unpin_chat_use_case.dart';
-import 'package:fourtyninehub/features/authentication/domain/use_cases/update_user_bio_usecase.dart';
-import 'package:fourtyninehub/features/authentication/domain/use_cases/update_user_name_usecase.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 
 part 'chats_state.dart';

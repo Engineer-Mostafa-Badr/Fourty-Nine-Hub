@@ -20,6 +20,7 @@ class PaymentCacheOutState {
   final List<ListBankEntity>? banks;
   final PriceYellowCardEntity? price;
   final PayoutMethodEntity? method;
+  final List<PaymentProviderEntity>? data;
   String? backColor;
 
   PaymentCacheOutState({
@@ -33,6 +34,7 @@ class PaymentCacheOutState {
     this.banks,
     this.price,
     this.method,
+    this.data,
     this.backColor = "#FFFFFFFF",
   });
 
@@ -48,6 +50,7 @@ class PaymentCacheOutState {
     PriceYellowCardEntity? price,
     PayoutMethodEntity? method,
     String? backColor,
+    List<PaymentProviderEntity>? data,
   }) {
     return PaymentCacheOutState(
       status: status ?? this.status,
@@ -61,6 +64,7 @@ class PaymentCacheOutState {
       banks: banks ?? this.banks,
       price: price ?? this.price,
       method: method ?? this.method,
+      data: data ?? this.data,
     );
   }
 }

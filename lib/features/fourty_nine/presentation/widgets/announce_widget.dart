@@ -15,7 +15,7 @@ class AnnounceWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SliderCubit, BasicState<List<SliderItemEntity>>>(
         builder: (context, state) {
-      if (state.data?.isEmpty ?? true) {
+      if (state.data?.isEmpty ?? false) {
         // print('data is empty');
         return const SizedBox();
       } else {

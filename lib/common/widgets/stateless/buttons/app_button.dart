@@ -36,7 +36,7 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: () => onPressed(),
       child: Container(
         height: height ?? kToolbarHeight * 1.2.h,

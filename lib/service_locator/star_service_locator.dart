@@ -3,6 +3,7 @@ import 'package:fourtyninehub/features/star_feature/data/repository/star_reposit
 import 'package:fourtyninehub/features/star_feature/domain/repository/star_repository.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/delete_my_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_all_star_use_case.dart';
+import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_banner_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_myl_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_winner_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
@@ -60,8 +61,13 @@ class StarServiceLocator {
         () => SentBillRequestUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<FetchBannerUseCase>(
+        () => FetchBannerUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerFactory<StarCubit>(() => StarCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

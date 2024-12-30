@@ -13,7 +13,6 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/subs
 import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/core/utils/api_service.dart';
-import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/competition/data/repository/competition_repo_impl.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
@@ -52,9 +51,7 @@ import 'package:fourtyninehub/service_locator/trip_join_service_locator.dart';
 import 'package:fourtyninehub/service_locator/twitter_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
 import 'package:get_it/get_it.dart';
-import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../core/data/datasources/local/shared_preferences/local_storage_consumer.dart';

@@ -31,6 +31,7 @@ class _GoogleMapViewAddresState extends State<GoogleMapViewAddres> {
         BlocListener<GetStartingPointRideCubit, RiderState>(
           listener: (context, state) {
             if (state is SuccessGetStartingPointState) {
+              log("messagemessagemessagemessagemessage");
               context.read<LocationSocketCubit>().sendSubCategoryId(
                     subCategoryId:
                         context.read<RiderTripReelTimeCubit>().tempCategory!.id,

@@ -13,4 +13,14 @@ class GiftRepositoryImpl implements GiftRepository {
   Future<Either<Failure, GiftEntity>> fetchGiftWallet() {
     return _remoteDataSource.fetchGiftWallet();
   }
+
+  @override
+  Future<Either<Failure, bool>> requestWithdrawCompetition(String id) {
+    return _remoteDataSource.requestWithdrawCompetition(id);
+  }
+
+  @override
+  Future<Either<Failure, bool>> requestWithdrawWheel() {
+    return _remoteDataSource.requestWithdrawWheel();
+  }
 }

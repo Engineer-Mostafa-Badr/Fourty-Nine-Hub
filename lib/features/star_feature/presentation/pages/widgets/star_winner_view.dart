@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/utils/date_time.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_winner_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
@@ -83,10 +84,7 @@ class _StarWinnerViewState extends State<StarWinnerView> {
   }
 
   Widget buildItem(context, StarWinnerEntity star) {
-    final String formattedDateTime =
-        DateFormat('dd/MM/yyyy').format(star.createdAt!);
-
-    DateTime dateTime = DateTime.parse('${star.createdAt!}');
+    DateTime dateTime = DateTime.parse(star.createdAt!);
 
     // Get the month
     int month = dateTime.month;
@@ -120,7 +118,7 @@ class _StarWinnerViewState extends State<StarWinnerView> {
                 color: Theme.of(context).scaffoldBackgroundColor,
               ),
               Label(
-                text: '${LocaleKeys.day.localize}: $formattedDateTime',
+                text: '${LocaleKeys.day.localize}: ${ formatDateTime(star.createdAt!, context)}',
                 style: Styles.smallText(
                   fontSize: 50.sp,
                   color: AppColors.GREY_NORMAL_COLOR,

@@ -14,12 +14,12 @@ class StarWinnerModel extends StarWinnerEntity {
   factory StarWinnerModel.fromJson(Map<String, dynamic> json) {
     return StarWinnerModel(
       id: json['_id'],
-      user: UserStarModel.fromJson(json['user_id']),
+      user: UserStarModel.fromJson(json['talentId']),
       profit: json['profit'] ?? 0,
       numberOfWins: json['numberOfWins'] ?? 0,
       createAt: json['createAt'] ?? '',
       createdAt:
-          json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
+          json['createdAt'] ??'',
     );
   }
 }
