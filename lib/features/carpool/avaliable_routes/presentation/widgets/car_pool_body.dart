@@ -42,10 +42,12 @@ class _CarPoolBodyState extends State<CarPoolBody>
   void initState() {
     _printCurrentLocation();
     BlocProvider.of<GetCurrencyCubit>(context).getCurrencyData();
-    BlocProvider.of<GetAllTripsCubit>(context).fetchAllCarpoolTrips();
-    BlocProvider.of<GetAvailableTripsForDriversCubit>(context)
-        .fetchAllCarpoolTripsForDriver();
-    BlocProvider.of<VerifyCompleteDriverCubit>(context).getAcceptedTrips();
+
+    BlocProvider.of<GetAllTripsCubit>(context)
+        .fetchAllCarpoolTrips(isLoggedIn: context.read<UserCubit>().isLoggedIn);
+    // BlocProvider.of<GetAvailableTripsForDriversCubit>(context)
+    //     .fetchAllCarpoolTripsForDriver();
+    // BlocProvider.of<VerifyCompleteDriverCubit>(context).getAcceptedTrips();
     super.initState();
   }
 

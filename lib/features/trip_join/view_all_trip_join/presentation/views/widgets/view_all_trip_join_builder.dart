@@ -58,12 +58,12 @@ class _ViewAllTripJoinCardBuilderState
           );
         }
         return ListView.builder(
-          itemCount: viewAllTripJoinCubit.tripJoinCards.length +
-           1,
+          itemCount: viewAllTripJoinCubit.tripJoinCards.length + 1,
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) {
-            if (index > nativeAdStart && index % adFrequency == adFrequency - 1) {
+            if (index > nativeAdStart &&
+                index % adFrequency == adFrequency - 1) {
               return getAdIfNeeded(index, _adsManager);
             }
             if (index < viewAllTripJoinCubit.tripJoinCards.length) {
@@ -151,15 +151,17 @@ class _ViewAllTripJoinCardBuilderState
                   }
                 },
                 subscribeMessageOnTap: () async {
-                  if (context.read<UserCubit>().isLoggedIn) {
+                  if (await context.read<UserCubit>().isLoggedIn) {
+                    print("LOOGEDIN \n");
                     if (await _isPremuim(
                       tripJoinCardEntity,
                       tripJoinCardEntity.categoryId ?? '',
                       LocaleKeys.tripjoinPremuimSubscription.localize,
-                    )) {
-                    } else {
-                      context.push(Routes.LOGIN);
-                    }
+                    )) {}
+                  } else {
+                    print("not LOOGEDIN \n");
+
+                    context.push(Routes.LOGIN);
                   }
                 },
               );

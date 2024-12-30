@@ -330,23 +330,21 @@ class AppPages {
   AppPages._();
 
   static late final GoRouter router;
-  static  initializeRouter(String initialRoute) {
-    router = GoRouter(
-    initialLocation: initialRoute,
-    routes: <RouteBase>[
+  static initializeRouter(String initialRoute) {
+    router = GoRouter(initialLocation: initialRoute, routes: <RouteBase>[
       GoRoute(
-    path: Routes.HOME,
-    builder: (context, state) => MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => serviceLocator<SliderCubit>(),
+        path: Routes.HOME,
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => serviceLocator<SliderCubit>(),
+            ),
+            BlocProvider(
+              create: (context) => serviceLocator<ThumbnailsCubit>(),
+            ),
+          ],
+          child: const FourtyNineView(),
         ),
-        BlocProvider(
-          create: (context) => serviceLocator<ThumbnailsCubit>(),
-        ),
-      ],
-      child: const FourtyNineView(),
-    ),
         routes: [
           GoRoute(
               path: Routes.CUSTOMPAGE,
@@ -354,21 +352,23 @@ class AppPages {
               builder: (context, state) => const CustomPage(),
               routes: [
                 GoRoute(
-                    path: Paths.PAGEPREVIEW,
-                    name: Routes.PAGEPREVIEW,
-                    builder: (context, state) => MultiBlocProvider(
-                      providers: [
-                        BlocProvider(
-                          create: (context) => serviceLocator<SliderCubit>(),
-                        ),
-                        BlocProvider(
-                          create: (context) => serviceLocator<ThumbnailsCubit>(),
-                        ),
-                      ],
-                      child:  PagePreview(state: state.extra as dynamic,),
-                    ),),
-              ]
-          ),
+                  path: Paths.PAGEPREVIEW,
+                  name: Routes.PAGEPREVIEW,
+                  builder: (context, state) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) => serviceLocator<SliderCubit>(),
+                      ),
+                      BlocProvider(
+                        create: (context) => serviceLocator<ThumbnailsCubit>(),
+                      ),
+                    ],
+                    child: PagePreview(
+                      state: state.extra as dynamic,
+                    ),
+                  ),
+                ),
+              ]),
           GoRoute(
             path: Paths.RestaurantDashboard,
             name: Routes.RestaurantDashboard,
@@ -1160,10 +1160,10 @@ class AppPages {
           GoRoute(
               path: Paths.SNAP,
               name: Routes.SNAP,
-              builder: (context, state) =>  const SnapView()),
+              builder: (context, state) => const SnapView()),
           // Spotlight
           GoRoute(
-                   path: Paths.SPOTLIGHT,
+              path: Paths.SPOTLIGHT,
               name: Routes.SPOTLIGHT,
               builder: (context, state) => MultiBlocProvider(
                     providers: [
@@ -2043,12 +2043,12 @@ class AppPages {
                   create: (_) => serviceLocator(), child: const BeStarView());
             },
           ),
-       GoRoute(
+          GoRoute(
             path: Paths.TenPercent,
             name: Routes.TenPercent,
             builder: (context, state) {
               return BlocProvider<TenPercentCubit>(
-                  create: (_) =>serviceLocator(),
+                  create: (_) => serviceLocator(),
                   child: const TenPercentView());
             },
           ),
@@ -2241,7 +2241,8 @@ class AppPages {
             builder: (context, state) {
               return MultiBlocProvider(providers: [
                 BlocProvider<GetAllTripsCubit>(
-                  create: (context) => GetAllTripsCubit(),
+                  create: (context) =>
+                      GetAllTripsCubit(apiConsumer: serviceLocator()),
                 ),
                 BlocProvider<GetCurrencyCubit>(
                   create: (context) => GetCurrencyCubit(
@@ -2273,7 +2274,8 @@ class AppPages {
                       getPriceCarpoolUsecase: serviceLocator()),
                 ),
                 BlocProvider<GetAllTripsCubit>(
-                  create: (context) => GetAllTripsCubit(),
+                  create: (context) =>
+                      GetAllTripsCubit(apiConsumer: serviceLocator()),
                 ),
                 BlocProvider<CreateCarPoolCubit>(
                   create: (context) => CreateCarPoolCubit(
@@ -2284,7 +2286,8 @@ class AppPages {
                   create: (context) => MapBoxDestCubit(),
                 ),
                 BlocProvider<GetAllTripsCubit>(
-                  create: (context) => GetAllTripsCubit(),
+                  create: (context) =>
+                      GetAllTripsCubit(apiConsumer: serviceLocator()),
                 ),
                 BlocProvider<GetCurrencyCubit>(
                   create: (context) => GetCurrencyCubit(
