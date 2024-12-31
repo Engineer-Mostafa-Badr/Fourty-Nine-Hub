@@ -12,23 +12,33 @@ class ContactUsCubit extends Cubit<ContactUsState> {
   final messageController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   final CreateContactUsUseCase _createContactUsUseCase;
+
   ContactUsCubit(
     this._createContactUsUseCase,
   ) : super(const ContactUsState());
 
   void createContactUs() async {
     state.copyWith(status: StateStatus.initial);
+
     if (formKey.currentState?.validate() ?? false) {
-      final response = await _createContactUsUseCase(ContactUsModel(
-          content: messageController.text, phone: phoneController.text));
+      // Exclude the phone field if it's empty
+      final data = {
+        'content': messageController.text,
+        if (phoneController.text.isNotEmpty) 'phone': phoneController.text, // Include phone only if not empty
+      };
+
+      final response = await _createContactUsUseCase(ContactUsModel.fromJson(data));
+
       response.fold(
-          (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-          (r) {
-        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-        print(r);
-        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-        return emit(state.copyWith(status: StateStatus.success));
-      });
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (r) {
+          print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+          print(r);
+          print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+          return emit(state.copyWith(status: StateStatus.success));
+        },
+      );
     }
   }
+
 }

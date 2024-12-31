@@ -25,7 +25,7 @@ class _SocialPageState extends State<SocialPage> {
   final List<String> _items = [
     LocaleKeys.face.localize,
     LocaleKeys.insta.localize,
-    LocaleKeys.tweet.localize,
+    LocaleKeys.Tweet.localize,
   ];
 
   @override
@@ -110,7 +110,7 @@ class _SocialPageState extends State<SocialPage> {
                   SocialPageParams(
                     face: face,
                     insta: insta,
-                    tweet: tweet, // Add 'tweet' as a new parameter
+                    tweet: tweet,
                   ),
                 );
 
