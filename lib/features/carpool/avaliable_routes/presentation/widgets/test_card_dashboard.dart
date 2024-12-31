@@ -58,7 +58,7 @@ class TestCardDashboard extends StatelessWidget {
                                         .currnecyAr
                                     : BlocProvider.of<GetCurrencyCubit>(context)
                                         .currnecyEn,
-                                style: Styles.mediumText(
+                                style: Styles.headerText(
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.SECONDARY_COLOR),
                               );

@@ -8,6 +8,8 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/check_trip_end_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/get_user_login_trip_no_socket_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/check_start_record_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/check_stop_record_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_accept_by_driver_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_accept_by_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_ride_currentTrip_cubit.dart';
@@ -18,6 +20,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/selec
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/create_trip_rider_form.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/map_and_address_finder_ride.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/my_trip_info_ride_widget.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/ride_banner_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/rider_banner_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/shipping_banner_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/sub_cateogry_ride_widget.dart';
@@ -45,6 +48,8 @@ class _ShippingRiderTabScreenState extends State<ShippingRiderTabScreen> {
     BlocProvider.of<GetCurrencyCubit>(context).getCurrencyData();
     // context.read<GetRideCurrenttripCubit>().get();
     super.initState();
+    context.read<CheckStopRecordCubit>().checkStop();
+    context.read<CheckStartRecordCubit>().checkStart();
     BlocProvider.of<SecretsCubit>(context).getAllSecrets();
     // context.read<CheckDriverTypeCubit>().checkDriverType();
     if (!isCheck) {
@@ -79,127 +84,100 @@ class _ShippingRiderTabScreenState extends State<ShippingRiderTabScreen> {
               }
             }
           },
-          child: BlocListener<CheckAcceptByDriverCubit, RiderState>(
-            listener: (context, state) {
-              // log(state.toString(),
-              //     name: "lskdfjslkdfjslkdfjslkdjfslkdjfslkdjfslkdjfslkdfj");
-              // if (state is SuccessCheckAcceptByDriverState) {
-              //   log(isCheck.toString(), name: "lskdjflskdjfdkddddddhhhhhhhhhh");
-              //   isCheck = true;
-              //   log(isCheck.toString(), name: "lskdjflskdjfdkddddddhhhhhhhhhh");
-              // context.pushAndRemoveUntil(
-              //   Routes.TRIPINFOBYRIDERSCREEN,
-              //   extra: state.model,
-              //   (route) => false,
-              // );
-              // }
-            },
-            child: BlocListener<CheckAcceptByRiderCubit, RiderState>(
-              listener: (context, state) {
-                // if (state is SuccessCheckAcceptByRiderState) {
-                //   isCheck = true;
-                // context.pushAndRemoveUntil(
-                //   Routes.TRIPINFOBYDRIVERSCREEN,
-                //   extra: state.model,
-                //   (route) => false,
-                // );
-                // }
-              },
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Sizer(),
-                        Flexible(
-                          child: RiderBannerWidget(),
-                        ),
-                        Sizer(),
-                        Flexible(
-                          child: ShippingBannerWidget(),
-                        ),
-                        Sizer(),
-                      ],
-                    ),
-                    const SubCateogryRideWidget(),
-                    SubCateogryShippingWidget(
-                      formKey: formKey,
-                    ),
-                    BlocBuilder<SelectCateogryCubit, RiderState>(
-                      builder: (context, state) {
-                        if (state is SuccessSelectCateogryState) {
-                          if (state.type == 0) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
-                              child: Column(
-                                children: [
-                                  const Sizer(),
-                                  BlocBuilder<RiderTripReelTimeCubit,
-                                      RiderState>(
-                                    builder: (context, state) {
-                                      if (state is ViewPickTripDataState) {
-                                        return Column(
-                                          children: [
-                                            const MapAndAddressFinderRide(),
-                                            BlocBuilder<GetTripInfoCubit,
-                                                RiderState>(
-                                              builder: (context, state) {
-                                                if (state
-                                                    is SuccessGetTripInfoState) {
-                                                  return BlocProvider(
-                                                    create: (context) =>
-                                                        GetCurrencyCubit(
-                                                            serviceLocator()),
-                                                    child:
-                                                        TripInfoRequestWidget(
-                                                      model: state.model,
-                                                    ),
-                                                  );
-                                                } else {
-                                                  return Container();
-                                                }
-                                              },
-                                            )
-                                          ],
-                                        );
-                                      } else if (state
-                                          is NotViewPickTripDataState) {
-                                        return BlocBuilder<
-                                            GetUserLoginTripNoSocketCubit,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // const Row(
+                //   crossAxisAlignment: CrossAxisAlignment.start,
+                //   children: [
+                //     Sizer(),
+                //     Flexible(
+                //       child: RiderBannerWidget(),
+                //     ),
+                //     Sizer(),
+                //     Flexible(
+                      // child: ShippingBannerWidget(),
+                //     ),
+                //     Sizer(),
+                //   ],
+                // ),
+                RideBannerWidget(),
+                const SubCateogryRideWidget(),
+                SubCateogryShippingWidget(
+                  formKey: formKey,
+                ),
+                BlocBuilder<SelectCateogryCubit, RiderState>(
+                  builder: (context, state) {
+                    if (state is SuccessSelectCateogryState) {
+                      if (state.type == 0) {
+                        return Padding(
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 12),
+                          child: Column(
+                            children: [
+                              const Sizer(),
+                              BlocBuilder<RiderTripReelTimeCubit,
+                                  RiderState>(
+                                builder: (context, state) {
+                                  if (state is ViewPickTripDataState) {
+                                    return Column(
+                                      children: [
+                                        const MapAndAddressFinderRide(),
+                                        BlocBuilder<GetTripInfoCubit,
                                             RiderState>(
                                           builder: (context, state) {
                                             if (state
-                                                is SuccessGetUserLoginTripNoSocketState) {
-                                              return MyTripInfoRideWidget(
-                                                model: state.model,
+                                                is SuccessGetTripInfoState) {
+                                              return BlocProvider(
+                                                create: (context) =>
+                                                    GetCurrencyCubit(
+                                                        serviceLocator()),
+                                                child:
+                                                    TripInfoRequestWidget(
+                                                  model: state.model,
+                                                ),
                                               );
                                             } else {
-                                              return const CreateTripRiderForm();
+                                              return Container();
                                             }
                                           },
-                                        );
-                                      } else {
-                                        return Container();
-                                      }
-                                    },
-                                  ),
-                                ],
+                                        )
+                                      ],
+                                    );
+                                  } else if (state
+                                      is NotViewPickTripDataState) {
+                                    return BlocBuilder<
+                                        GetUserLoginTripNoSocketCubit,
+                                        RiderState>(
+                                      builder: (context, state) {
+                                        if (state
+                                            is SuccessGetUserLoginTripNoSocketState) {
+                                          return MyTripInfoRideWidget(
+                                            model: state.model,
+                                          );
+                                        } else {
+                                          return const CreateTripRiderForm();
+                                        }
+                                      },
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                },
                               ),
-                            );
-                          } else {
-                            return Container();
-                          }
-                        } else {
-                          return Container();
-                        }
-                      },
-                    ),
-                    const Sizer(),
-                  ],
+                            ],
+                          ),
+                        );
+                      } else {
+                        return Container();
+                      }
+                    } else {
+                      return Container();
+                    }
+                  },
                 ),
-              ),
+                const Sizer(),
+              ],
             ),
           ),
         ),

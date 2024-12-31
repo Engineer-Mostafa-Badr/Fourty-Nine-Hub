@@ -120,14 +120,15 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                           padding: const EdgeInsets.all(5),
                           labelPadding: const EdgeInsets.all(5),
                           tabs: [
-                            Text(LocaleKeys.rideDashboard.tr()),
                             Text(LocaleKeys.trips.tr()),
+                            Text(LocaleKeys.rideDashboard.tr()),
+                            
                           ],
                         ),
                         Expanded(
                           child: TabBarView(
                             children: [
-                              const DriverInfoRideTap(),
+                              
                               BlocListener<CheckAcceptByDriverCubit, RiderState>(
                             listener: (context, state) {
                               log(state.toString(),
@@ -242,6 +243,7 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                               ),
                             ),
                           ),
+                          const DriverInfoRideTap(),
                             ],
                           ),
                         )
@@ -324,7 +326,7 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                                               ElevatedButton(
                                                 style: const ButtonStyle(
                                                     backgroundColor:
-                                                        WidgetStatePropertyAll(
+                                                        MaterialStatePropertyAll(
                                                             AppColors
                                                                 .PRIMARY_COLOR)),
                                                 onPressed: () {
@@ -401,7 +403,7 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                                               ElevatedButton(
                                                 style: ButtonStyle(
                                                   backgroundColor:
-                                                      WidgetStateProperty.all(
+                                                      MaterialStateProperty.all(
                                                           AppColors
                                                               .PRIMARY_COLOR),
                                                 ),

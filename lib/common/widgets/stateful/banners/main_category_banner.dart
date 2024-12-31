@@ -20,11 +20,13 @@ class MainCategoryBanner extends StatefulWidget {
   final Function()? onRegister;
   final Function() onFavorite;
   bool? isFavorite;
+  final double? fontSize;
   final bool removeFavorite;
   MainCategoryBanner({
     super.key,
     this.canRegister = false,
     this.onRegister,
+    this.fontSize,
     required this.category,
     this.removeFavorite = false,
     required this.onFavorite,
@@ -58,14 +60,14 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
               ? Colors.transparent
               : AppColors.PRIMARY_COLOR,
           image: DecorationImage(
-            fit: BoxFit.fitWidth,
+            fit: BoxFit.cover,
             image: CachedNetworkImageProvider(
               widget.category.banner,
             ),
-            colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.3),
-              BlendMode.darken,
-            ),
+            // colorFilter: ColorFilter.mode(
+            //   Colors.black.withOpacity(0.3),
+            //   BlendMode.darken,
+            // ),
           ),
         ),
         child: Stack(
@@ -79,7 +81,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 45.sp),
+                  fontSize: widget.fontSize?? 45.sp),
             ),
             PositionedDirectional(
               start: 0,
@@ -151,7 +153,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 45.sp),
+                  fontSize: widget.fontSize?? 45.sp),
             ),
             PositionedDirectional(
               start: 0,

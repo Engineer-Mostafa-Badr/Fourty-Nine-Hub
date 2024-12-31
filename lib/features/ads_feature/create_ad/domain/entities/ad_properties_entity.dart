@@ -13,7 +13,20 @@ class AdPropertiesEntity {
       required this.nameEn,
       required this.type,
       required this.values});
+
+  //toJson
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'nameAr': nameAr,
+      'nameEn': nameEn,
+      'type': type,
+      'values': values,
+    };
+  }
 }
+
+
 
 enum AdPropertyType { select, dropdown, number, text, image, file }
 

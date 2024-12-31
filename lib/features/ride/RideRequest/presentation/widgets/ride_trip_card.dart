@@ -113,7 +113,7 @@ class RideTripCard extends StatelessWidget {
           const Sizer(),
           AppButton(
             onPressed: () {
-              if ((model.isPremium ?? false) && (model.autoAccept ?? false)) {
+              if ((model.isPremium ?? false) || (model.autoAccept ?? false)) {
                 if (model.id != null) {
                   context
                       .read<AcceptOfferByDriverCubit>()
@@ -168,15 +168,15 @@ class RideTripCard extends StatelessWidget {
                 );
               }
             },
-            label: (model.isPremium ?? false) && (model.autoAccept ?? false)
+            label: (model.isPremium ?? false) || (model.autoAccept ?? false)
                 ? LocaleKeys.Accept.tr()
                 : LocaleKeys.sendOffer.tr(),
             width: double.infinity,
             height: 40,
-            color: (model.isPremium ?? false) && (model.autoAccept ?? false)
+            color: (model.isPremium ?? false) || (model.autoAccept ?? false)
                 ? Colors.white
                 : Colors.black,
-            backColor: (model.isPremium ?? false) && (model.autoAccept ?? false)
+            backColor: (model.isPremium ?? false) || (model.autoAccept ?? false)
                 ? AppColors.PRIMARY_COLOR
                 : AppColors.DARK_GRAY_COLOR,
             // padding: EdgeInsets.zero,

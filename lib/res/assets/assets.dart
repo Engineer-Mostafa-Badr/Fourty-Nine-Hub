@@ -72,6 +72,7 @@ abstract class Assets {
   static String restaurant = 'assets/images/restaurant.png';
   static String doctor = 'assets/images/doctor.png';
   static String metaVerified = 'assets/images/meta-verified.jpeg';
+  static String driversLicense = 'assets/images/Drivers-license.jpg';
   static String healthBanner = 'assets/images/health_banner.png';
   static String emergency = 'assets/images/emergency.png';
   static String doctorHomeVisit = 'assets/images/doctor_home_visit.png';
@@ -80,12 +81,13 @@ abstract class Assets {
   static String profileIcon = 'assets/images/profile_icon.png';
   static String chatRoomBackground = 'assets/images/background.png';
   static String maleImagePlaceholder = 'assets/images/male_image.png';
+  static String avatarRemovebackground = 'assets/images/avatar_remove_background.png';
   static String femaleImagePlacehlder = 'assets/images/female_image.png';
   static String autoComplete = 'assets/images/autocomplete.png';
   static String tripjoin = 'assets/images/tripjoin.png';
   static String carpool = "assets/images/carpool.png";
   static String tripJoin = "assets/images/tripjoincar.png";
-
+// .png
   //drawer
   static String contact_us_icon = 'assets/settings/contact_us_icon.png';
   static String dashbboard_icon = 'assets/settings/dashbboard_icon.png';
