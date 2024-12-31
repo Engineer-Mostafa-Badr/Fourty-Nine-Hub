@@ -125,31 +125,28 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
           ),
         ],
       ),
-      userGender == "female"
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(LocaleKeys.womenOnly.localize, style: Styles.headerText()),
-                Transform.scale(
-                  scale: 0.8,
-                  child: Switch(
-                    value: isWomanOnly,
-                    onChanged: (value) {
-                      isWomanOnly = !isWomanOnly;
-                      pr(isWomanOnly);
-                      setState(() {});
-                    },
-                    activeColor: AppColors.PRIMARY_COLOR,
-                    trackOutlineColor:
-                        const MaterialStatePropertyAll(Colors.grey),
-                    activeTrackColor: Colors.grey,
-                    inactiveTrackColor: Colors.white,
-                    inactiveThumbColor: Colors.grey,
-                  ),
-                ),
-              ],
-            )
-          : const SizedBox(),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(LocaleKeys.womenOnly.localize, style: Styles.headerText()),
+          Transform.scale(
+            scale: 0.8,
+            child: Switch(
+              value: isWomanOnly,
+              onChanged: (value) {
+                isWomanOnly = !isWomanOnly;
+                pr(isWomanOnly);
+                setState(() {});
+              },
+              activeColor: AppColors.PRIMARY_COLOR,
+              trackOutlineColor: const MaterialStatePropertyAll(Colors.grey),
+              activeTrackColor: Colors.grey,
+              inactiveTrackColor: Colors.white,
+              inactiveThumbColor: Colors.grey,
+            ),
+          ),
+        ],
+      ),
       Column(
         children: [
           Row(
@@ -167,7 +164,8 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
                     setState(() {});
                   },
                   activeColor: AppColors.PRIMARY_COLOR,
-                  trackOutlineColor: const MaterialStatePropertyAll(Colors.grey),
+                  trackOutlineColor:
+                      const MaterialStatePropertyAll(Colors.grey),
                   activeTrackColor: Colors.grey,
                   inactiveTrackColor: Colors.white,
                   inactiveThumbColor: Colors.grey,
