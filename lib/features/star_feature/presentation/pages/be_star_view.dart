@@ -156,7 +156,7 @@ class _BeStarViewState extends State<BeStarView> {
                     ),
                     const Sizer(),
                     Text(
-                      'You have a talent or special unique content!',
+                      state.banner?.title??'',
                       textAlign: TextAlign.center,
                       style: Styles.mediumText(
                         fontSize: 60.sp,
@@ -165,7 +165,7 @@ class _BeStarViewState extends State<BeStarView> {
                     ),
                     const Sizer(),
                     Text(
-                      'Share it with the users and win 10000 EGP every month!!!',
+                      state.banner?.subTitle??'',
                       textAlign: TextAlign.center,
                       style: Styles.mediumText(
                         fontSize: 60.sp,

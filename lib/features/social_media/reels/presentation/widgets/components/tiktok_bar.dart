@@ -129,7 +129,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 context.push(Routes.SPOTLIGHT);
               }),
               // Following Tab
-              _buildTab("Snap", 1, onTap: () {
+              _buildTab(LocaleKeys.snap.localize, 1, onTap: () {
                 AdInterstitialTop.loadIntersitialAd();
                 AdInterstitialTop.showInterstitialAd();
                 if (context
@@ -154,20 +154,20 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
 
               // For You Tab with rounded underline
               _buildTab(LocaleKeys.Reels.localize, 2, onTap: () {
-                if (context
-                    .read<PreloadBloc>()
-                    .state
-                    .controllers[
-                        context.read<PreloadBloc>().state.focusedIndex]!
-                    .value
-                    .isPlaying) {
-                  context
-                      .read<PreloadBloc>()
-                      .state
-                      .controllers[
-                          context.read<PreloadBloc>().state.focusedIndex]
-                      ?.pause();
-                }
+                // if (context
+                //     .read<PreloadBloc>()
+                //     .state
+                //     .controllers[
+                //         context.read<PreloadBloc>().state.focusedIndex]!
+                //     .value
+                //     .isPlaying) {
+                //   context
+                //       .read<PreloadBloc>()
+                //       .state
+                //       .controllers[
+                //           context.read<PreloadBloc>().state.focusedIndex]
+                //       ?.pause();
+                // }
                 setState(() {
                   _selectedIndex = 2;
                 });

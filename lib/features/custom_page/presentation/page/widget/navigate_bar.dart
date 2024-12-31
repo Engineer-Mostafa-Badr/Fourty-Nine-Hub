@@ -24,12 +24,12 @@ class NavigateBar extends StatefulWidget {
 class _NavigateBarState extends State<NavigateBar> {
   Map<String, bool> _selectedItems = {};
   final List<String> _icons = [
-    Assets.ride,
-    Assets.shipping,
-    Assets.health,
-    Assets.food,
+    Assets.homeRide,
+    Assets.loadingCar,
+    Assets.homeHealth,
+    Assets.homeFood,
     Assets.social,
-    Assets.reels,
+    Assets.homeReel,
     Assets.spotlightIcon,
     Assets.zoomMeeting,
     Assets.live,
@@ -109,7 +109,7 @@ class _NavigateBarState extends State<NavigateBar> {
                       ),
                     ),
                     selected: isSelected,
-                    trailing: SvgPicture.asset(
+                    trailing:(index == 0 ||index == 1 || index ==2|| index ==3|| index ==5)?Image.asset(_icons[index],height: 40.h,): SvgPicture.asset(
                       _icons[index],
                       height: 40.h,
                     ),
