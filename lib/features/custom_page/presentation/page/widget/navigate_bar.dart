@@ -23,21 +23,6 @@ class NavigateBar extends StatefulWidget {
 
 class _NavigateBarState extends State<NavigateBar> {
   Map<String, bool> _selectedItems = {};
-  Map<String, bool> _initFavouriteCategories(NavigateBarEntity preferences) {
-    return {
-      "Ride": preferences.ride,
-      "Loading": preferences.loading,
-      "Health": preferences.health,
-      "Meal": preferences.meal,
-      "Find": preferences.find,
-      "Reel": preferences.reel,
-      "Spotlight": preferences.spotlight,
-      "Meet": preferences.meet,
-      "Live": preferences.live,
-      "Snap": preferences.snap,
-    };
-  }
-
   final List<String> _icons = [
     Assets.homeRide,
     Assets.loadingCar,
@@ -50,6 +35,37 @@ class _NavigateBarState extends State<NavigateBar> {
     Assets.live,
     Assets.cameraIcon,
   ];
+
+  Map<String, bool> _initFavouriteCategories(NavigateBarEntity preferences) {
+    return {
+      "Ride": preferences.ride.enabled,
+      "Loading": preferences.loading.enabled,
+      "Health": preferences.health.enabled,
+      "Meal": preferences.meal.enabled,
+      "Find": preferences.find.enabled,
+      "Reel": preferences.reel.enabled,
+      "Spotlight": preferences.spotlight.enabled,
+      "Meet": preferences.meet.enabled,
+      "Live": preferences.live.enabled,
+      "Snap": preferences.snap.enabled,
+    };
+  }
+
+  List<String> _getLocalizedNames(NavigateBarEntity preferences) {
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    return [
+      isArabic ? preferences.ride.nameAr : preferences.ride.nameEn,
+      isArabic ? preferences.loading.nameAr : preferences.loading.nameEn,
+      isArabic ? preferences.health.nameAr : preferences.health.nameEn,
+      isArabic ? preferences.meal.nameAr : preferences.meal.nameEn,
+      isArabic ? preferences.find.nameAr : preferences.find.nameEn,
+      isArabic ? preferences.reel.nameAr : preferences.reel.nameEn,
+      isArabic ? preferences.spotlight.nameAr : preferences.spotlight.nameEn,
+      isArabic ? preferences.meet.nameAr : preferences.meet.nameEn,
+      isArabic ? preferences.live.nameAr : preferences.live.nameEn,
+      isArabic ? preferences.snap.nameAr : preferences.snap.nameEn,
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +81,13 @@ class _NavigateBarState extends State<NavigateBar> {
               if (_selectedItems.isEmpty) {
                 _selectedItems = _initFavouriteCategories(state.navigateBar!);
               }
+              final localizedNames = _getLocalizedNames(state.navigateBar!);
+
               return ListView.builder(
                 itemCount: _selectedItems.length,
                 itemBuilder: (context, index) {
-                  final categoryName = _selectedItems.keys.elementAt(index);
-                  final isSelected = _selectedItems[categoryName]!;
+                  final categoryName = localizedNames[index];
+                  final isSelected = _selectedItems.values.elementAt(index);
                   return ListTile(
                     leading: Checkbox(
                       value: isSelected,
@@ -77,16 +95,18 @@ class _NavigateBarState extends State<NavigateBar> {
                       activeColor: Theme.of(context).primaryColor,
                       onChanged: (bool? value) {
                         setState(() {
-                          _selectedItems[categoryName] = value ?? false;
+                          _selectedItems[_selectedItems.keys.elementAt(index)] =
+                              value ?? false;
                         });
                       },
                     ),
                     title: Text(
                       categoryName,
                       style: Styles.mediumText(
-                          fontSize: 65.sp,
-                          fontWeight: FontWeight.w400,
-                          color: Theme.of(context).primaryColor),
+                        fontSize: 65.sp,
+                        fontWeight: FontWeight.w400,
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                     selected: isSelected,
                     trailing:(index == 0 ||index == 1 || index ==2|| index ==3|| index ==5)?Image.asset(_icons[index],height: 40.h,): SvgPicture.asset(
@@ -128,17 +148,17 @@ class _NavigateBarState extends State<NavigateBar> {
                   context
                       .read<CustomPageCubit>()
                       .updateNavigateBar(NavigateBarParams(
-                        ride: _selectedItems["Ride"] ?? false,
-                        loading: _selectedItems["Loading"] ?? false,
-                        health: _selectedItems["Health"] ?? false,
-                        meal: _selectedItems["Meal"] ?? false,
-                        find: _selectedItems["Find"] ?? false,
-                        reel: _selectedItems["Reel"] ?? false,
-                        spotlight: _selectedItems["Spotlight"] ?? false,
-                        meet: _selectedItems["Meet"] ?? false,
-                        live: _selectedItems["Live"] ?? false,
-                        snap: _selectedItems["Snap"] ?? false,
-                      ));
+                    ride: _selectedItems["Ride"] ?? false,
+                    loading: _selectedItems["Loading"] ?? false,
+                    health: _selectedItems["Health"] ?? false,
+                    meal: _selectedItems["Meal"] ?? false,
+                    find: _selectedItems["Find"] ?? false,
+                    reel: _selectedItems["Reel"] ?? false,
+                    spotlight: _selectedItems["Spotlight"] ?? false,
+                    meet: _selectedItems["Meet"] ?? false,
+                    live: _selectedItems["Live"] ?? false,
+                    snap: _selectedItems["Snap"] ?? false,
+                  ));
                 } else {
                   // Show a message if the selection is not valid
                   showSuccessMessage(

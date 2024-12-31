@@ -1,10 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 
 // import '../../../../../common/widgets/dynamic/sizer,.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -60,7 +62,7 @@ class CompetitionCard extends StatelessWidget {
                       children: [
                         Positioned.fill(
                           child: Padding(
-                            padding:  EdgeInsets.all(8.w),
+                            padding: EdgeInsets.all(8.w),
                             child: CircularProgressIndicator(
                               value: countOfRequest / maxRequests,
                               strokeWidth: 8,
@@ -79,8 +81,21 @@ class CompetitionCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Label(
-                    text: '${competitionsWalletEntity.countOfRequest}',
+                  Row(
+                    children: [
+                      Label(
+                        text: competitionsWalletEntity.amount.toStringAsFixed(0),
+                      ),
+                      SizedBox(width: 10.w,),
+                      BlocBuilder<MainCategoriesCubit,MainCategoriesState>(
+                        builder: (BuildContext context,  state) {
+                          return Label(
+                            text:  context.locale == Locales.english
+                                ? state.currency?.currencyEn ??'':state.currency?.currencyAr ??'',
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ],
               )
@@ -100,8 +115,9 @@ class CompetitionCard extends StatelessWidget {
               Expanded(
                   child: Label(
                 maxLines: 2,
-                text:
-                    '${LocaleKeys.minimum.localize} ${competitionsWalletEntity.maxRequests} ${LocaleKeys.requestTransaction.localize}',
+                text: context.locale == Locales.english
+                    ? competitionsWalletEntity.descriptionGiftWalletEn
+                    : competitionsWalletEntity.descriptionGiftWalletAr,
                 style: Styles.mediumText(color: Colors.grey),
               )),
             ],
@@ -110,11 +126,13 @@ class CompetitionCard extends StatelessWidget {
           AppButton(
             label: LocaleKeys.requestWithdraw.localize,
             color: AppColors.AUTH_CONTAINER_COLOR,
-            backColor: competitionsWalletEntity.countOfRequest >= competitionsWalletEntity.maxRequests &&
+            backColor: competitionsWalletEntity.countOfRequest >=
+                        competitionsWalletEntity.maxRequests &&
                     competitionsWalletEntity.isWinner == true
                 ? Colors.red
                 : Colors.red.withOpacity(.5),
-            onPressed: competitionsWalletEntity.countOfRequest >= competitionsWalletEntity.maxRequests &&
+            onPressed: competitionsWalletEntity.countOfRequest >=
+                        competitionsWalletEntity.maxRequests &&
                     competitionsWalletEntity.isWinner == true
                 ? () {
                     onTap();

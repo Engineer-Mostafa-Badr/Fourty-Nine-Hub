@@ -1,96 +1,30 @@
-class CompetitionModel {
-  final bool? status;
-  final String? message;
-  final List<CompetitionData>? data;
+import 'package:fourtyninehub/features/competition/domain/entity/competition_entity.dart';
 
-  CompetitionModel({
-    this.status,
-    this.message,
-    this.data,
-  });
+class CompetitionModel extends CompetitionEntity {
+  CompetitionModel(
+      {required super.id,
+      required super.CompetitionId,
+      required super.withdrawLimit,
+      required super.maxRequests,
+      required super.nameAr,
+      required super.nameEn,
+      required super.descriptionEn,
+      required super.descriptionAr,
+      required super.countOfRequest,
+      required super.amount});
 
   factory CompetitionModel.fromJson(Map<String, dynamic> json) {
     return CompetitionModel(
-      status: json['status'] as bool?,
-      message: json['message'] as String?,
-      data: (json['data'] as List<dynamic>?)
-          ?.map((e) => CompetitionData.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      id: json['_id'] ?? '',
+      CompetitionId: json['competition_id']['_id'] ?? '',
+      withdrawLimit: json['competition_id']['withdrawLimit'] ?? 0,
+      maxRequests: json['competition_id']['maxRequests'] ?? 0,
+      nameAr: json['competition_id']['nameAr'] ?? '',
+      nameEn: json['competition_id']['nameEn'] ?? '',
+      descriptionEn: json['competition_id']['descriptionEn'] ?? '',
+      descriptionAr: json['competition_id']['descriptionAr'] ?? '',
+      countOfRequest: json['countOfRequest'] ??0,
+      amount: json['amount'] ?? 0,
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'status': status,
-      'message': message,
-      'data': data?.map((e) => e.toJson()).toList(),
-    };
-  }
-}
-
-class CompetitionData {
-  final CompetitionId? competitionId;
-  final int? countOfRequest;
-
-  CompetitionData({
-    this.competitionId,
-    this.countOfRequest,
-  });
-
-  factory CompetitionData.fromJson(Map<String, dynamic> json) {
-    return CompetitionData(
-      competitionId: json['competition_id'] == null
-          ? null
-          : CompetitionId.fromJson(
-              json['competition_id'] as Map<String, dynamic>),
-      countOfRequest: json['countOfRequest'] as int?,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'competition_id': competitionId?.toJson(),
-      'countOfRequest': countOfRequest,
-    };
-  }
-}
-
-class CompetitionId {
-  final String? id;
-  final String? nameAr;
-  final String? nameEn;
-  final String? descriptionEn;
-  final String? descriptionAr;
-  final int? maxRequests;
-
-  CompetitionId({
-    this.id,
-    this.nameAr,
-    this.nameEn,
-    this.descriptionAr,
-    this.descriptionEn,
-    this.maxRequests,
-  });
-
-  factory CompetitionId.fromJson(Map<String, dynamic> json) {
-    return CompetitionId(
-      id: json['_id'] as String?,
-      nameAr: json['nameAr'] as String? ?? "لا توجد بيانات",
-      nameEn: json['nameEn'] as String? ?? "No Title",
-      descriptionAr: json['descriptionAr'] as String?,
-      descriptionEn: json['descriptionEn'] as String?,
-      maxRequests: json['maxRequests'] as int?,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'nameAr': nameAr,
-      'nameEn': nameEn,
-      'descriptionAr': descriptionAr,
-      'descriptionEn': descriptionEn,
-      'maxRequests': maxRequests,
-    };
   }
 }

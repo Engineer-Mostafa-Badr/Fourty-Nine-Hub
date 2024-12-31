@@ -38,6 +38,7 @@ class _BeStarViewState extends State<BeStarView> {
   late StarCubit _cubit;
   bool showMore = false;
   final AdsManager _adsManager = AdsManager();
+
   @override
   void initState() {
     super.initState();
@@ -92,21 +93,23 @@ class _BeStarViewState extends State<BeStarView> {
       appBar: BackAppBar(
         label: LocaleKeys.beAStar.localize,
         actions: [
-          if(context.read<UserCubit>().isLoggedIn)
-          TextButton(
-            onPressed: () {
-              context.push(Routes.BE_STAR_DETAILS);
-              //   Navigator.push(context, MaterialPageRoute(builder: (context)=>const StarWinnerView()));
-            },
-            child: Text(
-              '${LocaleKeys.winners.localize} 🏆',
-              style: Styles.mediumText(
-                  color: AppColors.SECONDARY_COLOR, fontSize: 60.sp),
+          if (context.read<UserCubit>().isLoggedIn)
+            TextButton(
+              onPressed: () {
+                context.push(Routes.BE_STAR_DETAILS);
+                //   Navigator.push(context, MaterialPageRoute(builder: (context)=>const StarWinnerView()));
+              },
+              child: Text(
+                '${LocaleKeys.winners.localize} 🏆',
+                style: Styles.mediumText(
+                    color: AppColors.SECONDARY_COLOR, fontSize: 60.sp),
+              ),
             ),
-          ),
         ],
       ),
-      floatingActionButton:context.read<UserCubit>().isLoggedIn? const FloatingActionButtonStar():null,
+      floatingActionButton: context.read<UserCubit>().isLoggedIn
+          ? const FloatingActionButtonStar()
+          : null,
       body: BlocBuilder<StarCubit, StarState>(
         builder: (BuildContext context, state) {
           if (!context.read<UserCubit>().isLoggedIn) {
@@ -137,7 +140,7 @@ class _BeStarViewState extends State<BeStarView> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
-                    ImageFromInternet(image: state.banner?.banner ??''),
+                    ImageFromInternet(image: state.banner?.banner ?? ''),
                     Container(
                       width: double.infinity,
                       height: 240.h,
@@ -148,7 +151,8 @@ class _BeStarViewState extends State<BeStarView> {
                         //   image: NetworkImage(state.banner?.banner ??''),
                         // ),
                       ),
-                      child: ImageFromInternet(image: state.banner?.banner ??''),
+                      child:
+                          ImageFromInternet(image: state.banner?.banner ?? ''),
                     ),
                     const Sizer(),
                     Text(
@@ -171,237 +175,235 @@ class _BeStarViewState extends State<BeStarView> {
                     const Sizer(),
                     // ListView with shrinkWrap and no scrolling
                     ListView.separated(
-                      controller: _scrollController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      // Disable scrolling
-                      shrinkWrap: true,
-                      // Allow the ListView to take only the necessary height
-                      itemBuilder: (context, index) {
-                        // Insert ads after every 2 items
-                        // if ((index + 1) % 3 == 0) {
-                        //   return getAdIfNeeded(index, AdsManager());
-                        // }
-                        if (index > nativeAdStart && index % adFrequency == adFrequency - 1) {
-                          return getAdIfNeeded(index, _adsManager);
-                        }
-                        if (index >= sortedStars.length) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                        if (index >= sortedStars.length) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                        final videoController = _videoControllers[index];
-                        //final star = sortedStars[index];
-                        // final videoController = _videoControllers[index];
+                        controller: _scrollController,
+                        physics: const NeverScrollableScrollPhysics(),
+                        // Disable scrolling
+                        shrinkWrap: true,
+                        // Allow the ListView to take only the necessary height
+                        itemBuilder: (context, index) {
+                          // Insert ads after every 2 items
+                          // if ((index + 1) % 3 == 0) {
+                          //   return getAdIfNeeded(index, AdsManager());
+                          // }
+                          if (index > nativeAdStart &&
+                              index % adFrequency == adFrequency - 1) {
+                            return getAdIfNeeded(index, _adsManager);
+                          }
+                          if (index >= sortedStars.length) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          if (index >= sortedStars.length) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          final videoController = _videoControllers[index];
+                          //final star = sortedStars[index];
+                          // final videoController = _videoControllers[index];
 
-                        return Column(
-                          children: [
-                            buildHeaderInfo(sortedStars[index]),
-                            SizedBox(height: 10.h),
-                            if (videoController != null)
-                              videoController.value.isInitialized
-                                  ? GestureDetector(
-                                      onTap: () {
-                                        if (_isVideoEnded[index]) {
-                                          videoController.seekTo(Duration.zero);
-                                          videoController.play();
-                                          setState(() {
-                                            _isVideoEnded[index] = false;
-                                          });
-                                        } else {
-                                          videoController.value.isPlaying
-                                              ? videoController.pause()
-                                              : videoController.play();
+                          return Column(
+                            children: [
+                              buildHeaderInfo(sortedStars[index]),
+                              SizedBox(height: 10.h),
+                              if (videoController != null)
+                                videoController.value.isInitialized
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          if (_isVideoEnded[index]) {
+                                            videoController
+                                                .seekTo(Duration.zero);
+                                            videoController.play();
+                                            setState(() {
+                                              _isVideoEnded[index] = false;
+                                            });
+                                          } else {
+                                            videoController.value.isPlaying
+                                                ? videoController.pause()
+                                                : videoController.play();
+                                          }
+                                        },
+                                        child: AspectRatio(
+                                          aspectRatio: 1,
+                                          child: Stack(
+                                            children: [
+                                              VideoPlayer(videoController),
+                                              Row(
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                    children: [
+                                                      const Icon(
+                                                          Icons.remove_red_eye),
+                                                      Sizer(width: 10.w),
+                                                      Label(
+                                                          text:
+                                                          '${sortedStars[index].totalViews}'),
+                                                    ],
+                                                  ),
+                                                  const Spacer(),
+                                                  Label(
+                                                      text:
+                                                      '${LocaleKeys.Rating.localize} ${sortedStars[index].averageRating}'),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : const CircularProgressIndicator()
+                              else
+                                Stack(
+                                  children: [
+                                    GridView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: state.star![index]
+                                                    .mediaUrl.length ==
+                                                1
+                                            ? 1
+                                            : 2,
+                                      ),
+                                      itemCount:
+                                          state.star![index].mediaUrl.length < 4
+                                              ? state
+                                                  .star![index].mediaUrl.length
+                                              : 4,
+                                      itemBuilder: (context, mediaIndex) {
+                                        if (mediaIndex >=
+                                            state
+                                                .star![index].mediaUrl.length) {
+                                          // Skip rendering for out-of-bounds mediaIndex
+                                          return const SizedBox.shrink();
                                         }
-                                      },
-                                      child: AspectRatio(
-                                        aspectRatio: 1,
-                                        child: Stack(
-                                          children: [
-                                            VideoPlayer(videoController),
-                                            Padding(
-                                              padding: EdgeInsets.all(12.w),
-                                              child: Align(
-                                                alignment:
-                                                    AlignmentDirectional.topEnd,
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  children: [
-                                                    const Icon(
-                                                        Icons.remove_red_eye),
-                                                    Sizer(width: 10.w),
-                                                    Label(
-                                                        text:
-                                                            '${sortedStars[index].totalViews}'),
-                                                  ],
+                                        return GestureDetector(
+                                          onTap: () {
+                                            if (mediaIndex != 3 ||
+                                                (mediaIndex == 3 &&
+                                                    state.star![index].mediaUrl
+                                                            .length ==
+                                                        4)) {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    ImageDetails(
+                                                  image: state
+                                                      .star![index]
+                                                      .mediaUrl[mediaIndex]
+                                                      .mediaKey,
+                                                  function: () {},
+                                                ),
+                                              );
+                                            } else {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) => allImage(
+                                                  () {},
+                                                  state.star![index].mediaUrl
+                                                      .length,
+                                                  state
+                                                      .star![index]
+                                                      .mediaUrl[mediaIndex]
+                                                      .mediaKey,
+                                                ),
+                                              );
+                                            }
+                                          },
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                // margin:
+                                                //     const EdgeInsetsDirectional
+                                                //         .only(
+                                                //         end: 10, bottom: 10),
+                                                // padding:
+                                                //     const EdgeInsets.all(10),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.fill,
+                                                    image: NetworkImage(state
+                                                        .star![index]
+                                                        .mediaUrl[mediaIndex]
+                                                        .mediaKey),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.all(12.w),
-                                              child: Align(
-                                                alignment: AlignmentDirectional
-                                                    .topStart,
-                                                child: Label(
-                                                    text:
-                                                        'Rating: ${sortedStars[index].averageRating}'),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  : const CircularProgressIndicator()
-                            else
-                              Stack(
-                                children: [
-                                  Stack(
-                                    alignment: AlignmentDirectional.topEnd,
-                                    children: [
-                                      GridView.builder(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        padding: const EdgeInsets.all(10),
-                                        gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: state.star![index]
-                                                      .mediaUrl.length ==
-                                                  1
-                                              ? 1
-                                              : 2,
-                                        ),
-                                        itemCount: state.star![index].mediaUrl
-                                                    .length <
-                                                4
-                                            ? state.star![index].mediaUrl.length
-                                            : 4,
-                                        itemBuilder: (context, mediaIndex) {
-                                          if (mediaIndex >=
-                                              state.star![index].mediaUrl
-                                                  .length) {
-                                            // Skip rendering for out-of-bounds mediaIndex
-                                            return const SizedBox.shrink();
-                                          }
-                                          return GestureDetector(
-                                            onTap: () {
-                                              if (mediaIndex != 3 ||
-                                                  (mediaIndex == 3 &&
-                                                      state
-                                                              .star![index]
-                                                              .mediaUrl
-                                                              .length ==
-                                                          4)) {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      ImageDetails(
-                                                    image: state
-                                                        .star![index]
-                                                        .mediaUrl[mediaIndex]
-                                                        .mediaKey,
-                                                    function: () {},
-                                                  ),
-                                                );
-                                              } else {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      allImage(
-                                                    () {},
-                                                    state.star![index].mediaUrl
-                                                        .length,
-                                                    state
-                                                        .star![index]
-                                                        .mediaUrl[mediaIndex]
-                                                        .mediaKey,
-                                                  ),
-                                                );
-                                              }
-                                            },
-                                            child: Stack(
-                                              children: [
+                                              if (mediaIndex == 3 &&
+                                                  state.star![index].mediaUrl
+                                                          .length >
+                                                      4)
                                                 Container(
-                                                  margin:
-                                                      const EdgeInsetsDirectional
-                                                          .only(
-                                                          end: 10, bottom: 10),
-                                                  padding:
-                                                      const EdgeInsets.all(10),
+                                                  // margin:
+                                                  //     const EdgeInsetsDirectional
+                                                  //         .only(
+                                                  //         end: 10, bottom: 10),
+                                                  alignment: Alignment.center,
                                                   decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             15),
-                                                    image: DecorationImage(
-                                                      fit: BoxFit.fill,
-                                                      image: NetworkImage(state
-                                                          .star![index]
-                                                          .mediaUrl[mediaIndex]
-                                                          .mediaKey),
+                                                    color: Colors.black
+                                                        .withOpacity(0.5),
+                                                  ),
+                                                  child: Center(
+                                                    child: Label(
+                                                      text:
+                                                          "+${state.star![index].mediaUrl.length - 4}",
+                                                      style: Styles.headerText(
+                                                          color: Colors.white),
                                                     ),
                                                   ),
                                                 ),
-                                                if (mediaIndex == 3 &&
-                                                    state.star![index].mediaUrl
-                                                            .length >
-                                                        4)
-                                                  Container(
-                                                    margin:
-                                                        const EdgeInsetsDirectional
-                                                            .only(
-                                                            end: 10,
-                                                            bottom: 10),
-                                                    alignment: Alignment.center,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
-                                                      color: Colors.black
-                                                          .withOpacity(0.5),
-                                                    ),
-                                                    child: Center(
-                                                      child: Label(
-                                                        text:
-                                                            "+${state.star![index].mediaUrl.length - 4}",
-                                                        style:
-                                                            Styles.headerText(
-                                                                color: Colors
-                                                                    .white),
-                                                      ),
-                                                    ),
-                                                  ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(20.w),
-                                    child: Align(
-                                      alignment: AlignmentDirectional.topEnd,
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    Padding(
+                                      padding:  EdgeInsets.all(8.w),
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
                                         children: [
-                                          const Icon(Icons.remove_red_eye),
-                                          Sizer(width: 10.w),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              const Icon(Icons.remove_red_eye),
+                                              Sizer(width: 10.w),
+                                              Text(
+                                                '${sortedStars[index].totalViews}',
+                                                style:
+                                                    Styles.mediumText().copyWith(
+                                                  shadows: [
+                                                    Shadow(
+                                                      offset:
+                                                          const Offset(2.0, 2.0),
+                                                      // Position of the shadow
+                                                      blurRadius: 3.0,
+                                                      // Blur radius of the shadow
+                                                      color: Colors.black
+                                                          .withOpacity(
+                                                              0.5), // Shadow color
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const Spacer(),
                                           Text(
-                                            '${sortedStars[index].totalViews}',
+                                            '${LocaleKeys.Rating.localize} ${sortedStars[index].averageRating}',
                                             style: Styles.mediumText().copyWith(
                                               shadows: [
                                                 Shadow(
-                                                  offset: const Offset(2.0,
-                                                      2.0), // Position of the shadow
-                                                  blurRadius:
-                                                      3.0, // Blur radius of the shadow
-                                                  color: Colors.black
-                                                      .withOpacity(
-                                                          0.5), // Shadow color
+                                                  offset: const Offset(1.0, 1.0),
+                                                  blurRadius: 3.0,
+                                                  color: Colors.white
+                                                      .withOpacity(0.5),
                                                 ),
                                               ],
                                             ),
@@ -409,72 +411,53 @@ class _BeStarViewState extends State<BeStarView> {
                                         ],
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(20.w),
-                                    child: Align(
-                                      alignment: AlignmentDirectional.topStart,
-                                      child: Text(
-                                        'Rating: ${sortedStars[index].averageRating}',
-                                        style: Styles.mediumText().copyWith(
-                                          shadows: [
-                                            Shadow(
-                                              offset: const Offset(1.0, 1.0),
-                                              blurRadius: 3.0,
-                                              color:
-                                                  Colors.white.withOpacity(0.5),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                  ],
+                                ),
+                              const Sizer(),
+                              Align(
+                                alignment: AlignmentDirectional.topStart,
+                                child: Text(
+                                  sortedStars[index].description,
+                                  style: Styles.mediumText(),
+                                  textAlign: TextAlign.start,
+                                  maxLines: showMore ? 100 : 2,
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    showMore = !showMore;
+                                  });
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(showMore
+                                        ? Icons.arrow_drop_down_rounded
+                                        : Icons.arrow_drop_up_rounded),
+                                    Label(
+                                      text: showMore
+                                          ? LocaleKeys.showLess.localize
+                                          : LocaleKeys.showMore.localize,
+                                      style: Styles.smallText(
+                                          color:
+                                              Theme.of(context).primaryColor),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            const Sizer(),
-                            Align(
-                              alignment: AlignmentDirectional.topStart,
-                              child: Text(
-                                sortedStars[index].description,
-                                style: Styles.mediumText(),
-                                textAlign: TextAlign.start,
-                                maxLines: showMore ? 100 : 2,
-                              ),
+                              const Sizer(),
+                            ],
+                          );
+                        },
+                        separatorBuilder: (context, index) => Divider(
+                              height: 40.h,
+                              color: AppColors.GREY_NORMAL_COLOR,
                             ),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  showMore = !showMore;
-                                });
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(showMore
-                                      ? Icons.arrow_drop_down_rounded
-                                      : Icons.arrow_drop_up_rounded),
-                                  Label(
-                                    text: showMore
-                                        ? LocaleKeys.showLess.localize
-                                        : LocaleKeys.showMore.localize,
-                                    style: Styles.smallText(
-                                        color: Theme.of(context).primaryColor),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Sizer(),
-                          ],
-                        );
-                      },
-                      separatorBuilder: (context, index) => Divider(
-                        height: 40.h,
-                        color: AppColors.GREY_NORMAL_COLOR,
-                      ),
-                      itemCount: sortedStars.length // Add extra items for ads
+                        itemCount: sortedStars.length // Add extra items for ads
 
-                      // itemCount: sortedStars.length,
-                    ),
+                        // itemCount: sortedStars.length,
+                        ),
                   ],
                 ),
               ),

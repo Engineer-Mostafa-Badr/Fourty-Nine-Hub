@@ -118,7 +118,7 @@ class _SocialPageState extends State<SocialPage> {
                   SocialPageParams(
                     face: face,
                     insta: insta,
-                    tweet: tweet, // Add 'tweet' as a new parameter
+                    tweet: tweet,
                   ),
                 );
 

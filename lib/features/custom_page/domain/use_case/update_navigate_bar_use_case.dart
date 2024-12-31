@@ -27,32 +27,46 @@ class NavigateBarParams {
   final bool snap;
   final bool spotlight;
 
-  NavigateBarParams(
-      {
-      required this.find,
-      required this.health,
-      required this.live,
-      required this.loading,
-      required this.meal,
-      required this.meet,
-      required this.reel,
-      required this.ride,
-      required this.snap,
-      required this.spotlight,
-      });
+  NavigateBarParams({
+    required this.find,
+    required this.health,
+    required this.live,
+    required this.loading,
+    required this.meal,
+    required this.meet,
+    required this.reel,
+    required this.ride,
+    required this.snap,
+    required this.spotlight,
+  });
+
+  factory NavigateBarParams.fromJson(Map<String, dynamic> json) {
+    return NavigateBarParams(
+      find: json['Find']['enabled'] ?? false,
+      health: json['Health']['enabled'] ?? false,
+      live: json['Live']['enabled'] ?? false,
+      loading: json['Loading']['enabled'] ?? false,
+      meal: json['Meal']['enabled'] ?? false,
+      meet: json['Meet']['enabled'] ?? false,
+      reel: json['Reel']['enabled'] ?? false,
+      ride: json['Ride']['enabled'] ?? false,
+      snap: json['Snap']['enabled'] ?? false,
+      spotlight: json['Spotlight']['enabled'] ?? false,
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
-      'Find': find,
-      'Health': health,
-      'Live': live,
-      'Loading': loading,
-      'Meal': meal,
-      'Meet': meet,
-      'Reel': reel,
-      'Ride': ride,
-      'Snap': snap,
-      'Spotlight': spotlight,
+      'Find': {'enabled': find},
+      'Health': {'enabled': health},
+      'Live': {'enabled': live},
+      'Loading': {'enabled': loading},
+      'Meal': {'enabled': meal},
+      'Meet': {'enabled': meet},
+      'Reel': {'enabled': reel},
+      'Ride': {'enabled': ride},
+      'Snap': {'enabled': snap},
+      'Spotlight': {'enabled': spotlight},
     };
   }
 }
