@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
@@ -108,6 +109,47 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                               color: AppColors.BACKGROUND_COLOR,
                             ),
                           ),
+                          widget.params.category == "LockedChats"
+                              ? PopupMenuButton(
+                                  icon: Icon(
+                                    Icons.more_vert,
+                                    color: !context.isDarkMode
+                                        ? Colors.white
+                                        : AppColors.PRIMARY_COLOR,
+                                  ),
+                                  color: context.isDarkMode
+                                      ? AppColors.PRIMARY_COLOR
+                                      : AppColors.BACKGROUND_COLOR,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(16.0)),
+                                  ),
+                                  offset: const Offset(0, 50),
+                                  onSelected: (int value) async {
+                                    if (value == 0) {
+                                      await context
+                                          .read<ChatsCubit>()
+                                          .lockChats(isLockedTap: true);
+                                    }
+                                  },
+                                  itemBuilder: (context) {
+                                    return [
+                                      PopupMenuItem<int>(
+                                        value: 0,
+                                        child: Text(
+                                          context.isArabic
+                                              ? "الغاء قفل الدردشات"
+                                              : "Unlock chats",
+                                          style: Styles.mediumText(
+                                              color: context.isDarkMode
+                                                  ? Colors.white
+                                                  : AppColors.PRIMARY_COLOR),
+                                        ),
+                                      ),
+                                    ];
+                                  },
+                                )
+                              : const SizedBox(),
                         ],
                       );
                     }
@@ -203,8 +245,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                     ],
                                   ),
                                   child: ChatCard(
-                                    isSecret:
-                                        widget.params.category == "LockedChats",
+                                    isSecret: false,
                                     chat: state.chats?[index],
                                     chatsCubit: widget.params.chatsCubit,
                                   ),

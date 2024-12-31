@@ -455,7 +455,11 @@ class ChatsCubit extends Cubit<ChatsState> {
 
   Future<void> updateChat({required ChatEntity chat}) async {
     final response = await _updateChatUseCase(
-        UpdateChatParams(chatId: chat.id, isTimerActive: chat.isTimerActive));
+      UpdateChatParams(
+        chatId: chat.id,
+        isTimerActive: !chat.isTimerActive,
+      ),
+    );
     response.fold(
         (failure) =>
             emit(state.copyWith(failure: failure, status: ChatsStates.error)),
@@ -464,5 +468,57 @@ class ChatsCubit extends Cubit<ChatsState> {
       chat.isTimerActive = !chat.isTimerActive;
       emit(state.copyWith(status: ChatsStates.success));
     });
+  }
+
+  Future<void> updateLockChat({required ChatEntity chat}) async {
+    final response = await _updateChatUseCase(
+      UpdateChatParams(
+        chatId: chat.id,
+        isTimerActive: chat.isTimerActive,
+        isLocked: !chat.locked,
+        updateLockedChat: true,
+      ),
+    );
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: ChatsStates.error)),
+        (data) {
+      log("update lock chat result $data");
+      chat.locked = !chat.locked;
+      emit(state.copyWith(status: ChatsStates.success));
+    });
+  }
+
+  Future<void> lockChats({required bool isLockedTap}) async {
+    for (var chat in selectedChats) {
+      final response = await _updateChatUseCase(
+        UpdateChatParams(
+          chatId: chat.id,
+          isLocked: !chat.locked,
+          isTimerActive: chat.isTimerActive,
+          updateLockedChat: true,
+        ),
+      );
+      response.fold(
+          (failure) =>
+              emit(state.copyWith(failure: failure, status: ChatsStates.error)),
+          (data) {
+        log("lock chats result $data");
+        chat.locked = !chat.locked;
+        emit(state.copyWith(status: ChatsStates.success));
+      });
+
+      chat.isSelected = false; // Reset the selection status
+    }
+
+    // Clear selected chats after action is complete
+    selectedChats.clear();
+
+    // Refresh the chat list by category
+    if (isLockedTap) {
+      await getLockedChats();
+    } else {
+      await getChatsByCategory(_selectedChatCategory);
+    }
   }
 }

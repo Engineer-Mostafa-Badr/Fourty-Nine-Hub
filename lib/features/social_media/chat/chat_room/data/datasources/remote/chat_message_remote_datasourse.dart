@@ -1214,11 +1214,14 @@ class MessagesRemoteDataSourceImplementation
 
   @override
   Future<Either<Failure, bool>> updateChat(UpdateChatParams params) async {
-    var data = {
+    var updateTimerActiveData = {
       "timerActive": params.isTimerActive,
     };
+    var updateIsLockedData = {
+      "locked": params.isLocked,
+    };
     final response =
-        await _apiConsumer.put(EndPoints.updateChat(params.chatId), data: data);
+        await _apiConsumer.put(EndPoints.updateChat(params.chatId), data: params.updateLockedChat? updateIsLockedData : updateTimerActiveData);
     return response.fold((failure) {
       log("updateChat Remote Data Source: $failure");
       return Left(failure);

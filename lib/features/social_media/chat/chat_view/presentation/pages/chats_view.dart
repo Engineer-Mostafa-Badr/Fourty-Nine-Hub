@@ -301,6 +301,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:local_auth/local_auth.dart';
 
 import '../../../../../../service_locator/service_locator.dart';
 import '../../../../stories/presentation/cubit/stories_cubit.dart';
@@ -555,7 +556,14 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                                   Radius.circular(16.0)),
                                             ),
                                             offset: const Offset(0, 50),
-                                            onSelected: (int value) async {},
+                                            onSelected: (int value) async {
+                                              if (value == 3) {
+                                                await context
+                                                    .read<ChatsCubit>()
+                                                    .lockChats(isLockedTap: false);
+                                              }
+                                              
+                                            },
                                             itemBuilder: (context) {
                                               return [
                                                 PopupMenuItem<int>(
@@ -571,7 +579,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                                   ),
                                                 ),
                                                 PopupMenuItem<int>(
-                                                  value: 0,
+                                                  value: 1,
                                                   child: Text(
                                                     LocaleKeys.markAsUnread
                                                         .tr(),
@@ -584,7 +592,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                                   ),
                                                 ),
                                                 PopupMenuItem<int>(
-                                                  value: 0,
+                                                  value: 2,
                                                   child: Text(
                                                     LocaleKeys.selectAll.tr(),
                                                     style: Styles.mediumText(
@@ -596,7 +604,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                                   ),
                                                 ),
                                                 PopupMenuItem<int>(
-                                                  value: 0,
+                                                  value: 3,
                                                   child: Text(
                                                     LocaleKeys.lockChat.tr(),
                                                     style: Styles.mediumText(
@@ -808,21 +816,24 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       key: const ValueKey(1),
                       icon: Icons.mail_lock,
                       text: LocaleKeys.lockChat.tr(),
-                      onTap: () async {
-                        final result = await context.push(Routes.ARCHIVEDCHATS,
-                            extra: OptionsChatsViewParams(
-                              category: 'LockedChats',
-                              chatsCubit: chatsCubit,
-                              isSecret: true,
-                            ));
+                      // onTap: () async {
+                      //   final result = await context.push(Routes.ARCHIVEDCHATS,
+                      //       extra: OptionsChatsViewParams(
+                      //         category: 'LockedChats',
+                      //         chatsCubit: chatsCubit,
+                      //         isSecret: true,
+                      //       ));
 
-                        // Check if the result is true, refresh the home page
-                        if (result == true) {
-                          log("pop");
-                          await chatsCubit
-                              .getChatsByCategory(ChatCategories.social);
-                          setState(() {});
-                        }
+                      //   // Check if the result is true, refresh the home page
+                      //   if (result == true) {
+                      //     log("pop");
+                      //     await chatsCubit
+                      //         .getChatsByCategory(ChatCategories.social);
+                      //     setState(() {});
+                      //   }
+                      // },
+                      onTap: () async {
+                        await lockedChatsOnTap();
                       },
                     )
                   : const SizedBox.shrink(),
@@ -899,6 +910,21 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       case ChatCategories.service:
         return Column(
           children: [
+            InkWell(
+              onTap: () {
+                setState(() {
+                  expandedOptions = !expandedOptions;
+                });
+              },
+              child: SizedBox(
+                width: double.infinity,
+                child: Icon(
+                  expandedOptions
+                      ? Icons.keyboard_double_arrow_up_outlined
+                      : Icons.keyboard_double_arrow_down_outlined,
+                ),
+              ),
+            ),
             ChatOptions(
               icon: Icons.archive,
               text: LocaleKeys.archive.tr(),
@@ -932,21 +958,24 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       key: const ValueKey(4),
                       icon: Icons.mail_lock,
                       text: LocaleKeys.lockChat.tr(),
-                      onTap: () async {
-                        final result = await context.push(Routes.ARCHIVEDCHATS,
-                            extra: OptionsChatsViewParams(
-                              category: 'LockedChats',
-                              chatsCubit: chatsCubit,
-                              isSecret: true,
-                            ));
+                      // onTap: () async {
+                      //   final result = await context.push(Routes.ARCHIVEDCHATS,
+                      //       extra: OptionsChatsViewParams(
+                      //         category: 'LockedChats',
+                      //         chatsCubit: chatsCubit,
+                      //         isSecret: true,
+                      //       ));
 
-                        // Check if the result is true, refresh the home page
-                        if (result == true) {
-                          log("pop");
-                          await chatsCubit
-                              .getChatsByCategory(ChatCategories.service);
-                          setState(() {});
-                        }
+                      //   // Check if the result is true, refresh the home page
+                      //   if (result == true) {
+                      //     log("pop");
+                      //     await chatsCubit
+                      //         .getChatsByCategory(ChatCategories.service);
+                      //     setState(() {});
+                      //   }
+                      // },
+                      onTap: () async {
+                        await lockedChatsOnTap();
                       },
                     )
                   : const SizedBox.shrink(),
@@ -977,6 +1006,54 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       // return _buildCallingHistory(isVideo: false);
       // case ChatCategories.locked:
       // return _buildCategoryChats(isSecret: true);
+    }
+  }
+
+  Future<void> lockedChatsOnTap() async {
+    final LocalAuthentication auth = LocalAuthentication();
+
+    // Check if local authentication is available
+    bool isAvailable =
+        await auth.canCheckBiometrics || await auth.isDeviceSupported();
+
+    if (isAvailable) {
+      try {
+        // Attempt to authenticate the user
+        bool didAuthenticate = await auth.authenticate(
+          localizedReason: context.isArabic
+              ? 'تحقق من البصمة للوصول إلى المحادثات المغلقة'
+              : 'Please authenticate to access locked chats',
+          // options: const AuthenticationOptions(
+          //   biometricOnly: true,
+          //   stickyAuth: true,
+          // ),
+        );
+
+        if (didAuthenticate) {
+          // User authenticated successfully
+          final result = await context.push(
+            Routes.ARCHIVEDCHATS,
+            extra: OptionsChatsViewParams(
+              category: 'LockedChats',
+              chatsCubit: chatsCubit,
+              isSecret: true,
+            ),
+          );
+
+          // Check if the result is true, refresh the home page
+          if (result == true) {
+            log("pop");
+            await chatsCubit.getChatsByCategory(ChatCategories.social);
+            setState(() {});
+          }
+        } else {
+          log("Authentication failed");
+        }
+      } catch (e) {
+        log("Error during authentication: $e");
+      }
+    } else {
+      log("Local authentication not available on this device.");
     }
   }
 

@@ -106,7 +106,81 @@ class _ViewContactViewState extends State<ViewContactView> {
                       const SizedBox(
                         height: 16,
                       ),
-                      const ViewContactChatLockCart(),
+                      // const ViewContactChatLockCart(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.mail_lock,
+                              color: AppColors.GREY_DARK_COLOR,
+                              size: 24,
+                            ),
+                            const SizedBox(
+                              width: 32.0,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.chatsCubit.selectedChat.locked
+                                        ? context.isArabic
+                                            ? "الغاء قفل المحادثة"
+                                            : "Unlock Chat"
+                                        : context.isArabic
+                                            ? "قفل المحادثة"
+                                            : "Lock Chat",
+                                    style: Styles.mediumText(
+                                      fontWeight: FontWeight.w600,
+                                      color: context.isDarkMode
+                                          ? AppColors.BACKGROUND_COLOR
+                                          : AppColors.PRIMARY_COLOR,
+                                    ),
+                                  ),
+                                  ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.75,
+                                    ),
+                                    child: Text(
+                                      LocaleKeys.chatLockMessage.tr(),
+                                      style: Styles.mediumText(
+                                        fontWeight: FontWeight.w400,
+                                        color: AppColors.DARK_GRAY_COLOR,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                widget.chatsCubit.selectedChat.locked
+                                    ? Icons.toggle_on
+                                    : Icons.toggle_off,
+                                color: widget.chatsCubit.selectedChat.locked
+                                    ? context.isDarkMode
+                                        ? AppColors.BACKGROUND_COLOR
+                                        : AppColors.PRIMARY_COLOR
+                                    : context.isDarkMode
+                                        ? AppColors.BACKGROUND_COLOR
+                                            .withOpacity(0.2)
+                                        : AppColors.PRIMARY_COLOR
+                                            .withOpacity(0.5),
+                                size: 44,
+                              ),
+                              onPressed: () async {
+                                await widget.chatsCubit.updateLockChat(
+                                    chat: widget.chatsCubit.selectedChat);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Row(
