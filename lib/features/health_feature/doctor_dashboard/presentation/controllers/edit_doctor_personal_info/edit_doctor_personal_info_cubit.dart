@@ -94,7 +94,9 @@ class EditDoctorPersonalInfoCubit extends Cubit<EditDoctorPersonalInfoState> {
 
   void onSelectGovernorate(String id) {
     if (state.selectedGovernorateId != null &&
-        state.selectedGovernorateId == id) return;
+        state.selectedGovernorateId == id) {
+      return;
+    }
     emit(state.copyWith(selectedGovernorateId: id, selectedCityId: ''));
     print("state.governorateCubit${state.selectedGovernorateId}");
     print("state.cityCubit${state.selectedCityId}");

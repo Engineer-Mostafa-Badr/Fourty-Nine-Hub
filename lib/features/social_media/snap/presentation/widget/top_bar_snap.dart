@@ -30,7 +30,7 @@ class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin{
   bool isFrontCamera = false;
   bool isRecording = false;
   FlashMode _flashMode = FlashMode.off;
-  double _currentZoomLevel = 1.0;
+  final double _currentZoomLevel = 1.0;
   final double _maxZoomLevel = 5.0;
   File? _selectedImage; // Holds the selected image
   final ImagePicker _picker = ImagePicker(); // Image picker instance

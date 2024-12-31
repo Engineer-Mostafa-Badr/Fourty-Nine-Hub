@@ -379,5 +379,6 @@ extension ZegoUIKitDeviceExceptionTypeExtension
         // not error
         return null;
     }
+    return null;
   }
 }

@@ -1,23 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/carpool/add_new_route/presentation/widgets/dynamic_map_test.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/request_history_ride_model.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 
-import '../../../../common/widgets/form/text_fields/form_text_field.dart';
-import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
-import '../../../ride/trip_details/domain/entities/trip_request_entity.dart';
 
 class TripCard extends StatelessWidget {
   final RequestHistoryRideModel trip;
@@ -54,7 +45,7 @@ class TripCard extends StatelessWidget {
                                     onTap: () {
                                       Navigator.pop(context);
                                     },
-                                    child: Icon(Icons.arrow_back_ios)),
+                                    child: const Icon(Icons.arrow_back_ios)),
                                 const Spacer(),
                                 Text(
                                   formatDate(trip.createdAt!,
@@ -102,12 +93,12 @@ class TripCard extends StatelessWidget {
                                                   Colors.blue.withOpacity(0.5),
                                               spreadRadius: 3,
                                               blurRadius: 4,
-                                              offset: Offset(1, 1),
+                                              offset: const Offset(1, 1),
                                             ),
                                           ],
                                         ),
                                       ),
-                                      SizedBox(width: 16),
+                                      const SizedBox(width: 16),
                                       SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width *
@@ -124,24 +115,24 @@ class TripCard extends StatelessWidget {
                                           trip.startTime, context))
                                     ],
                                   ),
-                                  SizedBox(height: 1),
+                                  const SizedBox(height: 1),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             left: 6, right: 6),
-                                        child: Container(
+                                        child: SizedBox(
                                           height: 14,
                                           child: CustomPaint(
-                                            size: Size(1, 14),
+                                            size: const Size(1, 14),
                                             painter: DottedLinePainter(),
                                           ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 1),
+                                  const SizedBox(height: 1),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -157,7 +148,7 @@ class TripCard extends StatelessWidget {
                                                   Colors.green.withOpacity(0.5),
                                               spreadRadius: 3,
                                               blurRadius: 4,
-                                              offset: Offset(1, 1),
+                                              offset: const Offset(1, 1),
                                             ),
                                           ],
                                         ),
@@ -186,7 +177,7 @@ class TripCard extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                           children: [
                                             const Icon(Icons.schedule),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 8,
                                             ),
                                             Column(
@@ -222,7 +213,7 @@ class TripCard extends StatelessWidget {
                                               children: [
                                                 const Icon(
                                                     Icons.pin_drop_outlined),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 8,
                                                 ),
                                                 Column(
@@ -259,9 +250,9 @@ class TripCard extends StatelessWidget {
                                   // const Spacer(),
 
                                   const Padding(
-                                    padding: const EdgeInsets.symmetric(
+                                    padding: EdgeInsets.symmetric(
                                         vertical: 16),
-                                    child: const Divider(
+                                    child: Divider(
                                       height: 1,
                                       color: AppColors.GREY_DARK_COLOR,
                                     ),
@@ -306,7 +297,7 @@ class TripCard extends StatelessWidget {
                                                           fontWeight:
                                                               FontWeight.w500),
                                                     ),
-                                                    SizedBox(
+                                                    const SizedBox(
                                                       width: 4,
                                                     ),
                                                     Text(
@@ -348,9 +339,9 @@ class TripCard extends StatelessWidget {
                                   ),
 
                                   const Padding(
-                                    padding: const EdgeInsets.symmetric(
+                                    padding: EdgeInsets.symmetric(
                                         vertical: 16),
-                                    child: const Divider(
+                                    child: Divider(
                                       height: 1,
                                       color: AppColors.GREY_DARK_COLOR,
                                     ),
@@ -364,7 +355,7 @@ class TripCard extends StatelessWidget {
                                   const Spacer()
                                 ],
                               ),
-                              Sizer(
+                              const Sizer(
                                 height: 36,
                               ),
                               Row(
@@ -380,7 +371,7 @@ class TripCard extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              Sizer(
+                              const Sizer(
                                 height: 16,
                               ),
                               Row(
@@ -420,7 +411,7 @@ class TripCard extends StatelessWidget {
                         context.isArabic ? "arabic" : "english"),
                     style: Styles.headerText(fontSize: 30),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     "${trip.price}${context.isArabic ? trip.currencyAr : trip.currencyEn}",
                     style: Styles.headerText(fontSize: 30),
@@ -458,12 +449,12 @@ class TripCard extends StatelessWidget {
                                       color: Colors.blue.withOpacity(0.5),
                                       spreadRadius: 3,
                                       blurRadius: 4,
-                                      offset: Offset(1, 1),
+                                      offset: const Offset(1, 1),
                                     ),
                                   ],
                                 ),
                               ),
-                              SizedBox(width: 16),
+                              const SizedBox(width: 16),
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.6,
                                 child: Text(trip.fromAddress ?? "",
@@ -475,24 +466,24 @@ class TripCard extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(height: 1),
+                          const SizedBox(height: 1),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Padding(
                                 padding:
                                     const EdgeInsets.only(left: 6, right: 6),
-                                child: Container(
+                                child: SizedBox(
                                   height: 14,
                                   child: CustomPaint(
-                                    size: Size(1, 14),
+                                    size: const Size(1, 14),
                                     painter: DottedLinePainter(),
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 1),
+                          const SizedBox(height: 1),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -507,12 +498,12 @@ class TripCard extends StatelessWidget {
                                       color: Colors.green.withOpacity(0.5),
                                       spreadRadius: 3,
                                       blurRadius: 4,
-                                      offset: Offset(1, 1),
+                                      offset: const Offset(1, 1),
                                     ),
                                   ],
                                 ),
                               ),
-                              SizedBox(width: 16),
+                              const SizedBox(width: 16),
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.6,
                                 child: Text(trip.toAddress ?? "",
@@ -529,7 +520,7 @@ class TripCard extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  Icon(
+                  const Icon(
                     Icons.arrow_forward_ios,
                     size: 22,
                     color: AppColors.LIGHT_GRAY_COLOR2,
@@ -540,7 +531,7 @@ class TripCard extends StatelessWidget {
             const Sizer(
               height: 24,
             ),
-            Divider(
+            const Divider(
               height: 2,
               color: AppColors.LIGHT_GRAY_COLOR,
             )

@@ -235,7 +235,7 @@ class TinderViewState {
           anonymousChatResponseState ?? this.anonymousChatResponseState,
       anonymousChatResponse:
           anonymousChatResponse ?? this.anonymousChatResponse,
-      mainCategoryResponse: mainCategoryEntity ?? this.mainCategoryResponse,
+      mainCategoryResponse: mainCategoryEntity ?? mainCategoryResponse,
       mainCategoryResponseState:
           mainCategoryResponseState ?? this.mainCategoryResponseState,
       newImage:

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/ads/banner_ad_model.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -78,7 +76,7 @@ class _ProviderAdsState extends State<ProviderAds> {
                 children: [
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.5, // Reduced height
-                    child: AdsManagerWidget(),
+                    child: const AdsManagerWidget(),
                   ),
                   _buildAdContent(item), // Your content for the ad
                 ],
@@ -110,3 +108,5 @@ class _ProviderAdsState extends State<ProviderAds> {
     );
   }
 }
+
+         

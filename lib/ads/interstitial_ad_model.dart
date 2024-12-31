@@ -9,7 +9,7 @@ class AdInterstitialTop {
   static void loadIntersitialAd() {
     InterstitialAd.load(
       adUnitId: AdHelper.InterstitialAd,
-      request: AdRequest(),
+      request: const AdRequest(),
        adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad){
           _isAdReady = true;

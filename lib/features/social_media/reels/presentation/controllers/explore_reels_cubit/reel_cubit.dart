@@ -220,7 +220,9 @@ class ReelsCubit extends Cubit<ReelsState> {
 
   Future<void> fetchReels() async {
     if ((state.globalReelsIsLoading ?? false) ||
-        (state.globalReelsHasReachedMax ?? false)) return;
+        (state.globalReelsHasReachedMax ?? false)) {
+      return;
+    }
 
     emit(state.copyWith(isLoading: true));
     final result = await _getExploreReelsUseCase(

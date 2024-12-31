@@ -23,7 +23,6 @@ import 'package:fourtyninehub/features/notifications/presentation/widgets/notifi
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -79,6 +78,7 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
     }
   }
 
+
   @override
   void didChangeDependencies() async {
     appOpenAdManager.loadAd();
@@ -91,9 +91,6 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
     context
         .read<FirebaseNotficationsCubit>()
         .setupInterceptedMessage(context: context);
-    context
-        .read<NotificationSocketIoCubit>()
-        .notificationListener(languageCode: 'en');
     context.read<LocationSocketCubit>().updateDriverLocationOn();
   }
 
@@ -118,9 +115,17 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
     context
         .read<FirebaseNotficationsCubit>()
         .setupInterceptedMessage(context: context);
+    // context
+    //     .read<NotificationSocketIoCubit>()
+    //     .notificationListener(languageCode: 'en');
+  }
+
+  @override
+  initState(){
     context
         .read<NotificationSocketIoCubit>()
         .notificationListener(languageCode: 'en');
+
     super.initState();
   }
 
@@ -182,7 +187,7 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
           shrinkWrap: true,
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           children: [
-            AddBanner(),
+            const AddBanner(),
             //carousel slider
             const AnnounceWidget(),
             !context.read<UserCubit>().isLoggedIn
@@ -546,47 +551,99 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
     return SizedBox(
       height: kToolbarHeight * .9.h,
       width: double.infinity,
-      child: Stack(
+      child: Row(
         children: [
-          Positioned.fill(
-            child: AppButton(
-                color: AppColors.AUTH_CONTAINER_COLOR,
-                label: '10% Cashback',
-                style: Styles.mediumText(
-                  color: AppColors.AUTH_CONTAINER_COLOR,
-                  fontWeight: FontWeight.bold,
+          Expanded(
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: AppButton(
+                      color: AppColors.AUTH_CONTAINER_COLOR,
+                      label: '10% Cashback',
+                      style: Styles.mediumText(
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      icon: Icons.star,
+                      iconSize: 50.h,
+                      onPressed: () {
+                        HandleCashback.setCount('tenPercentCount',context);
+                        context.push(Routes.TenPercent);
+                      }),
                 ),
-                icon: Icons.star,
-                iconSize: 50.h,
-                onPressed: () {
-                  HandleCashback.setCount('tenPercentCount',context);
-                  context.push(Routes.TenPercent);
-                }),
+                Positioned(
+                    bottom: 5,
+                    left: 5,
+                    child: Icon(
+                      Icons.star,
+                      size: 20.h,
+                      color: AppColors.ACCENT_COLOR,
+                    )),
+                Positioned(
+                    top: 0,
+                    left: 10,
+                    child: Icon(
+                      Icons.star,
+                      size: 20.h,
+                      color: AppColors.ACCENT_COLOR,
+                    )),
+                Positioned(
+                    top: 15,
+                    right: 10,
+                    child: Icon(
+                      Icons.star,
+                      size: 20.h,
+                      color: AppColors.ACCENT_COLOR,
+                    ))
+              ],
+            ),
           ),
-          Positioned(
-              bottom: 5,
-              left: 5,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              )),
-          Positioned(
-              top: 0,
-              left: 10,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              )),
-          Positioned(
-              top: 15,
-              right: 10,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              ))
+          Sizer(),
+          Expanded(
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: AppButton(
+                      color: AppColors.AUTH_CONTAINER_COLOR,
+                      label: LocaleKeys.marriage.localize,
+                      style: Styles.mediumText(
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      icon: Icons.star,
+                      iconSize: 50.h,
+                      onPressed: () {
+                        //HandleCashback.setCount('tenPercentCount',context);
+                        context.push(Routes.Married);
+                      }),
+                ),
+                Positioned(
+                    bottom: 5,
+                    left: 5,
+                    child: Icon(
+                      Icons.star,
+                      size: 20.h,
+                      color: AppColors.ACCENT_COLOR,
+                    )),
+                Positioned(
+                    top: 0,
+                    left: 10,
+                    child: Icon(
+                      Icons.star,
+                      size: 20.h,
+                      color: AppColors.ACCENT_COLOR,
+                    )),
+                Positioned(
+                    top: 15,
+                    right: 10,
+                    child: Icon(
+                      Icons.star,
+                      size: 20.h,
+                      color: AppColors.ACCENT_COLOR,
+                    ))
+              ],
+            ),
+          ),
         ],
       ),
     );

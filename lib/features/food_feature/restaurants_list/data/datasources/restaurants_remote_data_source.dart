@@ -150,7 +150,9 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
     };
     log("data: ${jsonEncode(data)}");
     final response = await _apiConsumer
-        .get(EndPoints.searchRestaurants(params: params), data: data);
+        .get(EndPoints.searchRestaurants(params: params), data: data,
+    queryParameters: {"subCategory":subCategory}
+    );
     return response.fold(
       (failure) => Left(failure),
       (data) => Right(

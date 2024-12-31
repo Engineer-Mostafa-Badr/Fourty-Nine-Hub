@@ -27,7 +27,7 @@ class NextMediaPreview extends StatefulWidget {
   final String mediaPath;
   final bool isImage;
 
-  const NextMediaPreview({
+  const NextMediaPreview({super.key, 
     required this.mediaId,
     required this.mediaPath,
     required this.isImage,
@@ -241,7 +241,7 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
                               style: Styles.headerText(),
                             ),
                           ),
-                          Sizer(),
+                          const Sizer(),
                           //  const Spacer(),
                           Icon(
                             Icons.arrow_forward_ios,

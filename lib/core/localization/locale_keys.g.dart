@@ -1195,10 +1195,13 @@ abstract class  LocaleKeys {
   static const everyoneViewThisPost = 'everyoneViewThisPost';
   static const storyUploaded = 'storyUploaded';
   static const story = 'story';
-  static const next = 'next';
   static const continueUsingChatServices = 'continueUsingChatServices';
   static const recoverDeletedChats = 'recoverDeletedChats';
   static const sureRecoverDeletedChats = 'sureRecoverDeletedChats';
   static const restaurantOrders = 'restaurantOrders';
+  static const next = 'next';
+  static const transferTenYears = 'transferTenYears';
+  static const transferFiveYears = 'transferFiveYears';
+  static const marriage = 'marriage';
 
 }

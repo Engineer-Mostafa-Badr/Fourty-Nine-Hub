@@ -4,8 +4,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/bottom_navigator.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -119,17 +117,18 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                           unselectedLabelColor: AppColors.GREY_DARK_COLOR,
                           indicatorColor: AppColors.PRIMARY_COLOR,
                           indicatorSize: TabBarIndicatorSize.tab,
-                          padding: EdgeInsets.all(5),
-                          labelPadding: EdgeInsets.all(5),
+                          padding: const EdgeInsets.all(5),
+                          labelPadding: const EdgeInsets.all(5),
                           tabs: [
-                            Text(LocaleKeys.rideDashboard.tr()),
                             Text(LocaleKeys.trips.tr()),
+                            Text(LocaleKeys.rideDashboard.tr()),
+                            
                           ],
                         ),
                         Expanded(
                           child: TabBarView(
                             children: [
-                              DriverInfoRideTap(),
+                              
                               BlocListener<CheckAcceptByDriverCubit, RiderState>(
                             listener: (context, state) {
                               log(state.toString(),
@@ -244,6 +243,7 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                               ),
                             ),
                           ),
+                          const DriverInfoRideTap(),
                             ],
                           ),
                         )

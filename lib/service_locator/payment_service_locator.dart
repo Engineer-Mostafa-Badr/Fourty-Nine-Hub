@@ -105,6 +105,7 @@ class PaymentProviderServiceLocator {
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
+              serviceLocator(),
             ));
   }
 }

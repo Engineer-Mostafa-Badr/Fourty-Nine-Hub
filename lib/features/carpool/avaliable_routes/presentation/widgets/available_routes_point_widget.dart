@@ -59,14 +59,17 @@ class AvailableRoutesPointInfo extends StatelessWidget {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-                status == "Free" && tripStatus == "expired" ||
-                        tripStatus == "Completed"
-                    ? ""
-                    : status == "Free"
-                        ? LocaleKeys.free.localize
-                        : status == "Booked"
-                            ? LocaleKeys.booked.localize
-                            : "",
+                status == "Free" && tripStatus == "expired"
+                    ? context.isArabic
+                        ? "كان متاحا"
+                        : "ًWas free"
+                    : status == "Free" && tripStatus == "Completed"
+                        ? ""
+                        : status == "Free"
+                            ? LocaleKeys.free.localize
+                            : status == "Booked"
+                                ? LocaleKeys.booked.localize
+                                : "",
                 style: Styles.headerText(
                   fontSize: 24,
                   color: status == "Free"

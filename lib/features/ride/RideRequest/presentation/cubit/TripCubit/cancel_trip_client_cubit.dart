@@ -8,11 +8,12 @@ class CancelTripClientCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repository;
   CancelTripClientCubit({required this.repository}) : super(RiderInitial());
 
-  cancelTripClient({
+  Future<bool> cancelTripClient({
     required String id,
     String? reasonId,
     String? note,
   }) async {
+    bool result = false;
     var response = await repository.cancelTripClient(
         id: id, reasonId: reasonId, note: note);
     response.fold(
@@ -21,9 +22,11 @@ class CancelTripClientCubit extends Cubit<RiderState> {
         emit(FailureRiderState(failure: l));
       },
       (r) {
+        result=true;
         log('lkdjslkdfjslkdjflskdjf success');
         emit(SuccessCancelTripClientState());
       },
     );
+    return result;
   }
 }

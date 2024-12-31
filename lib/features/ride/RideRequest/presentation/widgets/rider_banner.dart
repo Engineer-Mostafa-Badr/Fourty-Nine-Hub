@@ -3,12 +3,16 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/ride_shipping_button_sheet.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/favorite_main_cateogry_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/functions/helper/lang_helper.dart';
@@ -39,103 +43,59 @@ class _RiderBannerState extends State<RiderBanner> {
 
   @override
   Widget build(BuildContext context) {
-    return MainCategoryBanner(
-      removeFavorite: true,
-      onFavorite: () {
-        log("message");
-        if (isFavrote) {
-          context
-              .read<FavoriteMainCateogryCubit>()
-              .favorite(widget.model.mainCategory?.mainCategoryId ?? "");
-          isFavrote = false;
-          return isFavrote;
-        } else {
-          context
-              .read<FavoriteMainCateogryCubit>()
-              .favorite(widget.model.mainCategory?.mainCategoryId ?? "");
-          isFavrote = true;
-          return isFavrote;
-        }
-        // setState(() {
-        //   isFavrote = !isFavrote!;
-        // });
-        // log("Slkdfjld");
-        // return true;
-      },
-      onRegister: () {
+    return GestureDetector(
+      onTap: () {
         if (context.read<UserCubit>().isLoggedIn) {
-          context.push(Routes.RIDERREGISTER);
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return BlocProvider(
+                create: (context) => serviceLocator<ShippingCubit>()..getBannerData(),
+                child: RideShippingButtonSheet(
+                  model: widget.model,
+                ),
+              );
+            },
+          );
         } else {
           context.push(Routes.REGISTER);
         }
       },
-      // canRegister: true,
-      // canRegister: true,
-      canRegister: false,
-      category: MainCategoryEntity(
-        nameEn: widget.model.mainCategory?.nameEn,
-        id: widget.model.mainCategory?.mainCategoryId ?? '',
-        name: getLang() == 'ar'
-            ? widget.model.mainCategory?.nameAr ?? ''
-            : widget.model.mainCategory?.nameEn ?? '',
-        banner: widget.model.mainCategory?.banner ?? UIConst.imagePlaceHolder,
-        cover: widget.model.mainCategory?.cover ?? UIConst.imagePlaceHolder,
-        image: UIConst.imagePlaceHolder,
-        total: widget.model.mainCategory?.driverLength ?? 0,
-        // favoriteName: widget.favoriteName,
-        isFavorite: widget.model.mainCategory?.isFavorite ?? false,
+      child: MainCategoryBanner(
+        removeFavorite: true,
+        onFavorite: () {
+          log("message");
+          if (isFavrote) {
+            context
+                .read<FavoriteMainCateogryCubit>()
+                .favorite(widget.model.mainCategory?.mainCategoryId ?? "");
+            isFavrote = false;
+            return isFavrote;
+          } else {
+            context
+                .read<FavoriteMainCateogryCubit>()
+                .favorite(widget.model.mainCategory?.mainCategoryId ?? "");
+            isFavrote = true;
+            return isFavrote;
+          }
+        },
+        onRegister: () {
+          
+        },
+        canRegister: false,
+        category: MainCategoryEntity(
+          nameEn: context.isArabic?"تسجيل سائق سيارة/نقل":"Car/Truck Register",
+          id: widget.model.mainCategory?.mainCategoryId ?? '',
+          name: getLang() == 'ar'
+              ? widget.model.mainCategory?.nameAr ?? ''
+              : widget.model.mainCategory?.nameEn ?? '',
+          banner: widget.model.mainCategory?.banner ?? UIConst.imagePlaceHolder,
+          cover: widget.model.mainCategory?.cover ?? UIConst.imagePlaceHolder,
+          image: UIConst.imagePlaceHolder,
+          total: widget.model.mainCategory?.driverLength ?? 0,
+          isFavorite: widget.model.mainCategory?.isFavorite ?? false,
+        ),
       ),
     );
-    // return Container(
-    //   padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-    //   decoration: BoxDecoration(
-    //     color: AppColors.YELLOW_COLOR,
-    //     borderRadius: BorderRadius.circular(5),
-    //     image: DecorationImage(
-    //       fit: BoxFit.cover,
-    //       image: CachedNetworkImageProvider(model.mainCategory?.banner ?? ""),
-    //     ),
-    //   ),
-    //   child: Row(
-    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //     children: [
-    //       Column(
-    //         children: [
-    //           const Icon(
-    //             Icons.favorite_border,
-    //             color: AppColors.SECONDARY_COLOR,
-    //           ),
-    //           const Sizer(
-    //             height: 20,
-    //           ),
-    //           Text(
-    //             '${model.mainCategory?.driverLength?.toShortScale} ${"Driver"}',
-    //             style: Styles.mediumText(
-    //               color: Colors.white,
-    //             ),
-    //           )
-    //         ],
-    //       ),
-    //       Text(
-    //         "Shipping",
-    //         style: Styles.headerText(color: Colors.white),
-    //       ),
-    //       InkWell(
-    //         onTap: () {
-    // if (context.read<UserCubit>().isLoggedIn) {
-    //   context.push(Routes.SHIPPING_REGISTER);
-    // } else {
-    //   context.push(Routes.SHIPPING_REGISTER);
-    //   // context.push(Routes.LOGIN);
-    // }
-    //         },
-    //         child: Text(
-    //           Labels.register,
-    //           style: Styles.mediumText(color: Colors.white),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 }

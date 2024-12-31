@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_inf
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rating_driver_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rider_register_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_model.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 // import 'package:mapbox_gl/mapbox_gl.dart';
 
@@ -118,10 +119,10 @@ class RiderDataSource {
 
   Future<Either<Failure, Map<String, dynamic>>> createOfferByDriver(
       {required String id, required double price}) async {
-    // Position location = await Geolocator.getCurrentPosition();
+    Position location = await Geolocator.getCurrentPosition();
     return api.post(EndPoints.createOffer(id), data: {
       "priceOffer": price,
-      "location": [31.261392, 29.962565]
+      "location": [location.latitude, location.longitude]
     });
   }
 
@@ -143,13 +144,13 @@ class RiderDataSource {
   Future<Either<Failure, Map<String, dynamic>>> riderInStartLocation({
     required String id,
   }) async {
-    // Position location = await Geolocator.getCurrentPosition();
+    Position location = await Geolocator.getCurrentPosition();
     return await api.put(
       EndPoints.riderInStartLocation(id),
       data: {
         "location": [
-          20,
-          30,
+          location.latitude,
+          location.longitude,
         ],
       },
     );
@@ -174,10 +175,10 @@ class RiderDataSource {
 
   Future<Either<Failure, Map<String, dynamic>>> completedTripRider(
       {required String id}) async {
-    // Position location = await Geolocator.getCurrentPosition();
+    Position location = await Geolocator.getCurrentPosition();
     return api.put(EndPoints.completedTripRider(id), data: {
       "location": "",
-      "startLocation": [2, 2]
+      "startLocation": [location.latitude, location.longitude]
     });
   }
 
@@ -189,11 +190,12 @@ class RiderDataSource {
 
   Future<Either<Failure, Map<String, dynamic>>> cancelTripClient(
       {required String id, String? reasonId, String? note}) async {
+    Position location = await Geolocator.getCurrentPosition();
     if (reasonId != null && note != null) {
       return api.put(EndPoints.cancelTripClient(id), data: {
         "reasonId": reasonId,
         "note": note,
-        "riderLocation": [30.098281, 31.329383]
+        "riderLocation": [location.latitude, location.longitude]
       });
     } else {
       return api.put(EndPoints.cancelTripClient(id), data: {});

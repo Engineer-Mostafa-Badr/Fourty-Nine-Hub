@@ -5,7 +5,6 @@ import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
-import 'package:fourtyninehub/features/authentication/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -77,7 +76,7 @@ class BaseApiConsumer extends ApiConsumer {
     _token = token;
     log(_token?.accessToken.toString() ?? "Okkkk",
         name: "lskdjflskdjflskdjflskjdf");
-    // CacheServiceImpl().saveUserToken(_token?.accessToken??"Token");
+    CacheServiceImpl().saveUserToken(_token?.accessToken??"Token");
     log("${await CacheManager.getAccessToken()} attached", name: "Token");
     if (token != null) {
       log(token.accessToken.toString(), name: "Token");

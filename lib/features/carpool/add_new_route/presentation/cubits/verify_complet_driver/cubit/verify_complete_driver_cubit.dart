@@ -7,7 +7,6 @@ import 'package:fourtyninehub/features/carpool/avaliable_routes/domain/entities/
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/get_current_location_driver.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:geolocator/geolocator.dart';
 
 part 'verify_complete_driver_state.dart';
 

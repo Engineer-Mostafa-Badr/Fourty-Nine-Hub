@@ -5,4 +5,6 @@ import '../entities/gift_entities.dart';
 
 abstract class GiftRepository {
   Future<Either<Failure, GiftEntity>> fetchGiftWallet();
+  Future<Either<Failure, bool>> requestWithdrawCompetition(String id);
+  Future<Either<Failure, bool>> requestWithdrawWheel();
 }

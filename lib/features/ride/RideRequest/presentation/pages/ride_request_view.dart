@@ -818,6 +818,7 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // log(widget.model.toJson().toString(), name: "lksdjflksjdlfkjsdlfkjslkdjflkdjf");
     var raiseFareCubit = context.read<RaiseFareCubit>();
     return BlocListener<CancelTripClientCubit, RiderState>(
       listener: (context, state) {
@@ -852,14 +853,14 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                     return Row(
                       children: [
                         Text(
-                "${state.list.length} ${LocaleKeys.driversAreViewingYourRequest.tr()}",
-                style: Styles.mediumText(
-                  color: !context.isDarkMode
-                      ? AppColors.QUANTITY_COLOR
-                      : Colors.white,
-                ),
-              ),
-              const Spacer(),
+                          "${state.list.length} ${LocaleKeys.driversAreViewingYourRequest.tr()}",
+                          style: Styles.mediumText(
+                            color: !context.isDarkMode
+                                ? AppColors.QUANTITY_COLOR
+                                : Colors.white,
+                          ),
+                        ),
+                        const Spacer(),
                         SizedBox(
                           height: 30,
                           width: MediaQuery.of(context).size.width * 0.25,
@@ -1263,13 +1264,19 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                                         ),
                                         GestureDetector(
                                           onTap: () async {
-                                            await context
+                                            // log("message");
+                                            bool result = await context
                                                 .read<CancelTripClientCubit>()
                                                 .cancelTripClient(
                                                   id: widget.model.trip?.id ??
                                                       "",
                                                 );
-                                            Navigator.pop(context);
+                                            if(result == true){
+                                              showSuccessMessage(context, LocaleKeys.successCancelTrip.tr());
+                                              Navigator.pop(context);
+                                            }else{
+                                              Navigator.pop(context);
+                                            }
                                           },
                                           child: Container(
                                             height: 60,

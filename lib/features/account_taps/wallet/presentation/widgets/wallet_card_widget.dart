@@ -23,7 +23,7 @@ class WalletCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: kToolbarHeight * 2,
+      height: kToolbarHeight * 4.h,
       width: double.infinity,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(

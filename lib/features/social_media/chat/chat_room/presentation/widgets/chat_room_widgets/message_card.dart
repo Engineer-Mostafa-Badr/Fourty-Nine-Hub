@@ -2,13 +2,11 @@
 
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:async';
 import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -30,7 +28,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swipe_to/swipe_to.dart';
-import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 
@@ -331,7 +328,7 @@ class MessageCard extends StatelessWidget {
             return BlocBuilder<ChatRoomCubit, ChatRoomState>(
               builder: (context, state) {
                 return AlertDialog(
-                  title: Text("Show Deleted Message"),
+                  title: const Text("Show Deleted Message"),
                   content:
                       Text(chatRoomCubit.deletedMessage?.text ?? "Loading..."),
                   actions: [
@@ -339,7 +336,7 @@ class MessageCard extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text("OK"),
+                      child: const Text("OK"),
                     ),
                   ],
                 );

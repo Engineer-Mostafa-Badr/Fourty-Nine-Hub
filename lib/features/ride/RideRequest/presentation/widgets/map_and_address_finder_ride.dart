@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/wid
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_destination_point_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_starting_point_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/destination_text_field_and_find_ride_widget.dart';
@@ -187,6 +188,11 @@ class _MapAndAddressFinderRideState extends State<MapAndAddressFinderRide> {
                     BlocProvider.of<GetDestinationPointRideCubit>(context)
                             .endLong !=
                         null) {
+                      context.read<LocationSocketCubit>().sendSubCategoryId(
+                    subCategoryId:
+                        context.read<RiderTripReelTimeCubit>().tempCategory!.id,
+                    address: startState.address,
+                  );
                   print("i am in third case \n");
                   context.read<GetTripInfoCubit>().getTripInfoRequest(
                       subCateogryId: context

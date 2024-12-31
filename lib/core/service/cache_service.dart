@@ -289,24 +289,20 @@ class CacheServiceImpl implements CacheService {
 
   @override
   Future<CheckAcceptByRiderModel?> getDriverTripInfo() async {
-    String? json = preferences.getString(CacheServiceImpl._TRIP_INFO_DRIVER);
-    if (json != null) {
-      return CheckAcceptByRiderModel.fromJson(jsonDecode(json));
-    }
-    return null;
+    String json = preferences.getString(CacheServiceImpl._TRIP_INFO_DRIVER)??"";
+    return CheckAcceptByRiderModel.fromJson(jsonDecode(json));
+      return null;
   }
 
   @override
   Future<CheckAcceptTripFromDriverModel?> getRiderTripInfo() async {
-    String? json = preferences.getString(CacheServiceImpl._TRIP_INFO_RIDER);
-    if (json != null) {
-      if (json.isNotEmpty) {
-        return CheckAcceptTripFromDriverModel.fromJson(jsonDecode(json));
-      } else {
-        return null;
-      }
+    String json = preferences.getString(CacheServiceImpl._TRIP_INFO_RIDER)??"";
+    if (json.isNotEmpty) {
+      return CheckAcceptTripFromDriverModel.fromJson(jsonDecode(json));
+    } else {
+      return null;
     }
-    return null;
+      return null;
   }
 
   @override

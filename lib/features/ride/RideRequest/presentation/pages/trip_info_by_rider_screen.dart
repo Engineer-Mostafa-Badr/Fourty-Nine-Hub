@@ -95,7 +95,7 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
                       : Colors.white,
                   context: context,
                   builder: (context) => RattingDriverWidget(
-                    driverId: "widget.model.driverId",
+                    driverId: widget.model.userId??"",
                     tripId: widget.model.id ?? "",
                   ),
                 ).whenComplete(
@@ -285,13 +285,13 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
                               GestureDetector(
                                 onTap: () {
                                   launchUrlString(
-                                      "tel://${widget.model.userPhone}");
+                                      "tel://${widget.model.driverPhone}");
                                 },
                                 child: Row(
                                   children: [
                                     const Icon(Icons.phone),
                                     const Sizer(),
-                                    Text(widget.model.userPhone ?? "")
+                                    Text(widget.model.driverPhone ?? "")
                                   ],
                                 ),
                               ),
