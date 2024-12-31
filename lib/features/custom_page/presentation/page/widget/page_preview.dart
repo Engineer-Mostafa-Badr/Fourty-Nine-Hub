@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,13 +52,13 @@ class _PagePreviewState extends State<PagePreview> {
               icon: const Icon(Icons.menu), // The menu icon
               onPressed: () {
                 HandleCashback.setCount('drawerCount', context);
-                _scaffoldKey.currentState?.openDrawer(); // Open the drawer
+                _scaffoldKey.currentState?.openDrawer();
               },
             ),
             bottom: TabBar(
               tabs: [
-                Tab(text: LocaleKeys.social.localize),
-                Tab(text: LocaleKeys.service.localize),
+                Tab(text: LocaleKeys.social.tr()),
+                Tab(text: LocaleKeys.service.tr()),
               ],
             ),
           ),

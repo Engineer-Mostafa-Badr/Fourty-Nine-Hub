@@ -1,8 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/localization/locales.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -10,15 +14,13 @@ import '../../../../../res/style/styles.dart';
 
 class WalletCardWidget extends StatelessWidget {
   final String balance;
-  final String currency;
   final double? target;
   final WalletTypes type;
   const WalletCardWidget(
       {super.key,
       required this.balance,
       this.target,
-      required this.type,
-      required this.currency});
+      required this.type,});
 
   @override
   Widget build(BuildContext context) {
@@ -66,15 +68,20 @@ class WalletCardWidget extends StatelessWidget {
                       ),
                     ),
                     Sizer(width: 10.w),
-                    Transform.translate(
-                      offset: Offset(0, 8.h),
-                      child: Label(
-                        text: currency,
-                        style: Styles.headerText(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          fontSize: 40.sp,
-                        ),
-                      ),
+                    BlocBuilder<MainCategoriesCubit,MainCategoriesState>(
+                      builder: (BuildContext context,  state) {
+                        return Transform.translate(
+                          offset: Offset(0, 8.h),
+                          child: Label(
+                            text:  context.locale == Locales.english
+                                ? state.currency?.currencyEn ??'':state.currency?.currencyAr ??'',
+                            style: Styles.headerText(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                              fontSize: 40.sp,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

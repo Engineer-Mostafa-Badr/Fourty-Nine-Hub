@@ -1228,7 +1228,8 @@ class CodegenLoader extends AssetLoader{
   "next": "التالي",
   "transferTenYears": "تم نقل رصيد عشر سنوات إلى محفظة الهدايا",
   "transferFiveYears": "تم نقل رصيد خمس سنوات إلى محفظة الهدايا",
-  "marriage": "زواج"
+  "marriage": "زواج",
+  "Rating": "تقييم:"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2461,7 +2462,8 @@ static const Map<String,dynamic> en = {
   "continueUsingChatServices": " , To continue using chat services",
   "recoverDeletedChats": "Recover Deleted Chats",
   "sureRecoverDeletedChats": "Are you sure you want to recover deleted chats?",
-  "marriage": "Marriage"
+  "marriage": "Marriage",
+  "Rating": "Rating:"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

@@ -1,60 +1,25 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/utils/api_service.dart';
-import 'package:fourtyninehub/features/competition/data/models/competion_model.dart';
-import 'package:fourtyninehub/features/competition/data/repository/competition_repo.dart';
 
-import '../../../../core/error/failure.dart';
-import '../../../../core/utils/shared_pref.dart';
-import '../models/winners_model.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/competition/data/data_source/competition_remote_data_source.dart';
 
-class CompetitionRepoImpl implements CompetitionRepo {
-  final ApiService apiService;
+import 'package:fourtyninehub/features/competition/domain/entity/competition_entity.dart';
 
-  CompetitionRepoImpl(this.apiService);
+import 'package:fourtyninehub/features/competition/domain/entity/winner_competition_entity.dart';
+
+import '../../domain/repository/competition_repository.dart';
+
+class CompetitionRepositoryImpl extends CompetitionRepository{
+  final CompetitionRemoteDataSource _competitionRemoteDataSource;
+
+  CompetitionRepositoryImpl(this._competitionRemoteDataSource);
   @override
-  Future<Either<Failure, CompetitionModel>> fetchCompetition() async {
-    try {
-      String? accessToken = await CacheManager.getAccessToken();
-      String? refreshToken = await CacheManager.getRefreshToken();
-      var data = await apiService.get(
-          url: 'api/v1/subscriber/competitionsSubscriber', token: accessToken);
-
-      var competition = CompetitionModel.fromJson(data);
-
-      return right(competition);
-    } on Exception catch (e) {
-      // Handle general exceptions
-      final failure = _mapExceptionToFailure(e);
-      return left(failure);
-    }
-  }
-
-  Failure _mapExceptionToFailure(Exception e) {
-    // Implement mapping from generic exception to Failure
-    // For example, you might inspect the exception to determine the cause
-    return ServerFailure(
-      message: e.toString(), // Customize this based on the exception details
-      statusCode:
-          null, // You may need to extract status code from the exception if available
-      errors: [e.toString()], // Customize this based on the exception details
-    );
+  Future<Either<Failure, List<CompetitionEntity>>> fetchCompetition() {
+    return _competitionRemoteDataSource.fetchCompetition();
   }
 
   @override
-  Future<Either<Failure, WinnersModel>> fetchWinners() async {
-    try {
-      String? accessToken = await CacheManager.getAccessToken();
-      String? refreshToken = await CacheManager.getRefreshToken();
-      var data = await apiService.get(
-          url: 'api/v1/subscriber/winners', token: accessToken);
-
-      var winner = WinnersModel.fromJson(data);
-
-      return right(winner);
-    } on Exception catch (e) {
-      // Handle general exceptions
-      final failure = _mapExceptionToFailure(e);
-      return left(failure);
-    }
+  Future<Either<Failure, List<WinnerCompetitionEntity>>> fetchWinner() {
+    return _competitionRemoteDataSource.fetchWinner();
   }
 }

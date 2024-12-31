@@ -26,6 +26,7 @@ import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_g
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/carpool_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
+import 'package:fourtyninehub/service_locator/competition_service_locator.dart';
 import 'package:fourtyninehub/service_locator/edit_food_service_locator.dart';
 import 'package:fourtyninehub/service_locator/face_book_service_locator.dart';
 import 'package:fourtyninehub/service_locator/follow_service_locator.dart';
@@ -163,11 +164,6 @@ class DI {
     );
     //for gifts
     serviceLocator.registerLazySingleton(() => GiftsCubit(serviceLocator()));
-//tinder getIt register
-    serviceLocator.registerLazySingleton<CompetitionRepoImpl>(
-      () => CompetitionRepoImpl(ApiService(Dio())),
-    );
-    // serviceLocator.registerLazySingleton<CompanyAdvertiseRepoImpl>(() => CompanyAdvertiseRepoImpl(ApiService(Dio())),);
 
     // Register the StoryRepository
     serviceLocator.registerLazySingleton<StoryRepository>(
@@ -358,6 +354,7 @@ class DI {
     ShareAppServiceLocator.execute(serviceLocator: serviceLocator);
     FollowServiceLocator.execute(serviceLocator: serviceLocator);
     TinderServiceLocator.execute(serviceLocator: serviceLocator);
+    CompetitionServiceLocator.execute(serviceLocator: serviceLocator);
   }
 
   static Future<void> reset() async {

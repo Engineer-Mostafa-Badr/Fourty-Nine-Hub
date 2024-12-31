@@ -1203,5 +1203,6 @@ abstract class  LocaleKeys {
   static const transferTenYears = 'transferTenYears';
   static const transferFiveYears = 'transferFiveYears';
   static const marriage = 'marriage';
+  static const Rating = 'Rating';
 
 }

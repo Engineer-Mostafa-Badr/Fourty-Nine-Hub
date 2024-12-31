@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/features/competition/data/models/winners_model.dart';
+import 'package:fourtyninehub/features/competition/domain/entity/winner_competition_entity.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -14,7 +14,7 @@ class WinnerCard extends StatelessWidget {
   WinnerCard({super.key, required this.isWinner, required this.model});
 
   bool isWinner = false;
-  final DataWinners model;
+  final WinnerCompetitionEntity model;
 
   @override
   Widget build(BuildContext context) {
@@ -52,24 +52,17 @@ class WinnerCard extends StatelessWidget {
               isWinner ? AppColors.ACCENT_COLOR : AppColors.PRIMARY_COLOR,
           child: ImageFromInternet(
             isCircle: true,
-            image: '${model.userId?.userProfile?.profilePictureKey?.mediaKey}',
+            image: model.image,
           ),
-          // child: CircleAvatar(
-          //   radius: isWinner ? 40 : 33,
-          //   backgroundColor: Colors.white,
-          //   backgroundImage: NetworkImage(
-          //       '${model.userId?.userProfile?.profilePictureKey?.mediaKey}' ??
-          //           ''),
-          // ),
         ),
         const Sizer(),
         Label(
-            text: model.userId?.fullName ?? '',
+            text: '${model.firstName} ${model.lastName}',
             style: Styles.mediumText(fontWeight: FontWeight.w500)),
         Label(
             text: context.locale == Locales.english
-                ? model.competitionId!.nameEn!
-                : model.competitionId!.nameAr!,
+                ? model.nameEn
+                : model.nameAr,
             style: Styles.smallText()),
         Label(text: '${model.profit}', style: Styles.mediumText()),
       ],

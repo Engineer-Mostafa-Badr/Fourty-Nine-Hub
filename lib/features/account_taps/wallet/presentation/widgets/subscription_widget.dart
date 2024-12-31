@@ -130,7 +130,9 @@ class SubscriptionWidget extends StatelessWidget {
                       WalletTypes.balance,
                     ],
                     subCategoryId: subscription.subCategoryId!,
-                    title: LocaleKeys.ads.localize,
+                    title:  context.locale == Locales.english
+                        ? subscription.nameEn ?? ''
+                        : subscription.nameAr ?? ''
                   );
                 },
               ),
