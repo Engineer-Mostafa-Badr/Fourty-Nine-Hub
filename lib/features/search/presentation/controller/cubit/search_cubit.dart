@@ -99,42 +99,54 @@ class SearchCubit extends Cubit<SearchState> {
     await prefs.setString('filter', 'totalUsers');
   }
 
-  void loadData(SearchParams params) async {
+  void loadDataMainCategory(SearchParams params) async {
     //   await getFeed(1);
     getPaginatedSearch(params, 1);
-    getPaginatedSubCategorySearch(params, 1);
-    getPaginatedUserSearch(params, 1);
-    getPaginatedAdsSearch(params, 1);
-    getPaginatedPostsSearch(params, 1);
-    getPaginatedTripComeSearch(params, 1);
-    getPaginatedReelsSearch(params, 1);
     searchPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
       getPaginatedSearch(params, pageKey);
     });
+  }
+  void loadDataSubCategory(SearchParams params) async {
+    getPaginatedSubCategorySearch(params, 1);
     searchPagingSubCategoryController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
       getPaginatedSubCategorySearch(params, pageKey);
     });
-    searchPagingUserController.addPageRequestListener((pageKey) {
+  }
+  void loadDataReel(SearchParams params) async {
+    getPaginatedReelsSearch(params, 1);
+    searchPagingReelsController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getPaginatedUserSearch(params, pageKey);
+      getPaginatedReelsSearch(params, pageKey);
     });
-    searchPagingAdsController.addPageRequestListener((pageKey) {
-      print("initStatePageKey : $pageKey");
-      getPaginatedAdsSearch(params, pageKey);
-    });
+  }
+  void loadDataPosts(SearchParams params) async {
+    getPaginatedPostsSearch(params, 1);
     searchPagingPostsController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
       getPaginatedPostsSearch(params, pageKey);
     });
+  }
+  void loadDataUser(SearchParams params) async {
+    getPaginatedUserSearch(params, 1);
+    searchPagingUserController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getPaginatedUserSearch(params, pageKey);
+    });
+  }
+  void loadDataTrip(SearchParams params) async {
+    getPaginatedTripComeSearch(params, 1);
     searchPagingTripComeController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
       getPaginatedTripComeSearch(params, pageKey);
     });
-    searchPagingReelsController.addPageRequestListener((pageKey) {
+  }
+  void loadDataMainAds(SearchParams params) async {
+    getPaginatedAdsSearch(params, 1);
+    searchPagingAdsController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getPaginatedReelsSearch(params, pageKey);
+      getPaginatedAdsSearch(params, pageKey);
     });
   }
 
