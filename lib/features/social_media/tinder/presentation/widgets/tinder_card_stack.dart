@@ -41,7 +41,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
   Widget build(BuildContext context) {
 
     return SizedBox(
-      height: 0.55.sh,
+      height: 0.9.sh,
 
       child: BlocBuilder<TinderViewCubit, TinderViewState>(
         builder: (context, state) {
@@ -100,18 +100,20 @@ class _TinderCardStackState extends State<TinderCardStack> {
   Widget _buildCardWidget(BuildContext context, UserDataTinderEntity cardUser) {
     return Padding(
       padding: const EdgeInsets.all(2.0),
-      child: Card(
-        clipBehavior: Clip.hardEdge,
-        elevation: 2,
-        child: Stack(
-          children: [
-            SwipeCardDemo2(cardUser: cardUser),
-            _buildGenderSwitch(context, cardUser),
-            // _buildMapSwitch(context, cardUser),
-            //_buildStoryBar(context, cardUser),
-            _buildPersonInfo(context, cardUser),
-            _buildActions(context, cardUser),
-          ],
+      child: SizedBox(
+        child: Card(
+          clipBehavior: Clip.hardEdge,
+          elevation: 2,
+          child: Stack(
+            children: [
+              SwipeCardDemo2(cardUser: cardUser),
+              _buildGenderSwitch(context, cardUser),
+              // _buildMapSwitch(context, cardUser),
+              //_buildStoryBar(context, cardUser),
+              _buildPersonInfo(context, cardUser),
+              _buildActions(context, cardUser),
+            ],
+          ),
         ),
       ),
     );

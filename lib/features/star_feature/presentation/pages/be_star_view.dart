@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/ads/native_ad_card.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/widget/custom_text_no_login.dart';
@@ -156,7 +157,7 @@ class _BeStarViewState extends State<BeStarView> {
                     ),
                     const Sizer(),
                     Text(
-                      state.banner?.title??'',
+                      context.isArabic?state.banner?.titleAr??'':state.banner?.titleEn??'',
                       textAlign: TextAlign.center,
                       style: Styles.mediumText(
                         fontSize: 60.sp,
@@ -165,7 +166,7 @@ class _BeStarViewState extends State<BeStarView> {
                     ),
                     const Sizer(),
                     Text(
-                      state.banner?.subTitle??'',
+                      context.isArabic?state.banner?.subTitleAr??'':state.banner?.subTitleEn??'',
                       textAlign: TextAlign.center,
                       style: Styles.mediumText(
                         fontSize: 60.sp,
