@@ -264,7 +264,7 @@ class _FollowingSectionState extends State<FollowingSection> {
           child: BlocConsumer<ReelsCubit, ReelsState>(
             builder: (context, state) {
               if (state.reelsForFollowing?.isEmpty??false) {
-                return const Center(child: Text(''));
+                return  Center(child: Text(LocaleKeys.noFollowing.localize));
               }
               return Stack(
                 children: [
