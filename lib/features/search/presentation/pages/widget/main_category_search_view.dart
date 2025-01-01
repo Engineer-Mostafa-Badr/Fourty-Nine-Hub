@@ -21,6 +21,9 @@ class MainCategorySearchView extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 10.w),
       child: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {
+          if(state.status ==SearchStates.loading){
+            return const Center(child: CircularProgressIndicator());
+          }
           final controller = context.read<SearchCubit>();
           // Listen for changes in the search text and trigger search
           // controller.searchController.addListener(() {

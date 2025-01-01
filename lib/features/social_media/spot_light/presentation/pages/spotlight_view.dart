@@ -200,25 +200,19 @@ class _FollowingSectionState extends State<FollowingSection> {
     // _scrollController.addListener(_onScroll);
   }
 
-  // Updated _onScroll method to detect scroll direction and trigger fetch
   void _onScroll(ScrollMetrics metrics) {
     double currentScrollPosition = metrics.pixels;
 
-    // print(
-    //     'Current scroll: ${currentScrollPosition}, Max scroll extent: ${metrics.maxScrollExtent}');
 
-    // Check if the user is scrolling right to left (i.e., scroll value is increasing)
     bool isScrollingRightToLeft =
         currentScrollPosition > _previousScrollPosition;
 
-    // Check if user has reached near the end of the list and is scrolling right to left
     if (isScrollingRightToLeft &&
         currentScrollPosition >= metrics.maxScrollExtent + 20 &&
         !_isFetchingMore) {
       _fetchMoreReels();
     }
 
-    // Update the previous scroll position for the next event
     _previousScrollPosition = currentScrollPosition;
   }
 
@@ -270,17 +264,16 @@ class _FollowingSectionState extends State<FollowingSection> {
           child: BlocConsumer<ReelsCubit, ReelsState>(
             builder: (context, state) {
               if (state.reelsForFollowing?.isEmpty??false) {
-                return const Center(child: CupertinoActivityIndicator());
+                return const Center(child: Text(''));
               }
               return Stack(
                 children: [
-                  // Wrap ListView.builder in a NotificationListener to track scrolls
                   NotificationListener<ScrollNotification>(
                     onNotification: (ScrollNotification notification) {
                       if (notification is ScrollUpdateNotification) {
                         _onScroll(notification.metrics);
                       }
-                      return true; // Prevent the event from bubbling up
+                      return true;
                     },
                     child: ListView.builder(
                       controller: _scrollController,

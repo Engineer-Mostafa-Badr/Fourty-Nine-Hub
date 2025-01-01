@@ -15,10 +15,10 @@ class TripComeWithYouEntity {
   final String toAr;
   final String fromEn;
   final String toEn;
-  final int distance;
-  final int duration;
-  final int passengers;
-  final int price;
+  final num distance;
+  final num duration;
+  final num passengers;
+  final num price;
   final String phone;
   final int time;
   final String countryCode;

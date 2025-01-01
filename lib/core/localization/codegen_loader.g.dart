@@ -1123,7 +1123,7 @@ class CodegenLoader extends AssetLoader{
   "reached": "وصل",
   "running": "جارية",
   "comeWithMe": "تعال معي",
-  "mainCategory": "Main Category",
+  "mainCategory": "الفئة الرئيسية",
   "failedTryAgain": "فشل. من فضلك حاول مجددا",
   "publishSubmitted": "تم إرسال موهبتك بنجاح، انتظر موافقة الإدارة",
   "loadingDashboard": "لوحة تحكم تحميلة",

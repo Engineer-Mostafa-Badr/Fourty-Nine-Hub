@@ -72,15 +72,13 @@ class _SearchViewState extends State<SearchView>
                     if (v.isNotEmpty) {
                       final prefs = await SharedPreferences.getInstance();
                       String? filter = prefs.getString('filter');
-                      print('context.read<SearchCubit>().state.filter??'
-                          '${filter ?? ''}');
                       context.read<SearchCubit>().loadData(
-                            SearchParams(
-                              search: v,
-                              filter: filter ?? '',
-                              params: PaginationParams(page: 1),
-                            ),
-                          );
+                        SearchParams(
+                          search: v,
+                          filter: filter ?? '',
+                          params: PaginationParams(page: 1),
+                        ),
+                      );
                     }
                   },
                   height: 70.h,
@@ -101,40 +99,47 @@ class _SearchViewState extends State<SearchView>
         bottom: TabBar(
           tabAlignment: TabAlignment.start,
           isScrollable: true,
-          // Enable scrolling for the TabBar
           onTap: (i) async {
             final prefs = await SharedPreferences.getInstance();
-
-            if (i == 0) {
-              await prefs.setString('filter', 'totalUsers');
-            } else if (i == 1) {
-              await prefs.setString('filter', 'reels');
-            } else if (i == 2) {
-              await prefs.setString('filter', 'posts');
-            } else if (i == 3) {
-              await prefs.setString('filter', 'mainCategories');
-            } else if (i == 4) {
-              await prefs.setString('filter', 'subCategories');
-            } else if (i == 5) {
-              await prefs.setString('filter', 'ads');
-            } else if (i == 6) {
-              await prefs.setString('filter', 'comeWithYouTrips');
-            } else if (i == 7) {
-              await prefs.setString('filter', 'carpoolTrips');
-            } else if (i == 8) {
-              await prefs.setString('filter', 'rideTrips');
+            switch (i) {
+              case 0:
+                await prefs.setString('filter', 'totalUsers');
+                break;
+              case 1:
+                await prefs.setString('filter', 'reels');
+                break;
+              case 2:
+                await prefs.setString('filter', 'posts');
+                break;
+              case 3:
+                await prefs.setString('filter', 'mainCategories');
+                break;
+              case 4:
+                await prefs.setString('filter', 'subCategories');
+                break;
+              case 5:
+                await prefs.setString('filter', 'ads');
+                break;
+              case 6:
+                await prefs.setString('filter', 'comeWithYouTrips');
+                break;
+              case 7:
+                await prefs.setString('filter', 'carpoolTrips');
+                break;
+              case 8:
+                await prefs.setString('filter', 'rideTrips');
+                break;
             }
-            String? filter = prefs.getString('filter');
 
-            print(
-                'context.read<SearchCubit>().state.filter??' '${filter ?? ''}');
-            context.read<SearchCubit>().loadData(SearchParams(
-                  search: context.read<SearchCubit>().searchController.text,
-                  filter: filter ?? '',
-                  params: PaginationParams(page: 1),
-                ));
-            print('context.read<SearchCubit>().state.filter1??'
-                '${filter ?? ''}');
+            // Fetch data for the selected tab
+            String? filter = prefs.getString('filter');
+            context.read<SearchCubit>().loadData(
+              SearchParams(
+                search: context.read<SearchCubit>().searchController.text,
+                filter: filter ?? '',
+                params: PaginationParams(page: 1),
+              ),
+            );
           },
           controller: _tabController,
           labelColor: Theme.of(context).primaryColor,
@@ -151,7 +156,7 @@ class _SearchViewState extends State<SearchView>
             Tab(text: LocaleKeys.mainCategory.localize),
             Tab(text: LocaleKeys.subCategory.localize),
             Tab(text: LocaleKeys.ads.localize),
-            Tab(text: LocaleKeys.comeWithMe.localize),
+            Tab(text: LocaleKeys.tripJoin.localize),
             Tab(text: LocaleKeys.carpool.localize),
             Tab(text: LocaleKeys.ride.localize),
           ],
@@ -174,4 +179,5 @@ class _SearchViewState extends State<SearchView>
       ),
     );
   }
+
 }

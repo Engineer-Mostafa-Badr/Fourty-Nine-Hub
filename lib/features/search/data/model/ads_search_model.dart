@@ -18,7 +18,6 @@ class AdsSearchModel extends AdsSearchEntity {
     required super.price,
     required super.status,
     required super.searchText,
-    required super.adminComments,
     required super.subscriptionType,
     required super.phone,
     required super.totalRating,
@@ -37,14 +36,13 @@ class AdsSearchModel extends AdsSearchEntity {
     required super.isBlocked,
     required super.isRejected,
     super.isFavorite,
-    required super.coordinates,
     required super.details,
   });
 
   factory AdsSearchModel.fromJson(Map<String, dynamic> json) {
     return AdsSearchModel(
         id: json['_id'] ?? '',
-        userId: json['userId']['_id'] ?? '',
+        userId: json['userId']?['_id'] ?? '',
         subCategoryId: json['subCategoryId'] ?? '',
         mainCategoryId: json['mainCategoryId'] ?? '',
         title: json['title'] ?? '',
@@ -63,7 +61,6 @@ class AdsSearchModel extends AdsSearchEntity {
         status: json['status'] ?? '',
         searchText: json['searchText'] ?? '',
         subscriptionType: json['subscriptionType'] ?? '',
-        adminComments: List<String>.from(json['adminComments']),
         phone: json['phone'] ?? '',
         totalRating: json['totalRating'] ?? 0,
         views: json['views'] ?? 0,
@@ -75,15 +72,15 @@ class AdsSearchModel extends AdsSearchEntity {
             : null,
         createdAt: DateTime.parse(json['createdAt']),
         updatedAt: DateTime.parse(json['updatedAt']),
-        phoneCount: List<String>.from(json['phoneCount']),
-        chatCount: List<String>.from(json['chatCount']),
-        loveCount: List<String>.from(json['loveCount']),
-        viewCount: List<String>.from(json['viewCount']),
+        phoneCount: json['phoneCount'] != null ? List<String>.from(json['phoneCount']) : [],
+        chatCount: json['chatCount'] != null ? List<String>.from(json['chatCount']) : [],
+        loveCount: json['loveCount'] != null ? List<String>.from(json['loveCount']) : [],
+        viewCount: json['viewCount'] != null ? List<String>.from(json['viewCount']) : [],
+
         isBanned: json['isBanned'] ?? false,
         isBlocked: json['isBlocked'] ?? false,
         isRejected: json['isRejected'] ?? false,
         isFavorite: json['isFavorite'] ?? false,
-        coordinates: List<double>.from(json['address']['coordinates']),
         details: json['propsPivot'] == null
             ? []
             : (json['propsPivot'] as List)

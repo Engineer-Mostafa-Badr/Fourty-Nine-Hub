@@ -191,7 +191,7 @@ class EndPoints {
   static String editMyAds(EditParams params) => '/ads/update-ads/${params.id}';
 
   static String search(SearchParams params) =>
-      '/searchApp?page=${params.params.page}&limit=${params.params.limit}}';
+      '/searchApp?page=${params.params.page}&limit=${params.params.limit}';
 
   static const getWallet = '/main-wallet/user-wallet';
   static const transferMoney = '/main-wallet/send-money';

@@ -37,6 +37,9 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
       padding: EdgeInsets.symmetric(vertical: 20.h),
       child: BlocBuilder<SearchCubit, SearchState>(
         builder: (BuildContext context, state) {
+          if(state.status ==SearchStates.loading){
+            return const Center(child: CircularProgressIndicator());
+          }
           final controller = context.read<SearchCubit>();
           if (controller.searchController.text.isNotEmpty) {
             return PagedGridView<int, SubCategoryEntity>(
