@@ -107,7 +107,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
           child: Stack(
             children: [
               SwipeCardDemo2(cardUser: cardUser),
-              _buildGenderSwitch(context, cardUser),
+              // _buildGenderSwitch(context, cardUser),
               // _buildMapSwitch(context, cardUser),
               //_buildStoryBar(context, cardUser),
               _buildPersonInfo(context, cardUser),
