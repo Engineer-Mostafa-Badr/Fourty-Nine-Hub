@@ -1,6 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/domain/usecases/pay_company_ad_use_case.dart';
 import '../../../../../common/models/public/pagination_params.dart';
@@ -59,13 +62,15 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
     return company;
   }
 
-  Future<void> addPostCompanyAdvertise({
+  Future<bool> addPostCompanyAdvertise({
     String? post,
     required String type,
     String? description,
     required num totalPrice,
     List<String>? mediaIds,
+    required BuildContext context,
   }) async {
+    bool result = false;
     emit(state.copyWith(status: StateStatus.loading));
     var response = await _companyAddUseCases(
       CompanyAddParams(
@@ -76,14 +81,28 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
         post: post,
       ),
     );
-    return response.fold(
-      (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+    response.fold(
+      (l) {
+        result = false;
+        emit(state.copyWith(failure: l, status: StateStatus.error));
+        Navigator.of(context).pop();
+        showErrorMessage(context, getFailureMessage(l, context));
+
+      },
       (data) {
+        result = true;
         emit(state.copyWith(advertise: data, status: StateStatus.success));
         mediaIds?.clear();
         print('Media IDs cleared after successful post.');
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        showSuccessMessage(context, context.isArabic
+            ? "تم تأكيد الخدمة!"
+            : "Service confirmed!");
+
       },
     );
+    return result;
   }
 
   Future<bool> deleteCompanyAd({required String id}) async {
