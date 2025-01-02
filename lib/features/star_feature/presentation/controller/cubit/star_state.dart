@@ -15,7 +15,7 @@ class StarState {
   final List<StarWinnerEntity>? winner;
   final List<UploadFileEntity>? video;
   final BannerTalentEntity? banner;
-  final List<VideoModel>? videos;
+  // final List<VideoModel>? videos;
 
   StarState({
     this.status = StarStates.loading,
@@ -24,7 +24,7 @@ class StarState {
     this.winner,
     this.video,
     this.banner,
-    this.videos,
+    // this.videos,
   });
 
   StarState copyWith({
@@ -35,7 +35,7 @@ class StarState {
     List<StarWinnerEntity>? winner,
     List<UploadFileEntity>? video,
     BannerTalentEntity? banner,
-     List<VideoModel>? videos,
+     // List<VideoModel>? videos,
   }) {
     return StarState(
       status: status ?? this.status,
@@ -44,7 +44,7 @@ class StarState {
       winner: winner ?? this.winner,
       video: video ?? this.video,
       banner: banner ?? this.banner,
-      videos: videos ?? this.videos,
+      // videos: videos ?? this.videos,
     );
   }
 }

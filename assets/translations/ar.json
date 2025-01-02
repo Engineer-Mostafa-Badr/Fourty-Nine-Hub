@@ -1022,8 +1022,8 @@
   "liveStreamOptions": "خيارات البث الحي",
   "createLive": "انشاء بث",
   "watch": "مشاهدة",
-  "Face":"وجه",
-  "Insta":"صور",
+  "Face":"فيس",
+  "Insta":"انستا",
   "day": "يوم",
   "month": "شهر",
   "numOfWins": "عدد مرات الفوز",
@@ -1217,5 +1217,15 @@
   "transferFiveYears":"تم نقل رصيد خمس سنوات إلى محفظة الهدايا",
   "marriage": "زواج",
   "Rating": "تقييم:",
-  "noFollowing": "لا يوجد متابعين"
+  "noFollowing": "لا يوجد متابعين",
+  "billCashback": "كاش باك فواتير",
+  "selectBill": "حدد الفاتورة",
+  "billValue": "قيمة الفاتورة",
+  "trafficViolation": "مخالفة المرور",
+  "electricityBill": "فاتورة الكهرباء",
+  "mobileBill": "فاتورة موبايل",
+  "enterBillValue": "ادخل قيمة الفاتورة",
+  "uploadAtLeastOneBill": "قم بتحميل على الاقل فاتورة واحدة",
+  "home": "الرئيسية"
+
 }

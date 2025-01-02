@@ -1037,8 +1037,8 @@ class CodegenLoader extends AssetLoader{
   "liveStreamOptions": "خيارات البث الحي",
   "createLive": "انشاء بث",
   "watch": "مشاهدة",
-  "Face": "وجه",
-  "Insta": "صور",
+  "Face": "فيس",
+  "Insta": "انستا",
   "day": "يوم",
   "month": "شهر",
   "numOfWins": "عدد مرات الفوز",
@@ -1230,7 +1230,16 @@ class CodegenLoader extends AssetLoader{
   "transferFiveYears": "تم نقل رصيد خمس سنوات إلى محفظة الهدايا",
   "marriage": "زواج",
   "Rating": "تقييم:",
-  "noFollowing": "لا يوجد متابعين"
+  "noFollowing": "لا يوجد متابعين",
+  "billCashback": "كاش باك فواتير",
+  "selectBill": "حدد الفاتورة",
+  "billValue": "قيمة الفاتورة",
+  "trafficViolation": "مخالفة المرور",
+  "electricityBill": "فاتورة الكهرباء",
+  "mobileBill": "فاتورة موبايل",
+  "enterBillValue": "ادخل قيمة الفاتورة",
+  "uploadAtLeastOneBill": "قم بتحميل على الاقل فاتورة واحدة",
+  "home": "الرئيسية"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2465,7 +2474,16 @@ static const Map<String,dynamic> en = {
   "sureRecoverDeletedChats": "Are you sure you want to recover deleted chats?",
   "marriage": "Marriage",
   "Rating": "Rating:",
-  "noFollowing": "No Following"
+  "noFollowing": "No Following",
+  "billCashback": "Bill Cashback",
+  "selectBill": "Select Bill",
+  "billValue": "Bill Value",
+  "trafficViolation": "Traffic Violation",
+  "electricityBill": "Electricity Bill",
+  "mobileBill": "Mobile Bill",
+  "enterBillValue": "Enter Bill Value",
+  "uploadAtLeastOneBill": "Please upload at least 1 bill",
+  "home": "Home"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

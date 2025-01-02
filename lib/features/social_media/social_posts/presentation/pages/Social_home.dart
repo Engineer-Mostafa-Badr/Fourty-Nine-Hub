@@ -239,7 +239,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                       SizedBox(
                         width: 8.w,
                       ),
-                      Label(text: i == 0 ? 'Home' : 'Profile',style: Styles.headerText(color: i == 0 ? Theme.of(context).primaryColor : Colors.grey,fontSize: 30),)
+                      Label(text: i == 0 ? LocaleKeys.home.localize : LocaleKeys.profile.localize,style: Styles.headerText(color: i == 0 ? Theme.of(context).primaryColor : Colors.grey,fontSize: 30),)
                     ],
                   )),
             ),

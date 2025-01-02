@@ -148,7 +148,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                           borderRadius: BorderRadius.circular(25),
                         ),
                         child: Text(
-                          LocaleKeys.premium.localize,
+                          LocaleKeys.premiumSubscription.localize,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: _isPremium
