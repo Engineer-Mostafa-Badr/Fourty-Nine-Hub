@@ -67,7 +67,9 @@ class CreatePostRemoteDataSourceImpl implements CreatePostRemoteDataSource {
       {required Map<String, dynamic> data}) async {
     print('say hi');
     final response =
-        await _apiConsumer.post(EndPoints.createFacebookPost, data: data);
+        await _apiConsumer.post(EndPoints.createFacebookPost, data: data,
+            queryParameters: {'subCategory': '66b77e77bb35968b535dc944'}
+        );
     return response.fold(
         (l) => Left(l), (data) => Right(data['status'] as bool));
   }

@@ -39,7 +39,6 @@ class _CreateStarState extends State<CreateStar> {
   var formKey = GlobalKey<FormState>();
   late List<VideoPlayerController> _videoControllers = [];
   var controllerStar;
-
   @override
   void dispose() {
     for (var controller in _videoControllers) {
@@ -47,18 +46,15 @@ class _CreateStarState extends State<CreateStar> {
     }
     super.dispose();
   }
-
   void _initializeVideoControllers(List<UploadFileEntity> videos) {
-    // Dispose of any existing controllers
     for (var controller in _videoControllers) {
       controller.dispose();
     }
 
-    // Initialize new controllers
     _videoControllers = videos.map((video) {
       return VideoPlayerController.file(File(video.file.path))
         ..initialize().then((_) {
-          setState(() {}); // Refresh when video is initialized
+          setState(() {});
         });
     }).toList();
   }
@@ -81,8 +77,6 @@ class _CreateStarState extends State<CreateStar> {
                   if (state.status == StarStates.uploadSuccess) {
                     showSuccessMessage(
                         context, LocaleKeys.publishSubmitted.localize);
-                    // context.read<CreatePostCubit>().clearSelectedImages();
-                    //  context.read<StarCubit>().clearSelectedVideos();
                     setState(() {
                       titleController.clear();
                       descController.clear();
@@ -103,12 +97,11 @@ class _CreateStarState extends State<CreateStar> {
                 builder: (BuildContext context, state) {
                   controllerStar = context.read<StarCubit>();
 
-                  // Initialize video controllers based on state.videos
                   _videoControllers = state.video?.map((video) {
                         return VideoPlayerController.file(File(video.file.path))
                           ..initialize().then((_) {
                             setState(
-                                () {}); // Refresh when video is initialized
+                                () {});
                           });
                       }).toList() ??
                       [];
@@ -134,9 +127,6 @@ class _CreateStarState extends State<CreateStar> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceAround,
                                       children: [
-                                        // if (state.)
-                                        //   const CircularProgressIndicator.adaptive(),
-                                        // if (!state.isImageUploading)
                                         Image.asset(
                                           Assets.image,
                                           height: kToolbarHeight * .8,
@@ -283,15 +273,6 @@ class _CreateStarState extends State<CreateStar> {
                                               ),
                                           ],
                                         ),
-                                        // Label(
-                                        //   text: LocaleKeys.addImagesDesc.localize,
-                                        //   style: Styles.mediumText(
-                                        //     color: context.isDarkMode
-                                        //         ? AppColors.LIGHT_COLOR
-                                        //         : AppColors.GREY_DARK_COLOR,
-                                        //   ),
-                                        //   textAlign: TextAlign.center,
-                                        // )
                                       ],
                                     ),
                                   ),
@@ -481,7 +462,6 @@ class _CreateStarState extends State<CreateStar> {
       ),
     );
   }
-
   Widget buildTextField({
     required String label,
     required TextEditingController controller,
@@ -493,7 +473,6 @@ class _CreateStarState extends State<CreateStar> {
           TextFormField(
             maxLines: null,
             controller: controller,
-            //  onChanged: (v) => controller.title = v,
             style: Styles.headerText(fontSize: 55.sp),
             decoration: InputDecoration(
                 fillColor: context.isDarkMode

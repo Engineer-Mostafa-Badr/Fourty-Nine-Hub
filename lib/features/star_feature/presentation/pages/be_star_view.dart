@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/ads/native_ad_card.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/widget/custom_text_no_login.dart';
@@ -13,7 +14,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/floating_action_button_star.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
@@ -39,6 +39,7 @@ class _BeStarViewState extends State<BeStarView> {
   late StarCubit _cubit;
   bool showMore = false;
   final AdsManager _adsManager = AdsManager();
+
   @override
   void initState() {
     super.initState();
@@ -46,6 +47,7 @@ class _BeStarViewState extends State<BeStarView> {
     _scrollController = ScrollController()..addListener(_onScroll);
     _cubit.loadInitialData();
     _adsManager.preloadAds();
+    _cubit.fetchBanner();
   }
 
   void _onScroll() {
@@ -69,7 +71,7 @@ class _BeStarViewState extends State<BeStarView> {
       if (controller != null) {
         controller
           ..initialize().then((_) {
-            if (mounted) setState(() {}); // Update UI after initialization
+            if (mounted) setState(() {});
           })
           ..addListener(() {
             if (controller.value.position == controller.value.duration) {
@@ -139,20 +141,25 @@ class _BeStarViewState extends State<BeStarView> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
+                    ImageFromInternet(image: state.banner?.banner ?? ''),
                     Container(
                       width: double.infinity,
                       height: 240.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.r),
-                        image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: AssetImage(Assets.win),
-                        ),
+                        // image: DecorationImage(
+                        //   fit: BoxFit.fill,
+                        //   image: NetworkImage(state.banner?.banner ??''),
+                        // ),
                       ),
+                      child:
+                          ImageFromInternet(image: state.banner?.banner ?? ''),
                     ),
                     const Sizer(),
                     Text(
-                      'You have a talent or special unique content!',
+                      context.isArabic
+                          ? state.banner?.titleAr ?? ''
+                          : state.banner?.titleEn ?? '',
                       textAlign: TextAlign.center,
                       style: Styles.mediumText(
                         fontSize: 60.sp,
@@ -161,7 +168,9 @@ class _BeStarViewState extends State<BeStarView> {
                     ),
                     const Sizer(),
                     Text(
-                      'Share it with the users and win 10000 EGP every month!!!',
+                      context.isArabic
+                          ? state.banner?.subTitleAr ?? ''
+                          : state.banner?.subTitleEn ?? '',
                       textAlign: TextAlign.center,
                       style: Styles.mediumText(
                         fontSize: 60.sp,
@@ -224,34 +233,33 @@ class _BeStarViewState extends State<BeStarView> {
                                             children: [
                                               VideoPlayer(videoController),
                                               Padding(
-                                                padding: EdgeInsets.all(12.w),
-                                                child: Align(
-                                                  alignment:
-                                                      AlignmentDirectional
-                                                          .topEnd,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    children: [
-                                                      const Icon(
-                                                          Icons.remove_red_eye),
-                                                      Sizer(width: 10.w),
-                                                      Label(
-                                                          text:
-                                                              '${sortedStars[index].totalViews}'),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.all(12.w),
-                                                child: Align(
-                                                  alignment:
-                                                      AlignmentDirectional
-                                                          .topStart,
-                                                  child: Label(
-                                                      text:
-                                                          'Rating: ${sortedStars[index].averageRating}'),
+                                                padding:  EdgeInsets.all(16.w),
+                                                child: Row(
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        const Icon(
+                                                          Icons.remove_red_eye,
+                                                          color: AppColors
+                                                              .AUTH_CONTAINER_COLOR,
+                                                        ),
+                                                        Sizer(width: 10.w),
+                                                        Label(
+                                                            text:
+                                                                '${sortedStars[index].totalViews}',
+                                                            color: AppColors
+                                                                .AUTH_CONTAINER_COLOR),
+                                                      ],
+                                                    ),
+                                                    const Spacer(),
+                                                    Label(
+                                                        color: AppColors
+                                                            .AUTH_CONTAINER_COLOR,
+                                                        text:
+                                                            '${LocaleKeys.Rating.localize} ${sortedStars[index].averageRating}'),
+                                                  ],
                                                 ),
                                               ),
                                             ],
@@ -262,183 +270,166 @@ class _BeStarViewState extends State<BeStarView> {
                               else
                                 Stack(
                                   children: [
-                                    Stack(
-                                      alignment: AlignmentDirectional.topEnd,
-                                      children: [
-                                        GridView.builder(
-                                          shrinkWrap: true,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          padding: const EdgeInsets.all(10),
-                                          gridDelegate:
-                                              SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: state.star![index]
-                                                        .mediaUrl.length ==
-                                                    1
-                                                ? 1
-                                                : 2,
-                                          ),
-                                          itemCount: state.star![index].mediaUrl
-                                                      .length <
-                                                  4
+                                    GridView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: state.star![index]
+                                                    .mediaUrl.length ==
+                                                1
+                                            ? 1
+                                            : 2,
+                                      ),
+                                      itemCount:
+                                          state.star![index].mediaUrl.length < 4
                                               ? state
                                                   .star![index].mediaUrl.length
                                               : 4,
-                                          itemBuilder: (context, mediaIndex) {
-                                            if (mediaIndex >=
-                                                state.star![index].mediaUrl
-                                                    .length) {
-                                              // Skip rendering for out-of-bounds mediaIndex
-                                              return const SizedBox.shrink();
+                                      itemBuilder: (context, mediaIndex) {
+                                        if (mediaIndex >=
+                                            state
+                                                .star![index].mediaUrl.length) {
+                                          // Skip rendering for out-of-bounds mediaIndex
+                                          return const SizedBox.shrink();
+                                        }
+                                        return GestureDetector(
+                                          onTap: () {
+                                            if (mediaIndex != 3 ||
+                                                (mediaIndex == 3 &&
+                                                    state.star![index].mediaUrl
+                                                            .length ==
+                                                        4)) {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    ImageDetails(
+                                                  image: state
+                                                      .star![index]
+                                                      .mediaUrl[mediaIndex]
+                                                      .mediaKey,
+                                                  function: () {},
+                                                ),
+                                              );
+                                            } else {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) => allImage(
+                                                  () {},
+                                                  state.star![index].mediaUrl
+                                                      .length,
+                                                  state
+                                                      .star![index]
+                                                      .mediaUrl[mediaIndex]
+                                                      .mediaKey,
+                                                ),
+                                              );
                                             }
-                                            return GestureDetector(
-                                              onTap: () {
-                                                if (mediaIndex != 3 ||
-                                                    (mediaIndex == 3 &&
-                                                        state
-                                                                .star![index]
-                                                                .mediaUrl
-                                                                .length ==
-                                                            4)) {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder: (context) =>
-                                                        ImageDetails(
-                                                      image: state
-                                                          .star![index]
-                                                          .mediaUrl[mediaIndex]
-                                                          .mediaKey,
-                                                      function: () {},
-                                                    ),
-                                                  );
-                                                } else {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder: (context) =>
-                                                        allImage(
-                                                      () {},
-                                                      state.star![index]
-                                                          .mediaUrl.length,
-                                                      state
-                                                          .star![index]
-                                                          .mediaUrl[mediaIndex]
-                                                          .mediaKey,
-                                                    ),
-                                                  );
-                                                }
-                                              },
-                                              child: Stack(
-                                                children: [
-                                                  Container(
-                                                    margin:
-                                                        const EdgeInsetsDirectional
-                                                            .only(
-                                                            end: 10,
-                                                            bottom: 10),
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            10),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
-                                                      image: DecorationImage(
-                                                        fit: BoxFit.fill,
-                                                        image: NetworkImage(
-                                                            state
-                                                                .star![index]
-                                                                .mediaUrl[
-                                                                    mediaIndex]
-                                                                .mediaKey),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  if (mediaIndex == 3 &&
-                                                      state.star![index]
-                                                              .mediaUrl.length >
-                                                          4)
-                                                    Container(
-                                                      margin:
-                                                          const EdgeInsetsDirectional
-                                                              .only(
-                                                              end: 10,
-                                                              bottom: 10),
-                                                      alignment:
-                                                          Alignment.center,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15),
-                                                        color: Colors.black
-                                                            .withOpacity(0.5),
-                                                      ),
-                                                      child: Center(
-                                                        child: Label(
-                                                          text:
-                                                              "+${state.star![index].mediaUrl.length - 4}",
-                                                          style:
-                                                              Styles.headerText(
-                                                                  color: Colors
-                                                                      .white),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                ],
-                                              ),
-                                            );
                                           },
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.all(20.w),
-                                      child: Align(
-                                        alignment: AlignmentDirectional.topEnd,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            const Icon(Icons.remove_red_eye),
-                                            Sizer(width: 10.w),
-                                            Text(
-                                              '${sortedStars[index].totalViews}',
-                                              style:
-                                                  Styles.mediumText().copyWith(
-                                                shadows: [
-                                                  Shadow(
-                                                    offset: const Offset(2.0,
-                                                        2.0), // Position of the shadow
-                                                    blurRadius:
-                                                        3.0, // Blur radius of the shadow
-                                                    color: Colors.black
-                                                        .withOpacity(
-                                                            0.5), // Shadow color
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                // margin:
+                                                //     const EdgeInsetsDirectional
+                                                //         .only(
+                                                //         end: 10, bottom: 10),
+                                                // padding:
+                                                //     const EdgeInsets.all(10),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.fill,
+                                                    image: NetworkImage(state
+                                                        .star![index]
+                                                        .mediaUrl[mediaIndex]
+                                                        .mediaKey),
                                                   ),
-                                                ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                              if (mediaIndex == 3 &&
+                                                  state.star![index].mediaUrl
+                                                          .length >
+                                                      4)
+                                                Container(
+                                                  // margin:
+                                                  //     const EdgeInsetsDirectional
+                                                  //         .only(
+                                                  //         end: 10, bottom: 10),
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                    color: Colors.black
+                                                        .withOpacity(0.5),
+                                                  ),
+                                                  child: Center(
+                                                    child: Label(
+                                                      text:
+                                                          "+${state.star![index].mediaUrl.length - 4}",
+                                                      style: Styles.headerText(
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                        );
+                                      },
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.all(20.w),
-                                      child: Align(
-                                        alignment:
-                                            AlignmentDirectional.topStart,
-                                        child: Text(
-                                          'Rating: ${sortedStars[index].averageRating}',
-                                          style: Styles.mediumText().copyWith(
-                                            shadows: [
-                                              Shadow(
-                                                offset: const Offset(1.0, 1.0),
-                                                blurRadius: 3.0,
-                                                color: Colors.white
-                                                    .withOpacity(0.5),
+                                      padding: EdgeInsets.all(8.w),
+                                      child: Row(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              const Icon(Icons.remove_red_eye,
+                                                color: AppColors
+                                                    .AUTH_CONTAINER_COLOR,
+                                              ),
+                                              Sizer(width: 10.w),
+                                              Text(
+                                                '${sortedStars[index].totalViews}',
+                                                style: Styles.mediumText(color: AppColors
+                                                    .AUTH_CONTAINER_COLOR,)
+                                                    .copyWith(
+                                                  shadows: [
+                                                    Shadow(
+                                                      offset: const Offset(
+                                                          2.0, 2.0),
+                                                      // Position of the shadow
+                                                      blurRadius: 3.0,
+                                                      // Blur radius of the shadow
+                                                      color: Colors.white
+                                                          .withOpacity(
+                                                              0.5), // Shadow color
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ],
                                           ),
-                                        ),
+                                          const Spacer(),
+                                          Text(
+                                            '${LocaleKeys.Rating.localize} ${sortedStars[index].averageRating}',
+                                            style: Styles.mediumText(color: AppColors
+                                                .AUTH_CONTAINER_COLOR,).copyWith(
+                                              shadows: [
+                                                Shadow(
+                                                  offset:
+                                                      const Offset(1.0, 1.0),
+                                                  blurRadius: 3.0,
+                                                  color: Colors.white
+                                                      .withOpacity(0.5),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],

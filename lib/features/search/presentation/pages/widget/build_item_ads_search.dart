@@ -56,8 +56,11 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
         builder: (BuildContext context, state) {
           return Container(
             width: kToolbarHeight * 2.5,
-            height: 600.h,
+            height: 800.h,
             margin: EdgeInsetsDirectional.all(10.w),
+            // padding: EdgeInsetsDirectional.symmetric(
+            //   vertical: 20.h
+            // ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5.r),
               border: Border.all(
@@ -75,63 +78,59 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                   child: Stack(
                     alignment: AlignmentDirectional.topStart,
                     children: [
-                      SizedBox(
-                        height: kToolbarHeight * 4,
-                        width: double.infinity,
-                        child: Swiper(
-                          itemCount: widget.item.images.length > 4
-                              ? 4
-                              : widget.item.images.length,
-                          onIndexChanged: (i) {},
-                          outer: false,
-                          loop: false,
-                          physics: widget.item.images.length > 1
-                              ? null
-                              : const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) => Padding(
-                            padding: EdgeInsets.only(bottom: 5.h),
-                            child: Stack(
-                              children: [
-                                ImageFromInternet(
-                                  width: double.infinity,
-                                  image: widget.item.images[index].mediaKey,
-                                  defaultLogo: true,
-                                  fit: BoxFit.fill,
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(5.r),
-                                      topRight: Radius.circular(5.r)),
-                                ),
-                                if (index == 3)
-                                  Positioned.fill(
-                                      child: InkWell(
-                                    onTap: () => context.push(Routes.ADdetails,
-                                        extra: widget.item.id),
-                                    child: Container(
-                                      color: Colors.black.withOpacity(0.8),
-                                      alignment: AlignmentDirectional.center,
-                                      child: Label(
-                                        text: LocaleKeys.seeAll.localize,
-                                        style: Styles.headerText(
-                                            color: Colors.white,
-                                            decoration:
-                                                TextDecoration.underline),
-                                      ),
+                      Swiper(
+                        itemCount: widget.item.images.length > 4
+                            ? 4
+                            : widget.item.images.length,
+                        onIndexChanged: (i) {},
+                        outer: false,
+                        loop: false,
+                        physics: widget.item.images.length > 1
+                            ? null
+                            : const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) => Padding(
+                          padding: EdgeInsets.only(bottom: 5.h),
+                          child: Stack(
+                            children: [
+                              ImageFromInternet(
+                                width: double.infinity,
+                                image: widget.item.images[index].mediaKey,
+                                defaultLogo: true,
+                                fit: BoxFit.fill,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(5.r),
+                                    topRight: Radius.circular(5.r)),
+                              ),
+                              if (index == 3)
+                                Positioned.fill(
+                                    child: InkWell(
+                                  onTap: () => context.push(Routes.ADdetails,
+                                      extra: widget.item.id),
+                                  child: Container(
+                                    color: Colors.black.withOpacity(0.8),
+                                    alignment: AlignmentDirectional.center,
+                                    child: Label(
+                                      text: LocaleKeys.seeAll.localize,
+                                      style: Styles.headerText(
+                                          color: Colors.white,
+                                          decoration:
+                                              TextDecoration.underline),
                                     ),
-                                  ))
-                              ],
-                            ),
+                                  ),
+                                ))
+                            ],
                           ),
-                          pagination: SwiperPagination(builder:
-                              SwiperCustomPagination(
-                                  builder: (context, config) {
-                            return const DotSwiperPaginationBuilder(
-                                    color: AppColors.GREY_DARK_COLOR,
-                                    activeColor: AppColors.SECONDARY_COLOR,
-                                    size: 10.0,
-                                    activeSize: 10.0)
-                                .build(context, config);
-                          })),
                         ),
+                        pagination: SwiperPagination(builder:
+                            SwiperCustomPagination(
+                                builder: (context, config) {
+                          return const DotSwiperPaginationBuilder(
+                                  color: AppColors.GREY_DARK_COLOR,
+                                  activeColor: AppColors.SECONDARY_COLOR,
+                                  size: 10.0,
+                                  activeSize: 10.0)
+                              .build(context, config);
+                        })),
                       ),
                       PositionedDirectional(
                         start: 10.w,
@@ -240,11 +239,13 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                                             '${getLang() == 'ar' ? e.value.nameAr : e.value.nameEn} : ',
                                         style: Styles.mediumText(
                                             color: AppColors.SECONDARY_COLOR)),
-                                    Label(
-                                        text: getLang() == 'ar'
-                                            ? e.value.nameAr
-                                            : e.value.nameEn,
-                                        style: Styles.mediumText()),
+                                    Expanded(
+                                      child: Label(
+                                          text: getLang() == 'ar'
+                                              ? e.value.nameAr
+                                              : e.value.nameEn,
+                                          style: Styles.mediumText()),
+                                    ),
                                   ],
                                 ));
                               }).toList())),

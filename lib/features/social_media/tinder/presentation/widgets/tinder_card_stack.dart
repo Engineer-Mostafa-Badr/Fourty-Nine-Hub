@@ -39,8 +39,10 @@ class TinderCardStack extends StatefulWidget {
 class _TinderCardStackState extends State<TinderCardStack> {
   @override
   Widget build(BuildContext context) {
+
     return SizedBox(
-      height: 0.55.sh,
+      height: 0.9.sh,
+
       child: BlocBuilder<TinderViewCubit, TinderViewState>(
         builder: (context, state) {
           // if (state.userData!.isEmpty) {
@@ -98,18 +100,20 @@ class _TinderCardStackState extends State<TinderCardStack> {
   Widget _buildCardWidget(BuildContext context, UserDataTinderEntity cardUser) {
     return Padding(
       padding: const EdgeInsets.all(2.0),
-      child: Card(
-        clipBehavior: Clip.hardEdge,
-        elevation: 2,
-        child: Stack(
-          children: [
-            SwipeCardDemo2(cardUser: cardUser),
-            _buildGenderSwitch(context, cardUser),
-            // _buildMapSwitch(context, cardUser),
-            //_buildStoryBar(context, cardUser),
-            _buildPersonInfo(context, cardUser),
-            _buildActions(context, cardUser),
-          ],
+      child: SizedBox(
+        child: Card(
+          clipBehavior: Clip.hardEdge,
+          elevation: 2,
+          child: Stack(
+            children: [
+              SwipeCardDemo2(cardUser: cardUser),
+              // _buildGenderSwitch(context, cardUser),
+              // _buildMapSwitch(context, cardUser),
+              //_buildStoryBar(context, cardUser),
+              _buildPersonInfo(context, cardUser),
+              _buildActions(context, cardUser),
+            ],
+          ),
         ),
       ),
     );
@@ -131,8 +135,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
           child: IconButton(
             onPressed: () => _switchDisplayGender(context, user),
             icon: Icon(
-                context.read<TinderViewCubit>().state.userData0?[0].gender ==
-                        'female'
+                context.read<TinderViewCubit>().state.userData0?[0].gender == 'female'
                     ? Icons.female
                     : Icons.male,
                 size: 35,
@@ -178,11 +181,10 @@ class _TinderCardStackState extends State<TinderCardStack> {
     );
   }
 
-  Future<void> _switchDisplayGender(
-      BuildContext context, UserDataTinderEntity user) async {
+  Future<void> _switchDisplayGender(BuildContext context, UserDataTinderEntity user) async {
     final currentGender = context.read<TinderViewCubit>().state.gender;
     final newGender = currentGender == 'female' ? 'male' : 'female';
-    await context.read<TinderViewCubit>().fetchUserData(newGender);
+    await context.read<TinderViewCubit>().fetchUserData( newGender);
     setState(() {
       print('sssssssssssssssssssssssssssss');
     });
@@ -263,7 +265,8 @@ class _TinderCardStackState extends State<TinderCardStack> {
       return context.isArabic ? 'غير متصل' : 'offline';
     }
     if (lastSeenModel?.status == 'online') {
-      if (lastSeenModel?.lastSeen != null || lastSeenModel?.lastSeen != '') {
+      if (lastSeenModel?.lastSeen != null ||
+          lastSeenModel?.lastSeen != '') {
         return '';
       }
 
@@ -344,25 +347,26 @@ class _TinderCardStackState extends State<TinderCardStack> {
             state.lastSeenModelState == TinderStates.initial) {
           return const Text('');
         } else {
-          if (state.lastSeenModel?.lastSeen != null) {
+          if( state.lastSeenModel?.lastSeen !=null) {
             return Text(
-              "${context.isArabic ? " آخر ظهور منذ" : 'Last seen'} ${getTimeAgo(context, state.lastSeenModel?.lastSeen ?? '')}",
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textScaler: TextScaler.noScaling,
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.9),
-                fontSize: 35.sp,
-                shadows: const [
-                  Shadow(
-                    offset: Offset(1.0, 1.0),
-                    blurRadius: 4.0,
-                    color: Colors.black87,
-                  ),
-                ],
-              ),
-            );
-          } else {
+             "${context.isArabic ? " آخر ظهور منذ" : 'Last seen'} ${getTimeAgo(context, state.lastSeenModel?.lastSeen ?? '')}"
+               ,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textScaler: TextScaler.noScaling,
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.9),
+              fontSize: 35.sp,
+              shadows: const [
+                Shadow(
+                  offset: Offset(1.0, 1.0),
+                  blurRadius: 4.0,
+                  color: Colors.black87,
+                ),
+              ],
+            ),
+          );
+          }else{
             return const SizedBox.shrink();
           }
         }
@@ -404,18 +408,15 @@ class _TinderCardStackState extends State<TinderCardStack> {
             _buildActionButton(
               context,
               Icons.report,
-              !context.read<UserCubit>().isLoggedIn
-                  ? () => context.push(Routes.LOGIN)
-                  : () {
-                      bottomSheet(
-                          context: context,
-                          widget: ReportView(
-                            id: cardUser.id!,
-                            categoryId: '66af974f8bf69f9469944746',
-                          ));
-                    },
+                !context.read<UserCubit>().isLoggedIn?()=>context.push(Routes.LOGIN):() {
+                  bottomSheet(
+                      context: context,
+                      widget: ReportView(
+                        id: cardUser.id!,
+                        categoryId: '66af974f8bf69f9469944746',
+                      ));},
               // () => _showReportBottomSheet(context, cardUser),
-              color: Colors.red,
+               color: Colors.red,
             ),
           ],
         ),
@@ -439,7 +440,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
     );
   }
 
-  _navigateToUserProfile(BuildContext context, UserDataTinderEntity cardUser) {
+   _navigateToUserProfile(BuildContext context, UserDataTinderEntity cardUser) {
     if (!context.read<UserCubit>().isLoggedIn) {
       return const CustomTextNoLogin();
     }
@@ -737,11 +738,10 @@ class ChatBottomSheet extends StatelessWidget {
     );
   }
 
-  void _startChat(
-      BuildContext context, String label, UserDataTinderEntity cardUser) {
+  void _startChat(BuildContext context, String label, UserDataTinderEntity cardUser) {
     // final tinderCubit = context.read<TinderViewCubit>();
     // final chatRoomCubit = serviceLocator<ChatRoomCubit>();
-    // final chatsCubit = serviceLocator<ChatsCubit>();
+   // final chatsCubit = serviceLocator<ChatsCubit>();
 
     if (label == "Anonymous") {
       // tinderCubit.startAnonymousChat(receiverId: cardUser.id ?? '').then((_) {
@@ -932,8 +932,7 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
       if (_currentStoryIndex < widget.cardUser.pictures.length - 1) {
         _currentStoryIndex = _currentStoryIndex + 1;
       } else {
-        _currentStoryIndex = widget.cardUser.pictures.length -
-            1; // Reset to the first story after the last
+        _currentStoryIndex =  widget.cardUser.pictures.length -1; // Reset to the first story after the last
       }
     });
   }

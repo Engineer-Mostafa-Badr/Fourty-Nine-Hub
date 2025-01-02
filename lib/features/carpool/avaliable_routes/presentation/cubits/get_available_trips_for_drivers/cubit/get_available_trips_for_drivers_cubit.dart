@@ -131,6 +131,8 @@ class GetAvailableTripsForDriversCubit
 
   @override
   Future<void> close() {
+    SharedWebSocket.socket!.off("carpool:getAllTrip");
+
     // SharedWebSocket.instance.socket!.dispose();
     return super.close();
   }

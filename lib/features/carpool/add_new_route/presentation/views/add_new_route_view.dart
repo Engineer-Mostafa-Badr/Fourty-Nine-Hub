@@ -13,7 +13,7 @@ class AddNewRouteView extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        context.pushReplacement(Routes.CAR_POOL);
+        context.pushReplacement(Routes.AVAILABLE_TRIPS);
         return false;
       },
       child: SafeArea(
@@ -22,7 +22,7 @@ class AddNewRouteView extends StatelessWidget {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                context.pushReplacement(Routes.CAR_POOL);
+                context.pushReplacement(Routes.AVAILABLE_TRIPS);
               },
             ),
             title: Transform(

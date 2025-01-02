@@ -39,12 +39,14 @@ class IsRestaurantModel {
   final bool? isRestaurant;
   final bool? approved;
   final String? restaurantId;
+  final String? subCategoryId;
   final bool? isActive; // New field
 
   IsRestaurantModel({
     this.isRestaurant,
     this.approved,
     this.restaurantId,
+    this.subCategoryId,
     this.isActive, // Include in constructor
   });
 
@@ -61,6 +63,9 @@ class IsRestaurantModel {
     if (restaurantId != null) {
       result.addAll({'restaurantId': restaurantId});
     }
+    if (subCategoryId != null) {
+      result.addAll({'subCategoryId': subCategoryId});
+    }
     if (isActive != null) {
       // Add isActive to the map
       result.addAll({'isActive': isActive});
@@ -75,6 +80,7 @@ class IsRestaurantModel {
       isRestaurant: map['isRestaurant'],
       approved: map['Approved'],
       restaurantId: map['restaurantId'],
+      subCategoryId: map['subCategoryId'],
       isActive: map['isActive'], // Parse isActive
     );
   }
@@ -88,7 +94,7 @@ class IsRestaurantModel {
 
   @override
   String toString() {
-    return 'IsRestaurantModel(isRestaurant: $isRestaurant, Approved: $approved, restaurantId: $restaurantId, isActive: $isActive)';
+    return 'IsRestaurantModel(isRestaurant: $isRestaurant, Approved: $approved, restaurantId: $restaurantId,subCategoryId:$subCategoryId, isActive: $isActive)';
   }
 
   @override
@@ -99,6 +105,7 @@ class IsRestaurantModel {
         other.isRestaurant == isRestaurant &&
         other.approved == approved &&
         other.restaurantId == restaurantId &&
+        other.subCategoryId == subCategoryId &&
         other.isActive == isActive; // Check isActive
   }
 
@@ -107,6 +114,7 @@ class IsRestaurantModel {
     return isRestaurant.hashCode ^
         approved.hashCode ^
         restaurantId.hashCode ^
+    subCategoryId.hashCode ^
         isActive.hashCode; // Include isActive in hashCode
   }
 }

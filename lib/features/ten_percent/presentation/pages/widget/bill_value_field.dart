@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/abstract/main_text_form_field.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/validator.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
@@ -7,7 +9,7 @@ class BillValueTextFormField extends MainTextFormField {
   @override
   final String? Function(String?)? validator;
 
-  BillValueTextFormField({
+  BillValueTextFormField( {
     super.key,
     this.validator,
     super.currentFocusNode,
@@ -19,10 +21,10 @@ class BillValueTextFormField extends MainTextFormField {
     super.hintColor,
     super.fillColor,
   }) : super(
-          validator: validator ?? Validator().validateEmptyValue,
-          hintText: 'Invoice value',
-          keyboardType: TextInputType.number,
-          textCapitalization: TextCapitalization.words,
-          borderColor: AppColors.GREY_DARK_COLOR,
-        );
+    validator: validator??Validator().validateEmptyValue,
+    hintText: LocaleKeys.billValue.localize,
+    keyboardType: TextInputType.number,
+    textCapitalization: TextCapitalization.words,
+    borderColor: AppColors.GREY_DARK_COLOR,
+  );
 }

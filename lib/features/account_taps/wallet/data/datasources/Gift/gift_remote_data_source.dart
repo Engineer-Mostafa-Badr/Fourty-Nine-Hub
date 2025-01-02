@@ -6,6 +6,8 @@ import '../../../../../../core/error/failure.dart';
 
 abstract class GiftRemoteDataSource {
   Future<Either<Failure, GiftModelModel>> fetchGiftWallet();
+  Future<Either<Failure, bool>> requestWithdrawCompetition(String id);
+  Future<Either<Failure, bool>> requestWithdrawWheel();
 }
 
 class GiftRemoteDataSourceImpl implements GiftRemoteDataSource {
@@ -18,5 +20,25 @@ class GiftRemoteDataSourceImpl implements GiftRemoteDataSource {
     final response = await _apiConsumer.get(EndPoints.getGift);
     return response.fold((failure) => Left(failure),
         (response) => Right(GiftModelModel.fromJson(response['data'])));
+  }
+
+  @override
+  Future<Either<Failure, bool>> requestWithdrawCompetition(String id) async {
+    final response = await _apiConsumer.post(EndPoints.requestWithdrawCompetition(id));
+
+    return response.fold(
+          (failure) => Left(failure),
+          (response) => Right(response['status']),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> requestWithdrawWheel() async {
+    final response = await _apiConsumer.post(EndPoints.requestWithdrawWheel);
+
+    return response.fold(
+          (failure) => Left(failure),
+          (response) => Right(response['status']),
+    );
   }
 }

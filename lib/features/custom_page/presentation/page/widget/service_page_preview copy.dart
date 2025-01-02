@@ -167,6 +167,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
             const Sizer(),
             _pickMeAndComeWithUWidget(),
             const Sizer(),
+            _buildTenPercentWidget(),
+            const Sizer(),
             _buildMainCategoriesViews(),
             const Sizer(),
             //main cats
@@ -587,6 +589,108 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildTenPercentWidget() {
+    return SizedBox(
+      height: kToolbarHeight * .9.h,
+      width: double.infinity,
+      child: Row(
+        children: [
+          Expanded(
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: AppButton(
+                      color: AppColors.AUTH_CONTAINER_COLOR,
+                      label: LocaleKeys.billCashback.localize,
+                      style: Styles.mediumText(
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      icon: Icons.star,
+                      iconSize: 50.h,
+                      onPressed: () {
+                        HandleCashback.setCount('tenPercentCount',context);
+                        context.push(Routes.TenPercent);
+                      }),
+                ),
+                Positioned(
+                    bottom: 5,
+                    left: 5,
+                    child: Icon(
+                      Icons.star,
+                      size: 20.h,
+                      color: AppColors.ACCENT_COLOR,
+                    )),
+                Positioned(
+                    top: 0,
+                    left: 10,
+                    child: Icon(
+                      Icons.star,
+                      size: 20.h,
+                      color: AppColors.ACCENT_COLOR,
+                    )),
+                Positioned(
+                    top: 15,
+                    right: 10,
+                    child: Icon(
+                      Icons.star,
+                      size: 20.h,
+                      color: AppColors.ACCENT_COLOR,
+                    ))
+              ],
+            ),
+          ),
+          Sizer(),
+          Expanded(
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: AppButton(
+                      color: AppColors.AUTH_CONTAINER_COLOR,
+                      label: LocaleKeys.marriage.localize,
+                      style: Styles.mediumText(
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      icon: Icons.star,
+                      iconSize: 50.h,
+                      onPressed: () {
+                        //HandleCashback.setCount('tenPercentCount',context);
+                        context.push(Routes.Married);
+                      }),
+                ),
+                Positioned(
+                    bottom: 5,
+                    left: 5,
+                    child: Icon(
+                      Icons.star,
+                      size: 20.h,
+                      color: AppColors.ACCENT_COLOR,
+                    )),
+                Positioned(
+                    top: 0,
+                    left: 10,
+                    child: Icon(
+                      Icons.star,
+                      size: 20.h,
+                      color: AppColors.ACCENT_COLOR,
+                    )),
+                Positioned(
+                    top: 15,
+                    right: 10,
+                    child: Icon(
+                      Icons.star,
+                      size: 20.h,
+                      color: AppColors.ACCENT_COLOR,
+                    ))
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

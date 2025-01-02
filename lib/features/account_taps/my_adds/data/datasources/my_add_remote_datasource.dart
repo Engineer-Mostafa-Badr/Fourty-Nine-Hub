@@ -108,7 +108,7 @@ class MyAdsRemoteDatasourceImpl implements MyAdsRemoteDatasource {
     final response = await _apiConsumer.get(EndPoints.getMyPickMeTrips);
     return response.fold(
         (l) => Left(l),
-        (data) => Right((data['data'] as List)
+        (data) => Right((data['data']['requests'] as List)
             .map((e) => TripAndRequestModel.fromJson(e))
             .toList()));
   }

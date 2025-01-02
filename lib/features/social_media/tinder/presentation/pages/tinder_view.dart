@@ -11,7 +11,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/subcategory_card_tinder.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/tinder_card_stack.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -62,10 +61,10 @@ class _TinderScreenState extends State<TinderScreen> {
     final tinderCubit = context.read<TinderViewCubit>();
     final user = context.read<UserCubit>();
     tinderCubit
-      ..fetchUserData(user.state.data?.gender ?? 'female')
-      ..fetchSubCategoryData()
-      ..fetchFavorites()
-      ..fetchMainCategoryById(context, '62c8b5b09332225799fe335e');
+      ..fetchUserData(user.state.data?.gender ??'female')
+      // ..fetchSubCategoryData()
+      ..fetchFavorites();
+      // ..fetchMainCategoryById(context,'62c8b5b09332225799fe335e');
   }
 
   @override
@@ -76,7 +75,7 @@ class _TinderScreenState extends State<TinderScreen> {
       ),
       body: BlocBuilder<TinderViewCubit, TinderViewState>(
         builder: (context, state) {
-          if (state.status == TinderStates.success) {
+          if(state.status ==TinderStates.success) {
             return _buildLoggedInContent(context, state);
           }
           return const Center(child: CircularProgressIndicator());
@@ -96,7 +95,7 @@ class _TinderScreenState extends State<TinderScreen> {
               const TinderCardStack()
             else
               SizedBox(
-                height: 0.55.sh,
+                height: 1.sh,
                 child: Shimmer.fromColors(
                   baseColor: Colors.grey[100]!,
                   highlightColor: Colors.white24,
@@ -109,50 +108,47 @@ class _TinderScreenState extends State<TinderScreen> {
                   ),
                 ),
               ),
-            if (state.userData0 != null && state.userData0!.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 2),
-                child: Divider(
-                  color: Colors.grey,
-                  height: 1.h,
-                  thickness: 1.h,
-                ),
-              ),
-            BlocBuilder<TinderViewCubit, TinderViewState>(
-              builder: (context, state) {
-                final controller = context.read<TinderViewCubit>();
-                if (state.subCategoryData != null &&
-                    state.mainCategoryResponse != null) {
-                  return Padding(
-                    padding: EdgeInsets.all(8.0.w),
-                    child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: state.subCategoryData?.length ?? 0,
-                      controller: _scrollController,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        childAspectRatio: 1,
-                      ),
-                      itemBuilder: (context, index) => SubcategoryCardTinder(
-                        mainCategory: state.mainCategoryResponse!,
-                        item: state.subCategoryData![index],
-                        onFav: () async {
-                          var result =
-                              await controller.toggleSubCategoryToFavorites(
-                            state.subCategoryData![index].id,
-                          );
-                          return result;
-                        },
-                      ),
-                    ),
-                  );
-                }
-                return const Center(child: CircularProgressIndicator());
-              },
-            ),
-            SizedBox(height: 50.h),
+            // if (state.userData0 != null && state.userData0!.isNotEmpty)
+            //   Padding(
+            //     padding: const EdgeInsets.only(top: 8.0, bottom: 2),
+            //     child: Divider(
+            //       color: Colors.grey,
+            //       height: 1.h,
+            //       thickness: 1.h,
+            //     ),
+            //   ),
+            // BlocBuilder<TinderViewCubit, TinderViewState>(
+            //   builder: (context, state) {
+            //     final controller = context.read<TinderViewCubit>();
+            //     if(state.subCategoryData !=null && state.mainCategoryResponse !=null) {
+            //       return Padding(
+            //       padding: EdgeInsets.all(8.0.w),
+            //       child: GridView.builder(
+            //         physics: const NeverScrollableScrollPhysics(),
+            //         shrinkWrap: true,
+            //         itemCount: state.subCategoryData?.length ?? 0,
+            //         controller: _scrollController,
+            //         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //           crossAxisCount: 3,
+            //           childAspectRatio: 1,
+            //         ),
+            //         itemBuilder: (context, index) => SubcategoryCardTinder(
+            //           mainCategory: state.mainCategoryResponse!,
+            //           item: state.subCategoryData![index],
+            //           onFav: () async {
+            //             var result = await controller.toggleSubCategoryToFavorites(
+            //               state.subCategoryData![index].id,
+            //             );
+            //             return result;
+            //           },
+            //         ),
+            //       ),
+            //     );
+            //     }
+            //     return const Center(child: CircularProgressIndicator());
+            //   },
+            // ),
+            // SizedBox(height: 50.h),
           ],
         ),
       ),

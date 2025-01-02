@@ -108,7 +108,6 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                 WalletCardWidget(
                   balance: state.wallet?.realAmount?.toStringAsFixed(2) ?? '',
                   type: WalletTypes.mainWallet,
-                  currency: state.wallet?.currency ?? '',
                 ),
                 const Sizer(),
                 Padding(

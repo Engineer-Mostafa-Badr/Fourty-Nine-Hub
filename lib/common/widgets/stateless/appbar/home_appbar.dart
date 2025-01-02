@@ -174,8 +174,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                 HandleCashback.setCount('chatCount', context);
                 context.push(Routes.CHAT, extra: ChatsViewParams());
               },
-              child: SvgPicture.asset(
-                Assets.message,
+              child: Image.asset(
+                Assets.newChat,
+                color: AppColors.PRIMARY_COLOR,
                 height: 30.h,
               ),
             ),

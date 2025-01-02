@@ -8,6 +8,9 @@ class CompetitionsWalletModel extends CompetitionsWalletEntity {
     required super.nameAr,
     required super.nameEn,
     required super.isWinner,
+    required super.descriptionGiftWalletEn,
+    required super.descriptionGiftWalletAr,
+    required super.amount,
   });
 
   factory CompetitionsWalletModel.fromJson(Map<String, dynamic> json) {
@@ -23,10 +26,17 @@ class CompetitionsWalletModel extends CompetitionsWalletEntity {
       nameEn: json['competition_id'] != null
           ? json['competition_id']['nameEn'] ?? ''
           : '',
+      descriptionGiftWalletEn: json['competition_id'] != null
+          ? json['competition_id']['descriptionGiftWalletEn'] ?? ''
+          : '',
+      descriptionGiftWalletAr: json['competition_id'] != null
+          ? json['competition_id']['descriptionGiftWalletAr'] ?? ''
+          : '',
       maxRequests: json['competition_id'] != null
           ? json['competition_id']['maxRequests'] ?? 0
           : 0,
       countOfRequest: json['countOfRequest'] ?? 0,
+      amount: json['amount'] ?? 0,
       isWinner: json['isWinner'] ?? false,
     );
   }

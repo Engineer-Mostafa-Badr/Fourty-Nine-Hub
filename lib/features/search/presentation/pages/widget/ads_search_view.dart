@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -30,6 +31,9 @@ class _AdsSearchViewState extends State<AdsSearchView> {
             var controllerAdvertise = context.read<AdvertisementCubit>();
             return BlocBuilder<SearchCubit, SearchState>(
               builder: (context, state) {
+                // if(state.status ==SearchStates.loading){
+                //   return const Center(child: CircularProgressIndicator());
+                // }
                 final controller = context.read<SearchCubit>();
                 if (controller.searchController.text.isNotEmpty) {
                   return PagedListView<int, AdsSearchEntity>(

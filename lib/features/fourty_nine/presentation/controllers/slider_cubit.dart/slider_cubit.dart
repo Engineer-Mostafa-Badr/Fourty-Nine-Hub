@@ -15,12 +15,15 @@ class SliderCubit extends Cubit<BasicState<List<SliderItemEntity>>> {
         );
 
   void loadData() async {
+    print("objectLSADSALD:AS");
     emit(state.copyWith(status: StateStatus.loading));
     final result = await _getSliderItemsUseCase.call(const NoParams());
+    print("objectLSADSALD:AS");
 
     emit(
       result.fold(
         (failure) {
+          print("objectLSADSALD:AS");
           print('there is an error ${failure.toString()}');
           return state.copyWith(
             failure: failure,
@@ -28,6 +31,7 @@ class SliderCubit extends Cubit<BasicState<List<SliderItemEntity>>> {
           );
         },
         (data) {
+          print("objectLSADSALD:AS");
           print('data is $data');
           return state.copyWith(
             status: StateStatus.success,

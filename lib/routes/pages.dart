@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/m
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/pages/privacy_view.dart';
 import 'package:fourtyninehub/features/account_taps/share_app/presentation/pages/share_the_app.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_history_entity.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/balance_wallet_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
@@ -99,6 +100,7 @@ import 'package:fourtyninehub/features/installment_feature/installment_details/p
 import 'package:fourtyninehub/features/installment_feature/installment_list/presentation/cubit/installment_list_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
+import 'package:fourtyninehub/features/married/presentation/pages/married_view.dart';
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.dart';
@@ -808,7 +810,7 @@ class AppPages {
           GoRoute(
             path: Paths.BALANCE,
             name: Routes.BALANCE,
-            builder: (context, state) => BlocProvider<WalletCubit>(
+            builder: (context, state) => BlocProvider<BalanceCubit>(
               create: (_) => serviceLocator(),
               child: const BalanceWalletView(),
             ),
@@ -1078,6 +1080,10 @@ class AppPages {
                       ),
                     ]),
               ]),
+          GoRoute(
+                  path: Paths.Married,
+                  name: Routes.Married,
+                  builder: (context, state) => const MarriedView()),
           // MazadatView
           GoRoute(
               path: Paths.MAZADAT,
@@ -2217,6 +2223,20 @@ class AppPages {
                     serviceLocator(),
                   ),
                 ),
+                // car pool
+                BlocProvider<GetAllTripsCubit>(
+                  create: (context) =>
+                      GetAllTripsCubit(apiConsumer: serviceLocator()),
+                ),
+                BlocProvider<GetCurrencyCubit>(
+                  create: (context) => GetCurrencyCubit(
+                    serviceLocator(),
+                  ),
+                ),
+                BlocProvider<JoinTripCarPoolCubit>(
+                  create: (context) => JoinTripCarPoolCubit(
+                      joinTripCarpoolUsecase: serviceLocator()),
+                ),
               ],
               child: const AvailableTripsView(),
             ),
@@ -2265,7 +2285,8 @@ class AppPages {
             builder: (context, state) {
               return MultiBlocProvider(providers: [
                 BlocProvider<GetAllTripsCubit>(
-                  create: (context) => GetAllTripsCubit(),
+                  create: (context) =>
+                      GetAllTripsCubit(apiConsumer: serviceLocator()),
                 ),
                 BlocProvider<GetCurrencyCubit>(
                   create: (context) => GetCurrencyCubit(
@@ -2297,7 +2318,8 @@ class AppPages {
                       getPriceCarpoolUsecase: serviceLocator()),
                 ),
                 BlocProvider<GetAllTripsCubit>(
-                  create: (context) => GetAllTripsCubit(),
+                  create: (context) =>
+                      GetAllTripsCubit(apiConsumer: serviceLocator()),
                 ),
                 BlocProvider<CreateCarPoolCubit>(
                   create: (context) => CreateCarPoolCubit(
@@ -2308,7 +2330,8 @@ class AppPages {
                   create: (context) => MapBoxDestCubit(),
                 ),
                 BlocProvider<GetAllTripsCubit>(
-                  create: (context) => GetAllTripsCubit(),
+                  create: (context) =>
+                      GetAllTripsCubit(apiConsumer: serviceLocator()),
                 ),
                 BlocProvider<GetCurrencyCubit>(
                   create: (context) => GetCurrencyCubit(

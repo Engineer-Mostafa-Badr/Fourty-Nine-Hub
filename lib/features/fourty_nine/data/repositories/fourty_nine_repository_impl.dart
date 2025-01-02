@@ -36,6 +36,7 @@ class FourtyNineRepositoryImpl implements FourtyNineRepository {
 
   @override
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems() {
+    print("Slider Rep");
     return _fourtyNineRemoteDataSource.getSliderItems();
   }
 

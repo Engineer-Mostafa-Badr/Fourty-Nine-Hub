@@ -151,15 +151,17 @@ class _ViewAllTripJoinCardBuilderState
                   }
                 },
                 subscribeMessageOnTap: () async {
-                  if (context.read<UserCubit>().isLoggedIn) {
+                  if (await context.read<UserCubit>().isLoggedIn) {
+                    print("LOOGEDIN \n");
                     if (await _isPremuim(
                       tripJoinCardEntity,
                       tripJoinCardEntity.categoryId ?? '',
                       LocaleKeys.tripjoinPremuimSubscription.localize,
-                    )) {
-                    } else {
-                      context.push(Routes.LOGIN);
-                    }
+                    )) {}
+                  } else {
+                    print("not LOOGEDIN \n");
+
+                    context.push(Routes.LOGIN);
                   }
                 },
               );

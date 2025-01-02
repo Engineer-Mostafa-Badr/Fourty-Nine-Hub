@@ -6,12 +6,19 @@ class CacheManager {
   static const _accessTokenKey = 'accessToken';
   static const _refreshTokenKey = 'refreshToken';
   static const themeDarkKey = 'darkTheme';
+  static const activeCustomPage = 'activeCustomPage';
   // static const themeLightKey = 'lightTheme';
 
   // Save access token
   static Future<void> saveAccessToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_accessTokenKey, token);
+  }
+
+  // Save active custom page
+  static Future<void> updateActive(bool active) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(activeCustomPage, active);
   }
 
   // Save refresh token
@@ -24,6 +31,11 @@ class CacheManager {
   static Future<String?> getAccessToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_accessTokenKey);
+  }
+  // Retrieve access token
+  static Future<bool?> getActivation() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(activeCustomPage);
   }
 
   // Retrieve refresh token

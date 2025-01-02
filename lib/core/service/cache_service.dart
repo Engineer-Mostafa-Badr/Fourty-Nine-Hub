@@ -23,13 +23,13 @@ abstract class CacheService {
   Future<bool?> getUserIsLoggedIn();
   Future<void> setLogin(bool value);
 
-  Future<bool> saveUserToken(String userToken);
+  // Future<bool> saveUserToken(String userToken);
 
   Future<bool> saveTripState(String value);
   Future<String> getTripState();
   Future<void> removeTripState();
 
-  Future<String?> getUserToken();
+  // Future<String?> getUserToken();
   Future<String?> getUserId();
   Future<bool> setUserId(String userId);
 
@@ -138,17 +138,17 @@ class CacheServiceImpl implements CacheService {
     return prefs.getString(_REFRESH_TOKEN);
   }
 
-  @override
-  Future<bool> saveUserToken(String userToken) async {
-    final prefs = await SharedPreferences.getInstance();
-    return await prefs.setString(_TOKEN, userToken);
-  }
-
-  @override
-  Future<String?> getUserToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_TOKEN);
-  }
+  // @override
+  // Future<bool> saveUserToken(String userToken) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   return await prefs.setString(_TOKEN, userToken);
+  // }
+  //
+  // @override
+  // Future<String?> getUserToken() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   return prefs.getString(_TOKEN);
+  // }
 
   @override
   Future<bool> saveUserTokenExpirationDate(String userTokenExpireDate) async {
@@ -456,11 +456,11 @@ class CacheServiceImplV2 implements CacheService {
     throw UnimplementedError();
   }
 
-  @override
-  Future<bool> saveUserToken(String userToken) {
-    // TODO: implement saveUserToken
-    throw UnimplementedError();
-  }
+  // @override
+  // Future<bool> saveUserToken(String userToken) {
+  //   // TODO: implement saveUserToken
+  //   throw UnimplementedError();
+  // }
 
   @override
   Future<bool> saveUserTokenExpirationDate(String userToken) {

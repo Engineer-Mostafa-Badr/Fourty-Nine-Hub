@@ -14,7 +14,6 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_e
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
-import '../../../../../res/assets/jsons.dart';
 import '../../../domain/entities/wallet_home_entity.dart';
 import '../../models/slider_item_model.dart';
 import '../../models/wallet_home_model.dart';
@@ -98,10 +97,11 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
 
   @override
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems() async {
-    final result = await _jsonParser.get(Jsons.sliderItems);
+    print("Slider data source");
+    final result = await _apiConsumer.get(EndPoints.sliderItems);
     return result.fold(
       (failure) => Left(failure),
-      (response) => Right((response['data']['items'] as List)
+      (response) => Right((response['data'] as List)
           .map((e) => SliderItemModel.fromJson(e))
           .toList()),
     );

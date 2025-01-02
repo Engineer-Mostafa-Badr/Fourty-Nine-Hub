@@ -36,7 +36,9 @@ class _AvailableRoutesBuilderState extends State<AvailableRoutesBuilder> {
           bool hasMatchingTrips = false;
 
           return Padding(
-            padding: EdgeInsets.symmetric(vertical: 20.h),
+            padding: EdgeInsets.only(
+              top: 50.h,
+            ),
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: state.trips.length,
@@ -91,7 +93,7 @@ class _AvailableRoutesBuilderState extends State<AvailableRoutesBuilder> {
             ),
           );
         } else if (state is GetAllTripsFailure) {
-          return const Center(child: Text("there is no trips. try again !"));
+          return Center(child: Text(state.errorMessage));
         } else {
           return const SizedBox();
         }
@@ -161,8 +163,8 @@ class _AvailableRoutesBottomSheetState
                       setState(() {});
                     },
                     activeColor: AppColors.PRIMARY_COLOR,
-                    trackColor:
-                        const WidgetStatePropertyAll(AppColors.SECONDARY_COLOR),
+                    trackColor: const MaterialStatePropertyAll(
+                        AppColors.SECONDARY_COLOR),
                     inactiveThumbColor: Colors.grey,
                   ),
                 ),
@@ -186,8 +188,8 @@ class _AvailableRoutesBottomSheetState
                       setState(() {});
                     },
                     activeColor: AppColors.PRIMARY_COLOR,
-                    trackColor:
-                        const WidgetStatePropertyAll(AppColors.SECONDARY_COLOR),
+                    trackColor: const MaterialStatePropertyAll(
+                        AppColors.SECONDARY_COLOR),
                     inactiveThumbColor: Colors.grey,
                   ),
                 ),
@@ -213,7 +215,7 @@ class _AvailableRoutesBottomSheetState
                           setState(() {});
                         },
                         activeColor: AppColors.PRIMARY_COLOR,
-                        trackColor: const WidgetStatePropertyAll(
+                        trackColor: const MaterialStatePropertyAll(
                             AppColors.SECONDARY_COLOR),
                         inactiveThumbColor: Colors.grey,
                       ),

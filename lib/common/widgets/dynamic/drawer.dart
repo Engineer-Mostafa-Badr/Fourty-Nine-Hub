@@ -19,7 +19,6 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
-import '../../../features/competition/data/repository/competition_repo_impl.dart';
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_cubit.dart';
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_state.dart';
 import '../../../features/competition/presentation/view/special_ads_view.dart';
@@ -263,105 +262,117 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         const Divider(
           color: Colors.grey,
         ),
-        BlocProvider(
-          create: (BuildContext context) =>
-              CompetitionCubit(serviceLocator.get<CompetitionRepoImpl>())
-                ..fetchCompetition(context),
+        BlocProvider<CompetitionCubit>(
+          create: (BuildContext context) =>serviceLocator()..fetchCompetition(),
           child: BlocBuilder<CompetitionCubit, CompetitionState>(
             builder: (BuildContext context, state) {
-              if (state is CompetitionSuccessState) {
+              if (state.status ==CompetitionStates.success) {
                 int calculateSumOfRequests() {
                   // Create a list of indices, excluding 0, 9, and 10
                   List<int> indicesToSum = List.generate(
-                          state.competitionModel.data?.length ?? 0,
+                      state.competition?.length ?? 0,
                           (index) => index)
                       .where((index) => index != 0 && index != 9 && index != 10)
                       .toList();
 
-                  // Use fold to sum the values, handling null values with ?? 0
-                  return indicesToSum.fold(0, (sum, index) {
-                    return sum +
-                        (state.competitionModel.data?[index].countOfRequest ??
-                            0);
+                  // Use fold to sum the values, ensuring all operations return an int
+                  return indicesToSum.fold<int>(0, (int sum, int index) {
+                    return sum + (state.competition?[index].countOfRequest ?? 0).toInt();
                   });
                 }
 
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  // Evenly distribute space
+
+                return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  // Align items at the start
                   children: [
-                    state.competitionModel.data![10].competitionId?.nameEn !=
-                            null
-                        ? counterItem(
-                            icon: Icons.ads_click,
-                            label: LocaleKeys.specialAds.localize,
-                            value:
-                                '${state.competitionModel.data![10].countOfRequest}',
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SpecialAdsView()),
-                              );
-                            },
-                            context: context,
-                          )
-                        : const SizedBox.shrink(),
-                    state.competitionModel.data![0].competitionId?.nameEn !=
-                            null
-                        ? counterItem(
-                            icon: Icons.person_add,
-                            label: LocaleKeys.friends.localize,
-                            value:
-                                '${state.competitionModel.data![0].countOfRequest}',
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SpecialAdsView()),
-                              );
-                            },
-                            context: context,
-                          )
-                        : const SizedBox.shrink(),
-                    state.competitionModel.data![9].competitionId?.nameEn !=
-                            null
-                        ? counterItem(
-                            icon: FontAwesomeIcons.car,
-                            label: LocaleKeys.ride.localize,
-                            value:
-                                '${state.competitionModel.data![9].countOfRequest}',
-                            context: context,
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SpecialAdsView()),
-                              );
-                            },
-                          )
-                        : const SizedBox.shrink(),
-                    state.competitionModel.data != null
-                        ? counterItem(
-                            icon: Icons.more_horiz,
-                            label: LocaleKeys.more.localize,
-                            value: '${calculateSumOfRequests()}',
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SpecialAdsView()),
-                              );
-                            },
-                            context: context,
-                          )
-                        : const SizedBox.shrink(),
+                    Padding(
+                      padding:  EdgeInsets.symmetric(
+                        vertical: 10.h,
+                        horizontal: 20.w
+                      ),
+                      child: Text(
+                        LocaleKeys.competitions.localize,
+                        style: Styles.mediumText(fontWeight: FontWeight.w500,),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      // Evenly distribute space
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      // Align items at the start
+                      children: [
+                        state.competition?[10].nameEn !=
+                                null
+                            ? counterItem(
+                                icon: Icons.ads_click,
+                                label: LocaleKeys.specialAds.localize,
+                                value:
+                                    '${state.competition?[10].countOfRequest}',
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SpecialAdsView()),
+                                  );
+                                },
+                                context: context,
+                              )
+                            : const SizedBox.shrink(),
+                        state.competition?[0].nameEn !=
+                                null
+                            ? counterItem(
+                                icon: Icons.person_add,
+                                label: LocaleKeys.friends.localize,
+                                value:
+                                    '${state.competition?[0].countOfRequest}',
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SpecialAdsView()),
+                                  );
+                                },
+                                context: context,
+                              )
+                            : const SizedBox.shrink(),
+                        state.competition?[9].nameEn !=
+                                null
+                            ? counterItem(
+                                icon: FontAwesomeIcons.car,
+                                label: LocaleKeys.ride.localize,
+                                value:
+                                    '${state.competition?[9].countOfRequest}',
+                                context: context,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SpecialAdsView()),
+                                  );
+                                },
+                              )
+                            : const SizedBox.shrink(),
+                        state.competition != null
+                            ? counterItem(
+                                icon: Icons.more_horiz,
+                                label: LocaleKeys.more.localize,
+                                value: '${calculateSumOfRequests()}',
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SpecialAdsView()),
+                                  );
+                                },
+                                context: context,
+                              )
+                            : const SizedBox.shrink(),
+                      ],
+                    ),
                   ],
                 );
               }

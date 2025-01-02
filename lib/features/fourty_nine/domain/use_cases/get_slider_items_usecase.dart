@@ -14,6 +14,7 @@ class GetSliderItemsUseCase extends UseCase<List<SliderItemEntity>, NoParams> {
   Future<Either<Failure, List<SliderItemEntity>>> call(
     NoParams params,
   ) {
+    print("Slider UseCase");
     return _fourtyNineRepository.getSliderItems();
   }
 }

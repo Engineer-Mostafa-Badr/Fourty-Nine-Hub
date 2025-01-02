@@ -17,6 +17,13 @@ class UpdateChatUseCase extends UseCase<bool, UpdateChatParams> {
 class UpdateChatParams {
   final String chatId;
   final bool isTimerActive;
+  final bool isLocked;
+  final bool updateLockedChat;
 
-  UpdateChatParams({required this.chatId, required this.isTimerActive});
+  UpdateChatParams({
+    required this.chatId,
+    required this.isTimerActive,
+    this.isLocked = false,
+    this.updateLockedChat = false,
+  });
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/carousel_slider.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,7 +16,7 @@ class AnnounceWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SliderCubit, BasicState<List<SliderItemEntity>>>(
         builder: (context, state) {
-      if (state.data?.isEmpty ?? true) {
+      if (state.data?.isEmpty ?? false) {
         // print('data is empty');
         return const SizedBox();
       } else {
@@ -23,14 +24,14 @@ class AnnounceWidget extends StatelessWidget {
             height: 200.h,
             autoPlay: true,
             widgets: state.data?.map((e) {
-                  return _buildAnnounceItem(item: e);
+                  return _buildAnnounceItem(item: e, context: context);
                 }).toList() ??
                 []);
       }
     });
   }
 
-  Widget _buildAnnounceItem({required SliderItemEntity item}) {
+  Widget _buildAnnounceItem({required SliderItemEntity item,required BuildContext context}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: ClipRRect(
@@ -63,12 +64,12 @@ class AnnounceWidget extends StatelessWidget {
                       style: Styles.headerText(
                           fontWeight: FontWeight.bold, color: Colors.white),
                       textAlign: TextAlign.center,
-                      text: item.title),
+                      text: context.isArabic?item.titleAr:item.titleEn),
                   Label(
                       style: Styles.smallText(
                           fontWeight: FontWeight.bold, color: Colors.white),
                       textAlign: TextAlign.center,
-                      text: item.subTitle),
+                      text: context.isArabic?item.subTitleAr:item.subTitleEn),
                 ],
               ),
             )),

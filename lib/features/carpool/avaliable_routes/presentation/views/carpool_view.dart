@@ -26,7 +26,7 @@ class CarPoolView extends StatelessWidget {
           ),
         ),
         body: BlocProvider(
-          create: (context) => GetAllTripsCubit(),
+          create: (context) => GetAllTripsCubit(apiConsumer: serviceLocator()),
           child: BlocProvider(
             create: (context) => GetAvailableTripsForDriversCubit(),
             child: BlocProvider(

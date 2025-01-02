@@ -13,207 +13,214 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Ba
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_states.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/wallet_card_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
-
-import '../../../../../common/models/public/pagination_params.dart';
-import '../../../../../common/widgets/stateful/dynamic/pagination_view.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/style/styles.dart';
-import '../../domain/entities/balance/balance_history_entity.dart';
 import '../widgets/wallet_history_card.dart';
 
-class BalanceWalletView extends StatelessWidget {
+class BalanceWalletView extends StatefulWidget {
   const BalanceWalletView({super.key});
 
+  @override
+  State<BalanceWalletView> createState() => _BalanceWalletViewState();
+}
+
+class _BalanceWalletViewState extends State<BalanceWalletView> {
+  bool showMore = false;
+
+  late ScrollController _scrollController;
+  late BalanceCubit _cubit;
+  @override
+  void initState() {
+    super.initState();
+    _cubit = context.read<BalanceCubit>();
+    _scrollController = ScrollController()..addListener(_onScroll);
+    _cubit.loadData();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      _cubit.fetchBalancetHistory();
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: BackAppBar(
           label: LocaleKeys.balance.localize,
         ),
-        body: BlocProvider<BalanceCubit>(
-          create: (_) => serviceLocator()..loadData(),
-          child: BlocConsumer<BalanceCubit, BalanceState>(
-            listener: (BuildContext context, BalanceState state) {
-              if (state.status == BalanceStates.initial) {
-                showSuccessMessage(
-                    context, LocaleKeys.requestWithdrawal.localize);
-              }
-              if (state.status == BalanceStates.errorRequest) {
-                showErrorMessage(
+        body: BlocConsumer<BalanceCubit, BalanceState>(
+          listener: (BuildContext context, BalanceState state) {
+            if (state.status == BalanceStates.initial) {
+              showSuccessMessage(context, LocaleKeys.requestWithdrawal.localize);
+            }
+            if (state.status == BalanceStates.errorRequest) {
+              showErrorMessage(
+                context,
+                getFailureMessage(
+                  state.failure!,
                   context,
-                  getFailureMessage(
-                    state.failure!,
-                    context,
-                  ),
-                );
-              }
-              // if (state.status == BalanceStates.successTen) {
-              //   showSuccessMessage(
-              //       context, 'Transfer ten_years balance done to gift wallet');
-              // }
-            },
-            builder: (context, state) {
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      WalletCardWidget(
-                        balance: '${state.balance?.balance ?? ''}',
-                        target: 1002,
-                        type: WalletTypes.balance,
-                        currency: state.balance?.currency ?? '',
-                      ),
-                      const Sizer(),
-                      Padding(
-                        padding: EdgeInsets.only(right: 5.w),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.info_outline,
-                              color: Colors.grey,
-                            ),
-                            const Sizer(),
-                            Expanded(
-                              child: Label(
-                                text:
-                                    '${LocaleKeys.minimum.localize}1002 ${LocaleKeys.transaction.localize}',
-                                style: Styles.mediumText(color: Colors.grey),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      //  state.balance?.openBalance == true && state.balance!.balance >=1002
-                      if (state.balance != null)
-                        state.balance!.balance >= 1002
-                            ? AppButton(
-                                backColor: AppColors.SECONDARY_COLOR,
-                                color: AppColors.AUTH_CONTAINER_COLOR,
-                                label: LocaleKeys.requestWithdraw.localize,
-                                onPressed: () {
-                                  context
-                                      .read<BalanceCubit>()
-                                      .requestWithdrawBalance();
-                                  //Your request withdrawal sent successfully waiting for administration approval
-                                },
-                                margin: 10,
-                              )
-                            : AppButton(
-                                backColor: Colors.red.withOpacity(.5),
-                                label: LocaleKeys.requestWithdraw.localize,
-                                onPressed: () {},
-                                margin: 10,
-                              ),
-                      // if (state.balance?.openBalance == true && state.withdraw?.data == false )
-                      //   Label(text: LocaleKeys.checkRequest.localize,color:AppColors.SECONDARY_COLOR,),
-
-                      _buildWalletActionItem(
-                          label:
-                              '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',
-                          subTitle:
-                              '${state.balance?.fiveYears ?? ''} . ${state.balance?.fiveYearsLeft ?? ''} ${LocaleKeys.yearsLast.localize}',
-                          ontap: state.balance?.fiveYearsComplete == true
-                              ? () {}
-                              : state.balance?.fiveYearsTransfer == true
-                                  ? () {
-                                      context
-                                          .read<BalanceCubit>()
-                                          .transferFiveBalance();
-                                    }
-                                  : () {},
-                          color: state.balance?.fiveYearsComplete == true
-                              ? Theme.of(context).primaryColor
-                              : state.balance?.fiveYearsTransfer == true
-                                  ? AppColors.SECONDARY_COLOR
-                                  : AppColors.SECONDARY_COLOR.withOpacity(.5),
-                          transfer: state.balance?.fiveYearsComplete == true
-                              ? LocaleKeys.complete.localize
-                              : LocaleKeys.transfer.localize,
-                          textColor: Theme.of(context).scaffoldBackgroundColor),
-                      _buildWalletActionItem(
-                          label:
-                              '${LocaleKeys.gift.localize} / 10 ${LocaleKeys.years.localize}',
-                          subTitle:
-                              '${state.balance?.tenYears ?? ''} . ${state.balance?.tenYearsLeft ?? ''} ${LocaleKeys.yearsLast.localize}',
-                          ontap: state.balance?.tenYearsTransfer == true
-                              ? () {}
-                              : state.balance?.tenYearsTransfer == true
-                                  ? () {
-                                      context
-                                          .read<BalanceCubit>()
-                                          .transferFiveBalance();
-                                    }
-                                  : () {},
-                          color: state.balance?.tenYearsComplete == true
-                              ? Theme.of(context).primaryColor
-                              : state.balance?.tenYearsTransfer == true
-                                  ? AppColors.SECONDARY_COLOR
-                                  : AppColors.SECONDARY_COLOR.withOpacity(.5),
-                          transfer: state.balance?.tenYearsComplete == true
-                              ? LocaleKeys.complete.localize
-                              : LocaleKeys.transfer.localize,
-                          textColor: state.balance?.tenYearsComplete == true
-                              ? Theme.of(context).scaffoldBackgroundColor
-                              : AppColors.AUTH_CONTAINER_COLOR),
-                      const Sizer(),
-                      Label(
-                        text: LocaleKeys.history.localize,
-                        style: Styles.headerText(),
-                      ),
-                      PaginationView<BalanceHistoryEntity>(
-                        loadingWidget: const SizedBox.shrink(),
-                        build: (ScrollController scrollController,
-                            List<BalanceHistoryEntity> data) {
-                          return data.isNotEmpty
-                              ? ListView.separated(
-                                  controller: scrollController,
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    return WalletHistoryCard(
-                                        title:
-                                            '${data[index].transactionAmount}',
-                                        subTitle: formatDateTime(
-                                            data[index].createdAt, context),
-                                        onTap: () {},
-                                        //amount: item.amount,
-                                        icon: FontAwesomeIcons.check);
-                                  },
-                                  separatorBuilder: (context, index) {
-                                    return const SizedBox();
-                                  },
-                                  itemCount: data.length)
-                              : Center(
-                                  child: Label(
-                                      text: LocaleKeys
-                                          .noHistoryAvailable.localize));
-                        },
-                        fetchData: (PaginationParams paginationParams) {
-                          return context
-                              .read<BalanceCubit>()
-                              .fetchBalanceHistory(
-                                  paginationParams: paginationParams);
-                        },
-                      )
-                    ],
-                  ),
                 ),
               );
-            },
-          ),
+            }
+            if (state.status == BalanceStates.successTen) {
+              showSuccessMessage(
+                  context, LocaleKeys.transferTenYears.localize);
+            }
+            if (state.status == BalanceStates.successFive) {
+              showSuccessMessage(
+                  context, LocaleKeys.transferFiveYears.localize);
+            }
+          },
+          builder: (context, state) {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    WalletCardWidget(
+                      balance: '${state.balance?.balance ?? ''}',
+                      target: 1002,
+                      type: WalletTypes.balance,
+                    ),
+                    const Sizer(),
+                    Padding(
+                      padding: EdgeInsets.only(right: 5.w),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.info_outline,
+                            color: Colors.grey,
+                          ),
+                          const Sizer(),
+                          Expanded(
+                            child: Label(
+                              text: '${LocaleKeys.minimum.localize}1002 ${LocaleKeys.transaction.localize}',
+                              style: Styles.mediumText(color: Colors.grey),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                  //  state.balance?.openBalance == true && state.balance!.balance >=1002
+                  if(state.balance!=null)
+                     state.balance!.balance >=1002
+                        ? AppButton(
+                            backColor: AppColors.SECONDARY_COLOR,
+                            color: AppColors.AUTH_CONTAINER_COLOR,
+                            label: LocaleKeys.requestWithdraw.localize,
+                            onPressed: () {
+                              context.read<BalanceCubit>().requestWithdrawBalance();
+                            },
+                            margin: 10,
+                          )
+                        : AppButton(
+                            backColor: Colors.red.withOpacity(.5),
+                            label: LocaleKeys.requestWithdraw.localize,
+                            onPressed: () {},
+                            margin: 10,
+                          ),
+                    // if (state.balance?.openBalance == true && state.withdraw?.data == false )
+                    //   Label(text: LocaleKeys.checkRequest.localize,color:AppColors.SECONDARY_COLOR,),
+
+                    _buildWalletActionItem(
+                        label: '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',
+                        subTitle:
+                            '${state.balance?.fiveYears ?? ''}  ${state.balance?.fiveYearsLeft ?? ''} ${LocaleKeys.yearsLast.localize}',
+                        ontap: state.balance?.fiveYearsComplete == true
+                            ? () {}
+                            : state.balance?.fiveYearsTransfer == true
+
+                                ? () {
+                                    context.read<BalanceCubit>().transferFiveBalance();
+                                  }
+                                : () {},
+                        color: state.balance?.fiveYearsComplete == true
+                            ? Theme.of(context).primaryColor
+                            : state.balance?.fiveYearsTransfer == true
+                                ? AppColors.SECONDARY_COLOR
+                                : AppColors.SECONDARY_COLOR.withOpacity(.5),
+                        transfer: state.balance?.fiveYearsComplete == true
+                            ? LocaleKeys.complete.localize
+                            : LocaleKeys.transfer.localize,
+                        textColor: state.balance?.fiveYearsComplete == true
+                            ? Theme.of(context).scaffoldBackgroundColor
+                            : AppColors.AUTH_CONTAINER_COLOR),
+                    _buildWalletActionItem(
+                        label: '${LocaleKeys.gift.localize} / 10 ${LocaleKeys.years.localize}',
+                        subTitle:
+                            '${state.balance?.tenYears ?? ''}  ${state.balance?.tenYearsLeft ?? ''} ${LocaleKeys.yearsLast.localize}',
+                        ontap: state.balance?.tenYearsComplete == true
+                            ? () {}
+                            : state.balance?.tenYearsTransfer == true
+                                ? () {
+                                    context.read<BalanceCubit>().transferTenBalance();
+                                  }
+                                : () {},
+                        color: state.balance?.tenYearsComplete == true
+                            ? Theme.of(context).primaryColor
+                            : state.balance?.tenYearsTransfer == true
+                                ? AppColors.SECONDARY_COLOR
+                                : AppColors.SECONDARY_COLOR.withOpacity(.5),
+                        transfer: state.balance?.tenYearsComplete == true
+                            ? LocaleKeys.complete.localize
+                            : LocaleKeys.transfer.localize,
+                        textColor: state.balance?.tenYearsComplete == true
+                            ? Theme.of(context).scaffoldBackgroundColor
+                            : AppColors.AUTH_CONTAINER_COLOR),
+                    const Sizer(),
+                    Label(
+                      text: LocaleKeys.history.localize,
+                      style: Styles.headerText(),
+                    ),
+                    state.status == BalanceStates.loading
+                        ? const Center(child: CircularProgressIndicator())
+                        : SizedBox(
+                      height: 400,
+                      child: ListView.separated(
+                        controller: _scrollController,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          if (index == _cubit.history.length) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          final item = state.history![index];
+                          return WalletHistoryCard(
+                            title: '${item.transactionAmount}',
+                            subTitle: formatDateTime(item.createdAt, context),
+                            icon: FontAwesomeIcons.check,
+                          );
+                        },
+                        separatorBuilder: (context, index) => const Divider(
+                          color: AppColors.GREY_NORMAL_COLOR,
+                        ),
+                        itemCount: state.history?.length ?? 0,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
         ));
   }
 
   Widget _buildWalletActionItem({
     required String label,
     required String subTitle,
-    required Function ontap,
+    required Function() ontap,
     required Color color,
     Color? textColor,
     required String transfer,
@@ -221,22 +228,16 @@ class BalanceWalletView extends StatelessWidget {
     return ListTile(
       title: Label(text: label),
       subtitle: Label(text: subTitle),
-      trailing: GestureDetector(
-        onTap: () {
+      trailing: MaterialButton(
+        onPressed: () {
           ontap();
         },
-        child: MaterialButton(
-          onPressed: () {},
-          color: color,
-          //disabledColor: const Color.fromARGB(159, 255, 82, 82),
-          textColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Label(
-              text: transfer,
-              style: Styles.mediumText(color: textColor ?? Colors.white)),
+        color: color,
+        textColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
         ),
+        child: Label(text: transfer, style: Styles.mediumText(color: textColor ?? Colors.white)),
       ),
     );
   }

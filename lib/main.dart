@@ -61,7 +61,7 @@ import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'firebase_options.dart';
 import 'routes/pages.dart';
-
+bool isActivate = false;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -78,7 +78,7 @@ void main() async {
     },
   );
   // ZegoGiftManager().cache.cache(giftItemList);
-
+  isActivate= await CacheManager.getActivation()??false;
   //Admob.initialize();l
 
   SystemChrome.setPreferredOrientations([
@@ -89,9 +89,9 @@ void main() async {
   final customPageCubit = serviceLocator<CustomPageCubit>();
   await customPageCubit.fetchActivate();
 
-  final isActivated = customPageCubit.state.activate?.customPage ?? false;
+  // final isActivated =  false;
 
-  final initialRoute = isActivated ? Routes.PAGEPREVIEW : Routes.HOME;
+  final initialRoute = isActivate ? Routes.PAGEPREVIEW : Routes.HOME;
 
   AppPages.initializeRouter(initialRoute);
   runApp(

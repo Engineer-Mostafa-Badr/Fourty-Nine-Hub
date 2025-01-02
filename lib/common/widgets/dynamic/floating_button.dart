@@ -43,11 +43,11 @@ class FloatingButton extends StatelessWidget {
               },
         backgroundColor: Colors.white,
         child: icon != null
-            ? Icon(
-                icon,
-                color: AppColors.PRIMARY_COLOR,
-                size: 50.sp,
-              )
+            ? Image.asset(
+          Assets.floatImage,
+          height: 50.h,
+          width: 50.w,
+        )
             : Image.asset(
                 Assets.logo,
                 height: 50.h,
