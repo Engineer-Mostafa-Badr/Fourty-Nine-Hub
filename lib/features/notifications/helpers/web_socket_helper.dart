@@ -62,15 +62,13 @@ class WebSocketHelper {
           //     name: "Ljkdlfjsdlfkjsldkfjsldkjflskdjf");
           Future.delayed(
             const Duration(seconds: 2),
-                () {
+            () {
               player.play(AssetSource("audio/u_have_a_new_ride_ar.mp3"));
             },
           );
         }
         notificationCallback(jsonDecode(data));
-
       });
-
 
       SharedWebSocket.socket!.on('error', (data) {
         pr("error $data");

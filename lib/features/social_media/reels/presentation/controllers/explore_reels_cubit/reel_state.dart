@@ -1,13 +1,13 @@
 part of 'reel_cubit.dart';
 
-enum ReelsStates { loading, initial, success,uploadSuccess,error }
+enum ReelsStates { loading, initial, success, uploadSuccess, error }
+
 class ReelsState {
   final ReelsStates status;
   final Failure? failure;
   final bool isCreatingReply;
 
-
-   List<Reel> globalReels;
+  List<Reel> globalReels;
   final List<Reel>? reelsForFollowing;
 
   final List<Reel>? reelsForAudio;
@@ -108,51 +108,50 @@ class ReelsState {
     this.video,
   });
 
-  ReelsState copyWith({
-    Failure? failure,
-    ReelsStates? status,
-    bool? isCreatingReply,
-    bool? isCreatingReelView,
-    String? reelViewErrorMessage,
-    bool? reelViewSuccess,
-    List<Reel>? reelsForFollowing,
-    bool? reelsForFollowerIsLoading,
-    bool? reelsForFollowerHasReachedMax,
-    int? reelsForFollowerCurrentPage,
-    int? playingIndex,
-    List<CommentData>? comments,
-    //for video controller
-    bool? isInitialized,
-    bool? isPlaying,
-    bool? showPlayPauseIcon,
-    bool? isLikingComment,
-    String? likeReelCommentErrorMessage,
-    String? likeReelCommentResponseMessage,
-    ReelSaveResponse? reelSaveResponse,
-    ReelShareResponse? reelShareResponse,
-    List<Reel>? reels,
-    List<Reel>? reelsForAudio,
-    bool? isLoading,
-    bool? hasReachedMax,
-    int? currentPage,
-    bool? isLikingReel,
-    String? likeReelErrorMessage,
-    ReelLikeResponse? likeReelResponse,
-    bool? isCommenting,
-    String? commentErrorMessage,
-    AddCommentResponse? commentResponse,
-    bool? isFetchingComments,
-    String? fetchCommentsErrorMessage,
-    GetCommentsResponse? fetchedComments,
-    bool? isReplyingComment,
-    String? replyCommentErrorMessage,
-    AddCommentResponse? replyCommentResponse,
-    bool? isUploadingReel,
-    String? uploadReelErrorMessage,
-    bool? uploadReelSuccess,
-    String? selectedPrivacy,
-    List<UploadFileEntity>? video
-  }) {
+  ReelsState copyWith(
+      {Failure? failure,
+      ReelsStates? status,
+      bool? isCreatingReply,
+      bool? isCreatingReelView,
+      String? reelViewErrorMessage,
+      bool? reelViewSuccess,
+      List<Reel>? reelsForFollowing,
+      bool? reelsForFollowerIsLoading,
+      bool? reelsForFollowerHasReachedMax,
+      int? reelsForFollowerCurrentPage,
+      int? playingIndex,
+      List<CommentData>? comments,
+      //for video controller
+      bool? isInitialized,
+      bool? isPlaying,
+      bool? showPlayPauseIcon,
+      bool? isLikingComment,
+      String? likeReelCommentErrorMessage,
+      String? likeReelCommentResponseMessage,
+      ReelSaveResponse? reelSaveResponse,
+      ReelShareResponse? reelShareResponse,
+      List<Reel>? reels,
+      List<Reel>? reelsForAudio,
+      bool? isLoading,
+      bool? hasReachedMax,
+      int? currentPage,
+      bool? isLikingReel,
+      String? likeReelErrorMessage,
+      ReelLikeResponse? likeReelResponse,
+      bool? isCommenting,
+      String? commentErrorMessage,
+      AddCommentResponse? commentResponse,
+      bool? isFetchingComments,
+      String? fetchCommentsErrorMessage,
+      GetCommentsResponse? fetchedComments,
+      bool? isReplyingComment,
+      String? replyCommentErrorMessage,
+      AddCommentResponse? replyCommentResponse,
+      bool? isUploadingReel,
+      String? uploadReelErrorMessage,
+      bool? uploadReelSuccess,
+      String? selectedPrivacy,
+      List<UploadFileEntity>? video}) {
     return ReelsState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

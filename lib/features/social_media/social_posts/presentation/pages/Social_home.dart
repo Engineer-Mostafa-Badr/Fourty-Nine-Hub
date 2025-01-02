@@ -26,26 +26,24 @@ import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../widgets/posts/create_post_banner.dart';
 
-class SocialParams{
+class SocialParams {
   final String userId;
   final bool? hideAppBar;
   final int? index;
 
-  SocialParams({required this.userId, this.hideAppBar=false, this.index=0});
+  SocialParams({required this.userId, this.hideAppBar = false, this.index = 0});
 }
+
 class SocialHomeView extends StatefulWidget {
   SocialParams? params;
 
-  SocialHomeView({super.key, payload}){
-   if(payload is SocialParams){
-     params = payload;
-   }else{
-     params = SocialParams(
-       userId: '',
-       index: payload['index'],
-       hideAppBar: false
-     );
-   }
+  SocialHomeView({super.key, payload}) {
+    if (payload is SocialParams) {
+      params = payload;
+    } else {
+      params =
+          SocialParams(userId: '', index: payload['index'], hideAppBar: false);
+    }
   }
 
   @override
@@ -53,7 +51,7 @@ class SocialHomeView extends StatefulWidget {
 }
 
 class _SocialHomeViewState extends State<SocialHomeView>
-    with SingleTickerProviderStateMixin,AutomaticKeepAliveClientMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
@@ -85,9 +83,9 @@ class _SocialHomeViewState extends State<SocialHomeView>
     super.build(context);
     return DefaultTabController(
       length: 3,
-      initialIndex: widget.params?.index??0,
+      initialIndex: widget.params?.index ?? 0,
       child: Scaffold(
-          appBar: widget.params?.hideAppBar==true
+          appBar: widget.params?.hideAppBar == true
               ? null
               : HomeAppbar(
                   isWithBackArrow: true,
@@ -113,21 +111,26 @@ class _SocialHomeViewState extends State<SocialHomeView>
                     ],
                   ),
                 ),
-          drawer: widget.params?.hideAppBar==true ? null : const DrawerWidget(),
-          bottomNavigationBar:widget.params?.hideAppBar==true ? null : BottomNavigator(
-            scrollController: scrollController,
-            isScrollingDown: _isScrollingDown,
-            mainCategory: 2,
-            index: 2,
-          ),
-          floatingActionButton: _isScrollingDown || widget.params?.hideAppBar==true
+          drawer:
+              widget.params?.hideAppBar == true ? null : const DrawerWidget(),
+          bottomNavigationBar: widget.params?.hideAppBar == true
               ? null
-              : const FloatingButton(
-                  changeView: 2,
+              : BottomNavigator(
+                  scrollController: scrollController,
+                  isScrollingDown: _isScrollingDown,
+                  mainCategory: 2,
+                  index: 2,
                 ),
-          floatingActionButtonLocation: _isScrollingDown || widget.params?.hideAppBar==true
-              ? null
-              : FloatingActionButtonLocation.centerDocked,
+          floatingActionButton:
+              _isScrollingDown || widget.params?.hideAppBar == true
+                  ? null
+                  : const FloatingButton(
+                      changeView: 2,
+                    ),
+          floatingActionButtonLocation:
+              _isScrollingDown || widget.params?.hideAppBar == true
+                  ? null
+                  : FloatingActionButtonLocation.centerDocked,
           body: TabBarView(
             children: [
               BlocBuilder<UserCubit, BasicState<UserEntity>>(

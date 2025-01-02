@@ -50,16 +50,15 @@ class SharedWebSocket {
   static void disconnect() {
     if (socket != null) {
       log("Socket disconnect process started...");
-      _isConnecting = false; 
+      _isConnecting = false;
       log("Disconnecting socket...");
-      socket!.disconnect(); 
+      socket!.disconnect();
 
       log("Removing all socket listeners...");
-      socket!
-          .clearListeners(); 
+      socket!.clearListeners();
 
       log("Nullifying the socket instance...");
-      socket = null; 
+      socket = null;
 
       log("Socket disconnected successfully.");
     } else {

@@ -28,7 +28,7 @@ class _CustomPageState extends State<CustomPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar:  BackAppBar(
+      appBar: BackAppBar(
         label: LocaleKeys.customPage.localize,
         // leading: IconButton(
         //   icon: const Icon(Icons.menu),
@@ -38,18 +38,18 @@ class _CustomPageState extends State<CustomPage> {
         //   },
         // ),
       ),
-    //  drawer: const DrawerWidget(),
+      //  drawer: const DrawerWidget(),
       body: BlocProvider<CustomPageCubit>(
         create: (BuildContext context) => serviceLocator()..fetchActivate(),
         child: BlocConsumer<CustomPageCubit, CustomPageState>(
           listener: (BuildContext context, CustomPageState state) {
-            if(state.status ==CustomPageStates.updateSuccess){
-              if(state.activate!.customPage ==true){
+            if (state.status == CustomPageStates.updateSuccess) {
+              if (state.activate!.customPage == true) {
                 context.pushReplacementNamed(Routes.CUSTOMPAGE);
-              }else{
+              } else {
                 context.pushReplacementNamed(Routes.HOME);
               }
-              print('''''''''''''''object''''''''''''''');
+              print('''''' '''''' '''object''' '''''' '''''');
             }
           },
           builder: (BuildContext context, state) {
@@ -64,14 +64,14 @@ class _CustomPageState extends State<CustomPage> {
                           child: Label(
                               text: LocaleKeys.activatePage.localize,
                               style: Styles.mediumText(
-                                  fontSize: 65.sp, fontWeight: FontWeight.w400)
-                          )),
+                                  fontSize: 65.sp,
+                                  fontWeight: FontWeight.w400))),
                       Switch(
                         value: state.activate?.customPage ?? false,
                         onChanged: (v) {
                           controller.updateActivate(v);
                           Restart.restartApp();
-                          },
+                        },
                         activeColor: Colors.red,
                         inactiveThumbColor: Colors.black,
                         activeTrackColor: Colors.grey,
@@ -101,11 +101,11 @@ class _CustomPageState extends State<CustomPage> {
                       style: Styles.mediumText(
                           fontSize: 65.sp, fontWeight: FontWeight.w400)),
                   onTap: () {
-                    context.push(Routes.PAGEPREVIEW,extra: state.activate?.customPage ==true);
+                    context.push(Routes.PAGEPREVIEW,
+                        extra: state.activate?.customPage == true);
                   },
                   trailing: Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
                 ),
-
               ],
             );
           },

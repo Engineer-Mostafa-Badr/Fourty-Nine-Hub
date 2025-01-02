@@ -16,171 +16,208 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class TenPercentView extends StatefulWidget {
-  const TenPercentView({super.key,});
+  const TenPercentView({
+    super.key,
+  });
 
   @override
   State<TenPercentView> createState() => _TenPercentViewState();
 }
 
 class _TenPercentViewState extends State<TenPercentView> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const BackAppBar(label: 'Ten Percent Cashback'),
-      body: BlocBuilder<TenPercentCubit,TenPercentState>(
-        builder: (context,state) {
-          var cubit = context.read<TenPercentCubit>();
-          return Form(
-            key: cubit.formKey,
-            child: ListView(
-              padding: EdgeInsets.all(16.w),
-              children: [
-                Label(text: "Traffic violations",style: Styles.headerText(),),
-                const Sizer(),
-                InkWell(
-                  onTap: () async {
-                    await context.read<TenPercentCubit>().uploadTrafficBill();
-                  },
-                  child: BlocBuilder<TenPercentCubit, TenPercentState>(
-                    builder: (context, state) {
-                      if (state.trafficFile!=null&&state.trafficFile!.isNotEmpty) {
-                        return SizedBox(
-                          width: double.infinity,
-                          height: 300.h,
-                          child: ImagePickerPlaceholder(
-                            width: double.infinity,
-                            height: 300.h,
-                            image: Image.file(
-                              File(state.trafficFile??''),
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        );
-                      }
+      body: BlocBuilder<TenPercentCubit, TenPercentState>(
+          builder: (context, state) {
+        var cubit = context.read<TenPercentCubit>();
+        return Form(
+          key: cubit.formKey,
+          child: ListView(
+            padding: EdgeInsets.all(16.w),
+            children: [
+              Label(
+                text: "Traffic violations",
+                style: Styles.headerText(),
+              ),
+              const Sizer(),
+              InkWell(
+                onTap: () async {
+                  await context.read<TenPercentCubit>().uploadTrafficBill();
+                },
+                child: BlocBuilder<TenPercentCubit, TenPercentState>(
+                  builder: (context, state) {
+                    if (state.trafficFile != null &&
+                        state.trafficFile!.isNotEmpty) {
                       return SizedBox(
                         width: double.infinity,
                         height: 300.h,
-                        child: const ImagePickerPlaceholder(
-                          title: 'Select Bill',
+                        child: ImagePickerPlaceholder(
+                          width: double.infinity,
+                          height: 300.h,
+                          image: Image.file(
+                            File(state.trafficFile ?? ''),
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       );
-                    },
-                  ),
+                    }
+                    return SizedBox(
+                      width: double.infinity,
+                      height: 300.h,
+                      child: const ImagePickerPlaceholder(
+                        title: 'Select Bill',
+                      ),
+                    );
+                  },
                 ),
-                const Sizer(),
-                BillValueTextFormField(currentController: cubit.trafficController,validator: (p0) {
-                  if (p0!.isEmpty&&(state.trafficId!=null&&state.trafficId!.isNotEmpty)) {
+              ),
+              const Sizer(),
+              BillValueTextFormField(
+                currentController: cubit.trafficController,
+                validator: (p0) {
+                  if (p0!.isEmpty &&
+                      (state.trafficId != null &&
+                          state.trafficId!.isNotEmpty)) {
                     return 'Please enter value';
                   }
                   return null;
-                },),
-                const Sizer(),
-                Label(text: "Electricity bill",style: Styles.headerText(),),
-                const Sizer(),
-                InkWell(
-                  onTap: () async {
-                    await context.read<TenPercentCubit>().uploadElectricityBill();
-                  },
-                  child: BlocBuilder<TenPercentCubit, TenPercentState>(
-                    builder: (context, state) {
-                      if (state.electricityFile!=null&&state.electricityFile!.isNotEmpty) {
-                        return SizedBox(
-                          width: double.infinity,
-                          height: 300.h,
-                          child: ImagePickerPlaceholder(
-                            width: double.infinity,
-                            height: 300.h,
-                            image: Image.file(
-                              File(state.electricityFile??''),
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        );
-                      }
+                },
+              ),
+              const Sizer(),
+              Label(
+                text: "Electricity bill",
+                style: Styles.headerText(),
+              ),
+              const Sizer(),
+              InkWell(
+                onTap: () async {
+                  await context.read<TenPercentCubit>().uploadElectricityBill();
+                },
+                child: BlocBuilder<TenPercentCubit, TenPercentState>(
+                  builder: (context, state) {
+                    if (state.electricityFile != null &&
+                        state.electricityFile!.isNotEmpty) {
                       return SizedBox(
                         width: double.infinity,
                         height: 300.h,
-                        child: const ImagePickerPlaceholder(
-                          title: 'Select Bill',
+                        child: ImagePickerPlaceholder(
+                          width: double.infinity,
+                          height: 300.h,
+                          image: Image.file(
+                            File(state.electricityFile ?? ''),
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       );
-                    },
-                  ),
+                    }
+                    return SizedBox(
+                      width: double.infinity,
+                      height: 300.h,
+                      child: const ImagePickerPlaceholder(
+                        title: 'Select Bill',
+                      ),
+                    );
+                  },
                 ),
-                const Sizer(),
-                BillValueTextFormField(currentController: cubit.electricityController, validator: (p0) {
-                  if (p0!.isEmpty&&(state.electricityId!=null&&state.electricityId!.isNotEmpty)) {
+              ),
+              const Sizer(),
+              BillValueTextFormField(
+                currentController: cubit.electricityController,
+                validator: (p0) {
+                  if (p0!.isEmpty &&
+                      (state.electricityId != null &&
+                          state.electricityId!.isNotEmpty)) {
                     return 'Please enter value';
                   }
                   return null;
-                },),
-                const Sizer(),
-                Label(text: "Mobile bill",style: Styles.headerText(),),
-                const Sizer(),
-                InkWell(
-                  onTap: () async {
-                    await context.read<TenPercentCubit>().uploadMobileBill();
-                  },
-                  child: BlocBuilder<TenPercentCubit, TenPercentState>(
-                    builder: (context, state) {
-                      if (state.mobileFile!=null&&state.mobileFile!.isNotEmpty) {
-                        return SizedBox(
-                          width: double.infinity,
-                          height: 300.h,
-                          child: ImagePickerPlaceholder(
-                            width: double.infinity,
-                            height: 300.h,
-                            image: Image.file(
-                              File(state.mobileFile??''),
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        );
-                      }
+                },
+              ),
+              const Sizer(),
+              Label(
+                text: "Mobile bill",
+                style: Styles.headerText(),
+              ),
+              const Sizer(),
+              InkWell(
+                onTap: () async {
+                  await context.read<TenPercentCubit>().uploadMobileBill();
+                },
+                child: BlocBuilder<TenPercentCubit, TenPercentState>(
+                  builder: (context, state) {
+                    if (state.mobileFile != null &&
+                        state.mobileFile!.isNotEmpty) {
                       return SizedBox(
                         width: double.infinity,
                         height: 300.h,
-                        child: const ImagePickerPlaceholder(
-                          title: 'Select Bill',
+                        child: ImagePickerPlaceholder(
+                          width: double.infinity,
+                          height: 300.h,
+                          image: Image.file(
+                            File(state.mobileFile ?? ''),
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       );
-                    },
-                  ),
+                    }
+                    return SizedBox(
+                      width: double.infinity,
+                      height: 300.h,
+                      child: const ImagePickerPlaceholder(
+                        title: 'Select Bill',
+                      ),
+                    );
+                  },
                 ),
-                const Sizer(),
-                BillValueTextFormField(currentController: cubit.mobileController, validator: (p0) {
-                  if (p0!.isEmpty&&(state.mobileId!=null&&state.mobileId!.isNotEmpty)) {
+              ),
+              const Sizer(),
+              BillValueTextFormField(
+                currentController: cubit.mobileController,
+                validator: (p0) {
+                  if (p0!.isEmpty &&
+                      (state.mobileId != null && state.mobileId!.isNotEmpty)) {
                     return 'Please enter value';
                   }
                   return null;
-                },),
-                const Sizer(),
-                SizedBox(
-                  height: 80.h,
-                  width: double.infinity,
-                  child: state.isLoading?const Center(child: CircularProgressIndicator()):ElevatedButton(onPressed: (){
-                   if(cubit.formKey.currentState!.validate()) {
-                     if ((state.mobileId == null || state.mobileId == '') &&
-                         (state.electricityId == null || state.electricityId == '') &&
-                         (state.trafficId == null || state.trafficId == '')) {
-                       showErrorMessage(context, 'Please upload at least 1 bill');
-                     }else{
-                       cubit.fetchAdRequests(context);
-                     }
-                   }
-                  },
-                            style: ElevatedButton.styleFrom(
+                },
+              ),
+              const Sizer(),
+              SizedBox(
+                height: 80.h,
+                width: double.infinity,
+                child: state.isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : ElevatedButton(
+                        onPressed: () {
+                          if (cubit.formKey.currentState!.validate()) {
+                            if ((state.mobileId == null ||
+                                    state.mobileId == '') &&
+                                (state.electricityId == null ||
+                                    state.electricityId == '') &&
+                                (state.trafficId == null ||
+                                    state.trafficId == '')) {
+                              showErrorMessage(
+                                  context, 'Please upload at least 1 bill');
+                            } else {
+                              cubit.fetchAdRequests(context);
+                            }
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.SECONDARY_COLOR,
-                            textStyle: TextStyle(color: Colors.white, fontSize: 20.sp)), child: Label(text: LocaleKeys.sendRequest.localize,style: Styles.headerText(color: Colors.white ),),
-                            ),
-                ),
-
-              ],
-            ),
-          );
-        }
-      ),
+                            textStyle: TextStyle(
+                                color: Colors.white, fontSize: 20.sp)),
+                        child: Label(
+                          text: LocaleKeys.sendRequest.localize,
+                          style: Styles.headerText(color: Colors.white),
+                        ),
+                      ),
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 }

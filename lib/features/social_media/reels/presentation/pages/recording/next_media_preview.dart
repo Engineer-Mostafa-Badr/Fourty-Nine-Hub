@@ -27,7 +27,8 @@ class NextMediaPreview extends StatefulWidget {
   final String mediaPath;
   final bool isImage;
 
-  const NextMediaPreview({super.key, 
+  const NextMediaPreview({
+    super.key,
     required this.mediaId,
     required this.mediaPath,
     required this.isImage,
@@ -68,8 +69,9 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
       body: SafeArea(
         child: BlocConsumer<ReelsCubit, ReelsState>(
           listener: (BuildContext context, state) {
-            if(state.status == ReelsStates.uploadSuccess){
-              showSuccessMessage(context, LocaleKeys.uploadSuccessfully.localize);
+            if (state.status == ReelsStates.uploadSuccess) {
+              showSuccessMessage(
+                  context, LocaleKeys.uploadSuccessfully.localize);
               context.pushReplacementNamed(Routes.REELS);
             }
           },
@@ -231,12 +233,16 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
                                   : state.selectedPrivacy == 'friends'
                                       ? LocaleKeys.friendsViewThisPost.localize
                                       : state.selectedPrivacy == 'followers'
-                                          ? LocaleKeys.followersViewThisPost.localize
+                                          ? LocaleKeys
+                                              .followersViewThisPost.localize
                                           : state.selectedPrivacy ==
                                                   'friendsAndFollowers'
-                                              ? LocaleKeys.friendsAndFollowersViewThisPost.localize
+                                              ? LocaleKeys
+                                                  .friendsAndFollowersViewThisPost
                                                   .localize
-                                              : LocaleKeys.everyoneViewThisPost.localize,
+                                                  .localize
+                                              : LocaleKeys.everyoneViewThisPost
+                                                  .localize,
                               maxLines: 2,
                               style: Styles.headerText(),
                             ),
@@ -262,15 +268,19 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
                             if (widget.isImage == true) {
                               controller.uploadReel(
                                   params: UploadReelParams(
-                                      images: [widget.mediaId],
-                                      //audioMedia:'66ae56014894b5d4015bcb02',
-                                      description: descController.text.isNotEmpty ? descController.text : null,
-                                      ));
+                                images: [widget.mediaId],
+                                //audioMedia:'66ae56014894b5d4015bcb02',
+                                description: descController.text.isNotEmpty
+                                    ? descController.text
+                                    : null,
+                              ));
                             } else {
                               controller.uploadVideoReel(
                                   params: UploadVideoReelParams(
                                 thumbnailMediaId: widget.mediaId,
-                                    description: descController.text.isNotEmpty ? descController.text : null,
+                                description: descController.text.isNotEmpty
+                                    ? descController.text
+                                    : null,
                               ));
                             }
                           },

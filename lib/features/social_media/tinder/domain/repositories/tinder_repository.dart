@@ -16,7 +16,8 @@ import '../../../../../core/error/failure.dart';
 
 abstract class TinderRepository {
   Future<Either<Failure, GiftApi>> getGifts(PaginationParams params);
-  Future<Either<Failure, List<UserDataTinderEntity>>> getUsers(GetUsersParams params);
+  Future<Either<Failure, List<UserDataTinderEntity>>> getUsers(
+      GetUsersParams params);
   Future<Either<Failure, ProfileUserModel>> getUserProfile(String params);
   Future<Either<Failure, SubFavoritesResponse>> fetchFavourites();
   Future<Either<Failure, CategoryFavoritesResponse>>

@@ -5,11 +5,11 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/snap/data/model/filter_model.dart';
 import 'package:fourtyninehub/features/social_media/snap/domain/entity/filter_entity.dart';
 
-abstract class SnapRemoteDataSource{
-  Future<Either<Failure,List<FilterEntity>>> fetchFilter();
+abstract class SnapRemoteDataSource {
+  Future<Either<Failure, List<FilterEntity>>> fetchFilter();
 }
 
-class SnapRemoteDataSourceImpl extends SnapRemoteDataSource{
+class SnapRemoteDataSourceImpl extends SnapRemoteDataSource {
   final ApiConsumer _apiConsumer;
 
   SnapRemoteDataSourceImpl(this._apiConsumer);
@@ -19,8 +19,8 @@ class SnapRemoteDataSourceImpl extends SnapRemoteDataSource{
     final response = await _apiConsumer.get(EndPoints.snap);
 
     return response.fold(
-          (failure)=>Left(failure),
-          (response) {
+      (failure) => Left(failure),
+      (response) {
         final list = (response['data'] as List)
             .map((e) => FilterModel.fromJson(e))
             .toList();

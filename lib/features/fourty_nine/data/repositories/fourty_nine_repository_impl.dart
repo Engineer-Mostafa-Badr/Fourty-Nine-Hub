@@ -29,9 +29,11 @@ class FourtyNineRepositoryImpl implements FourtyNineRepository {
   }
 
   @override
-  Future<Either<Failure, List<MainCategoryEntity>>> getMainCategoriesCustomPage(MainCategoriesParams params) {
+  Future<Either<Failure, List<MainCategoryEntity>>> getMainCategoriesCustomPage(
+      MainCategoriesParams params) {
     return _fourtyNineRemoteDataSource.getMainCategoriesCustomPage(params);
   }
+
   @override
   Future<Either<Failure, List<SliderItemEntity>>> getSliderItems() {
     return _fourtyNineRemoteDataSource.getSliderItems();

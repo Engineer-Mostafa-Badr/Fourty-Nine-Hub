@@ -5,11 +5,11 @@ class SocialPageEntity {
   final bool insta;
   final bool tweet;
 
-  SocialPageEntity(
-      {required this.id,
-      required this.userId,
-      required this.face,
-      required this.insta,
-      required this.tweet,
-      });
+  SocialPageEntity({
+    required this.id,
+    required this.userId,
+    required this.face,
+    required this.insta,
+    required this.tweet,
+  });
 }

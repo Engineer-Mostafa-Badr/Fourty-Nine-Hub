@@ -1,38 +1,36 @@
 import 'dart:developer';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/pickers/date/id_expiry_date_picker.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/picture_optional_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/Identity_confirmation_card_register_widget.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/behind_car_license_register_card_widget.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/criminal_record_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/behind_driver_license_card_register_widget.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/car_info_rider.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/car_image_register_card_widget.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/car_model_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/driver_license_card_register_ride_widget.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/expiration_date_driver_license_card_register_widget.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/drag_analysis_register_card_widget.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/front_car_license_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/front_driver_license_card_register_widget.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/governorates_ride_widget.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/more_information_register_card_widget.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/plate_number_register_card_widget.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/technical_examination_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/user_info_card_register_ride_widget.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/image_validation.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_brands/fetch_car_brands_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_models/fetch_car_models_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_year_type/fetch_car_year_type_cubit.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 
 class RideRegisterSocketScreen extends StatefulWidget {
   const RideRegisterSocketScreen({
@@ -111,568 +109,208 @@ class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 5,
+              const UserInfoCardRegisterRideWidget(),
+              const Sizer(
+                height: 30,
               ),
-              UserInfoCardRegisterRideWidget(),
-              Sizer(height: 30,),
-              DriverLicenseCardRegisterRideWidget(),
-              Sizer(height: 30,),
-              FrontDriverLicenseCardRegisterWidget(),
-              Sizer(height: 30,),
-              BehindDriverLicenseCardRegisterWidget(),
-              const CarInfoRider(),
-              const Sizer(),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 17),
-                width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(border: Border.all()),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    DropdownButton(
-                      icon: Container(),
-                      value: workingType,
-                      dropdownColor: Colors.white,
-                      style: const TextStyle(color: Colors.black),
-                      onChanged: (value) {
-                        setState(() {
-                          workingType = value ?? "";
-                          registerRider.model.workingType = workingType;
-                        });
-                      },
-                      items: const [
-                        DropdownMenuItem(
-                          value: "percentage",
-                          child: Text("Percentage"),
-                        ),
-                        DropdownMenuItem(
-                          value: "subscribePackage",
-                          child: Text("Subscribe Package"),
-                        ),
-                      ],
-                      underline: Container(),
-                    ),
-                    const Icon(Icons.arrow_drop_down)
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 17),
-                width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(border: Border.all()),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    DropdownButton(
-                      icon: Container(),
-                      value: vehicleType,
-                      dropdownColor: Colors.white,
-                      style: const TextStyle(color: Colors.black),
-                      onChanged: (value) {
-                        setState(() {
-                          vehicleType = value ?? "";
-                          registerRider.model.vehicleType = vehicleType;
-                        });
-                      },
-                      items: const [
-                        DropdownMenuItem(
-                          value: "car",
-                          child: Text("Car"),
-                        ),
-                        DropdownMenuItem(
-                          value: "scooter",
-                          child: Text("Scooter"),
-                        ),
-                      ],
-                      underline: Container(),
-                    ),
-                    const Icon(Icons.arrow_drop_down)
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Flexible(
-                    flex: 15,
-                    child: Row(
-                      children: [
-                        Switch(
-                          inactiveTrackColor: AppColors.GREY_LIGHT_COLOR,
-                          onChanged: (value) {
-                            setState(() {
-                              if (context.isUserLoggedIn) {
-                                registerRider.model.airCondition = value;
-                              } else {
-                                context.push(Routes.LOGIN);
-                              }
-                            });
-                          },
-                          value: registerRider.model.airCondition ?? false,
-                        ),
-                        Flexible(
-                          child: Text(
-                            LocaleKeys.airConditionAc.tr(),
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Spacer(),
-                  Row(
-                    children: [
-                      Switch(
-                        inactiveTrackColor: AppColors.GREY_LIGHT_COLOR,
-                        onChanged: (value) {
-                          setState(() {
-                            if (context.isUserLoggedIn) {
-                              registerRider.model.smoker = value;
-                            } else {
-                              context.push(Routes.LOGIN);
-                            }
-                          });
-                        },
-                        value: registerRider.model.smoker ?? false,
-                      ),
-                      Text(
-                        LocaleKeys.Smoker.tr(),
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              FormField(
-                validator: (value) {
-                  if (registerRider.model.carImage == null) {
-                    return LocaleKeys.thisFieldIsRequired.tr();
-                  }
-                  return null;
-                },
-                builder: (field) {
-                  return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  LocaleKeys.carPicture.tr(),
-                                  style: const TextStyle(
-                                      fontSize: 17,
-                                      color: AppColors.PRIMARY_COLOR,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ImageValidation(
-                                      isAuthentcation: true,
-                                      validator: (value) {
-                                        return registerRider.validation(
-                                            message: LocaleKeys
-                                                .thisFieldIsRequired
-                                                .tr(),
-                                            condition:
-                                                registerRider.model.carImage ==
-                                                    null);
-                                      },
-                                      onTap: (image) {
-                                        registerRider.pickImageCar(image);
-                                      },
-                                      width: 95,
-                                      noTextError: true,
-                                      hint: Labels.inFront,
-                                    ),
-                                  ],
-                                ),
-                                if (field.hasError)
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      const SizedBox(height: 8),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 2),
-                                        child: Text(
-                                          field.errorText ?? "",
-                                          style: Styles.mediumText(
-                                              color: Colors.red),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Label(
-                                  text: LocaleKeys.id.tr(),
-                                  style: const TextStyle(
-                                      fontSize: 17,
-                                      color: AppColors.PRIMARY_COLOR,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        ImageValidation(
-                                          isAuthentcation: true,
-                                          validator: (value) {
-                                            return registerRider.validation(
-                                                message: LocaleKeys
-                                                    .thisFieldIsRequired
-                                                    .tr(),
-                                                condition: registerRider
-                                                        .model.idImageInFront ==
-                                                    null);
-                                          },
-                                          onTap: (image) {
-                                            registerRider
-                                                .pickIdInFrontImage(image);
-                                          },
-                                          width: 95,
-                                          noTextError: true,
-                                          hint: Labels.inFront,
-                                        ),
-                                        const Sizer(),
-                                        ImageValidation(
-                                          isAuthentcation: true,
-                                          onTap: (image) {
-                                            registerRider
-                                                .pickIdBehindImage(image);
-                                          },
-                                          validator: (value) {
-                                            return registerRider.validation(
-                                                message: LocaleKeys
-                                                    .thisFieldIsRequired
-                                                    .tr(),
-                                                condition: registerRider.model
-                                                        .idImageInBehind ==
-                                                    null);
-                                          },
-                                          // noTextError: true,
-                                          width: 95,
-                                          hint: Labels.behind,
-                                        ),
-                                      ],
-                                    ),
-                                    if (field.hasError)
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const SizedBox(height: 8),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 2),
-                                            child: Text(
-                                              field.errorText ?? "",
-                                              style: Styles.mediumText(
-                                                  color: Colors.red),
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ]);
+              DriverLicenseCardRegisterRideWidget(
+                title: context.isArabic?"رقم رخصة السائق":"Driver's License Number",
+                onChanged: (value) {
+                  registerRider.model.driverLicenseNumber = value;
                 },
               ),
-              const SizedBox(height: 10),
+              const Sizer(
+                height: 30,
+              ),
+              const FrontDriverLicenseCardRegisterWidget(),
+              const Sizer(
+                height: 30,
+              ),
+              BehindDriverLicenseCardRegisterWidget(
+                title: context.isArabic?"الجانب الخلفي من رخصة السائق":"Back side of driver's license",
+                onTap: (image) {
+                  riderCubit.model.drivingImageBehind = image;
+                },
+              ),
+              const Sizer(
+                height: 30,
+              ),
+              ExpirationDateDriverLicenseCardRegisterWidget(
+                onTap: (date) {
+                  context.read<RegisterRiderCubit>().model.drvingExpiryDate =
+                      date.toString();
+                },
+              ),
+              const Sizer(
+                height: 30,
+              ),
+              //
+              BehindDriverLicenseCardRegisterWidget(
+                onTap: (image) {
+                    riderCubit.model.idImageInFront = image;
+                  },
+                  title: context.isArabic?"الجانب الامامي من البطاقة الشخصية":"ID card (front part)",),
+              const Sizer(
+                height: 30,
+              ),
+              BehindDriverLicenseCardRegisterWidget(
+                  onTap: (image) {
+                    riderCubit.model.idImageInBehind = image;
+                  },
+                  title: context.isArabic?"البطاقة الشخصية (الجزاء الخلفي)":"ID card (back part)"),
+              const Sizer(
+                height: 30,
+              ),
+              DriverLicenseCardRegisterRideWidget(
+                title: context.isArabic?"رقم البطاقة الشخصية":"ID number",
+                onChanged: (value) {
+                  registerRider.model.idNumber = value;
+                },
+              ),
+              const Sizer(
+                height: 30,
+              ),
+              ExpirationDateDriverLicenseCardRegisterWidget(
+                onTap: (date) {
+                  context.read<RegisterRiderCubit>().model.idExpiryDate =
+                      date.toString();
+                },
+              ),
+              const Sizer(
+                height: 30,
+              ),
+              //
+              const IdentityConfirmationCardRegisterWidget(),
 
-              const SizedBox(height: 10),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Label(
-                        text: Labels.drivingLicense,
-                        style: TextStyle(
-                            fontSize: 17,
-                            color: AppColors.PRIMARY_COLOR,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      const Sizer(),
-                      FormField(
-                        builder: (field) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  ImageValidation(
-                                    onTap: (image) {
-                                      registerRider
-                                          .pickDrivingInFrontImage(image);
-                                    },
-                                    validator: (value) {
-                                      return registerRider.validation(
-                                          message: LocaleKeys
-                                              .thisFieldIsRequired
-                                              .tr(),
-                                          condition: registerRider
-                                                  .model.drivingImageInFront ==
-                                              null);
-                                    },
-                                    noTextError: true,
-                                    width: 95,
-                                    hint: Labels.inFront,
-                                  ),
-                                  ImageValidation(
-                                    onTap: (image) {
-                                      registerRider
-                                          .pickDrivingBehindImage(image);
-                                    },
-                                    validator: (value) {
-                                      return registerRider.validation(
-                                          message: LocaleKeys
-                                              .thisFieldIsRequired
-                                              .tr(),
-                                          condition: registerRider
-                                                  .model.drivingImageBehind ==
-                                              null);
-                                    },
-                                    noTextError: true,
-                                    width: 95,
-                                    hint: Labels.behind,
-                                  ),
-                                ],
-                              ),
-                              if (field.hasError)
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      field.errorText ?? "",
-                                      style:
-                                          Styles.mediumText(color: Colors.red),
-                                    ),
-                                  ],
-                                )
-                            ],
+              BlocBuilder<PictureOptionalCubit, RiderState>(
+                builder: (context, state) {
+                  log(state.toString(), name: "lsdjfslkdjflskjfddddkdkdkk");
+                  if (state is SuccessGetPictureOptionalState) {
+                    if (state.value.dragAnalytics?.open ?? false) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (state.value.dragAnalytics?.open ?? false)
+                            Column(
+                              children: [
+                                const Sizer(
+                                  height: 30,
+                                ),
+                                const DragAnalysisRegisterCardWidget(),
+                                const Sizer(
+                                  height: 30,
+                                ),
+                                //
+                                ExpirationDateDriverLicenseCardRegisterWidget(
+                                  onTap: (date) {
+                                    context
+                                        .read<RegisterRiderCubit>()
+                                        .model
+                                        .dragAnalysisDate = date.toString();
+                                  },
+                                ),
+                              ],
+                            ),
+                          // criminalRecord
+                          if (state.value.criminalRecord?.open ?? false)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Sizer(
+                                  height: 30,
+                                ),
+                                const CriminalRecordRegisterCardWidget(),
+                                const Sizer(
+                                  height: 30,
+                                ),
+                                //
+                                ExpirationDateDriverLicenseCardRegisterWidget(
+                                  onTap: (date) {
+                                    context
+                                        .read<RegisterRiderCubit>()
+                                        .model
+                                        .criminalRecordDate = date.toString();
+                                  },
+                                ),
+                              ],
+                            ),
+                          //technicalExamination
+                          if (state.value.technicalExamination?.open ?? false)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Sizer(
+                                  height: 30,
+                                ),
+                                const TechnicalExaminationRegisterCardWidget(),
+                                const Sizer(
+                                  height: 30,
+                                ),
+                                //
+                                ExpirationDateDriverLicenseCardRegisterWidget(
+                                  onTap: (date) {
+                                    context
+                                            .read<RegisterRiderCubit>()
+                                            .model
+                                            .technicalExaminationDate =
+                                        date.toString();
+                                  },
+                                ),
+                              ],
+                            )
+                        ],
+                      );
+                    } else {
+                      return Container(
+                          // width: 150,
+                          // height: 150,
+                          // color: Colors.red,
                           );
-                        },
-                      )
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Label(
-                        text: Labels.license,
-                        style: TextStyle(
-                            fontSize: 17,
-                            color: AppColors.PRIMARY_COLOR,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      const Sizer(),
-                      FormField(
-                        builder: (field) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  ImageValidation(
-                                    onTap: (image) {
-                                      registerRider
-                                          .pickLicenseInFrontImage(image);
-                                    },
-                                    validator: (value) {
-                                      return registerRider.validation(
-                                          message: LocaleKeys
-                                              .thisFieldIsRequired
-                                              .tr(),
-                                          condition: registerRider
-                                                  .model.licenseImageInFront ==
-                                              null);
-                                    },
-                                    noTextError: true,
-                                    width: 95,
-                                    hint: Labels.inFront,
-                                  ),
-                                  ImageValidation(
-                                    onTap: (image) {
-                                      registerRider
-                                          .pickLicenseBehindImage(image);
-                                    },
-                                    validator: (value) {
-                                      return registerRider.validation(
-                                          message: LocaleKeys
-                                              .thisFieldIsRequired
-                                              .tr(),
-                                          condition: registerRider
-                                                  .model.licenseImgeBehind ==
-                                              null);
-                                    },
-                                    width: 95,
-                                    noTextError: true,
-                                    hint: Labels.behind,
-                                  ),
-                                ],
-                              ),
-                              if (field.hasError)
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      field.errorText ?? "",
-                                      style:
-                                          Styles.mediumText(color: Colors.red),
-                                    ),
-                                  ],
-                                )
-                            ],
-                          );
-                        },
-                      )
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Flexible(
-                    child: DefaultTextFormField(
-                      validator: (p0) {
-                        if (p0 == null || p0.isEmpty) {
-                          return LocaleKeys.thisFieldIsRequired.tr();
-                        }
-                        return null;
-                      },
-                      currentController: idNumberController,
-                      currentFocusNode: idNumberFocusNode,
-                      hint: LocaleKeys.idNumber.tr(),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Flexible(
-                    child: DefaultTextFormField(
-                      validator: (p0) {
-                        if (p0 == null || p0.isEmpty) {
-                          return LocaleKeys.thisFieldIsRequired.tr();
-                        }
-                        return null;
-                      },
-                      currentController: plateNumberController,
-                      currentFocusNode: plateNumberFocusNode,
-                      hint: LocaleKeys.plateInformation.tr(),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              CreateDoctorIDExpiryDatePicker(
-                onDateSelected: (date) {
-                  if (date != null) {
-                    registerRider.pickIdExpiryDate(date);
-                  }
-                },
-                validator: (value) {
-                  if (registerRider.model.idExpiryDate == null) {
-                    return LocaleKeys.thisFieldIsRequired.tr();
-                  }
-                  return null;
-                },
-                textStyle: const TextStyle(
-                    fontSize: 17,
-                    color: AppColors.PRIMARY_COLOR,
-                    fontWeight: FontWeight.w600),
-                borderWidth: 1,
-                borderColor: Colors.black,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              CreateDoctorIDExpiryDatePicker(
-                validator: (value) {
-                  if (registerRider.model.drvingExpiryDate == null) {
-                    return LocaleKeys.thisFieldIsRequired.tr();
-                  }
-                  return null;
-                },
-                title: LocaleKeys.drivingLicenseExpiryDate.tr(),
-                textStyle: const TextStyle(
-                    fontSize: 17,
-                    color: AppColors.PRIMARY_COLOR,
-                    fontWeight: FontWeight.w600),
-                borderWidth: 1,
-                onDateSelected: (date) {
-                  if (date != null) {
-                    registerRider.pickDrivingExpiryDate(date);
+                    }
+                  } else {
+                    return Container();
                   }
                 },
               ),
-              const SizedBox(
-                height: 10,
+              const Sizer(
+                height: 30,
               ),
-              CreateDoctorIDExpiryDatePicker(
-                validator: (value) {
-                  if (registerRider.model.licenseExpiryDate == null) {
-                    return LocaleKeys.thisFieldIsRequired.tr();
-                  }
-                  return null;
-                },
-                borderWidth: 1,
-                title: LocaleKeys.licenseExpiryDate.tr(),
-                textStyle: const TextStyle(
-                    fontSize: 17,
-                    color: AppColors.PRIMARY_COLOR,
-                    fontWeight: FontWeight.w600),
-                onDateSelected: (date) {
-                  if (date != null) {
-                    registerRider.pickLicenseExpiryDate(date);
-                  }
+
+              const CarModelRegisterCardWidget(),
+              const Sizer(
+                height: 30,
+              ),
+              PlateNumberRegisterCardWidget(),
+              const Sizer(
+                height: 30,
+              ),
+              const FrontCarLicenseRegisterCardWidget(),
+              const Sizer(
+                height: 30,
+              ),
+              const BehindCarLicenseRegisterCardWidget(),
+              const Sizer(
+                height: 30,
+              ),
+              ExpirationDateDriverLicenseCardRegisterWidget(
+                onTap: (date) {
+                  context.read<RegisterRiderCubit>().model.licenseExpiryDate =
+                      date.toString();
                 },
               ),
+              const Sizer(
+                height: 30,
+              ),
+              const CarImageRegisterCardWidget(),
+              const Sizer(
+                height: 30,
+              ),
+
+              const MoreInformationRegisterCardWidget(),
+              const Sizer(
+                height: 30,
+              ),
+              // GovernoratesRideWidget(),
               const SizedBox(
                 height: 10,
               ),
@@ -700,242 +338,51 @@ class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
                   );
                 },
               ),
-              BlocBuilder<PictureOptionalCubit, RiderState>(
-                builder: (context, state) {
-                  log(state.toString(), name: "lsdjfslkdjflskjfddddkdkdkk");
-                  if (state is SuccessGetPictureOptionalState) {
-                    if (state.value.dragAnalytics?.open ?? false) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (state.value.dragAnalytics?.open ?? false)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Label(
-                                  text: LocaleKeys.dragAnalysis.tr(),
-                                  style: const TextStyle(
-                                      fontSize: 17,
-                                      color: AppColors.PRIMARY_COLOR,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                const Sizer(),
-                                ImageValidation(
-                                  onTap: (image) {
-                                    registerRider
-                                        .pickDrivingInFrontImage(image);
-                                  },
-                                  validator: (value) {
-                                    return registerRider.validation(
-                                        message:
-                                            LocaleKeys.thisFieldIsRequired.tr(),
-                                        condition: registerRider
-                                                .model.drivingImageInFront ==
-                                            null);
-                                  },
-                                  noTextError: true,
-                                  width: 95,
-                                  hint: "",
-                                ),
-                                const Sizer(),
-                                Row(
-                                  children: [
-                                    Flexible(
-                                      child: DefaultTextFormField(
-                                        readOnly: true,
-                                        currentController:
-                                            TextEditingController(
-                                                text: state.value.dragAnalytics
-                                                    ?.address),
-                                        hint:
-                                            state.value.dragAnalytics?.address,
-                                      ),
-                                    ),
-                                    const Sizer(),
-                                    Flexible(
-                                      child: DefaultTextFormField(
-                                        readOnly: true,
-                                        currentController:
-                                            TextEditingController(
-                                                text: state.value.dragAnalytics
-                                                    ?.phone),
-                                        hint: state.value.dragAnalytics?.phone,
-                                      ),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          // criminalRecord
-                          if (state.value.criminalRecord?.open ?? false)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Label(
-                                  text: LocaleKeys.criminalRecord.tr(),
-                                  style: const TextStyle(
-                                      fontSize: 17,
-                                      color: AppColors.PRIMARY_COLOR,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                const Sizer(),
-                                ImageValidation(
-                                  onTap: (image) {
-                                    registerRider
-                                        .pickDrivingInFrontImage(image);
-                                  },
-                                  validator: (value) {
-                                    return registerRider.validation(
-                                        message:
-                                            LocaleKeys.thisFieldIsRequired.tr(),
-                                        condition: registerRider
-                                                .model.drivingImageInFront ==
-                                            null);
-                                  },
-                                  noTextError: true,
-                                  width: 95,
-                                  hint: "",
-                                ),
-                                const Sizer(),
-                              ],
-                            ),
-                          //technicalExamination
-                          if (state.value.technicalExamination?.open ?? false)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Label(
-                                  text: LocaleKeys.technicalExamination.tr(),
-                                  style: const TextStyle(
-                                      fontSize: 17,
-                                      color: AppColors.PRIMARY_COLOR,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                const Sizer(),
-                                ImageValidation(
-                                  onTap: (image) {
-                                    registerRider
-                                        .pickDrivingInFrontImage(image);
-                                  },
-                                  validator: (value) {
-                                    return registerRider.validation(
-                                        message:
-                                            LocaleKeys.thisFieldIsRequired.tr(),
-                                        condition: registerRider
-                                                .model.drivingImageInFront ==
-                                            null);
-                                  },
-                                  noTextError: true,
-                                  width: 95,
-                                  hint: "",
-                                ),
-                                const Sizer(),
-                                Row(
-                                  children: [
-                                    Flexible(
-                                      child: DefaultTextFormField(
-                                        readOnly: true,
-                                        currentController:
-                                            TextEditingController(
-                                                text: state
-                                                    .value
-                                                    .technicalExamination
-                                                    ?.address),
-                                        hint:
-                                            state.value.dragAnalytics?.address,
-                                      ),
-                                    ),
-                                    const Sizer(),
-                                    Flexible(
-                                      child: DefaultTextFormField(
-                                        readOnly: true,
-                                        currentController:
-                                            TextEditingController(
-                                                text: state
-                                                    .value
-                                                    .technicalExamination
-                                                    ?.phone),
-                                        hint: state.value.dragAnalytics?.phone,
-                                      ),
-                                    )
-                                  ],
-                                )
-                              ],
-                            )
-                        ],
-                      );
-                    } else {
-                      return Container(
-                          // width: 150,
-                          // height: 150,
-                          // color: Colors.red,
-                          );
-                    }
-                  } else {
-                    return Container();
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const AppInfoText(
-                text: Labels.theApplicationDoesNot,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const AppInfoText(
-                text: Labels.youWillGetPounds,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: AppButton(
-                  backColor: AppColors.PRIMARY_COLOR,
-                  textColor: Colors.white,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                  label: Labels.submit,
-                  onPressed: () {
-                    // log(widget.formKey.currentState!.validate().toString(),
-                    //     name: "lksdjflksjf");
-                    // log("lksjdflksdjflskdjf", name: lastNameController.text);
-                    // log(formKey.currentState!.validate().toString(),
-                    // name: "laksjdf");
-                    // if (widget.formKey.currentState?.validate() ?? false) {
-                    registerRider.model.driverFirstName =
-                        firstNameController.text;
-                    registerRider.model.driverLastName =
-                        lastNameController.text;
-                    registerRider.model.phone = phoneController.text;
-                    registerRider.model.pricingPerKm =
-                        double.tryParse(pricingPerKmController.text) ?? 0;
-                    // registerRider.model.vehicleModel =
-                    //     vehicleModelController.text;
-                    // registerRider.model.vehicleBrand =
-                    //     vehicleBrandController.text;
-                    // registerRider.model.vehicleYear =
-                    //     vehicleYearController.text;
-                    registerRider.model.yourFavoriteCity =
-                        yourFavoriteCiryController.text;
-                    registerRider.model.idNumber = idNumberController.text;
-                    registerRider.model.plateInfo = plateNumberController.text;
-                    registerRider.registerOne();
-                    // }
-                    // registerRider.register();
-                    // log("${registerRider.model.registerOne()}",
-                    //       name: "lksjdflskjdflskdjf");
-                  },
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const AppInfoText(
+                      text: Labels.theApplicationDoesNot,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const AppInfoText(
+                      text: Labels.youWillGetPounds,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: AppButton(
+                        backColor: AppColors.PRIMARY_COLOR,
+                        textColor: Colors.white,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                        label: Labels.submit,
+                        onPressed: () {
+                          // registerRider.uploadImages();
+                          if (context.read<RegisterRiderCubit>().socketFormKey.currentState?.validate() == true) {
+                            registerRider.registerOne();
+                          }
+                          
+                        },
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
+              )
             ],
           ),
         );
@@ -943,3 +390,7 @@ class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
     );
   }
 }
+
+
+
+// المشاعر مش كلام

@@ -3,8 +3,6 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 
-
-
 class DeleteTinderPictureUseCase extends UseCase<bool, String> {
   final TinderRepository _repository;
 
@@ -15,4 +13,3 @@ class DeleteTinderPictureUseCase extends UseCase<bool, String> {
     return _repository.deletePictures(params);
   }
 }
-

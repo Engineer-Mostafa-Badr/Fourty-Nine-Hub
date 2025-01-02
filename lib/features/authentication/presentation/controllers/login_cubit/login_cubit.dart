@@ -47,9 +47,9 @@ class LoginCubit extends Cubit<LoginState> {
         LoginParams(
           email: emailTextController.text.trim(),
           password: passwordTextController.text.trim(),
-          token: token??"",
+          token: token ?? "",
         ),
-    );
+      );
 
       result.fold(
         (failure) => emit(LoginError(failure)),
@@ -143,7 +143,7 @@ class LoginCubit extends Cubit<LoginState> {
       //   // Return the signed-in user credential
       //   return userCredential;
       // } else {
-        throw Exception('Facebook login failed: ${''}');
+      throw Exception('Facebook login failed: ${''}');
       // }
     } catch (e) {
       log('Error during Facebook sign-in: $e');

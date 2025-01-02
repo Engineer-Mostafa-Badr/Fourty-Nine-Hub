@@ -1,20 +1,20 @@
 import 'package:fourtyninehub/features/custom_page/domain/entity/navigate_bar_entity.dart';
 
 class NavigateBarModel extends NavigateBarEntity {
-  NavigateBarModel(
-      {required super.id,
-      required super.userId,
-      required super.find,
-      required super.health,
-      required super.live,
-      required super.loading,
-      required super.meal,
-      required super.meet,
-      required super.reel,
-      required super.ride,
-      required super.snap,
-      required super.spotlight,
-      });
+  NavigateBarModel({
+    required super.id,
+    required super.userId,
+    required super.find,
+    required super.health,
+    required super.live,
+    required super.loading,
+    required super.meal,
+    required super.meet,
+    required super.reel,
+    required super.ride,
+    required super.snap,
+    required super.spotlight,
+  });
 
   factory NavigateBarModel.fromJson(Map<String, dynamic> json) {
     return NavigateBarModel(

@@ -50,7 +50,8 @@ class _RiderBannerState extends State<RiderBanner> {
             context: context,
             builder: (context) {
               return BlocProvider(
-                create: (context) => serviceLocator<ShippingCubit>()..getBannerData(),
+                create: (context) =>
+                    serviceLocator<ShippingCubit>()..getBannerData(),
                 child: RideShippingButtonSheet(
                   model: widget.model,
                 ),
@@ -79,12 +80,11 @@ class _RiderBannerState extends State<RiderBanner> {
             return isFavrote;
           }
         },
-        onRegister: () {
-          
-        },
+        onRegister: () {},
         canRegister: false,
         category: MainCategoryEntity(
-          nameEn: context.isArabic?"تسجيل سائق سيارة/نقل":"Car/Truck Register",
+          nameEn:
+              context.isArabic ? "تسجيل سائق سيارة/نقل" : "Car/Truck Register",
           id: widget.model.mainCategory?.mainCategoryId ?? '',
           name: getLang() == 'ar'
               ? widget.model.mainCategory?.nameAr ?? ''

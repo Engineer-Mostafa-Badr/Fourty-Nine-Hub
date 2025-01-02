@@ -55,6 +55,7 @@ class GetAvailableTripsForDriversCubit
     emit(GetAvailableTripsForDriversLoading());
     SharedWebSocket.socket!.emit('carpool:getTripForDriver');
   }
+
   List<CarpoolTripParam> _parseTrips(dynamic data) {
     if (data is String) {
       print("Received data as String, decoding...");

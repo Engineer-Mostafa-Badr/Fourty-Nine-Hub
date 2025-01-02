@@ -102,10 +102,9 @@ mixin ZegoPluginInvitationService {
         subTag: 'invitation service',
       );
       return ZegoSignalingPluginCancelInvitationResult(
-        error: PlatformException(code: '', message: ''),
-        errorInvitees: <String>[],
-        invitationID: ""
-      );
+          error: PlatformException(code: '', message: ''),
+          errorInvitees: <String>[],
+          invitationID: "");
     }
 
     var invitationID = '';
@@ -193,8 +192,7 @@ mixin ZegoPluginInvitationService {
         subTag: 'invitation service',
       );
       return const ZegoSignalingPluginResponseInvitationResult(
-        invitationID: ""
-      );
+          invitationID: "");
     }
 
     return ZegoSignalingPluginCore.shared.coreData.reject(invitationID, data);
@@ -215,8 +213,7 @@ mixin ZegoPluginInvitationService {
         subTag: 'invitation service',
       );
       return const ZegoSignalingPluginResponseInvitationResult(
-        invitationID: ""
-      );
+          invitationID: "");
     }
 
     return ZegoSignalingPluginCore.shared.coreData.reject(invitationID, data);
@@ -248,8 +245,7 @@ mixin ZegoPluginInvitationService {
         subTag: 'invitation service',
       );
       return const ZegoSignalingPluginResponseInvitationResult(
-        invitationID: ""
-      );
+          invitationID: "");
     }
 
     return ZegoSignalingPluginCore.shared.coreData.accept(invitationID, data);

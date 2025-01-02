@@ -233,9 +233,8 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
 
   @override
   Future<Either<Failure, bool>> uploadReel(UploadReelParams params) async {
-    final response = await _apiConsumer.post(EndPoints.uploadReel,
-    data: params.toJson()
-    );
+    final response =
+        await _apiConsumer.post(EndPoints.uploadReel, data: params.toJson());
 
     return response.fold((l) {
       return Left(l);
@@ -245,10 +244,10 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> uploadVideoReel(UploadVideoReelParams params) async {
-    final response = await _apiConsumer.post(EndPoints.uploadReel,
-        data: params.toMap()
-    );
+  Future<Either<Failure, bool>> uploadVideoReel(
+      UploadVideoReelParams params) async {
+    final response =
+        await _apiConsumer.post(EndPoints.uploadReel, data: params.toMap());
 
     return response.fold((l) {
       return Left(l);

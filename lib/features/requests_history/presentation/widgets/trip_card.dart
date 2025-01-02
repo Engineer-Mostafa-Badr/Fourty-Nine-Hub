@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/requests_history/data/models/request_hist
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
-
 class TripCard extends StatelessWidget {
   final RequestHistoryRideModel trip;
 
@@ -250,8 +249,7 @@ class TripCard extends StatelessWidget {
                                   // const Spacer(),
 
                                   const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 16),
+                                    padding: EdgeInsets.symmetric(vertical: 16),
                                     child: Divider(
                                       height: 1,
                                       color: AppColors.GREY_DARK_COLOR,
@@ -339,8 +337,7 @@ class TripCard extends StatelessWidget {
                                   ),
 
                                   const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 16),
+                                    padding: EdgeInsets.symmetric(vertical: 16),
                                     child: Divider(
                                       height: 1,
                                       color: AppColors.GREY_DARK_COLOR,

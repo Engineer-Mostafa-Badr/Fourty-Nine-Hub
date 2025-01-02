@@ -33,55 +33,54 @@ class MealBanner extends StatelessWidget {
             ),
           );
         }
-          return MainCategoryBanner(
-            category: state.mainCategory != null
-                ? MainCategoryEntity(
-                    id: state.mainCategory?.id ?? "",
-                    name: context.isArabic?'أكلة':'Meal',
-                    image: state.mainCategory?.image ?? "",
-                    banner: state.mainCategory?.banner ?? "",
-                    cover: state.mainCategory?.cover ?? "",
-                    isFavorite: state.mainCategory?.isFavorite ?? false,
-                    total: state.mainCategory?.total ?? 0,
-                    nameEn: context.isArabic?'أكلة':'Meal',
-                  )
-                : MainCategoryEntity(
-                    id: state.banner?.id ?? "",
-                    name: context.isArabic?'أكلة':'Meal',
-                    image: state.banner?.banner ?? "",
-                    banner: state.banner?.banner ?? "",
-                    cover: state.banner?.cover ?? "",
-                    isFavorite: false,
-                    total: state.banner?.numberOfAds ?? 0,
-                    nameEn: context.isArabic?'أكلة':'Meal'),
-            canRegister: state.isResturant?.isRestaurant == true ? false : true,
-            onRegister: () {
-              if (context.read<UserCubit>().isLoggedIn) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BlocProvider<CreateRestaurantCubit>(
-                        create: (context) => serviceLocator()..loadData(),
-                        child: CreateRestaurantForm(
-                          from: 'create',
-                          restaurantId: state.isResturant!.restaurantId,
-                        ),
+        return MainCategoryBanner(
+          category: state.mainCategory != null
+              ? MainCategoryEntity(
+                  id: state.mainCategory?.id ?? "",
+                  name: context.isArabic ? 'أكلة' : 'Meal',
+                  image: state.mainCategory?.image ?? "",
+                  banner: state.mainCategory?.banner ?? "",
+                  cover: state.mainCategory?.cover ?? "",
+                  isFavorite: state.mainCategory?.isFavorite ?? false,
+                  total: state.mainCategory?.total ?? 0,
+                  nameEn: context.isArabic ? 'أكلة' : 'Meal',
+                )
+              : MainCategoryEntity(
+                  id: state.banner?.id ?? "",
+                  name: context.isArabic ? 'أكلة' : 'Meal',
+                  image: state.banner?.banner ?? "",
+                  banner: state.banner?.banner ?? "",
+                  cover: state.banner?.cover ?? "",
+                  isFavorite: false,
+                  total: state.banner?.numberOfAds ?? 0,
+                  nameEn: context.isArabic ? 'أكلة' : 'Meal'),
+          canRegister: state.isResturant?.isRestaurant == true ? false : true,
+          onRegister: () {
+            if (context.read<UserCubit>().isLoggedIn) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider<CreateRestaurantCubit>(
+                      create: (context) => serviceLocator()..loadData(),
+                      child: CreateRestaurantForm(
+                        from: 'create',
+                        restaurantId: state.isResturant!.restaurantId,
                       ),
-                    ));
-                // context.push(Routes.CREATERESTURANT);
-              } else {
-                context.push(Routes.REGISTER);
-              }
-            },
-            onFavorite: () {
-              print("object");
-              context
-                  .read<RestaurantsCubit>()
-                  .toggleFavoriteCategory(state.mainCategory!.id);
-            },
-            isFavorite: !(state.mainCategory?.isFavorite??false),
-          );
-
+                    ),
+                  ));
+              // context.push(Routes.CREATERESTURANT);
+            } else {
+              context.push(Routes.REGISTER);
+            }
+          },
+          onFavorite: () {
+            print("object");
+            context
+                .read<RestaurantsCubit>()
+                .toggleFavoriteCategory(state.mainCategory!.id);
+          },
+          isFavorite: !(state.mainCategory?.isFavorite ?? false),
+        );
       },
     );
   }

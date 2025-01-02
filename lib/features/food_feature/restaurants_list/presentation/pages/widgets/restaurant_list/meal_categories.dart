@@ -117,7 +117,9 @@ class _MealCategoriesState extends State<MealCategories> {
                               onTap: (String id) {
                                 AdInterstitialTop.loadIntersitialAd();
                                 AdInterstitialTop.showInterstitialAd();
-                                context.read<RestaurantsCubit>().loadInitialRestaurantsData(id);
+                                context
+                                    .read<RestaurantsCubit>()
+                                    .loadInitialRestaurantsData(id);
                               },
                               subCategory: subCategory,
                               favouriteSubCategory: () async {

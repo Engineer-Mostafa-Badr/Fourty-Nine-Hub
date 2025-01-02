@@ -34,20 +34,22 @@ class _FollowingViewState extends State<FollowingView> {
     super.initState();
     _cubit = context.read<FollowCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
-    _cubit.loadInitialDataFollowing(search,widget.otherId);
+    _cubit.loadInitialDataFollowing(search, widget.otherId);
 
     _cubit.searchController.addListener(() {
       if (isFirstSearchListenerCall) {
         isFirstSearchListenerCall = false;
         return;
       }
-      _cubit.loadInitialDataFollowing( _cubit.searchController.text,widget.otherId);
+      _cubit.loadInitialDataFollowing(
+          _cubit.searchController.text, widget.otherId);
     });
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      _cubit.fetchAllFollowing(_cubit.searchController.text,widget.otherId);
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      _cubit.fetchAllFollowing(_cubit.searchController.text, widget.otherId);
     }
   }
 
@@ -74,11 +76,13 @@ class _FollowingViewState extends State<FollowingView> {
                   border: InputBorder.none,
                   focusedBorder: InputBorder.none,
                   enabledBorder: InputBorder.none,
-                  contentPadding:  EdgeInsets.only(top: 5.h),
+                  contentPadding: EdgeInsets.only(top: 5.h),
                   hintStyle: Styles.mediumText(fontSize: 65.sp),
                   hintText: LocaleKeys.search.localize,
-                  prefixIcon: Icon(FontAwesomeIcons.magnifyingGlass,size: 30.sp,)
-              ),
+                  prefixIcon: Icon(
+                    FontAwesomeIcons.magnifyingGlass,
+                    size: 30.sp,
+                  )),
             ),
           ),
         ),
@@ -90,10 +94,10 @@ class _FollowingViewState extends State<FollowingView> {
             }
             return Expanded(
               child: ListView.separated(
-
                 controller: _scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: _cubit.following.length + (_cubit.isLoadingMore ? 1 : 0),
+                itemCount:
+                    _cubit.following.length + (_cubit.isLoadingMore ? 1 : 0),
                 separatorBuilder: (context, index) => const Sizer(),
                 itemBuilder: (context, index) {
                   if (index == _cubit.following.length) {
@@ -101,9 +105,8 @@ class _FollowingViewState extends State<FollowingView> {
                   }
                   final following = _cubit.following[index];
                   return GestureDetector(
-                    onTap: (){
-                      context.push(
-                          Routes.INSTAGRAMPROFILE,
+                    onTap: () {
+                      context.push(Routes.INSTAGRAMPROFILE,
                           extra: following.followingId);
                     },
                     child: Row(
@@ -120,7 +123,8 @@ class _FollowingViewState extends State<FollowingView> {
                           children: [
                             RichText(
                               text: TextSpan(
-                                  text: "${following.firstName} ${following.lastname}",
+                                  text:
+                                      "${following.firstName} ${following.lastname}",
                                   style: Styles.headerText(
                                     fontWeight: FontWeight.w600,
                                   )),

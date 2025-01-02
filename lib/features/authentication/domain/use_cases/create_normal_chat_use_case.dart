@@ -4,7 +4,8 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 
-class CreateNormalChatUseCase extends UseCase<ChatEntity, CreateNormalChatParams> {
+class CreateNormalChatUseCase
+    extends UseCase<ChatEntity, CreateNormalChatParams> {
   final AuthRepository _repository;
   CreateNormalChatUseCase(this._repository);
 

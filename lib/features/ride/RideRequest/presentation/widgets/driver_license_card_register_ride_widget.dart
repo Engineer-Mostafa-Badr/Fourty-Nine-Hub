@@ -1,35 +1,40 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class DriverLicenseCardRegisterRideWidget extends StatelessWidget {
-  DriverLicenseCardRegisterRideWidget({super.key});
+  DriverLicenseCardRegisterRideWidget({super.key, required this.title, this.onChanged});
+  final String title;
+  final Function(String value)? onChanged;
   TextEditingController pricingPerKmController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    var rideRideRegisterCubit = context.read<RegisterRiderCubit>();
     return Container(
       width: double.infinity,
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(color: Colors.grey.shade400, blurRadius: 30)
-                  ]
-                ),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: context.isDarkMode?AppColors.UNSELECTED_DARK_GRAY_COLOR: Colors.white,
+          boxShadow: context.isDarkMode?[]: [BoxShadow(color: Colors.grey.shade400, blurRadius: 30)]
+          ),
       child: Column(
         children: [
           Text(
-            "رقم رخصة السائق",
+            title,
             style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 40),
           ),
-          Sizer(),
+          const Sizer(),
           DefaultTextFormField(
+            onChanged: onChanged,
             isAuthentcation: true,
             hint: '',
             hintColor: AppColors.PRIMARY_COLOR,

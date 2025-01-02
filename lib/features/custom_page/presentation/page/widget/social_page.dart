@@ -107,12 +107,12 @@ class _SocialPageState extends State<SocialPage> {
                 bool tweet = _selectedItem == 2;
 
                 context.read<CustomPageCubit>().updateSocialPage(
-                  SocialPageParams(
-                    face: face,
-                    insta: insta,
-                    tweet: tweet, // Add 'tweet' as a new parameter
-                  ),
-                );
+                      SocialPageParams(
+                        face: face,
+                        insta: insta,
+                        tweet: tweet, // Add 'tweet' as a new parameter
+                      ),
+                    );
 
                 print('Selected Item: ${_items[_selectedItem!]}');
               },

@@ -74,8 +74,8 @@ class JoinTripCarpoolServiceLocator {
     //usecases
     serviceLocator.registerFactory(() => GetAllTripsUseCase(serviceLocator()));
 
-    serviceLocator.registerLazySingleton<GetAllTripsCubit>(
-        () => GetAllTripsCubit());
+    serviceLocator
+        .registerLazySingleton<GetAllTripsCubit>(() => GetAllTripsCubit());
 
     //Get Currency//
     serviceLocator.registerFactory<GetCurrencyCubit>(

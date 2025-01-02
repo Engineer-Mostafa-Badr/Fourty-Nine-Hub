@@ -18,15 +18,15 @@ class MainCategoriesState {
     this.wallet,
   });
 
-  MainCategoriesState copyWith(
-      {StateStatus? status,
-      Failure? failure,
-      int? selectedIndex,
-      CurrencyEntity? currency,
-      WalletHomeEntity? wallet,
-      List<MainCategoryEntity>? data,
-      List<MainCategoryEntity>? customPage,
-      }) {
+  MainCategoriesState copyWith({
+    StateStatus? status,
+    Failure? failure,
+    int? selectedIndex,
+    CurrencyEntity? currency,
+    WalletHomeEntity? wallet,
+    List<MainCategoryEntity>? data,
+    List<MainCategoryEntity>? customPage,
+  }) {
     return MainCategoriesState(
       status: status ?? this.status,
       currency: currency ?? this.currency,

@@ -92,7 +92,7 @@ class ReelsRepositoryImpl extends ReelsRepository {
 
   @override
   Future<Either<Failure, bool>> uploadReel(UploadReelParams params) {
-   return _reelsRemoteDataSource.uploadReel(params);
+    return _reelsRemoteDataSource.uploadReel(params);
   }
 
   @override

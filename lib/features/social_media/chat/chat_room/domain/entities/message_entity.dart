@@ -29,31 +29,31 @@ class MessageEntity {
   bool isForwarded = false;
   bool isTimerExpired = false;
 
-  MessageEntity(
-      {required this.id,
-      required this.text,
-      required this.media,
-      required this.sender,
-      required this.reply,
-      required this.createdAt,
-      required this.updateAt,
-      required this.byMe,
-      required this.isUpdated,
-      required this.seen,
-      required this.delivered,
-      required this.hasReply,
-      this.chatId,
-      this.groupId,
-      required this.time,
-      required this.isDeleted,
-      required this.sharedContacts,
-      required this.isOneTimeViewMessage,
-      required this.isOneTimeSeenMessage,
-      required this.isListened,
-      this.isSelected = false,
-      this.isForwarded = false,
-      this.isTimerExpired = false,
-      });
+  MessageEntity({
+    required this.id,
+    required this.text,
+    required this.media,
+    required this.sender,
+    required this.reply,
+    required this.createdAt,
+    required this.updateAt,
+    required this.byMe,
+    required this.isUpdated,
+    required this.seen,
+    required this.delivered,
+    required this.hasReply,
+    this.chatId,
+    this.groupId,
+    required this.time,
+    required this.isDeleted,
+    required this.sharedContacts,
+    required this.isOneTimeViewMessage,
+    required this.isOneTimeSeenMessage,
+    required this.isListened,
+    this.isSelected = false,
+    this.isForwarded = false,
+    this.isTimerExpired = false,
+  });
 
   void markAsSeen() {
     seen = true;

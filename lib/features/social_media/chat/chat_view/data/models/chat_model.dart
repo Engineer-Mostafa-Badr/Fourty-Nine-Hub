@@ -32,7 +32,7 @@ class ChatModel extends ChatEntity {
         lastSeenCount: json['lastSeenCount'],
         unreadCount: json['unreadCount'],
         userId: json['userId'],
-        avatar: json['avatar']?? "",
+        avatar: json['avatar'] ?? "",
         // typing: false,
         online: false,
         isPinned: json['pinned'] ?? false,

@@ -17,6 +17,7 @@ class LastNameTextFormField extends MainTextFormField {
       super.maxLength,
       String? Function(String?)? validator,
       super.hintColor,
+      super.onChanged,
       super.fillColor})
       : super(
           validator: validator ?? Validator().validateUserName,

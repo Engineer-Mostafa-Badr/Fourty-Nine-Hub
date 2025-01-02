@@ -2,7 +2,7 @@ import 'package:fourtyninehub/features/social_media/snap/domain/entity/filter_en
 
 import '../../../../../../core/error/failure.dart';
 
-enum SnapStates { loading, initial, error,success}
+enum SnapStates { loading, initial, error, success }
 
 extension SnapStatesX on SnapState {
   bool get isInitial => status == SnapStates.initial;
@@ -21,11 +21,11 @@ class SnapState {
     this.failure,
     this.snap,
   });
-  SnapState copyWith(
-      {SnapStates? status,
-      Failure? failure,
-        List<FilterEntity>? snap,
-      }) {
+  SnapState copyWith({
+    SnapStates? status,
+    Failure? failure,
+    List<FilterEntity>? snap,
+  }) {
     return SnapState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

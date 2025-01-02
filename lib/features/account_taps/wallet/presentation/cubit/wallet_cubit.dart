@@ -81,9 +81,9 @@ class WalletCubit extends Cubit<WalletState> {
     );
 
     response.fold(
-          (failure) =>
+      (failure) =>
           emit(state.copyWith(failure: failure, status: WalletStates.error)),
-          (data) {
+      (data) {
         history.addAll(data);
 
         if (data.length < pageSize) {
@@ -97,7 +97,6 @@ class WalletCubit extends Cubit<WalletState> {
       },
     );
   }
-
 
   Future<void> fetchWalletSubscription() async {
     final response = await _subscriptionWalletUseCase(const NoParams());

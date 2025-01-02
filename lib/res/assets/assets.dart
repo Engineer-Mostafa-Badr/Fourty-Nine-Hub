@@ -81,12 +81,16 @@ abstract class Assets {
   static String profileIcon = 'assets/images/profile_icon.png';
   static String chatRoomBackground = 'assets/images/background.png';
   static String maleImagePlaceholder = 'assets/images/male_image.png';
-  static String avatarRemovebackground = 'assets/images/avatar_remove_background.png';
+  static String avatarRemovebackground =
+      'assets/images/avatar_remove_background.png';
   static String femaleImagePlacehlder = 'assets/images/female_image.png';
   static String autoComplete = 'assets/images/autocomplete.png';
   static String tripjoin = 'assets/images/tripjoin.png';
   static String carpool = "assets/images/carpool.png";
   static String tripJoin = "assets/images/tripjoincar.png";
+  static String carImage = "assets/images/car_image.jpg";
+  static String personalImage = "assets/images/personal_image.png";
+
 // .png
   //drawer
   static String contact_us_icon = 'assets/settings/contact_us_icon.png';

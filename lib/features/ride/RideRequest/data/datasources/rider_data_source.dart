@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
@@ -37,6 +38,7 @@ class RiderDataSource {
 
   Future<Either<Failure, Map<String, dynamic>>> registerDriver(
       {required RiderRegisterModel model}) {
+    log(jsonEncode(model.registerOne()).toString(), name: "lskdjfslkjdflksjdflksdjfklj");
     return api.post(EndPoints.specialRegister, data: model.registerOne());
   }
 
@@ -292,5 +294,38 @@ class RiderDataSource {
 
   Future<Either<Failure, Map<String, dynamic>>> deleteDriver() {
     return api.delete("/ride/riders");
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getCarBrand() {
+    return api.post(EndPoints.getCarBrand, data: {"brand": ""});
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getCarModelByBrand(
+      {required String brand}) {
+    return api.get(EndPoints.getCarModelByBrand, queryParameters: {
+      'brand': brand,
+    });
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getCarYearType(
+      {required String brand, required String model}) {
+    return api.get(EndPoints.getCarYearType, queryParameters: {
+      'model': model,
+      'brand': brand,
+    });
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> ridersColors() {
+    return api.get("/ride/riders/colors");
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getSigninUrl(
+      {required String url, required Map<String, dynamic>? data}) {
+    return api.put(url, data: data);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> successUpload(
+      {required String url, required Map<String, dynamic>? data}) {
+    return api.put(url, data: data);
   }
 }

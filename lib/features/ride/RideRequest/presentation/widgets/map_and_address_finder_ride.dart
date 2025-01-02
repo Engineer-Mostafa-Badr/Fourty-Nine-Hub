@@ -188,11 +188,13 @@ class _MapAndAddressFinderRideState extends State<MapAndAddressFinderRide> {
                     BlocProvider.of<GetDestinationPointRideCubit>(context)
                             .endLong !=
                         null) {
-                      context.read<LocationSocketCubit>().sendSubCategoryId(
-                    subCategoryId:
-                        context.read<RiderTripReelTimeCubit>().tempCategory!.id,
-                    address: startState.address,
-                  );
+                  context.read<LocationSocketCubit>().sendSubCategoryId(
+                        subCategoryId: context
+                            .read<RiderTripReelTimeCubit>()
+                            .tempCategory!
+                            .id,
+                        address: startState.address,
+                      );
                   print("i am in third case \n");
                   context.read<GetTripInfoCubit>().getTripInfoRequest(
                       subCateogryId: context

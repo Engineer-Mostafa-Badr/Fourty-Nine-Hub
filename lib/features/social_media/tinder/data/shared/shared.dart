@@ -581,7 +581,9 @@ String getTimeAgo(BuildContext context, String lastSeen) {
   Duration difference = now.difference(lastSeenTime);
 
   if (difference.inDays > 7) {
-    DateFormat dateFormat =context.isArabic? DateFormat('E, yyyy/MM/dd ','ar'):DateFormat('E, dd/MM/yyyy ','en');
+    DateFormat dateFormat = context.isArabic
+        ? DateFormat('E, yyyy/MM/dd ', 'ar')
+        : DateFormat('E, dd/MM/yyyy ', 'en');
     DateFormat timeFormat = DateFormat('h:mm a');
     String formattedDate = dateFormat.format(lastSeenTime);
     String formattedTime = timeFormat.format(lastSeenTime);

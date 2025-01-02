@@ -16,7 +16,7 @@ class FilteredImageWidgetState extends State<FilteredImageWidget> {
 
   Future<void> _pickAndFilterImage() async {
     final XFile? pickedFile =
-    await _imagePicker.pickImage(source: ImageSource.gallery);
+        await _imagePicker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       setState(() {

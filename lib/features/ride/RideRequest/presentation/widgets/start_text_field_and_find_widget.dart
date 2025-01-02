@@ -79,10 +79,10 @@ class _StartTextFieldAndFindWidgetState
   Widget? _getIcon(RiderState state) {
     if (state is SuccessGetStartingPointState) {
       context.read<LocationSocketCubit>().sendSubCategoryId(
-                    subCategoryId:
-                        context.read<RiderTripReelTimeCubit>().tempCategory!.id,
-                    address: state.address,
-                  );
+            subCategoryId:
+                context.read<RiderTripReelTimeCubit>().tempCategory!.id,
+            address: state.address,
+          );
       return const Icon(
         Icons.check,
         color: AppColors.CHECK_MARK_COLOR,

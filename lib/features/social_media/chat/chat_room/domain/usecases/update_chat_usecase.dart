@@ -18,5 +18,5 @@ class UpdateChatParams {
   final String chatId;
   final bool isTimerActive;
 
-  UpdateChatParams({required this.chatId, required this.isTimerActive}); 
-  }
+  UpdateChatParams({required this.chatId, required this.isTimerActive});
+}

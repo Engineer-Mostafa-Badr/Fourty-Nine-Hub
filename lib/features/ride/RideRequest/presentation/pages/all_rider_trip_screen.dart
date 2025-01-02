@@ -122,128 +122,144 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                           tabs: [
                             Text(LocaleKeys.trips.tr()),
                             Text(LocaleKeys.rideDashboard.tr()),
-                            
                           ],
                         ),
                         Expanded(
                           child: TabBarView(
                             children: [
-                              
-                              BlocListener<CheckAcceptByDriverCubit, RiderState>(
-                            listener: (context, state) {
-                              log(state.toString(),
-                                  name:
-                                      "lskdfjslkdfjslkdfjslkdjfslkdjfslkdjfslkdjfslkdfj");
-                              if (state is SuccessCheckAcceptByDriverState) {
-                                context.pushAndRemoveUntil(
-                                  Routes.TRIPINFOBYRIDERSCREEN,
-                                  extra: state.model,
-                                  (route) => false,
-                                );
-                              }
-                            },
-                            child: BlocListener<CheckAcceptByRiderCubit, RiderState>(
-                              listener: (context, state) {
-                                log(state.toString(),
-                                    name:
-                                        "lskdfjslkdfjslkdfjslkdjfslkdjfslkdjfslkdjfslkdfj");
-                                if (state is SuccessCheckAcceptByRiderState) {
-                                  context.pushAndRemoveUntil(
-                                    Routes.TRIPINFOBYDRIVERSCREEN,
-                                    extra: state.model,
-                                    (route) => false,
-                                  );
-                                }
-                              },
-                              child: BlocConsumer<AcceptOfferByDriverCubit, RiderState>(
+                              BlocListener<CheckAcceptByDriverCubit,
+                                  RiderState>(
                                 listener: (context, state) {
-                                  if (state is FailureRiderState) {
-                                    context.pop();
-                                    showErrorMessage(context,
-                                        getFailureMessage(state.failure, context));
-                                  }
-                                  if (state is SuccessAcceptOfferByDriverState) {
+                                  log(state.toString(),
+                                      name:
+                                          "lskdfjslkdfjslkdfjslkdjfslkdjfslkdjfslkdjfslkdfj");
+                                  if (state
+                                      is SuccessCheckAcceptByDriverState) {
                                     context.pushAndRemoveUntil(
-                                      Routes.TRIPINFOBYDRIVERSCREEN,
+                                      Routes.TRIPINFOBYRIDERSCREEN,
                                       extra: state.model,
                                       (route) => false,
                                     );
                                   }
                                 },
-                                builder: (context, state) {
-                                  log(state.toString(),
-                                      name: "slkfjsldkjfdkdkkkkdddddddddd");
-                                  if (state is LoadingRiderState) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-                                  return BlocConsumer<SendOfferByDriverCubit,
+                                child: BlocListener<CheckAcceptByRiderCubit,
+                                    RiderState>(
+                                  listener: (context, state) {
+                                    log(state.toString(),
+                                        name:
+                                            "lskdfjslkdfjslkdfjslkdjfslkdjfslkdjfslkdjfslkdfj");
+                                    if (state
+                                        is SuccessCheckAcceptByRiderState) {
+                                      context.pushAndRemoveUntil(
+                                        Routes.TRIPINFOBYDRIVERSCREEN,
+                                        extra: state.model,
+                                        (route) => false,
+                                      );
+                                    }
+                                  },
+                                  child: BlocConsumer<AcceptOfferByDriverCubit,
                                       RiderState>(
                                     listener: (context, state) {
                                       if (state is FailureRiderState) {
                                         context.pop();
-                                        showErrorMessage(context,
-                                            getFailureMessage(state.failure, context));
+                                        showErrorMessage(
+                                            context,
+                                            getFailureMessage(
+                                                state.failure, context));
                                       }
-                                      if (state is SuccessSendOfferByDriverState) {
-                                        context.pop();
-                                        showSuccessMessage(context,
-                                            LocaleKeys.yourOfferSendSuccess.tr());
+                                      if (state
+                                          is SuccessAcceptOfferByDriverState) {
+                                        context.pushAndRemoveUntil(
+                                          Routes.TRIPINFOBYDRIVERSCREEN,
+                                          extra: state.model,
+                                          (route) => false,
+                                        );
                                       }
                                     },
                                     builder: (context, state) {
-                                      // log(state.toString(), name: "lsdkjfsdlkjfldksjkdd");
+                                      log(state.toString(),
+                                          name: "slkfjsldkjfdkdkkkkdddddddddd");
                                       if (state is LoadingRiderState) {
                                         return const Center(
                                           child: CircularProgressIndicator(),
                                         );
                                       }
-                                      return Column(
-                                        children: [
-                                          Expanded(
-                                            child: BlocBuilder<GetAllTripRiderCubit,
-                                                RiderState>(
-                                              builder: (context, state) {
-                                                if (state is LoadingRiderState) {
-                                                  return const Center(
-                                                    child: CircularProgressIndicator(
-                                                      color: AppColors.PRIMARY_COLOR,
-                                                    ),
-                                                  );
-                                                }
-                                                if (state
-                                                    is SuccessGetAllTripsRiderState) {
-                                                  return SingleChildScrollView(
-                                                    child: Column(
-                                                      children: state.list
-                                                          .map(
-                                                            (e) {
-                                                              return RideTripCard(
-                                                                model: e,
-                                                              );
-                                                            },
-                                                          )
-                                                          .toList()
-                                                          .reversed
-                                                          .toList(),
-                                                    ),
-                                                  );
-                                                } else {
-                                                  return Container();
-                                                }
-                                              },
-                                            ),
-                                          )
-                                        ],
+                                      return BlocConsumer<
+                                          SendOfferByDriverCubit, RiderState>(
+                                        listener: (context, state) {
+                                          if (state is FailureRiderState) {
+                                            context.pop();
+                                            showErrorMessage(
+                                                context,
+                                                getFailureMessage(
+                                                    state.failure, context));
+                                          }
+                                          if (state
+                                              is SuccessSendOfferByDriverState) {
+                                            context.pop();
+                                            showSuccessMessage(
+                                                context,
+                                                LocaleKeys.yourOfferSendSuccess
+                                                    .tr());
+                                          }
+                                        },
+                                        builder: (context, state) {
+                                          // log(state.toString(), name: "lsdkjfsdlkjfldksjkdd");
+                                          if (state is LoadingRiderState) {
+                                            return const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                          }
+                                          return Column(
+                                            children: [
+                                              Expanded(
+                                                child: BlocBuilder<
+                                                    GetAllTripRiderCubit,
+                                                    RiderState>(
+                                                  builder: (context, state) {
+                                                    if (state
+                                                        is LoadingRiderState) {
+                                                      return const Center(
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          color: AppColors
+                                                              .PRIMARY_COLOR,
+                                                        ),
+                                                      );
+                                                    }
+                                                    if (state
+                                                        is SuccessGetAllTripsRiderState) {
+                                                      return SingleChildScrollView(
+                                                        child: Column(
+                                                          children: state.list
+                                                              .map(
+                                                                (e) {
+                                                                  return RideTripCard(
+                                                                    model: e,
+                                                                  );
+                                                                },
+                                                              )
+                                                              .toList()
+                                                              .reversed
+                                                              .toList(),
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      return Container();
+                                                    }
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        },
                                       );
                                     },
-                                  );
-                                },
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          const DriverInfoRideTap(),
+                              const DriverInfoRideTap(),
                             ],
                           ),
                         )

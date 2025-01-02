@@ -35,7 +35,7 @@ class _PagePreviewState extends State<PagePreview> {
       length: 2, // Number of tabs
       child: WillPopScope(
         onWillPop: () async {
-          if(widget.state ??false) {
+          if (widget.state ?? false) {
             SystemNavigator.pop();
             return false;
           }
@@ -84,17 +84,19 @@ class _PagePreviewState extends State<PagePreview> {
                       builder: (BuildContext context, social) {
                         if (social.status == CustomPageStates.success) {
                           return Padding(
-                            padding:
-                                const EdgeInsets.only(right: 8, left: 8, top: 8),
+                            padding: const EdgeInsets.only(
+                                right: 8, left: 8, top: 8),
                             child: social.social?.face == true
                                 ? SocialHomeView(
                                     payload: SocialParams(
                                         userId: social.social?.userId ?? '',
                                         hideAppBar: true),
                                   )
-                                :social.social?.insta ==true? const InstagramView(
-                                    hideAppBar: true,
-                                  ) : const TwitterView(),
+                                : social.social?.insta == true
+                                    ? const InstagramView(
+                                        hideAppBar: true,
+                                      )
+                                    : const TwitterView(),
                           );
                         } else {
                           return const CustomLoading();

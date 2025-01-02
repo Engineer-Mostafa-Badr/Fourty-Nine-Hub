@@ -2,15 +2,17 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/ride_register_socket_screen.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/rider_register_scand_screen.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/rider_register_no_socket_screen.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/sub_category.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -51,7 +53,6 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
   TextEditingController pricingPerKmController = TextEditingController();
   TextEditingController vehicleTypeController = TextEditingController();
   TextEditingController vehicleYearController = TextEditingController();
-  GlobalKey<FormState> formKey = GlobalKey();
   bool smoker = false;
   bool isSelectCategory = false;
   @override
@@ -60,7 +61,7 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
     return SharedScaffold(
       mainCategoryId: 1,
       body: Form(
-        key: formKey,
+        key: context.read<RegisterRiderCubit>().socketFormKey,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 0),
           child: BlocConsumer<RegisterRiderCubit, RiderState>(
@@ -95,294 +96,252 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
                     //   height: 30,
                     // ),
                     // const Gap(30),
-                    Text(
-                      "Welcome to Ride Register",
-                      style: Styles.headerText(
-                        fontSize: 40,
-                        color: AppColors.PRIMARY_COLOR_DARK,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        context.isArabic?"مرحبًا بكم في تسجيل توصيلة":"Welcome to Ride Register",
+                        style: Styles.headerText(
+                          fontSize: 40,
+                          color: AppColors.PRIMARY_COLOR_DARK,
+                        ),
                       ),
                     ),
-                    // const SizedBox(
-                    //   height: 10,
-                    // ),
-                    // const Gap(40),
-                    Center(
-                      child: BlocBuilder<GetCateogryRiderCubit, RiderState>(
-                        builder: (context, state) {
-                          if (state is SuccessGetCateogyRider) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Gap(8),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                FormField(
-                                  validator: (value) {
-                                    log(value.toString());
-                                    return registerRider.validation(
-                                      message: LocaleKeys
-                                          .chooseYourFavoriteSubCategory
-                                          .tr(),
-                                      condition:
-                                          registerRider.model.subcategoryId ==
-                                              null,
-                                    );
-                                  },
-                                  builder: (field) {
-                                    if (!isSelectCategory) {
-                                      return ViewRideCategory(
-                                          onChanged: () {
-                                            setState(() {
-                                              selectRegisterType(context
-                                                  .read<RegisterRiderCubit>());
-                                              log(isSelectCategory.toString(),
-                                                  name: "isSelectCategory");
-                                              isSelectCategory =
-                                                  !isSelectCategory;
-                                            });
-                                          },
-                                          list: state.model.subCategories ?? [],
-                                          containsList:
-                                              state.model.subCategories ?? []);
-                                    } else {
-                                      if (registerRider
-                                          .SELECTED_NO_SOCKET_SUBCATEGORY_IDS
-                                          .isNotEmpty) {
-                                        return ViewRideCategory(
-                                            onChanged: () {
-                                              setState(() {
-                                                log("SELECTED_NO_SOCKET_SUBCATEGORY_IDS");
-                                                selectRegisterType(context.read<
-                                                    RegisterRiderCubit>());
-                                                isSelectCategory = true;
-                                              });
-                                            },
-                                            list: parsSubCategory(
-                                                subCategorys:
-                                                    state.model.subCategories ??
+                    const Sizer(),
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: context.isDarkMode
+                              ? AppColors.UNSELECTED_DARK_GRAY_COLOR
+                              : Colors.white,
+                          boxShadow: context.isDarkMode
+                              ? []
+                              : [
+                                  BoxShadow(
+                                      color: Colors.grey.shade400,
+                                      blurRadius: 30)
+                                ]),
+                      child: Center(
+                        child: BlocBuilder<GetCateogryRiderCubit, RiderState>(
+                          builder: (context, state) {
+                            if (state is SuccessGetCateogyRider) {
+                              // return Container(
+                              //   child: StaggeredGrid.count(
+                              //     crossAxisCount: 2,
+                              //     children: state.model.subCategories!.map(
+                              //       (e) => SubCategoryRideCard(model: e,),
+                              //     ).toList(),
+                              //   ),
+                              // );
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Gap(8),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  FormField(
+                                    validator: (value) {
+                                      log(value.toString());
+                                      return registerRider.validation(
+                                        message: context.isArabic?"اختر الفئة الفرعية المفضلة لديك!":"Choose your favorite sub category!",
+                                        condition:
+                                            registerRider.model.subcategoryId ==
+                                                null,
+                                      );
+                                    },
+                                    builder: (field) {
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Builder(
+                                            builder: (context) {
+                                              if (!isSelectCategory) {
+                                                return ViewRideCategory(
+                                                    onChanged: () {
+                                                      setState(() {
+                                                        selectRegisterType(
+                                                            context.read<
+                                                                RegisterRiderCubit>());
+                                                        log(
+                                                            isSelectCategory
+                                                                .toString(),
+                                                            name:
+                                                                "isSelectCategory");
+                                                        isSelectCategory =
+                                                            !isSelectCategory;
+                                                      });
+                                                    },
+                                                    list: state.model
+                                                            .subCategories ??
                                                         [],
-                                                subCategorysIds: registerRider
-                                                    .NO_SOCKET_SUBCATEGORY_IDS),
-                                            containsList: registerRider
-                                                .SELECTED_NO_SOCKET_SUBCATEGORY_IDS);
-                                      }
-                                      if (registerRider
-                                          .SELECTED_RICH_VALID_SUBCATEGORY_IDS
-                                          .isNotEmpty) {
-                                        return ViewRideCategory(
-                                            onChanged: () {
-                                              setState(() {
-                                                log("SELECTED_RICH_VALID_SUBCATEGORY_IDS");
-                                                selectRegisterType(context.read<
-                                                    RegisterRiderCubit>());
-
+                                                    containsList: state.model
+                                                            .subCategories ??
+                                                        []);
+                                              } else {
+                                                if (registerRider
+                                                    .SELECTED_NO_SOCKET_SUBCATEGORY_IDS
+                                                    .isNotEmpty) {
+                                                  return ViewRideCategory(
+                                                      onChanged: () {
+                                                        setState(() {
+                                                          log("SELECTED_NO_SOCKET_SUBCATEGORY_IDS");
+                                                          selectRegisterType(
+                                                              context.read<
+                                                                  RegisterRiderCubit>());
+                                                          isSelectCategory =
+                                                              true;
+                                                        });
+                                                      },
+                                                      list: parsSubCategory(
+                                                          subCategorys: state
+                                                                  .model
+                                                                  .subCategories ??
+                                                              [],
+                                                          subCategorysIds:
+                                                              registerRider
+                                                                  .NO_SOCKET_SUBCATEGORY_IDS),
+                                                      containsList: registerRider
+                                                          .SELECTED_NO_SOCKET_SUBCATEGORY_IDS);
+                                                }
                                                 if (registerRider
                                                     .SELECTED_RICH_VALID_SUBCATEGORY_IDS
-                                                    .isEmpty) {
-                                                } else {
-                                                  isSelectCategory = true;
+                                                    .isNotEmpty) {
+                                                  return ViewRideCategory(
+                                                      onChanged: () {
+                                                        setState(() {
+                                                          log("SELECTED_RICH_VALID_SUBCATEGORY_IDS");
+                                                          selectRegisterType(
+                                                              context.read<
+                                                                  RegisterRiderCubit>());
+
+                                                          if (registerRider
+                                                              .SELECTED_RICH_VALID_SUBCATEGORY_IDS
+                                                              .isEmpty) {
+                                                          } else {
+                                                            isSelectCategory =
+                                                                true;
+                                                          }
+
+                                                          log(
+                                                              registerRider
+                                                                  .selectedSubCategoryList
+                                                                  .toString(),
+                                                              name:
+                                                                  "lskdjflskdjflskdjf");
+                                                        });
+                                                      },
+                                                      list: parsSubCategory(
+                                                          subCategorys: state
+                                                                  .model
+                                                                  .subCategories ??
+                                                              [],
+                                                          subCategorysIds:
+                                                              registerRider
+                                                                  .RICH_VALID_SUBCATEGORY_IDS),
+                                                      containsList: registerRider
+                                                          .selectedSubCategoryList);
                                                 }
-
-                                                log(
-                                                    registerRider
-                                                        .selectedSubCategoryList
-                                                        .toString(),
-                                                    name: "lskdjflskdjflskdjf");
-                                              });
+                                                if (registerRider
+                                                    .SELECTED_WOMEN_SUBCATEGORY_IDS
+                                                    .isNotEmpty) {
+                                                  return ViewRideCategory(
+                                                      onChanged: () {
+                                                        log("SELECTED_WOMEN_SUBCATEGORY_IDS");
+                                                        setState(() {
+                                                          selectRegisterType(
+                                                              context.read<
+                                                                  RegisterRiderCubit>());
+                                                          isSelectCategory =
+                                                              true;
+                                                        });
+                                                      },
+                                                      list: parsSubCategory(
+                                                          subCategorys: state
+                                                                  .model
+                                                                  .subCategories ??
+                                                              [],
+                                                          subCategorysIds:
+                                                              registerRider
+                                                                  .WOMEN_SUBCATEGORY_IDS),
+                                                      containsList: registerRider
+                                                          .SELECTED_RICH_VALID_SUBCATEGORY_IDS);
+                                                } else if (registerRider
+                                                    .SELECTED_SOCKET_CATEGORY_IDS
+                                                    .isNotEmpty) {
+                                                  log("SELECTED_SOCKET_CATEGORY_IDS");
+                                                  return ViewRideCategory(
+                                                      onChanged: () {
+                                                        log("SELECTED_SOCKET_CATEGORY_IDS");
+                                                        setState(() {
+                                                          selectRegisterType(
+                                                              context.read<
+                                                                  RegisterRiderCubit>());
+                                                          isSelectCategory =
+                                                              true;
+                                                        });
+                                                      },
+                                                      list: parsSubCategory(
+                                                          subCategorys: state
+                                                                  .model
+                                                                  .subCategories ??
+                                                              [],
+                                                          subCategorysIds:
+                                                              registerRider
+                                                                  .SOCKET_CATEGORY_IDS),
+                                                      containsList: registerRider
+                                                          .SELECTED_SOCKET_CATEGORY_IDS);
+                                                } else {
+                                                  return ViewRideCategory(
+                                                      onChanged: () {
+                                                        setState(() {
+                                                          selectRegisterType(
+                                                              context.read<
+                                                                  RegisterRiderCubit>());
+                                                          isSelectCategory =
+                                                              true;
+                                                        });
+                                                      },
+                                                      list: state.model
+                                                              .subCategories ??
+                                                          [],
+                                                      containsList: state.model
+                                                              .subCategories ??
+                                                          []);
+                                                }
+                                              }
                                             },
-                                            list: parsSubCategory(
-                                                subCategorys:
-                                                    state.model.subCategories ??
-                                                        [],
-                                                subCategorysIds: registerRider
-                                                    .RICH_VALID_SUBCATEGORY_IDS),
-                                            containsList: registerRider
-                                                .selectedSubCategoryList);
-                                      }
-                                      if (registerRider
-                                          .SELECTED_WOMEN_SUBCATEGORY_IDS
-                                          .isNotEmpty) {
-                                        return ViewRideCategory(
-                                            onChanged: () {
-                                              log("SELECTED_WOMEN_SUBCATEGORY_IDS");
-                                              setState(() {
-                                                selectRegisterType(context.read<
-                                                    RegisterRiderCubit>());
-                                                isSelectCategory = true;
-                                              });
-                                            },
-                                            list: parsSubCategory(
-                                                subCategorys:
-                                                    state.model.subCategories ??
-                                                        [],
-                                                subCategorysIds: registerRider
-                                                    .WOMEN_SUBCATEGORY_IDS),
-                                            containsList: registerRider
-                                                .SELECTED_RICH_VALID_SUBCATEGORY_IDS);
-                                      } else if (registerRider
-                                          .SELECTED_SOCKET_CATEGORY_IDS
-                                          .isNotEmpty) {
-                                        log("SELECTED_SOCKET_CATEGORY_IDS");
-                                        return ViewRideCategory(
-                                            onChanged: () {
-                                              log("SELECTED_SOCKET_CATEGORY_IDS");
-                                              setState(() {
-                                                selectRegisterType(context.read<
-                                                    RegisterRiderCubit>());
-                                                isSelectCategory = true;
-                                              });
-                                            },
-                                            list: parsSubCategory(
-                                                subCategorys:
-                                                    state.model.subCategories ??
-                                                        [],
-                                                subCategorysIds: registerRider
-                                                    .SOCKET_CATEGORY_IDS),
-                                            containsList: registerRider
-                                                .SELECTED_SOCKET_CATEGORY_IDS);
-                                      } else {
-                                        return ViewRideCategory(
-                                            onChanged: () {
-                                              setState(() {
-                                                selectRegisterType(context.read<
-                                                    RegisterRiderCubit>());
-                                                isSelectCategory = true;
-                                              });
-                                            },
-                                            list:
-                                                state.model.subCategories ?? [],
-                                            containsList:
-                                                state.model.subCategories ??
-                                                    []);
-                                      }
-                                    }
-
-                                    // return Column(
-                                    //   crossAxisAlignment:
-                                    //       CrossAxisAlignment.start,
-                                    //   children: [
-                                    //     DropdownMenu<SubCategoryEntity>(
-                                    //       inputDecorationTheme:
-                                    //           InputDecorationTheme(
-                                    //         hintStyle: const TextStyle(
-                                    //             fontSize: 16,
-                                    //             color: AppColors.PRIMARY_COLOR,
-                                    //             fontWeight: FontWeight.w600),
-                                    //         border: OutlineInputBorder(
-                                    //             borderRadius:
-                                    //                 BorderRadius.circular(10),
-                                    //             borderSide: BorderSide(
-                                    //                 color: field.hasError
-                                    //                     ? Colors.red
-                                    //                     : Colors.grey)),
-                                    //         errorBorder: OutlineInputBorder(
-                                    //           borderRadius:
-                                    //               BorderRadius.circular(10),
-                                    //           borderSide: BorderSide(
-                                    //             color: field.hasError
-                                    //                 ? Colors.red
-                                    //                 : Colors.black,
-                                    //           ),
-                                    //         ),
-                                    //         enabledBorder: OutlineInputBorder(
-                                    //           borderRadius:
-                                    //               BorderRadius.circular(10),
-                                    //           borderSide: BorderSide(
-                                    //             color: field.hasError
-                                    //                 ? Colors.red
-                                    //                 : Colors.black,
-                                    //           ),
-                                    //         ),
-                                    //         focusedBorder: OutlineInputBorder(
-                                    //           borderRadius:
-                                    //               BorderRadius.circular(10),
-                                    //           borderSide: BorderSide(
-                                    //             color: field.hasError
-                                    //                 ? Colors.red
-                                    //                 : Colors.black,
-                                    //           ),
-                                    //         ),
-                                    //       ),
-                                    //       width: MediaQuery.of(context)
-                                    //               .size
-                                    //               .width *
-                                    //           0.95,
-                                    //       hintText: LocaleKeys.subCategory.tr(),
-                                    //       dropdownMenuEntries:
-                                    //           state.model.subCategories!
-                                    //               .map(
-                                    //                 (e) => SubCategoryEntity(
-                                    //                     id: e.subCategoryId!,
-                                    //                     image: e.picture ?? "",
-                                    //                     isFavorite: false,
-                                    //                     nameEn:
-                                    //                         e.subCategoryNameEn ??
-                                    //                             "",
-                                    //                     nameAr:
-                                    //                         e.subCategoryNameAr ??
-                                    //                             ""),
-                                    //               )
-                                    //               .map(
-                                    //                 (e) => DropdownMenuEntry<
-                                    //                     SubCategoryEntity>(
-                                    //                   value: e,
-                                    //                   label: e.nameEn,
-                                    //                 ),
-                                    //               )
-                                    //               .toList(),
-                                    //       onSelected: (value) {
-                                    //         setState(() {
-                                    //           registerRider.model
-                                    //               .subcategoryId = value!.id;
-                                    //           // if (context.isUserLoggedIn) {
-                                    //           //   if (value != null) {
-                                    //           // registerRider.model
-                                    //           //     .subcategoryId = value.id;
-                                    //           //     // shippingcubit.selectSubCategory(
-                                    //           //     //     subCategory: value);
-                                    //           //     // field.didChange(
-                                    //           //     //     value); // تحديث حالة الفاليديشن
-                                    //           //   }
-                                    //           // } else {
-                                    //           //   context.push(Routes.LOGIN);
-                                    //           // }
-                                    //         });
-                                    //       },
-                                    //     ),
-                                    //     const SizedBox(
-                                    //       height: 8,
-                                    //     ),
-                                    //     if (field.hasError)
-                                    //       Padding(
-                                    //         padding: const EdgeInsets.symmetric(
-                                    //           horizontal: 15,
-                                    //         ),
-                                    //         child: Text(
-                                    //           field.errorText ?? "",
-                                    //           style: Styles.mediumText(
-                                    //             color: Colors.red,
-                                    //           ),
-                                    //         ),
-                                    //       )
-                                    //   ],
-                                    // );
-                                  },
-                                ),
-                              ],
-                            );
-                          } else {
-                            return Container();
-                          }
-                        },
+                                          ),
+                                          if (field.hasError)
+                                            Column(
+                                              children: [
+                                                const Sizer(),
+                                                Text(
+                                                  field.errorText.toString(),
+                                                  style: Styles.mediumText(
+                                                      color: Colors.red),
+                                                )
+                                              ],
+                                            ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
+                        ),
                       ),
                     ),
-                    // RiderRegisterOne(
-                    //   formKey: formKey,
-                    // ),
-                    // RiderRegisterScandScreen(
-                    //   formKey: formKey,
-                    // ),
+                    const Sizer(
+                      height: 30,
+                    ),
                     selectRegisterType(registerRider),
                     const SizedBox(
                       height: 10,
@@ -413,32 +372,15 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
   selectRegisterType(RegisterRiderCubit registerCubit) {
     if (registerCubit.SELECTED_NO_SOCKET_SUBCATEGORY_IDS.isNotEmpty) {
       log("RiderRegisterOne");
-      return RiderRegisterScandScreen(
-        formKey: formKey,
+      return RiderRegisterNoSocketScreen(
+        formKey: context.read<RegisterRiderCubit>().socketFormKey,
       );
     } else {
       log("RiderRegisterScandScreen");
       return RideRegisterSocketScreen(
-        formKey: formKey,
+        formKey: context.read<RegisterRiderCubit>().socketFormKey,
       );
     }
-    // if (registerCubit.model.subcategoryId == "62c8ba9f8e28a58a3edf57eb" ||
-    //     registerCubit.model.subcategoryId == "62c8baa08e28a58a3edf57ed" ||
-    //     registerCubit.model.subcategoryId == "62c8baa18e28a58a3edf57ef" ||
-    //     registerCubit.model.subcategoryId == "62c8baa28e28a58a3edf57f1" ||
-    //     registerCubit.model.subcategoryId == "62c8baa38e28a58a3edf57f3" ||
-    //     registerCubit.model.subcategoryId == "62ea012a69ea29c91dfc3917" ||
-    //     registerCubit.model.subcategoryId == "6698736fdaa111da2d775627") {
-    //   log("one");
-    //   return RiderRegisterOne(
-    //     formKey: formKey,
-    //   );
-    // } else {
-    //   log("tow");
-    //   return RiderRegisterScandScreen(
-    //     formKey: formKey,
-    //   );
-    // }
   }
 }
 
@@ -460,27 +402,41 @@ class _ViewRideCategoryState extends State<ViewRideCategory> {
   Widget build(BuildContext context) {
     var registerRider = context.read<RegisterRiderCubit>();
     return StaggeredGrid.count(
-      crossAxisCount: 2,
+      crossAxisCount: 1,
       children: [
         ...List.generate(
           widget.list.length,
           (index) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(widget.list[index].subCategoryNameEn ?? ""),
-                Checkbox(
-                  value: registerRider.selectedSubCategoryList
-                      .contains(widget.list[index]),
-                  onChanged: (value) {
-                    widget.onChanged();
-                    context
-                        .read<RegisterRiderCubit>()
-                        .selectSubCategory(subCategory: widget.list[index]);
-                    setState(() {});
-                  },
-                )
-              ],
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(
+                                widget.list[index].picture ?? ""))),
+                  ),
+                  const Sizer(),
+                  Text((context.isArabic?widget.list[index].subCategoryNameAr:widget.list[index].subCategoryNameEn) ?? ""),
+                  const Spacer(),
+                  Checkbox(
+                    value: registerRider.selectedSubCategoryList
+                        .contains(widget.list[index]),
+                    onChanged: (value) {
+                      log(widget.list[index].subCategoryId.toString());
+                      widget.onChanged();
+                      context
+                          .read<RegisterRiderCubit>()
+                          .selectSubCategory(subCategory: widget.list[index]);
+                      setState(() {});
+                    },
+                  ),
+                ],
+              ),
             );
           },
         )

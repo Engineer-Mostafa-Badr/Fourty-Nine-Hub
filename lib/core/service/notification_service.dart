@@ -129,11 +129,11 @@ class _FlutterLocalNotificationHelper {
     flutterLocalNotificationsPlugin.initialize(const InitializationSettings(
       android: AndroidInitializationSettings('@mipmap/ic_launcher'),
       iOS: DarwinInitializationSettings(
-          requestAlertPermission: true,
-          requestBadgePermission: true,
-          requestSoundPermission: true,
-          // onDidReceiveLocalNotification: onDidReceiveLocalNotification
-          ),
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true,
+        // onDidReceiveLocalNotification: onDidReceiveLocalNotification
+      ),
     ));
   }
 

@@ -56,7 +56,8 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       this._checkUserNearbyUseCase,
       this._fetchSubCategoryDataUseCase,
       this._uploadTinderPictureUseCase,
-      this._toggleSubCategoryToFavoritesUseCase, this._deleteTinderPictureUseCase)
+      this._toggleSubCategoryToFavoritesUseCase,
+      this._deleteTinderPictureUseCase)
       : super(TinderViewState());
 
   // Future<void> fetchUserData() async{
@@ -86,6 +87,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       },
     );
   }
+
   Future<void> fetchMainCategoryById(BuildContext context, String id) async {
     if (!isClosed) {
       emit(state.copyWith(
@@ -101,7 +103,8 @@ class TinderViewCubit extends Cubit<TinderViewState> {
           status: TinderStates.failure,
         ));
       }, (r) {
-        emit(state.copyWith(mainCategoryEntity: r, status: TinderStates.success));
+        emit(state.copyWith(
+            mainCategoryEntity: r, status: TinderStates.success));
         // emit(state.copyWith(
         //   mainCategoryResponseState: TinderStates.success,
         //   mainCategoryEntity: r,
@@ -342,8 +345,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       response.fold((l) {
         emit(state.copyWith(subCategoryDataState: TinderStates.failure));
       }, (r) {
-        emit(state.copyWith(
-            subCategoryData: r, status: TinderStates.success));
+        emit(state.copyWith(subCategoryData: r, status: TinderStates.success));
       });
     }
 
@@ -388,15 +390,16 @@ class TinderViewCubit extends Cubit<TinderViewState> {
             data: {'profilePictureId': data.mediaId},
           );
           return response.fold(
-                (failure) {
+            (failure) {
               print('=======>data Fal}');
 
               return Left(failure);
             },
-                (data) {
+            (data) {
               emit(state.copyWith(newImage: image));
               UserCubit.to.getUser();
-              uploadPictures(pictures: AddImagesParams(media: [state.newImage!.mediaId]));
+              uploadPictures(
+                  pictures: AddImagesParams(media: [state.newImage!.mediaId]));
               print("newImage====>${state.newImage?.mediaId}");
               return const Right(true);
             },
@@ -404,20 +407,19 @@ class TinderViewCubit extends Cubit<TinderViewState> {
         });
   }
 
-
   Future<void> uploadPictures({
-  required AddImagesParams pictures,
-}) async {
+    required AddImagesParams pictures,
+  }) async {
     final response = await _uploadTinderPictureUseCase(pictures);
     if (isClosed) return;
     response.fold(
-          (failure) {
+      (failure) {
         print('Failure : $failure');
         if (!isClosed) {
           emit(state.copyWith(failure: failure, status: TinderStates.failure));
         }
       },
-          (data) {
+      (data) {
         if (!isClosed) {
           emit(state.copyWith(status: TinderStates.success));
         }
@@ -426,8 +428,10 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       },
     );
   }
+
   void setUploading(bool isUploading) {
-    emit(TinderViewState(isUploading: isUploading, profileUserData: state.profileUserData));
+    emit(TinderViewState(
+        isUploading: isUploading, profileUserData: state.profileUserData));
   }
   // Future<void> uploadPictures({
   //   required AddImagesParams pictures,
@@ -489,8 +493,8 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     final response = await _toggleSubCategoryToFavoritesUseCase(subcategoryId);
     bool result = false;
     response.fold(
-        (failure) =>
-            emit(state.copyWith(failure: failure, status: TinderStates.failure)),
+        (failure) => emit(
+            state.copyWith(failure: failure, status: TinderStates.failure)),
         (data) {
       result = data;
       emit(state.copyWith(status: TinderStates.success));
@@ -502,12 +506,12 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     final response = await _deleteTinderPictureUseCase(id);
     if (isClosed) return;
     response.fold(
-          (failure) {
+      (failure) {
         if (!isClosed) {
           emit(state.copyWith(failure: failure, status: TinderStates.failure));
         }
       },
-          (data) {
+      (data) {
         if (!isClosed) {
           emit(state.copyWith(status: TinderStates.success));
         }

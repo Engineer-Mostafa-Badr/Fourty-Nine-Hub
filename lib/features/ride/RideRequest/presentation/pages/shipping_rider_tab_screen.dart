@@ -21,8 +21,6 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/cre
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/map_and_address_finder_ride.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/my_trip_info_ride_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/ride_banner_widget.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/rider_banner_widget.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/shipping_banner_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/sub_cateogry_ride_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/sub_cateogry_shipping_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/trip_info_request_widget.dart';
@@ -96,28 +94,26 @@ class _ShippingRiderTabScreenState extends State<ShippingRiderTabScreen> {
                 //     ),
                 //     Sizer(),
                 //     Flexible(
-                      // child: ShippingBannerWidget(),
+                // child: ShippingBannerWidget(),
                 //     ),
                 //     Sizer(),
                 //   ],
                 // ),
-                RideBannerWidget(),
+                const RideBannerWidget(),
                 const SubCateogryRideWidget(),
                 SubCateogryShippingWidget(
                   formKey: formKey,
                 ),
-                BlocBuilder<SelectCateogryCubit, RiderState>(
+                BlocBuilder<SelectCateogryCubit, RiderState>( 
                   builder: (context, state) {
                     if (state is SuccessSelectCateogryState) {
                       if (state.type == 0) {
                         return Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
                           child: Column(
                             children: [
                               const Sizer(),
-                              BlocBuilder<RiderTripReelTimeCubit,
-                                  RiderState>(
+                              BlocBuilder<RiderTripReelTimeCubit, RiderState>(
                                 builder: (context, state) {
                                   if (state is ViewPickTripDataState) {
                                     return Column(
@@ -132,8 +128,7 @@ class _ShippingRiderTabScreenState extends State<ShippingRiderTabScreen> {
                                                 create: (context) =>
                                                     GetCurrencyCubit(
                                                         serviceLocator()),
-                                                child:
-                                                    TripInfoRequestWidget(
+                                                child: TripInfoRequestWidget(
                                                   model: state.model,
                                                 ),
                                               );

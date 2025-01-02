@@ -3,8 +3,6 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 
-
-
 class UploadTinderPictureUseCase extends UseCase<bool, AddImagesParams> {
   final TinderRepository _repository;
 
@@ -16,7 +14,7 @@ class UploadTinderPictureUseCase extends UseCase<bool, AddImagesParams> {
   }
 }
 
-class AddImagesParams{
+class AddImagesParams {
   List<String>? media;
 
   AddImagesParams({
@@ -24,8 +22,6 @@ class AddImagesParams{
   });
 
   Map<String, dynamic> toJson() => {
-
-    'pictures': media,
-  };
+        'pictures': media,
+      };
 }
-

@@ -21,5 +21,5 @@ class ShowDeletedMessageParams {
   final String chatId;
   final String messageId;
 
-  ShowDeletedMessageParams({required this.chatId, required this.messageId}); 
-  }
+  ShowDeletedMessageParams({required this.chatId, required this.messageId});
+}

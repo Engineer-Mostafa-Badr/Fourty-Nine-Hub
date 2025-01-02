@@ -27,19 +27,18 @@ class NavigateBarParams {
   final bool snap;
   final bool spotlight;
 
-  NavigateBarParams(
-      {
-      required this.find,
-      required this.health,
-      required this.live,
-      required this.loading,
-      required this.meal,
-      required this.meet,
-      required this.reel,
-      required this.ride,
-      required this.snap,
-      required this.spotlight,
-      });
+  NavigateBarParams({
+    required this.find,
+    required this.health,
+    required this.live,
+    required this.loading,
+    required this.meal,
+    required this.meet,
+    required this.reel,
+    required this.ride,
+    required this.snap,
+    required this.spotlight,
+  });
 
   Map<String, dynamic> toJson() {
     return {

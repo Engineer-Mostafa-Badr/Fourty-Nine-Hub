@@ -129,7 +129,6 @@ class DI {
     //         .setExtraHeaders({'Authorization': token??cred}) // optional
     //         .build()));
 
-
     // database
     serviceLocator.registerLazySingleton<Database>(
         () => SQFLiteDataSource.instance.database);

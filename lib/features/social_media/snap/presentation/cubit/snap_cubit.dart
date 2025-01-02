@@ -10,13 +10,12 @@ class SnapCubit extends Cubit<SnapState> {
     this._fetchFilterSnapUseCase,
   ) : super(const SnapState());
 
-
   Future<void> fetchFilter() async {
     final response = await _fetchFilterSnapUseCase.call(const NoParams());
     response.fold((l) {
       emit(state.copyWith(failure: l, status: SnapStates.error));
     }, (data) {
-      emit(state.copyWith(snap: data,status: SnapStates.success));
+      emit(state.copyWith(snap: data, status: SnapStates.success));
     });
   }
 }

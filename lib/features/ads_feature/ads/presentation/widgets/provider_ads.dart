@@ -39,7 +39,6 @@ class _ProviderAdsState extends State<ProviderAds> {
 
   @override
   void initState() {
-
     super.initState();
     _adsManager.preloadAds();
   }
@@ -64,7 +63,7 @@ class _ProviderAdsState extends State<ProviderAds> {
             );
           },
           itemBuilder: (context, item, index) {
-    // if (index > 0 && index % 3 == 0) {
+            // if (index > 0 && index % 3 == 0) {
 /*
    if (index > nativeAdStart && index % adFrequency == adFrequency - 1) {
               return getAdIfNeeded(index, _adsManager);
@@ -75,7 +74,8 @@ class _ProviderAdsState extends State<ProviderAds> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.5, // Reduced height
+                    height: MediaQuery.of(context).size.height *
+                        0.5, // Reduced height
                     child: const AdsManagerWidget(),
                   ),
                   _buildAdContent(item), // Your content for the ad
@@ -93,8 +93,10 @@ class _ProviderAdsState extends State<ProviderAds> {
               const Center(child: CircularProgressIndicator())),
     );
   }
+
   Widget _buildAdContent(AdModel item) {
-    return CategoriesExtension.fromNameEn(widget.params.mainCategory.nameEn ?? '')
+    return CategoriesExtension.fromNameEn(
+            widget.params.mainCategory.nameEn ?? '')
         .view(
       item: item,
       onFav: (String id) async {
@@ -108,5 +110,3 @@ class _ProviderAdsState extends State<ProviderAds> {
     );
   }
 }
-
-         

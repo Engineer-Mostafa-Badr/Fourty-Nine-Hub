@@ -27,116 +27,130 @@ class EditProfileTinder extends StatelessWidget {
         child: BlocBuilder<TinderViewCubit, TinderViewState>(
           builder: (BuildContext context, state) {
             var controller = context.read<TinderViewCubit>();
-            if(state.status ==TinderStates.success) {
+            if (state.status == TinderStates.success) {
               return Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 1 / 1.3,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemCount: 9, // Always display 9 items
-                itemBuilder: (context, index) {
-                  final hasImage = index < (state.profileUserData?.pictures.length ?? 0);
-                  final imageUrl = hasImage
-                      ? state.profileUserData!.pictures[index].mediaKey
-                      : null;
+                padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 1 / 1.3,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                  ),
+                  itemCount: 9, // Always display 9 items
+                  itemBuilder: (context, index) {
+                    final hasImage =
+                        index < (state.profileUserData?.pictures.length ?? 0);
+                    final imageUrl = hasImage
+                        ? state.profileUserData!.pictures[index].mediaKey
+                        : null;
 
-                  return Stack(
-                    alignment: AlignmentDirectional.bottomStart,
-                    children: [
-                      Container(
-                        height: 200.h,
-                        margin: EdgeInsets.symmetric(horizontal: 15.w),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.r),
-                          border: hasImage
-                              ? null
-                              : Border.all(color: Colors.grey, width: 2),
-                          color: hasImage ? null : Colors.grey[400],
-                          image: hasImage
-                              ? DecorationImage(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(imageUrl!),
-                          )
-                              : state.newImage != null && index == state.profileUserData?.pictures.length
-                              ? DecorationImage(
-                            fit: BoxFit.fill,
-                            image: FileImage(File(state.newImage!.file.path)),
-                          )
+                    return Stack(
+                      alignment: AlignmentDirectional.bottomStart,
+                      children: [
+                        Container(
+                          height: 200.h,
+                          margin: EdgeInsets.symmetric(horizontal: 15.w),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.r),
+                            border: hasImage
+                                ? null
+                                : Border.all(color: Colors.grey, width: 2),
+                            color: hasImage ? null : Colors.grey[400],
+                            image: hasImage
+                                ? DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: NetworkImage(imageUrl!),
+                                  )
+                                : state.newImage != null &&
+                                        index ==
+                                            state.profileUserData?.pictures
+                                                .length
+                                    ? DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: FileImage(
+                                            File(state.newImage!.file.path)),
+                                      )
+                                    : null,
+                          ),
+                          child: state.isUploading == false &&
+                                  index ==
+                                      state.profileUserData?.pictures.length
+                              ? const Center(
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.SECONDARY_COLOR,
+                                  ),
+                                )
                               : null,
                         ),
-                        child: state.isUploading ==false && index == state.profileUserData?.pictures.length
-                            ? const Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.SECONDARY_COLOR,
-                          ),
-                        )
-                            : null,
-                      ),
-                      if (hasImage || (state.newImage != null && index == state.profileUserData?.pictures.length))
-                        InkWell(
-                          onTap: ()async{
-                            await controller.deletePicture(state.profileUserData!.pictures[index].id);
-                            controller.fetchUserProfile(userId: userCubit.state.data!.id);
-                          },
-                          child: CircleAvatar(
-                            radius: 30.r,
-                            backgroundColor: AppColors.GREY_NORMAL_COLOR,
-                            child: Icon(
-                              Icons.clear,
-                              color: AppColors.AUTH_CONTAINER_COLOR,
-                              size: 40.sp,
+                        if (hasImage ||
+                            (state.newImage != null &&
+                                index ==
+                                    state.profileUserData?.pictures.length))
+                          InkWell(
+                            onTap: () async {
+                              await controller.deletePicture(
+                                  state.profileUserData!.pictures[index].id);
+                              controller.fetchUserProfile(
+                                  userId: userCubit.state.data!.id);
+                            },
+                            child: CircleAvatar(
+                              radius: 30.r,
+                              backgroundColor: AppColors.GREY_NORMAL_COLOR,
+                              child: Icon(
+                                Icons.clear,
+                                color: AppColors.AUTH_CONTAINER_COLOR,
+                                size: 40.sp,
+                              ),
+                            ),
+                          )
+                        else
+                          InkWell(
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Wrap(
+                                    children: <Widget>[
+                                      ListTile(
+                                          leading:
+                                              const Icon(Icons.photo_library),
+                                          title:
+                                              Text(LocaleKeys.gallery.localize),
+                                          onTap: () async {
+                                            Navigator.pop(context);
+                                            await controller.uploadPhoto(
+                                                isGallery: true);
+                                          }),
+                                      ListTile(
+                                        leading: const Icon(Icons.camera_alt),
+                                        title: Text(LocaleKeys.camera.localize),
+                                        onTap: () async {
+                                          Navigator.pop(context);
+                                          await controller.uploadPhoto(
+                                              isGallery: false);
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: CircleAvatar(
+                              radius: 30.r,
+                              backgroundColor: AppColors.SECONDARY_COLOR,
+                              child: Icon(
+                                Icons.add,
+                                color: AppColors.AUTH_CONTAINER_COLOR,
+                                size: 40.sp,
+                              ),
                             ),
                           ),
-                        )
-                      else
-                        InkWell(
-                          onTap: () {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return Wrap(
-                                  children: <Widget>[
-                                    ListTile(
-                                      leading: const Icon(Icons.photo_library),
-                                      title: Text(LocaleKeys.gallery.localize),
-                                      onTap: () async {
-                                        Navigator.pop(context);
-                                        await controller
-                                            .uploadPhoto(isGallery: true);
-                                      }
-                                    ),
-                                    ListTile(
-                                      leading: const Icon(Icons.camera_alt),
-                                      title: Text(LocaleKeys.camera.localize),
-                                      onTap: () async {
-                                        Navigator.pop(context);
-                                         await controller.uploadPhoto(isGallery: false);
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          child: CircleAvatar(
-                            radius: 30.r,
-                            backgroundColor: AppColors.SECONDARY_COLOR,
-                            child: Icon(
-                              Icons.add,
-                              color: AppColors.AUTH_CONTAINER_COLOR,
-                              size: 40.sp,
-                            ),
-                          ),
-                        ),
-                    ],
-                  );
-                },
-              ),
-            );
+                      ],
+                    );
+                  },
+                ),
+              );
             }
             return const Center(child: CircularProgressIndicator());
           },
@@ -145,8 +159,6 @@ class EditProfileTinder extends StatelessWidget {
     );
   }
 }
-
-
 
 // import 'dart:io';
 //

@@ -305,7 +305,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     });
   }
 
-  Future<void> getProfileViewByUserId({required bool isProfile, required String userId}) async {
+  Future<void> getProfileViewByUserId(
+      {required bool isProfile, required String userId}) async {
     profileViewsByUserId.clear();
     final response = await _getProfileViewsByUserIdUseCase(
         GetProfileViewsParams(isProfile: isProfile, userId: userId));

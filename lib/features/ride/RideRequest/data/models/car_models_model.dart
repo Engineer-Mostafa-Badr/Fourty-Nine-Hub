@@ -1,4 +1,9 @@
-import '../../domain/entity/car_model_entity.dart';
 
-class CarModelsModel extends CarModelEntity {}
-// TripRequestModel
+class CarModelsModel {
+  final String? model;
+  CarModelsModel({this.model});
+
+  factory CarModelsModel.fromJson(Map<String, dynamic> json) {
+    return CarModelsModel(model: json['model'].toString());
+  }
+}

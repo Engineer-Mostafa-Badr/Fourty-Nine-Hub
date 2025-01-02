@@ -76,7 +76,7 @@ class BaseApiConsumer extends ApiConsumer {
     _token = token;
     log(_token?.accessToken.toString() ?? "Okkkk",
         name: "lskdjflskdjflskdjflskjdf");
-    CacheServiceImpl().saveUserToken(_token?.accessToken??"Token");
+    CacheServiceImpl().saveUserToken(_token?.accessToken ?? "Token");
     log("${await CacheManager.getAccessToken()} attached", name: "Token");
     if (token != null) {
       log(token.accessToken.toString(), name: "Token");
@@ -220,7 +220,7 @@ class BaseApiConsumer extends ApiConsumer {
         queryParameters: queryParameters,
         options: Options(headers: headers),
       );
-
+      log(result.data.toString(), name: "url");
       if (result.data['status']) {
         return Right(result.data as Map<String, dynamic>);
       } else {
@@ -259,7 +259,7 @@ class BaseApiConsumer extends ApiConsumer {
           queryParameters: queryParameters,
           options: Options(headers: headers));
       log(result.data.toString(), name: "url");
-      if (result.data['status']) {
+      if (getSuccessState(result.data)) {
         log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
         if (result.data is Map<String, dynamic>) {
           return Right(result.data as Map<String, dynamic>);
@@ -365,6 +365,19 @@ class BaseApiConsumer extends ApiConsumer {
   void removeTokenFromHeader() {
     _dio.options.headers['Authorization'] = null;
     CliLogger.info('Barear Token is  ${_dio.options.headers['Authorization']}');
+  }
+
+  bool getSuccessState(Map<String, dynamic> response) {
+    if (response.containsKey("success")) {
+      return response["success"];
+    } else {
+      if (response.containsKey("status")) {
+        return response["status"];
+      } else {
+        return false;
+      }
+    }
+
   }
 }
 //dependency inversion

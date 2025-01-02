@@ -38,7 +38,9 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_r
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_ride_currentTrip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/offer_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/pick_driver_image_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/record_ride_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/send_offer_by_driver_cubit.dart';
@@ -83,7 +85,6 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
 
   final customPageCubit = serviceLocator<CustomPageCubit>();
   await customPageCubit.fetchActivate();
@@ -300,6 +301,15 @@ class _MyAppState extends State<MyApp> {
           create: (context) =>
               GetRideCurrenttripCubit(repository: serviceLocator())..get(),
         ),
+        
+        BlocProvider(
+          create: (context) =>
+              RegisterRiderCubit(repository: serviceLocator(), repo: serviceLocator()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              PickDriverImageCubit(),
+        ),
         BlocProvider(
           create: (context) => DriversNearbyCubit(repository: serviceLocator()),
         ),
@@ -318,9 +328,9 @@ class _MyAppState extends State<MyApp> {
               return FutureBuilder<bool>(
                   future: CacheManager.getMode(),
                   builder: (context, snapshot) {
-                    return BlocBuilder<CustomPageCubit,CustomPageState>(
+                    return BlocBuilder<CustomPageCubit, CustomPageState>(
                       builder: (BuildContext context, custom) {
-                        return  MaterialApp.router(
+                        return MaterialApp.router(
                           builder: (context, child) {
                             return MediaQuery(
                               data: MediaQuery.of(context)
