@@ -27,9 +27,9 @@ class _ReelSearchViewState extends State<ReelSearchView> {
       padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
       child: BlocBuilder<SearchCubit, SearchState>(
         builder: (BuildContext context, state) {
-          if(state.status ==SearchStates.loading){
-            return const Center(child: CircularProgressIndicator());
-          }
+          // if(state.status ==SearchStates.loading){
+          //   return const Center(child: CircularProgressIndicator());
+          // }
           final controller = context.read<SearchCubit>();
           if (controller.searchController.text.isNotEmpty) {
             return PagedGridView<int, ReelsSearchEntity>(

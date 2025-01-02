@@ -157,7 +157,9 @@ class _BeStarViewState extends State<BeStarView> {
                     ),
                     const Sizer(),
                     Text(
-                      context.isArabic?state.banner?.titleAr??'':state.banner?.titleEn??'',
+                      context.isArabic
+                          ? state.banner?.titleAr ?? ''
+                          : state.banner?.titleEn ?? '',
                       textAlign: TextAlign.center,
                       style: Styles.mediumText(
                         fontSize: 60.sp,
@@ -166,7 +168,9 @@ class _BeStarViewState extends State<BeStarView> {
                     ),
                     const Sizer(),
                     Text(
-                      context.isArabic?state.banner?.subTitleAr??'':state.banner?.subTitleEn??'',
+                      context.isArabic
+                          ? state.banner?.subTitleAr ?? ''
+                          : state.banner?.subTitleEn ?? '',
                       textAlign: TextAlign.center,
                       style: Styles.mediumText(
                         fontSize: 60.sp,
@@ -228,25 +232,35 @@ class _BeStarViewState extends State<BeStarView> {
                                           child: Stack(
                                             children: [
                                               VideoPlayer(videoController),
-                                              Row(
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                    children: [
-                                                      const Icon(
-                                                          Icons.remove_red_eye),
-                                                      Sizer(width: 10.w),
-                                                      Label(
-                                                          text:
-                                                          '${sortedStars[index].totalViews}'),
-                                                    ],
-                                                  ),
-                                                  const Spacer(),
-                                                  Label(
-                                                      text:
-                                                      '${LocaleKeys.Rating.localize} ${sortedStars[index].averageRating}'),
-                                                ],
+                                              Padding(
+                                                padding:  EdgeInsets.all(16.w),
+                                                child: Row(
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        const Icon(
+                                                          Icons.remove_red_eye,
+                                                          color: AppColors
+                                                              .AUTH_CONTAINER_COLOR,
+                                                        ),
+                                                        Sizer(width: 10.w),
+                                                        Label(
+                                                            text:
+                                                                '${sortedStars[index].totalViews}',
+                                                            color: AppColors
+                                                                .AUTH_CONTAINER_COLOR),
+                                                      ],
+                                                    ),
+                                                    const Spacer(),
+                                                    Label(
+                                                        color: AppColors
+                                                            .AUTH_CONTAINER_COLOR,
+                                                        text:
+                                                            '${LocaleKeys.Rating.localize} ${sortedStars[index].averageRating}'),
+                                                  ],
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -366,27 +380,31 @@ class _BeStarViewState extends State<BeStarView> {
                                       },
                                     ),
                                     Padding(
-                                      padding:  EdgeInsets.all(8.w),
+                                      padding: EdgeInsets.all(8.w),
                                       child: Row(
                                         children: [
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,
                                             children: [
-                                              const Icon(Icons.remove_red_eye),
+                                              const Icon(Icons.remove_red_eye,
+                                                color: AppColors
+                                                    .AUTH_CONTAINER_COLOR,
+                                              ),
                                               Sizer(width: 10.w),
                                               Text(
                                                 '${sortedStars[index].totalViews}',
-                                                style:
-                                                    Styles.mediumText().copyWith(
+                                                style: Styles.mediumText(color: AppColors
+                                                    .AUTH_CONTAINER_COLOR,)
+                                                    .copyWith(
                                                   shadows: [
                                                     Shadow(
-                                                      offset:
-                                                          const Offset(2.0, 2.0),
+                                                      offset: const Offset(
+                                                          2.0, 2.0),
                                                       // Position of the shadow
                                                       blurRadius: 3.0,
                                                       // Blur radius of the shadow
-                                                      color: Colors.black
+                                                      color: Colors.white
                                                           .withOpacity(
                                                               0.5), // Shadow color
                                                     ),
@@ -398,10 +416,12 @@ class _BeStarViewState extends State<BeStarView> {
                                           const Spacer(),
                                           Text(
                                             '${LocaleKeys.Rating.localize} ${sortedStars[index].averageRating}',
-                                            style: Styles.mediumText().copyWith(
+                                            style: Styles.mediumText(color: AppColors
+                                                .AUTH_CONTAINER_COLOR,).copyWith(
                                               shadows: [
                                                 Shadow(
-                                                  offset: const Offset(1.0, 1.0),
+                                                  offset:
+                                                      const Offset(1.0, 1.0),
                                                   blurRadius: 3.0,
                                                   color: Colors.white
                                                       .withOpacity(0.5),

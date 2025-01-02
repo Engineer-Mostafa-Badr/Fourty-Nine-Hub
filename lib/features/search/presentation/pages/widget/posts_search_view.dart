@@ -29,9 +29,9 @@ class PostsSearchView extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 10.w),
       child: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {
-          if(state.status ==SearchStates.loading){
-            return const Center(child: CircularProgressIndicator());
-          }
+          // if(state.status ==SearchStates.loading){
+          //   return const Center(child: CircularProgressIndicator());
+          // }
           final controller = context.read<SearchCubit>();
           if (controller.searchController.text.isNotEmpty) {
             return PagedListView<int, PostEntity>(

@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/change_react.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/entity/ads_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/entity/reels_search_entity.dart';
 import 'package:fourtyninehub/features/search/domain/entity/trip_come_with_you_entity.dart';
@@ -28,6 +30,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/share_post_usecase.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,6 +54,8 @@ class SearchCubit extends Cubit<SearchState> {
   final ReplyOnCommentUseCase _replyOnCommentUseCase;
   final EditCommentUseCase _editCommentUseCase;
   final CommentReactUseCase _commentReactUseCase;
+  final GetMainCategoriesUseCase _getMainCategoriesUseCase;
+
 
   SearchCubit(
     this._fetchSearchUseCase,
@@ -69,7 +74,7 @@ class SearchCubit extends Cubit<SearchState> {
     this._commentReactUseCase,
     this._fetchTripComeSearchUseCase,
     this._fetchReelSearchUseCase,
-    this._fetchSearchSubCategoryUseCase,
+    this._fetchSearchSubCategoryUseCase, this._getMainCategoriesUseCase,
   ) : super(SearchState());
 
   TextEditingController searchController = TextEditingController();
@@ -113,6 +118,7 @@ class SearchCubit extends Cubit<SearchState> {
       print("initStatePageKey : $pageKey");
       getPaginatedSubCategorySearch(params, pageKey);
     });
+   await loadDataMain();
   }
   void loadDataReel(SearchParams params) async {
     getPaginatedReelsSearch(params, 1);
@@ -577,4 +583,31 @@ class SearchCubit extends Cubit<SearchState> {
     });
     return value;
   }
+
+  Future<void> loadDataMain() async {
+    emit(state.copyWith(status: SearchStates.loading));
+    await UserCubit.to.getUser();
+    {
+      final user = UserCubit.to.state.data?.id;
+      print('userId1$user');
+      print('userId1$user');
+      final result = await _getMainCategoriesUseCase(
+          MainCategoriesParams(page: 1, limit: 100, userId: user ?? ''));
+
+      result.fold(
+            (failure) {
+          emit(state.copyWith(
+            failure: failure,
+            status: SearchStates.error,
+          ));
+          CliLogger.error(
+              'can\'t load main categories there is an error ${failure.toString()}');
+        },
+            (r) {
+          emit(state.copyWith(status: SearchStates.success, mainCategory: r));
+        },
+      );
+    }
+  }
+
 }
