@@ -9,15 +9,16 @@ import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/driver_register_request_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/request_model.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
 class ShippingDataSource {
   ApiConsumer api;
   final CacheService cacheService;
   ShippingDataSource({required this.api, required this.cacheService});
   Future<Either<Failure, Map<String, dynamic>>> getBannerData() async {
-    String? token = await cacheService.getUserToken() ?? "";
-    log(token, name: "lllllllllllllllllllllllllddddddddddddddddd");
-    String? userId = extractUserId(token);
+    // String? token = await cacheService.getUserToken() ?? "";
+    String? token = await CacheManager.getAccessToken() ?? "";
+    log(token!, name: "lllllllllllllllllllllllllddddddddddddddddd");
+    String? userId = extractUserId(token!);
     // extractUserId(token ?? "");
     if (userId == null) {
       return api.get(EndPoints.bannerData);
@@ -31,7 +32,8 @@ class ShippingDataSource {
   Future<Either<Failure, Map<String, dynamic>>> getS3(
       {required String endpoint, Map<String, dynamic>? data}) async {
     CacheService cacheService = CacheServiceImpl();
-    var token = await cacheService.getUserToken();
+    // var token = await cacheService.getUserToken();
+    var token = await CacheManager.getAccessToken();
     log(token.toString(), name: "TOKENTOKEN");
     log(data.toString(), name: "DATADATADATA");
     log("${EndPoints.developmentBaseUrl}$endpoint", name: "endpointendpoint");
@@ -126,7 +128,8 @@ class ShippingDataSource {
 
   Future<Either<Failure, Map<String, dynamic>>> callMessage(
       {required String ownerId, required String subcategoryId}) async {
-    String? token = await cacheService.getUserToken() ?? "";
+    // String? token = await cacheService.getUserToken() ?? "";
+    String? token = await CacheManager.getAccessToken() ?? "";
     log(token, name: "lllllllllllllllllllllllllddddddddddddddddd");
     String? userId = extractUserId(token);
     return api.post(EndPoints.click, data: {

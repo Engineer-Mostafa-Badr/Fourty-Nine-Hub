@@ -1,9 +1,12 @@
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
+// import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/create_offer_no_socket_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/create_trip_no_socket_model.dart';
@@ -22,7 +25,8 @@ class RiderDataSource {
   RiderDataSource({required this.api, required this.cacheService});
 
   Future<Either<Failure, Map<String, dynamic>>> getCateogryData() async {
-    String? token = await cacheService.getUserToken() ?? "";
+    // String? token = await cacheService.getUserToken() ?? "";
+    String? token = await CacheManager.getAccessToken() ?? "";
     String? userId = extractUserId(token);
     // extractUserId(token ?? "");
     print("USERID============ $userId \n");

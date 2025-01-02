@@ -2199,6 +2199,20 @@ class AppPages {
                     serviceLocator(),
                   ),
                 ),
+                // car pool
+                BlocProvider<GetAllTripsCubit>(
+                  create: (context) =>
+                      GetAllTripsCubit(apiConsumer: serviceLocator()),
+                ),
+                BlocProvider<GetCurrencyCubit>(
+                  create: (context) => GetCurrencyCubit(
+                    serviceLocator(),
+                  ),
+                ),
+                BlocProvider<JoinTripCarPoolCubit>(
+                  create: (context) => JoinTripCarPoolCubit(
+                      joinTripCarpoolUsecase: serviceLocator()),
+                ),
               ],
               child: const AvailableTripsView(),
             ),

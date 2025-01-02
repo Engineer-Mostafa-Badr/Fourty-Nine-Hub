@@ -66,7 +66,7 @@ class _AvaiableRoutesCardState extends State<AvaiableRoutesCard> {
                     children: [
                       Row(
                         children: [
-                          Text('${widget.entity.priceForEveryUser} ',
+                          Text('${widget.entity.priceForEveryUser.toInt()} ',
                               style: Styles.headerText(
                                   fontSize: 36,
                                   color: AppColors.CHECK_MARK_COLOR,

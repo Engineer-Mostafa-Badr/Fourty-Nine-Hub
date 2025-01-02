@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
@@ -42,13 +43,16 @@ class _AvailableTripsBodyState extends State<AvailableTripsBody> {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                LocaleKeys.userOwnCarsShareWithThem.localize,
-                style: Styles.headerText(
-                  color: AppColors.getSecondryColor(context),
+                context.isArabic
+                    ? "أنشئ إعلانًا لرحلاتك اليومية وشارك تكاليف النقل مع ركاب آخرين."
+                    : "Advertise your recurring trips and connect with passengers daily.",
+                style: Styles.mediumText(
+                  color: AppColors.PRIMARY_COLOR_DARK,
+                  fontStyle: FontStyle.italic,
                 ),
-                textAlign: TextAlign.start,
               ),
             ),
+            const SizedBox(height: 8),
             const ViewAllTripJoinCardBuilder(),
           ],
         ),

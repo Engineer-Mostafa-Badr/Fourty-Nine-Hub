@@ -248,97 +248,122 @@ class _AcceptedCardImageState extends State<AcceptedCardImage> {
               final parentContext = context;
               widget.bookedUser != null
                   ? showModalBottomSheet(
+                      backgroundColor: AppColors.BACKGROUND_COLOR,
                       context: context,
                       builder: (context) {
                         return Center(
                           child: Container(
-                            height: MediaQuery.of(context).size.height * 0.8,
+                            height: widget.isOtpVerified
+                                ? MediaQuery.of(context).size.height * 0.4
+                                : MediaQuery.of(context).size.height * 0.8,
                             decoration: BoxDecoration(
                               color: AppColors.BACKGROUND_COLOR,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Column(
                               children: [
-                                Text(
-                                  LocaleKeys.enterUserOtp.localize,
-                                  style: Styles.headerText(),
-                                ),
-                                Directionality(
-                                  textDirection: TextDirection.ltr,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 24, vertical: 8),
-                                    child: PinCodeTextField(
-                                      appContext: context,
-                                      length: 6,
-                                      onChanged: (value) {
-                                        print("value $value \n");
-                                        otpSaved =
-                                            value; // Update OTP on change
-                                      },
-                                      animationType: AnimationType.fade,
-                                      pinTheme: PinTheme(
-                                        shape: PinCodeFieldShape.box,
-                                        borderRadius: BorderRadius.circular(8),
-                                        activeFillColor: Colors.grey[200],
-                                        selectedFillColor: Colors.grey[300],
-                                        inactiveFillColor: Colors.grey[100],
-                                        fieldHeight: 50,
-                                        fieldWidth: 40,
-                                        activeColor: Colors.blue,
-                                        selectedColor: Colors.blue,
-                                      ),
-                                      backgroundColor:
-                                          AppColors.BACKGROUND_COLOR,
-                                      keyboardType: TextInputType.number,
-                                      cursorColor: Colors.blue,
-                                      animationDuration:
-                                          const Duration(milliseconds: 300),
-                                      beforeTextPaste: (text) {
-                                        // Allow pasting
-                                        return true;
-                                      },
-                                      onCompleted: (data) {
-                                        otpSaved = data;
-                                        print("otpSaved $otpSaved \n");
-                                        print(data);
-                                      },
-                                    ),
-                                  ),
-                                ),
-                                const Sizer(),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24),
-                                  child: AvaialbleTripsButton(
-                                    color: parentContext
-                                            .isDarkMode // Use the saved context
-                                        ? AppColors.SECONDARY_COLOR
-                                        : AppColors.PRIMARY_COLOR,
-                                    title: LocaleKeys.confirm.localize,
-                                    onTap: () async {
-                                      try {
-                                        await BlocProvider.of<
-                                                    VerifyCompleteDriverCubit>(
-                                                parentContext) // Use the saved context
-                                            .verifyUserOtp(
-                                          verifyOtpParam: VerifyOtpParam(
-                                            driverLocation: [],
-                                            otp: otpSaved,
-                                            userId: widget.bookedUser?.id ?? "",
+                                !widget.isOtpVerified
+                                    ? Column(
+                                        children: [
+                                          Text(
+                                            LocaleKeys.enterUserOtp.localize,
+                                            style: Styles.headerText(),
                                           ),
-                                          tripId: widget.tripId,
-                                        );
-                                      } catch (e) {
-                                        // Handle the error gracefully
-                                        print("Error: $e");
-                                      }
-                                    },
-                                  ),
-                                ),
-                                const Spacer(
-                                  flex: 2,
-                                ),
+                                          Directionality(
+                                            textDirection: TextDirection.ltr,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 24,
+                                                      vertical: 8),
+                                              child: PinCodeTextField(
+                                                appContext: context,
+                                                length: 6,
+                                                onChanged: (value) {
+                                                  print("value $value \n");
+                                                  otpSaved =
+                                                      value; // Update OTP on change
+                                                },
+                                                animationType:
+                                                    AnimationType.fade,
+                                                pinTheme: PinTheme(
+                                                  shape: PinCodeFieldShape.box,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  activeFillColor:
+                                                      Colors.grey[200],
+                                                  selectedFillColor:
+                                                      Colors.grey[300],
+                                                  inactiveFillColor:
+                                                      Colors.grey[100],
+                                                  fieldHeight: 50,
+                                                  fieldWidth: 40,
+                                                  activeColor: Colors.blue,
+                                                  selectedColor: Colors.blue,
+                                                ),
+                                                backgroundColor:
+                                                    AppColors.BACKGROUND_COLOR,
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                cursorColor: Colors.blue,
+                                                animationDuration:
+                                                    const Duration(
+                                                        milliseconds: 300),
+                                                beforeTextPaste: (text) {
+                                                  // Allow pasting
+                                                  return true;
+                                                },
+                                                onCompleted: (data) {
+                                                  otpSaved = data;
+                                                  print(
+                                                      "otpSaved $otpSaved \n");
+                                                  print(data);
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                          const Sizer(),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 24),
+                                            child: AvaialbleTripsButton(
+                                              color: parentContext
+                                                      .isDarkMode // Use the saved context
+                                                  ? AppColors.SECONDARY_COLOR
+                                                  : AppColors.PRIMARY_COLOR,
+                                              title:
+                                                  LocaleKeys.confirm.localize,
+                                              onTap: () async {
+                                                try {
+                                                  await BlocProvider.of<
+                                                              VerifyCompleteDriverCubit>(
+                                                          parentContext) // Use the saved context
+                                                      .verifyUserOtp(
+                                                    verifyOtpParam:
+                                                        VerifyOtpParam(
+                                                      driverLocation: [],
+                                                      otp: otpSaved,
+                                                      userId: widget
+                                                              .bookedUser?.id ??
+                                                          "",
+                                                    ),
+                                                    tripId: widget.tripId,
+                                                  );
+                                                } catch (e) {
+                                                  // Handle the error gracefully
+                                                  print("Error: $e");
+                                                }
+                                              },
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    : const SizedBox(),
+                                !widget.isOtpVerified
+                                    ? const Spacer(
+                                        flex: 2,
+                                      )
+                                    : const SizedBox(),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 24),

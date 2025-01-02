@@ -377,23 +377,23 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
         } else if (state.status == StateStatus.success) {
           return Row(
             children: [
-              Expanded(
-                child: _buildRideSubCategoryItem(
-                  service: state.data?[0].service ?? RideServicesEnum.pickMe,
-                  title: LocaleKeys.carpool.localize,
-                  image: state.data?[0].image ?? '',
-                  onTab: () {
-                    AdInterstitialTop.loadIntersitialAd();
-                    AdInterstitialTop.showInterstitialAd();
-                    return HandleCashback.setCount('carPoolCount',context);
-                  },
-                  // image: Assets.carpool,
-                  // isFavorite: state.data![0].is,
-                  // numberOfAds: state.data![0].numberOfAds?.toInt(),
-                  route: Routes.CAR_POOL,
-                ),
-              ),
-              const Sizer(),
+              // Expanded(
+              //   child: _buildRideSubCategoryItem(
+              //     service: state.data?[0].service ?? RideServicesEnum.pickMe,
+              //     title: LocaleKeys.carpool.localize,
+              //     image: state.data?[0].image ?? '',
+              //     onTab: () {
+              //       AdInterstitialTop.loadIntersitialAd();
+              //       AdInterstitialTop.showInterstitialAd();
+              //       return HandleCashback.setCount('carPoolCount',context);
+              //     },
+              //     // image: Assets.carpool,
+              //     // isFavorite: state.data![0].is,
+              //     // numberOfAds: state.data![0].numberOfAds?.toInt(),
+              //     route: Routes.CAR_POOL,
+              //   ),
+              // ),
+              // const Sizer(),
               Expanded(
                 child: _buildRideSubCategoryItem(
                   service:
