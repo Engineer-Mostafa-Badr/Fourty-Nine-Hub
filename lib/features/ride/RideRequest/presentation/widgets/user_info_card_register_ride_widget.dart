@@ -56,83 +56,89 @@ class _UserInfoCardRegisterRideWidgetState
         children: [
           FormField(
             validator: (value) {
-                    if (rideRegisterCubit.model.driverImage == null) {
-                      return context.isArabic
-                          ? "يرجى إضافة صورة"
-                          : "Please add an image";
-                    }
-                  },
+              if (rideRegisterCubit.model.driverImage == null) {
+                return context.isArabic
+                    ? "يرجى إضافة صورة"
+                    : "Please add an image";
+              }
+            },
             builder: (field) {
               return Column(
                 children: [
                   Column(
                     children: [
                       BlocBuilder<PickDriverImageCubit, RiderState>(
-            builder: (context, state) {
-              if (state is SuccessPickDriverImageState) {
-                return Column(
-                      children: [
-                        Container(
-                            width: 90,
-                            height: 90,
-                            padding: const EdgeInsets.all(15),
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: FileImage(
-                                      rideRegisterCubit.model.driverImage!),
-                                  fit: BoxFit.cover,
-                                ),
-                                color: AppColors.PRIMARY_COLOR,
-                                shape: BoxShape.circle),
-                            child: rideRegisterCubit.model.driverImage == null
-                                ? Image.asset(
-                                    Assets.avatarRemovebackground,
-                                    color: Colors.white,
+                        builder: (context, state) {
+                          if (state is SuccessPickDriverImageState) {
+                            // /.model.driverImage = state.image;
+                            return Column(
+                              children: [
+                                Container(
+                                    width: 90,
+                                    height: 90,
+                                    padding: const EdgeInsets.all(15),
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: FileImage(state.image),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        color: AppColors.PRIMARY_COLOR,
+                                        shape: BoxShape.circle),
+                                    child:
+                                        rideRegisterCubit.model.driverImage ==
+                                                null
+                                            ? Image.asset(
+                                                Assets.avatarRemovebackground,
+                                                color: Colors.white,
+                                              )
+                                            : null),
+                                if (field.hasError)
+                                  ValidationErrorWidget(
+                                    message: field.errorText ?? "",
                                   )
-                                : null),
-                        if (field.hasError)
-                          ValidationErrorWidget(
-                            message: field.errorText??"",
-                          )
-                      ],
-                    );
-              } else {
-                return Container(
-                    width: 90,
-                    height: 90,
-                    padding: const EdgeInsets.all(15),
-                    decoration: const BoxDecoration(
-                        color: AppColors.PRIMARY_COLOR, shape: BoxShape.circle),
-                    child: Image.asset(
-                      Assets.avatarRemovebackground,
-                      color: Colors.white,
-                    ));
-              }
-            },
-          ),
-          const Sizer(),
-          GestureDetector(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ProfileImageInfoRideScreen(),
-              ),
-            ),
-            child: Container(
-              width: 130,
-              height: 40,
-              decoration: BoxDecoration(
-                  border: Border.all(),
-                  borderRadius: BorderRadius.circular(30)),
-              child: Center(
-                  child: Text(
-                context.isArabic ? "إضافة صورة" : "Add Image",
-                style: Styles.mediumText(),
-              )),
-            ),
-          ),
-          if(field.hasError)
-          ValidationErrorWidget(message: field.errorText??"",)
+                              ],
+                            );
+                          } else {
+                            return Container(
+                                width: 90,
+                                height: 90,
+                                padding: const EdgeInsets.all(15),
+                                decoration: const BoxDecoration(
+                                    color: AppColors.PRIMARY_COLOR,
+                                    shape: BoxShape.circle),
+                                child: Image.asset(
+                                  Assets.avatarRemovebackground,
+                                  color: Colors.white,
+                                ));
+                          }
+                        },
+                      ),
+                      const Sizer(),
+                      GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const ProfileImageInfoRideScreen(),
+                          ),
+                        ),
+                        child: Container(
+                          width: 130,
+                          height: 40,
+                          decoration: BoxDecoration(
+                              border: Border.all(),
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Center(
+                              child: Text(
+                            context.isArabic ? "إضافة صورة" : "Add Image",
+                            style: Styles.mediumText(),
+                          )),
+                        ),
+                      ),
+                      if (field.hasError)
+                        ValidationErrorWidget(
+                          message: field.errorText ?? "",
+                        )
                     ],
                   )
                 ],

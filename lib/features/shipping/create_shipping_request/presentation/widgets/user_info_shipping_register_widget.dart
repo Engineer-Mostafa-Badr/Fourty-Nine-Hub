@@ -42,90 +42,100 @@ class _UserInfoShippingRegisterWidgetState
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: context.isDarkMode?AppColors.UNSELECTED_DARK_GRAY_COLOR: Colors.white,
-          boxShadow: context.isDarkMode?[]: [BoxShadow(color: Colors.grey.shade400, blurRadius: 30)]
-          ),
+          color: context.isDarkMode
+              ? AppColors.UNSELECTED_DARK_GRAY_COLOR
+              : Colors.white,
+          boxShadow: context.isDarkMode
+              ? []
+              : [BoxShadow(color: Colors.grey.shade400, blurRadius: 30)]),
       child: Column(
         children: [
           FormField(
             validator: (value) {
-                    if (shippingRegisterCubit.model.driverImage == null) {
-                      return context.isArabic
-                          ? "يرجى إضافة صورة"
-                          : "Please add an image";
-                    }
-                  },
+              if (shippingRegisterCubit.model.driverImage == null) {
+                return context.isArabic
+                    ? "يرجى إضافة صورة"
+                    : "Please add an image";
+              }
+            },
             builder: (field) {
               return Column(
                 children: [
                   Column(
                     children: [
                       BlocBuilder<PickDriverImageCubit, RiderState>(
-            builder: (context, state) {
-              if (state is SuccessPickDriverImageState) {
-                return Column(
-                      children: [
-                        Container(
-                            width: 90,
-                            height: 90,
-                            padding: const EdgeInsets.all(15),
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: FileImage(
-                                      shippingRegisterCubit.model.driverImage!),
-                                  fit: BoxFit.cover,
-                                ),
-                                color: AppColors.PRIMARY_COLOR,
-                                shape: BoxShape.circle),
-                            child: shippingRegisterCubit.model.driverImage == null
-                                ? Image.asset(
-                                    Assets.avatarRemovebackground,
-                                    color: Colors.white,
+                        builder: (context, state) {
+                          if (state is SuccessPickDriverImageState) {
+                            shippingRegisterCubit.model.driverImage =
+                                state.image;
+                            return Column(
+                              children: [
+                                Container(
+                                    width: 90,
+                                    height: 90,
+                                    padding: const EdgeInsets.all(15),
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: FileImage(state.image),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        color: AppColors.PRIMARY_COLOR,
+                                        shape: BoxShape.circle),
+                                    child: shippingRegisterCubit
+                                                .model.driverImage ==
+                                            null
+                                        ? Image.asset(
+                                            Assets.avatarRemovebackground,
+                                            color: Colors.white,
+                                          )
+                                        : null),
+                                if (field.hasError)
+                                  ValidationErrorWidget(
+                                    message: field.errorText ?? "",
                                   )
-                                : null),
-                        if (field.hasError)
-                          ValidationErrorWidget(
-                            message: field.errorText??"",
-                          )
-                      ],
-                    );
-              } else {
-                return Container(
-                    width: 90,
-                    height: 90,
-                    padding: const EdgeInsets.all(15),
-                    decoration: const BoxDecoration(
-                        color: AppColors.PRIMARY_COLOR, shape: BoxShape.circle),
-                    child: Image.asset(
-                      Assets.avatarRemovebackground,
-                      color: Colors.white,
-                    ));
-              }
-            },
-          ),
-          const Sizer(),
-          GestureDetector(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ProfileImageInfoRideScreen(),
-              ),
-            ),
-            child: Container(
-              width: 130,
-              height: 40,
-              decoration: BoxDecoration(
-                  border: Border.all(),
-                  borderRadius: BorderRadius.circular(30)),
-              child: Center(
-                  child: Text(
-                context.isArabic ? "إضافة صورة" : "Add Image",
-                style: Styles.mediumText(),
-              )),
-            ),
-          ),
-          if(field.hasError)
-          ValidationErrorWidget(message: field.errorText??"",)
+                              ],
+                            );
+                          } else {
+                            return Container(
+                                width: 90,
+                                height: 90,
+                                padding: const EdgeInsets.all(15),
+                                decoration: const BoxDecoration(
+                                    color: AppColors.PRIMARY_COLOR,
+                                    shape: BoxShape.circle),
+                                child: Image.asset(
+                                  Assets.avatarRemovebackground,
+                                  color: Colors.white,
+                                ));
+                          }
+                        },
+                      ),
+                      const Sizer(),
+                      GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const ProfileImageInfoRideScreen(),
+                          ),
+                        ),
+                        child: Container(
+                          width: 130,
+                          height: 40,
+                          decoration: BoxDecoration(
+                              border: Border.all(),
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Center(
+                              child: Text(
+                            context.isArabic ? "إضافة صورة" : "Add Image",
+                            style: Styles.mediumText(),
+                          )),
+                        ),
+                      ),
+                      if (field.hasError)
+                        ValidationErrorWidget(
+                          message: field.errorText ?? "",
+                        )
                     ],
                   )
                 ],
@@ -133,7 +143,7 @@ class _UserInfoShippingRegisterWidgetState
             },
           ),
           const Sizer(),
-          
+
           FirstNameTextFormField(
             isAuthentcation: true,
             onChanged: (value) {

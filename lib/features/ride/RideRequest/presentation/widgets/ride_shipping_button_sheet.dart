@@ -40,7 +40,7 @@ class RideShippingButtonSheet extends StatelessWidget {
                     onTap: () {
                       if (state.model.mainCategory?.isDriverApproved == false &&
                           state.model.mainCategory?.isDriver == true) {
-                            context.push(Routes.SHIPPING_REGISTER);
+                            context.pop();
                         showErrorMessage(
                             context,
                             context.isArabic
@@ -115,6 +115,7 @@ class RideShippingButtonSheet extends StatelessWidget {
               onTap: () {
                 if (model.mainCategory?.isDriverApproved == false &&
                     model.mainCategory?.isDriver == true) {
+                      context.pop();
                   showErrorMessage(
                       context,
                       context.isArabic
