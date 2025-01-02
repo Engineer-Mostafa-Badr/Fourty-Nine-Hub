@@ -4,7 +4,6 @@ import 'package:fourtyninehub/features/ten_percent/domain/usecases/send_bill_req
 import '../../../../../core/error/failure.dart';
 
 abstract class TenPercentRepo {
-  Future<Either<Failure, bool>> sendBillRequest({required SentBillRequestParams params});
-
-
+  Future<Either<Failure, bool>> sendBillRequest(
+      {required SentBillRequestParams params});
 }

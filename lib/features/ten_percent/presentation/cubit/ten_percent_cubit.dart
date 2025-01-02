@@ -10,13 +10,13 @@ import '../../../../../core/error/failure.dart';
 part 'ten_percent_state.dart';
 
 class TenPercentCubit extends Cubit<TenPercentState> {
-
   var formKey = GlobalKey<FormState>();
   TextEditingController trafficController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
   TextEditingController electricityController = TextEditingController();
   final SentBillRequestUseCase _sentBillRequestUseCase;
-  TenPercentCubit(this._sentBillRequestUseCase) : super(const TenPercentState());
+  TenPercentCubit(this._sentBillRequestUseCase)
+      : super(const TenPercentState());
 
   uploadMobileBill({bool isGallery = true}) async {
     final UploadFile upload = UploadFile();
@@ -36,6 +36,7 @@ class TenPercentCubit extends Cubit<TenPercentState> {
         });
     print("length${state.mobileId}");
   }
+
   uploadElectricityBill({bool isGallery = true}) async {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
@@ -54,6 +55,7 @@ class TenPercentCubit extends Cubit<TenPercentState> {
         });
     print("length${state.electricityId}");
   }
+
   uploadTrafficBill({bool isGallery = true}) async {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
@@ -79,38 +81,40 @@ class TenPercentCubit extends Cubit<TenPercentState> {
   // }
 
   Future<void> fetchAdRequests(BuildContext context) async {
-
     emit(state.copyWith(status: TenPercentStates.loading));
 
     final response = await _sentBillRequestUseCase(
       SentBillRequestParams(
-          electricityAmount: electricityController.text,
-          electricityId: state.electricityId,
-
-          mobileAmount: mobileController.text,
-          mobileId: state.mobileId,
-          trafficAmount: trafficController.text,
-          trafficId: state.trafficId,
-
+        electricityAmount: electricityController.text,
+        electricityId: state.electricityId,
+        mobileAmount: mobileController.text,
+        mobileId: state.mobileId,
+        trafficAmount: trafficController.text,
+        trafficId: state.trafficId,
       ),
     );
 
     response.fold(
-          (failure) {
-            showErrorMessage(context, getFailureMessage(failure, context));
+      (failure) {
+        showErrorMessage(context, getFailureMessage(failure, context));
 
-            emit(
-          state.copyWith(failure: failure, status: TenPercentStates.error));
-          },
-          (data) {
-            showSuccessMessage(context, LocaleKeys.requestSentSuccess.localize);
-            trafficController.clear();
-            mobileController.clear();
-            electricityController.clear();
-            emit(state.copyWith(status: TenPercentStates.success,electricityFile: '',mobileFile: '',trafficFile: '',electricityId: '',mobileId: '',trafficId: ''));
-            context.pop();
+        emit(state.copyWith(failure: failure, status: TenPercentStates.error));
+      },
+      (data) {
+        showSuccessMessage(context, LocaleKeys.requestSentSuccess.localize);
+        trafficController.clear();
+        mobileController.clear();
+        electricityController.clear();
+        emit(state.copyWith(
+            status: TenPercentStates.success,
+            electricityFile: '',
+            mobileFile: '',
+            trafficFile: '',
+            electricityId: '',
+            mobileId: '',
+            trafficId: ''));
+        context.pop();
       },
     );
   }
-
 }

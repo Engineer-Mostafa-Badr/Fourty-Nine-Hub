@@ -287,7 +287,8 @@ class UploadFile2 {
           print("Error confirming upload: $failure");
           return Left(failure);
         }, (_) {
-          onUploaded(UploadFileEntity(mediaId: mediaId, file: file)); // XFile here
+          onUploaded(
+              UploadFileEntity(mediaId: mediaId, file: file)); // XFile here
           return const Right(true);
         });
       });
@@ -334,7 +335,8 @@ class UploadFile2 {
           print("Error confirming upload: $failure");
           return Left(failure);
         }, (_) {
-          onUploaded(UploadFileEntity(mediaId: mediaId, file: file)); // XFile here
+          onUploaded(
+              UploadFileEntity(mediaId: mediaId, file: file)); // XFile here
           return const Right(true);
         });
       });
@@ -359,7 +361,6 @@ class UploadFile2 {
     await Dio().put(signedUrl, data: fileBytes, options: options);
   }
 }
-
 
 class UploadFileEntity {
   final String mediaId;

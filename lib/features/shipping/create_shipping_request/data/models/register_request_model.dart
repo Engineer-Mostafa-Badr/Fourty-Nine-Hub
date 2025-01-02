@@ -19,21 +19,27 @@ class RegisterRequestModel {
   DateTime? drivingExpiryDate;
   File? licenseImageBehind;
   File? licenseImageInFront;
+  File? driverImage;
   DateTime? licenseExpiryDate;
   String? model;
   String? phone;
   String? idNumber;
+  DateTime? birthDate;
   String? plateInfromation;
+  String? driverLicenseNumber;
   // GovernorateEntity? governorate;
   RegisterRequestModel({
     this.subCategoryId,
     this.firstName,
     this.lastName,
     this.idNumber,
+    this.birthDate,
     this.plateInfromation,
+    this.driverImage,
     this.carImageInFront,
     this.idImageBehind,
     this.idImageInFront,
+    this.driverLicenseNumber,
     this.idExpiryDate,
     this.drivingImageBehind,
     this.drivingImageInFront,

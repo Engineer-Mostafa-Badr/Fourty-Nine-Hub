@@ -60,8 +60,6 @@ class ChatsRepositoryImplementation extends ChatsRepository {
     throw UnimplementedError();
   }
 
-  
-
   @override
   void listenToNewChats(Function(ChatEntity) params) {
     _chatsRemoteDataSource.listenToNewChats(params);
@@ -93,32 +91,35 @@ class ChatsRepositoryImplementation extends ChatsRepository {
   }
 
   @override
-  Future<Either<Failure, MessageEntity>> showDeletedMessage(ShowDeletedMessageParams showDeletedMessageParams) {
-    return _chatsRemoteDataSource.showDeletedMessage( showDeletedMessageParams);
+  Future<Either<Failure, MessageEntity>> showDeletedMessage(
+      ShowDeletedMessageParams showDeletedMessageParams) {
+    return _chatsRemoteDataSource.showDeletedMessage(showDeletedMessageParams);
   }
 
   @override
-  Future<Either<Failure, List<LastSeenChatsEntity>>> getChatLastSeen(String chatId) {
+  Future<Either<Failure, List<LastSeenChatsEntity>>> getChatLastSeen(
+      String chatId) {
     return _chatsRemoteDataSource.getChatLastSeen(chatId);
   }
-  
+
   @override
   Future<Either<Failure, bool>> recoverDeletedChats() {
     return _chatsRemoteDataSource.recoverDeletedChats();
   }
-  
+
   @override
   Future<Either<Failure, bool>> connectMe() {
     return _chatsRemoteDataSource.connectMe();
   }
-  
+
   @override
   Future<Either<Failure, bool>> disconnectMe() {
     return _chatsRemoteDataSource.disconnectMe();
   }
 
   @override
-  Future<Either<Failure, GetOnlineOfflineStatusEntity>> getOnlineOfflineStatus({required String userId}) {
+  Future<Either<Failure, GetOnlineOfflineStatusEntity>> getOnlineOfflineStatus(
+      {required String userId}) {
     return _chatsRemoteDataSource.getOnlineOfflineStatus(userId: userId);
   }
 }

@@ -84,7 +84,6 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final AcceptRejectFriendRequestUseCase _acceptRejectFriendRequestUseCase;
   final DeleteFriendUseCase _deleteFriendUseCase;
   final SearchUsersUsecase _searchUsersUsecase;
-  
 
   SocialPostsCubit(
     this._getFeedUseCase,
@@ -332,8 +331,6 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       emit(state.copyWith(postDetails: data, status: StateStatus.initial));
     });
   }
-
-  
 
   // get advertisements
   Future<List<PostEntity>> getAdvertisements() async {

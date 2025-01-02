@@ -63,7 +63,9 @@ class ReelsCubit extends Cubit<ReelsState> {
       this._addReplyUseCase,
       this._getCommentsUseCase,
       this._toggleCommentLikeUseCase,
-      this._reelsWithSameAudioUseCase, this._uploadReelUseCase, this._uploadVideoReelUseCase)
+      this._reelsWithSameAudioUseCase,
+      this._uploadReelUseCase,
+      this._uploadVideoReelUseCase)
       : super(ReelsState());
 
   var pauseChild = false;
@@ -101,16 +103,17 @@ class ReelsCubit extends Cubit<ReelsState> {
     final response = await _uploadReelUseCase(params);
 
     response.fold(
-          (failure) {
+      (failure) {
         emit(state.copyWith(failure: failure, status: ReelsStates.error));
       },
-          (data) {
+      (data) {
         emit(state.copyWith(
           status: ReelsStates.uploadSuccess,
         ));
       },
     );
   }
+
   Future<void> uploadVideoReel({
     required UploadVideoReelParams params,
   }) async {
@@ -119,10 +122,10 @@ class ReelsCubit extends Cubit<ReelsState> {
     final response = await _uploadVideoReelUseCase(params);
 
     response.fold(
-          (failure) {
+      (failure) {
         emit(state.copyWith(failure: failure, status: ReelsStates.error));
       },
-          (data) {
+      (data) {
         emit(state.copyWith(
           status: ReelsStates.uploadSuccess,
         ));
@@ -142,7 +145,7 @@ class ReelsCubit extends Cubit<ReelsState> {
       );
 
       if (result != null && result.files.single.path != null) {
-        final pickedFile = XFile(result.files.single.path!);  // Use XFile here
+        final pickedFile = XFile(result.files.single.path!); // Use XFile here
 
         // Determine file type
         final fileType = pickedFile.path.split('.').last.toLowerCase();
@@ -150,7 +153,7 @@ class ReelsCubit extends Cubit<ReelsState> {
 
         if (isImage) {
           await uploadFile.uploadImage(
-            file: pickedFile,  // Pass XFile
+            file: pickedFile, // Pass XFile
             subCategoryId: '66a3583454e6e337915514db',
             onUploaded: (UploadFileEntity data) async {
               print("Uploaded Image Media ID: ${data.mediaId}");
@@ -168,7 +171,7 @@ class ReelsCubit extends Cubit<ReelsState> {
           );
         } else {
           await uploadFile.uploadVideo(
-            file: pickedFile,  // Pass XFile
+            file: pickedFile, // Pass XFile
             subCategoryId: '66a3583454e6e337915514db',
             onUploaded: (UploadFileEntity data) async {
               print("Uploaded Video Media ID: ${data.mediaId}");
@@ -192,12 +195,6 @@ class ReelsCubit extends Cubit<ReelsState> {
       print("Error picking media: $e");
     }
   }
-
-
-
-
-
-
 
   Future<void> createAdvertisement(
       List<String> mediaIds, String type, double totalPrice) async {

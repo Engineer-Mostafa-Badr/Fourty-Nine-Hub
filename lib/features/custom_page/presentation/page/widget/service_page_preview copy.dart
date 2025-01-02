@@ -44,7 +44,8 @@ class ServicePagePreview extends StatefulWidget {
   State<ServicePagePreview> createState() => _ServicePagePreviewState();
 }
 
-class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBindingObserver {
+class _ServicePagePreviewState extends State<ServicePagePreview>
+    with WidgetsBindingObserver {
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
@@ -55,9 +56,9 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
       print(e.toString());
     }
   }
+
   AppOpenAdManager appOpenAdManager = AppOpenAdManager();
   bool isPaused = false;
-
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -173,7 +174,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
             //main cats
             BlocProvider(
               create: (BuildContext context) =>
-              serviceLocator<MainCategoriesCubit>()..getMainCategoryCustomPage(),
+                  serviceLocator<MainCategoriesCubit>()
+                    ..getMainCategoryCustomPage(),
               child: BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
                 builder: (context, state) {
                   final controller = context.read<MainCategoriesCubit>();
@@ -184,23 +186,23 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
                       child: Column(
                         children: List.generate(
                             6,
-                                (index) => Padding(
-                              padding: EdgeInsets.only(bottom: 15.h),
-                              child: Container(
-                                height: MediaQuery.of(context).size.height *
-                                    .15.h,
-                                width: double.infinity,
-                                margin:
-                                EdgeInsets.symmetric(horizontal: 10.w),
-                                padding:
-                                EdgeInsets.symmetric(horizontal: 10.w),
-                                decoration: BoxDecoration(
-                                  color: AppColors.AUTH_CONTAINER_COLOR,
-                                  borderRadius: BorderRadius.circular(20.r),
-                                  border: Border.all(color: Colors.grey),
-                                ),
-                              ),
-                            )),
+                            (index) => Padding(
+                                  padding: EdgeInsets.only(bottom: 15.h),
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        .15.h,
+                                    width: double.infinity,
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 10.w),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10.w),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.AUTH_CONTAINER_COLOR,
+                                      borderRadius: BorderRadius.circular(20.r),
+                                      border: Border.all(color: Colors.grey),
+                                    ),
+                                  ),
+                                )),
                       ),
                     );
                   }
@@ -214,7 +216,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
                           onTap: () {
                             AdInterstitialTop.loadIntersitialAd();
                             AdInterstitialTop.showInterstitialAd();
-                            HandleCashback.setCount('mainCategoriesCount',context);
+                            HandleCashback.setCount(
+                                'mainCategoriesCount', context);
                             context.push(Routes.SUBCATEGORIES,
                                 extra: state.customPage![index]);
                           },
@@ -222,8 +225,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
                             category: state.customPage![index],
                             onFavorite: () async {
                               var result =
-                              await controller.toggleFavoriteMedicalService(
-                                  state.customPage![index].id);
+                                  await controller.toggleFavoriteMedicalService(
+                                      state.customPage![index].id);
                               print("result$result");
                               return result;
                             },
@@ -231,7 +234,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
                         );
                       },
                       separatorBuilder: (BuildContext context, int index) =>
-                      const Sizer(),
+                          const Sizer(),
                     );
                   } else {
                     return const SizedBox.shrink();
@@ -269,7 +272,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
                 width: 34.h,
               ),
               Routes.MAINCATEGORIESTREE,
-                  () => HandleCashback.setCount('threeDotsCount', context),
+              () => HandleCashback.setCount('threeDotsCount', context),
             ),
             _buildItemTabBar(
                 SvgPicture.asset(
@@ -277,13 +280,11 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
                   height: 34.h,
                   width: 34.h,
                 ),
-                Routes.MAINCATEGORIESCARDS,
-                    (){
-                  AdInterstitialTop.loadIntersitialAd();
-                  AdInterstitialTop.showInterstitialAd();
-                  HandleCashback.setCount('mainCategoriesSliderCount',context);
-                }
-            ),
+                Routes.MAINCATEGORIESCARDS, () {
+              AdInterstitialTop.loadIntersitialAd();
+              AdInterstitialTop.showInterstitialAd();
+              HandleCashback.setCount('mainCategoriesSliderCount', context);
+            }),
           ],
         ),
       ),
@@ -291,10 +292,10 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
   }
 
   Widget _buildItemTabBar(
-      Widget icon,
-      String routeName,
-      Function() onTab,
-      ) {
+    Widget icon,
+    String routeName,
+    Function() onTab,
+  ) {
     return InkWell(
       onTap: () {
         onTab();
@@ -309,30 +310,30 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
   }
 
   BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-  _pickMeAndComeWithUWidget() {
+      _pickMeAndComeWithUWidget() {
     return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
       builder: (context, state) {
         if (state.status == StateStatus.loading) {
           return Row(
             children: List.generate(
                 2,
-                    (index) => Expanded(
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.grey[100]!,
-                    highlightColor: Colors.white24,
-                    child: Container(
-                      width: 100.h,
-                      height: kToolbarHeight * 2.h,
-                      margin: const EdgeInsets.symmetric(horizontal: 5),
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      decoration: BoxDecoration(
-                        color: AppColors.AUTH_CONTAINER_COLOR,
-                        borderRadius: BorderRadius.circular(20.r),
-                        border: Border.all(color: Colors.grey),
+                (index) => Expanded(
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey[100]!,
+                        highlightColor: Colors.white24,
+                        child: Container(
+                          width: 100.h,
+                          height: kToolbarHeight * 2.h,
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          decoration: BoxDecoration(
+                            color: AppColors.AUTH_CONTAINER_COLOR,
+                            borderRadius: BorderRadius.circular(20.r),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                )),
+                    )),
           );
         } else if (state.status == StateStatus.success) {
           return Row(
@@ -345,7 +346,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
                   onTab: () {
                     AdInterstitialTop.loadIntersitialAd();
                     AdInterstitialTop.showInterstitialAd();
-                    return HandleCashback.setCount('carPoolCount',context);
+                    return HandleCashback.setCount('carPoolCount', context);
                   },
                   // image: Assets.carpool,
                   // isFavorite: state.data![0].is,
@@ -357,7 +358,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
               Expanded(
                 child: _buildRideSubCategoryItem(
                   service:
-                  state.data?[1].service ?? RideServicesEnum.comeWithYou,
+                      state.data?[1].service ?? RideServicesEnum.comeWithYou,
                   title: LocaleKeys.tripJoin.localize,
                   image: state.data?[1].image ?? '',
                   // image: Assets.tripJoin,
@@ -366,7 +367,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
                   onTab: () {
                     AdInterstitialTop.loadIntersitialAd();
                     AdInterstitialTop.showInterstitialAd();
-                    return HandleCashback.setCount('tripJoinCount',context);
+                    return HandleCashback.setCount('tripJoinCount', context);
                   },
                   // isFavorite: state.data![1].isFavorite,
                   // numberOfAds: state.data![1].numberOfAds?.toInt(),
@@ -377,8 +378,8 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
         } else {
           return Container(
             padding:
-            //EdgeInsets.all
-            const EdgeInsets.symmetric(horizontal: 10),
+                //EdgeInsets.all
+                const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               LocaleKeys.noRideSubcategories.localize,
               style: TextStyle(fontSize: 32.sp.w, fontWeight: FontWeight.w500),
@@ -388,7 +389,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
       },
     );
   }
-
 
   Widget _buildStarWidget() {
     return SizedBox(
@@ -409,7 +409,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
                 onPressed: () {
                   AdInterstitialTop.loadIntersitialAd();
                   AdInterstitialTop.showInterstitialAd();
-                  HandleCashback.setCount('beAStarCount',context);
+                  HandleCashback.setCount('beAStarCount', context);
                   context.push(Routes.BE_STAR);
                 }),
           ),
@@ -497,11 +497,11 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
 
   Widget _buildRideSubCategoryItem(
       {required RideServicesEnum service,
-        required String title,
-        required String image,
-        String? route,
-        bool? isFavorite,
-        required Function() onTab}) {
+      required String title,
+      required String image,
+      String? route,
+      bool? isFavorite,
+      required Function() onTab}) {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: service.value()),
       onTap: () {

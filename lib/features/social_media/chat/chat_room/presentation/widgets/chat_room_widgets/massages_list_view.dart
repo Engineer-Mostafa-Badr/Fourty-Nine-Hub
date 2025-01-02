@@ -156,7 +156,8 @@ class MessagesListView extends StatelessWidget {
                     return false;
                   },
                   child: ListView.builder(
-                    itemCount: state.messages!.length, // Add one for the loading indicator
+                    itemCount: state
+                        .messages!.length, // Add one for the loading indicator
                     controller: chatRoomCubit.scrollController,
                     itemBuilder: (context, index) {
                       // if (index == state.messages!.length) {

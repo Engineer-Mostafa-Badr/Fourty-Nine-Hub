@@ -15,7 +15,6 @@ import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/send_
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/upload_tinder_picture_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
-
 class TinderRepositoryImpl extends TinderRepository {
   final TinderRemoteDataSource _storiesRemoteDataSource;
 
@@ -27,7 +26,8 @@ class TinderRepositoryImpl extends TinderRepository {
   }
 
   @override
-  Future<Either<Failure, List<UserDataTinderEntity>>> getUsers(GetUsersParams params) {
+  Future<Either<Failure, List<UserDataTinderEntity>>> getUsers(
+      GetUsersParams params) {
     return _storiesRemoteDataSource.getUsers(params);
   }
 

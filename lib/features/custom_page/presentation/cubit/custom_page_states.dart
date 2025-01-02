@@ -6,7 +6,7 @@ import '../../../../../../core/error/failure.dart';
 import '../../domain/entity/favourite_categ_entity.dart';
 import '../../domain/entity/sub_tab_entity.dart';
 
-enum CustomPageStates { loading, initial, error, success ,updateSuccess}
+enum CustomPageStates { loading, initial, error, success, updateSuccess }
 
 class CustomPageState {
   final CustomPageStates status;

@@ -177,11 +177,12 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<Either<Failure, bool>> updateUserBio(String bio) {
     return _remoteDataSource.updateUserBio(bio: bio);
   }
-  
+
   @override
   Future<Either<Failure, bool>> updateUserName(String name) {
     return _remoteDataSource.updateUserName(name: name);
   }
+
   @override
   Future<Either<Failure, ChatEntity>> createNormalChat(
       CreateNormalChatParams params) {
@@ -193,19 +194,22 @@ class AuthRepositoryImpl extends AuthRepository {
       CreateAnonymousChatParams params) {
     return _remoteDataSource.createAnonymousChat(params);
   }
-  
+
   @override
-  Future<Either<Failure, bool>> updateProfileView(UpdateProfileViewParams params) {
+  Future<Either<Failure, bool>> updateProfileView(
+      UpdateProfileViewParams params) {
     return _remoteDataSource.updateProfileView(params);
   }
 
   @override
-  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViews(GetProfileViewsParams params) {
+  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViews(
+      GetProfileViewsParams params) {
     return _remoteDataSource.getProfileViews(params);
   }
-  
+
   @override
-  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViewsByUserId(GetProfileViewsParams params) {
+  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViewsByUserId(
+      GetProfileViewsParams params) {
     return _remoteDataSource.getProfileViewsByUserId(params);
   }
 }

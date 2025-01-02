@@ -1,4 +1,3 @@
-
 // class GetHistoryRideUseCase extends UseCase<List<TripModel>, NoParams> {
 //   final RequestHistoryRepo _repository;
 

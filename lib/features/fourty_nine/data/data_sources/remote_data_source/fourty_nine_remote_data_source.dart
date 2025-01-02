@@ -77,18 +77,19 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<MainCategoryEntity>>> getMainCategoriesCustomPage(MainCategoriesParams params) async {
+  Future<Either<Failure, List<MainCategoryEntity>>> getMainCategoriesCustomPage(
+      MainCategoriesParams params) async {
     final result = await _apiConsumer.get(
       EndPoints.getMainCategoriesCustomPage,
       queryParameters: params.toJson(),
     );
     return result.fold(
-          (failure) {
+      (failure) {
         CliLogger.error(
             "can't load main categories - from data source - there is an error ${failure.toString()}");
         return Left(failure);
       },
-          (response) => Right((response['data']['mainCategories'] as List)
+      (response) => Right((response['data']['mainCategories'] as List)
           .map((e) => MainCategoryModel.fromJson(e))
           .toList()),
     );
@@ -191,6 +192,4 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
       },
     );
   }
-
-
 }

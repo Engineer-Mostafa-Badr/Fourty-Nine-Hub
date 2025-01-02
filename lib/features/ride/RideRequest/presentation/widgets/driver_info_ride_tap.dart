@@ -60,11 +60,14 @@ class DriverInfoRideTap extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Label(
-                              text: context.isArabic?"الموعد النهائي للاشتراك المميز":"Deadline Subscription Premium",
+                              text: context.isArabic
+                                  ? "الموعد النهائي للاشتراك المميز"
+                                  : "Deadline Subscription Premium",
                               style: Styles.mediumText(
                                   color: AppColors.PRIMARY_COLOR)),
                           Label(
-                              text: "${state.model.deadlineSubscriptionPremium}",
+                              text:
+                                  "${state.model.deadlineSubscriptionPremium}",
                               style: Styles.mediumText(
                                   color: AppColors.PRIMARY_COLOR)),
                         ],
@@ -106,7 +109,6 @@ class DriverInfoRideTap extends StatelessWidget {
                                     "${state.model.deadlineSubscriptionPremium} Day",
                                     style: Styles.headerText(),
                                   ),
-                                  
                                   const SizedBox(
                                     height: 5,
                                   ),
@@ -236,11 +238,14 @@ class DriverInfoRideTap extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Label(
-                              text: context.isArabic?"الموعد النهائي للاشتراك العادي":"Deadline Subscription Regular",
+                              text: context.isArabic
+                                  ? "الموعد النهائي للاشتراك العادي"
+                                  : "Deadline Subscription Regular",
                               style: Styles.mediumText(
                                   color: AppColors.PRIMARY_COLOR)),
                           Label(
-                              text: "${state.model.deadlineSubscriptionRegular}",
+                              text:
+                                  "${state.model.deadlineSubscriptionRegular}",
                               style: Styles.mediumText(
                                   color: AppColors.PRIMARY_COLOR)),
                         ],

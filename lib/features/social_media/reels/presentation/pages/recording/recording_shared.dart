@@ -29,7 +29,7 @@ class ReelsRecordingScreen extends StatefulWidget {
   const ReelsRecordingScreen(
       {super.key,
       this.voiceMediaId,
-        this.voiceSignedUrl,
+      this.voiceSignedUrl,
       this.comeFromCompany,
       this.totalPrice,
       this.advertisementType});
@@ -167,7 +167,9 @@ class VideoPlaybackScreen extends StatefulWidget {
   final String thumbPath;
   final bool isAudioOriginal;
   final String? audioMediaId;
-  const VideoPlaybackScreen(this.videoPath, this.thumbPath,this.isAudioOriginal, {super.key,this.audioMediaId});
+  const VideoPlaybackScreen(
+      this.videoPath, this.thumbPath, this.isAudioOriginal,
+      {super.key, this.audioMediaId});
 
   @override
   VideoPlaybackScreenState createState() => VideoPlaybackScreenState();
@@ -188,7 +190,8 @@ class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
       ..setLooping(true);
   }
 
-  Future<String> applyFilterAndSaveVideo(String originalPath, String filterCommand) async {
+  Future<String> applyFilterAndSaveVideo(
+      String originalPath, String filterCommand) async {
     final tempDir = Directory.systemTemp;
     final filteredVideoPath = '${tempDir.path}/filtered_video.mp4';
 
@@ -229,11 +232,10 @@ class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
                               print('wwwwwwwwwwwwwwwww${widget.audioMediaId}');
                               print('wwwwwwwwwwwwwwwww${widget.thumbPath}');
                               final filteredPath =
-                              await applyFilterAndSaveVideo(
-                                  widget.videoPath, 'hue=s=0');
+                                  await applyFilterAndSaveVideo(
+                                      widget.videoPath, 'hue=s=0');
                               final file = File(filteredPath);
-                              final fileType =
-                              _determineFileType(file.path);
+                              final fileType = _determineFileType(file.path);
                               final fileSize = await file.length();
 
                               await serviceLocator<StoryCubit>()
@@ -244,8 +246,10 @@ class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
                                 description: '',
                               )
                                   .then((value) {
-                                showSuccessMessage(context, LocaleKeys.storyUploaded.localize);
-                              });},
+                                showSuccessMessage(
+                                    context, LocaleKeys.storyUploaded.localize);
+                              });
+                            },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.PRIMARY_COLOR,
                                 textStyle:

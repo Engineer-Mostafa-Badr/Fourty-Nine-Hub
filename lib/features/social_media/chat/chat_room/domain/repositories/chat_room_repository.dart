@@ -22,7 +22,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecas
 
 abstract class ChatRoomRepository {
   Future<Either<Failure, bool>> sendMessage(SendMessageParams params);
-Future<Either<Failure, bool>> updateChat(UpdateChatParams params);
+  Future<Either<Failure, bool>> updateChat(UpdateChatParams params);
 
   Future<Either<Failure, bool>> deleteMessage(DeleteMessageParams params);
   Future<Either<Failure, bool>> startTyping({required String chatId});
@@ -35,7 +35,7 @@ Future<Either<Failure, bool>> updateChat(UpdateChatParams params);
   Future<Either<Failure, bool>> startRecording({required String chatId});
   Future<Either<Failure, bool>> stopRecording({required String chatId});
   void listenToRecordingStatus(Function(ListenToRecordingParams) params);
-void listenToDeleteMessage(Function(DeleteMessageParams) params);
+  void listenToDeleteMessage(Function(DeleteMessageParams) params);
   Future<Either<Failure, MessageEntity>> getOneTimeViewMessage(
       GetOneTimeViewMessageParams params);
 

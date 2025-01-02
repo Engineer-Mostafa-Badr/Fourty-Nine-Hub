@@ -21,6 +21,5 @@ class ShareAppServiceLocator {
     // serviceLocator.registerFactory<ShareAppCubit>(() => ShareAppCubit(
     //       serviceLocator(),
     //     ));
-
   }
 }

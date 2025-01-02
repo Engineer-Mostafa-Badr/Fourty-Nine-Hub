@@ -81,7 +81,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: widget.fontSize?? 45.sp),
+                  fontSize: widget.fontSize ?? 45.sp),
             ),
             PositionedDirectional(
               start: 0,
@@ -153,7 +153,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: widget.fontSize?? 45.sp),
+                  fontSize: widget.fontSize ?? 45.sp),
             ),
             PositionedDirectional(
               start: 0,

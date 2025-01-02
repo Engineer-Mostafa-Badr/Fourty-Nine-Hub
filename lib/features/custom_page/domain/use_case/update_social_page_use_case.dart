@@ -20,7 +20,8 @@ class SocialPageParams {
   final bool insta;
   final bool tweet;
 
-  SocialPageParams({required this.face, this.insta = false,this.tweet = false});
+  SocialPageParams(
+      {required this.face, this.insta = false, this.tweet = false});
 
   Map<String, dynamic> toJson() => {
         "49Face": face,

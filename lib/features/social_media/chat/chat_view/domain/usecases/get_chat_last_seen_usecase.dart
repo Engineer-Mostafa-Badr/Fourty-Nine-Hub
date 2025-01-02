@@ -3,7 +3,8 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/repositories/chats_repository.dart';
 
-class GetChatLastSeenUseCase extends UseCase<List<LastSeenChatsEntity>, String> {
+class GetChatLastSeenUseCase
+    extends UseCase<List<LastSeenChatsEntity>, String> {
   final ChatsRepository _repo;
 
   GetChatLastSeenUseCase(this._repo);

@@ -713,9 +713,9 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                             : GestureDetector(
                                 onTap: () {
                                   if (context.isUserLoggedIn) {
-                                    context
-                                        .read<UserCubit>()
-                                        .updateProfileView(isProfile: false, userId: widget.userId);
+                                    context.read<UserCubit>().updateProfileView(
+                                        isProfile: false,
+                                        userId: widget.userId);
                                   }
                                   showDialog(
                                       context: context,

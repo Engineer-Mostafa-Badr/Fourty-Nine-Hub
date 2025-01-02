@@ -112,8 +112,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           AdInterstitialTop.loadIntersitialAd();
                           AdInterstitialTop.showInterstitialAd();
                           await context.push(Routes.FAVOURITECATEGORIES);
-                          context.read<MainCategoriesCubit>().loadDataCategory();
-                         // context.read<MainCategoriesCubit>().getMainCategoryCustomPage();
+                          context
+                              .read<MainCategoriesCubit>()
+                              .loadDataCategory();
+                          // context.read<MainCategoriesCubit>().getMainCategoryCustomPage();
                         }),
 
                     drawerListTile(
@@ -433,8 +435,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         AdInterstitialTop.loadIntersitialAd();
         AdInterstitialTop.showInterstitialAd();
         context.go(
-        context.read<UserCubit>().isLoggedIn ? Routes.LUCKYWHEEL : Routes.LOGIN,
-      );
+          context.read<UserCubit>().isLoggedIn
+              ? Routes.LUCKYWHEEL
+              : Routes.LOGIN,
+        );
       },
       child: Container(
         width: double.infinity,

@@ -105,7 +105,7 @@ class _LoginViewState extends State<LoginView> {
             //     state.userTokensEntity.refreshToken);
             // await BackgroundService.reStartWebSocketService(
             //     state.userTokensEntity.accessToken);
-             serviceLocator<UserCubit>()
+            serviceLocator<UserCubit>()
               ..setLogin(true)
               ..attachToken()
               ..getUser().then((value) async {
@@ -238,7 +238,8 @@ class _LoginViewState extends State<LoginView> {
                               labelStyle: TextStyle(
                                   fontSize: 35.sp,
                                   color: AppColors.AUTH_CONTAINER_COLOR),
-                              onPressed: () => loginCubit.login(formKey, context),
+                              onPressed: () =>
+                                  loginCubit.login(formKey, context),
                             ),
                     ],
                   )),

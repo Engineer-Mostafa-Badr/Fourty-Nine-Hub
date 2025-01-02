@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -22,7 +21,7 @@ class RideShippingButtonSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -36,135 +35,147 @@ class RideShippingButtonSheet extends StatelessWidget {
                 );
               }
               if (state is SuccessGetBannerState) {
-                if(!(state.model.mainCategory?.isDriverApproved??false)){
+                if (!(state.model.mainCategory?.isDriverApproved ?? false)) {
                   return GestureDetector(
                     onTap: () {
-                      if(state.model.mainCategory?.isDriverApproved == false && state.model.mainCategory?.isDriver == true){
-                        showErrorMessage(context, context.isArabic ? "في انتظار الموافقة" : "Waiting for approve");
-                      }
-                      else{
+                      if (state.model.mainCategory?.isDriverApproved == false &&
+                          state.model.mainCategory?.isDriver == true) {
+                            context.pop();
+                        showErrorMessage(
+                            context,
+                            context.isArabic
+                                ? "في انتظار الموافقة"
+                                : "Waiting for approve");
+                      } else {
                         context.push(Routes.SHIPPING_REGISTER);
                       }
                     },
                     child: Stack(
-                    children: [
-                      // الخلفية (الصورة)
-                      ClipRRect(
-                        borderRadius:
-                            BorderRadius.circular(10), // زوايا دائرية للصورة
-                        child: Container(
-                          height: 55,
-                          width: MediaQuery.of(context).size.width - 50,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                  state.model.mainCategory?.banner ?? ""),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                      // تأثير الزجاج
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                            10), // زوايا دائرية لتطابق الصورة
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(
-                              sigmaX:
-                                  (model.mainCategory?.isDriverApproved ?? false)
-                                      ? 0
-                                      : 5,
-                              sigmaY:
-                                  (model.mainCategory?.isDriverApproved ?? false)
-                                      ? 0
-                                      : 5), // قوة التمويه
+                      children: [
+                        // الخلفية (الصورة)
+                        ClipRRect(
+                          borderRadius:
+                              BorderRadius.circular(10), // زوايا دائرية للصورة
                           child: Container(
-                            color: Colors.black
-                                .withOpacity(0.4), // لون شفاف داكن فوق الزجاج
                             height: 55,
                             width: MediaQuery.of(context).size.width - 50,
-                            child: Center(
-                              child: Text(
-                                LocaleKeys.shipping.tr(),
-                                // getDriverState(isDriver: state.model.mainCategory?.isDriver??false, isDriverApproved: state.model.mainCategory?.isDriverApproved??false, title: LocaleKeys.shipping.tr(), context: context),
-                                style: Styles.headerText(
-                                    color: AppColors.AUTH_CONTAINER_COLOR),
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    state.model.mainCategory?.banner ?? ""),
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                                    ),
+                        // تأثير الزجاج
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                              10), // زوايا دائرية لتطابق الصورة
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(
+                                sigmaX: (model.mainCategory?.isDriverApproved ??
+                                        false)
+                                    ? 0
+                                    : 5,
+                                sigmaY: (model.mainCategory?.isDriverApproved ??
+                                        false)
+                                    ? 0
+                                    : 5), // قوة التمويه
+                            child: Container(
+                              color: Colors.black
+                                  .withOpacity(0.4), // لون شفاف داكن فوق الزجاج
+                              height: 55,
+                              width: MediaQuery.of(context).size.width - 50,
+                              child: Center(
+                                child: Text(
+                                  LocaleKeys.shipping.tr(),
+                                  // getDriverState(isDriver: state.model.mainCategory?.isDriver??false, isDriverApproved: state.model.mainCategory?.isDriverApproved??false, title: LocaleKeys.shipping.tr(), context: context),
+                                  style: Styles.headerText(
+                                      color: AppColors.AUTH_CONTAINER_COLOR),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 } else {
                   return Container();
                 }
-                
               } else {
                 return Container();
               }
             },
           ),
-          Sizer(),
-          if(!(model.mainCategory?.isDriverApproved??false))
-          GestureDetector(
-            onTap: () {
-              if(model.mainCategory?.isDriverApproved == false && model.mainCategory?.isDriver == true){
-                showErrorMessage(context, context.isArabic ? "في انتظار الموافقة" : "Waiting for approve");
-              }
-              else{
-                context.push(Routes.RIDERREGISTER);
-              }
-            },
-            child: Stack(
-              children: [
-                // الخلفية (الصورة)
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10), // زوايا دائرية للصورة
-                  child: Container(
-                    height: 55,
-                    width: MediaQuery.of(context).size.width - 50,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(model.mainCategory?.banner ?? ""),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-                ClipRRect(
-                  borderRadius:
-                      BorderRadius.circular(10), // زوايا دائرية لتطابق الصورة
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(
-                        sigmaX: (model.mainCategory?.isDriverApproved ?? false)
-                            ? 0
-                            : 5,
-                        sigmaY: (model.mainCategory?.isDriverApproved ?? false)
-                            ? 0
-                            : 5), // قوة التمويه
+          const Sizer(),
+          if (!(model.mainCategory?.isDriverApproved ?? false))
+            GestureDetector(
+              onTap: () {
+                if (model.mainCategory?.isDriverApproved == false &&
+                    model.mainCategory?.isDriver == true) {
+                      context.pop();
+                  showErrorMessage(
+                      context,
+                      context.isArabic
+                          ? "في انتظار الموافقة"
+                          : "Waiting for approve");
+                } else {
+                  context.push(Routes.RIDERREGISTER);
+                }
+              },
+              child: Stack(
+                children: [
+                  // الخلفية (الصورة)
+                  ClipRRect(
+                    borderRadius:
+                        BorderRadius.circular(10), // زوايا دائرية للصورة
                     child: Container(
-                      color: (model.mainCategory?.isDriverApproved ?? false)
-                          ? null
-                          : Colors.black
-                              .withOpacity(0.4), // لون شفاف داكن فوق الزجاج
                       height: 55,
                       width: MediaQuery.of(context).size.width - 50,
-                      child: Center(
-                        child: Text(
-                          LocaleKeys.ride.tr(),
-                          // getDriverState(isDriver: model.mainCategory?.isDriver??false, isDriverApproved: model.mainCategory?.isDriverApproved??false, title: LocaleKeys.ride, context: context),
-                          style: Styles.headerText(
-                              color: AppColors.AUTH_CONTAINER_COLOR),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(model.mainCategory?.banner ?? ""),
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  ClipRRect(
+                    borderRadius:
+                        BorderRadius.circular(10), // زوايا دائرية لتطابق الصورة
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(
+                          sigmaX:
+                              (model.mainCategory?.isDriverApproved ?? false)
+                                  ? 0
+                                  : 5,
+                          sigmaY:
+                              (model.mainCategory?.isDriverApproved ?? false)
+                                  ? 0
+                                  : 5), // قوة التمويه
+                      child: Container(
+                        color: (model.mainCategory?.isDriverApproved ?? false)
+                            ? null
+                            : Colors.black
+                                .withOpacity(0.4), // لون شفاف داكن فوق الزجاج
+                        height: 55,
+                        width: MediaQuery.of(context).size.width - 50,
+                        child: Center(
+                          child: Text(
+                            LocaleKeys.ride.tr(),
+                            // getDriverState(isDriver: model.mainCategory?.isDriver??false, isDriverApproved: model.mainCategory?.isDriverApproved??false, title: LocaleKeys.ride, context: context),
+                            style: Styles.headerText(
+                                color: AppColors.AUTH_CONTAINER_COLOR),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -173,11 +184,11 @@ class RideShippingButtonSheet extends StatelessWidget {
   getDriverState(
       {required bool isDriver,
       required bool isDriverApproved,
-      required String title, required BuildContext context}) {
+      required String title,
+      required BuildContext context}) {
     if (!isDriver && !isDriverApproved) {
       return title;
-    }
-    else{
+    } else {
       return context.isArabic ? "في انتظار الموافقة" : "Waiting for approve";
     }
   }

@@ -4,8 +4,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/domain/last_seen_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 
-
-
 class FetchLastSeenUseCase extends UseCase<LastSeenEntity, String> {
   final TinderRepository _repository;
 

@@ -48,7 +48,9 @@ class UserProfilePageState extends State<UserProfilePage> {
 
   Scaffold _buildLoadingScaffold() {
     return Scaffold(
-      appBar: BackAppBar(label: LocaleKeys.profile.localize,),
+      appBar: BackAppBar(
+        label: LocaleKeys.profile.localize,
+      ),
       body: const Center(child: CupertinoActivityIndicator()),
     );
   }
@@ -57,15 +59,19 @@ class UserProfilePageState extends State<UserProfilePage> {
     final userCubit = context.read<UserCubit>();
     return Scaffold(
       floatingActionButton: _buildFloatingActionButton(context),
-      appBar: BackAppBar(label: LocaleKeys.profile.localize,),
+      appBar: BackAppBar(
+        label: LocaleKeys.profile.localize,
+      ),
       extendBodyBehindAppBar: true,
       body: SafeArea(
         child: RefreshIndicator(
-          onRefresh: () async{
-            await context.read<TinderViewCubit>().fetchUserProfile(userId: userCubit.state.data!.id);
+          onRefresh: () async {
+            await context
+                .read<TinderViewCubit>()
+                .fetchUserProfile(userId: userCubit.state.data!.id);
           },
           child: SingleChildScrollView(
-           // physics: const BouncingScrollPhysics(),
+            // physics: const BouncingScrollPhysics(),
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 20.h),
               child: Column(
@@ -98,13 +104,13 @@ class UserProfilePageState extends State<UserProfilePage> {
     return FloatingActionButton(
       heroTag: 'upload_image',
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>const EditProfileTinder()));
-       // _handleImageUpload(context);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const EditProfileTinder()));
+        // _handleImageUpload(context);
       },
       backgroundColor: AppColors.SECONDARY_COLOR,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-      child:
-          const Icon(Icons.edit, color: Colors.white),
+      child: const Icon(Icons.edit, color: Colors.white),
     );
   }
 
@@ -116,7 +122,7 @@ class UserProfilePageState extends State<UserProfilePage> {
           final userCubit = context.read<UserCubit>();
           final tinderCubit = context.read<TinderViewCubit>();
 
-         // await tinderCubit.uploadPictures(pictures: [uploadedFile.mediaId]);
+          // await tinderCubit.uploadPictures(pictures: [uploadedFile.mediaId]);
           // await tinderCubit
           //     .fetchUserProfile(userId: userCubit.state.data!.id)
           //     .then((value) => tinderCubit.resetStoryIndex());
@@ -169,13 +175,13 @@ class UserProfilePageState extends State<UserProfilePage> {
             ),
           ),
           const Divider(),
-          if(userId?.birthday !=null)
-          _buildListTile(
-            icon: Icons.cake,
-            iconColor: Colors.redAccent,
-            title: LocaleKeys.user_info_date_of_birth.localize,
-            subtitle: userId?.birthday ?? '',
-          ),
+          if (userId?.birthday != null)
+            _buildListTile(
+              icon: Icons.cake,
+              iconColor: Colors.redAccent,
+              title: LocaleKeys.user_info_date_of_birth.localize,
+              subtitle: userId?.birthday ?? '',
+            ),
           _buildListTile(
             icon: Icons.person,
             iconColor: Colors.redAccent,
@@ -205,7 +211,11 @@ class UserProfilePageState extends State<UserProfilePage> {
     required String subtitle,
   }) {
     return ListTile(
-      leading: Icon(icon, color: iconColor,size: 60.sp,),
+      leading: Icon(
+        icon,
+        color: iconColor,
+        size: 60.sp,
+      ),
       title: Text(
         title,
         textScaler: TextScaler.noScaling,

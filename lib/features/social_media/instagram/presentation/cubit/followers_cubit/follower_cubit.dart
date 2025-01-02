@@ -19,47 +19,50 @@ class FollowCubit extends Cubit<FollowState> {
   int currentPage = 1;
   final int pageSize;
 
-  FollowCubit(this._allFollowersUseCase, this._allFollowingUseCase, {this.pageSize = 10})
+  FollowCubit(this._allFollowersUseCase, this._allFollowingUseCase,
+      {this.pageSize = 10})
       : super(FollowState());
 
-  void loadInitialData(String search,String otherId) async {
+  void loadInitialData(String search, String otherId) async {
     emit(state.copyWith(status: FollowStates.loading, failure: null));
     followers.clear();
     currentPage = 1;
     hasMoreData = true;
-    await fetchAllFollowers(search,otherId);
+    await fetchAllFollowers(search, otherId);
   }
 
-  void loadInitialDataFollowing(String search,String otherId) async {
+  void loadInitialDataFollowing(String search, String otherId) async {
     emit(state.copyWith(status: FollowStates.loading, failure: null));
     following.clear();
     currentPage = 1;
     hasMoreData = true;
-    await fetchAllFollowing(search,otherId);
+    await fetchAllFollowing(search, otherId);
   }
+
   @override
   Future<void> close() {
     searchController.dispose();
     return super.close();
   }
 
-  Future<void> _fetchData<T>(
-      String search, String otherId,Function(TwitterFeedParams) useCase, List<T> dataList) async {
+  Future<void> _fetchData<T>(String search, String otherId,
+      Function(TwitterFeedParams) useCase, List<T> dataList) async {
     if (!hasMoreData || isLoadingMore) return;
 
     emit(state.copyWith(status: FollowStates.loading));
     isLoadingMore = true;
 
     final response = await useCase(
-      TwitterFeedParams(page: currentPage, limit: pageSize, search: search,otherId: otherId),
+      TwitterFeedParams(
+          page: currentPage, limit: pageSize, search: search, otherId: otherId),
     );
 
     response.fold(
-          (failure) {
+      (failure) {
         isLoadingMore = false;
         emit(state.copyWith(failure: failure, status: FollowStates.error));
       },
-          (data) {
+      (data) {
         dataList.addAll(data);
 
         if (data.length < pageSize) {
@@ -74,12 +77,11 @@ class FollowCubit extends Cubit<FollowState> {
     );
   }
 
-  Future<void> fetchAllFollowers(String search,String otherId) async {
-    await _fetchData(search, otherId,_allFollowersUseCase.call, followers);
+  Future<void> fetchAllFollowers(String search, String otherId) async {
+    await _fetchData(search, otherId, _allFollowersUseCase.call, followers);
   }
 
-  Future<void> fetchAllFollowing(String search,String otherId) async {
-    await _fetchData(search, otherId,_allFollowingUseCase.call, following);
+  Future<void> fetchAllFollowing(String search, String otherId) async {
+    await _fetchData(search, otherId, _allFollowingUseCase.call, following);
   }
 }
-

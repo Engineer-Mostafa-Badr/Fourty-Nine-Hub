@@ -14,15 +14,18 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 abstract class ChatsRepository {
   Future<Either<Failure, List<ChatEntity>>> getChats(GetChatsParams params);
   Future<Either<Failure, bool>> changeChatMuteState(String chatId);
-  Future<Either<Failure, MessageEntity>> showDeletedMessage(ShowDeletedMessageParams showDeletedMessageParams);
+  Future<Either<Failure, MessageEntity>> showDeletedMessage(
+      ShowDeletedMessageParams showDeletedMessageParams);
   Future<Either<Failure, bool>> changeChatToArchiveNormal(String chatId);
-  Future<Either<Failure, List<LastSeenChatsEntity>>> getChatLastSeen(String chatId);
+  Future<Either<Failure, List<LastSeenChatsEntity>>> getChatLastSeen(
+      String chatId);
   Future<Either<Failure, bool>> deleteChat({required String chatId});
   Future<Either<Failure, bool>> pinChat({required String chatId});
   Future<Either<Failure, bool>> unPinChat({required String chatId});
   Future<Either<Failure, bool>> lockChat(LockChatParams lockChatParams);
   Future<Either<Failure, UserEntity>> getUser({required String userId});
-  Future<Either<Failure, GetOnlineOfflineStatusEntity>> getOnlineOfflineStatus({required String userId});
+  Future<Either<Failure, GetOnlineOfflineStatusEntity>> getOnlineOfflineStatus(
+      {required String userId});
   Future<Either<Failure, bool>> unLockChat(LockChatParams lockChatParams);
   Future<Either<Failure, ChatCategoryEntity>> getGroups();
   Future<Either<Failure, bool>> recoverDeletedChats();
@@ -30,8 +33,6 @@ abstract class ChatsRepository {
   Future<Either<Failure, bool>> disconnectMe();
   Future<Either<Failure, List<SeenHistoryModel>>> getSeenHistory(
       {required String chatId});
-
-  
 
   void listenToNewChats(Function(ChatEntity) params);
   void stopListenToNewChats();

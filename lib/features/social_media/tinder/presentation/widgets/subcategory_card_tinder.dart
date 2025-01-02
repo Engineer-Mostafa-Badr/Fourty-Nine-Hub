@@ -23,9 +23,9 @@ class SubcategoryCardTinder extends StatefulWidget {
   final Function() onFav;
   const SubcategoryCardTinder(
       {super.key,
-        required this.item,
-        required this.mainCategory,
-        required this.onFav});
+      required this.item,
+      required this.mainCategory,
+      required this.onFav});
 
   @override
   State<SubcategoryCardTinder> createState() => _SubCategoryCardState();
@@ -63,22 +63,23 @@ class _SubCategoryCardState extends State<SubcategoryCardTinder> {
                       url: widget.item.image,
                     ),
                   ),
-                  if(context.read<UserCubit>().isLoggedIn)  PositionedDirectional(
-                    top: 2.h,
-                      child: IconAppButton(
-                        icon: widget.item.isFavorite == false
-                            ? Icons.favorite_outline
-                            : Icons.favorite,
-                        size: 50.sp,
-                        onPressed: () async {
-                          var result = await widget.onFav();
-                          if (result == true) {
-                            widget.item.isFavorite = !widget.item.isFavorite!;
-                            setState(() {});
-                          }
-                        },
-                        color: AppColors.SECONDARY_COLOR,
-                      ))
+                  if (context.read<UserCubit>().isLoggedIn)
+                    PositionedDirectional(
+                        top: 2.h,
+                        child: IconAppButton(
+                          icon: widget.item.isFavorite == false
+                              ? Icons.favorite_outline
+                              : Icons.favorite,
+                          size: 50.sp,
+                          onPressed: () async {
+                            var result = await widget.onFav();
+                            if (result == true) {
+                              widget.item.isFavorite = !widget.item.isFavorite!;
+                              setState(() {});
+                            }
+                          },
+                          color: AppColors.SECONDARY_COLOR,
+                        ))
                 ],
               ),
             ),
@@ -89,8 +90,11 @@ class _SubCategoryCardState extends State<SubcategoryCardTinder> {
                 children: [
                   Expanded(
                     child: Label(
-                      text: context.isArabic?widget.item.nameAr:widget.item.nameEn,
-                      style: Styles.smallText(fontWeight: FontWeight.bold,fontSize: 24),
+                      text: context.isArabic
+                          ? widget.item.nameAr
+                          : widget.item.nameEn,
+                      style: Styles.smallText(
+                          fontWeight: FontWeight.bold, fontSize: 24),
                     ),
                   ),
                   IconAppButton(

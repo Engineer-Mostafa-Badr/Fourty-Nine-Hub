@@ -96,8 +96,8 @@ class ShippingCubit extends Cubit<ShippingState> {
     ));
   }
 
-  selectSubCategory({required SubCategoryEntity subCategory}) {
-    model.subCategoryId = subCategory.id;
+  selectSubCategory({required String subCategory}) {
+    model.subCategoryId = subCategory;
   }
 
   // getUserImage({required File image}) {

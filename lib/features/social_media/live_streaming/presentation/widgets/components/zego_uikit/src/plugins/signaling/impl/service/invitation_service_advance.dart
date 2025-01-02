@@ -336,8 +336,7 @@ mixin ZegoPluginInvitationServiceAdvance {
         subTag: 'advance invitation service',
       );
       return const ZegoSignalingPluginResponseInvitationResult(
-        invitationID: ""
-      );
+          invitationID: "");
     }
 
     ZegoLoggerService.logInfo(
@@ -374,8 +373,7 @@ mixin ZegoPluginInvitationServiceAdvance {
         subTag: 'advance invitation service',
       );
       return const ZegoSignalingPluginResponseInvitationResult(
-        invitationID: ""
-      );
+          invitationID: "");
     }
 
     return ZegoSignalingPluginCore.shared.coreData.advanceReject(
@@ -415,8 +413,7 @@ mixin ZegoPluginInvitationServiceAdvance {
         subTag: 'advance invitation service',
       );
       return const ZegoSignalingPluginResponseInvitationResult(
-        invitationID: ""
-      );
+          invitationID: "");
     }
 
     return ZegoSignalingPluginCore.shared.coreData.advanceAccept(

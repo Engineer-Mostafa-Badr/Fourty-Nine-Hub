@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/request_history_ride_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/all_trip_for_driver_mode/all_trip_for_driver_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/all_trip_no_socket_model/all_trip_no_socket_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/car_models_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_by_rider_model/check_accept_by_rider_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_trip_from_driver_model/check_accept_trip_from_driver_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/color_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/current_trip_ride_model/current_trip_ride_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/driver_info_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/driver_near_by_model/driver_near_by_model.dart';
@@ -17,6 +21,8 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_response_model/trip_response_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/banner_model.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/features/trip_join/add_new_trip_join/data/models/car_brand_model.dart';
+import 'package:fourtyninehub/features/trip_join/add_new_trip_join/data/models/car_year_type_model.dart';
 
 class RiderState {}
 
@@ -228,7 +234,6 @@ class SuccessGetAllOfferNoSocketState extends RiderState {
 
 class SuccessRateDvierState extends RiderState {}
 
-
 class SuccessCheckTripEndState extends RiderState {}
 
 class SuccessStartRecordState extends RiderState {}
@@ -253,4 +258,34 @@ class SuccessGetCurrentTripState extends RiderState {
   final CurrentTripRideModel model;
 
   SuccessGetCurrentTripState({required this.model});
+}
+
+class SuccessGetCarBrandRideState extends RiderState {
+  final List<CarBrandModel> list;
+
+  SuccessGetCarBrandRideState({required this.list});
+}
+
+class SuccessGetCarModelByBrandRideState extends RiderState {
+  final List<CarModelsModel> list;
+
+  SuccessGetCarModelByBrandRideState({required this.list});
+}
+
+class SuccessGetCarYearTypeRideState extends RiderState {
+  final List<CarYearTypeModel> list;
+
+  SuccessGetCarYearTypeRideState({required this.list});
+}
+
+class SuccessGetCarColorsRideState extends RiderState{
+  final List<ColorModel> list;
+
+  SuccessGetCarColorsRideState({required this.list});
+}
+
+class SuccessPickDriverImageState extends RiderState{
+  final File image;
+
+  SuccessPickDriverImageState({required this.image});
 }

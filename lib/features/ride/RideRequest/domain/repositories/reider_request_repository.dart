@@ -451,6 +451,24 @@ class ReiderRequestRepository {
     return dataSource.deleteDriver();
   }
 
+  Future<Either<Failure, Map<String, dynamic>>> getCarBrand() {
+    return dataSource.getCarBrand();
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getCarModelByBrand(
+      {required String brand}) {
+    return dataSource.getCarModelByBrand(brand: brand);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getCarYearType(
+      {required String brand, required String model}) {
+    return dataSource.getCarYearType(model: model, brand: brand);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> ridersColors() {
+    return dataSource.ridersColors();
+  }
+
   checkStartRecord(Function() onChage) {
     log("Ride:startRecord i");
     SharedWebSocket.socket!.on(
@@ -534,5 +552,13 @@ class ReiderRequestRepository {
         log(data.toString(), name: "Drivers NearBy Data");
       },
     );
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> getSignUrl({required Map<String, dynamic>? data, required String url}){
+    return dataSource.getSigninUrl(url: url, data: data);
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> successUpload({required Map<String, dynamic>? data, required String url}){
+    return dataSource.successUpload(url: url, data: data);
   }
 }

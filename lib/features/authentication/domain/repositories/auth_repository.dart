@@ -20,7 +20,6 @@ import '../use_cases/verify_forget_password_otp_use_case.dart';
 abstract class AuthRepository {
   const AuthRepository();
 
-  
   Future<Either<Failure, bool>> updateUserBio(String bio);
   Future<Either<Failure, bool>> updateUserName(String name);
 
@@ -46,13 +45,17 @@ abstract class AuthRepository {
   // Future<Either<Failure, bool>> saveUserId (UserTokensEntity? userTokens);
   Future<Either<Failure, double>> getWelcomeGift();
   Future<Either<Failure, void>> signOut();
-  
-  Future<Either<Failure, ChatEntity>> createNormalChat(CreateNormalChatParams params);
+
+  Future<Either<Failure, ChatEntity>> createNormalChat(
+      CreateNormalChatParams params);
 
   Future<Either<Failure, ChatEntity>> createAnonymousChat(
       CreateAnonymousChatParams params);
-  Future<Either<Failure, bool>> updateProfileView(UpdateProfileViewParams params);
-  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViews(GetProfileViewsParams params);
-  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViewsByUserId(GetProfileViewsParams params);
+  Future<Either<Failure, bool>> updateProfileView(
+      UpdateProfileViewParams params);
+  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViews(
+      GetProfileViewsParams params);
+  Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViewsByUserId(
+      GetProfileViewsParams params);
   bool attachToken(UserTokensEntity? token);
 }

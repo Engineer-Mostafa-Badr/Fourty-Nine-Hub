@@ -180,7 +180,7 @@ class _MediaPreviewState extends State<MediaPreview> {
                                     duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeOut,
                                     child: Padding(
-                                      padding:  EdgeInsets.all(30.w),
+                                      padding: EdgeInsets.all(30.w),
                                       child: Transform.scale(
                                         scale: isSelected ? 1 : 0.6,
                                         child: ColorFiltered(
@@ -201,9 +201,11 @@ class _MediaPreviewState extends State<MediaPreview> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 90.h, horizontal: 10.w),
-            child: IconButton(onPressed: () {
-              Navigator.pop(context);
-            }, icon: const Icon(Icons.clear)),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.clear)),
           )
         ],
       ),

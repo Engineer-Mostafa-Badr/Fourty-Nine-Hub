@@ -36,7 +36,7 @@ class RideBannerWidget extends StatelessWidget {
                 builder: (context, state) {
                   log(state.toString(), name: "lskdfjlskdjflskdjflskdjf");
                   if (state is LoadingShippingState) {
-                    return CircularProgressIndicator(
+                    return const CircularProgressIndicator(
                       color: AppColors.PRIMARY_COLOR,
                     );
                   }
@@ -68,7 +68,7 @@ class RideBannerWidget extends StatelessWidget {
                   }
                 },
               ),
-              Sizer(),
+              const Sizer(),
               (state.model.mainCategory?.isDriverApproved ?? false)
                   ? Padding(
                       padding: const EdgeInsets.symmetric(
@@ -94,7 +94,7 @@ class RideBannerWidget extends StatelessWidget {
                       ),
                     )
                   : Container(),
-              Sizer(),
+              const Sizer(),
               BlocBuilder<ShippingCubit, ShippingState>(
                 builder: (context, state) {
                   return Container();

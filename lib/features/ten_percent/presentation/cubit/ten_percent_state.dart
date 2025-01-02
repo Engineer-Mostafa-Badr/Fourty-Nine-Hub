@@ -31,17 +31,16 @@ class TenPercentState {
     this.electricityId,
     this.trafficId,
   });
-  TenPercentState copyWith({
-    TenPercentStates? status,
-    Failure? failure,
-    bool? isLast,
-    String? mobileFile,
-    String? electricityFile,
-    String? trafficFile,
-    String? mobileId,
-    String? electricityId,
-    String? trafficId
-  }) {
+  TenPercentState copyWith(
+      {TenPercentStates? status,
+      Failure? failure,
+      bool? isLast,
+      String? mobileFile,
+      String? electricityFile,
+      String? trafficFile,
+      String? mobileId,
+      String? electricityId,
+      String? trafficId}) {
     return TenPercentState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

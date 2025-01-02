@@ -32,11 +32,9 @@ class _UserAdsState extends State<UserAds> {
   final AdsManager _adsManager = AdsManager();
   @override
   void initState() {
-
     _adsManager.preloadAds();
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -96,27 +94,31 @@ class _UserAdsState extends State<UserAds> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-            if (index > nativeAdStart && index % adFrequency == adFrequency - 1)
-              SizedBox(height: 50,child: getAdIfNeeded(index, _adsManager),),
-
+                if (index > nativeAdStart &&
+                    index % adFrequency == adFrequency - 1)
+                  SizedBox(
+                    height: 50,
+                    child: getAdIfNeeded(index, _adsManager),
+                  ),
                 CategoriesExtension.fromNameEn(
                         widget.params.mainCategory.nameEn ?? '')
                     .view(
                   item: item,
                   onFav: (String id) async {
-                    var result =
-                        await context.read<AdvertisementCubit>().favouriteAd(id);
+                    var result = await context
+                        .read<AdvertisementCubit>()
+                        .favouriteAd(id);
                     return result;
                   },
                   onRemoveFav: (String id) async {
-                    var result =
-                        await context.read<AdvertisementCubit>().unFavouriteAd(id);
+                    var result = await context
+                        .read<AdvertisementCubit>()
+                        .unFavouriteAd(id);
                     return result;
                   },
                 ),
               ],
             );
-
           },
           noMoreItemsIndicatorBuilder: (context) => Container(),
           firstPageProgressIndicatorBuilder: (context) => Container(

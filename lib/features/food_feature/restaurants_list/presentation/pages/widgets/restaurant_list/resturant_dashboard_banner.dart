@@ -19,17 +19,19 @@ class ResturantDashboardButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = context.watch<RestaurantsCubit>().state;
     return InkWell(
-      onTap: () async{
-        var result =await context.push(Routes.RestaurantDashboard,
+      onTap: () async {
+        var result = await context.push(Routes.RestaurantDashboard,
             extra: state.isResturant!.restaurantId!);
-        if(result == true){
+        if (result == true) {
           context.read<RestaurantsCubit>().loadData();
         }
       },
       child: Container(
           padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 30.h),
           decoration: BoxDecoration(
-              color: context.isDarkMode?AppColors.PRIMARY_COLOR:Theme.of(context).primaryColor,
+              color: context.isDarkMode
+                  ? AppColors.PRIMARY_COLOR
+                  : Theme.of(context).primaryColor,
               borderRadius: BorderRadius.circular(20.r)),
           child: Row(
             children: [
@@ -37,8 +39,7 @@ class ResturantDashboardButton extends StatelessWidget {
                 child: Label(
                   text: LocaleKeys.restaurantDashboard.localize,
                   style: Styles.mediumText(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
               Icon(

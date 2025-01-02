@@ -10,24 +10,24 @@ class AdInterstitialTop {
     InterstitialAd.load(
       adUnitId: AdHelper.InterstitialAd,
       request: const AdRequest(),
-       adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (InterstitialAd ad){
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
           _isAdReady = true;
           _interstitialAd = ad;
         },
-        onAdFailedToLoad: (error){
+        onAdFailedToLoad: (error) {
           print(error.message);
         },
       ),
     );
-    print('====================================================================================');
+    print(
+        '====================================================================================');
   }
 
-  static void showInterstitialAd(){
-    if(_isAdReady){
+  static void showInterstitialAd() {
+    if (_isAdReady) {
       _interstitialAd!.show();
-    }
-    else{
+    } else {
       print('the ad not ready now try later');
     }
   }

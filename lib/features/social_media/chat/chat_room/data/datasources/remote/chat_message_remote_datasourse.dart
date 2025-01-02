@@ -1227,10 +1227,10 @@ class MessagesRemoteDataSourceImplementation
       return Right(data['status']);
     });
   }
-  
+
   @override
   void listenToDeleteMessage(Function(DeleteMessageParams p1) params) {
-   try {
+    try {
       SharedWebSocket.socket!.on(SocketIOListeners.messageDeleted, (data) {
         final decodedData = jsonDecode(data);
         log("Delete Message remote data source :  $data");

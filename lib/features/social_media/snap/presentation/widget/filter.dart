@@ -29,7 +29,6 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-
 class _HomePageState extends State<HomePage> {
   late DeepArController deepArController;
   final GlobalKey _key = GlobalKey();
@@ -54,8 +53,10 @@ class _HomePageState extends State<HomePage> {
   Future<void> _initializeDeepArController() async {
     if (!deepArController.isInitialized) {
       await deepArController.initialize(
-        androidLicenseKey: '930f25b8068f75e888da6f36ca5e7743d7922d9e9b33f36390e980176eaf4e84a2a048142d9b1310',
-        iosLicenseKey: '111a528fa021dbf6a64decfb751ca354e59793f11926845436472e094038cd491de29c031f9ead7f',
+        androidLicenseKey:
+            '930f25b8068f75e888da6f36ca5e7743d7922d9e9b33f36390e980176eaf4e84a2a048142d9b1310',
+        iosLicenseKey:
+            '111a528fa021dbf6a64decfb751ca354e59793f11926845436472e094038cd491de29c031f9ead7f',
       );
     }
   }
@@ -63,11 +64,12 @@ class _HomePageState extends State<HomePage> {
   Future<void> _captureAndSaveImage() async {
     try {
       RenderRepaintBoundary? boundary =
-      _key.currentContext!.findRenderObject() as RenderRepaintBoundary?;
+          _key.currentContext!.findRenderObject() as RenderRepaintBoundary?;
 
       if (boundary != null) {
         ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-        ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+        ByteData? byteData =
+            await image.toByteData(format: ui.ImageByteFormat.png);
 
         if (byteData != null) {
           Uint8List pngBytes = byteData.buffer.asUint8List();
@@ -116,24 +118,21 @@ class _HomePageState extends State<HomePage> {
 
       // Apply the downloaded filter to DeepAR
       deepArController.switchEffect(filePath);
-
     } catch (e) {
       print("Error downloading or switching effect: $e");
     }
   }
 
-
-
   Widget buildCameraPreview() => RepaintBoundary(
-    key: _key,
-    child: SizedBox(
-      height: MediaQuery.of(context).size.height * 0.78,
-      child: Transform.scale(
-        scale: 1.6,
-        child: DeepArPreview(deepArController),
-      ),
-    ),
-  );
+        key: _key,
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.78,
+          child: Transform.scale(
+            scale: 1.6,
+            child: DeepArPreview(deepArController),
+          ),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -174,15 +173,18 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   Center(
                                     child: Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 5.w),
-                                      height: MediaQuery.of(context).size.height *
-                                          0.13, // Responsive circle height
-                                      width: MediaQuery.of(context).size.height *
-                                          0.13, // Responsive circle width
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5.w),
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.13, // Responsive circle height
+                                      width:
+                                          MediaQuery.of(context).size.height *
+                                              0.13, // Responsive circle width
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        border:
-                                        Border.all(color: Colors.white, width: 8.w),
+                                        border: Border.all(
+                                            color: Colors.white, width: 8.w),
                                       ),
                                     ),
                                   ),
@@ -195,7 +197,8 @@ class _HomePageState extends State<HomePage> {
                                       });
 
                                       // Automatically apply the filter when scrolled
-                                      final filterUrl = state.snap![index].deepar;
+                                      final filterUrl =
+                                          state.snap![index].deepar;
                                       await applyDynamicFilter(filterUrl);
                                     },
                                     itemBuilder: (context, index) {
@@ -203,9 +206,14 @@ class _HomePageState extends State<HomePage> {
                                       return Padding(
                                         padding: EdgeInsets.all(40.w),
                                         child: AnimatedContainer(
-                                          duration: const Duration(milliseconds: 300),
-                                          width: selectedFilterIndex == index ? 90.w : 70.w,
-                                          height: selectedFilterIndex == index ? 90.h : 70.h,
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          width: selectedFilterIndex == index
+                                              ? 90.w
+                                              : 70.w,
+                                          height: selectedFilterIndex == index
+                                              ? 90.h
+                                              : 70.h,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
                                             image: DecorationImage(
@@ -259,7 +267,11 @@ class _HomePageState extends State<HomePage> {
                   radius: 47.w,
                   backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
                   child: ImageFromInternet(
-                    image: serviceLocator<UserCubit>().state.data!.profilePicture ?? UIConst.profilePlaceHolder,
+                    image: serviceLocator<UserCubit>()
+                            .state
+                            .data!
+                            .profilePicture ??
+                        UIConst.profilePlaceHolder,
                     height: 90.h,
                     width: 90.w,
                     isCircle: true,

@@ -14,9 +14,9 @@ class UserDataTinderEntity {
 
   UserDataTinderEntity({
     required this.id,
-    required   this.firstName,
-    required  this.lastName,
-    required  this.email,
+    required this.firstName,
+    required this.lastName,
+    required this.email,
     required this.birthday,
     required this.gender,
     required this.location,
@@ -46,5 +46,4 @@ class TinderUserPicture {
     required this.id,
     required this.mediaKey,
   });
-
 }

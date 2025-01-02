@@ -71,6 +71,7 @@ class MyVoiceVideoRecordingScreenState
     _flashAnimation =
         Tween<double>(begin: 0.0, end: 1.0).animate(_flashAnimationController);
   }
+
   Future<void> _initCamera() async {
     try {
       cameras = await availableCameras();
@@ -80,14 +81,14 @@ class MyVoiceVideoRecordingScreenState
       _showErrorDialog(LocaleKeys.error_dialog_camera_init_fail.tr());
     }
   }
+
   void _changeFlashMode() {
     setState(() {
       if (_flashMode == FlashMode.off) {
         _flashMode = FlashMode.torch;
       } else if (_flashMode == FlashMode.auto) {
         _flashMode = FlashMode.off;
-      }
-      else {
+      } else {
         _flashMode = FlashMode.off;
       }
     });
@@ -122,7 +123,6 @@ class MyVoiceVideoRecordingScreenState
       _showErrorDialog(LocaleKeys.error_dialog_controller_init_fail.tr());
     }
   }
-
 
   void _startRecording() async {
     if (_controller!.value.isRecordingVideo) return;
@@ -210,11 +210,16 @@ class MyVoiceVideoRecordingScreenState
         : 'hflip';
 
     final commandArgs = [
-      '-i', videoPath!,
-      '-vf', filterCommand,
-      '-c:v', 'mpeg4',
-      '-q:v', '5',
-      '-b:v', '1M',
+      '-i',
+      videoPath!,
+      '-vf',
+      filterCommand,
+      '-c:v',
+      'mpeg4',
+      '-q:v',
+      '5',
+      '-b:v',
+      '1M',
       filteredVideoPath!,
     ];
 
@@ -343,10 +348,7 @@ class MyVoiceVideoRecordingScreenState
             child: CameraPreview(_controller!),
           ),
           Padding(
-            padding:  EdgeInsets.symmetric(
-              vertical: 40.h,
-              horizontal: 20.w
-            ),
+            padding: EdgeInsets.symmetric(vertical: 40.h, horizontal: 20.w),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -362,17 +364,22 @@ class MyVoiceVideoRecordingScreenState
                         color: _flashMode == FlashMode.off
                             ? Colors.grey
                             : _flashMode == FlashMode.auto
-                            ? Colors.yellow.shade100
-                            : Colors.yellow,
+                                ? Colors.yellow.shade100
+                                : Colors.yellow,
                       ),
                       onPressed: _changeFlashMode,
                     ),
                   ],
                 ),
                 const Spacer(),
-                IconButton(onPressed: (){
-                  Navigator.pop(context);
-                }, icon:  Icon(Icons.clear,size: 50.sp,))
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.clear,
+                      size: 50.sp,
+                    ))
               ],
             ),
           ),
@@ -412,7 +419,9 @@ class MyVoiceVideoRecordingScreenState
         children: [
           Row(
             children: [
-              SizedBox(width: 100.w,),
+              SizedBox(
+                width: 100.w,
+              ),
               Center(
                 child: IconButton(
                   color: Colors.white,
@@ -425,23 +434,27 @@ class MyVoiceVideoRecordingScreenState
                     ],
                   ),
                   onPressed: () {
-                    context.read<ReelsCubit>().pickMediaFromGallery(context)
+                    context
+                        .read<ReelsCubit>()
+                        .pickMediaFromGallery(context)
                         .then((value) {
-                      if(_selectedImage?.path !=null) {
-                       return Navigator.push(
+                      if (_selectedImage?.path != null) {
+                        return Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const ReelsRecordingScreen(
-                                // voiceMediaId: widget.reel.audioMedia,
-                                // voiceSignedUrl: widget.audio.audioSignedUrl,
-                              ),
+                                  // voiceMediaId: widget.reel.audioMedia,
+                                  // voiceSignedUrl: widget.audio.audioSignedUrl,
+                                  ),
                             ));
                       }
                     });
                   },
                 ),
               ),
-              SizedBox(width: 100.w,),
+              SizedBox(
+                width: 100.w,
+              ),
               GestureDetector(
                 onLongPress: () => _startRecording(),
                 onLongPressEnd: (_) => _stopRecording(),
@@ -496,5 +509,4 @@ class MyVoiceVideoRecordingScreenState
     _flashAnimationController.dispose();
     super.dispose();
   }
-
 }

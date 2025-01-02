@@ -18,5 +18,5 @@ class DeleteMessageParams {
   final String chatId;
   final String messageId;
 
-  DeleteMessageParams({required this.chatId, required this.messageId}); 
-  }
+  DeleteMessageParams({required this.chatId, required this.messageId});
+}

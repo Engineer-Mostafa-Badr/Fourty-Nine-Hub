@@ -22,8 +22,7 @@ class TopBarSnap extends StatefulWidget {
   State<TopBarSnap> createState() => _TopBarSnapState();
 }
 
-class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin{
-
+class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin {
   late CameraController _cameraController;
   late List<CameraDescription> _cameras;
   bool isReady = false;
@@ -63,7 +62,7 @@ class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin{
             child: ModalBarrier(
               color: Colors.black.withOpacity(0.5),
               dismissible:
-              false, // Prevents tapping outside to dismiss the overlay
+                  false, // Prevents tapping outside to dismiss the overlay
             ),
           ),
           const Center(
@@ -95,7 +94,7 @@ class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin{
   // Filter PageView properties
   int selectedFilterIndex = 0; // Tracks which filter is applied
   final PageController _pageController =
-  PageController(viewportFraction: 0.3); // Controls the page scrolling
+      PageController(viewportFraction: 0.3); // Controls the page scrolling
   int totalFilters = 10; // Total number of filters
   final GlobalKey _globalKey = GlobalKey();
   bool isSelected = false;
@@ -132,6 +131,7 @@ class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin{
     _flashAnimation =
         Tween<double>(begin: 0.0, end: 1.0).animate(_flashAnimationController);
   }
+
   void _switchCamera() {
     setState(() {
       isFrontCamera = !isFrontCamera;
@@ -149,6 +149,7 @@ class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin{
       log("Error switching camera: $e");
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -162,11 +163,10 @@ class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin{
             children: [
               GestureDetector(
                 onTap: () {
-                  if(context.isUserLoggedIn){
-
+                  if (context.isUserLoggedIn) {
                     context.push(Routes.OTHERSACCOUNT,
                         extra: serviceLocator<UserCubit>().state.data!.id);
-                  }else{
+                  } else {
                     context.go(Routes.LOGIN);
                   }
                 },
@@ -174,7 +174,10 @@ class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin{
                   radius: 30.w,
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   child: ImageFromInternet(
-                    image: serviceLocator<UserCubit>().state.data!.profilePicture ??
+                    image: serviceLocator<UserCubit>()
+                            .state
+                            .data!
+                            .profilePicture ??
                         UIConst.profilePlaceHolder,
                     height: 60.h,
                     width: 60.w,
@@ -222,13 +225,13 @@ class _TopBarSnapState extends State<TopBarSnap> with TickerProviderStateMixin{
                   _flashMode == FlashMode.off
                       ? FontAwesomeIcons.bolt
                       : _flashMode == FlashMode.auto
-                      ? FontAwesomeIcons.bolt
-                      : FontAwesomeIcons.bolt,
+                          ? FontAwesomeIcons.bolt
+                          : FontAwesomeIcons.bolt,
                   color: _flashMode == FlashMode.off
                       ? Colors.grey
                       : _flashMode == FlashMode.auto
-                      ? Colors.yellow.shade100
-                      : Colors.yellow,
+                          ? Colors.yellow.shade100
+                          : Colors.yellow,
                 ),
                 onPressed: _changeFlashMode,
               ),

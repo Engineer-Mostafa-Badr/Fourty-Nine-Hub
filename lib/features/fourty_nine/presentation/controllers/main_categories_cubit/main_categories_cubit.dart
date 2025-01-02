@@ -33,11 +33,11 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     this._toggleFavoriteCategoryUseCase,
     this._getWalletHomeUseCase,
     this._currencyUseCase,
-    this._anyCashBackUseCase, this._categoriesCustomPageUseCase,
+    this._anyCashBackUseCase,
+    this._categoriesCustomPageUseCase,
   ) : super(MainCategoriesState());
 
-
-  Future<void> loadDataCategory() async{
+  Future<void> loadDataCategory() async {
     await loadData();
     await getMainCategoryCustomPage();
   }

@@ -115,22 +115,22 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                 ),
                 const Sizer(),
                 ClickableWidget(
-                  onTap: (){
-                controller.filterAds(
-                categorize: widget.categorization, context: context);
-                },
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: AppColors.PRIMARY_COLOR,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Label(
-                      text: LocaleKeys.filter.localize,
-                      style: Styles.headerText(color: Colors.white),
-                    ),
-                )),
+                    onTap: () {
+                      controller.filterAds(
+                          categorize: widget.categorization, context: context);
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: AppColors.PRIMARY_COLOR,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Label(
+                        text: LocaleKeys.filter.localize,
+                        style: Styles.headerText(color: Colors.white),
+                      ),
+                    )),
               ],
             );
           }),

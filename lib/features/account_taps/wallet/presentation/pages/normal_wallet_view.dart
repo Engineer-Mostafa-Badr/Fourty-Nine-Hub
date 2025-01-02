@@ -93,8 +93,8 @@ class _NormalWalletViewState extends State<NormalWalletView> {
         builder: (context, state) {
           final visibleSubscriptions = state.subscription?.isNotEmpty == true
               ? (showMore
-              ? state.subscription
-              : state.subscription!.take(2).toList())
+                  ? state.subscription
+                  : state.subscription!.take(2).toList())
               : [];
 
           return RefreshIndicator(
@@ -122,7 +122,7 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                       Expanded(
                         child: Label(
                           text:
-                          '${LocaleKeys.minimum.localize}500 ${LocaleKeys.transaction.localize}',
+                              '${LocaleKeys.minimum.localize}500 ${LocaleKeys.transaction.localize}',
                           style: Styles.mediumText(color: Colors.grey),
                         ),
                       ),
@@ -131,28 +131,29 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                 ),
                 const Sizer(),
                 state.wallet?.realAmount != null &&
-                    state.wallet!.realAmount! >= 500
+                        state.wallet!.realAmount! >= 500
                     ? AppButton(
-                  label: LocaleKeys.withdraw.localize,
-                  color: AppColors.AUTH_CONTAINER_COLOR,
-                  backColor: AppColors.SECONDARY_COLOR,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BlocProvider<PaymentCubit>(
-                          create: (BuildContext context) => serviceLocator(),
-                          child: const PaymentCashOut(),
-                        ),
-                      ),
-                    );
-                  },
-                )
+                        label: LocaleKeys.withdraw.localize,
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        backColor: AppColors.SECONDARY_COLOR,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BlocProvider<PaymentCubit>(
+                                create: (BuildContext context) =>
+                                    serviceLocator(),
+                                child: const PaymentCashOut(),
+                              ),
+                            ),
+                          );
+                        },
+                      )
                     : AppButton(
-                  label: LocaleKeys.withdraw.localize,
-                  backColor: AppColors.SECONDARY_COLOR.withOpacity(.5),
-                  onPressed: () {},
-                ),
+                        label: LocaleKeys.withdraw.localize,
+                        backColor: AppColors.SECONDARY_COLOR.withOpacity(.5),
+                        onPressed: () {},
+                      ),
                 const Sizer(),
                 Label(
                   text: LocaleKeys.subscriptions.localize,
@@ -195,29 +196,29 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                 state.status == WalletStates.loading
                     ? const Center(child: CircularProgressIndicator())
                     : SizedBox(
-                  height: 400,
-                  child: ListView.separated(
-                    controller: _scrollController,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      if (index == _cubit.history.length) {
-                        return const Center(
-                            child: CircularProgressIndicator());
-                      }
-                      final item = state.history![index];
-                      return WalletHistoryCard(
-                        title: '${item.transactionAmount}',
-                        subTitle: formatDateTime(item.createdAt, context),
-                        amount: item.received == true,
-                        icon: FontAwesomeIcons.check,
-                      );
-                    },
-                    separatorBuilder: (context, index) => const Divider(
-                      color: AppColors.GREY_NORMAL_COLOR,
-                    ),
-                    itemCount: state.history?.length ?? 0,
-                  ),
-                )
+                        height: 400,
+                        child: ListView.separated(
+                          controller: _scrollController,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            if (index == _cubit.history.length) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                            final item = state.history![index];
+                            return WalletHistoryCard(
+                              title: '${item.transactionAmount}',
+                              subTitle: formatDateTime(item.createdAt, context),
+                              amount: item.received == true,
+                              icon: FontAwesomeIcons.check,
+                            );
+                          },
+                          separatorBuilder: (context, index) => const Divider(
+                            color: AppColors.GREY_NORMAL_COLOR,
+                          ),
+                          itemCount: state.history?.length ?? 0,
+                        ),
+                      )
               ],
             ),
           );
@@ -225,5 +226,4 @@ class _NormalWalletViewState extends State<NormalWalletView> {
       ),
     );
   }
-
 }

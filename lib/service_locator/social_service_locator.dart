@@ -82,15 +82,15 @@ class SocialServiceLocator {
     serviceLocator.registerLazySingleton<GetChatsUseCase>(() => GetChatsUseCase(
           serviceLocator(),
         ));
-    serviceLocator.registerLazySingleton<ConnectMeUseCase>(
-        () => ConnectMeUseCase(
+    serviceLocator
+        .registerLazySingleton<ConnectMeUseCase>(() => ConnectMeUseCase(
               serviceLocator(),
             ));
-            serviceLocator.registerLazySingleton<DisconnectMeUseCase>(
-        () => DisconnectMeUseCase(
+    serviceLocator
+        .registerLazySingleton<DisconnectMeUseCase>(() => DisconnectMeUseCase(
               serviceLocator(),
             ));
-            serviceLocator.registerLazySingleton<GetOnlineOfflineStatusUseCase>(
+    serviceLocator.registerLazySingleton<GetOnlineOfflineStatusUseCase>(
         () => GetOnlineOfflineStatusUseCase(
               serviceLocator(),
             ));
@@ -201,7 +201,6 @@ class SocialServiceLocator {
         () => GetSeenHistoryUseCase(
               serviceLocator(),
             ));
-    
 
     serviceLocator.registerLazySingleton<GetOneTimeViewMessageUseCase>(
         () => GetOneTimeViewMessageUseCase(

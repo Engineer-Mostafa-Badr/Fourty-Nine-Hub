@@ -60,7 +60,9 @@ class _InstagramProfileState extends State<InstagramProfile> {
   Widget build(BuildContext context) {
     final loginUser = context.read<UserCubit>().state.data;
     if (context.isUserLoggedIn) {
-      context.read<UserCubit>().updateProfileView(isProfile: true, userId: widget.userId);
+      context
+          .read<UserCubit>()
+          .updateProfileView(isProfile: true, userId: widget.userId);
     }
     return DefaultTabController(
       length: loginUser?.id == widget.userId ? 3 : 2,
@@ -77,7 +79,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                     SliverToBoxAdapter(
                         child: Container(
                             width: double.infinity,
-                            padding:  EdgeInsetsDirectional.only(
+                            padding: EdgeInsetsDirectional.only(
                                 top: 70.h, end: 20.w, start: 20.w),
                             child: Row(
                                 mainAxisAlignment:
@@ -94,15 +96,16 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                                 : AppColors.DARK_BLUE_COLOR,
                                             size: 55.w,
                                           )),
-                                      if ( state.profileData!.email.isNotEmpty &&  state.profileData!.email !='Hidden')
-                                      Label(
-                                          text:
-                                              '${state.profileData?.email.split('@')[0]}',
-                                          style: Styles.headerText(
-                                            color: context.isDarkMode
-                                                ? AppColors.LIGHT_COLOR
-                                                : AppColors.DARK_GRAY_COLOR,
-                                          )),
+                                      if (state.profileData!.email.isNotEmpty &&
+                                          state.profileData!.email != 'Hidden')
+                                        Label(
+                                            text:
+                                                '${state.profileData?.email.split('@')[0]}',
+                                            style: Styles.headerText(
+                                              color: context.isDarkMode
+                                                  ? AppColors.LIGHT_COLOR
+                                                  : AppColors.DARK_GRAY_COLOR,
+                                            )),
                                       if (state.profileData?.isDocument ==
                                           true) ...[
                                         Sizer(
@@ -437,8 +440,15 @@ class _InstagramProfileState extends State<InstagramProfile> {
                       ),
                       const Sizer(),
                       InkWell(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewFollowersAndFollowing(otherId: state.profileData!.id,email: state.profileData?.email ??'')));
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ViewFollowersAndFollowing(
+                                          otherId: state.profileData!.id,
+                                          email:
+                                              state.profileData?.email ?? '')));
                         },
                         child: _buildCounter(
                           value: '${user.followersCount} ',
@@ -447,8 +457,15 @@ class _InstagramProfileState extends State<InstagramProfile> {
                       ),
                       const Sizer(),
                       InkWell(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewFollowersAndFollowing(otherId: state.profileData!.id, email: state.profileData?.email ??'',)));
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ViewFollowersAndFollowing(
+                                        otherId: state.profileData!.id,
+                                        email: state.profileData?.email ?? '',
+                                      )));
                         },
                         child: _buildCounter(
                           value: '${user.followingCount} ',
@@ -498,18 +515,18 @@ class _InstagramProfileState extends State<InstagramProfile> {
                 Sizer(
                   height: 4.h,
                 ),
-                if (user.email.isNotEmpty && user.email !='Hidden')
-                Label(
-                    text: '@ ${user.email.split('@')[0]}',
-                    style: Styles.mediumText(
-                      color: context.isDarkMode
-                          ? AppColors.LIGHT_GRAY_COLOR
-                          : AppColors.DARK_BLUE_COLOR,
-                    )),
+                if (user.email.isNotEmpty && user.email != 'Hidden')
+                  Label(
+                      text: '@ ${user.email.split('@')[0]}',
+                      style: Styles.mediumText(
+                        color: context.isDarkMode
+                            ? AppColors.LIGHT_GRAY_COLOR
+                            : AppColors.DARK_BLUE_COLOR,
+                      )),
                 Sizer(
                   height: 4.h,
                 ),
-                if (user.bio.isNotEmpty && user.bio !='Hidden')
+                if (user.bio.isNotEmpty && user.bio != 'Hidden')
                   Label(
                       text: user.bio,
                       style: Styles.mediumText(

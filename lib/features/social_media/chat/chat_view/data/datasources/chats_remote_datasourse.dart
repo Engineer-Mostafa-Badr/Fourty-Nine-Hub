@@ -69,8 +69,6 @@ abstract class ChatsRemoteDataSource {
   Future<Either<Failure, List<SeenHistoryModel>>> getSeenHistoryList(
       {required String chatId});
 
-  
-
   void stopListenToNewChats();
 
   void listenToNewChats(Function(ChatEntity) params);
@@ -173,8 +171,6 @@ class ChatsRemoteDataSourceImplementation implements ChatsRemoteDataSource {
             .map((e) => SeenHistoryModel.fromJson(e))
             .toList()));
   }
-
-  
 
   @override
   void listenToNewChats(Function(ChatEntity) params) {

@@ -216,7 +216,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                         context.push(Routes.HOME);
                         // context.pushReplacement(Routes.HOME);
                         context.read<MainCategoriesCubit>().loadDataCategory();
-                       // context.read<MainCategoriesCubit>().getMainCategoryCustomPage();
+                        // context.read<MainCategoriesCubit>().getMainCategoryCustomPage();
                         // Phoenix.rebirth(context);
                       }
                       // context.pop();

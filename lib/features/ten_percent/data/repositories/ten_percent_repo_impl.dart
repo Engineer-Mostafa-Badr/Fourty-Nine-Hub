@@ -12,8 +12,8 @@ class TenPercentRepoImpl implements TenPercentRepo {
   TenPercentRepoImpl(this._remoteDataSource);
 
   @override
-  Future<Either<Failure, bool>> sendBillRequest({required SentBillRequestParams params}) async {
+  Future<Either<Failure, bool>> sendBillRequest(
+      {required SentBillRequestParams params}) async {
     return await _remoteDataSource.sendBillRequest(params: params);
   }
-
 }

@@ -24,7 +24,6 @@ class SubscriptionInterceptor extends Interceptor {
   @override
   Future<void> onError(
       DioException err, ErrorInterceptorHandler handler) async {
-    log(err.response.toString(), name: "lsjdfksdjfksdjflksdjflksjf");
     if (err.type == DioExceptionType.badResponse &&
         err.response?.data['endPointSubscription'] != null &&
         err.response?.data['endPointSubscription'] == true &&

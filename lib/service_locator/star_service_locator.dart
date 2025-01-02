@@ -76,7 +76,7 @@ class StarServiceLocator {
         ));
 
     serviceLocator.registerFactory<TenPercentCubit>(() => TenPercentCubit(
-      serviceLocator(),
+          serviceLocator(),
         ));
   }
 }

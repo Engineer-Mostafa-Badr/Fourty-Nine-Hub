@@ -198,12 +198,13 @@ class TinderRemoteDataSourceImpl implements TinderRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> deletePictures(String id)async {
-    final response = await _apiConsumer.delete(EndPoints.tinderDeletePicture(id),
-       );
+  Future<Either<Failure, bool>> deletePictures(String id) async {
+    final response = await _apiConsumer.delete(
+      EndPoints.tinderDeletePicture(id),
+    );
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(response['status']),
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
     );
   }
 

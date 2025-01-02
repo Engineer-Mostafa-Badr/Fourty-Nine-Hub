@@ -20,6 +20,7 @@ class FirstNameTextFormField extends MainTextFormField {
     super.style,
     super.hintColor,
     super.fillColor,
+    super.onChanged,
   }) : super(
           // style: ,
           validator: validator ?? Validator().validateUserName,

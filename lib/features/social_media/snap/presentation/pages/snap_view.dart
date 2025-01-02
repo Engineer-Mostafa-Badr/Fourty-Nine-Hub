@@ -52,7 +52,6 @@ class AdvancedSnapchatCameraScreen extends StatefulWidget {
 
 class _AdvancedSnapchatCameraScreenState
     extends State<AdvancedSnapchatCameraScreen> with TickerProviderStateMixin {
-
   late CameraController _cameraController;
   late List<CameraDescription> _cameras;
   bool isReady = false;
@@ -191,8 +190,7 @@ class _AdvancedSnapchatCameraScreenState
         _flashMode = FlashMode.torch;
       } else if (_flashMode == FlashMode.auto) {
         _flashMode = FlashMode.off;
-      }
-      else {
+      } else {
         _flashMode = FlashMode.off;
       }
     });
@@ -306,7 +304,6 @@ class _AdvancedSnapchatCameraScreenState
                 child: CameraPreview(_cameraController),
               ),
             ),
-
             GestureDetector(
               onHorizontalDragEnd: (details) {
                 if (details.primaryVelocity! > 0) {
@@ -320,8 +317,7 @@ class _AdvancedSnapchatCameraScreenState
             Align(
               alignment: Alignment.bottomCenter,
               child: SizedBox(
-                height: MediaQuery.of(context).size.height *
-                    0.25,
+                height: MediaQuery.of(context).size.height * 0.25,
                 child: Row(
                   children: [
                     Expanded(
@@ -332,24 +328,24 @@ class _AdvancedSnapchatCameraScreenState
                             color: Colors.white,
                             icon: Stack(
                               children: [
-                                 Icon(
+                                Icon(
                                   size: 60.sp,
                                   Icons.photo_library,
                                 ),
                               ],
                             ),
-                            onPressed: () =>_pickImageFromGallery()
-                                .then((value) {
-                              if(_selectedImage?.path !=null) {
+                            onPressed: () =>
+                                _pickImageFromGallery().then((value) {
+                              if (_selectedImage?.path != null) {
                                 return Navigator.push(
                                     context,
-                                 MaterialPageRoute(
+                                    MaterialPageRoute(
                                       builder: (context) => MediaPreview(
-                                          mediaPath: _selectedImage?.path ??'',
+                                          mediaPath: _selectedImage?.path ?? '',
                                           mediaType: MediaType.image),
                                     ));
                               }
-                                }), // Pick an image from gallery
+                            }), // Pick an image from gallery
                           ),
                         ),
                       ),
@@ -425,9 +421,8 @@ class _AdvancedSnapchatCameraScreenState
                                           child: ColorFiltered(
                                             colorFilter: filter['colorFilter'],
                                             child: CircleAvatar(
-                                              backgroundImage:
-                                                  const AssetImage(
-                                                      'assets/filters/camera_filter.webp'),
+                                              backgroundImage: const AssetImage(
+                                                  'assets/filters/camera_filter.webp'),
                                               child: Text(
                                                 filter['name'],
                                                 textAlign: TextAlign.center,
@@ -465,8 +460,11 @@ class _AdvancedSnapchatCameraScreenState
                               ],
                             ),
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomePage()));
-                             // Navigator.push(context, MaterialPageRoute(builder: (context)=>FaceDetectionCamera()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const HomePage()));
+                              // Navigator.push(context, MaterialPageRoute(builder: (context)=>FaceDetectionCamera()));
                             }, // Pick an image from gallery
                           ),
                         ),
@@ -495,11 +493,10 @@ class _AdvancedSnapchatCameraScreenState
             children: [
               GestureDetector(
                 onTap: () {
-                  if(context.isUserLoggedIn){
-
+                  if (context.isUserLoggedIn) {
                     context.push(Routes.OTHERSACCOUNT,
                         extra: serviceLocator<UserCubit>().state.data!.id);
-                  }else{
+                  } else {
                     context.go(Routes.LOGIN);
                   }
                 },
@@ -507,7 +504,10 @@ class _AdvancedSnapchatCameraScreenState
                   radius: 47.w,
                   backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
                   child: ImageFromInternet(
-                    image: serviceLocator<UserCubit>().state.data!.profilePicture ??
+                    image: serviceLocator<UserCubit>()
+                            .state
+                            .data!
+                            .profilePicture ??
                         UIConst.profilePlaceHolder,
                     height: 90.h,
                     width: 90.w,
@@ -517,15 +517,15 @@ class _AdvancedSnapchatCameraScreenState
               ),
             ],
           ),
-          SizedBox(width: 10.w,),
+          SizedBox(
+            width: 10.w,
+          ),
           IconButton(
               onPressed: () {
                 showDialog(
-                    context: context,
-                    builder: (_) =>
-                    const SearchAppUsers());
+                    context: context, builder: (_) => const SearchAppUsers());
               },
-              icon:  Icon(
+              icon: Icon(
                 FontAwesomeIcons.magnifyingGlass,
                 size: 50.sp,
               )),

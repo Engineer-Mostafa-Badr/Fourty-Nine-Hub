@@ -14,12 +14,12 @@ class FollowingModel extends FollowingEntity {
   factory FollowingModel.fromJson(Map<String, dynamic> json) {
     return FollowingModel(
       id: json['_id'] ?? '',
-      followerId: json['followerId']??'',
-      firstName: json['followingId']?['firstName']??'',
-      lastname: json['followingId']?['lastName']??'',
-      email: json['followingId']?['email']??'',
-      image: json['followingId']?['image']??'',
-      followingId: json['followingId']?['_id'] ??'',
+      followerId: json['followerId'] ?? '',
+      firstName: json['followingId']?['firstName'] ?? '',
+      lastname: json['followingId']?['lastName'] ?? '',
+      email: json['followingId']?['email'] ?? '',
+      image: json['followingId']?['image'] ?? '',
+      followingId: json['followingId']?['_id'] ?? '',
     );
   }
 }

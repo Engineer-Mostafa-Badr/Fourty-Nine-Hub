@@ -21,13 +21,13 @@ import '../../../../../../service_locator/service_locator.dart';
 import 'package:image/image.dart' as img;
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 
-
 class MediaPreviewScreen extends StatefulWidget {
   final String mediaId;
   final String mediaPath;
   final bool isImage;
 
-  const MediaPreviewScreen({super.key, 
+  const MediaPreviewScreen({
+    super.key,
     required this.mediaId,
     required this.mediaPath,
     required this.isImage,
@@ -43,7 +43,8 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
   Filter? _selectedFilter;
   String? _croppedImagePath;
 
-  Future<File> applyFilterAndSaveImage(String originalPath, String filterType) async {
+  Future<File> applyFilterAndSaveImage(
+      String originalPath, String filterType) async {
     final originalImage = img.decodeImage(File(originalPath).readAsBytesSync());
 
     img.Image filteredImage;
@@ -62,21 +63,19 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
     return File(filteredImagePath);
   }
 
-
-  Future<String> applyFilterAndSaveVideo(String originalPath, String filterCommand) async {
+  Future<String> applyFilterAndSaveVideo(
+      String originalPath, String filterCommand) async {
     final tempDir = Directory.systemTemp;
     final filteredVideoPath = '${tempDir.path}/filtered_video.mp4';
 
     final command = '-i $originalPath -vf "$filterCommand" $filteredVideoPath';
 
     await FFmpegKit.execute(command).then((session) {
-       session.getReturnCode();
+      session.getReturnCode();
     });
 
     return filteredVideoPath;
   }
-
-
 
   @override
   void initState() {
@@ -105,7 +104,6 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
     _videoController?.dispose();
     super.dispose();
   }
-
 
   void _applyFilter(Filter filter) {
     setState(() {
@@ -168,7 +166,6 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
     );
   }
 
-
   void _showFilterBottomSheet() {
     showModalBottomSheet(
       context: context,
@@ -195,86 +192,88 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                 Expanded(
                   child: widget.isImage
                       ? ColorFiltered(
-                    colorFilter: _selectedFilter?.colorFilter ??
-                        const ColorFilter.mode(
-                            Colors.transparent, BlendMode.multiply),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * .8,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50.r),
-                        image: DecorationImage(
-                          fit: BoxFit.fitWidth,
-                          image: FileImage(
-                            File(_croppedImagePath ?? widget.mediaPath),
+                          colorFilter: _selectedFilter?.colorFilter ??
+                              const ColorFilter.mode(
+                                  Colors.transparent, BlendMode.multiply),
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * .8,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.r),
+                              image: DecorationImage(
+                                fit: BoxFit.fitWidth,
+                                image: FileImage(
+                                  File(_croppedImagePath ?? widget.mediaPath),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  )
+                        )
                       : _videoController != null &&
-                      _videoController!.value.isInitialized
-                      ? Center(
-                    child: ColorFiltered(
-                      colorFilter: _selectedFilter?.colorFilter ??
-                          const ColorFilter.mode(
-                              Colors.transparent, BlendMode.multiply),
-                      child: AspectRatio(
-                        aspectRatio:
-                        _videoController!.value.aspectRatio,
-                        child: VideoPlayer(_videoController!),
-                      ),
-                    ),
-                  )
-                      : const Center(child: CircularProgressIndicator()),
+                              _videoController!.value.isInitialized
+                          ? Center(
+                              child: ColorFiltered(
+                                colorFilter: _selectedFilter?.colorFilter ??
+                                    const ColorFilter.mode(
+                                        Colors.transparent, BlendMode.multiply),
+                                child: AspectRatio(
+                                  aspectRatio:
+                                      _videoController!.value.aspectRatio,
+                                  child: VideoPlayer(_videoController!),
+                                ),
+                              ),
+                            )
+                          : const Center(child: CircularProgressIndicator()),
                 ),
                 Padding(
                   padding:
-                  EdgeInsets.symmetric(horizontal: 20.w, vertical: 60.h),
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 60.h),
                   child: Row(
                     children: [
                       Expanded(
                         child: buildContainer(
                           onTap: widget.isImage
                               ? () async {
-                            final filteredFile =
-                            await applyFilterAndSaveImage(
-                                widget.mediaPath, 'grayscale');
-                            final fileType =
-                            _determineFileType(filteredFile.path);
-                            final fileSize = await filteredFile.length();
+                                  final filteredFile =
+                                      await applyFilterAndSaveImage(
+                                          widget.mediaPath, 'grayscale');
+                                  final fileType =
+                                      _determineFileType(filteredFile.path);
+                                  final fileSize = await filteredFile.length();
 
-                            await serviceLocator<StoryCubit>()
-                                .uploadStoryVideoOrImage(
-                              filteredFile,
-                              fileType,
-                              fileSize,
-                              description: '',
-                            )
-                                .then((value) {
-                              showSuccessMessage(context, LocaleKeys.storyUploaded.localize);
-                            });
-                          }
+                                  await serviceLocator<StoryCubit>()
+                                      .uploadStoryVideoOrImage(
+                                    filteredFile,
+                                    fileType,
+                                    fileSize,
+                                    description: '',
+                                  )
+                                      .then((value) {
+                                    showSuccessMessage(context,
+                                        LocaleKeys.storyUploaded.localize);
+                                  });
+                                }
                               : () async {
-                            final filteredPath =
-                            await applyFilterAndSaveVideo(
-                                widget.mediaPath, 'hue=s=0');
-                            final file = File(filteredPath);
-                            final fileType =
-                            _determineFileType(file.path);
-                            final fileSize = await file.length();
+                                  final filteredPath =
+                                      await applyFilterAndSaveVideo(
+                                          widget.mediaPath, 'hue=s=0');
+                                  final file = File(filteredPath);
+                                  final fileType =
+                                      _determineFileType(file.path);
+                                  final fileSize = await file.length();
 
-                            await serviceLocator<StoryCubit>()
-                                .uploadStoryVideoOrImage(
-                              file,
-                              fileType,
-                              fileSize,
-                              description: '',
-                            )
-                                .then((value) {
-                              showSuccessMessage(context, LocaleKeys.storyUploaded.localize);
-                            });
-                          },
+                                  await serviceLocator<StoryCubit>()
+                                      .uploadStoryVideoOrImage(
+                                    file,
+                                    fileType,
+                                    fileSize,
+                                    description: '',
+                                  )
+                                      .then((value) {
+                                    showSuccessMessage(context,
+                                        LocaleKeys.storyUploaded.localize);
+                                  });
+                                },
                           color: AppColors.AUTH_CONTAINER_COLOR,
                           textColor: AppColors.QUANTITY_COLOR,
                           title: LocaleKeys.story.localize,
@@ -285,7 +284,8 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                       Expanded(
                         child: buildContainer(
                           onTap: () {
-                            if (!widget.isImage && _videoController?.value.isPlaying == true) {
+                            if (!widget.isImage &&
+                                _videoController?.value.isPlaying == true) {
                               _videoController?.pause();
                             }
                             Navigator.push(
@@ -359,7 +359,6 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
       ),
     );
   }
-
 
   Widget buildContainer({
     required Function onTap,
