@@ -605,7 +605,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview> with WidgetsBin
                 Positioned.fill(
                   child: AppButton(
                       color: AppColors.AUTH_CONTAINER_COLOR,
-                      label: '10% Cashback',
+                      label: LocaleKeys.billCashback.localize,
                       style: Styles.mediumText(
                         color: AppColors.AUTH_CONTAINER_COLOR,
                         fontWeight: FontWeight.bold,

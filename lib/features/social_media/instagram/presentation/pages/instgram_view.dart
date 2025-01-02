@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -122,7 +124,7 @@ class _InstagramViewState extends State<InstagramView> {
                   SizedBox(
                     width: 8.w,
                   ),
-                  Label(text: i == 0 ? 'Home' : 'Profile',style: Styles.headerText(color: i == 0
+                  Label(text: i == 0 ? LocaleKeys.home.localize : LocaleKeys.profile.localize,style: Styles.headerText(color: i == 0
                       ? context.isDarkMode
                       ? AppColors.PRIMARY_COLOR_DARK
                       : AppColors.PRIMARY_COLOR

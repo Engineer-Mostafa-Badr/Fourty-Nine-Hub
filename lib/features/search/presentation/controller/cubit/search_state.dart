@@ -15,6 +15,7 @@ class SearchState {
   final List<ReelsSearchEntity>? reels;
   final PostEntity? postDetails;
   final CommentEntity? newComment;
+  final List<MainCategoryEntity>? mainCategory;
 
   SearchState({
     this.status = SearchStates.loading,
@@ -28,6 +29,7 @@ class SearchState {
     this.tripCome,
     this.newComment,
     this.reels,
+    this.mainCategory,
     this.filter = 'totalUsers',
   });
 
@@ -43,7 +45,9 @@ class SearchState {
       List<TripComeWithYouEntity>? tripCome,
       PostEntity? postDetails,
       CommentEntity? newComment,
-      List<ReelsSearchEntity>? reels}) {
+      List<ReelsSearchEntity>? reels,
+         List<MainCategoryEntity>? mainCategory,
+      }) {
     return SearchState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
@@ -56,6 +60,7 @@ class SearchState {
       newComment: newComment ?? this.newComment,
       tripCome: tripCome ?? this.tripCome,
       reels: reels ?? this.reels,
+      mainCategory: mainCategory ?? this.mainCategory,
     );
   }
 }

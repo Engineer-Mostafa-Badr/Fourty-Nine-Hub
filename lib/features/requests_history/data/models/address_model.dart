@@ -14,9 +14,9 @@ class AddressModel extends AddressEntity {
   factory AddressModel.fromJson(Map<String, dynamic> json) {
     return AddressModel(
       id: json['_id'] ?? '',
-      coordinates: (json['coordinates'] as List<dynamic>)
+      coordinates: json['coordinates']!=null?(json['coordinates'] as List<dynamic>)
           .map((e) => (e as num).toDouble()) // Safely cast to double
-          .toList(),
+          .toList():[],
       address: json['address'] ?? '',
       street: json['street'] ?? '',
       flat: json['flat'] ?? '',

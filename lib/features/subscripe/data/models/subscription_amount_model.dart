@@ -2,14 +2,15 @@ import 'package:fourtyninehub/features/subscripe/domain/entities/subscription_am
 
 class SubscriptionAmountModel extends SubscriptionAmountEntity {
   SubscriptionAmountModel(
-      {required super.currency,
+      {required super.currencyAr,required super.currencyEn,
       required super.amount,
       required super.id,
       required super.isActive});
 
   factory SubscriptionAmountModel.fromJson(Map<String, dynamic> json) {
     return SubscriptionAmountModel(
-      currency: json['currency'],
+      currencyAr: json['currencyAr'],
+      currencyEn: json['currencyEn'],
       amount: json['amount'],
       id: json['_id'],
       isActive: json['isActive'],

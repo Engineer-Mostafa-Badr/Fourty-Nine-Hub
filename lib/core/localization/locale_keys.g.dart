@@ -1204,5 +1204,15 @@ abstract class  LocaleKeys {
   static const transferFiveYears = 'transferFiveYears';
   static const marriage = 'marriage';
   static const Rating = 'Rating';
+  static const noFollowing = 'noFollowing';
+  static const billCashback = 'billCashback';
+  static const selectBill = 'selectBill';
+  static const billValue = 'billValue';
+  static const trafficViolation = 'trafficViolation';
+  static const electricityBill = 'electricityBill';
+  static const mobileBill = 'mobileBill';
+  static const enterBillValue = 'enterBillValue';
+  static const uploadAtLeastOneBill = 'uploadAtLeastOneBill';
+  static const home = 'home';
 
 }

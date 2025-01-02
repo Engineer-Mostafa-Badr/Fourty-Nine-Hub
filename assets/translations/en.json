@@ -1235,5 +1235,15 @@
   "recoverDeletedChats": "Recover Deleted Chats",
   "sureRecoverDeletedChats": "Are you sure you want to recover deleted chats?",
   "marriage": "Marriage",
-  "Rating": "Rating:"
+  "Rating": "Rating:",
+  "noFollowing": "No Following",
+  "billCashback": "Bill Cashback",
+  "selectBill": "Select Bill",
+  "billValue": "Bill Value",
+  "trafficViolation": "Traffic Violation",
+  "electricityBill": "Electricity Bill",
+  "mobileBill": "Mobile Bill",
+  "enterBillValue": "Enter Bill Value",
+  "uploadAtLeastOneBill": "Please upload at least 1 bill",
+  "home": "Home"
 }

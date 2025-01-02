@@ -36,18 +36,18 @@ class TripComeWithYouModel extends TripComeWithYouEntity {
   factory TripComeWithYouModel.fromJson(Map<String, dynamic> json) {
     return TripComeWithYouModel(
       id: json["_id"] ?? '',
-      userId: json['userId']['_id'] ?? '',
-      userFirstName: json['userId']['firstName'] ?? '',
-      userLastName: json['userId']['lastName'] ?? '',
+      userId: json['userId']?['_id'] ?? '',
+      userFirstName: json['userId']?['firstName'] ?? '',
+      userLastName: json['userId']?['lastName'] ?? '',
       image: json['userId']?['USER_PROFILE']?['profilePictureKey']
               ?['mediaKey'] ??
           '',
       categoryId: json['categoryId']?['_id'] ?? '',
       categoryNameAr: json['categoryId']?['nameAr'] ?? '',
       categoryNameEn: json['categoryId']?['nameEn'] ?? '',
-      vehicleId: json['vehicleId']['_id'] ?? '',
-      vehicleBrand: json['vehicleId']['Brand'] ?? '',
-      vehicleModel: json['vehicleId']['Model'] ?? '',
+      vehicleId: json['vehicleId']?['_id'] ?? '',
+      vehicleBrand: json['vehicleId']?['Brand'] ?? '',
+      vehicleModel: json['vehicleId']?['Model'] ?? '',
       fromAr: json["fromAr"] ?? '',
       toAr: json["toAr"] ?? '',
       fromEn: json["fromEn"] ?? '',

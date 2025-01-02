@@ -1,7 +1,9 @@
 class BannerTalentEntity{
   final String banner;
-  final String title;
-  final String subTitle;
+  final String titleAr;
+  final String titleEn;
+  final String subTitleAr;
+  final String subTitleEn;
 
-  BannerTalentEntity({required this.banner,required this.title,required this.subTitle});
+  BannerTalentEntity({required this.banner,required this.titleAr,required this.titleEn,required this.subTitleAr,required this.subTitleEn});
 }

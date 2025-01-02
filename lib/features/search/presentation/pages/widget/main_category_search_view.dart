@@ -21,44 +21,10 @@ class MainCategorySearchView extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 10.w),
       child: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {
-          final controller = context.read<SearchCubit>();
-          // Listen for changes in the search text and trigger search
-          // controller.searchController.addListener(() {
-          //   if (controller.searchController.text.isNotEmpty) {
-          //     controller.getSearch(SearchParams(
-          //       search: controller.searchController.text,
-          //       params: PaginationParams(page: 1),
-          //     ));
-          //   }
-          // });
-
-          // Display a loading shimmer when the search is loading
-          // if (state.status==SearchStates.loading) {
-          //   return Shimmer.fromColors(
-          //     baseColor: Colors.grey[100]!,
-          //     highlightColor: Colors.white24,
-          //     child: Column(
-          //       children: List.generate(
-          //           6,
-          //               (index) => Padding(
-          //             padding: EdgeInsets.only(bottom: 15.h),
-          //             child: Container(
-          //               height: MediaQuery.of(context).size.height * .15.h,
-          //               width: double.infinity,
-          //               margin: EdgeInsets.symmetric(horizontal: 10.w),
-          //               padding: EdgeInsets.symmetric(horizontal: 10.w),
-          //               decoration: BoxDecoration(
-          //                 color: AppColors.AUTH_CONTAINER_COLOR,
-          //                 borderRadius: BorderRadius.circular(20.r),
-          //                 border: Border.all(color: Colors.grey),
-          //               ),
-          //             ),
-          //           )),
-          //     ),
-          //   );
+          // if(state.status ==SearchStates.loading){
+          //   return const Center(child: CircularProgressIndicator());
           // }
-
-          // Check if search results exist
+          final controller = context.read<SearchCubit>();
           if (controller.searchController.text.isNotEmpty) {
             return PagedListView<int, MainCategoryEntity>(
               pagingController: controller.searchPagingController,
@@ -98,33 +64,7 @@ class MainCategorySearchView extends StatelessWidget {
                     const CupertinoActivityIndicator(),
               ),
             );
-            // return ListView.separated(
-            //   itemCount: state.search?.length ??0,
-            //   // physics: const NeverScrollableScrollPhysics(),
-            //   shrinkWrap: true,
-            //   itemBuilder: (context, index) {
-            //     return InkWell(
-            //       onTap: () {
-            //         context.push(Routes.SUBCATEGORIES, extra: state.search![index]);
-            //       },
-            //       child: BuildItemSearchMainCategory(
-            //         category: state.search![index],
-            //         onFavorite: () async {
-            //           var result =
-            //           await controller.toggleFavoriteMedicalService(
-            //               state.search![index].id);
-            //           print("result$result");
-            //           return result;
-            //         },
-            //       ),
-            //     );
-            //   },
-            //   separatorBuilder: (BuildContext context, int index) =>
-            //   const Sizer(),
-            // );
           }
-
-          // If no search results or initial state
           return Center(
             child: Text(LocaleKeys.noResultsFound.localize),
           );

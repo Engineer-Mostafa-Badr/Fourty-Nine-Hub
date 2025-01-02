@@ -1022,8 +1022,8 @@
   "liveStreamOptions": "خيارات البث الحي",
   "createLive": "انشاء بث",
   "watch": "مشاهدة",
-  "Face":"وجه",
-  "Insta":"صور",
+  "Face":"فيس",
+  "Insta":"انستا",
   "day": "يوم",
   "month": "شهر",
   "numOfWins": "عدد مرات الفوز",
@@ -1108,7 +1108,7 @@
   "reached":"وصل",
   "running":"جارية",
   "comeWithMe" : "تعال معي",
-  "mainCategory" : "Main Category",
+  "mainCategory" : "الفئة الرئيسية",
 
   "failedTryAgain":"فشل. من فضلك حاول مجددا",
   "publishSubmitted": "تم إرسال موهبتك بنجاح، انتظر موافقة الإدارة",
@@ -1216,5 +1216,16 @@
   "transferTenYears":"تم نقل رصيد عشر سنوات إلى محفظة الهدايا",
   "transferFiveYears":"تم نقل رصيد خمس سنوات إلى محفظة الهدايا",
   "marriage": "زواج",
-  "Rating": "تقييم:"
+  "Rating": "تقييم:",
+  "noFollowing": "لا يوجد متابعين",
+  "billCashback": "كاش باك فواتير",
+  "selectBill": "حدد الفاتورة",
+  "billValue": "قيمة الفاتورة",
+  "trafficViolation": "مخالفة المرور",
+  "electricityBill": "فاتورة الكهرباء",
+  "mobileBill": "فاتورة موبايل",
+  "enterBillValue": "ادخل قيمة الفاتورة",
+  "uploadAtLeastOneBill": "قم بتحميل على الاقل فاتورة واحدة",
+  "home": "الرئيسية"
+
 }
