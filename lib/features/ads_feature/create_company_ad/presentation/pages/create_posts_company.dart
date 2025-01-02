@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
@@ -89,28 +91,64 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                       TextButton(
                           child: Label(text: LocaleKeys.post.localize),
                           onPressed: () {
-                            print('**************************************');
-                            print(controller.selectedImages);
-                            print('**************************************');
-                            if (formKey.currentState!.validate()) {
-                              context
-                                  .read<CreateCompanyAdCubit>()
-                                  .addPostCompanyAdvertise(
-                                    mediaIds: widget.picture
-                                        ? controller.selectedImages ??
-                                            showErrorMessage(
-                                              context,
-                                              LocaleKeys
-                                                  .imageNotSelected.localize,
-                                            )
-                                        : null,
-                                    type: widget.type,
-                                    post: widget.text
-                                        ? postContentTextController.text
-                                        : null,
-                                    totalPrice: widget.totalPrice,
-                                  );
-                            }
+                            bool inArabic = context.isArabic;
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return BlocProvider.value(
+                                  value: serviceLocator<CreateCompanyAdCubit>(),
+                                  child: BlocBuilder<CreateCompanyAdCubit,CreateCompanyAdState>(
+                                    builder: (context,state) {
+                                      return AlertDialog(
+                                        title: Text(inArabic ? "تأكيد الخدمة" : "Service Confirmation"),
+                                        content: Text(inArabic
+                                            ? "هذه الخدمة ستكلف ${widget.totalPrice} ${context.read<MainCategoriesCubit>().state.currency?.currencyAr}. هل تريد المتابعة؟"
+                                            : "This service will cost ${widget.totalPrice} ${context.read<MainCategoriesCubit>().state.currency?.currencyEn}. Do you want to proceed?"),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text(inArabic ? "إلغاء" : "Cancel"),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              // Handle confirmation
+                                              print('**************************************');
+                                              print(controller.selectedImages);
+                                              print('**************************************');
+                                              if (formKey.currentState!.validate()) {
+                                                 await context
+                                                    .read<CreateCompanyAdCubit>()
+                                                    .addPostCompanyAdvertise(
+                                                      mediaIds: widget.picture
+                                                          ? controller.selectedImages ??
+                                                              showErrorMessage(
+                                                                context,
+                                                                LocaleKeys
+                                                                    .imageNotSelected.localize,
+                                                              )
+                                                          : null,
+                                                      type: widget.type,
+                                                      post: widget.text
+                                                          ? postContentTextController.text
+                                                          : null,
+                                                      totalPrice: widget.totalPrice, context: context,
+                                                    );
+
+                                              }
+
+                                            },
+                                            child: Text(inArabic ? "تأكيد" : "Confirm"),
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                  ),
+                                );
+                              },
+                            );
+
                           }),
                     ],
                   ),
