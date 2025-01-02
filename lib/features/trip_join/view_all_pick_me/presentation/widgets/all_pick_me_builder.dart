@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/ads/native_ad_card.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -57,21 +58,49 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
       builder: (context, state) {
         return ListView.builder(
           controller: scrollController,
-          itemCount: viewAllPickMeCubit.cards.length ,
+          itemCount: viewAllPickMeCubit.cards.length,
           itemBuilder: (context, index) {
-            if (index > nativeAdStart && index % adFrequency == adFrequency - 1) {
+            if (index > nativeAdStart &&
+                index % adFrequency == adFrequency - 1) {
               return getAdIfNeeded(index, _adsManager);
             }
             if (index == 0) {
               return Align(
                 alignment: Alignment.centerLeft,
-                child: Text(
-                  LocaleKeys.youDontOwnCar.localize,
-                  // "Users own cars/share the trip with them" ,
-                  style: Styles.headerText(
-                    color: AppColors.getSecondryColor(context),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: RichText(
+                    text: TextSpan(
+                      style: Styles.mediumText(
+                        color: AppColors.PRIMARY_COLOR_DARK,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: context.isArabic ? " لا تمتلك سيارة؟ " : "",
+                          style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold), // تعديل الحجم هنا
+                        ),
+                        TextSpan(
+                          text: context.isArabic
+                              ? " أعلن عن رحلتك اليومية وابحث عن شخص يمكنه أن يوصلك بأسعار مخفضة!"
+                              : "",
+                        ),
+                        TextSpan(
+                          text: context.isArabic ? "" : "Don’t have a car? ",
+                          style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold), // تعديل الحجم هنا
+                        ),
+                        TextSpan(
+                          text: context.isArabic
+                              ? ""
+                              : " Post your daily ride and find someone who can give you a discounted lift!",
+                        ),
+                      ],
+                    ),
                   ),
-                  textAlign: TextAlign.start,
                 ),
               );
             }

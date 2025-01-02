@@ -76,7 +76,7 @@ class BaseApiConsumer extends ApiConsumer {
     _token = token;
     log(_token?.accessToken.toString() ?? "Okkkk",
         name: "lskdjflskdjflskdjflskjdf");
-    CacheServiceImpl().saveUserToken(_token?.accessToken??"Token");
+    // CacheServiceImpl().saveUserToken(_token?.accessToken??"Token");
     log("${await CacheManager.getAccessToken()} attached", name: "Token");
     if (token != null) {
       log(token.accessToken.toString(), name: "Token");

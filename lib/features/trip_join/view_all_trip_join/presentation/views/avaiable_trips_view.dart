@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
+import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/widgets/car_pool_body.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_pick_me/presentation/views/all_pickme_view.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trips_floating_action_button.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/avilable_trips_body.dart';
@@ -36,35 +37,64 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
     // FirebaseHelper.getToken();
     // FirebaseHelper.setupInteractedMessage();
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
             title: Transform(
               transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
               child: Text(
-                LocaleKeys.availableTrips.localize,
+                // LocaleKeys.availableTrips.localize,
+                context.isArabic
+                    ? "مرحبا بك في جاي معاك"
+                    : "Welcome to Trip Join",
                 style: Styles.headerText(),
               ),
             ),
           ),
           body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  // LocaleKeys.availableTrips.localize,
+                  context.isArabic
+                      ? "رحلات مخفضة - وفر فلوسك وسافر بأسعار أقل!"
+                      : "Discounted Trips - Save money and travel for less!",
+                  style: Styles.mediumText(
+                    color: AppColors.PRIMARY_COLOR_DARK,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
               Builder(builder: (context) {
                 const double size = 40;
                 return TabBar(
                   dividerColor: context.isDarkMode ? Colors.grey : null,
+                  indicatorColor: AppColors.PRIMARY_COLOR_DARK,
                   tabs: [
+                    TripJoinTabIcon(
+                      icon: Image.asset(Assets.carpool,
+                          width: size.h, height: size.h, fit: BoxFit.fill),
+                      // title: LocaleKeys.carpool.localize,
+                      title:
+                          context.isArabic ? "مشاركة كابتن" : "Captain Share",
+                      height: size + 15,
+                    ),
                     TripJoinTabIcon(
                       icon: Image.asset(Assets.tripjoin,
                           width: size.h, height: size.h, fit: BoxFit.fill),
-                      title: LocaleKeys.carTrips.localize,
+                      // title: LocaleKeys.carTrips.localize,
+                      title: context.isArabic ? "تعالي اوصلك" : "Trip Join",
                       height: size + 15,
                     ),
                     TripJoinTabIcon(
                       icon: Image.asset(Assets.autoComplete,
                           width: size.h, height: size.h, fit: BoxFit.fill),
-                      title: LocaleKeys.userTrips.localize,
+                      // title: LocaleKeys.userTrips.localize,
+                      title: context.isArabic ? "وصلني معاك" : "Pick Me",
                       height: size + 15,
                     ),
                   ],
@@ -74,6 +104,7 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
               const Expanded(
                 child: TabBarView(
                   children: [
+                    CarPoolBody(),
                     Stack(
                       children: [
                         SizedBox(
@@ -122,6 +153,8 @@ class TripJoinTabIcon extends StatelessWidget {
           Text(
             title,
             style: Styles.mediumText(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
                 color: context.isDarkMode
                     ? Colors.white
                     : AppColors.PRIMARY_COLOR),
