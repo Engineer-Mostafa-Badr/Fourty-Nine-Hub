@@ -31,9 +31,9 @@ class _AdsSearchViewState extends State<AdsSearchView> {
             var controllerAdvertise = context.read<AdvertisementCubit>();
             return BlocBuilder<SearchCubit, SearchState>(
               builder: (context, state) {
-                if(state.status ==SearchStates.loading){
-                  return const Center(child: CircularProgressIndicator());
-                }
+                // if(state.status ==SearchStates.loading){
+                //   return const Center(child: CircularProgressIndicator());
+                // }
                 final controller = context.read<SearchCubit>();
                 if (controller.searchController.text.isNotEmpty) {
                   return PagedListView<int, AdsSearchEntity>(

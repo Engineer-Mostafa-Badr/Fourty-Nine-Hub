@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/cat
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -37,9 +38,9 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
       padding: EdgeInsets.symmetric(vertical: 20.h),
       child: BlocBuilder<SearchCubit, SearchState>(
         builder: (BuildContext context, state) {
-          if(state.status ==SearchStates.loading){
-            return const Center(child: CircularProgressIndicator());
-          }
+          // if(state.status ==SearchStates.loading){
+          //   return const Center(child: CircularProgressIndicator());
+          // }
           final controller = context.read<SearchCubit>();
           if (controller.searchController.text.isNotEmpty) {
             return PagedGridView<int, SubCategoryEntity>(
@@ -54,37 +55,34 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                   );
                 },
                 itemBuilder: (context, item, index) {
-                  return InkWell(
-                    onTap: () {
-                      context.push(Routes.SUBCATEGORIES,
-                          extra: state.search![index]);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: buildItem(item, () async {
-                        var result = await controller
-                            .toggleSubCategoryToFavorites(item.id);
-                        return result;
-                      },
-                          item.isFavorite == true
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          state.search![index]),
+                  return SubCategoryCard(
+                    mainCategory: (state.mainCategory != null && index < state.mainCategory!.length)
+                        ? state.mainCategory![index]
+                        : MainCategoryEntity(
+                      id: '',
+                      nameEn: '',
+                      image: '',
+                      banner: '',
+                      cover: '',
+                      total: 0,
                     ),
+                    item: item,
+                    onFav: () async {
+                      var result = await controller.toggleSubCategoryToFavorites(item.id);
+                      return result;
+                    },
                   );
                 },
+
                 noMoreItemsIndicatorBuilder: (context) => Container(),
                 firstPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator(),
+                const CupertinoActivityIndicator(),
                 newPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator(),
-              ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, childAspectRatio: 1),
+                const CupertinoActivityIndicator(),
+              ),  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3, childAspectRatio: 1),
             );
           }
-
-          // If no search results or initial state
           return Center(
             child: Text(LocaleKeys.noResultsFound.localize),
           );
@@ -178,6 +176,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                             context.push(Routes.LOGIN);
                           }
                         })
+
                   ],
                 ),
               ),

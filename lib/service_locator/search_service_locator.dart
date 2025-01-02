@@ -71,6 +71,7 @@ class SearchServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
         ));
   }
 }
