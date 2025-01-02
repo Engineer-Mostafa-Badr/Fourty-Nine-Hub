@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/features/custom_page/domain/entity/activate_entity.dart';
 import 'package:fourtyninehub/features/custom_page/domain/use_case/fetch_activate_use_case.dart';
 import 'package:fourtyninehub/features/custom_page/domain/use_case/fetch_social_page_use_case.dart';
 import 'package:fourtyninehub/features/custom_page/domain/use_case/update_activate_use_case.dart';
@@ -124,23 +126,26 @@ class CustomPageCubit extends Cubit<CustomPageState> {
   }
 
   // Activate ///////////////////////////////////////////////
-
+  //
   Future<void> fetchActivate() async {
-    final response = await _fetchActivateUseCase.call(const NoParams());
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: CustomPageStates.error));
-    }, (data) {
-      emit(state.copyWith(activate: data, status: CustomPageStates.success));
-    });
+    bool? active = await CacheManager.getActivation();
+    // final response = await _fetchActivateUseCase.call(const NoParams());
+    // response.fold((l) {
+    //   emit(state.copyWith(failure: l, status: CustomPageStates.error));
+    // }, (data) {
+      emit(state.copyWith(activate: ActivateEntity(id: '', userId: '', customPage: active??false), status: CustomPageStates.success));
+    // });
   }
-
+  //
   Future<void> updateActivate(bool params) async {
-    final response = await _updateActivateUseCase.call(params);
-    response.fold((l) {
-      emit(state.copyWith(failure: l, status: CustomPageStates.error));
-    }, (data) {
-      emit(state.copyWith(status: CustomPageStates.updateSuccess));
-      fetchActivate();
-    });
+    bool? active = await CacheManager.getActivation();
+    CacheManager.updateActive(!(active ?? false));
+    // final response = await _updateActivateUseCase.call(params);
+    // response.fold((l) {
+    //   emit(state.copyWith(failure: l, status: CustomPageStates.error));
+    // }, (data) {
+    //   emit(state.copyWith(status: CustomPageStates.updateSuccess));
+    //   fetchActivate();
+    // });
   }
 }

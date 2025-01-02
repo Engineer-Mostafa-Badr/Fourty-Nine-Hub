@@ -28,12 +28,14 @@ class ReelsSearchModel extends ReelsSearchEntity {
   factory ReelsSearchModel.fromJson(Map<String, dynamic> json) {
     return ReelsSearchModel(
       id: json['_id'] ?? '',
-      UserId: json['user']['_id'] ?? '',
-      firstName: json['user']['firstName'] ?? '',
-      lastName: json['user']['lastName'] ?? '',
+      UserId: json['user']?['_id'] ?? '',
+      firstName: json['user']?['firstName'] ?? '',
+      lastName: json['user']?['lastName'] ?? '',
       image:
-          json['user']['USER_PROFILE']['profilePictureKey']['mediaKey'] ?? '',
-      videoMedia: VideoMediaModel.fromJson(json['videoMedia']),
+          json['user']?['USER_PROFILE']?['profilePictureKey']?['mediaKey'] ?? '',
+      videoMedia: json['videoMedia'] != null
+          ? VideoMediaModel.fromJson(json['videoMedia'])
+          : VideoMediaEntity(id: '', mediaKey: ''),
       isActive: json['isActive'] ?? false,
       adminIgnore: json['adminIgnore'] ?? false,
       sharedWith: json['sharedWith'] ?? [],

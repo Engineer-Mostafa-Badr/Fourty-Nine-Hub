@@ -27,7 +27,7 @@ class _TenPercentViewState extends State<TenPercentView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(label: 'Ten Percent Cashback'),
+      appBar: BackAppBar(label: LocaleKeys.billCashback.localize),
       body: BlocBuilder<TenPercentCubit,TenPercentState>(
         builder: (context,state) {
           var cubit = context.read<TenPercentCubit>();
@@ -36,7 +36,7 @@ class _TenPercentViewState extends State<TenPercentView> {
             child: ListView(
               padding: EdgeInsets.all(16.w),
               children: [
-                Label(text: "Traffic violations",style: Styles.headerText(),),
+                Label(text: LocaleKeys.trafficViolation.localize,style: Styles.headerText(),),
                 const Sizer(),
                 InkWell(
                   onTap: () async {
@@ -61,8 +61,8 @@ class _TenPercentViewState extends State<TenPercentView> {
                       return SizedBox(
                         width: double.infinity,
                         height: 300.h,
-                        child: const ImagePickerPlaceholder(
-                          title: 'Select Bill',
+                        child: ImagePickerPlaceholder(
+                          title: LocaleKeys.selectBill.localize,
                         ),
                       );
                     },
@@ -71,12 +71,12 @@ class _TenPercentViewState extends State<TenPercentView> {
                 const Sizer(),
                 BillValueTextFormField(currentController: cubit.trafficController,validator: (p0) {
                   if (p0!.isEmpty&&(state.trafficId!=null&&state.trafficId!.isNotEmpty)) {
-                    return 'Please enter value';
+                    return LocaleKeys.enterBillValue.localize;
                   }
                   return null;
                 },),
                 const Sizer(),
-                Label(text: "Electricity bill",style: Styles.headerText(),),
+                Label(text: LocaleKeys.electricityBill.localize,style: Styles.headerText(),),
                 const Sizer(),
                 InkWell(
                   onTap: () async {
@@ -101,8 +101,8 @@ class _TenPercentViewState extends State<TenPercentView> {
                       return SizedBox(
                         width: double.infinity,
                         height: 300.h,
-                        child: const ImagePickerPlaceholder(
-                          title: 'Select Bill',
+                        child: ImagePickerPlaceholder(
+                          title: LocaleKeys.selectBill.localize,
                         ),
                       );
                     },
@@ -111,12 +111,12 @@ class _TenPercentViewState extends State<TenPercentView> {
                 const Sizer(),
                 BillValueTextFormField(currentController: cubit.electricityController, validator: (p0) {
                   if (p0!.isEmpty&&(state.electricityId!=null&&state.electricityId!.isNotEmpty)) {
-                    return 'Please enter value';
+                    return LocaleKeys.enterBillValue.localize;
                   }
                   return null;
                 },),
                 const Sizer(),
-                Label(text: "Mobile bill",style: Styles.headerText(),),
+                Label(text: LocaleKeys.mobileBill.localize,style: Styles.headerText(),),
                 const Sizer(),
                 InkWell(
                   onTap: () async {
@@ -141,8 +141,8 @@ class _TenPercentViewState extends State<TenPercentView> {
                       return SizedBox(
                         width: double.infinity,
                         height: 300.h,
-                        child: const ImagePickerPlaceholder(
-                          title: 'Select Bill',
+                        child: ImagePickerPlaceholder(
+                          title: LocaleKeys.selectBill.localize,
                         ),
                       );
                     },
@@ -151,7 +151,7 @@ class _TenPercentViewState extends State<TenPercentView> {
                 const Sizer(),
                 BillValueTextFormField(currentController: cubit.mobileController, validator: (p0) {
                   if (p0!.isEmpty&&(state.mobileId!=null&&state.mobileId!.isNotEmpty)) {
-                    return 'Please enter value';
+                    return LocaleKeys.enterBillValue.localize;
                   }
                   return null;
                 },),
@@ -164,7 +164,7 @@ class _TenPercentViewState extends State<TenPercentView> {
                      if ((state.mobileId == null || state.mobileId == '') &&
                          (state.electricityId == null || state.electricityId == '') &&
                          (state.trafficId == null || state.trafficId == '')) {
-                       showErrorMessage(context, 'Please upload at least 1 bill');
+                       showErrorMessage(context, LocaleKeys.uploadAtLeastOneBill.localize);
                      }else{
                        cubit.fetchAdRequests(context);
                      }

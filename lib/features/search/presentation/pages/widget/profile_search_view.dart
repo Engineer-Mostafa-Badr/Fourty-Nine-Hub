@@ -25,6 +25,9 @@ class ProfileSearchView extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 30.w),
       child: BlocBuilder<SearchCubit, SearchState>(
         builder: (BuildContext context, state) {
+          // if(state.status ==SearchStates.loading){
+          //   return const Center(child: CircularProgressIndicator());
+          // }
           final controller = context.read<SearchCubit>();
           if (controller.searchController.text.isNotEmpty) {
             return PagedListView<int, UserSearchEntity>(

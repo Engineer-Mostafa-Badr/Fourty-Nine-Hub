@@ -19,7 +19,6 @@ class AdsSearchEntity {
   final num price;
   final String status;
   final String searchText;
-  final List<String> adminComments;
   final String phone;
   final int totalRating;
   final int views;
@@ -37,7 +36,6 @@ class AdsSearchEntity {
   final bool isBlocked;
   final bool isRejected;
   bool? isFavorite;
-  final List<double> coordinates;
   List<CreateAdEntity> details;
 
   String get formatedDate => DateFormat('yyyy-MM-dd').format(createdAt);
@@ -62,7 +60,6 @@ class AdsSearchEntity {
     required this.price,
     required this.status,
     required this.searchText,
-    required this.adminComments,
     required this.subscriptionType,
     required this.phone,
     required this.totalRating,
@@ -81,7 +78,6 @@ class AdsSearchEntity {
     required this.isBlocked,
     required this.isRejected,
     this.isFavorite = false,
-    required this.coordinates,
     required this.details,
   });
 }

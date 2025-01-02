@@ -41,7 +41,7 @@ class CustomPageBottonNavBar extends StatelessWidget
 
           // Build the visible items based on the navigateBar properties
           List<BottomItemModel> visibleItems = [
-            if (navigateBar.meal)
+            if (navigateBar.meal.enabled)
               BottomItemModel(
                 icon: FontAwesomeIcons.bowlFood,
                 label: 'meal',
@@ -49,7 +49,7 @@ class CustomPageBottonNavBar extends StatelessWidget
                 image: Assets.food,
                 route: Routes.FOOD,
               ),
-            if (navigateBar.health)
+            if (navigateBar.health.enabled)
               BottomItemModel(
                 icon: FontAwesomeIcons.kitMedical,
                 label: 'health',
@@ -57,7 +57,7 @@ class CustomPageBottonNavBar extends StatelessWidget
                 image: Assets.health,
                 route: Routes.VISITA,
               ),
-            if (navigateBar.loading)
+            if (navigateBar.loading.enabled)
               BottomItemModel(
                 icon: Icons.delivery_dining,
                 label: 'ship',
@@ -65,7 +65,7 @@ class CustomPageBottonNavBar extends StatelessWidget
                 image: Assets.shipping,
                 route: Routes.SHIPPING,
               ),
-            if (navigateBar.ride)
+            if (navigateBar.ride.enabled)
               BottomItemModel(
                 icon: FontAwesomeIcons.car,
                 label: 'ride',
@@ -81,7 +81,7 @@ class CustomPageBottonNavBar extends StatelessWidget
             //     image: Assets.twitter,
             //     route: Routes.TWITTER,
             //   ),
-            if (navigateBar.reel)
+            if (navigateBar.reel.enabled)
               BottomItemModel(
                 icon: FontAwesomeIcons.list,
                 label: 'reels',
@@ -97,7 +97,7 @@ class CustomPageBottonNavBar extends StatelessWidget
             //     image: Assets.message,
             //     route: Routes.CHAT,
             //   ),
-            if (navigateBar.find)
+            if (navigateBar.find.enabled)
               BottomItemModel(
                 icon: FontAwesomeIcons.car,
                 label: 'find',
@@ -105,7 +105,7 @@ class CustomPageBottonNavBar extends StatelessWidget
                 image: Assets.social,
                 route: Routes.Tinder,
               ),
-            if (navigateBar.snap)
+            if (navigateBar.snap.enabled)
               BottomItemModel(
                 icon: FontAwesomeIcons.microphone,
                 label: 'snap',
@@ -113,7 +113,7 @@ class CustomPageBottonNavBar extends StatelessWidget
                 image: Assets.cameraIcon,
                 route: Routes.SNAP,
               ),
-            if (navigateBar.live)
+            if (navigateBar.live.enabled)
               BottomItemModel(
                 icon: FontAwesomeIcons.stream,
                 label: 'live',
@@ -121,7 +121,7 @@ class CustomPageBottonNavBar extends StatelessWidget
                 image: Assets.live,
                 route: Routes.LIVE,
               ),
-            if (navigateBar.meet)
+            if (navigateBar.meet.enabled)
               BottomItemModel(
                 icon: Icons.video_call,
                 label: 'meet',
@@ -129,7 +129,7 @@ class CustomPageBottonNavBar extends StatelessWidget
                 image: Assets.zoomMeeting,
                 route: Routes.ZOOM,
               ),
-            if (navigateBar.spotlight)
+            if (navigateBar.spotlight.enabled)
               BottomItemModel(
                 icon: Icons.light_mode_rounded,
                 label: 'spotlight',

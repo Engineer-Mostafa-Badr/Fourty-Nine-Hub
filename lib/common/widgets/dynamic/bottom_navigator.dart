@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../routes/routes.dart';
@@ -33,7 +34,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         label: 'reels',
         index: 1,
         cacheKey: 'reelsCount',
-        image: Assets.reels,
+        image: Assets.homeReel,
         route: Routes.REELS,
       ),
       BottomItemModel(
@@ -41,7 +42,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         label: 'meal',
         index: 0,
         cacheKey: 'mealsCount',
-        image: Assets.food,
+        image: Assets.homeFood,
         route: Routes.FOOD,
       ),
       BottomItemModel(
@@ -49,7 +50,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         // Change to a health-related icon
         label: 'health',
         cacheKey: 'healthCount',
-        image: Assets.healthcare,
+        image: Assets.homeHealth,
         index: 2,
         // Ensure this index matches the health item
         route: Routes.VISITA,
@@ -59,7 +60,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         label: 'ride',
         cacheKey: 'rideCount',
         index: 3,
-        image: Assets.ride,
+        image: Assets.homeRide,
         route: Routes.RIDE,
       ),
     ];
@@ -188,8 +189,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                               //width: 90.w,
                               height: widget.items[index].height * 2.h,
                             )
-                          : SvgPicture.asset(
+                          : Image.asset(
                               widget.items[index].image!,
+                              color: index!=1?AppColors.PRIMARY_COLOR:null,
                               height: widget.items[index].height * 1.8.h,
                             ),
                     ),

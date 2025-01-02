@@ -7,34 +7,29 @@ import '../../../../../res/style/styles.dart';
 
 class DonutChartPainter extends CustomPainter {
   final BuildContext context;
-  final int count; // The current count
-  final int max; // The maximum value
+  final num count;
+  final num max;
+  final String? title;
 
   DonutChartPainter({
     required this.context,
     required this.count,
     required this.max,
+     this.title,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    final double outerRadius = size.width / 4.5;
+    final double outerRadius = size.width / 3.5;
     final double innerRadius =
-        outerRadius - 45; // Adjust this to fit your design
-
-    final Paint outerPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = outerRadius - innerRadius
-      ..color = Colors.transparent;
+        outerRadius - 60;
 
     final Paint innerPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = outerRadius - innerRadius;
 
-    // Calculate the percentage
     int percentage = ((count / max) * 100).toInt();
 
-    // Define the sections (current progress and remaining)
     final List<Map<String, dynamic>> sections = [
       {'value': percentage.toDouble(), 'color': AppColors.SECONDARY_COLOR},
       {
@@ -43,11 +38,9 @@ class DonutChartPainter extends CustomPainter {
       },
     ];
 
-    // Calculate total value (which will be 100 as it's a percentage)
     double total = sections.fold(
         0, (sum, item) => sum + (item['value'] as num).toDouble());
 
-    // Draw the full donut chart
     double startAngle = -pi / 2;
     for (var section in sections) {
       final double sweepAngle = (section['value'] as num) / total * 2 * pi;
@@ -64,10 +57,9 @@ class DonutChartPainter extends CustomPainter {
       startAngle += sweepAngle;
     }
 
-    // Draw the percentage text in the center
     final textPainter = TextPainter(
       text: TextSpan(
-        text: '$percentage%', // Display percentage as an integer
+        text:title ?? '$percentage%',
         style:
             Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
       ),

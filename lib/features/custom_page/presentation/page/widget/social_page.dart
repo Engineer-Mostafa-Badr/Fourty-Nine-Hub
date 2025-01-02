@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/custom_page/domain/use_case/update_social_page_use_case.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../res/style/styles.dart';
@@ -25,7 +26,13 @@ class _SocialPageState extends State<SocialPage> {
   final List<String> _items = [
     LocaleKeys.face.localize,
     LocaleKeys.insta.localize,
-    LocaleKeys.tweet.localize,
+    LocaleKeys.Tweet.localize,
+  ];
+
+  final List<String> _images = [
+    Assets.facebookLogo,
+    Assets.instaLogo,
+    Assets.twitterLogo,
   ];
 
   @override
@@ -76,6 +83,7 @@ class _SocialPageState extends State<SocialPage> {
                         color: Theme.of(context).primaryColor,
                       ),
                     ),
+                    trailing: Image.asset(_images[index], height: 50.h, width: 50.w),
                     selected: _selectedItem == index,
                     selectedTileColor: Colors.transparent,
                   );
@@ -110,7 +118,7 @@ class _SocialPageState extends State<SocialPage> {
                   SocialPageParams(
                     face: face,
                     insta: insta,
-                    tweet: tweet, // Add 'tweet' as a new parameter
+                    tweet: tweet,
                   ),
                 );
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -15,9 +16,11 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../../common/widgets/dynamic/drawer.dart';
@@ -102,13 +105,16 @@ class _SocialHomeViewState extends State<SocialHomeView>
                         : AppColors.PRIMARY_COLOR,
                     tabs: [
                       Tab(
+                        icon: Image.asset(Assets.facebookLogo,height: 50.h,width: 50.w,),
                         text: LocaleKeys.Face.localize,
                       ),
                       Tab(
+                        icon: Image.asset(Assets.instaLogo,height: 50.h,width: 50.w,),
                         text: LocaleKeys.Insta.localize,
                       ),
                       Tab(
-                        text: LocaleKeys.Tweets.localize,
+                        icon: Image.asset(Assets.twitterLogo,height: 50.h,width: 50.w,),
+                        text: LocaleKeys.tweet.localize,
                       ),
                     ],
                   ),
@@ -222,11 +228,19 @@ class _SocialHomeViewState extends State<SocialHomeView>
                                   color: Theme.of(context).primaryColor,
                                   width: 2)))
                       : null,
-                  child: Icon(
-                    i == 0 ? Icons.home : Icons.person,
-                    color:
-                        i == 0 ? Theme.of(context).primaryColor : Colors.grey,
-                    size: 40.w,
+                  child: Row(
+                    children: [
+                      Icon(
+                        i == 0 ? Icons.home : Icons.person,
+                        color:
+                            i == 0 ? Theme.of(context).primaryColor : Colors.grey,
+                        size: 40.w,
+                      ),
+                      SizedBox(
+                        width: 8.w,
+                      ),
+                      Label(text: i == 0 ? LocaleKeys.home.localize : LocaleKeys.profile.localize,style: Styles.headerText(color: i == 0 ? Theme.of(context).primaryColor : Colors.grey,fontSize: 30),)
+                    ],
                   )),
             ),
           ),

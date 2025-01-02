@@ -91,7 +91,7 @@ class _BalanceWalletViewState extends State<BalanceWalletView> {
                     WalletCardWidget(
                       balance: '${state.balance?.balance ?? ''}',
                       target: 1002,
-                      type: WalletTypes.balance, currency: state.balance?.currency ??'',
+                      type: WalletTypes.balance,
                     ),
                     const Sizer(),
                     Padding(

@@ -86,6 +86,8 @@ class EndPoints {
   static const getCurrency = '/main-wallet/app-currency';
   static const anyCashBack = '/cashback/any';
   static const sliderItems = '/sliders/to-app';
+  static const competition = '/subscriber/competitionsSubscriber';
+  static const winnerCompetition = '/subscriber/winners';
   static String loggedUserId = UserCubit.to.state.data?.id ?? '';
   static String getMainCategoryDetails(String id) =>
       '/categories/main/$id${loggedUserId.isNotEmpty ? '?userId=$loggedUserId' : ''}';
@@ -189,7 +191,7 @@ class EndPoints {
   static String editMyAds(EditParams params) => '/ads/update-ads/${params.id}';
 
   static String search(SearchParams params) =>
-      '/searchApp?page=${params.params.page}&limit=${params.params.limit}}';
+      '/searchApp?page=${params.params.page}&limit=${params.params.limit}';
 
   static const getWallet = '/main-wallet/user-wallet';
   static const transferMoney = '/main-wallet/send-money';

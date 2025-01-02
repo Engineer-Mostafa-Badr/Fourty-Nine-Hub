@@ -1,52 +1,64 @@
+class FavouriteCatFeature {
+  final String nameEn;
+  final String nameAr;
+  final bool enabled;
+
+  FavouriteCatFeature({
+    required this.nameEn,
+    required this.nameAr,
+    required this.enabled,
+  });
+}
+
 class FavouriteCatEntity {
   final String id;
   final String userId;
-  final bool medicalService;
-  final bool homeService;
-  final bool craft;
-  final bool realEstate;
-  final bool equipment;
-  final bool spareParts;
-  final bool cars;
-  final bool vehicles;
-  final bool smoking;
-  final bool remnants;
-  final bool rawMaterials;
-  final bool wholesaleTrade;
-  final bool homeEssentials;
-  final bool mobilesTablets;
-  final bool electricalDevices;
-  final bool doctorJob;
-  final bool technology;
-  final bool packaging;
-  final bool projects;
-  final bool computersCameras;
-  final bool marketingSales;
-  final bool talent;
-  final bool scenery;
-  final bool accountantJob;
-  final bool engineerJob;
-  final bool events;
-  final bool musicalInstruments;
-  final bool travelTourism;
-  final bool education;
-  final bool handmades;
-  final bool otherJob;
-  final bool fitness;
-  final bool libraries;
-  final bool healthyTools;
-  final bool jewelryWatches;
-  final bool accessories;
-  final bool charitys;
-  final bool collectiblesGifts;
-  final bool discountsOffers;
-  final bool fashionBeauty;
-  final bool animals;
-  final bool ports;
-  final bool dating;
-  final bool farming;
-  final bool governmentServices;
-  final bool social;
+  final FavouriteCatFeature medicalService;
+  final FavouriteCatFeature homeService;
+  final FavouriteCatFeature craft;
+  final FavouriteCatFeature realEstate;
+  final FavouriteCatFeature equipment;
+  final FavouriteCatFeature spareParts;
+  final FavouriteCatFeature cars;
+  final FavouriteCatFeature vehicles;
+  final FavouriteCatFeature smoking;
+  final FavouriteCatFeature remnants;
+  final FavouriteCatFeature rawMaterials;
+  final FavouriteCatFeature wholesaleTrade;
+  final FavouriteCatFeature homeEssentials;
+  final FavouriteCatFeature mobilesTablets;
+  final FavouriteCatFeature electricalDevices;
+  final FavouriteCatFeature doctorJob;
+  final FavouriteCatFeature technology;
+  final FavouriteCatFeature packaging;
+  final FavouriteCatFeature projects;
+  final FavouriteCatFeature computersCameras;
+  final FavouriteCatFeature marketingSales;
+  final FavouriteCatFeature talent;
+  final FavouriteCatFeature scenery;
+  final FavouriteCatFeature accountantJob;
+  final FavouriteCatFeature engineerJob;
+  final FavouriteCatFeature events;
+  final FavouriteCatFeature musicalInstruments;
+  final FavouriteCatFeature travelTourism;
+  final FavouriteCatFeature education;
+  final FavouriteCatFeature handmades;
+  final FavouriteCatFeature otherJob;
+  final FavouriteCatFeature fitness;
+  final FavouriteCatFeature libraries;
+  final FavouriteCatFeature healthyTools;
+  final FavouriteCatFeature jewelryWatches;
+  final FavouriteCatFeature accessories;
+  final FavouriteCatFeature charitys;
+  final FavouriteCatFeature collectiblesGifts;
+  final FavouriteCatFeature discountsOffers;
+  final FavouriteCatFeature fashionBeauty;
+  final FavouriteCatFeature animals;
+  final FavouriteCatFeature ports;
+  final FavouriteCatFeature dating;
+  final FavouriteCatFeature farming;
+  final FavouriteCatFeature governmentServices;
+  final FavouriteCatFeature social;
 
   FavouriteCatEntity(
       {required this.id,
