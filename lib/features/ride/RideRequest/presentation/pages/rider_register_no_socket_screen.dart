@@ -162,7 +162,8 @@ class _RiderRegisterNoSocketScreenState extends State<RiderRegisterNoSocketScree
                 height: 30,
               ),
               //
-              const CarModelRegisterCardWidget(),
+              // const CarModelRegisterCardWidget(),
+              
               const Sizer(
                 height: 30,
               ),

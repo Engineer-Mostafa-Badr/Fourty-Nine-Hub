@@ -21,10 +21,10 @@ class DriverRegisterRequestModel {
   Map<String, dynamic> register() {
     return {
       "categoryId": categoryId,
-      "carModel": carModel,
+      "carModel": carModel, // car model string
       "firstName": firstName,
       "lastName": lastName,
-      "location": "الشروق",
+      "location": location,
       "phone": phone,
       "plateInformation": plateInformation,
       "idNumber": idNumber

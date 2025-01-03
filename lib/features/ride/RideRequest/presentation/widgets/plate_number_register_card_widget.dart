@@ -6,12 +6,20 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
+import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class PlateNumberRegisterCardWidget extends StatelessWidget {
+class PlateNumberRegisterCardWidget extends StatefulWidget {
   PlateNumberRegisterCardWidget({super.key});
+
+  @override
+  State<PlateNumberRegisterCardWidget> createState() => _PlateNumberRegisterCardWidgetState();
+}
+
+class _PlateNumberRegisterCardWidgetState extends State<PlateNumberRegisterCardWidget> {
   TextEditingController pricingPerKmController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,19 +28,23 @@ class PlateNumberRegisterCardWidget extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: context.isDarkMode?AppColors.UNSELECTED_DARK_GRAY_COLOR: Colors.white,
-          boxShadow: context.isDarkMode?[]: [BoxShadow(color: Colors.grey.shade400, blurRadius: 30)]
-          ),
+          color: context.isDarkMode
+              ? AppColors.UNSELECTED_DARK_GRAY_COLOR
+              : Colors.white,
+          boxShadow: context.isDarkMode
+              ? []
+              : [BoxShadow(color: Colors.grey.shade400, blurRadius: 30)]),
       child: Column(
         children: [
           Text(
-            context.isArabic?"لوحة الأرقام":"Number plate",
+            context.isArabic ? "لوحة الأرقام" : "Number plate",
             style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 40),
           ),
           const Sizer(),
           DefaultTextFormField(
             onChanged: (value) {
-              context.read<RegisterRiderCubit>().model.plateInfo = value;
+              BlocProvider.of<ShippingCubit>(context).model.plateInfromation = value;
+              BlocProvider.of<RegisterRiderCubit>(context).model.plateInfo = value;
             },
             isAuthentcation: true,
             hint: '',
@@ -40,7 +52,7 @@ class PlateNumberRegisterCardWidget extends StatelessWidget {
             currentController: pricingPerKmController,
             validator: (p0) {
               if (p0 == null || p0.isEmpty) {
-                return LocaleKeys.pricingPerKmIsRequired.tr();
+                return LocaleKeys.thisFieldIsRequired.tr();
               }
               return null;
             },

@@ -94,7 +94,12 @@ class _IdentityConfirmationCardRegisterWidgetState
                 if (pickedImage != null) {
                   image = File(pickedImage.path);
                   context.read<RegisterRiderCubit>().model.verfiyUserImage = image;
-                  widget.onChange!(image!);
+                  setState(() {
+                    
+                  });
+                  if (widget.onChange != null) {
+                    widget.onChange!(image!);
+                  }
                 }
                 setState(() {});
               },
