@@ -457,7 +457,8 @@ class ShippingCubit extends Cubit<ShippingState> {
         categoryId: model.subCategoryId ?? "",
         firstName: model.firstName ?? "",
         lastName: model.lastName ?? "",
-        location: "",
+        
+        location: model.location??"لا يوجد",
         phone: model.phone ?? "",
         plateInformation: model.plateInfromation ?? "",
         idNumber: model.idNumber ?? "",

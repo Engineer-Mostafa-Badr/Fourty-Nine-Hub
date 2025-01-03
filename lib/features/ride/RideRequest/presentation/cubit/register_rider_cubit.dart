@@ -233,10 +233,6 @@ class RegisterRiderCubit extends Cubit<RiderState> {
     model.phone = phone;
   }
 
-  pickIdNumberDriver({required String idNumber}) {
-    model.idNumber = idNumber;
-  }
-
   pickEndDateDriverLicense({required DateTime date}) {
     model.idExpiryDate = date.toString();
   }

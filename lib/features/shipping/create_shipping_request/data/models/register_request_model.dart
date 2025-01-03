@@ -27,11 +27,13 @@ class RegisterRequestModel {
   DateTime? birthDate;
   String? plateInfromation;
   String? driverLicenseNumber;
+  String? location;
   // GovernorateEntity? governorate;
   RegisterRequestModel({
     this.subCategoryId,
     this.firstName,
     this.lastName,
+    this.location,
     this.idNumber,
     this.birthDate,
     this.plateInfromation,

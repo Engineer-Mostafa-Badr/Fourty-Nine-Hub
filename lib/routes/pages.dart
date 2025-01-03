@@ -2000,8 +2000,12 @@ class AppPages {
                 create: (context) => serviceLocator<ShippingCubit>(),
               ),
               //to be reviewed
-              BlocProvider(
+              
+BlocProvider(
                 create: (context) => serviceLocator<CreateDoctorCubit>(),
+              ),
+              BlocProvider(
+                create: (context) => serviceLocator<HealthCubit>(),
               ),
             ], child: const RegisterShippingScreen()),
           ),
