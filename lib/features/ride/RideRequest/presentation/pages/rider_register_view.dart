@@ -99,7 +99,9 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
-                        context.isArabic?"مرحبًا بكم في تسجيل توصيلة":"Welcome to Ride Register",
+                        context.isArabic
+                            ? "مرحبًا بكم في تسجيل توصيلة"
+                            : "Welcome to Ride Register",
                         style: Styles.headerText(
                           fontSize: 40,
                           color: AppColors.PRIMARY_COLOR_DARK,
@@ -146,10 +148,10 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
                                     validator: (value) {
                                       log(value.toString());
                                       return registerRider.validation(
-                                        message: context.isArabic?"اختر الفئة الفرعية المفضلة لديك!":"Choose your favorite sub category!",
-                                        condition:
-                                            registerRider.model.subcategoryId ==
-                                                null,
+                                        message: context.isArabic
+                                            ? "اختر الفئة الفرعية المفضلة لديك!"
+                                            : "Choose your favorite sub category!",
+                                        condition: validatie(registerRider),
                                       );
                                     },
                                     builder: (field) {
@@ -356,6 +358,20 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
     );
   }
 
+  validatie(RegisterRiderCubit registerRider) {
+    log(registerRider.selectedSubCategoryList.toString());
+    log(registerRider.selectedSubCategoryNoSocket.toString());
+    if (registerRider.selectedSubCategoryList.isNotEmpty) {
+      return false;
+    } else {
+      if (registerRider.selectedSubCategoryNoSocket == null) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
   List<SubCategory> parsSubCategory(
       {required List<SubCategory> subCategorys,
       required List subCategorysIds}) {
@@ -421,7 +437,10 @@ class _ViewRideCategoryState extends State<ViewRideCategory> {
                                 widget.list[index].picture ?? ""))),
                   ),
                   const Sizer(),
-                  Text((context.isArabic?widget.list[index].subCategoryNameAr:widget.list[index].subCategoryNameEn) ?? ""),
+                  Text((context.isArabic
+                          ? widget.list[index].subCategoryNameAr
+                          : widget.list[index].subCategoryNameEn) ??
+                      ""),
                   const Spacer(),
                   Checkbox(
                     value: registerRider.selectedSubCategoryList

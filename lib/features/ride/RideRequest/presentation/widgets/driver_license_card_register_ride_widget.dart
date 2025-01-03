@@ -9,14 +9,20 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/regis
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class DriverLicenseCardRegisterRideWidget extends StatelessWidget {
+class DriverLicenseCardRegisterRideWidget extends StatefulWidget {
   DriverLicenseCardRegisterRideWidget({super.key, required this.title, this.onChanged});
   final String title;
   final Function(String value)? onChanged;
+
+  @override
+  State<DriverLicenseCardRegisterRideWidget> createState() => _DriverLicenseCardRegisterRideWidgetState();
+}
+
+class _DriverLicenseCardRegisterRideWidgetState extends State<DriverLicenseCardRegisterRideWidget> {
   TextEditingController pricingPerKmController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    var rideRideRegisterCubit = context.read<RegisterRiderCubit>();
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -29,19 +35,19 @@ class DriverLicenseCardRegisterRideWidget extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            title,
+            widget.title,
             style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 40),
           ),
           const Sizer(),
           DefaultTextFormField(
-            onChanged: onChanged,
+            onChanged: widget.onChanged,
             isAuthentcation: true,
             hint: '',
             hintColor: AppColors.PRIMARY_COLOR,
             currentController: pricingPerKmController,
             validator: (p0) {
               if (p0 == null || p0.isEmpty) {
-                return LocaleKeys.pricingPerKmIsRequired.tr();
+                return LocaleKeys.thisFieldIsRequired.tr();
               }
               return null;
             },

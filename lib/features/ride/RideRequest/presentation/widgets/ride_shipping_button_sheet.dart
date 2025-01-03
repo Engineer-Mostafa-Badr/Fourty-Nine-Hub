@@ -89,7 +89,7 @@ class RideShippingButtonSheet extends StatelessWidget {
                               width: MediaQuery.of(context).size.width - 50,
                               child: Center(
                                 child: Text(
-                                  LocaleKeys.shipping.tr(),
+                                  LocaleKeys.ship.tr(),
                                   // getDriverState(isDriver: state.model.mainCategory?.isDriver??false, isDriverApproved: state.model.mainCategory?.isDriverApproved??false, title: LocaleKeys.shipping.tr(), context: context),
                                   style: Styles.headerText(
                                       color: AppColors.AUTH_CONTAINER_COLOR),

@@ -86,9 +86,7 @@ class _RiderBannerState extends State<RiderBanner> {
           nameEn:
               context.isArabic ? "تسجيل سائق سيارة/نقل" : "Car/Truck Register",
           id: widget.model.mainCategory?.mainCategoryId ?? '',
-          name: getLang() == 'ar'
-              ? widget.model.mainCategory?.nameAr ?? ''
-              : widget.model.mainCategory?.nameEn ?? '',
+          name: context.isArabic ? "تسجيل سائق سيارة/نقل" : "Car/Truck Register",
           banner: widget.model.mainCategory?.banner ?? UIConst.imagePlaceHolder,
           cover: widget.model.mainCategory?.cover ?? UIConst.imagePlaceHolder,
           image: UIConst.imagePlaceHolder,

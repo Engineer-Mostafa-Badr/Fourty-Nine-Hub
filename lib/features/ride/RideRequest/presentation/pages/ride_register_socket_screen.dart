@@ -1,10 +1,12 @@
 import 'dart:developer';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/picture_optional_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
@@ -346,14 +348,14 @@ class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const AppInfoText(
-                      text: Labels.theApplicationDoesNot,
+                    AppInfoText(
+                      text: LocaleKeys.theApplicationDoesNotDeductAnyPercentage.tr(),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    const AppInfoText(
-                      text: Labels.youWillGetPounds,
+                    AppInfoText(
+                      text: LocaleKeys.youWillGetPoundsAnnually.tr(),
                     ),
                     const SizedBox(
                       height: 10,
@@ -367,7 +369,7 @@ class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
                           fontSize: 16,
                           color: Colors.white,
                         ),
-                        label: Labels.submit,
+                        label: LocaleKeys.submit.tr(),
                         onPressed: () {
                           // registerRider.uploadImages();
                           if (context.read<RegisterRiderCubit>().socketFormKey.currentState?.validate() == true) {

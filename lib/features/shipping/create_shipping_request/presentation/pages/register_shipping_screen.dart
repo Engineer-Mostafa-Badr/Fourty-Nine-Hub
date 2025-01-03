@@ -16,7 +16,9 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/pickers/date/id_expiry_date_picker.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/Identity_confirmation_card_register_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/behind_car_license_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/behind_driver_license_card_register_widget.dart';
@@ -26,6 +28,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/dri
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/expiration_date_driver_license_card_register_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/front_car_license_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/plate_number_register_card_widget.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/validation_error_widget.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/sub_category.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
@@ -33,6 +36,8 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/user_info_shipping_register_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RegisterShippingScreen extends StatefulWidget {
@@ -56,6 +61,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
   TextEditingController idNumberController = TextEditingController();
   TextEditingController plateNumberController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey();
+  String? selectCity;
   @override
   void initState() {
     // TODO: implement initState
@@ -65,13 +71,14 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<HealthCubit>().getGovernorates();
     final shippingcubit = context.read<ShippingCubit>();
     return SharedScaffold(
       mainCategoryId: 1,
       body: BlocConsumer<ShippingCubit, ShippingState>(
         listener: (context, state) {
           if (state is SuccessRegisterState) {
-            // context.pushReplacementNamed(Routes.HOME);
+            context.pushReplacementNamed(Routes.HOME);
             showSuccessMessage(context, state.message);
           }
           if (state is FailureShippingState) {
@@ -143,10 +150,18 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                         horizontal: 10),
                                     padding: const EdgeInsets.all(10),
                                     decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: context.isDarkMode?AppColors.UNSELECTED_DARK_GRAY_COLOR: Colors.white,
-          boxShadow: context.isDarkMode?[]: [BoxShadow(color: Colors.grey.shade400, blurRadius: 30)]
-          ),
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: context.isDarkMode
+                                            ? AppColors
+                                                .UNSELECTED_DARK_GRAY_COLOR
+                                            : Colors.white,
+                                        boxShadow: context.isDarkMode
+                                            ? []
+                                            : [
+                                                BoxShadow(
+                                                    color: Colors.grey.shade400,
+                                                    blurRadius: 30)
+                                              ]),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -205,7 +220,9 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     height: 30,
                   ),
                   DriverLicenseCardRegisterRideWidget(
-                    title: context.isArabic?"رقم رخصة السائق":"Driver's License Number",
+                    title: context.isArabic
+                        ? "رقم رخصة السائق"
+                        : "Driver's License Number",
                     onChanged: (value) {
                       shippingcubit.model.driverLicenseNumber = value;
                       // shippingCubit.model.driverLicenseNumber = value;
@@ -215,7 +232,9 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     height: 30,
                   ),
                   BehindDriverLicenseCardRegisterWidget(
-                    title: context.isArabic?"الجانب الامامي من رخصة السائق":"Front side of driver's license",
+                    title: context.isArabic
+                        ? "الجانب الامامي من رخصة السائق"
+                        : "Front side of driver's license",
                     onTap: (image) {
                       shippingcubit.model.drivingImageInFront = image;
                     },
@@ -224,7 +243,9 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     height: 30,
                   ),
                   BehindDriverLicenseCardRegisterWidget(
-                    title: context.isArabic?"الجانب الخلفي من رخصة السائق":"Back side of driver's license",
+                    title: context.isArabic
+                        ? "الجانب الخلفي من رخصة السائق"
+                        : "Back side of driver's license",
                     onTap: (image) {
                       shippingcubit.model.drivingImageBehind = image;
                     },
@@ -242,12 +263,13 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     height: 30,
                   ),
                   //
-
                   BehindDriverLicenseCardRegisterWidget(
                       onTap: (image) {
                         shippingcubit.model.idImageInFront = image;
                       },
-                      title: context.isArabic?"البطاقة الشخصية (الجزاء الامامي)":"ID card (front part)"),
+                      title: context.isArabic
+                          ? "البطاقة الشخصية (الجزاء الامامي)"
+                          : "ID card (front part)"),
                   const Sizer(
                     height: 30,
                   ),
@@ -255,12 +277,15 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       onTap: (image) {
                         shippingcubit.model.idImageInFront = image;
                       },
-                      title: context.isArabic?"البطاقة الشخصية (الجزاء الخلفي)":"ID card (back part)"),
+                      title: context.isArabic
+                          ? "البطاقة الشخصية (الجزاء الخلفي)"
+                          : "ID card (back part)"),
                   const Sizer(
                     height: 30,
                   ),
                   DriverLicenseCardRegisterRideWidget(
-                    title: context.isArabic?"رقم البطاقة الشخصية":"ID number",
+                    title:
+                        context.isArabic ? "رقم البطاقة الشخصية" : "ID number",
                     onChanged: (value) {
                       shippingcubit.model.idNumber = value;
                     },
@@ -277,9 +302,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     height: 30,
                   ),
                   IdentityConfirmationCardRegisterWidget(
-                    onChange: (image) {
-                      
-                    },
+                    onChange: (image) {},
                   ),
 
                   const Sizer(
@@ -298,50 +321,171 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     height: 30,
                   ),
                   const CarImageRegisterCardWidget(),
-                  Sizer(height: 30,),
+                  Sizer(
+                    height: 30,
+                  ),
                   DriverLicenseCardRegisterRideWidget(
-                    title: context.isArabic?"موديل السيارة":"Car Model",
+                    title: context.isArabic ? "موديل السيارة" : "Car Model",
                     onChanged: (value) {
                       shippingcubit.model.model = value;
                     },
                   ),
-                  Sizer(height: 30,),
+                  Sizer(
+                    height: 30,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: context.isDarkMode
+                            ? AppColors.UNSELECTED_DARK_GRAY_COLOR
+                            : Colors.white,
+                        boxShadow: context.isDarkMode
+                            ? []
+                            : [
+                                BoxShadow(
+                                    color: Colors.grey.shade400, blurRadius: 30)
+                              ]),
+                    child: Column(
+                      children: [
+                        Text(
+            context.isArabic
+                                      ? "يرجى اختيار المدينة"
+                                      : "Please select a city",
+            style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 40),
+          ),
+          const Sizer(),
+                        BlocBuilder<HealthCubit, HealthState>(
+                          builder: (context, state) {
+                            if (state.isLoading) {
+                              return Align(
+                                child: const CircularProgressIndicator(
+                                  color: AppColors.PRIMARY_COLOR,
+                                ),
+                              );
+                            }
+                            return FormField(
+                              validator: (value) {
+                                if (selectCity == null) {
+                                  return context.isArabic
+                                      ? "يرجى اختيار المدينة"
+                                      : "Please select a city";
+                                }
+                                return null;
+                              },
+                              builder: (field) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      width: double.infinity,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                          border: field.hasError
+                                              ? Border.all(
+                                                  color: AppColors
+                                                      .SECONDARY_COLOR_DARK)
+                                              : null,
+                                          color: context.isDarkMode
+                                              ? Colors.black12
+                                              : Colors.grey.shade400,
+                                          borderRadius: BorderRadius.circular(10)),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child:
+                                                DropdownButton<GovernorateEntity>(
+                                              underline: Container(),
+                                              icon: Container(),
+                                              hint: Text((selectCity) ??
+                                                  (context.isArabic
+                                                      ? "المدينة المفضلة"
+                                                      : "Favorite city")),
+                                              items: state.governorates!
+                                                  .map(
+                                                    (e) => DropdownMenuItem<
+                                                        GovernorateEntity>(
+                                                      value: e,
+                                                      child: Text((context.isArabic
+                                                              ? e.nameAr
+                                                              : e.nameEn) ??
+                                                          ""),
+                                                    ),
+                                                  )
+                                                  .toList(),
+                                              onChanged: (value) {
+                                                shippingcubit.model.location =
+                                                    value?.nameAr ?? "";
+                                                selectCity = (context.isArabic
+                                                        ? value?.nameAr
+                                                        : value?.nameEn) ??
+                                                    "";
+                        
+                                                setState(() {});
+                                              },
+                                              dropdownColor: context.isDarkMode
+                                                  ? AppColors.DARK_BLUE_COLOR
+                                                  : Colors.white,
+                                            ),
+                                          ),
+                                          const Icon(
+                                              Icons.keyboard_arrow_down_outlined)
+                                        ],
+                                      ),
+                                    ),
+                                    if (field.hasError)
+                                      ValidationErrorWidget(
+                                          message: field.errorText ?? "")
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       children: [
                         AppInfoText(
-                    text: LocaleKeys.theApplicationDoesNotDeductAnyPercentage
-                        .tr(),
-                  ),
-                  // const Gap(30),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  AppInfoText(
-                    text: LocaleKeys.youWillGetPoundsAnnually.tr(),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  // const Gap(30),
-                  Align(
-                    alignment: Alignment.center,
-                    child: AppButton(
-                      backColor: AppColors.PRIMARY_COLOR,
-                      textColor: Colors.white,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                      label: LocaleKeys.submit.tr(),
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          context.read<ShippingCubit>().register();
-                        }
-                      },
-                    ),
-                  ),
+                          text: LocaleKeys
+                              .theApplicationDoesNotDeductAnyPercentage
+                              .tr(),
+                        ),
+                        // const Gap(30),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        AppInfoText(
+                          text: LocaleKeys.youWillGetPoundsAnnually.tr(),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        // const Gap(30),
+                        Align(
+                          alignment: Alignment.center,
+                          child: AppButton(
+                            backColor: AppColors.PRIMARY_COLOR,
+                            textColor: Colors.white,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                            label: LocaleKeys.submit.tr(),
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                context.read<ShippingCubit>().register();
+                              }
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -460,7 +604,10 @@ class _SubCategoryShippingCardState extends State<SubCategoryShippingCard> {
                     image: NetworkImage(widget.model.picture ?? ""))),
           ),
           const Sizer(),
-          Text((context.isArabic?widget.model.subCategoryNameAr: widget.model.subCategoryNameEn) ?? ""),
+          Text((context.isArabic
+                  ? widget.model.subCategoryNameAr
+                  : widget.model.subCategoryNameEn) ??
+              ""),
           const Spacer(),
           Checkbox(
             value: widget.isSelect,
