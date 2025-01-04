@@ -207,7 +207,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
     final data = await context.read<TinderViewCubit>().sendGift(
           receiverId: receiverId!,
           subCategoryId: '66af974f8bf69f9469944746',
-          giftId: gift.sId ?? '',
+          giftId: gift.sId ?? '', context: context,
         );
 
     if (data.toString().contains('sent Gift Successfully') ||

@@ -7,6 +7,8 @@ import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/add_favourite_category_use_case.dart';
@@ -22,6 +24,7 @@ import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_u
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/send_geft_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/upload_tinder_picture_use_case.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import '../../data/models/near_by_model.dart';
 import 'tinder_state.dart';
@@ -267,6 +270,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     required String receiverId,
     required String giftId,
     required String subCategoryId,
+    required BuildContext context,
   }) async {
     emit(state.copyWith(
       sendGiftErrorDataState: TinderStates.initial,
@@ -278,6 +282,9 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     response.fold((l) {
       emit(state.copyWith(sendGiftErrorDataState: TinderStates.success));
     }, (r) {
+      log("send gift response $r");
+      context.pop();
+      showSuccessMessage(context, context.isArabic?'تم ارسال الهدية بنجاح':'Gift sent successfully');
       emit(state.copyWith(sendGiftErrorDataState: TinderStates.success));
     });
     // emit(state.copyWith(sendGiftErrorDataState: TinderStates.initial));
