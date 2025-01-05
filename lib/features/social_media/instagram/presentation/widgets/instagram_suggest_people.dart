@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -55,9 +56,29 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Label(
-                        text: LocaleKeys.suggestedForYou.localize,
-                        style: Styles.headerText(),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Label(
+                              text: LocaleKeys.suggestedForYou.localize,
+                              style: Styles.headerText(),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: (){
+                              context.push(Routes.InstagramSuggestPeople);
+                            },
+                            child: Label(
+                              text: LocaleKeys.viewAll.localize,
+                              style: Styles.headerText(
+                                decoration: TextDecoration.underline,
+                                decorationThickness: 1.w,
+                                fontSize: 28,
+                                color: AppColors.SECONDARY_COLOR
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                       Container(
                         alignment: AlignmentDirectional.topStart,
@@ -115,7 +136,7 @@ class _InstagramSuggestPeopleState extends State<InstagramSuggestPeople> {
                                           borderRadius:
                                               BorderRadius.circular(4),
                                           border: Border.all(
-                                              color: AppColors.DARK_GRAY_COLOR),
+                                              color: AppColors.DIVIDER_GRAY_COLOR),
                                         ),
                                         child: Column(
                                           crossAxisAlignment:

@@ -1214,5 +1214,6 @@ abstract class  LocaleKeys {
   static const enterBillValue = 'enterBillValue';
   static const uploadAtLeastOneBill = 'uploadAtLeastOneBill';
   static const home = 'home';
+  static const mutualFriends = 'mutualFriends';
 
 }

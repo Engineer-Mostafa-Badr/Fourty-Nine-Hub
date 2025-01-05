@@ -1245,5 +1245,7 @@
   "mobileBill": "Mobile Bill",
   "enterBillValue": "Enter Bill Value",
   "uploadAtLeastOneBill": "Please upload at least 1 bill",
-  "home": "Home"
+  "home": "Home",
+  "mutualFriends": "Mutual Friends"
+
 }

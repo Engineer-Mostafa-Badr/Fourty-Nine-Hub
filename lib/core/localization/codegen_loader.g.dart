@@ -1239,7 +1239,8 @@ class CodegenLoader extends AssetLoader{
   "mobileBill": "فاتورة موبايل",
   "enterBillValue": "ادخل قيمة الفاتورة",
   "uploadAtLeastOneBill": "قم بتحميل على الاقل فاتورة واحدة",
-  "home": "الرئيسية"
+  "home": "الرئيسية",
+  "mutualFriends": "صديقا مشترك"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2483,7 +2484,8 @@ static const Map<String,dynamic> en = {
   "mobileBill": "Mobile Bill",
   "enterBillValue": "Enter Bill Value",
   "uploadAtLeastOneBill": "Please upload at least 1 bill",
-  "home": "Home"
+  "home": "Home",
+  "mutualFriends": "Mutual Friends"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
