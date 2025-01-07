@@ -24,18 +24,21 @@ class CreatePostBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           context.read<UserCubit>().isLoggedIn
               ? UserProfileImage(
+            size: 40.w,
                   userId: context.read<UserCubit>().state.data?.id ?? '',
                   imageURL:
                       context.read<UserCubit>().state.data?.profilePicture,
                   accountId: 0,
                 )
-              : const ProfileImage(
+              : ProfileImage(
+            size: 40.w,
+
                   accountId: 0,
                   userId: '',
                 ),
@@ -50,21 +53,21 @@ class CreatePostBanner extends StatelessWidget {
                   : context.push(Routes.CREATEPOST, extra: 'facebook');
             },
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
+              padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 5),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey, width: .5),
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(50.r),
               ),
               child: Label(
                 text: context.locale == Locales.english
-                    ? 'What do you think?'
+                    ? 'What on your mind?'
                     : 'بم تفكر؟',
                 style: Styles.mediumText(color: Colors.grey),
               ),
             ),
           )),
           const Sizer(
-            width: 10,
+            width: 50,
           ),
           InkWell(
             onTap: () {
@@ -79,7 +82,8 @@ class CreatePostBanner extends StatelessWidget {
               children: [
                 SvgPicture.asset(
                   Assets.zoomMeeting,
-                  height: 40.h,
+                  height: 50.h,
+
                 ),
                 Sizer(
                   height: 3.h,

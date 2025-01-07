@@ -577,6 +577,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                               children: [
                                 SizedBox(
                                   width: 180.w,
+                                  height:50.h,
+
                                   child: AppButton(
                                       // height: 120.h,
                                       width: kToolbarHeight * 1.5,
@@ -646,6 +648,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                         width: user.sentFriendRequest == true
                                             ? 230.w
                                             : 180.w,
+                                  height:50.h,
+
                                         child: AppButton(
                                             // height: 80.h,
                                             padding: 5,
@@ -812,6 +816,8 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                     ),
                     if (loginUser?.id != widget.userId)
                       MessageButton(
+                        width: 180.w,
+                        height:50.h,
                         user: state.profileData!,
                         normalPress: () async {
                           if (context.read<UserCubit>().isLoggedIn) {
@@ -977,7 +983,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                           height: 5.h,
                         ),
                       ],
-                      if (user.job.isNotEmpty && user.isDocument == true) ...[
+                      if (user.job.isNotEmpty && user.isDocument == true&&user.job!='Hidden') ...[
                         Row(
                           children: [
                             const Icon(
@@ -1073,7 +1079,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
     return RichText(
         text: TextSpan(children: [
       TextSpan(
-          text: value, style: Styles.mediumText(fontWeight: FontWeight.w500)),
+          text: value, style: Styles.mediumText(fontWeight: FontWeight.w500,color: Theme.of(context).textTheme.bodyMedium?.color)),
       TextSpan(
           text: label,
           style: Styles.mediumText(

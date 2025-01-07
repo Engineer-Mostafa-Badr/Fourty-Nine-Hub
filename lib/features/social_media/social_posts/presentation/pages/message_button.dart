@@ -12,12 +12,14 @@ class MessageButton extends StatelessWidget {
   final UserProfileEntity user;
   final Function() anonymousPress;
   final Function() normalPress;
+  final double? width;
+  final double? height;
 
   const MessageButton(
       {super.key,
       required this.user,
       required this.anonymousPress,
-      required this.normalPress});
+      required this.normalPress, this.width, this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,8 @@ class MessageButton extends StatelessWidget {
     final titleFontSize = screenHeight * 0.05;
 
     return SizedBox(
-      height: 62.h,
+      height:height?? 62.h,
+      width:width ,
       child: AppButton(
           // height: 120.h,
           width: kToolbarHeight * 1.5,

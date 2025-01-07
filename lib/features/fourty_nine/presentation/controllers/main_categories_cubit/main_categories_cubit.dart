@@ -1,16 +1,25 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/currency_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/question_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/answer_question_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/any_cashback_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_currency_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_custom_page_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_question_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/shared/fourty_nine_shared_data.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
+import 'package:fourtyninehub/routes/pages.dart';
+import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../domain/entities/wallet_home_entity.dart';
@@ -19,7 +28,12 @@ import '../../../domain/use_cases/get_wallet_home_use_case.dart';
 part 'main_categories_state.dart';
 
 class MainCategoriesCubit extends Cubit<MainCategoriesState> {
+  static MainCategoriesState to = AppPages
+      .router.routerDelegate.navigatorKey.currentContext!
+      .read<MainCategoriesState>();
   final GetMainCategoriesUseCase _getMainCategoriesUseCase;
+  final GetQuestionUseCase _getQuestionUseCase;
+  final AnswerQuestionUseCase _answerQuestionUseCase;
   final GetMainCategoriesCustomPageUseCase _categoriesCustomPageUseCase;
   final AnyCashBackUseCase _anyCashBackUseCase;
   final FourtyNineSharedData _fourtyNineSharedData =
@@ -34,11 +48,12 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     this._getWalletHomeUseCase,
     this._currencyUseCase,
     this._anyCashBackUseCase,
-    this._categoriesCustomPageUseCase,
+    this._categoriesCustomPageUseCase, this._getQuestionUseCase, this._answerQuestionUseCase,
   ) : super(MainCategoriesState());
 
   Future<void> loadDataCategory() async {
     await loadData();
+    await getQuestion();
     await getMainCategoryCustomPage();
   }
 
@@ -63,7 +78,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
           CliLogger.error(
               'can\'t load main categories there is an error ${failure.toString()}');
         },
-        (r) {
+        (r) async {
           _fourtyNineSharedData.mainCategories = r;
           CliLogger.info('main categories loaded : ${r.length}');
           // CliLogger.info('shared main categories loaded : ${_fourtyNineSharedData.mainCategories.length}');
@@ -153,6 +168,35 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
       emit(state.copyWith(status: StateStatus.success));
     });
     return result;
+  }
+  Future<void> getQuestion() async {
+    final response = await _getQuestionUseCase(const NoParams());
+    response.fold(
+        (failure) =>
+            emit(state.copyWith(failure: failure, status: StateStatus.error)),
+        (data) {
+      emit(state.copyWith(question: data, status: StateStatus.success));
+    });
+  }
+
+  Future<void> answerQuestion({
+    required String id,
+    required String answer,
+    required BuildContext context
+  }) async {
+    final response = await _answerQuestionUseCase(AnswerQuestionParams(id: id,answer: answer));
+    response.fold(
+        (failure) {
+          context.pop();
+          showErrorMessage(context, getFailureMessage(failure, context));
+
+          emit(state.copyWith(failure: failure, status: StateStatus.error));
+        },
+        (data) {
+          context.pop();
+          showSuccessMessage(context, LocaleKeys.successSubmit.localize);
+      emit(state.copyWith(status: StateStatus.success));
+    });
   }
 
   Future<bool> anyCashBack() async {

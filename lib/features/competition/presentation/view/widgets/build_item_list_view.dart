@@ -49,7 +49,7 @@ class BuildItemListView extends StatelessWidget {
           height: 40.h,
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 45.w, vertical: 20.h),
+          padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 20.h),
           child: Row(
             children: [
               GestureDetector(
@@ -57,7 +57,7 @@ class BuildItemListView extends StatelessWidget {
                   context.push(Routes.GIFT);
                 },
                 child: CustomPaint(
-                  size: const Size(20, 20),
+                  size: const Size(40, 20),
                   painter: DonutChartPainter(
                       context: context,
                       count: count,
@@ -69,45 +69,46 @@ class BuildItemListView extends StatelessWidget {
               ),
               SizedBox(width: 55.w),
               Expanded(
-                child: Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 15.h, horizontal: 20.w),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '${LocaleKeys.count.localize}$count',
-                      style: Styles.mediumText(
-                          color: Theme.of(context).scaffoldBackgroundColor),
+                child: Column(
+                  children: [
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 15.h, horizontal: 20.w),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${LocaleKeys.count.localize}$count',
+                          style: Styles.mediumText(
+                              color: Theme.of(context).scaffoldBackgroundColor),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              SizedBox(width: 10.w),
-              Expanded(
-                child: Container(
-                  // height: 50,
-                  padding: EdgeInsets.symmetric(
-                    vertical: 15.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '${LocaleKeys.max.localize}$max',
-                      style: Styles.mediumText(
-                          color: Theme.of(context).scaffoldBackgroundColor),
+                    SizedBox(height: 10.w),
+                    Container(
+                     // height: 50,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 15.h,),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${LocaleKeys.max.localize}$max',
+                          style: Styles.mediumText(
+                              color: Theme.of(context).scaffoldBackgroundColor),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
               SizedBox(width: 55.w),
               CustomPaint(
-                size: const Size(20, 20),
+                size: const Size(40, 20),
                 painter: DonutChartPainter(
                   context: context,
                   count: count,

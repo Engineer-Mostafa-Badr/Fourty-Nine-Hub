@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,8 +16,10 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/animated_text.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
@@ -40,6 +43,8 @@ import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../widgets/announce_widget.dart';
+import 'package:text_scroll/text_scroll.dart';
+import 'package:auto_scroll_text/auto_scroll_text.dart';
 
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});
@@ -193,10 +198,29 @@ class _FourtyNineViewState extends State<FourtyNineView>
             !context.read<UserCubit>().isLoggedIn
                 ? const Sizer()
                 : const SizedBox.shrink(),
+            const ScrollableTextWithAnimation(),
+
             //wallet
             context.read<UserCubit>().isLoggedIn
                 ? const WalletWidget()
                 : const SizedBox.shrink(),
+            ClickableWidget(
+              onTap:(){
+                context.push(Routes.CUSTOMPAGE);
+              },
+              child: Container(
+                height: 100.h,
+                alignment: Alignment.center,
+                child: AutoScrollText(
+                  LocaleKeys.choosePreferredAppStyle.localize,
+                  style: Styles.headerText(fontSize: 30, color: AppColors.SECONDARY_COLOR),
+                  textDirection: context.isArabic?TextDirection.rtl:TextDirection.ltr,
+                  selectable: true,
+                  // textStyle: TextStyle(fontSize: 24),
+                ),
+              ),
+            ),
+            // ScrollableTextWithAnimation(text: 'Colored text.kasmdlkasdmklasmdkladmslkamdklasmdkndasjkdnasjkdnsjka',),
             //    Sizer(),
             //admob
             //   const GoogleAddsBanner(),
@@ -739,11 +763,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    SquareImage(
+                    Image.asset(
+                      Assets.tripJoinImage,
                       fit: BoxFit.cover,
                       width: 150,
                       // source: AssetImage(image),
-                      url: image,
                     ),
                     Container(
                       color: Colors.black
@@ -757,6 +781,8 @@ class _FourtyNineViewState extends State<FourtyNineView>
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Row(
                 children: [
+                  Container(),
+                  const Spacer(),
                   Label(
                     // text: service.title(),
                     text: title,

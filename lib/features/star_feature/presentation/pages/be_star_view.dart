@@ -144,7 +144,7 @@ class _BeStarViewState extends State<BeStarView> {
                     ImageFromInternet(image: state.banner?.banner ?? ''),
                     Container(
                       width: double.infinity,
-                      height: 240.h,
+                      height: MediaQuery.sizeOf(context).height * 0.13.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.r),
                         // image: DecorationImage(
@@ -153,7 +153,7 @@ class _BeStarViewState extends State<BeStarView> {
                         // ),
                       ),
                       child:
-                          ImageFromInternet(image: state.banner?.banner ?? ''),
+                          ImageFromInternet(image: state.banner?.banner ?? '',fit: BoxFit.fitWidth,),
                     ),
                     const Sizer(),
                     Text(

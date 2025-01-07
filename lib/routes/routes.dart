@@ -31,8 +31,10 @@ abstract class Routes {
   static const WALLETHISTORY = '/Wallet/WalletHistory';
   static const TRANSFERMONEY = '/Wallet/TransferMoney';
   static const SOCIAL = '/Social';
+  static const FacebookSuggestPeople = '/Social/FacebookSuggestPeople';
   static const OTHERSACCOUNT = '/Social/OthersAccount';
   static const INSTAGRAMPROFILE = '/Instagram/InstagramProfile';
+  static const InstagramSuggestPeople = '/Instagram/InstagramSuggestPeople';
   static const EDITPROFILE = '/Social/OthersAccount/EditProfile';
   static const REELS = '/Social/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
@@ -222,8 +224,10 @@ abstract class Paths {
   static const TRANSFERMONEY = 'TransferMoney';
   static const INSTAGRAM = 'Instagram';
   static const SOCIAL = 'Social';
+  static const FacebookSuggestPeople = 'FacebookSuggestPeople';
   static const OTHERSACCOUNT = 'OthersAccount';
   static const INSTAGRAMPROFILE = 'InstagramProfile';
+  static const InstagramSuggestPeople = 'InstagramSuggestPeople';
   static const MAZADAT = 'Mazadat';
   static const IMAGESPAGEVIEW = 'ImagesPageView';
   static const SHOWIMAGESVIEW = 'ShowImagesView';

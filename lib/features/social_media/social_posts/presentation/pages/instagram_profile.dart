@@ -436,7 +436,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                     children: [
                       _buildCounter(
                         value: '${user.instagramPosts ?? 0} ',
-                        label: LocaleKeys.Posts.localize,
+                        label: LocaleKeys.post.localize,
                       ),
                       const Sizer(),
                       InkWell(
@@ -452,7 +452,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                         },
                         child: _buildCounter(
                           value: '${user.followersCount} ',
-                          label: LocaleKeys.Followers.localize,
+                          label: LocaleKeys.follower.localize,
                         ),
                       ),
                       const Sizer(),

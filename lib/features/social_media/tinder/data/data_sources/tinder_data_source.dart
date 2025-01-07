@@ -36,7 +36,7 @@ abstract class TinderRemoteDataSource {
 
   Future<Either<Failure, LastSeenEntity>> fetchLastSeen(String id);
 
-  Future<Either<Failure, dynamic>> sendGift(SendGiftParams params);
+  Future<Either<Failure, SendGiftResponse>> sendGift(SendGiftParams params);
 
   Future<Either<Failure, GiftApi>> fetchGifts();
 
@@ -142,18 +142,20 @@ class TinderRemoteDataSourceImpl implements TinderRemoteDataSource {
       EndPoints.fetchLastSeen(id),
     );
     return response.fold(
-      (failure) => Left(failure),
+      (failure) {
+        return Left(failure);
+      },
       (response) => Right(LastSeenModel.fromJson(response['data'])),
     );
   }
 
   @override
-  Future<Either<Failure, dynamic>> sendGift(SendGiftParams params) async {
+  Future<Either<Failure, SendGiftResponse>> sendGift(SendGiftParams params) async {
     final response =
         await _apiConsumer.post(EndPoints.sendGift, data: params.toJson());
     return response.fold(
       (failure) => Left(failure),
-      (response) => Right(LastSeenModel.fromJson(response['data'])),
+      (response) => Right(response['status']),
     );
   }
 

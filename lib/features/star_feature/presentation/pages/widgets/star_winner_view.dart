@@ -70,9 +70,9 @@ class _StarWinnerViewState extends State<StarWinnerView> {
                 }
                 return buildItem(context, state.winner![index]);
               },
-              separatorBuilder: (context, index) => Divider(
+              separatorBuilder: (context, index) => SizedBox(
                 height: 40.h,
-                color: AppColors.GREY_NORMAL_COLOR,
+                // color: AppColors.GREY_NORMAL_COLOR,
               ),
               itemCount: state.winner?.length ?? 0,
             ),
