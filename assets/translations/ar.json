@@ -125,7 +125,7 @@
   "health": "صحه",
   "ship": "تحميله",
   "ride": "توصيله",
-  "lang": "E",
+  "lang": "En",
   "ad": "اعلان",
   "ads": "اعلانات",
   "wallet": "محفظه",
@@ -1227,6 +1227,12 @@
   "enterBillValue": "ادخل قيمة الفاتورة",
   "uploadAtLeastOneBill": "قم بتحميل على الاقل فاتورة واحدة",
   "home": "الرئيسية",
-  "mutualFriends": "صديقا مشترك"
+  "mutualFriends": "صديقا مشترك",
+  "choosePreferredAppStyle": "اختار الان الشكل المفضل للتطبيق بما يتناسب مع اهتماماتك !!!",
+  "enterYourAnswer": "ادخل اجابتك",
+  "yourAnswer": "إجابتك",
+  "enterSomething": "ادخل شيئًا...",
+  "pleaseEnterAValue": "يرجى إدخال قيمة",
+  "answerSentSuccessfully": "تم إرسال الإجابة بنجاح"
 
 }

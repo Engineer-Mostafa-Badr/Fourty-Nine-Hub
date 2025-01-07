@@ -141,7 +141,7 @@ class CodegenLoader extends AssetLoader{
   "health": "صحه",
   "ship": "تحميله",
   "ride": "توصيله",
-  "lang": "E",
+  "lang": "En",
   "ad": "اعلان",
   "ads": "اعلانات",
   "wallet": "محفظه",
@@ -1240,7 +1240,13 @@ class CodegenLoader extends AssetLoader{
   "enterBillValue": "ادخل قيمة الفاتورة",
   "uploadAtLeastOneBill": "قم بتحميل على الاقل فاتورة واحدة",
   "home": "الرئيسية",
-  "mutualFriends": "صديقا مشترك"
+  "mutualFriends": "صديقا مشترك",
+  "choosePreferredAppStyle": "اختار الان الشكل المفضل للتطبيق بما يتناسب مع اهتماماتك !!!",
+  "enterYourAnswer": "ادخل اجابتك",
+  "yourAnswer": "إجابتك",
+  "enterSomething": "ادخل شيئًا...",
+  "pleaseEnterAValue": "يرجى إدخال قيمة",
+  "answerSentSuccessfully": "تم إرسال الإجابة بنجاح"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1367,7 +1373,7 @@ static const Map<String,dynamic> en = {
   "health": "Health",
   "ship": "Ship",
   "ride": "Ride",
-  "lang": "ع",
+  "lang": "عربي",
   "ads": "Ads",
   "ad": "Ad",
   "wallet": "Wallet",
@@ -2485,7 +2491,13 @@ static const Map<String,dynamic> en = {
   "enterBillValue": "Enter Bill Value",
   "uploadAtLeastOneBill": "Please upload at least 1 bill",
   "home": "Home",
-  "mutualFriends": "Mutual Friends"
+  "mutualFriends": "Mutual Friends",
+  "choosePreferredAppStyle": "Choose now the preferred app style that suits your interests!!!",
+  "enterYourAnswer": "Enter Your Answer",
+  "yourAnswer": "Your Answer",
+  "enterSomething": "Enter something...",
+  "pleaseEnterAValue": "Please enter a value",
+  "answerSentSuccessfully": "Answer sent successfully"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

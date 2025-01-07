@@ -3,13 +3,13 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 
-class SendGiftUseCase extends UseCase<dynamic, SendGiftParams> {
+class SendGiftUseCase extends UseCase<SendGiftResponse, SendGiftParams> {
   final TinderRepository _repository;
 
   SendGiftUseCase(this._repository);
 
   @override
-  Future<Either<Failure, dynamic>> call(SendGiftParams params) {
+  Future<Either<Failure, SendGiftResponse>> call(SendGiftParams params) {
     return _repository.sendGift(params);
   }
 }
@@ -29,4 +29,17 @@ class SendGiftParams {
         'giftId': giftId,
         // 'subCategory':'66af974f8bf69f9469944746',
       };
+}
+
+class SendGiftResponse{
+  final bool status;
+  final num httpCode;
+
+  SendGiftResponse({required this.status, required this.httpCode});
+
+  //fromJson
+  factory SendGiftResponse.fromJson(Map<String, dynamic> json) => SendGiftResponse(
+    status: json['status'] ?? (json['success'] ?? false),
+    httpCode: json['httpCode']??200,
+  );
 }

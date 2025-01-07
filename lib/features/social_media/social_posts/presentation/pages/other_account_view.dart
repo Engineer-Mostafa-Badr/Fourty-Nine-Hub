@@ -1079,7 +1079,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
     return RichText(
         text: TextSpan(children: [
       TextSpan(
-          text: value, style: Styles.mediumText(fontWeight: FontWeight.w500)),
+          text: value, style: Styles.mediumText(fontWeight: FontWeight.w500,color: Theme.of(context).textTheme.bodyMedium?.color)),
       TextSpan(
           text: label,
           style: Styles.mediumText(
