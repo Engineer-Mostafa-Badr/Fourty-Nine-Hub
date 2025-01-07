@@ -190,6 +190,8 @@ import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cu
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/pages/edit_profile_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_all_discover_people.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_suggest_people.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
@@ -198,6 +200,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/pages/mus
 import 'package:fourtyninehub/features/social_media/snap/presentation/pages/snap_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/instagram_profile.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/face_book_post_details.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_suggest_people.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
@@ -924,6 +927,19 @@ class AppPages {
                   );
                 },
               ),
+              GoRoute(
+                path: Paths.InstagramSuggestPeople,
+                name: Routes.InstagramSuggestPeople,
+                routes: const [],
+                builder: (context, state) {
+
+                  return BlocProvider<InstagramCubit>(
+                    create: (_) =>
+                        serviceLocator(),
+                    child: const InstagramAllDiscoverPeople(),
+                  );
+                },
+              ),
             ],
             builder: (context, state) => MultiBlocProvider(
               providers: [
@@ -982,6 +998,18 @@ class AppPages {
                       child: CreatePostView(
                         social: social ?? 'social',
                       ),
+                    );
+                  },
+                ),
+                GoRoute(
+                  path: Paths.FacebookSuggestPeople,
+                  name: Routes.FacebookSuggestPeople,
+                  builder: (context, state) {
+                    final social = state.extra as String?;
+
+                    return BlocProvider<SocialPostsCubit>(
+                      create: (_) =>serviceLocator(),
+                      child: const FacebookSuggestedPeople(),
                     );
                   },
                 ),

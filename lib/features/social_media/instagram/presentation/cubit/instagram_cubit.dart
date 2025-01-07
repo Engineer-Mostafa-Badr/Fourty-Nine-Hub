@@ -455,7 +455,7 @@ class InstagramCubit extends Cubit<InstagramState> {
   final PagingController<int, CommentEntity> commentsPagingController =
       PagingController(firstPageKey: 1);
 
-  int pageSize = 10;
+  int pageSize = 15;
   Future<void> getPostComments(
       {required BuildContext context,
       required String postId,
@@ -651,5 +651,48 @@ class InstagramCubit extends Cubit<InstagramState> {
       value = r;
     });
     return value;
+  }
+
+
+
+  List<SuggestUserEntity> facebookSuggestPeople = [];
+  bool isLoadingMore = false;
+  bool hasMoreData = true;
+  int currentPage = 1;
+
+
+  void loadInitialSuggestPeople() async {
+    emit(state.copyWith(status: StateStatus.loading));
+    facebookSuggestPeople.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await fetchFacebookSuggestPeople();
+  }
+
+  Future<void> fetchFacebookSuggestPeople() async {
+    if (!hasMoreData || isLoadingMore) return;
+
+    isLoadingMore = true;
+
+    final response = await _suggestedFriendsUseCase(
+      SuggestedFriendsParams(limit: pageSize, page: currentPage),
+    );
+
+    response.fold(
+          (failure) => emit(
+          state.copyWith(failure: failure, status: StateStatus.error)),
+          (data) {
+        facebookSuggestPeople.addAll(data);
+
+        if (data.length < pageSize) {
+          hasMoreData = false;
+        } else {
+          currentPage++;
+        }
+
+        isLoadingMore = false;
+        emit(state.copyWith(status: StateStatus.success));
+      },
+    );
   }
 }

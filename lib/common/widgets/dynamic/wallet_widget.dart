@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -62,7 +64,7 @@ class WalletWidget extends StatelessWidget {
                   AdInterstitialTop.loadIntersitialAd();
                   AdInterstitialTop.showInterstitialAd();
                   context.push(Routes.BALANCE);
-                }, LocaleKeys.balance.tr(), '${state.wallet?.balance.toStringAsFixed(0) ?? ''} ',
+                }, LocaleKeys.balance.tr(), '${FormatNumbers().formatNumber(state.wallet?.balance??0) } ',
                     state.wallet?.currency ?? ''),
                 Container(
                   width: 2.w,
@@ -79,7 +81,7 @@ class WalletWidget extends StatelessWidget {
                   AdInterstitialTop.loadIntersitialAd();
                   AdInterstitialTop.showInterstitialAd();
                   context.push(Routes.GIFT);
-                }, LocaleKeys.gift.tr(), '${state.wallet?.giftWallet.toStringAsFixed(0)  ?? ''} ',
+                }, LocaleKeys.gift.tr(), '${FormatNumbers().formatNumber(state.wallet?.giftWallet??0)} ',
                     state.wallet?.currency ?? ''),
                 Container(
                   width: 2.h,
@@ -99,7 +101,7 @@ class WalletWidget extends StatelessWidget {
                   //showing
                 },
                     LocaleKeys.wallet.tr(),
-                    '${state.wallet?.realAmount.toStringAsFixed(0)  ?? ''} ',
+                    '${FormatNumbers().formatNumber(state.wallet?.realAmount??0)} ',
                     state.wallet?.currency ?? ''),
               ],
             ),

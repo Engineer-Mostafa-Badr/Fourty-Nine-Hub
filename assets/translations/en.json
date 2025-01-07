@@ -123,7 +123,7 @@
   "health": "Health",
   "ship": "Ship",
   "ride": "Ride",
-  "lang": "ع",
+  "lang": "عربي",
   "ads": "Ads",
   "ad": "Ad",
   "wallet": "Wallet",
@@ -1245,5 +1245,12 @@
   "mobileBill": "Mobile Bill",
   "enterBillValue": "Enter Bill Value",
   "uploadAtLeastOneBill": "Please upload at least 1 bill",
-  "home": "Home"
+  "home": "Home",
+  "mutualFriends": "Mutual Friends",
+  "choosePreferredAppStyle": "Choose now the preferred app style that suits your interests!!!",
+  "enterYourAnswer": "Enter Your Answer",
+  "yourAnswer": "Your Answer",
+  "enterSomething": "Enter something...",
+  "pleaseEnterAValue": "Please enter a value",
+  "answerSentSuccessfully": "Answer sent successfully"
 }

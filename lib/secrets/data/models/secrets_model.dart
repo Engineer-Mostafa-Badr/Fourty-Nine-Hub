@@ -14,7 +14,7 @@ class SecretsModel extends Secrets {
       openRouteServiceKey: json['openRouteServiceApiKey'],
       tomtomMapKey: json['googleMapsApiKey'],
       json['googleMapsApiKey'],
-      int.parse(json['zegoAppId']),
+      json['zegoAppId'],
       json['zegoAppSign'],
     );
   }

@@ -85,6 +85,8 @@ class EndPoints {
   static const getWalletHome = '/main-wallet/user-wallets-amount';
   static const getCurrency = '/main-wallet/app-currency';
   static const anyCashBack = '/cashback/any';
+  static const getQuestion = '/infosAndQuestions/show';
+  static answerQuestion(String id) => '/infosAndQuestions/answer/$id';
   static const sliderItems = '/sliders/to-app';
   static const competition = '/subscriber/competitionsSubscriber';
   static const winnerCompetition = '/subscriber/winners';

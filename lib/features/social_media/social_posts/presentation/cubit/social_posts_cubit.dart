@@ -404,6 +404,48 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     }
   }
 
+
+  List<SuggestUserEntity> facebookSuggestPeople = [];
+  bool isLoadingMore = false;
+  bool hasMoreData = true;
+  int currentPage = 1;
+
+
+  void loadInitialSuggestPeople() async {
+    facebookSuggestPeople.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await fetchFacebookSuggestPeople();
+  }
+
+  Future<void> fetchFacebookSuggestPeople() async {
+    if (!hasMoreData || isLoadingMore) return;
+
+    emit(state.copyWith(status: StateStatus.loading));
+    isLoadingMore = true;
+
+    final response = await _suggestedFriendsUseCase(
+      SuggestedFriendsParams(limit: pageSize, page: currentPage),
+    );
+
+    response.fold(
+          (failure) => emit(
+          state.copyWith(failure: failure, status: StateStatus.error)),
+          (data) {
+            facebookSuggestPeople.addAll(data);
+
+        if (data.length < pageSize) {
+          hasMoreData = false;
+        } else {
+          currentPage++;
+        }
+
+        isLoadingMore = false;
+        emit(state.copyWith(status: StateStatus.success));
+      },
+    );
+  }
+
   uploadPhoto({bool isGallery = true}) async {
     final UploadFile upload = UploadFile();
     print('=======>data Hiii');

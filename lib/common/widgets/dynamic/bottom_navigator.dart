@@ -172,28 +172,30 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                   int index1 = context.isArabic ? 2 : 1;
                   int index2 = context.isArabic ? 1 : 2;
 
-                  return GestureDetector(
-                    onTap: () {
-                      widget.onTap(index);
-                    },
-                    child: Padding(
-                      padding: index == index1
-                          ? EdgeInsets.only(right: 30.w)
-                          : index == index2
-                              ? EdgeInsets.only(left: 60.w)
-                              : EdgeInsets.zero,
-                      // Conditionally render the Icon or SvgPicture
-                      child: index == 2 // Index for "health"
-                          ? Image.asset(
-                              widget.items[index].image!,
-                              //width: 90.w,
-                              height: widget.items[index].height * 2.h,
-                            )
-                          : Image.asset(
-                              widget.items[index].image!,
-                              color: index!=1?AppColors.PRIMARY_COLOR:null,
-                              height: widget.items[index].height * 1.8.h,
-                            ),
+                  return Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        widget.onTap(index);
+                      },
+                      child: Padding(
+                        padding: index == index1
+                            ? EdgeInsets.only(right: 30.w)
+                            : index == index2
+                                ? EdgeInsets.only(left: 60.w)
+                                : EdgeInsets.zero,
+                        // Conditionally render the Icon or SvgPicture
+                        child: index == 2 // Index for "health"
+                            ? Image.asset(
+                                widget.items[index].image!,
+                                //width: 90.w,
+                                height: widget.items[index].height * 2.h,
+                              )
+                            : Image.asset(
+                                widget.items[index].image!,
+                                color: index!=1?AppColors.PRIMARY_COLOR:null,
+                                height: widget.items[index].height * 1.8.h,
+                              ),
+                      ),
                     ),
                   );
                 }),

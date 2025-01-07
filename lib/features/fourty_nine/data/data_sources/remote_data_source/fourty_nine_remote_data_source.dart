@@ -7,10 +7,13 @@ import 'package:fourtyninehub/features/fourty_nine/data/models/banner_model.dart
 import 'package:fourtyninehub/features/fourty_nine/data/models/currency_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/main_category_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/data/models/parent_main_category_model.dart';
+import 'package:fourtyninehub/features/fourty_nine/data/models/question_model.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/currency_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/parent_main_category_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/question_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/answer_question_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
@@ -38,6 +41,8 @@ abstract class FourtyNineRemoteDataSource {
   Future<Either<Failure, WalletHomeEntity>> getWalletHome();
   Future<Either<Failure, CurrencyEntity>> getCurrency();
   Future<Either<Failure, bool>> anyCashBack();
+  Future<Either<Failure, QuestionEntity>> getQuestion();
+  Future<Either<Failure, bool>> answerQuestion(AnswerQuestionParams params);
 }
 
 class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
@@ -189,6 +194,33 @@ class FourtyNineRemoteDataSourceImpl implements FourtyNineRemoteDataSource {
       },
       (data) {
         return Right(data['status']);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, QuestionEntity>> getQuestion() async {
+    final result = await _apiConsumer.get(EndPoints.getQuestion);
+    return result.fold(
+          (failure) {
+        return Left(failure);
+      },
+          (data) {
+        return Right(QuestionModel.fromJson(data['data']));
+      },
+    );  }
+
+  @override
+  Future<Either<Failure, bool>> answerQuestion(AnswerQuestionParams params) async {
+    final result = await _apiConsumer.post(EndPoints.answerQuestion(params.id),data: {
+      "answer": params.answer
+    });
+    return result.fold(
+          (failure) {
+        return Left(failure);
+      },
+          (data) {
+        return Right(data['status'] ?? (data['success'] ?? false));
       },
     );
   }

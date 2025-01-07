@@ -1214,5 +1214,12 @@ abstract class  LocaleKeys {
   static const enterBillValue = 'enterBillValue';
   static const uploadAtLeastOneBill = 'uploadAtLeastOneBill';
   static const home = 'home';
+  static const mutualFriends = 'mutualFriends';
+  static const choosePreferredAppStyle = 'choosePreferredAppStyle';
+  static const enterYourAnswer = 'enterYourAnswer';
+  static const yourAnswer = 'yourAnswer';
+  static const enterSomething = 'enterSomething';
+  static const pleaseEnterAValue = 'pleaseEnterAValue';
+  static const answerSentSuccessfully = 'answerSentSuccessfully';
 
 }

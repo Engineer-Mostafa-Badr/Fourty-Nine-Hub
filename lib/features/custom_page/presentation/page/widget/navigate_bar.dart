@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -28,10 +29,10 @@ class _NavigateBarState extends State<NavigateBar> {
     Assets.loadingCar,
     Assets.homeHealth,
     Assets.homeFood,
-    Assets.social,
+    Assets.findLogo,
     Assets.homeReel,
     Assets.spotlightIcon,
-    Assets.zoomMeeting,
+    Assets.cameraLogo,
     Assets.live,
     Assets.cameraIcon,
   ];
@@ -67,6 +68,41 @@ class _NavigateBarState extends State<NavigateBar> {
     ];
   }
 
+  ScrollController scrollController = ScrollController();
+  bool _isScrollingDown = false;
+
+
+  didChangeDependencies() {
+    super.didChangeDependencies();
+    _setupScrollController();
+  }
+
+
+  void _setupScrollController() {
+    scrollController.addListener(() {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (!_isScrollingDown) {
+          setState(() {
+            _isScrollingDown = true;
+          });
+        }
+      } else if (scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (_isScrollingDown) {
+          setState(() {
+            _isScrollingDown = false;
+          });
+        }
+      }
+    });
+
+    // context
+    //     .read<NotificationSocketIoCubit>()
+    //     .notificationListener(languageCode: 'en');
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,6 +120,7 @@ class _NavigateBarState extends State<NavigateBar> {
               final localizedNames = _getLocalizedNames(state.navigateBar!);
 
               return ListView.builder(
+                controller: scrollController,
                 itemCount: _selectedItems.length,
                 itemBuilder: (context, index) {
                   final categoryName = localizedNames[index];
@@ -109,7 +146,7 @@ class _NavigateBarState extends State<NavigateBar> {
                       ),
                     ),
                     selected: isSelected,
-                    trailing:(index == 0 ||index == 1 || index ==2|| index ==3|| index ==5)?Image.asset(_icons[index],height: 40.h,): SvgPicture.asset(
+                    trailing:(index == 0 ||index == 1 || index ==2|| index ==3|| index ==5|| index ==4|| index ==7)?Image.asset(_icons[index],height: 40.h,): SvgPicture.asset(
                       _icons[index],
                       height: 40.h,
                     ),
@@ -125,7 +162,9 @@ class _NavigateBarState extends State<NavigateBar> {
           },
         ),
       ),
-      floatingActionButton: BlocProvider<CustomPageCubit>(
+      floatingActionButton: _isScrollingDown
+          ? null
+          : BlocProvider<CustomPageCubit>(
         create: (BuildContext context) => serviceLocator(),
         child: BlocConsumer<CustomPageCubit, CustomPageState>(
           listener: (BuildContext context, state) {
