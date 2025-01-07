@@ -84,35 +84,34 @@ class _SpotlightViewState extends State<SpotlightView> {
     final userId = userCubit.state.data?.id ?? '';
 
     return Scaffold(
-      appBar: BackAppBar(label: LocaleKeys.spotlight_title.tr(),
-      actions: [
-        IconButton(
-          onPressed: () {
-            context.push(
-              Routes.OTHERSACCOUNT,
-              extra: userId,
-            );
-          },
-          icon:  Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4.0),
-            child: Icon(
-              Icons.person,
-              size: 50.sp,
+      appBar: BackAppBar(
+        label: LocaleKeys.spotlight_title.tr(),
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.push(
+                Routes.OTHERSACCOUNT,
+                extra: userId,
+              );
+            },
+            icon: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: Icon(
+                Icons.person,
+                size: 50.sp,
+              ),
             ),
           ),
-        ),
           IconButton(
               onPressed: () {
                 showDialog(
-                    context: context,
-                    builder: (_) =>
-                    const SearchAppUsers());
+                    context: context, builder: (_) => const SearchAppUsers());
               },
               icon: Icon(
                 Icons.search,
                 size: 50.sp,
               )),
-      ],
+        ],
       ),
       body: isLoggedIn
           ? CustomScrollView(
@@ -148,7 +147,6 @@ class _SpotlightViewState extends State<SpotlightView> {
             ),
     );
   }
-
 }
 
 class FriendsList extends StatelessWidget {
@@ -202,7 +200,6 @@ class _FollowingSectionState extends State<FollowingSection> {
 
   void _onScroll(ScrollMetrics metrics) {
     double currentScrollPosition = metrics.pixels;
-
 
     bool isScrollingRightToLeft =
         currentScrollPosition > _previousScrollPosition;
@@ -263,8 +260,8 @@ class _FollowingSectionState extends State<FollowingSection> {
           width: double.infinity,
           child: BlocConsumer<ReelsCubit, ReelsState>(
             builder: (context, state) {
-              if (state.reelsForFollowing?.isEmpty??false) {
-                return  Center(child: Text(LocaleKeys.noFollowing.localize));
+              if (state.reelsForFollowing?.isEmpty ?? false) {
+                return Center(child: Text(LocaleKeys.noFollowing.localize));
               }
               return Stack(
                 children: [
@@ -279,7 +276,7 @@ class _FollowingSectionState extends State<FollowingSection> {
                       controller: _scrollController,
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      itemCount: (state.reelsForFollowing?.length??0),
+                      itemCount: (state.reelsForFollowing?.length ?? 0),
                       itemBuilder: (context, index) {
                         final reel = state.reelsForFollowing![index];
                         return SizedBox(
@@ -287,7 +284,7 @@ class _FollowingSectionState extends State<FollowingSection> {
                           child: Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 20.w, vertical: 12.h),
-                            child: _buildReelCard(context, reel,index),
+                            child: _buildReelCard(context, reel, index),
                           ),
                         );
                       },
@@ -310,7 +307,7 @@ class _FollowingSectionState extends State<FollowingSection> {
     );
   }
 
-  Widget _buildReelCard(BuildContext context, Reel reel,int index) {
+  Widget _buildReelCard(BuildContext context, Reel reel, int index) {
     return GestureDetector(
       onTap: () async {
         await Navigator.push(
@@ -362,7 +359,7 @@ class _FollowingSectionState extends State<FollowingSection> {
                   body: UnifiedReelItem(
                     reel: reel,
                     isVisible: true,
-                    index:index,
+                    index: index,
                     itemType: ReelItemType.spotlight,
                   ),
                   // MainReelItem(
@@ -414,15 +411,15 @@ class _FollowingSectionState extends State<FollowingSection> {
             //   ),
             // ),
             Image.network(
-             reel.thumbnailSignedUrl,
+              reel.thumbnailSignedUrl,
               width: double.infinity,
               height: double.infinity,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) =>
-              const SizedBox.shrink(),
+                  const SizedBox.shrink(),
             ),
             Padding(
-              padding:  EdgeInsets.all(12.w),
+              padding: EdgeInsets.all(12.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -438,9 +435,15 @@ class _FollowingSectionState extends State<FollowingSection> {
                       isCircle: true,
                     ),
                   ),
-                  SizedBox(height: 10.h,),
-                  Label(text: '${reel.user.firstName} ${_getFirstTwoWords(reel.user.lastName)}'),
-                  Label( text: formatDate('${reel.createdAt}'),),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Label(
+                      text:
+                          '${reel.user.firstName} ${_getFirstTwoWords(reel.user.lastName)}'),
+                  Label(
+                    text: formatDate('${reel.createdAt}'),
+                  ),
                 ],
               ),
             ),
@@ -449,6 +452,7 @@ class _FollowingSectionState extends State<FollowingSection> {
       ),
     );
   }
+
   String formatDate(String createdAt) {
     final DateTime dateTime = DateTime.parse(createdAt);
     final DateTime now = DateTime.now();
@@ -463,7 +467,8 @@ class _FollowingSectionState extends State<FollowingSection> {
     } else {
       return context.locale == Locales.english
           ? DateFormat('dd/MM/yyyy', 'en').format(dateTime)
-          : DateFormat('yyyy/MM/dd', 'ar').format(dateTime); // Format: 12-3-2022
+          : DateFormat('yyyy/MM/dd', 'ar')
+              .format(dateTime); // Format: 12-3-2022
     }
   }
 
@@ -477,7 +482,6 @@ class _FollowingSectionState extends State<FollowingSection> {
     }
     return words.length > 1 ? '${words[0]} ${words[1]}' : words[0];
   }
-
 }
 
 class DiscoverSection extends StatefulWidget {
@@ -507,23 +511,25 @@ class DiscoverSectionState extends State<DiscoverSection> {
         Flexible(
           child: BlocBuilder<ReelsCubit, ReelsState>(
             builder: (context, state) {
-              if ((state.globalReels.isEmpty) && !(state.globalReelsIsLoading)) {
+              if ((state.globalReels.isEmpty) &&
+                  !(state.globalReelsIsLoading)) {
                 return const Center(child: CupertinoActivityIndicator());
               }
 
               return GridView.builder(
                 padding: EdgeInsets.symmetric(
-                    horizontal: 20.w,),
+                  horizontal: 20.w,
+                ),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 8.h,
                   crossAxisSpacing: 8.w,
                   childAspectRatio: 0.7,
                 ),
-                itemCount:
-                    (state.globalReels.length) + (widget.isFetchingMore ? 1 : 0),
+                itemCount: (state.globalReels.length) +
+                    (widget.isFetchingMore ? 1 : 0),
                 itemBuilder: (context, index) {
                   if (index == (state.globalReels.length) &&
                       widget.isFetchingMore) {
@@ -535,7 +541,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
                     );
                   }
                   final reel = state.globalReels[index];
-                  return _buildReelCard(context, reel,index);
+                  return _buildReelCard(context, reel, index);
                 },
               );
             },
@@ -545,7 +551,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
     );
   }
 
-  Widget _buildReelCard(BuildContext context, Reel reel,int index) {
+  Widget _buildReelCard(BuildContext context, Reel reel, int index) {
     return GestureDetector(
       onTap: () async {
         await Navigator.push(
@@ -596,7 +602,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
                 ),
                 body: UnifiedReelItem(
                   reel: reel,
-                  index:index,
+                  index: index,
                   isVisible: true,
                   itemType: ReelItemType.spotlight,
                 ),
@@ -616,7 +622,6 @@ class DiscoverSectionState extends State<DiscoverSection> {
         child: Stack(
           alignment: AlignmentDirectional.bottomStart,
           children: [
-
             // Positioned(
             //   bottom: 8,
             //   left: 2,
@@ -644,10 +649,10 @@ class DiscoverSectionState extends State<DiscoverSection> {
               height: double.infinity,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) =>
-              const SizedBox.shrink(),
+                  const SizedBox.shrink(),
             ),
             Padding(
-              padding:  EdgeInsets.all(12.w),
+              padding: EdgeInsets.all(12.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -663,9 +668,13 @@ class DiscoverSectionState extends State<DiscoverSection> {
                       isCircle: true,
                     ),
                   ),
-                  SizedBox(height: 10.h,),
-                  Label(text: '${reel.user.firstName} ${_getFirstTwoWords(reel.user.lastName)}'),
-                  Label( text: formatDate('${reel.createdAt}')),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Label(
+                      text:
+                          '${reel.user.firstName} ${_getFirstTwoWords(reel.user.lastName)}'),
+                  Label(text: formatDate('${reel.createdAt}')),
                 ],
               ),
             ),
@@ -674,6 +683,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
       ),
     );
   }
+
   String formatDate(String createdAt) {
     final DateTime dateTime = DateTime.parse(createdAt);
     final DateTime now = DateTime.now();
@@ -688,7 +698,8 @@ class DiscoverSectionState extends State<DiscoverSection> {
     } else {
       return context.locale == Locales.english
           ? DateFormat('dd/MM/yyyy', 'en').format(dateTime)
-          : DateFormat('yyyy/MM/dd', 'ar').format(dateTime); // Format: 12-3-2022
+          : DateFormat('yyyy/MM/dd', 'ar')
+              .format(dateTime); // Format: 12-3-2022
     }
   }
 
@@ -702,5 +713,4 @@ class DiscoverSectionState extends State<DiscoverSection> {
     }
     return words.length > 1 ? '${words[0]} ${words[1]}' : words[0];
   }
-
 }

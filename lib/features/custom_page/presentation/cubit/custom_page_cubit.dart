@@ -133,9 +133,13 @@ class CustomPageCubit extends Cubit<CustomPageState> {
     // response.fold((l) {
     //   emit(state.copyWith(failure: l, status: CustomPageStates.error));
     // }, (data) {
-      emit(state.copyWith(activate: ActivateEntity(id: '', userId: '', customPage: active??false), status: CustomPageStates.success));
+    emit(state.copyWith(
+        activate:
+            ActivateEntity(id: '', userId: '', customPage: active ?? false),
+        status: CustomPageStates.success));
     // });
   }
+
   //
   Future<void> updateActivate(bool params) async {
     bool? active = await CacheManager.getActivation();

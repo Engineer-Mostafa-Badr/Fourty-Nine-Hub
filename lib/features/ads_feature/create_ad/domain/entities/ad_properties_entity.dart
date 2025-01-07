@@ -26,8 +26,6 @@ class AdPropertiesEntity {
   }
 }
 
-
-
 enum AdPropertyType { select, dropdown, number, text, image, file }
 
 extension AdPropertyTypeX on AdPropertyType {

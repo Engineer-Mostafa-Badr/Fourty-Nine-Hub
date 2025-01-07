@@ -75,11 +75,11 @@ class RestaurantDashboardRemoteDataSourceImpl
   }
 
   @override
-  Future<Either<Failure, bool>> deleteRestaurant(DeleteResturantParams params) async {
-    final response =
-        await _apiServices.delete(EndPoints.deleteRestaurant(params.restaurantId),
-        queryParameters: {"subCategory": params.subCategoryId}
-        );
+  Future<Either<Failure, bool>> deleteRestaurant(
+      DeleteResturantParams params) async {
+    final response = await _apiServices.delete(
+        EndPoints.deleteRestaurant(params.restaurantId),
+        queryParameters: {"subCategory": params.subCategoryId});
     return response.fold((l) {
       return Left(l);
     }, (data) {
@@ -91,8 +91,7 @@ class RestaurantDashboardRemoteDataSourceImpl
   Future<Either<Failure, bool>> updateRestaurant(params) async {
     final response = await _apiServices.put(EndPoints.updateRestaurant,
         data: params.toJson(),
-        queryParameters: {"subCategory": params.subcategoryId}
-    );
+        queryParameters: {"subCategory": params.subcategoryId});
     return response.fold((l) {
       return Left(l);
     }, (data) {

@@ -24,11 +24,12 @@ class GiftRemoteDataSourceImpl implements GiftRemoteDataSource {
 
   @override
   Future<Either<Failure, bool>> requestWithdrawCompetition(String id) async {
-    final response = await _apiConsumer.post(EndPoints.requestWithdrawCompetition(id));
+    final response =
+        await _apiConsumer.post(EndPoints.requestWithdrawCompetition(id));
 
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(response['status']),
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
     );
   }
 
@@ -37,8 +38,8 @@ class GiftRemoteDataSourceImpl implements GiftRemoteDataSource {
     final response = await _apiConsumer.post(EndPoints.requestWithdrawWheel);
 
     return response.fold(
-          (failure) => Left(failure),
-          (response) => Right(response['status']),
+      (failure) => Left(failure),
+      (response) => Right(response['status']),
     );
   }
 }

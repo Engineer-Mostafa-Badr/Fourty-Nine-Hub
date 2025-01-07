@@ -277,7 +277,9 @@ class _PaymentViewState extends State<PaymentView> {
                 text: LocaleKeys.snapCopyOfBillPayment.localize,
                 style: Styles.headerText(),
               ),
-               SizedBox(height: 10.h,),
+              SizedBox(
+                height: 10.h,
+              ),
               InkWell(
                 onTap: () async {
                   await cubit.uploadProfileImage();
@@ -297,7 +299,9 @@ class _PaymentViewState extends State<PaymentView> {
                   },
                 ),
               ),
-              SizedBox(height: 10.h,),
+              SizedBox(
+                height: 10.h,
+              ),
               BlocBuilder<PaymentCubit, PaymentState>(
                 builder: (context, state) {
                   return ElevatedButton(
@@ -325,7 +329,8 @@ class _PaymentViewState extends State<PaymentView> {
                     },
                     child: Text(
                       LocaleKeys.sendReviewApproval.localize,
-                      style: Styles.mediumText(color: AppColors.AUTH_CONTAINER_COLOR),
+                      style: Styles.mediumText(
+                          color: AppColors.AUTH_CONTAINER_COLOR),
                     ),
                   );
                 },

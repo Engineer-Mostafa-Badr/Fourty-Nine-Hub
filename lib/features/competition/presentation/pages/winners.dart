@@ -20,10 +20,10 @@ class Winners extends StatelessWidget {
         label: LocaleKeys.winners.localize,
       ),
       body: BlocProvider<CompetitionCubit>(
-        create: (context) =>serviceLocator()..fetchWinnerCompetition(),
+        create: (context) => serviceLocator()..fetchWinnerCompetition(),
         child: BlocBuilder<CompetitionCubit, CompetitionState>(
           builder: (BuildContext context, state) {
-            if (state.status ==CompetitionStates.success) {
+            if (state.status == CompetitionStates.success) {
               return Padding(
                 padding: const EdgeInsets.all(10),
                 child: GridView.builder(

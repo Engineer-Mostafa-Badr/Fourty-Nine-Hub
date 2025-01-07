@@ -33,8 +33,7 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
   Future<Either<Failure, List<StarEntity>>> fetchAllStar(
       StarPaginationParams params) async {
     final response = await _apiConsumer.get(EndPoints.allStar(params),
-    queryParameters: {"subCategory":"6723913b74f292b91ad2de54"}
-    );
+        queryParameters: {"subCategory": "6723913b74f292b91ad2de54"});
 
     return response.fold(
       (failure) => Left(failure),
@@ -62,10 +61,9 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
 
   @override
   Future<Either<Failure, bool>> uploadMyStar(StarParams params) async {
-    final response =
-        await _apiConsumer.post(EndPoints.uploadStar, data: params.toJson(),
-        queryParameters: {"subCategory":"6723913b74f292b91ad2de54"}
-        );
+    final response = await _apiConsumer.post(EndPoints.uploadStar,
+        data: params.toJson(),
+        queryParameters: {"subCategory": "6723913b74f292b91ad2de54"});
 
     return response.fold(
       (failure) => Left(failure),
@@ -92,8 +90,9 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
   @override
   Future<Either<Failure, List<StarWinnerEntity>>> fetchWinnerStar(
       StarPaginationParams params) async {
-    final response = await _apiConsumer.get(EndPoints.winnerStar(params),
-        queryParameters: {"subCategory":"6723913b74f292b91ad2de54"},
+    final response = await _apiConsumer.get(
+      EndPoints.winnerStar(params),
+      queryParameters: {"subCategory": "6723913b74f292b91ad2de54"},
     );
 
     return response.fold(
@@ -113,8 +112,8 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
     );
 
     return response.fold(
-          (failure) => Left(failure),
-          (response) {
+      (failure) => Left(failure),
+      (response) {
         return Right((BannerTalentModel.fromJson(response['data'])));
       },
     );

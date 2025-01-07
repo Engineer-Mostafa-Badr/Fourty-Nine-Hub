@@ -23,7 +23,7 @@ class CompetitionModel extends CompetitionEntity {
       nameEn: json['competition_id']['nameEn'] ?? '',
       descriptionEn: json['competition_id']['descriptionEn'] ?? '',
       descriptionAr: json['competition_id']['descriptionAr'] ?? '',
-      countOfRequest: json['countOfRequest'] ??0,
+      countOfRequest: json['countOfRequest'] ?? 0,
       amount: json['amount'] ?? 0,
     );
   }

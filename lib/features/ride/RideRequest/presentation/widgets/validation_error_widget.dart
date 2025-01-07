@@ -9,15 +9,16 @@ class ValidationErrorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-                      children: [
-                        Sizer(
-                          height: 10,
-                        ),
-                        Text(
-                          message,
-                          style: Styles.mediumText(color: AppColors.SECONDARY_COLOR_DARK, fontSize: 27),
-                        )
-                      ],
-                    );
+      children: [
+        const Sizer(
+          height: 10,
+        ),
+        Text(
+          message,
+          style: Styles.mediumText(
+              color: AppColors.SECONDARY_COLOR_DARK, fontSize: 27),
+        )
+      ],
+    );
   }
 }

@@ -94,7 +94,7 @@ class GiftWalletView extends StatelessWidget {
                                     text: context.locale == Locales.english
                                         ? state.currency?.currencyEn ?? ''
                                         : state.currency?.currencyAr ?? '',
-                                   // color: AppColors.SECONDARY_COLOR,
+                                    // color: AppColors.SECONDARY_COLOR,
                                   );
                                 },
                               ),

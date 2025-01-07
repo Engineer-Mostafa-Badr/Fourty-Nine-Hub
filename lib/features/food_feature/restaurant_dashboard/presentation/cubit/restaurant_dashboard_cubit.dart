@@ -148,8 +148,9 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
   }
 
   Future<void> deleteRestaurantById(BuildContext context,
-      {required String id,required String subCategoryId}) async {
-    final response = await _deleteRestaurantUseCase(DeleteResturantParams(restaurantId: id, subCategoryId: subCategoryId));
+      {required String id, required String subCategoryId}) async {
+    final response = await _deleteRestaurantUseCase(
+        DeleteResturantParams(restaurantId: id, subCategoryId: subCategoryId));
     response.fold(
         (failure) =>
             emit(state.copyWith(status: RestaurantDashboardStates.error)),

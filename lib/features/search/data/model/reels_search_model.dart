@@ -31,8 +31,8 @@ class ReelsSearchModel extends ReelsSearchEntity {
       UserId: json['user']?['_id'] ?? '',
       firstName: json['user']?['firstName'] ?? '',
       lastName: json['user']?['lastName'] ?? '',
-      image:
-          json['user']?['USER_PROFILE']?['profilePictureKey']?['mediaKey'] ?? '',
+      image: json['user']?['USER_PROFILE']?['profilePictureKey']?['mediaKey'] ??
+          '',
       videoMedia: json['videoMedia'] != null
           ? VideoMediaModel.fromJson(json['videoMedia'])
           : VideoMediaEntity(id: '', mediaKey: ''),

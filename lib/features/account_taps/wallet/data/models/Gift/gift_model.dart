@@ -8,7 +8,7 @@ class GiftModelModel extends GiftEntity {
     required super.giftWallet,
     required super.competitionsWallet,
     required super.wheelWinner,
-     required super.wheel,
+    required super.wheel,
   });
 
   factory GiftModelModel.fromJson(Map<String, dynamic> json) {

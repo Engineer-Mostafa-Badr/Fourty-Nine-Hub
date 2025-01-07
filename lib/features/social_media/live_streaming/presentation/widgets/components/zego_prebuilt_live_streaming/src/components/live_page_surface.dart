@@ -261,13 +261,16 @@ class _ZegoLiveStreamingLivePageSurfaceState
                         Row(
                           children: [
                             GestureDetector(
-                              onTap: (){
+                              onTap: () {
                                 showUserGiftBottomSheet(context,
-                                    receiverId:
-                                    context.read<UserCubit>().state.data!.id,
+                                    receiverId: context
+                                        .read<UserCubit>()
+                                        .state
+                                        .data!
+                                        .id,
                                     forSelect: true, selectGift: (gift) {
-                                      // context.read<StreamCubit>().selectGift(gift);
-                                    });
+                                  // context.read<StreamCubit>().selectGift(gift);
+                                });
                               },
                               child: SvgPicture.asset(
                                 'context.read<StreamCubit>().state.goals.first',
@@ -278,13 +281,18 @@ class _ZegoLiveStreamingLivePageSurfaceState
                               width: 50.w,
                             ),
                             GestureDetector(
-                              onTap: (){
+                              onTap: () {
                                 showUserGiftBottomSheet(context,
-                                    receiverId:
-                                    context.read<UserCubit>().state.data!.id,
+                                    receiverId: context
+                                        .read<UserCubit>()
+                                        .state
+                                        .data!
+                                        .id,
                                     forSelect: true, selectGift: (gift) {
-                                      context.read<StreamCubit>().onSendGift(gift.sId??'');
-                                    });
+                                  context
+                                      .read<StreamCubit>()
+                                      .onSendGift(gift.sId ?? '');
+                                });
                               },
                               child: Image.asset(
                                 'assets/49-New-icons/goal.png',
@@ -321,8 +329,8 @@ class _ZegoLiveStreamingLivePageSurfaceState
 
   Future<void> showUserGiftBottomSheet(BuildContext context,
       {required String? receiverId,
-        bool forSelect = false,
-        void Function(GiftData)? selectGift}) async {
+      bool forSelect = false,
+      void Function(GiftData)? selectGift}) async {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -340,8 +348,12 @@ class _ZegoLiveStreamingLivePageSurfaceState
           expand: false,
           builder: (BuildContext context, ScrollController scrollController) {
             List<GiftData> goals = [];
-            for(var item in context.read<GiftsCubit>().state.gifts){
-              if(context.read<StreamCubit>().rooms[context.read<StreamCubit>().state.pageIndex??0].gift.any((element) => element.giftId==item.sId)){
+            for (var item in context.read<GiftsCubit>().state.gifts) {
+              if (context
+                  .read<StreamCubit>()
+                  .rooms[context.read<StreamCubit>().state.pageIndex ?? 0]
+                  .gift
+                  .any((element) => element.giftId == item.sId)) {
                 goals.add(item);
               }
             }
@@ -365,12 +377,12 @@ class _ZegoLiveStreamingLivePageSurfaceState
                           ? Colors.black.withOpacity(0.4)
                           : Colors.grey.withOpacity(0.9),
                       borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(20)),
+                          const BorderRadius.vertical(top: Radius.circular(20)),
                     ),
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                       LocaleKeys.gift_body_send_a_gift.tr(),
+                        LocaleKeys.gift_body_send_a_gift.tr(),
                         textScaler: const TextScaler.linear(1.0),
                         style: TextStyle(
                             color: context.isDarkMode
@@ -398,19 +410,19 @@ class _ZegoLiveStreamingLivePageSurfaceState
                             padding: const EdgeInsets.all(4.0),
                             child: OutlinedButton(
                               style: ButtonStyle(
-                                side: const MaterialStatePropertyAll(BorderSide(
+                                side: const WidgetStatePropertyAll(BorderSide(
                                     width: 1, color: AppColors.ACCENT_COLOR)),
                                 iconColor:
-                                const MaterialStatePropertyAll(Colors.white),
+                                    const WidgetStatePropertyAll(Colors.white),
                                 backgroundColor: context.isDarkMode
-                                    ? const MaterialStatePropertyAll(Colors.black)
-                                    : MaterialStatePropertyAll(
-                                    Colors.grey.withOpacity(0.9)),
+                                    ? const WidgetStatePropertyAll(Colors.black)
+                                    : WidgetStatePropertyAll(
+                                        Colors.grey.withOpacity(0.9)),
                               ),
                               onPressed: () {
                                 serviceLocator<SubscriptionController>()
                                     .showActiveSubscriptionAmounts(
-                                    walletType: WalletTypes.balance);
+                                        walletType: WalletTypes.balance);
                               },
                               child: Text(
                                 "${LocaleKeys.gift_body_recharge.tr()} 💳",

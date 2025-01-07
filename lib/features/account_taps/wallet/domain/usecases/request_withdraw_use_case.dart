@@ -3,7 +3,6 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/gift_repository.dart';
 
-
 class RequestWithdrawUseCase extends UseCase<bool, String> {
   final GiftRepository _repository;
 

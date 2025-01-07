@@ -33,15 +33,16 @@ class SpecialAdsBody extends StatelessWidget {
       create: (context) => serviceLocator()..loadData(),
       child: BlocBuilder<CompetitionCubit, CompetitionState>(
         builder: (BuildContext context, state) {
-          if (state.status == CompetitionStates.success && state.currency !=null) {
+          if (state.status == CompetitionStates.success &&
+              state.currency != null) {
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
               child: ListView.separated(
                 itemBuilder: (context, index) => BuildItemListView(
-                  model: state.competition![index],
-                  icon: icons[index % icons.length],
-                  currency: state.currency!// Pass the corresponding icon
-                ),
+                    model: state.competition![index],
+                    icon: icons[index % icons.length],
+                    currency: state.currency! // Pass the corresponding icon
+                    ),
                 separatorBuilder: (context, index) => const Padding(
                   padding: EdgeInsets.only(top: 20, bottom: 10),
                   child: Divider(endIndent: 15, color: Colors.grey),

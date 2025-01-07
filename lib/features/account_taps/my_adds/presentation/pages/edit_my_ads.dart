@@ -596,7 +596,10 @@ class _EditMyAdsState extends State<EditMyAds> {
                                                 (CityEntity city) {
                                           return DropdownMenuItem<CityEntity>(
                                             value: city,
-                                            child: Text(context.isArabic?city.nameAr:city.nameEn), // Change to city.nameAr for Arabic
+                                            child: Text(context.isArabic
+                                                ? city.nameAr
+                                                : city
+                                                    .nameEn), // Change to city.nameAr for Arabic
                                           );
                                         }).toList(),
                                       ),

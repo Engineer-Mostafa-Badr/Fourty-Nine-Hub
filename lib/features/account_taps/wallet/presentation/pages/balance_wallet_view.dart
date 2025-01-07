@@ -52,6 +52,7 @@ class _BalanceWalletViewState extends State<BalanceWalletView> {
     _scrollController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +62,8 @@ class _BalanceWalletViewState extends State<BalanceWalletView> {
         body: BlocConsumer<BalanceCubit, BalanceState>(
           listener: (BuildContext context, BalanceState state) {
             if (state.status == BalanceStates.initial) {
-              showSuccessMessage(context, LocaleKeys.requestWithdrawal.localize);
+              showSuccessMessage(
+                  context, LocaleKeys.requestWithdrawal.localize);
             }
             if (state.status == BalanceStates.errorRequest) {
               showErrorMessage(
@@ -73,8 +75,7 @@ class _BalanceWalletViewState extends State<BalanceWalletView> {
               );
             }
             if (state.status == BalanceStates.successTen) {
-              showSuccessMessage(
-                  context, LocaleKeys.transferTenYears.localize);
+              showSuccessMessage(context, LocaleKeys.transferTenYears.localize);
             }
             if (state.status == BalanceStates.successFive) {
               showSuccessMessage(
@@ -105,7 +106,8 @@ class _BalanceWalletViewState extends State<BalanceWalletView> {
                           const Sizer(),
                           Expanded(
                             child: Label(
-                              text: '${LocaleKeys.minimum.localize}1002 ${LocaleKeys.transaction.localize}',
+                              text:
+                                  '${LocaleKeys.minimum.localize}1002 ${LocaleKeys.transaction.localize}',
                               style: Styles.mediumText(color: Colors.grey),
                             ),
                           ),
@@ -113,37 +115,41 @@ class _BalanceWalletViewState extends State<BalanceWalletView> {
                       ),
                     ),
 
-                  //  state.balance?.openBalance == true && state.balance!.balance >=1002
-                  if(state.balance!=null)
-                     state.balance!.balance >=1002
-                        ? AppButton(
-                            backColor: AppColors.SECONDARY_COLOR,
-                            color: AppColors.AUTH_CONTAINER_COLOR,
-                            label: LocaleKeys.requestWithdraw.localize,
-                            onPressed: () {
-                              context.read<BalanceCubit>().requestWithdrawBalance();
-                            },
-                            margin: 10,
-                          )
-                        : AppButton(
-                            backColor: Colors.red.withOpacity(.5),
-                            label: LocaleKeys.requestWithdraw.localize,
-                            onPressed: () {},
-                            margin: 10,
-                          ),
+                    //  state.balance?.openBalance == true && state.balance!.balance >=1002
+                    if (state.balance != null)
+                      state.balance!.balance >= 1002
+                          ? AppButton(
+                              backColor: AppColors.SECONDARY_COLOR,
+                              color: AppColors.AUTH_CONTAINER_COLOR,
+                              label: LocaleKeys.requestWithdraw.localize,
+                              onPressed: () {
+                                context
+                                    .read<BalanceCubit>()
+                                    .requestWithdrawBalance();
+                              },
+                              margin: 10,
+                            )
+                          : AppButton(
+                              backColor: Colors.red.withOpacity(.5),
+                              label: LocaleKeys.requestWithdraw.localize,
+                              onPressed: () {},
+                              margin: 10,
+                            ),
                     // if (state.balance?.openBalance == true && state.withdraw?.data == false )
                     //   Label(text: LocaleKeys.checkRequest.localize,color:AppColors.SECONDARY_COLOR,),
 
                     _buildWalletActionItem(
-                        label: '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',
+                        label:
+                            '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',
                         subTitle:
                             '${state.balance?.fiveYears ?? ''}  ${state.balance?.fiveYearsLeft ?? ''} ${LocaleKeys.yearsLast.localize}',
                         ontap: state.balance?.fiveYearsComplete == true
                             ? () {}
                             : state.balance?.fiveYearsTransfer == true
-
                                 ? () {
-                                    context.read<BalanceCubit>().transferFiveBalance();
+                                    context
+                                        .read<BalanceCubit>()
+                                        .transferFiveBalance();
                                   }
                                 : () {},
                         color: state.balance?.fiveYearsComplete == true
@@ -158,14 +164,17 @@ class _BalanceWalletViewState extends State<BalanceWalletView> {
                             ? Theme.of(context).scaffoldBackgroundColor
                             : AppColors.AUTH_CONTAINER_COLOR),
                     _buildWalletActionItem(
-                        label: '${LocaleKeys.gift.localize} / 10 ${LocaleKeys.years.localize}',
+                        label:
+                            '${LocaleKeys.gift.localize} / 10 ${LocaleKeys.years.localize}',
                         subTitle:
                             '${state.balance?.tenYears ?? ''}  ${state.balance?.tenYearsLeft ?? ''} ${LocaleKeys.yearsLast.localize}',
                         ontap: state.balance?.tenYearsComplete == true
                             ? () {}
                             : state.balance?.tenYearsTransfer == true
                                 ? () {
-                                    context.read<BalanceCubit>().transferTenBalance();
+                                    context
+                                        .read<BalanceCubit>()
+                                        .transferTenBalance();
                                   }
                                 : () {},
                         color: state.balance?.tenYearsComplete == true
@@ -187,28 +196,30 @@ class _BalanceWalletViewState extends State<BalanceWalletView> {
                     state.status == BalanceStates.loading
                         ? const Center(child: CircularProgressIndicator())
                         : SizedBox(
-                      height: 400,
-                      child: ListView.separated(
-                        controller: _scrollController,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          if (index == _cubit.history.length) {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          }
-                          final item = state.history![index];
-                          return WalletHistoryCard(
-                            title: '${item.transactionAmount}',
-                            subTitle: formatDateTime(item.createdAt, context),
-                            icon: FontAwesomeIcons.check,
-                          );
-                        },
-                        separatorBuilder: (context, index) => const Divider(
-                          color: AppColors.GREY_NORMAL_COLOR,
-                        ),
-                        itemCount: state.history?.length ?? 0,
-                      ),
-                    )
+                            height: 400,
+                            child: ListView.separated(
+                              controller: _scrollController,
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                if (index == _cubit.history.length) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                }
+                                final item = state.history![index];
+                                return WalletHistoryCard(
+                                  title: '${item.transactionAmount}',
+                                  subTitle:
+                                      formatDateTime(item.createdAt, context),
+                                  icon: FontAwesomeIcons.check,
+                                );
+                              },
+                              separatorBuilder: (context, index) =>
+                                  const Divider(
+                                color: AppColors.GREY_NORMAL_COLOR,
+                              ),
+                              itemCount: state.history?.length ?? 0,
+                            ),
+                          )
                   ],
                 ),
               ),
@@ -237,7 +248,9 @@ class _BalanceWalletViewState extends State<BalanceWalletView> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Label(text: transfer, style: Styles.mediumText(color: textColor ?? Colors.white)),
+        child: Label(
+            text: transfer,
+            style: Styles.mediumText(color: textColor ?? Colors.white)),
       ),
     );
   }

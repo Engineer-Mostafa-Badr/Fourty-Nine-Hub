@@ -298,7 +298,7 @@ class RegisterRiderCubit extends Cubit<RiderState> {
     await uploadDriverLicense();
     await uploadDriverId();
     await uploadVerifyImage();
-    
+
     await uploadCarLicnse();
     await uploadCarImage();
     await uploadDrugAnalysis();

@@ -83,7 +83,8 @@ class _SocialPageState extends State<SocialPage> {
                         color: Theme.of(context).primaryColor,
                       ),
                     ),
-                    trailing: Image.asset(_images[index], height: 50.h, width: 50.w),
+                    trailing:
+                        Image.asset(_images[index], height: 50.h, width: 50.w),
                     selected: _selectedItem == index,
                     selectedTileColor: Colors.transparent,
                   );
@@ -115,12 +116,12 @@ class _SocialPageState extends State<SocialPage> {
                 bool tweet = _selectedItem == 2;
 
                 context.read<CustomPageCubit>().updateSocialPage(
-                  SocialPageParams(
-                    face: face,
-                    insta: insta,
-                    tweet: tweet,
-                  ),
-                );
+                      SocialPageParams(
+                        face: face,
+                        insta: insta,
+                        tweet: tweet,
+                      ),
+                    );
 
                 print('Selected Item: ${_items[_selectedItem!]}');
               },

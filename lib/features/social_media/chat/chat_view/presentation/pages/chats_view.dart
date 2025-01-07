@@ -303,7 +303,6 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
 
-
 import '../../../../../../service_locator/service_locator.dart';
 import '../../../../stories/presentation/cubit/stories_cubit.dart';
 import '../widgets/calling_card.dart';
@@ -561,9 +560,9 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                               if (value == 3) {
                                                 await context
                                                     .read<ChatsCubit>()
-                                                    .lockChats(isLockedTap: false);
+                                                    .lockChats(
+                                                        isLockedTap: false);
                                               }
-                                              
                                             },
                                             itemBuilder: (context) {
                                               return [

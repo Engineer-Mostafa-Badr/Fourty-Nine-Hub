@@ -117,15 +117,18 @@ class ReelsCubit extends Cubit<ReelsState> {
   Future<void> uploadVideoReel({
     required UploadVideoReelParams params,
   }) async {
+    log("lskjdfskjdfksjdfksjdf ن");
     emit(state.copyWith(status: ReelsStates.loading));
 
     final response = await _uploadVideoReelUseCase(params);
 
     response.fold(
       (failure) {
+        log("lskjdfskjdfksjdfksjdf error");
         emit(state.copyWith(failure: failure, status: ReelsStates.error));
       },
       (data) {
+        log("lskjdfskjdfksjdfksjdf");
         emit(state.copyWith(
           status: ReelsStates.uploadSuccess,
         ));
@@ -152,41 +155,54 @@ class ReelsCubit extends Cubit<ReelsState> {
         final isImage = ['jpg', 'jpeg', 'png'].contains(fileType);
 
         if (isImage) {
-          await uploadFile.uploadImage(
-            file: pickedFile, // Pass XFile
-            subCategoryId: '66a3583454e6e337915514db',
-            onUploaded: (UploadFileEntity data) async {
-              print("Uploaded Image Media ID: ${data.mediaId}");
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MediaPreviewScreen(
-                    mediaId: data.mediaId,
-                    mediaPath: pickedFile.path,
-                    isImage: true,
-                  ),
-                ),
-              );
-            },
+          MaterialPageRoute(
+            builder: (context) => MediaPreviewScreen(
+              mediaPath: pickedFile.path,
+              isImage: true,
+            ),
           );
+          // await uploadFile.uploadImage(
+          //   file: pickedFile, // Pass XFile
+          //   subCategoryId: '66a3583454e6e337915514db',
+          //   onUploaded: (UploadFileEntity data) async {
+          //     print("Uploaded Image Media ID: ${data.mediaId}");
+
+          //     await Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => MediaPreviewScreen(
+          //           mediaId: data.mediaId,
+          //           mediaPath: pickedFile.path,
+          //           isImage: true,
+          //         ),
+          //       ),
+          //     );
+          //   },
+          // );
         } else {
-          await uploadFile.uploadVideo(
-            file: pickedFile, // Pass XFile
-            subCategoryId: '66a3583454e6e337915514db',
-            onUploaded: (UploadFileEntity data) async {
-              print("Uploaded Video Media ID: ${data.mediaId}");
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MediaPreviewScreen(
-                    mediaId: data.mediaId,
-                    mediaPath: pickedFile.path,
-                    isImage: false,
-                  ),
-                ),
-              );
-            },
+          MaterialPageRoute(
+            builder: (context) => MediaPreviewScreen(
+              mediaPath: pickedFile.path,
+              isImage: false,
+            ),
           );
+          // await uploadFile.uploadVideo(
+          //   file: pickedFile, // Pass XFile
+          //   subCategoryId: '66a3583454e6e337915514db',
+          //   onUploaded: (UploadFileEntity data) async {
+          //     print("Uploaded Video Media ID: ${data.mediaId}");
+          //     await Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => MediaPreviewScreen(
+          //           mediaId: data.mediaId,
+          //           mediaPath: pickedFile.path,
+          //           isImage: false,
+          //         ),
+          //       ),
+          //     );
+          //   },
+          // );
         }
       } else {
         print("No media selected.");
@@ -195,6 +211,10 @@ class ReelsCubit extends Cubit<ReelsState> {
       print("Error picking media: $e");
     }
   }
+
+  // uploadReel(){
+
+  // }
 
   Future<void> createAdvertisement(
       List<String> mediaIds, String type, double totalPrice) async {
@@ -555,7 +575,7 @@ class ReelsCubit extends Cubit<ReelsState> {
       log("${newReels.first.user.firstName}----------------------------------------------------------------------------------------------");
 
       emit(state.copyWith(
-        reelsForAudio: [...state.reelsForAudio ?? [], ...newReels],
+        reelsForAudio: newReels,
         isLoading: false,
       ));
     });

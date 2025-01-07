@@ -114,7 +114,7 @@ class IsRestaurantModel {
     return isRestaurant.hashCode ^
         approved.hashCode ^
         restaurantId.hashCode ^
-    subCategoryId.hashCode ^
+        subCategoryId.hashCode ^
         isActive.hashCode; // Include isActive in hashCode
   }
 }

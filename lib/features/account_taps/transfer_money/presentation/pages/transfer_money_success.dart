@@ -56,7 +56,7 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
             child: Screenshot(
               controller: screenshotController,
               child: Container(
-               // padding: const EdgeInsets.all(16.0),
+                // padding: const EdgeInsets.all(16.0),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -177,7 +177,9 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
                           children: [
                             Text(
                               '${LocaleKeys.date.localize}: ',
-                              style: Styles.headerText(fontWeight: FontWeight.w400,color: AppColors.GREY_NORMAL_COLOR),
+                              style: Styles.headerText(
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.GREY_NORMAL_COLOR),
                             ),
                             Text(
                               widget.model.date,

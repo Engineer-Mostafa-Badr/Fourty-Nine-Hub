@@ -506,8 +506,8 @@ class _AdvancedSnapchatCameraScreenState
                   child: ImageFromInternet(
                     image: serviceLocator<UserCubit>()
                             .state
-                            .data!
-                            .profilePicture ??
+                            .data
+                            ?.profilePicture ??
                         UIConst.profilePlaceHolder,
                     height: 90.h,
                     width: 90.w,

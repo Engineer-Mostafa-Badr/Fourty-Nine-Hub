@@ -61,10 +61,10 @@ class _TinderScreenState extends State<TinderScreen> {
     final tinderCubit = context.read<TinderViewCubit>();
     final user = context.read<UserCubit>();
     tinderCubit
-      ..fetchUserData(user.state.data?.gender ??'female')
+      ..fetchUserData(user.state.data?.gender ?? 'female')
       // ..fetchSubCategoryData()
       ..fetchFavorites();
-      // ..fetchMainCategoryById(context,'62c8b5b09332225799fe335e');
+    // ..fetchMainCategoryById(context,'62c8b5b09332225799fe335e');
   }
 
   @override
@@ -75,7 +75,7 @@ class _TinderScreenState extends State<TinderScreen> {
       ),
       body: BlocBuilder<TinderViewCubit, TinderViewState>(
         builder: (context, state) {
-          if(state.status ==TinderStates.success) {
+          if (state.status == TinderStates.success) {
             return _buildLoggedInContent(context, state);
           }
           return const Center(child: CircularProgressIndicator());

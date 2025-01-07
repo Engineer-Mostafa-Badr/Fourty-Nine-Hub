@@ -9,6 +9,7 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_fo
 import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_form_field.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/driver_ride_model/driver_ride_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/pick_driver_image_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
@@ -19,8 +20,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class UserInfoCardRegisterRideWidget extends StatefulWidget {
-  const UserInfoCardRegisterRideWidget({super.key});
-
+  const UserInfoCardRegisterRideWidget({super.key, this.model});
+  final DriverRideModel? model;
   @override
   State<UserInfoCardRegisterRideWidget> createState() =>
       _UserInfoCardRegisterRideWidgetState();
@@ -35,6 +36,18 @@ class _UserInfoCardRegisterRideWidgetState
   TextEditingController lastNameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   DateTime? birthDate;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.model != null) {
+      firstNameController.text = widget.model?.driverFirstName ?? "";
+      lastNameController.text = widget.model?.driverLastName ?? "";
+      birthDate = birthDate;
+      phoneController.text = widget.model?.phone??"";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var rideRegisterCubit = context.read<RegisterRiderCubit>();
@@ -61,6 +74,7 @@ class _UserInfoCardRegisterRideWidgetState
                     ? "يرجى إضافة صورة"
                     : "Please add an image";
               }
+              return null;
             },
             builder: (field) {
               return Column(
@@ -103,10 +117,11 @@ class _UserInfoCardRegisterRideWidgetState
                                 width: 90,
                                 height: 90,
                                 padding: const EdgeInsets.all(15),
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(image: NetworkImage(widget.model?.driverPictureKey??"")),
                                     color: AppColors.PRIMARY_COLOR,
                                     shape: BoxShape.circle),
-                                child: Image.asset(
+                                child: widget.model != null? null: Image.asset(
                                   Assets.avatarRemovebackground,
                                   color: Colors.white,
                                 ));
@@ -186,6 +201,7 @@ class _UserInfoCardRegisterRideWidgetState
               if (rideRegisterCubit.model.birthDate == null) {
                 return "";
               }
+              return null;
             },
             builder: (field) {
               return Column(

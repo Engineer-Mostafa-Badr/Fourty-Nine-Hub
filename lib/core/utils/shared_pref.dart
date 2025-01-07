@@ -32,6 +32,7 @@ class CacheManager {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_accessTokenKey);
   }
+
   // Retrieve access token
   static Future<bool?> getActivation() async {
     final prefs = await SharedPreferences.getInstance();

@@ -9,7 +9,7 @@ class BillValueTextFormField extends MainTextFormField {
   @override
   final String? Function(String?)? validator;
 
-  BillValueTextFormField( {
+  BillValueTextFormField({
     super.key,
     this.validator,
     super.currentFocusNode,
@@ -21,10 +21,10 @@ class BillValueTextFormField extends MainTextFormField {
     super.hintColor,
     super.fillColor,
   }) : super(
-    validator: validator??Validator().validateEmptyValue,
-    hintText: LocaleKeys.billValue.localize,
-    keyboardType: TextInputType.number,
-    textCapitalization: TextCapitalization.words,
-    borderColor: AppColors.GREY_DARK_COLOR,
-  );
+          validator: validator ?? Validator().validateEmptyValue,
+          hintText: LocaleKeys.billValue.localize,
+          keyboardType: TextInputType.number,
+          textCapitalization: TextCapitalization.words,
+          borderColor: AppColors.GREY_DARK_COLOR,
+        );
 }

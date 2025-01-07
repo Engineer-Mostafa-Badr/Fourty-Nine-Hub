@@ -2,7 +2,8 @@ import 'package:fourtyninehub/features/subscripe/domain/entities/subscription_am
 
 class SubscriptionAmountModel extends SubscriptionAmountEntity {
   SubscriptionAmountModel(
-      {required super.currencyAr,required super.currencyEn,
+      {required super.currencyAr,
+      required super.currencyEn,
       required super.amount,
       required super.id,
       required super.isActive});

@@ -151,7 +151,7 @@ class _ViewAllTripJoinCardBuilderState
                   }
                 },
                 subscribeMessageOnTap: () async {
-                  if (await context.read<UserCubit>().isLoggedIn) {
+                  if (context.read<UserCubit>().isLoggedIn) {
                     print("LOOGEDIN \n");
                     if (await _isPremuim(
                       tripJoinCardEntity,

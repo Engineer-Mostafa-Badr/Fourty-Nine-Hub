@@ -191,10 +191,11 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
                 });
                 if (newSubCategoryId != null) {
                   final selectedSubCategoryEntity = subCategories.firstWhere(
-                        (subCategory) => subCategory.id == newSubCategoryId,
+                    (subCategory) => subCategory.id == newSubCategoryId,
                   );
 
-                  serviceLocator<SubscriptionController>().showSubscriptionPlans(
+                  serviceLocator<SubscriptionController>()
+                      .showSubscriptionPlans(
                     wallets: [
                       WalletTypes.mainWallet,
                       WalletTypes.giftWallet,

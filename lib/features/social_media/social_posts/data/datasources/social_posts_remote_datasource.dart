@@ -155,24 +155,30 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   @override
   Future<Either<Failure, bool>> reactOnPost(
       {required PostReactParams params}) async {
-    final response = await _apiConsumer
-        .post(EndPoints.reactOnPost(params.postId), data: params.toJson(),);
+    final response = await _apiConsumer.post(
+      EndPoints.reactOnPost(params.postId),
+      data: params.toJson(),
+    );
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
   @override
   Future<Either<Failure, bool>> reactOnComment(
       {required PostReactParams params}) async {
-    final response = await _apiConsumer
-        .post(EndPoints.reactOnComment(params.postId), data: params.toJson(),);
+    final response = await _apiConsumer.post(
+      EndPoints.reactOnComment(params.postId),
+      data: params.toJson(),
+    );
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 
   @override
   Future<Either<Failure, CommentEntity>> commentOnPost(
       {required PostCommentParams params}) async {
-    final response = await _apiConsumer
-        .post(EndPoints.commentOnPost(params.postId), data: params.toJson(),);
+    final response = await _apiConsumer.post(
+      EndPoints.commentOnPost(params.postId),
+      data: params.toJson(),
+    );
     return response.fold(
         (l) => Left(l), (data) => Right(CommentModel.fromJson(data['data'])));
   }
@@ -180,7 +186,9 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   @override
   Future<Either<Failure, List<CommentEntity>>> getPostComments(
       {required PostCommentsParams params}) async {
-    final response = await _apiConsumer.get(EndPoints.getPostComments(params),);
+    final response = await _apiConsumer.get(
+      EndPoints.getPostComments(params),
+    );
     return response.fold(
         (l) => Left(l),
         (data) => Right((data['data']['comments'] as List)

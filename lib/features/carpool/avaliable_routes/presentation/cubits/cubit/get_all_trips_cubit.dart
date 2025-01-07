@@ -15,7 +15,7 @@ class GetAllTripsCubit extends Cubit<GetAllTripsState> {
 
   final ApiConsumer apiConsumer;
 
-  GetAllTripsCubit({required this.apiConsumer}) : super(GetAllTripsInitial()) {}
+  GetAllTripsCubit({required this.apiConsumer}) : super(GetAllTripsInitial());
 
   void _initializeSocketListeners() {
     // if (!SharedWebSocket.instance.socket!.connected) {

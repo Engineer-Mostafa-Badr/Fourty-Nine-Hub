@@ -11,12 +11,12 @@ class CompetitionCubit extends Cubit<CompetitionState> {
   final GetCurrencyUseCase _currencyUseCase;
 
   CompetitionCubit(
-      this._competitionUseCase,
-      this._winnerCompetitionUseCase, this._currencyUseCase,
-     )
-      : super(const CompetitionState());
+    this._competitionUseCase,
+    this._winnerCompetitionUseCase,
+    this._currencyUseCase,
+  ) : super(const CompetitionState());
 
-  Future<void> loadData() async{
+  Future<void> loadData() async {
     await fetchCompetition();
     await getCurrency();
   }
@@ -26,9 +26,11 @@ class CompetitionCubit extends Cubit<CompetitionState> {
     response.fold((l) {
       emit(state.copyWith(failure: l, status: CompetitionStates.error));
     }, (data) {
-      emit(state.copyWith(competition: data, status: CompetitionStates.success));
+      emit(
+          state.copyWith(competition: data, status: CompetitionStates.success));
     });
   }
+
   Future<void> fetchWinnerCompetition() async {
     final response = await _winnerCompetitionUseCase.call(const NoParams());
     response.fold((l) {
@@ -43,10 +45,7 @@ class CompetitionCubit extends Cubit<CompetitionState> {
     response.fold((l) {
       emit(state.copyWith(failure: l, status: CompetitionStates.error));
     }, (data) {
-      emit(state.copyWith(
-        currency: data,
-        status: CompetitionStates.success
-      ));
+      emit(state.copyWith(currency: data, status: CompetitionStates.success));
     });
   }
 }

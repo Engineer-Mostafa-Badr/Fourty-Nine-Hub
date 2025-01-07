@@ -7,12 +7,12 @@ import 'package:fourtyninehub/features/competition/data/models/winners_model.dar
 import 'package:fourtyninehub/features/competition/domain/entity/competition_entity.dart';
 import 'package:fourtyninehub/features/competition/domain/entity/winner_competition_entity.dart';
 
-abstract class CompetitionRemoteDataSource{
-  Future<Either<Failure,List<CompetitionEntity>>> fetchCompetition();
-  Future<Either<Failure,List<WinnerCompetitionEntity>>> fetchWinner();
+abstract class CompetitionRemoteDataSource {
+  Future<Either<Failure, List<CompetitionEntity>>> fetchCompetition();
+  Future<Either<Failure, List<WinnerCompetitionEntity>>> fetchWinner();
 }
 
-class CompetitionRemoteDataSourceImpl extends CompetitionRemoteDataSource{
+class CompetitionRemoteDataSourceImpl extends CompetitionRemoteDataSource {
   final ApiConsumer _apiConsumer;
 
   CompetitionRemoteDataSourceImpl(this._apiConsumer);
@@ -21,13 +21,13 @@ class CompetitionRemoteDataSourceImpl extends CompetitionRemoteDataSource{
     var response = await _apiConsumer.get(EndPoints.competition);
 
     return response.fold(
-          (failure) => Left(failure),
-          (response) {
-            final list = (response['data'] as List)
-                .map((e) => CompetitionModel.fromJson(e))
-                .toList();
-            return Right(list);
-          },
+      (failure) => Left(failure),
+      (response) {
+        final list = (response['data'] as List)
+            .map((e) => CompetitionModel.fromJson(e))
+            .toList();
+        return Right(list);
+      },
     );
   }
 
@@ -36,8 +36,8 @@ class CompetitionRemoteDataSourceImpl extends CompetitionRemoteDataSource{
     var response = await _apiConsumer.get(EndPoints.winnerCompetition);
 
     return response.fold(
-          (failure) => Left(failure),
-          (response) {
+      (failure) => Left(failure),
+      (response) {
         final list = (response['data'] as List)
             .map((e) => WinnerCompetitionModel.fromJson(e))
             .toList();

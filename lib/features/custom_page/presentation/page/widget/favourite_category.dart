@@ -79,8 +79,12 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
     return [
-      isArabic ? preferences.medicalService.nameAr : preferences.medicalService.nameEn,
-      isArabic ? preferences.homeService.nameAr : preferences.homeService.nameEn,
+      isArabic
+          ? preferences.medicalService.nameAr
+          : preferences.medicalService.nameEn,
+      isArabic
+          ? preferences.homeService.nameAr
+          : preferences.homeService.nameEn,
       isArabic ? preferences.craft.nameAr : preferences.craft.nameEn,
       isArabic ? preferences.realEstate.nameAr : preferences.realEstate.nameEn,
       isArabic ? preferences.equipment.nameAr : preferences.equipment.nameEn,
@@ -89,45 +93,80 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
       isArabic ? preferences.vehicles.nameAr : preferences.vehicles.nameEn,
       isArabic ? preferences.smoking.nameAr : preferences.smoking.nameEn,
       isArabic ? preferences.remnants.nameAr : preferences.remnants.nameEn,
-      isArabic ? preferences.rawMaterials.nameAr : preferences.rawMaterials.nameEn,
-      isArabic ? preferences.wholesaleTrade.nameAr : preferences.wholesaleTrade.nameEn,
-      isArabic ? preferences.homeEssentials.nameAr : preferences.homeEssentials.nameEn,
-      isArabic ? preferences.mobilesTablets.nameAr : preferences.mobilesTablets.nameEn,
-      isArabic ? preferences.electricalDevices.nameAr : preferences.electricalDevices.nameEn,
+      isArabic
+          ? preferences.rawMaterials.nameAr
+          : preferences.rawMaterials.nameEn,
+      isArabic
+          ? preferences.wholesaleTrade.nameAr
+          : preferences.wholesaleTrade.nameEn,
+      isArabic
+          ? preferences.homeEssentials.nameAr
+          : preferences.homeEssentials.nameEn,
+      isArabic
+          ? preferences.mobilesTablets.nameAr
+          : preferences.mobilesTablets.nameEn,
+      isArabic
+          ? preferences.electricalDevices.nameAr
+          : preferences.electricalDevices.nameEn,
       isArabic ? preferences.doctorJob.nameAr : preferences.doctorJob.nameEn,
       isArabic ? preferences.technology.nameAr : preferences.technology.nameEn,
       isArabic ? preferences.packaging.nameAr : preferences.packaging.nameEn,
       isArabic ? preferences.projects.nameAr : preferences.projects.nameEn,
-      isArabic ? preferences.computersCameras.nameAr : preferences.computersCameras.nameEn,
-      isArabic ? preferences.marketingSales.nameAr : preferences.marketingSales.nameEn,
+      isArabic
+          ? preferences.computersCameras.nameAr
+          : preferences.computersCameras.nameEn,
+      isArabic
+          ? preferences.marketingSales.nameAr
+          : preferences.marketingSales.nameEn,
       isArabic ? preferences.talent.nameAr : preferences.talent.nameEn,
       isArabic ? preferences.scenery.nameAr : preferences.scenery.nameEn,
-      isArabic ? preferences.accountantJob.nameAr : preferences.accountantJob.nameEn,
-      isArabic ? preferences.engineerJob.nameAr : preferences.engineerJob.nameEn,
+      isArabic
+          ? preferences.accountantJob.nameAr
+          : preferences.accountantJob.nameEn,
+      isArabic
+          ? preferences.engineerJob.nameAr
+          : preferences.engineerJob.nameEn,
       isArabic ? preferences.events.nameAr : preferences.events.nameEn,
-      isArabic ? preferences.musicalInstruments.nameAr : preferences.musicalInstruments.nameEn,
-      isArabic ? preferences.travelTourism.nameAr : preferences.travelTourism.nameEn,
+      isArabic
+          ? preferences.musicalInstruments.nameAr
+          : preferences.musicalInstruments.nameEn,
+      isArabic
+          ? preferences.travelTourism.nameAr
+          : preferences.travelTourism.nameEn,
       isArabic ? preferences.education.nameAr : preferences.education.nameEn,
       isArabic ? preferences.handmades.nameAr : preferences.handmades.nameEn,
       isArabic ? preferences.otherJob.nameAr : preferences.otherJob.nameEn,
       isArabic ? preferences.fitness.nameAr : preferences.fitness.nameEn,
       isArabic ? preferences.libraries.nameAr : preferences.libraries.nameEn,
-      isArabic ? preferences.healthyTools.nameAr : preferences.healthyTools.nameEn,
-      isArabic ? preferences.jewelryWatches.nameAr : preferences.jewelryWatches.nameEn,
-      isArabic ? preferences.accessories.nameAr : preferences.accessories.nameEn,
+      isArabic
+          ? preferences.healthyTools.nameAr
+          : preferences.healthyTools.nameEn,
+      isArabic
+          ? preferences.jewelryWatches.nameAr
+          : preferences.jewelryWatches.nameEn,
+      isArabic
+          ? preferences.accessories.nameAr
+          : preferences.accessories.nameEn,
       isArabic ? preferences.charitys.nameAr : preferences.charitys.nameEn,
-      isArabic ? preferences.collectiblesGifts.nameAr : preferences.collectiblesGifts.nameEn,
-      isArabic ? preferences.discountsOffers.nameAr : preferences.discountsOffers.nameEn,
-      isArabic ? preferences.fashionBeauty.nameAr : preferences.fashionBeauty.nameEn,
+      isArabic
+          ? preferences.collectiblesGifts.nameAr
+          : preferences.collectiblesGifts.nameEn,
+      isArabic
+          ? preferences.discountsOffers.nameAr
+          : preferences.discountsOffers.nameEn,
+      isArabic
+          ? preferences.fashionBeauty.nameAr
+          : preferences.fashionBeauty.nameEn,
       isArabic ? preferences.animals.nameAr : preferences.animals.nameEn,
       isArabic ? preferences.ports.nameAr : preferences.ports.nameEn,
       isArabic ? preferences.dating.nameAr : preferences.dating.nameEn,
       isArabic ? preferences.farming.nameAr : preferences.farming.nameEn,
-      isArabic ? preferences.governmentServices.nameAr : preferences.governmentServices.nameEn,
+      isArabic
+          ? preferences.governmentServices.nameAr
+          : preferences.governmentServices.nameEn,
       isArabic ? preferences.social.nameAr : preferences.social.nameEn,
     ];
   }
-
 
   @override
   Widget build(BuildContext context) {

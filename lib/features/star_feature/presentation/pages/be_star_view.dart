@@ -233,7 +233,7 @@ class _BeStarViewState extends State<BeStarView> {
                                             children: [
                                               VideoPlayer(videoController),
                                               Padding(
-                                                padding:  EdgeInsets.all(16.w),
+                                                padding: EdgeInsets.all(16.w),
                                                 child: Row(
                                                   children: [
                                                     Row(
@@ -387,16 +387,18 @@ class _BeStarViewState extends State<BeStarView> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,
                                             children: [
-                                              const Icon(Icons.remove_red_eye,
+                                              const Icon(
+                                                Icons.remove_red_eye,
                                                 color: AppColors
                                                     .AUTH_CONTAINER_COLOR,
                                               ),
                                               Sizer(width: 10.w),
                                               Text(
                                                 '${sortedStars[index].totalViews}',
-                                                style: Styles.mediumText(color: AppColors
-                                                    .AUTH_CONTAINER_COLOR,)
-                                                    .copyWith(
+                                                style: Styles.mediumText(
+                                                  color: AppColors
+                                                      .AUTH_CONTAINER_COLOR,
+                                                ).copyWith(
                                                   shadows: [
                                                     Shadow(
                                                       offset: const Offset(
@@ -416,8 +418,10 @@ class _BeStarViewState extends State<BeStarView> {
                                           const Spacer(),
                                           Text(
                                             '${LocaleKeys.Rating.localize} ${sortedStars[index].averageRating}',
-                                            style: Styles.mediumText(color: AppColors
-                                                .AUTH_CONTAINER_COLOR,).copyWith(
+                                            style: Styles.mediumText(
+                                              color: AppColors
+                                                  .AUTH_CONTAINER_COLOR,
+                                            ).copyWith(
                                               shadows: [
                                                 Shadow(
                                                   offset:

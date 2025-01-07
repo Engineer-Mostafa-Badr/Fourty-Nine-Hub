@@ -16,11 +16,12 @@ class WalletCardWidget extends StatelessWidget {
   final String balance;
   final double? target;
   final WalletTypes type;
-  const WalletCardWidget(
-      {super.key,
-      required this.balance,
-      this.target,
-      required this.type,});
+  const WalletCardWidget({
+    super.key,
+    required this.balance,
+    this.target,
+    required this.type,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -68,13 +69,14 @@ class WalletCardWidget extends StatelessWidget {
                       ),
                     ),
                     Sizer(width: 10.w),
-                    BlocBuilder<MainCategoriesCubit,MainCategoriesState>(
-                      builder: (BuildContext context,  state) {
+                    BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+                      builder: (BuildContext context, state) {
                         return Transform.translate(
                           offset: Offset(0, 8.h),
                           child: Label(
-                            text:  context.locale == Locales.english
-                                ? state.currency?.currencyEn ??'':state.currency?.currencyAr ??'',
+                            text: context.locale == Locales.english
+                                ? state.currency?.currencyEn ?? ''
+                                : state.currency?.currencyAr ?? '',
                             style: Styles.headerText(
                               color: Theme.of(context).scaffoldBackgroundColor,
                               fontSize: 40.sp,

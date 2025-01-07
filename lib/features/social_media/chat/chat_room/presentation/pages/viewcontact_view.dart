@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/view_contact_chat_lock_cart.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/view_contact_custom_divider.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/view_contact_incription_cart.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/view_contact_status_cart.dart';
