@@ -47,7 +47,7 @@ class DriverInfoRideTap extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       label: LocaleKeys.registrationForm.tr(),
                       onPressed: () {
-                        context.push(Routes.EDITDRIVERSCREEN);
+                        context.push(Routes.updateDriverRide);
                       },
                       backColor: Colors.white,
                       color: AppColors.PRIMARY_COLOR,

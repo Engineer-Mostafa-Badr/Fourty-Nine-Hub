@@ -15,9 +15,10 @@ class DeleteRestaurantUseCase extends UseCase<bool, DeleteResturantParams> {
   }
 }
 
-class DeleteResturantParams{
+class DeleteResturantParams {
   final String restaurantId;
   final String subCategoryId;
 
-  DeleteResturantParams({required this.restaurantId, required this.subCategoryId});
+  DeleteResturantParams(
+      {required this.restaurantId, required this.subCategoryId});
 }

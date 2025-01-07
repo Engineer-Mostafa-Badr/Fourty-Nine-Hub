@@ -104,7 +104,7 @@ class _ShippingRiderTabScreenState extends State<ShippingRiderTabScreen> {
                 SubCateogryShippingWidget(
                   formKey: formKey,
                 ),
-                BlocBuilder<SelectCateogryCubit, RiderState>( 
+                BlocBuilder<SelectCateogryCubit, RiderState>(
                   builder: (context, state) {
                     if (state is SuccessSelectCateogryState) {
                       if (state.type == 0) {

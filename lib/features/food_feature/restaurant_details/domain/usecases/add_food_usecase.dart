@@ -21,11 +21,15 @@ class AddFoodParams {
   final String foodName;
   final String subcategory;
 
-  AddFoodParams({required this.photo, required this.price, required this.foodName,required this.subcategory});
+  AddFoodParams(
+      {required this.photo,
+      required this.price,
+      required this.foodName,
+      required this.subcategory});
 
   Map<String, dynamic> toJson() => {
-    "picture": photo,
-    "price": price,
-    "foodName": foodName,
-  };
+        "picture": photo,
+        "price": price,
+        "foodName": foodName,
+      };
 }

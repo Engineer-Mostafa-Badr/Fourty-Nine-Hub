@@ -318,7 +318,8 @@ class _CarModelRegisterCardWidgetState
                       ],
                     );
                   },
-                );   } else {
+                );
+              } else {
                 return Container();
               }
             },
@@ -337,118 +338,125 @@ class _CarModelRegisterCardWidgetState
                       );
                     }
                     if (state is SuccessGetCarColorsRideState) {
-                        return FormField(
+                      return FormField(
                         validator: (value) {
                           return context
-                                .read<SelectCarModelBrandYearRideCubit>()
-                                .color ==
-                              null
-                            ? context.isArabic
-                              ? "يرجى اختيار لون السيارة"
-                              : "Please select car color"
-                            : null;
+                                      .read<SelectCarModelBrandYearRideCubit>()
+                                      .color ==
+                                  null
+                              ? context.isArabic
+                                  ? "يرجى اختيار لون السيارة"
+                                  : "Please select car color"
+                              : null;
                         },
                         builder: (field) {
                           return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            width: double.infinity,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              border: field.hasError
-                                ? Border.all(
-                                  color: AppColors.SECONDARY_COLOR_DARK)
-                                : null,
-                              color: context.isDarkMode
-                                ? Colors.black12
-                                : Colors.grey.shade400,
-                              borderRadius: BorderRadius.circular(10)),
-                            child: Row(
-                              children: [
-                              Expanded(
-                                child: DropdownButton<ColorModel>(
-                                  underline: Container(),
-                                  icon: Container(),
-                                  hint: context
-                                        .read<
-                                          SelectCarModelBrandYearRideCubit>()
-                                        .color ==
-                                      null
-                                    ? Text(context.isArabic
-                                      ? "لون السيارة"
-                                      : "Car Color")
-                                    : Row(
-                                      children: [
-                                      Container(
-                                        width: 25,
-                                        height: 25,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: AppColors
-                                              .PRIMARY_COLOR),
-                                          color: Color(int.tryParse(
-                                              '0xff${context.read<SelectCarModelBrandYearRideCubit>().color?.code?.split("#").last}') ??
-                                            0xFFFFFFFF),
-                                          shape: BoxShape.circle),
-                                      ),
-                                      const Sizer(),
-                                      Text(context
-                                          .read<
-                                            SelectCarModelBrandYearRideCubit>()
-                                          .color
-                                          ?.nameArabic ??
-                                        "")
-                                      ],
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                width: double.infinity,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    border: field.hasError
+                                        ? Border.all(
+                                            color:
+                                                AppColors.SECONDARY_COLOR_DARK)
+                                        : null,
+                                    color: context.isDarkMode
+                                        ? Colors.black12
+                                        : Colors.grey.shade400,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: DropdownButton<ColorModel>(
+                                          underline: Container(),
+                                          icon: Container(),
+                                          hint: context
+                                                      .read<
+                                                          SelectCarModelBrandYearRideCubit>()
+                                                      .color ==
+                                                  null
+                                              ? Text(context.isArabic
+                                                  ? "لون السيارة"
+                                                  : "Car Color")
+                                              : Row(
+                                                  children: [
+                                                    Container(
+                                                      width: 25,
+                                                      height: 25,
+                                                      decoration: BoxDecoration(
+                                                          border: Border.all(
+                                                              color: AppColors
+                                                                  .PRIMARY_COLOR),
+                                                          color: Color(int.tryParse(
+                                                                  '0xff${context.read<SelectCarModelBrandYearRideCubit>().color?.code?.split("#").last}') ??
+                                                              0xFFFFFFFF),
+                                                          shape:
+                                                              BoxShape.circle),
+                                                    ),
+                                                    const Sizer(),
+                                                    Text(context
+                                                            .read<
+                                                                SelectCarModelBrandYearRideCubit>()
+                                                            .color
+                                                            ?.nameArabic ??
+                                                        "")
+                                                  ],
+                                                ),
+                                          items: state.list
+                                              .map(
+                                                (e) => DropdownMenuItem<
+                                                    ColorModel>(
+                                                  value: e,
+                                                  child: Row(
+                                                    children: [
+                                                      Container(
+                                                        width: 25,
+                                                        height: 25,
+                                                        decoration: BoxDecoration(
+                                                            border: Border.all(
+                                                                color: AppColors
+                                                                    .PRIMARY_COLOR),
+                                                            color: Color(int.parse(
+                                                                '0xff${e.code?.split("#").last}')),
+                                                            shape: BoxShape
+                                                                .circle),
+                                                      ),
+                                                      const Sizer(),
+                                                      Text(e.nameArabic ?? "")
+                                                    ],
+                                                  ),
+                                                ),
+                                              )
+                                              .toList(),
+                                          onChanged: (value) {
+                                            rideRegisterCubit.model
+                                                .vehicleColor = value?.id ?? "";
+                                            context
+                                                .read<
+                                                    SelectCarModelBrandYearRideCubit>()
+                                                .selectColor(value: value);
+                                            setState(() {});
+                                          },
+                                          dropdownColor: context.isDarkMode
+                                              ? AppColors.DARK_BLUE_COLOR
+                                              : Colors.white),
                                     ),
-                                  items: state.list
-                                    .map(
-                                    (e) => DropdownMenuItem<ColorModel>(
-                                      value: e,
-                                      child: Row(
-                                      children: [
-                                        Container(
-                                        width: 25,
-                                        height: 25,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: AppColors
-                                              .PRIMARY_COLOR),
-                                          color: Color(int.parse(
-                                            '0xff${e.code?.split("#").last}')),
-                                          shape: BoxShape.circle),
-                                        ),
-                                        const Sizer(),
-                                        Text(e.nameArabic ?? "")
-                                      ],
-                                      ),
-                                    ),
-                                    )
-                                    .toList(),
-                                  onChanged: (value) {
-                                  rideRegisterCubit.model.vehicleColor =
-                                    value?.id ?? "";
-                                  context
-                                    .read<
-                                      SelectCarModelBrandYearRideCubit>()
-                                    .selectColor(value: value);
-                                  setState(() {});
-                                  },
-                                  dropdownColor: context.isDarkMode
-                                    ? AppColors.DARK_BLUE_COLOR
-                                    : Colors.white),
+                                    const Icon(
+                                        Icons.keyboard_arrow_down_outlined)
+                                  ],
+                                ),
                               ),
-                              const Icon(Icons.keyboard_arrow_down_outlined)
-                              ],
-                            ),
-                            ),
-                            if (field.hasError)
-                            ValidationErrorWidget(message: field.errorText ?? "")
-                          ],
+                              if (field.hasError)
+                                ValidationErrorWidget(
+                                    message: field.errorText ?? "")
+                            ],
                           );
                         },
-                        );
+                      );
                     } else {
                       return Container();
                     }

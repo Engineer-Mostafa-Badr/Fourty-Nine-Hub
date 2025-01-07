@@ -84,14 +84,18 @@ class CompetitionCard extends StatelessWidget {
                   Row(
                     children: [
                       Label(
-                        text: competitionsWalletEntity.amount.toStringAsFixed(0),
+                        text:
+                            competitionsWalletEntity.amount.toStringAsFixed(0),
                       ),
-                      SizedBox(width: 10.w,),
-                      BlocBuilder<MainCategoriesCubit,MainCategoriesState>(
-                        builder: (BuildContext context,  state) {
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+                        builder: (BuildContext context, state) {
                           return Label(
-                            text:  context.locale == Locales.english
-                                ? state.currency?.currencyEn ??'':state.currency?.currencyAr ??'',
+                            text: context.locale == Locales.english
+                                ? state.currency?.currencyEn ?? ''
+                                : state.currency?.currencyAr ?? '',
                           );
                         },
                       ),

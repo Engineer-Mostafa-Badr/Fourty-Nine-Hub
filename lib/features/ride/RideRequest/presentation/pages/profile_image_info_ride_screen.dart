@@ -12,7 +12,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 class ProfileImageInfoRideScreen extends StatefulWidget {
   const ProfileImageInfoRideScreen({super.key});
 
@@ -36,10 +35,15 @@ class _ProfileImageInfoRideScreenState
               margin: const EdgeInsets.symmetric(horizontal: 10),
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: context.isDarkMode?AppColors.UNSELECTED_DARK_GRAY_COLOR: Colors.white,
-          boxShadow: context.isDarkMode?[]: [BoxShadow(color: Colors.grey.shade400, blurRadius: 30)]
-          ),
+                  borderRadius: BorderRadius.circular(10),
+                  color: context.isDarkMode
+                      ? AppColors.UNSELECTED_DARK_GRAY_COLOR
+                      : Colors.white,
+                  boxShadow: context.isDarkMode
+                      ? []
+                      : [
+                          BoxShadow(color: Colors.grey.shade400, blurRadius: 30)
+                        ]),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -61,7 +65,9 @@ class _ProfileImageInfoRideScreenState
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        context.isArabic?"وجه مرئي بوضوح":"Clearly visible face",
+                        context.isArabic
+                            ? "وجه مرئي بوضوح"
+                            : "Clearly visible face",
                         style: Styles.headerText(fontWeight: FontWeight.w500),
                         textAlign: TextAlign.end,
                       ),
@@ -80,7 +86,7 @@ class _ProfileImageInfoRideScreenState
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        context.isArabic? "بدون نظارات":"Without glasses",
+                        context.isArabic ? "بدون نظارات" : "Without glasses",
                         style: Styles.headerText(fontWeight: FontWeight.w500),
                         textAlign: TextAlign.end,
                       ),
@@ -99,7 +105,9 @@ class _ProfileImageInfoRideScreenState
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        context.isArabic?"إضاءة جيدة وبدون فلاتر":"Good lighting and no filters",
+                        context.isArabic
+                            ? "إضاءة جيدة وبدون فلاتر"
+                            : "Good lighting and no filters",
                         style: Styles.headerText(fontWeight: FontWeight.w500),
                         textAlign: TextAlign.end,
                       ),
@@ -141,7 +149,7 @@ class _ProfileImageInfoRideScreenState
                     borderRadius: BorderRadius.circular(30)),
                 child: Center(
                   child: Text(
-                    context.isArabic?"إضافة صورة":"Add Image",
+                    context.isArabic ? "إضافة صورة" : "Add Image",
                     style: Styles.headerText(
                         color: Colors.white, fontWeight: FontWeight.w500),
                   ),

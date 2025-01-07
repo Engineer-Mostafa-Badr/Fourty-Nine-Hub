@@ -2,7 +2,7 @@ import '../../../../../../core/error/failure.dart';
 import '../../../../../lucky_wheel/domain/entities/wheel_wallet_entity.dart';
 import '../../../domain/entities/gift_entities.dart';
 
-enum GiftStates { loading, initial, error ,success,errorRequest}
+enum GiftStates { loading, initial, error, success, errorRequest }
 
 class GiftState {
   final GiftStates status;

@@ -87,7 +87,6 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
         emit(state.copyWith(failure: l, status: StateStatus.error));
         Navigator.of(context).pop();
         showErrorMessage(context, getFailureMessage(l, context));
-
       },
       (data) {
         result = true;
@@ -96,10 +95,8 @@ class CreateCompanyAdCubit extends Cubit<CreateCompanyAdState> {
         print('Media IDs cleared after successful post.');
         Navigator.of(context).pop();
         Navigator.of(context).pop();
-        showSuccessMessage(context, context.isArabic
-            ? "تم تأكيد الخدمة!"
-            : "Service confirmed!");
-
+        showSuccessMessage(context,
+            context.isArabic ? "تم تأكيد الخدمة!" : "Service confirmed!");
       },
     );
     return result;

@@ -88,9 +88,10 @@ class BuildItemListView extends StatelessWidget {
               SizedBox(width: 10.w),
               Expanded(
                 child: Container(
-                 // height: 50,
-                  padding:
-                      EdgeInsets.symmetric(vertical: 15.h,),
+                  // height: 50,
+                  padding: EdgeInsets.symmetric(
+                    vertical: 15.h,
+                  ),
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(12.r),

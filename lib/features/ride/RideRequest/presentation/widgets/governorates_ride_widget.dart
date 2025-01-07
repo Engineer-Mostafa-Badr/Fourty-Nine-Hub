@@ -23,6 +23,6 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     var rideRegisterCubit = context.read<RegisterRiderCubit>();
-//     return 
+//     return
 //   }
 // }

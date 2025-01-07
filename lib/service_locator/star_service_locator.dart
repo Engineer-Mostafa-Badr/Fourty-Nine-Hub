@@ -61,8 +61,8 @@ class StarServiceLocator {
         () => SentBillRequestUseCase(
               serviceLocator(),
             ));
-    serviceLocator.registerLazySingleton<FetchBannerUseCase>(
-        () => FetchBannerUseCase(
+    serviceLocator
+        .registerLazySingleton<FetchBannerUseCase>(() => FetchBannerUseCase(
               serviceLocator(),
             ));
 

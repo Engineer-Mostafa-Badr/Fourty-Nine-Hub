@@ -109,10 +109,19 @@ class _NavigateBarState extends State<NavigateBar> {
                       ),
                     ),
                     selected: isSelected,
-                    trailing:(index == 0 ||index == 1 || index ==2|| index ==3|| index ==5)?Image.asset(_icons[index],height: 40.h,): SvgPicture.asset(
-                      _icons[index],
-                      height: 40.h,
-                    ),
+                    trailing: (index == 0 ||
+                            index == 1 ||
+                            index == 2 ||
+                            index == 3 ||
+                            index == 5)
+                        ? Image.asset(
+                            _icons[index],
+                            height: 40.h,
+                          )
+                        : SvgPicture.asset(
+                            _icons[index],
+                            height: 40.h,
+                          ),
                   );
                 },
               );
@@ -148,17 +157,17 @@ class _NavigateBarState extends State<NavigateBar> {
                   context
                       .read<CustomPageCubit>()
                       .updateNavigateBar(NavigateBarParams(
-                    ride: _selectedItems["Ride"] ?? false,
-                    loading: _selectedItems["Loading"] ?? false,
-                    health: _selectedItems["Health"] ?? false,
-                    meal: _selectedItems["Meal"] ?? false,
-                    find: _selectedItems["Find"] ?? false,
-                    reel: _selectedItems["Reel"] ?? false,
-                    spotlight: _selectedItems["Spotlight"] ?? false,
-                    meet: _selectedItems["Meet"] ?? false,
-                    live: _selectedItems["Live"] ?? false,
-                    snap: _selectedItems["Snap"] ?? false,
-                  ));
+                        ride: _selectedItems["Ride"] ?? false,
+                        loading: _selectedItems["Loading"] ?? false,
+                        health: _selectedItems["Health"] ?? false,
+                        meal: _selectedItems["Meal"] ?? false,
+                        find: _selectedItems["Find"] ?? false,
+                        reel: _selectedItems["Reel"] ?? false,
+                        spotlight: _selectedItems["Spotlight"] ?? false,
+                        meet: _selectedItems["Meet"] ?? false,
+                        live: _selectedItems["Live"] ?? false,
+                        snap: _selectedItems["Snap"] ?? false,
+                      ));
                 } else {
                   // Show a message if the selection is not valid
                   showSuccessMessage(

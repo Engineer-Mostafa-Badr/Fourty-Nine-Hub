@@ -79,39 +79,37 @@ class RiderRegisterModel {
   });
   Map<String, dynamic> registerOne() {
     return {
-    "driverFirstName" : driverFirstName,
-    "driverLastName": driverLastName,
-    "vehicleModel": vehicleModel,
-    "vehicleBrand": vehicleBrand,
-    "vehicleYear" : vehicleYear,
-    "subcategoryIds": subcategoryIds,
-    "pricingPerKm": pricingPerKm,
-    "phone": phone,
-    "smoker" : smoker??false,
-    "airConditioner" : airCondition??false,
-    "city" : governorateNameAr,
-    "plateInfo" : plateInfo,
-    "idNumber" : idNumber,
-    "workingType" : workingType,
-    "vehicleColor" : vehicleColor,
-    "birthday": birthDate.toString(),
-    "driverLicenseNumber": driverLicenseNumber
+      "driverFirstName": driverFirstName,
+      "driverLastName": driverLastName,
+      "vehicleModel": vehicleModel,
+      "vehicleBrand": vehicleBrand,
+      "vehicleYear": vehicleYear,
+      "subcategoryIds": subcategoryIds,
+      "pricingPerKm": pricingPerKm,
+      "phone": phone,
+      "smoker": smoker ?? false,
+      "airConditioner": airCondition ?? false,
+      "city": governorateNameAr,
+      "plateInfo": plateInfo,
+      "idNumber": idNumber,
+      "workingType": workingType,
+      "vehicleColor": vehicleColor,
+      "birthday": birthDate.toString(),
+      "driverLicenseNumber": driverLicenseNumber
     };
   }
 
-
-
   Map<String, dynamic> registerTow() {
     return {
-    "driverFirstName" : driverFirstName,
-    "driverLastName": driverLastName,
-    "carModel" : carModel,
-    "subcategoryId": subcategoryId,
-    "phone": phone,
-    "plateInfo" : plateInfo,
-    "idNumber" : idNumber,
-    "birthday": birthDate.toString(),
-    "driverLicenseNumber": driverLicenseNumber,
-};
+      "driverFirstName": driverFirstName,
+      "driverLastName": driverLastName,
+      "carModel": carModel,
+      "subcategoryId": subcategoryId,
+      "phone": phone,
+      "plateInfo": plateInfo,
+      "idNumber": idNumber,
+      "birthday": birthDate.toString(),
+      "driverLicenseNumber": driverLicenseNumber,
+    };
   }
 }

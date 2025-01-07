@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -548,13 +550,15 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
   }
 
   Future<void> _handleLikeAction(BuildContext context, ReelsCubit cubit) async {
+    log("LSdkjflskdjflskdjflsdf l");
     try {
       await cubit.likeReel(reel.id).then((_) {
         final response = cubit.state.likeReelResponse;
         if (response?.message == "Reel liked successfully") {
           reel.likeCount++;
         } else if (response?.message == "Reel unlike successfully") {
-          if (reel.likeCount > 0) reel.likeCount--;
+          // if (reel.likeCount > 0) reel.likeCount--;
+          reel.likeCount--;
         }
       });
 

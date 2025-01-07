@@ -238,7 +238,8 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                                                   if (value != null) {
                                                     shippingcubit
                                                         .selectSubCategory(
-                                                            subCategory: value.id);
+                                                            subCategory:
+                                                                value.id);
                                                     field.didChange(
                                                         value); // تحديث حالة الفاليديشن
                                                   }

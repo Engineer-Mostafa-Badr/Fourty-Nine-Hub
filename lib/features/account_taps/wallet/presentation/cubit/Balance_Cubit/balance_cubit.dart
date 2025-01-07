@@ -26,7 +26,7 @@ class BalanceCubit extends Cubit<BalanceState> {
     this._checkRequestWithdrawUseCase,
   ) : super(const BalanceState());
 
-   loadData() async {
+  loadData() async {
     await fetchBalanceWallet();
     await checkRequestWithdrawBalance();
     await loadInitialData();
@@ -66,9 +66,9 @@ class BalanceCubit extends Cubit<BalanceState> {
     );
 
     response.fold(
-          (failure) =>
+      (failure) =>
           emit(state.copyWith(failure: failure, status: BalanceStates.error)),
-          (data) {
+      (data) {
         history.addAll(data);
 
         if (data.length < pageSize) {

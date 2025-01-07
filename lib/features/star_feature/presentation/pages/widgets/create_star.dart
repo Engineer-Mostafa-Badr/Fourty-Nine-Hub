@@ -46,6 +46,7 @@ class _CreateStarState extends State<CreateStar> {
     }
     super.dispose();
   }
+
   void _initializeVideoControllers(List<UploadFileEntity> videos) {
     for (var controller in _videoControllers) {
       controller.dispose();
@@ -100,8 +101,7 @@ class _CreateStarState extends State<CreateStar> {
                   _videoControllers = state.video?.map((video) {
                         return VideoPlayerController.file(File(video.file.path))
                           ..initialize().then((_) {
-                            setState(
-                                () {});
+                            setState(() {});
                           });
                       }).toList() ??
                       [];
@@ -462,6 +462,7 @@ class _CreateStarState extends State<CreateStar> {
       ),
     );
   }
+
   Widget buildTextField({
     required String label,
     required TextEditingController controller,

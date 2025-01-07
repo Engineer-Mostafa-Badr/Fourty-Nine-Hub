@@ -56,31 +56,33 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                 },
                 itemBuilder: (context, item, index) {
                   return SubCategoryCard(
-                    mainCategory: (state.mainCategory != null && index < state.mainCategory!.length)
+                    mainCategory: (state.mainCategory != null &&
+                            index < state.mainCategory!.length)
                         ? state.mainCategory![index]
                         : MainCategoryEntity(
-                      id: '',
-                      nameEn: '',
-                      image: '',
-                      banner: '',
-                      cover: '',
-                      total: 0,
-                    ),
+                            id: '',
+                            nameEn: '',
+                            image: '',
+                            banner: '',
+                            cover: '',
+                            total: 0,
+                          ),
                     item: item,
                     onFav: () async {
-                      var result = await controller.toggleSubCategoryToFavorites(item.id);
+                      var result = await controller
+                          .toggleSubCategoryToFavorites(item.id);
                       return result;
                     },
                   );
                 },
-
                 noMoreItemsIndicatorBuilder: (context) => Container(),
                 firstPageProgressIndicatorBuilder: (context) =>
-                const CupertinoActivityIndicator(),
+                    const CupertinoActivityIndicator(),
                 newPageProgressIndicatorBuilder: (context) =>
-                const CupertinoActivityIndicator(),
-              ),  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3, childAspectRatio: 1),
+                    const CupertinoActivityIndicator(),
+              ),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3, childAspectRatio: 1),
             );
           }
           return Center(
@@ -176,7 +178,6 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
                             context.push(Routes.LOGIN);
                           }
                         })
-
                   ],
                 ),
               ),

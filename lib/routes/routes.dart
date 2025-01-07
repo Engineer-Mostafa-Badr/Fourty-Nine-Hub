@@ -187,6 +187,9 @@ abstract class Routes {
   static const TRIPINFOBYDRIVERSCREEN = '/Ride/TripInfoByDriverScreen';
   static const ALLTRIPNOSOCKETSCREEN = '/Ride/AllTripNoSocketScreen';
   static const TripRideRating = '/Ride/TripRideRating';
+
+  static const updateDriverShipping = '/Ride/updateDriverShipping';
+  static const updateDriverRide = '/Ride/updateDriverRide';
 }
 
 abstract class Paths {
@@ -364,4 +367,7 @@ abstract class Paths {
   static const TRIPINFOBYRIDERSCREEN = 'TRIPINFOBYRIDERSCREEN';
   static const TRIPINFOBYDRIVERSCREEN = 'TRIPINFOBYDRIVERSCREEN';
   static const ALLTRIPNOSOCKETSCREEN = 'ALLTRIPNOSOCKETSCREEN';
+
+  static const updateDriverShipping = 'updateDriverShipping';
+  static const updateDriverRide = 'updateDriverRide';
 }

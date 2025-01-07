@@ -6,7 +6,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/pa
 import 'package:go_router/go_router.dart';
 
 import '../../../res/assets/assets.dart';
-import '../../../res/style/app_colors.dart';
 import '../../../routes/routes.dart';
 
 class FloatingButton extends StatelessWidget {
@@ -44,10 +43,10 @@ class FloatingButton extends StatelessWidget {
         backgroundColor: Colors.white,
         child: icon != null
             ? Image.asset(
-          Assets.floatImage,
-          height: 50.h,
-          width: 50.w,
-        )
+                Assets.floatImage,
+                height: 50.h,
+                width: 50.w,
+              )
             : Image.asset(
                 Assets.logo,
                 height: 50.h,

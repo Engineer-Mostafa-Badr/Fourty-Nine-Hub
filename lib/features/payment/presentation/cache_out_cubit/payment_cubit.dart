@@ -30,7 +30,8 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
     this._payOutRequestUseCase,
     this._requestInstapayUseCase,
     this._priceYellowUseCase,
-    this._methodBankUseCase, this.getPaymentProviderUseCase,
+    this._methodBankUseCase,
+    this.getPaymentProviderUseCase,
   ) : super(PaymentCacheOutState());
 
   final InstapayCacheOutUseCase _instapayCacheOutUseCase;
@@ -226,16 +227,16 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
     final response = await getPaymentProviderUseCase(const NoParams());
     List<PaymentProviderEntity> paymentProviderList = [];
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) {
-          paymentProviderList.addAll(data);
-          for (var provider in paymentProviderList) {
-            paymentProviderMap[provider.nameEn] = provider.id;
-            print('Fetched provider: ${provider.nameEn}, ID: ${provider.id}');
-          }
-          emit(state.copyWith(
-              data: paymentProviderList, status: StateStatus.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) {
+      paymentProviderList.addAll(data);
+      for (var provider in paymentProviderList) {
+        paymentProviderMap[provider.nameEn] = provider.id;
+        print('Fetched provider: ${provider.nameEn}, ID: ${provider.id}');
+      }
+      emit(state.copyWith(
+          data: paymentProviderList, status: StateStatus.success));
+    });
     print("Payment Data:${paymentProviderList.length}");
     return paymentProviderList;
   }

@@ -12,7 +12,8 @@ abstract class RestaurantDashboardRepo {
   Future<Either<Failure, RestaurantOrdersModel>> getRestaurantOrders(
       PaginationParams params);
   Future<Either<Failure, Restaurant2Model>> getRestaurantInfo();
-  Future<Either<Failure, bool>> deleteRestaurant(DeleteResturantParams restaurantId);
+  Future<Either<Failure, bool>> deleteRestaurant(
+      DeleteResturantParams restaurantId);
   Future<Either<Failure, bool>> updateRestaurant(UpdateRestaurantParams params);
   Future<Either<Failure, RestaurantStatistics>> getRestaurantStatistics();
   Future<Either<Failure, bool>> changeActiveStatus();

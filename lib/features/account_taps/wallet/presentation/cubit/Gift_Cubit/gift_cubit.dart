@@ -16,7 +16,9 @@ class GiftCubit extends Cubit<GiftState> {
 
   GiftCubit(
     this._giftUseCases,
-    this._getWheelWalletUseCase, this._requestWithdrawUseCase, this._requestWithdrawWheelUseCase,
+    this._getWheelWalletUseCase,
+    this._requestWithdrawUseCase,
+    this._requestWithdrawWheelUseCase,
   ) : super(const GiftState());
 
   void loadData() async {
@@ -56,6 +58,7 @@ class GiftCubit extends Cubit<GiftState> {
       emit(state.copyWith(status: GiftStates.success));
     });
   }
+
   requestWithdrawWheel() async {
     final response = await _requestWithdrawWheelUseCase(const NoParams());
     response.fold((l) {

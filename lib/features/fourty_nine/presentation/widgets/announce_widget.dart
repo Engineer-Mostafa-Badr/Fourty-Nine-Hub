@@ -31,7 +31,8 @@ class AnnounceWidget extends StatelessWidget {
     });
   }
 
-  Widget _buildAnnounceItem({required SliderItemEntity item,required BuildContext context}) {
+  Widget _buildAnnounceItem(
+      {required SliderItemEntity item, required BuildContext context}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: ClipRRect(
@@ -64,12 +65,13 @@ class AnnounceWidget extends StatelessWidget {
                       style: Styles.headerText(
                           fontWeight: FontWeight.bold, color: Colors.white),
                       textAlign: TextAlign.center,
-                      text: context.isArabic?item.titleAr:item.titleEn),
+                      text: context.isArabic ? item.titleAr : item.titleEn),
                   Label(
                       style: Styles.smallText(
                           fontWeight: FontWeight.bold, color: Colors.white),
                       textAlign: TextAlign.center,
-                      text: context.isArabic?item.subTitleAr:item.subTitleEn),
+                      text:
+                          context.isArabic ? item.subTitleAr : item.subTitleEn),
                 ],
               ),
             )),

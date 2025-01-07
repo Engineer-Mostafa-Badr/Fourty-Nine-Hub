@@ -39,9 +39,9 @@ class _CriminalRecordRegisterCardWidgetState
               margin: const EdgeInsets.symmetric(horizontal: 10),
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                border: field.hasError
-                    ? Border.all(color: AppColors.SECONDARY_COLOR_DARK)
-                    : null,
+                  border: field.hasError
+                      ? Border.all(color: AppColors.SECONDARY_COLOR_DARK)
+                      : null,
                   borderRadius: BorderRadius.circular(10),
                   color: context.isDarkMode
                       ? AppColors.UNSELECTED_DARK_GRAY_COLOR
@@ -100,8 +100,10 @@ class _CriminalRecordRegisterCardWidgetState
                       )),
                     ),
                   ),
-                  if(field.hasError)
-                  ValidationErrorWidget(message: field.errorText??"",)
+                  if (field.hasError)
+                    ValidationErrorWidget(
+                      message: field.errorText ?? "",
+                    )
                 ],
               ),
             ),

@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/data/mod
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/request_model.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+
 class ShippingDataSource {
   ApiConsumer api;
   final CacheService cacheService;
@@ -17,8 +18,8 @@ class ShippingDataSource {
   Future<Either<Failure, Map<String, dynamic>>> getBannerData() async {
     // String? token = await cacheService.getUserToken() ?? "";
     String? token = await CacheManager.getAccessToken() ?? "";
-    log(token!, name: "lllllllllllllllllllllllllddddddddddddddddd");
-    String? userId = extractUserId(token!);
+    log(token, name: "lllllllllllllllllllllllllddddddddddddddddd");
+    String? userId = extractUserId(token);
     // extractUserId(token ?? "");
     if (userId == null) {
       return api.get(EndPoints.bannerData);

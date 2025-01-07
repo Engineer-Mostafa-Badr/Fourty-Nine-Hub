@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -139,6 +141,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
           heartIcon: Icons.favorite,
           iconColor: Colors.pink,
           onDoubleTap: () async {
+            log("LSdkjflskdjflskdjflsdf o");
             await reelCubit.likeReel(reel.id).then((val) async {
               if (val == "Reel liked successfully") {
                 setState(() {

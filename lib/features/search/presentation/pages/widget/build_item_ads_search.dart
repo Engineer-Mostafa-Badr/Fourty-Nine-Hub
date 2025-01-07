@@ -113,8 +113,7 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                                       text: LocaleKeys.seeAll.localize,
                                       style: Styles.headerText(
                                           color: Colors.white,
-                                          decoration:
-                                              TextDecoration.underline),
+                                          decoration: TextDecoration.underline),
                                     ),
                                   ),
                                 ))
@@ -122,8 +121,7 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                           ),
                         ),
                         pagination: SwiperPagination(builder:
-                            SwiperCustomPagination(
-                                builder: (context, config) {
+                            SwiperCustomPagination(builder: (context, config) {
                           return const DotSwiperPaginationBuilder(
                                   color: AppColors.GREY_DARK_COLOR,
                                   activeColor: AppColors.SECONDARY_COLOR,

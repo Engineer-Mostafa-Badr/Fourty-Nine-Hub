@@ -22,7 +22,7 @@ class CancelTripClientCubit extends Cubit<RiderState> {
         emit(FailureRiderState(failure: l));
       },
       (r) {
-        result=true;
+        result = true;
         log('lkdjslkdfjslkdjflskdjf success');
         emit(SuccessCancelTripClientState());
       },

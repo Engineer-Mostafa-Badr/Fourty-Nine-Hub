@@ -12,7 +12,6 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/Ide
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/behind_car_license_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/behind_driver_license_card_register_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/car_image_register_card_widget.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/car_model_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/driver_license_card_register_ride_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/expiration_date_driver_license_card_register_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/front_car_license_register_card_widget.dart';
@@ -34,7 +33,8 @@ class RiderRegisterNoSocketScreen extends StatefulWidget {
       _RiderRegisterNoSocketScreenState();
 }
 
-class _RiderRegisterNoSocketScreenState extends State<RiderRegisterNoSocketScreen> {
+class _RiderRegisterNoSocketScreenState
+    extends State<RiderRegisterNoSocketScreen> {
   FocusNode firstNameFocusNode = FocusNode();
   FocusNode lastNameFocusNode = FocusNode();
   FocusNode phoneFocusNode = FocusNode();
@@ -81,192 +81,191 @@ class _RiderRegisterNoSocketScreenState extends State<RiderRegisterNoSocketScree
             );
           }
           return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const UserInfoCardRegisterRideWidget(),
-              const Sizer(
-                height: 30,
-              ),
-              DriverLicenseCardRegisterRideWidget(
-                title: "رقم رخصة السائق",
-                onChanged: (value) {
-                  registerRider.model.driverLicenseNumber = value;
-                },
-              ),
-              const Sizer(
-                height: 30,
-              ),
-              const FrontDriverLicenseCardRegisterWidget(),
-              const Sizer(
-                height: 30,
-              ),
-              BehindDriverLicenseCardRegisterWidget(
-                title: "الجانب الخلفي من رخصة السائق",
-                onTap: (image) {
-                  registerRider.model.drivingImageBehind = image;
-                },
-              ),
-              const Sizer(
-                height: 30,
-              ),
-              //
-              ExpirationDateDriverLicenseCardRegisterWidget(
-                onTap: (date) {
-                  context.read<RegisterRiderCubit>().model.idExpiryDate =
-                    date.toString();
-                },
-              ),
-              const Sizer(
-                height: 30,
-              ),
-              //
-              
-              BehindDriverLicenseCardRegisterWidget(
-                onTap: (image) {
-                    registerRider.model.idImageInFront = image;
-                  },
-                  title: "البطاقة الشخصية (الجزاء الامامي)"),
-              const Sizer(
-                height: 30,
-              ),
-              BehindDriverLicenseCardRegisterWidget(
-                  onTap: (image) {
-                    registerRider.model.idImageInBehind = image;
-                  },
-                  title: "البطاقة الشخصية (الجزاء الخلفي)"),
-              const Sizer(
-                height: 30,
-              ),
-              DriverLicenseCardRegisterRideWidget(
-                title: "رقم البطاقة الشخصية",
-                onChanged: (value) {
-                  registerRider.model.idNumber = value;
-                },
-              ),
-              const Sizer(
-                height: 30,
-              ),
-              ExpirationDateDriverLicenseCardRegisterWidget(
-                onTap: (date) {
-                  context.read<RegisterRiderCubit>().model.idExpiryDate =
-                      date.toString();
-                },
-              ),
-              const Sizer(
-                height: 30,
-              ),
-              const IdentityConfirmationCardRegisterWidget(),
-              
-            const Sizer(
-                height: 30,
-              ),
-              //
-              // const CarModelRegisterCardWidget(),
-              
-              const Sizer(
-                height: 30,
-              ),
-              PlateNumberRegisterCardWidget(),
-              const Sizer(
-                height: 30,
-              ),
-              const FrontCarLicenseRegisterCardWidget(),
-              const Sizer(
-                height: 30,
-              ),
-              const BehindCarLicenseRegisterCardWidget(),
-              const Sizer(
-                height: 30,
-              ),
-              const CarImageRegisterCardWidget(),
-              const Sizer(
-                height: 30,
-              ),
-              Sizer(height: 30,),
-                  DriverLicenseCardRegisterRideWidget(
-                    title: "موديل السيارة",
-                    onChanged: (value) {
-                      context.read<RegisterRiderCubit>().model.carModel = value;
-                    },
-                  ),
-              const SizedBox(
-                height: 10,
-              ),
-              FormField(
-                builder: (field) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (field.hasError)
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(height: 8),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: Text(
-                                field.errorText ?? "",
-                                style: Styles.mediumText(color: Colors.red),
-                              ),
-                            ),
-                          ],
-                        )
-                    ],
-                  );
-                },
-              ),
-              
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                const SizedBox(
-                  height: 10,
+                const UserInfoCardRegisterRideWidget(),
+                const Sizer(
+                  height: 30,
                 ),
-                const AppInfoText(
-                  text: Labels.theApplicationDoesNot,
+                DriverLicenseCardRegisterRideWidget(
+                  title: "رقم رخصة السائق",
+                  onChanged: (value) {
+                    registerRider.model.driverLicenseNumber = value;
+                  },
                 ),
-                const SizedBox(
-                  height: 10,
+                const Sizer(
+                  height: 30,
                 ),
-                const AppInfoText(
-                  text: Labels.youWillGetPounds,
+                const FrontDriverLicenseCardRegisterWidget(),
+                const Sizer(
+                  height: 30,
                 ),
-                const SizedBox(
-                  height: 10,
+                BehindDriverLicenseCardRegisterWidget(
+                  title: "الجانب الخلفي من رخصة السائق",
+                  onTap: (image) {
+                    registerRider.model.drivingImageBehind = image;
+                  },
                 ),
-                Align(
-                  alignment: Alignment.center,
-                  child: AppButton(
-                    backColor: AppColors.PRIMARY_COLOR,
-                    textColor: Colors.white,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                    label: Labels.submit,
-                    onPressed: () {
-                      log("message");
-                      if (context.isUserLoggedIn) {
-                        registerRider.registerTow(context);
-                      } else {
-                        context.push(Routes.LOGIN);
-                      }
+                const Sizer(
+                  height: 30,
+                ),
+                //
+                ExpirationDateDriverLicenseCardRegisterWidget(
+                  onTap: (date) {
+                    context.read<RegisterRiderCubit>().model.idExpiryDate =
+                        date.toString();
+                  },
+                ),
+                const Sizer(
+                  height: 30,
+                ),
+                //
+
+                BehindDriverLicenseCardRegisterWidget(
+                    onTap: (image) {
+                      registerRider.model.idImageInFront = image;
                     },
-                  ),
+                    title: "البطاقة الشخصية (الجزاء الامامي)"),
+                const Sizer(
+                  height: 30,
+                ),
+                BehindDriverLicenseCardRegisterWidget(
+                    onTap: (image) {
+                      registerRider.model.idImageInBehind = image;
+                    },
+                    title: "البطاقة الشخصية (الجزاء الخلفي)"),
+                const Sizer(
+                  height: 30,
+                ),
+                DriverLicenseCardRegisterRideWidget(
+                  title: "رقم البطاقة الشخصية",
+                  onChanged: (value) {
+                    registerRider.model.idNumber = value;
+                  },
+                ),
+                const Sizer(
+                  height: 30,
+                ),
+                ExpirationDateDriverLicenseCardRegisterWidget(
+                  onTap: (date) {
+                    context.read<RegisterRiderCubit>().model.idExpiryDate =
+                        date.toString();
+                  },
+                ),
+                const Sizer(
+                  height: 30,
+                ),
+                const IdentityConfirmationCardRegisterWidget(),
+
+                const Sizer(
+                  height: 30,
+                ),
+                //
+                // const CarModelRegisterCardWidget(),
+
+                const Sizer(
+                  height: 30,
+                ),
+                const PlateNumberRegisterCardWidget(),
+                const Sizer(
+                  height: 30,
+                ),
+                const FrontCarLicenseRegisterCardWidget(),
+                const Sizer(
+                  height: 30,
+                ),
+                const BehindCarLicenseRegisterCardWidget(),
+                const Sizer(
+                  height: 30,
+                ),
+                const CarImageRegisterCardWidget(),
+                const Sizer(
+                  height: 30,
+                ),
+                const Sizer(
+                  height: 30,
+                ),
+                DriverLicenseCardRegisterRideWidget(
+                  title: "موديل السيارة",
+                  onChanged: (value) {
+                    context.read<RegisterRiderCubit>().model.carModel = value;
+                  },
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-              ],
-            ),
-              
-          )
-              ]
-            )
-            );
+                FormField(
+                  builder: (field) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (field.hasError)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 8),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: Text(
+                                  field.errorText ?? "",
+                                  style: Styles.mediumText(color: Colors.red),
+                                ),
+                              ),
+                            ],
+                          )
+                      ],
+                    );
+                  },
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const AppInfoText(
+                        text: Labels.theApplicationDoesNot,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const AppInfoText(
+                        text: Labels.youWillGetPounds,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: AppButton(
+                          backColor: AppColors.PRIMARY_COLOR,
+                          textColor: Colors.white,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                          label: Labels.submit,
+                          onPressed: () {
+                            log("message");
+                            if (context.isUserLoggedIn) {
+                              registerRider.registerTow(context);
+                            } else {
+                              context.push(Routes.LOGIN);
+                            }
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+                )
+              ]));
         },
       ),
     );

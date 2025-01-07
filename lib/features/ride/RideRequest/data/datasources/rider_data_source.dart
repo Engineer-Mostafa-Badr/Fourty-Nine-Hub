@@ -7,7 +7,6 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
-import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/create_offer_no_socket_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/create_trip_no_socket_model.dart';
@@ -42,7 +41,8 @@ class RiderDataSource {
 
   Future<Either<Failure, Map<String, dynamic>>> registerDriver(
       {required RiderRegisterModel model}) {
-    log(jsonEncode(model.registerOne()).toString(), name: "lskdjfslkjdflksjdflksdjfklj");
+    log(jsonEncode(model.registerOne()).toString(),
+        name: "lskdjfslkjdflksjdflksdjfklj");
     return api.post(EndPoints.specialRegister, data: model.registerOne());
   }
 
@@ -332,4 +332,12 @@ class RiderDataSource {
       {required String url, required Map<String, dynamic>? data}) {
     return api.put(url, data: data);
   }
+
+  Future<Either<Failure, Map<String, dynamic>>> getRideDriver() {
+    return api.get(EndPoints.getDriverRide);
+  }
+
+  // Future<Either<Failure, Map<String, dynamic>>> getShippingDriver() {
+  //   return api.put(url, data: data);
+  // }
 }

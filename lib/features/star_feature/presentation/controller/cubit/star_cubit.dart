@@ -25,7 +25,8 @@ class StarCubit extends Cubit<StarState> {
       this._fetchMylStarUseCase,
       this._uploadMyStarUseCase,
       this._deleteMyStarUseCase,
-      this._fetchWinnerStarUseCase, this._bannerUseCase)
+      this._fetchWinnerStarUseCase,
+      this._bannerUseCase)
       : super(StarState());
 
   // TextEditingController starController = TextEditingController();

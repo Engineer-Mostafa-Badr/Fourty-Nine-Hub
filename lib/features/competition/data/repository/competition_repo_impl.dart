@@ -9,7 +9,7 @@ import 'package:fourtyninehub/features/competition/domain/entity/winner_competit
 
 import '../../domain/repository/competition_repository.dart';
 
-class CompetitionRepositoryImpl extends CompetitionRepository{
+class CompetitionRepositoryImpl extends CompetitionRepository {
   final CompetitionRemoteDataSource _competitionRemoteDataSource;
 
   CompetitionRepositoryImpl(this._competitionRemoteDataSource);

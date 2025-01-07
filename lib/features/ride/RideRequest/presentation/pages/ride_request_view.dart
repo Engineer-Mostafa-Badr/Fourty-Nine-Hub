@@ -1271,10 +1271,13 @@ class _RequestButtonSheetWidgetState extends State<RequestButtonSheetWidget> {
                                                   id: widget.model.trip?.id ??
                                                       "",
                                                 );
-                                            if(result == true){
-                                              showSuccessMessage(context, LocaleKeys.successCancelTrip.tr());
+                                            if (result == true) {
+                                              showSuccessMessage(
+                                                  context,
+                                                  LocaleKeys.successCancelTrip
+                                                      .tr());
                                               Navigator.pop(context);
-                                            }else{
+                                            } else {
                                               Navigator.pop(context);
                                             }
                                           },

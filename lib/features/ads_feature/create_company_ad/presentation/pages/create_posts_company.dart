@@ -97,58 +97,67 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                               builder: (BuildContext context) {
                                 return BlocProvider.value(
                                   value: serviceLocator<CreateCompanyAdCubit>(),
-                                  child: BlocBuilder<CreateCompanyAdCubit,CreateCompanyAdState>(
-                                    builder: (context,state) {
-                                      return AlertDialog(
-                                        title: Text(inArabic ? "تأكيد الخدمة" : "Service Confirmation"),
-                                        content: Text(inArabic
-                                            ? "هذه الخدمة ستكلف ${widget.totalPrice} ${context.read<MainCategoriesCubit>().state.currency?.currencyAr}. هل تريد المتابعة؟"
-                                            : "This service will cost ${widget.totalPrice} ${context.read<MainCategoriesCubit>().state.currency?.currencyEn}. Do you want to proceed?"),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text(inArabic ? "إلغاء" : "Cancel"),
-                                          ),
-                                          TextButton(
-                                            onPressed: () async {
-                                              // Handle confirmation
-                                              print('**************************************');
-                                              print(controller.selectedImages);
-                                              print('**************************************');
-                                              if (formKey.currentState!.validate()) {
-                                                 await context
-                                                    .read<CreateCompanyAdCubit>()
-                                                    .addPostCompanyAdvertise(
-                                                      mediaIds: widget.picture
-                                                          ? controller.selectedImages ??
-                                                              showErrorMessage(
-                                                                context,
-                                                                LocaleKeys
-                                                                    .imageNotSelected.localize,
-                                                              )
-                                                          : null,
-                                                      type: widget.type,
-                                                      post: widget.text
-                                                          ? postContentTextController.text
-                                                          : null,
-                                                      totalPrice: widget.totalPrice, context: context,
-                                                    );
-
-                                              }
-
-                                            },
-                                            child: Text(inArabic ? "تأكيد" : "Confirm"),
-                                          ),
-                                        ],
-                                      );
-                                    }
-                                  ),
+                                  child: BlocBuilder<CreateCompanyAdCubit,
+                                          CreateCompanyAdState>(
+                                      builder: (context, state) {
+                                    return AlertDialog(
+                                      title: Text(inArabic
+                                          ? "تأكيد الخدمة"
+                                          : "Service Confirmation"),
+                                      content: Text(inArabic
+                                          ? "هذه الخدمة ستكلف ${widget.totalPrice} ${context.read<MainCategoriesCubit>().state.currency?.currencyAr}. هل تريد المتابعة؟"
+                                          : "This service will cost ${widget.totalPrice} ${context.read<MainCategoriesCubit>().state.currency?.currencyEn}. Do you want to proceed?"),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text(
+                                              inArabic ? "إلغاء" : "Cancel"),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            // Handle confirmation
+                                            print(
+                                                '**************************************');
+                                            print(controller.selectedImages);
+                                            print(
+                                                '**************************************');
+                                            if (formKey.currentState!
+                                                .validate()) {
+                                              await context
+                                                  .read<CreateCompanyAdCubit>()
+                                                  .addPostCompanyAdvertise(
+                                                    mediaIds: widget.picture
+                                                        ? controller
+                                                                .selectedImages ??
+                                                            showErrorMessage(
+                                                              context,
+                                                              LocaleKeys
+                                                                  .imageNotSelected
+                                                                  .localize,
+                                                            )
+                                                        : null,
+                                                    type: widget.type,
+                                                    post: widget.text
+                                                        ? postContentTextController
+                                                            .text
+                                                        : null,
+                                                    totalPrice:
+                                                        widget.totalPrice,
+                                                    context: context,
+                                                  );
+                                            }
+                                          },
+                                          child: Text(
+                                              inArabic ? "تأكيد" : "Confirm"),
+                                        ),
+                                      ],
+                                    );
+                                  }),
                                 );
                               },
                             );
-
                           }),
                     ],
                   ),

@@ -15,14 +15,13 @@ class DonutChartPainter extends CustomPainter {
     required this.context,
     required this.count,
     required this.max,
-     this.title,
+    this.title,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     final double outerRadius = size.width / 3.5;
-    final double innerRadius =
-        outerRadius - 60;
+    final double innerRadius = outerRadius - 60;
 
     final Paint innerPaint = Paint()
       ..style = PaintingStyle.stroke
@@ -59,7 +58,7 @@ class DonutChartPainter extends CustomPainter {
 
     final textPainter = TextPainter(
       text: TextSpan(
-        text:title ?? '$percentage%',
+        text: title ?? '$percentage%',
         style:
             Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
       ),
