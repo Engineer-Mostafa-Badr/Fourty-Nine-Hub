@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -41,6 +42,9 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
   late AudioPlayer _player;
   bool _hasError = false;
   bool _isCompleted = false;
+  late Timer _timer;
+  late int _remainingTime;
+
 
   @override
   void initState() {
@@ -113,9 +117,11 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
   Widget build(BuildContext context) {
     final reelCubit = context.watch<ReelsCubit>();
     return Scaffold(
-      backgroundColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+      backgroundColor:
+          context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
       appBar: AppBar(
-        backgroundColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
+        backgroundColor:
+            context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
         toolbarHeight: kToolbarHeight * 0.8,
         leading: IconButton(
           icon: Icon(
@@ -234,12 +240,23 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                                   width: 20,
                                   height: 20,
                                   decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(image: NetworkImage(widget.reel.user.profilePictureSignedUrl??""), fit: BoxFit.cover,)
-                                  ),
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        image: NetworkImage(widget.reel.user
+                                                .profilePictureSignedUrl ??
+                                            ""),
+                                        fit: BoxFit.cover,
+                                      )),
                                 ),
-                                Sizer(width: 8,),
-                                Text(widget.audio.username, style: Styles.mediumText(fontWeight: FontWeight.w500, fontSize: 25),)
+                                Sizer(
+                                  width: 8,
+                                ),
+                                Text(
+                                  widget.audio.username,
+                                  style: Styles.mediumText(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 25),
+                                )
                               ],
                             )
                           ],
@@ -252,8 +269,37 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
               SizedBox(height: 20.h),
               Row(
                 children: [
-                  Icon(Icons.play_arrow),
-                  Text("31s"),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        if (_player.playing) {
+                          _player.stop();
+                        } else {
+                          _player.play();
+                        }
+                      });
+                    },
+                    icon: Icon(_player.playing ? Icons.stop : Icons.play_arrow),
+                  ),
+                  FutureBuilder(
+  future: getAudioDuration(widget.audio.audioSignedUrl),
+  builder: (context, snapshot) {
+    if (snapshot.hasData) {
+      if (_player.playing) {
+        startCountdown(snapshot.data!);
+        return Text(
+          "${(_remainingTime ~/ 60).toString().padLeft(2, '0')}:${(_remainingTime % 60).toString().padLeft(2, '0')}",
+        );
+      }
+      return snapshot.data != null
+          ? Text(getFormattedDuration(snapshot.data!))
+          : CircularProgressIndicator();
+    } else {
+      return Container();
+    }
+  },
+),
+
                   Sizer(),
                   Container(
                     height: 15,
@@ -261,10 +307,22 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                     color: Colors.grey,
                   ),
                   Sizer(),
-                  Text("Original sound by: ", style: Styles.smallText(fontSize: 24),),
-                  Text(widget.audio.username, style: Styles.smallText(fontSize: 24, fontWeight: FontWeight.bold),),
-                  Text(" ${widget.audio.reelsCount} posts", style: Styles.smallText(fontSize: 25, color: Colors.grey,),),
-          
+                  Text(
+                    "${context.isArabic ? "الصوت الأصلي بواسطة" : "Original sound by"}: ",
+                    style: Styles.smallText(fontSize: 24),
+                  ),
+                  Text(
+                    widget.audio.username,
+                    style: Styles.smallText(
+                        fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    " ${widget.audio.reelsCount} posts",
+                    style: Styles.smallText(
+                      fontSize: 25,
+                      color: Colors.grey,
+                    ),
+                  ),
                 ],
               ),
               SizedBox(height: 20.h),
@@ -277,30 +335,38 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: AppButton(
                         label: "",
-                        backColor: context.isDarkMode?Color(0xFF2E2E2E): Color(0xFFF1F1F2),
+                        backColor: context.isDarkMode
+                            ? Color(0xFF2E2E2E)
+                            : Color(0xFFF1F1F2),
                         onPressed: () {
                           setState(() {
                             isSave = !isSave;
-                            context.read<ReelsCubit>().saveReel(widget.reel.id).then(
-                            (val) => showSnackBarAfterBuild(
-                                context: context,
-                                message: val == 'unsaved successfully'
-                                    ? LocaleKeys.reel_unsaved.tr()
-                                    : LocaleKeys.reel_saved.tr(),
-                                icon: val != 'unsaved successfully'
-                                    ? Icons.check_circle
-                                    : Icons.unpublished,
-                                backgroundColor: Colors.white,
-                                textColor: AppColors.QUANTITY_COLOR));
+                            context
+                                .read<ReelsCubit>()
+                                .saveReel(widget.reel.id)
+                                .then((val) => showSnackBarAfterBuild(
+                                    context: context,
+                                    message: val == 'unsaved successfully'
+                                        ? LocaleKeys.reel_unsaved.tr()
+                                        : LocaleKeys.reel_saved.tr(),
+                                    icon: val != 'unsaved successfully'
+                                        ? Icons.check_circle
+                                        : Icons.unpublished,
+                                    backgroundColor: Colors.white,
+                                    textColor: AppColors.QUANTITY_COLOR));
                           });
                         },
                         widget: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              isSave?Icons.bookmark: Icons.bookmark_border_outlined,
+                              isSave
+                                  ? Icons.bookmark
+                                  : Icons.bookmark_border_outlined,
                               size: 25,
-                              color: context.isDarkMode?Colors.white:Colors.black,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                             Sizer(),
                             Text(
@@ -309,110 +375,18 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                                   : "Add to Favourites",
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
-                                  color: context.isDarkMode?Colors.white:Colors.black,
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black,
                                   fontSize: 30.sp),
                             ),
                           ],
                         ),
                       ),
-                      // child: ElevatedButton(
-                      //   style: const ButtonStyle(
-                      //       backgroundColor:
-                      //           WidgetStatePropertyAll(AppColors.GRAY_LIGHT_COLOR3)),
-                      //   onPressed: () {
-                      //     // _player.dispose();
-                      //     // Navigator.push(
-                      //     //     context,
-                      //     //     MaterialPageRoute(
-                      //     //       builder: (context) => ReelsRecordingScreen(
-                      //     //         voiceMediaId: widget.reel.audioMedia,
-                      //     //         voiceSignedUrl: widget.audio.audioSignedUrl,
-                      //     //       ),
-                      //     //     ));
-                      //   },
-                      //   child:
-                      // ),
                     ),
                   ),
                 ),
               ),
-              // _hasError
-              //     ? Center(
-              //         child: Text(
-              //           LocaleKeys.audio_load_fail.tr(),
-              //           style: const TextStyle(),
-              //         ),
-              //       )
-              //     : Padding(
-              //         padding: const EdgeInsets.all(8.0),
-              //         child: Row(
-              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //           children: [
-              //             StreamBuilder<PlayerState>(
-              //               stream: _player.playerStateStream,
-              //               builder: (context, snapshot) {
-              //                 final playerState = snapshot.data;
-              //                 final playing = playerState?.playing;
-              //                 if (playing != true) {
-              //                   return IconButton(
-              //                     icon: const Icon(
-              //                       Icons.play_arrow,
-              //                     ),
-              //                     onPressed: _togglePlayPause,
-              //                   );
-              //                 } else {
-              //                   return IconButton(
-              //                     icon: const Icon(
-              //                       Icons.pause,
-              //                     ),
-              //                     onPressed: _togglePlayPause,
-              //                   );
-              //                 }
-              //               },
-              //             ),
-              //             Expanded(
-              //               child: StreamBuilder<Duration>(
-              //                 stream: _player.positionStream,
-              //                 builder: (context, snapshot) {
-              //                   final position = snapshot.data ?? Duration.zero;
-              //                   final duration = _player.duration ?? Duration.zero;
-          
-              //                   double sliderValue =
-              //                       position.inMilliseconds.toDouble();
-              //                   if (sliderValue >
-              //                       duration.inMilliseconds.toDouble()) {
-              //                     sliderValue = duration.inMilliseconds.toDouble();
-              //                   }
-          
-              //                   return Slider(
-              //                     value: sliderValue,
-              //                     max: duration.inMilliseconds.toDouble(),
-              //                     onChanged: (value) {
-              //                       _player.seek(
-              //                           Duration(milliseconds: value.toInt()));
-              //                     },
-              //                   );
-              //                 },
-              //               ),
-              //             ),
-              //             StreamBuilder<Duration>(
-              //               stream: _player.positionStream,
-              //               builder: (context, snapshot) {
-              //                 final position = snapshot.data ?? Duration.zero;
-              //                 final positionText = formatDuration(position);
-              //                 return Text(
-              //                   positionText,
-              //                   style: TextStyle(
-              //                     fontSize: 30.sp,
-              //                     fontWeight: FontWeight.bold,
-              //                   ),
-              //                   overflow: TextOverflow.ellipsis,
-              //                 );
-              //               },
-              //             ),
-              //           ],
-              //         ),
-              //       ),
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.all(10),
@@ -421,10 +395,12 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                     builder: (context, state) {
                       // log(state.reelsForAudio!.length.toString());
                       if (state.globalReelsIsLoading) {
-                        return const Center(child: CupertinoActivityIndicator());
+                        return const Center(
+                            child: CupertinoActivityIndicator());
                       }
                       return GridView.builder(
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
                           childAspectRatio: 0.6,
                           mainAxisSpacing: 4,
@@ -448,11 +424,11 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                             },
                             child: Stack(
                               children: [
-                                
                                 Image.network(
                                   width: double.infinity,
                                   height: 150,
-                                  state.reelsForAudio![index].audio.audioPicture,
+                                  state
+                                      .reelsForAudio![index].audio.audioPicture,
                                   errorBuilder: (context, error, stackTrace) =>
                                       const Center(
                                     child: CupertinoActivityIndicator(),
@@ -501,18 +477,27 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                     child: Container(
                       height: 50,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 10)
-                        ]
-                      ),
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black.withOpacity(.2),
+                                blurRadius: 10)
+                          ]),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.music_note, color: Colors.black,),
+                          Icon(
+                            Icons.music_note,
+                            color: Colors.black,
+                          ),
                           Sizer(),
-                          Text("Add to Story", style: Styles.mediumText(color: Colors.black, fontWeight: FontWeight.w600),)
+                          Text(
+                            context.isArabic ? "أضف إلى القصة" : "Add to Story",
+                            style: Styles.mediumText(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600),
+                          )
                         ],
                       ),
                     ),
@@ -522,15 +507,22 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                     child: Container(
                       height: 50,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: AppColors.PRIMARY_COLOR_DARK
-                      ),
+                          borderRadius: BorderRadius.circular(30),
+                          color: AppColors.PRIMARY_COLOR_DARK),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.video_library_sharp, color: Colors.white,),
+                          Icon(
+                            Icons.video_library_sharp,
+                            color: Colors.white,
+                          ),
                           Sizer(),
-                          Text("Use sound", style: Styles.mediumText(color: Colors.white, fontWeight: FontWeight.w600),)
+                          Text(
+                            context.isArabic ? "استخدم الصوت" : "Use sound",
+                            style: Styles.mediumText(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
+                          )
                         ],
                       ),
                     ),
@@ -543,6 +535,46 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
       ),
     );
   }
+
+  Future<Duration?> getAudioDuration(String url) async {
+    final AudioPlayer player = AudioPlayer();
+
+    // تحميل الملف الصوتي من الرابط
+    await player.setUrl(url);
+
+    // الحصول على مدة الصوت
+    final duration = player.duration;
+    return duration;
+  }
+
+  String getFormattedDuration(Duration duration) {
+    if (duration.inMinutes < 1) {
+      // أقل من دقيقة، عرض الثواني
+      return "${duration.inSeconds} s";
+    } else if (duration.inHours < 1) {
+      // أقل من ساعة، عرض الدقائق
+      return "${duration.inMinutes} m";
+    } else if (duration.inDays < 1) {
+      // أقل من يوم، عرض الساعات
+      return "${duration.inHours} h";
+    } else {
+      // أكثر من يوم، عرض الأيام
+      return "${duration.inDays} d";
+    }
+  }
+
+void startCountdown(Duration duration) {
+  _remainingTime = duration.inSeconds;
+  _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    if (_remainingTime > 0) {
+      setState(() {
+        _remainingTime--;
+      });
+    } else {
+      _timer.cancel();
+    }
+  });
+}
 
   String reelText(int reelCount) {
     if (reelCount == 0) {

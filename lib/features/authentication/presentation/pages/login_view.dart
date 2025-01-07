@@ -66,12 +66,12 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     final loginCubit = context.read<LoginCubit>();
     final registerCubit = context.read<RegisterCubit>();
-    if (MediaQuery.of(context).viewInsets.bottom != 0.0) {
-      log("lllllllllllllllllllllllllll");
-      scrollController.jumpTo(409);
-    }
-    log(MediaQuery.of(context).viewInsets.bottom.toString(),
-        name: "OpenKeyboard");
+    // if (MediaQuery.of(context).viewInsets.bottom != 0.0) {
+    //   log("lllllllllllllllllllllllllll");
+    //   scrollController.jumpTo(409);
+    // }
+    // log(MediaQuery.of(context).viewInsets.bottom.toString(),
+    //     name: "OpenKeyboard");
     return BlocListener<RegisterCubit, RegisterState>(
       listener: (context, state) async {
         if (state is RegisterError) {
@@ -204,13 +204,14 @@ class _LoginViewState extends State<LoginView> {
                               loginCubit: loginCubit,
                             )
                           : const RegisterWidget(),
-                      SizedBox(
-                        height: widget.authType == AuthType.LOGIN
-                            ? MediaQuery.of(context).viewInsets.bottom != 0.0
-                                ? 20
-                                : 100.h
-                            : 0,
-                      ),
+                      // SizedBox(
+                      //   height: widget.authType == AuthType.LOGIN
+                      //       ? MediaQuery.of(context).viewInsets.bottom != 0.0
+                      //           ? 20
+                      //           : 100.h
+                      //       : 0,
+                      // ),
+                      Sizer(height: 50,),
                       widget.authType == AuthType.REGISTER
                           ? DefaultButton(
                               labelStyle: TextStyle(
