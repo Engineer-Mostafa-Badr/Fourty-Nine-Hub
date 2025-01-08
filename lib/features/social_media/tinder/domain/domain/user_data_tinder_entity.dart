@@ -10,6 +10,7 @@ class UserDataTinderEntity {
   final int followersCount;
   final int followingCount;
   final int friendsCount;
+  final bool areFriends;
   final List<TinderUserPicture> pictures;
 
   UserDataTinderEntity({
@@ -25,6 +26,7 @@ class UserDataTinderEntity {
     required this.followingCount,
     required this.friendsCount,
     required this.pictures,
+    required this.areFriends,
   });
 }
 

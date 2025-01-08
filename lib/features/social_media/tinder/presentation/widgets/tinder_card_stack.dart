@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:developer';
@@ -14,6 +16,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/domain/user_data_tinder_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
@@ -22,11 +25,16 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../chat/chat_view/domain/entities/chat_entity.dart';
+import '../../../chat/chat_view/domain/usecases/get_chats_usecase.dart';
+import '../../../chat/chat_view/presentation/pages/chats_view.dart';
+import '../../../social_posts/presentation/pages/message_button.dart';
 import '../../data/shared/shared.dart';
 
 class TinderCardStack extends StatefulWidget {
@@ -39,10 +47,8 @@ class TinderCardStack extends StatefulWidget {
 class _TinderCardStackState extends State<TinderCardStack> {
   @override
   Widget build(BuildContext context) {
-
     return SizedBox(
-      height: 0.9.sh,
-
+      height: 0.88.sh,
       child: BlocBuilder<TinderViewCubit, TinderViewState>(
         builder: (context, state) {
           // if (state.userData!.isEmpty) {
@@ -63,7 +69,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
           state.userData0!.length < 3 ? state.userData0!.length : 2,
       scale: 0.9,
       isLoop: true,
-      padding: const EdgeInsets.only(right: 4.0, left: 4.0, bottom: 16),
+      padding: const EdgeInsets.only(right: 4.0, left: 4.0, bottom: 24),
       onSwipe: (previousIndex, currentIndex, direction) {
         // Disable swapping if there's only one card
         if (state.userData0!.length == 1) {
@@ -76,14 +82,17 @@ class _TinderCardStackState extends State<TinderCardStack> {
         if (currentIndex != null) {
           _fetchUserDataOnSwipe(context, state.userData0![currentIndex].id);
 
-          if (currentIndex >= state.userData0!.length - 3) {
-            context.read<TinderViewCubit>().fetchUserData(state.gender!);
-          }
+          // if (currentIndex >= state.userData0!.length - 3) {
+          //   context.read<TinderViewCubit>().fetchUserData(state.gender!);
+          // }
         }
         return true;
       },
       cardBuilder: (context, index, horizontalOffsetPercentage,
           verticalOffsetPercentage) {
+        // if (index >= state.userData0!.length) {
+        //   setState(() {});
+        // }
         return _buildCardWidget(context, state.userData0![index]);
       },
       duration: const Duration(milliseconds: 100),
@@ -135,7 +144,8 @@ class _TinderCardStackState extends State<TinderCardStack> {
           child: IconButton(
             onPressed: () => _switchDisplayGender(context, user),
             icon: Icon(
-                context.read<TinderViewCubit>().state.userData0?[0].gender == 'female'
+                context.read<TinderViewCubit>().state.userData0?[0].gender ==
+                        'female'
                     ? Icons.female
                     : Icons.male,
                 size: 35,
@@ -181,10 +191,11 @@ class _TinderCardStackState extends State<TinderCardStack> {
     );
   }
 
-  Future<void> _switchDisplayGender(BuildContext context, UserDataTinderEntity user) async {
+  Future<void> _switchDisplayGender(
+      BuildContext context, UserDataTinderEntity user) async {
     final currentGender = context.read<TinderViewCubit>().state.gender;
     final newGender = currentGender == 'female' ? 'male' : 'female';
-    await context.read<TinderViewCubit>().fetchUserData( newGender);
+    await context.read<TinderViewCubit>().fetchUserData(newGender);
     setState(() {
       print('sssssssssssssssssssssssssssss');
     });
@@ -262,15 +273,14 @@ class _TinderCardStackState extends State<TinderCardStack> {
     final lastSeenModel = context.read<TinderViewCubit>().state.lastSeenModel;
 
     if (lastSeenModel?.status == 'offline') {
-      return context.isArabic ? 'غير متصل' : 'offline';
+      return context.isArabic ? 'غير متصل' : 'Offline';
     }
     if (lastSeenModel?.status == 'online') {
-      if (lastSeenModel?.lastSeen != null ||
-          lastSeenModel?.lastSeen != '') {
+      if (lastSeenModel?.lastSeen != null || lastSeenModel?.lastSeen != '') {
         return '';
       }
 
-      return context.isArabic ? 'متصل' : 'online';
+      return context.isArabic ? 'متصل' : 'Online';
     }
     return '';
   }
@@ -347,26 +357,25 @@ class _TinderCardStackState extends State<TinderCardStack> {
             state.lastSeenModelState == TinderStates.initial) {
           return const Text('');
         } else {
-          if( state.lastSeenModel?.lastSeen !=null) {
+          if (state.lastSeenModel?.lastSeen != null) {
             return Text(
-             "${context.isArabic ? " آخر ظهور منذ" : 'Last seen'} ${getTimeAgo(context, state.lastSeenModel?.lastSeen ?? '')}"
-               ,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            textScaler: TextScaler.noScaling,
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.9),
-              fontSize: 35.sp,
-              shadows: const [
-                Shadow(
-                  offset: Offset(1.0, 1.0),
-                  blurRadius: 4.0,
-                  color: Colors.black87,
-                ),
-              ],
-            ),
-          );
-          }else{
+              "${context.isArabic ? " آخر ظهور منذ" : 'Last seen'} ${getTimeAgo(context, state.lastSeenModel?.lastSeen ?? '')}",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textScaler: TextScaler.noScaling,
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.9),
+                fontSize: 35.sp,
+                shadows: const [
+                  Shadow(
+                    offset: Offset(1.0, 1.0),
+                    blurRadius: 4.0,
+                    color: Colors.black87,
+                  ),
+                ],
+              ),
+            );
+          } else {
             return const SizedBox.shrink();
           }
         }
@@ -376,7 +385,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
 
   Widget _buildActions(BuildContext context, UserDataTinderEntity cardUser) {
     return Positioned(
-      bottom: 4,
+      bottom: 8,
       right: 8,
       left: 8,
       child: Padding(
@@ -408,15 +417,18 @@ class _TinderCardStackState extends State<TinderCardStack> {
             _buildActionButton(
               context,
               Icons.report,
-                !context.read<UserCubit>().isLoggedIn?()=>context.push(Routes.LOGIN):() {
-                  bottomSheet(
-                      context: context,
-                      widget: ReportView(
-                        id: cardUser.id!,
-                        categoryId: '66af974f8bf69f9469944746',
-                      ));},
+              !context.read<UserCubit>().isLoggedIn
+                  ? () => context.push(Routes.LOGIN)
+                  : () {
+                      bottomSheet(
+                          context: context,
+                          widget: ReportView(
+                            id: cardUser.id!,
+                            categoryId: '66af974f8bf69f9469944746',
+                          ));
+                    },
               // () => _showReportBottomSheet(context, cardUser),
-               color: Colors.red,
+              color: Colors.red,
             ),
           ],
         ),
@@ -440,7 +452,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
     );
   }
 
-   _navigateToUserProfile(BuildContext context, UserDataTinderEntity cardUser) {
+  _navigateToUserProfile(BuildContext context, UserDataTinderEntity cardUser) {
     if (!context.read<UserCubit>().isLoggedIn) {
       return const CustomTextNoLogin();
     }
@@ -653,7 +665,7 @@ class ChatBottomSheet extends StatelessWidget {
                   LocaleKeys.chat_alert_dialog_pick_chat_type.tr(),
                   textScaler: TextScaler.noScaling,
                   style: TextStyle(
-                    fontSize: 50.sp,
+                    fontSize: 40.sp,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.start,
@@ -666,20 +678,84 @@ class ChatBottomSheet extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
-                    child: _buildChatOptionCard(
-                      context,
-                      icon: Icons.visibility_off,
-                      label: LocaleKeys.chat_alert_dialog_anonymous.tr(),
-                      cardUser: cardUser,
+                    child: InkWell(
+                      onTap: () async {
+                        if (context.read<UserCubit>().isLoggedIn) {
+                          ChatEntity? chat = await context
+                              .read<UserCubit>()
+                              .createAnonymousChat(
+                                otherId: cardUser.id!,
+                              );
+                          context.pop();
+                          context.push(
+                            Routes.CHAT,
+                            extra: ChatsViewParams(
+                              isFromStartChat: true,
+                              initialTabIndex: 0,
+                              selectedChat: chat,
+                            ),
+                          );
+                        } else {
+                          context.push(Routes.LOGIN);
+                        }
+                      },
+                      child: _buildChatOptionCard(
+                        context,
+                        icon: Icons.visibility_off,
+                        label: LocaleKeys.chat_alert_dialog_anonymous.tr(),
+                        cardUser: cardUser,
+                      ),
                     ),
                   ),
                   SizedBox(height: screenHeight * 0.02),
                   Expanded(
-                    child: _buildChatOptionCard(
-                      context,
-                      icon: Icons.visibility,
-                      label: LocaleKeys.chat_alert_dialog_regular.tr(),
-                      cardUser: cardUser,
+                    child: InkWell(
+                      onTap: () async {
+                        if (context.read<UserCubit>().isLoggedIn) {
+                          log("are friends : ${cardUser.areFriends}");
+                          if (cardUser.areFriends == true) {
+                            ChatEntity? chat = await context
+                                .read<UserCubit>()
+                                .createNormalChat(
+                                  otherId: cardUser.id!,
+                                  categoryId: ChatCategoriesIds.social,
+                                );
+                            context.pop();
+                            context.push(
+                              Routes.CHAT,
+                              extra: ChatsViewParams(
+                                isFromStartChat: true,
+                                initialTabIndex: 0,
+                                selectedChat: chat,
+                              ),
+                            );
+                          } else {
+                            ChatEntity? chat = await context
+                                .read<UserCubit>()
+                                .createNormalChat(
+                                  otherId: cardUser.id!,
+                                  categoryId: ChatCategoriesIds.greet,
+                                );
+                            context.pop();
+                            context.push(
+                              Routes.CHAT,
+                              extra: ChatsViewParams(
+                                isFromStartChat: true,
+                                initialTabIndex: 0,
+                                selectedChat: chat,
+                              ),
+                            );
+                          }
+                        } else {
+                          context.push(Routes.LOGIN);
+                        }
+                      },
+                      child: _buildChatOptionCard(
+                        context,
+                        icon: Icons.visibility,
+                        label: LocaleKeys.chat_alert_dialog_regular.tr(),
+                        cardUser: cardUser,
+                      ),
                     ),
                   ),
                 ],
@@ -738,10 +814,11 @@ class ChatBottomSheet extends StatelessWidget {
     );
   }
 
-  void _startChat(BuildContext context, String label, UserDataTinderEntity cardUser) {
+  void _startChat(
+      BuildContext context, String label, UserDataTinderEntity cardUser) {
     // final tinderCubit = context.read<TinderViewCubit>();
     // final chatRoomCubit = serviceLocator<ChatRoomCubit>();
-   // final chatsCubit = serviceLocator<ChatsCubit>();
+    // final chatsCubit = serviceLocator<ChatsCubit>();
 
     if (label == "Anonymous") {
       // tinderCubit.startAnonymousChat(receiverId: cardUser.id ?? '').then((_) {
@@ -793,19 +870,170 @@ class ChatBottomSheet extends StatelessWidget {
   }
 }
 
+Widget _buildChatOptionCard(
+  BuildContext context, {
+  required IconData icon,
+  required String label,
+  required Function() onPressed,
+}) {
+  final screenWidth = MediaQuery.of(context).size.width;
+  final screenHeight = MediaQuery.of(context).size.height;
+  final iconSize = screenWidth * 0.1;
+  final fontSize = screenHeight * 0.04;
+  final padding = screenHeight * 0.01;
+
+  return SizedBox(
+    height: 150.h,
+    child: ElevatedButton(
+        onPressed: () {
+          onPressed();
+        },
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.white,
+            shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+            )),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: iconSize,
+              color: label == "Anonymous"
+                  ? AppColors.SECONDARY_COLOR
+                  : AppColors.PRIMARY_COLOR,
+            ),
+            SizedBox(height: padding),
+            Text(
+              label,
+              style: Styles.headerText(
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: padding / 2),
+          ],
+        )),
+  );
+}
+
 void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
   showModalBottomSheet(
-    context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
-    backgroundColor: context.isDarkMode
-        ? Colors.black.withOpacity(0.9)
-        : Colors.white.withOpacity(0.9),
-    builder: (BuildContext context) {
-      return ChatBottomSheet(cardUser: cardUser);
-    },
-  );
+      context: context,
+      builder: (_) => Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50.r),
+            ),
+            height: MediaQuery.of(context).size.height * 0.3,
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: double.infinity,
+                  padding:
+                      EdgeInsets.all(MediaQuery.of(context).size.height * 0.02),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(50.r),
+                        topRight: Radius.circular(50.r)),
+                    color: AppColors.GREY_NORMAL_COLOR,
+                  ),
+                  child: Text(
+                    LocaleKeys.chat_alert_dialog_pick_chat_type.tr(),
+                    style: Styles.headerText(
+                      fontSize: 60.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(
+                        MediaQuery.of(context).size.height * 0.02),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildChatOptionCard(
+                          context,
+                          icon: Icons.visibility_off,
+                          label: LocaleKeys.chat_alert_dialog_anonymous.tr(),
+                          onPressed: () async {
+                            if (context.read<UserCubit>().isLoggedIn) {
+                              ChatEntity? chat = await context
+                                  .read<UserCubit>()
+                                  .createAnonymousChat(
+                                    otherId: cardUser.id!,
+                                  );
+                              context.pop();
+                              context.push(
+                                Routes.CHAT,
+                                extra: ChatsViewParams(
+                                  isFromStartChat: true,
+                                  initialTabIndex: 0,
+                                  selectedChat: chat,
+                                ),
+                              );
+                            } else {
+                              context.push(Routes.LOGIN);
+                            }
+                          },
+                        ),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.02),
+                        _buildChatOptionCard(
+                          context,
+                          icon: Icons.visibility,
+                          label: LocaleKeys.chat_alert_dialog_regular.tr(),
+                          onPressed: () async {
+                            if (context.read<UserCubit>().isLoggedIn) {
+                              if (cardUser.areFriends == true) {
+                                ChatEntity? chat = await context
+                                    .read<UserCubit>()
+                                    .createNormalChat(
+                                      otherId: cardUser.id!,
+                                      categoryId: ChatCategoriesIds.social,
+                                    );
+                                context.pop();
+                                context.push(
+                                  Routes.CHAT,
+                                  extra: ChatsViewParams(
+                                    isFromStartChat: true,
+                                    initialTabIndex: 0,
+                                    selectedChat: chat,
+                                  ),
+                                );
+                              } else {
+                                ChatEntity? chat = await context
+                                    .read<UserCubit>()
+                                    .createNormalChat(
+                                      otherId: cardUser.id!,
+                                      categoryId: ChatCategoriesIds.greet,
+                                    );
+                                context.pop();
+                                context.push(
+                                  Routes.CHAT,
+                                  extra: ChatsViewParams(
+                                    isFromStartChat: true,
+                                    initialTabIndex: 0,
+                                    selectedChat: chat,
+                                  ),
+                                );
+                              }
+                            } else {
+                              context.push(Routes.LOGIN);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ));
 }
 
 Widget swipeCardDemo2(BuildContext context, UserDataTinderEntity cardUser) {
@@ -932,7 +1160,8 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
       if (_currentStoryIndex < widget.cardUser.pictures.length - 1) {
         _currentStoryIndex = _currentStoryIndex + 1;
       } else {
-        _currentStoryIndex =  widget.cardUser.pictures.length -1; // Reset to the first story after the last
+        _currentStoryIndex = widget.cardUser.pictures.length -
+            1; // Reset to the first story after the last
       }
     });
   }
@@ -1006,6 +1235,23 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
             ),
           ),
         ),
+        // Shadow overlay
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent, // Gradual fade to transparent
+                  Colors.transparent, // Gradual fade to transparent
+                  Colors.black.withOpacity(0.7), // Shadow effect at the top
+                ],
+              ),
+            ),
+          ),
+        ),
+        // Progress indicators
         Positioned(
           top: 10,
           left: 10,
