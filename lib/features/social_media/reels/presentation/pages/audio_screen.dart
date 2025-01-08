@@ -288,7 +288,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
       if (_player.playing) {
         startCountdown(snapshot.data!);
         return Text(
-          "${(_remainingTime ~/ 60).toString().padLeft(2, '0')}:${(_remainingTime % 60).toString().padLeft(2, '0')}",
+          "${_remainingTime}",
         );
       }
       return snapshot.data != null
@@ -474,56 +474,84 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Flexible(
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black.withOpacity(.2),
-                                blurRadius: 10)
-                          ]),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.music_note,
-                            color: Colors.black,
-                          ),
-                          Sizer(),
-                          Text(
-                            context.isArabic ? "أضف إلى القصة" : "Add to Story",
-                            style: Styles.mediumText(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
-                          )
-                        ],
+                    child: GestureDetector(
+                      onTap: () {
+                        _player.dispose();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReelsRecordingScreen(
+                              voiceMediaId: widget.reel.audioMedia,
+                              voiceSignedUrl: widget.audio.audioSignedUrl,
+                            ),
+                          ));
+
+                      },
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(.2),
+                                  blurRadius: 10)
+                            ]),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.music_note,
+                              color: Colors.black,
+                            ),
+                            Sizer(),
+                            Text(
+                              context.isArabic ? "أضف إلى القصة" : "Add to Story",
+                              style: Styles.mediumText(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
                   Sizer(),
                   Flexible(
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: AppColors.PRIMARY_COLOR_DARK),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.video_library_sharp,
-                            color: Colors.white,
-                          ),
-                          Sizer(),
-                          Text(
-                            context.isArabic ? "استخدم الصوت" : "Use sound",
-                            style: Styles.mediumText(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
-                          )
-                        ],
+                    child: GestureDetector(
+                      onTap: () {
+                        _player.dispose();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReelsRecordingScreen(
+                              voiceMediaId: widget.reel.audioMedia,
+                              voiceSignedUrl: widget.audio.audioSignedUrl,
+                            ),
+                          ));
+
+                      },
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: AppColors.PRIMARY_COLOR_DARK),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.video_library_sharp,
+                              color: Colors.white,
+                            ),
+                            Sizer(),
+                            Text(
+                              context.isArabic ? "استخدم الصوت" : "Use sound",
+                              style: Styles.mediumText(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   )
