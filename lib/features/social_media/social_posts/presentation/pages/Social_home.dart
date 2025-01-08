@@ -103,15 +103,27 @@ class _SocialHomeViewState extends State<SocialHomeView>
                         : AppColors.PRIMARY_COLOR,
                     tabs: [
                       Tab(
-                        icon: Image.asset(Assets.facebookLogo,height: 50.h,width: 50.w,),
+                        icon: Image.asset(
+                          Assets.facebookLogo,
+                          height: 50.h,
+                          width: 50.w,
+                        ),
                         text: LocaleKeys.Face.localize,
                       ),
                       Tab(
-                        icon: Image.asset(Assets.instaLogo,height: 50.h,width: 50.w,),
+                        icon: Image.asset(
+                          Assets.instaLogo,
+                          height: 50.h,
+                          width: 50.w,
+                        ),
                         text: LocaleKeys.Insta.localize,
                       ),
                       Tab(
-                        icon: Image.asset(Assets.twitterLogo,height: 50.h,width: 50.w,),
+                        icon: Image.asset(
+                          Assets.twitterLogo,
+                          height: 50.h,
+                          width: 50.w,
+                        ),
                         text: LocaleKeys.tweet.localize,
                       ),
                     ],
@@ -235,14 +247,24 @@ class _SocialHomeViewState extends State<SocialHomeView>
                     children: [
                       Icon(
                         i == 0 ? Icons.home : Icons.person,
-                        color:
-                            i == 0 ? Theme.of(context).primaryColor : Colors.grey,
+                        color: i == 0
+                            ? Theme.of(context).primaryColor
+                            : Colors.grey,
                         size: 40.w,
                       ),
                       SizedBox(
                         width: 8.w,
                       ),
-                      Label(text: i == 0 ? LocaleKeys.home.localize : LocaleKeys.profile.localize,style: Styles.headerText(color: i == 0 ? Theme.of(context).primaryColor : Colors.grey,fontSize: 30),)
+                      Label(
+                        text: i == 0
+                            ? LocaleKeys.home.localize
+                            : LocaleKeys.profile.localize,
+                        style: Styles.headerText(
+                            color: i == 0
+                                ? Theme.of(context).primaryColor
+                                : Colors.grey,
+                            fontSize: 30),
+                      )
                     ],
                   )),
             ),

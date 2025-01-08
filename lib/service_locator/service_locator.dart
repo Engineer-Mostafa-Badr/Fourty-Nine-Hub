@@ -12,8 +12,6 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/subscription_interceptor.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
-import 'package:fourtyninehub/core/utils/api_service.dart';
-import 'package:fourtyninehub/features/competition/data/repository/competition_repo_impl.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';

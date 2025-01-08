@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
@@ -377,7 +376,6 @@ class BaseApiConsumer extends ApiConsumer {
         return false;
       }
     }
-
   }
 }
 //dependency inversion

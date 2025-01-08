@@ -47,7 +47,8 @@ class RestaurantDashboardRepoImpl implements RestaurantDashboardRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> deleteRestaurant(DeleteResturantParams restaurantId) async {
+  Future<Either<Failure, bool>> deleteRestaurant(
+      DeleteResturantParams restaurantId) async {
     return await _remoteDataSource.deleteRestaurant(restaurantId);
   }
 

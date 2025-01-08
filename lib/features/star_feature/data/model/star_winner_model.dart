@@ -18,8 +18,7 @@ class StarWinnerModel extends StarWinnerEntity {
       profit: json['profit'] ?? 0,
       numberOfWins: json['numberOfWins'] ?? 0,
       createAt: json['createAt'] ?? '',
-      createdAt:
-          json['createdAt'] ??'',
+      createdAt: json['createdAt'] ?? '',
     );
   }
 }

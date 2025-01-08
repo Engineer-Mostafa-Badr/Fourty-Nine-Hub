@@ -35,10 +35,8 @@ class FoodCartRemoteDataSourceImpl implements FoodCartRemoteDataSource {
 
   @override
   Future<Either<Failure, bool>> placeOrder({required String cartId}) async {
-    final response =
-        await _apiConsumer.post(EndPoints.placeOrder, data: {"cartId": cartId},
-        queryParameters: {"subCategory": ""}
-        );
+    final response = await _apiConsumer.post(EndPoints.placeOrder,
+        data: {"cartId": cartId}, queryParameters: {"subCategory": ""});
     return response.fold((l) => Left(l), (data) => Right(data['status']));
   }
 }

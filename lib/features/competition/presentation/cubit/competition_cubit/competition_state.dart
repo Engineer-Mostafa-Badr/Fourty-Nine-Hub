@@ -3,7 +3,7 @@ import 'package:fourtyninehub/features/competition/domain/entity/winner_competit
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/currency_entity.dart';
 import '../../../../../../core/error/failure.dart';
 
-enum CompetitionStates { loading, initial, error, success ,updateSuccess}
+enum CompetitionStates { loading, initial, error, success, updateSuccess }
 
 class CompetitionState {
   final CompetitionStates status;
@@ -19,13 +19,13 @@ class CompetitionState {
     this.winner,
     this.currency,
   });
-  CompetitionState copyWith(
-      {CompetitionStates? status,
-        Failure? failure,
-        List<CompetitionEntity>? competition,
-         List<WinnerCompetitionEntity>? winner,
-         CurrencyEntity? currency,
-      }) {
+  CompetitionState copyWith({
+    CompetitionStates? status,
+    Failure? failure,
+    List<CompetitionEntity>? competition,
+    List<WinnerCompetitionEntity>? winner,
+    CurrencyEntity? currency,
+  }) {
     return CompetitionState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

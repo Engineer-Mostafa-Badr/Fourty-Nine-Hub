@@ -342,7 +342,7 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                                               ElevatedButton(
                                                 style: const ButtonStyle(
                                                     backgroundColor:
-                                                        MaterialStatePropertyAll(
+                                                        WidgetStatePropertyAll(
                                                             AppColors
                                                                 .PRIMARY_COLOR)),
                                                 onPressed: () {
@@ -419,7 +419,7 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                                               ElevatedButton(
                                                 style: ButtonStyle(
                                                   backgroundColor:
-                                                      MaterialStateProperty.all(
+                                                      WidgetStateProperty.all(
                                                           AppColors
                                                               .PRIMARY_COLOR),
                                                 ),

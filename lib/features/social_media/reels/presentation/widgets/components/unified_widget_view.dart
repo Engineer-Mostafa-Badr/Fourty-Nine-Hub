@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -204,6 +206,7 @@ class _UnifiedReelItemState extends State<UnifiedReelItem>
                   : null,
               child: DoubleTapHeart(
                 onDoubleTap: () async {
+                  log("LSdkjflskdjflskdjflsdf v");
                   await serviceLocator<ReelsCubit>()
                       .likeReel(widget.reel.id)
                       .then((val) async {

@@ -85,6 +85,8 @@ class EndPoints {
   static const getWalletHome = '/main-wallet/user-wallets-amount';
   static const getCurrency = '/main-wallet/app-currency';
   static const anyCashBack = '/cashback/any';
+  static const getQuestion = '/infosAndQuestions/show';
+  static answerQuestion(String id) => '/infosAndQuestions/answer/$id';
   static const sliderItems = '/sliders/to-app';
   static const competition = '/subscriber/competitionsSubscriber';
   static const winnerCompetition = '/subscriber/winners';
@@ -107,6 +109,7 @@ class EndPoints {
   static String requestWithdrawCompetition(String id) {
     return '/subscriber/request-withdrawal/$id';
   }
+
   static const getBalance = '/main-wallet/user-balance';
 
   static String getHistoryBalance(BalanceHistoryParams params) {
@@ -243,6 +246,7 @@ class EndPoints {
 
   // ride
   static String bannerDataRider = "$developmentBaseUrl/ride/get-thumbnail-ride";
+  static String getDriverRide = "$developmentBaseUrl/ride/riders/Info";
   static String specialRegister =
       "$developmentBaseUrl/ride/riders/special/register";
   static String riderRegister = "$developmentBaseUrl/ride/riders/register";

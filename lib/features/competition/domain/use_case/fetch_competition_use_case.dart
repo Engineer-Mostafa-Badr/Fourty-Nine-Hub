@@ -4,7 +4,8 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/competition/domain/entity/competition_entity.dart';
 import 'package:fourtyninehub/features/competition/domain/repository/competition_repository.dart';
 
-class FetchCompetitionUseCase extends UseCase<List<CompetitionEntity>, NoParams> {
+class FetchCompetitionUseCase
+    extends UseCase<List<CompetitionEntity>, NoParams> {
   final CompetitionRepository _competitionRepository;
 
   FetchCompetitionUseCase(this._competitionRepository);

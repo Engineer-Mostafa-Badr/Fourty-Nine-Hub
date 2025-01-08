@@ -2,8 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
+import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/widgets/unread_notifications_builder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -69,7 +69,13 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           if (isShowLogo)
             InkWell(
-              onTap: () {},
+              onTap: () {
+                if (!isCurrentRoute(context, Routes.HOME)) {
+                context.go(Routes.HOME,);
+                }else{
+                  print("object");
+                }
+              },
               child: SizedBox(
                 height: 50.h,
                 width: 50.h,
@@ -86,21 +92,26 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
 
           if (isWithBackArrow) SizedBox(width: 20.w),
           if (isWithBackArrow)
-            IconAppButton(
-              onPressed: () => context.pop(),
-              icon: Icons.arrow_back_ios,
-              size: 20,
+            Expanded(
+              child: IconAppButton(
+                onPressed: () => context.pop(),
+                icon: Icons.arrow_back_ios,
+                size: 20,
+              ),
             ),
           SizedBox(
             width: 20.w,
           ),
           if (language)
             if (showLanguage)
-              TextButton(
-                  onPressed: () {},
-                  child: Label(text: 'Register', style: Styles.mediumText())),
+              Expanded(
+                child: TextButton(
+                    onPressed: () {},
+                    child: Label(text: 'Register', style: Styles.mediumText())),
+              ),
           //put lang
           Container(
+            width: 80.w,
               padding: EdgeInsets.symmetric(horizontal: 5.w),
               child: TextAppButton(
                   label: LocaleKeys.lang.tr(),
@@ -158,22 +169,25 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           if (showLanguage)
-            TextButton(
-                onPressed: () {},
-                child: Label(
-                    text: LocaleKeys.register.localize,
-                    style: Styles.mediumText())),
+            Expanded(
+              child: TextButton(
+                  onPressed: () {},
+                  child: Label(
+                      text: LocaleKeys.register.localize,
+                      style: Styles.mediumText())),
+            ),
           // if (language)
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15.w),
-            child: InkWell(
-              onTap: () {
-                if (isCurrentRoute(context, Routes.CHAT) == true) {
-                  return;
-                }
-                HandleCashback.setCount('chatCount', context);
-                context.push(Routes.CHAT, extra: ChatsViewParams());
-              },
+          InkWell(
+            onTap: () {
+              if (isCurrentRoute(context, Routes.CHAT) == true) {
+                return;
+              }
+              HandleCashback.setCount('chatCount', context);
+              context.push(Routes.CHAT, extra: ChatsViewParams());
+            },
+            child: Container(
+              width: 80.w,
+              padding: EdgeInsets.symmetric(horizontal: 15.w),
               child: Image.asset(
                 Assets.newChat,
                 color: AppColors.PRIMARY_COLOR,
@@ -183,7 +197,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           ),
 
           SizedBox(
-            width: 40.w,
+            width: 15.w,
           ),
           GestureDetector(
             onTap: () {

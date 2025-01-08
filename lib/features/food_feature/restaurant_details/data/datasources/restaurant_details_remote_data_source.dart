@@ -80,10 +80,9 @@ class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
   @override
   Future<Either<Failure, RestaurantMenu>> addFood(
       {required AddFoodParams params}) async {
-    final response =
-        await _apiConsumer.post(EndPoints.addFood,data: params.toJson(),
-        queryParameters: {"subCategory": params.subcategory}
-        );
+    final response = await _apiConsumer.post(EndPoints.addFood,
+        data: params.toJson(),
+        queryParameters: {"subCategory": params.subcategory});
     return response.fold((failure) => Left(failure),
         (data) => Right(RestaurantMneuModel.fromJson(data['data'])));
   }

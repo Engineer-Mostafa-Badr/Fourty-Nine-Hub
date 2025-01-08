@@ -24,14 +24,16 @@ class ContactUsCubit extends Cubit<ContactUsState> {
       // Exclude the phone field if it's empty
       final data = {
         'content': messageController.text,
-        if (phoneController.text.isNotEmpty) 'phone': phoneController.text, // Include phone only if not empty
+        if (phoneController.text.isNotEmpty)
+          'phone': phoneController.text, // Include phone only if not empty
       };
 
-      final response = await _createContactUsUseCase(ContactUsModel.fromJson(data));
+      final response =
+          await _createContactUsUseCase(ContactUsModel.fromJson(data));
 
       response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (r) {
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
           print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
           print(r);
           print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
@@ -40,5 +42,4 @@ class ContactUsCubit extends Cubit<ContactUsState> {
       );
     }
   }
-
 }

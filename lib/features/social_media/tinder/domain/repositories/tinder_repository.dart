@@ -27,7 +27,7 @@ abstract class TinderRepository {
   Future<Either<Failure, bool>> deletePictures(String id);
   Future<Either<Failure, NearByModel>> checkUserNearby(String id);
   Future<Either<Failure, LastSeenEntity>> fetchLastSeen(String id);
-  Future<Either<Failure, dynamic>> sendGift(SendGiftParams params);
+  Future<Either<Failure, SendGiftResponse>> sendGift(SendGiftParams params);
   Future<Either<Failure, GiftApi>> fetchGifts();
   Future<Either<Failure, List<SubCategoryEntity>>> fetchSubCategoryData();
 }

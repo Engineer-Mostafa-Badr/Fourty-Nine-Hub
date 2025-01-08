@@ -37,6 +37,8 @@ abstract class Assets {
   static String tinder = 'assets/images/tinder.svg';
   static String social = 'assets/images/social.svg';
   static String hand = 'assets/images/hand.png';
+  static String findLogo = 'assets/icons/findLogo.png';
+  static String cameraLogo = 'assets/icons/cameraLogo.png';
 
   static String fawry = 'assets/images/fawry.png';
   static String instaPay = 'assets/images/instapay.png';
@@ -134,6 +136,7 @@ abstract class Assets {
   static String spotlightIcon = 'assets/icons/spotlight.svg';
   static String cameraIcon = 'assets/icons/camera_icon.svg';
   static String star = 'assets/images/star.png';
+  static String tripJoinImage = 'assets/images/tripJoinImage.jpg';
 
   //! audio
   static String notificationAudioApp = 'audio/notification.mp3';

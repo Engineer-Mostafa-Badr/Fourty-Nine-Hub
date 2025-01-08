@@ -72,11 +72,18 @@ class AdsSearchModel extends AdsSearchEntity {
             : null,
         createdAt: DateTime.parse(json['createdAt']),
         updatedAt: DateTime.parse(json['updatedAt']),
-        phoneCount: json['phoneCount'] != null ? List<String>.from(json['phoneCount']) : [],
-        chatCount: json['chatCount'] != null ? List<String>.from(json['chatCount']) : [],
-        loveCount: json['loveCount'] != null ? List<String>.from(json['loveCount']) : [],
-        viewCount: json['viewCount'] != null ? List<String>.from(json['viewCount']) : [],
-
+        phoneCount: json['phoneCount'] != null
+            ? List<String>.from(json['phoneCount'])
+            : [],
+        chatCount: json['chatCount'] != null
+            ? List<String>.from(json['chatCount'])
+            : [],
+        loveCount: json['loveCount'] != null
+            ? List<String>.from(json['loveCount'])
+            : [],
+        viewCount: json['viewCount'] != null
+            ? List<String>.from(json['viewCount'])
+            : [],
         isBanned: json['isBanned'] ?? false,
         isBlocked: json['isBlocked'] ?? false,
         isRejected: json['isRejected'] ?? false,

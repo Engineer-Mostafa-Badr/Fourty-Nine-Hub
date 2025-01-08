@@ -21,16 +21,11 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/exp
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/drag_analysis_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/front_car_license_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/front_driver_license_card_register_widget.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/governorates_ride_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/more_information_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/plate_number_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/technical_examination_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/user_info_card_register_ride_widget.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_brands/fetch_car_brands_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_models/fetch_car_models_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/fetch_car_year_type/fetch_car_year_type_cubit.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -46,52 +41,7 @@ class RideRegisterSocketScreen extends StatefulWidget {
 }
 
 class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
-  FocusNode firstNameFocusNode = FocusNode();
-  FocusNode lastNameFocusNode = FocusNode();
-  FocusNode phoneFocusNode = FocusNode();
-  FocusNode idNumberFocusNode = FocusNode();
-  FocusNode plateNumberFocusNode = FocusNode();
-  FocusNode vehicleModelFocusNode = FocusNode();
-  FocusNode vehicleBrandFocusNode = FocusNode();
-  FocusNode vehicleColorFocusNode = FocusNode();
-  FocusNode pricingPerKmFocusNode = FocusNode();
-  FocusNode vehicleTypeFocusNode = FocusNode();
-  FocusNode vehicleYearFocusNode = FocusNode();
-  FocusNode yourFavoriteCiryFocusNode = FocusNode();
-  FocusNode model = FocusNode();
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController modelController = TextEditingController();
-  TextEditingController idNumberController = TextEditingController();
-  TextEditingController plateNumberController = TextEditingController();
-  TextEditingController vehicleModelController = TextEditingController();
-  TextEditingController vehicleBrandController = TextEditingController();
-  TextEditingController vehicleColorController = TextEditingController();
-  TextEditingController pricingPerKmController = TextEditingController();
-  TextEditingController vehicleTypeController = TextEditingController();
-  TextEditingController vehicleYearController = TextEditingController();
-  TextEditingController yourFavoriteCiryController = TextEditingController();
-  // GlobalKey<FormState> formKey = GlobalKey();
-  bool smoker = false;
-  late FetchCarBrandsCubit fetchCarBrandsCubit;
-  late FetchCarModelsCubit fetchCarModelsCubit;
-  late FetchCarYearTypeCubit fetchCarYearTypeCubit;
   late RegisterRiderCubit riderCubit;
-
-  String workingType = 'percentage';
-  String vehicleType = 'car';
-  DateTime? birthDate;
-  // "workingType" : "percentage" //percentage or subscribePackage
-  @override
-  void initState() {
-    fetchCarBrandsCubit = context.read<FetchCarBrandsCubit>();
-    fetchCarModelsCubit = context.read<FetchCarModelsCubit>();
-    fetchCarYearTypeCubit = context.read<FetchCarYearTypeCubit>();
-    riderCubit = context.read<RegisterRiderCubit>();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final registerRider = context.read<RegisterRiderCubit>();
@@ -116,7 +66,9 @@ class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
                 height: 30,
               ),
               DriverLicenseCardRegisterRideWidget(
-                title: context.isArabic?"رقم رخصة السائق":"Driver's License Number",
+                title: context.isArabic
+                    ? "رقم رخصة السائق"
+                    : "Driver's License Number",
                 onChanged: (value) {
                   registerRider.model.driverLicenseNumber = value;
                 },
@@ -129,7 +81,9 @@ class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
                 height: 30,
               ),
               BehindDriverLicenseCardRegisterWidget(
-                title: context.isArabic?"الجانب الخلفي من رخصة السائق":"Back side of driver's license",
+                title: context.isArabic
+                    ? "الجانب الخلفي من رخصة السائق"
+                    : "Back side of driver's license",
                 onTap: (image) {
                   riderCubit.model.drivingImageBehind = image;
                 },
@@ -149,9 +103,12 @@ class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
               //
               BehindDriverLicenseCardRegisterWidget(
                 onTap: (image) {
-                    riderCubit.model.idImageInFront = image;
-                  },
-                  title: context.isArabic?"الجانب الامامي من البطاقة الشخصية":"ID card (front part)",),
+                  riderCubit.model.idImageInFront = image;
+                },
+                title: context.isArabic
+                    ? "الجانب الامامي من البطاقة الشخصية"
+                    : "ID card (front part)",
+              ),
               const Sizer(
                 height: 30,
               ),
@@ -159,12 +116,14 @@ class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
                   onTap: (image) {
                     riderCubit.model.idImageInBehind = image;
                   },
-                  title: context.isArabic?"البطاقة الشخصية (الجزاء الخلفي)":"ID card (back part)"),
+                  title: context.isArabic
+                      ? "البطاقة الشخصية (الجزاء الخلفي)"
+                      : "ID card (back part)"),
               const Sizer(
                 height: 30,
               ),
               DriverLicenseCardRegisterRideWidget(
-                title: context.isArabic?"رقم البطاقة الشخصية":"ID number",
+                title: context.isArabic ? "رقم البطاقة الشخصية" : "ID number",
                 onChanged: (value) {
                   registerRider.model.idNumber = value;
                 },
@@ -282,7 +241,7 @@ class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
               const Sizer(
                 height: 30,
               ),
-              PlateNumberRegisterCardWidget(),
+              const PlateNumberRegisterCardWidget(),
               const Sizer(
                 height: 30,
               ),
@@ -349,7 +308,8 @@ class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
                       height: 10,
                     ),
                     AppInfoText(
-                      text: LocaleKeys.theApplicationDoesNotDeductAnyPercentage.tr(),
+                      text: LocaleKeys.theApplicationDoesNotDeductAnyPercentage
+                          .tr(),
                     ),
                     const SizedBox(
                       height: 10,
@@ -372,10 +332,14 @@ class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
                         label: LocaleKeys.submit.tr(),
                         onPressed: () {
                           // registerRider.uploadImages();
-                          if (context.read<RegisterRiderCubit>().socketFormKey.currentState?.validate() == true) {
+                          if (context
+                                  .read<RegisterRiderCubit>()
+                                  .socketFormKey
+                                  .currentState
+                                  ?.validate() ==
+                              true) {
                             registerRider.registerOne();
                           }
-                          
                         },
                       ),
                     ),
@@ -392,7 +356,5 @@ class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
     );
   }
 }
-
-
 
 // المشاعر مش كلام

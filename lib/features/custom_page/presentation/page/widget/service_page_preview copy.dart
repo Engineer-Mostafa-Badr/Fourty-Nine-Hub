@@ -613,7 +613,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                       icon: Icons.star,
                       iconSize: 50.h,
                       onPressed: () {
-                        HandleCashback.setCount('tenPercentCount',context);
+                        HandleCashback.setCount('tenPercentCount', context);
                         context.push(Routes.TenPercent);
                       }),
                 ),
@@ -644,7 +644,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
               ],
             ),
           ),
-          Sizer(),
+          const Sizer(),
           Expanded(
             child: Stack(
               children: [

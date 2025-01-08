@@ -48,7 +48,9 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
         title: Text(LocaleKeys.cashOutOption.localize),
       ),
       body: BlocProvider<PaymentCacheOutCubit>(
-        create: (BuildContext context) => serviceLocator()..payoutMethod()..getPaymentProvider(),
+        create: (BuildContext context) => serviceLocator()
+          ..payoutMethod()
+          ..getPaymentProvider(),
         child: BlocBuilder<PaymentCacheOutCubit, PaymentCacheOutState>(
           builder: (context, state) {
             return SingleChildScrollView(
@@ -76,7 +78,8 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
                                 height: 30.h,
                               ),
                               color: Colors.blue,
-                              details: LocaleKeys.enterYourCreditCardDetails.localize,
+                              details: LocaleKeys
+                                  .enterYourCreditCardDetails.localize,
                               context: context,
                             ),
                           ),

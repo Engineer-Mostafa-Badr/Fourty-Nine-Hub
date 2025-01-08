@@ -58,7 +58,7 @@ class TinderRepositoryImpl extends TinderRepository {
   }
 
   @override
-  Future<Either<Failure, dynamic>> sendGift(SendGiftParams params) {
+  Future<Either<Failure, SendGiftResponse>> sendGift(SendGiftParams params) {
     return _storiesRemoteDataSource.sendGift(params);
   }
 

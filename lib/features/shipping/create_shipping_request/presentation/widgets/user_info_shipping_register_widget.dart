@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,6 +55,7 @@ class _UserInfoShippingRegisterWidgetState
                     ? "يرجى إضافة صورة"
                     : "Please add an image";
               }
+              return null;
             },
             builder: (field) {
               return Column(
@@ -180,6 +179,7 @@ class _UserInfoShippingRegisterWidgetState
               if (shippingRegisterCubit.model.birthDate == null) {
                 return "";
               }
+              return null;
             },
             builder: (field) {
               return Column(

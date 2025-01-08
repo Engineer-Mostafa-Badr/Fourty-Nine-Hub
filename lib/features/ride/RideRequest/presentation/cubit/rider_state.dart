@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/color_model.
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/current_trip_ride_model/current_trip_ride_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/driver_info_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/driver_near_by_model/driver_near_by_model.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/driver_ride_model/driver_ride_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_info_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/my_trip_offer_ride_model/my_trip_offer_ride_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/my_trip_ride_model.dart';
@@ -278,14 +279,20 @@ class SuccessGetCarYearTypeRideState extends RiderState {
   SuccessGetCarYearTypeRideState({required this.list});
 }
 
-class SuccessGetCarColorsRideState extends RiderState{
+class SuccessGetCarColorsRideState extends RiderState {
   final List<ColorModel> list;
 
   SuccessGetCarColorsRideState({required this.list});
 }
 
-class SuccessPickDriverImageState extends RiderState{
+class SuccessPickDriverImageState extends RiderState {
   final File image;
 
   SuccessPickDriverImageState({required this.image});
+}
+
+class SuccessGetDriverRideState extends RiderState {
+  final DriverRideModel model;
+
+  SuccessGetDriverRideState({required this.model});
 }

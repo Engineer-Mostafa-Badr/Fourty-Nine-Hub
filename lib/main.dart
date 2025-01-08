@@ -62,6 +62,7 @@ import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'firebase_options.dart';
 import 'routes/pages.dart';
+
 bool isActivate = false;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -79,7 +80,7 @@ void main() async {
     },
   );
   // ZegoGiftManager().cache.cache(giftItemList);
-  isActivate= await CacheManager.getActivation()??false;
+  isActivate = await CacheManager.getActivation() ?? false;
   //Admob.initialize();l
 
   SystemChrome.setPreferredOrientations([
@@ -298,25 +299,19 @@ class _MyAppState extends State<MyApp> {
         ),
 
         // context.read<LocationSocketCubit>().updateDriverLocationOn();
-        
-        
+
         BlocProvider(
           create: (context) =>
               GetRideCurrenttripCubit(repository: serviceLocator())..get(),
         ),
 
-
+        BlocProvider(create: (context) => serviceLocator<ShippingCubit>()),
         BlocProvider(
-          create: (context) =>
-              serviceLocator<ShippingCubit>()
+          create: (context) => RegisterRiderCubit(
+              repository: serviceLocator(), repo: serviceLocator()),
         ),
         BlocProvider(
-          create: (context) =>
-              RegisterRiderCubit(repository: serviceLocator(), repo: serviceLocator()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              PickDriverImageCubit(),
+          create: (context) => PickDriverImageCubit(),
         ),
         BlocProvider(
           create: (context) => DriversNearbyCubit(repository: serviceLocator()),

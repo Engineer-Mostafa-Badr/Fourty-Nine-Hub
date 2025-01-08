@@ -1216,8 +1216,10 @@ class MessagesRemoteDataSourceImplementation
     var updateIsLockedData = {
       "locked": params.isLocked,
     };
-    final response =
-        await _apiConsumer.put(EndPoints.updateChat(params.chatId), data: params.updateLockedChat? updateIsLockedData : updateTimerActiveData);
+    final response = await _apiConsumer.put(EndPoints.updateChat(params.chatId),
+        data: params.updateLockedChat
+            ? updateIsLockedData
+            : updateTimerActiveData);
     return response.fold((failure) {
       log("updateChat Remote Data Source: $failure");
       return Left(failure);

@@ -8,6 +8,7 @@ class MainCategoriesState {
   final List<MainCategoryEntity>? data;
   final List<MainCategoryEntity>? customPage;
   final WalletHomeEntity? wallet;
+  final QuestionEntity? question;
   MainCategoriesState({
     this.status = StateStatus.initial,
     this.failure,
@@ -15,6 +16,7 @@ class MainCategoriesState {
     this.selectedIndex = 0,
     this.data,
     this.customPage,
+    this.question,
     this.wallet,
   });
 
@@ -24,6 +26,7 @@ class MainCategoriesState {
     int? selectedIndex,
     CurrencyEntity? currency,
     WalletHomeEntity? wallet,
+    QuestionEntity? question,
     List<MainCategoryEntity>? data,
     List<MainCategoryEntity>? customPage,
   }) {
@@ -35,6 +38,7 @@ class MainCategoriesState {
       data: data ?? this.data,
       customPage: customPage ?? this.customPage,
       wallet: wallet ?? this.wallet,
+      question: question ?? this.question,
     );
   }
 }

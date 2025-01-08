@@ -263,36 +263,36 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           color: Colors.grey,
         ),
         BlocProvider<CompetitionCubit>(
-          create: (BuildContext context) =>serviceLocator()..fetchCompetition(),
+          create: (BuildContext context) =>
+              serviceLocator()..fetchCompetition(),
           child: BlocBuilder<CompetitionCubit, CompetitionState>(
             builder: (BuildContext context, state) {
-              if (state.status ==CompetitionStates.success) {
+              if (state.status == CompetitionStates.success) {
                 int calculateSumOfRequests() {
                   // Create a list of indices, excluding 0, 9, and 10
                   List<int> indicesToSum = List.generate(
-                      state.competition?.length ?? 0,
-                          (index) => index)
+                          state.competition?.length ?? 0, (index) => index)
                       .where((index) => index != 0 && index != 9 && index != 10)
                       .toList();
 
                   // Use fold to sum the values, ensuring all operations return an int
                   return indicesToSum.fold<int>(0, (int sum, int index) {
-                    return sum + (state.competition?[index].countOfRequest ?? 0).toInt();
+                    return sum +
+                        (state.competition?[index].countOfRequest ?? 0).toInt();
                   });
                 }
-
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding:  EdgeInsets.symmetric(
-                        vertical: 10.h,
-                        horizontal: 20.w
-                      ),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 10.h, horizontal: 20.w),
                       child: Text(
                         LocaleKeys.competitions.localize,
-                        style: Styles.mediumText(fontWeight: FontWeight.w500,),
+                        style: Styles.mediumText(
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                     Row(
@@ -301,8 +301,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       // Align items at the start
                       children: [
-                        state.competition?[10].nameEn !=
-                                null
+                        state.competition?[10].nameEn != null
                             ? counterItem(
                                 icon: Icons.ads_click,
                                 label: LocaleKeys.specialAds.localize,
@@ -319,8 +318,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 context: context,
                               )
                             : const SizedBox.shrink(),
-                        state.competition?[0].nameEn !=
-                                null
+                        state.competition?[0].nameEn != null
                             ? counterItem(
                                 icon: Icons.person_add,
                                 label: LocaleKeys.friends.localize,
@@ -337,8 +335,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 context: context,
                               )
                             : const SizedBox.shrink(),
-                        state.competition?[9].nameEn !=
-                                null
+                        state.competition?[9].nameEn != null
                             ? counterItem(
                                 icon: FontAwesomeIcons.car,
                                 label: LocaleKeys.ride.localize,

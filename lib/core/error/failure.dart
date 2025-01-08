@@ -78,3 +78,13 @@ String getFailureMessage(Failure failure, BuildContext context) {
     return 'Unknown Failure';
   }
 }
+
+int getStatusCode(Failure failure, BuildContext context) {
+  if (failure is ServerFailure) {
+    final message = failure.statusCode;
+
+    return message??0;
+  }  else {
+    return 200;
+  }
+}

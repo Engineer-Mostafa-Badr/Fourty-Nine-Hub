@@ -25,7 +25,8 @@ class WinnerCompetitionModel extends WinnerCompetitionEntity {
       nameEn: json['competition_id']['nameEn'] ?? '',
       firstName: json['user_id']['firstName'] ?? '',
       lastName: json['user_id']['lastName'] ?? '',
-      image: json['user_id']['USER_PROFILE']['profilePictureKey']['mediaKey'] ?? '',
+      image: json['user_id']['USER_PROFILE']['profilePictureKey']['mediaKey'] ??
+          '',
       profit: json['profit'] ?? 0,
       createdAt: json['createdAt'] ?? '',
       numberOfWins: json['numberOfWins'] ?? 0,

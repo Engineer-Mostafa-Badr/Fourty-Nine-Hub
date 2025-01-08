@@ -92,7 +92,8 @@ class ShareTheApp extends StatelessWidget {
               height: 50,
               width: double.infinity,
               color: AppColors.PRIMARY_COLOR,
-              style: Styles.mediumText(color: Theme.of(context).scaffoldBackgroundColor),
+              style: Styles.mediumText(
+                  color: Theme.of(context).scaffoldBackgroundColor),
               label: '${LocaleKeys.yourReferralID.localize} $referralId'),
         ),
         const Sizer(),

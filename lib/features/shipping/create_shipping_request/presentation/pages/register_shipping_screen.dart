@@ -4,26 +4,21 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/first_name_text_form_field.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/last_name_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/pickers/date/id_expiry_date_picker.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/Identity_confirmation_card_register_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/behind_car_license_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/behind_driver_license_card_register_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/car_image_register_card_widget.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/car_model_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/driver_license_card_register_ride_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/expiration_date_driver_license_card_register_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/front_car_license_register_card_widget.dart';
@@ -32,12 +27,10 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/val
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/banner_model/sub_category.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_state.dart';
-import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/image_validation.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/widgets/user_info_shipping_register_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RegisterShippingScreen extends StatefulWidget {
@@ -78,7 +71,10 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
       body: BlocConsumer<ShippingCubit, ShippingState>(
         listener: (context, state) {
           if (state is SuccessRegisterState) {
-            context.pushReplacementNamed(Routes.HOME);
+            context.pushAndRemoveUntil(
+              Routes.RIDE,
+              (route) => false,
+            );
             showSuccessMessage(context, state.message);
           }
           if (state is FailureShippingState) {
@@ -107,7 +103,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   // ),
                   // const Gap(30),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
                       LocaleKeys.welcomeToShipRegister.tr(),
                       style: Styles.headerText(
@@ -216,7 +212,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     height: 30,
                   ),
                   const UserInfoShippingRegisterWidget(),
-                  Sizer(
+                  const Sizer(
                     height: 30,
                   ),
                   DriverLicenseCardRegisterRideWidget(
@@ -308,7 +304,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                   const Sizer(
                     height: 30,
                   ),
-                  PlateNumberRegisterCardWidget(),
+                  const PlateNumberRegisterCardWidget(),
                   const Sizer(
                     height: 30,
                   ),
@@ -321,7 +317,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     height: 30,
                   ),
                   const CarImageRegisterCardWidget(),
-                  Sizer(
+                  const Sizer(
                     height: 30,
                   ),
                   DriverLicenseCardRegisterRideWidget(
@@ -330,7 +326,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                       shippingcubit.model.model = value;
                     },
                   ),
-                  Sizer(
+                  const Sizer(
                     height: 30,
                   ),
                   Container(
@@ -351,17 +347,18 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     child: Column(
                       children: [
                         Text(
-            context.isArabic
-                                      ? "يرجى اختيار المدينة"
-                                      : "Please select a city",
-            style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 40),
-          ),
-          const Sizer(),
+                          context.isArabic
+                              ? "يرجى اختيار المدينة"
+                              : "Please select a city",
+                          style: Styles.headerText(
+                              fontWeight: FontWeight.w500, fontSize: 40),
+                        ),
+                        const Sizer(),
                         BlocBuilder<HealthCubit, HealthState>(
                           builder: (context, state) {
                             if (state.isLoading) {
-                              return Align(
-                                child: const CircularProgressIndicator(
+                              return const Align(
+                                child: CircularProgressIndicator(
                                   color: AppColors.PRIMARY_COLOR,
                                 ),
                               );
@@ -393,12 +390,13 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                           color: context.isDarkMode
                                               ? Colors.black12
                                               : Colors.grey.shade400,
-                                          borderRadius: BorderRadius.circular(10)),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
                                       child: Row(
                                         children: [
                                           Expanded(
-                                            child:
-                                                DropdownButton<GovernorateEntity>(
+                                            child: DropdownButton<
+                                                GovernorateEntity>(
                                               underline: Container(),
                                               icon: Container(),
                                               hint: Text((selectCity) ??
@@ -410,10 +408,11 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                                     (e) => DropdownMenuItem<
                                                         GovernorateEntity>(
                                                       value: e,
-                                                      child: Text((context.isArabic
-                                                              ? e.nameAr
-                                                              : e.nameEn) ??
-                                                          ""),
+                                                      child: Text(
+                                                          (context.isArabic
+                                                                  ? e.nameAr
+                                                                  : e.nameEn) ??
+                                                              ""),
                                                     ),
                                                   )
                                                   .toList(),
@@ -424,7 +423,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                                         ? value?.nameAr
                                                         : value?.nameEn) ??
                                                     "";
-                        
+
                                                 setState(() {});
                                               },
                                               dropdownColor: context.isDarkMode
@@ -432,8 +431,8 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                                                   : Colors.white,
                                             ),
                                           ),
-                                          const Icon(
-                                              Icons.keyboard_arrow_down_outlined)
+                                          const Icon(Icons
+                                              .keyboard_arrow_down_outlined)
                                         ],
                                       ),
                                     ),
@@ -450,7 +449,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       children: [
                         AppInfoText(

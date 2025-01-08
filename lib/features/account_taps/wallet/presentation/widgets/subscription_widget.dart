@@ -124,16 +124,15 @@ class SubscriptionWidget extends StatelessWidget {
                   print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
                   serviceLocator<SubscriptionController>()
                       .showSubscriptionPlans(
-                    wallets: [
-                      WalletTypes.mainWallet,
-                      WalletTypes.giftWallet,
-                      WalletTypes.balance,
-                    ],
-                    subCategoryId: subscription.subCategoryId!,
-                    title:  context.locale == Locales.english
-                        ? subscription.nameEn ?? ''
-                        : subscription.nameAr ?? ''
-                  );
+                          wallets: [
+                        WalletTypes.mainWallet,
+                        WalletTypes.giftWallet,
+                        WalletTypes.balance,
+                      ],
+                          subCategoryId: subscription.subCategoryId!,
+                          title: context.locale == Locales.english
+                              ? subscription.nameEn ?? ''
+                              : subscription.nameAr ?? '');
                 },
               ),
             ),

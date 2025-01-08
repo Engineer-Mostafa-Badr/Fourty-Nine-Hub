@@ -138,7 +138,9 @@ class _MoreInformationRegisterCardWidgetState
               return FormField(
                 validator: (value) {
                   if (selectCity == null) {
-                    return context.isArabic ? "يرجى اختيار المدينة" : "Please select a city";
+                    return context.isArabic
+                        ? "يرجى اختيار المدينة"
+                        : "Please select a city";
                   }
                   return null;
                 },
@@ -147,63 +149,68 @@ class _MoreInformationRegisterCardWidgetState
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: field.hasError
-                        ? Border.all(color: AppColors.SECONDARY_COLOR_DARK)
-                        : null,
-                    color: context.isDarkMode
-                        ? Colors.black12
-                        : Colors.grey.shade400,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: DropdownButton<GovernorateEntity>(
-                        underline: Container(),
-                        icon: Container(),
-                        hint: Text((selectCity) ??
-                            (context.isArabic
-                                ? "المدينة المفضلة"
-                                : "Favorite city")),
-                        items: state.governorates!
-                            .map(
-                              (e) => DropdownMenuItem<GovernorateEntity>(
-                                value: e,
-                                child: Text(
-                                    (context.isArabic ? e.nameAr : e.nameEn) ??
-                                        ""),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (value) {
-                          registerRider.model.governorateNameAr =
-                              value?.nameAr ?? "";
-                          selectCity =
-                               (context.isArabic ?value?.nameAr : value?.nameEn)??"";
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        width: double.infinity,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            border: field.hasError
+                                ? Border.all(
+                                    color: AppColors.SECONDARY_COLOR_DARK)
+                                : null,
+                            color: context.isDarkMode
+                                ? Colors.black12
+                                : Colors.grey.shade400,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: DropdownButton<GovernorateEntity>(
+                                underline: Container(),
+                                icon: Container(),
+                                hint: Text((selectCity) ??
+                                    (context.isArabic
+                                        ? "المدينة المفضلة"
+                                        : "Favorite city")),
+                                items: state.governorates!
+                                    .map(
+                                      (e) =>
+                                          DropdownMenuItem<GovernorateEntity>(
+                                        value: e,
+                                        child: Text((context.isArabic
+                                                ? e.nameAr
+                                                : e.nameEn) ??
+                                            ""),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (value) {
+                                  registerRider.model.governorateNameAr =
+                                      value?.nameAr ?? "";
+                                  selectCity = (context.isArabic
+                                          ? value?.nameAr
+                                          : value?.nameEn) ??
+                                      "";
 
-                          setState(() {});
-                        },
-                        dropdownColor: context.isDarkMode
-                            ? AppColors.DARK_BLUE_COLOR
-                            : Colors.white,
+                                  setState(() {});
+                                },
+                                dropdownColor: context.isDarkMode
+                                    ? AppColors.DARK_BLUE_COLOR
+                                    : Colors.white,
+                              ),
+                            ),
+                            const Icon(Icons.keyboard_arrow_down_outlined)
+                          ],
+                        ),
                       ),
-                    ),
-                    const Icon(Icons.keyboard_arrow_down_outlined)
-                  ],
-                ),
-              ),
-              if(field.hasError)
-              ValidationErrorWidget(message: field.errorText??"")
+                      if (field.hasError)
+                        ValidationErrorWidget(message: field.errorText ?? "")
                     ],
                   );
                 },
               );
             },
           ),
-          Sizer(),
+          const Sizer(),
           DefaultTextFormField(
             onChanged: (value) {
               context.read<RegisterRiderCubit>().model.pricingPerKm =
@@ -221,7 +228,7 @@ class _MoreInformationRegisterCardWidgetState
               return null;
             },
           ),
-          Sizer(),
+          const Sizer(),
           if (registerRider.model.subcategoryId == "6698736fdaa111da2d775627")
             Column(
               children: [

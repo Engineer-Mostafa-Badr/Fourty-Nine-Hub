@@ -1,25 +1,33 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class DriverLicenseCardRegisterRideWidget extends StatefulWidget {
-  DriverLicenseCardRegisterRideWidget({super.key, required this.title, this.onChanged});
+  const DriverLicenseCardRegisterRideWidget(
+      {super.key, required this.title, this.onChanged, this.initValue});
   final String title;
   final Function(String value)? onChanged;
+  final String? initValue;
 
   @override
-  State<DriverLicenseCardRegisterRideWidget> createState() => _DriverLicenseCardRegisterRideWidgetState();
+  State<DriverLicenseCardRegisterRideWidget> createState() =>
+      _DriverLicenseCardRegisterRideWidgetState();
 }
 
-class _DriverLicenseCardRegisterRideWidgetState extends State<DriverLicenseCardRegisterRideWidget> {
+class _DriverLicenseCardRegisterRideWidgetState
+    extends State<DriverLicenseCardRegisterRideWidget> {
   TextEditingController pricingPerKmController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    pricingPerKmController.text = widget.initValue??"";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +37,12 @@ class _DriverLicenseCardRegisterRideWidgetState extends State<DriverLicenseCardR
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: context.isDarkMode?AppColors.UNSELECTED_DARK_GRAY_COLOR: Colors.white,
-          boxShadow: context.isDarkMode?[]: [BoxShadow(color: Colors.grey.shade400, blurRadius: 30)]
-          ),
+          color: context.isDarkMode
+              ? AppColors.UNSELECTED_DARK_GRAY_COLOR
+              : Colors.white,
+          boxShadow: context.isDarkMode
+              ? []
+              : [BoxShadow(color: Colors.grey.shade400, blurRadius: 30)]),
       child: Column(
         children: [
           Text(

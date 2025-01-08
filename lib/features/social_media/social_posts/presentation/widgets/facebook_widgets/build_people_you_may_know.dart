@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -428,7 +429,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                           ],
                                         ),
                                       ),
-                                    );
+                                       );
                                   },
                                   noMoreItemsIndicatorBuilder: (context) =>
                                       Container(),
@@ -443,6 +444,21 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                     ],
                   ),
                 ),
+                GestureDetector(
+                  onTap: (){
+                    context.push(Routes.FacebookSuggestPeople);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Label(text: LocaleKeys.viewAll.localize,style: Styles.headerText(fontSize: 30),),
+                      const Sizer(),
+                      Icon(Icons.arrow_forward_ios,size: 28.w,)
+                    ],
+                  ),
+                ),
+                const Sizer(),
+
                 Container(
                   width: double.infinity,
                   height: 5.h,

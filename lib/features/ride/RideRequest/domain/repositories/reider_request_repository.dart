@@ -118,68 +118,6 @@ class ReiderRequestRepository {
     SharedWebSocket.socket!.emit("drivers:nearBy", [data]);
   }
 
-//   RequestSocketResponse nearbyDriversOn() {
-//     Map<String, dynamic> response = {};
-//     SharedWebSocket.socket!.on(
-//       "drivers:near",
-//       (data) {
-//         log(jsonDecode(data).toString(),
-//             name: "lskdjflsdkjflskdjflkdjflskdjflskdjf");
-//         // response = jsonDecode(fixJson(data));
-//       },
-//     );
-//     response = jsonDecode('''{
-//   "drivers": [
-//     {
-//       "driverId": "66e0578c51f4bced71f262d1",
-//       "location": {
-//         "lat": "null",
-//         "lng": "0"
-//       },
-//       "userData": {
-//         "firstName": "basel",
-//         "USER_PROFILE": {
-//           "_id": "66c349d7a684ab473f1c1eda",
-//           "userId": "66c349d7a684ab473f1c1ed7",
-//           "profilePictureKey": {
-//             "_id": "66a4ee09e0f15662b542e239",
-//             "mediaKey": "https://49hub-reels.s3.eu-central-1.amazonaws.com/ride/twitter/66a4118c8a30f11ecd8f9edd/eeed6270-6a1c-4d76-a3ed-4bb015e1160c.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZI2LDRJFLQMKAMUH%2F20240923%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20240923T052212Z&X-Amz-Expires=3600&X-Amz-Signature=f28c44970b10310cfc4b991981955afe15c80fb5dc16eb40757fa4815c605c4d&X-Amz-SignedHeaders=host&x-id=GetObject"
-//             }
-//           },
-//           "id": "null"
-//         }
-//       },
-//       {
-//         "driverId": "66e0582a66fc44ca4acb327d",
-//         "location": {
-//           "lat": "null",
-//           "lng": "0"
-//       },
-//       "userData": {
-//         "firstName": "mohamed",
-//         "USER_PROFILE": {
-//           "_id": "66bcbd183aa2f0e6b120aa6e",
-//           "userId": "66bcbd183aa2f0e6b120aa6b",
-//           "profilePictureKey": {
-//             "_id": "66cc740113bfa607c5bbcb82",
-//             "mediaKey": "https://49hub-reels.s3.eu-central-1.amazonaws.com/ride/pickup/66bcbd183aa2f0e6b120aa6b/ef686290-4c9e-4515-afcd-f7c8a19c8975.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZI2LDRJFLQMKAMUH%2F20240923%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20240923T052212Z&X-Amz-Expires=3600&X-Amz-Signature=ea301251d5a196f59f797c368c4553b14dd19fad23115a2229ed406741531cc8&X-Amz-SignedHeaders=host&x-id=GetObject"
-//           }
-//         },
-//       "id": "null"
-//     }
-//   }
-// ], "tripInfo": {
-//   "distance": 25708,
-//   "duration": 2304,
-//   "price": 125,
-//   "paymentMethod": "cash"
-// }
-// }''');
-//     log(response.toString(), name: "lskdjflskdjflskdjflkdjjfjfjfjfjffj");
-//     RequestSocketResponse data = RequestSocketResponse.fromJson(response);
-//     return data;
-//   }
-
   riseFare({required String offer, required String tripId}) {
     var json = jsonEncode({"offer": offer, "tripId": tripId});
     log(json.toString(), name: "riseFare");
@@ -225,7 +163,6 @@ class ReiderRequestRepository {
 
   void getAllTripSocket(Function(List<AllTripForDriverModel> data) onData) {
     log("llllllllllllllllllllllllllllllllllllllllllllllllllll getAllTrip");
-    // SharedWebSocket.socket!.connect();
     SharedWebSocket.socket!.emit("Ride:getAllTrip");
     SharedWebSocket.socket!.on(
       "Ride:getAllTrip",
@@ -238,15 +175,10 @@ class ReiderRequestRepository {
                   (e) => AllTripForDriverModel.fromJson(e),
                 )
                 .toList();
-        // AllTripForDriverModel.fromJson(jsonDecode(data));
         log(model.toString(), name: "AllTripAllTrip");
         onData(model);
-        // log("llllllllllllllllllllllllllllllllllllllllllllllllllll");
-        // log(jsonDecode(data).toString(),
-        //     name: "llllllllllllllllllllllllllllllllllllllllllllllllllll");
       },
     );
-    // return data;
   }
 
   String extractTextAfterSymbol(String text, String symbol) {
@@ -554,11 +486,16 @@ class ReiderRequestRepository {
     );
   }
 
-  Future<Either<Failure, Map<String, dynamic>>> getSignUrl({required Map<String, dynamic>? data, required String url}){
+  Future<Either<Failure, Map<String, dynamic>>> getSignUrl(
+      {required Map<String, dynamic>? data, required String url}) {
     return dataSource.getSigninUrl(url: url, data: data);
   }
 
-  Future<Either<Failure, Map<String, dynamic>>> successUpload({required Map<String, dynamic>? data, required String url}){
+  Future<Either<Failure, Map<String, dynamic>>> successUpload(
+      {required Map<String, dynamic>? data, required String url}) {
     return dataSource.successUpload(url: url, data: data);
+  }
+  Future<Either<Failure, Map<String, dynamic>>> getRideDriver() {
+    return dataSource.getRideDriver();
   }
 }

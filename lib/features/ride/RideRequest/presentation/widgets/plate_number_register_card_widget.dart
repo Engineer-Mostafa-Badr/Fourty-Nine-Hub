@@ -11,13 +11,15 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class PlateNumberRegisterCardWidget extends StatefulWidget {
-  PlateNumberRegisterCardWidget({super.key});
+  const PlateNumberRegisterCardWidget({super.key});
 
   @override
-  State<PlateNumberRegisterCardWidget> createState() => _PlateNumberRegisterCardWidgetState();
+  State<PlateNumberRegisterCardWidget> createState() =>
+      _PlateNumberRegisterCardWidgetState();
 }
 
-class _PlateNumberRegisterCardWidgetState extends State<PlateNumberRegisterCardWidget> {
+class _PlateNumberRegisterCardWidgetState
+    extends State<PlateNumberRegisterCardWidget> {
   TextEditingController pricingPerKmController = TextEditingController();
 
   @override
@@ -43,8 +45,10 @@ class _PlateNumberRegisterCardWidgetState extends State<PlateNumberRegisterCardW
           const Sizer(),
           DefaultTextFormField(
             onChanged: (value) {
-              BlocProvider.of<ShippingCubit>(context).model.plateInfromation = value;
-              BlocProvider.of<RegisterRiderCubit>(context).model.plateInfo = value;
+              BlocProvider.of<ShippingCubit>(context).model.plateInfromation =
+                  value;
+              BlocProvider.of<RegisterRiderCubit>(context).model.plateInfo =
+                  value;
             },
             isAuthentcation: true,
             hint: '',

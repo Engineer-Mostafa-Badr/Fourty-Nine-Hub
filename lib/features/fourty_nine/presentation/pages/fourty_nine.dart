@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,8 +16,10 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/animated_text.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
@@ -40,6 +43,8 @@ import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../widgets/announce_widget.dart';
+import 'package:text_scroll/text_scroll.dart';
+import 'package:auto_scroll_text/auto_scroll_text.dart';
 
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});
@@ -48,20 +53,21 @@ class FourtyNineView extends StatefulWidget {
   State<FourtyNineView> createState() => _FourtyNineViewState();
 }
 
-class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObserver {
+class _FourtyNineViewState extends State<FourtyNineView>
+    with WidgetsBindingObserver {
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
-  checkLogin()async {
+  checkLogin() async {
     try {
-      if(!context.isUserLoggedIn) await context.read<UserCubit>().getUser();
+      if (!context.isUserLoggedIn) await context.read<UserCubit>().getUser();
     } catch (e) {
       print(e.toString());
     }
   }
+
   AppOpenAdManager appOpenAdManager = AppOpenAdManager();
   bool isPaused = false;
-
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -77,7 +83,6 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
       isPaused = false;
     }
   }
-
 
   @override
   void didChangeDependencies() async {
@@ -121,7 +126,7 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
   }
 
   @override
-  initState(){
+  initState() {
     context
         .read<NotificationSocketIoCubit>()
         .notificationListener(languageCode: 'en');
@@ -193,10 +198,29 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
             !context.read<UserCubit>().isLoggedIn
                 ? const Sizer()
                 : const SizedBox.shrink(),
+            const ScrollableTextWithAnimation(),
+
             //wallet
             context.read<UserCubit>().isLoggedIn
                 ? const WalletWidget()
                 : const SizedBox.shrink(),
+            ClickableWidget(
+              onTap:(){
+                context.push(Routes.CUSTOMPAGE);
+              },
+              child: Container(
+                height: 100.h,
+                alignment: Alignment.center,
+                child: AutoScrollText(
+                  LocaleKeys.choosePreferredAppStyle.localize,
+                  style: Styles.headerText(fontSize: 30, color: AppColors.SECONDARY_COLOR),
+                  textDirection: context.isArabic?TextDirection.rtl:TextDirection.ltr,
+                  selectable: true,
+                  // textStyle: TextStyle(fontSize: 24),
+                ),
+              ),
+            ),
+            // ScrollableTextWithAnimation(text: 'Colored text.kasmdlkasdmklasmdkladmslkamdklasmdkndasjkdnasjkdnsjka',),
             //    Sizer(),
             //admob
             //   const GoogleAddsBanner(),
@@ -255,7 +279,8 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
                         onTap: () {
                           AdInterstitialTop.loadIntersitialAd();
                           AdInterstitialTop.showInterstitialAd();
-                          HandleCashback.setCount('mainCategoriesCount',context);
+                          HandleCashback.setCount(
+                              'mainCategoriesCount', context);
                           context.push(Routes.SUBCATEGORIES,
                               extra: state.data![index]);
                         },
@@ -309,21 +334,19 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
                 width: 34.h,
               ),
               Routes.MAINCATEGORIESTREE,
-                  () => HandleCashback.setCount('threeDotsCount', context),
+              () => HandleCashback.setCount('threeDotsCount', context),
             ),
             _buildItemTabBar(
-              SvgPicture.asset(
-                Assets.mobile,
-                height: 34.h,
-                width: 34.h,
-              ),
-              Routes.MAINCATEGORIESCARDS,
-                (){
-                  AdInterstitialTop.loadIntersitialAd();
-                  AdInterstitialTop.showInterstitialAd();
-                  HandleCashback.setCount('mainCategoriesSliderCount',context);
-                }
-            ),
+                SvgPicture.asset(
+                  Assets.mobile,
+                  height: 34.h,
+                  width: 34.h,
+                ),
+                Routes.MAINCATEGORIESCARDS, () {
+              AdInterstitialTop.loadIntersitialAd();
+              AdInterstitialTop.showInterstitialAd();
+              HandleCashback.setCount('mainCategoriesSliderCount', context);
+            }),
           ],
         ),
       ),
@@ -406,7 +429,7 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
                   onTab: () {
                     AdInterstitialTop.loadIntersitialAd();
                     AdInterstitialTop.showInterstitialAd();
-                    return HandleCashback.setCount('tripJoinCount',context);
+                    return HandleCashback.setCount('tripJoinCount', context);
                   },
                   // isFavorite: state.data![1].isFavorite,
                   // numberOfAds: state.data![1].numberOfAds?.toInt(),
@@ -515,7 +538,7 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
                 onPressed: () {
                   AdInterstitialTop.loadIntersitialAd();
                   AdInterstitialTop.showInterstitialAd();
-                  HandleCashback.setCount('beAStarCount',context);
+                  HandleCashback.setCount('beAStarCount', context);
                   context.push(Routes.BE_STAR);
                 }),
           ),
@@ -547,6 +570,7 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
       ),
     );
   }
+
   Widget _buildTenPercentWidget() {
     return SizedBox(
       height: kToolbarHeight * .9.h,
@@ -567,7 +591,7 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
                       icon: Icons.star,
                       iconSize: 50.h,
                       onPressed: () {
-                        HandleCashback.setCount('tenPercentCount',context);
+                        HandleCashback.setCount('tenPercentCount', context);
                         context.push(Routes.TenPercent);
                       }),
                 ),
@@ -598,7 +622,7 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
               ],
             ),
           ),
-          Sizer(),
+          const Sizer(),
           Expanded(
             child: Stack(
               children: [
@@ -739,11 +763,11 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    SquareImage(
+                    Image.asset(
+                      Assets.tripJoinImage,
                       fit: BoxFit.cover,
                       width: 150,
                       // source: AssetImage(image),
-                      url: image,
                     ),
                     Container(
                       color: Colors.black
@@ -757,6 +781,8 @@ class _FourtyNineViewState extends State<FourtyNineView> with WidgetsBindingObse
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Row(
                 children: [
+                  Container(),
+                  const Spacer(),
                   Label(
                     // text: service.title(),
                     text: title,

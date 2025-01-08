@@ -60,9 +60,8 @@ class WinnerCard extends StatelessWidget {
             text: '${model.firstName} ${model.lastName}',
             style: Styles.mediumText(fontWeight: FontWeight.w500)),
         Label(
-            text: context.locale == Locales.english
-                ? model.nameEn
-                : model.nameAr,
+            text:
+                context.locale == Locales.english ? model.nameEn : model.nameAr,
             style: Styles.smallText()),
         Label(text: '${model.profit}', style: Styles.mediumText()),
       ],

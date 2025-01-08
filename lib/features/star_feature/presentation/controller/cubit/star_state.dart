@@ -2,7 +2,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/banner_talent_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_winner_entity.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/create_star.dart';
 
 import '../../../../../common/functions/global/upload_file.dart';
 
@@ -35,7 +34,7 @@ class StarState {
     List<StarWinnerEntity>? winner,
     List<UploadFileEntity>? video,
     BannerTalentEntity? banner,
-     // List<VideoModel>? videos,
+    // List<VideoModel>? videos,
   }) {
     return StarState(
       status: status ?? this.status,

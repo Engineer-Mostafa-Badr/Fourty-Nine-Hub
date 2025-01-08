@@ -22,13 +22,11 @@ import 'package:image/image.dart' as img;
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 
 class MediaPreviewScreen extends StatefulWidget {
-  final String mediaId;
   final String mediaPath;
   final bool isImage;
 
   const MediaPreviewScreen({
     super.key,
-    required this.mediaId,
     required this.mediaPath,
     required this.isImage,
   });
@@ -293,7 +291,6 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                               MaterialPageRoute(
                                 builder: (context) => NextMediaPreview(
                                   mediaPath: widget.mediaPath,
-                                  mediaId: widget.mediaId,
                                   isImage: widget.isImage,
                                 ),
                               ),

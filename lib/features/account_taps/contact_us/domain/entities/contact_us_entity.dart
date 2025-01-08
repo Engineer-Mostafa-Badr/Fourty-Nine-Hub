@@ -1,5 +1,5 @@
 class ContactUsEntity {
   final String content;
-   String? phone;
-  ContactUsEntity({required this.content,  this.phone});
+  String? phone;
+  ContactUsEntity({required this.content, this.phone});
 }

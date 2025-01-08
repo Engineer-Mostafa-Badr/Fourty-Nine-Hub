@@ -124,12 +124,18 @@ class _InstagramViewState extends State<InstagramView> {
                   SizedBox(
                     width: 8.w,
                   ),
-                  Label(text: i == 0 ? LocaleKeys.home.localize : LocaleKeys.profile.localize,style: Styles.headerText(color: i == 0
-                      ? context.isDarkMode
-                      ? AppColors.PRIMARY_COLOR_DARK
-                      : AppColors.PRIMARY_COLOR
-                      : Colors.grey,fontSize: 30),)
-
+                  Label(
+                    text: i == 0
+                        ? LocaleKeys.home.localize
+                        : LocaleKeys.profile.localize,
+                    style: Styles.headerText(
+                        color: i == 0
+                            ? context.isDarkMode
+                                ? AppColors.PRIMARY_COLOR_DARK
+                                : AppColors.PRIMARY_COLOR
+                            : Colors.grey,
+                        fontSize: 30),
+                  )
                 ],
               ),
             ),

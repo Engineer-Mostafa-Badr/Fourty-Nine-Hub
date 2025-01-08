@@ -15,8 +15,6 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../common/functions/helper/lang_helper.dart';
-
 class RiderBanner extends StatefulWidget {
   const RiderBanner({
     super.key,
@@ -86,7 +84,8 @@ class _RiderBannerState extends State<RiderBanner> {
           nameEn:
               context.isArabic ? "تسجيل سائق سيارة/نقل" : "Car/Truck Register",
           id: widget.model.mainCategory?.mainCategoryId ?? '',
-          name: context.isArabic ? "تسجيل سائق سيارة/نقل" : "Car/Truck Register",
+          name:
+              context.isArabic ? "تسجيل سائق سيارة/نقل" : "Car/Truck Register",
           banner: widget.model.mainCategory?.banner ?? UIConst.imagePlaceHolder,
           cover: widget.model.mainCategory?.cover ?? UIConst.imagePlaceHolder,
           image: UIConst.imagePlaceHolder,

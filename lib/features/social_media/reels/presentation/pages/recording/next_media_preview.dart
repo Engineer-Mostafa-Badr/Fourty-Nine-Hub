@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,8 +11,6 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/privacy_status_enum.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_reel_use_case.dart';
-import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_video_reel_use_case.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/shared/filter_utiles.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
@@ -23,13 +22,11 @@ import 'package:video_player/video_player.dart';
 import '../../../../../../routes/routes.dart';
 
 class NextMediaPreview extends StatefulWidget {
-  final String mediaId;
   final String mediaPath;
   final bool isImage;
 
   const NextMediaPreview({
     super.key,
-    required this.mediaId,
     required this.mediaPath,
     required this.isImage,
   });
@@ -76,7 +73,13 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
             }
           },
           builder: (BuildContext context, state) {
+            log(state.status.toString());
             final controller = context.read<ReelsCubit>();
+            // if (state.status == ReelsStates.loading) {
+            //   return const Center(
+            //     child: CircularProgressIndicator(color: AppColors.PRIMARY_COLOR,),
+            //   );
+            // }
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
               child: Column(
@@ -263,25 +266,24 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
                       Expanded(
                         child: buildContainer(
                           onTap: () {
-                            print('Media Path: ${widget.mediaId}');
                             print('isImage: ${widget.isImage}');
                             if (widget.isImage == true) {
-                              controller.uploadReel(
-                                  params: UploadReelParams(
-                                images: [widget.mediaId],
-                                //audioMedia:'66ae56014894b5d4015bcb02',
-                                description: descController.text.isNotEmpty
-                                    ? descController.text
-                                    : null,
-                              ));
+                              // controller.uploadReel(
+                              //     params: UploadReelParams(
+                              //   images: [widget.mediaId],
+                              //   //audioMedia:'66ae56014894b5d4015bcb02',
+                              //   description: descController.text.isNotEmpty
+                              //       ? descController.text
+                              //       : null,
+                              // ));
                             } else {
-                              controller.uploadVideoReel(
-                                  params: UploadVideoReelParams(
-                                thumbnailMediaId: widget.mediaId,
-                                description: descController.text.isNotEmpty
-                                    ? descController.text
-                                    : null,
-                              ));
+                              // controller.uploadVideoReel(
+                              //     params: UploadVideoReelParams(
+                              //   thumbnailMediaId: widget.mediaId,
+                              //   description: descController.text.isNotEmpty
+                              //       ? descController.text
+                              //       : null,
+                              // ));
                             }
                           },
                           color: AppColors.SECONDARY_COLOR,

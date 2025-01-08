@@ -56,7 +56,6 @@ class SearchCubit extends Cubit<SearchState> {
   final CommentReactUseCase _commentReactUseCase;
   final GetMainCategoriesUseCase _getMainCategoriesUseCase;
 
-
   SearchCubit(
     this._fetchSearchUseCase,
     this._toggleFavoriteCategoryUseCase,
@@ -74,7 +73,8 @@ class SearchCubit extends Cubit<SearchState> {
     this._commentReactUseCase,
     this._fetchTripComeSearchUseCase,
     this._fetchReelSearchUseCase,
-    this._fetchSearchSubCategoryUseCase, this._getMainCategoriesUseCase,
+    this._fetchSearchSubCategoryUseCase,
+    this._getMainCategoriesUseCase,
   ) : super(SearchState());
 
   TextEditingController searchController = TextEditingController();
@@ -112,14 +112,16 @@ class SearchCubit extends Cubit<SearchState> {
       getPaginatedSearch(params, pageKey);
     });
   }
+
   void loadDataSubCategory(SearchParams params) async {
     getPaginatedSubCategorySearch(params, 1);
     searchPagingSubCategoryController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
       getPaginatedSubCategorySearch(params, pageKey);
     });
-   await loadDataMain();
+    await loadDataMain();
   }
+
   void loadDataReel(SearchParams params) async {
     getPaginatedReelsSearch(params, 1);
     searchPagingReelsController.addPageRequestListener((pageKey) {
@@ -127,6 +129,7 @@ class SearchCubit extends Cubit<SearchState> {
       getPaginatedReelsSearch(params, pageKey);
     });
   }
+
   void loadDataPosts(SearchParams params) async {
     getPaginatedPostsSearch(params, 1);
     searchPagingPostsController.addPageRequestListener((pageKey) {
@@ -134,6 +137,7 @@ class SearchCubit extends Cubit<SearchState> {
       getPaginatedPostsSearch(params, pageKey);
     });
   }
+
   void loadDataUser(SearchParams params) async {
     getPaginatedUserSearch(params, 1);
     searchPagingUserController.addPageRequestListener((pageKey) {
@@ -141,6 +145,7 @@ class SearchCubit extends Cubit<SearchState> {
       getPaginatedUserSearch(params, pageKey);
     });
   }
+
   void loadDataTrip(SearchParams params) async {
     getPaginatedTripComeSearch(params, 1);
     searchPagingTripComeController.addPageRequestListener((pageKey) {
@@ -148,6 +153,7 @@ class SearchCubit extends Cubit<SearchState> {
       getPaginatedTripComeSearch(params, pageKey);
     });
   }
+
   void loadDataMainAds(SearchParams params) async {
     getPaginatedAdsSearch(params, 1);
     searchPagingAdsController.addPageRequestListener((pageKey) {
@@ -595,7 +601,7 @@ class SearchCubit extends Cubit<SearchState> {
           MainCategoriesParams(page: 1, limit: 100, userId: user ?? ''));
 
       result.fold(
-            (failure) {
+        (failure) {
           emit(state.copyWith(
             failure: failure,
             status: SearchStates.error,
@@ -603,11 +609,10 @@ class SearchCubit extends Cubit<SearchState> {
           CliLogger.error(
               'can\'t load main categories there is an error ${failure.toString()}');
         },
-            (r) {
+        (r) {
           emit(state.copyWith(status: SearchStates.success, mainCategory: r));
         },
       );
     }
   }
-
 }

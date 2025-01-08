@@ -59,10 +59,10 @@ class _TinderScreenState extends State<TinderScreen> {
     final tinderCubit = context.read<TinderViewCubit>();
     final user = context.read<UserCubit>();
     tinderCubit
-      ..fetchUserData(user.state.data?.gender ??'female')
+      ..fetchUserData(user.state.data?.gender ?? 'female')
       ..fetchSubCategoryData()
       ..fetchFavorites()
-      ..fetchMainCategoryById(context,'62c8b5b09332225799fe335e');
+      ..fetchMainCategoryById(context, '62c8b5b09332225799fe335e');
   }
 
   @override
@@ -73,7 +73,7 @@ class _TinderScreenState extends State<TinderScreen> {
       ),
       body: BlocBuilder<TinderViewCubit, TinderViewState>(
         builder: (context, state) {
-          if(state.status ==TinderStates.success) {
+          if (state.status == TinderStates.success) {
             return _buildLoggedInContent(context, state);
           }
           return const Center(child: CircularProgressIndicator());
@@ -92,30 +92,33 @@ class _TinderScreenState extends State<TinderScreen> {
             BlocBuilder<TinderViewCubit, TinderViewState>(
               builder: (context, state) {
                 final controller = context.read<TinderViewCubit>();
-                if(state.subCategoryData !=null && state.mainCategoryResponse !=null) {
+                if (state.subCategoryData != null &&
+                    state.mainCategoryResponse != null) {
                   return Padding(
-                  padding: EdgeInsets.all(8.0.w),
-                  child: GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: state.subCategoryData?.length ?? 0,
-                    controller: _scrollController,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 1,
+                    padding: EdgeInsets.all(8.0.w),
+                    child: GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.subCategoryData?.length ?? 0,
+                      controller: _scrollController,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 1,
+                      ),
+                      itemBuilder: (context, index) => SubcategoryCardTinder(
+                        mainCategory: state.mainCategoryResponse!,
+                        item: state.subCategoryData![index],
+                        onFav: () async {
+                          var result =
+                              await controller.toggleSubCategoryToFavorites(
+                            state.subCategoryData![index].id,
+                          );
+                          return result;
+                        },
+                      ),
                     ),
-                    itemBuilder: (context, index) => SubcategoryCardTinder(
-                      mainCategory: state.mainCategoryResponse!,
-                      item: state.subCategoryData![index],
-                      onFav: () async {
-                        var result = await controller.toggleSubCategoryToFavorites(
-                          state.subCategoryData![index].id,
-                        );
-                        return result;
-                      },
-                    ),
-                  ),
-                );
+                  );
                 }
                 return const Center(child: CircularProgressIndicator());
               },

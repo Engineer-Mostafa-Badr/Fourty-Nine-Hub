@@ -33,21 +33,21 @@ class SearchState {
     this.filter = 'totalUsers',
   });
 
-  SearchState copyWith(
-      {SearchStates? status,
-      Failure? failure,
-      String? filter,
-      List<MainCategoryEntity>? search,
-      List<SubCategoryEntity>? searchSubCategory,
-      List<UserSearchEntity>? userSearch,
-      List<AdsSearchEntity>? adsSearch,
-      List<PostEntity>? posts,
-      List<TripComeWithYouEntity>? tripCome,
-      PostEntity? postDetails,
-      CommentEntity? newComment,
-      List<ReelsSearchEntity>? reels,
-         List<MainCategoryEntity>? mainCategory,
-      }) {
+  SearchState copyWith({
+    SearchStates? status,
+    Failure? failure,
+    String? filter,
+    List<MainCategoryEntity>? search,
+    List<SubCategoryEntity>? searchSubCategory,
+    List<UserSearchEntity>? userSearch,
+    List<AdsSearchEntity>? adsSearch,
+    List<PostEntity>? posts,
+    List<TripComeWithYouEntity>? tripCome,
+    PostEntity? postDetails,
+    CommentEntity? newComment,
+    List<ReelsSearchEntity>? reels,
+    List<MainCategoryEntity>? mainCategory,
+  }) {
     return SearchState(
       status: status ?? this.status,
       failure: failure ?? this.failure,

@@ -91,7 +91,7 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                                       activeTrackColor: Colors.grey,
                                       activeColor: AppColors.SECONDARY_COLOR,
                                       trackOutlineColor:
-                                          MaterialStateProperty.resolveWith(
+                                          WidgetStateProperty.resolveWith(
                                               (sattes) => Colors.white),
                                       onChanged: (v) async {
                                         print("vsssss${!v}");
@@ -177,12 +177,11 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                                                     RestaurantDashboardCubit>()
                                                 .deleteRestaurantById(context,
                                                     id: widget.restaurantId,
-                                              subCategoryId: state
-                                                    .info
-                                                    ?.subcategoryId
-                                                    ?.id ??
-                                                ''
-                                            );
+                                                    subCategoryId: state
+                                                            .info
+                                                            ?.subcategoryId
+                                                            ?.id ??
+                                                        '');
                                             context.pop(true);
                                             // Future.delayed(const Duration(seconds: 1),()=>context.pop(true));
                                           }
