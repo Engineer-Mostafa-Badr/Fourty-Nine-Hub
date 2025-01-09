@@ -410,13 +410,13 @@ class _ZegoLiveStreamingLivePageSurfaceState
                             padding: const EdgeInsets.all(4.0),
                             child: OutlinedButton(
                               style: ButtonStyle(
-                                side: const WidgetStatePropertyAll(BorderSide(
+                                side: const MaterialStatePropertyAll(BorderSide(
                                     width: 1, color: AppColors.ACCENT_COLOR)),
                                 iconColor:
-                                    const WidgetStatePropertyAll(Colors.white),
+                                    const MaterialStatePropertyAll(Colors.white),
                                 backgroundColor: context.isDarkMode
-                                    ? const WidgetStatePropertyAll(Colors.black)
-                                    : WidgetStatePropertyAll(
+                                    ? const MaterialStatePropertyAll(Colors.black)
+                                    : MaterialStatePropertyAll(
                                         Colors.grey.withOpacity(0.9)),
                               ),
                               onPressed: () {

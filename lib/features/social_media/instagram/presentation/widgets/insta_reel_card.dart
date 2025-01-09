@@ -37,7 +37,7 @@ class _InstagramReelCardState extends State<InstagramReelCard> {
       setState(() {});
     });
 
-    // _controller!.setLooping(true);
+    _controller!.setLooping(true);
     _controller!.initialize();
     if (widget.playVideo == true) _controller!.play();
   }
