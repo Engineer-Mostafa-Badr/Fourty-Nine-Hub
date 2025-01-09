@@ -8,7 +8,6 @@ import 'package:fourtyninehub/ads/app_open_model.dart';
 import 'package:fourtyninehub/ads/banner_ad_model.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -43,7 +42,6 @@ import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../widgets/announce_widget.dart';
-import 'package:text_scroll/text_scroll.dart';
 import 'package:auto_scroll_text/auto_scroll_text.dart';
 
 class FourtyNineView extends StatefulWidget {
