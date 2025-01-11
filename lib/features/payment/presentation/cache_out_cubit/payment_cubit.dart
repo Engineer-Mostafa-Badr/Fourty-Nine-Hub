@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/payment_provider_entity.dart';
 import 'package:fourtyninehub/features/payment/domain/use_cases/get_payment_provider_use_case.dart';
@@ -103,6 +104,7 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
 
   Future<void> uploadPhoto({
     bool isGallery = true,
+    required BuildContext context,
     required bool
         isFrontImage, // New parameter to differentiate between front and back images
   }) async {
@@ -122,7 +124,7 @@ class PaymentCacheOutCubit extends Cubit<PaymentCacheOutState> {
               backColor: '#FFFFFFFF',
             ));
           }
-        });
+        }, context: context);
   }
 
   void removePhoto({bool isFrontImage = true}) {

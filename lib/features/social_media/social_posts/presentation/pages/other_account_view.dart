@@ -309,7 +309,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           onTap: () async {
                                             Navigator.pop(context);
                                             await controller.uploadPhoto(
-                                                isGallery: true);
+                                                isGallery: true, context: context);
                                             // Reload user data if needed
                                           },
                                         ),
@@ -320,7 +320,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           onTap: () async {
                                             Navigator.pop(context);
                                             await controller.uploadPhoto(
-                                                isGallery: false);
+                                                isGallery: false, context: context);
                                             // Reload user data if needed
                                           },
                                         ),
@@ -343,7 +343,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           onTap: () async {
                                             Navigator.pop(context);
                                             await controller.uploadCoverPhoto(
-                                                isGallery: true);
+                                                isGallery: true, context: context);
                                             // Reload user data if needed
                                           },
                                         ),
@@ -354,7 +354,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           onTap: () async {
                                             Navigator.pop(context);
                                             await controller.uploadCoverPhoto(
-                                                isGallery: false);
+                                                isGallery: false, context: context);
                                             // Reload user data if needed
                                           },
                                         ),

@@ -446,11 +446,12 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     );
   }
 
-  uploadPhoto({bool isGallery = true}) async {
+  uploadPhoto({bool isGallery = true,required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print('=======>data Hiii');
     UploadFileEntity? image;
     await upload.uploadImage(
+      context: context,
         isGallery: isGallery,
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) async {
@@ -475,12 +476,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         });
   }
 
-  uploadCoverPhoto({bool isGallery = true}) async {
+  uploadCoverPhoto({bool isGallery = true,required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print('=======>data Hiii');
     UploadFileEntity? cover;
 
     await upload.uploadImage(
+      context:context,
         isGallery: isGallery,
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) async {

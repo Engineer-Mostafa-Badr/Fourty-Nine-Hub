@@ -191,7 +191,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                               onTap: () async {
                                                 Navigator.pop(context);
                                                 controller.uploadPhoto(
-                                                    isGallery: true);
+                                                    isGallery: true, context: context);
                                               },
                                             ),
                                             ListTile(
@@ -202,7 +202,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                               onTap: () async {
                                                 Navigator.pop(context);
                                                 controller.uploadPhoto(
-                                                    isGallery: false);
+                                                    isGallery: false, context: context);
                                                 // await CompanyAdvertiseCubit.get(context)
                                                 //     .uploadPhoto(isGallery: false);
                                                 // Reload user data if needed

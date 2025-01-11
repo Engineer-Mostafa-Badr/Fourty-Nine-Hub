@@ -460,7 +460,7 @@ class TwitterCubit extends Cubit<TwitterState> {
     emit(ShowRepliesSuccessState());
   }
 
-  uploadPersonalPhoto() {
+  uploadPersonalPhoto({required BuildContext context}) {
     final UploadFile upload = UploadFile();
     upload.uploadImage(
         subCategoryId: '66a3583454e6e337915514db',
@@ -469,7 +469,7 @@ class TwitterCubit extends Cubit<TwitterState> {
           print("PersonalPhotoId: ${data.mediaId}");
           emit(
               state.copyWith(personalPhoto: data, status: StateStatus.success));
-        });
+        }, context: context);
   }
 
   removePersonalPhoto() {
@@ -488,7 +488,7 @@ class TwitterCubit extends Cubit<TwitterState> {
     print(state.backId?.mediaId);
   }
 
-  uploadFrontId() {
+  uploadFrontId({required BuildContext context}) {
     final UploadFile upload = UploadFile();
     upload.uploadImage(
         subCategoryId: '66a3583454e6e337915514db',
@@ -496,10 +496,10 @@ class TwitterCubit extends Cubit<TwitterState> {
           print("FrontId name ${data.file}");
           print("FrontId: ${data.mediaId}");
           emit(state.copyWith(frontId: data, status: StateStatus.success));
-        });
+        }, context: context);
   }
 
-  uploadBackId() {
+  uploadBackId({required BuildContext context}) {
     final UploadFile upload = UploadFile();
     upload.uploadImage(
         subCategoryId: '66a3583454e6e337915514db',
@@ -507,7 +507,7 @@ class TwitterCubit extends Cubit<TwitterState> {
           print("BackId name ${data.file}");
           print("BackId: ${data.mediaId}");
           emit(state.copyWith(backId: data, status: StateStatus.success));
-        });
+        }, context: context);
   }
 
   void deletePost(

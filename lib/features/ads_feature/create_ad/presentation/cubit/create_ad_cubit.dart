@@ -171,6 +171,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
    pickImage(
       {bool isGallery = true,
         required String subCategoryId,
+        required BuildContext context,
         required Function(UploadFileEntity) onUploaded}) async {
      loadImage = true;
      emit(state.copyWith(status: CreateAdStates.uploadImage));
@@ -180,6 +181,8 @@ class CreateAdCubit extends Cubit<CreateAdState> {
         .pickImage(isGallery: isGallery)
         .then((file) async {
       if (file != null) {
+        showLoadingDialog(context);
+
         final tempDir = await getTemporaryDirectory();
         final uniqueFileName =
             'compressed_${DateTime.now().millisecondsSinceEpoch}_${file.name}';
@@ -261,13 +264,15 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     await Dio().put(signedUrl, data: image, options: options);
     print("aasl;das;ld,");
   }
-  void uploadImage({required String subCategoryId}) async {
+  void uploadImage({required String subCategoryId,required BuildContext context}) async {
     loadImage = true;
     emit(state.copyWith(status: CreateAdStates.uploadImage));
 
     final mediaResponse = await pickImage(
             subCategoryId: subCategoryId,
+            context:context,
             onUploaded: (UploadFileEntity media) {
+              context.pop();
               final images = state.images ?? [];
               images.add(media);
               print("objectUpload1");

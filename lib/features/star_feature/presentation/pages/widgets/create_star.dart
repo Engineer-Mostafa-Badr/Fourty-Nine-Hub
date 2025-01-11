@@ -174,7 +174,7 @@ class _CreateStarState extends State<CreateStar> {
                                                                 controller
                                                                     .uploadPhoto(
                                                                         isGallery:
-                                                                            true);
+                                                                            true, context: context);
                                                               },
                                                             ),
                                                             ListTile(
@@ -191,7 +191,7 @@ class _CreateStarState extends State<CreateStar> {
                                                                 controller
                                                                     .uploadPhoto(
                                                                         isGallery:
-                                                                            false);
+                                                                            false, context: context);
                                                                 // await CompanyAdvertiseCubit.get(context)
                                                                 //     .uploadPhoto(isGallery: false);
                                                                 // Reload user data if needed

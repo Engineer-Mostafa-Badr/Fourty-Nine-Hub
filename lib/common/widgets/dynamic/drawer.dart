@@ -588,7 +588,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 Navigator.pop(context);
                                 await context
                                     .read<UserCubit>()
-                                    .uploadPhoto(isGallery: true);
+                                    .uploadPhoto(isGallery: true, context: context);
                                 // Reload user data if needed
                               },
                             ),
@@ -599,7 +599,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 Navigator.pop(context);
                                 await context
                                     .read<UserCubit>()
-                                    .uploadPhoto(isGallery: false);
+                                    .uploadPhoto(isGallery: false, context: context);
                                 // Reload user data if needed
                               },
                             ),

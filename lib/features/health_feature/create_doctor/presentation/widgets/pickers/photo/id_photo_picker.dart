@@ -29,7 +29,7 @@ class CreateDoctorIDPhotoPicker extends StatelessWidget {
           children: [
             InkWell(
               onTap: () async {
-                await createDoctorCubit.uploadIdFrontImage();
+                await createDoctorCubit.uploadIdFrontImage(context: context);
               },
               child: BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
                 buildWhen: (previous, current) =>
@@ -52,7 +52,7 @@ class CreateDoctorIDPhotoPicker extends StatelessWidget {
             const Sizer(),
             InkWell(
               onTap: () async {
-                await createDoctorCubit.uploadIdBehindImage();
+                await createDoctorCubit.uploadIdBehindImage(context: context);
               },
               child: BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
                 buildWhen: (previous, current) =>

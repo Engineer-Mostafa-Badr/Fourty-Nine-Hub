@@ -395,7 +395,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                     onTap: () async {
                                       Navigator.pop(context);
                                       await controller.uploadPhoto(
-                                          isGallery: true);
+                                          isGallery: true, context: context);
                                       // Reload user data if needed
                                     },
                                   ),
@@ -405,7 +405,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                     onTap: () async {
                                       Navigator.pop(context);
                                       await controller.uploadPhoto(
-                                          isGallery: false);
+                                          isGallery: false, context: context);
                                       // Reload user data if needed
                                     },
                                   ),
