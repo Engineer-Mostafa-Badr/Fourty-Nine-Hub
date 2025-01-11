@@ -307,7 +307,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           title:
                                               Text(LocaleKeys.gallery.localize),
                                           onTap: () async {
-                                            Navigator.pop(context);
+                                            // Navigator.pop(context);
                                             await controller.uploadPhoto(
                                                 isGallery: true, context: context);
                                             // Reload user data if needed
@@ -318,7 +318,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           title:
                                               Text(LocaleKeys.camera.localize),
                                           onTap: () async {
-                                            Navigator.pop(context);
+                                            // Navigator.pop(context);
                                             await controller.uploadPhoto(
                                                 isGallery: false, context: context);
                                             // Reload user data if needed
@@ -341,7 +341,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           title:
                                               Text(LocaleKeys.gallery.localize),
                                           onTap: () async {
-                                            Navigator.pop(context);
+                                            // Navigator.pop(context);
                                             await controller.uploadCoverPhoto(
                                                 isGallery: true, context: context);
                                             // Reload user data if needed
@@ -352,7 +352,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           title:
                                               Text(LocaleKeys.camera.localize),
                                           onTap: () async {
-                                            Navigator.pop(context);
+                                            // Navigator.pop(context);
                                             await controller.uploadCoverPhoto(
                                                 isGallery: false, context: context);
                                             // Reload user data if needed
@@ -705,13 +705,26 @@ class _OtherAccountViewState extends State<OtherAccountView> {
                                           ));
                                 },
                                 child: CircleAvatar(
-                                  radius: 120,
-                                  child: CircleAvatar(
-                                    radius: 60,
-                                    backgroundColor: Colors.white,
-                                    backgroundImage: FileImage(
-                                        File(state.newImage!.file.path)),
+                                  radius: 160.w,
+                                  backgroundColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                                  child: Container(
+                                    height: 250.h,
+                                    width: 300.w,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        image: FileImage(File(state.newImage!.file.path)),
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
                                   ),
+                                  // child: CircleAvatar(
+                                  //   radius: 60,
+                                  //   backgroundColor: Colors.white,
+                                  //   backgroundImage: FileImage(
+                                  //       File(state.newImage!.file.path)),
+                                  // ),
                                 ),
                               )
                             : GestureDetector(

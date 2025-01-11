@@ -349,16 +349,17 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                 ),
                               );
                             },
-                            child: CircleAvatar(
-                              radius: 40.r,
-                              child: CircleAvatar(
-                                radius: 40.r,
-                                backgroundColor: Colors.white,
-                                backgroundImage:
-                                    FileImage(File(state.newImage!.file.path)),
-                              ),
-                            ),
-                          )
+                      child: Container(
+                        height: 100.h,
+                        width: 100.w,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: FileImage(File(state.newImage!.file.path)),
+                            fit: BoxFit.fill,
+                        ),
+                      ),
+                      ))
                         : InkWell(
                             onTap: () {
                               showDialog(
@@ -393,7 +394,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                     leading: const Icon(Icons.photo_library),
                                     title: Text(LocaleKeys.gallery.localize),
                                     onTap: () async {
-                                      Navigator.pop(context);
+                                      // Navigator.pop(context);
                                       await controller.uploadPhoto(
                                           isGallery: true, context: context);
                                       // Reload user data if needed
@@ -403,7 +404,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                     leading: const Icon(Icons.camera_alt),
                                     title: Text(LocaleKeys.camera.localize),
                                     onTap: () async {
-                                      Navigator.pop(context);
+                                      // Navigator.pop(context);
                                       await controller.uploadPhoto(
                                           isGallery: false, context: context);
                                       // Reload user data if needed

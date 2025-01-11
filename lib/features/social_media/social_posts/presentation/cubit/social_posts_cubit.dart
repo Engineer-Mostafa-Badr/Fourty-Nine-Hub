@@ -41,6 +41,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../core/enums/base_status_enum.dart';
@@ -455,6 +456,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         isGallery: isGallery,
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) async {
+        context.pop();
           image = data;
           final response = await serviceLocator<ApiConsumer>().put(
             '/users/profile-picture',
@@ -486,6 +488,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         isGallery: isGallery,
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) async {
+        context.pop();
           cover = data;
           final response = await serviceLocator<ApiConsumer>().put(
             '/users/change-cover-picture',
