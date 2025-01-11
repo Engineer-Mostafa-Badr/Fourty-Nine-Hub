@@ -220,7 +220,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
 //   );
 // }
 
-  uploadPhoto({bool isGallery = true}) async {
+  uploadPhoto({bool isGallery = true,required BuildContext context}) async {
     emit(state.copyWith(status: StateStatus.loading));
     final UploadFile upload = UploadFile();
     await upload.uploadImage(
@@ -245,7 +245,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
               return const Right(true);
             },
           );
-        });
+        }, context: context);
   }
 
   // create normal chat

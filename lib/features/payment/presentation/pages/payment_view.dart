@@ -282,7 +282,7 @@ class _PaymentViewState extends State<PaymentView> {
               ),
               InkWell(
                 onTap: () async {
-                  await cubit.uploadProfileImage();
+                  await cubit.uploadProfileImage(context: context);
                 },
                 child: BlocBuilder<PaymentCubit, PaymentState>(
                   buildWhen: (previous, current) =>

@@ -41,6 +41,7 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twit
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../core/enums/base_status_enum.dart';
@@ -446,14 +447,16 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     );
   }
 
-  uploadPhoto({bool isGallery = true}) async {
+  uploadPhoto({bool isGallery = true,required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print('=======>data Hiii');
     UploadFileEntity? image;
     await upload.uploadImage(
+      context: context,
         isGallery: isGallery,
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) async {
+        context.pop();
           image = data;
           final response = await serviceLocator<ApiConsumer>().put(
             '/users/profile-picture',
@@ -475,15 +478,17 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         });
   }
 
-  uploadCoverPhoto({bool isGallery = true}) async {
+  uploadCoverPhoto({bool isGallery = true,required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print('=======>data Hiii');
     UploadFileEntity? cover;
 
     await upload.uploadImage(
+      context:context,
         isGallery: isGallery,
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) async {
+        context.pop();
           cover = data;
           final response = await serviceLocator<ApiConsumer>().put(
             '/users/change-cover-picture',

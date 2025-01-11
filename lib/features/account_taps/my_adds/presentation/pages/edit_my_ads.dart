@@ -136,6 +136,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                                         controller.uploadImage(
                                           subCategoryId: widget
                                               .categorization.subCategory.id,
+                                          context: context
                                         );
                                       },
                                       isBordered: true,

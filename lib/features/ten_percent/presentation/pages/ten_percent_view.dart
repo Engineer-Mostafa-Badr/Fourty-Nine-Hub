@@ -45,7 +45,7 @@ class _TenPercentViewState extends State<TenPercentView> {
                 const Sizer(),
                 InkWell(
                   onTap: () async {
-                    await context.read<TenPercentCubit>().uploadTrafficBill();
+                    await context.read<TenPercentCubit>().uploadTrafficBill(context: context);
                   },
                   child: BlocBuilder<TenPercentCubit, TenPercentState>(
                     builder: (context, state) {
@@ -85,7 +85,7 @@ class _TenPercentViewState extends State<TenPercentView> {
                 const Sizer(),
                 InkWell(
                   onTap: () async {
-                    await context.read<TenPercentCubit>().uploadElectricityBill();
+                    await context.read<TenPercentCubit>().uploadElectricityBill(context: context);
                   },
                   child: BlocBuilder<TenPercentCubit, TenPercentState>(
                     builder: (context, state) {
@@ -125,7 +125,7 @@ class _TenPercentViewState extends State<TenPercentView> {
                 const Sizer(),
                 InkWell(
                   onTap: () async {
-                    await context.read<TenPercentCubit>().uploadMobileBill();
+                    await context.read<TenPercentCubit>().uploadMobileBill(context: context);
                   },
                   child: BlocBuilder<TenPercentCubit, TenPercentState>(
                     builder: (context, state) {

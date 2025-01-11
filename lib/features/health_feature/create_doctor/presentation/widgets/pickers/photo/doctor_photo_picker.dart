@@ -44,7 +44,7 @@ class _CreateDoctorProfilePhotoPickerState
                   ),
                   InkWell(
                     onTap: () async {
-                      await createDoctorCubit.uploadProfileImage();
+                      await createDoctorCubit.uploadProfileImage(context: context);
                     },
                     child: BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
                         builder: (context, state) {
@@ -59,7 +59,7 @@ class _CreateDoctorProfilePhotoPickerState
               }
               return InkWell(
                 onTap: () async {
-                  await createDoctorCubit.uploadProfileImage();
+                  await createDoctorCubit.uploadProfileImage(context: context);
                 },
                 child: BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
                     builder: (context, state) {

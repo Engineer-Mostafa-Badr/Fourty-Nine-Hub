@@ -78,7 +78,7 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
             '',
         onUploaded: (value) {
           onUploaded(value);
-        },
+        }, context: context,
       );
       emit(CreateMenuCloseLoading());
     } else {

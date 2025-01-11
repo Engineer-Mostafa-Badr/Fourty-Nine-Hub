@@ -5,12 +5,15 @@ import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -23,11 +26,13 @@ class UploadFile {
   Future<Either<Failure, bool>?> uploadImage(
       {bool isGallery = true,
       required String subCategoryId,
+      required BuildContext context,
       required Function(UploadFileEntity) onUploaded}) async {
     final file = await FilePickerHelper()
         .pickImage(isGallery: isGallery)
         .then((file) async {
       if (file != null) {
+        showLoadingDialog(context);
         final tempDir = await getTemporaryDirectory();
         final uniqueFileName =
             'compressed_${DateTime.now().millisecondsSinceEpoch}_${file.name}';
@@ -81,6 +86,8 @@ class UploadFile {
             }, (data) { */
             print("object111");
             onUploaded(UploadFileEntity(mediaId: mediaId, file: file));
+            context.pop();
+
             return const Right(true);
             // });
           });

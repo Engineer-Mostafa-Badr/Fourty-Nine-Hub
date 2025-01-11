@@ -478,11 +478,11 @@ class _CreateAdViewState extends State<CreateAdView> {
                       ),
                     ),
                   ),
-                  if(controller.loadImage) Container(
-                      height: double.infinity,
-                      width: double.infinity,
-                      color: Colors.black.withOpacity(0.5),
-                      child: const Center(child: CircularProgressIndicator.adaptive())),
+                  // if(controller.loadImage) Container(
+                  //     height: double.infinity,
+                  //     width: double.infinity,
+                  //     color: Colors.black.withOpacity(0.5),
+                  //     child: const Center(child: CircularProgressIndicator.adaptive())),
                 ],
               );
             }
@@ -499,7 +499,7 @@ class _CreateAdViewState extends State<CreateAdView> {
         children: [
           InkWell(
             onTap: () => controller.uploadImage(
-                subCategoryId: widget.categorization.subCategory.id),
+                subCategoryId: widget.categorization.subCategory.id,context:context),
             child: Container(
               height: kToolbarHeight * 3,
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),

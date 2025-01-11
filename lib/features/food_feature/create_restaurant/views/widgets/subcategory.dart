@@ -26,7 +26,7 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
               BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                   builder: (context, st) {
                 return DropdownButtonFormField<FoodCategoryEntity>(
-                  dropdownColor: Colors.white,
+                  dropdownColor: Theme.of(context).scaffoldBackgroundColor,
                   decoration: InputDecoration(
                     fillColor: Colors.transparent,
                     isDense: true,
@@ -67,7 +67,7 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
                           child: Text(
                             (context.isArabic ? e.nameAr : e.nameEn) ?? "",
                             style: Styles
-                                .mediumText(), // Add your desired text style here
+                                .mediumText(color: Theme.of(context).textTheme.bodyMedium?.color), // Add your desired text style here
                           )))
                       .toList(),
                   onChanged: (value) {
