@@ -185,7 +185,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
             'compressed_${DateTime.now().millisecondsSinceEpoch}_${file.name}';
         final targetPath = '${tempDir.path}/$uniqueFileName';
         print("file.path${file.path}");
-        print("file.path${targetPath}");
+        print("file.path$targetPath");
         print("objectUpload2");
         var result = await FlutterImageCompress.compressAndGetFile(
           file.path,
