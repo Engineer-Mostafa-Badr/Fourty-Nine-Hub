@@ -276,12 +276,16 @@ class InstagramCubit extends Cubit<InstagramState> {
         await _getFeedUseCase(TwitterFeedParams(limit: 5, page: page));
     List<PostEntity> advertisements = [];
     List<PostEntity> reels = [];
+    List<PostEntity> savedReels = [];
+    savedReels.addAll(state.reels??[]);
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) async {
       if (data.isNotEmpty) {
         advertisements = await getAdvertisements();
         reels = await getReels();
+        savedReels.addAll(reels);
+        reels.map((element) => element.type='reels').toList();
       }
       List<PostEntity> totalPosts = [];
       totalPosts.addAll(data);
@@ -300,7 +304,7 @@ class InstagramCubit extends Cubit<InstagramState> {
         final nextPageKey = page + 1;
         feedPagingController.appendPage(totalPosts, nextPageKey);
       }
-      emit(state.copyWith(posts: totalPosts, status: StateStatus.initial));
+      emit(state.copyWith(posts: totalPosts,reels:savedReels, status: StateStatus.initial));
     });
   }
 

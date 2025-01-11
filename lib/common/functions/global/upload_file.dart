@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
@@ -12,6 +13,7 @@ import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../core/error/failure.dart';
@@ -26,7 +28,20 @@ class UploadFile {
         .pickImage(isGallery: isGallery)
         .then((file) async {
       if (file != null) {
-        final bytes = await file.readAsBytes();
+        final tempDir = await getTemporaryDirectory();
+        final uniqueFileName =
+            'compressed_${DateTime.now().millisecondsSinceEpoch}_${file.name}';
+        final targetPath = '${tempDir.path}/$uniqueFileName';
+        print("file.path${file.path}");
+        print("file.path$targetPath");
+        print("objectUpload2");
+        var result = await FlutterImageCompress.compressAndGetFile(
+          file.path,
+          targetPath,
+          quality: 50,
+          rotate: 360,
+        );
+        final bytes = await result!.readAsBytes();
         int size = bytes.length;
         // get signed url
         final signedURLResponse =
@@ -40,8 +55,21 @@ class UploadFile {
           print(l.toString());
         }, (data) async {
           log("responseData: ${jsonEncode(data)}");
+          final tempDir = await getTemporaryDirectory();
+          final uniqueFileName =
+              'compressed_${DateTime.now().millisecondsSinceEpoch}_${file.name}';
+          final targetPath = '${tempDir.path}/$uniqueFileName';
+          print("file.path${file.path}");
+          print("file.path$targetPath");
+          print("objectUpload2");
+          var result = await FlutterImageCompress.compressAndGetFile(
+            file.path,
+            targetPath,
+            quality: 50,
+            rotate: 360,
+          );
           await sendBinaryFileData(
-                  file: file, signedUrl: data['data']['signedUrl'])
+                  file: result!, signedUrl: data['data']['signedUrl'])
               .then((value) async {
             print("amdl;maldmaslkd");
             final mediaId = data['data']['mediaId'];

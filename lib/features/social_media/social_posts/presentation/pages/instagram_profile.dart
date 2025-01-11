@@ -451,8 +451,8 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                               state.profileData?.email ?? '')));
                         },
                         child: _buildCounter(
-                          value: '${user.followersCount} ',
-                          label: LocaleKeys.follower.localize,
+                          value: '${user.friendsCount} ',
+                          label: LocaleKeys.friend.localize,
                         ),
                       ),
                       const Sizer(),
@@ -468,8 +468,8 @@ class _InstagramProfileState extends State<InstagramProfile> {
                                       )));
                         },
                         child: _buildCounter(
-                          value: '${user.followingCount} ',
-                          label: LocaleKeys.Following.localize,
+                          value: '${user.followersCount} ',
+                          label: LocaleKeys.follower.localize,
                         ),
                       ),
                       Sizer(

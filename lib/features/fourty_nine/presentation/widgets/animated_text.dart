@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -89,7 +88,7 @@ class _ScrollableTextWithAnimationState extends State<ScrollableTextWithAnimatio
               }
             },
             child: Container(
-              height: 100.h,
+              height: 60.h,
               alignment: Alignment.center,
               child: AutoScrollText(
                 context.isArabic?context.read<MainCategoriesCubit>().state.question?.messageAr??'':context.read<MainCategoriesCubit>().state.question?.messageEn??'',

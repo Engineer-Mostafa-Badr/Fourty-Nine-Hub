@@ -8,7 +8,6 @@ import 'package:fourtyninehub/ads/app_open_model.dart';
 import 'package:fourtyninehub/ads/banner_ad_model.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -43,7 +42,6 @@ import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../widgets/announce_widget.dart';
-import 'package:text_scroll/text_scroll.dart';
 import 'package:auto_scroll_text/auto_scroll_text.dart';
 
 class FourtyNineView extends StatefulWidget {
@@ -209,7 +207,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 context.push(Routes.CUSTOMPAGE);
               },
               child: Container(
-                height: 100.h,
+                height: 60.h,
                 alignment: Alignment.center,
                 child: AutoScrollText(
                   LocaleKeys.choosePreferredAppStyle.localize,
@@ -781,42 +779,52 @@ class _FourtyNineViewState extends State<FourtyNineView>
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Row(
                 children: [
-                  Container(),
+                  // Container(
+                  //   margin: EdgeInsetsDirectional.only(start: 20.w),
+                  //   // padding: EdgeInsets.symmetric(vertical: 5.h),
+                  //   decoration: BoxDecoration(
+                  //       boxShadow: [
+                  //         BoxShadow(
+                  //           color: Colors.black.withOpacity(0.5),
+                  //           spreadRadius: 0.03,
+                  //           blurRadius: 6,
+                  //         ),
+                  //       ]
+                  //   ),
+                  //   child: InkWell(
+                  //     onTap: () async {},
+                  //     child: Icon(
+                  //       isFavorite ?? false
+                  //           ? Icons.favorite
+                  //           : Icons.favorite_border,
+                  //       // Icons.favorite,
+                  //       color: AppColors.SECONDARY_COLOR,
+                  //       size: 38.h,
+                  //     ),
+                  //   ),
+                  // ),
                   const Spacer(),
-                  Label(
-                    // text: service.title(),
-                    text: title,
-                    style: Styles.mediumText(
-                      color: AppColors.AUTH_CONTAINER_COLOR,
-                      fontSize: 65.sp,
-                    ),
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5.h),
-                    child: Column(
-                      children: [
-                        InkWell(
-                          onTap: () async {},
-                          child: Icon(
-                            isFavorite ?? false
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            // Icons.favorite,
-                            color: AppColors.SECONDARY_COLOR,
-                            size: 38.h,
+                  Container(
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.5),
+                            spreadRadius: 0.03,
+                            blurRadius: 6,
                           ),
-                        ),
-                        // const Spacer(),
-                        // Label(
-                        //   text: '$numberOfAds ${LocaleKeys.ads.tr()}',
-                        //   style: Styles.mediumText(
-                        //     color: Colors.white,
-                        //   ),
-                        // ),
-                      ],
+                        ]
+                    ),
+                    child: Label(
+                      // text: service.title(),
+                      text: title,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize:  45.sp),
                     ),
                   ),
+                  const Spacer(),
+                  Container()
                 ],
               ),
             ),

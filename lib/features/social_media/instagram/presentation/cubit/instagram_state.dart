@@ -7,6 +7,7 @@ class InstagramState {
   final int? newPage;
   final List<PostEntity>? posts;
   final List<PostEntity>? media;
+  final List<PostEntity>? reels;
   final int? pageIndex;
   final int? count;
   final List<SuggestUserEntity>? suggestedFriends;
@@ -25,6 +26,7 @@ class InstagramState {
     this.newComment,
     this.postComments,
     this.suggestedFriends,
+    this.reels,
     this.followers,
     this.following,
     this.media,
@@ -34,6 +36,7 @@ class InstagramState {
     StateStatus? status,
     Failure? failure,
     List<PostEntity>? posts,
+    List<PostEntity>? reels,
     List<PostEntity>? media,
     int? advertisementsPage,
     int? newPage,
@@ -59,6 +62,7 @@ class InstagramState {
       suggestedFriends: suggestedFriends ?? this.suggestedFriends,
       followers: followers ?? this.followers,
       following: following ?? this.following,
+      reels: reels ?? this.reels,
     );
   }
 }

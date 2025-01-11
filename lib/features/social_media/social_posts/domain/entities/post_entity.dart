@@ -13,7 +13,7 @@ class PostEntity {
   String? content;
   LocationModel? location;
   final String photo;
-  final String type;
+  String? type;
   final List<String>? images;
   final List<TwitterUserModel>? users;
   final List<TwitterUserModel>? likedUsers;
