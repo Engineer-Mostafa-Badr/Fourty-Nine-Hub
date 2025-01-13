@@ -36,6 +36,7 @@ import '../../../../../../routes/routes.dart';
 import '../../../../../../service_locator/service_locator.dart';
 import '../../../domain/usecases/post_react_usecase.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class FacebookPostCard extends StatefulWidget {
   final PostEntity post;
@@ -1028,73 +1029,160 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   )
                 ],
                 if ((images?.isNotEmpty ?? false))
-                  SizedBox(
-                    child: GridView.builder(
-                        padding: const EdgeInsets.all(10),
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: images!.length == 1 ? 1 : 2),
-                        itemCount: images.length < 4 ? images.length : 4,
-                        itemBuilder: (context, index) => ClickableWidget(
-                              onTap: () {
-                                if (index != 3 ||
-                                    (index == 3 && images.length == 4)) {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => ImageDetailsScreen(
-                                            image: images[index],
-                                            fromPost: true,
-                                            onRemoveImage: () {
-                                              // controller
-                                              //     .removePhoto(images![index]);
-                                              context.pop();
-                                            },
-                                          ));
-                                } else {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return ShowPostsImages(
-                                          images: images,
-                                          onRemoveImage:
-                                              (UploadFileEntity image) {
-                                            // controller.removePhoto(image);
-                                          },
-                                        );
-                                      });
-                                }
-                              },
-                              child: Stack(
-                                children: [
-                                  Stack(
-                                    children: [
-                                      ImageFromInternet(
-                                        image: images[index],
-                                        defaultLogo: true,
-                                      ),
-                                      if (index == 3 && images.length > 4)
-                                        Container(
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                            color:
-                                                Colors.black.withOpacity(0.5),
-                                          ),
-                                          child: Center(
-                                            child: Label(
-                                              text: "+${images.length - 4}",
-                                              style: Styles.headerText(
-                                                color: Colors.white,
-                                              ),
+                  StaggeredGrid.count(
+                    crossAxisCount: (images?.length??0)>4?4:images?.length??0,
+                    mainAxisSpacing: 4,
+                    crossAxisSpacing: 4,
+                    children: List.generate(
+                      (images?.length??0)>4?4:images?.length??0,
+                          (index) {
+                        // Define layout pattern dynamically
+                        int crossAxisCellCount;
+                        int mainAxisCellCount;
+
+                        if (index % 5 == 0) {
+                          crossAxisCellCount = 2;
+                          mainAxisCellCount = 2;
+                        } else if (index % 5 == 1) {
+                          crossAxisCellCount = 2;
+                          mainAxisCellCount = 1;
+                        } else {
+                          crossAxisCellCount = 1;
+                          mainAxisCellCount = 1;
+                        }
+
+                        return StaggeredGridTile.count(
+                          crossAxisCellCount: crossAxisCellCount,
+                          mainAxisCellCount: mainAxisCellCount,
+                          child: ClickableWidget(
+                            onTap: () {
+                              if (index != 3 ||
+                                  (index == 3 && (images?.length??0) == 4)) {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => ImageDetailsScreen(
+                                      image: images?[index]??'',
+                                      fromPost: true,
+                                      onRemoveImage: () {
+                                        // controller
+                                        //     .removePhoto(images![index]);
+                                        context.pop();
+                                      },
+                                    ));
+                              } else {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return ShowPostsImages(
+                                        images: images??[],
+                                        onRemoveImage:
+                                            (UploadFileEntity image) {
+                                          // controller.removePhoto(image);
+                                        },
+                                      );
+                                    });
+                              }
+                            },
+                            child: Stack(
+                              children: [
+                                Stack(
+                                  children: [
+                                    ImageFromInternet(
+                                      image: images?[index]??'',
+                                      defaultLogo: true,
+                                    ),
+                                    if (index == 3 && (images?.length??0) > 4)
+                                      Container(
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color:
+                                          Colors.black.withOpacity(0.5),
+                                        ),
+                                        child: Center(
+                                          child: Label(
+                                            text: "+${(images?.length??0) - 4}",
+                                            style: Styles.headerText(
+                                              color: Colors.white,
                                             ),
                                           ),
                                         ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            )),
+                                      ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
+                  // SizedBox(
+                  //   child: GridView.builder(
+                  //       padding: const EdgeInsets.all(10),
+                  //       shrinkWrap: true,
+                  //       physics: const NeverScrollableScrollPhysics(),
+                  //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  //           crossAxisCount: images!.length == 1 ? 1 : 2),
+                  //       itemCount: images.length < 4 ? images.length : 4,
+                  //       itemBuilder: (context, index) => ClickableWidget(
+                  //             onTap: () {
+                  //               if (index != 3 ||
+                  //                   (index == 3 && images.length == 4)) {
+                  //                 showDialog(
+                  //                     context: context,
+                  //                     builder: (context) => ImageDetailsScreen(
+                  //                           image: images[index],
+                  //                           fromPost: true,
+                  //                           onRemoveImage: () {
+                  //                             // controller
+                  //                             //     .removePhoto(images![index]);
+                  //                             context.pop();
+                  //                           },
+                  //                         ));
+                  //               } else {
+                  //                 showDialog(
+                  //                     context: context,
+                  //                     builder: (context) {
+                  //                       return ShowPostsImages(
+                  //                         images: images,
+                  //                         onRemoveImage:
+                  //                             (UploadFileEntity image) {
+                  //                           // controller.removePhoto(image);
+                  //                         },
+                  //                       );
+                  //                     });
+                  //               }
+                  //             },
+                  //             child: Stack(
+                  //               children: [
+                  //                 Stack(
+                  //                   children: [
+                  //                     ImageFromInternet(
+                  //                       image: images[index],
+                  //                       defaultLogo: true,
+                  //                     ),
+                  //                     if (index == 3 && images.length > 4)
+                  //                       Container(
+                  //                         alignment: Alignment.center,
+                  //                         decoration: BoxDecoration(
+                  //                           color:
+                  //                               Colors.black.withOpacity(0.5),
+                  //                         ),
+                  //                         child: Center(
+                  //                           child: Label(
+                  //                             text: "+${images.length - 4}",
+                  //                             style: Styles.headerText(
+                  //                               color: Colors.white,
+                  //                             ),
+                  //                           ),
+                  //                         ),
+                  //                       ),
+                  //                   ],
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //           )),
+                  // ),
               ],
             ),
           );

@@ -10,8 +10,11 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -32,26 +35,45 @@ class UploadFile {
         .pickImage(isGallery: isGallery)
         .then((file) async {
       if (file != null) {
+        // Crop the image
+        final CroppedFile? croppedFile = await ImageCropper().cropImage(
+          sourcePath: file.path,
+          uiSettings: [
+            AndroidUiSettings(
+              toolbarTitle: LocaleKeys.cropImage.localize,
+              toolbarColor: AppColors.SECONDARY_COLOR,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false,
+            ),
+            IOSUiSettings(
+              title: 'Crop Image',
+            ),
+          ],
+        );
+
+        XFile finalFile = XFile(croppedFile?.path??'');
         showLoadingDialog(context);
         final tempDir = await getTemporaryDirectory();
         final uniqueFileName =
-            'compressed_${DateTime.now().millisecondsSinceEpoch}_${file.name}';
+            'compressed_${DateTime.now().millisecondsSinceEpoch}_${finalFile.name}';
         final targetPath = '${tempDir.path}/$uniqueFileName';
-        print("file.path${file.path}");
-        print("file.path$targetPath");
+        print("finalFile.path${finalFile.path}");
+        print("finalFile.path$targetPath");
         print("objectUpload2");
         var result = await FlutterImageCompress.compressAndGetFile(
-          file.path,
+          finalFile.path,
           targetPath,
           quality: 50,
           rotate: 360,
         );
+
         final bytes = await result!.readAsBytes();
         int size = bytes.length;
         // get signed url
         final signedURLResponse =
             await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
-          "type": "image/${file.mimeType ?? 'png'}",
+          "type": "image/${finalFile.mimeType ?? 'png'}",
           "size": size,
           "subcategoryId": subCategoryId
         });
@@ -62,13 +84,13 @@ class UploadFile {
           log("responseData: ${jsonEncode(data)}");
           final tempDir = await getTemporaryDirectory();
           final uniqueFileName =
-              'compressed_${DateTime.now().millisecondsSinceEpoch}_${file.name}';
+              'compressed_${DateTime.now().millisecondsSinceEpoch}_${finalFile.name}';
           final targetPath = '${tempDir.path}/$uniqueFileName';
-          print("file.path${file.path}");
-          print("file.path$targetPath");
+          print("finalFile.path${finalFile.path}");
+          print("finalFile.path$targetPath");
           print("objectUpload2");
           var result = await FlutterImageCompress.compressAndGetFile(
-            file.path,
+            finalFile.path,
             targetPath,
             quality: 50,
             rotate: 360,
@@ -85,7 +107,7 @@ class UploadFile {
               return Left(l);
             }, (data) { */
             print("object111");
-            onUploaded(UploadFileEntity(mediaId: mediaId, file: file));
+            onUploaded(UploadFileEntity(mediaId: mediaId, file: finalFile));
             context.pop();
 
             return const Right(true);
