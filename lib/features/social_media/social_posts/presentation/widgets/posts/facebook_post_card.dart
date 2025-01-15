@@ -261,6 +261,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                         ),
                       Expanded(
                           child: MessageButton(
+
                             fromFacebook: true,
                             user: UserProfileEntity(id: widget.post.user?.id, firstName: widget.post.user?.firstName, lastName: widget.post.user?.lastName, email: widget.post.user?.email, totalView: 0, profilePicture: widget.post.user?.image, profileCover: '', friendsCount: 0, maritalStatus: '', followersCount: 0, followingCount: 0, posts: 0, instagramPosts: 0, bio: '', city: '', country: '', job: '', phone: '',),
                             normalPress: () async {
@@ -327,8 +328,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                       Expanded(
                         child: _buildReactionPlaceHolder(
                             label: LocaleKeys.share.localize,
-                            isImage: true,
-                            image: Assets.facebookShare,
+                            isImage: false,
+                            icon: FontAwesomeIcons.share,
                             onTap: () async {
                               showModalBottomSheet(
                                 backgroundColor: Colors.white,
