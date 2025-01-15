@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../domain/entities/user_tokens_entity.dart';
@@ -16,6 +17,17 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
   final AttachTokenUseCase _attachToken;
   final ResendOTPUseCase _resendOTPUseCase;
   String otp = '';
+  bool isTimeOff = false;
+
+  int endTime = DateTime.now().millisecondsSinceEpoch + 1500 * 30;
+  late CountdownTimerController controller =
+  CountdownTimerController(endTime: endTime, onEnd: onEnd);
+  void onEnd() {
+   isTimeOff = true;
+  }
+
+
+
 
   VerifyOtpCubit(
     this._verifyOTPUseCase,
@@ -43,12 +55,26 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
 
   void resendOTP(String email) async {
     if (state is VerifyOtpLoading) return;
-
     emit(ResendOtpLoading());
     final result = await _resendOTPUseCase(ResendOTPParams(email: email));
     result.fold(
-      (l) => emit(ResendOtpError(l)),
-      (_) => emit(ResendOtpSuccess()),
+          (l) {
+        emit(ResendOtpError(l));
+      },
+          (_) {
+        emit(ResendOtpSuccess());
+             if(isTimeOff) {
+                isTimeOff=false;
+                endTime = DateTime
+                    .now()
+                    .millisecondsSinceEpoch + 1000 * 30;
+                controller = CountdownTimerController(
+                    endTime: endTime, onEnd: onEnd);
+             }
+      },
+
     );
+
+
   }
 }

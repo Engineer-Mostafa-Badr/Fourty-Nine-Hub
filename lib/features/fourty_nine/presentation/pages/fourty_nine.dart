@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -43,6 +46,8 @@ import '../../../../routes/routes.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../widgets/announce_widget.dart';
 import 'package:auto_scroll_text/auto_scroll_text.dart';
+
+import '../widgets/exit_widget.dart';
 
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});
@@ -158,151 +163,153 @@ class _FourtyNineViewState extends State<FourtyNineView>
           // pr(state.message);
         }
       },
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: HomeAppbar(
-          isWithBackArrow: false,
-          language: true,
-          leading: IconButton(
-            icon: const Icon(Icons.menu), // The menu icon
-            onPressed: () {
-              HandleCashback.setCount('drawerCount', context);
-              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-            },
-          ),
-        ),
-        bottomNavigationBar: BottomNavigator(
-          scrollController: scrollController,
-          isScrollingDown: _isScrollingDown,
-          mainCategory: 1,
-          index: 2,
-        ),
-        floatingActionButton: _isScrollingDown
-            ? null
-            : const FloatingButton(
-                changeView: 1,
-                icon: Icons.person,
-              ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        drawer: const DrawerWidget(),
-        body: ListView(
-          controller: scrollController,
-          shrinkWrap: true,
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          children: [
-            const AddBanner(),
-            //carousel slider
-            const AnnounceWidget(),
-            !context.read<UserCubit>().isLoggedIn
-                ? const Sizer()
-                : const SizedBox.shrink(),
-            const ScrollableTextWithAnimation(),
-
-            //wallet
-            context.read<UserCubit>().isLoggedIn
-                ? const WalletWidget()
-                : const SizedBox.shrink(),
-            ClickableWidget(
-              onTap:(){
-                context.push(Routes.CUSTOMPAGE);
+      child: ExitWidget(
+        child: Scaffold(
+          key: _scaffoldKey,
+          appBar: HomeAppbar(
+            isWithBackArrow: false,
+            language: true,
+            leading: IconButton(
+              icon: const Icon(Icons.menu), // The menu icon
+              onPressed: () {
+                HandleCashback.setCount('drawerCount', context);
+                _scaffoldKey.currentState?.openDrawer(); // Open the drawer
               },
-              child: Container(
-                height: 60.h,
-                alignment: Alignment.center,
-                child: AutoScrollText(
-                  LocaleKeys.choosePreferredAppStyle.localize,
-                  style: Styles.headerText(fontSize: 30, color: AppColors.SECONDARY_COLOR),
-                  textDirection: context.isArabic?TextDirection.rtl:TextDirection.ltr,
-                  selectable: true,
-                  // textStyle: TextStyle(fontSize: 24),
+            ),
+          ),
+          bottomNavigationBar: BottomNavigator(
+            scrollController: scrollController,
+            isScrollingDown: _isScrollingDown,
+            mainCategory: 1,
+            index: 2,
+          ),
+          floatingActionButton: _isScrollingDown
+              ? null
+              : const FloatingButton(
+                  changeView: 1,
+                  icon: Icons.person,
+                ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          drawer: const DrawerWidget(),
+          body: ListView(
+            controller: scrollController,
+            shrinkWrap: true,
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            children: [
+              const AddBanner(),
+              //carousel slider
+              const AnnounceWidget(),
+              !context.read<UserCubit>().isLoggedIn
+                  ? const Sizer()
+                  : const SizedBox.shrink(),
+              const ScrollableTextWithAnimation(),
+
+              //wallet
+              context.read<UserCubit>().isLoggedIn
+                  ? const WalletWidget()
+                  : const SizedBox.shrink(),
+              ClickableWidget(
+                onTap:(){
+                  context.push(Routes.CUSTOMPAGE);
+                },
+                child: Container(
+                  height: 60.h,
+                  alignment: Alignment.center,
+                  child: AutoScrollText(
+                    LocaleKeys.choosePreferredAppStyle.localize,
+                    style: Styles.headerText(fontSize: 30, color: AppColors.SECONDARY_COLOR),
+                    textDirection: context.isArabic?TextDirection.rtl:TextDirection.ltr,
+                    selectable: true,
+                    // textStyle: TextStyle(fontSize: 24),
+                  ),
                 ),
               ),
-            ),
-            // ScrollableTextWithAnimation(text: 'Colored text.kasmdlkasdmklasmdkladmslkamdklasmdkndasjkdnasjkdnsjka',),
-            //    Sizer(),
-            //admob
-            //   const GoogleAddsBanner(),
-            _buildStarWidget(),
-            const Sizer(),
-            //pick me and come with U
-            _pickMeAndComeWithUWidget(),
-            const Sizer(),
-            _buildTenPercentWidget(),
-            // const Sizer(),
-            // _auctionAndInstallmentWidget(),
-            // const Sizer(),
-            // _buildBookingWidget(),
-            const Sizer(),
-            //cats layout
-            _buildMainCategoriesViews(),
-            const Sizer(),
-            //main cats
-            BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
-              builder: (context, state) {
-                final controller = context.read<MainCategoriesCubit>();
-                if (state.status == StateStatus.loading) {
-                  return Shimmer.fromColors(
-                    baseColor: Colors.grey[100]!,
-                    highlightColor: Colors.white24,
-                    child: Column(
-                      children: List.generate(
-                          6,
-                          (index) => Padding(
-                                padding: EdgeInsets.only(bottom: 15.h),
-                                child: Container(
-                                  height: MediaQuery.of(context).size.height *
-                                      .15.h,
-                                  width: double.infinity,
-                                  margin:
-                                      EdgeInsets.symmetric(horizontal: 10.w),
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 10.w),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.AUTH_CONTAINER_COLOR,
-                                    borderRadius: BorderRadius.circular(20.r),
-                                    border: Border.all(color: Colors.grey),
+              // ScrollableTextWithAnimation(text: 'Colored text.kasmdlkasdmklasmdkladmslkamdklasmdkndasjkdnasjkdnsjka',),
+              //    Sizer(),
+              //admob
+              //   const GoogleAddsBanner(),
+              _buildStarWidget(),
+              const Sizer(),
+              //pick me and come with U
+              _pickMeAndComeWithUWidget(),
+              const Sizer(),
+              _buildTenPercentWidget(),
+              // const Sizer(),
+              // _auctionAndInstallmentWidget(),
+              // const Sizer(),
+              // _buildBookingWidget(),
+              const Sizer(),
+              //cats layout
+              _buildMainCategoriesViews(),
+              const Sizer(),
+              //main cats
+              BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+                builder: (context, state) {
+                  final controller = context.read<MainCategoriesCubit>();
+                  if (state.status == StateStatus.loading) {
+                    return Shimmer.fromColors(
+                      baseColor: Colors.grey[100]!,
+                      highlightColor: Colors.white24,
+                      child: Column(
+                        children: List.generate(
+                            6,
+                            (index) => Padding(
+                                  padding: EdgeInsets.only(bottom: 15.h),
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        .15.h,
+                                    width: double.infinity,
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 10.w),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10.w),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.AUTH_CONTAINER_COLOR,
+                                      borderRadius: BorderRadius.circular(20.r),
+                                      border: Border.all(color: Colors.grey),
+                                    ),
                                   ),
-                                ),
-                              )),
-                    ),
-                  );
-                }
-                if (state.data != null) {
-                  return ListView.separated(
-                    itemCount: state.data?.length ?? 0,
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          AdInterstitialTop.loadIntersitialAd();
-                          AdInterstitialTop.showInterstitialAd();
-                          HandleCashback.setCount(
-                              'mainCategoriesCount', context);
-                          context.push(Routes.SUBCATEGORIES,
-                              extra: state.data![index]);
-                        },
-                        child: MainCategoryBanner(
-                          category: state.data![index],
-                          onFavorite: () async {
-                            var result =
-                                await controller.toggleFavoriteMedicalService(
-                                    state.data![index].id);
-                            print("result$result");
-                            return result;
+                                )),
+                      ),
+                    );
+                  }
+                  if (state.data != null) {
+                    return ListView.separated(
+                      itemCount: state.data?.length ?? 0,
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            AdInterstitialTop.loadIntersitialAd();
+                            AdInterstitialTop.showInterstitialAd();
+                            HandleCashback.setCount(
+                                'mainCategoriesCount', context);
+                            context.push(Routes.SUBCATEGORIES,
+                                extra: state.data![index]);
                           },
-                        ),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const Sizer(),
-                  );
-                } else {
-                  return const SizedBox.shrink();
-                }
-              },
-            ),
-          ],
+                          child: MainCategoryBanner(
+                            category: state.data![index],
+                            onFavorite: () async {
+                              var result =
+                                  await controller.toggleFavoriteMedicalService(
+                                      state.data![index].id);
+                              print("result$result");
+                              return result;
+                            },
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const Sizer(),
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -37,8 +38,9 @@ class MessageButton extends StatelessWidget {
       height:height,
       width:width ,
       child: fromFacebook==true?_buildReactionPlaceHolder(
-          image: Assets.newChat,
-          label: LocaleKeys.comment.localize,
+          isImage: false,
+          icon: FontAwesomeIcons.whatsapp,
+          label: LocaleKeys.send.localize,
           // image: Assets.comment,
           onTap: () {
             showModalBottomSheet(
@@ -190,14 +192,20 @@ class MessageButton extends StatelessWidget {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          if (image != null)
             Image.asset(
-              Assets.newChat,
-              width: 10.w,
-              height: 10.h,
+              image,
+              width: 24.w,
+              height: 24.h,
               color: Colors.grey,
             ),
-
-          Label(text: "label", style: Styles.mediumText(color: Colors.grey,fontSize: 12.sp))
+          if (isImage == false)
+            FaIcon(
+              icon,
+              color: Colors.grey,
+              size: 32.sp,
+            ),
+          Label(text: label, style: Styles.mediumText(color: Colors.grey))
         ],
       );
     } else {
@@ -206,15 +214,21 @@ class MessageButton extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            if (image != null)
               Image.asset(
-                Assets.newChat,
-                width: 25.w,
-                height: 25.h,
+                image,
+                width: 40.w,
+                height: 40.h,
                 color: Colors.grey,
               ),
-
+            if (image == null)
+              FaIcon(
+                icon,
+                color: Colors.grey,
+                size: 32.sp,
+              ),
             // Sizer(),
-            Label(text: LocaleKeys.send.localize, style: Styles.mediumText(color: Colors.grey))
+            Label(text: label, style: Styles.mediumText(color: Colors.grey))
           ],
         ),
       );

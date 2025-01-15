@@ -1247,7 +1247,12 @@ class CodegenLoader extends AssetLoader{
   "enterSomething": "ادخل شيئًا...",
   "pleaseEnterAValue": "يرجى إدخال قيمة",
   "answerSentSuccessfully": "تم إرسال الإجابة بنجاح",
-  "cropImage": "قص صورة"
+  "cropImage": "قص صورة",
+  "ExitApp":"الخروج من التطبيق",
+  "sureLogoutApp": "هل أنت متأكد أنك تريد الخروج؟",
+    "sure":"متأكد",
+    "warning":"تحزير"
+
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2499,7 +2504,13 @@ static const Map<String,dynamic> en = {
   "enterSomething": "Enter something...",
   "pleaseEnterAValue": "Please enter a value",
   "answerSentSuccessfully": "Answer sent successfully",
-  "cropImage": "Crop Image"
+  "cropImage": "Crop Image",
+  "ExitApp":"Exit App",
+  "sureLogoutApp":"Are you sure you want to leave?",
+   "sure":"Sure",
+  "warning":"warning"
+
+
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
