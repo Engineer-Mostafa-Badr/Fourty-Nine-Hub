@@ -177,25 +177,44 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                       onTap: () {
                         widget.onTap(index);
                       },
+                      // child: Padding(
+                      //   // padding: EdgeInsets.zero,
+                      //   padding:EdgeInsets.only(right: 30,left: 30),
+                      //   // padding: index == index1
+                      //   //     ? EdgeInsets.only(right: 30.w)
+                      //   //     : index == index2
+                      //   //         ? EdgeInsets.only(left: 60.w)
+                      //   //         : EdgeInsets.zero,
+                      //   // Conditionally render the Icon or SvgPicture
+                      //   child: index == 2 // Index for "health"
+                      //       ? Image.asset(
+                      //           widget.items[index].image!,
+                      //           //width: 90.w,
+                      //           height: widget.items[index].height * 2.h,
+                      //         )
+                      //       : Image.asset(
+                      //           widget.items[index].image!,
+                      //           color: index!=1?AppColors.PRIMARY_COLOR:null,
+                      //           height: widget.items[index].height * 1.8.h,
+                      //         ),
+                      // ),
                       child: Padding(
-                        padding: index == index1
-                            ? EdgeInsets.only(right: 30.w)
-                            : index == index2
-                                ? EdgeInsets.only(left: 60.w)
-                                : EdgeInsets.zero,
-                        // Conditionally render the Icon or SvgPicture
+                        padding: EdgeInsets.only(
+                          left: index == 2 ? 1.0 : 35.0,  // Add more padding for the middle icon
+                          right: index == 1 ? 1.0 : 35.0, // Add more padding for the middle icon
+                        ),
                         child: index == 2 // Index for "health"
                             ? Image.asset(
-                                widget.items[index].image!,
-                                //width: 90.w,
-                                height: widget.items[index].height * 2.h,
-                              )
+                          widget.items[index].image!,
+                          height: widget.items[index].height * 2.h, // Adjust height for middle item
+                        )
                             : Image.asset(
-                                widget.items[index].image!,
-                                color: index!=1?AppColors.PRIMARY_COLOR:null,
-                                height: widget.items[index].height * 1.8.h,
-                              ),
+                          widget.items[index].image!,
+                          color: index != 1 ? AppColors.PRIMARY_COLOR : null,
+                          height: widget.items[index].height * 1.8.h,
+                        ),
                       ),
+
                     ),
                   );
                 }),

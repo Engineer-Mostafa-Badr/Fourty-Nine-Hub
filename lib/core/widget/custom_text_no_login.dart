@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../res/style/styles.dart';
 import '../../routes/routes.dart';
+import '../localization/locale_keys.g.dart';
 
 class CustomTextNoLogin extends StatelessWidget {
   const CustomTextNoLogin({super.key});
@@ -34,6 +36,33 @@ class CustomTextNoLogin extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+class CustomTextNoLoginNew extends StatelessWidget {
+   CustomTextNoLoginNew({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SingleChildScrollView(
+        child: GestureDetector(
+          onTap: () => context.push(Routes.LOGIN),
+          child: Center(
+            child: Text(
+              // 'Please Login,\n Register to enjoy the app',
+              // 'تسجيل/تسجيل الدخول\n للاستمتاع بالتطبيق',
+              // 'Register/Login \n To enjoy App',
+              "${LocaleKeys.loginOrRegister.localize}",
+              style: Styles.headerText(
+                fontSize: 50,
+                color: Theme.of(context).primaryColor,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
         ),

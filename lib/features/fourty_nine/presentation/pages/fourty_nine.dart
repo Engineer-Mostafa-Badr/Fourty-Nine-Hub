@@ -210,7 +210,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 height: 60.h,
                 alignment: Alignment.center,
                 child: AutoScrollText(
-                  LocaleKeys.choosePreferredAppStyle.localize,
+                  "${LocaleKeys.choosePreferredAppStyle.localize}...   ",
                   style: Styles.headerText(fontSize: 30, color: AppColors.SECONDARY_COLOR),
                   textDirection: context.isArabic?TextDirection.rtl:TextDirection.ltr,
                   selectable: true,
