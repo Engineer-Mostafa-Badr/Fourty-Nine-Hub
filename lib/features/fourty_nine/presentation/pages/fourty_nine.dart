@@ -127,7 +127,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
     //     .read<NotificationSocketIoCubit>()
     //     .notificationListener(languageCode: 'en');
   }
-
   @override
   initState() {
     context
@@ -136,7 +135,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
 
     super.initState();
   }
-
   @override
   void dispose() {
     scrollController.dispose();

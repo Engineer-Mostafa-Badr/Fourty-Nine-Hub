@@ -211,7 +211,7 @@ class _LoginViewState extends State<LoginView> {
                       //           : 100.h
                       //       : 0,
                       // ),
-                      const Sizer(height: 50,),
+                      Sizer(height: 50,),
                       widget.authType == AuthType.REGISTER
                           ? DefaultButton(
                               labelStyle: TextStyle(
