@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,8 +10,11 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 
@@ -50,6 +54,16 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
             centerTitle: false,
           ),
           floatingActionButton: ClickableWidget(
+            onTap: (){
+              if (AuthHelper().isLoggedIn()) {
+                context.push(Routes.CREATEAD,
+                    extra: CategorizationEntity(
+                        mainCategory: widget.mainCategory,
+                        subCategory: state.subCategories![state.subCatIndex??0],fromMarriage: true));
+              } else {
+                context.push(Routes.LOGIN);
+              }
+            },
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -120,6 +134,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                       child: Container(
                         alignment: AlignmentDirectional.center,
                         padding: EdgeInsets.all(6.w),
+                        margin: EdgeInsets.all(2.w),
                         decoration: BoxDecoration(
                           color:(state.subCatIndex??0)==index?AppColors.PRIMARY_COLOR: Theme.of(context).scaffoldBackgroundColor,
                           borderRadius: BorderRadius.circular(15.r),

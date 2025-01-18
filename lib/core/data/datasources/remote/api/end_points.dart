@@ -852,6 +852,9 @@ class EndPoints {
   }
 
   static String getSubcategoryAdProps(String id) {
+    return '/ads/PropsBySubCategoryId/$id';
+  }
+  static String getMainCategoryAdProps(String id) {
     return '/ads/PropsByMainCategoryId/$id';
   }
 
