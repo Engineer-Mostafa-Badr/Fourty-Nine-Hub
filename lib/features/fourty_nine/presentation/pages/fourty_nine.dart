@@ -16,6 +16,7 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/animated_text.dart';
@@ -636,7 +637,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       iconSize: 50.h,
                       onPressed: () {
                         //HandleCashback.setCount('tenPercentCount',context);
-                        context.push(Routes.Married);
+                        context.push(Routes.MARRIAGESUBCATEGORIES,extra: MainCategoryEntity(id: '62c8b5b09332225799fe335e', nameEn: 'Marriage',name:'زواج', image: "", banner: '', cover: '', total: 0));
                       }),
                 ),
                 Positioned(
