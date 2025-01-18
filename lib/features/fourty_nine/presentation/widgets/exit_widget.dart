@@ -18,8 +18,8 @@ class ExitWidget extends StatelessWidget {
       builder: (context) => AlertDialog(
         backgroundColor: Colors.white,
         titlePadding: const EdgeInsets.only(top: 5),
-
-        title:  Column(children: [
+        title:  Column(
+          children: [
           Text(
             LocaleKeys.warning.localize,
             style:  Styles.headerText(color: Colors.red,fontWeight: FontWeight.bold),
