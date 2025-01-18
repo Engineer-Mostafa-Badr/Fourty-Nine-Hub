@@ -1221,5 +1221,6 @@ abstract class  LocaleKeys {
   static const enterSomething = 'enterSomething';
   static const pleaseEnterAValue = 'pleaseEnterAValue';
   static const answerSentSuccessfully = 'answerSentSuccessfully';
+  static const cropImage = 'cropImage';
 
 }

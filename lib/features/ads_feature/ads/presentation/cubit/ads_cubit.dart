@@ -73,6 +73,21 @@ class AdvertisementCubit extends Cubit<AdsState> {
     emit(state.copyWith(status: AdsStates.success));
   }
 
+  void loadMarriageData(
+      {required String subCategoryId,
+      required String filter,
+      required bool fromTab}) async {
+    if (fromTab == true) {
+      emit(state.copyWith(status: AdsStates.loading));
+    }
+    await getMarriageAds(subCategoryId: subCategoryId, page: 1);
+    adsPagingController.addPageRequestListener((pageKey) {
+      print("initStatePageKey : $pageKey");
+      getMarriageAds(subCategoryId: subCategoryId, page: pageKey);
+    });
+    emit(state.copyWith(status: AdsStates.success));
+  }
+
   void loadFilterData({
     required FilterModel model,
     required String filter,
@@ -138,8 +153,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
     });
   }
 
-  final PagingController<int, AdModel> adsPagingController =
-      PagingController(firstPageKey: 1);
+  final PagingController<int, AdModel> adsPagingController = PagingController(firstPageKey: 1);
   getAds(
       {required String subCategoryId,
       required String filter,
@@ -152,6 +166,39 @@ class AdvertisementCubit extends Cubit<AdsState> {
     final response = await _getAdsUseCase(GetAdsParams(
         subCategoryId: subCategoryId,
         filter: filter,
+        page: page,
+        limit: 10,
+        userId: userId));
+    response
+        .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
+            (data) async {
+      final isLastPage = data.length < 10;
+      if (page == 1) {
+        print("page == 1 $page");
+        adsPagingController.itemList = [];
+      }
+      if (isLastPage) {
+        print("isLastPage = $isLastPage");
+        print(data.length);
+        print(data.toString());
+        adsPagingController.appendLastPage(data);
+      } else {
+        print("isNotLastPage = $isLastPage");
+        final nextPageKey = page + 1;
+        adsPagingController.appendPage(data, nextPageKey);
+      }
+    });
+  }
+  getMarriageAds(
+      {required String subCategoryId,
+      required int page}) async {
+    final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
+
+    if (page == 1) {
+      adsPagingController.itemList = [];
+    }
+    final response = await _getAdsUseCase(GetAdsParams(
+        subCategoryId: subCategoryId,
         page: page,
         limit: 10,
         userId: userId));

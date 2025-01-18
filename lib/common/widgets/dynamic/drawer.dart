@@ -585,7 +585,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               leading: const Icon(Icons.photo_library),
                               title: const Text('Gallery'),
                               onTap: () async {
-                                Navigator.pop(context);
+                                // Navigator.pop(context);
                                 await context
                                     .read<UserCubit>()
                                     .uploadPhoto(isGallery: true, context: context);
@@ -596,7 +596,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               leading: const Icon(Icons.camera_alt),
                               title: const Text('Camera'),
                               onTap: () async {
-                                Navigator.pop(context);
+                                // Navigator.pop(context);
                                 await context
                                     .read<UserCubit>()
                                     .uploadPhoto(isGallery: false, context: context);
