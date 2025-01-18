@@ -63,7 +63,7 @@ class BadgedLabel extends StatelessWidget {
             decoration: BoxDecoration(
                 color: isBordered ? color : color,
                 border: isBordered
-                    ? Border.all(color: borderColor, width: .5.w)
+                    ? Border.all(color: borderColor)
                     : null,
                 borderRadius: BorderRadius.circular(radius.r)),
             // child: isCentered
