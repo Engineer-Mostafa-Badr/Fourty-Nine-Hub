@@ -38,8 +38,10 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
+            titleSpacing: 0,
+            centerTitle: false,
             title: Transform(
-              transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
+              transform: Matrix4.translationValues(-0.0, 0.0, 0.0),
               child: Text(
                 // LocaleKeys.availableTrips.localize,
                 context.isArabic
@@ -53,7 +55,7 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   // LocaleKeys.availableTrips.localize,
                   context.isArabic
@@ -71,6 +73,9 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
                 return TabBar(
                   dividerColor: context.isDarkMode ? Colors.grey : null,
                   indicatorColor: AppColors.PRIMARY_COLOR_DARK,
+                  padding: EdgeInsets.zero,
+                  labelPadding: EdgeInsets.zero,
+                  indicatorPadding: EdgeInsets.zero,
                   tabs: [
                     TripJoinTabIcon(
                       icon: Image.asset(Assets.carpool,

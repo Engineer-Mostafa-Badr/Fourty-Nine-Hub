@@ -82,7 +82,7 @@ class _AvailableRoutesBuilderState extends State<AvailableRoutesBuilder> {
                       child: Text(
                         LocaleKeys.noTripsAvailable.localize,
                         // "There are no ${widget.type} trips .",
-                        style: TextStyle(fontSize: 24.sp, color: Colors.grey),
+                        style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold, color: Colors.grey),
                       ),
                     ),
                   );

@@ -1248,10 +1248,10 @@ class CodegenLoader extends AssetLoader{
   "pleaseEnterAValue": "يرجى إدخال قيمة",
   "answerSentSuccessfully": "تم إرسال الإجابة بنجاح",
   "cropImage": "قص صورة",
-  "ExitApp":"الخروج من التطبيق",
-  "sureLogoutApp": "هل أنت متأكد أنك تريد الخروج؟",
+  "ExitApp":"هل أنت متأكد ؟",
+  "sureLogoutApp": "هل تريد الخروج من التطبيق",
     "sure":"متأكد",
-    "warning":"تحزير"
+    "warning":"تحذير !"
 
 };
 static const Map<String,dynamic> en = {
@@ -2505,10 +2505,10 @@ static const Map<String,dynamic> en = {
   "pleaseEnterAValue": "Please enter a value",
   "answerSentSuccessfully": "Answer sent successfully",
   "cropImage": "Crop Image",
-  "ExitApp":"Exit App",
-  "sureLogoutApp":"Are you sure you want to leave?",
+  "ExitApp":"Are you sure ?",
+  "sureLogoutApp":"Do you want exit from the app",
    "sure":"Sure",
-  "warning":"warning"
+  "warning":"warning !"
 
 
 };
