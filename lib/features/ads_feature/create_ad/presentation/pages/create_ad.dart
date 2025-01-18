@@ -42,7 +42,7 @@ class _CreateAdViewState extends State<CreateAdView> {
   void initState() {
     context
         .read<CreateAdCubit>()
-        .loadData(subCategoryId: widget.categorization.mainCategory.id);
+        .loadData(subCategoryId: widget.categorization.fromMarriage==false?widget.categorization.mainCategory.id:widget.categorization.subCategory.id, fromMarriage: widget.categorization.fromMarriage??false);
     super.initState();
   }
 
