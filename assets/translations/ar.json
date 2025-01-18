@@ -1233,6 +1233,11 @@
   "yourAnswer": "إجابتك",
   "enterSomething": "ادخل شيئًا...",
   "pleaseEnterAValue": "يرجى إدخال قيمة",
-  "answerSentSuccessfully": "تم إرسال الإجابة بنجاح"
+  "answerSentSuccessfully": "تم إرسال الإجابة بنجاح",
+  "cropImage": "قص صورة",
+  "sureLogoutApp": "هل أنت متأكد أنك تريد الخروج؟",
+  "ExitApp": "الخروج من التطبيق",
+  "sure": "متأكد"
+
 
 }

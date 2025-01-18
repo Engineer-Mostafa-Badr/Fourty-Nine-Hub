@@ -121,7 +121,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                           _buildImageCard(
                             label: '',
                             onTap: () {
-                              controller.uploadPersonalPhoto();
+                              controller.uploadPersonalPhoto(context: context);
                             },
                             onRemove: () {
                               controller.removePersonalPhoto();
@@ -145,7 +145,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                                     label: '',
                                     text: LocaleKeys.front.localize,
                                     onTap: () {
-                                      controller.uploadFrontId();
+                                      controller.uploadFrontId(context: context);
                                     },
                                     onRemove: () {
                                       controller.removeFrontId();
@@ -160,7 +160,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                                     label: '',
                                     text: LocaleKeys.back.localize,
                                     onTap: () {
-                                      controller.uploadBackId();
+                                      controller.uploadBackId(context: context);
                                     },
                                     onRemove: () {
                                       print('back');

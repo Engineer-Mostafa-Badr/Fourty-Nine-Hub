@@ -205,7 +205,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                                               Navigator.pop(context);
                                               controller.uploadPhoto(
                                                   isGallery: true,
-                                                  isFrontImage: true);
+                                                  isFrontImage: true, context: context);
                                             },
                                           ),
                                           ListTile(
@@ -217,7 +217,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                                               Navigator.pop(context);
                                               controller.uploadPhoto(
                                                   isGallery: false,
-                                                  isFrontImage: true);
+                                                  isFrontImage: true, context: context);
                                             },
                                           ),
                                         ],
@@ -297,7 +297,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                                               Navigator.pop(context);
                                               controller.uploadPhoto(
                                                   isGallery: true,
-                                                  isFrontImage: false);
+                                                  isFrontImage: false, context: context);
                                             },
                                           ),
                                           ListTile(
@@ -309,7 +309,7 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
                                               Navigator.pop(context);
                                               controller.uploadPhoto(
                                                   isGallery: false,
-                                                  isFrontImage: false);
+                                                  isFrontImage: false, context: context);
                                             },
                                           ),
                                         ],

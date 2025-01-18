@@ -1252,5 +1252,10 @@
   "yourAnswer": "Your Answer",
   "enterSomething": "Enter something...",
   "pleaseEnterAValue": "Please enter a value",
-  "answerSentSuccessfully": "Answer sent successfully"
+  "answerSentSuccessfully": "Answer sent successfully",
+  "cropImage": "Crop Image",
+  "sureLogoutApp": "Are you sure you want to leave?",
+  "ExitApp":"Exit App",
+  "sure": "Sure"
+
 }

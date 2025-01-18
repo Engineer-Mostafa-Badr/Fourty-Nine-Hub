@@ -154,18 +154,18 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                       if (title.isNotEmpty &&
                           _selectedDate != null &&
                           _endTime != null) {
-                        if (_endTime!.isBefore(_startTime!)) {
-                          showErrorMessage(context,
-                              LocaleKeys.startDateTimeValidation.localize);
-
-                          return;
-                        }
-                        if (_startTime!.isBefore(TimeOfDay.now())) {
-                          showErrorMessage(context,
-                              LocaleKeys.startDateBeginValidation.localize);
-
-                          return;
-                        }
+                        // if (_endTime!.isBefore(_startTime!)) {
+                        //   showErrorMessage(context,
+                        //       LocaleKeys.startDateTimeValidation.localize);
+                        //
+                        //   return;
+                        // }
+                        // if (_startTime!.isBefore(TimeOfDay.now())) {
+                        //   showErrorMessage(context,
+                        //       LocaleKeys.startDateBeginValidation.localize);
+                        //
+                        //   return;
+                        // }
                         await context.read<StreamCubit>().createNewMeeting(
                               startTime: _combineDateAndTime(
                                 _selectedDate!,

@@ -6,12 +6,14 @@ class CreateAdEntity {
   final String? type;
   final String? nameAr;
   final String? nameEn;
+  final String? image;
 
   CreateAdEntity(
       {required this.value,
       required this.propId,
       this.type,
       this.nameAr,
+      this.image,
       this.nameEn});
 
   Map<String, dynamic> toJson() {

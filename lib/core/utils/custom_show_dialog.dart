@@ -26,7 +26,7 @@ Future customShowDialog(context) => showDialog(
               iconData: Icons.camera,
               text: 'Camera',
               function: () async {
-                await context.read<UserCubit>().uploadPhoto(isGallery: false);
+                await context.read<UserCubit>().uploadPhoto(isGallery: false, context: context);
                 Navigator.pop(context);
               },
             ),
@@ -37,7 +37,7 @@ Future customShowDialog(context) => showDialog(
               iconData: Icons.image,
               text: 'Gallery',
               function: () async {
-                await context.read<UserCubit>().uploadPhoto(isGallery: true);
+                await context.read<UserCubit>().uploadPhoto(isGallery: true, context: context);
 
                 Navigator.pop(context);
               },

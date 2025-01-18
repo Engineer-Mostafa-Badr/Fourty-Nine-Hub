@@ -120,7 +120,7 @@ class EditProfileTinder extends StatelessWidget {
                                           onTap: () async {
                                             Navigator.pop(context);
                                             await controller.uploadPhoto(
-                                                isGallery: true);
+                                                isGallery: true, context: context);
                                           }),
                                       ListTile(
                                         leading: const Icon(Icons.camera_alt),
@@ -128,7 +128,7 @@ class EditProfileTinder extends StatelessWidget {
                                         onTap: () async {
                                           Navigator.pop(context);
                                           await controller.uploadPhoto(
-                                              isGallery: false);
+                                              isGallery: false, context: context);
                                         },
                                       ),
                                     ],

@@ -126,7 +126,7 @@ class UserProfilePageState extends State<UserProfilePage> {
           // await tinderCubit
           //     .fetchUserProfile(userId: userCubit.state.data!.id)
           //     .then((value) => tinderCubit.resetStoryIndex());
-        },
+        }, context: context,
       );
 
       if (uploadResult == null) {

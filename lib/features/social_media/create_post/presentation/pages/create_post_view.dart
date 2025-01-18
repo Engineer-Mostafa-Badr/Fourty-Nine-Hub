@@ -774,7 +774,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                 splashColor: Colors.transparent,
                 hoverColor: Colors.transparent,
                 highlightColor: Colors.transparent,
-                onTap: () async => await controller.uploadPhoto(),
+                onTap: () async => await controller.uploadPhoto(context: context),
                 child: Row(
                   children: [
                     const Icon(

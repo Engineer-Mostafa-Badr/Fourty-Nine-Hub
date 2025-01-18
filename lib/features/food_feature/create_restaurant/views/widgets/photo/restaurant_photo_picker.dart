@@ -59,7 +59,7 @@ class _CreateRestaurantProfilePhotoPickerState
                   InkWell(
                     onTap: () async {
                       await createRestaurantCubit.uploadProfileImage(
-                          subcategoryId: widget.subcategoryId);
+                          subcategoryId: widget.subcategoryId, context: context);
                     },
                     child: BlocBuilder<CreateRestaurantCubit,
                         CreateRestaurantState>(builder: (context, state) {
