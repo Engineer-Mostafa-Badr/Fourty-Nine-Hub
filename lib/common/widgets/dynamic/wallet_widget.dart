@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/routes/routes.dart';

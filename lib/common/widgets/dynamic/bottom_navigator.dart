@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
@@ -148,57 +147,59 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 400),
-      height: bottomNavBarHeight, // Use the dynamic height
-      child: CustomPaint(
-        painter: BottomBarPainter(
-          color: Colors.black,
-        ),
-        child: Container(
-          padding: const EdgeInsets.only(bottom: 20, top: 10),
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            boxShadow: const [
-              BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2),
-            ],
+    return SafeArea(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 400),
+        height: bottomNavBarHeight, // Use the dynamic height
+        child: CustomPaint(
+          painter: BottomBarPainter(
+            color: Colors.black,
           ),
-          child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 0.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: List.generate(widget.items.length, (index) {
-                  int index1 = context.isArabic ? 2 : 1;
-                  int index2 = context.isArabic ? 1 : 2;
-
-                  return Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        widget.onTap(index);
-                      },
-                      child: Padding(
-                        padding: index == index1
-                            ? EdgeInsets.only(right: 30.w)
-                            : index == index2
-                                ? EdgeInsets.only(left: 60.w)
-                                : EdgeInsets.zero,
-                        // Conditionally render the Icon or SvgPicture
-                        child: index == 2 // Index for "health"
-                            ? Image.asset(
-                                widget.items[index].image!,
-                                //width: 90.w,
-                                height: widget.items[index].height * 2.h,
-                              )
-                            : Image.asset(
-                                widget.items[index].image!,
-                                color: index!=1?AppColors.PRIMARY_COLOR:null,
-                                height: widget.items[index].height * 1.8.h,
-                              ),
+          child: Container(
+            padding: const EdgeInsets.only(bottom: 20, top: 10),
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              boxShadow: const [
+                BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2),
+              ],
+            ),
+            child: SafeArea(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 0.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: List.generate(widget.items.length, (index) {
+                    int index1 = context.isArabic ? 2 : 1;
+                    int index2 = context.isArabic ? 1 : 2;
+      
+                    return Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          widget.onTap(index);
+                        },
+                        child: Padding(
+                          padding: index == index1
+                              ? EdgeInsets.only(right: 30.w)
+                              : index == index2
+                                  ? EdgeInsets.only(left: 60.w)
+                                  : EdgeInsets.zero,
+                          // Conditionally render the Icon or SvgPicture
+                          child: index == 2 // Index for "health"
+                              ? Image.asset(
+                                  widget.items[index].image!,
+                                  //width: 90.w,
+                                  height: widget.items[index].height * 2.h,
+                                )
+                              : Image.asset(
+                                  widget.items[index].image!,
+                                  color: index!=1?AppColors.PRIMARY_COLOR:null,
+                                  height: widget.items[index].height * 1.8.h,
+                                ),
+                        ),
                       ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
+                ),
               ),
             ),
           ),

@@ -248,7 +248,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                                         fit: BoxFit.cover,
                                       )),
                                 ),
-                                Sizer(
+                                const Sizer(
                                   width: 8,
                                 ),
                                 Text(
@@ -288,25 +288,25 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
       if (_player.playing) {
         startCountdown(snapshot.data!);
         return Text(
-          "${_remainingTime}",
+          "$_remainingTime",
         );
       }
       return snapshot.data != null
           ? Text(getFormattedDuration(snapshot.data!))
-          : CircularProgressIndicator();
+          : const CircularProgressIndicator();
     } else {
       return Container();
     }
   },
 ),
 
-                  Sizer(),
+                  const Sizer(),
                   Container(
                     height: 15,
                     width: 1,
                     color: Colors.grey,
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Text(
                     "${context.isArabic ? "الصوت الأصلي بواسطة" : "Original sound by"}: ",
                     style: Styles.smallText(fontSize: 24),
@@ -336,8 +336,8 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                       child: AppButton(
                         label: "",
                         backColor: context.isDarkMode
-                            ? Color(0xFF2E2E2E)
-                            : Color(0xFFF1F1F2),
+                            ? const Color(0xFF2E2E2E)
+                            : const Color(0xFFF1F1F2),
                         onPressed: () {
                           setState(() {
                             isSave = !isSave;
@@ -368,7 +368,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                                   ? Colors.white
                                   : Colors.black,
                             ),
-                            Sizer(),
+                            const Sizer(),
                             Text(
                               context.isArabic
                                   ? "أضف إلى المفضلة"
@@ -389,7 +389,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: BlocConsumer<ReelsCubit, ReelsState>(
                     listener: (context, state) {},
                     builder: (context, state) {
@@ -469,7 +469,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
             left: 0,
             right: 0,
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 10),
+              margin: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -500,11 +500,11 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.music_note,
                               color: Colors.black,
                             ),
-                            Sizer(),
+                            const Sizer(),
                             Text(
                               context.isArabic ? "أضف إلى القصة" : "Add to Story",
                               style: Styles.mediumText(
@@ -516,7 +516,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                       ),
                     ),
                   ),
-                  Sizer(),
+                  const Sizer(),
                   Flexible(
                     child: GestureDetector(
                       onTap: () {
@@ -539,11 +539,11 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.video_library_sharp,
                               color: Colors.white,
                             ),
-                            Sizer(),
+                            const Sizer(),
                             Text(
                               context.isArabic ? "استخدم الصوت" : "Use sound",
                               style: Styles.mediumText(
@@ -593,7 +593,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
 
 void startCountdown(Duration duration) {
   _remainingTime = duration.inSeconds;
-  _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+  _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
     if (_remainingTime > 0) {
       setState(() {
         _remainingTime--;

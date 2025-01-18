@@ -3,10 +3,15 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/animated_heart_wiidget.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/custom_progress_bar.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/unified_widget_view.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../controllers/explore_reels_cubit/reel_cubit.dart';
@@ -173,8 +178,42 @@ class _ReelsWidgetState extends State<ReelsWidget>
           },
           child: Stack(
             children: [
+              
               VideoPlayer(widget.controller),
               buildPlayPauseIcon(),
+              Positioned.fill(
+                bottom: MediaQuery.of(context).size.height*0.0,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.keyboard_double_arrow_left_sharp, color: Colors.white,),
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          if (!serviceLocator<UserCubit>().isLoggedIn) {
+              context.push(Routes.LOGIN);
+            } else {
+              // _showGiftBottomSheet(context);
+            }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(color: Colors.black.withOpacity(0.9), blurRadius: 30)
+          ]
+        ),
+                          child: Image.asset(Assets.giftBoxIcon, width: 30, height: 30, color: Colors.white,))),
+                      
+                    ],
+                  ),
+                ),
+              ),
               Positioned(
                 right: 0,
                 bottom: 20,

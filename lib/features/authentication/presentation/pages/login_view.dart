@@ -211,7 +211,9 @@ class _LoginViewState extends State<LoginView> {
                       //           : 100.h
                       //       : 0,
                       // ),
-                      Sizer(height: 50,),
+                      const Sizer(
+                        height: 50,
+                      ),
                       widget.authType == AuthType.REGISTER
                           ? DefaultButton(
                               labelStyle: TextStyle(
@@ -239,8 +241,10 @@ class _LoginViewState extends State<LoginView> {
                               labelStyle: TextStyle(
                                   fontSize: 35.sp,
                                   color: AppColors.AUTH_CONTAINER_COLOR),
-                              onPressed: () =>
-                                  loginCubit.login(formKey, context),
+                              onPressed: () {
+                                log("message");
+                                loginCubit.login(formKey, context);
+                              },
                             ),
                     ],
                   )),

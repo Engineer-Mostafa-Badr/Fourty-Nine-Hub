@@ -95,7 +95,7 @@ class ReelsScreenState extends State<ReelsScreen> {
                   ),
                 ),
                 const Positioned(
-                    top: kToolbarHeight * 0.5,
+                    top: kToolbarHeight * 0.3,
                     right: 4,
                     left: 4,
                     child: AdvancedTikTokTabBar()),

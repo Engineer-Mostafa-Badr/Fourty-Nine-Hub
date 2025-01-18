@@ -323,7 +323,7 @@ class _BaseIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return InkWell( 
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(15.h),

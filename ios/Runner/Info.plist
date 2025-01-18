@@ -2,26 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSContactsUsageDescription</key>
-    <string>Reason we need access to the contact list</string>
-     <key>NSCameraUsageDescription</key>
-     <string>We need access to your camera to record videos.</string>
-     <key>NSMicrophoneUsageDescription</key>
-     <string>We need access to your microphone to record audio.</string>
-     <key>NSPhotoLibraryAddUsageDescription</key>
-     <string>We need access to your photo library to save the videos.</string>
-     <key>NSPhotoLibraryUsageDescription</key>
-     <string>We need access to your photo library to save the videos.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to your location to show your current position.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app needs access to your location to show your current position.</string>
-    <key>NSFaceIDUsageDescription</key>
-    <string>Why is my app authenticating using face id?</string>
-	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) Camera Usage!</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>$(PRODUCT_NAME) Microphone Usage!</string>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -38,14 +20,52 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
-	<key>NSMicrophoneUsageDescription</key>
-    <string>We need to access to the microphone to record audio file</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.872417805780-6ul51c5nsnl1nnahs9diudi7msr140cf</string>
+				<string>fb892486282359942</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-3940256099942544~3347511713</string>
+	<key>GIDClientID</key>
+	<string>872417805780-6ul51c5nsnl1nnahs9diudi7msr140cf.apps.googleusercontent.com</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) Camera Usage!</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Reason we need access to the contact list</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Why is my app authenticating using face id?</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app needs access to your location to show your current position.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to your location to show your current position.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need to access to the microphone to record audio file</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need access to your photo library to save the videos.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library to save the videos.</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>processing</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -63,26 +83,6 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
-	<key>GIDClientID</key>
-                <!-- TODO Replace this value (CLIENT_ID): -->
-        <string>872417805780-6ul51c5nsnl1nnahs9diudi7msr140cf.apps.googleusercontent.com</string>
-        <key>CFBundleURLTypes</key>
-        <array>
-            <dict>
-                <key>CFBundleTypeRole</key>
-                <string>Editor</string>
-                <key>CFBundleURLSchemes</key>
-                <array>
-                    <!-- TODO Replace this value: -->
-                    <!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
-                    <string>com.googleusercontent.apps.872417805780-6ul51c5nsnl1nnahs9diudi7msr140cf</string>
-                    <string>fb892486282359942</string>
-                </array>
-            </dict>
-        </array>
+	
 </dict>
 </plist>

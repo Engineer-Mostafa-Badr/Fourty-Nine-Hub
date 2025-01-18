@@ -6,6 +6,8 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.d
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/ride/Authentication/presentation/screens/ride_no_socket_parts_screen.dart';
+import 'package:fourtyninehub/features/ride/Authentication/presentation/screens/ride_socket_parts_screen.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
@@ -386,11 +388,20 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
   selectRegisterType(RegisterRiderCubit registerCubit) {
     if (registerCubit.SELECTED_NO_SOCKET_SUBCATEGORY_IDS.isNotEmpty) {
       log("RiderRegisterOne");
+      return const RideNoSocketPartsScreen();
       return RiderRegisterNoSocketScreen(
         formKey: context.read<RegisterRiderCubit>().socketFormKey,
       );
     } else {
       log("RiderRegisterScandScreen");
+      return Column(
+        children: [
+          const RideSocketPartsScreen(),
+          RideRegisterSocketScreen(
+        formKey: context.read<RegisterRiderCubit>().socketFormKey,
+      )
+        ],
+      );
       return RideRegisterSocketScreen(
         formKey: context.read<RegisterRiderCubit>().socketFormKey,
       );

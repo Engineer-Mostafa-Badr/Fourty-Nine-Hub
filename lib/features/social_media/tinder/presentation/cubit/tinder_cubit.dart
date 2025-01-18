@@ -4,7 +4,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
@@ -13,7 +12,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/add_favourite_category_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/chech_user_nearby_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/delete_tinder_picture_use_case.dart';
@@ -27,11 +25,9 @@ import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_u
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/send_geft_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/upload_tinder_picture_use_case.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
-import 'package:fourtyninehub/features/subscripe/presentation/widgets/amounts.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
-import '../../../../subscripe/domain/entities/subscription_amount_entity.dart';
 import '../../data/models/near_by_model.dart';
 import 'tinder_state.dart';
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -46,16 +45,16 @@ class _ScrollableTextWithAnimationState extends State<ScrollableTextWithAnimatio
                           decoration: InputDecoration(
                             labelText: LocaleKeys.yourAnswer.localize,
                             hintText: LocaleKeys.enterSomething.localize,
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(20.0)),
                             ),
-                            disabledBorder: OutlineInputBorder(
+                            disabledBorder: const OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(20.0)),
                             ),
-                            enabledBorder: OutlineInputBorder(
+                            enabledBorder: const OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(20.0)),
                             ),
-                            focusedBorder: OutlineInputBorder(
+                            focusedBorder: const OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(20.0)),
                             ),
                           ),

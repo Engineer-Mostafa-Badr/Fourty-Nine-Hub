@@ -98,7 +98,7 @@ class UserReel {
   final String id;
   final String firstName;
   final String lastName;
-  final bool isFriend;
+  bool isFriend;
   final String privacy;
   final bool story;
   final bool verified;
@@ -121,7 +121,7 @@ class UserReel {
   final bool isRestaurant;
   bool isFollowed;
   final bool areFriends;
-  final bool isSentRequest;
+  bool isSentRequest;
 
   UserReel({
     required this.id,

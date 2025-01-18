@@ -12,6 +12,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/shared/tiktok_option_sheet.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -44,140 +45,169 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
 
   @override
   Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Column(
+          //         mainAxisAlignment: MainAxisAlignment.end,
+          //         children: [
+          //           Container(
+          //               alignment: Alignment.centerLeft,
+          //               // color: Colors.red,
+          //               child: IconButton(
+          //                   onPressed: () {
+          //                     if (context.read<PreloadBloc>().state.controllers[
+          //                             context
+          //                                 .read<PreloadBloc>()
+          //                                 .state
+          //                                 .focusedIndex] !=
+          //                         null) {
+          //                       context
+          //                           .read<PreloadBloc>()
+          //                           .state
+          //                           .controllers[context
+          //                               .read<PreloadBloc>()
+          //                               .state
+          //                               .focusedIndex]
+          //                           ?.pause();
+          //                     }
+          //                     context.read<PreloadBloc>().resetFocusedIndex(
+          //                         context.read<PreloadBloc>().state.focusedIndex);
+          //                     Navigator.pop(context);
+          //                   },
+          //                   icon: Icon(
+          //                     Icons.arrow_back_ios,
+          //                     size: 0.08.sw,
+          //                     color: Colors.white,
+          //                     shadows: const [
+          //                       Shadow(
+          //                         color: Colors.black,
+          //                         offset: Offset(1, 1),
+          //                         blurRadius: 5.0,
+          //                       )
+          //                     ],
+          //                   )
+          //                   )
+          //                   ),
+          //           Sizer(),
+          //           // Icon(Icons.volume_off)
+          //         ],
+          //       ),
+           Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+             children: [
+               _buildLiveIcon(onTap: () {
+                      AdInterstitialTop.loadIntersitialAd();
+                      AdInterstitialTop.showInterstitialAd();
+                      if (context
+                          .read<PreloadBloc>()
+                          .state
+                          .controllers[
+                              context.read<PreloadBloc>().state.focusedIndex]!
+                          .value
+                          .isPlaying) {
+                        context
+                            .read<PreloadBloc>()
+                            .state
+                            .controllers[
+                                context.read<PreloadBloc>().state.focusedIndex]
+                            ?.pause();
+                      }
+                      if (context.isUserLoggedIn) {
+                        showTiktokOption(context, generateRandom9DigitNumber);
+                      } else {
+                        context.go(Routes.LOGIN);
+                      }
+                    }),
+
+                const Sizer(height: 50,),
+                Image.asset(Assets.volumeOff, color: Colors.white, width: 15, height: 15,),
+                Image.asset(Assets.volumeOn, color: Colors.white, width: 20, height: 20,)
+             ],
+           ),
+          Row(
+            children: [
+              _buildTab(LocaleKeys.Spotlight.localize, 0, onTap: () {
+                  if (context
+                      .read<PreloadBloc>()
+                      .state
+                      .controllers[
+                          context.read<PreloadBloc>().state.focusedIndex]!
+                      .value
+                      .isPlaying) {
+                    context
+                        .read<PreloadBloc>()
+                        .state
+                        .controllers[
+                            context.read<PreloadBloc>().state.focusedIndex]
+                        ?.pause();
+                  }
+                  setState(() {
+                    _selectedIndex = 0;
+                  });
+                  context.push(Routes.SPOTLIGHT);
+                }),
+                // Following Tab
+                _buildTab(LocaleKeys.snap.localize, 1, onTap: () {
+                  AdInterstitialTop.loadIntersitialAd();
+                  AdInterstitialTop.showInterstitialAd();
+                  if (context
+                      .read<PreloadBloc>()
+                      .state
+                      .controllers[
+                          context.read<PreloadBloc>().state.focusedIndex]!
+                      .value
+                      .isPlaying) {
+                    context
+                        .read<PreloadBloc>()
+                        .state
+                        .controllers[
+                            context.read<PreloadBloc>().state.focusedIndex]
+                        ?.pause();
+                  }
+                  setState(() {
+                    _selectedIndex = 1;
+                  });
+                  context.push(Routes.SNAP);
+                }),
+      
+                // For You Tab with rounded underline
+                _buildTab("Reel", 2, onTap: () {
+                  setState(() {
+                    _selectedIndex = 2;
+                  });
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ReelsRecordingScreen(),
+                    ),
+                  );
+                }),
+            ],
+          ),
+          const Icon(Icons.search),
+          
+        ],
+      ),
+    );
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Column(
         children: [
-          Container(
-              alignment: Alignment.centerLeft,
-              // color: Colors.red,
-              child: IconButton(
-                  onPressed: () {
-                    if (context.read<PreloadBloc>().state.controllers[
-                            context.read<PreloadBloc>().state.focusedIndex] !=
-                        null) {
-                      context
-                          .read<PreloadBloc>()
-                          .state
-                          .controllers[
-                              context.read<PreloadBloc>().state.focusedIndex]
-                          ?.pause();
-                    }
-                    context.read<PreloadBloc>().resetFocusedIndex(
-                        context.read<PreloadBloc>().state.focusedIndex);
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    size: 0.08.sw,
-                    color: Colors.white,
-                    shadows: const [
-                      Shadow(
-                        color: Colors.black,
-                        offset: Offset(1, 1),
-                        blurRadius: 5.0,
-                      )
-                    ],
-                  ))),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               // LIVE Icon with Glow Effect
+              
               const Sizer(),
-              _buildLiveIcon(onTap: () {
-                AdInterstitialTop.loadIntersitialAd();
-                AdInterstitialTop.showInterstitialAd();
-                if (context
-                    .read<PreloadBloc>()
-                    .state
-                    .controllers[
-                        context.read<PreloadBloc>().state.focusedIndex]!
-                    .value
-                    .isPlaying) {
-                  context
-                      .read<PreloadBloc>()
-                      .state
-                      .controllers[
-                          context.read<PreloadBloc>().state.focusedIndex]
-                      ?.pause();
-                }
-                if (context.isUserLoggedIn) {
-                  showTiktokOption(context, generateRandom9DigitNumber);
-                } else {
-                  context.go(Routes.LOGIN);
-                }
-              }),
+             
               const Spacer(), // Explore Tab
-              _buildTab(LocaleKeys.Spotlight.localize, 0, onTap: () {
-                if (context
-                    .read<PreloadBloc>()
-                    .state
-                    .controllers[
-                        context.read<PreloadBloc>().state.focusedIndex]!
-                    .value
-                    .isPlaying) {
-                  context
-                      .read<PreloadBloc>()
-                      .state
-                      .controllers[
-                          context.read<PreloadBloc>().state.focusedIndex]
-                      ?.pause();
-                }
-                setState(() {
-                  _selectedIndex = 0;
-                });
-                context.push(Routes.SPOTLIGHT);
-              }),
-              // Following Tab
-              _buildTab(LocaleKeys.snap.localize, 1, onTap: () {
-                AdInterstitialTop.loadIntersitialAd();
-                AdInterstitialTop.showInterstitialAd();
-                if (context
-                    .read<PreloadBloc>()
-                    .state
-                    .controllers[
-                        context.read<PreloadBloc>().state.focusedIndex]!
-                    .value
-                    .isPlaying) {
-                  context
-                      .read<PreloadBloc>()
-                      .state
-                      .controllers[
-                          context.read<PreloadBloc>().state.focusedIndex]
-                      ?.pause();
-                }
-                setState(() {
-                  _selectedIndex = 1;
-                });
-                context.push(Routes.SNAP);
-              }),
-
-              // For You Tab with rounded underline
-              _buildTab(LocaleKeys.Reels.localize, 2, onTap: () {
-                // if (context
-                //     .read<PreloadBloc>()
-                //     .state
-                //     .controllers[
-                //         context.read<PreloadBloc>().state.focusedIndex]!
-                //     .value
-                //     .isPlaying) {
-                //   context
-                //       .read<PreloadBloc>()
-                //       .state
-                //       .controllers[
-                //           context.read<PreloadBloc>().state.focusedIndex]
-                //       ?.pause();
-                // }
-                setState(() {
-                  _selectedIndex = 2;
-                });
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ReelsRecordingScreen(),
-                  ),
-                );
-              }),
+              
               const Spacer(),
               // Search Icon with custom SVG
               _buildSearchIcon(onTap: () {
@@ -210,14 +240,13 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
     return InkWell(
       onTap: onTap,
       child: SizedBox(
-        height: 0.08.sw,
-        width: 0.08.sw,
+        height: 0.07.sw,
+        width: 0.07.sw,
         child: Stack(
           children: [
             // Shadow layer
             Transform.translate(
-              offset: const Offset(1, 1), // Adjust the offset as needed
-
+              offset: const Offset(1, 1), // Adjust the offset as neede
               child: ImageFiltered(
                 enabled: true,
                 imageFilter: ImageFilter.blur(
@@ -254,13 +283,14 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
       child: Padding(
         padding: const EdgeInsets.only(right: 4.0, left: 4.0, top: 8),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               text,
               style: TextStyle(
                 color: isSelected ? Colors.white : Colors.white70,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w500,
                 fontSize: 18.0,
                 shadows: const [
                   Shadow(
@@ -309,7 +339,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
       onTap: onTap,
       child: SizedBox(
         child: Icon(
-          size: 0.08.sw,
+          size: 0.06.sw,
           FontAwesomeIcons.magnifyingGlass,
           color: Colors.white,
           shadows: const [
