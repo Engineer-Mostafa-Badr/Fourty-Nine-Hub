@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -120,7 +121,7 @@ class StoryCubit extends Cubit<StoryState> {
   Future<void> getMutedStories({
     userId,
     context,
-    limit = 1,
+    limit = 10,
     page = 1,
     loadMore = false,
   }) async {
@@ -251,7 +252,7 @@ class StoryCubit extends Cubit<StoryState> {
     ));
     // _fetchStoriesUseCase
     final response = await _fetchStoriesUseCase(
-        PaginationParams(page: state.currentPage, limit: 10));
+        PaginationParams(page: state.currentPage, limit: 100));
 
     response.fold(
       (failure) {
@@ -303,7 +304,7 @@ class StoryCubit extends Cubit<StoryState> {
       final fileSize = await file.length();
 
       // Call your upload method
-      await uploadStoryVideoOrImage(file, fileType, fileSize,
+      await uploadStoryVideoOrImageOrVoice(file, fileType, fileSize,
           description: description);
     } else {
       print('No file selected.');
@@ -321,8 +322,9 @@ class StoryCubit extends Cubit<StoryState> {
     }
   }
 
-  Future<void> uploadStoryVideoOrImage(File file, String fileType, int fileSize,
-      {description}) async {
+  Future<void> uploadStoryVideoOrImageOrVoice(
+      File file, String fileType, int fileSize,
+      {description, String? color}) async {
     final token = await CacheManager.getAccessToken();
 
     // Step 1: Generate Signed URL
@@ -371,7 +373,8 @@ class StoryCubit extends Cubit<StoryState> {
     }
   }
 
-  Future<void> confirmUpload(String storyMediaId, {description = ''}) async {
+  Future<void> confirmUpload(String storyMediaId,
+      {description = '', String? color}) async {
     final token = await CacheManager.getAccessToken();
 
     final response = await http.put(
@@ -381,9 +384,14 @@ class StoryCubit extends Cubit<StoryState> {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
-      body: jsonEncode({
-        "description": "$description", // Add your actual description here
-      }),
+      body: color != null
+          ? jsonEncode({
+              "description": "$description", // Add your actual description here
+              "color": color,
+            })
+          : jsonEncode({
+              "description": "$description", // Add your actual description here
+            }),
     );
 
     if (response.statusCode == 200) {
@@ -394,13 +402,25 @@ class StoryCubit extends Cubit<StoryState> {
     }
   }
 
-  Future<void> createTextStory(String text) async {
-    final response = await _createStoryUseCase(text);
+  Future<void> createTextStory(
+      {required String text,
+      required String color,
+      required String fontFamily}) async {
+    final response = await _createStoryUseCase(CreateStoryParams(
+      text: text,
+      color: color,
+      fontFamily: fontFamily,
+    ));
     response.fold(
       (failure) {
         emit(StoryError('Failed to create story: $failure'));
       },
-      (data) async {},
+      (data) async {
+        log("createTextStory: $data");
+        await fetchStories();
+        await getMutedStories();
+        emit(state.copyWith(isLoading: false)); // Reset loading state
+      },
     );
   }
 

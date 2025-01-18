@@ -512,57 +512,57 @@ class ChatStories extends StatelessWidget {
               width: 4,
             ),
             _createMyStory(context),
-            const SizedBox(
-              width: 12,
-            ),
-            BlocConsumer<StoryCubit, StoryState>(
-              listener: (context, state) {
-                // TODO: implement listener
-              },
-              builder: (context, state) {
-                if (state.mutedStoriesResponse != null) {
-                  return _mutedStories(context);
-                }
-                return const SizedBox(
-                  height: 0,
-                  width: 0,
-                );
-              },
-            ),
-            const Sizer(
-              width: 12,
-            ),
-            BlocBuilder<StoryCubit, StoryState>(
-              builder: (context, state) {
-                if (state.users.isEmpty ?? false) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                    child: Shimmer.fromColors(
-                      baseColor: Colors.grey.withOpacity(0.1),
-                      highlightColor: Colors.grey.withOpacity(0.5),
-                      child: CircleAvatar(
-                        radius: MediaQuery.of(context).size.height *
-                            0.03, // Responsive radius
-                      ),
-                    ),
-                  );
-                }
-                return ListView.separated(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                      child: _buildStoryItem(context, state, index),
-                    );
-                  },
-                  separatorBuilder: (context, index) => const Sizer(
-                    width: 8,
-                  ),
-                  itemCount: state.users.length ?? 0,
-                );
-              },
-            ),
+            // const SizedBox(
+            //   width: 12,
+            // ),
+            // BlocConsumer<StoryCubit, StoryState>(
+            //   listener: (context, state) {
+            //     // TODO: implement listener
+            //   },
+            //   builder: (context, state) {
+            //     if (state.mutedStoriesResponse != null) {
+            //       return _mutedStories(context);
+            //     }
+            //     return const SizedBox(
+            //       height: 0,
+            //       width: 0,
+            //     );
+            //   },
+            // ),
+            // const Sizer(
+            //   width: 12,
+            // ),
+            // BlocBuilder<StoryCubit, StoryState>(
+            //   builder: (context, state) {
+            //     if (state.users.isEmpty ?? false) {
+            //       return Padding(
+            //         padding: const EdgeInsets.symmetric(horizontal: 2.0),
+            //         child: Shimmer.fromColors(
+            //           baseColor: Colors.grey.withOpacity(0.1),
+            //           highlightColor: Colors.grey.withOpacity(0.5),
+            //           child: CircleAvatar(
+            //             radius: MediaQuery.of(context).size.height *
+            //                 0.03, // Responsive radius
+            //           ),
+            //         ),
+            //       );
+            //     }
+            //     return ListView.separated(
+            //       shrinkWrap: true,
+            //       scrollDirection: Axis.horizontal,
+            //       itemBuilder: (context, index) {
+            //         return Padding(
+            //           padding: const EdgeInsets.symmetric(horizontal: 2.0),
+            //           child: _buildStoryItem(context, state, index),
+            //         );
+            //       },
+            //       separatorBuilder: (context, index) => const Sizer(
+            //         width: 8,
+            //       ),
+            //       itemCount: state.users.length ?? 0,
+            //     );
+            //   },
+            // ),
           ],
         ),
       ),
@@ -598,13 +598,14 @@ class ChatStories extends StatelessWidget {
                     child: CircleAvatar(
                       backgroundColor: AppColors.PRIMARY_COLOR,
                       backgroundImage: NetworkImage(
-                        serviceLocator<UserCubit>().state.data != null
+                        serviceLocator<UserCubit>().state.data != null && context.isUserLoggedIn
                             ? serviceLocator<UserCubit>()
                                 .state
                                 .data!
                                 .profilePicture!
                             : UIConst.profilePlaceHolder,
                       ),
+
                       onBackgroundImageError: (_, __) => Image.asset(
                         UIConst.profilePlaceHolder,
                       ),

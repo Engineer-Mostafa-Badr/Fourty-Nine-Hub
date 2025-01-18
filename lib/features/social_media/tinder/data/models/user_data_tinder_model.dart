@@ -15,6 +15,7 @@ class UserDataTinderModel extends UserDataTinderEntity {
     required super.friendsCount,
     required super.areFriends,
     required super.pictures,
+    required super.hasStory,
   });
 
   factory UserDataTinderModel.fromJson(Map<String, dynamic> json) {
@@ -26,6 +27,7 @@ class UserDataTinderModel extends UserDataTinderEntity {
       birthday: json['birthday']?? '',
       gender: json['gender']?? '',
       areFriends: json['areFriends'] ?? false,
+      hasStory: json['hasStory'] ?? false,
       location: json['location'] != null
           ? LocationModel.fromJson(json['location'])
           : null,

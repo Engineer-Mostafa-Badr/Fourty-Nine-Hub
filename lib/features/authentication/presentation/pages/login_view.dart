@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 import 'dart:io';
 
@@ -83,8 +85,8 @@ class _LoginViewState extends State<LoginView> {
             extra: registerCubit.emailTextController.text,
           );
         } else if (state is RegisterSuccess) {
-          context.read<UserCubit>().setLogin(true);
-          context.read<UserCubit>().getUser();
+          await context.read<UserCubit>().setLogin(true);
+         await context.read<UserCubit>().getUser();
           context.go(Routes.HOME);
         }
       },

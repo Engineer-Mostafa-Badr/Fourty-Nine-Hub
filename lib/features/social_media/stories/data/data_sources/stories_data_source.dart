@@ -9,10 +9,12 @@ import 'package:fourtyninehub/features/social_media/stories/data/models/muted_st
 import 'package:fourtyninehub/features/social_media/stories/data/models/viewers_model.dart';
 import 'package:fourtyninehub/features/social_media/stories/domain/use_case/update_privacy_use_case.dart';
 
+import '../../domain/use_case/create_story_use_case.dart';
+
 abstract class StoriesRemoteDataSource {
   Future<Either<Failure, bool>> makeViews(String id);
   Future<Either<Failure, bool>> deleteStory(String id);
-  Future<Either<Failure, bool>> createStory(String id);
+  Future<Either<Failure, bool>> createStory(CreateStoryParams params);
   Future<Either<Failure, bool>> muteUserStories(String id);
   Future<Either<Failure, ViewersResponse>> getStoryViewers(String id);
   Future<Either<Failure, MutedStoriesResponse>> getMutedStories(
@@ -55,9 +57,9 @@ class StoriesRemoteDataSourceImpl implements StoriesRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> createStory(String id) async {
+  Future<Either<Failure, bool>> createStory(CreateStoryParams params) async {
     final response =
-        await _apiConsumer.post(EndPoints.createStory, data: {'text': id});
+        await _apiConsumer.post(EndPoints.createStory, data: {'text': params.text, 'color': params.color, 'fontFamily': params.fontFamily,});
     return response.fold(
       (failure) => Left(failure),
       (response) => Right(

@@ -73,7 +73,7 @@ class _TinderScreenState extends State<TinderScreen> {
   void _initializeTinderData() {
     final tinderCubit = context.read<TinderViewCubit>();
     tinderCubit
-      ..fetchUserData(isMaleSelected! ? 'female' : 'male')
+      ..fetchUserData(gender: isMaleSelected! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "")
       // ..fetchSubCategoryData()
       ..fetchFavorites();
     // ..fetchMainCategoryById(context,'62c8b5b09332225799fe335e');
@@ -108,7 +108,7 @@ class _TinderScreenState extends State<TinderScreen> {
                 isMaleSelected = !isMaleSelected!; // Toggle the state
                 final tinderCubit = context.read<TinderViewCubit>();
                 tinderCubit
-                  ..fetchUserData(isMaleSelected! ? 'female' : 'male')
+                  ..fetchUserData(gender: isMaleSelected! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "")
                   // ..fetchSubCategoryData()
                   ..fetchFavorites();
               });

@@ -193,7 +193,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
       BuildContext context, UserDataTinderEntity user) async {
     final currentGender = context.read<TinderViewCubit>().state.gender;
     final newGender = currentGender == 'female' ? 'male' : 'female';
-    await context.read<TinderViewCubit>().fetchUserData(newGender);
+    // await context.read<TinderViewCubit>().fetchUserData(gender: ! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "");
     setState(() {
       print('sssssssssssssssssssssssssssss');
     });
@@ -239,25 +239,62 @@ class _TinderCardStackState extends State<TinderCardStack> {
             _buildPersonStatus(context),
             ListTile(
               contentPadding: EdgeInsets.zero,
-              title: Text(
-                "${capitalizeAndSplit(cardUser.firstName ?? '')} ${capitalizeAndSplit(cardUser.lastName ?? '')}",
-                textAlign: TextAlign.start,
-                maxLines: 1,
-                softWrap: true,
-                overflow: TextOverflow.fade,
-                textScaler: TextScaler.noScaling,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 60.sp,
-                  shadows: const [
-                    Shadow(
-                      offset: Offset(1.0, 1.0),
-                      blurRadius: 4.0,
-                      color: Colors.black,
+              title: Row(
+                children: [
+                  InkWell(
+                    onTap: cardUser.hasStory? (){
+                      // navigate to stories
+                    }: null,
+                    child: Container(
+                      height: kToolbarHeight * .7,
+                      width: kToolbarHeight * .7,
+                      decoration: cardUser.hasStory? BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        border: Border.all(
+                          color: AppColors.PRIMARY_COLOR_DARK,
+                          width: 3,
+                        )
+                      ): null,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: CircleAvatar(
+                          child: Image.network(
+                            cardUser.profilePicture??UIConst.profilePlaceHolder,
+                            fit: BoxFit.cover,
+                            errorBuilder:
+                                (context, error, stackTrace) {
+                              return Image.network(
+                                UIConst.profilePlaceHolder,
+                                fit: BoxFit.cover,
+                              );
+                            },
+                          ),
+                        ),
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 8,),
+                  Text(
+                    "${capitalizeAndSplit(cardUser.firstName ?? '')} ${capitalizeAndSplit(cardUser.lastName ?? '')}",
+                    textAlign: TextAlign.start,
+                    maxLines: 1,
+                    softWrap: true,
+                    overflow: TextOverflow.fade,
+                    textScaler: TextScaler.noScaling,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 60.sp,
+                      shadows: const [
+                        Shadow(
+                          offset: Offset(1.0, 1.0),
+                          blurRadius: 4.0,
+                          color: Colors.black,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
               subtitle: _buildLastSeen(context),
             ),
@@ -394,22 +431,30 @@ class _TinderCardStackState extends State<TinderCardStack> {
             _buildActionButton(
               context,
               Icons.person,
-              () => context.push(Routes.OTHERSACCOUNT, extra: cardUser.id),
+              !context.read<UserCubit>().isLoggedIn
+                  ? () => context.push(Routes.LOGIN)
+                  : () => context.push(Routes.OTHERSACCOUNT, extra: cardUser.id),
               color: AppColors.PRIMARY_COLOR,
             ),
             _buildActionButton(context, Icons.chat,
-                () => showChatBottomSheet(context, cardUser),
+                !context.read<UserCubit>().isLoggedIn
+                    ? () => context.push(Routes.LOGIN)
+                    :  () => showChatBottomSheet(context, cardUser),
                 color: Colors.white, iconColor: AppColors.PRIMARY_COLOR),
             _buildActionButton(
               context,
               Icons.add_photo_alternate_outlined,
-              () => _navigateToUserProfile(context, cardUser),
+              !context.read<UserCubit>().isLoggedIn
+                  ? () => context.push(Routes.LOGIN)
+                  :  () => _navigateToUserProfile(context, cardUser),
               color: Colors.red,
             ),
             _buildActionButton(
               context,
               Icons.card_giftcard,
-              () => showGiftBottomSheet(context, receiverId: cardUser.id),
+              !context.read<UserCubit>().isLoggedIn
+                  ? () => context.push(Routes.LOGIN)
+                  :  () => showGiftBottomSheet(context, receiverId: cardUser.id),
               color: AppColors.ACCENT_COLOR,
             ),
             _buildActionButton(
@@ -960,6 +1005,7 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                           label: LocaleKeys.chat_alert_dialog_anonymous.tr(),
                           onPressed: () async {
                             if (context.read<UserCubit>().isLoggedIn) {
+                              log("Are Friends : ${cardUser.areFriends}");
                               ChatEntity? chat = await context
                                   .read<UserCubit>()
                                   .createAnonymousChat(
@@ -987,6 +1033,7 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                           label: LocaleKeys.chat_alert_dialog_regular.tr(),
                           onPressed: () async {
                             if (context.read<UserCubit>().isLoggedIn) {
+                              log("Are Friends : ${cardUser.areFriends}");
                               if (cardUser.areFriends == true) {
                                 ChatEntity? chat = await context
                                     .read<UserCubit>()

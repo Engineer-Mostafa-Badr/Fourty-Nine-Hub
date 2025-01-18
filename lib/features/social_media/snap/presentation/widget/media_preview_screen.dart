@@ -238,7 +238,8 @@ class _MediaPreviewState extends State<MediaPreview> {
         final fileSize = await file.length();
 
         await serviceLocator<StoryCubit>()
-            .uploadStoryVideoOrImage(file, fileType, fileSize, description: '')
+            .uploadStoryVideoOrImageOrVoice(file, fileType, fileSize,
+                description: '')
             .then((value) => ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Story created')),
                 ));
