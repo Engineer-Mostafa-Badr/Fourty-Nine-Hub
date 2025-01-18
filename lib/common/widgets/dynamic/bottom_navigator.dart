@@ -200,8 +200,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                       // ),
                       child: Padding(
                         padding: EdgeInsets.only(
-                          left: index == 2 ? 1.0 : 35.0,  // Add more padding for the middle icon
-                          right: index == 1 ? 1.0 : 35.0, // Add more padding for the middle icon
+                          left: index == 1 ? 1.0 : 40.0,  // Less padding for the first icon
+                          right: index == 2 ? 1.0 : 40.0, // Less padding for the last icon
                         ),
                         child: index == 2 // Index for "health"
                             ? Image.asset(

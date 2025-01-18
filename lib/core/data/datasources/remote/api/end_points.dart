@@ -57,6 +57,7 @@ class EndPoints {
   static const getWelcomeGift = '/auth/welcome-gift';
   static const socialLogin = '/auth/social/login';
   static const resendOTP = '/auth/resend-reset-code';
+  static const resendVerificationOTP = '/auth/resend-verification-code';
   static const refreshToken = '/auth/refresh/token';
 
   static String friendsList(TwitterFeedParams params) =>

@@ -761,7 +761,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.asset(
+                     Image.asset(
                       Assets.tripJoinImage,
                       fit: BoxFit.cover,
                       width: 150,

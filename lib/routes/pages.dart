@@ -601,6 +601,9 @@ class AppPages {
                   create: (_) => serviceLocator<LoginCubit>(),
                 ),
                 BlocProvider(
+                  create: (_) => serviceLocator<VerifyOtpCubit>(),
+                ),
+                BlocProvider(
                   create: (_) => serviceLocator<GetWalletCubit>(),
                 ),
                 BlocProvider(
@@ -662,6 +665,9 @@ class AppPages {
               providers: [
                 BlocProvider(
                   create: (_) => serviceLocator<LoginCubit>(),
+                ),
+                BlocProvider(
+                  create: (_) => serviceLocator<VerifyOtpCubit>(),
                 ),
                 BlocProvider(
                   create: (_) => serviceLocator<RegisterCubit>(),
