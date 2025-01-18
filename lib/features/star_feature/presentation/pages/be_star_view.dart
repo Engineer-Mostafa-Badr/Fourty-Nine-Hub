@@ -115,26 +115,7 @@ class _BeStarViewState extends State<BeStarView> {
       body: BlocBuilder<StarCubit, StarState>(
         builder: (BuildContext context, state) {
           if (!context.read<UserCubit>().isLoggedIn) {
-            return Center(
-              child:       Stack(
-                alignment: Alignment.center,
-                children: [
-                  const CircularStepProgressIndicator(
-                    totalSteps: 20,
-                    stepSize: 20,
-                    selectedStepSize: 20,
-                    currentStep: 15,
-                    width: 300,
-                    height: 300,
-                    padding: 0.5,
-                    selectedColor: AppColors.PRIMARY_COLOR,
-                    unselectedColor: Colors.grey,
-                  ),
-                  CustomTextNoLoginNew()
-                ],
-              ),
-            );
-            // return const CustomTextNoLogin();
+            return CustomNotLogged();
           }
           if (state.status == StarStates.loading) {
             return const CustomLoading();

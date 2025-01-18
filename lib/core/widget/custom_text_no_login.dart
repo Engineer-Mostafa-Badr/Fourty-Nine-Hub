@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:go_router/go_router.dart';
+import 'package:step_progress_indicator/step_progress_indicator.dart';
 
+import '../../res/style/app_colors.dart';
 import '../../res/style/styles.dart';
 import '../../routes/routes.dart';
 import '../localization/locale_keys.g.dart';
@@ -67,6 +69,30 @@ class CustomTextNoLoginNew extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CustomNotLogged extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return   Stack(
+      alignment: Alignment.center,
+      children: [
+        const CircularStepProgressIndicator(
+          totalSteps: 20,
+          stepSize: 20,
+          selectedStepSize: 20,
+          currentStep: 15,
+          width: 300,
+          height: 300,
+          padding: 0.5,
+          selectedColor: AppColors.PRIMARY_COLOR,
+          unselectedColor: Colors.grey,
+        ),
+        CustomTextNoLoginNew()
+      ],
     );
   }
 }
