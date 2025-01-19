@@ -59,7 +59,7 @@ class _EditMyAdsState extends State<EditMyAds> {
         create: (BuildContext context) => serviceLocator()
           ..loadDataInEdit(
               subCategoryId: widget.categorization.mainCategory?.id ?? '',
-              id: widget.categorization.id),
+              id: widget.categorization.id, fromMarriage: false),
         child: BlocConsumer<CreateAdCubit, CreateAdState>(
           listener: (BuildContext context, CreateAdState state) {
             if (state.status == CreateAdStates.updateSuccess) {

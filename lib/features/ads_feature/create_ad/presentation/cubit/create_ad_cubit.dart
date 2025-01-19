@@ -76,30 +76,31 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       this._adsByIdUseCase)
       : super(CreateAdState());
 
-  void loadData({required String subCategoryId}) async {
+  void loadData({required String subCategoryId,required bool fromMarriage}) async {
     emit(state.copyWith(status: CreateAdStates.loading));
+    print("fromMarriage$fromMarriage");
 
     await Future.wait([
-      getAdProperties(subCategoryId: subCategoryId),
+      getAdProperties(subCategoryId: subCategoryId, fromMarriage: fromMarriage),
       _getGovernorates(),
     ]);
     emit(state.copyWith(status: CreateAdStates.success));
   }
 
   void loadDataInEdit(
-      {required String subCategoryId, required String id}) async {
+      {required String subCategoryId, required String id,required bool fromMarriage}) async {
     // emit(state.copyWith(status: CreateAdStates.loading));
-
+    print("fromMarriage$fromMarriage");
     await Future.wait([
-      getAdProperties(subCategoryId: subCategoryId),
+      getAdProperties(subCategoryId: subCategoryId, fromMarriage: fromMarriage),
       _getGovernorates(),
       fetchMyAdsById(id: id),
     ]);
     // emit(state.copyWith(status: CreateAdStates.success));
   }
 
-  Future<void> getAdProperties({required String subCategoryId}) async {
-    final response = await _getAdPropertiesUsecase(subCategoryId);
+  Future<void> getAdProperties({required String subCategoryId,required bool? fromMarriage}) async {
+    final response = await _getAdPropertiesUsecase(GetAdPropertiesParams(id: subCategoryId, fromMarriage: fromMarriage));
     response.fold(
         (failure) => emit(
             state.copyWith(failure: failure, status: CreateAdStates.error)),
@@ -315,7 +316,9 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     print(categorize.subCategory.hasAuction);
 
     String type = '';
-    if (categorize.mainCategory.nameEn == 'Dating' && state.isMale == true) {
+    if(categorize.fromMarriage==true){
+      type='user';
+    }else if (categorize.mainCategory.nameEn == 'Dating' && state.isMale == true) {
       type = 'male';
     } else if (categorize.mainCategory.nameEn == 'Dating' &&
         state.isMale == false) {

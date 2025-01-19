@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubi
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/pages/ad_requests_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/marriage_ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/create_ad.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/filter_ads.dart';
@@ -592,6 +593,16 @@ class AppPages {
                       ),
                     ]),
               ]),
+          GoRoute(
+              path: Paths.MARRIAGESUBCATEGORIES,
+              name: Routes.MARRIAGESUBCATEGORIES,
+              builder: (context, state) => BlocProvider(
+                    create: (context) =>serviceLocator<SubcategoriesCubit>(),
+                    child: MarriageSubCategoriesView(
+                      mainCategory: state.extra as MainCategoryEntity,
+                    ),
+                  ),
+              ),
           GoRoute(
             name: Routes.LOGIN,
             path: Paths.LOGIN,

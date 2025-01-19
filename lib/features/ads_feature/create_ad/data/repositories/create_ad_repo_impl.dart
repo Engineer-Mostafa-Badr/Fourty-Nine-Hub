@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/datasources/create_ad_remote_datasource.dart';
 
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/get_ad_properties_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 
 import '../../domain/repositories/create_ad_repo.dart';
@@ -14,9 +15,9 @@ class CreateAdRepoImpl implements CreateAdRepo {
   CreateAdRepoImpl(this._remoteDatasource);
   @override
   Future<Either<Failure, List<AdPropertiesEntity>>> getAdProperties(
-      {required String subCategoryId}) async {
+      {required GetAdPropertiesParams params}) async {
     return await _remoteDatasource.getAdProperties(
-        subCategoryId: subCategoryId);
+        params: params);
   }
 
   @override
