@@ -32,7 +32,9 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   }
 
   changeSubCatIndex(int index){
+    if(index == state.subCatIndex) return;
     emit(state.copyWith(subCatIndex: index));
+    loadMarriageData(subCategoryId: state.subCategories?[index].id??'');
   }
 
   MainCategoryEntity? mainCategory;
@@ -166,6 +168,8 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
             final nextPageKey = page + 1;
             adsPagingController.appendPage(data, nextPageKey);
           }
+
+          emit(state.copyWith(ads:data));
         });
   }
 

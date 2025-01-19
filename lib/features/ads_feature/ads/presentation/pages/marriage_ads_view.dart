@@ -79,19 +79,6 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
             padding: EdgeInsets.all(16.0.w),
             child: Column(
               children: [
-                // Container(
-                //   padding: EdgeInsets.all(10.w),
-                //   decoration: BoxDecoration(
-                //     color: Theme.of(context).scaffoldBackgroundColor,
-                //     borderRadius: BorderRadius.circular(15.r),
-                //     border: Border.all()
-                //   ),
-                //   child: Row(
-                //     children: [
-                //       Icon()
-                //     ],
-                //   ),
-                // ),
                 state.mainCategory==null?Container():MainCategoryBanner(
                   category: context.read<SubcategoriesCubit>().state.mainCategory!,
                   onFavorite: () async {
@@ -152,6 +139,16 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                     ), separatorBuilder: (BuildContext context, int index) =>const Sizer(width: 30,),
                   ),
                 ),
+                const Sizer(height: 40,),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: state.ads?.length??0,
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (context, index) => Container(
+                        margin: EdgeInsets.only(bottom: 20.h),
+                        child:Text(state.ads?[index].title??''),
+                      )),
+          )
               ],
             ),
           ),

@@ -316,7 +316,9 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     print(categorize.subCategory.hasAuction);
 
     String type = '';
-    if (categorize.mainCategory.nameEn == 'Dating' && state.isMale == true) {
+    if(categorize.fromMarriage==true){
+      type='user';
+    }else if (categorize.mainCategory.nameEn == 'Dating' && state.isMale == true) {
       type = 'male';
     } else if (categorize.mainCategory.nameEn == 'Dating' &&
         state.isMale == false) {
