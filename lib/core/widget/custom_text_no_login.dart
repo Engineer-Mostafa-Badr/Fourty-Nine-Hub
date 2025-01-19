@@ -59,7 +59,7 @@ class CustomTextNoLoginNew extends StatelessWidget {
               // 'Please Login,\n Register to enjoy the app',
               // 'تسجيل/تسجيل الدخول\n للاستمتاع بالتطبيق',
               // 'Register/Login \n To enjoy App',
-              "${LocaleKeys.loginOrRegister.localize}",
+              LocaleKeys.loginOrRegister.localize,
               style: Styles.headerText(
                 fontSize: 50,
                 color: Theme.of(context).primaryColor,

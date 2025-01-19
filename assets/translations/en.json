@@ -1256,6 +1256,7 @@
   "cropImage": "Crop Image",
   "sureLogoutApp": "Are you sure you want to leave?",
   "ExitApp":"Exit App",
-  "sure": "Sure"
-
+  "sure": "Sure",
+  "warning": "Warning",
+  "loginOrRegister": "Register/Login \n To enjoy App"
 }

@@ -153,7 +153,6 @@ dependencies:
   flutter_background_service: ^5.0.10
   restart_app:
   image_cropper:
-  flutter_countdown_timer: ^4.1.0
 
 dependency_overrides:
 #  camera_android_camerax: 0.6.10+1
