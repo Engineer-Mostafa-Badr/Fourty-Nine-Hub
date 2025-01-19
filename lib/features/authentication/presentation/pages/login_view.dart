@@ -322,6 +322,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           // style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
           controller: loginCubit.emailTextController,
           hint: LocaleKeys.emailOrPhone.localize,
+
           prefix: Icon(
             Icons.email,
             color: AppColors.GREY_DARK_COLOR,

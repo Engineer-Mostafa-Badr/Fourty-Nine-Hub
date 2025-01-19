@@ -119,6 +119,7 @@ class FormTextField extends StatelessWidget {
           obscureText: obsecure ?? false,
           onChanged: action,
           decoration: InputDecoration(
+            errorStyle: TextStyle(height: 0.1),
             constraints: constraints,
             hintText: hint,
             filled: true,
@@ -163,6 +164,7 @@ class FormTextField extends StatelessWidget {
           ),
         ),
       ),
+
       if (info != null)
         Container(
             margin: const EdgeInsets.only(top: 5),

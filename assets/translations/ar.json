@@ -157,7 +157,7 @@
   "emptyFieldNotValid": "حقل فارغ غير صالح",
   "login": "تسجيل الدخول",
   "register": "تسجيل",
-  "emailOrPhone": "البريد الإلكتروني أو الهاتف",
+  "emailOrPhone": "البريد الإلكتروني",
   "password": "كلمة المرور",
   "forgetPassword": "نسيت كلمة المرور",
   "lastName": "اللقب",
