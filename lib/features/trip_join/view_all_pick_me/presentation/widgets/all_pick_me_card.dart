@@ -243,7 +243,7 @@ class AllPickMeCard extends StatelessWidget {
                                   .currnecyAr
                               : BlocProvider.of<GetCurrencyCubit>(context)
                                   .currnecyEn,
-                          style: Styles.mediumText(
+                          style: Styles.mediumText(fontSize: 35,
                               fontWeight: FontWeight.bold,
                               color: AppColors.SECONDARY_COLOR),
                         )

@@ -77,7 +77,7 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                                     .currnecyAr
                                 : BlocProvider.of<GetCurrencyCubit>(context)
                                     .currnecyEn,
-                            style: Styles.headerText(
+                            style: Styles.mediumText(fontSize:35,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.SECONDARY_COLOR),
                           )

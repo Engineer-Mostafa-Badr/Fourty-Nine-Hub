@@ -69,6 +69,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
     super.build(context);
     final state = context.watch<RestaurantsCubit>().state;
     return SharedScaffold(
+       isWithBackArrow: false,
       mainCategoryId: 1,
       // backgroundColor: scaffoldDarkColor(context),
       body: RefreshIndicator(

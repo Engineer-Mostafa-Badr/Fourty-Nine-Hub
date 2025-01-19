@@ -425,7 +425,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 child: _buildRideSubCategoryItem(
                   service:
                       state.data?[1].service ?? RideServicesEnum.comeWithYou,
-                  title: LocaleKeys.tripJoin.localize,
+                  title:state.data![1].name.toString(),
                   image: state.data?[1].image ?? '',
                   // image: Assets.tripJoin,
 
@@ -767,8 +767,8 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.asset(
-                      Assets.tripJoinImage,
+                    Image.network(
+                      image,
                       fit: BoxFit.cover,
                       width: 150,
                       // source: AssetImage(image),

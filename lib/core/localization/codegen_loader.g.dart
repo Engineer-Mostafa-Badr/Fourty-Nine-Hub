@@ -1231,7 +1231,7 @@ class CodegenLoader extends AssetLoader{
   "marriage": "زواج",
   "Rating": "تقييم:",
   "noFollowing": "لا يوجد متابعين",
-  "billCashback": "كاش باك فواتير",
+  "billCashback": "أسترجاع الفواتير",
   "selectBill": "حدد الفاتورة",
   "billValue": "قيمة الفاتورة",
   "trafficViolation": "مخالفة المرور",
@@ -1251,7 +1251,9 @@ class CodegenLoader extends AssetLoader{
   "ExitApp":"هل أنت متأكد ؟",
   "sureLogoutApp": "هل تريد الخروج من التطبيق",
     "sure":"متأكد",
-    "warning":"تحذير !"
+    "warning":"تحذير !",
+  "cashBack":"قم بتحميل فاتورة واحدة على الأقل للاستمتاع بالحصول على استرداد نقدي كهدية من التطبيق"
+
 
 };
 static const Map<String,dynamic> en = {
@@ -2508,7 +2510,8 @@ static const Map<String,dynamic> en = {
   "ExitApp":"Are you sure ?",
   "sureLogoutApp":"Do you want exit from the app",
    "sure":"Sure",
-  "warning":"warning !"
+  "warning":"warning !",
+  "cashBack":"Upload At Least One Bill To Enjoy Getting Cash back As A Gift On The App"
 
 
 };

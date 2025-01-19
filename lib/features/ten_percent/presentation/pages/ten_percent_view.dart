@@ -36,7 +36,7 @@ class _TenPercentViewState extends State<TenPercentView> {
             child: ListView(
               padding: EdgeInsets.all(16.w),
               children: [
-                Label(text: 'Upload At Least One Bill To Enjoy Getting Cashback As A Gift On The App.',style: Styles.headerText(
+                Label(text: LocaleKeys.cashBack.localize,style: Styles.headerText(
 
                   color: AppColors.SECONDARY_COLOR
                 ),maxLines: 3,),

@@ -45,8 +45,8 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
               child: Text(
                 // LocaleKeys.availableTrips.localize,
                 context.isArabic
-                    ? "مرحبا بك في جاي معاك"
-                    : "Welcome to Trip Join",
+                    ? "جاي معاك"
+                    : "Trip Join",
                 style: Styles.headerText(),
               ),
             ),
@@ -54,15 +54,14 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+              Center(
                 child: Text(
                   // LocaleKeys.availableTrips.localize,
                   context.isArabic
-                      ? "رحلات مخفضة - وفر فلوسك وسافر بأسعار أقل!"
-                      : "Discounted Trips - Save money and travel for less!",
+                      ? "رحلات مخفضة - وفر فلوسك وسافر بأسعار أقل"
+                      : "Discounted Trips - Save money and travel for less",
                   style: Styles.mediumText(
-                    color: AppColors.PRIMARY_COLOR_DARK,
+                    color: AppColors.PRIMARY_COLOR,
                     fontWeight: FontWeight.bold,
                     fontStyle: FontStyle.italic,
                   ),
