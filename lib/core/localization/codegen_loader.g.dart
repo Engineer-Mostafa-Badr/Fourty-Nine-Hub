@@ -173,7 +173,7 @@ class CodegenLoader extends AssetLoader{
   "emptyFieldNotValid": "حقل فارغ غير صالح",
   "login": "تسجيل الدخول",
   "register": "تسجيل",
-  "emailOrPhone": "البريد الإلكتروني أو الهاتف",
+  "emailOrPhone": "البريد الإلكتروني",
   "password": "كلمة المرور",
   "forgetPassword": "نسيت كلمة المرور",
   "lastName": "اللقب",
@@ -1248,11 +1248,11 @@ class CodegenLoader extends AssetLoader{
   "pleaseEnterAValue": "يرجى إدخال قيمة",
   "answerSentSuccessfully": "تم إرسال الإجابة بنجاح",
   "cropImage": "قص صورة",
-  "ExitApp":"الخروج من التطبيق",
   "sureLogoutApp": "هل أنت متأكد أنك تريد الخروج؟",
-    "sure":"متأكد",
-    "warning":"تحزير"
-
+  "ExitApp": "الخروج من التطبيق",
+  "sure": "متأكد",
+  "warning": "تحذير",
+  "loginOrRegister": "تسجيل الدخول\n للاستمتاع بالتطبيق"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1413,7 +1413,7 @@ static const Map<String,dynamic> en = {
   "emptyFieldNotValid": "Empty Field Not Valid",
   "login": "Login",
   "register": "Register",
-  "emailOrPhone": "Email Or Phone",
+  "emailOrPhone": "Email",
   "password": "Password",
   "forgetPassword": "Forget Password?",
   "lastName": "Last Name",
@@ -2505,12 +2505,11 @@ static const Map<String,dynamic> en = {
   "pleaseEnterAValue": "Please enter a value",
   "answerSentSuccessfully": "Answer sent successfully",
   "cropImage": "Crop Image",
-  "ExitApp":"Exit App",
-  "sureLogoutApp":"Are you sure you want to leave?",
-   "sure":"Sure",
-  "warning":"warning"
-
-
+  "sureLogoutApp": "Are you sure you want to leave?",
+  "ExitApp": "Exit App",
+  "sure": "Sure",
+  "warning": "Warning",
+  "loginOrRegister": "Register/Login \n To enjoy App"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
