@@ -44,6 +44,26 @@ class _QuranViewPageState extends State<QuranViewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              'القران الكريم',
+              style: TextStyle(fontSize: 40.sp),
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.arrow_forward,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Pop the current screen
+              },
+            ),
+          ],
+        ),
+      ),
       body: BlocProvider.value(
         value: _quranCubit, // Provide the existing instance of QuranCubit
         child: BlocConsumer<QuranCubit, QuranState>(
