@@ -71,12 +71,10 @@ class _NavigateBarState extends State<NavigateBar> {
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
-
   didChangeDependencies() {
     super.didChangeDependencies();
     _setupScrollController();
   }
-
 
   void _setupScrollController() {
     scrollController.addListener(() {
@@ -102,11 +100,11 @@ class _NavigateBarState extends State<NavigateBar> {
     //     .notificationListener(languageCode: 'en');
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(LocaleKeys.navigateBar.localize),
       ),
       body: BlocProvider<CustomPageCubit>(
@@ -146,10 +144,21 @@ class _NavigateBarState extends State<NavigateBar> {
                       ),
                     ),
                     selected: isSelected,
-                    trailing:(index == 0 ||index == 1 || index ==2|| index ==3|| index ==5|| index ==4|| index ==7)?Image.asset(_icons[index],height: 40.h,): SvgPicture.asset(
-                      _icons[index],
-                      height: 40.h,
-                    ),
+                    trailing: (index == 0 ||
+                            index == 1 ||
+                            index == 2 ||
+                            index == 3 ||
+                            index == 5 ||
+                            index == 4 ||
+                            index == 7)
+                        ? Image.asset(
+                            _icons[index],
+                            height: 40.h,
+                          )
+                        : SvgPicture.asset(
+                            _icons[index],
+                            height: 40.h,
+                          ),
                   );
                 },
               );
@@ -165,56 +174,56 @@ class _NavigateBarState extends State<NavigateBar> {
       floatingActionButton: _isScrollingDown
           ? null
           : BlocProvider<CustomPageCubit>(
-        create: (BuildContext context) => serviceLocator(),
-        child: BlocConsumer<CustomPageCubit, CustomPageState>(
-          listener: (BuildContext context, state) {
-            if (state.status == CustomPageStates.success) {
-              showSuccessMessage(
-                  context, LocaleKeys.updateSuccessfully.localize);
-            }
-          },
-          builder: (BuildContext context, Object? state) {
-            return FloatingActionButton(
-              backgroundColor: Theme.of(context).primaryColor,
-              onPressed: () {
-                final selectedCategories = _selectedItems.entries
-                    .where((entry) => entry.value == true)
-                    .map((entry) => entry.key)
-                    .toList();
-                if (selectedCategories.length >= 3 &&
-                    selectedCategories.length <= 5) {
-                  // Proceed with the selected items
-                  context
-                      .read<CustomPageCubit>()
-                      .updateNavigateBar(NavigateBarParams(
-                    ride: _selectedItems["Ride"] ?? false,
-                    loading: _selectedItems["Loading"] ?? false,
-                    health: _selectedItems["Health"] ?? false,
-                    meal: _selectedItems["Meal"] ?? false,
-                    find: _selectedItems["Find"] ?? false,
-                    reel: _selectedItems["Reel"] ?? false,
-                    spotlight: _selectedItems["Spotlight"] ?? false,
-                    meet: _selectedItems["Meet"] ?? false,
-                    live: _selectedItems["Live"] ?? false,
-                    snap: _selectedItems["Snap"] ?? false,
-                  ));
-                } else {
-                  // Show a message if the selection is not valid
-                  showSuccessMessage(
-                    context,
-                    LocaleKeys.atLeast3atMost5items.localize,
-                    color: AppColors.SECONDARY_COLOR,
+              create: (BuildContext context) => serviceLocator(),
+              child: BlocConsumer<CustomPageCubit, CustomPageState>(
+                listener: (BuildContext context, state) {
+                  if (state.status == CustomPageStates.success) {
+                    showSuccessMessage(
+                        context, LocaleKeys.updateSuccessfully.localize);
+                  }
+                },
+                builder: (BuildContext context, Object? state) {
+                  return FloatingActionButton(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    onPressed: () {
+                      final selectedCategories = _selectedItems.entries
+                          .where((entry) => entry.value == true)
+                          .map((entry) => entry.key)
+                          .toList();
+                      if (selectedCategories.length >= 3 &&
+                          selectedCategories.length <= 5) {
+                        // Proceed with the selected items
+                        context
+                            .read<CustomPageCubit>()
+                            .updateNavigateBar(NavigateBarParams(
+                              ride: _selectedItems["Ride"] ?? false,
+                              loading: _selectedItems["Loading"] ?? false,
+                              health: _selectedItems["Health"] ?? false,
+                              meal: _selectedItems["Meal"] ?? false,
+                              find: _selectedItems["Find"] ?? false,
+                              reel: _selectedItems["Reel"] ?? false,
+                              spotlight: _selectedItems["Spotlight"] ?? false,
+                              meet: _selectedItems["Meet"] ?? false,
+                              live: _selectedItems["Live"] ?? false,
+                              snap: _selectedItems["Snap"] ?? false,
+                            ));
+                      } else {
+                        // Show a message if the selection is not valid
+                        showSuccessMessage(
+                          context,
+                          LocaleKeys.atLeast3atMost5items.localize,
+                          color: AppColors.SECONDARY_COLOR,
+                        );
+                      }
+                    },
+                    child: Icon(
+                      Icons.check,
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                    ),
                   );
-                }
-              },
-              child: Icon(
-                Icons.check,
-                color: Theme.of(context).scaffoldBackgroundColor,
+                },
               ),
-            );
-          },
-        ),
-      ),
+            ),
     );
   }
 }

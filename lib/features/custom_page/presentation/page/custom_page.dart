@@ -56,30 +56,7 @@ class _CustomPageState extends State<CustomPage> {
             var controller = context.read<CustomPageCubit>();
             return Column(
               children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.w),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: Label(
-                              text: LocaleKeys.activatePage.localize,
-                              style: Styles.mediumText(
-                                  fontSize: 65.sp,
-                                  fontWeight: FontWeight.w400))),
-                      Switch(
-                        value: state.activate?.customPage ?? false,
-                        onChanged: (v) {
-                          controller.updateActivate(v);
-                          Restart.restartApp();
-                        },
-                        activeColor: Colors.red,
-                        inactiveThumbColor: Colors.black,
-                        activeTrackColor: Colors.grey,
-                        inactiveTrackColor: Colors.grey,
-                      ),
-                    ],
-                  ),
-                ),
+                const ActivatePageBlocConsumer(),
                 ListTile(
                   title: Label(
                       text: LocaleKeys.editPage.localize,
@@ -111,6 +88,55 @@ class _CustomPageState extends State<CustomPage> {
           },
         ),
       ),
+    );
+  }
+}
+
+class ActivatePageBlocConsumer extends StatelessWidget {
+  const ActivatePageBlocConsumer({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<CustomPageCubit, CustomPageState>(
+      listener: (context, state) {
+        if (state.status == CustomPageStates.updateSuccess) {
+          if (state.activate!.customPage == true) {
+            context.pushReplacementNamed(Routes.CUSTOMPAGE);
+          } else {
+            context.pushReplacementNamed(Routes.HOME);
+          }
+          print('''''' '''''' '''object''' '''''' '''''');
+        }
+      },
+      builder: (context, state) {
+        var controller = context.read<CustomPageCubit>();
+
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 25.w),
+          child: Row(
+            children: [
+              Expanded(
+                  child: Label(
+                      text: LocaleKeys.activatePage.localize,
+                      style: Styles.mediumText(
+                          fontSize: 65.sp, fontWeight: FontWeight.w400))),
+              Switch(
+                value: state.activate?.customPage ?? false,
+                onChanged: (v) {
+                  controller.updateActivate(v);
+                  Restart.restartApp();
+                },
+                activeColor: Colors.red,
+                inactiveThumbColor: Colors.black,
+                activeTrackColor: Colors.grey,
+                inactiveTrackColor: Colors.grey,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

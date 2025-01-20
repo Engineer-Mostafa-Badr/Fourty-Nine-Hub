@@ -172,6 +172,7 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(LocaleKeys.favoriteCategory.localize),
       ),
       body: BlocProvider<CustomPageCubit>(

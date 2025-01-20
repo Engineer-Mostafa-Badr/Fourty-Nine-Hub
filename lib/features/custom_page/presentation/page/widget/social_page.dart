@@ -39,6 +39,7 @@ class _SocialPageState extends State<SocialPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(LocaleKeys.socialPage.localize),
       ),
       body: BlocProvider<CustomPageCubit>(

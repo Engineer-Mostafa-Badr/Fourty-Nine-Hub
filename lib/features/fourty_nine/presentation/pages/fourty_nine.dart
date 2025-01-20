@@ -128,6 +128,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
     //     .read<NotificationSocketIoCubit>()
     //     .notificationListener(languageCode: 'en');
   }
+
   @override
   initState() {
     context
@@ -136,6 +137,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
 
     super.initState();
   }
+
   @override
   void dispose() {
     scrollController.dispose();
@@ -188,7 +190,8 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   changeView: 1,
                   icon: Icons.person,
                 ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           drawer: const DrawerWidget(),
           body: ListView(
             controller: scrollController,
@@ -197,7 +200,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
             children: [
               const AddBanner(),
               //carousel slider
+              const Sizer(),
               const AnnounceWidget(),
+              const Sizer(),
               !context.read<UserCubit>().isLoggedIn
                   ? const Sizer()
                   : const SizedBox.shrink(),
@@ -208,7 +213,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   ? const WalletWidget()
                   : const SizedBox.shrink(),
               ClickableWidget(
-                onTap:(){
+                onTap: () {
                   context.push(Routes.CUSTOMPAGE);
                 },
                 child: Container(
@@ -216,8 +221,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   alignment: Alignment.center,
                   child: AutoScrollText(
                     LocaleKeys.choosePreferredAppStyle.localize,
-                    style: Styles.headerText(fontSize: 30, color: AppColors.SECONDARY_COLOR),
-                    textDirection: context.isArabic?TextDirection.rtl:TextDirection.ltr,
+                    style: Styles.headerText(
+                        fontSize: 30, color: AppColors.SECONDARY_COLOR),
+                    textDirection: context.isArabic
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
                     selectable: true,
                     // textStyle: TextStyle(fontSize: 24),
                   ),
@@ -642,7 +650,15 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       iconSize: 50.h,
                       onPressed: () {
                         //HandleCashback.setCount('tenPercentCount',context);
-                        context.push(Routes.MARRIAGESUBCATEGORIES,extra: MainCategoryEntity(id: '62c8b5b09332225799fe335e', nameEn: 'Marriage',name:'زواج', image: "", banner: '', cover: '', total: 0));
+                        context.push(Routes.MARRIAGESUBCATEGORIES,
+                            extra: MainCategoryEntity(
+                                id: '62c8b5b09332225799fe335e',
+                                nameEn: 'Marriage',
+                                name: 'زواج',
+                                image: "",
+                                banner: '',
+                                cover: '',
+                                total: 0));
                       }),
                 ),
                 Positioned(
@@ -811,22 +827,20 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   // ),
                   const Spacer(),
                   Container(
-                    decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.5),
-                            spreadRadius: 0.03,
-                            blurRadius: 6,
-                          ),
-                        ]
-                    ),
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.5),
+                        spreadRadius: 0.03,
+                        blurRadius: 6,
+                      ),
+                    ]),
                     child: Label(
                       // text: service.title(),
                       text: title,
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize:  45.sp),
+                          fontSize: 45.sp),
                     ),
                   ),
                   const Spacer(),
