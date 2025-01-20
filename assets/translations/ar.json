@@ -1236,6 +1236,13 @@
   "answerSentSuccessfully": "تم إرسال الإجابة بنجاح",
 
   "cropImage": "قص صورة",
+  "emailOtpVerification": "التحقق من البريد الإلكتروني OTP",
+  "loginOrRegister": "تسجيل الدخول\n للاستمتاع بالتطبيق",
+  "pleaseCheckEmail": "يرجى التحقق من بريدك الإلكتروني للحصول على رمز التحقق.",
+  "didntReciveEmail": "لم تتلق بريدا إلكترونيا؟",
+  "resend": "إعادة الإرسال",
+
+  "cropImage": "قص صورة",
   "sureLogoutApp": "هل أنت متأكد أنك تريد الخروج؟",
   "ExitApp": "الخروج من التطبيق",
   "sure": "متأكد",
