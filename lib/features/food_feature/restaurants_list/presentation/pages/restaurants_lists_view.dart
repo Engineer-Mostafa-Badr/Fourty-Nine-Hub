@@ -1,4 +1,6 @@
 // For JSON decoding
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -69,7 +71,6 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
     super.build(context);
     final state = context.watch<RestaurantsCubit>().state;
     return SharedScaffold(
-       isWithBackArrow: false,
       mainCategoryId: 1,
       // backgroundColor: scaffoldDarkColor(context),
       body: RefreshIndicator(

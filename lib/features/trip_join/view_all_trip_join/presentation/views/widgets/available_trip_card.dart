@@ -52,7 +52,7 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
             children: [
               CustomCard(
                 children: [
-                  Row(
+                  Row(crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         _localizeStatus(
@@ -63,28 +63,49 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                         ),
                       ),
                       const Spacer(),
-                      Row(
+
+
+                      Row(crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                               widget.tripJoinCardEntity.journeyPrice
                                       ?.toStringAsFixed(0) ??
                                   '' "  ",
                               style: Styles.headerText(
-                                  fontSize: 50, color: Colors.green[600])),
+                                  fontSize: 50, color:Colors.black
+                              // Colors.green[600]
+                              )
+                          ),
+                          const SizedBox(width: 2,),
+                          context.locale.languageCode=="ar"?
                           Text(
                             context.isArabic
                                 ? BlocProvider.of<GetCurrencyCubit>(context)
                                     .currnecyAr
                                 : BlocProvider.of<GetCurrencyCubit>(context)
                                     .currnecyEn,
-                            style: Styles.mediumText(fontSize:35,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.SECONDARY_COLOR),
+                            style: Styles.mediumText(fontSize:context.locale.languageCode=="ar"?35: 30,
+                                fontWeight: FontWeight.w500,
+                                color:AppColors.SECONDARY_COLOR
+                            ),
                           )
+                              :SizedBox(height: 17,
+                            child:  Text(
+                            context.isArabic
+                                ? BlocProvider.of<GetCurrencyCubit>(context)
+                                .currnecyAr
+                                : BlocProvider.of<GetCurrencyCubit>(context)
+                                .currnecyEn,
+                            style: Styles.mediumText(fontSize:context.locale.languageCode=="ar"?35: 30,
+                                fontWeight: FontWeight.w500,
+                                color:AppColors.SECONDARY_COLOR
+                            ),
+                          ),)
                         ],
                       ),
                     ],
                   ),
+                  widget.tripJoinCardEntity.brand!=null&&widget.tripJoinCardEntity.brand!=""?
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -100,7 +121,7 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                         textAlign: TextAlign.start,
                       ),
                     ],
-                  ),
+                  ):const SizedBox.shrink(),
                   const Sizer(),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,

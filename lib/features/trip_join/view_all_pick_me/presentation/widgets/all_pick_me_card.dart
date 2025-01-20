@@ -230,25 +230,45 @@ class AllPickMeCard extends StatelessWidget {
                     context.isArabic ? TextDirection.rtl : TextDirection.ltr,
                 child: Column(
                   children: [
-                    Row(
+                    Row(crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                             pickMeCardEntity.journeyPrice?.toStringAsFixed(0) ??
                                 '',
                             style: Styles.headerText(
-                                fontSize: 70, color: Colors.green[600])),
+                                fontSize: 50, color:Colors.black
+                              // Colors.green[600]
+                            )
+                        ),
+                        const SizedBox(width: 2,),
+                        context.locale.languageCode=="ar"?
                         Text(
                           context.isArabic
                               ? BlocProvider.of<GetCurrencyCubit>(context)
-                                  .currnecyAr
+                              .currnecyAr
                               : BlocProvider.of<GetCurrencyCubit>(context)
-                                  .currnecyEn,
-                          style: Styles.mediumText(fontSize: 35,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.SECONDARY_COLOR),
+                              .currnecyEn,
+                          style: Styles.mediumText(fontSize:context.locale.languageCode=="ar"?35: 30,
+                              fontWeight: FontWeight.w500,
+                              color:AppColors.SECONDARY_COLOR
+                          ),
                         )
+                            :SizedBox(height: 17,
+                          child:  Text(
+                            context.isArabic
+                                ? BlocProvider.of<GetCurrencyCubit>(context)
+                                .currnecyAr
+                                : BlocProvider.of<GetCurrencyCubit>(context)
+                                .currnecyEn,
+                            style: Styles.mediumText(fontSize:context.locale.languageCode=="ar"?35: 30,
+                                fontWeight: FontWeight.w500,
+                                color:AppColors.SECONDARY_COLOR
+                            ),
+                          ),)
                       ],
                     ),
+
+
                     Text(
                       _localizeStatus(context, pickMeCardEntity.status ?? ''),
                       style: Styles.headerText(
