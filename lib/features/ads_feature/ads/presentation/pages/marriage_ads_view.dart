@@ -4,13 +4,16 @@ import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/stateless/images/profile_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -29,20 +32,29 @@ class MarriageSubCategoriesView extends StatefulWidget {
 }
 
 class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
+  late ScrollController _scrollController;
+
   @override
   void initState() {
     context
         .read<SubcategoriesCubit>()
-        .loadData(widget.mainCategory.id);
+        .loadInitialData(subCategoryId:widget.mainCategory.id);
+    _scrollController = ScrollController()..addListener(_onScroll);
+
     super.initState();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context.read<SubcategoriesCubit>().loadInitialData(subCategoryId:widget.mainCategory.id);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
-        buildWhen: (previous, current) => previous != current && current.isInitState,
         builder: (context, state) {
-          print("state.status${state.status}");
           var controller = context.read<SubcategoriesCubit>();
         return state.isLoading?Container(
             color: Theme.of(context).scaffoldBackgroundColor,
@@ -59,7 +71,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                 context.push(Routes.CREATEAD,
                     extra: CategorizationEntity(
                         mainCategory: widget.mainCategory,
-                        subCategory: state.subCategories![state.subCatIndex??0],fromMarriage: true));
+                        subCategory: state.subCategories![state.subCategories?.indexWhere((element) => element.isSelected==true)??0],fromMarriage: true));
               } else {
                 context.push(Routes.LOGIN);
               }
@@ -72,7 +84,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                 ),
                 padding: EdgeInsets.all(10.w),
                 child: Label(text: "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${
-                context.isArabic?"${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCatIndex??0].nameAr}":"${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCatIndex??0].nameEn}"
+                context.isArabic?"${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected==true)??0].nameAr}":"${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected==true)??0].nameEn}"
                 }",),
               )),
           body: Padding(
@@ -90,40 +102,88 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                   },
                 ),
                 const Sizer(),
-                BadgedLabel(
-                    label: LocaleKeys.filter.localize,
-                    width: double.infinity,
-                    color: Colors.white,
-                    textColor: AppColors.PRIMARY_COLOR,
-                    isBordered: true,
-                    margin: 1.w,
-                    borderColor: AppColors.PRIMARY_COLOR,
-                    padding: EdgeInsets.symmetric(
-                        vertical: 15.h, horizontal: 5.w),
-                    icon: Icons.filter_alt_rounded,
-                    iconLeading: Icons.arrow_drop_down,
-                    onTap: () async {
-
-                    }),
+                Container(
+                    margin: EdgeInsetsDirectional.all(10.w),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: BadgedLabel(
+                              label: LocaleKeys.filter.localize,
+                              width: 170.h,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 15.h, horizontal: 5.w),
+                              icon: Icons.filter_alt_rounded,
+                              iconLeading: Icons.arrow_drop_down,
+                              onTap: () async {
+                                dynamic data = await context.push(Routes.FILTERADS,
+                                    extra: CategorizationEntity(
+                                        mainCategory: state.mainCategory!,
+                                        subCategory: state.subCategories![state.subCategories?.indexWhere((element) => element.isSelected==true)??0],fromMarriage: true));
+                                if (data != null) {
+                                  print("objectsdaa");
+                                  // Future.delayed(const Duration(seconds: 1), () =>
+                                  //     controller.changeState(data, data != null));
+                                  // context.read<AdvertisementCubit>().loadFilterData(
+                                  //     model: data,
+                                  //     filter: userType);
+                                  // controller.loadFilterData(
+                                  //     model: data, filter: userType);
+                                }
+                              }),
+                        ),
+                        const Sizer(
+                          width: 5,
+                        ),
+                        Expanded(
+                          child: BadgedLabel(
+                              label: LocaleKeys.city.localize,
+                              width: 170.h,
+                              icon: Icons.filter_alt_rounded,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 15.h, horizontal: 5.w),
+                              iconLeading: Icons.arrow_drop_down,
+                              onTap: () async {
+                                dynamic data = await context.push(
+                                    Routes.GOVERNORATEFILTERADS,
+                                    extra: CategorizationEntity(
+                                        mainCategory: state.mainCategory!,
+                                        subCategory: state.subCategories![state.subCategories?.indexWhere((element) => element.isSelected==true)??0]));
+                                if (data != null) {
+                                  print("objectsdaa");
+                                  // controller.state.city = data.cityId;
+                                  // controller.state.governorate = data.governorateId;
+                                  // Future.delayed(const Duration(seconds: 1), () =>
+                                  //     controller.changeState(data, data != null));
+                                  // context.read<AdvertisementCubit>().loadFilterData(
+                                  //     model: data,
+                                  //     filter: userType);
+                                  // controller.loadFilterData(
+                                  //     model: data, filter: userType);
+                                }
+                              }),
+                        ),
+                      ],
+                    )),
                 const Sizer(height: 40,),
                 SizedBox(
                   height: 50.h,
                   child: ListView.separated(
                     itemCount: state.subCategories?.length??0,
-                    // controller: scrollController,
+                    // controller: _scrollController,
                     scrollDirection: Axis.horizontal,
                     // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     //     crossAxisCount: 3, childAspectRatio: 1),
                     itemBuilder: (context, index) => ClickableWidget(
-                      onTap: (){
-                        controller.changeSubCatIndex(index);
+                      onTap: ()async{
+                        await controller.changeSubCatIndex(index);
+
                       },
                       child: Container(
                         alignment: AlignmentDirectional.center,
                         padding: EdgeInsets.all(6.w),
                         margin: EdgeInsets.all(2.w),
                         decoration: BoxDecoration(
-                          color:(state.subCatIndex??0)==index?AppColors.PRIMARY_COLOR: Theme.of(context).scaffoldBackgroundColor,
+                          color:state.subCategories?[index].isSelected==true?AppColors.PRIMARY_COLOR: Theme.of(context).scaffoldBackgroundColor,
                           borderRadius: BorderRadius.circular(15.r),
                           boxShadow: const [
                             BoxShadow(
@@ -134,19 +194,44 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                             )
                           ],
                         ),
-                        child: Label(text: context.isArabic?(state.subCategories?[index].nameAr??''):(state.subCategories?[index].nameEn??''),color: (state.subCatIndex??0)==index?Colors.white:null,),
+                        child: Label(text: context.isArabic?(state.subCategories?[index].nameAr??''):(state.subCategories?[index].nameEn??''),color: state.subCategories?[index].isSelected==true?Colors.white:null,),
                       ),
                     ), separatorBuilder: (BuildContext context, int index) =>const Sizer(width: 30,),
                   ),
                 ),
                 const Sizer(height: 40,),
                 Expanded(
-                  child: ListView.builder(
-                      itemCount: state.ads?.length??0,
+                  child: state.isLoadingAds?const Center(child: CircularProgressIndicator(),):ListView.builder(
+                    controller: _scrollController,
+                      itemCount: controller.marriageAds.length,
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (context, index) => Container(
                         margin: EdgeInsets.only(bottom: 20.h),
-                        child:Text(state.ads?[index].title??''),
+                        padding: EdgeInsets.all(16.w),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          borderRadius: BorderRadius.circular(20.r),
+                          // border: Border.all(color: AppColors.PRIMARY_COLOR),
+                        ),
+                        child:Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                ImageFromInternet(image: controller.marriageAds[index].images.first
+                                ,height: 80.h,width: 80.w,isCircle: true,
+
+                                ),
+                                const Sizer(width: 15,),
+                                Label(text: controller.marriageAds[index].title)
+                              ],
+                            ),
+                            const Sizer(),
+                            Label(text: controller.marriageAds[index].description),
+                            const Sizer(),
+                            CallMessageButtons(otherUserId: controller.marriageAds[index].userId??'', subcategoryId: state.subCategories?[state.subCategories?.indexWhere((element) => element.isSelected==true)??0].id??'', phone: controller.marriageAds[index].phone??'', id: controller.marriageAds[index].id,hasReport: true,)
+                          ]
+                        ),
                       )),
           )
               ],
