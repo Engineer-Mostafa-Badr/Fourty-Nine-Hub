@@ -30,7 +30,7 @@ class _FilterAdsViewState extends State<FilterAdsView> {
   void initState() {
     context
         .read<CreateAdCubit>()
-        .loadData(subCategoryId: widget.categorization.mainCategory.id);
+        .loadData(subCategoryId: widget.categorization.mainCategory.id, fromMarriage: false);
     super.initState();
   }
 

@@ -2509,7 +2509,11 @@ static const Map<String,dynamic> en = {
   "loginOrRegister": "Register/Login \n To enjoy App",
   "pleaseCheckEmail": "Please check your email for the verification code.",
   "didntReciveEmail": "Didn\\'t receive an email?",
-  "resend": "Resend"
+  "resend": "Resend",
+  "sureLogoutApp": "Are you sure you want to leave?",
+  "ExitApp": "Exit App",
+  "sure": "Sure",
+  "warning": "Warning",
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

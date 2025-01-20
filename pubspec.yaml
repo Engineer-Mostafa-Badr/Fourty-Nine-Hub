@@ -35,6 +35,7 @@ dependencies:
   flutter_countdown_timer: ^4.1.0
 
   #  win32: ^5.7.1
+#  win32: ^5.10.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.5
