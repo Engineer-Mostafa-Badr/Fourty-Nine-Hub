@@ -1222,10 +1222,12 @@ abstract class  LocaleKeys {
   static const pleaseEnterAValue = 'pleaseEnterAValue';
   static const answerSentSuccessfully = 'answerSentSuccessfully';
   static const cropImage = 'cropImage';
+
   static const sureLogoutApp = 'sureLogoutApp';
   static const ExitApp = 'ExitApp';
   static const sure = 'sure';
   static const warning = 'warning';
+  static const loginOrRegister = 'loginOrRegister';
 
 
 }

@@ -261,7 +261,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   @override
   Future<Either<Failure, void>> resendOTP(ResendOTPParams params) async {
     final result = await _apiConsumer.put(
-      EndPoints.resendOTP,
+      EndPoints.resendVerificationOTP,
       data: params.toJson(),
     );
     return result.fold(

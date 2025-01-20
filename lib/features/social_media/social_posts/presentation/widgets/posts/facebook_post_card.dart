@@ -1122,6 +1122,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
               style: Styles.headerText(
                   color: Theme.of(context).primaryColor),
             ),
+
             SizedBox(
               height: 10.h,
             )
@@ -1222,6 +1223,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                   );
                 },
               ),
+
             ),
           // SizedBox(
           //   child: GridView.builder(
