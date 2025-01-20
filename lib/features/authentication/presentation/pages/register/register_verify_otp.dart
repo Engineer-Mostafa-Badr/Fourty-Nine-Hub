@@ -146,7 +146,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
           ),
           child: DefaultButton(
             width: double.infinity,
-            label: 'Verify',
+            label: LocaleKeys.verify.localize,
             onPressed: () => verifyOtpCubit.verifyOTP(widget.email),
           ),
         ),
@@ -165,8 +165,8 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                     opacity: value,
                     child: Transform.translate(
                       offset: Offset(0, (1 - value) * 20),
-                      child: const Text(
-                        'Email OTP Verification',
+                      child:  Text(
+                        LocaleKeys.emailOtpVerification.localize,
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
@@ -187,8 +187,8 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                     end: Alignment.bottomRight,
                   ).createShader(bounds);
                 },
-                child: const Text(
-                  'Please check your email for the verification code.',
+                child:  Text(
+                  LocaleKeys.pleaseCheckEmail.localize,
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
@@ -197,7 +197,6 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                 ),
               ),
               const SizedBox(height: 40),
-
               PinCodeTextField(
                 appContext: context,
                 length: 6,
@@ -206,8 +205,8 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                 pinTheme: PinTheme(
                   shape: PinCodeFieldShape.box,
                   borderRadius: BorderRadius.circular(12),
+                  fieldWidth: 50,
                   fieldHeight: 70,
-                  fieldWidth: 60,
                   activeFillColor: Colors.white,
                   selectedFillColor: Colors.white,
                   inactiveFillColor: Colors.white,
@@ -232,8 +231,8 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
               ),
               const SizedBox(height: 40), // Spacing
 
-              const Text(
-                'Didn\'t receive an email?',
+               Text(
+                LocaleKeys.didntReciveEmail.localize,
                 style: TextStyle(
                   fontSize: 16,
                   color: AppColors.PRIMARY_COLOR_DARK,
@@ -278,8 +277,8 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                                         ? Theme.of(context).primaryColor.withOpacity(0.1)
                                         : Colors.grey.withOpacity(0.1),
                                   ),
-                                  child: const Text(
-                                    'Resend',
+                                  child:  Text(
+                                    LocaleKeys.resend.localize,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
