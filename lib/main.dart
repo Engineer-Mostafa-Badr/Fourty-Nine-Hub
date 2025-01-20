@@ -63,7 +63,10 @@ import 'features/authentication/presentation/controllers/user_cubit/user_cubit.d
 import 'firebase_options.dart';
 import 'routes/pages.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 bool isActivate = false;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
