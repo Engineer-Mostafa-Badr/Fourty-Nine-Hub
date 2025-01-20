@@ -42,7 +42,7 @@ class _CreateAdViewState extends State<CreateAdView> {
   void initState() {
     context
         .read<CreateAdCubit>()
-        .loadData(subCategoryId: widget.categorization.mainCategory.id);
+        .loadData(subCategoryId: widget.categorization.fromMarriage==false?widget.categorization.mainCategory.id:widget.categorization.subCategory.id, fromMarriage: widget.categorization.fromMarriage??false);
     super.initState();
   }
 
@@ -113,7 +113,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                           const Divider(),
                           _buildImagePicker(),
                           const Sizer(),
-                          Row(
+                          if(widget.categorization.fromMarriage==false)Row(
                             children: [
                               Expanded(
                                   child: InkWell(
@@ -215,7 +215,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                             ],
                           ),
                           const Sizer(),
-                          Label(text: LocaleKeys.adTitle.localize),
+                          Label(text: widget.categorization.fromMarriage==false?LocaleKeys.adTitle.localize:LocaleKeys.name.localize),
                           TextFormField(
                             maxLines: null,
                             onChanged: (v) => controller.title = v,
@@ -225,7 +225,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                                     ? AppColors.GREY_DARK_COLOR
                                     : AppColors.LIGHT_COLOR,
                                 contentPadding: const EdgeInsets.all(5),
-                                hintText: LocaleKeys.title.localize,
+                                hintText: widget.categorization.fromMarriage==false?LocaleKeys.title.localize:LocaleKeys.name.localize,
                                 hintStyle: Styles.mediumText(),
                                 prefix: Sizer(
                                   width: 20.w,
@@ -419,7 +419,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                                     )
                                   : const SizedBox.shrink(),
                           const Sizer(),
-                          Label(
+                          if(widget.categorization.fromMarriage==false)...[Label(
                               text: state.isPrice == true
                                   ? LocaleKeys.price.localize
                                   : LocaleKeys.salary.localize),
@@ -447,7 +447,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                                 return null;
                               }
                             },
-                          ),
+                          )],
                           const Sizer(),
                           ListView.separated(
                             physics: const NeverScrollableScrollPhysics(),

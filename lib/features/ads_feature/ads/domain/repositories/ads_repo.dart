@@ -13,6 +13,5 @@ abstract class AdsRepo {
   Future<Either<Failure, bool>> requestPickMe({required RequestParams params});
   Future<Either<Failure, bool>> favouriteAd({required String params});
   Future<Either<Failure, bool>> removeFavouriteAd({required String params});
-  Future<Either<Failure, bool>> requestComeWithMe(
-      {required RequestParams params});
+  Future<Either<Failure, bool>> requestComeWithMe({required RequestParams params});
 }
