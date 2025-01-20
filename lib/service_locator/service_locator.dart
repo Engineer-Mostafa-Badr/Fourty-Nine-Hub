@@ -12,6 +12,12 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/subscription_interceptor.dart';
 import 'package:fourtyninehub/core/service/base_repository.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
+import 'package:fourtyninehub/features/call/data/datasources/call_remote_datasource.dart';
+import 'package:fourtyninehub/features/call/data/repositories/call_repository_impl.dart';
+import 'package:fourtyninehub/features/call/domain/repositories/call_repository.dart';
+import 'package:fourtyninehub/features/call/domain/usecases/get_agora_token_usecase.dart';
+import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
+import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
@@ -21,6 +27,9 @@ import 'package:fourtyninehub/features/social_media/stories/data/repositories/St
 import 'package:fourtyninehub/features/social_media/tinder/data/repositories/tinder_repository_impl.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/repositories/tinder_repository.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/get_gifts_use_case.dart';
+import 'package:fourtyninehub/helpers/call_helpers/call_helper/call_kit_helper.dart';
+import 'package:fourtyninehub/helpers/call_helpers/call_helper/call_with_notification_helper.dart';
+import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
 import 'package:fourtyninehub/service_locator/auth_service_locator.dart';
 import 'package:fourtyninehub/service_locator/carpool_service_locator.dart';
 import 'package:fourtyninehub/service_locator/club_voice_service_locator.dart';
@@ -77,6 +86,8 @@ final serviceLocator = GetIt.instance;
 class DI {
   static Future<void> execute({String? token}) async {
     print('executed');
+
+    _callFeatureInjector();
     // //preloading
     serviceLocator.registerLazySingleton(() => PreloadBloc());
     serviceLocator.registerLazySingleton<ReelsCubit>(
@@ -372,4 +383,21 @@ class DI {
   //           .setExtraHeaders({'Authorization': token??cred}) // optional
   //           .build()));
   // }
+
+  static void _callFeatureInjector() {
+    serviceLocator.registerLazySingleton(() => SendCallCubit());
+    serviceLocator.registerLazySingleton(() => CallCubit());
+    serviceLocator.registerLazySingleton<FcmNotificationHelper>(
+        () => FcmNotificationHelperImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton(() => FirebaseMessaging.instance);
+    serviceLocator.registerLazySingleton(() => GetAgoraTokenUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<CallRepository>(
+        () => CallRepositoryImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<CallRemoteDatasource>(
+        () => CallRemoteDatasourceImpl());
+
+    serviceLocator.registerLazySingleton<CallKitHelper>(() => CallKitHelperImpl());
+    serviceLocator.registerLazySingleton<CallWithNotificationHelper>(
+        () => CallWithNotificationHelper(serviceLocator(), serviceLocator(), serviceLocator()));
+  }
 }

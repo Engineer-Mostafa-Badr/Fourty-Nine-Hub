@@ -42,10 +42,13 @@ class SubcategoriesState {
 enum SubcategoriesStates {
   loading,
   loadingAds,
+  adsSuccess,
   initState, error }
 
 extension SubcategoriesStateX on SubcategoriesState {
   bool get isLoading => status == SubcategoriesStates.loading;
   bool get isInitState => status == SubcategoriesStates.initState;
   bool get isError => status == SubcategoriesStates.error;
+  bool get isLoadingAds => status == SubcategoriesStates.loadingAds;
+  bool get isAdsSuccess => status == SubcategoriesStates.adsSuccess;
 }

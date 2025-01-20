@@ -1234,6 +1234,7 @@
   "enterSomething": "ادخل شيئًا...",
   "pleaseEnterAValue": "يرجى إدخال قيمة",
   "answerSentSuccessfully": "تم إرسال الإجابة بنجاح",
+
   "cropImage": "قص صورة",
   "emailOtpVerification": "التحقق من البريد الإلكتروني OTP",
   "loginOrRegister": "تسجيل الدخول\n للاستمتاع بالتطبيق",
@@ -1247,4 +1248,5 @@
   "sure": "متأكد",
   "warning": "تحذير",
   "loginOrRegister": "تسجيل الدخول\n للاستمتاع بالتطبيق"
+
 }

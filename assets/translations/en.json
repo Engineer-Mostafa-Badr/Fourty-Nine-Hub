@@ -1253,6 +1253,7 @@
   "enterSomething": "Enter something...",
   "pleaseEnterAValue": "Please enter a value",
   "answerSentSuccessfully": "Answer sent successfully",
+
   "cropImage": "Crop Image",
   "sureLogoutApp": "Are you sure you want to leave?",
   "ExitApp":"Exit App",
@@ -1263,5 +1264,6 @@
   "pleaseCheckEmail": "Please check your email for the verification code.",
   "didntReciveEmail": "Didn\\'t receive an email?",
   "resend": "Resend"
+
 
 }

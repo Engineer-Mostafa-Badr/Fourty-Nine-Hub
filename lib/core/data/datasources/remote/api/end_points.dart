@@ -59,6 +59,7 @@ class EndPoints {
   static const resendOTP = '/auth/resend-reset-code';
   static const resendVerificationOTP = '/auth/resend-verification-code';
   static const refreshToken = '/auth/refresh/token';
+  static const agoraGenerateToken = '/agora';
 
   static String friendsList(TwitterFeedParams params) =>
       '/friends/allFriends?search=${params.search}&page=${params.page}&limit=${params.limit}';
