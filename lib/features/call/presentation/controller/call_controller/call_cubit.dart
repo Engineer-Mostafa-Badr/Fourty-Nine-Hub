@@ -5,5 +5,9 @@ import 'package:fourtyninehub/features/call/presentation/controller/call_control
 class CallCubit extends Cubit<CallState> {
   CallCubit() : super(NoCalls());
 
+  void setCall(){
+
+  }
+
   
 }
