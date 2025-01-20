@@ -167,7 +167,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                       offset: Offset(0, (1 - value) * 20),
                       child:  Text(
                         LocaleKeys.emailOtpVerification.localize,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
                           color: Colors.black87,
@@ -189,7 +189,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                 },
                 child:  Text(
                   LocaleKeys.pleaseCheckEmail.localize,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     color: Colors.white,
                   ),
@@ -233,7 +233,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
 
                Text(
                 LocaleKeys.didntReciveEmail.localize,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   color: AppColors.PRIMARY_COLOR_DARK,
                 ),
@@ -279,7 +279,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                                   ),
                                   child:  Text(
                                     LocaleKeys.resend.localize,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
