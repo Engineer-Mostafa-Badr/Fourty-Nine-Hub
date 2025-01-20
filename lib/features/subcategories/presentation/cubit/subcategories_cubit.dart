@@ -31,8 +31,15 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
 
   }
 
-  changeSubCatIndex(int index){
-    emit(state.copyWith(subCatIndex: index));
+  changeSubCatIndex(int index) async {
+    if(index == state.subCatIndex) return;
+    List<SubCategoryEntity> marriageSubCategories=state.subCategories??[];
+    marriageSubCategories.where((element) => element.isSelected=false).toList();
+    marriageSubCategories[index].isSelected=true;
+    emit(state.copyWith(status: SubcategoriesStates.loadingAds,subCatIndex: index,subCategories: marriageSubCategories));
+    await loadInitMarriage(subCategoryId: state.subCategories?[index].id??'');
+    emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
+    // loadInitialData(subCategoryId:widget.mainCategory.id);
   }
 
   MainCategoryEntity? mainCategory;
@@ -102,6 +109,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
         (r) async {
           await loadMarriageData(subCategoryId: r.first.id);
           data = r;
+          r.first.isSelected=true;
            emit(state.copyWith(subCategories: r));
         });
 
@@ -125,48 +133,74 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     // if (fromTab == true) {
       emit(state.copyWith(status: SubcategoriesStates.loadingAds));
     // }
-    await getMarriageAds(subCategoryId: subCategoryId, page: 1);
+    await getMarriageAds(subCategoryId: subCategoryId, );
     adsPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getMarriageAds(subCategoryId: subCategoryId, page: pageKey);
+      getMarriageAds(subCategoryId: subCategoryId, );
     });
     emit(state.copyWith(status: SubcategoriesStates.initState));
   }
 
   final PagingController<int, AdModel> adsPagingController = PagingController(firstPageKey: 1);
 
-  getMarriageAds(
+  void loadInitialData({required String subCategoryId}) async {
+    emit(state.copyWith(status: SubcategoriesStates.loading));
+    marriageAds.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await Future.wait([
+      getMainCategoryDetails(),
+      getMarriageSubcategories(subCategoryId),
+    ]);
+    emit(state.copyWith(status: SubcategoriesStates.initState));
+  }
+
+  loadInitMarriage({required String subCategoryId}) async {
+    marriageAds.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await getMarriageAds(subCategoryId:subCategoryId);
+    emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
+  }
+
+  List<AdModel> marriageAds = [];
+  bool isLoadingMore = false;
+  bool hasMoreData = true;
+  int currentPage = 1;
+  int pageSize = 10;
+  Future getMarriageAds(
       {required String subCategoryId,
-        required int page}) async {
+        }) async {
     final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
 
-    if (page == 1) {
-      adsPagingController.itemList = [];
-    }
+    if (!hasMoreData || isLoadingMore) return;
+
+    // emit(state.copyWith(status: SubcategoriesStates.loading));
+    isLoadingMore = true;
+
     final response = await _getAdsUseCase(GetAdsParams(
         subCategoryId: subCategoryId,
-        page: page,
+        page: currentPage,
         limit: 10,
         userId: userId));
-    response
-        .fold((l) => emit(state.copyWith(failure: l, status: SubcategoriesStates.error)),
-            (data) async {
-          final isLastPage = data.length < 10;
-          if (page == 1) {
-            print("page == 1 $page");
-            adsPagingController.itemList = [];
-          }
-          if (isLastPage) {
-            print("isLastPage = $isLastPage");
-            print(data.length);
-            print(data.toString());
-            adsPagingController.appendLastPage(data);
-          } else {
-            print("isNotLastPage = $isLastPage");
-            final nextPageKey = page + 1;
-            adsPagingController.appendPage(data, nextPageKey);
-          }
-        });
+
+    response.fold(
+          (failure) => emit(
+          state.copyWith(failure: failure, status: SubcategoriesStates.error)),
+          (data) {
+            marriageAds.addAll(data);
+
+        if (data.length < pageSize) {
+          hasMoreData = false;
+        } else {
+          currentPage++;
+        }
+
+        isLoadingMore = false;
+        print("objectmarriageAds${marriageAds.length}");
+        emit(state.copyWith(ads:data,status: SubcategoriesStates.adsSuccess));
+      },
+    );
   }
 
 

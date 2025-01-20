@@ -157,7 +157,7 @@
   "emptyFieldNotValid": "Empty Field Not Valid",
   "login": "Login",
   "register": "Register",
-  "emailOrPhone": "Email Or Phone",
+  "emailOrPhone": "Email",
   "password": "Password",
   "forgetPassword": "Forget Password?",
   "lastName": "Last Name",
@@ -1253,9 +1253,17 @@
   "enterSomething": "Enter something...",
   "pleaseEnterAValue": "Please enter a value",
   "answerSentSuccessfully": "Answer sent successfully",
+
   "cropImage": "Crop Image",
   "sureLogoutApp": "Are you sure you want to leave?",
   "ExitApp":"Exit App",
-  "sure": "Sure"
+  "sure": "Sure",
+  "warning": "Warning",
+  "emailOtpVerification": "Email OTP Verification",
+  "loginOrRegister": "Register/Login \n To enjoy App",
+  "pleaseCheckEmail": "Please check your email for the verification code.",
+  "didntReciveEmail": "Didn\\'t receive an email?",
+  "resend": "Resend"
+
 
 }
