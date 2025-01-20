@@ -1252,7 +1252,11 @@ class CodegenLoader extends AssetLoader{
   "loginOrRegister": "تسجيل الدخول\n للاستمتاع بالتطبيق",
   "pleaseCheckEmail": "يرجى التحقق من بريدك الإلكتروني للحصول على رمز التحقق.",
   "didntReciveEmail": "لم تتلق بريدا إلكترونيا؟",
-  "resend": "إعادة الإرسال"
+  "resend": "إعادة الإرسال",
+  "sureLogoutApp": "هل أنت متأكد أنك تريد الخروج؟",
+  "ExitApp": "الخروج من التطبيق",
+  "sure": "متأكد",
+  "warning": "تحذير"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2505,15 +2509,15 @@ static const Map<String,dynamic> en = {
   "pleaseEnterAValue": "Please enter a value",
   "answerSentSuccessfully": "Answer sent successfully",
   "cropImage": "Crop Image",
-  "emailOtpVerification": "Email OTP Verification",
-  "loginOrRegister": "Register/Login \n To enjoy App",
-  "pleaseCheckEmail": "Please check your email for the verification code.",
-  "didntReciveEmail": "Didn\\'t receive an email?",
-  "resend": "Resend",
   "sureLogoutApp": "Are you sure you want to leave?",
   "ExitApp": "Exit App",
   "sure": "Sure",
   "warning": "Warning",
+  "emailOtpVerification": "Email OTP Verification",
+  "loginOrRegister": "Register/Login \n To enjoy App",
+  "pleaseCheckEmail": "Please check your email for the verification code.",
+  "didntReciveEmail": "Didn\\'t receive an email?",
+  "resend": "Resend"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }
