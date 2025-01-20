@@ -1231,5 +1231,7 @@ abstract class  LocaleKeys {
   static const ExitApp = 'ExitApp';
   static const sure = 'sure';
   static const warning = 'warning';
+  static const cashBack = 'cashBack';
+
 
 }

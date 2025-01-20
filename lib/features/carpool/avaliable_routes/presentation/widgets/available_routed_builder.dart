@@ -78,11 +78,14 @@ class _AvailableRoutesBuilderState extends State<AvailableRoutesBuilder> {
                   return Center(
                     child: Padding(
                       padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.35),
+                          top: MediaQuery.of(context).size.height * 0.25),
                       child: Text(
                         LocaleKeys.noTripsAvailable.localize,
                         // "There are no ${widget.type} trips .",
-                        style: TextStyle(fontSize: 24.sp, color: Colors.grey),
+                        style: Styles.mediumText(
+                          color: Colors.grey,fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic,
+                        ),
                       ),
                     ),
                   );

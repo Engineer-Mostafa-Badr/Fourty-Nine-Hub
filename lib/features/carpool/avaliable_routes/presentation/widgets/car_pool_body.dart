@@ -73,7 +73,7 @@ class _CarPoolBodyState extends State<CarPoolBody>
                   ? AppColors.PRIMARY_COLOR_DARK
                   : AppColors.PRIMARY_COLOR_LIGHT,
               indicatorColor: AppColors.PRIMARY_COLOR_DARK,
-              labelPadding: EdgeInsets.symmetric(horizontal: 8.w),
+              labelPadding: const EdgeInsets.symmetric(horizontal: 8),
               dividerColor: Colors.transparent,
               tabs: [
                 Tab(
@@ -313,8 +313,8 @@ class _CarPoolBodyState extends State<CarPoolBody>
         if (type == "available")
           Positioned(
             top: 8,
-            right: 4,
-            left: 4,
+            right: 10,
+            left: 10,
             child: Text(
               context.isArabic
                   ? "انضم إلى الرحلات المتوفرة حولك الآن."
@@ -328,8 +328,8 @@ class _CarPoolBodyState extends State<CarPoolBody>
         if (type == "myBookings")
           Positioned(
             top: 8,
-            right: 4,
-            left: 4,
+            right: 10,
+            left: 10,
             child: Text(
               context.isArabic
                   ? "كل حجوزاتك في مكان واحد!"
@@ -343,8 +343,8 @@ class _CarPoolBodyState extends State<CarPoolBody>
         if (type == "running")
           Positioned(
             top: 8,
-            right: 4,
-            left: 4,
+            right: 10,
+            left: 10,
             child: Text(
               context.isArabic
                   ? "تعرف على الرحلات الجارية في الوقت الحالي."
@@ -358,8 +358,8 @@ class _CarPoolBodyState extends State<CarPoolBody>
         if (type == "expired")
           Positioned(
             top: 8,
-            right: 4,
-            left: 4,
+            right: 10,
+            left: 10,
             child: Text(
               context.isArabic
                   ? "الرحلات المنتهية حديثًا."

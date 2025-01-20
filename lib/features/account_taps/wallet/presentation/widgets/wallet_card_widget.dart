@@ -72,14 +72,14 @@ class WalletCardWidget extends StatelessWidget {
                     BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
                       builder: (BuildContext context, state) {
                         return Transform.translate(
-                          offset: Offset(0, 8.h),
+                          offset: Offset(0, 0.h),
                           child: Label(
                             text: context.locale == Locales.english
                                 ? state.currency?.currencyEn ?? ''
                                 : state.currency?.currencyAr ?? '',
                             style: Styles.headerText(
                               color: Theme.of(context).scaffoldBackgroundColor,
-                              fontSize: 40.sp,
+                              fontSize: 45.sp,
                             ),
                           ),
                         );
@@ -87,11 +87,13 @@ class WalletCardWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                Label(
-                  text: LocaleKeys.hUB.localize,
-                  style: Styles.mediumText(
-                      fontWeight: FontWeight.w300,
-                      color: Theme.of(context).scaffoldBackgroundColor),
+                Align(alignment:AlignmentDirectional.centerEnd ,
+                  child: Label(
+                    text: LocaleKeys.hUB.localize,
+                    style: Styles.mediumText(
+                        fontWeight: FontWeight.w300,
+                        color: Theme.of(context).scaffoldBackgroundColor),
+                  ),
                 )
               ],
             ),

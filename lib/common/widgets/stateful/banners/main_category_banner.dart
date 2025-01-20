@@ -221,13 +221,23 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
 
   Widget _buildRegisterButton() {
     if (widget.canRegister) {
-      return InkWell(
-        onTap: () {
+      return TextButton(
+        onPressed: () {
           log('88888888888888888888888888');
           widget.onRegister?.call();
         },
+        style: TextButton.styleFrom(
+          backgroundColor: Colors.red,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.all(0),
+          minimumSize: const Size(70, 30),
+          maximumSize: const Size(70, 30),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
         child: Text(LocaleKeys.register.tr(),
-            style: Styles.mediumText(
+            style: Styles.mediumText(fontSize: 30,
                 color: Colors.white, fontWeight: FontWeight.bold)),
       );
     } else {
