@@ -217,9 +217,28 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
           ),
         );
       }),
+        floatingActionButton:buildFloatingAction(context),
+
+    );
+  }
+  Widget buildFloatingAction(BuildContext context){
+    return FloatingActionButton.extended(
+      onPressed: () {},
+      backgroundColor: AppColors.PRIMARY_COLOR,
+      icon: const Icon(
+        Icons.add,
+        color: Colors.white,
+      ),
+      label: Label(
+        text: LocaleKeys.addAde.localize,
+        style: Styles.mediumText(
+            fontWeight: FontWeight.bold,color: Colors.white),
+      ),
     );
   }
 }
+
+
 
 class AdsViewParams {
   final MainCategoryEntity mainCategory;

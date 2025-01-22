@@ -1252,7 +1252,9 @@ class CodegenLoader extends AssetLoader{
   "sureLogoutApp": "هل تريد الخروج من التطبيق",
     "sure":"متأكد",
     "warning":"تحذير !",
-  "cashBack":"قم بتحميل فاتورة واحدة على الأقل للاستمتاع بالحصول على استرداد نقدي كهدية من التطبيق"
+  "cashBack":"قم بتحميل فاتورة واحدة على الأقل للاستمتاع بالحصول على استرداد نقدي كهدية من التطبيق",
+    "Email":"البريد الألكترونى",
+    "addAde":"أضف أعلان"
 
 
 };
@@ -2511,7 +2513,9 @@ static const Map<String,dynamic> en = {
   "sureLogoutApp":"Do you want exit from the app",
    "sure":"Sure",
   "warning":"warning !",
-  "cashBack":"Upload At Least One Bill To Enjoy Getting Cash back As A Gift On The App"
+  "cashBack":"Upload At Least One Bill To Enjoy Getting Cash back As A Gift On The App",
+  "Email":"Email",
+  "addAde":"Add Ade"
 
 
 };
