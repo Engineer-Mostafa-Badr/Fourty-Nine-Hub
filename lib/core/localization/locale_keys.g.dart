@@ -1232,6 +1232,8 @@ abstract class  LocaleKeys {
   static const sure = 'sure';
   static const warning = 'warning';
   static const cashBack = 'cashBack';
+  static const Email = 'Email';
+  static const addAde = 'addAde';
 
 
 }

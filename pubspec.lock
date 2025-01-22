@@ -333,10 +333,10 @@ packages:
     dependency: "direct main"
     description:
       name: chewie
-      sha256: d8908907084d28533fbabe4a8b7112b63caa907506e5163fe2d10a5fa7cbf3ee
+      sha256: "6386fcc7ad7a8f7b25709ce988cd089cdde894bf335c7a0024a1bfcf8788a452"
       url: "https://pub.dev"
     source: hosted
-    version: "1.8.7"
+    version: "1.9.2"
   clock:
     dependency: transitive
     description:
@@ -461,10 +461,10 @@ packages:
     dependency: transitive
     description:
       name: device_frame
-      sha256: afe76182aec178d171953d9b4a50a43c57c7cf3c77d8b09a48bf30c8fa04dd9d
+      sha256: d031a06f5d6f4750009672db98a5aa1536aa4a231713852469ce394779a23d75
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.2.0"
   device_info_plus:
     dependency: "direct main"
     description:
@@ -485,10 +485,10 @@ packages:
     dependency: "direct main"
     description:
       name: device_preview
-      sha256: "2f097bf31b929e15e6756dbe0ec1bcb63952ab9ed51c25dc5a2c722d2b21fdaf"
+      sha256: a694acdd3894b4c7d600f4ee413afc4ff917f76026b97ab06575fe886429ef19
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.2.0"
   dio:
     dependency: "direct main"
     description:
@@ -2149,6 +2149,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
+  popover:
+    dependency: "direct main"
+    description:
+      name: popover
+      sha256: "0606f3e10f92fc0459f5c52fd917738c29e7552323b28694d50c2d3312d0e1a2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.1"
   pretty_dio_logger:
     dependency: "direct main"
     description:
@@ -2297,10 +2305,10 @@ packages:
     dependency: "direct main"
     description:
       name: screenshot
-      sha256: d448f43130f49bc7eead1b267b3ea0291cb2450f037bb0a0ecce7aa4c65e2aee
+      sha256: "63817697a7835e6ce82add4228e15d233b74d42975c143ad8cfe07009fab866b"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.0"
+    version: "3.0.0"
   share_plus:
     dependency: "direct main"
     description:
@@ -3028,4 +3036,4 @@ packages:
     version: "2.6.0+3"
 sdks:
   dart: ">=3.5.0 <4.0.0"
-  flutter: ">=3.19.3"
+  flutter: ">=3.24.0"
