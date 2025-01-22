@@ -13,6 +13,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/pages/ad_requests_view.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
@@ -22,6 +23,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
 
 
 class MarriageSubCategoriesView extends StatefulWidget {
@@ -269,6 +271,31 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                               ),
                               const Sizer(),
                               Label(text: controller.marriageAds[index].description),
+                              const Sizer(),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    flex: 3,
+                                    child: PremiumRequestButton(
+                                      adId: controller.marriageAds[index].id,
+                                      subCategoryId:
+                                      controller.marriageAds[index].subCategoryId ?? '',
+                                      subscriptionStatus:
+                                      controller.marriageAds[index].subscriptionStatus ?? '',
+                                    ),
+                                  ),
+                                  const Sizer(width: 5),
+                                  Expanded(
+                                    flex: 3,
+                                    child: RequestButton(
+                                      adId: controller.marriageAds[index].id,
+                                      subscriptionStatus:
+                                      controller.marriageAds[index].subscriptionStatus ?? '',
+                                    ),
+                                  )
+                                ],
+                              ),
                               const Sizer(),
                               CallMessageButtons(otherUserId: controller.marriageAds[index].userId??'', subcategoryId: state.subCategories?[state.subCategories?.indexWhere((element) => element.isSelected==true)??0].id??'', phone: controller.marriageAds[index].phone??'', id: controller.marriageAds[index].id,hasReport: true,)
                             ]
