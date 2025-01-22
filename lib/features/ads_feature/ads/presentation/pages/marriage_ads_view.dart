@@ -12,7 +12,10 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/pages/ad_requests_view.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -20,6 +23,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
 
 
 class MarriageSubCategoriesView extends StatefulWidget {
@@ -46,11 +50,36 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<SubcategoriesCubit>().loadInitialData(subCategoryId:widget.mainCategory.id);
+        _scrollController.position.maxScrollExtent ) {
+      context.read<SubcategoriesCubit>().filterAds(model: context.read<SubcategoriesCubit>().state.filterModel!, filter: '');
     }
   }
 
+
+  bool _isFilterApplied = false;
+
+  Future<void> _applyFilter(BuildContext context, SubcategoriesCubit controller) async {
+    if (_isFilterApplied) return; // Prevent duplicate execution
+    _isFilterApplied = true;
+
+    dynamic data = await context.push(
+      Routes.GOVERNORATEFILTERADS,
+      extra: CategorizationEntity(
+        mainCategory: controller.state.mainCategory!,
+        subCategory: controller.state.subCategories![
+        controller.state.subCategories!.indexWhere((element) => element.isSelected == true) ?? 0],
+      ),
+    );
+
+    if (data != null) {
+      controller.state.city = data.cityId;
+      controller.state.governorate = data.governorateId;
+      controller.changeFilterModel(data);
+      await controller.loadFilterData(model: data, filter: 'user');
+    }
+
+    _isFilterApplied = false; // Reset the flag
+  }
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
@@ -118,7 +147,8 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                 dynamic data = await context.push(Routes.FILTERADS,
                                     extra: CategorizationEntity(
                                         mainCategory: state.mainCategory!,
-                                        subCategory: state.subCategories![state.subCategories?.indexWhere((element) => element.isSelected==true)??0],fromMarriage: true));
+                                        fromMarriage: true,
+                                        subCategory: state.subCategories![state.subCategories?.indexWhere((element) => element.isSelected==true)??0],));
                                 if (data != null) {
                                   print("objectsdaa");
                                   // Future.delayed(const Duration(seconds: 1), () =>
@@ -126,8 +156,10 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                   // context.read<AdvertisementCubit>().loadFilterData(
                                   //     model: data,
                                   //     filter: userType);
-                                  // controller.loadFilterData(
-                                  //     model: data, filter: userType);
+                                  controller.changeFilterModel(data);
+
+                                  controller.loadFilterData(
+                                      model: data, filter: 'user');
                                 }
                               }),
                         ),
@@ -147,18 +179,23 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                     Routes.GOVERNORATEFILTERADS,
                                     extra: CategorizationEntity(
                                         mainCategory: state.mainCategory!,
+                                        fromMarriage: true,
                                         subCategory: state.subCategories![state.subCategories?.indexWhere((element) => element.isSelected==true)??0]));
                                 if (data != null) {
+                                  print("data.cityId${data.cityId}");
+                                  print("data.governorateId${data.governorateId}");
                                   print("objectsdaa");
-                                  // controller.state.city = data.cityId;
-                                  // controller.state.governorate = data.governorateId;
+                                  controller.state.city = data.cityId;
+                                  controller.state.governorate = data.governorateId;
+                                  controller.changeFilterModel(data);
+                                  FilterModel model = FilterModel(cityId: "state.city", governorateId: "state.governorate");
                                   // Future.delayed(const Duration(seconds: 1), () =>
                                   //     controller.changeState(data, data != null));
                                   // context.read<AdvertisementCubit>().loadFilterData(
                                   //     model: data,
                                   //     filter: userType);
-                                  // controller.loadFilterData(
-                                  //     model: data, filter: userType);
+                                  await controller.loadFilterData(
+                                      model: data, filter: 'user');
                                 }
                               }),
                         ),
@@ -201,36 +238,68 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                 ),
                 const Sizer(height: 40,),
                 Expanded(
-                  child: state.isLoadingAds?const Center(child: CircularProgressIndicator(),):ListView.builder(
+                  child: state.status == SubcategoriesStates.loadingAds?const Center(child: CircularProgressIndicator(),):ListView.builder(
                     controller: _scrollController,
                       itemCount: controller.marriageAds.length,
                       physics: const BouncingScrollPhysics(),
-                      itemBuilder: (context, index) => Container(
-                        margin: EdgeInsets.only(bottom: 20.h),
-                        padding: EdgeInsets.all(16.w),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.circular(20.r),
-                          // border: Border.all(color: AppColors.PRIMARY_COLOR),
-                        ),
-                        child:Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                ImageFromInternet(image: controller.marriageAds[index].images.first
-                                ,height: 80.h,width: 80.w,isCircle: true,
+                      itemBuilder: (context, index) => ClickableWidget(
+                        onTap: (){
+                          context.push(Routes.ADdetails,
+                              extra:  controller.marriageAds[index].id);
 
-                                ),
-                                const Sizer(width: 15,),
-                                Label(text: controller.marriageAds[index].title)
-                              ],
-                            ),
-                            const Sizer(),
-                            Label(text: controller.marriageAds[index].description),
-                            const Sizer(),
-                            CallMessageButtons(otherUserId: controller.marriageAds[index].userId??'', subcategoryId: state.subCategories?[state.subCategories?.indexWhere((element) => element.isSelected==true)??0].id??'', phone: controller.marriageAds[index].phone??'', id: controller.marriageAds[index].id,hasReport: true,)
-                          ]
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: 20.h),
+                          padding: EdgeInsets.all(16.w),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            borderRadius: BorderRadius.circular(20.r),
+                            // border: Border.all(color: AppColors.PRIMARY_COLOR),
+                          ),
+                          child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  ImageFromInternet(image: controller.marriageAds[index].images.first
+                                  ,height: 80.h,width: 80.w,isCircle: true,
+
+                                  ),
+                                  const Sizer(width: 15,),
+                                  Label(text: controller.marriageAds[index].title)
+                                ],
+                              ),
+                              const Sizer(),
+                              Label(text: controller.marriageAds[index].description),
+                              const Sizer(),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    flex: 3,
+                                    child: PremiumRequestButton(
+                                      adId: controller.marriageAds[index].id,
+                                      subCategoryId:
+                                      controller.marriageAds[index].subCategoryId ?? '',
+                                      subscriptionStatus:
+                                      controller.marriageAds[index].subscriptionStatus ?? '',
+                                    ),
+                                  ),
+                                  const Sizer(width: 5),
+                                  Expanded(
+                                    flex: 3,
+                                    child: RequestButton(
+                                      adId: controller.marriageAds[index].id,
+                                      subscriptionStatus:
+                                      controller.marriageAds[index].subscriptionStatus ?? '',
+                                    ),
+                                  )
+                                ],
+                              ),
+                              const Sizer(),
+                              CallMessageButtons(otherUserId: controller.marriageAds[index].userId??'', subcategoryId: state.subCategories?[state.subCategories?.indexWhere((element) => element.isSelected==true)??0].id??'', phone: controller.marriageAds[index].phone??'', id: controller.marriageAds[index].id,hasReport: true,)
+                            ]
+                          ),
                         ),
                       )),
           )

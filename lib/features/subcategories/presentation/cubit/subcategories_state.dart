@@ -5,15 +5,23 @@ class SubcategoriesState {
   final SubcategoriesStates status;
   final int? subCatIndex;
   final List<AdModel>? ads;
+  String? city;
+  String? governorate;
+  final FilterModel? filterModel;
+
 
   final List<SubCategoryEntity>? subCategories;
   final List<SubCategoryEntity>? marriageSubCategories;
   final MainCategoryEntity? mainCategory;
-  const SubcategoriesState(
+  SubcategoriesState(
       {this.failure,
       this.subCategories,
         this.ads,
-      this.mainCategory,
+        this.city = '',
+        this.governorate = '',
+        this.filterModel,
+
+        this.mainCategory,
       this.marriageSubCategories,
       this.subCatIndex=0,
       this.status = SubcategoriesStates.loading});
@@ -23,6 +31,9 @@ class SubcategoriesState {
     SubcategoriesStates? status,
     MainCategoryEntity? mainCategory,
     int? subCatIndex,
+    String? city,
+    String? governorate,
+    FilterModel? filterModel,
     List<SubCategoryEntity>? subCategories,
     List<SubCategoryEntity>? marriageSubCategories,
     List<AdModel>? ads,
