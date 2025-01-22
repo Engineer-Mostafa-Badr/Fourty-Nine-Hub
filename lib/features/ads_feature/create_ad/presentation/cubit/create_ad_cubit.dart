@@ -390,8 +390,8 @@ class CreateAdCubit extends Cubit<CreateAdState> {
 
   void filterAds(
       {required CategorizationEntity categorize,
-      required BuildContext context}) async {
-    if ((formState.currentState?.validate() ?? false)) {
+      required BuildContext context,}) async {
+    if (true) {
       print("ss");
       List<CreateAdEntity> details = [];
       for (int i = 0; i < (state.filterAdProperties?.length ?? 0); i++) {
@@ -403,7 +403,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
                 type: state.filterAdProperties![i].type)));
       }
       String priceId = (state.filterAdProperties != null &&
-              state.filterAdProperties!.isNotEmpty)
+              state.filterAdProperties!.isNotEmpty&&categorize.fromMarriage==false)
           ? state.filterAdProperties
                   ?.firstWhere((element) =>
                       element.nameAr == 'السعر' || element.nameAr == 'الراتب')
@@ -416,7 +416,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
                   element.value.nameAr.isNotEmpty && element.propId != priceId)
               .toList()
           : [];
-      CreateAdEntity? price = details.isNotEmpty
+      CreateAdEntity? price = (details.isNotEmpty&&categorize.fromMarriage==false)
           ? details.firstWhere((element) => element.propId == priceId)
           : null;
       for (var item in selectedDetails) {
@@ -431,6 +431,10 @@ class CreateAdCubit extends Cubit<CreateAdState> {
           limit: 10,
           page: 1,
           subCategoryId: categorize.subCategory.id);
+      if(categorize.fromMarriage==true){
+        context.pop(model);
+        return;
+      }
       final response = await _filterAdUseCase(model);
       response.fold(
           (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
@@ -454,6 +458,10 @@ class CreateAdCubit extends Cubit<CreateAdState> {
           limit: 10,
           page: 1,
           subCategoryId: categorize.subCategory.id);
+      if(categorize.fromMarriage==true){
+        context.pop(model);
+        return;
+      }
       final response = await _filterAdUseCase(model);
       response.fold(
           (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
