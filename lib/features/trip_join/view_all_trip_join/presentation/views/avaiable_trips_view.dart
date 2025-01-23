@@ -105,7 +105,7 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
               const Expanded(
                 child: TabBarView(
                   children: [
-                    CarPoolBody(),
+                     CarPoolBody(),
                     Stack(
                       children: [
                         SizedBox(

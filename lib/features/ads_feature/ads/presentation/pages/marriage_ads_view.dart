@@ -13,6 +13,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/pages/ad_requests_view.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
@@ -20,6 +21,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
@@ -149,18 +151,18 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                         mainCategory: state.mainCategory!,
                                         fromMarriage: true,
                                         subCategory: state.subCategories![state.subCategories?.indexWhere((element) => element.isSelected==true)??0],));
-                                if (data != null) {
-                                  print("objectsdaa");
-                                  // Future.delayed(const Duration(seconds: 1), () =>
-                                  //     controller.changeState(data, data != null));
-                                  // context.read<AdvertisementCubit>().loadFilterData(
-                                  //     model: data,
-                                  //     filter: userType);
-                                  controller.changeFilterModel(data);
-
-                                  controller.loadFilterData(
-                                      model: data, filter: 'user');
-                                }
+                                // if (data != null) {
+                                //   print("objectsdaa");
+                                //   // Future.delayed(const Duration(seconds: 1), () =>
+                                //   //     controller.changeState(data, data != null));
+                                //   // context.read<AdvertisementCubit>().loadFilterData(
+                                //   //     model: data,
+                                //   //     filter: userType);
+                                //   controller.changeFilterModel(data);
+                                //
+                                //   controller.loadFilterData(
+                                //       model: data, filter: 'user');
+                                // }
                               }),
                         ),
                         const Sizer(
@@ -277,21 +279,27 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                 children: [
                                   Expanded(
                                     flex: 3,
-                                    child: PremiumRequestButton(
-                                      adId: controller.marriageAds[index].id,
-                                      subCategoryId:
-                                      controller.marriageAds[index].subCategoryId ?? '',
-                                      subscriptionStatus:
-                                      controller.marriageAds[index].subscriptionStatus ?? '',
+                                    child: BlocProvider(
+                                      create: (BuildContext context) =>serviceLocator<AdvertisementCubit>(),
+                                      child: PremiumRequestButton(
+                                        adId: controller.marriageAds[index].id,
+                                        subCategoryId:
+                                        controller.marriageAds[index].subCategoryId ?? '',
+                                        subscriptionStatus:
+                                        controller.marriageAds[index].subscriptionStatus ?? '',
+                                      ),
                                     ),
                                   ),
                                   const Sizer(width: 5),
                                   Expanded(
                                     flex: 3,
-                                    child: RequestButton(
-                                      adId: controller.marriageAds[index].id,
-                                      subscriptionStatus:
-                                      controller.marriageAds[index].subscriptionStatus ?? '',
+                                    child: BlocProvider(
+                                      create: (BuildContext context) =>serviceLocator<AdvertisementCubit>(),
+                                      child: RequestButton(
+                                        adId: controller.marriageAds[index].id,
+                                        subscriptionStatus:
+                                        controller.marriageAds[index].subscriptionStatus ?? '',
+                                      ),
                                     ),
                                   )
                                 ],
