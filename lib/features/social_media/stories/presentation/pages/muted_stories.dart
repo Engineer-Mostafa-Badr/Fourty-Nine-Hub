@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/pages/more_stories.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
@@ -59,7 +60,12 @@ class _MutedStoriesState extends State<MutedStories> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Muted Stories', style: Styles.headerText()),
+        backgroundColor: AppColors.PRIMARY_COLOR,
+        foregroundColor: Colors.white,
+        title: Text(
+          context.isArabic ? "القصص المعطلة" : 'Muted Stories',
+          style: Styles.headerText(color: Colors.white),
+        ),
       ),
       body: state.mutedStoriesResponse != null
           ? Column(
@@ -102,15 +108,19 @@ class _MutedStoriesState extends State<MutedStories> {
                       child: ListTile(
                         contentPadding: const EdgeInsets.all(8),
                         tileColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          side: BorderSide(color: Colors.grey[300]!, width: 1),
-                        ),
+                        // shape: RoundedRectangleBorder(
+                        //   borderRadius: BorderRadius.circular(15),
+                        //   side: BorderSide(color: Colors.grey[300]!, width: 1),
+                        // ),
                         leading: CircleAvatar(
-                          radius: 30,
-                          backgroundImage:
-                              NetworkImage(userStory.user!.profilePictureUrl!),
-                          backgroundColor: Colors.grey[300],
+                          radius: 28,
+                          backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+                          child: CircleAvatar(
+                            radius: 25,
+                            backgroundImage: NetworkImage(
+                                userStory.user!.profilePictureUrl!),
+                            backgroundColor: Colors.grey[300],
+                          ),
                         ),
                         title: Text(
                           capitalizeAndSplit2Only(
@@ -121,66 +131,6 @@ class _MutedStoriesState extends State<MutedStories> {
                           getTimeAgo(context,
                               userStory.stories!.last.createdAt.toString()),
                           style: Styles.mediumText(),
-                        ),
-                        trailing: PopupMenuButton<String>(
-                          icon: const Icon(Icons.more_vert,
-                              color: Colors.black, size: 35),
-                          onSelected: (String value) async {
-                            if (value == 'report') {
-                              await showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (context) {
-                                  return SizedBox(
-                                    height: MediaQuery.of(context)
-                                                .viewInsets
-                                                .bottom >
-                                            0
-                                        ? 0.8.sh
-                                        : 0.6.sh,
-                                    child: ReportView(
-                                      id: userStory.user!.id!,
-                                      categoryId: '668e7b4be8cfec5bcc752af9',
-                                    ),
-                                  );
-                                },
-                              );
-                            } else if (value == 'Un Mute') {
-                              context.read<StoryCubit>().muteUserStories(
-                                    context: context,
-                                    userId: userStory.user!.id ?? '',
-                                  );
-                            }
-                          },
-                          itemBuilder: (BuildContext context) {
-                            return [
-                              const PopupMenuItem<String>(
-                                value: 'report',
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.report,
-                                        color: AppColors.PRIMARY_COLOR_DARK),
-                                    SizedBox(width: 10),
-                                    Text('Report',
-                                        textScaler: TextScaler.noScaling),
-                                  ],
-                                ),
-                              ),
-                              const PopupMenuItem<String>(
-                                value: 'Un Mute',
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.notifications_off_outlined,
-                                        color: AppColors.PRIMARY_COLOR),
-                                    SizedBox(width: 10),
-                                    Text('Un Mute',
-                                        textScaler: TextScaler.noScaling),
-                                  ],
-                                ),
-                              ),
-                            ];
-                          },
                         ),
                       ),
                     );

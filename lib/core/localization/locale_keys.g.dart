@@ -1229,12 +1229,12 @@ abstract class  LocaleKeys {
   static const sureLogoutApp = 'sureLogoutApp';
   static const ExitApp = 'ExitApp';
   static const sure = 'sure';
-  static const warning = 'warning';
   static const loginOrRegister = 'loginOrRegister';
   static const addAde = 'addAde';
   static const cashBack = 'cashBack';
   static const navigateBarDescription = 'navigateBarDescription';
   static const socialDescription = 'socialDescription';
   static const favouriteDescrepion = 'favouriteDescrepion';
+  static const warning = 'warning';
 
 }

@@ -1255,13 +1255,13 @@ class CodegenLoader extends AssetLoader{
   "sureLogoutApp": "هل أنت متأكد أنك تريد الخروج؟",
   "ExitApp": "الخروج من التطبيق",
   "sure": "متأكد",
-  "warning": "تحذير",
   "loginOrRegister": "تسجيل الدخول\n للاستمتاع بالتطبيق",
   "addAde": "اضافة إعلان",
   "cashBack": "قم بتحميل فاتورة واحدة على الأقل للاستمتاع بالحصول على استرداد نقدي كهدية من التطبيق",
   "navigateBarDescription": "اختر المجال المناسب الذي تحب أن تراه في شريط القوائم السفلي للتطبيق",
   "socialDescription": "اختار الشكل الاجتماعي المفضل لديك يمكنك اختيار شكل واحد فقط بحدأقصى",
-  "favouriteDescrepion": "اختار الاقسام الرئيسيه المفضله لديك التي تحب أن تراها يمكنك اختيار بحد أقصى اقسام"
+  "favouriteDescrepion": "اختار الاقسام الرئيسيه المفضله لديك التي تحب أن تراها يمكنك اختيار بحد أقصى اقسام",
+  "warning": "تحذير!!!"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2517,7 +2517,7 @@ static const Map<String,dynamic> en = {
   "sureLogoutApp": "Are you sure you want to leave?",
   "ExitApp": "Exit App",
   "sure": "Sure",
-  "warning": "Warning",
+  "warning": "Warning!!!",
   "emailOtpVerification": "Email OTP Verification",
   "loginOrRegister": "Register/Login \n To enjoy App",
   "pleaseCheckEmail": "Please check your email for the verification code.",

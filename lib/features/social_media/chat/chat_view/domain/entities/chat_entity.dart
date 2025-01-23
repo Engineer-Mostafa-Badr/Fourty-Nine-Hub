@@ -22,6 +22,7 @@ class ChatEntity {
   bool isSelected = false;
   bool isPinned = false;
   bool isTimerActive = false;
+  bool hasStory = false;
 
   ChatEntity({
     required this.id,
@@ -45,5 +46,6 @@ class ChatEntity {
     this.isPinned = false,
     this.isTimerActive = false,
     this.lastSeen,
+    this.hasStory = false,
   });
 }

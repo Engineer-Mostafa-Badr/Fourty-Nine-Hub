@@ -75,9 +75,9 @@ class TinderViewCubit extends Cubit<TinderViewState> {
   //     var response = await _getUserDataUseCase.call(GetUsersParams(gender: gender, page: page, limit: 20,));
   //   }
   // }
-  Future<void> fetchUserData(String gender) async {
+  Future<void> fetchUserData({required String gender, required bool isLoggedIn, String userId = ""}) async {
     final response = await _getUserDataUseCase(
-      GetUsersParams(gender: gender, page: 1, limit: 20),
+      GetUsersParams(gender: gender, page: 1, limit: 100, isLoggedIn: isLoggedIn, userId: userId),
     );
     if (isClosed) return;
     response.fold(
@@ -320,7 +320,11 @@ class TinderViewCubit extends Cubit<TinderViewState> {
     }, (r) {
       log("send gift response $r");
       context.pop();
-      showSuccessMessage(context, context.isArabic?'تم ارسال الهدية بنجاح':'Gift sent successfully');
+      showSuccessMessage(
+          context,
+          context.isArabic
+              ? 'تم ارسال الهدية بنجاح'
+              : 'Gift sent successfully');
       emit(state.copyWith(sendGiftErrorDataState: TinderStates.success));
     });
   }

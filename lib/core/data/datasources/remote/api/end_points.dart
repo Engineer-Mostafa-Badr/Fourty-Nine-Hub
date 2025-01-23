@@ -470,6 +470,7 @@ class EndPoints {
   static const fetchFavourites = '/favorite-sub-category';
   static const fetchFavouritesCategory = '/favorite-category';
   static deleteStory(String id) => '/stories/$id';
+  static makeLike(String id) => '/stories/like/$id';
   static addFavouriteCategories(String id) => '/favorite-sub-category/$id';
   static fetchLastSeen(String id) => '/users/last-seen/$id';
   static const sendGift =

@@ -1258,7 +1258,8 @@
   "sureLogoutApp": "Are you sure you want to leave?",
   "ExitApp":"Exit App",
   "sure": "Sure",
-  "warning": "Warning",
+  "warning": "Warning!!!",
+
   "emailOtpVerification": "Email OTP Verification",
   "loginOrRegister": "Register/Login \n To enjoy App",
   "pleaseCheckEmail": "Please check your email for the verification code.",

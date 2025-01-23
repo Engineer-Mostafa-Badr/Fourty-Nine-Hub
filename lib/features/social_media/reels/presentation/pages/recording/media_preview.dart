@@ -240,7 +240,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                                   final fileSize = await filteredFile.length();
 
                                   await serviceLocator<StoryCubit>()
-                                      .uploadStoryVideoOrImage(
+                                      .uploadStoryVideoOrImageOrVoice(
                                     filteredFile,
                                     fileType,
                                     fileSize,
@@ -261,7 +261,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                                   final fileSize = await file.length();
 
                                   await serviceLocator<StoryCubit>()
-                                      .uploadStoryVideoOrImage(
+                                      .uploadStoryVideoOrImageOrVoice(
                                     file,
                                     fileType,
                                     fileSize,

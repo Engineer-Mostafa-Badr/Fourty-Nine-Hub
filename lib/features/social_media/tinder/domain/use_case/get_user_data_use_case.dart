@@ -21,14 +21,23 @@ class GetUsersParams {
   final String gender;
   final int page;
   final int limit;
+  final String userId;
+  final bool isLoggedIn;
 
   GetUsersParams(
-      {required this.gender, required this.page, required this.limit});
+      {required this.gender, required this.page, required this.limit,required this.userId, required this.isLoggedIn});
 
   //toJson
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJsonNotLoggedIn() => {
         'gender': gender,
         'page': page,
         'limit': limit,
       };
+
+  Map<String, dynamic> toJsonLoggedIn() => {
+    'gender': gender,
+    'page': page,
+    'limit': limit,
+    'userId': userId,
+  };
 }

@@ -91,6 +91,9 @@ class Story {
   final String? caption;
   final String? thumbnailUrl;
   final DateTime? createdAt;
+  final String? color;
+  final String? fontFamily;
+  bool isLiked;
 
   Story({
     this.id,
@@ -100,6 +103,9 @@ class Story {
     this.caption,
     this.thumbnailUrl,
     this.createdAt,
+    this.color,
+    this.fontFamily,
+    this.isLiked = false,
   });
 
   factory Story.fromJson(Map<String, dynamic>? json) {
@@ -113,6 +119,9 @@ class Story {
       thumbnailUrl: json['thumbnailSignedUrl'] as String?,
       createdAt:
           json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
+      color: json['color'] as String?,
+      fontFamily: json['fontFamily'] as String?,
+      isLiked: json['isLiked'] ?? false,
     );
   }
 
@@ -125,6 +134,9 @@ class Story {
       'caption': caption,
       'thumbnailSignedUrl': thumbnailUrl,
       'createdAt': createdAt?.toIso8601String(),
+      'color': color,
+      'fontFamily': fontFamily,
+      'isLiked': isLiked,
     }..removeWhere((key, value) => value == null);
   }
 }

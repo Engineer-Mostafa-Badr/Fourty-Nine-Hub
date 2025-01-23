@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
@@ -59,7 +60,7 @@ class _TinderScreenState extends State<TinderScreen> {
     final tinderCubit = context.read<TinderViewCubit>();
     final user = context.read<UserCubit>();
     tinderCubit
-      ..fetchUserData(user.state.data?.gender ?? 'female')
+      ..fetchUserData(gender: user.state.data?.gender ?? 'female', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "")
       ..fetchSubCategoryData()
       ..fetchFavorites()
       ..fetchMainCategoryById(context, '62c8b5b09332225799fe335e');

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +7,7 @@ import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/muted_stories_model.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/viewers_model.dart';
@@ -15,10 +17,12 @@ import 'package:fourtyninehub/features/social_media/stories/domain/use_case/fetc
 import 'package:fourtyninehub/features/social_media/stories/domain/use_case/get_followers_use_case.dart';
 import 'package:fourtyninehub/features/social_media/stories/domain/use_case/get_muted_stories_use_case.dart';
 import 'package:fourtyninehub/features/social_media/stories/domain/use_case/get_story_viewrs_use_case.dart';
+import 'package:fourtyninehub/features/social_media/stories/domain/use_case/make_like_usecase.dart';
 import 'package:fourtyninehub/features/social_media/stories/domain/use_case/make_view_use_case.dart';
 import 'package:fourtyninehub/features/social_media/stories/domain/use_case/mute_stories_use_case.dart';
 import 'package:fourtyninehub/features/social_media/stories/domain/use_case/update_privacy_use_case.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
@@ -41,18 +45,20 @@ class StoryCubit extends Cubit<StoryState> {
   final UpdateStoryPrivacyUseCase _updateStoryPrivacyUseCase;
   final DeleteStoryUseCase _deleteStoryUseCase;
   final FetchStoriesUseCase _fetchStoriesUseCase;
+  final MakeLikeUseCase _makeLikeUseCase;
 
   StoryCubit(
-      this._createStoryUseCase,
-      this._deleteStoryUseCase,
-      this._fetchStoriesUseCase,
-      this._makeViewUseCase,
-      this._muteStoriesUseCase,
-      this._getMutedStoriesUseCase,
-      this._getStoryViewersUseCase,
-      this._getFollowersUseCase,
-      this._updateStoryPrivacyUseCase)
-      : super(StoryState());
+    this._createStoryUseCase,
+    this._deleteStoryUseCase,
+    this._fetchStoriesUseCase,
+    this._makeViewUseCase,
+    this._muteStoriesUseCase,
+    this._getMutedStoriesUseCase,
+    this._getStoryViewersUseCase,
+    this._getFollowersUseCase,
+    this._updateStoryPrivacyUseCase,
+    this._makeLikeUseCase,
+  ) : super(StoryState());
 
   makeView({storyId, context}) async {
     getViewersInStory(context: context, storyId: storyId);
@@ -120,7 +126,7 @@ class StoryCubit extends Cubit<StoryState> {
   Future<void> getMutedStories({
     userId,
     context,
-    limit = 1,
+    limit = 10,
     page = 1,
     loadMore = false,
   }) async {
@@ -226,6 +232,7 @@ class StoryCubit extends Cubit<StoryState> {
 
   Future<void> deleteStory(String storyId) async {
     emit(state.copyWith(isLoading: true));
+
     final response = await _deleteStoryUseCase(storyId);
 
     response.fold(
@@ -234,7 +241,25 @@ class StoryCubit extends Cubit<StoryState> {
         emit(state.copyWith(isLoading: false)); // Reset loading state
       },
       (data) async {
+        state.users[0].stories!.removeWhere((story) => story.id == storyId);
         await fetchStories();
+        emit(state.copyWith(isLoading: false)); // Reset loading state
+      },
+    );
+  }
+
+  Future<void> makeLike(String storyId) async {
+    emit(state.copyWith(isLoading: true));
+
+    final response = await _makeLikeUseCase(storyId);
+
+    response.fold(
+      (failure) {
+        emit(StoryError('Failed to make like: $failure'));
+        emit(state.copyWith(isLoading: false)); // Reset loading state
+      },
+      (data) async {
+        // await fetchStories();
         emit(state.copyWith(isLoading: false)); // Reset loading state
       },
     );
@@ -251,7 +276,7 @@ class StoryCubit extends Cubit<StoryState> {
     ));
     // _fetchStoriesUseCase
     final response = await _fetchStoriesUseCase(
-        PaginationParams(page: state.currentPage, limit: 10));
+        PaginationParams(page: state.currentPage, limit: 100));
 
     response.fold(
       (failure) {
@@ -303,7 +328,7 @@ class StoryCubit extends Cubit<StoryState> {
       final fileSize = await file.length();
 
       // Call your upload method
-      await uploadStoryVideoOrImage(file, fileType, fileSize,
+      await uploadStoryVideoOrImageOrVoice(file, fileType, fileSize,
           description: description);
     } else {
       print('No file selected.');
@@ -321,8 +346,9 @@ class StoryCubit extends Cubit<StoryState> {
     }
   }
 
-  Future<void> uploadStoryVideoOrImage(File file, String fileType, int fileSize,
-      {description}) async {
+  Future<void> uploadStoryVideoOrImageOrVoice(
+      File file, String fileType, int fileSize,
+      {description, String? color}) async {
     final token = await CacheManager.getAccessToken();
 
     // Step 1: Generate Signed URL
@@ -360,7 +386,8 @@ class StoryCubit extends Cubit<StoryState> {
             'Response body: ${responseData['data']['mediaId']}***************************************');
 
         final storyMediaId = responseData['data']['mediaId'];
-        await confirmUpload(storyMediaId, description: description);
+        await confirmUpload(storyMediaId,
+            description: description, color: color);
       } else {
         print('Failed to upload file: ${uploadResponse.statusCode}');
         print('Response body: ${uploadResponse.body}');
@@ -371,7 +398,8 @@ class StoryCubit extends Cubit<StoryState> {
     }
   }
 
-  Future<void> confirmUpload(String storyMediaId, {description = ''}) async {
+  Future<void> confirmUpload(String storyMediaId,
+      {description = '', String? color}) async {
     final token = await CacheManager.getAccessToken();
 
     final response = await http.put(
@@ -381,9 +409,14 @@ class StoryCubit extends Cubit<StoryState> {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
-      body: jsonEncode({
-        "description": "$description", // Add your actual description here
-      }),
+      body: color != null
+          ? jsonEncode({
+              "description": "$description", // Add your actual description here
+              "color": color,
+            })
+          : jsonEncode({
+              "description": "$description", // Add your actual description here
+            }),
     );
 
     if (response.statusCode == 200) {
@@ -394,13 +427,25 @@ class StoryCubit extends Cubit<StoryState> {
     }
   }
 
-  Future<void> createTextStory(String text) async {
-    final response = await _createStoryUseCase(text);
+  Future<void> createTextStory(
+      {required String text,
+      required String color,
+      required String fontFamily}) async {
+    final response = await _createStoryUseCase(CreateStoryParams(
+      text: text,
+      color: color,
+      fontFamily: fontFamily,
+    ));
     response.fold(
       (failure) {
         emit(StoryError('Failed to create story: $failure'));
       },
-      (data) async {},
+      (data) async {
+        log("createTextStory: $data");
+        await fetchStories();
+        await getMutedStories();
+        emit(state.copyWith(isLoading: false)); // Reset loading state
+      },
     );
   }
 
@@ -416,9 +461,7 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
     ),
     context: context,
     isScrollControlled: true,
-    backgroundColor: ThemeCubit.get(context).isDarkTheme
-        ? Colors.black.withOpacity(0.9)
-        : Colors.white.withOpacity(0.9),
+    backgroundColor: Colors.white.withOpacity(0.9),
     builder: (BuildContext context) {
       return DraggableScrollableSheet(
         expand: false,
@@ -430,13 +473,10 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
             children: [
               // Beautiful Header Section with shadow effect
               Container(
-                decoration: BoxDecoration(
-                  color: ThemeCubit.get(context).isDarkTheme
-                      ? Colors.black.withOpacity(0.9)
-                      : Colors.white.withOpacity(0.9),
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(25)),
-                  boxShadow: const [
+                decoration: const BoxDecoration(
+                  color: AppColors.PRIMARY_COLOR,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+                  boxShadow: [
                     BoxShadow(
                       color: Colors.black26,
                       offset: Offset(0, -3),
@@ -449,38 +489,36 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Viewed by ${viewers.data.length}',
-                      style: TextStyle(
+                      context.isArabic
+                          ? 'شوهدت بواسطة ${viewers.data.length}'
+                          : 'Viewed by ${viewers.data.length}',
+                      style: const TextStyle(
                         fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: ThemeCubit.get(context).isDarkTheme
-                            ? Colors.white.withOpacity(0.9)
-                            : Colors.black.withOpacity(0.9),
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Icon(
-                        Icons.close,
-                        size: 26,
-                        color: Colors.black54,
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Navigator.pop(context);
+                    //   },
+                    //   child: const Icon(
+                    //     Icons.close,
+                    //     size: 26,
+                    //     color: Colors.black54,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
-              const Divider(thickness: 1, color: Colors.transparent),
+              // const Divider(thickness: 1, color: Colors.transparent),
 
               // Responsive List of Viewers
               Expanded(
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: ThemeCubit.get(context).isDarkTheme
-                        ? Colors.black.withOpacity(0.9)
-                        : Colors.white.withOpacity(0.9),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
                   ),
                   child: ListView.builder(
                     controller: scrollController,
@@ -501,21 +539,23 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
                             onTap: () => context.push(Routes.OTHERSACCOUNT,
                                 extra: viewer.user.id),
                             child: CircleAvatar(
-                              radius: 16,
-                              backgroundImage: NetworkImage(viewer
-                                  .user.profile!.profilePicture!.mediaKey!),
-                              backgroundColor: Colors.grey[300],
+                              radius: 19,
+                              backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+                              child: CircleAvatar(
+                                radius: 16,
+                                backgroundImage: NetworkImage(viewer
+                                    .user.profile!.profilePicture!.mediaKey!),
+                                backgroundColor: Colors.grey[300],
+                              ),
                             ),
                           ),
                           title: Text(
                             capitalizeAndSplit2Only(
                                 "${viewer.user.firstName} ${viewer.user.lastName}"),
                             style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: ThemeCubit.get(context).isDarkTheme
-                                  ? Colors.white.withOpacity(0.9)
-                                  : Colors.black.withOpacity(0.9),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black.withOpacity(0.8),
                             ),
                           ),
                           subtitle: Text(
@@ -530,9 +570,7 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
                             getTimeAgo(context, viewer.updatedAt.toString()),
                             style: TextStyle(
                               fontSize: 14,
-                              color: ThemeCubit.get(context).isDarkTheme
-                                  ? Colors.grey[200]
-                                  : Colors.grey[600],
+                              color: Colors.grey[600],
                             ),
                           ),
                           onTap: () {

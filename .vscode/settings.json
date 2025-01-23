@@ -1,4 +1,6 @@
-// {
+{
+    "cmake.ignoreCMakeListsMissing": true
+} // {
 //     "cSpell.words": [
 //         "addproducttocartfromdetails",
 //         "addressadd",
