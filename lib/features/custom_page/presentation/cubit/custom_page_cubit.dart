@@ -38,7 +38,7 @@ class CustomPageCubit extends Cubit<CustomPageState> {
       this._fetchActivateUseCase,
       this._updateActivateUseCase)
       : super(const CustomPageState());
-
+  int editPageCurrentIndex = 0;
   // void loadData() async {
   //   await fetchCustomPageWallet();
   //   await checkRequestWithdrawCustomPage();

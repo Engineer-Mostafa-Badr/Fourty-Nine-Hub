@@ -20,10 +20,14 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/custom_page_botton_nav_bar.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/pages/main_categories_cards_view.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/pages/main_categories_taps_view.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
@@ -77,6 +81,10 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
 
   @override
   void initState() {
+    HandleCashback.setCount('threeDotsCount', context);
+    AdInterstitialTop.loadIntersitialAd();
+    AdInterstitialTop.showInterstitialAd();
+    HandleCashback.setCount('mainCategoriesSliderCount', context);
     appOpenAdManager.loadAd();
     WidgetsBinding.instance.addObserver(this);
     checkLogin();
@@ -122,10 +130,19 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
   void dispose() {
     scrollController.dispose();
     WidgetsBinding.instance.removeObserver(this);
-
     super.dispose();
   }
 
+  List<Widget> getMainCategoryWidgets(
+          MainCategoriesCubit controller, MainCategoriesState state) =>
+      [
+        MainCategoriesListView(controller: controller, state: state),
+        BlocProvider(
+          create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
+          child: MainCategoriesGridView(isAppBarShow: false),
+        ),
+        MainCategoriesFlipCardsView(isAppBarShow: false),
+      ];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -207,34 +224,11 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                     );
                   }
                   if (state.customPage != null) {
-                    return ListView.separated(
-                      itemCount: state.customPage?.length ?? 0,
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            AdInterstitialTop.loadIntersitialAd();
-                            AdInterstitialTop.showInterstitialAd();
-                            HandleCashback.setCount(
-                                'mainCategoriesCount', context);
-                            context.push(Routes.SUBCATEGORIES,
-                                extra: state.customPage![index]);
-                          },
-                          child: MainCategoryBanner(
-                            category: state.customPage![index],
-                            onFavorite: () async {
-                              var result =
-                                  await controller.toggleFavoriteMedicalService(
-                                      state.customPage![index].id);
-                              print("result$result");
-                              return result;
-                            },
-                          ),
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const Sizer(),
+                    return SizedBox(
+                      height: 500.h,
+                      child: getMainCategoryWidgets(controller, state)[
+                          CacheManager.getInt(
+                              CacheManager.selectedCategoryView)!],
                     );
                   } else {
                     return const SizedBox.shrink();
@@ -692,6 +686,45 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
           ),
         ],
       ),
+    );
+  }
+}
+
+class MainCategoriesListView extends StatelessWidget {
+  const MainCategoriesListView({
+    super.key,
+    required this.controller,
+    required this.state,
+  });
+  final MainCategoriesState state;
+  final MainCategoriesCubit controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      itemCount: state.customPage?.length ?? 0,
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        return InkWell(
+          onTap: () {
+            AdInterstitialTop.loadIntersitialAd();
+            AdInterstitialTop.showInterstitialAd();
+            HandleCashback.setCount('mainCategoriesCount', context);
+            context.push(Routes.SUBCATEGORIES, extra: state.customPage![index]);
+          },
+          child: MainCategoryBanner(
+            category: state.customPage![index],
+            onFavorite: () async {
+              var result = await controller
+                  .toggleFavoriteMedicalService(state.customPage![index].id);
+              print("result$result");
+              return result;
+            },
+          ),
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) => const Sizer(),
     );
   }
 }

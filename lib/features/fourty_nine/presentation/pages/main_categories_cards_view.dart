@@ -1,4 +1,6 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
@@ -8,31 +10,68 @@ import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class MainCategoriesFlipCardsView extends StatelessWidget {
-  const MainCategoriesFlipCardsView({super.key});
+import '../../../../core/localization/locales.dart';
+
+class MainCategoriesFlipCardsView extends StatefulWidget {
+  const MainCategoriesFlipCardsView({super.key,this.isAppBarShow = true});
+  final bool isAppBarShow;
+
+  @override
+  _MainCategoriesFlipCardsViewState createState() =>
+      _MainCategoriesFlipCardsViewState();
+}
+
+class _MainCategoriesFlipCardsViewState
+    extends State<MainCategoriesFlipCardsView> {
+  late MainCategoriesCubit mainCategoriesCubit;
+
+  String labelName="";
+
+  @override
+  void initState() {
+    super.initState();
+    mainCategoriesCubit = context.read<MainCategoriesCubit>();
+  }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    labelName=context.locale == Locales.english?
+    mainCategoriesCubit.state.data![0].nameEn.toString()
+        :mainCategoriesCubit.state.data![0].name.toString();
+
+  }
 
   @override
   Widget build(BuildContext context) {
-    print(context.read<MainCategoriesCubit>().state.data?[0].image);
+    final mainCategories = mainCategoriesCubit.state.data ?? [];
+
     return Scaffold(
-      appBar: const BackAppBar(),
+      appBar: widget.isAppBarShow ?BackAppBar(
+        label: mainCategories.isNotEmpty ? labelName : '',
+      ):null,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: CardSwiper(
               padding: EdgeInsets.only(left: 10.w, right: 10.w, bottom: 20.h),
-              cardsCount:
-                  context.read<MainCategoriesCubit>().state.data?.length ?? 0,
+              cardsCount: mainCategories.length,
+              onSwipe:(previousIndex, currentIndex, direction) {
+                setState(() {
+                  labelName=context.locale == Locales.english?
+                  mainCategoriesCubit.state.data![currentIndex!].nameEn.toString()
+                 :mainCategoriesCubit.state.data![currentIndex!].name.toString();
+                });
+                return true;
+              } ,
               cardBuilder:
                   (context, index, percentThresholdX, percentThresholdY) {
                 return GestureDetector(
                   onTap: () {
-                    context.push(Routes.SUBCATEGORIES,
-                        extra: context
-                            .read<MainCategoriesCubit>()
-                            .state
-                            .data?[index]);
+                    context.push(
+                      Routes.SUBCATEGORIES,
+                      extra: mainCategories[index],
+                    );
                   },
                   child: DecoratedBox(
                     decoration: BoxDecoration(
@@ -40,12 +79,9 @@ class MainCategoriesFlipCardsView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16.0),
                       image: DecorationImage(
                         fit: BoxFit.fill,
-                        image: CachedNetworkImageProvider(context
-                                .read<MainCategoriesCubit>()
-                                .state
-                                .data?[index]
-                                .cover ??
-                            ''),
+                        image: CachedNetworkImageProvider(
+                          mainCategories[index].cover ?? '',
+                        ),
                       ),
                       gradient: const LinearGradient(
                         colors: [Colors.black, Colors.white],
@@ -71,18 +107,21 @@ class MainCategoriesFlipCardsView extends StatelessWidget {
                                 padding: const EdgeInsetsDirectional.all(8),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Align(
-                                      alignment:
-                                          AlignmentDirectional.bottomStart,
+                                    Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                    BoxShadow(
+                                    color: Colors.black.withOpacity(0.23),
+                                spreadRadius: 0.03,
+                                blurRadius: 6,
+                              ),
+                               ]
+                                   ),
                                       child: Text(
-                                        context
-                                                .read<MainCategoriesCubit>()
-                                                .state
-                                                .data?[index]
-                                                .name ??
-                                            '',
+                                        mainCategories[index].name ?? '',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 60.sp,
@@ -91,15 +130,7 @@ class MainCategoriesFlipCardsView extends StatelessWidget {
                                         textAlign: TextAlign.start,
                                       ),
                                     ),
-                                    // Text(
-                                    //   ' ${context.read<MainCategoriesCubit>().state.data?[index].total ?? 0} Ads',
-                                    //   style: TextStyle(
-                                    //     color: Colors.white,
-                                    //     fontSize: 32.sp,
-                                    //     fontWeight: FontWeight.bold,
-                                    //   ),
-                                    //   textAlign: TextAlign.end,
-                                    // ),
+                                    const SizedBox(height: 100,)
                                   ],
                                 ),
                               ),

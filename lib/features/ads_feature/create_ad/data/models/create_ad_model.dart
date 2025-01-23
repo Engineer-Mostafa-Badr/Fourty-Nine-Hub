@@ -7,9 +7,9 @@ class CreateAdModel extends CreateAdEntity {
     return CreateAdModel(
       value: SelectionModel.fromJson(json['value']),
       propId: json['props'] is String? json['props']: json['_id'] ?? '',
-      nameAr: json['props'] is String? '': json['value']['ar']??'',
-      nameEn: json['props'] is String? '': json['value']['en']??'',
-      image: json['propertyId'] is String? '': json['propertyId']['image']??'',
+      nameAr: json['props'] is String? '': json['value']['ar'].toString(),
+      nameEn: json['props'] is String? '': json['value']['en'].toString(),
+      image: json['propertyId'] is String||json['propertyId']==null? '': json['propertyId']['image']??'',
     );
   }
 

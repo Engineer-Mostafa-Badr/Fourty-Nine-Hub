@@ -57,7 +57,9 @@ class EndPoints {
   static const getWelcomeGift = '/auth/welcome-gift';
   static const socialLogin = '/auth/social/login';
   static const resendOTP = '/auth/resend-reset-code';
+  static const resendVerificationOTP = '/auth/resend-verification-code';
   static const refreshToken = '/auth/refresh/token';
+  static const agoraGenerateToken = '/agora';
 
   static String friendsList(TwitterFeedParams params) =>
       '/friends/allFriends?search=${params.search}&page=${params.page}&limit=${params.limit}';
@@ -862,7 +864,7 @@ class EndPoints {
   static const createAd = '/ads/create-ads';
 
   static filterAd(FilterModel filter) =>
-      '/ads/filter-ads/${filter.subCategoryId}?government=${filter.governorateId}&city=${filter.cityId}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
+      '/ads/filter-ads/${filter.subCategoryId}?${(filter.governorateId?.isNotEmpty??false)?"government=${filter.governorateId}&":''}${filter.cityId?.isNotEmpty??false?"city=${filter.cityId}&":""}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
   static deleteFood(String id) => '/food/delete-food-item/$id';
   static const addFood = '/food/add-food';
   static const deleteCart = '/food/deleteCart';

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
@@ -10,7 +11,6 @@ import '../../../domain/use_cases/save_tokens_use_case.dart';
 import '../../../domain/use_cases/verify_otp_use_case.dart';
 
 part 'verify_otp_state.dart';
-
 class VerifyOtpCubit extends Cubit<VerifyOtpState> {
   final VerifyOTPUseCase _verifyOTPUseCase;
   final SaveTokensUseCase _saveTokens;
@@ -19,62 +19,65 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
   String otp = '';
   bool isTimeOff = false;
 
-  int endTime = DateTime.now().millisecondsSinceEpoch + 1500 * 30;
-  late CountdownTimerController controller =
-  CountdownTimerController(endTime: endTime, onEnd: onEnd);
-  void onEnd() {
-   isTimeOff = true;
-  }
-
-
-
+  int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 300;
+  late CountdownTimerController controller;
 
   VerifyOtpCubit(
-    this._verifyOTPUseCase,
-    this._saveTokens,
-    this._attachToken,
-    this._resendOTPUseCase,
-  ) : super(VerifyOtpInitial());
+      this._verifyOTPUseCase,
+      this._saveTokens,
+      this._attachToken,
+      this._resendOTPUseCase,
+      ) : super(VerifyOtpInitial()) {
+    _initializeTimer();
+  }
+
+  void _initializeTimer() {
+    print("Initializing timer...");
+    endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 60;
+    print("New endTime: $endTime");
+    // controller.dispose();
+    controller = CountdownTimerController(endTime: endTime, onEnd: onEnd);
+    print("Timer initialized successfully");
+  }
 
   void verifyOTP(String email) async {
     if (state is VerifyOtpLoading) return;
     emit(VerifyOtpLoading());
-    final result =
-        await _verifyOTPUseCase(VerifyOTPParams(email: email, otp: otp));
+    final result = await _verifyOTPUseCase(VerifyOTPParams(email: email, otp: otp));
     emit(
       result.fold(
-        (failure) => VerifyOtpError(failure),
-        (userToken) {
-          _attachToken(userToken); // attach to dio
-          _saveTokens(userToken); // save to local storage
+            (failure) => VerifyOtpError(failure),
+            (userToken) {
+          _attachToken(userToken);
+          _saveTokens(userToken);
           return VerifyOtpSuccess(userTokensEntity: userToken);
         },
       ),
     );
   }
 
+  void onEnd() {
+    print("Timer ended, enabling resend button");
+    isTimeOff = true;
+    emit(ResendOtpEnabled());
+  }
+
   void resendOTP(String email) async {
     if (state is VerifyOtpLoading) return;
     emit(ResendOtpLoading());
+
     final result = await _resendOTPUseCase(ResendOTPParams(email: email));
     result.fold(
           (l) {
         emit(ResendOtpError(l));
       },
           (_) {
+        isTimeOff = false;
+        _initializeTimer();
         emit(ResendOtpSuccess());
-             if(isTimeOff) {
-                isTimeOff=false;
-                endTime = DateTime
-                    .now()
-                    .millisecondsSinceEpoch + 1000 * 30;
-                controller = CountdownTimerController(
-                    endTime: endTime, onEnd: onEnd);
-             }
+        emit(ResendOtpDisabled());
       },
-
     );
-
-
   }
+
 }

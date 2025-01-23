@@ -38,13 +38,15 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
+            titleSpacing: 0,
+            centerTitle: false,
             title: Transform(
-              transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
+              transform: Matrix4.translationValues(-0.0, 0.0, 0.0),
               child: Text(
                 // LocaleKeys.availableTrips.localize,
                 context.isArabic
-                    ? "مرحبا بك في جاي معاك"
-                    : "Welcome to Trip Join",
+                    ? "جاي معاك"
+                    : "Trip Join",
                 style: Styles.headerText(),
               ),
             ),
@@ -52,15 +54,14 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+              Center(
                 child: Text(
                   // LocaleKeys.availableTrips.localize,
                   context.isArabic
-                      ? "رحلات مخفضة - وفر فلوسك وسافر بأسعار أقل!"
-                      : "Discounted Trips - Save money and travel for less!",
+                      ? "رحلات مخفضة - وفر فلوسك وسافر بأسعار أقل"
+                      : "Discounted Trips - Save money and travel for less",
                   style: Styles.mediumText(
-                    color: AppColors.PRIMARY_COLOR_DARK,
+                    color: AppColors.PRIMARY_COLOR,
                     fontWeight: FontWeight.bold,
                     fontStyle: FontStyle.italic,
                   ),
@@ -71,6 +72,9 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
                 return TabBar(
                   dividerColor: context.isDarkMode ? Colors.grey : null,
                   indicatorColor: AppColors.PRIMARY_COLOR_DARK,
+                  padding: EdgeInsets.zero,
+                  labelPadding: EdgeInsets.zero,
+                  indicatorPadding: EdgeInsets.zero,
                   tabs: [
                     TripJoinTabIcon(
                       icon: Image.asset(Assets.carpool,
@@ -101,7 +105,7 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
               const Expanded(
                 child: TabBarView(
                   children: [
-                    CarPoolBody(),
+                     CarPoolBody(),
                     Stack(
                       children: [
                         SizedBox(

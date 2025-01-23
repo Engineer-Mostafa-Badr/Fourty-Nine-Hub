@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_e
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../core/states/basic_state.dart';
 
 class AnnounceWidget extends StatelessWidget {
@@ -16,17 +17,30 @@ class AnnounceWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SliderCubit, BasicState<List<SliderItemEntity>>>(
         builder: (context, state) {
-      if (state.data?.isEmpty ?? false) {
-        // print('data is empty');
-        return const SizedBox();
-      } else {
-        return CarouselSliderWidget(
+      if (state.isLoading) {
+        return Shimmer.fromColors(
+          baseColor: Colors.grey[100]!,
+          highlightColor: Colors.white24,
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10), color: Colors.grey),
+            width: double.infinity,
             height: 200.h,
-            autoPlay: true,
-            widgets: state.data?.map((e) {
-                  return _buildAnnounceItem(item: e, context: context);
-                }).toList() ??
-                []);
+          ),
+        );
+      } else {
+        if (state.data?.isEmpty ?? false) {
+          // print('data is empty');
+          return const SizedBox();
+        } else {
+          return CarouselSliderWidget(
+              height: 200.h,
+              autoPlay: true,
+              widgets: state.data?.map((e) {
+                    return _buildAnnounceItem(item: e, context: context);
+                  }).toList() ??
+                  []);
+        }
       }
     });
   }

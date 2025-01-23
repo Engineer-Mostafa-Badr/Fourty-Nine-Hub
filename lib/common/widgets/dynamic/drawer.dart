@@ -7,17 +7,20 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../core/widget/custom_text_no_login.dart';
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_cubit.dart';
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_state.dart';
@@ -102,7 +105,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         onTap: () {
                           AdInterstitialTop.loadIntersitialAd();
                           AdInterstitialTop.showInterstitialAd();
-                          context.push(Routes.CUSTOMPAGE);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const EditPage(),
+                            ),
+                          );
                         }),
                     drawerListTile(
                         image: Assets.favorite_main_category_icon,
@@ -431,11 +439,35 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       onTap: () {
         AdInterstitialTop.loadIntersitialAd();
         AdInterstitialTop.showInterstitialAd();
-        context.go(
-          context.read<UserCubit>().isLoggedIn
-              ? Routes.LUCKYWHEEL
-              : Routes.LOGIN,
-        );
+        if (context.read<UserCubit>().isLoggedIn) {
+          context.go(Routes.LUCKYWHEEL);
+        } else {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Dialog(
+                insetPadding: const EdgeInsets.all(20),
+                child: Container(
+                  width: 350,
+                  height: 400,
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      CustomNotLogged(),
+                      const SizedBox(height: 10,),
+                      AppButton(
+                          color: AppColors.LIGHT_COLOR,
+                          backColor: AppColors.PRIMARY_COLOR_DARK,
+                          label: "Cancel", onPressed: (){
+                        Navigator.pop(context);
+                      }),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        }
       },
       child: Container(
         width: double.infinity,
@@ -586,9 +618,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               title: const Text('Gallery'),
                               onTap: () async {
                                 // Navigator.pop(context);
-                                await context
-                                    .read<UserCubit>()
-                                    .uploadPhoto(isGallery: true, context: context);
+                                await context.read<UserCubit>().uploadPhoto(
+                                    isGallery: true, context: context);
                                 // Reload user data if needed
                               },
                             ),
@@ -597,9 +628,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               title: const Text('Camera'),
                               onTap: () async {
                                 // Navigator.pop(context);
-                                await context
-                                    .read<UserCubit>()
-                                    .uploadPhoto(isGallery: false, context: context);
+                                await context.read<UserCubit>().uploadPhoto(
+                                    isGallery: false, context: context);
                                 // Reload user data if needed
                               },
                             ),

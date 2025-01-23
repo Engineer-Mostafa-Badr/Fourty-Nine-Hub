@@ -1,3 +1,4 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -63,10 +64,13 @@ import 'features/authentication/presentation/controllers/user_cubit/user_cubit.d
 import 'firebase_options.dart';
 import 'routes/pages.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 bool isActivate = false;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await CacheManager.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -98,11 +102,11 @@ void main() async {
   AppPages.initializeRouter(initialRoute);
   runApp(
     LocalizationService.rootWidget(
-      // child: DevicePreview(
-      //   enabled: !kReleaseMode,
-      //   builder: (context) => const MyApp(),
-      // ),
-      child: const MyApp(),
+      child: DevicePreview(
+        enabled: false,
+        builder: (context) => const MyApp(),
+      ),
+      // child: const MyApp(),
     ),
   );
 }

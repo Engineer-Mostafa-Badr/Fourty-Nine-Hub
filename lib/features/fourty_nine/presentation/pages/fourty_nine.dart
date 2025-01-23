@@ -188,7 +188,8 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   changeView: 1,
                   icon: Icons.person,
                 ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           drawer: const DrawerWidget(),
           body: ListView(
             controller: scrollController,
@@ -197,7 +198,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
             children: [
               const AddBanner(),
               //carousel slider
+              const Sizer(),
               const AnnounceWidget(),
+              const Sizer(),
               !context.read<UserCubit>().isLoggedIn
                   ? const Sizer()
                   : const SizedBox.shrink(),
@@ -208,14 +211,14 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   ? const WalletWidget()
                   : const SizedBox.shrink(),
               ClickableWidget(
-                onTap:(){
+                onTap: () {
                   context.push(Routes.CUSTOMPAGE);
                 },
                 child: Container(
                   height: 60.h,
                   alignment: Alignment.center,
                   child: AutoScrollText(
-                    LocaleKeys.choosePreferredAppStyle.localize,
+                    "${LocaleKeys.choosePreferredAppStyle.localize}...   ",
                     style: Styles.headerText(fontSize: 30, color: AppColors.SECONDARY_COLOR),
                     textDirection: context.isArabic?TextDirection.rtl:TextDirection.ltr,
                     selectable: true,
@@ -425,7 +428,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 child: _buildRideSubCategoryItem(
                   service:
                       state.data?[1].service ?? RideServicesEnum.comeWithYou,
-                  title: LocaleKeys.tripJoin.localize,
+                  title:state.data![1].name.toString(),
                   image: state.data?[1].image ?? '',
                   // image: Assets.tripJoin,
 
@@ -767,8 +770,8 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.asset(
-                      Assets.tripJoinImage,
+                    Image.network(
+                      image,
                       fit: BoxFit.cover,
                       width: 150,
                       // source: AssetImage(image),

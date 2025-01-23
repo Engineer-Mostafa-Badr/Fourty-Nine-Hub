@@ -766,7 +766,7 @@ class PrivacyView extends StatelessWidget {
                 },
               ),
             )
-          : const CustomTextNoLogin(),
+          :  CustomNotLogged(),
     );
   }
 }

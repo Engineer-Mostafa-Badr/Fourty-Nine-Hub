@@ -84,7 +84,7 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                         ),
                         TextSpan(
                           text: context.isArabic
-                              ? " أعلن عن رحلتك اليومية وابحث عن شخص يمكنه أن يوصلك بأسعار مخفضة!"
+                              ? " أعلن عن رحلتك اليومية وابحث عن شخص يمكنه أن يوصلك بأسعار مخفضة"
                               : "",
                         ),
                         TextSpan(

@@ -8,8 +8,8 @@ import '../../domain/usecases/create_contact_us_usecase.dart';
 part 'contact_us_state.dart';
 
 class ContactUsCubit extends Cubit<ContactUsState> {
-  final phoneController = TextEditingController();
-  final messageController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController messageController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   final CreateContactUsUseCase _createContactUsUseCase;
 
@@ -17,7 +17,7 @@ class ContactUsCubit extends Cubit<ContactUsState> {
     this._createContactUsUseCase,
   ) : super(const ContactUsState());
 
-  void createContactUs() async {
+  void createContactUs(BuildContext context) async {
     state.copyWith(status: StateStatus.initial);
 
     if (formKey.currentState?.validate() ?? false) {
@@ -34,6 +34,8 @@ class ContactUsCubit extends Cubit<ContactUsState> {
       response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (r) {
+          messageController=TextEditingController(text: "");
+          phoneController=TextEditingController(text: "");
           print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
           print(r);
           print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
