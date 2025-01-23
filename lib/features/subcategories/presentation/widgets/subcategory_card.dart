@@ -68,18 +68,30 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                     PositionedDirectional(
                         top: 10.h,
                         start: 10.w,
-                        child: IconAppButton(
-                          icon: widget.item.isFavorite == false
-                              ? Icons.favorite_outline
-                              : Icons.favorite,
-                          onPressed: () async {
-                            var result = await widget.onFav();
-                            if (result == true) {
-                              widget.item.isFavorite = !widget.item.isFavorite!;
-                              setState(() {});
-                            }
-                          },
-                          color: AppColors.SECONDARY_COLOR,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.23),
+                                  spreadRadius: 0.03,
+                                  blurRadius: 6,
+                                ),
+                              ]
+                          ),
+                          child: IconAppButton(
+                            icon: widget.item.isFavorite == false
+                                ? Icons.favorite_outline
+                                : Icons.favorite,
+                            onPressed: () async {
+                              var result = await widget.onFav();
+                              if (result == true) {
+                                widget.item.isFavorite = !widget.item.isFavorite!;
+                                setState(() {});
+                              }
+                            },
+                            color: AppColors.SECONDARY_COLOR,
+                          ),
                         ))
                 ],
               ),

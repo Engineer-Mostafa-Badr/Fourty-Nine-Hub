@@ -128,7 +128,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
     //     .read<NotificationSocketIoCubit>()
     //     .notificationListener(languageCode: 'en');
   }
-
   @override
   initState() {
     context
@@ -137,7 +136,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
 
     super.initState();
   }
-
   @override
   void dispose() {
     scrollController.dispose();
@@ -220,12 +218,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   height: 60.h,
                   alignment: Alignment.center,
                   child: AutoScrollText(
-                    LocaleKeys.choosePreferredAppStyle.localize,
-                    style: Styles.headerText(
-                        fontSize: 30, color: AppColors.SECONDARY_COLOR),
-                    textDirection: context.isArabic
-                        ? TextDirection.rtl
-                        : TextDirection.ltr,
+                    "${LocaleKeys.choosePreferredAppStyle.localize}...   ",
+                    style: Styles.headerText(fontSize: 30, color: AppColors.SECONDARY_COLOR),
+                    textDirection: context.isArabic?TextDirection.rtl:TextDirection.ltr,
                     selectable: true,
                     // textStyle: TextStyle(fontSize: 24),
                   ),
@@ -433,7 +428,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 child: _buildRideSubCategoryItem(
                   service:
                       state.data?[1].service ?? RideServicesEnum.comeWithYou,
-                  title: LocaleKeys.tripJoin.localize,
+                  title:state.data![1].name.toString(),
                   image: state.data?[1].image ?? '',
                   // image: Assets.tripJoin,
 
@@ -650,15 +645,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       iconSize: 50.h,
                       onPressed: () {
                         //HandleCashback.setCount('tenPercentCount',context);
-                        context.push(Routes.MARRIAGESUBCATEGORIES,
-                            extra: MainCategoryEntity(
-                                id: '62c8b5b09332225799fe335e',
-                                nameEn: 'Marriage',
-                                name: 'زواج',
-                                image: "",
-                                banner: '',
-                                cover: '',
-                                total: 0));
+                        context.push(Routes.MARRIAGESUBCATEGORIES,extra: MainCategoryEntity(id: '62c8b5b09332225799fe335e', nameEn: 'Marriage',name:'زواج', image: "", banner: '', cover: '', total: 0));
                       }),
                 ),
                 Positioned(
@@ -783,8 +770,8 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.asset(
-                      Assets.tripJoinImage,
+                    Image.network(
+                      image,
                       fit: BoxFit.cover,
                       width: 150,
                       // source: AssetImage(image),
@@ -827,20 +814,22 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   // ),
                   const Spacer(),
                   Container(
-                    decoration: BoxDecoration(boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        spreadRadius: 0.03,
-                        blurRadius: 6,
-                      ),
-                    ]),
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.5),
+                            spreadRadius: 0.03,
+                            blurRadius: 6,
+                          ),
+                        ]
+                    ),
                     child: Label(
                       // text: service.title(),
                       text: title,
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 45.sp),
+                          fontSize:  45.sp),
                     ),
                   ),
                   const Spacer(),

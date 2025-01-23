@@ -346,7 +346,8 @@ class DetailsSection extends StatelessWidget {
           )),
           Expanded(
             child: Text(
-                "${context.isArabic ? item.subcategoryId?.nameAr : item.subcategoryId?.nameEn ?? ''}, ${item.description ?? ''}",
+                "${context.isArabic ? item.subcategoryId?.nameAr : item.subcategoryId?.nameEn ?? ''}"
+                    "${item.description!=null?",":""} ${item.description ?? ''}",
                 style: Styles.mediumText(
                     fontWeight: FontWeight.w600, fontSize: 30)),
           ),

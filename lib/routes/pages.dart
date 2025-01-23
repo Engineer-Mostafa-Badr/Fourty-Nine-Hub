@@ -249,6 +249,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/avaiable_trips_view.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
+import 'package:fourtyninehub/main.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/account_taps/account/presentation/cubit/cubit/favourite_drawer_cubit.dart';
@@ -345,7 +346,9 @@ class AppPages {
 
   static late final GoRouter router;
   static initializeRouter(String initialRoute) {
-    router = GoRouter(initialLocation: initialRoute, routes: <RouteBase>[
+    router = GoRouter(
+      navigatorKey: navigatorKey,
+      initialLocation: initialRoute, routes: <RouteBase>[
       GoRoute(
         path: Routes.HOME,
         builder: (context, state) => MultiBlocProvider(
@@ -612,6 +615,9 @@ class AppPages {
                   create: (_) => serviceLocator<LoginCubit>(),
                 ),
                 BlocProvider(
+                  create: (_) => serviceLocator<VerifyOtpCubit>(),
+                ),
+                BlocProvider(
                   create: (_) => serviceLocator<GetWalletCubit>(),
                 ),
                 BlocProvider(
@@ -673,6 +679,9 @@ class AppPages {
               providers: [
                 BlocProvider(
                   create: (_) => serviceLocator<LoginCubit>(),
+                ),
+                BlocProvider(
+                  create: (_) => serviceLocator<VerifyOtpCubit>(),
                 ),
                 BlocProvider(
                   create: (_) => serviceLocator<RegisterCubit>(),
