@@ -57,6 +57,7 @@ class EndPoints {
   static const getWelcomeGift = '/auth/welcome-gift';
   static const socialLogin = '/auth/social/login';
   static const resendOTP = '/auth/resend-reset-code';
+  static const resendVerificationOTP = '/auth/resend-verification-code';
   static const refreshToken = '/auth/refresh/token';
   static const agoraGenerateToken = '/agora';
 
@@ -853,6 +854,9 @@ class EndPoints {
   }
 
   static String getSubcategoryAdProps(String id) {
+    return '/ads/PropsBySubCategoryId/$id';
+  }
+  static String getMainCategoryAdProps(String id) {
     return '/ads/PropsByMainCategoryId/$id';
   }
 

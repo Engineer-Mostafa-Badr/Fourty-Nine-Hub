@@ -28,3 +28,6 @@ final class ResendOtpError extends VerifyOtpState {
 
   ResendOtpError(this.failure);
 }
+class ResendOtpEnabled extends VerifyOtpState {}
+
+class ResendOtpDisabled extends VerifyOtpState {}

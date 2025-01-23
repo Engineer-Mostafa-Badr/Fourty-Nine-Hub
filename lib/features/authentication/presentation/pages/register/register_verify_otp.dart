@@ -1,5 +1,8 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_countdown_timer/current_remaining_time.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
@@ -46,48 +49,34 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
         } else if (state is ResendOtpSuccess) {
           showSuccessMessage(context, 'resend otp success');
         } else if (state is VerifyOtpSuccess) {
-          await CacheManager.saveAccessToken(
-              state.userTokensEntity.accessToken);
-          await CacheManager.saveRefreshToken(
-              state.userTokensEntity.refreshToken);
-          context
-              .read<NotificationSocketIoCubit>()
-              .notificationListener(languageCode: 'en');
-          context
-              .read<NotificationSocketIoCubit>()
-              .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
+          await CacheManager.saveAccessToken(state.userTokensEntity.accessToken);
+          await CacheManager.saveRefreshToken(state.userTokensEntity.refreshToken);
+          context.read<NotificationSocketIoCubit>().notificationListener(languageCode: 'en');
+          context.read<NotificationSocketIoCubit>().clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
 
           serviceLocator<UserCubit>()
             ..setLogin(true)
             ..attachToken()
             ..getUser().then((value) async {
-              // Ensure the widget is still mounted before proceeding
               if (!mounted) return;
 
               String? accessToken = await CacheManager.getAccessToken();
               String? refreshToken = await CacheManager.getRefreshToken();
 
-              print(
-                  '/////////////////////////////////////////////////////////////////////////');
               print('Refresh Token: $refreshToken');
               print('Access Token: $accessToken');
-              print(
-                  '/////////////////////////////////////////////////////////////////////////');
               print(serviceLocator<UserCubit>().state.data.toString());
 
-              // Navigate to the home screen
               Navigator.pop(context);
               context.push(Routes.HOME);
 
-              // Show the success dialog after navigation
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (mounted) {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return Dialog(
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
+                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24.0.r),
                         ),
@@ -99,8 +88,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                               Text(
                                 LocaleKeys.congratulations.localize,
                                 style: Styles.headerText(
-                                    color: AppColors.SECONDARY_COLOR,
-                                    fontSize: 45.sp),
+                                    color: AppColors.SECONDARY_COLOR, fontSize: 45.sp),
                               ),
                               SizedBox(height: 16.h),
                               Text(
@@ -111,12 +99,10 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                               SizedBox(height: 40.h),
                               ElevatedButton(
                                 onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog
+                                  Navigator.of(context).pop();
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      Theme.of(context).primaryColor,
+                                  backgroundColor: Theme.of(context).primaryColor,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16.0.r),
                                   ),
@@ -129,8 +115,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                                   child: Text(
                                     LocaleKeys.close.localize,
                                     style: TextStyle(
-                                        color: Theme.of(context)
-                                            .scaffoldBackgroundColor),
+                                        color: Theme.of(context).scaffoldBackgroundColor),
                                   ),
                                 ),
                               ),
@@ -147,82 +132,207 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
       },
       child: Scaffold(
         appBar: const BackAppBar(),
-        bottomSheet: DefaultButton(
-          margin: const EdgeInsets.all(30),
-          width: double.infinity,
-          label: 'Verify',
-          onPressed: () => verifyOtpCubit.verifyOTP(widget.email),
+        bottomSheet: Container(
+          padding: const EdgeInsets.all(30),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 10,
+                offset: Offset(0, -2),
+              ),
+            ],
+          ),
+          child: DefaultButton(
+            width: double.infinity,
+            label: 'Verify',
+            onPressed: () => verifyOtpCubit.verifyOTP(widget.email),
+          ),
         ),
-        body: Column(
-          children: [
-            const Label(
-              text: 'Email OTP\nVerification',
-            ),
-            const Label(
-              text: 'Please check your phone to see the verification\ncode',
-            ),
-            const Sizer(),
-            PinCodeTextField(
-              appContext: context,
-              pastedTextStyle: TextStyle(
-                color: Colors.green.shade600,
-                fontWeight: FontWeight.bold,
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 60),
+              // Animated Title
+              TweenAnimationBuilder(
+                duration: const Duration(milliseconds: 500),
+                tween: Tween<double>(begin: 0, end: 1),
+                builder: (context, value, child) {
+                  return Opacity(
+                    opacity: value,
+                    child: Transform.translate(
+                      offset: Offset(0, (1 - value) * 20),
+                      child: const Text(
+                        'Email OTP Verification',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                },
               ),
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              length: 6,
-              obscureText: false,
-              blinkWhenObscuring: true,
-              animationType: AnimationType.fade,
-              pinTheme: PinTheme(
-                shape: PinCodeFieldShape.box,
-                borderRadius: BorderRadius.circular(4),
-                fieldHeight: 50,
-                fieldWidth: 50,
-                activeFillColor: Colors.white,
-                selectedFillColor: Colors.white,
-                inactiveFillColor: Colors.white,
-                inactiveColor: Theme.of(context).primaryColor,
-                activeColor: Theme.of(context).primaryColor,
-                selectedColor: Theme.of(context).primaryColor,
-                disabledColor: Colors.grey[100],
-                errorBorderColor: Colors.red,
-                activeBorderWidth: 1,
-                selectedBorderWidth: 1,
-                inactiveBorderWidth: 1,
-                disabledBorderWidth: 1,
-                errorBorderWidth: 1,
-                borderWidth: 1,
+              const SizedBox(height: 16),
+              ShaderMask(
+                shaderCallback: (bounds) {
+                  return LinearGradient(
+                    colors: [Colors.blue.shade600, Colors.purple.shade600],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ).createShader(bounds);
+                },
+                child: const Text(
+                  'Please check your email for the verification code.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
-              cursorColor: Colors.black,
-              animationDuration: const Duration(milliseconds: 300),
-              enableActiveFill: true,
-              onChanged: (v) => verifyOtpCubit.otp = v,
-              keyboardType: TextInputType.number,
-              boxShadows: const [
-                BoxShadow(
-                  offset: Offset(0, 1),
-                  color: Colors.black12,
-                  blurRadius: 10,
-                )
-              ],
-              onCompleted: (v) => verifyOtpCubit.verifyOTP(widget.email),
-              beforeTextPaste: (text) {
-                return true;
-              },
-            ),
-            const Sizer(),
-            const Label(
-              text: 'Didn\'t receive an email?',
-            ),
-            TextButton(
-              onPressed: () => verifyOtpCubit.resendOTP(widget.email),
-              child: const Label(
-                text: 'Resend',
+              const SizedBox(height: 40),
+
+              PinCodeTextField(
+                appContext: context,
+                length: 6,
+                obscureText: false,
+                animationType: AnimationType.scale,
+                pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.box,
+                  borderRadius: BorderRadius.circular(12),
+                  fieldHeight: 70,
+                  fieldWidth: 60,
+                  activeFillColor: Colors.white,
+                  selectedFillColor: Colors.white,
+                  inactiveFillColor: Colors.white,
+                  activeColor: Theme.of(context).primaryColor,
+                  selectedColor: Theme.of(context).primaryColor,
+                  inactiveColor: Colors.grey[300],
+                  borderWidth: 2,
+                ),
+                cursorColor: Colors.black,
+                animationDuration: const Duration(milliseconds: 300),
+                enableActiveFill: true,
+                onChanged: (v) => verifyOtpCubit.otp = v,
+                keyboardType: TextInputType.number,
+                boxShadows: const [
+                  BoxShadow(
+                    offset: Offset(0, 4),
+                    color: Colors.black12,
+                    blurRadius: 8,
+                  ),
+                ],
+                onCompleted: (v) => verifyOtpCubit.verifyOTP(widget.email),
               ),
-            ),
-          ],
+              const SizedBox(height: 40), // Spacing
+
+              const Text(
+                'Didn\'t receive an email?',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: AppColors.PRIMARY_COLOR_DARK,
+                ),
+              ),
+              const SizedBox(height: 20), // Spacing
+
+              BlocBuilder<VerifyOtpCubit, VerifyOtpState>(
+                builder: (context, state) {
+                  final verifyOtpCubit = context.read<VerifyOtpCubit>();
+                  return TweenAnimationBuilder(
+                    duration: const Duration(milliseconds: 300),
+                    tween: Tween<double>(begin: 0, end: 1),
+                    builder: (context, value, child) {
+                      return Opacity(
+                        opacity: value,
+                        child: Transform.translate(
+                          offset: Offset(0, (1 - value) * 20),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                  onPressed: verifyOtpCubit.isTimeOff
+                                      ? () {
+                                    verifyOtpCubit.resendOTP(widget.email);
+                                  }
+                                      : null,
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: verifyOtpCubit.isTimeOff
+                                        ? Theme.of(context).primaryColor
+                                        : Colors.grey,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 10,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    backgroundColor: verifyOtpCubit.isTimeOff
+                                        ? Theme.of(context).primaryColor.withOpacity(0.1)
+                                        : Colors.grey.withOpacity(0.1),
+                                  ),
+                                  child: const Text(
+                                    'Resend',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10), // Spacing
+                                CountdownTimer(
+                                  controller: verifyOtpCubit.controller,
+                                  onEnd: verifyOtpCubit.onEnd,
+                                  endTime: verifyOtpCubit.endTime,
+                                  endWidget: const Text(
+                                    "00:00",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: AppColors.PRIMARY_COLOR,
+                                    ),
+                                  ),
+                                  widgetBuilder: (context, CurrentRemainingTime? time) {
+                                    if (time == null) {
+                                      return const Text(
+                                        '00:00',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey,
+                                        ),
+                                      );
+                                    }
+                                    return Text(
+                                      '${time.sec} : 00',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color:AppColors.PRIMARY_COLOR,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+              const SizedBox(height: 40),
+            ],
+          ),
         ),
       ),
+
     );
   }
 }

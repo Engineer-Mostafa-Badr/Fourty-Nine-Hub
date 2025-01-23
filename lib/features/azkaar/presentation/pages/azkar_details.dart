@@ -45,6 +45,7 @@ class _AzkarDetailsState extends State<AzkarDetails> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        surfaceTintColor: Colors.transparent,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

@@ -5,11 +5,12 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/models/ad_property_model.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/get_ad_properties_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 
 abstract class CreateAdRemoteDatasource {
   Future<Either<Failure, List<AdPropertiesEntity>>> getAdProperties({
-    required String subCategoryId,
+    required GetAdPropertiesParams params,
   });
   Future<Either<Failure, bool>> creatAd({required AdModel ad});
   Future<Either<Failure, List<AdModel>>> filterAd({required FilterModel ad});
@@ -20,9 +21,9 @@ class CreateAdRemoteDatasourceImpl implements CreateAdRemoteDatasource {
   CreateAdRemoteDatasourceImpl(this._apiConsumer);
   @override
   Future<Either<Failure, List<AdPropertiesEntity>>> getAdProperties(
-      {required String subCategoryId}) async {
+      {required GetAdPropertiesParams params}) async {
     final response =
-        await _apiConsumer.get(EndPoints.getSubcategoryAdProps(subCategoryId));
+        await _apiConsumer.get(params.fromMarriage==false?EndPoints.getMainCategoryAdProps(params.id):EndPoints.getSubcategoryAdProps(params.id));
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data'] as List)

@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/any_cashback
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_currency_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_custom_page_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_question_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/shared/fourty_nine_shared_data.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
@@ -41,6 +42,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   final ToggleFavoriteCategoryUseCase _toggleFavoriteCategoryUseCase;
   final GetWalletHomeUseCase _getWalletHomeUseCase;
   final GetCurrencyUseCase _currencyUseCase;
+  final GetMainCategoryDetailsUseCase _getMainCategoryDetailsUseCase;
 
   MainCategoriesCubit(
     this._getMainCategoriesUseCase,
@@ -48,15 +50,28 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     this._getWalletHomeUseCase,
     this._currencyUseCase,
     this._anyCashBackUseCase,
-    this._categoriesCustomPageUseCase, this._getQuestionUseCase, this._answerQuestionUseCase,
+    this._categoriesCustomPageUseCase, this._getQuestionUseCase, this._answerQuestionUseCase, this._getMainCategoryDetailsUseCase,
   ) : super(MainCategoriesState());
 
   Future<void> loadDataCategory() async {
     await loadData();
+    await getMainCategoryDetails();
     await getQuestion();
     await getMainCategoryCustomPage();
   }
 
+  Future<void> getMainCategoryDetails() async {
+    // if (user != null) {
+    final response = await _getMainCategoryDetailsUseCase('62c8b5b09332225799fe335e');
+    response.fold(
+            (failure) => emit(state.copyWith(status: StateStatus.error)),
+            (data) {
+          emit(state.copyWith(
+            marriageMainCategory: data,
+          ));
+        });
+    // }
+  }
   Future<void> loadData() async {
     emit(state.copyWith(status: StateStatus.loading));
     await UserCubit.to.getUser();
