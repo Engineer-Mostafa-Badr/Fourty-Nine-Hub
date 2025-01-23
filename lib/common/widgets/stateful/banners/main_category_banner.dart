@@ -118,9 +118,20 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                                   });
                                 }
                               },
-                              icon: Icon(widget.category.isFavorite == true
-                                  ? Icons.favorite
-                                  : Icons.favorite_border),
+                              icon: Container(
+                                decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.5),
+                                        spreadRadius: 0.03,
+                                        blurRadius: 6,
+                                      ),
+                                    ]
+                                ),
+                                child: Icon(widget.category.isFavorite == true
+                                    ? Icons.favorite
+                                    : Icons.favorite_border),
+                              ),
                             )
                       : const SizedBox.shrink(),
                   // Label(

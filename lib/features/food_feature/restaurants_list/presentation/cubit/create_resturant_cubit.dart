@@ -167,14 +167,14 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
 
   // ================================= upload images =================================
   Future<void> _uploadImage(
-      {required dynamic Function(UploadFileEntity) onUploaded}) async {
+      {required dynamic Function(UploadFileEntity) onUploaded,required BuildContext context}) async {
     if (_createDoctorParams.subCategoryId.isNotEmpty) {
       emit(CreateResturantLoading("Uploading Image..."));
       await UploadFile().uploadImage(
         subCategoryId: _createDoctorParams.subCategoryId,
         onUploaded: (value) {
           onUploaded(value);
-        },
+        }, context: context,
       );
       emit(CreateResturantCloseLoading());
     } else {
@@ -182,39 +182,39 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
     }
   }
 
-  Future<void> uploadProfileImage() async {
+  Future<void> uploadProfileImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
       _createDoctorParams.mediaId = media.mediaId;
       emit(CreateResturantUploadProfileImage(media.file));
-    });
+    }, context: context);
   }
 
-  Future<void> uploadIdFrontImage() async {
+  Future<void> uploadIdFrontImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
       _createDoctorParams.idFrontKey = media.mediaId;
       emit(CreateResturantUploadIdFrontImage(media.file));
-    });
+    }, context: context);
   }
 
-  Future<void> uploadIdBehindImage() async {
+  Future<void> uploadIdBehindImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
       _createDoctorParams.idBehindKey = media.mediaId;
       emit(CreateResturantUploadIdBehindImage(media.file));
-    });
+    }, context: context);
   }
 
-  Future<void> uploadPracticingFrontImage() async {
+  Future<void> uploadPracticingFrontImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
       _createDoctorParams.practicingFront = media.mediaId;
       emit(CreateResturantUploadPracticingFrontImage(media.file));
-    });
+    }, context: context);
   }
 
-  Future<void> uploadPracticingBehindImage() async {
+  Future<void> uploadPracticingBehindImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
       _createDoctorParams.practicingBehind = media.mediaId;
       emit(CreateResturantUploadPracticingBehindImage(media.file));
-    });
+    }, context: context);
   }
 
   // ================================= toggles =================================

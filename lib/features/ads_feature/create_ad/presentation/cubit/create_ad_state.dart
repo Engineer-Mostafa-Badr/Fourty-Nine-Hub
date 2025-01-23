@@ -8,6 +8,8 @@ enum CreateAdStates {
   loadCities,
   loadCitiesSuccess,
   imageUploading,
+  uploadImage,
+  uploadImageSuccess,
   updateSuccess,
 }
 
@@ -19,6 +21,8 @@ extension CreateAdStateX on CreateAdState {
   bool get isInitial => status == CreateAdStates.initState;
   bool get isLoadCitiesSuccess => status == CreateAdStates.loadCitiesSuccess;
   bool get isImageUploading => status == CreateAdStates.imageUploading;
+  bool get isUploadImage => status == CreateAdStates.uploadImage;
+  bool get isUploadImageSuccess => status == CreateAdStates.uploadImageSuccess;
 }
 
 class CreateAdState {

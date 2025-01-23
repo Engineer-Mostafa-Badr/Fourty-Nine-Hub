@@ -414,7 +414,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
   //   }
   // }
 
-  uploadPhoto({bool isGallery = true}) async {
+  uploadPhoto({bool isGallery = true,required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print('=======>data Hiii');
     UploadFileEntity? image;
@@ -442,7 +442,7 @@ class TinderViewCubit extends Cubit<TinderViewState> {
               return const Right(true);
             },
           );
-        });
+        }, context: context);
   }
 
   Future<void> uploadPictures({

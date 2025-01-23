@@ -233,7 +233,9 @@ class _AdCardState extends State<AdCard> {
                                   style: Styles.mediumText(
                                       color: AppColors.SECONDARY_COLOR),
                                 ),
-                                const WidgetSpan(child: Icon(Icons.add)),
+                                WidgetSpan(child: Sizer(width: 5.w,)),
+                                WidgetSpan(child: ImageFromInternet(image: e.image??'',width: 25.w,height: 25.h,defaultLogo: true,)),
+                                WidgetSpan(child: Sizer(width: 5.w,)),
                                 TextSpan(
                                   text:
                                       "${getLang() == 'ar' ? e.value.nameAr : e.value.nameEn}    ",

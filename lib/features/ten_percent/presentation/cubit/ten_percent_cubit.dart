@@ -18,7 +18,7 @@ class TenPercentCubit extends Cubit<TenPercentState> {
   TenPercentCubit(this._sentBillRequestUseCase)
       : super(const TenPercentState());
 
-  uploadMobileBill({bool isGallery = true}) async {
+  uploadMobileBill({bool isGallery = true,required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
     await upload.uploadImage(
@@ -33,11 +33,11 @@ class TenPercentCubit extends Cubit<TenPercentState> {
               mobileId: data.mediaId,
               // backColor: '#FFFFFFFF',
               status: TenPercentStates.success));
-        });
+        }, context: context);
     print("length${state.mobileId}");
   }
 
-  uploadElectricityBill({bool isGallery = true}) async {
+  uploadElectricityBill({bool isGallery = true,required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
     await upload.uploadImage(
@@ -52,11 +52,11 @@ class TenPercentCubit extends Cubit<TenPercentState> {
               electricityId: data.mediaId,
               // backColor: '#FFFFFFFF',
               status: TenPercentStates.success));
-        });
+        }, context: context);
     print("length${state.electricityId}");
   }
 
-  uploadTrafficBill({bool isGallery = true}) async {
+  uploadTrafficBill({bool isGallery = true,required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
     await upload.uploadImage(
@@ -71,7 +71,7 @@ class TenPercentCubit extends Cubit<TenPercentState> {
               trafficId: data.mediaId,
               // backColor: '#FFFFFFFF',
               status: TenPercentStates.success));
-        });
+        }, context: context);
     print("length${state.trafficId}");
   }
   // Future<void> uploadProfileImage() async {

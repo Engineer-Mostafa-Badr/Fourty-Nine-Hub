@@ -31,7 +31,7 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
   void initState() {
     context
         .read<CreateAdCubit>()
-        .loadData(subCategoryId: widget.categorization.mainCategory.id);
+        .loadData(subCategoryId: widget.categorization.mainCategory.id, fromMarriage: false);
     super.initState();
   }
 

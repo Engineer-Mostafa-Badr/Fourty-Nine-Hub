@@ -120,7 +120,7 @@ class EditFoodCubit extends Cubit<EditFoodState> {
       subCategoryId: subcategoryId ?? '',
       onUploaded: (value) {
         onUploaded(value);
-      },
+      }, context: context,
     );
   }
 

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
@@ -80,7 +81,7 @@ class PaymentCubit extends Cubit<PaymentState> {
   }
 
   File? get selectedImage => _selectedImage;
-  Future<void> uploadProfileImage() async {
+  Future<void> uploadProfileImage({required BuildContext context}) async {
     emit(state.copyWith(uploadStatus: StateStatus.loading));
     final result = await UploadFile().uploadImage(
       subCategoryId: "66742736963f11f31c67b51d",
@@ -89,7 +90,7 @@ class PaymentCubit extends Cubit<PaymentState> {
             uploadedImage: File(media.file.path),
             uploadStatus: StateStatus.success,
             imageMediaId: media.mediaId));
-      },
+      }, context: context,
     );
     if (result != null) {
     } else {

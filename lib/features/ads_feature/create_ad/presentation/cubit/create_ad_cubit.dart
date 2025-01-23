@@ -1,7 +1,16 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:typed_data';
+
+import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:fourtyninehub/common/functions/helper/file_picker_helper.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -23,7 +32,10 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/useca
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
 
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../../../../core/error/failure.dart';
 
 import '../../../../../routes/routes.dart';
@@ -31,6 +43,7 @@ import '../../../../account_taps/my_adds/domain/usecases/fetch_my_ads_by_id_usec
 import '../../domain/entities/categorization_entity.dart';
 import '../../domain/usecases/create_ad_usecase.dart';
 import '../../domain/usecases/get_ad_properties_usecase.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 part 'create_ad_state.dart';
 
@@ -63,30 +76,31 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       this._adsByIdUseCase)
       : super(CreateAdState());
 
-  void loadData({required String subCategoryId}) async {
+  void loadData({required String subCategoryId,required bool fromMarriage}) async {
     emit(state.copyWith(status: CreateAdStates.loading));
+    print("fromMarriage$fromMarriage");
 
     await Future.wait([
-      getAdProperties(subCategoryId: subCategoryId),
+      getAdProperties(subCategoryId: subCategoryId, fromMarriage: fromMarriage),
       _getGovernorates(),
     ]);
     emit(state.copyWith(status: CreateAdStates.success));
   }
 
   void loadDataInEdit(
-      {required String subCategoryId, required String id}) async {
+      {required String subCategoryId, required String id,required bool fromMarriage}) async {
     // emit(state.copyWith(status: CreateAdStates.loading));
-
+    print("fromMarriage$fromMarriage");
     await Future.wait([
-      getAdProperties(subCategoryId: subCategoryId),
+      getAdProperties(subCategoryId: subCategoryId, fromMarriage: fromMarriage),
       _getGovernorates(),
       fetchMyAdsById(id: id),
     ]);
     // emit(state.copyWith(status: CreateAdStates.success));
   }
 
-  Future<void> getAdProperties({required String subCategoryId}) async {
-    final response = await _getAdPropertiesUsecase(subCategoryId);
+  Future<void> getAdProperties({required String subCategoryId,required bool? fromMarriage}) async {
+    final response = await _getAdPropertiesUsecase(GetAdPropertiesParams(id: subCategoryId, fromMarriage: fromMarriage));
     response.fold(
         (failure) => emit(
             state.copyWith(failure: failure, status: CreateAdStates.error)),
@@ -154,17 +168,119 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     print(values[index].nameAr);
     print(values[index].nameEn);
   }
+  bool loadImage = false;
+   pickImage(
+      {bool isGallery = true,
+        required String subCategoryId,
+        required BuildContext context,
+        required Function(UploadFileEntity) onUploaded}) async {
+     loadImage = true;
+     emit(state.copyWith(status: CreateAdStates.uploadImage));
+     print("objectUpload0");
 
-  void uploadImage({required String subCategoryId}) async {
-    emit(state.copyWith(status: CreateAdStates.imageUploading));
-    final mediaResponse = await UploadFile()
-        .uploadImage(
+    final file = await FilePickerHelper()
+        .pickImage(isGallery: isGallery)
+        .then((file) async {
+      if (file != null) {
+        showLoadingDialog(context);
+
+        final tempDir = await getTemporaryDirectory();
+        final uniqueFileName =
+            'compressed_${DateTime.now().millisecondsSinceEpoch}_${file.name}';
+        final targetPath = '${tempDir.path}/$uniqueFileName';
+        print("file.path${file.path}");
+        print("file.path$targetPath");
+        print("objectUpload2");
+        var result = await FlutterImageCompress.compressAndGetFile(
+          file.path,
+          targetPath,
+          quality: 50,
+          rotate: 360,
+        );
+        final bytes = await result!.readAsBytes();
+        int size = bytes.length;
+        // get signed url
+        final signedURLResponse =
+        await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
+          "type": "image/${file.mimeType ?? 'png'}",
+          "size": size,
+          "subcategoryId": subCategoryId
+        });
+        // send to w3 storage
+        signedURLResponse.fold((l) {
+          print(l.toString());
+        }, (data) async {
+          print("objectUpload3");
+          log("responseData: ${jsonEncode(data)}");
+          final tempDir = await getTemporaryDirectory();
+          final uniqueFileName =
+              'compressed_${DateTime.now().millisecondsSinceEpoch}_${file.name}';
+          final targetPath = '${tempDir.path}/$uniqueFileName';
+          var result = await FlutterImageCompress.compressAndGetFile(
+            file.path,
+            targetPath,
+            quality: 50,
+            rotate: 360,
+          );
+          await sendBinaryFileData(
+              file: result!, signedUrl: data['data']['signedUrl'])
+              .then((value) async {
+            print("amdl;maldmaslkd");
+            final mediaId = data['data']['mediaId'];
+            final confirmUploadResponse = await serviceLocator<ApiConsumer>()
+                .put(EndPoints.confirmUpload(mediaId));
+            /* confirmUploadResponse.fold((l) {
+              print("object22222");
+              return Left(l);
+            }, (data) { */
+            print("object111");
+            onUploaded(UploadFileEntity(mediaId: mediaId, file: file));
+            return const Right(true);
+            // });
+          });
+        });
+      }
+    });
+
+    return null;
+  }
+  Future<void> sendBinaryFileData(
+      {required XFile file, required String signedUrl}) async {
+    print("signedUrl$signedUrl");
+    Uint8List image = await file.readAsBytes();
+    print("object${image.length}");
+    print("object$image");
+    // var newFile = await FlutterImageCompress.=
+    String fileName = file.path.split('/').last;
+
+    Options options = Options(contentType: file.mimeType, headers: {
+      'Accept': "*/*",
+      'Content-Type': 'application/octet-stream',
+      'Content-Length': image.length,
+      'Connection': 'keep-alive',
+      'User-Agent': 'ClinicPlush',
+      // 'File-Name': fileName,
+    });
+
+    await Dio().put(signedUrl, data: image, options: options);
+    print("aasl;das;ld,");
+  }
+  void uploadImage({required String subCategoryId,required BuildContext context}) async {
+    loadImage = true;
+    emit(state.copyWith(status: CreateAdStates.uploadImage));
+
+    final mediaResponse = await pickImage(
             subCategoryId: subCategoryId,
+            context:context,
             onUploaded: (UploadFileEntity media) {
+              context.pop();
               final images = state.images ?? [];
               images.add(media);
+              print("objectUpload1");
+              loadImage = false;
+
               emit(state.copyWith(
-                  images: images, status: CreateAdStates.initState));
+                  images: images, status: CreateAdStates.initState,));
             })
         .then((value) {
       if (value == null) {

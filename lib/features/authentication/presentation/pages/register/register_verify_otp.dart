@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_countdown_timer/current_remaining_time.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
@@ -214,10 +216,46 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
             const Label(
               text: 'Didn\'t receive an email?',
             ),
-            TextButton(
-              onPressed: () => verifyOtpCubit.resendOTP(widget.email),
-              child: const Label(
-                text: 'Resend',
+            const SizedBox(height: 20,),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 15),
+              child: Row(
+                children: [
+                  TextButton(
+                  onPressed: () {
+                   verifyOtpCubit.resendOTP(widget.email);
+                   setState(() {});
+                    },
+                    child:  const Label(
+                      text: 'Resend',
+                    ),
+                  ),
+                  const SizedBox(width: 20,),
+                  CountdownTimer(
+                    controller:verifyOtpCubit.controller,
+                    onEnd: verifyOtpCubit.onEnd,
+                    endTime: verifyOtpCubit.endTime,
+                    endWidget: const Text("00:00"),
+                    widgetBuilder: (context, CurrentRemainingTime? time) {
+                      if (time == null) {
+                        return Text(
+                          '00:00',
+                          style: Styles.mediumText(
+                            color: AppColors.PRIMARY_COLOR_LIGHT,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      }
+                      return Text(
+                        '  ${time.sec} : 00 ',
+                        style: Styles.mediumText(
+                          color: AppColors.PRIMARY_COLOR_LIGHT,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
           ],
