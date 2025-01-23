@@ -173,7 +173,7 @@ class CodegenLoader extends AssetLoader{
   "emptyFieldNotValid": "حقل فارغ غير صالح",
   "login": "تسجيل الدخول",
   "register": "تسجيل",
-  "emailOrPhone": "البريد الإلكتروني أو الهاتف",
+  "emailOrPhone": "البريد الإلكتروني",
   "password": "كلمة المرور",
   "forgetPassword": "نسيت كلمة المرور",
   "lastName": "اللقب",
@@ -1247,16 +1247,21 @@ class CodegenLoader extends AssetLoader{
   "enterSomething": "ادخل شيئًا...",
   "pleaseEnterAValue": "يرجى إدخال قيمة",
   "answerSentSuccessfully": "تم إرسال الإجابة بنجاح",
+  "emailOtpVerification": "التحقق من البريد الإلكتروني OTP",
+  "pleaseCheckEmail": "يرجى التحقق من بريدك الإلكتروني للحصول على رمز التحقق.",
+  "didntReciveEmail": "لم تتلق بريدا إلكترونيا؟",
+  "resend": "إعادة الإرسال",
   "cropImage": "قص صورة",
-  "ExitApp":"هل أنت متأكد ؟",
-  "sureLogoutApp": "هل تريد الخروج من التطبيق",
-    "sure":"متأكد",
-    "warning":"تحذير !",
-  "cashBack":"قم بتحميل فاتورة واحدة على الأقل للاستمتاع بالحصول على استرداد نقدي كهدية من التطبيق",
-    "Email":"البريد الألكترونى",
-    "addAde":"أضف أعلان"
-
-
+  "sureLogoutApp": "هل أنت متأكد أنك تريد الخروج؟",
+  "ExitApp": "الخروج من التطبيق",
+  "sure": "متأكد",
+  "warning": "تحذير",
+  "loginOrRegister": "تسجيل الدخول\n للاستمتاع بالتطبيق",
+  "addAde": "اضافة إعلان",
+  "cashBack": "قم بتحميل فاتورة واحدة على الأقل للاستمتاع بالحصول على استرداد نقدي كهدية من التطبيق",
+  "navigateBarDescription": "اختر المجال المناسب الذي تحب أن تراه في شريط القوائم السفلي للتطبيق",
+  "socialDescription": "اختار الشكل الاجتماعي المفضل لديك يمكنك اختيار شكل واحد فقط بحدأقصى",
+  "favouriteDescrepion": "اختار الاقسام الرئيسيه المفضله لديك التي تحب أن تراها يمكنك اختيار بحد أقصى اقسام"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1417,7 +1422,7 @@ static const Map<String,dynamic> en = {
   "emptyFieldNotValid": "Empty Field Not Valid",
   "login": "Login",
   "register": "Register",
-  "emailOrPhone": "Email Or Phone",
+  "emailOrPhone": "Email",
   "password": "Password",
   "forgetPassword": "Forget Password?",
   "lastName": "Last Name",
@@ -2509,15 +2514,20 @@ static const Map<String,dynamic> en = {
   "pleaseEnterAValue": "Please enter a value",
   "answerSentSuccessfully": "Answer sent successfully",
   "cropImage": "Crop Image",
-  "ExitApp":"Are you sure ?",
-  "sureLogoutApp":"Do you want exit from the app",
-   "sure":"Sure",
-  "warning":"warning !",
-  "cashBack":"Upload At Least One Bill To Enjoy Getting Cash back As A Gift On The App",
-  "Email":"Email",
-  "addAde":"Add Ade"
-
-
+  "sureLogoutApp": "Are you sure you want to leave?",
+  "ExitApp": "Exit App",
+  "sure": "Sure",
+  "warning": "Warning",
+  "emailOtpVerification": "Email OTP Verification",
+  "loginOrRegister": "Register/Login \n To enjoy App",
+  "pleaseCheckEmail": "Please check your email for the verification code.",
+  "didntReciveEmail": "Didn\\'t receive an email?",
+  "resend": "Resend",
+  "addAde": "Add ad",
+  "cashBack": "Upload At Least One Bill To Enjoy Getting Cash back As A Gift On The App",
+  "navigateBarDescription": "Choose the appropriate field you would like to see in the application's bottom navigation bar.",
+  "socialDescription": "Choose your preferred social shape. You can select only one shape at most.",
+  "favouriteDescription": "Choose your favorite main categories that you would like to see. You can select up to 8 categories at most."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

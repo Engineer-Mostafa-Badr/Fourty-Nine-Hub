@@ -13,7 +13,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/localization/locales.dart';
 
 class MainCategoriesFlipCardsView extends StatefulWidget {
-  const MainCategoriesFlipCardsView({super.key});
+  const MainCategoriesFlipCardsView({super.key,this.isAppBarShow = true});
+  final bool isAppBarShow;
 
   @override
   _MainCategoriesFlipCardsViewState createState() =>
@@ -45,9 +46,9 @@ class _MainCategoriesFlipCardsViewState
     final mainCategories = mainCategoriesCubit.state.data ?? [];
 
     return Scaffold(
-      appBar: BackAppBar(
+      appBar: widget.isAppBarShow ?BackAppBar(
         label: mainCategories.isNotEmpty ? labelName : '',
-      ),
+      ):null,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

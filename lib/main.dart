@@ -70,7 +70,7 @@ bool isActivate = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await CacheManager.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

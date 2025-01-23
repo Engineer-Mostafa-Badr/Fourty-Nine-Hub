@@ -7,7 +7,10 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/custom_page/domain/use_case/update_social_page_use_case.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/cubit/edit_page_cubit/edit_page_cubit.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../res/style/styles.dart';
@@ -38,9 +41,6 @@ class _SocialPageState extends State<SocialPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(LocaleKeys.socialPage.localize),
-      ),
       body: BlocProvider<CustomPageCubit>(
         create: (BuildContext context) => serviceLocator()..fetchSocialPage(),
         child: BlocConsumer<CustomPageCubit, CustomPageState>(
@@ -61,34 +61,44 @@ class _SocialPageState extends State<SocialPage> {
             if (state.status == CustomPageStates.loading) {
               return const Center(child: CircularProgressIndicator());
             } else if (state.status == CustomPageStates.success) {
-              return ListView.builder(
-                itemCount: _items.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: Radio<int>(
-                      value: index,
-                      groupValue: _selectedItem,
-                      activeColor: Theme.of(context).primaryColor,
-                      onChanged: (int? value) {
-                        setState(() {
-                          _selectedItem = value;
-                        });
+              return Column(
+                children: [
+                  ListTile(
+                    title: Text(LocaleKeys.socialPage.localize),
+                    subtitle: Text(LocaleKeys.navigateBarDescription.localize),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: _items.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: Radio<int>(
+                            value: index,
+                            groupValue: _selectedItem,
+                            activeColor: Theme.of(context).primaryColor,
+                            onChanged: (int? value) {
+                              setState(() {
+                                _selectedItem = value;
+                              });
+                            },
+                          ),
+                          title: Text(
+                            _items[index],
+                            style: Styles.mediumText(
+                              fontSize: 65.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                          trailing: Image.asset(_images[index],
+                              height: 50.h, width: 50.w),
+                          selected: _selectedItem == index,
+                          selectedTileColor: Colors.transparent,
+                        );
                       },
                     ),
-                    title: Text(
-                      _items[index],
-                      style: Styles.mediumText(
-                        fontSize: 65.sp,
-                        fontWeight: FontWeight.w400,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                    trailing:
-                        Image.asset(_images[index], height: 50.h, width: 50.w),
-                    selected: _selectedItem == index,
-                    selectedTileColor: Colors.transparent,
-                  );
-                },
+                  ),
+                ],
               );
             } else {
               return Center(
@@ -105,11 +115,16 @@ class _SocialPageState extends State<SocialPage> {
             if (state.status == CustomPageStates.success) {
               showSuccessMessage(
                   context, LocaleKeys.updateSuccessfully.localize);
+              BlocProvider.of<EditPageCubit>(context).changePage(
+                  BlocProvider.of<EditPageCubit>(context).currentIndex + 1);
             }
           },
           builder: (BuildContext context, Object? state) {
-            return FloatingActionButton(
-              backgroundColor: Theme.of(context).primaryColor,
+            return CustomElevatedButton(
+              child: Text(
+                LocaleKeys.next.localize,
+                style: const TextStyle(color: AppColors.whiteColor),
+              ),
               onPressed: () {
                 bool face = _selectedItem == 0;
                 bool insta = _selectedItem == 1;
@@ -125,10 +140,6 @@ class _SocialPageState extends State<SocialPage> {
 
                 print('Selected Item: ${_items[_selectedItem!]}');
               },
-              child: Icon(
-                Icons.check,
-                color: Theme.of(context).scaffoldBackgroundColor,
-              ),
             );
           },
         ),

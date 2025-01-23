@@ -217,7 +217,7 @@ class _ContactUsViewState extends State<ContactUsView> {
 
                             const Sizer(height: 30,),
 
-                      buildContainerPhoneAndEmail(size,LocaleKeys.Email.localize,"49_mobile_app@gmail.com",
+                      buildContainerPhoneAndEmail(size,LocaleKeys.email.localize,"49_mobile_app@gmail.com",
                           Icons.email_outlined,(){}),
 
                             const Sizer(height: 50,),

@@ -188,7 +188,8 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   changeView: 1,
                   icon: Icons.person,
                 ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           drawer: const DrawerWidget(),
           body: ListView(
             controller: scrollController,
@@ -197,7 +198,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
             children: [
               const AddBanner(),
               //carousel slider
+              const Sizer(),
               const AnnounceWidget(),
+              const Sizer(),
               !context.read<UserCubit>().isLoggedIn
                   ? const Sizer()
                   : const SizedBox.shrink(),
@@ -208,7 +211,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   ? const WalletWidget()
                   : const SizedBox.shrink(),
               ClickableWidget(
-                onTap:(){
+                onTap: () {
                   context.push(Routes.CUSTOMPAGE);
                 },
                 child: Container(

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
@@ -10,18 +11,22 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/service_page_preview%20copy.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:restart_app/restart_app.dart';
 import '../../../../social_media/social_posts/presentation/pages/Social_home.dart';
 import '../../../../social_media/stories/presentation/cubit/stories_cubit.dart';
 
 class PagePreview extends StatefulWidget {
-  const PagePreview({super.key, required this.state});
+  const PagePreview({super.key, this.state, this.isButtonsVisible = false});
   final bool? state;
-
+  final bool isButtonsVisible;
   @override
   State<PagePreview> createState() => _PagePreviewState();
 }
@@ -62,51 +67,97 @@ class _PagePreviewState extends State<PagePreview> {
             ),
           ),
           drawer: const DrawerWidget(),
-          body: TabBarView(
+          body: Stack(
             children: [
-              MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                    create: (context) =>
-                        serviceLocator<InstagramCubit>()..loadData(),
-                  ),
-                  BlocProvider(
-                    create: (context) => serviceLocator<StoryCubit>(),
-                  ),
-                  BlocProvider(
-                    create: (context) =>
-                        serviceLocator<CustomPageCubit>()..fetchSocialPage(),
-                  ),
-                ],
-                child: BlocBuilder<InstagramCubit, InstagramState>(
-                  builder: (BuildContext context, state) {
-                    return BlocBuilder<CustomPageCubit, CustomPageState>(
-                      builder: (BuildContext context, social) {
-                        if (social.status == CustomPageStates.success) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                right: 8, left: 8, top: 8),
-                            child: social.social?.face == true
-                                ? SocialHomeView(
-                                    payload: SocialParams(
-                                        userId: social.social?.userId ?? '',
-                                        hideAppBar: true),
-                                  )
-                                : social.social?.insta == true
-                                    ? const InstagramView(
-                                        hideAppBar: true,
+              TabBarView(
+                children: [
+                  MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) =>
+                            serviceLocator<InstagramCubit>()..loadData(),
+                      ),
+                      BlocProvider(
+                        create: (context) => serviceLocator<StoryCubit>(),
+                      ),
+                      BlocProvider(
+                        create: (context) => serviceLocator<CustomPageCubit>()
+                          ..fetchSocialPage(),
+                      ),
+                    ],
+                    child: BlocBuilder<InstagramCubit, InstagramState>(
+                      builder: (BuildContext context, state) {
+                        return BlocBuilder<CustomPageCubit, CustomPageState>(
+                          builder: (BuildContext context, social) {
+                            if (social.status == CustomPageStates.success) {
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 8, left: 8, top: 8),
+                                child: social.social?.face == true
+                                    ? SocialHomeView(
+                                        payload: SocialParams(
+                                            userId: social.social?.userId ?? '',
+                                            hideAppBar: true),
                                       )
-                                    : const TwitterView(),
-                          );
-                        } else {
-                          return const CustomLoading();
-                        }
+                                    : social.social?.insta == true
+                                        ? const InstagramView(
+                                            hideAppBar: true,
+                                          )
+                                        : const TwitterView(),
+                              );
+                            } else {
+                              return const CustomLoading();
+                            }
+                          },
+                        );
                       },
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                  const ServicePagePreview(),
+                ],
               ),
-              const ServicePagePreview(),
+              Visibility(
+                visible: widget.isButtonsVisible,
+                child: Positioned(
+                  right: 0,
+                  left: 0,
+                  bottom: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomElevatedButton(
+                          child: Text(
+                            'حفظ وتفعيل',
+                            style:
+                                Styles.mediumText(color: AppColors.whiteColor),
+                          ),
+                          onPressed: () async {
+                            await context
+                                .read<CustomPageCubit>()
+                                .updateActivate(true);
+                            Restart.restartApp();
+                          },
+                        ),
+                        CustomElevatedButton(
+                          onPressed: () async {
+                            await context
+                                .read<CustomPageCubit>()
+                                .updateActivate(false);
+                            Restart.restartApp();
+                          },
+                          child: Text(
+                            'حفظ وعدم تفعيل',
+                            style:
+                                Styles.mediumText(color: AppColors.whiteColor),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),
